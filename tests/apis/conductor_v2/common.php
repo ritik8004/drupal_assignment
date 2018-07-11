@@ -5,15 +5,8 @@ use Acquia\Hmac\Key;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 
-const ACM_ORG_ID = 1;
-
-const ACM_BASE_URL = 'https://api.eu-west-1.prod.acm.acquia.io/v2/';
-
-const ACM_HMAC_KEY = '55f360f632174015aafeb460d7acf3ec';
-
-const ACM_HMAC_SECRET = 'M2M3NWZlYjItMDM2Ny00';
-
 require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/settings.php';
 
 /**
  * Function to invoke API.
@@ -28,9 +21,10 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
  *   Store id.
  */
 function invoke_api($endpoint, $method = 'GET', array $data = []) {
-  $endpoint = ACM_BASE_URL . $endpoint;
+  global $config;
+  $endpoint = $config['url'] . $endpoint;
 
-  $key = new Key(ACM_HMAC_KEY, base64_encode(ACM_HMAC_SECRET));
+  $key = new Key($config['hmac_key'], base64_encode($config['hmac_secret']));
   $middleware = new HmacAuthMiddleware($key);
 
   // Register the middleware.
@@ -75,14 +69,17 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
   return $data;
 }
 
-function create_site($name, $description, $org_id = ACM_ORG_ID) {
+function create_site($name, $description, $org_id = NULL) {
+  if (empty($org_id)) {
+    global $config;
+    $org_id = $config['org_id'];
+  }
+
   $data = [
     'name' => $name,
     'description' => $description,
     'org_id' => $org_id,
   ];
-
-  //var_dump($data);
 
   return invoke_api('config/site/create', 'POST', $data);
 }
@@ -98,8 +95,6 @@ function create_auth($name, $description, $site_id, $client_id, $client_secret, 
     'token_secret' => $token_secret,
   ];
 
-  //var_dump($data);
-
   return invoke_api('config/auth_detail/create', 'POST', $data);
 }
 
@@ -114,8 +109,6 @@ function create_system($name, $description, $site_id, $type, $url, $uuid, $auth_
     'skip_ssl' => FALSE,
     'auth_id' => $auth_id,
   ];
-
-  //var_dump($data);
 
   return invoke_api('config/system/create', 'POST', $data);
 }
