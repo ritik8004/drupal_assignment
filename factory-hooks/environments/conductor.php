@@ -83,36 +83,38 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'GOvi4TncWFS-kqU9H6p4vg',
     ],
     // H&M KW.
-    'hm_dev' => [
+    'hmkw_dev' => [
       'url' => 'https://alshaya-hm-dev.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '0a38353bdb364be589fc56ac45084778',
       'hmac_secret' => '8xl_BQ1bDa8jAcYZ8smX-A',
     ],
-    'hm_test' => [
-      'url' => 'https://alshaya-hm-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'b01954179c164c0192676a4d4114f45d',
-      'hmac_secret' => 'cEF-LqxkmIF3ousifm5pvA',
+    'hmkw_test' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
+      'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
+      'api_version' => 'v2',
     ],
-    'hm_uat' => [
+    'hmkw_uat' => [
       'url' => 'https://alshaya-hm-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'b23acd31fa2543a0986d057194175312',
       'hmac_secret' => 'ADBateHrtvFQSrradB8CNg',
     ],
-    'hm_pprod' => [
+    'hmkw_pprod' => [
       'url' => 'https://alshaya-hm-pprod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'd57a1fdc153946afbc3b4b821f2029e1',
       'hmac_secret' => 'c0VSHfPxVXuJM0ioX_4thA',
     ],
-    'hm_prod' => [
+    'hmkw_prod' => [
       'url' => 'https://alshaya-hm-prod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '3844f45d61d7467d9a671f3e1cf4bea8',
       'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
     ],
     // H&M SA.
     'hmsa_test' => [
-      'url' => 'https://alshaya-hmsa-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '3fdf3a81b66e416da5d2b53448a3931e',
-      'hmac_secret' => 'kfv0JI-8DcAoFU2JobkymQ',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
+      'hmac_secret' => 'NDNkNDYzOGQtZjEyZC00',
+      'api_version' => 'v2',
     ],
     'hmsa_uat' => [
       'url' => 'https://alshaya-hmsa-uat.eu-west-1.prod.acm.acquia.io/',
@@ -126,9 +128,10 @@ function alshaya_get_conductor_host_data() {
     ],
     // H&M AE.
     'hmae_test' => [
-      'url' => 'https://alshaya-hmae-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '932982860b7b4ec18e1b0d5979006fdd',
-      'hmac_secret' => 'I7orNPTFOrHdpRAku4AHbQ',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
+      'hmac_secret' => 'ZDI1OTgyNDEtNzlkMS00',
+      'api_version' => 'v2',
     ],
     'hmae_uat' => [
       'url' => 'https://alshaya-hmae-uat.eu-west-1.prod.acm.acquia.io/',
