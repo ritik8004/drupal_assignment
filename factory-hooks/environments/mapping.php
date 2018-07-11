@@ -53,19 +53,19 @@ function alshaya_get_env_keys($site, $env) {
     'mckw' => [
       '01uat' => [
         'magento' => 'mc_uat',
-        'conductor' => 'mc_uat',
+        'conductor' => 'mckw_uat',
       ],
       '01pprod' => [
         'magento' => 'mc_dev',
-        'conductor' => 'mc_pprod',
+        'conductor' => 'mckw_pprod',
       ],
       '01live' => [
         'magento' => 'mc_prod',
-        'conductor' => 'mc_prod',
+        'conductor' => 'mckw_prod',
       ],
       '01test' => [
         'magento' => 'mc_test',
-        'conductor' => 'mc_test',
+        'conductor' => 'mckw_test',
       ],
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
