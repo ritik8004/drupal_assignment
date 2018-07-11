@@ -183,13 +183,30 @@
           a,
           span {
             border: none;
-            padding: 0.1875rem;
-            width: 2.625rem;
-            height: 2.625rem;
+            width: 2.375rem;
+            height: 2.375rem;
+            position: relative;
+            padding: 0;
 
             &.picked {
-              border: 1px solid $pdp_size_option_border;
               background: transparent;
+
+              &::after {
+                content: '';
+                position: absolute;
+                display: inline-block;
+                top: -0.1875rem;
+                #{$left}: -0.1875rem;
+                #{$right}: -0.1875rem;
+                bottom: -0.1875rem;
+                z-index: 1;
+                border: 1px solid $pdp_size_option_border;
+                pointer-events: none;
+              }
+            }
+
+            &.white {
+              box-shadow: 0 0 0 1px inset $pdp_white_color_attribute;
             }
           }
         }
@@ -198,6 +215,7 @@
       .select-buttons {
         display: flex;
         flex-flow: row wrap;
+        padding: 0.1875rem 0;
       }
     }
   }
