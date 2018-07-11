@@ -392,7 +392,7 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
 
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
       $path = str_replace("/$lang/", '', $term['path']);
-      if (strpos($path, 'taxonomy') !== TRUE) {
+      if (strpos($path, 'taxonomy') === FALSE) {
         $form['brand']['#value'] = $path;
       }
     }
