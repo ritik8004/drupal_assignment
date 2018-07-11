@@ -272,6 +272,39 @@
           }
         }
       }
+
+      .view-filters {
+        position: relative;
+
+        .ajax-progress-throbber {
+          position: absolute;
+          top: 0.4375rem;
+          #{$right}: 1.875rem;
+          z-index: 5;
+
+          .message {
+            display: none;
+          }
+
+          .throbber {
+            background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+            background-position: $right center !important;
+            background-repeat: no-repeat !important;
+            background-size: 2rem;
+            padding: 1rem;
+
+            @include breakpoint($only-mobile) {
+              background-size: 1.5rem;
+              padding: 0.5rem;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-#{$left}: 0;
+            #{$right}: 1.875rem;
+          }
+        }
+      }
     }
 
     &.promo-banner {
