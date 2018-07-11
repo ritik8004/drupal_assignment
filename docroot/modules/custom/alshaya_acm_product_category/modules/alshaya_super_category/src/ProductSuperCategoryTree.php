@@ -90,12 +90,15 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
-        if ($brand_arg = $request->query->get('brand')) {
-          $params = Url::fromUserInput("/$brand_arg")->getRouteParameters();
-          if (!empty($params['taxonomy_term'])) {
-            $brand = $params['taxonomy_term'];
-            $term = $this->termStorage->load($brand);
+        if ($brand = $request->query->get('brand')) {
+          if (!is_numeric($brand)) {
+            $params = Url::fromUserInput("/$brand")->getRouteParameters();
+            if (!empty($params['taxonomy_term'])) {
+              $brand = $params['taxonomy_term'];
+            }
           }
+
+          $term = $this->termStorage->load($brand);
         }
       }
     }
