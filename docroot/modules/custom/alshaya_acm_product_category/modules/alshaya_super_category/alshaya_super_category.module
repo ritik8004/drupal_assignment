@@ -79,7 +79,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
       break;
 
     case 'system_branding_block':
-
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
@@ -131,10 +130,8 @@ function alshaya_super_category_preprocess_block(&$variables) {
  * Implements hook_block_build_alter().
  */
 function alshaya_super_category_block_build_alter(array &$build, BlockPluginInterface $block) {
-  if ($block->getPluginId() == 'system_branding_block') {
-    if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
-      $build['#cache']['contexts'][] = 'url.query_args';
-    }
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $build['#cache']['contexts'][] = 'url.query_args:brand';
   }
 }
 
