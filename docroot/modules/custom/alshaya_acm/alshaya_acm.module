@@ -522,41 +522,6 @@ function alshaya_acm_get_cart_items_by_sku() {
 }
 
 /**
- * Implements hook_form_BASE_FORM_ID_alter().
- */
-function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $swatches = $display_settings->get('swatches')['pdp'];
-  $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
-
-  $form['quantity']['#type'] = 'select';
-  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
-  $form['quantity']['#validated'] = TRUE;
-  unset($form['quantity']['#size']);
-
-  if (isset($form['ajax'], $form['ajax']['configurables'])) {
-    foreach ($form['ajax']['configurables'] as $key => $form_item) {
-      if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
-        $form['ajax']['configurables'][$key]['#empty_value'] = '';
-        $form['ajax']['configurables'][$key]['#options_attributes']['']['disabled'] = 'disabled';
-        $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
-        $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
-        $form['ajax']['configurables'][$key]['#attributes']['class'][] = in_array($key, $swatches)
-          ? 'form-item-configurable-swatch'
-          : 'form-item-configurable-select';
-      }
-    }
-  }
-  // We need to change the markup for submit button.
-  // @see alshaya_white_label_theme_suggestions_input_alter().
-  $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
-
-  // Adding classes to add to cart button and quanity field.
-  $form['add_to_cart']['#attributes']['class'][] = 'edit-add-to-cart';
-  $form['quantity']['#attributes']['class'][] = 'edit-quantity';
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_multistep_default_alter(&$form, FormStateInterface $form_state, $form_id) {

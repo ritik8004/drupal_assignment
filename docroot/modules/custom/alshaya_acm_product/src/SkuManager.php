@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Render\FormattableMarkup;
@@ -11,14 +12,17 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SkuManager.
@@ -56,6 +60,13 @@ class SkuManager {
    * @var \Drupal\acq_sku\AcqSkuLinkedSku
    */
   protected $linkedSkus;
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * Cache Backend service for alshaya.
@@ -114,6 +125,13 @@ class SkuManager {
   protected $skuStorage;
 
   /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -122,6 +140,8 @@ class SkuManager {
    *   Config Factory service object.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
    *   Current Route object.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
@@ -132,6 +152,8 @@ class SkuManager {
    *   The logger service.
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
@@ -142,17 +164,20 @@ class SkuManager {
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
                               CurrentRouteMatch $current_route,
+                              RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
+                              ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
+    $this->currentRequest = $request_stack->getCurrentRequest();
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->fileStorage = $entity_type_manager->getStorage('file');
@@ -160,6 +185,7 @@ class SkuManager {
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
+    $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
@@ -204,6 +230,8 @@ class SkuManager {
    *   Image build array.
    */
   public function getSkuImage(array $media, $image_style = '', $rel_image_style = '') {
+    $media['label'] = $media['label'] ?? '';
+
     $image = [
       '#theme' => 'image_style',
       '#style_name' => $image_style,
@@ -1436,6 +1464,75 @@ class SkuManager {
   public function clearProductCachedData(SKU $sku) {
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
+  }
+
+  /**
+   * Get first child based on brand conditions if defined or from default.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $root_attribute_code
+   *   Root attribute code.
+   * @param array $selected
+   *   Current selection.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   First child SKU entity.
+   */
+  public function getFirstChildForSku(SKUInterface $sku, $root_attribute_code, array $selected = []) {
+    // Get the first child from user selected value if available.
+    if (isset($selected[$root_attribute_code])) {
+      $first_child = $this->getChildSkuFromAttribute($sku, $root_attribute_code, $selected[$root_attribute_code]);
+
+      if ($first_child instanceof SKU) {
+        return $first_child;
+      }
+    }
+
+    // Select first child based on value provided in query params.
+    $sku_id = (int) $this->currentRequest->query->get('selected');
+
+    // Give preference to sku id passed via query params.
+    if ($sku_id) {
+      $first_child = SKU::load($sku_id);
+
+      if ($first_child instanceof SKUInterface) {
+        // We do it again to get current translation.
+        // We expect no performance impact as all the skus are already loaded
+        // multiple times in the request.
+        $first_child = SKU::loadFromSku($first_child->getSku());
+        return $first_child;
+      }
+    }
+
+    // Default use-case: User landing on PDP from PLP/Search/directly.
+    return $this->getChildSkus($sku, TRUE);
+  }
+
+  /**
+   * Get all the swatch images with sku text as key.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   Parent SKU.
+   *
+   * @return array
+   *   Swatches array.
+   */
+  public function getSwatches(SKUInterface $sku) {
+    $swatches = [];
+    $children = $this->getChildSkus($sku);
+
+    foreach ($children as $child) {
+      $swatch_item = $child->getSwatchImage();
+
+      if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
+        continue;
+      }
+
+      $swatches[$child->id()] = $swatch_item['file']->url();
+    }
+
+    return $swatches;
   }
 
 }

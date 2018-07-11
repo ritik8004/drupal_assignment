@@ -78,6 +78,23 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
     $build['#product_label'] = [
       '#markup' => $title,
     ];
+
+    $settings = \Drupal::config('alshaya_acm_product.display_settings');
+
+    $swatches_display_status = $settings->get('color_swatches');
+    if ($swatches_display_status) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      $swatches = $sku_manager->getSwatches($sku);
+      if ($swatches) {
+        $swatch_plp_limit = $settings->get('swatch_plp_limit');
+        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);
+        $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
+          ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
+          : FALSE;
+      }
+    }
   }
   else {
     $build['title'] = [
