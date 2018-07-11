@@ -142,6 +142,22 @@ function alshaya_vs_transac_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('label_position', [
+      'x' => 15,
+      'y' => 17,
+    ])
+    ->save(TRUE);
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('label_position', [
+      'x' => 7,
+      'y' => 17,
+      'single_x' => 10,
+      'single_y' => 17,
+    ])
+    ->save();
+
   $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');
   $view_store_finder->set('display.attachment_1.display_options.fields.field_brand.label', 'المحل يشمل');
   $view_store_finder->set('display.page_1.display_options.fields.field_brand.label', 'المحل يشمل');
