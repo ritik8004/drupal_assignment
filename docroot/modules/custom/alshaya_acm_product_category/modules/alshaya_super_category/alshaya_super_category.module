@@ -130,9 +130,32 @@ function alshaya_super_category_preprocess_block(&$variables) {
  * Implements hook_block_build_alter().
  */
 function alshaya_super_category_block_build_alter(array &$build, BlockPluginInterface $block) {
-  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
-    $build['#cache']['contexts'][] = 'url.query_args:brand';
+  $config = \Drupal::config('alshaya_super_category.settings');
+
+  if (!$config->get('status')) {
+    return;
   }
+
+  $blocks = array_merge([
+    'alshaya_main_menu',
+    'alshaya_shop_by_block',
+  ],
+  // Prepare plugin id array based on configured 'footer menu blocks".
+  array_map(function ($derivative) {
+    return "system_menu_block:$derivative";
+  }, $config->get('footer_menu_blocks')));
+
+  // Get the list of blocks that are used as promo panel.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_promo_panel')) {
+    $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
+    $blocks = array_merge($blocks, array_keys($promo_panel_blocks));
+  }
+
+  if (!in_array($block->getPluginId(), $blocks)) {
+    return;
+  }
+
+  $build['#cache']['contexts'][] = 'url.query_args:brand';
 }
 
 /**
