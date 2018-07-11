@@ -78,6 +78,8 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // Allow other modules to alter the data.
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
 
+    $this->arrayUniqueRecursive($data);
+
     // Re-write the config to make sure the overrides are not lost.
     $this->configStorage->write($config->getName(), $data);
     Cache::invalidateTags($config->getCacheTags());
@@ -102,6 +104,29 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
       if (file_exists($override_path)) {
         $override = Yaml::parse(file_get_contents($override_path));
         $data = NestedArray::mergeDeep($data, $override);
+      }
+    }
+  }
+
+  /**
+   * Remove duplicate values because of simple array values in config.
+   *
+   * @param mixed $data
+   *   Config data to make unique Mostly this will be array.
+   */
+  private function arrayUniqueRecursive(&$data) {
+    if (!is_array($data)) {
+      return;
+    }
+
+    // Make indexed arrays unique.
+    $data = (array_values($data) === $data)
+      ? array_unique($data)
+      : $data;
+
+    foreach ($data as $value) {
+      if (is_array($value)) {
+        $this->arrayUniqueRecursive($value);
       }
     }
   }
