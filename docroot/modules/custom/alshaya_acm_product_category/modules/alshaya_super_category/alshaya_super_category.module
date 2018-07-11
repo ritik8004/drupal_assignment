@@ -9,6 +9,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
@@ -360,7 +361,12 @@ function alshaya_super_category_search_api_solr_query_alter(SolariumQueryInterfa
   $fields = $index->getServerInstance()->getBackend()->getSolrFieldNames($index);
   $solr_field = !empty($fields['field_category']) ? $fields['field_category'] : '';
   if ($solr_field) {
-    $brand = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
+    $brand_arg = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
+    $params = Url::fromUserInput("/$brand_arg")->getRouteParameters();
+    if (!empty($params['taxonomy_term'])) {
+      $brand = $params['taxonomy_term'];
+    }
+
     $solarium_query->addParam('bq', "{$solr_field}:$brand^" . $super_category->get('solr_boost'));
   }
 }
@@ -389,6 +395,12 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
         '#type' => 'hidden',
         '#value' => $term['id'],
       ];
+
+      $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $path = str_replace("/$lang/", '', $term['path']);
+      if (strpos($path, 'taxonomy') !== TRUE) {
+        $form['brand']['#value'] = $path;
+      }
     }
 
     $form['#cache']['contexts'][] = 'url.path';

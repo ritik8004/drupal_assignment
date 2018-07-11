@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -89,8 +90,12 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
         }
       }
       elseif ($request->get('_route') == 'view.search.page') {
-        if ($brand = $request->query->get('brand')) {
-          $term = $this->termStorage->load($brand);
+        if ($brand_arg = $request->query->get('brand')) {
+          $params = Url::fromUserInput("/$brand_arg")->getRouteParameters();
+          if (!empty($params['taxonomy_term'])) {
+            $brand = $params['taxonomy_term'];
+            $term = $this->termStorage->load($brand);
+          }
         }
       }
     }
