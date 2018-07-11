@@ -1,4 +1,10 @@
 <?php
+// @codingStandardsIgnoreFile
+
+/**
+ * @file
+ * Provides some utility functions to create ACM configuration.
+ */
 
 use Acquia\Hmac\Guzzle\HmacAuthMiddleware;
 use Acquia\Hmac\Key;
@@ -17,8 +23,9 @@ require_once __DIR__ . '/settings.php';
  *   Method.
  * @param array $data
  *   Data array.
- * @param int $store_id
- *   Store id.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
  */
 function invoke_api($endpoint, $method = 'GET', array $data = []) {
   global $config;
@@ -69,6 +76,19 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
   return $data;
 }
 
+/**
+ * Function to create a new site on ACM.
+ *
+ * @param string $name
+ *   Name of the site to create.
+ * @param string $description
+ *   Description of the site to create.
+ * @param int $org_id
+ *   The organization id to create the site into.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
+ */
 function create_site($name, $description, $org_id = NULL) {
   if (empty($org_id)) {
     global $config;
@@ -84,6 +104,27 @@ function create_site($name, $description, $org_id = NULL) {
   return invoke_api('config/site/create', 'POST', $data);
 }
 
+/**
+ * Function to create a new authentication config on ACM.
+ *
+ * @param string $name
+ *   Name of the site to create.
+ * @param string $description
+ *   Description of the site to create.
+ * @param int $site_id
+ *   The site id to create the auth into.
+ * @param string $client_id
+ *   The client id to authenticate on the system.
+ * @param string $client_secret
+ *   The client secret to authenticate on the system.
+ * @param string $token
+ *   The token to authenticate on the system.
+ * @param string $token_secret
+ *   The token secret to authenticate on the system.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
+ */
 function create_auth($name, $description, $site_id, $client_id, $client_secret, $token = '', $token_secret = '') {
   $data = [
     'name' => $name,
@@ -98,6 +139,27 @@ function create_auth($name, $description, $site_id, $client_id, $client_secret, 
   return invoke_api('config/auth_detail/create', 'POST', $data);
 }
 
+/**
+ * Function to create a new system on ACM.
+ *
+ * @param string $name
+ *   Name of the site to create.
+ * @param string $description
+ *   Description of the site to create.
+ * @param int $site_id
+ *   The site id to create the auth into.
+ * @param string $type
+ *   The system type (magento|drupal).
+ * @param string $url
+ *   The url of the system.
+ * @param string $uuid
+ *   The unique id of the system.
+ * @param string $auth_id
+ *   The id of the auth to use on the system.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
+ */
 function create_system($name, $description, $site_id, $type, $url, $uuid, $auth_id) {
   $data = [
     'name' => $name,
@@ -113,10 +175,27 @@ function create_system($name, $description, $site_id, $type, $url, $uuid, $auth_
   return invoke_api('config/system/create', 'POST', $data);
 }
 
+/**
+ * Function to create a new mapping on ACM.
+ *
+ * @param string $name
+ *   Name of the site to create.
+ * @param string $description
+ *   Description of the site to create.
+ * @param int $site_id
+ *   The site id to create the auth into.
+ * @param int $backend_id
+ *   The id of the backend system.
+ * @param int $frontend_id
+ *   The id of the frontend system.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
+ */
 function create_mapping($name, $description, $site_id, $backend_id, $frontend_id) {
   $data = [
     'name' => $name,
-    'desciption' => $description,
+    'description' => $description,
     'site_id' => $site_id,
     'backend_id' => $backend_id,
     'frontend_id' => $frontend_id,

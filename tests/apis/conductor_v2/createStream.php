@@ -1,4 +1,10 @@
 <?php
+// @codingStandardsIgnoreFile
+
+/**
+ * @file
+ * Create the entire ACM configure for a given site and environment.
+ */
 
 const DRUPAL_ROOT = __DIR__ . '/../../';
 

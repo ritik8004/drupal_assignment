@@ -1,4 +1,10 @@
 <?php
+// @codingStandardsIgnoreFile
+
+/**
+ * @file
+ * The variables to authenticate on ACM.
+ */
 
 global $config;
 
