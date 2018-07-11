@@ -368,9 +368,11 @@
     skipInfoWindow = skipInfoWindow || false;
 
     var marker_icon_path = null;
+    var label_position = null;
 
     if (typeof drupalSettings.alshaya_stores_finder !== 'undefined' && drupalSettings.alshaya_stores_finder.map !== 'undefined') {
       marker_icon_path = drupalSettings.alshaya_stores_finder.map.marker_icon_path;
+      label_position = drupalSettings.alshaya_stores_finder.map.label_position;
     }
 
     if (typeof marker_icon_path === 'undefined' || marker_icon_path == null || marker_icon_path.length === 0) {
@@ -381,16 +383,16 @@
       // Add the marker icon.
       markerSettings.icon = {
         url: marker_icon_path,
-        labelOrigin: new google.maps.Point(15, 15),
+        labelOrigin: new google.maps.Point(label_position.x, label_position.y),
         scaledSize: new google.maps.Size(31, 48)
       };
       if (drupalSettings.path.currentLanguage === 'ar') {
         // If only single digit move them closer to the center.
         if (markerSettings.label.length === 1) {
-          markerSettings.icon.labelOrigin = new google.maps.Point(11, 15);
+          markerSettings.icon.labelOrigin = new google.maps.Point(label_position.single_x, label_position.single_y);
         }
         else {
-          markerSettings.icon.labelOrigin = new google.maps.Point(7, 15);
+          markerSettings.icon.labelOrigin = new google.maps.Point(label_position.x, label_position.y);
         }
       }
     }

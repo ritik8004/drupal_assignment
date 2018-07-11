@@ -9,6 +9,29 @@ use Drupal\Core\Site\Settings;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update().
+ *
+ * Update the store finder config to install label position settings.
+ */
+function alshaya_vs_transac_update_8003() {
+  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
+    ->set('label_position', [
+      'x' => 15,
+      'y' => 17,
+    ])
+    ->save(TRUE);
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('label_position', [
+      'x' => 7,
+      'y' => 17,
+      'single_x' => 10,
+      'single_y' => 17,
+    ])
+    ->save();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Update plp slider configuration.
