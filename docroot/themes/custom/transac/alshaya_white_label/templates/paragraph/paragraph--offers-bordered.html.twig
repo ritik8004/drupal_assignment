@@ -3,10 +3,10 @@
   {{ content.field_heading }}
 
   {% if content.field_link|render %}
-    <a href={{ content.field_link[0]['#url'] }}>
+    <a href="{{ content.field_link[0]['#url'] }}">
   {% endif %}
     {{ content.field_banner }}
-  {% if content.field_link %}
+  {% if content.field_link|render %}
     </a>
   {% endif %}
 
