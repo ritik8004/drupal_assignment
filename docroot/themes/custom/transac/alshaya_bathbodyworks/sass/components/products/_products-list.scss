@@ -136,6 +136,12 @@
   }
 
   .c-products__item {
+    @include breakpoint($only-tablet) {
+      &:nth-child(3n+2) {
+        margin: 0 0 1rem;
+      }
+    }
+
     @include breakpoint($tablet) {
       width: 25%;
     }
