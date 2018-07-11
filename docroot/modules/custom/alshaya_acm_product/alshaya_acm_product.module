@@ -1027,7 +1027,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
     else {
       foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
-        if (is_array($configurable)) {
+        if (!is_array($configurable)) {
           continue;
         }
 
