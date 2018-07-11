@@ -464,10 +464,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, 'links', $promotion_types);
 
         if (!empty($promotions)) {
+          $free_gift_promotions = $generic_promotions = [];
           // Split promotions array into 2 parts, since we need to render
           // free gift promotions in a different way.
-          $free_gift_promotions = $generic_promotions = [];
-
           foreach ($promotions as $promotion) {
             if (empty($promotion['skus'])) {
               $generic_promotions[] = $promotion;
@@ -742,10 +741,12 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
         $build['cart_form_placeholder'] = [
           '#type' => 'link',
           '#title' => '',
-          '#url' => Url::fromRoute('alshaya_acm_product.get_cart_form', [
-            'view_mode' => $node_view_mode,
-            'entity' => $entity->id(),
-          ]),
+          '#url' => Url::fromRoute(
+            'alshaya_acm_product.get_cart_form', [
+              'view_mode' => $node_view_mode,
+              'entity' => $entity->id(),
+            ]
+          ),
           '#attributes' => [
             'class' => [
               'use-ajax',
@@ -866,6 +867,8 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
         '#theme' => "free_gift_cart_label",
         '#promos' => $free_gift_promos,
       ];
+
+      $form['cart'][$id]['promo_text']['#wrapper_attributes'] = ['class' => ['free-gifts-wrapper']];
     }
   }
 }
@@ -1220,6 +1223,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   if ($tree_pointer instanceof SKU) {
+    $entity = alshaya_acm_product_get_display_node($tree_pointer);
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
@@ -1352,6 +1356,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
 
+    \Drupal::moduleHandler()->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $quantity);
     return $response;
   }
   else {
@@ -1523,4 +1528,20 @@ function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields =
 function alshaya_acm_product_alshaya_master_post_drupal_install() {
   // Add fields to store the values from attributes as fields.
   \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
+ */
+function alshaya_acm_product_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
+  if ($stock <= 0) {
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'addClass', ['hidden-important']));
+    // @codingStandardsIgnoreLine
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', TRUE]));
+  }
+  else {
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'removeClass', ['hidden-important']));
+    // @codingStandardsIgnoreLine
+    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', FALSE]));
+  }
 }
