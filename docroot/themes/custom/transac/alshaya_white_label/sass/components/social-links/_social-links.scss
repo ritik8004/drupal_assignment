@@ -34,6 +34,10 @@
     &::before {
       font-size: 1.938rem;
       color: $social_links;
+
+      @include breakpoint($only-mobile) {
+        font-size: 2.625rem;
+      }
     }
 
     &:hover::before {
