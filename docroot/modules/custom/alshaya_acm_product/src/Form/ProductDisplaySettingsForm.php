@@ -31,6 +31,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product.display_settings');
     $config->set('image_thumb_gallery', $form_state->getValue('image_thumb_gallery'));
     $config->set('color_swatches', $form_state->getValue('color_swatches'));
+    $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -54,6 +55,12 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Display color swatches on product node.'),
       '#default_value' => $config->get('color_swatches'),
+    ];
+
+    $form['short_desc_characters'] = [
+      '#type' => 'number',
+      '#title' => $this->t('No. of characters that should be displayed as short decription on PDP page.'),
+      '#default_value' => $config->get('short_desc_characters'),
     ];
 
     return $form;

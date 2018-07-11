@@ -91,6 +91,10 @@
     html[lang=ar] {
       width: auto;
       margin-#{$left}: 0;
+
+      @include breakpoint($desktop) {
+        margin-#{$right}: 0.625rem;
+      }
     }
   }
 
@@ -281,6 +285,15 @@
       &::after {
         top: 0.25rem;
       }
+    }
+  }
+}
+
+html[lang=ar] {
+  .c-footer-menu--about {
+    @include breakpoint($tablet) {
+      width: auto;
+      margin-right: 5%;
     }
   }
 }

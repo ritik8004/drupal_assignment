@@ -172,6 +172,35 @@
       }
     }
   }
+
+  .form-item-configurables-color {
+    .select2Option {
+      li {
+        display: flex;
+        align-items: center;
+
+        &.li-swatch-image {
+          a,
+          span {
+            border: none;
+            padding: 0.1875rem;
+            width: 2.625rem;
+            height: 2.625rem;
+
+            &.picked {
+              border: 1px solid $pdp_size_option_border;
+              background: transparent;
+            }
+          }
+        }
+      }
+
+      .select-buttons {
+        display: flex;
+        flex-flow: row wrap;
+      }
+    }
+  }
 }
 
 .basic-details-wrapper {
