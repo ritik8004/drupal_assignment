@@ -1457,3 +1457,37 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
   // Add fields to store the values from attributes as fields.
   \Drupal::service('acq_sku.fields_manager')->addFields();
 }
+
+/**
+ * Returns short decsription for PDP page.
+ *
+ * @param string $description_value
+ *   Description value from which short desc should be extracted.
+ * @param string $tag
+ *   Tag to be displayed.
+ * @param bool $fallback
+ *   Display first 'x' characters if no non-empty element found.
+ *
+ * @return string
+ *   Short description.
+ */
+function alshaya_acm_product_get_short_description($description_value, $tag, $fallback = 'TRUE') {
+  $short_desc_html = '';
+  // Extract the first non-empty paragraph.
+  $dom = Html::load($description_value);
+  $xpath = new \DOMXPath($dom);
+  $expression = '//' . $tag . '[normalize-space()][1]';
+  foreach ($xpath->query($expression) as $node) {
+    $short_desc_html = $node->nodeValue;
+  }
+  if ($fallback) {
+    // If there is no non-empty paragraph,
+    // get no. of characters to be displayed from config.
+    if (empty($short_desc_html)) {
+      $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
+      $short_desc_html = mb_substr($description_value, 0, $short_desc_len);
+    }
+  }
+
+  return $short_desc_html;
+}

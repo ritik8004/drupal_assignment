@@ -147,11 +147,8 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
         $short_desc['label'] = [
           '#markup' => t('Short Description'),
         ];
-        $start = strpos($description_value, '<p>');
-        $end = strpos($description_value, '</p>', $start);
-        $short_desc_html = substr($description_value, $start, $end - $start + 4);
         $short_desc['value'] = [
-          '#markup' => $short_desc_html,
+          '#markup' => alshaya_acm_product_get_short_description($description_value, 'p', $fallback = 'TRUE'),
         ];
       }
 

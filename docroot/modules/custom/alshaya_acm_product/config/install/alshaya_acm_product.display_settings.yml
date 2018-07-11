@@ -9,3 +9,4 @@ swatch_plp_limit: 3
 swatches:
   pdp: {  }
   plp: {  }
+short_desc_characters: 150
