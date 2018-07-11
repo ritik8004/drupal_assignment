@@ -137,6 +137,7 @@ function alshaya_super_category_block_build_alter(array &$build, BlockPluginInte
   }
 
   $blocks = array_merge([
+    'system_branding_block',
     'alshaya_main_menu',
     'alshaya_shop_by_block',
   ],
