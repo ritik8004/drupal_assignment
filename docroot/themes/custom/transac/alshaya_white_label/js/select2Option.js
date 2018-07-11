@@ -24,6 +24,7 @@ jQuery.fn.select2Option = function (options) {
         var liHtml = $('<li></li>');
 
         if ($(this).attr('swatch-image')) {
+          liHtml.addClass('li-swatch-image');
           var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + $(this).text() + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
