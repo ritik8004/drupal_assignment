@@ -1004,10 +1004,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child
         // SKUs.
-        $variations = alshaya_acm_product_get_selected_option_sku(
-          $product_tree,
-          [$root_attribute_code => $selected[$root_attribute_code]]
-        );
+        $variations = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
 
         // Check stock for variations & update options.
         foreach ($variations as $key => $variation) {
