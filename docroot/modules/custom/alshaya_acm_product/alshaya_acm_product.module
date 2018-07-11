@@ -342,6 +342,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
     $sku = $entity->get('field_skus')->first()->getString();
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
@@ -461,7 +464,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Get the image.
         $build['image'] = [];
 
-        $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
+        $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
           $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
