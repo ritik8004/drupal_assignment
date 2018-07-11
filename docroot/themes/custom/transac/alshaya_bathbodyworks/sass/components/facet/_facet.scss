@@ -8,6 +8,10 @@
     @include breakpoint($desktop) {
       padding-top: 0;
     }
+
+    li {
+      margin-#{$left}: 0;
+    }
   }
 
   label {
@@ -39,7 +43,7 @@
 
 .js-facets-checkbox-links {
   .facet-item {
-    min-height: 2.5rem;
+    min-height: auto;
     padding: 0.625rem 0;
     margin-bottom: 0;
 
@@ -83,18 +87,27 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
     &.facet-item--expanded {
       & > label {
-        padding-bottom: 0.625rem;
-        padding-#{$left}: 0.625rem;
-
         &::before {
           top: 0.5rem !important;
+        }
+
+        .facet-item--active-trail & {
+          & > label {
+            padding-bottom: 0.625rem;
+            padding-#{$left}: 0.625rem;
+          }
+        }
+
+        .facet-item__value,
+        .facet-item__count,
+        span {
+          font-family: $alshaya-thin !important;
         }
       }
 
       ul li {
         > label {
           &::before {
-            margin-#{$right}: 0.625rem;
             margin-top: -0.3125rem;
           }
         }
@@ -106,23 +119,36 @@ ul[data-drupal-facet-id=plp_category_facet] {
         @include breakpoint($only-tablet) {
           margin-#{$left}: 0;
         }
+
+        &:first-child {
+          padding-top: 0;
+        }
+
+        &:last-child {
+          padding-bottom: 0;
+        }
       }
     }
 
     label {
       min-height: 0.875rem;
       margin: 0;
+    }
 
-      .facet-item__value {
-        margin-#{$left}: 0;
-      }
+    & > input[type=checkbox]:checked ~ label {
+      font-family: $alshaya-thin;
     }
   }
 
   .facet-item--expanded {
     > ul {
-      padding-top: 0.625rem;
-      margin-#{$left}: 0.625rem;
+      padding-top: 0.625rem !important;
+
+      li.facet-item--expanded {
+        ul {
+          margin-#{$left}: 0.625rem !important;
+        }
+      }
 
       li:not(:last-child) {
         margin-bottom: 0.625rem;
@@ -135,6 +161,26 @@ ul[data-drupal-facet-id=plp_category_facet] {
       @include icon(chevronleft, before) {
         #{$left}: -1.5rem;
       }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  .facet-item--expanded {
+    & > ul {
+      margin-#{$left}: 0;
+    }
+  }
+
+  & > li {
+    &.facet-item--expanded {
+      & > label {
+        padding-bottom: 0.625rem;
+      }
+    }
+
+    &:not(.facet-item--expanded) > label > .facet-item__value {
+      margin-#{$left}: 0;
     }
   }
 }
@@ -163,12 +209,17 @@ ul[data-drupal-facet-id=plp_category_facet] {
         &::before {
           display: none;
         }
-
-        .facet-item__value,
-        .facet-item__count {
-          font-weight: normal;
-        }
       }
+
+      ul > li > label .facet-item__value {
+        margin-#{$left}: 0.625rem;
+      }
+    }
+  }
+
+  & > li > label {
+    .facet-item__value {
+      margin-#{$left}: 0;
     }
   }
 }

@@ -45,21 +45,18 @@
       }
 
       var promoPanelOptions = {
-        useTransform: false,
         slidesToShow: 3,
-        slidesToScroll: 1,
+        slidesToScroll: 3,
         focusOnSelect: false,
-        centerMode: true,
-        centerPadding: '190px',
+        variableWidth: true,
         touchThreshold: 1000,
         responsive: [
           {
             breakpoint: 1025,
             settings: {
               slidesToShow: 2,
-              initialSlide: 1,
-              centerPadding: '10px',
-              slidesToScroll: 1
+              slidesToScroll: 2,
+              initialSlide: 1
             }
           }
         ]

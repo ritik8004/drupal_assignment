@@ -13,6 +13,8 @@
       var $offer_content = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content');
       var $body = $('body');
 
+      $($body).addClass('promo-panel-page');
+
       $($offer_toggler).once().on('click', function () {
         $(window).trigger('resize');
         $(this).parent().toggleClass('active-promo-panel');
@@ -32,12 +34,12 @@
        * Promo panel sticky on scroll.
        */
       function checkOffset() {
-        if ($('.block-promo-panel-wrapper .promo-panel-label').offset().top + $('.block-promo-panel-wrapper .promo-panel-label').height() >= $('.block-promo-panel-wrapper').offset().top - 25) {
+        if ($('.block-promo-panel-wrapper .promo-panel-label').offset().top + $('.c-footer-primary').height() >= $('.block-promo-panel-wrapper').offset().top - 25) {
           $('.block-promo-panel-wrapper .promo-panel-label').addClass('label-not-fixed'); // restore on scroll down
           $('.block-promo-panel-wrapper').removeClass('promo-panel-fixed').addClass('promo-static'); // restore on scroll down
         }
 
-        if ($(document).scrollTop() + window.innerHeight < $('.block-promo-panel-wrapper').offset().top) {
+        if ($(document).scrollTop() + window.innerHeight < $('.c-footer').offset().top) {
           $('.block-promo-panel-wrapper .promo-panel-label').removeClass('label-not-fixed');
           $('.block-promo-panel-wrapper').addClass('promo-panel-fixed').removeClass('promo-static');
         }

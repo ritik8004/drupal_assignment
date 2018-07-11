@@ -10,6 +10,11 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
   display: inline-block;
   background-size: contain;
   background-position: center;
+
+  @include breakpoint($only-mobile) {
+    width: 1.875rem;
+    height: 1.875rem;
+  }
 }
 
 .ic-social {

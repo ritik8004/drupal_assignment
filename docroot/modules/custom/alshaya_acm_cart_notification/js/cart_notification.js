@@ -54,7 +54,7 @@
         }
       });
 
-      $('.form-item-configurable-select').on('change', function () {
+      $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
         // Start loading.
         spinner_start();
       });
