@@ -367,10 +367,6 @@ function alshaya_super_category_search_api_solr_query_alter(SolariumQueryInterfa
   $solr_field = !empty($fields['field_category']) ? $fields['field_category'] : '';
   if ($solr_field) {
     $brand = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
-    if (empty($brand)) {
-      $brand = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('default_category_tid');
-    }
-
     $solarium_query->addParam('bq', "{$solr_field}:$brand^" . $super_category->get('solr_boost'));
   }
 }
