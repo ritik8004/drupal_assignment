@@ -16,9 +16,9 @@
       }
 
       // Do not apply soft limit if one of the options is selected.
-      $('input[type=checkbox]:checked').each(function () {
-        if ($(this).closest('ul').nextAll('a').text() === 'Show more') {
-          jQuery(this).closest('ul').nextAll('a').click();
+      $('input.facets-checkbox:checkbox:checked').each(function () {
+        if ($(this).closest('ul').nextAll('a').first().text() === Drupal.t('Show more')) {
+          jQuery(this).closest('ul').nextAll('a').first().click();
         }
       });
     }
