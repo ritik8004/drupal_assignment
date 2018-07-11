@@ -80,7 +80,7 @@ foreach ($countries as $country_code => $country_name) {
       'Drupal system details for ' . ucfirst(strtolower($brand_name)) . ' ' . strtoupper($country_code) . ' ' . ucfirst(strtolower($lang_name)) . ' - ' . ucfirst(strtolower($env)),
       $site->id,
       'drupal',
-      $drupal_base_url . '/' . $lang_code,
+      'https://' . $brand_code . $country_code . '-' . $env . '.factory.alshaya.com/' . $lang_code,
       $magento_data['store_id'][$lang_code],
       $drupal_auth->id
     );

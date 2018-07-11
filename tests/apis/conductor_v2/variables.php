@@ -24,7 +24,5 @@ $mdc_client_id = 'acnbwifl9olohrh30g1t4liqnwqwi6p2';
 $mdc_client_secret = 'ctuivmr0bnqbq357xqalotnocntidcay';
 
 // Drupal information.
-$drupal_base_url = 'https://hmkw-test.factory.alshaya.com';
-
 $drupal_client_id = '35b9a28a-939f-4e2b-be55-9445c5b6549e';
 $drupal_client_secret = 'AlShAyA';
