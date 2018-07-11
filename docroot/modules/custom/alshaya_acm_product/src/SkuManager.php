@@ -192,31 +192,6 @@ class SkuManager {
   }
 
   /**
-   * Utility function to return media files for a SKU.
-   *
-   * @param mixed $sku
-   *   SKU text or full entity object.
-   * @param bool $first_image_only
-   *   Flag to indicate if we want only the first image and not the whole array.
-   *
-   * @return array
-   *   Array of media files.
-   */
-  public function getSkuMedia($sku, $first_image_only = FALSE) {
-    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
-    if (!($sku_entity instanceof SKU)) {
-      return [];
-    }
-
-    if ($first_image_only) {
-      return $sku_entity->getThumbnail();
-    }
-
-    return $sku_entity->getMedia();
-  }
-
-  /**
    * Get Image tag from media item array.
    *
    * @param array $media
