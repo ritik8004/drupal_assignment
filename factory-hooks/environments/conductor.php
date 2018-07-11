@@ -199,9 +199,10 @@ function alshaya_get_conductor_host_data() {
     ],
     // VictoriaSecret KW.
     'vskw_test' => [
-      'url' => 'https://alshaya-vskw-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '43d835c683544f16ae02b6738bd30246',
-      'hmac_secret' => 'mkvCzZn8C70jN8TdKJT6ww',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
+      'hmac_secret' => 'ZjI0NzBhNGUtMjM2Zi00',
+      'api_version' => 'v2',
     ],
     'vskw_uat' => [
       'url' => 'https://alshaya-vskw-uat.eu-west-1.prod.acm.acquia.io/',
@@ -210,9 +211,10 @@ function alshaya_get_conductor_host_data() {
     ],
     // VictoriaSecret SA.
     'vssa_test' => [
-      'url' => 'https://alshaya-vssa-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '8f0cca86f92c4d4899c0cefd69c3ab80',
-      'hmac_secret' => 'vUGB9pW4Wif8Kuqu_Wa3DA',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'b88bad1f106b439ea3a156bd2085e178',
+      'hmac_secret' => 'Yjc1YTRjNTAtNDNkNi00',
+      'api_version' => 'v2',
     ],
     'vssa_uat' => [
       'url' => 'https://alshaya-vssa-uat.eu-west-1.prod.acm.acquia.io/',
@@ -221,9 +223,10 @@ function alshaya_get_conductor_host_data() {
     ],
     // VictoriaSecret AE.
     'vsae_test' => [
-      'url' => 'https://alshaya-vsae-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '814e195c622042219be0c36566078bec',
-      'hmac_secret' => 'rboHiF67oDbiBjtCKufN3g',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'c938cdcc017b44bfb7bc736a0ab8a150',
+      'hmac_secret' => 'MjM5Y2Q0OTMtMjczNy00',
+      'api_version' => 'v2',
     ],
     'vsae_uat' => [
       'url' => 'https://alshaya-vsae-uat.eu-west-1.prod.acm.acquia.io/',
