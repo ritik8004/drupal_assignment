@@ -155,6 +155,7 @@ function alshaya_super_category_block_build_alter(array &$build, BlockPluginInte
     return;
   }
 
+  $build['#cache']['contexts'][] = 'url.path';
   $build['#cache']['contexts'][] = 'url.query_args:brand';
 }
 
