@@ -7,6 +7,7 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
@@ -78,9 +79,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
       break;
 
     case 'system_branding_block':
-      // Update block cache context.
-      $variables['content']['#cache']['contexts'][] = 'url.path';
-      $variables['content']['#cache']['contexts'][] = 'url.query_args';
 
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
@@ -126,6 +124,17 @@ function alshaya_super_category_preprocess_block(&$variables) {
         $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
       }
       break;
+  }
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function alshaya_super_category_block_build_alter(array &$build, BlockPluginInterface $block) {
+  if ($block->getPluginId() == 'system_branding_block') {
+    if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      $build['#cache']['contexts'][] = 'url.query_args';
+    }
   }
 }
 
@@ -361,6 +370,10 @@ function alshaya_super_category_search_api_solr_query_alter(SolariumQueryInterfa
   $solr_field = !empty($fields['field_category']) ? $fields['field_category'] : '';
   if ($solr_field) {
     $brand = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
+    if (empty($brand)) {
+      $brand = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('default_category_tid');
+    }
+
     $solarium_query->addParam('bq', "{$solr_field}:$brand^" . $super_category->get('solr_boost'));
   }
 }
