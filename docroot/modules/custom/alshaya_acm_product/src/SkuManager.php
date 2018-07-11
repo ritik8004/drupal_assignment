@@ -1505,22 +1505,8 @@ class SkuManager {
       }
     }
 
-    // Allow brand modules to apply brand specific logic and provide the first
-    // child.
-    $implementations = $this->moduleHandler->getImplementations('alshaya_acm_product_first_child_for_selection');
-    foreach ($implementations as $module) {
-      $first_child = $this->moduleHandler->invoke(
-        $module,
-        'alshaya_acm_product_first_child_for_selection',
-        [$sku]
-      );
-
-      if ($first_child instanceof SKU) {
-        return $first_child;
-      }
-    }
-
-    return NULL;
+    // Default use-case: User landing on PDP from PLP/Search/directly.
+    return $this->getChildSkus($sku, TRUE);
   }
 
   /**
