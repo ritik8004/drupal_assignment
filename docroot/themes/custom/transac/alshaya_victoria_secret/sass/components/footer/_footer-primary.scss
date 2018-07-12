@@ -279,6 +279,16 @@
   }
 }
 
+.language--switcher {
+  &.only-first-time {
+    .language-switcher-close {
+      &::after {
+        top: 0.25rem;
+      }
+    }
+  }
+}
+
 html[lang=ar] {
   .c-footer-menu--about {
     @include breakpoint($tablet) {

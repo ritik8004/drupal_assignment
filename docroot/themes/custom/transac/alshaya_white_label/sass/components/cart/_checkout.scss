@@ -333,7 +333,7 @@
       padding: 0;
       font-size: 0;
       max-height: 15rem;
-      overflow: scroll;
+      overflow: auto;
 
       .left {
         float: $left;
@@ -934,28 +934,11 @@ body.alias--cart {
 
         &:nth-child(2) {
           background: $total_discount_total_td_2nd_child_bg;
-          padding-top: 0.5em !important;
-
-          @include breakpoint($only-mobile) {
-            padding-top: 1.4em !important;
-          }
         }
       }
 
       td:first-child {
-        font-size: 12px;
-
-        @include breakpoint($mobile) {
-          padding-top: 0.1rem !important;
-        }
-
-        @include breakpoint($tablet) {
-          padding-top: 0.3rem !important;
-        }
-
-        @include breakpoint($desktop) {
-          padding-top: 0.5rem !important;
-        }
+        font-size: 0.75rem;
       }
     }
 

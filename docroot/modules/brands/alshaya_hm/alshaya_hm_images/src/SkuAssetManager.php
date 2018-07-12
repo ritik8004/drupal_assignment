@@ -510,7 +510,7 @@ class SkuAssetManager {
         (!in_array($article_castor_id, $traversed_article_castor_ids))) {
         $traversed_article_castor_ids[] = $article_castor_id;
         $color_attributes = $this->getColorAttributesFromSku($child_sku);
-        $article_castor_ids[$color_attributes['attr_color_label']] = $color_attributes['attr_rgb_color'];
+        $article_castor_ids[$child_sku] = $color_attributes['attr_rgb_color'];
       }
     }
 
