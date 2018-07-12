@@ -99,7 +99,7 @@ class AcqPromotionsManager {
    *   Queue factory service.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config factory service.
-   * @param Connection $connection
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
    *   Database connection service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.

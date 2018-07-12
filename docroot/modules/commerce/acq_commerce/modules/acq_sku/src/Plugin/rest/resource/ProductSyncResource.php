@@ -617,6 +617,9 @@ class ProductSyncResource extends ResourceBase {
     }
   }
 
+  /**
+   *
+   */
   protected function getProcessedMedia($product, $current_value) {
     $media = [];
 
@@ -631,7 +634,7 @@ class ProductSyncResource extends ResourceBase {
         $image = $product['attributes']['image'];
 
         foreach ($media as &$data) {
-          if (substr_compare($data['file'], $image, -strlen($image) ) === 0) {
+          if (substr_compare($data['file'], $image, -strlen($image)) === 0) {
             $data['position'] = -1;
             break;
           }

@@ -222,7 +222,7 @@ class SKUFieldsManager {
 
     $this->moduleHandler->alter('acq_sku_base_field_additions', $fields);
 
-    foreach ($fields as $field_code =>  $field) {
+    foreach ($fields as $field_code => $field) {
       $fields[$field_code] = $this->applyDefaults($field_code, $field);
     }
 

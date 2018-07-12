@@ -84,8 +84,6 @@ class SkuAssetManager {
    *   Sku manager service.
    * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
    *   Sku Plugin Manager.
-   * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
-   *   Sku Plugin Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -190,7 +188,8 @@ class SkuAssetManager {
       }
     }
 
-    // If there is only a single location_image, we don't want the results to be grouped.
+    // If there is only a single location_image, we don't want the results to
+    // be grouped.
     if (count($location_images) === 1) {
       return $asset_urls;
     }
@@ -209,6 +208,8 @@ class SkuAssetManager {
    *   Page type on which this asset needs to be rendered.
    * @param string $location_image
    *   Location on page e.g., main image, thumbnails etc.
+   * @param string $style
+   *   CSS style.
    *
    * @return array
    *   Array of asset attributes.
@@ -242,7 +243,6 @@ class SkuAssetManager {
           $set['res'] = "res[y]";
         }
       }
-
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $page_type);
@@ -325,7 +325,7 @@ class SkuAssetManager {
    * @return array
    *   Array of assets sorted by their asset types & angles.
    */
-  public function sortSkuAssets($sku, $page_type, array $assets) {
+  public function sortSkuAssets(SKU $sku, $page_type, array $assets) {
     $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
     // Fetch weights of asset types based on the pagetype.
     $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
@@ -465,7 +465,7 @@ class SkuAssetManager {
 
     if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
       if (!empty($terms)) {
-        foreach ($terms as $key => $value) {
+        foreach ($terms as $value) {
           $tid = $value['target_id'];
           $term = $this->termStorage->load($tid);
           if ($term instanceof TermInterface) {

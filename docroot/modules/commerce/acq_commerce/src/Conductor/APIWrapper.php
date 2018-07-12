@@ -197,7 +197,6 @@ class APIWrapper implements APIWrapperInterface {
     // Clean up cart data.
     $cart = $this->helper->cleanCart($cart);
 
-
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
       return ($client->post($endpoint, $opt));
@@ -365,7 +364,7 @@ class APIWrapper implements APIWrapperInterface {
     try {
       // Try to get the customer but don't throw exceptions.
       /** @var array $existingCustomer */
-       $existingCustomer = $this->getCustomer($customer['email'], FALSE);
+      $existingCustomer = $this->getCustomer($customer['email'], FALSE);
       if (!empty($existingCustomer)) {
         $customer['customer_id'] = $existingCustomer['customer_id'];
       }
@@ -994,34 +993,34 @@ class APIWrapper implements APIWrapperInterface {
     return $response;
   }
 
-    /**
-     * Get position of the products in a category.
-     *
-     * @param int $category_id
-     *   The category id.
-     *
-     * @return array
-     *   All products with the positions in the given category.
-     *
-     * @throws \Exception
-     */
-    public function getProductPosition($category_id) {
-        $endpoint = $this->apiVersion . "/agent/category/$category_id/position";
+  /**
+   * Get position of the products in a category.
+   *
+   * @param int $category_id
+   *   The category id.
+   *
+   * @return array
+   *   All products with the positions in the given category.
+   *
+   * @throws \Exception
+   */
+  public function getProductPosition($category_id) {
+    $endpoint = $this->apiVersion . "/agent/category/$category_id/position";
 
-        $doReq = function ($client, $opt) use ($endpoint) {
-            return ($client->get($endpoint, $opt));
-        };
+    $doReq = function ($client, $opt) use ($endpoint) {
+      return ($client->get($endpoint, $opt));
+    };
 
-        $result = [];
+    $result = [];
 
-        try {
-            $result = $this->tryAgentRequest($doReq, 'productPosition', 'position');
-        }
-        catch (ConnectorException $e) {
-            throw new \Exception($e->getMessage(), $e->getCode());
-        }
-
-        return $result;
+    try {
+      $result = $this->tryAgentRequest($doReq, 'productPosition', 'position');
     }
+    catch (ConnectorException $e) {
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    return $result;
+  }
 
 }

@@ -517,7 +517,7 @@ class Configurable extends SKUPluginBase {
 
     if (!$asString) {
       $display_node = $this->getDisplayNode($parent_sku);
-      
+
       if ($display_node instanceof Node) {
         $url = $display_node->toUrl();
         $link = Link::fromTextAndUrl($cartName, $url);
