@@ -966,15 +966,22 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
+    // We show the size guide link if available as prefix.
+    $size_guide = _alshaya_acm_product_get_size_guide_info();
+    if (isset($size_guide['link'])) {
+      $configurable_options = array_keys($form['ajax']['configurables']);
+
+      foreach ($configurable_options as $configurable_option) {
+        if (in_array($configurable_option, $size_guide['attributes'])) {
+          $form['ajax']['configurables'][$configurable_option]['#prefix'] = $size_guide['link'];
+        }
+      }
+    }
+
     // Attach size guide link to size attribute. This is statically attached to
     // size, we don't want it for any other attributes.
     if (isset($form['ajax']['configurables']['size'])) {
       $form['ajax']['configurables']['size']['#required_error'] = t('Please select a size.');
-
-      // We show the size guide link if available as prefix.
-      if ($size_guide_enabled = _alshaya_acm_product_check_size_guide_enabled()) {
-        $form['ajax']['configurables']['size']['#prefix'] = $size_guide_enabled;
-      }
 
       // @TODO: This looks like related to GTM, also for now only limited to
       // size attribute and not checking for other attributes.
@@ -1364,14 +1371,17 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 }
 
 /**
- * Helper function to get size guide link.
+ * Helper function to get size guide info if enabled and available.
  *
- * @return string
- *   Link html as string or empty if not available.
+ * @return array
+ *   Array containing link html and attributes.
  */
-function _alshaya_acm_product_check_size_guide_enabled() {
-  // Check if we have the configuration set.
-  if (\Drupal::config('alshaya_acm_product.size_guide')->get('size_guide_enabled')) {
+function _alshaya_acm_product_get_size_guide_info() {
+  $info = [];
+
+  $config = \Drupal::config('alshaya_acm_product.size_guide');
+
+  if ($config->get('size_guide_enabled')) {
     $options = [
       'attributes' => [
         'class' => ['size-guide-link', 'use-ajax'],
@@ -1381,10 +1391,12 @@ function _alshaya_acm_product_check_size_guide_enabled() {
     ];
     $url = Url::fromRoute('alshaya_acm_product.size_guide_modal', [], $options);
     $link = Link::fromTextAndUrl(t('Size Guide'), $url);
-    return $link->toString();
+    $info['link'] = $link->toString();
+
+    $info['attributes'] = explode(',', $config->get('size_guide_attributes'));
   }
 
-  return '';
+  return $info;
 }
 
 /**
