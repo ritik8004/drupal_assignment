@@ -13,8 +13,12 @@
     text-transform: uppercase;
     color: $store_finder_text;
 
+    html[lang=ar] & {
+      padding: 0.125rem 0 0;
+    }
+
     @include breakpoint($only-tablet) {
-      width: 37%;
+      width: 36%;
 
       html[lang=ar] & {
         width: 35%;
@@ -26,6 +30,10 @@
       vertical-align: middle;
       position: relative;
       top: -0.125rem;
+
+      html[lang=ar] & {
+        top: 0;
+      }
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 0.5rem;
