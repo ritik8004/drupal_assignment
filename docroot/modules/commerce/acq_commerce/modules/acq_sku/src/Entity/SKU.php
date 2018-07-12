@@ -136,9 +136,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
         if ($media_item &&
           isset($media_item['roles'])
-          && !in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
-          $this->mediaData[] = $media_item;
+          && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+          continue;
         }
+
+        $this->mediaData[] = $media_item;
       }
 
       if ($update_sku) {
@@ -212,7 +214,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @return array|null
    *   Processed media item or null if some error occurred.
    */
-  protected function processMediaItem(&$update_sku, array $data, $download = FALSE) {
+  protected function processMediaItem(&$update_sku, array &$data, $download = FALSE) {
     $media_item = $data;
 
     // Processing is required only for media type image as of now.

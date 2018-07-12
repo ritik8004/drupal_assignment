@@ -132,6 +132,17 @@
     .light {
       font-size: 0.75rem;
     }
+
+    img {
+      width: auto;
+      height: 8.125rem;
+      border: 1px solid $basket_img_border;
+      padding: 1px;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
   }
 
   .delivery--method {

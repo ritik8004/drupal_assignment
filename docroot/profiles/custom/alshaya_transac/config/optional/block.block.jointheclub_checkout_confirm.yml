@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_loyalty
+    - system
+  theme:
+    - alshaya_white_label
+id: jointheclub_checkout_confirm
+theme: alshaya_white_label
+region: content
+weight: -13
+provider: null
+plugin: join_the_club
+settings:
+  id: join_the_club
+  label: 'Join the club'
+  provider: alshaya_loyalty
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /cart/checkout/confirmation
+    negate: false
+    context_mapping: {  }

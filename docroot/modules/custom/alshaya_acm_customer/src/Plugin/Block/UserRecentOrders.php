@@ -212,7 +212,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
               }
 
               // Load the first image.
-              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
+              $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288');
 
               // Total price.
               $order['items'][$key]['total_price'] = [
