@@ -362,6 +362,12 @@ class CustomerController extends ControllerBase {
     $build['#theme'] = 'user_order_print';
     $build['#attached']['library'][] = 'alshaya_acm_customer/order_print';
 
+    // Not caching for this as this page is only accessed when user place order
+    // and see printed version. User can also directly see/visit this page but
+    // that is not a valid case + caching this having consequences for
+    // anonymous users.
+    $build['#cache']['max-age'] = 0;
+
     return $build;
   }
 
