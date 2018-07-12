@@ -23,7 +23,11 @@
 {% if swatch_image %}
   <span class="swatch swatch-image"><img src="{{ swatch_image }}" title="{{ value|raw }}" /></span>
 {% elseif swatch_color %}
-  <span class="swatch swatch-color" style="background-color: {{ swatch_color }}" ></span>
+  {% if swatch_color in ['#FFFFFF', '#ffffff', '#fff', '#FFF'] %}
+    <span class="swatch swatch-color white" style="background-color: {{ swatch_color }}" ></span>
+  {% else %}
+    <span class="swatch swatch-color" style="background-color: {{ swatch_color }}" ></span>
+  {% endif %}
 {% elseif swatch_text %}
   <span class="swatch swatch-text">{{ swatch_text }}</span>
 {% endif %}
