@@ -315,8 +315,8 @@ class SkuAssetManager {
   /**
    * Helper function to sort based on angles.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU for which the assets needs to be sorted on angles.
+   * @param string $sku
+   *   SKU code for which the assets needs to be sorted on angles.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
    * @param array $assets
@@ -325,7 +325,7 @@ class SkuAssetManager {
    * @return array
    *   Array of assets sorted by their asset types & angles.
    */
-  public function sortSkuAssets(SKU $sku, $page_type, array $assets) {
+  public function sortSkuAssets($sku, $page_type, array $assets) {
     $alshaya_hm_images_config = $this->configFactory->get('alshaya_hm_images.settings');
     // Fetch weights of asset types based on the pagetype.
     $sku_asset_type_weights = $alshaya_hm_images_config->get('weights')[$page_type];
