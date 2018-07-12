@@ -10,7 +10,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Url;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
@@ -93,24 +92,20 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function build() {
-    // Get current language code.
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get all the parents of product category.
     $term_data = $this->productCategoryTree->getCategoryRootTerms();
-    // If no data, no need to render the block.
+
     if (empty($term_data)) {
       return [];
     }
 
-    // Load english term data to set the css class based on term name.
-    if ($langcode !== 'en') {
-      $term_data_en = $this->productCategoryTree->getCategoryRootTerms('en');
-    }
+    // Get all child terms for the given parent.
+    $term_data_en = $this->productCategoryTree->getCategoryTree('en', 0, FALSE, FALSE);
 
     // Add class for all terms.
     foreach ($term_data as $term_id => &$term_info) {
       $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
-      // Create a link class based on taxonomy term name.
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
 
@@ -118,24 +113,15 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     $parent_id = alshaya_super_category_get_default_term();
 
     // Set default category link to redirect to home page.
-    // Default category is set to active, while we are on home page, But the
-    // link is pointing to term page.
+    // Default category is set to active, while we are on home page.
     if (isset($term_data[$parent_id])) {
       $term_data[$parent_id]['path'] = Url::fromRoute('<front>')->toString();
     }
 
     // Get current term from route.
-    $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    // Get all parents of the given term.
-    if ($term instanceof TermInterface) {
-      $parent = $this->productCategoryTree->getCategoryTermRootParent($term);
-      if (count($parent) > 0) {
-        $parent_id = $parent['id'];
-      }
-    }
-
-    if (isset($term_data[$parent_id])) {
-      $term_data[$parent_id]['class'] .= ' active';
+    $term = $this->productCategoryTree->getCategoryTermRequired();
+    if (!empty($term) && isset($term_data[$term['id']])) {
+      $term_data[$term['id']]['class'] .= ' active';
     }
 
     return [
@@ -161,7 +147,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public function getCacheContexts() {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path', 'url.query_args']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url.path', 'url.query_args:brand']);
   }
 
 }

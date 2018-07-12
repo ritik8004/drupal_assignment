@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
 
@@ -37,19 +38,30 @@ class SkuImagesManager {
   protected $configFactory;
 
   /**
+   * File storage.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
+                              EntityTypeManagerInterface $entity_type_manager,
                               SkuManager $sku_manager) {
     $this->moduleHandler = $module_handler;
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
   }
@@ -66,6 +78,16 @@ class SkuImagesManager {
    *   Array of media files.
    */
   public function getAllMedia(SKUInterface $sku, $check_parent_child = FALSE) {
+    // Here for_sku means it can be in parent or child.
+    // And from_sku means specifically for this SKU.
+    $cache_key = $check_parent_child ? 'media_for_sku' : 'media_from_sku';
+
+    $return = $this->skuManager->getProductCachedData($sku, $cache_key);
+
+    if (is_array($return)) {
+      return $this->addFileObjects($return);
+    }
+
     $media = $sku->getMedia();
 
     $return = [
@@ -134,7 +156,57 @@ class SkuImagesManager {
       $return['images'][$url] = $url;
     }
 
+    $this->skuManager->setProductCachedData(
+      $sku,
+      $cache_key,
+      $this->removeFileObjects($return)
+    );
+
     return $return;
+  }
+
+  /**
+   * Add file objects back to cached version of media.
+   *
+   * @param array $media
+   *   Media array.
+   *
+   * @return array
+   *   Processed media array.
+   */
+  private function addFileObjects(array $media) {
+    if (empty($media['media_items']['images'])) {
+      return $media;
+    }
+
+    foreach ($media['media_items']['images'] as &$item) {
+      if (isset($item['fid'])) {
+        $item['file'] = $this->fileStorage->load($item['fid']);
+      }
+    }
+
+    return $media;
+  }
+
+  /**
+   * Remove file objects for caching media.
+   *
+   * @param array $media
+   *   Media array.
+   *
+   * @return array
+   *   Processed media array.
+   */
+  private function removeFileObjects(array $media) {
+    if (empty($media['media_items']['images'])) {
+      return $media;
+    }
+
+    foreach ($media['media_items']['images'] as &$item) {
+      unset($item['file']);
+    }
+
+    return $media;
   }
 
   /**
@@ -147,7 +219,7 @@ class SkuImagesManager {
    *   First SKU entity with media if found else null.
    */
   public function getFirstChildWithMedia(SKUInterface $sku) {
-    $cache_key = 'first_child_sku_with_media_' . $sku->getSku() . '_' . $sku->language()->getId();
+    $cache_key = 'first_child_with_media';
 
     $child_sku = $this->skuManager->getProductCachedData($sku, $cache_key);
     if ($child_sku) {
