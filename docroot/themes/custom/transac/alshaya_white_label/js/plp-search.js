@@ -187,7 +187,8 @@
       }
 
       /**
-       * Place the search count from view header in different locations based on resolution.
+       * Place the search count from view header in different locations based
+       * on resolution.
        */
       function placeSearchCount() {
         var viewHeader = null;
@@ -321,6 +322,16 @@
           }
         }
       }
+
+      // Keep the filters open that have checkboxes checked.
+      $('div.block-facets-ajax').each(function () {
+        $(this).find('input.facets-checkbox:checkbox:checked').each(function () {
+          if (!$(this).closest('div.block-facets-ajax').hasClass('facet-active')) {
+            $(this).closest('div.block-facets-ajax').addClass('facet-active');
+            return false;
+          }
+        });
+      });
 
       // Clone the filter bar and add it to the filter menu on mobile.
       // Show mobile slider only on mobile resolution.
