@@ -75,19 +75,36 @@ class AlshayaRemoveSuperCategoryProcessor extends ProcessorPluginBase implements
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
-    if (!empty($results) && $this->removeSuperCategory()) {
-      // Ids of super category terms (all top level terms).
+    if (!empty($results) && $this->isSuperCategoryTermsToBeRemoved()) {
       if (!empty($super_categories = array_keys($this->categoryTree->getCategoryRootTerms()))) {
-        foreach ($results as $key => $result) {
-          // If super category term exists in facet item, unset it.
-          if (in_array($result->getRawValue(), $super_categories)) {
-            unset($results[$key]);
-          }
-        }
+        // Remove super categories from facet results.
+        $results = $this->removeSuperCategoriesFromResult($results, $super_categories);
       }
     }
 
     // Return the results.
+    return $results;
+  }
+
+  /**
+   * Removing super categories from the result set.
+   *
+   * @param array $results
+   *   Facet result array.
+   * @param array $super_categories
+   *   Super categories.
+   *
+   * @return array
+   *   Facet result array with super categories removed.
+   */
+  protected function removeSuperCategoriesFromResult(array $results, array $super_categories) {
+    foreach ($results as $key => $result) {
+      // If super category term exists in result set, unset it.
+      if (in_array($result->getRawValue(), $super_categories)) {
+        unset($results[$key]);
+      }
+    }
+
     return $results;
   }
 
@@ -97,7 +114,7 @@ class AlshayaRemoveSuperCategoryProcessor extends ProcessorPluginBase implements
    * @return bool
    *   Remove super category term or not.
    */
-  protected function removeSuperCategory() {
+  protected function isSuperCategoryTermsToBeRemoved() {
     if ($this->configFactory->get('alshaya_super_category.settings')->get('status')) {
       return TRUE;
     }
