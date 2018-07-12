@@ -214,7 +214,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
    * @return array|null
    *   Processed media item or null if some error occurred.
    */
-  protected function processMediaItem(&$update_sku, array $data, $download = FALSE) {
+  protected function processMediaItem(&$update_sku, array &$data, $download = FALSE) {
     $media_item = $data;
 
     // Processing is required only for media type image as of now.

@@ -1533,6 +1533,14 @@ class SkuManager {
    *   Swatches array.
    */
   public function getSwatches(SKUInterface $sku, $attribute_code = 'color') {
+    $swatches = $this->getProductCachedData($sku, 'swatches');
+
+    // We may have nothing for an SKU, we should not keep processing for it.
+    // If value is not set, function returns NULL above so we check for array.
+    if (is_array($swatches)) {
+      return $swatches;
+    }
+
     $swatches = [];
     $duplicates = [];
     $children = $this->getChildSkus($sku);
@@ -1553,6 +1561,8 @@ class SkuManager {
       $duplicates[$value] = 1;
       $swatches[$child->id()] = $swatch_item['file']->url();
     }
+
+    $this->setProductCachedData($sku, 'swatches', $swatches);
 
     return $swatches;
   }
