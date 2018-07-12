@@ -219,7 +219,8 @@
     }
   }
 
-  input[type="tel"] {
+  input[type="tel"],
+  input[type="text"] {
     font-size: 1rem !important;
   }
 }
