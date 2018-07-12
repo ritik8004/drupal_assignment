@@ -1,4 +1,10 @@
 .path--cart {
+  .view-product-slider {
+    .price-wrapper {
+      clear: both;
+    }
+  }
+
   .tooltip--head {
     @include breakpoint($desktop) {
       font-size: 0.875rem;

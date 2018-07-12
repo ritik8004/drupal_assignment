@@ -101,10 +101,10 @@ autosize:
   js:
     vendor/js/autosize.min.js: {}
 
-sizeguide:
+attribute:
   js:
     js/select2Option.js: {}
-    js/sizeguide.js: {}
+    js/attribute.js: {}
 
 ucfix:
   js:

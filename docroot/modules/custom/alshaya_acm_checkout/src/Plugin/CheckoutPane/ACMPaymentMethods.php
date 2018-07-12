@@ -130,7 +130,17 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // payment method even before user does place order. By default we select
     // a payment method, we inform Magento about that here.
     if (empty($cart_payment)) {
-      $this->getCheckoutHelper()->setSelectedPayment($selected_plugin_id);
+      $isSurchargeEnabled = $this->getCheckoutHelper()->isSurchargeEnabled();
+
+      if ($isSurchargeEnabled) {
+        $this->getCheckoutHelper()->setBillingFromShipping(FALSE);
+      }
+
+      $this->getCheckoutHelper()->setSelectedPayment(
+        $selected_plugin_id,
+        [],
+        $isSurchargeEnabled
+      );
     }
 
     // More than one payment method available, so build a form to let the user
@@ -175,16 +185,19 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
 
       $sub_title = '';
 
-      if ($plugin_id === 'cashondelivery') {
+      if ($this->getCheckoutHelper()->isSurchargeEnabled() && $plugin_id === 'cashondelivery') {
         $surcharge = $cart->getExtension('surcharge');
 
         if ($surcharge) {
-          $surcharge_value = alshaya_acm_price_get_formatted_price($surcharge['amount']);
-          $sub_title = $config->get('cod_surcharge_short_description');
-          $description = $config->get('cod_surcharge_description');
+          $surcharge['amount'] = (float) $surcharge['amount'];
+          if ($surcharge['amount'] > 0) {
+            $surcharge_value = alshaya_acm_price_get_formatted_price($surcharge['amount']);
+            $sub_title = $config->get('cod_surcharge_short_description');
+            $description = $config->get('cod_surcharge_description');
 
-          $sub_title = str_replace('[surcharge]', $surcharge_value, $sub_title);
-          $description = str_replace('[surcharge]', $surcharge_value, $description);
+            $sub_title = str_replace('[surcharge]', $surcharge_value, $sub_title);
+            $description = str_replace('[surcharge]', $surcharge_value, $description);
+          }
         }
       }
 

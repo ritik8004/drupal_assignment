@@ -14,11 +14,14 @@
         select2OptionConvert();
       });
 
-      if ($(window).width() < 1025) {
+      if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
         $('.form-item-configurable-select').on('change', function () {
           $(this).closest('.sku-base-form').find('.error').remove();
         });
       }
+
+      $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
+      $('#configurable_ajax .form-item-configurable-select').parent().addClass('configurable-select');
 
       /**
        * JS for converting select list for size to unformatted list on PDP pages.
@@ -28,20 +31,24 @@
        */
       function convertSelectListtoUnformattedList(element) {
         element.once('bind-events').each(function () {
-          $('select', $(this)).select2Option();
+          var that = $(this).parent();
+          $('select', that).select2Option();
 
-          var clickedOption = $('.select2Option li a.picked', $(this));
-          $('.select2Option', $(this)).find('.list-title .selected-text').remove();
-          $('.select2Option', $(this)).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+          $('.select2Option', that).find('.list-title .selected-text').remove();
+
+          var clickedOption = $('select option:selected', that);
+          if (!clickedOption.is(':disabled')) {
+            $('.select2Option', that).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+          }
         });
       }
 
       function select2OptionConvert() {
-        if ($(window).width() > 767) {
-          convertSelectListtoUnformattedList($('.form-item-configurables-band-size, .form-item-configurables-cup-size, .form-item-configurables-size'));
+        if ($(window).width() > drupalSettings.show_configurable_boxes_after) {
+          convertSelectListtoUnformattedList($('.form-item-configurable-select'));
         }
 
-        convertSelectListtoUnformattedList($('.form-item-configurables-color'));
+        convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
       }
     }
   };

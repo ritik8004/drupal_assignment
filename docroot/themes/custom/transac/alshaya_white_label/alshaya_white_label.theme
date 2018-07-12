@@ -87,9 +87,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
   $route_options = $routematch->getRouteObject()->getOptions();
   if (isset($route_options['parameters']['page_manager_page'])) {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-panel');
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('overlay__wrapper');
   }
   else {
     $variables['attributes']['class'][] = Html::cleanCssIdentifier('page-standard');
+    $variables['attributes']['class'][] = Html::cleanCssIdentifier('overlay__wrapper');
   }
 
   if ($routematch->getRouteName() === "acq_customer.orders" || $routematch->getRouteName() === 'acq_cart.cart') {
@@ -757,7 +759,9 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
       $title = $menu->link->getTitle();
       $links[strtolower($title)] = $menu->link->getUrlObject()->setAbsolute(TRUE)->toString();
     }
-    $variables['links'] = $links;
+    if (isset($links)) {
+      $variables['links'] = $links;
+    }
   }
 }
 
