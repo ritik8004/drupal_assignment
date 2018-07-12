@@ -25,6 +25,10 @@ $languages = [
 
 foreach ($countries as $country_code => $country_name) {
   $magento_data = alshaya_get_commerce_third_party_settings(strtolower($brand_code), $country_code, '01' . strtolower($env));
+  if (empty($magento_data)) {
+    echo "\nNothing for: " . $brand_name . ' ' . $country_name . ' - ' . $env;
+    continue;
+  }
 
   // Create new site for $country_code.
   $site = create_site(
