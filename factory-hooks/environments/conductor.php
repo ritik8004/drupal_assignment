@@ -143,11 +143,26 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
       'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
     ],
+    // Pottery Barn KW.
+    'pbkw_test' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
+      'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
+      'api_version' => 'v2',
+    ],
+    // Pottery Barn SA.
+    'pbsa_test' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
+      'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
+      'api_version' => 'v2',
+    ],
     // Pottery Barn AE.
     'pbae_test' => [
-      'url' => 'https://alshaya-pbae-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'cbf73a1b03eb43369149662f41980491',
-      'hmac_secret' => '_tcQBAc4nXGPNsSH1AAARw',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
+      'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
+      'api_version' => 'v2',
     ],
     // BathBodyWorks KW.
     'bbwkw_test' => [
