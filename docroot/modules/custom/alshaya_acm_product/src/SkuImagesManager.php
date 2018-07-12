@@ -168,6 +168,26 @@ class SkuImagesManager {
   }
 
   /**
+   * Get first image from media to display as list.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Media item array.
+   */
+  public function getFirstImage(SKUInterface $sku) {
+    $media = $this->getAllMedia($sku, TRUE);
+
+    if (isset($media['media_items'], $media['media_items']['images'])
+      && is_array($media['media_items']['images'])) {
+      return reset($media['media_items']['images']);
+    }
+
+    return [];
+  }
+
+  /**
    * Get gallery for particular SKU.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -217,6 +237,9 @@ class SkuImagesManager {
             '#mainImage' => $search_main_image,
             '#thumbnails' => $thumbnails,
             '#attached' => [
+              'drupalSettings' => [
+                'plp_slider' => $this->configFactory->get('alshaya_acm_product.display_settings')->get('plp_slider'),
+              ],
               'library' => [
                 'alshaya_search/alshaya_search',
               ],

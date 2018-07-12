@@ -98,6 +98,7 @@ $alabaster: #fcfcfc;
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
+$_pink_one: #636363;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -254,7 +255,7 @@ $tooltip_bg_opacity_0: rgba(240, 246, 252, 0);
 $tooltip_text: $nero;
 $tooltip_border: $nero;
 // Second color for arrow of tooltip.
-$tooltip_border_2: $white-smoke-light;
+$tooltip_border_2: $vanilla;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 $tooltip_icon: $nero;
@@ -535,7 +536,7 @@ $plp_tile_product_hover_bg: $white-five;
 $plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
 $plp_tile_hover_slider_nav_hover: $grey-ash;
-$plp_tile_hover_slider_arrows: $black;
+$plp_tile_hover_slider_arrows: $_pink_one;
 $plp_pager_link: $marine-blue;
 $plp_pager_link_border: $marine-blue;
 
@@ -554,7 +555,7 @@ $pdp_sell_title: $nero;
 $pdp_title_collection_name: $ash-triplet;
 
 // Product modal
-$pdp_modal_full_prodlink: $brilliant-rose;
+$pdp_modal_full_prodlink: $nero;
 $pdp_modal_full_prodlink_border: $gainsboro;
 
 // Product Add to cart form.

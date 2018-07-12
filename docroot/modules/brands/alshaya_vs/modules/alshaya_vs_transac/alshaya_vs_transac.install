@@ -6,6 +6,23 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update plp slider configuration.
+ */
+function alshaya_vs_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_vs_transac',
+    'override',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
 
 /**
  * Implements hook_update_N().
@@ -20,6 +37,7 @@ function alshaya_vs_transac_update_8001() {
     'image.style.137x144',
     'image.style.192x168',
     'image.style.291x288',
+    'image.style.59x60',
     'image.style.product_zoom_medium_606x504',
     'image.style.product_zoom_small_81x72',
   ];

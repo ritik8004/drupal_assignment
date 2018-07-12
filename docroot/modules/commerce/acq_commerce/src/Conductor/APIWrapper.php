@@ -197,13 +197,10 @@ class APIWrapper implements APIWrapperInterface {
     // Clean up cart data.
     $cart = $this->helper->cleanCart($cart);
 
-
     $doReq = function ($client, $opt) use ($endpoint, $cart) {
       $opt['json'] = $cart;
       return ($client->post($endpoint, $opt));
     };
-
-    $cart = [];
 
     try {
       // First invalidate so even if we get exception, all blocks are updated.

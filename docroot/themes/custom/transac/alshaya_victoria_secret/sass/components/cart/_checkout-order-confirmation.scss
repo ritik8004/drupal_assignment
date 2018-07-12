@@ -292,3 +292,23 @@
     }
   }
 }
+
+.c-order-print {
+  .user__order--detail {
+    .surcharge-row td {
+      padding: 0.625rem 1rem;
+    }
+  }
+}
+
+@media print {
+  .page-standard {
+    &.c-order-print {
+      padding-bottom: 0;
+    }
+  }
+
+  .user__order--detail {
+    margin-bottom: 0;
+  }
+}
