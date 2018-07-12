@@ -1,5 +1,13 @@
 .c-plp {
-  padding-top: 1rem;
+  padding-top: 1.5rem;
+
+  @include breakpoint($tablet) {
+    padding-top: 0.75rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0.625rem;
+  }
 
   .region__content {
     position: relative;
@@ -114,6 +122,11 @@
 
     .view-header.search-count {
       margin-top: 1.5rem;
+
+      &.only-mobile {
+        margin-top: 0;
+        padding-top: 0.5rem;
+      }
     }
   }
 
@@ -190,6 +203,16 @@
     .field--name-name {
       margin-bottom: 0.3125rem;
       text-transform: uppercase;
+    }
+  }
+
+  .c-page-title {
+    height: 1.75rem;
+    line-height: 1.5;
+
+    @include breakpoint($only-mobile) {
+      height: 1.25rem;
+      line-height: 1.25;
     }
   }
 }
