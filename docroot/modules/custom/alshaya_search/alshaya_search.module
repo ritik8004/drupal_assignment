@@ -296,32 +296,67 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
       unset($languages['ar']);
       $default_language = current($languages);
     }
+
+    $redirect = FALSE;
     if (\Drupal::languageManager()->getCurrentLanguage()->getId() == 'ar') {
       // If none of the characters of the keywords are in arabic.
       if (!preg_match("/\p{Arabic}/u", $keyword)) {
-        // Redirect to the previously identified non arabic language.
-        $url = Url::fromUserInput('/search', [
-          'query' => ['keywords' => $keyword],
-          'absolute' => TRUE,
-          'language' => $default_language,
-        ])->toString();
-        $response = new RedirectResponse($url);
-        $response->send();
+        $redirect = TRUE;
+        $redirect_lang = $default_language;
       }
     }
-    else {
-      if (preg_match("/^\p{Arabic}+$/u", $keyword)) {
-        // Redirect to arabic, if all characters are in arabic.
-        $url = Url::fromUserInput('/search', [
-          'query' => ['keywords' => $keyword],
-          'absolute' => TRUE,
-          'language' => $languages['ar'],
-        ])->toString();
-        $response = new RedirectResponse($url);
-        $response->send();
+    elseif (preg_match("/\p{Arabic}+$/u", $keyword)) {
+      // Redirect to arabic, if all characters are in arabic.
+      $redirect = TRUE;
+      $redirect_lang = $languages['ar'];
+    }
+
+    if ($redirect) {
+      $query = ['keywords' => $keyword];
+      if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
+        $brand = alshaya_search_redirect_get_brand_input_value($form_state->getValue('brand'), $redirect_lang);
+        if ($brand) {
+          $query['brand'] = $brand;
+        }
       }
+
+      // Redirect to keyword language.
+      $url = Url::fromUserInput('/search', [
+        'query' => $query,
+        'absolute' => TRUE,
+        'language' => $redirect_lang,
+      ])->toString();
+      $response = new RedirectResponse($url);
+      $response->send();
     }
   }
+}
+
+/**
+ * Get brand path in given language to redirect.
+ *
+ * @param string $brand
+ *   The current brand value.
+ * @param object $language
+ *   The current language.
+ *
+ * @return mixed
+ *   Return brand alias in given language else return empty.
+ */
+function alshaya_search_redirect_get_brand_input_value($brand, $language) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    return;
+  }
+
+  if (!is_numeric($brand)) {
+    $params = Url::fromUserInput("/$brand")->getRouteParameters();
+    if (!empty($params['taxonomy_term'])) {
+      $brand = $params['taxonomy_term'];
+    }
+  }
+
+  $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/taxonomy/term/' . $brand, $language->getId());
+  return str_replace("/", '', urldecode($alias));
 }
 
 /**
