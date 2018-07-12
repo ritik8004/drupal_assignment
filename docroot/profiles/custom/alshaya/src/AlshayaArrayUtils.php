@@ -62,7 +62,7 @@ class AlshayaArrayUtils {
       ? array_unique($array)
       : $array;
 
-    foreach ($array as $value) {
+    foreach ($array as &$value) {
       if (is_array($value)) {
         self::arrayUnique($value);
       }
