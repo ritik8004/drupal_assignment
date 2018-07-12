@@ -266,14 +266,10 @@
     }
 
     img {
-      min-width: 8rem;
+      width: 8rem;
 
       @include breakpoint($tablet) {
-        min-width: 7.5rem;
-      }
-
-      @include breakpoint($desktop) {
-        min-width: 8.5625rem;
+        width: 7.125rem;
       }
     }
 
