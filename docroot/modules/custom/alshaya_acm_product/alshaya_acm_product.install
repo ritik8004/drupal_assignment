@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 
 /**
@@ -13,9 +14,57 @@ use Drupal\node\Entity\Node;
  *
  * Adding description field to SKU.
  */
-function alshaya_acm_product_update_8021() {
+function alshaya_acm_product_update_8024() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new config value for size guide attributes.
+ */
+function alshaya_acm_product_update_8023() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.size_guide'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add 'short_desc_characters' config.
+ */
+function alshaya_acm_product_update_8022() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update display settings to allow swatch field configuration.
+ */
+function alshaya_acm_product_update_8021() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
 }
 
 /**

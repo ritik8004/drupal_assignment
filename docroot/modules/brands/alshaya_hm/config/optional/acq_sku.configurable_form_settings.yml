@@ -1,6 +1,7 @@
 attribute_weights:
-  article_castor_id: 1
-  size: 2
+  default:
+    article_castor_id: 1
+    size: 2
 show_quantity: FALSE
 sortable_options:
   - size

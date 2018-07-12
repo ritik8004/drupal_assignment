@@ -139,48 +139,9 @@ function alshaya_acm_checkout_taxonomy_term_presave(EntityInterface $entity) {
  *   Cleaned address array.
  */
 function _alshaya_acm_checkout_clean_address($address) {
-  $address = (array) $address;
-
-  $allowed_fields = [
-    'firstname',
-    'first_name',
-    'lastname',
-    'last_name',
-    'telephone',
-    'street',
-    'street2',
-    'city',
-    'region',
-    'postcode',
-    'country_id',
-    'extension',
-  ];
-
-  foreach ($address as $key => $value) {
-    if (!in_array($key, $allowed_fields)) {
-      unset($address[$key]);
-    }
-  }
-
-  if (!empty($address['region'])) {
-    // TODO: We may just require region and not region_id, need to verify later.
-    $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country_id']);
-    $address['region'] = $address['region_id'];
-  }
-
-  if (!empty($address['telephone'])) {
-    $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
-  }
-
-  // @TODO: CORE-2332 - Fix this properly, possibly in Magento.
-  // City is Magento core field but we don't use it at all.
-  // But this is required by Cybersource so we need proper value.
-  // For now, we copy value of Area to City.
-  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-  $address['city'] = $address_book_manager->getAddressShippingAreaValue($address);
-
-  return $address;
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+  $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+  return $helper->cleanCheckoutAddress($address);
 }
 
 /**
@@ -413,43 +374,21 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
     return;
   }
 
+  /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+  $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+
   // Cybersource requires billing info to be available before it processes
   // credit card. This info is set in the signed fields by Magento. To ensure
   // we have the values set, we need to pass it to Magento before we start
   // payment process.
   if (!empty($billing['same_as_shipping']) && $billing['same_as_shipping'] == 1) {
-    alshaya_acm_checkout_set_shipping_into_billing($cart);
+    $helper->setBillingFromShipping();
   }
   else {
     /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
     $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $address = _alshaya_acm_checkout_clean_address($address_book_manager->getMagentoAddressFromAddressArray($billing['address']['billing']));
-    $cart->setBilling($address);
+    $address = $address_book_manager->getMagentoAddressFromAddressArray($billing['address']['billing']);
+    $helper->setBillingInfo(FALSE, $address);
   }
 
-}
-
-/**
- * Helper function to copy shipping address into billing address.
- *
- * @param \Drupal\acq_cart\CartInterface $cart
- *   Cart object.
- */
-function alshaya_acm_checkout_set_shipping_into_billing(CartInterface $cart) {
-  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-  $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-  /** @var \Drupal\alshaya_acm\CartHelper $cart_helper */
-  $cart_helper = \Drupal::service('alshaya_acm.cart_helper');
-
-  $shipping_address = $cart_helper->getShipping($cart);
-
-  // Loading address from address book if customer_address_id is available.
-  if (isset($shipping_address['customer_address_id'])) {
-    if ($entity = $address_book_manager->getUserAddressByCommerceId($shipping_address['customer_address_id'])) {
-      $shipping_address = $address_book_manager->getAddressFromEntity($entity, FALSE);
-    }
-  }
-
-  $cart->setBilling(_alshaya_acm_checkout_clean_address($shipping_address));
 }

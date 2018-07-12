@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <style type="text/css">
+        body,p {font-family: Arial, helvetica; font-size: 13px; line-height: 1.31; color: #232323;}
+        .footer p {color: #fff;}
+        h1 {font-size: 24px; color: #232323; border-bottom: 1px solid #adadad; padding-bottom: 15px; font-weight: normal;}
+        a { color: #ef5f96; text-decoration: none;}
+        .bold { font-weight: bold; }
+        .button { background: #ef5f96; text-transform: uppercase; font-size: 12px; color: #fff; padding: 10px 30px; margin: 10px 0; display: inline-block;}
+        p { margin-bottom: 16px;}
+        #center {min-height: 200px; padding: 0 25px;}
+        #header {border-bottom: 1px solid #adadad; padding: 25px 25px 40px 25px; margin-bottom: 23px;}
+        .footer {margin-top: 50px; background: #232323;}
+        #mimemail-body.ar {text-align: right;}
+        @media only screen and (max-device-width: 480px) {
+          #header {padding: 10px 7px; margin-bottom: 21px;}
+          #header img {width: 160px;}
+          #center {padding: 0 7px}
+          h1 {font-size: 18px; padding-bottom: 10px}
+        }
+      </style>
+  </head>
+  <body id="mimemail-body" class="{{ lang }}" {% if ( module | length > 0 ) and ( key | length > 0 ) %}  {% set class = 'class="' ~ module ~ '-' ~ key ~ '"' %} {% endif %} >
+    <div id="header" style="text-align: center;">
+      <img src="{{ email_logo }}" width="281px" alt="logo" title="logo"/>
+    </div>
+    <div id="center">
+      <div id="main">
+        {{ body|raw }}
+      </div>
+    </div>
+    <div class="footer" style="border-top: 1px solid #adadad; text-align: center;">
+      <div style="padding-top: 30px; padding-bottom: 50px;">
+        {% for name, link in links %}
+          <a href="{{ link }}" target="_blank" style="text-decoration: none;">
+            <img style="margin: 0 0 0 15px;" src="{{ site_base_path ~ directory }}/../alshaya_victoria_secret/imgs/email-social-icons/{{ name }}-icon.png" alt="{{ name|t }}" width="24.3px" title="{{ name|t }}" />
+          </a>
+        {% endfor %}
+      </div>
+      <div style="font-family: Arial, helvetica; font-size: 11px; color: #333; line-height: 1.55; background: #232323; padding: 16px; text-align: center;">
+        <p style="margin:0; color: #fff; font-size: 11px;">
+          {{ email_footer }}
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -240,21 +240,22 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         if (isRTL()) {
           $(this, context).lightSlider({
             vertical: false,
-            item: 4,
+            item: settings.plp_slider.item,
             rtl: true,
-            slideMargin: 5,
+            slideMargin: settings.plp_slider.margin,
             onSliderLoad: function () {
-              gallery.css('height', '73px');
+              gallery.css('height', settings.plp_slider.height + 'px');
             }
           });
         }
         else {
           $(this, context).lightSlider({
             vertical: false,
-            item: 4,
-            slideMargin: 5,
+            item: settings.plp_slider.item,
+            rtl: false,
+            slideMargin: settings.plp_slider.margin,
             onSliderLoad: function () {
-              gallery.css('height', '73px');
+              gallery.css('height', settings.plp_slider.height + 'px');
             }
           });
         }
@@ -345,7 +346,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
    */
   Drupal.changeProgressBarToThrobber = function(context) {
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {
-      if ((ajax_instance !== null && ajax_instance.hasOwnProperty('element')) &&
+      if ((ajax_instance) && (ajax_instance.hasOwnProperty('element')) &&
         ($(ajax_instance.element, context).hasClass('c-products-list') ||
         ($(ajax_instance.element, context).parents('ul[data-drupal-views-infinite-scroll-pager="automatic"]').length > 0))) {
         Drupal.ajax.instances[key].progress.type = 'throbber';

@@ -202,8 +202,6 @@ class APIWrapper implements APIWrapperInterface {
       return ($client->post($endpoint, $opt));
     };
 
-    $cart = [];
-
     try {
       // First invalidate so even if we get exception, all blocks are updated.
       Cache::invalidateTags(['cart:' . $cart_id]);

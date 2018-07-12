@@ -1,4 +1,4 @@
-{{ attach_library('alshaya_white_label/sizeguide') }}
+{{ attach_library('alshaya_white_label/attribute') }}
 {{ attach_library('alshaya_white_label/cloud_zoom') }}
 {%
 set classes = [
@@ -96,9 +96,14 @@ set classes = [
                   </div>
                 {% endif %}
               </div>
-              {% if content.short_desc.value|render %}
-                <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+              {% if content.description %}
+                {% if content.read_more_style.value|render %}
+                  <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                  <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                {% else %}
+                  <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+                  <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+                {% endif %}
               {% endif %}
             </div>
           </div>

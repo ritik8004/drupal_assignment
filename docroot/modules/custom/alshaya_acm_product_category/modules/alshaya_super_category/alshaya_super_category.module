@@ -360,8 +360,8 @@ function alshaya_super_category_search_api_solr_query_alter(SolariumQueryInterfa
   $fields = $index->getServerInstance()->getBackend()->getSolrFieldNames($index);
   $solr_field = !empty($fields['field_category']) ? $fields['field_category'] : '';
   if ($solr_field) {
-    $brand = \Drupal::requestStack()->getCurrentRequest()->query->get('brand');
-    $solarium_query->addParam('bq', "{$solr_field}:$brand^" . $super_category->get('solr_boost'));
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+    $solarium_query->addParam('bq', "{$solr_field}:{$term['id']}^" . $super_category->get('solr_boost'));
   }
 }
 
@@ -389,6 +389,12 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
         '#type' => 'hidden',
         '#value' => $term['id'],
       ];
+
+      $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      $path = str_replace("/$lang/", '', $term['path']);
+      if (strpos($path, 'taxonomy') === FALSE) {
+        $form['brand']['#value'] = $path;
+      }
     }
 
     $form['#cache']['contexts'][] = 'url.path';
