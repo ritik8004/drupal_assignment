@@ -7,11 +7,6 @@
   line-height: 1.33;
   text-decoration: underline;
 
-  &:visited,
-  &:active {
-    color: none;
-  }
-
   @include breakpoint($only-tablet) {
     top: 0.625rem;
   }
