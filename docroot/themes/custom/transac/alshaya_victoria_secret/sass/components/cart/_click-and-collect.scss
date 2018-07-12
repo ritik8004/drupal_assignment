@@ -101,7 +101,13 @@
         margin-top: 9.125rem;
 
         .scroll-fix {
-          padding: 0.5rem 1.25rem;
+          padding: 0.5rem 0;
+
+          .open--hours {
+            .key-value-value {
+              float: $right;
+            }
+          }
         }
 
         .select-store {
@@ -169,6 +175,16 @@
       .label--delivery-time {
         font-family: $vs-bold;
         font-weight: normal !important;
+      }
+
+      .geolocation-common-map-container {
+        .store-open-hours {
+          .hours--label {
+            &::after {
+              top: 2px;
+            }
+          }
+        }
       }
     }
 
