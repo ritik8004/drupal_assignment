@@ -87,7 +87,7 @@
     }
 
     @include breakpoint($only-tablet) {
-      margin-top: 5rem;
+      margin-top: 2.75rem;
     }
   }
 }
@@ -122,6 +122,45 @@
   div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
     @include breakpoint($desktop) {
       height: 38.31rem !important;
+    }
+  }
+}
+
+.pdp-modal-overlay {
+  #drupal-modal {
+    .content__main {
+      @include breakpoint($desktop) {
+        min-height: 33.325rem;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  #drupal-modal {
+    #lightSlider {
+      &.pager-yes {
+        padding: 0 2.4375rem;
+      }
+    }
+
+    .slick-track {
+      width: 28.125rem !important;
+    }
+
+    .cloudzoom {
+      .cloudzoom__thumbnails {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .path--cart,
+  .nodetype--acq_product {
+    .ui-dialog {
+      #drupal-modal {
+        height: 39rem !important;
+      }
     }
   }
 }
