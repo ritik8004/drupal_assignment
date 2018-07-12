@@ -7,6 +7,7 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
@@ -78,10 +79,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
       break;
 
     case 'system_branding_block':
-      // Update block cache context.
-      $variables['content']['#cache']['contexts'][] = 'url.path';
-      $variables['content']['#cache']['contexts'][] = 'url.query_args';
-
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
@@ -127,6 +124,40 @@ function alshaya_super_category_preprocess_block(&$variables) {
       }
       break;
   }
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function alshaya_super_category_block_build_alter(array &$build, BlockPluginInterface $block) {
+  $config = \Drupal::config('alshaya_super_category.settings');
+
+  if (!$config->get('status')) {
+    return;
+  }
+
+  $blocks = array_merge([
+    'system_branding_block',
+    'alshaya_main_menu',
+    'alshaya_shop_by_block',
+  ],
+  // Prepare plugin id array based on configured 'footer menu blocks".
+  array_map(function ($derivative) {
+    return "system_menu_block:$derivative";
+  }, $config->get('footer_menu_blocks')));
+
+  // Get the list of blocks that are used as promo panel.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_promo_panel')) {
+    $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
+    $blocks = array_merge($blocks, array_keys($promo_panel_blocks));
+  }
+
+  if (!in_array($block->getPluginId(), $blocks)) {
+    return;
+  }
+
+  $build['#cache']['contexts'][] = 'url.path';
+  $build['#cache']['contexts'][] = 'url.query_args:brand';
 }
 
 /**
