@@ -22,7 +22,7 @@ cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 echo "Restore database dumps."
 drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip
 
-## Apply the database updates.
+## Apply the database updates to all sites.
 echo "Executing updb."
 drush8 acsf-tools-ml updb 2> /tmp/temp
 output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g')
