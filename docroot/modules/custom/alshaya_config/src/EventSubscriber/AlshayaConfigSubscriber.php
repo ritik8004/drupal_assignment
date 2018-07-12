@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_config\EventSubscriber;
 
+use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
@@ -77,6 +78,11 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     // Allow other modules to alter the data.
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
+
+    // Avoid fatal errors for unknown reasons.
+    if (is_array($data)) {
+      AlshayaArrayUtils::arrayUnique($data);
+    }
 
     // Re-write the config to make sure the overrides are not lost.
     $this->configStorage->write($config->getName(), $data);

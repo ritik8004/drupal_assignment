@@ -9,10 +9,10 @@ use Drupal\Core\Site\Settings;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
-  * Implements hook_update_N().
-  *
-  * Update plp slider configuration.
-  */
+ * Implements hook_update_N().
+ *
+ * Update plp slider configuration.
+ */
 function alshaya_vs_transac_update_8002() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');

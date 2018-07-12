@@ -30,6 +30,7 @@
   span.out-of-stock {
     font-family: $vs-regular;
     font-size: 0.875rem;
+    margin: 1rem 0;
   }
 
   .form-type-select {
@@ -256,7 +257,6 @@
   .field--name-field-skus {
     #configurable_ajax {
       .configurable-select,
-      .form-item-configurables-size,
       .form-item-configurables-cup-size,
       .form-item-configurables-band-size {
         label {
@@ -300,6 +300,12 @@
             width: 100%;
             padding-#{$left}: 0.625rem;
           }
+        }
+      }
+
+      .form-item-configurables-size {
+        &::after {
+          content: none;
         }
       }
     }
