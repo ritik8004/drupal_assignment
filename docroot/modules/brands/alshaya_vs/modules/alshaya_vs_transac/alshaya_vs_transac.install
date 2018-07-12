@@ -27,20 +27,17 @@ function alshaya_vs_transac_update_dependencies() {
  * Update the store finder config to install label position settings.
  */
 function alshaya_vs_transac_update_8003() {
-  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-    ->set('label_position', [
-      'x' => 15,
-      'y' => 17,
-    ])
-    ->save(TRUE);
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_stores_finder.settings'],
+    'alshaya_vs_transac',
+    'override',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('label_position', [
-      'x' => 7,
-      'y' => 17,
-      'single_x' => 10,
-      'single_y' => 17,
-    ])
+    ->set('label_position', _alshaya_vs_transac_marker_label_position_ar())
     ->save();
 }
 
@@ -155,20 +152,8 @@ function alshaya_vs_transac_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  \Drupal::configFactory()->getEditable('alshaya_stores_finder.settings')
-    ->set('label_position', [
-      'x' => 15,
-      'y' => 17,
-    ])
-    ->save(TRUE);
-
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('label_position', [
-      'x' => 7,
-      'y' => 17,
-      'single_x' => 10,
-      'single_y' => 17,
-    ])
+    ->set('label_position', _alshaya_vs_transac_marker_label_position_ar())
     ->save();
 
   $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');

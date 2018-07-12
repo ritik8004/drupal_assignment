@@ -165,3 +165,18 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
     }
   }
 }
+
+/**
+ * Config of marker label position for arabic.
+ *
+ * @return array
+ *   Return array of arabic settings override.
+ */
+function _alshaya_vs_transac_marker_label_position_ar() {
+  return [
+    'x' => 7,
+    'y' => 17,
+    'single_x' => 10,
+    'single_y' => 17,
+  ];
+}

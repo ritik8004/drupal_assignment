@@ -386,14 +386,9 @@
         labelOrigin: new google.maps.Point(label_position.x, label_position.y),
         scaledSize: new google.maps.Size(31, 48)
       };
-      if (drupalSettings.path.currentLanguage === 'ar') {
-        // If only single digit move them closer to the center.
-        if (markerSettings.label.length === 1) {
-          markerSettings.icon.labelOrigin = new google.maps.Point(label_position.single_x, label_position.single_y);
-        }
-        else {
-          markerSettings.icon.labelOrigin = new google.maps.Point(label_position.x, label_position.y);
-        }
+      // If only single digit move them closer to the center.
+      if (drupalSettings.path.currentLanguage === 'ar' && markerSettings.label.length === 1) {
+        markerSettings.icon.labelOrigin = new google.maps.Point(label_position.single_x, label_position.single_y);
       }
     }
 
