@@ -23,7 +23,7 @@ function alshaya_stores_finder_update_8104() {
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('label_position', [
+    ->set('marker.label_position', [
       'x' => 7,
       'y' => 17,
       'single_x' => 10,
@@ -99,7 +99,7 @@ function alshaya_stores_finder_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('label_position', [
+    ->set('marker.label_position', [
       'x' => 7,
       'y' => 15,
       'single_x' => 11,
