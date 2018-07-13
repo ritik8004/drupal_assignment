@@ -57,8 +57,8 @@ class AlshayaArrayUtils {
    *   Multi-dimensional array to make it unique.
    */
   public static function arrayUnique(array &$array) {
-    // Make indexed arrays unique.
-    $array = (array_values($array) === $array)
+    // Make indexed single dimensional arrays unique.
+    $array = (array_values($array) === $array) && (count($array) === count($array, COUNT_RECURSIVE))
       ? array_unique($array)
       : $array;
 
