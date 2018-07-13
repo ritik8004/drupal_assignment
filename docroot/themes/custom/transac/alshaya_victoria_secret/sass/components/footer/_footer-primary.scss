@@ -297,3 +297,18 @@ html[lang=ar] {
     }
   }
 }
+
+.c-footer-primary,
+.only-first-time {
+  .language-switcher-language-url {
+    ul {
+      li {
+        &.ar {
+          a {
+            font-family: $vs-arabic-regular;
+          }
+        }
+      }
+    }
+  }
+}
