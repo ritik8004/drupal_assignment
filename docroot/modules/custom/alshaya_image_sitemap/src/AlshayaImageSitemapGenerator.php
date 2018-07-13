@@ -11,6 +11,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\node\Entity\Node;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -64,6 +67,13 @@ class AlshayaImageSitemapGenerator {
   protected $languageManager;
 
   /**
+   * SKU Images Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -80,6 +90,8 @@ class AlshayaImageSitemapGenerator {
    *   The module handler service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager
+   *   SKU Images Manager.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -87,7 +99,8 @@ class AlshayaImageSitemapGenerator {
                               EntityTypeManagerInterface $entity_manager,
                               ModuleHandlerInterface $module_handler,
                               TranslationInterface $string_translation,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              SkuImagesManager $skuImagesManager) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -95,6 +108,7 @@ class AlshayaImageSitemapGenerator {
     $this->moduleHandler = $module_handler;
     $this->stringTranslation = $string_translation;
     $this->languageManager = $language_manager;
+    $this->skuImagesManager = $skuImagesManager;
   }
 
   /**
@@ -135,10 +149,23 @@ class AlshayaImageSitemapGenerator {
     if (count($nids) > 0) {
       foreach ($nids as $nid) {
         // Fetch list of media files for each nid.
-        $media = [];
-        $this->moduleHandler->invokeAll('image_sitemap_get_product_media', [&$media, &$nid]);
-        if (empty($media)) {
-          $media = alshaya_acm_product_get_product_media($nid);
+        // Load product from id.
+        $node_storage = $this->entityTypeManager->getStorage('node');
+        $product = $node_storage->load($nid);
+
+        if ($product instanceof Node) {
+          // Get SKU from product.
+          $skuId = $product->get('field_skus')->first()->getString();
+          if (isset($skuId)) {
+            $sku = SKU::loadFromSku($skuId);
+            if ($sku instanceof SKU) {
+              $all_media = $this->skuImagesManager->getAllMedia($sku);
+              if (!empty($all_media['images'])) {
+                // Changes for the image count.
+                $media = $all_media['images'];
+              }
+            }
+          }
         }
 
         if (!empty($media)) {
@@ -148,12 +175,10 @@ class AlshayaImageSitemapGenerator {
           foreach ($languages as $language) {
             $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $language])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
           }
-          foreach ($media as $media_item) {
-            if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
-              $output .= '<image:image><image:loc>' . file_create_url($media_item['file']->getFileUri()) . '</image:loc><image:title>' . $media_item['file']->getFilename() . '</image:title></image:image>';
-            }
-            elseif (isset($media_item['url'])) {
-              $output .= '<image:image><image:loc>' . str_replace('&', '%26', $media_item['url']->toString()) . '</image:loc></image:image>';
+          foreach ($media as $key => $value) {
+            if ($key) {
+              $path = str_replace('&', '%26', $value);
+              $output .= '<image:image><image:loc>' . $path . '</image:loc></image:image>';
             }
             $total_urls++;
           }
