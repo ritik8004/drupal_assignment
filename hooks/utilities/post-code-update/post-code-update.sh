@@ -20,7 +20,7 @@ cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
 ## Restore the database dumps before applying database updates.
 echo "Restore database dumps."
-drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip
+drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip -y
 
 ## Apply the database updates to all sites.
 echo "Executing updb."
