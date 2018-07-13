@@ -8,16 +8,6 @@
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Implements hook_module_implements_alter().
- */
-function alshaya_vs_module_implements_alter(&$implementations, $hook) {
-  // Alter page_attachments implementation for alshaya_vs to call at last.
-  if ($hook == 'page_attachments') {
-    unset($implementations['back_to_top']);
-  }
-}
-
-/**
  * Implements hook_gtm_list_name_alter().
  */
 function alshaya_vs_gtm_list_name_alter(&$listName) {
