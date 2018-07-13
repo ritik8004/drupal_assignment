@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
@@ -496,6 +497,40 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
     if ($term = Term::load($form['tid']['#value'])) {
       // Display highlight field only for level 2 term.
       $form['field_main_menu_highlight']['#access'] = ($term->get('depth_level')->getString() == 2) ? TRUE : FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_super_category_language_switch_links_alter(array &$links, $type, Url $url) {
+  $request = \Drupal::requestStack()->getCurrentRequest();
+
+  if ($request->get('_route') == 'view.search.page') {
+    if (($keywords = $request->query->get('keywords')) && !is_numeric($keywords)) {
+      return;
+    }
+
+    if (($brand = $request->query->get('brand')) && !is_numeric($brand)) {
+      $params = Url::fromUserInput("/$brand")->getRouteParameters();
+      if (!empty($params['taxonomy_term'])) {
+        $brand = $params['taxonomy_term'];
+      }
+    }
+
+    if (!empty($brand)) {
+      foreach ($links as $lang => $url_object) {
+        // Get term alias to replace it for brand query.
+        $alias = \Drupal::service('path.alias_manager')
+          ->getAliasByPath('/taxonomy/term/' . $brand, $lang);
+
+        $alias = str_replace("/", '', urldecode($alias));
+
+        if (!empty($links[$lang]['query']['brand'])) {
+          $links[$lang]['query']['brand'] = $alias;
+        }
+      }
     }
   }
 }
