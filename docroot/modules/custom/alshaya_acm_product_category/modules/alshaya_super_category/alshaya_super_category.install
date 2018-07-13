@@ -11,7 +11,9 @@
  * Add alshaya_remove_supercategory_term processor to SRP/PLP category facet.
  */
 function alshaya_super_category_update_8002() {
-  _alshaya_super_category_configure_facet_processor();
+  \Drupal::configFactory()->getEditable('facets.facet.category')->save();
+  \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')->save();
+  \Drupal::configFactory()->getEditable('facets.facet.category_promotion')->save();
 }
 
 /**
@@ -22,36 +24,4 @@ function alshaya_super_category_update_8001() {
     ->getEditable('alshaya_super_category.settings')
     ->set('solr_boost', 21)
     ->save(TRUE);
-}
-
-/**
- * Implements hook_update_n().
- */
-function alshaya_super_category_install() {
-  _alshaya_super_category_configure_facet_processor();
-}
-
-/**
- * Add/Configure `alshaya_remove_supercategory_term` facet processor plugin.
- */
-function _alshaya_super_category_configure_facet_processor() {
-  $facet_config = [
-    'processor_id' => 'alshaya_remove_supercategory_term',
-    'weights' => [
-      'build' => -10,
-    ],
-    'settings' => [],
-  ];
-
-  $facet_processor_config = \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')->get('processor_configs');
-  $facet_processor_config['alshaya_remove_supercategory_term'] = $facet_config;
-  \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')
-    ->set('processor_configs', $facet_processor_config)
-    ->save();
-
-  $facet_processor_config = \Drupal::configFactory()->getEditable('facets.facet.category')->get('processor_configs');
-  $facet_processor_config['alshaya_remove_supercategory_term'] = $facet_config;
-  \Drupal::configFactory()->getEditable('facets.facet.category')
-    ->set('processor_configs', $facet_processor_config)
-    ->save();
 }
