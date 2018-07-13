@@ -23,6 +23,21 @@
       text-transform: none;
       color: $plp_facet_filter_label;
     }
+
+    .block-page-title-block.mobile {
+      h1 {
+        @include breakpoint($only-mobile) {
+          font-size: 1rem;
+        }
+      }
+
+      + .view-header.search-count {
+        padding-top: 3px;
+        border-bottom: 1px solid $content_pagetitle_border;
+        padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+    }
   }
 
   .c-products__item {
@@ -33,6 +48,10 @@
       max-width: 18.1875rem;
       margin-#{$right}: 2.4%;
       margin-bottom: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.5rem);
     }
 
     &:nth-child(3n) {
@@ -63,7 +82,7 @@
       }
 
       .alshaya_search_mainimage {
-        @include breakpoint($only-tablet) {
+        @include breakpoint($upto-desktop) {
           height: auto;
         }
 
@@ -85,6 +104,8 @@
         .c-facet__label {
           border-#{$right}: 0;
           color: $plp_facet_filter_label;
+          height: 2.5rem;
+          line-height: 1.4;
 
           &::after {
             border: 1px solid $plp_facet_label_border_mobile;
@@ -93,6 +114,11 @@
             align-items: center;
             justify-content: center;
             font-size: 2rem;
+            height: 2.5rem;
+          }
+
+          @include breakpoint($tablet) {
+            width: 6.8125rem;
           }
 
           &.is-active {
@@ -144,6 +170,11 @@
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
+      ul {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
       ul li {
         height: 2.5rem;
         margin-bottom: 0.75rem;
@@ -213,7 +244,7 @@
 
       .c-facet__blocks__wrapper--mobile {
         @include breakpoint($only-mobile) {
-          z-index: 7;
+          z-index: 5;
         }
 
         .c-facet__blocks {
@@ -296,10 +327,10 @@
     .form-type-select {
       @include breakpoint($upto-desktop) {
         select {
-          height: 2.1875rem;
+          height: 2.5rem;
           padding: 0.5rem;
           position: static;
-          line-height: 1.3;
+          line-height: 1.4;
         }
 
         &::after {
@@ -307,7 +338,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          line-height: 2.1875rem;
+          line-height: 2.5rem;
           font-size: 2rem;
           z-index: auto;
         }
