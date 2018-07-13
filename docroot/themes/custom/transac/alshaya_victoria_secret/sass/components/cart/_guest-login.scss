@@ -194,8 +194,6 @@
   }
 
   .block-customer-service-block {
-    @include breakpoint($desktop) {
-      padding-top: 0.875rem;
-    }
+    padding-top: 0.75rem;
   }
 }
