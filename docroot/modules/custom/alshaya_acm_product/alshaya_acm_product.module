@@ -1025,7 +1025,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
             if ($quantity > 0) {
               // Set the dropdown quantity options only for selected option.
-              if (isset($selected[$configurable_key]) && $selected[$attribute_parts[0]] == $key) {
+              if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
                 $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
               }
             }
