@@ -103,6 +103,14 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       elseif ($request->get('_route') == 'view.search.page') {
         if ($brand = $request->query->get('brand')) {
           if (!is_numeric($brand)) {
+            // On search result page when user tries to switch content language,
+            // it throws an error.
+            //
+            // Because the url will generate link with /ar but other parameters
+            // are still in english and system will try to look for english
+            // brand name in arabic, and vice versa.
+            // Handle the error by loading the term id by detecting brand
+            // parameter's language.
             $alias_lang = NULL;
             if ($this->languageManager->getCurrentLanguage()->getId() == 'ar' && !preg_match("/\p{Arabic}/u", $brand)) {
               $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
@@ -115,6 +123,8 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
               }
             }
             else {
+              // If brand parameter and current language both are same then
+              // try to get taxonomy term from brand only.
               $params = Url::fromUserInput("/$brand")->getRouteParameters();
               if (!empty($params['taxonomy_term'])) {
                 $brand = $params['taxonomy_term'];
