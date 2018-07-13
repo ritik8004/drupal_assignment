@@ -36,7 +36,9 @@
 
       #product-image-gallery,
       #lightSlider {
-        height: 31rem;
+        @include breakpoint($desktop) {
+          height: 31rem;
+        }
       }
     }
   }
