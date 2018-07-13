@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -1305,6 +1306,7 @@ class SkuManager {
     $tree = $plugin->deriveProductTree($sku);
 
     $configurable_codes = array_keys($tree['configurables']);
+    $all_combinations = AlshayaArrayUtils::getAllCombinations($configurable_codes);
 
     $combinations = [];
 
@@ -1314,21 +1316,32 @@ class SkuManager {
         continue;
       }
 
-      foreach ($sku_entity->get('attributes')->getValue() as $attribute) {
-        if (in_array($attribute['key'], $configurable_codes)) {
-          $combinations['by_sku'][$sku_code][$attribute['key']] = $attribute['value'];
-          $combinations['attribute_sku'][$attribute['key']][$attribute['value']][] = $sku_code;
+      $attributes = $sku_entity->get('attributes')->getValue();
+      $attributes = array_column($attributes, 'value', 'key');
+      foreach ($configurable_codes as $code) {
+        $value = $attributes[$code] ?? '';
+
+        if (empty($value)) {
+          continue;
         }
+
+        $combinations['by_sku'][$sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
     }
 
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
+    $combinations['by_attribute'] = [];
+
     foreach ($combinations['by_sku'] ?? [] as $combination) {
-      foreach ($combination as $key1 => $value1) {
-        foreach ($combination as $key2 => $value2) {
-          $combinations['by_attribute'][$key1][$value1][$key2][$value2] = $value2;
+      foreach ($all_combinations as $possible_combination) {
+        $combination_string = '';
+        foreach ($possible_combination as $code) {
+          $combination_string .= $code . '|' . $combination[$code] . '||';
+          $combinations['by_attribute'][$combination_string] = 1;
         }
+        $combinations['by_attribute'][$combination_string] = 1;
       }
     }
 
@@ -1376,18 +1389,29 @@ class SkuManager {
       }
     }
 
-    foreach ($configurable_codes as $index => $code) {
-      if (isset($selected[$code])) {
-        $selected_value = $selected[$code];
-        for ($i = ++$index; $i < count($configurable_codes); $i++) {
-          $code_to_check = $configurable_codes[$i];
-          foreach ($configurables[$code_to_check]['#options'] as $key => $value) {
-            if (empty($key) || isset($combinations['by_attribute'][$code][$selected_value][$code_to_check][$key])) {
-              continue;
-            }
+    $combination_key = '';
+    foreach ($selected as $code => $value) {
+      $index = array_search($code, $configurable_codes);
+      if ($index !== FALSE) {
+        unset($configurable_codes[$index]);
+      }
 
-            $configurables[$code_to_check]['#options_attributes'][$key]['disabled'] = 'disabled';
+      $combination_key .= $code . '|' . $value . '||';
+      foreach ($configurable_codes as $configurable_code) {
+        foreach ($configurables[$configurable_code]['#options'] as $key => $value) {
+          $check_key1 = $combination_key . $configurable_code . '|' . $key . '||';
+          $check_key2 = $configurable_code . '|' . $key . '||' . $combination_key;
+
+          if (isset($combinations['by_attribute'][$check_key1])
+            || isset($combinations['by_attribute'][$check_key2])) {
+            continue;
           }
+
+          if (isset($selected[$configurable_code]) && $selected[$configurable_code] == $key) {
+            unset($selected[$configurable_code]);
+          }
+
+          $configurables[$configurable_code]['#options_attributes'][$key]['disabled'] = 'disabled';
         }
       }
     }

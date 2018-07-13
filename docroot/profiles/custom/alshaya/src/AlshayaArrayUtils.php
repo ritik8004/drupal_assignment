@@ -69,4 +69,35 @@ class AlshayaArrayUtils {
     }
   }
 
+  /**
+   * Get all possible combinations for array values.
+   *
+   * @param array $array
+   *   Array to process.
+   *
+   * @return array
+   *   Processed array.
+   */
+  public static function getAllCombinations(array $array) {
+    $combinations = [];
+    $combinations_check = [];
+
+    $words = sizeof($array);
+    $combos = 1;
+    for ($i = $words; $i > 0; $i--) {
+      $combos *= $i;
+    }
+
+    while (sizeof($combinations) < $combos) {
+      shuffle($array);
+      $combo = implode('||', $array);
+      if (!in_array($combo, $combinations_check)) {
+        $combinations_check[] = $combo;
+        $combinations[] = $array;
+      }
+    }
+
+    return $combinations;
+  }
+
 }
