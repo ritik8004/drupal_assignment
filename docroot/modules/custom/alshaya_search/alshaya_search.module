@@ -356,7 +356,7 @@ function alshaya_search_redirect_get_brand_input_value($brand, $language) {
   }
 
   $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/taxonomy/term/' . $brand, $language->getId());
-  // Decode url for any non string value (arabic strings are encoded).
+  // Decode url string of encoded value. (arabic strings are encoded).
   return str_replace("/", '', urldecode($alias));
 }
 
