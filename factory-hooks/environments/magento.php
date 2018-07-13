@@ -338,21 +338,18 @@ function alshaya_get_magento_host_data() {
           'en' => 'kwt_en',
           'ar' => 'kwt_ar',
         ],
-        'stock_mode' => 'push',
       ],
       'sa' => [
         'magento_lang_prefix' => [
           'en' => 'ksa_en',
           'ar' => 'ksa_ar',
         ],
-        'stock_mode' => 'push',
       ],
       'ae' => [
         'magento_lang_prefix' => [
           'en' => 'uae_en',
           'ar' => 'uae_ar',
         ],
-        'stock_mode' => 'push',
       ],
     ],
   ];
