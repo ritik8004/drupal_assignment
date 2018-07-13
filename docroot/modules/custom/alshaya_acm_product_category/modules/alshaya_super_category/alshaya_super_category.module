@@ -524,7 +524,7 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
         // Get term alias to replace it for brand query.
         $alias = \Drupal::service('path.alias_manager')
           ->getAliasByPath('/taxonomy/term/' . $brand, $lang);
-
+        // Decode url string of encoded value. (arabic strings are encoded).
         $alias = str_replace("/", '', urldecode($alias));
 
         if (!empty($links[$lang]['query']['brand'])) {
