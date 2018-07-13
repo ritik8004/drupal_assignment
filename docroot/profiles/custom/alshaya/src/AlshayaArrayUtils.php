@@ -72,29 +72,36 @@ class AlshayaArrayUtils {
   /**
    * Get all possible combinations for array values.
    *
-   * @param array $array
+   * @param array $source
    *   Array to process.
+   * @param array $partial
+   *   Array to store partial combinations.
+   * @param array $used
+   *   Array to store used combinations.
    *
    * @return array
    *   Processed array.
    */
-  public static function getAllCombinations(array $array) {
-    $combinations = [];
-    $combinations_check = [];
-
-    $words = sizeof($array);
-    $combos = 1;
-    for ($i = $words; $i > 0; $i--) {
-      $combos *= $i;
+  public static function getAllCombinations(array $source, array $partial = [], array $used = []) {
+    if (count($partial) == count($source)) {
+     return [$partial];
     }
 
-    while (sizeof($combinations) < $combos) {
-      shuffle($array);
-      $combo = implode('||', $array);
-      if (!in_array($combo, $combinations_check)) {
-        $combinations_check[] = $combo;
-        $combinations[] = $array;
+    $combinations = [];
+    foreach ($source as $key => $value) {
+      if (isset($used[$key])) {
+        continue;
       }
+
+      $new_partial = $partial;
+      $new_partial[] = $value;
+      $new_used = $used;
+      $new_used[$key] = $key;
+
+      $combinations = array_merge(
+        $combinations,
+        self::getAllCombinations($source, $new_partial, $new_used)
+      );
     }
 
     return $combinations;
