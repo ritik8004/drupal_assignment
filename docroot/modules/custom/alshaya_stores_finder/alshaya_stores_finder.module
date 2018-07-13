@@ -37,7 +37,7 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
   $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googleGeocodingAPI']['components'] = ['country' => $site_country];
   $attachments['#attached']['drupalSettings']['alshaya_stores_finder']['map'] = [
     'marker_icon_path' => $marker->get('marker.url'),
-    'label_position' => $marker->get('label_position'),
+    'label_position' => $marker->get('marker.label_position'),
   ];
 }
 
