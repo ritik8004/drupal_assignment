@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
@@ -416,15 +417,17 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
 
     if (is_array($term)) {
+
       $form['brand'] = [
         '#type' => 'hidden',
         '#value' => $term['id'],
       ];
 
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      $path = str_replace("/$lang/", '', $term['path']);
+      $path = str_replace("/$lang/", '', urldecode($term['path']));
+
       if (strpos($path, 'taxonomy') === FALSE) {
-        $form['brand']['#value'] = $path;
+        $form['brand']['#value'] = ($lang == 'ar') ? urldecode($path) : $path;
       }
     }
 
