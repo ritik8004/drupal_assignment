@@ -13,6 +13,21 @@ use Drupal\Core\Site\Settings;
  *
  * Update the store finder config to install label position settings.
  */
+function alshaya_stores_finder_update_8105() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_stores_finder.settings'],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update the store finder config to install label position settings.
+ */
 function alshaya_stores_finder_update_8104() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(

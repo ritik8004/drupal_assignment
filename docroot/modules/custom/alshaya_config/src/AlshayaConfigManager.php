@@ -173,7 +173,7 @@ class AlshayaConfigManager {
         // For now we check only level one keys. We may want to enhance it
         // later to do recursive check. We may want to complicate this a bit
         // more to handle more scenarios. For now it is simple.
-        $data = array_merge($data, $existing);
+        $data = NestedArray::mergeDeepArray([$data, $existing], TRUE);
         break;
 
       case self::MODE_MERGE:
