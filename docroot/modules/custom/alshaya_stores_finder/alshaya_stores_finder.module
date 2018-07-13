@@ -33,9 +33,12 @@ function alshaya_stores_finder_page_attachments(array &$attachments) {
   // @TODO: Check if this is really required on all pages.
   $attachments['#attached']['library'][] = 'alshaya_stores_finder/store_finder';
   $site_country = _alshaya_custom_get_site_level_country_code();
-  $marker_path = \Drupal::configFactory()->get('alshaya_stores_finder.settings')->get('marker.url');
+  $marker = \Drupal::configFactory()->get('alshaya_stores_finder.settings');
   $attachments['#attached']['drupalSettings']['geolocation']['geocoder']['googleGeocodingAPI']['components'] = ['country' => $site_country];
-  $attachments['#attached']['drupalSettings']['alshaya_stores_finder']['map'] = ['marker_icon_path' => $marker_path];
+  $attachments['#attached']['drupalSettings']['alshaya_stores_finder']['map'] = [
+    'marker_icon_path' => $marker->get('marker.url'),
+    'label_position' => $marker->get('label_position'),
+  ];
 }
 
 /**
