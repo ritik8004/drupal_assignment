@@ -535,13 +535,16 @@ class SkuManager {
    *   View mode around how the promotion needs to be rendered.
    * @param array $types
    *   Type of promotion to filter on.
+   * @param string $product_view_mode
+   *   Product view mode for which promotion is being rendered.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function getPromotionsFromSkuId(SKU $sku,
                                          string $view_mode,
-                                         array $types = ['cart', 'category']) {
+                                         array $types = ['cart', 'category'],
+                                         $product_view_mode = NULL) {
 
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
@@ -584,7 +587,9 @@ class SkuManager {
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
 
-          if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+          if (($view_mode == 'links') &&
+            ($product_view_mode == 'full') &&
+            !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
             $view_mode = 'free_gift';
           }
 
@@ -612,6 +617,14 @@ class SkuManager {
                 'discount_type' => $discount_type,
                 'discount_value' => $discount_value,
               ];
+
+              if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+                $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
+              }
+
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+                $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
+              }
               break;
           }
         }
@@ -628,7 +641,7 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos)) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types);
+        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
       }
     }
 
