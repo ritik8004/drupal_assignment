@@ -365,7 +365,9 @@ class SkuAssetManager {
 
             // Use number for sorting in case we land onto 2 images with same
             // asset type & facing type.
-            if (($weight_a - $weight_b) === 0) {
+            if (($weight_a - $weight_b) === 0
+              && isset($a['Data'], $a['Data']['Angle'], $a['Data']['Angle']['Number'])
+              && isset($b['Data'], $b['Data']['Angle'], $b['Data']['Angle']['Number'])) {
               $weight_a = $a['Data']['Angle']['Number'];
               $weight_b = $b['Data']['Angle']['Number'];
             }
