@@ -24,7 +24,6 @@ function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, arr
  */
 function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variables) {
   $view = $variables['view'];
-  // @codingStandardsIgnoreLine
   if (!in_array($view->current_display, ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
     return;
   }
@@ -147,8 +146,9 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
         $short_desc['label'] = [
           '#markup' => t('Short Description'),
         ];
+
         $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
-        $short_desc_html = mb_substr($description_value, 0, $short_desc_len);
+        $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
         $short_desc['value'] = [
           '#markup' => $short_desc_html,
         ];
