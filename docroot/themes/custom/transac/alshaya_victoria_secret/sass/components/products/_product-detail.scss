@@ -207,7 +207,8 @@
             }
 
             &.white {
-              box-shadow: 0 0 0 1px inset $pdp_white_color_attribute;
+              -webkit-appearance: none;
+              box-shadow: 0 0 0 1px $pdp_white_color_attribute;
             }
           }
         }
