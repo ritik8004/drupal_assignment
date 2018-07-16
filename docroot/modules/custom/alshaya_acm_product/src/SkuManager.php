@@ -1316,6 +1316,11 @@ class SkuManager {
         continue;
       }
 
+      // Disable OOS combinations too.
+      if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+        continue;
+      }
+
       $attributes = $sku_entity->get('attributes')->getValue();
       $attributes = array_column($attributes, 'value', 'key');
       foreach ($configurable_codes as $code) {
