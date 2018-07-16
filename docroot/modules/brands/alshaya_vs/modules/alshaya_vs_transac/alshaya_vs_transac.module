@@ -182,11 +182,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 /**
  * Implements hook_block_access().
  *
- * Can't handle visibility for content type from visibility settings.
- *
- * We have two vertical tabs for content type on block settings page and the
- * one which allows "negate the condition", is not working as expected. so, we
- * had to write this hook to hide page title block from advanced page CT.
+ * Can't handle visibility for content type for a particular field condition.
  */
 function alshaya_vs_transac_block_access(Block $block, $operation, AccountInterface $account) {
   // Not allow 'page_title_block' block on advanced page content type.
@@ -206,6 +202,7 @@ function alshaya_vs_transac_block_access(Block $block, $operation, AccountInterf
       return;
     }
 
+    // Restrict page title visibility, if the category is the super category.
     $terms = $node->get('field_product_category')->getValue();
     if (count($terms) > 0) {
       $term_id = $terms[0]['target_id'];
