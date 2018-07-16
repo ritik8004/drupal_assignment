@@ -191,6 +191,10 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 function alshaya_vs_transac_block_access(Block $block, $operation, AccountInterface $account) {
   // Not allow 'page_title_block' block on advanced page content type.
   if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
+    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      return;
+    }
+
     $route = \Drupal::routeMatch();
     if ($route->getRouteName() != 'entity.node.canonical') {
       return;
