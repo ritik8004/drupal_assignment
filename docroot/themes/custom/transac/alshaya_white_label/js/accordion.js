@@ -104,11 +104,13 @@
         $('.c-pdp .short-description-wrapper', context).once('readmore').each(function () {
           $(this).on('click', '.read-more-description-link-mobile', function () {
             $(this).parent().toggleClass('show-detail');
+            $(this).parent().find('.desc-wrapper:first-child').hide();
             $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
             $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
           });
           $(this).on('click', '.show-less-link', function () {
             $(this).parent().toggleClass('show-detail');
+            $(this).parent().find('.desc-wrapper:first-child').show();
             $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
             $(this).replaceWith('<span class="read-more-description-link-mobile">' + Drupal.t('Read more') + '</span>');
             $('html,body').animate({

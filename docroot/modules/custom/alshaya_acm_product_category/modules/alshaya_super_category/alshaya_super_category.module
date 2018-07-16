@@ -7,8 +7,10 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
@@ -79,10 +81,6 @@ function alshaya_super_category_preprocess_block(&$variables) {
       break;
 
     case 'system_branding_block':
-      // Update block cache context.
-      $variables['content']['#cache']['contexts'][] = 'url.path';
-      $variables['content']['#cache']['contexts'][] = 'url.query_args';
-
       /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
@@ -123,11 +121,45 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $variables['content']['site_logo']['#alt']    = $parent->label();
       $variables['content']['site_name']['#markup'] = $parent->label();
       // Set the site path to brand page.
-      if ($parent->id() !== alshaya_super_category_get_default_term()) {
+      if ($parent->id() != alshaya_super_category_get_default_term()) {
         $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
       }
       break;
   }
+}
+
+/**
+ * Implements hook_block_build_alter().
+ */
+function alshaya_super_category_block_build_alter(array &$build, BlockPluginInterface $block) {
+  $config = \Drupal::config('alshaya_super_category.settings');
+
+  if (!$config->get('status')) {
+    return;
+  }
+
+  $blocks = array_merge([
+    'system_branding_block',
+    'alshaya_main_menu',
+    'alshaya_shop_by_block',
+  ],
+  // Prepare plugin id array based on configured 'footer menu blocks".
+  array_map(function ($derivative) {
+    return "system_menu_block:$derivative";
+  }, $config->get('footer_menu_blocks')));
+
+  // Get the list of blocks that are used as promo panel.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_promo_panel')) {
+    $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
+    $blocks = array_merge($blocks, array_keys($promo_panel_blocks));
+  }
+
+  if (!in_array($block->getPluginId(), $blocks)) {
+    return;
+  }
+
+  $build['#cache']['contexts'][] = 'url.path';
+  $build['#cache']['contexts'][] = 'url.query_args:brand';
 }
 
 /**
@@ -478,6 +510,40 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
     if ($term = Term::load($form['tid']['#value'])) {
       // Display highlight field only for level 2 term.
       $form['field_main_menu_highlight']['#access'] = ($term->get('depth_level')->getString() == 2) ? TRUE : FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_super_category_language_switch_links_alter(array &$links, $type, Url $url) {
+  $request = \Drupal::requestStack()->getCurrentRequest();
+
+  if ($request->get('_route') == 'view.search.page') {
+    if (($keywords = $request->query->get('keywords')) && !is_numeric($keywords)) {
+      return;
+    }
+
+    if (($brand = $request->query->get('brand')) && !is_numeric($brand)) {
+      $params = Url::fromUserInput("/$brand")->getRouteParameters();
+      if (!empty($params['taxonomy_term'])) {
+        $brand = $params['taxonomy_term'];
+      }
+    }
+
+    if (!empty($brand)) {
+      foreach ($links as $lang => $url_object) {
+        // Get term alias to replace it for brand query.
+        $alias = \Drupal::service('path.alias_manager')
+          ->getAliasByPath('/taxonomy/term/' . $brand, $lang);
+        // Decode url string of encoded value. (arabic strings are encoded).
+        $alias = str_replace("/", '', urldecode($alias));
+
+        if (!empty($links[$lang]['query']['brand'])) {
+          $links[$lang]['query']['brand'] = $alias;
+        }
+      }
     }
   }
 }

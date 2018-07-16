@@ -5,7 +5,44 @@
  * Install file for alshaya_store_finder.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update().
+ *
+ * Update the store finder config to install label position settings.
+ */
+function alshaya_stores_finder_update_8104() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_stores_finder.settings'],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('marker.label_position', [
+      'x' => 7,
+      'y' => 17,
+      'single_x' => 10,
+      'single_y' => 17,
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Refactor store detail page link for store finder glossary view.
+ */
+function alshaya_stores_finder_update_8103() {
+  $configs = [
+    'views.view.stores_finder',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_stores_finder');
+}
 
 /**
  * Implements hook_update().
@@ -60,16 +97,13 @@ function alshaya_stores_finder_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
-}
 
-/**
- * Implements hook_update().
- *
- * Refactor store detail page link for store finder glossary view.
- */
-function alshaya_stores_finder_update_8103() {
-  $configs = [
-    'views.view.stores_finder',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_stores_finder');
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('marker.label_position', [
+      'x' => 7,
+      'y' => 15,
+      'single_x' => 11,
+      'single_y' => 15,
+    ])
+    ->save();
 }

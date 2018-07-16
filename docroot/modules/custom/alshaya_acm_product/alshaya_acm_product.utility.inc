@@ -273,7 +273,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
 
   // If no main image, use default image.
-  if (empty($main_image)) {
+  if (empty($main_image) && $check_parent_child) {
     if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());

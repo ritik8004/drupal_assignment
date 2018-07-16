@@ -79,7 +79,7 @@
   #block-youllbeableto {
     h3 {
       color: $user_sidebar_block_title;
-      font-size: 14px;
+      font-size: 0.875rem;
       font-family: $alshaya-bold;
       text-transform: lowercase;
       font-weight: normal;
@@ -509,8 +509,9 @@
   }
 }
 
+#block-youllbeableto-checkout-confirm,
 #block-youllbeableto,
-#block-jointheclub {
+.block-join-the-club {
   text-transform: lowercase;
 
   a {

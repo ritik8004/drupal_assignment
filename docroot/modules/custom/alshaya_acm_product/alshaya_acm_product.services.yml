@@ -33,6 +33,7 @@ services:
     arguments:
       - '@module_handler'
       - '@config.factory'
+      - '@entity_type.manager'
       - '@alshaya_acm_product.skumanager'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
