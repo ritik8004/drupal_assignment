@@ -7,8 +7,11 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -173,6 +176,40 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
       $build['short_desc'] = $short_desc;
       $build['description'][] = $description;
     }
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ *
+ * Can't handle visibility for content type from visibility settings.
+ *
+ * We have two vertical tabs for content type on block settings page and the
+ * one which allows "negate the condition", is not working as expected. so, we
+ * had to write this hook to hide page title block from advanced page CT.
+ */
+function alshaya_vs_transac_block_access(Block $block, $operation, AccountInterface $account) {
+  // Not allow 'page_title_block' block on advanced page content type.
+  if ($operation == 'view' && $block->getPluginId() == 'page_title_block') {
+    $route = \Drupal::routeMatch();
+    if ($route->getRouteName() != 'entity.node.canonical') {
+      return;
+    }
+
+    /* @var \Drupal\node\Entity\Node $node */
+    $node = $route->getParameter('node');
+    if ($node->bundle() !== 'advanced_page') {
+      return;
+    }
+
+    $terms = $node->get('field_product_category')->getValue();
+    if (count($terms) > 0) {
+      $term_id = $terms[0]['target_id'];
+      $super_terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
+      return AccessResult::forbiddenIf(in_array($term_id, array_keys($super_terms)));
+    }
+
+    return;
   }
 }
 
