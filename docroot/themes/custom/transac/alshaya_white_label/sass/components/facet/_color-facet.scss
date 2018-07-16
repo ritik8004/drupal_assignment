@@ -16,7 +16,8 @@
       }
 
       &[class*='swatch-color-fffff'] {
-        box-shadow: 0 0 0 1px inset $plp_facet_white_color_attribute;
+        -webkit-appearance: none;
+        box-shadow: 0 0 0 1px $plp_facet_white_color_attribute;
       }
     }
 
