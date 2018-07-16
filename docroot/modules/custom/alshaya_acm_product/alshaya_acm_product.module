@@ -1019,26 +1019,28 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child
         // SKUs.
-        $variations = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
+        $select_for_stock_check = [];
+        foreach ($selected as $key => $value) {
+          $select_for_stock_check[$key] = $value;
+          $variations = alshaya_acm_product_fetch_selected_option_tree($product_tree, $select_for_stock_check);
 
-        // Check stock for variations & update options.
-        foreach ($variations as $key => $variation) {
-          if ($key === '#available_config') {
-            continue;
-          }
-
-          if ($variation instanceof SKU) {
-            $attribute_parts = explode(':', $key);
-
-            $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
-            if ($quantity > 0) {
-              // Set the dropdown quantity options only for selected option.
-              if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
-                $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-              }
+          // Check stock for variations & update options.
+          foreach ($variations as $key => $variation) {
+            if ($key === '#available_config') {
+              continue;
             }
-            else {
-              if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
+
+            if ($variation instanceof SKU) {
+              $attribute_parts = explode(':', $key);
+
+              $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
+              if ($quantity > 0) {
+                // Set the dropdown quantity options only for selected option.
+                if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
+                  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+                }
+              }
+              elseif (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
                 $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
               }
             }
