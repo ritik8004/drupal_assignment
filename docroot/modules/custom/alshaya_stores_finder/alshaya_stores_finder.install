@@ -19,7 +19,7 @@ function alshaya_stores_finder_update_8105() {
     ['alshaya_stores_finder.settings'],
     'alshaya_stores_finder',
     'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
 }
 
@@ -34,7 +34,7 @@ function alshaya_stores_finder_update_8104() {
     ['alshaya_stores_finder.settings'],
     'alshaya_stores_finder',
     'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
