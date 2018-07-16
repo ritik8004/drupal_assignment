@@ -342,7 +342,16 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
 
     // Check if the pattern is already set with the alias.
     if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
-      $pattern->setPattern($alias . '/' . $pattern->getPattern());
+      // In case of 'arabic', alias is generating in wrong(reverse) pattern, so
+      // this needs to be handled for language specific for now. In case of
+      // arabic as discussed, assumption is that user will add only in arabic
+      // or numbers (no english).
+      if ($context['language'] == 'ar') {
+        $pattern->setPattern($pattern->getPattern() . '/' . $alias);
+      }
+      else {
+        $pattern->setPattern($alias . '/' . $pattern->getPattern());
+      }
     }
   }
 }
