@@ -217,7 +217,7 @@
       .select-buttons {
         display: flex;
         flex-flow: row wrap;
-        padding: 0.1875rem 0;
+        margin-top: 0;
       }
     }
   }
@@ -334,12 +334,17 @@
 .field--name-field-skus {
   .sku-base-form {
     #configurable_ajax {
-      padding: 0.875rem 0 0;
+      .form-item {
+        padding: 0.875rem 0;
+      }
 
       @include breakpoint($only-mobile) {
+        padding: 0.875rem 0 0;
+
         .form-item {
           margin: 1.25rem 0 0;
           padding-bottom: 1.25rem;
+          padding-top: 0;
 
           &.configurable-swatch {
             margin-top: 0;
@@ -397,6 +402,14 @@
 
     &::after {
       font-size: 2rem;
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .mobilegallery {
+    @include breakpoint($only-mobile) {
+      padding-bottom: 0;
     }
   }
 }
