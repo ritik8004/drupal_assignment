@@ -10,7 +10,7 @@
       width: 100%;
 
       span {
-        text-transform: lowercase;
+        text-transform: capitalize;
         font-size: 0.75rem;
         line-height: 1;
         margin-bottom: 0.25rem;
@@ -64,7 +64,7 @@
   margin-bottom: 0.5rem;
   color: $pdp_product_form_text;
   width: 100%;
-  text-transform: initial;
+  text-transform: capitalize;
 }
 
 .description-wrapper {
@@ -126,6 +126,7 @@
     .sku-base-form {
       button[type="submit"] {
         text-transform: uppercase;
+        float: $right;
       }
     }
   }
@@ -183,7 +184,20 @@
       line-height: 1.8;
       padding: 0.5rem 0;
       margin-#{$left}: 1rem;
-      width: 66%;
+      width: 70%;
+
+      @include breakpoint($only-tablet) {
+        width: 65%;
+
+        html[lang="ar"] & {
+          float: left !important;
+          margin-top: 2rem !important;
+        }
+      }
+
+      html[lang="ar"] & {
+        line-height: 0;
+      }
     }
   }
 }

@@ -61,16 +61,28 @@
 
     .filter--mobile {
       @include breakpoint($tablet) {
-        top: 2rem;
+        top: auto;
+        margin-top: -3.75rem;
 
         html[lang=ar] & {
-          top: 2rem;
+          top: auto;
+          margin-top: -3.75rem;
         }
+      }
+
+      .form-type-select {
+        text-transform: initial;
       }
 
       @include breakpoint($upto-desktop) {
         .form-type-select {
           @include select3-style(9rem);
+
+          &::after {
+            font-size: 2.2rem;
+            height: 2.5rem;
+            width: 2.5rem;
+          }
         }
       }
 
@@ -101,10 +113,24 @@
         .c-facet__blocks__wrapper--mobile {
           .c-facet__label {
             border-#{$right}: 0;
+            padding: 0 0.625rem;
+            line-height: 3.2;
 
             &.active-filter-count {
               .filter-count {
                 padding-top: 0.25rem;
+              }
+            }
+          }
+
+          .c-facet__blocks {
+            .filter-menu-label {
+              margin-bottom: 0;
+
+              .label {
+                height: 2.25rem;
+                line-height: 3;
+                margin-top: 0;
               }
             }
           }
@@ -114,6 +140,19 @@
 
     .view-header.search-count {
       margin-top: 1.5rem;
+      border-bottom-color: $primary_border;
+
+      &.only-mobile {
+        margin-top: 0;
+        padding-bottom: 0.375rem;
+      }
+    }
+
+    .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+      @include breakpoint($only-mobile) {
+        padding-top: 0.5rem;
+        border-top-color: $primary_border;
+      }
     }
   }
 
@@ -136,6 +175,12 @@
   }
 
   .c-products__item {
+    @include breakpoint($only-tablet) {
+      &:nth-child(3n+2) {
+        margin: 0 0 1rem;
+      }
+    }
+
     @include breakpoint($tablet) {
       width: 25%;
     }
@@ -190,6 +235,9 @@
 
 .c-facet__blocks__wrapper--mobile {
   .c-facet__label {
+    height: 2.5rem;
+    color: $plp_tile_product_title;
+
     @include breakpoint($only-mobile) {
       font-size: 0.875rem;
     }
@@ -203,11 +251,12 @@
     @include breakpoint($only-tablet) {
       padding-#{$left}: 0.625rem;
       font-size: 0.875rem;
+      line-height: 3.2;
+      padding: 0 0.625rem;
     }
 
     &.is-active {
       padding-#{$left}: 0.6875rem;
-      padding-top: 0.6875rem;
 
       &::after {
         border-#{$left}: 0;
@@ -223,6 +272,10 @@
       color: $plp_facet_dropdown_icon;
       border: 1px solid $plp_facet_input_border;
       border-#{$left}: 0;
+      height: 2.5rem;
+      line-height: 1.15;
+      width: 2.5rem;
+      font-size: 2.2rem;
     }
   }
 
@@ -233,8 +286,6 @@
     }
 
     .filter-menu-label {
-      @include u-visibility(inline-block);
-
       .label {
         font-size: 0.875rem;
       }
@@ -265,6 +316,53 @@
     label {
       font-size: 0.875rem;
       line-height: 1.5;
+      transform: translate(0, -40%);
+    }
+
+    .select2-container {
+      .select2-selection {
+        height: 2.5rem;
+        padding: 0.4rem 0.2rem;
+      }
+
+      .select2-selection__arrow {
+        height: 2.5rem;
+        width: 2.5rem;
+
+        &::after {
+          line-height: 1.2;
+          height: 2.5rem;
+          width: 2.5rem;
+          font-size: 2.2rem;
+        }
+      }
+    }
+
+    html[lang=ar] & {
+      label {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        transform: translate(0, -40%);
+      }
+
+      .select2-container {
+        .select2-selection {
+          height: 2.5rem;
+          padding: 0.4rem 0.2rem;
+        }
+
+        .select2-selection__arrow {
+          height: 2.5rem;
+          width: 2.5rem;
+
+          &::after {
+            line-height: 1.2;
+            height: 2.5rem;
+            width: 2.5rem;
+            font-size: 2.2rem;
+          }
+        }
+      }
     }
   }
 }

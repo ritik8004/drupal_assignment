@@ -13,8 +13,12 @@
     text-transform: uppercase;
     color: $store_finder_text;
 
+    html[lang=ar] & {
+      padding: 0.125rem 0 0;
+    }
+
     @include breakpoint($only-tablet) {
-      width: 37%;
+      width: 36%;
 
       html[lang=ar] & {
         width: 35%;
@@ -26,6 +30,10 @@
       vertical-align: middle;
       position: relative;
       top: -0.125rem;
+
+      html[lang=ar] & {
+        top: 0;
+      }
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 0.5rem;
@@ -46,6 +54,7 @@
     [id^=edit-actions] {
       top: 0;
       height: 2.5rem;
+      padding-top: 0.5rem;
 
       @include icon(search, before) {
         color: $store_finder_icon;
@@ -128,7 +137,7 @@
   .current-location {
     @include breakpoint($only-tablet) {
       &::before {
-        #{$left}: 0.25rem;
+        #{$left}: 0.5rem;
         bottom: 0.6875rem;
       }
     }
@@ -148,6 +157,10 @@
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 0.5rem;
+
+        html[lang=ar] & {
+          margin-top: -0.4375rem;
+        }
       }
     }
   }
@@ -175,7 +188,7 @@
       html[lang=ar] & {
         margin-#{$left}: 0.625rem;
         padding-#{$right}: 0;
-        width: 31%;
+        width: 30%;
       }
     }
 
@@ -215,14 +228,16 @@
 
     &::before {
       margin-#{$left}: -0.5rem;
+      margin-#{$right}: 0.125rem;
+      margin-top: -0.1875rem;
 
       html[lang=ar] & {
-        margin-#{$right}: 0.2rem;
+        margin-top: 0.125rem;
       }
     }
 
     @include breakpoint($only-tablet) {
-      padding: 0.43rem 0 0;
+      padding: 0.5rem 0 0;
 
       html[lang=ar] & {
         padding: 0.3rem 0 0;
@@ -235,6 +250,7 @@
     [id^=edit-geolocation-geocoder-google-places-api] {
       font-size: 0.875rem;
       height: 2.5rem;
+      padding: 0.875rem 0.6rem 0.5rem;
 
       @include breakpoint($only-mobile) {
         padding-#{$left}: 0.5rem;
@@ -273,7 +289,7 @@
 
   @include breakpoint($only-tablet) {
     .store-finder--wrapper {
-      width: 44%;
+      width: 45%;
 
       html[lang=ar] & {
         width: 46%;
@@ -281,10 +297,10 @@
 
       .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
       .form-item-geolocation-geocoder-google-places-api {
-        width: 67% !important;
+        width: 60% !important;
 
         html[lang=ar] & {
-          width: 65% !important;
+          width: 62% !important;
         }
       }
     }
@@ -300,7 +316,7 @@
     }
 
     .label--location {
-      padding-top: 0.625rem;
+      padding-top: 0.875rem;
 
       html[lang=ar] & {
         padding-top: 0.5rem;
@@ -309,12 +325,10 @@
       }
 
       @include breakpoint($only-tablet) {
-        width: 30%;
+        width: 37%;
       }
 
       @include breakpoint($desktop) {
-        padding-top: 0.625rem;
-
         html[lang=ar] & {
           width: 26.6%;
           padding-top: 0.875rem;
@@ -413,10 +427,7 @@
   .current-location {
     @include breakpoint($desktop) {
       html[lang=ar] & {
-        margin-top: 0;
         padding-top: 0.25rem;
-        padding-right: 0;
-        text-indent: 1.5rem;
       }
     }
   }
@@ -525,7 +536,7 @@
 
   @include breakpoint($only-tablet) {
     #{$left}: 16%;
-    width: 46%;
+    width: 47%;
   }
 }
 
@@ -546,6 +557,7 @@
       }
 
       &::before {
+        background-image: url(../imgs/icons/my-location.svg);
         background-size: 100%;
         height: 1.875rem;
         width: 1.875rem;
@@ -557,5 +569,10 @@
     .block-store-finder-form__form__label__wrapper {
       float: $right;
     }
+  }
+
+  .list-view-link,
+  .map-view-link {
+    line-height: 1.5;
   }
 }

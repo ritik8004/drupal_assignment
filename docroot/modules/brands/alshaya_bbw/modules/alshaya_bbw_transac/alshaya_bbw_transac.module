@@ -61,17 +61,20 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
           $fragrance_desc['value'] = [
             '#markup' => $fragrance_description,
           ];
+          // $build['short_desc'] contains the description that should be
+          // displayed before 'Read More'.
+          $build['short_desc'] = $fragrance_desc;
           $build['description'][] = $fragrance_desc;
         }
 
-        if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
-          $more_info_desc['label'] = [
-            '#markup' => t('More info'),
+        if ($overview = $entity->get('body')->getValue()) {
+          $overview_desc['label'] = [
+            '#markup' => t('Overview'),
           ];
-          $more_info_desc['value'] = [
-            '#markup' => $more_info,
+          $overview_desc['value'] = [
+            '#markup' => $overview[0]['value'],
           ];
-          $build['description'][] = $more_info_desc;
+          $build['description'][] = $overview_desc;
         }
 
         if ($usage = $sku_entity->get('attr_usage')->getString()) {
@@ -82,6 +85,16 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
             '#markup' => $usage,
           ];
           $build['description'][] = $usage_desc;
+        }
+
+        if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
+          $more_info_desc['label'] = [
+            '#markup' => t('More info'),
+          ];
+          $more_info_desc['value'] = [
+            '#markup' => $more_info,
+          ];
+          $build['description'][] = $more_info_desc;
         }
       }
     }
