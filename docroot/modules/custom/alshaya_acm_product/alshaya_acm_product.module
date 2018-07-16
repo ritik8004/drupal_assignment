@@ -1098,7 +1098,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // If all the options are disabled, we show the product is out of stock.
         // We reduce one in options_attributes count as we will always have
         // empty_option disabled.
-        elseif (count($configurable['#options']) == count($configurable['#options_attributes']) - 1) {
+        elseif (count($configurable['#options']) == (count(array_column($configurable['#options_attributes'], 'disabled')) - 1)) {
           $configurable = [
             '#markup' => '',
           ];
