@@ -1582,7 +1582,8 @@
         font-size: 0.875rem;
         color: $pdp_size_option_text;
 
-        &.picked {
+        &.picked,
+        &:hover {
           color: $pdp_size_option_selected_text;
           font-weight: bold;
           background: $pdp_size_option_selected_bg;
