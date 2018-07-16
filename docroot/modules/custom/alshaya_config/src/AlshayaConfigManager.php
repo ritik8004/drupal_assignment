@@ -27,6 +27,11 @@ class AlshayaConfigManager {
   const MODE_ADD_MISSING = 'missing';
 
   /**
+   * Add missing values recursively from config.
+   */
+  const MODE_ADD_MISSING_RECURSIVE = 'missing_recursive';
+
+  /**
    * Merge configs - deep merge.
    */
   const MODE_MERGE = 'merge';
@@ -174,6 +179,11 @@ class AlshayaConfigManager {
         // later to do recursive check. We may want to complicate this a bit
         // more to handle more scenarios. For now it is simple.
         $data = array_merge($data, $existing);
+        break;
+
+      case self::MODE_ADD_MISSING_RECURSIVE:
+        // Add Missing keys recursively, Keeping existing data as is.
+        $data = NestedArray::mergeDeepArray([$data, $existing], TRUE);
         break;
 
       case self::MODE_MERGE:
