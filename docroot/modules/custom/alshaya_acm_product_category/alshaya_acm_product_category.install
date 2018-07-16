@@ -11,31 +11,9 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Update view of PLP promotional banner to hide if empty.
- */
-function alshaya_acm_product_category_update_8013() {
-  alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_product_category');
-}
-
-/**
- * Implements hook_update_dependencies().
- */
-function alshaya_acm_product_category_update_dependencies() {
-  return [
-    'alshaya_acm_product_category' => [
-      '8007' => [
-        'acq_sku' => '8006',
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_update_N().
- *
  * Adding new field 'Display as clickable link' to product category vocabulary.
  */
-function alshaya_acm_product_category_update_8013() {
+function alshaya_acm_product_category_update_8014() {
   $configs = [
     'field.storage.taxonomy_term.field_display_as_clickable_link',
     'field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link',
@@ -55,6 +33,28 @@ function alshaya_acm_product_category_update_8013() {
       $term->save();
     }
   }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update view of PLP promotional banner to hide if empty.
+ */
+function alshaya_acm_product_category_update_8013() {
+  alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_acm_product_category_update_dependencies() {
+  return [
+    'alshaya_acm_product_category' => [
+      '8007' => [
+        'acq_sku' => '8006',
+      ],
+    ],
+  ];
 }
 
 /**
