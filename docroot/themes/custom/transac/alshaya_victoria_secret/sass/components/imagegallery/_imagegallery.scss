@@ -1,9 +1,5 @@
 @include breakpoint($only-mobile) {
   .mobilegallery {
-    #product-image-gallery-mobile {
-      padding-bottom: 2.375rem;
-    }
-
     .slick-dots {
       li {
         margin: 0.75rem;
