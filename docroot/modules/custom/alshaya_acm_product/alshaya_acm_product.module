@@ -857,6 +857,29 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       $user_input_configurables = $form_state->getUserInput();
       $selected = $user_input_configurables['configurables'] ?? [];
+      $selected = array_filter($selected);
+
+      if ($selected && count($selected) != count($product_tree['configurables'])) {
+        $delete_next = FALSE;
+
+        // Cleanup selected value.
+        foreach ($selected as $code => $value) {
+          if ($delete_next) {
+            unset($selected[$code]);
+            continue;
+          }
+
+          // We will remove all selected values after matching trigger.
+          if ($user_input_configurables['_triggering_element_name'] == 'configurables[' . $code . ']') {
+            $delete_next = TRUE;
+          }
+        }
+
+        $form_state->setValue('configurables', $selected);
+        $user_input_configurables['configurables'] = $selected;
+        $form_state->setUserInput($user_input_configurables);
+      }
+
       $first_child = $sku_manager->getFirstChildForSku(
         $sku_entity,
         $root_attribute_code,
@@ -876,26 +899,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
         (!isset($user_input_configurables['configurables'], $user_input_configurables['configurables'][$root_attribute_code]))) {
         $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
-        $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
-        $user_input_configurables['configurables'] = [$root_attribute_code => $first_child_root_attr_value];
-        $form_state->setUserInput($user_input_configurables);
-      }
-
-      // Check stock in case of Configurable products with multiple attributes.
-      $selected = $form_state->getValue('configurables');
-
-      // While selecting an attribute, the user input is available under inputs.
-      if (empty($selected)) {
-        $selected = $form_state->getUserInput()['configurables'];
-      }
-
-      $selected = array_filter($selected);
-
-      // If we selected more than one attribute and we clicked on the root
-      // attribute, then reset all child/leaf attributes.
-      if (count($selected) > 1
-        && $user_input_configurables['_triggering_element_name'] == 'configurables[' . $root_attribute_code . ']') {
-        $selected = [$root_attribute_code => $selected[$root_attribute_code]];
+        $selected = [$root_attribute_code => $first_child_root_attr_value];
         $form_state->setValue('configurables', $selected);
         $user_input_configurables['configurables'] = $selected;
         $form_state->setUserInput($user_input_configurables);
@@ -905,6 +909,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $selected = $selected ?? [];
 
       $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
+
+      $form_state->setValue('configurables', $selected);
+      $user_input_configurables['configurables'] = $selected;
+      $form_state->setUserInput($user_input_configurables);
     }
     else {
       // If only one configurable option there, select first value as default.
@@ -1006,7 +1014,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // Process stock now.
     if (count($product_tree['configurables']) > 1) {
-      // @TODO: Improve this in CORE-2169.
       if (!empty($selected)) {
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child
@@ -1027,11 +1034,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               // Set the dropdown quantity options only for selected option.
               if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
                 $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-              }
-            }
-            else {
-              if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
-                $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
               }
             }
           }
@@ -1088,7 +1090,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // If all the options are disabled, we show the product is out of stock.
         // We reduce one in options_attributes count as we will always have
         // empty_option disabled.
-        elseif (count($configurable['#options']) == count($configurable['#options_attributes']) - 1) {
+        elseif (count($configurable['#options']) == (count(array_column($configurable['#options_attributes'], 'disabled')) - 1)) {
           $configurable = [
             '#markup' => '',
           ];

@@ -31,7 +31,15 @@
   text-transform: none;
 
   select {
-    line-height: 1.7;
+    line-height: 2;
     font-size: 0.875rem;
+    height: 2.5rem;
+    padding-#{$left}: 0.625rem;
+    color: $plp_tile_product_title;
+
+    html[lang=ar] & {
+      height: 2.5rem;
+      line-height: 3.2;
+    }
   }
 }

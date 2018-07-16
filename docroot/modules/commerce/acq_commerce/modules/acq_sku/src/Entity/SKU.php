@@ -231,7 +231,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
           // Try to download again if download flag is set to true.
           if ($download) {
-            return $this->processMediaItem($data, $update_sku, TRUE);
+            return $this->processMediaItem($update_sku, $data, TRUE);
           }
         }
       }
@@ -385,11 +385,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // First check if we have some result before doing anything else.
     if (count($skus) == 0) {
-      // We don't log the error while doing sync.
-      if ($log_not_found) {
-        \Drupal::logger('acq_sku')->error('No SKU found for @sku.', ['@sku' => $sku]);
-      }
-
+      // We simply return NULL as this is very normal to have SKU missing.
       return NULL;
     }
 

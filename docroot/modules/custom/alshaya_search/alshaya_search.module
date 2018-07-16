@@ -280,7 +280,7 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
   $keyword = $form_state->getValue('keywords');
 
   // Don't process if some notorious guy reached search page directly.
-  if (empty($keyword)) {
+  if (empty($keyword) || is_numeric($keyword)) {
     return;
   }
 

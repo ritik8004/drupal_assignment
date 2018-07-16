@@ -31,7 +31,7 @@
        * Promo panel sticky on scroll.
        */
       function checkOffset() {
-        if ($('.block-promo-panel-wrapper .promo-panel-label').offset().top + $('.c-footer-primary').height() >= $('.block-promo-panel-wrapper').offset().top - 25) {
+        if ($('.block-promo-panel-wrapper .promo-panel-label').offset().top >= $('.c-footer').offset().top - 49) {
           $('.block-promo-panel-wrapper .promo-panel-label').addClass('label-not-fixed'); // restore on scroll down
           $('.block-promo-panel-wrapper').removeClass('promo-panel-fixed').addClass('promo-static'); // restore on scroll down
         }

@@ -148,6 +148,13 @@
   .address--primary {
     letter-spacing: 0;
     text-align: $left;
+
+    a:hover,
+    span {
+      &::before {
+        border-width: 0.25rem;
+      }
+    }
   }
 }
 
