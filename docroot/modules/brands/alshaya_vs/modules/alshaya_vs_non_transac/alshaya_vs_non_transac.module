@@ -33,7 +33,7 @@ function alshaya_vs_non_transac_block_access(Block $block, $operation, AccountIn
 /**
  * Implements hook_module_implements_alter().
  */
-function alshaya_vs_module_implements_alter(&$implementations, $hook) {
+function alshaya_vs_non_transac_module_implements_alter(&$implementations, $hook) {
   // Alter page_attachments implementation for alshaya_vs to call at last.
   if ($hook == 'page_attachments') {
     unset($implementations['back_to_top']);
