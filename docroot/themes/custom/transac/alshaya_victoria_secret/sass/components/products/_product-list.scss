@@ -367,3 +367,23 @@
     }
   }
 }
+
+.c-plp {
+  ul {
+    &.js-pager__items {
+      margin-top: 3rem;
+
+      a {
+        font-size: 0.875rem;
+        line-height: 1.29;
+        text-transform: uppercase;
+        padding: 0.62625rem 3.9375rem;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
