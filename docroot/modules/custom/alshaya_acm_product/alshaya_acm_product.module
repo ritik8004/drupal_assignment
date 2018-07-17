@@ -551,16 +551,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
-
         $build['item_code']['#markup'] = $sku;
-
-        $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
-
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
-
-        if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
-        }
 
         $promotion_types = ['cart'];
 
