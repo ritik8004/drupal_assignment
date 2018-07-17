@@ -14,6 +14,11 @@
           border-radius: 1.6px;
         }
       }
+
+      &[class*='swatch-color-fffff'] {
+        -webkit-appearance: none;
+        box-shadow: 0 0 0 1px $plp_facet_white_color_attribute;
+      }
     }
 
     &.is-active {

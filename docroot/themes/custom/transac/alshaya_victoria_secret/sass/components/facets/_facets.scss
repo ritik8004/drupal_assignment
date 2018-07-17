@@ -15,10 +15,17 @@
     text-transform: none;
   }
 
+  .c-accordion__title {
+    &.ui-state-active {
+      border-bottom: none;
+    }
+  }
+
   .facet-item .facet-item__value,
   .facet-item .facet-item__count {
     @include breakpoint($only-mobile) {
       vertical-align: middle;
+      margin-top: 0;
     }
   }
 
@@ -58,9 +65,22 @@
   }
 
   ul {
+    padding-top: 0.5rem;
+
     li {
       @include breakpoint($desktop) {
         margin-bottom: 1.25rem;
+      }
+    }
+
+    input[type="text"] {
+      width: 100%;
+      height: 2.5rem;
+      background: url(../imgs/assets/search.svg) 96% center no-repeat;
+      background-size: 1rem;
+
+      html[lang=ar] & {
+        background-position-x: 4%;
       }
     }
   }

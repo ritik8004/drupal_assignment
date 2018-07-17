@@ -37,8 +37,16 @@
 }
 
 .view-address-book {
-  @include breakpoint($tablet) {
-    padding-top: 1.5rem;
+  .c-address-book & {
+    @include breakpoint($tablet) {
+      padding-top: 1.5rem;
+    }
+  }
+
+  .c-delivery-checkout & {
+    @include breakpoint($tablet) {
+      padding-top: 0.5rem;
+    }
   }
 }
 
@@ -148,6 +156,13 @@
   .address--primary {
     letter-spacing: 0;
     text-align: $left;
+
+    a:hover,
+    span {
+      &::before {
+        border-width: 0.25rem;
+      }
+    }
   }
 }
 

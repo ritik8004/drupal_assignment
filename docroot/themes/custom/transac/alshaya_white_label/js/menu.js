@@ -68,6 +68,7 @@
         }
 
         $('.main--menu').addClass('menu--active');
+        $('.block-alshaya-super-category .main--menu ').removeClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
       });
@@ -126,13 +127,9 @@
         $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
-      var header_timer;
-      $('.branding__menu .main--menu .menu--one__list-item.has-child').hover(function () {
-        header_timer = setTimeout(function () {
-          $('body').addClass('overlay');
-        }, 300);
+      $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
+        $('body').addClass('overlay');
       }, function () {
-        clearTimeout(header_timer);
         $('body').removeClass('overlay');
       });
 

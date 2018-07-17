@@ -333,7 +333,6 @@ function alshaya_get_magento_host_data() {
       ],
     ],
     'default' => [
-      'stock_mode' => 'push',
       'kw' => [
         'magento_lang_prefix' => [
           'en' => 'kwt_en',

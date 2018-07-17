@@ -631,6 +631,7 @@
 .language--switcher.only-first-time {
   @include stickyButton();
 
+  z-index: 11;
   border-color: $lang_switch_firsttime_border;
   width: 100%;
   background-color: $lang_switch_firsttime_bg;
