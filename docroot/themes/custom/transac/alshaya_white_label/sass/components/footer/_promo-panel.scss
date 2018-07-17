@@ -2,6 +2,10 @@
   overflow: hidden;
   text-align: center;
 
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+
   @include breakpoint($tablet) {
     left: 0;
     right: 0;
