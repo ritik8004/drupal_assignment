@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\NodeInterface;
 use Drupal\system\Entity\Menu;
@@ -500,4 +501,44 @@ function alshaya_super_category_form_taxonomy_term_acq_product_category_form_alt
       $form['field_main_menu_highlight']['#access'] = ($term->get('depth_level')->getString() == 2) ? TRUE : FALSE;
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_search_query_param_alter().
+ */
+function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormStateInterface $form_state, $redirect_lang) {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
+    $brand = alshaya_super_category_get_brand_input_value($form_state->getValue('brand'), $redirect_lang);
+    if ($brand) {
+      $query['brand'] = $brand;
+    }
+  }
+}
+
+/**
+ * Get brand path in given language to redirect.
+ *
+ * @param string $brand
+ *   The current brand value.
+ * @param object $language
+ *   The current language.
+ *
+ * @return mixed
+ *   Return brand alias in given language else return empty.
+ */
+function alshaya_super_category_get_brand_input_value($brand, $language) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    return;
+  }
+
+  if (!is_numeric($brand)) {
+    $params = Url::fromUserInput("/$brand")->getRouteParameters();
+    if (!empty($params['taxonomy_term'])) {
+      $brand = $params['taxonomy_term'];
+    }
+  }
+
+  $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/taxonomy/term/' . $brand, $language->getId());
+  // Decode url string of encoded value. (arabic strings are encoded).
+  return str_replace("/", '', urldecode($alias));
 }

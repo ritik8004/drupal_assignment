@@ -313,12 +313,7 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
 
     if ($redirect) {
       $query = ['keywords' => $keyword];
-      if (\Drupal::moduleHandler()->moduleExists('alshaya_super_category')) {
-        $brand = alshaya_search_redirect_get_brand_input_value($form_state->getValue('brand'), $redirect_lang);
-        if ($brand) {
-          $query['brand'] = $brand;
-        }
-      }
+      \Drupal::moduleHandler()->alter('alshaya_search_query_param', $query, $form_state, $redirect_lang);
 
       // Redirect to keyword language.
       $url = Url::fromUserInput('/search', [
@@ -330,34 +325,6 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
       $response->send();
     }
   }
-}
-
-/**
- * Get brand path in given language to redirect.
- *
- * @param string $brand
- *   The current brand value.
- * @param object $language
- *   The current language.
- *
- * @return mixed
- *   Return brand alias in given language else return empty.
- */
-function alshaya_search_redirect_get_brand_input_value($brand, $language) {
-  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
-    return;
-  }
-
-  if (!is_numeric($brand)) {
-    $params = Url::fromUserInput("/$brand")->getRouteParameters();
-    if (!empty($params['taxonomy_term'])) {
-      $brand = $params['taxonomy_term'];
-    }
-  }
-
-  $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/taxonomy/term/' . $brand, $language->getId());
-  // Decode url string of encoded value. (arabic strings are encoded).
-  return str_replace("/", '', urldecode($alias));
 }
 
 /**
