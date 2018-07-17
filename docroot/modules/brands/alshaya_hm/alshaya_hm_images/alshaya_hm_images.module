@@ -293,30 +293,6 @@ function alshaya_hm_images_preprocess_product_zoom(&$variables) {
 }
 
 /**
- * Implements hook_image_sitemap_get_product_media().
- */
-function alshaya_hm_images_image_sitemap_get_product_media(&$media, &$nid) {
-  // Load product from id.
-  $product = Node::load($nid);
-
-  if ($product instanceof Node) {
-    // Get SKU from product.
-    $skuId = $product->get('field_skus')->first()->getString();
-    if (isset($skuId)) {
-      $sku = SKU::loadFromSku($skuId);
-      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-      if ($sku instanceof SKU) {
-        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
-        if (!empty($images)) {
-          // Changes for the image count.
-          $media = $images;
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_acq_sku_base_field_additions_alter().
  */
 function alshaya_hm_images_acq_sku_base_field_additions_alter(array &$fields = []) {

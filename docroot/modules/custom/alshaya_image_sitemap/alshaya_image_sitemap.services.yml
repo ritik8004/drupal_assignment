@@ -1,4 +1,12 @@
 services:
   alshaya_image_sitemap.generator:
     class: Drupal\alshaya_image_sitemap\AlshayaImageSitemapGenerator
-    arguments: ["@database", "@state", "@file_system", "@entity_type.manager", "@module_handler", "@string_translation", "@language_manager"]
+    arguments:
+      - '@database'
+      - '@state'
+      - '@file_system'
+      - '@entity_type.manager'
+      - '@module_handler'
+      - '@string_translation'
+      - '@language_manager'
+      - '@alshaya_acm_product.sku_images_manager'
