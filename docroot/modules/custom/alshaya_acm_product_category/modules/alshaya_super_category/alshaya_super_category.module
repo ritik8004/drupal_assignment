@@ -303,11 +303,11 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
 }
 
 /**
- * Implements hook_pathauto_pattern_alter().
+ * Implements hook_pathauto_alias_alter().
  *
  * Update url alias for product node based on super category feature status.
  */
-function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context) {
+function alshaya_super_category_pathauto_alias_alter(&$alias, array $context) {
   if ($context['module'] == 'node' && $context['bundle'] == 'acq_product') {
     $super_category = \Drupal::config('alshaya_super_category.settings');
     if (!$super_category->get('status') || !$super_category->get('product_path_alter')) {
@@ -324,25 +324,46 @@ function alshaya_super_category_pathauto_pattern_alter(&$pattern, array $context
     // Get the category field of the node to generate path alias.
     $term = $node->get('field_category')->get(0)->entity;
     // Get the translations of the term based on the current lang code.
-    if ($term instanceof TermInterface && $context['language'] !== 'en' && $term->hasTranslation($context['language'])) {
+    if ($term instanceof TermInterface && $context['language'] !== 'en'
+      && $term->hasTranslation($context['language'])) {
       $term = $term->getTranslation($context['language']);
     }
 
     // Get parent term object of given term.
-    $parent = \Drupal::service('alshaya_acm_product_category.product_category_tree')
-      ->getCategoryTermRootParent($term);
+    /** @var \Drupal\alshaya_super_category\ProductSuperCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $parent = $product_category_tree->getCategoryTermRootParent($term);
 
-    if (count($parent) <= 0) {
+    if (empty($parent)) {
       return;
     }
 
     // Get term alias to append with node alias.
-    $alias = \Drupal::service('path.alias_manager')
-      ->getAliasByPath('/taxonomy/term/' . $parent['id'], $context['language']);
+    $term_alias = \Drupal::service('path.alias_manager')->getAliasByPath(
+      '/taxonomy/term/' . $parent['id'],
+      $context['language']
+    );
 
     // Check if the pattern is already set with the alias.
-    if (strpos($pattern->getPattern(), $alias . '/') === FALSE) {
-      $pattern->setPattern($alias . '/' . $pattern->getPattern());
+    // In case of 'arabic', alias is generating in wrong(reverse) pattern, so
+    // this needs to be handled for language specific for now. In case of
+    // arabic as discussed, assumption is that user will add only in arabic
+    // or numbers (no english).
+    if ($context['language'] == 'ar') {
+      $term_has_no_en = (bool) !preg_match("/([a-z])/iu", $term_alias);
+      $alias_has_no_en = (bool) !preg_match("/([a-z])/iu", $alias);
+
+      // If both term alias and node alias have nothing in EN we revert the
+      // pattern.
+      if ($term_has_no_en && $alias_has_no_en) {
+        $alias = $alias . $term_alias;
+      }
+      else {
+        $alias = $term_alias . $alias;
+      }
+    }
+    else {
+      $alias = $term_alias . $alias;
     }
   }
 }

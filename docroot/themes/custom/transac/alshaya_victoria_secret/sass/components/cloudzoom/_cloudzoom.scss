@@ -168,3 +168,11 @@
     }
   }
 }
+
+.mobilegallery {
+  .subtext {
+    @include breakpoint($only-mobile) {
+      bottom: 2rem;
+    }
+  }
+}

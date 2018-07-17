@@ -1,0 +1,16 @@
+#backtotop {
+  font-size: 0;
+
+  @include breakpoint($tablet) {
+    #{$right}: 0;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 0.75rem;
+  }
+
+  @include icon(chevronup, after) {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
