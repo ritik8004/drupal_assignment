@@ -2,8 +2,10 @@
 
 namespace Drupal\alshaya_acm_product;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -11,14 +13,17 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SkuManager.
@@ -56,6 +61,13 @@ class SkuManager {
    * @var \Drupal\acq_sku\AcqSkuLinkedSku
    */
   protected $linkedSkus;
+
+  /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
 
   /**
    * Cache Backend service for alshaya.
@@ -114,6 +126,13 @@ class SkuManager {
   protected $skuStorage;
 
   /**
+   * Request stock service object.
+   *
+   * @var null|\Symfony\Component\HttpFoundation\Request
+   */
+  protected $currentRequest;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -122,6 +141,8 @@ class SkuManager {
    *   Config Factory service object.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route
    *   Current Route object.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager service.
    * @param \Drupal\Core\Language\LanguageManager $languageManager
@@ -132,6 +153,8 @@ class SkuManager {
    *   The logger service.
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_labels_cache
@@ -142,17 +165,20 @@ class SkuManager {
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
                               CurrentRouteMatch $current_route,
+                              RequestStack $request_stack,
                               EntityTypeManagerInterface $entity_type_manager,
                               LanguageManager $languageManager,
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
+                              ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
+    $this->currentRequest = $request_stack->getCurrentRequest();
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
     $this->fileStorage = $entity_type_manager->getStorage('file');
@@ -160,34 +186,10 @@ class SkuManager {
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
+    $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
-  }
-
-  /**
-   * Utility function to return media files for a SKU.
-   *
-   * @param mixed $sku
-   *   SKU text or full entity object.
-   * @param bool $first_image_only
-   *   Flag to indicate if we want only the first image and not the whole array.
-   *
-   * @return array
-   *   Array of media files.
-   */
-  public function getSkuMedia($sku, $first_image_only = FALSE) {
-    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
-    if (!($sku_entity instanceof SKU)) {
-      return [];
-    }
-
-    if ($first_image_only) {
-      return $sku_entity->getThumbnail();
-    }
-
-    return $sku_entity->getMedia();
   }
 
   /**
@@ -204,6 +206,8 @@ class SkuManager {
    *   Image build array.
    */
   public function getSkuImage(array $media, $image_style = '', $rel_image_style = '') {
+    $media['label'] = $media['label'] ?? '';
+
     $image = [
       '#theme' => 'image_style',
       '#style_name' => $image_style,
@@ -1302,6 +1306,7 @@ class SkuManager {
     $tree = $plugin->deriveProductTree($sku);
 
     $configurable_codes = array_keys($tree['configurables']);
+    $all_combinations = AlshayaArrayUtils::getAllCombinations($configurable_codes);
 
     $combinations = [];
 
@@ -1311,21 +1316,37 @@ class SkuManager {
         continue;
       }
 
-      foreach ($sku_entity->get('attributes')->getValue() as $attribute) {
-        if (in_array($attribute['key'], $configurable_codes)) {
-          $combinations['by_sku'][$sku_code][$attribute['key']] = $attribute['value'];
-          $combinations['attribute_sku'][$attribute['key']][$attribute['value']][] = $sku_code;
+      // Disable OOS combinations too.
+      if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+        continue;
+      }
+
+      $attributes = $sku_entity->get('attributes')->getValue();
+      $attributes = array_column($attributes, 'value', 'key');
+      foreach ($configurable_codes as $code) {
+        $value = $attributes[$code] ?? '';
+
+        if (empty($value)) {
+          continue;
         }
+
+        $combinations['by_sku'][$sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
     }
 
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
+    $combinations['by_attribute'] = [];
+
     foreach ($combinations['by_sku'] ?? [] as $combination) {
-      foreach ($combination as $key1 => $value1) {
-        foreach ($combination as $key2 => $value2) {
-          $combinations['by_attribute'][$key1][$value1][$key2][$value2] = $value2;
+      foreach ($all_combinations as $possible_combination) {
+        $combination_string = '';
+        foreach ($possible_combination as $code) {
+          $combination_string .= $code . '|' . $combination[$code] . '||';
+          $combinations['by_attribute'][$combination_string] = 1;
         }
+        $combinations['by_attribute'][$combination_string] = 1;
       }
     }
 
@@ -1346,31 +1367,56 @@ class SkuManager {
    * @param array $selected
    *   Selected values.
    */
-  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array $selected = []) {
+  public function disableUnavailableOptions(SKU $sku, array &$configurables, array $tree, array &$selected = []) {
     $configurable_codes = array_keys($tree['configurables']);
 
     $combinations = $this->getConfigurableCombinations($sku);
 
     // Cleanup current selection.
     $selected = array_filter($selected);
+
     foreach ($selected as $code => $value) {
+      // Check for selected values in current options.
       if (!isset($configurables[$code]['#options'][$value])) {
         unset($selected[$code]);
+        continue;
       }
     }
 
+    // Remove all options which are not available at all.
     foreach ($configurable_codes as $index => $code) {
-      if (isset($selected[$code])) {
-        $selected_value = $selected[$code];
-        for ($i = ++$index; $i < count($configurable_codes); $i++) {
-          $code_to_check = $configurable_codes[$i];
-          foreach ($configurables[$code_to_check]['#options'] as $key => $value) {
-            if (empty($key) || isset($combinations['by_attribute'][$code][$selected_value][$code_to_check][$key])) {
-              continue;
-            }
+      foreach ($configurables[$code]['#options'] as $key => $value) {
+        if (empty($key) || isset($combinations['attribute_sku'][$code][$key])) {
+          continue;
+        }
 
-            $configurables[$code_to_check]['#options_attributes'][$key]['disabled'] = 'disabled';
+        unset($configurables[$code]['#options'][$key]);
+      }
+    }
+
+    $combination_key = '';
+    foreach ($selected as $code => $value) {
+      $index = array_search($code, $configurable_codes);
+      if ($index !== FALSE) {
+        unset($configurable_codes[$index]);
+      }
+
+      $combination_key .= $code . '|' . $value . '||';
+      foreach ($configurable_codes as $configurable_code) {
+        foreach ($configurables[$configurable_code]['#options'] as $key => $value) {
+          $check_key1 = $combination_key . $configurable_code . '|' . $key . '||';
+          $check_key2 = $configurable_code . '|' . $key . '||' . $combination_key;
+
+          if (isset($combinations['by_attribute'][$check_key1])
+            || isset($combinations['by_attribute'][$check_key2])) {
+            continue;
           }
+
+          if (isset($selected[$configurable_code]) && $selected[$configurable_code] == $key) {
+            unset($selected[$configurable_code]);
+          }
+
+          $configurables[$configurable_code]['#options_attributes'][$key]['disabled'] = 'disabled';
         }
       }
     }
@@ -1436,6 +1482,123 @@ class SkuManager {
   public function clearProductCachedData(SKU $sku) {
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
+  }
+
+  /**
+   * Get first child based on brand conditions if defined or from default.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $root_attribute_code
+   *   Root attribute code.
+   * @param array $selected
+   *   Current selection.
+   * @param array|null $root_attribute_form_item
+   *   Form item containing options and disabled attributes.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   First child SKU entity.
+   */
+  public function getFirstChildForSku(SKUInterface $sku, $root_attribute_code, array $selected = [], $root_attribute_form_item = []) {
+    // Get the first child from user selected value if available.
+    if (isset($selected[$root_attribute_code])) {
+      $first_child = $this->getChildSkuFromAttribute($sku, $root_attribute_code, $selected[$root_attribute_code]);
+
+      if ($first_child instanceof SKU) {
+        return $first_child;
+      }
+    }
+
+    // Select first child based on value provided in query params.
+    $sku_id = (int) $this->currentRequest->query->get('selected');
+
+    // Give preference to sku id passed via query params.
+    if ($sku_id) {
+      $first_child = SKU::load($sku_id);
+
+      if ($first_child instanceof SKUInterface) {
+        // We do it again to get current translation.
+        // We expect no performance impact as all the skus are already loaded
+        // multiple times in the request.
+        $first_child = SKU::loadFromSku($first_child->getSku());
+        return $first_child;
+      }
+    }
+
+    // Default use-case: User landing on PDP from PLP/Search/directly.
+    // Get the first child from sorted options of root attribute.
+    if ($root_attribute_form_item) {
+      foreach ($root_attribute_form_item['#options'] as $key => $value) {
+        if (isset($root_attribute_form_item['#options_attributes'][$key]['disabled'])) {
+          continue;
+        }
+
+        $root_attribute_first_value = $key;
+        break;
+      }
+
+      if (isset($root_attribute_first_value)) {
+        return $this->getChildSkuFromAttribute(
+          $sku,
+          $root_attribute_code,
+          $root_attribute_first_value
+        );
+      }
+    }
+
+    // Fallback.
+    return $this->getChildSkus($sku, TRUE);
+  }
+
+  /**
+   * Get all the swatch images with sku text as key.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   Parent SKU.
+   * @param string $attribute_code
+   *   Attribute code used for swatches.
+   *
+   * @return array
+   *   Swatches array.
+   */
+  public function getSwatches(SKUInterface $sku, $attribute_code = 'color') {
+    $swatches = $this->getProductCachedData($sku, 'swatches');
+
+    // We may have nothing for an SKU, we should not keep processing for it.
+    // If value is not set, function returns NULL above so we check for array.
+    if (is_array($swatches)) {
+      return $swatches;
+    }
+
+    $swatches = [];
+    $duplicates = [];
+    $children = $this->getChildSkus($sku);
+
+    foreach ($children as $child) {
+      $value = $child->get('attr_' . $attribute_code)->getString();
+
+      if (empty($value) || isset($duplicates[$value])) {
+        continue;
+      }
+
+      // Do not show OOS swatches.
+      if (!alshaya_acm_get_stock_from_sku($child)) {
+        continue;
+      }
+
+      $swatch_item = $child->getSwatchImage();
+
+      if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
+        continue;
+      }
+
+      $duplicates[$value] = 1;
+      $swatches[$child->id()] = $swatch_item['file']->url();
+    }
+
+    $this->setProductCachedData($sku, 'swatches', $swatches);
+
+    return $swatches;
   }
 
 }

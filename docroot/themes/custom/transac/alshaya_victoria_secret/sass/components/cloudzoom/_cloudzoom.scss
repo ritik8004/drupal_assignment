@@ -1,14 +1,178 @@
 #product-image-gallery,
 #lightSlider {
   .slick-slide {
-    height: 8.125rem !important;
+    height: auto !important;
+    min-height: 8.125rem;
+    padding: 0;
+    border: 0;
+    position: relative;
 
     @include breakpoint($desktop) {
       margin: 0.625rem 0;
+      width: 6.125rem !important;
+      #{$left}: 2px;
     }
 
     @include breakpoint($only-tablet) {
-      width: 7rem !important;
+      width: 6.125rem !important;
+      border: 0 !important;
+      margin: 2px 0.4375rem;
+    }
+
+    img {
+      height: 8.125rem;
+    }
+  }
+
+  .slick-current {
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      bottom: -2px;
+      left: -2px;
+      right: -2px;
+      border: 1px solid $gallery_arrows_border;
+    }
+  }
+}
+
+.cloudzoom {
+  .cloudzoom__herocontainer {
+    @include breakpoint($desktop) {
+      width: calc(100% - (6.375rem + 0.25rem));
+    }
+
+    .cloudzoom__image {
+      .img-wrap {
+        @include breakpoint($desktop) {
+          height: auto;
+          // Adding some buffer and restricting height in case of very tall aspect ratio.
+          max-height: 37.5rem;
+
+          .acq-content-product-modal & {
+            img {
+              width: 25.25rem !important;
+            }
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          width: 18.1875rem;
+          height: auto;
+          // Adding some buffer and restricting height in case of very tall aspect ratio.
+          max-height: 25rem;
+
+          img {
+            height: auto !important;
+          }
+
+          .acq-content-product-modal & {
+            width: auto;
+
+            img {
+              width: 18.1875rem !important;
+            }
+          }
+        }
+      }
+    }
+
+    .product-labels {
+      height: auto;
+      width: auto;
+    }
+  }
+
+  .cloudzoom__thumbnails {
+    @include breakpoint($desktop) {
+      width: 6.375rem;
+      margin-#{$right}: 0.25rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: 2.75rem;
+    }
+  }
+}
+
+#product-image-gallery-container {
+  .imagegallery__wrapper {
+    #product-image-gallery {
+      @include breakpoint($desktop) {
+        width: 6.625rem;
+        margin-#{$left}: 1.5rem;
+      }
+    }
+
+    > .imagegallery__full {
+      @include breakpoint($desktop) {
+        width: calc(100% - (10.75rem)) !important;
+      }
+    }
+  }
+
+  .button__wrapper {
+    @include breakpoint($desktop) {
+      #{$left}: 54%;
+    }
+  }
+}
+
+// Size Guide modal popup theming
+.path--cart .ui-dialog,
+.nodetype--acq_product .ui-dialog {
+  #drupal-modal,
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
+    @include breakpoint($desktop) {
+      height: 38.31rem !important;
+    }
+  }
+}
+
+.pdp-modal-overlay {
+  #drupal-modal {
+    .content__main {
+      @include breakpoint($desktop) {
+        min-height: 33.325rem;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  #drupal-modal {
+    #lightSlider {
+      &.pager-yes {
+        padding: 0 2.4375rem;
+      }
+    }
+
+    .slick-track {
+      width: 28.125rem !important;
+    }
+
+    .cloudzoom {
+      .cloudzoom__thumbnails {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .path--cart,
+  .nodetype--acq_product {
+    .ui-dialog {
+      #drupal-modal {
+        height: 39rem !important;
+      }
+    }
+  }
+}
+
+.mobilegallery {
+  .subtext {
+    @include breakpoint($only-mobile) {
+      bottom: 2rem;
     }
   }
 }

@@ -7,6 +7,7 @@
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -445,7 +446,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
           ];
 
           \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.array');
-          $form['totals'] = _alshaya_array_insert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
+          $form['totals'] = AlshayaArrayUtils::arrayInsert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
           break;
         }
       }
@@ -519,41 +520,6 @@ function alshaya_acm_get_cart_items_by_sku() {
     }
   }
   return $skus;
-}
-
-/**
- * Implements hook_form_BASE_FORM_ID_alter().
- */
-function alshaya_acm_form_sku_base_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $swatches = $display_settings->get('swatches')['pdp'];
-  $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
-
-  $form['quantity']['#type'] = 'select';
-  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options();
-  $form['quantity']['#validated'] = TRUE;
-  unset($form['quantity']['#size']);
-
-  if (isset($form['ajax'], $form['ajax']['configurables'])) {
-    foreach ($form['ajax']['configurables'] as $key => $form_item) {
-      if (is_array($form_item) && isset($form_item['#type']) && $form_item['#type'] == 'select') {
-        $form['ajax']['configurables'][$key]['#empty_value'] = '';
-        $form['ajax']['configurables'][$key]['#options_attributes']['']['disabled'] = 'disabled';
-        $form['ajax']['configurables'][$key]['#empty_option'] = t('Select @title', ['@title' => $form_item['#title']]);
-        $form['ajax']['configurables'][$key]['#attributes']['data-default-title'] = $form_item['#title'];
-        $form['ajax']['configurables'][$key]['#attributes']['class'][] = in_array($key, $swatches)
-          ? 'form-item-configurable-swatch'
-          : 'form-item-configurable-select';
-      }
-    }
-  }
-  // We need to change the markup for submit button.
-  // @see alshaya_white_label_theme_suggestions_input_alter().
-  $form['add_to_cart']['#attributes']['data-twig-suggestion'] = 'addtocart';
-
-  // Adding classes to add to cart button and quanity field.
-  $form['add_to_cart']['#attributes']['class'][] = 'edit-add-to-cart';
-  $form['quantity']['#attributes']['class'][] = 'edit-quantity';
 }
 
 /**
@@ -838,7 +804,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   }
 
   // Load the first image.
-  $sku_image = alshaya_acm_get_product_display_image($sku_entity, '137x144');
+  $sku_image = alshaya_acm_get_product_display_image($sku_entity, '291x288');
 
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);

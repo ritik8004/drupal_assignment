@@ -263,19 +263,6 @@ function alshaya_advanced_page_is_department_page($tid) {
 }
 
 /**
- * Implements hook_pathauto_pattern_alter().
- */
-function alshaya_advanced_page_pathauto_pattern_alter(&$pattern, array $context) {
-  // Check if current context.
-  if ($context['module'] == 'node'
-    && $context['bundle'] == 'advanced_page'
-    && $context['data']['node']->get('field_use_as_department_page')->value == 1) {
-    // Set path for department page.
-    $pattern->setPattern('department-[node:title]');
-  }
-}
-
-/**
  * Callback for converting one content type to another.
  */
 function _alshaya_advanced_page_convert_base_tables($to_type, $nids, $base_tables) {

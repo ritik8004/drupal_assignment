@@ -74,23 +74,42 @@ set classes = [
             <h2 class="field__label">{{ 'Product Description'|t }}</h2>
             <div class="field__content-wrapper">
               <div class="field__content">
-                {% if content.short_desc.value|render %}
-                  <div class="desc-wrapper">
-                    {% if content.short_desc.label|render %}
-                      <div class="desc-label">
-                        {{ content.short_desc.label }}
-                      </div>
-                    {% endif %}
-
+                <div class="desc-wrapper">
+                  {% if content.short_desc.label|render %}
+                    <div class="desc-label">
+                      {{ content.short_desc.label }}
+                    </div>
+                  {% endif %}
+                  {% if content.short_desc.value|render %}
                     <div class="desc-value">
                       {{ content.short_desc.value }}
                     </div>
-                  </div>
-                {% endif %}
+                  {% endif %}
+                </div>
+                {% for desc in content.description %}
+                  {% if desc.value|render %}
+                    <div class="desc-wrapper">
+                      {% if desc.label|render %}
+                        <div class="desc-label">
+                          {{ desc.label }}
+                        </div>
+                      {% endif %}
+
+                      <div class="desc-value">
+                        {{ desc.value }}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
               </div>
               {% if content.description %}
-                <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+                {% if content.read_more_style.value|render %}
+                  <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                  <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                {% else %}
+                  <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+                  <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+                {% endif %}
               {% endif %}
             </div>
           </div>

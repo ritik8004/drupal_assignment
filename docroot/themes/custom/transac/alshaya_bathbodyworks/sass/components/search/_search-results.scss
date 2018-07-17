@@ -1,3 +1,11 @@
 .ui-autocomplete {
   border: 1px solid $autocomplete_border;
 }
+
+.alias--search {
+  aside.c-sidebar-first {
+    .c-facet__blocks__wrapper {
+      margin-#{$left}: 0;
+    }
+  }
+}

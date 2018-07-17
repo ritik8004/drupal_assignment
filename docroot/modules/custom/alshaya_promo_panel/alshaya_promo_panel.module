@@ -52,26 +52,6 @@ function alshaya_promo_panel_preprocess_block(&$variables) {
       // If the block is added to "block reference" paragraph type.
       else {
         $variables['attributes']['class'][] = 'block__reference--block-promo-panel-wrapper';
-        // Get the referer path.
-        $referrer_path = parse_url(\Drupal::request()->headers->get('referer'))['path'];
-        $referrer_path = preg_replace('/^(\/' . $lang->getId() . ')(.*)/', '', $referrer_path);
-        $internal_uri = !empty($referrer_path) ? $referrer_path : 'home';
-
-        // Create the back link.
-        $element['back'] = [
-          '#type' => 'link',
-          '#title' => t('Back'),
-          '#url' => Url::fromUri('internal:/' . $internal_uri, ['language' => $lang]),
-          '#options' => [
-            'attributes' => [
-              'class' => ['mobile-back-link'],
-            ],
-          ],
-        ];
-        // Change default label with link.
-        $variables['label'] = [
-          '#markup' => \Drupal::service('renderer')->render($element) . $variables['label'],
-        ];
       }
       break;
   }

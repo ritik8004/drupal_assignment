@@ -53,19 +53,19 @@ function alshaya_get_env_keys($site, $env) {
     'mckw' => [
       '01uat' => [
         'magento' => 'mc_uat',
-        'conductor' => 'mc_uat',
+        'conductor' => 'mckw_uat',
       ],
       '01pprod' => [
         'magento' => 'mc_dev',
-        'conductor' => 'mc_pprod',
+        'conductor' => 'mckw_pprod',
       ],
       '01live' => [
         'magento' => 'mc_prod',
-        'conductor' => 'mc_prod',
+        'conductor' => 'mckw_prod',
       ],
       '01test' => [
-        'magento' => 'mc_test',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_qa',
+        'conductor' => 'mckw_test',
       ],
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
@@ -121,20 +121,20 @@ function alshaya_get_env_keys($site, $env) {
     'hmkw' => [
       '01uat' => [
         'magento' => 'hm_uat',
-        'conductor' => 'hm_uat'
+        'conductor' => 'hmkw_uat'
       ],
       '01pprod' => [
         'magento' => 'hm_uat',
-        'conductor' => 'hm_pprod'
+        'conductor' => 'hmkw_pprod'
       ],
       '01live' => [
         'magento' => 'hm_prod',
-        'conductor' => 'hm_prod'
+        'conductor' => 'hmkw_prod'
       ],
       // Local, travis, 01dev, 01dev2, 01dev3.
       'default' => [
         'magento' => 'hm_qa',
-        'conductor' => 'hm_test',
+        'conductor' => 'hmkw_test',
       ],
     ],
     // H&M SA.
@@ -212,20 +212,33 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'bbwae_prod'
       ],
     ],
+    // Pottery Barn KW.
+    'pbkw' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_test',
+      ],
+    ],
+    // Pottery Barn SA.
+    'pbsa' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_test',
+      ],
+    ],
     // Pottery Barn AE.
     'pbae' => [
-      // PBAE is connected to MC UAT for now.
       'default' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcae_uat',
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_test',
       ],
-      //'default' => [
-      //  'magento' => 'pb_qa',
-      //  'conductor' => 'pbae_test',
-      //],
     ],
     // Victoria Secret KW.
     'vskw' => [
+      '01uat' => [
+        'magento' => 'vs_uat',
+        'conductor' => 'vskw_uat',
+      ],
       'default' => [
         'magento' => 'vs_qa',
         'conductor' => 'vskw_test',
@@ -233,6 +246,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret SA.
     'vssa' => [
+      '01uat' => [
+        'magento' => 'vs_uat',
+        'conductor' => 'vssa_uat',
+      ],
       'default' => [
         'magento' => 'vs_qa',
         'conductor' => 'vssa_test',
@@ -240,6 +257,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret AE.
     'vsae' => [
+      '01uat' => [
+        'magento' => 'vs_uat',
+        'conductor' => 'vsae_uat',
+      ],
       'default' => [
         'magento' => 'vs_qa',
         'conductor' => 'vsae_test',

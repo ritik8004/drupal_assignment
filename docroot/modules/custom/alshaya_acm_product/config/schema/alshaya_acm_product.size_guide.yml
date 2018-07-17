@@ -8,6 +8,9 @@ alshaya_acm_product.size_guide:
     size_guide_modal_content_node:
       type: integer
       label: 'Size guide content node'
+    size_guide_attributes:
+      type: string
+      label: 'Size guide Attributes'
     langcode:
       type: string
       label: 'Language code'

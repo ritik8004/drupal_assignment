@@ -8,3 +8,16 @@ alshaya_acm_product.display_settings:
     color_swatches:
       type: boolean
       label: 'Display color swatches on product node'
+    plp_slider:
+      type: mapping
+      label: 'Configuration for plp slider'
+      mapping:
+        items:
+          type: integer
+          label: 'Number of items to display in slider'
+        margin:
+          type: integer
+          label: 'Margin between images in slider'
+        height:
+          type: integer
+          label: 'Height of slider'

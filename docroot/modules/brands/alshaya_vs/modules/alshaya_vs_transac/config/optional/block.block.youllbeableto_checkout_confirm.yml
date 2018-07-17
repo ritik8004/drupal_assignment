@@ -1,0 +1,30 @@
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:1a2425f6-8986-4e40-a30a-88ffebf18c53'
+  module:
+    - block_content
+    - system
+  theme:
+    - alshaya_victoria_secret
+id: youllbeableto_checkout_confirm
+theme: alshaya_victoria_secret
+region: content
+weight: -14
+provider: null
+plugin: 'block_content:1a2425f6-8986-4e40-a30a-88ffebf18c53'
+settings:
+  id: 'block_content:1a2425f6-8986-4e40-a30a-88ffebf18c53'
+  label: 'you’ll be able to'
+  provider: block_content
+  label_display: visible
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: /cart/checkout/confirmation
+    negate: false
+    context_mapping: {  }

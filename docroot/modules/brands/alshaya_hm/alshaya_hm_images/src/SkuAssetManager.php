@@ -365,7 +365,9 @@ class SkuAssetManager {
 
             // Use number for sorting in case we land onto 2 images with same
             // asset type & facing type.
-            if (($weight_a - $weight_b) === 0) {
+            if (($weight_a - $weight_b) === 0
+              && isset($a['Data'], $a['Data']['Angle'], $a['Data']['Angle']['Number'])
+              && isset($b['Data'], $b['Data']['Angle'], $b['Data']['Angle']['Number'])) {
               $weight_a = $a['Data']['Angle']['Number'];
               $weight_b = $b['Data']['Angle']['Number'];
             }
@@ -510,7 +512,7 @@ class SkuAssetManager {
         (!in_array($article_castor_id, $traversed_article_castor_ids))) {
         $traversed_article_castor_ids[] = $article_castor_id;
         $color_attributes = $this->getColorAttributesFromSku($child_sku);
-        $article_castor_ids[$color_attributes['attr_color_label']] = $color_attributes['attr_rgb_color'];
+        $article_castor_ids[$child_sku] = $color_attributes['attr_rgb_color'];
       }
     }
 

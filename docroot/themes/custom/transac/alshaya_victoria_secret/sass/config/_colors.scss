@@ -98,6 +98,7 @@ $alabaster: #fcfcfc;
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
+$_pink_one: #636363;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -254,16 +255,16 @@ $tooltip_bg_opacity_0: rgba(240, 246, 252, 0);
 $tooltip_text: $nero;
 $tooltip_border: $nero;
 // Second color for arrow of tooltip.
-$tooltip_border_2: $white-smoke-light;
+$tooltip_border_2: $vanilla;
 // $tooltip_border + opacity 0.
 $tooltip_border_opacity_0: rgba(0, 132, 204, 0);
 $tooltip_icon: $nero;
 $tooltip_link: $black;
 
 // Back to top
-$btt_bg: $whisper-light;
+$btt_bg: rgba(35, 35, 35, 0.25);
 $btt_hover_text: $grey-ash;
-$btt_text: $black;
+$btt_text: $white-five;
 
 // Breadcrumb.
 $breadcrumb_bg: $white-smoke-light;
@@ -527,7 +528,7 @@ $plp_tile_product_title_hover: $nero;
 $plp_tile_product_price: $black;
 $plp_tile_product_special_price: $red-error;
 $plp_tile_product_discount_label: $red-error;
-$plp_tile_product_hover_border: $greyish;
+$plp_tile_product_hover_border: $gainsboro;
 $plp_tile_product_hover_shadow: $whisper-light;
 $plp_tile_product_hover_bg: $white-five;
 
@@ -535,7 +536,7 @@ $plp_tile_product_hover_bg: $white-five;
 $plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
 $plp_tile_hover_slider_nav_hover: $grey-ash;
-$plp_tile_hover_slider_arrows: $black;
+$plp_tile_hover_slider_arrows: $_pink_one;
 $plp_pager_link: $marine-blue;
 $plp_pager_link_border: $marine-blue;
 
@@ -552,9 +553,10 @@ $pdp_title_section_border: $gainsboro;
 $pdp_mobile_wrapper: $white-five;
 $pdp_sell_title: $nero;
 $pdp_title_collection_name: $ash-triplet;
+$pdp_white_color_attribute: $white;
 
 // Product modal
-$pdp_modal_full_prodlink: $brilliant-rose;
+$pdp_modal_full_prodlink: $nero;
 $pdp_modal_full_prodlink_border: $gainsboro;
 
 // Product Add to cart form.
@@ -931,7 +933,7 @@ $basket_sku_promo_link: $red-error;
 $basket_oos_tr_bg: $white-four;
 $basket_oos_inline_txt: $brilliant-rose;
 $basket_oos_inline_qty_border: $red-error;
-$basket_img_border: $white;
+$basket_img_border: $gainsboro;
 $basket_img_bg: $white-five;
 $basket_th_4th_child: #ededed;
 $basket_continue_shopping_btn_border: $black;

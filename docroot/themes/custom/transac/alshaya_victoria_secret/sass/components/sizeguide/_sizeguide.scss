@@ -1,12 +1,11 @@
 .size-guide-link {
   float: $right;
   position: relative;
-  top: 0;
   padding-top: 0.875rem;
   font-size: 0.75rem;
   line-height: 1.33;
   text-decoration: underline;
-  padding-#{$right}: 0.625rem;
+  top: 0;
 
   @include breakpoint($only-mobile) {
     padding: 0;
@@ -27,12 +26,15 @@
 
       .full-prod-link {
         margin-bottom: 0;
-        padding-bottom: 0.375rem;
+        padding-top: 0.65rem;
+        padding-bottom: 0.45rem;
       }
 
       #product-image-gallery,
       #lightSlider {
-        height: 31rem;
+        @include breakpoint($desktop) {
+          height: 31rem;
+        }
       }
     }
   }
@@ -41,5 +43,11 @@
 .acq-content-product-modal {
   .content__main {
     min-height: auto;
+  }
+
+  .full-prod-link {
+    &::after {
+      font-size: 1.5rem;
+    }
   }
 }

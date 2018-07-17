@@ -327,17 +327,20 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   $orderDetails['discount'] = (float) $order['totals']['discount'] != 0 ? alshaya_acm_price_format($order['totals']['discount']) : NULL;
 
   if (isset($order['extension']['surcharge_incl_tax']) && $order['extension']['surcharge_incl_tax'] > 0) {
-    $acm_config = \Drupal::config('alshaya_acm_checkout.settings');
-    $surcharge_label = $acm_config->get('cod_surcharge_label');
-    $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
+    // If surcharge is enabled, only then show.
+    if (\Drupal::service('alshaya_acm_checkout.checkout_helper')->isSurchargeEnabled()) {
+      $acm_config = \Drupal::config('alshaya_acm_checkout.settings');
+      $surcharge_label = $acm_config->get('cod_surcharge_label');
+      $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
 
-    $orderDetails['surcharge_label']['#markup'] = $surcharge_label;
-    $orderDetails['surcharge']['#markup'] = alshaya_acm_price_format(
-      $order['extension']['surcharge_incl_tax'],
-      [],
-      $surcharge_tooltip
-    );
-    $orderDetails['surcharge_print']['#markup'] = alshaya_acm_price_format($order['extension']['surcharge_incl_tax']);
+      $orderDetails['surcharge_label']['#markup'] = $surcharge_label;
+      $orderDetails['surcharge']['#markup'] = alshaya_acm_price_format(
+        $order['extension']['surcharge_incl_tax'],
+        [],
+        $surcharge_tooltip
+      );
+      $orderDetails['surcharge_print']['#markup'] = alshaya_acm_price_format($order['extension']['surcharge_incl_tax']);
+    }
   }
 
   $orderDetails['order_total'] = alshaya_acm_price_format($order['totals']['grand']);
@@ -453,7 +456,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['image'] = '';
 
     // Load the first image.
-    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
+    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288');
 
     $products[] = $product;
   }

@@ -56,7 +56,7 @@ class CartFormHelper {
    */
   public function isAttributeSortable($attribute_code) {
     $sortable_options = $this->config->get('sortable_options');
-    return isset($sortable_options[$attribute_code]);
+    return in_array($attribute_code, $sortable_options);
   }
 
   /**
@@ -70,7 +70,8 @@ class CartFormHelper {
    */
   public function getFirstAttribute($attribute_set = 'default') {
     $weights = $this->getConfigurableAttributeWeights($attribute_set);
-    return !empty($weights) ? reset($weights) : '';
+    $attributes = $weights ? array_keys($weights) : [];
+    return !empty($attributes) ? reset($attributes) : '';
   }
 
   /**
