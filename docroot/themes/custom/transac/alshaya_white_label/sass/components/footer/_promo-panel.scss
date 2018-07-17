@@ -6,10 +6,11 @@
     left: 0;
     right: 0;
     position: fixed;
+    width: 100%;
     z-index: 10;
     bottom: 0;
     transform: translateY(calc(100% - 49px));
-    transition: transform 0.4s ease-in, opacity 0.4s ease-in;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 1;
   }
 
@@ -87,6 +88,7 @@
 
     html[lang=ar] & {
       left: -0.875rem;
+      right: auto;
     }
   }
 
@@ -180,13 +182,6 @@
 
 .promo-panel-fixed {
   &.block-promo-panel-wrapper {
-    @include breakpoint($tablet) {
-      position: fixed;
-      z-index: 10;
-      bottom: 0;
-      width: 100%;
-    }
-
     &.active-promo-panel {
       @include breakpoint($tablet) {
         z-index: 1001;

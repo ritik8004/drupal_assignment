@@ -212,6 +212,20 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'bbwae_prod'
       ],
     ],
+    // Pottery Barn KW.
+    'pbkw' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_test',
+      ],
+    ],
+    // Pottery Barn SA.
+    'pbsa' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_test',
+      ],
+    ],
     // Pottery Barn AE.
     'pbae' => [
       'default' => [

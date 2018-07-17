@@ -33,3 +33,19 @@ alshaya_stores_finder.settings:
         use_default:
           type: boolean
           label: 'Use the default marker icon supplied by the module.'
+        label_position:
+          type: mapping
+          label: 'Label position'
+          mapping:
+            x:
+              type: integer
+              label: 'Label position x'
+            y:
+              type: integer
+              label: 'Label position y'
+            single_x:
+              type: integer
+              label: 'Label single position x'
+            single_y:
+              type: integer
+              label: 'Label single position y'
