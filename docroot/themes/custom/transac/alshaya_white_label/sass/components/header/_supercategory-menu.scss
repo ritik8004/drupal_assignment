@@ -9,6 +9,7 @@
     .menu--one__list {
       .menu--one__link {
         font-size: 0.75rem;
+        padding: 0.625rem;
 
         @include breakpoint ($desktop) {
           padding: 0.5rem 1rem;
@@ -75,7 +76,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        height: 2.75rem;
+        height: 2.8125rem;
       }
 
       li {

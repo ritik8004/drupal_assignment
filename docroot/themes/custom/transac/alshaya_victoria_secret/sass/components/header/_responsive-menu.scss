@@ -92,10 +92,6 @@ header {
   .logged-in .toggle--sign,
   .toggle--sign {
     top: 2.8125rem;
-
-    @include breakpoint($only-mobile) {
-      top: 2.75rem;
-    }
   }
 
   .main--menu {
@@ -184,6 +180,10 @@ header {
     width: 75%;
     top: 2.8125rem;
     background-color: $header_mobile_menu_bg;
+
+    @include breakpoint($only-mobile) {
+      top: 2.75rem;
+    }
   }
 
   #block-cartminiblock {
@@ -199,6 +199,10 @@ header {
     z-index: 1;
     text-align: center;
     background-color: $header_mobile_menu_bg;
+
+    @include breakpoint($only-mobile) {
+      top: 2.75rem;
+    }
   }
 
   .menu--active .mobile--close {
@@ -207,10 +211,6 @@ header {
     height: 2.8125rem;
     width: 2.8125rem;
     padding-top: 0.5rem;
-
-    @include breakpoint($only-mobile) {
-      top: 2.75rem;
-    }
   }
 
   .c-menu-secondary,
@@ -221,6 +221,26 @@ header {
 
   .c-my-account-nav {
     width: 16.875rem !important;
+  }
+}
+
+.c-menu-secondary,
+.toggle--sign,
+.main--menu ul.menu--one__list {
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 2.8125rem);
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 2.8125rem) !important;
+  }
+}
+
+.menu--active .mobile--close {
+  @include breakpoint($only-mobile) {
+    #{$left}: calc(100% - 2.8125rem);
   }
 }
 
