@@ -67,17 +67,41 @@ class SkuImagesManager {
   }
 
   /**
+   * Utility function to return all media items for a SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param bool $check_parent_child
+   *   Check parent or child SKUs.
+   * @param string $default_label
+   *   Default value for alt/title.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getAllMediaItems(SKUInterface $sku, $check_parent_child = FALSE, $default_label = '') {
+    $media = $this->getAllMedia($sku, $check_parent_child, $default_label);
+    $media_items = [];
+    foreach ($media['media_items'] ?? [] as $items) {
+      $media_items = array_merge($media_items, $items);
+    }
+    return $media_items;
+  }
+
+  /**
    * Utility function to return all media files for a SKU.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    * @param bool $check_parent_child
    *   Check parent or child SKUs.
+   * @param string $default_label
+   *   Default value for alt/title.
    *
    * @return array
    *   Array of media files.
    */
-  public function getAllMedia(SKUInterface $sku, $check_parent_child = FALSE) {
+  public function getAllMedia(SKUInterface $sku, $check_parent_child = FALSE, $default_label = '') {
     // Here for_sku means it can be in parent or child.
     // And from_sku means specifically for this SKU.
     $cache_key = $check_parent_child ? 'media_for_sku' : 'media_from_sku';
@@ -88,12 +112,25 @@ class SkuImagesManager {
       return $this->addFileObjects($return);
     }
 
-    $media = $sku->getMedia();
+    $plugin = $sku->getPluginInstance();
+
+    if (empty($default_label) && $sku->bundle() == 'simple') {
+      $parent = $plugin->getParentSku($sku);
+
+      // Check if there is parent SKU available, we use label from that.
+      if ($parent instanceof SKUInterface) {
+        $default_label = $parent->label();
+      }
+    }
+
+    $media = $sku->getMedia(TRUE, FALSE, $default_label);
 
     $return = [
       'images' => [],
       'videos' => [],
       'media_items' => [],
+      'main' => [],
+      'thumb' => [],
     ];
 
     // We will use below variables for alter hooks.
@@ -120,7 +157,7 @@ class SkuImagesManager {
 
         // Check if there is child SKU available, use media files of child.
         if ($child instanceof SKUInterface) {
-          return $this->getAllMedia($child);
+          return $this->getAllMedia($child, FALSE, $default_label);
         }
       }
     }
