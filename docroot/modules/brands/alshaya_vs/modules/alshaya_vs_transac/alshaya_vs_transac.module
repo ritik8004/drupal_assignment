@@ -186,7 +186,7 @@ function _alshaya_vs_transac_marker_label_position_ar() {
   return [
     'x' => 7,
     'y' => 17,
-    'single_x' => 10,
+    'single_x' => 11,
     'single_y' => 17,
   ];
 }
