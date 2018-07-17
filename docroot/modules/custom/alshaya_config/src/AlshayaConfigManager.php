@@ -80,10 +80,10 @@ class AlshayaConfigManager {
    *   Path where configs reside. Defaults to install.
    * @param string $mode
    *   Mode of update operation replace / add missing.
-   * @param string $replace_key
-   *   Key to replace when using MODE_REPLACE_KEY.
+   * @param array $options
+   *   Array of keys to replace when using MODE_REPLACE_KEY.
    */
-  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE, $replace_key = '') {
+  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE, array $options = []) {
     if (empty($configs)) {
       return;
     }
@@ -148,7 +148,7 @@ class AlshayaConfigManager {
       else {
         $existing = $config->getRawData();
         $existing = is_array($existing) ? $existing : [];
-        $updated = $this->getUpdatedData($existing, $data, $mode, $replace_key);
+        $updated = $this->getUpdatedData($existing, $data, $mode, $options);
         $config->setData($updated)->save(TRUE);
       }
 
@@ -175,13 +175,13 @@ class AlshayaConfigManager {
    *   Config data from code.
    * @param string $mode
    *   Mode to use replace/merge.
-   * @param string $replace_key
-   *   Key to replace when using MODE_REPLACE_KEY.
+   * @param array $options
+   *   Array of Keys to replace when using MODE_REPLACE_KEY.
    *
    * @return array
    *   Updated data based on mode.
    */
-  public function getUpdatedData(array $existing, array $data, $mode, $replace_key = '') {
+  public function getUpdatedData(array $existing, array $data, $mode, array $options = []) {
     switch ($mode) {
       case self::MODE_ADD_MISSING:
         // For now we check only level one keys. We may want to enhance it
@@ -201,8 +201,10 @@ class AlshayaConfigManager {
         break;
 
       case self::MODE_REPLACE_KEY:
-        $existing[$replace_key] = $data[$replace_key];
-        $data = $existing;
+        foreach ($options['replace_keys'] as $replace_key) {
+          $existing[$replace_key] = $data[$replace_key];
+          $data = $existing;
+        }
         break;
 
       case self::MODE_REPLACE:

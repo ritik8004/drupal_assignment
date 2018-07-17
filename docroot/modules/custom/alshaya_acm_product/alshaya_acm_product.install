@@ -17,12 +17,13 @@ use Drupal\node\Entity\Node;
 function alshaya_acm_product_update_8024() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
+  $options['replace_keys'] = ['short_desc_characters'];
   $manager->updateConfigs(
     ['alshaya_acm_product.display_settings'],
     'alshaya_acm_product',
     'install',
     AlshayaConfigManager::MODE_REPLACE_KEY,
-    'short_desc_characters'
+    $options
   );
 }
 
