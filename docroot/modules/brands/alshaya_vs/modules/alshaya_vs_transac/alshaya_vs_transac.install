@@ -17,8 +17,6 @@ function alshaya_vs_transac_update_dependencies() {
       '8003' => [
         'alshaya_stores_finder' => '8104',
       ],
-    ],
-    'alshaya_vs_transac' => [
       '8004' => [
         'alshaya_stores_finder' => '8105',
       ],
