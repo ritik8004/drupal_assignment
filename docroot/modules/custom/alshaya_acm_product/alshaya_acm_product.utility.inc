@@ -148,7 +148,7 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
 
   $media = $skuImagesManager->getAllMedia($sku_entity, $check_parent_child);
   $main_image = $media['main'];
-  $thumbnails = $media['thumb'];
+  $thumbnails = $media['thumbs'];
 
   // Fetch settings.
   $settings = alshaya_product_zoom_cloudzoom_default_settings();
@@ -201,10 +201,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
       'height' => 81,
     ];
   }
-
-  // Invoke the alter hook to allow all modules to update the element.
-  // @TODO: Move this to hook_alshaya_acm_product_build_alter.
-  \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
 
   // If no main image, use default image.
   if (empty($main_image) && $check_parent_child) {

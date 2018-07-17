@@ -129,8 +129,6 @@ class SkuImagesManager {
       'images' => [],
       'videos' => [],
       'media_items' => [],
-      'main' => [],
-      'thumb' => [],
     ];
 
     // We will use below variables for alter hooks.
@@ -139,6 +137,9 @@ class SkuImagesManager {
 
     // Invoke the alter hook to allow all modules to update the element.
     $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $sku);
+
+    $return['main'] = $main;
+    $return['thumbs'] = $thumbs;
 
     // Avoid notices and warnings in local.
     if ($check_parent_child && empty($media) && empty($main)) {
