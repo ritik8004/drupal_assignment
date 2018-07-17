@@ -193,7 +193,7 @@ function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
       $item = [
         'label' => $block->label(),
         'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
-        'class' => 'mobile-link',
+        'class' => 'promo-panel--mobile-link',
       ];
       array_unshift($variables['term_tree'], $item);
     }
