@@ -153,7 +153,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       if ($current_language != $default_language
         && $term_object->hasTranslation($current_language)) {
         $term_object = $term_object->getTranslation($current_language);
-       }
+      }
 
       if ($term_object instanceof TermInterface) {
         if (!empty($meta_tags = $this->metaTagManager->tagsFromEntityWithDefaults($term_object))) {
