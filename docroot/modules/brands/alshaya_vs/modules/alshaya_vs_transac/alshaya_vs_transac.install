@@ -18,7 +18,23 @@ function alshaya_vs_transac_update_dependencies() {
         'alshaya_stores_finder' => '8104',
       ],
     ],
+    'alshaya_vs_transac' => [
+      '8004' => [
+        'alshaya_stores_finder' => '8105',
+      ],
+    ],
   ];
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update the store finder label position for arabic.
+ */
+function alshaya_vs_transac_update_8004() {
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+     ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+     ->save();
 }
 
 /**
@@ -33,7 +49,7 @@ function alshaya_vs_transac_update_8003() {
     ['alshaya_stores_finder.settings'],
     'alshaya_vs_transac',
     'override',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
