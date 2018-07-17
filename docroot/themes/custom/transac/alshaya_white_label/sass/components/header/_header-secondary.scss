@@ -261,7 +261,7 @@
 }
 
 .menu--three__list-item {
-  .menu--three__link {
+  a.menu--three__link {
     position: relative;
 
     @include breakpoint($upto-desktop) {

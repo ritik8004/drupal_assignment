@@ -3,7 +3,7 @@
     <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>  
     <li class="menu__list-item menu--three__list-item">
       <div class="menu__link-wrapper menu-two__link-wrapper">
-        <a class="menu__link menu--three__link {{ data.sub-nav-class }}" href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': level3.id}) }}">{{ level3.label }}</a>
+        <{{ level3.tag }} class="menu__link menu--three__link {{ data.sub-nav-class }}" {{ level3.path }}>{{ level3.label }}</{{ level3.tag }}>
       </div>
 
       {% if level3.child is not empty %}
