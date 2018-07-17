@@ -150,7 +150,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
         $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
         $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
         $short_desc['value'] = [
-          '#markup' => $short_desc_html,
+          '#markup' => $short_desc_html . '...',
         ];
 
         // If short description is the same as description,
@@ -160,6 +160,11 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
             '#markup' => 'display:none;',
           ];
         }
+      }
+      else {
+        $build['read_more_style']['value'] = [
+          '#markup' => 'display:none;',
+        ];
       }
 
       $description['value'] = [
