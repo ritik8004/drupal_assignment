@@ -68,6 +68,7 @@
         }
 
         $('.main--menu').addClass('menu--active');
+        $('.block-alshaya-super-category .main--menu ').removeClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
       });
