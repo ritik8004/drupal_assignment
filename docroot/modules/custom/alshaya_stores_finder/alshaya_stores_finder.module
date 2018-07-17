@@ -293,3 +293,18 @@ function alshaya_stores_finder_alshaya_config_save_alter(array &$data, $config_n
     }
   }
 }
+
+/**
+ * Config of marker label position for arabic.
+ *
+ * @return array
+ *   Return array of arabic settings override.
+ */
+function _alshaya_stores_finder_marker_label_position_ar() {
+  return [
+    'x' => 7,
+    'y' => 15,
+    'single_x' => 11,
+    'single_y' => 15,
+  ];
+}
