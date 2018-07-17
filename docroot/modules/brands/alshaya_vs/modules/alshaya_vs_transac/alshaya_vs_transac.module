@@ -118,7 +118,7 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
   $collection = $sku->get('attr_product_collection')->getString();
   $short_description = $sku->label();
 
-  if ($context === 'pdp') {
+  if ($context === 'pdp' || $context === 'modal') {
     $title = '<span class="title--sub">' . $collection . '</span>';
     $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
   }
