@@ -365,14 +365,6 @@
   }
 }
 
-.view-plp-promotional-banner {
-  img {
-    &:empty {
-      display: none;
-    }
-  }
-}
-
 .c-plp {
   ul {
     &.js-pager__items {
