@@ -55,7 +55,29 @@
 }
 
 #payment_method_cybersource {
+  @include breakpoint($only-mobile) {
+    min-height: 6.5rem;
+
+    #payment_method_title_cybersource {
+      &.plugin-selected {
+        min-height: 7rem;
+      }
+    }
+  }
+
+  .payment-method-name {
+    .method-title {
+      @include breakpoint($only-tablet) {
+        width: 51%;
+      }
+    }
+  }
+
   .card-types-wrapper {
+    @include breakpoint($only-mobile) {
+      top: 4rem;
+    }
+
     .card-type {
       &-visa {
         background: url('../../alshaya_white_label/imgs/cards/visa-inactive.png') no-repeat;
