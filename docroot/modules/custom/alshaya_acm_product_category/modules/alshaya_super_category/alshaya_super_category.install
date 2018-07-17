@@ -25,11 +25,13 @@ function alshaya_super_category_update_dependencies() {
  */
 function alshaya_super_category_update_8002() {
   \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')
-    ->set('tags.title', '[node:title] | [supercategory:title]')->save();
+    ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
   \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
-    ->set('tags.title', '[node:title] | [supercategory:title]')->save();
+    ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
+    ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
   \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
-    ->set('tags.title', '[term:name] | [supercategory:title]')->save();
+    ->set('tags.title', '[term:name] | [supercategory:meta_title]')->save();
 }
 
 /**
@@ -48,9 +50,11 @@ function alshaya_super_category_update_8001() {
 function alshaya_super_category_install() {
   // Adding super category title token to meta tags.
   \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')
-    ->set('tags.title', '[node:title] | [supercategory:title]')->save();
+    ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
   \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
-    ->set('tags.title', '[node:title] | [supercategory:title]')->save();
+    ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
+    ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
   \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
-    ->set('tags.title', '[term:name] | [supercategory:title]')->save();
+    ->set('tags.title', '[term:name] | [supercategory:meta_title]')->save();
 }
