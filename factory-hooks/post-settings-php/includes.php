@@ -12,6 +12,8 @@ use Symfony\Component\Yaml\Yaml;
 // This variable is declared and filled in post-sites-php/includes.php
 global $site_name;
 
+global $site_code;
+
 // If we are on local environment, the site name has not been detected yet.
 if (empty($site_name) && $settings['env'] == 'local') {
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/project.local.yml'));

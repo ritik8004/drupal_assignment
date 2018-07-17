@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbe080c4884437c926531a6800cff212",
+    "content-hash": "3bef24b65c8d4afe6259fe77ed84f12a",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -464,7 +464,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fengyuanchen/cropper.git",
+                "url": "git@github.com:fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -1995,7 +1995,8 @@
                 },
                 "patches_applied": {
                     "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch"
+                    "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch",
+                    "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
