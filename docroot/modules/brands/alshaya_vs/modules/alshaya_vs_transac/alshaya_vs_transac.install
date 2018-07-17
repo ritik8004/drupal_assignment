@@ -31,8 +31,8 @@ function alshaya_vs_transac_update_dependencies() {
  */
 function alshaya_vs_transac_update_8005() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-         ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
-         ->save();
+    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->save();
 }
 
 /**
