@@ -287,11 +287,7 @@
 
 .price--discount {
   font-size: 0.75rem;
-
-  @include breakpoint($only-tablet) {
-    margin-top: 0.625rem;
-    margin-bottom: 0.625rem;
-  }
+  margin: 0.625rem 0;
 }
 
 .alshaya_search_slider {
