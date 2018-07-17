@@ -176,3 +176,12 @@
     }
   }
 }
+
+#product-image-gallery,
+#lightSlider {
+  .slick-next {
+    @include breakpoint($desktop) {
+      bottom: auto;
+    }
+  }
+}
