@@ -27,6 +27,21 @@ function alshaya_vs_transac_update_dependencies() {
 /**
  * Implements hook_update().
  *
+ * Update soft limit for facets of actual_color_label_code.
+ */
+function alshaya_vs_transac_update_8006() {
+  // Update facets config to avoid recreating facets.
+  foreach(['', 'plp_', 'promo_'] as $prefix) {
+    \Drupal::configFactory()
+      ->getEditable("facets.facet.{$prefix}actual_color_label_code")
+      ->set('widget.config.soft_limit', 5)
+      ->save(TRUE);
+  }
+}
+
+/**
+ * Implements hook_update().
+ *
  * Update the store finder label position for arabic.
  */
 function alshaya_vs_transac_update_8005() {
