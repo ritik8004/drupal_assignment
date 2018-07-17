@@ -145,7 +145,6 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
 
     // Add class for all terms.
     foreach ($term_data as $term_id => &$term_info) {
-      $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
       $term_object = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
 
       // We need to do this or meta tag always gets/renders value from default
@@ -164,6 +163,7 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
         }
       }
 
+      $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }
 
