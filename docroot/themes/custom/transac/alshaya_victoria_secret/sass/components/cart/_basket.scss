@@ -181,10 +181,16 @@
     padding-top: 0;
   }
 
-  .view-product-slider .owl-carousel .owl-item img {
-    max-width: none;
-    width: auto;
-    height: 11.8125rem;
+  .view-product-slider {
+    .owl-carousel {
+      .owl-item {
+        img {
+          max-width: none;
+          width: auto;
+          height: 11.8125rem;
+        }
+      }
+    }
   }
 }
 
