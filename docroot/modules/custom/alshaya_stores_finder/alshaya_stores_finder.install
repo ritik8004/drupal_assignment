@@ -15,12 +15,7 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_stores_finder_update_8105() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', [
-      'x' => 7,
-      'y' => 17,
-      'single_x' => 10,
-      'single_y' => 17,
-    ])
+    ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -39,12 +34,7 @@ function alshaya_stores_finder_update_8104() {
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', [
-      'x' => 7,
-      'y' => 17,
-      'single_x' => 10,
-      'single_y' => 17,
-    ])
+    ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -115,11 +105,6 @@ function alshaya_stores_finder_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', [
-      'x' => 7,
-      'y' => 15,
-      'single_x' => 11,
-      'single_y' => 15,
-    ])
+    ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
