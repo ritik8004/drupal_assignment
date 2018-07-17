@@ -559,3 +559,34 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
     }
   }
 }
+
+/**
+ * Get super category for a given the term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   Term object.
+ *
+ * @return \Drupal\Core\Entity\EntityInterface|null|static
+ *   Super category term.
+ */
+function _alshaya_super_category_get_super_category_for_term(TermInterface $term) {
+  if ($term->bundle() == 'acq_product_category') {
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if (!empty($super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRootParent($term))) {
+      if (!empty($super_category_term = Term::load($super_category['id']))) {
+        // We doing this as we not getting translated values.
+        return \Drupal::service('entity.repository')->getTranslationFromContext($super_category_term, $langcode);
+      }
+    }
+    else {
+      // Use default super category.
+      $super_category_tid = alshaya_super_category_get_default_term();
+      if (!empty($super_category_term = Term::load($super_category_tid))) {
+        // We doing this as we not getting translated values.
+        return \Drupal::service('entity.repository')->getTranslationFromContext($super_category_term, $langcode);
+      }
+    }
+  }
+
+  return NULL;
+}
