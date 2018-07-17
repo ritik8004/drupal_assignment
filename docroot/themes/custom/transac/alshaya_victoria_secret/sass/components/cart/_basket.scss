@@ -34,11 +34,13 @@
           padding-#{$left}: 0.75rem;
         }
 
-        .form-type-select .ajax-progress-throbber {
-          @include breakpoint($only-mobile) {
-            top: 0.8125rem;
-            #{$right}: auto;
-            #{$left}: -2.2rem;
+        .form-type-select {
+          .ajax-progress-throbber {
+            @include breakpoint($only-mobile) {
+              top: 0.8125rem;
+              #{$right}: auto;
+              #{$left}: -2.2rem;
+            }
           }
         }
       }
@@ -276,8 +278,12 @@
     }
   }
 
-  .messages.messages--status::before {
-    margin-top: 0;
+  .messages {
+    .messages--status {
+      &::before {
+        margin-top: 0;
+      }
+    }
   }
 }
 
