@@ -161,6 +161,11 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
           ];
         }
       }
+      else {
+        $build['read_more_style']['value'] = [
+          '#markup' => 'display:none;',
+        ];
+      }
 
       $description['value'] = [
         '#markup' => $description_value,
