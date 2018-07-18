@@ -7,6 +7,10 @@
   text-decoration: underline;
   top: 0;
 
+  @include breakpoint($only-tablet) {
+    z-index: 2;
+  }
+
   @include breakpoint($only-mobile) {
     padding: 0;
     margin-bottom: 0.3125rem;
