@@ -1138,13 +1138,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $prefix_settings = $this->configFactory->get('alshaya_addressbook.settings')->get('prefix_settings');
     $mapping = $this->getMagentoFieldMappings();
     $form_fields = $this->getMagentoFormFields();
-    $component_string = ":prefix :value";
 
     // Reverse the string for rtl language.
     $language = $this->languageManager->getCurrentLanguage();
-    if ($language->getDirection() == LanguageInterface::DIRECTION_RTL) {
-      $component_string = ":value :prefix";
-    }
+    $component_string = $language->getDirection() == LanguageInterface::DIRECTION_RTL ? ":value :prefix" : ":prefix :value";
 
     $prefix_field = $prefix_settings['key'];
     foreach ($address as $key => &$value) {
