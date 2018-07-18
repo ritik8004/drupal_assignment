@@ -21,3 +21,13 @@ use Drupal\node\NodeInterface;
 function hook_alshaya_stores_finder_store_update_alter(NodeInterface $node, array $store) {
 
 }
+
+/**
+ * Alter marker label position.
+ *
+ * @param array $label_position
+ *   Array of label position override.
+ */
+function hook_alshaya_stores_finder_marker_label_position_alter(array &$label_position) {
+
+}

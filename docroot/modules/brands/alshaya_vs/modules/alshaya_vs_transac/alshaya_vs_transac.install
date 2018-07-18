@@ -46,7 +46,7 @@ function alshaya_vs_transac_update_8006() {
  */
 function alshaya_vs_transac_update_8005() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -66,7 +66,7 @@ function alshaya_vs_transac_update_8003() {
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -187,7 +187,7 @@ function alshaya_vs_transac_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 
   $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');
