@@ -234,7 +234,7 @@ class CustomerCartForm extends FormBase {
         if ($response_message[1] == 'success') {
           $this->successMessage = $response_message[0];
         }
-        else if ($response_message[1] == 'error_coupon') {
+        elseif ($response_message[1] == 'error_coupon') {
           // Set the error and require rebuild.
           $form_state->setErrorByName('coupon', $response_message[0]);
           $form_state->setRebuild(TRUE);

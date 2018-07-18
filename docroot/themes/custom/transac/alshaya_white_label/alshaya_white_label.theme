@@ -280,6 +280,20 @@ function alshaya_white_label_preprocess_field__node__field_store_open_hours__sto
 }
 
 /**
+ * Implements hook_preprocess_field().
+ */
+function alshaya_white_label_preprocess_field__field_slider(&$variables) {
+  $data = [];
+  if (!empty($variables['items'])) {
+    foreach ($variables['items'] as $item) {
+      $data[$item['content']['#paragraph']->getType()][] = $item['content'];
+    }
+  }
+
+  $variables['slider_usp_data'] = $data;
+}
+
+/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {
@@ -1005,6 +1019,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         }
       }
     }
+  }
+  elseif ($variables['elements']['#paragraph']->getType() == 'delivery_usp_block') {
+    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $variables['paragraph'];
+    $timer_value = [];
+    $timer_value[$paragraph->id()] = $paragraph->get('field_usp_timer')->getString();
+    // Passing value so that can be used in slider JS.
+    $variables['#attached']['drupalSettings']['usp_text_timer'] = $timer_value;
   }
 }
 

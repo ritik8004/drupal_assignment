@@ -40,44 +40,18 @@
 
 {{ attach_library('alshaya_white_label/slider_banner') }}
 
-{%
-  set classes = [
-    'field',
-    'field--name-' ~ field_name|clean_class,
-    'field--type-' ~ field_type|clean_class,
-    'field--label-' ~ label_display,
-  ]
-%}
-{%
-  set title_classes = [
-    'field__label',
-    label_display == 'visually_hidden' ? 'visually-hidden',
-  ]
-%}
-
-{% if label_hidden %}
-  {% if multiple %}
-    <div{{ attributes.addClass('c-slider-promo__items owl-carousel') }}>
-      {% for item in items %}
-        <div{{ item.attributes.addClass('c-slider-promo__item') }}>{{ item.content }}</div>
-      {% endfor %}
-    </div>
-  {% else %}
-    {% for item in items %}
-      <div{{ attributes.addClass('c-slider-promo__item') }}>{{ item.content }}</div>
+{% if slider_usp_data is not empty %}
+    {% for paragraph_type, data in slider_usp_data %}
+        {% if paragraph_type == 'banner' %}
+            <div class="paragraph-{{ paragraph_type }}">
+                {% for render_data in data %}
+                    <div{{ attributes.addClass('c-slider-promo__item') }}>{{ render_data }}</div>
+                {% endfor %}
+            </div>
+        {% else %}
+            {% for render_data in data %}
+                <div class="paragraph-{{ paragraph_type }}">{{ render_data }}</div>
+            {% endfor %}
+        {% endif %}
     {% endfor %}
-  {% endif %}
-{% else %}
-  <div{{ attributes.addClass(classes) }}>
-    <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
-    {% if multiple %}
-    <div class='c-slider-promo__items owl-carousel'>
-      {% endif %}
-      {% for item in items %}
-        <div{{ item.attributes.addClass('c-slider-promo__item') }}>{{ item.content }}</div>
-      {% endfor %}
-      {% if multiple %}
-    </div>
-    {% endif %}
-  </div>
 {% endif %}

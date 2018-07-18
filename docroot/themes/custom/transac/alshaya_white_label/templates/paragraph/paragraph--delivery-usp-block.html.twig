@@ -1,0 +1,20 @@
+{{ attach_library('alshaya_white_label/delivery_usp') }}
+{%
+    set classes = [
+        'paragraph_usp_delivery',
+        'paragraph--type--' ~ paragraph.bundle|clean_class,
+        'paragraph-id--' ~ paragraph.id(),
+        view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
+    ]
+%}
+{% block paragraph %}
+    <div{{ attributes.addClass(classes) }} style="background-color: {{ paragraph.field_usp_text_background.value }}">
+      {% if content.field_usp_text %}
+        <div class="usp_list {{ 'arrow--' ~ paragraph.field_arrow_color.value }}">
+          <div style="color: {{ paragraph.field_usp_text_font_color.value }}">
+              {{ content.field_usp_text }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+{% endblock paragraph %}

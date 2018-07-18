@@ -9,7 +9,19 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_vs_transac_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter') {
+    $group = $implementations['alshaya_vs_transac'];
+    unset($implementations['alshaya_vs_transac']);
+    $implementations = ['alshaya_vs_transac' => $group] + $implementations;
+  }
+}
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -17,6 +29,32 @@ use Drupal\Core\Url;
 function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, array $store) {
   if (isset($store['included_in_store'])) {
     $node->get('field_brand')->setValue(trim($store['included_in_store']));
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_vs_transac_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  // Load SKU entity.
+  $sku_entity = SKU::load($form['sku_id']['#value']);
+
+  if (!($sku_entity instanceof SKUInterface)) {
+    return;
+  }
+
+  if (isset($form['ajax'], $form['ajax']['configurables'], $form['ajax']['configurables']['fragrance'])) {
+    // For condition check, we need the English value.
+    if ($sku_entity->hasTranslation('en')) {
+      $sku_entity = $sku_entity->getTranslation('en');
+    }
+
+    // Try to get value for product_category. We need to set fragrance field's
+    // label based on that.
+    $product_category = $sku_entity->get('attr_product_category')->getString();
+    if (strtolower($product_category) == 'lip-color') {
+      $form['ajax']['configurables']['fragrance']['#title'] = t('Color');
+    }
   }
 }
 
@@ -47,8 +85,8 @@ function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variab
  * Implements hook_acq_sku_base_field_additions_alter().
  */
 function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
-  $alshaya_bbw_transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  $fields = array_merge($fields, $alshaya_bbw_transac_fields);
+  $transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $transac_fields);
 }
 
 /**

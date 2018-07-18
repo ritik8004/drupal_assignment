@@ -291,7 +291,7 @@ class CartSessionStorage implements CartStorageInterface {
     $data = [
       'cart_id' => $cart->id(),
       'customer_id' => $customer_id,
-      'customer_email' => $customer_email
+      'customer_email' => $customer_email,
     ];
     $cart->convertToCustomerCart($data);
     $this->session->set(self::STORAGE_KEY, $cart);

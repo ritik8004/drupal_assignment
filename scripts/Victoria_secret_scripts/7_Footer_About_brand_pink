@@ -3,8 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="https://vsae.test-alshaya.acsitefactory.com/en/admin/structure/menu/manage/about-brand" />
-<title>About_brand</title>
+<link rel="selenium.base" href="https://vsae-test.factory.alshaya.com/en" />
+<title>New Test</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
@@ -32,6 +32,11 @@
 	<td>&lt;front&gt;</td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>//label[text()=&quot;PINK&quot;]/../input[@type='checkbox']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>id=edit-submit</td>
 	<td></td>
@@ -50,6 +55,11 @@
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
 	<td>&lt;front&gt;</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//label[text()=&quot;PINK&quot;]/../input[@type='checkbox']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -72,6 +82,11 @@
 	<td>&lt;front&gt;</td>
 </tr>
 <tr>
+	<td>click</td>
+	<td>//label[text()=&quot;PINK&quot;]/../input[@type='checkbox']</td>
+	<td></td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>id=edit-submit</td>
 	<td></td>
@@ -90,6 +105,11 @@
 	<td>type</td>
 	<td>id=edit-link-0-uri</td>
 	<td>&lt;front&gt;</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//label[text()=&quot;PINK&quot;]/../input[@type='checkbox']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -112,13 +132,8 @@
 	<td>&lt;front&gt;</td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>id=edit-submit</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//table[@id='menu-overview']/tbody/tr[2]/td/a/div</td>
+	<td>//label[text()=&quot;PINK&quot;]/../input[@type='checkbox']</td>
 	<td></td>
 </tr>
 <tr>
@@ -126,7 +141,6 @@
 	<td>id=edit-submit</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

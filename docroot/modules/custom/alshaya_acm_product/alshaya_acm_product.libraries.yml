@@ -6,6 +6,7 @@ product_view:
     - core/jquery
     - core/jquery.once
     - core/drupal
+
 stock_check:
   version: 1.x
   js:

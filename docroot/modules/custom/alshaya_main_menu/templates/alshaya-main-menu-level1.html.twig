@@ -26,9 +26,9 @@
                 {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
             {% endif %}
             {% if style is not empty %}
-                <a class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" href="{{ level1.path }}">{{ level1.label }}</a>
+                <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
             {% else %}
-                <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}">{{ level1.label }}</a>
+                <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
             {% endif %}
             {% set style = '' %}
           </div>

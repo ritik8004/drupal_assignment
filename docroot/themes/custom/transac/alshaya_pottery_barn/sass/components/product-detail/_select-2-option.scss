@@ -1,0 +1,13 @@
+.select2Option {
+  .select-buttons {
+    li {
+      a.picked {
+        font-weight: normal;
+      }
+    }
+  }
+
+  .selected-text {
+    font-weight: 600;
+  }
+}

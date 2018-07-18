@@ -414,8 +414,8 @@ function alshaya_hm_update_8001() {
 function alshaya_hm_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.content');
 
-  // Enable and set alshaya_hnm as default theme and set the site logo, favicon
-  // icon and email logo path.
+  // Enable and set alshaya_hnm as default theme and set the site logo,
+  // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_hnm');
 
   // Set store id - EN.

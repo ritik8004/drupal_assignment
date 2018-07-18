@@ -1,0 +1,230 @@
+.nodetype--acq_product {
+  .free-gift-promotions {
+    display: flex;
+    flex-flow: row wrap;
+    margin-bottom: 0.8125rem;
+    border: solid 1px $free-gifts-border;
+    padding: 0.75rem 0.5rem;
+    margin-#{$left}: -0.5rem;
+
+    @include breakpoint($upto-desktop) {
+      margin-#{$left}: 0;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0;
+      padding: 0.75rem;
+    }
+  }
+
+  .free-gift-image {
+    width: 4.6875rem;
+    margin-#{$right}: 1rem;
+
+    @include breakpoint($only-mobile) {
+      margin: 0 0.75rem 0 0;
+    }
+  }
+
+  .free-gift-promo-wrapper {
+    width: calc(100% - (5.6875rem));
+    font-size: 0.75rem;
+    line-height: 1.33;
+    color: $free-gifts-text;
+
+    @include breakpoint($only-mobile) {
+      width: calc(100% - (5.4375rem));
+    }
+
+    .label {
+      font-size: 0.875rem;
+      line-height: 1.29;
+      color: $free-gifts-label;
+      text-transform: capitalize;
+      margin: 0.625rem 0 0.5rem;
+    }
+  }
+
+  .free-gift-title {
+    .title {
+      font-size: 0.75rem;
+      line-height: 1.33;
+      color: $free-gifts-title-text;
+      cursor: pointer;
+
+      a {
+        text-decoration: underline;
+        margin-bottom: 0.25rem;
+        display: block;
+
+        @include breakpoint($only-tablet) {
+          display: inherit;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .free-gift-coupon-code {
+    margin-top: 0.5rem;
+
+    .coupon-code {
+      font-family: $alshaya-bold;
+      font-size: 0.75rem;
+      font-weight: bold;
+      line-height: 1.33;
+      color: $free-gifts-coupon-code-text;
+    }
+  }
+}
+
+.free-gifts-modal-overlay {
+  position: fixed;
+  width: 100%;
+
+  .ui-dialog {
+    #drupal-modal {
+      overflow: auto !important;
+
+      .content__main {
+        min-height: auto;
+        height: 31.5rem;
+      }
+    }
+  }
+
+  @include breakpoint ($only-mobile) {
+    .acq-content-product-modal {
+      display: flex;
+      flex-flow: row wrap;
+
+      > div {
+        width: 100%;
+      }
+
+      .content__main {
+        order: -2;
+      }
+
+      .content__title_wrapper {
+        padding: 0;
+      }
+    }
+  }
+
+  .c-products__free__item__label {
+    font-size: 0.875rem;
+    line-height: 1.29;
+    color: $free-gifts-label;
+    margin: 0.6875rem 0 0.375rem;
+  }
+
+  .c-products__item__label {
+    display: none;
+  }
+
+  .field--name-name {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: $free-gifts-modal-product-name;
+  }
+
+  .content--item-code {
+    padding-bottom: 1rem;
+    font-size: 0.625rem;
+    line-height: 1.2;
+    color: $free-gifts-modal-product-item-code;
+  }
+
+  .content__sidebar {
+    @include breakpoint($only-tablet) {
+      margin-top: 0;
+    }
+
+    .label {
+      margin: 0.8125rem 0 0.75rem;
+      font-size: 0.875rem;
+      font-family: $alshaya-bold;
+      line-height: 1.29;
+      color: $free-gifts-modal-product-description-label;
+    }
+  }
+}
+
+.path--cart {
+  .gift-message {
+    font-size: 0.75rem;
+    line-height: 1.33;
+    color: $cart-free-gifts-message;
+    margin-top: 1.125rem;
+
+    .coupon-code {
+      color: $free-gifts-coupon-code-text;
+      font-family: $alshaya_bold;
+      cursor: pointer;
+    }
+  }
+
+  #table-cart-items {
+    tr {
+      td {
+        .free-gift-title {
+          a {
+            display: inherit;
+            font-size: 0.75rem !important;
+            line-height: 1.33;
+            color: $cart-free-gifts-title;
+            text-decoration: underline;
+            cursor: pointer;
+
+            @include breakpoint($only-mobile) {
+              display: block;
+              margin-top: 0.25rem;
+            }
+
+            &:hover {
+              color: $primary_link-hover;
+            }
+          }
+        }
+
+        .sku-promotions {
+          @include breakpoint($only-mobile) {
+            display: none;
+          }
+        }
+
+        &.free-gifts-wrapper {
+          display: none;
+
+          @include breakpoint($only-mobile) {
+            display: block;
+            padding: 0 0 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  .free-gift-label {
+    font-size: 0.75rem;
+    line-height: 1.33;
+    text-align: center;
+    color: $cart-free-gifts-label;
+    background-color: $cart-free-gifts-label-background;
+    padding: 0.375rem 0;
+    display: block;
+    width: 10rem;
+    margin-top: 0.1875rem;
+    margin-bottom: 0 !important;
+
+    @include breakpoint($only-mobile) {
+      width: 9.75rem;
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+}

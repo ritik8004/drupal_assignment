@@ -129,6 +129,15 @@
           modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
         });
       });
+
+      $('.free-gift-title a').click(function () {
+        $('body').addClass('free-gifts-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
+        });
+      });
     }
   };
 

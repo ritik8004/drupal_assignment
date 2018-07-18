@@ -168,7 +168,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $sku_gallery = $this->skuImagesManager->getGallery($sku, 'search', $product_label);
 
         $promotion_types = ['cart'];
-        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, FALSE, $promotion_types);
+        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, 'default', $promotion_types);
 
         $promotion_cache_tags = [];
         foreach ($promotions as $key => $promotion) {

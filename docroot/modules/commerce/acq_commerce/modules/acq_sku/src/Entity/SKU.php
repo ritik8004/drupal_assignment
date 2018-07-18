@@ -825,4 +825,5 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
     }
   }
+
 }

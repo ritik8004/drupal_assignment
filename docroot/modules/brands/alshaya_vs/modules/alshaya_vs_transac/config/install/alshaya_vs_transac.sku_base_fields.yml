@@ -24,3 +24,6 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+
+  product_category:
+    label: 'Product Category'
