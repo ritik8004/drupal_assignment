@@ -22,6 +22,18 @@ function alshaya_vs_transac_update_dependencies() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add product_category field.
+ */
+function alshaya_vs_transac_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
  * Implements hook_update().
  *
  * Update the store finder config to install label position settings.
