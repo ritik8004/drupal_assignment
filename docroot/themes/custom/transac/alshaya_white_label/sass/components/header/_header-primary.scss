@@ -1164,6 +1164,35 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    a.promo-panel--mobile-link {
+      position: relative;
+
+      @include icon(chevron#{$right}, after) {
+        color: $header_mobile_menu_arrow;
+        font-size: 1.313rem;
+        cursor: pointer;
+        pointer-events: none;
+        float: $right;
+        width: 1.3125rem;
+        position: absolute;
+        height: 1.3125rem;
+        #{$right}: 0;
+        top: 0.8125rem;
+      }
+    }
+  }
+
+  .menu__list {
+    li.promo-panel--mobile-list {
+      @include breakpoint($tablet) {
+        display: none;
+      }
+    }
+  }
+}
+
 .toggle--sign {
   @include breakpoint($only-mobile) {
     color: $header_mobile_menu_close;

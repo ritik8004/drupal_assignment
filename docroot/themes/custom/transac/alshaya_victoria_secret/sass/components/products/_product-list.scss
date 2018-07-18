@@ -46,7 +46,7 @@
     @include breakpoint ($desktop) {
       width: 31.6%;
       max-width: 18.1875rem;
-      margin-#{$right}: 2.4%;
+      margin-#{$right}: 2.5%;
       margin-bottom: 2rem;
     }
 
@@ -334,6 +334,11 @@
           padding: 0.5rem;
           position: static;
           line-height: 1.4;
+
+          html[lang=ar] & {
+            height: 2.5rem;
+            padding-left: 3rem;
+          }
         }
 
         &::after {
@@ -360,10 +365,22 @@
   }
 }
 
-.view-plp-promotional-banner {
-  img {
-    &:empty {
-      display: none;
+.c-plp {
+  ul {
+    &.js-pager__items {
+      margin-top: 3rem;
+
+      a {
+        font-size: 0.875rem;
+        line-height: 1.29;
+        text-transform: uppercase;
+        padding: 0.62625rem 3.9375rem;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: 100%;
+        }
+      }
     }
   }
 }
