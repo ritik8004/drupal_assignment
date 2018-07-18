@@ -141,13 +141,23 @@
   }
 }
 
-.block-basket-horizontal-recommendation > h3 {
-  font-size: 1.125rem;
-  font-family: $vs-regular;
-  text-align: center;
-  text-transform: none;
-  margin-bottom: 0.3rem;
-  padding-bottom: 0.56rem;
+.block-basket-horizontal-recommendation {
+  > h3 {
+    font-size: 1.125rem;
+    font-family: $vs-regular;
+    text-align: center;
+    text-transform: none;
+    margin-bottom: 0.3rem;
+    padding-bottom: 0.56rem;
+  }
+
+  .view-product-slider {
+    .owl-carousel {
+      .owl-item img {
+        max-width: 8.875rem;
+      }
+    }
+  }
 }
 
 .empty-cart-wrapper {

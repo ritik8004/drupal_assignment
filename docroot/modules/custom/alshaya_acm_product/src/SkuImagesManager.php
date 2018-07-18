@@ -300,7 +300,7 @@ class SkuImagesManager {
             }
 
             if ($display_thumbnails) {
-              $thumbnails[] = $this->skuManager->getSkuImage($media_item, '59x60', '291x288');
+              $thumbnails[] = $this->skuManager->getSkuImage($media_item, '291x288', '291x288');
             }
           }
 
