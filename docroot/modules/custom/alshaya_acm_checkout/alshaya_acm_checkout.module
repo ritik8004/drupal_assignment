@@ -414,3 +414,17 @@ function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInte
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_acm_checkout_preprocess_checkout_selected_address(&$variables) {
+  $variables['delivery_address'] = \Drupal::service('alshaya_addressbook.manager')->getAddressWithPrefix($variables['delivery_address']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_acm_checkout_preprocess_alshaya_address(&$variables) {
+  $variables['address'] = \Drupal::service('alshaya_addressbook.manager')->getAddressWithPrefix($variables['address']);
+}

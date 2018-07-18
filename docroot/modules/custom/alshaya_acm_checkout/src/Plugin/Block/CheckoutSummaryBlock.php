@@ -341,6 +341,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         }
 
         $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+        $shipping_address = $this->addressBookManager->getAddressWithPrefix($shipping_address);
 
         $comma = $this->t(',')->render();
 
