@@ -186,7 +186,7 @@
   .view-product-slider {
     .owl-carousel {
       .owl-item {
-        img {
+        a > img {
           max-width: 8.875rem;
         }
       }
