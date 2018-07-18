@@ -13,7 +13,6 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\Entity\Node;
-use Drupal\alshaya_acm_product\SkuImagesManager;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -67,13 +66,6 @@ class AlshayaImageSitemapGenerator {
   protected $languageManager;
 
   /**
-   * SKU Images Manager.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuImagesManager
-   */
-  protected $skuImagesManager;
-
-  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -90,8 +82,6 @@ class AlshayaImageSitemapGenerator {
    *   The module handler service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
-   * @param \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager
-   *   SKU Images Manager.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -99,8 +89,7 @@ class AlshayaImageSitemapGenerator {
                               EntityTypeManagerInterface $entity_manager,
                               ModuleHandlerInterface $module_handler,
                               TranslationInterface $string_translation,
-                              LanguageManagerInterface $language_manager,
-                              SkuImagesManager $skuImagesManager) {
+                              LanguageManagerInterface $language_manager) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -108,7 +97,6 @@ class AlshayaImageSitemapGenerator {
     $this->moduleHandler = $module_handler;
     $this->stringTranslation = $string_translation;
     $this->languageManager = $language_manager;
-    $this->skuImagesManager = $skuImagesManager;
   }
 
   /**
@@ -143,8 +131,8 @@ class AlshayaImageSitemapGenerator {
   public function process($nids) {
     $output = '';
     $total_urls = $this->state->get('alshaya_image_sitemap.url_count');
-    $this->moduleHandler
-      ->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $languages = $this->languageManager->getLanguages();
+    $country_code = _alshaya_custom_get_site_level_country_code();
 
     if (count($nids) > 0) {
       foreach ($nids as $nid) {
@@ -159,7 +147,11 @@ class AlshayaImageSitemapGenerator {
           if (isset($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
-              $all_media = $this->skuImagesManager->getAllMedia($sku);
+              // @TODO: Add dependency injection when module is uninstalled from non-transac.
+              // @codingStandardsIgnoreStart
+              $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+              $all_media = $sku_images_manager->getAllMedia($sku, TRUE);
+              // @codingStandardsIgnoreEnd
               if (!empty($all_media['images'])) {
                 // Changes for the image count.
                 $media = $all_media['images'];
@@ -169,8 +161,6 @@ class AlshayaImageSitemapGenerator {
         }
 
         if (!empty($media)) {
-          $languages = $this->languageManager->getLanguages();
-          $country_code = _alshaya_custom_get_site_level_country_code();
           $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE])->toString() . '</loc>';
           foreach ($languages as $language) {
             $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $language])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
