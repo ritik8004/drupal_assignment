@@ -164,6 +164,16 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 }
 
 /**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_acm_product_acq_sku_product_sku_alter(&$sku, $product) {
+  // Set sku activation date if product activation date available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $sku->created = strtotime($product['attributes']['product_activation_date']);
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function alshaya_acm_product_theme($existing, $type, $theme, $path) {
