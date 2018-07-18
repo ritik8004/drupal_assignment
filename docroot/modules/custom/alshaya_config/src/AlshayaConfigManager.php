@@ -27,9 +27,19 @@ class AlshayaConfigManager {
   const MODE_ADD_MISSING = 'missing';
 
   /**
+   * Add missing values recursively from config.
+   */
+  const MODE_ADD_MISSING_RECURSIVE = 'missing_recursive';
+
+  /**
    * Merge configs - deep merge.
    */
   const MODE_MERGE = 'merge';
+
+  /**
+   * Replace a particular key in config.
+   */
+  const MODE_REPLACE_KEY = 'replace_key';
 
   /**
    * Config Storage service.
@@ -70,8 +80,10 @@ class AlshayaConfigManager {
    *   Path where configs reside. Defaults to install.
    * @param string $mode
    *   Mode of update operation replace / add missing.
+   * @param array $options
+   *   Array of keys to replace when using MODE_REPLACE_KEY.
    */
-  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE) {
+  public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE, array $options = []) {
     if (empty($configs)) {
       return;
     }
@@ -136,7 +148,7 @@ class AlshayaConfigManager {
       else {
         $existing = $config->getRawData();
         $existing = is_array($existing) ? $existing : [];
-        $updated = $this->getUpdatedData($existing, $data, $mode);
+        $updated = $this->getUpdatedData($existing, $data, $mode, $options);
         $config->setData($updated)->save(TRUE);
       }
 
@@ -163,11 +175,13 @@ class AlshayaConfigManager {
    *   Config data from code.
    * @param string $mode
    *   Mode to use replace/merge.
+   * @param array $options
+   *   Array of Keys to replace when using MODE_REPLACE_KEY.
    *
    * @return array
    *   Updated data based on mode.
    */
-  public function getUpdatedData(array $existing, array $data, $mode) {
+  public function getUpdatedData(array $existing, array $data, $mode, array $options = []) {
     switch ($mode) {
       case self::MODE_ADD_MISSING:
         // For now we check only level one keys. We may want to enhance it
@@ -176,9 +190,21 @@ class AlshayaConfigManager {
         $data = array_merge($data, $existing);
         break;
 
+      case self::MODE_ADD_MISSING_RECURSIVE:
+        // Add Missing keys recursively, Keeping existing data as is.
+        $data = NestedArray::mergeDeepArray([$data, $existing], TRUE);
+        break;
+
       case self::MODE_MERGE:
         // Same as $config->merge(). To keep code consistent we do it here.
         $data = NestedArray::mergeDeepArray([$existing, $data], TRUE);
+        break;
+
+      case self::MODE_REPLACE_KEY:
+        foreach ($options['replace_keys'] as $replace_key) {
+          $existing[$replace_key] = $data[$replace_key];
+          $data = $existing;
+        }
         break;
 
       case self::MODE_REPLACE:

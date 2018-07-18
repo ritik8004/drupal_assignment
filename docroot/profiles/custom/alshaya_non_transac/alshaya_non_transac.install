@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Uninstall alshaya_image_sitemap module.
+ */
+function alshaya_non_transac_update_8105() {
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_image_sitemap')) {
+    \Drupal::service('module_installer')->uninstall(['alshaya_image_sitemap']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Disable whitelabel_non_transac theme.
  */
 function alshaya_non_transac_update_8104() {

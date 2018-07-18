@@ -396,6 +396,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       elseif ($view_mode == 'full') {
         $context = 'pdp';
 
+        // This is required to allow showing different gallery on page load
+        // when user clicked on swatch.
+        $build['#cache']['contexts'][] = 'url';
+
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
           if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
@@ -436,7 +440,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['related']['#weight'] = 11;
         }
 
-        alshaya_acm_product_get_gallery($build, $sku_entity);
+        // Get the gallery for selected SKU if selected sku id available in
+        // query params, else show it from main parent sku itself.
+        $sku_for_gallery = $sku_entity;
+
+        $selected_value = \Drupal::request()->query->get('selected');
+        if ($selected_value) {
+          $selected_sku = SKU::load($selected_value);
+
+          if ($selected_sku instanceof SKUInterface) {
+            $sku_for_gallery = $selected_sku;
+          }
+        }
+
+        alshaya_acm_product_get_gallery($build, $sku_for_gallery);
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
@@ -607,16 +624,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
-
         $build['item_code']['#markup'] = $sku;
-
-        $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
-
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
-
-        if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
-        }
 
         $promotion_types = ['cart'];
 
@@ -1619,5 +1628,31 @@ function alshaya_acm_product_alshaya_acm_product_ajax_cart_form_alter(AjaxRespon
     $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'removeClass', ['hidden-important']));
     // @codingStandardsIgnoreLine
     $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', FALSE]));
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_acm_product_language_switch_links_alter(array &$links, $type, Url $url) {
+  $selected_query = \Drupal::request()->query->get('selected');
+
+  /** @var \Drupal\Core\Routing\CurrentRouteMatch $current_route_matcher */
+  $current_route_matcher = \Drupal::service('current_route_match');
+
+  // Alter block only if we have selected color query parameter on a PDP.
+  if (($selected_query) &&
+    $current_route_matcher->getRouteName() == 'entity.node.canonical' &&
+    ($node = $current_route_matcher->getParameter('node')) &&
+    $node->getType() == 'acq_product') {
+
+    // Remove the selected color parameter in the query string for all except
+    // current language.
+    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    foreach ($links as $langcode => $link) {
+      if ($langcode != $current_langcode && isset($links[$langcode]['query']['selected'])) {
+        unset($links[$langcode]['query']['selected']);
+      }
+    }
   }
 }

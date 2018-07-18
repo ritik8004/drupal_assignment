@@ -56,7 +56,7 @@ class CartFormHelper {
    */
   public function isAttributeSortable($attribute_code) {
     $sortable_options = $this->config->get('sortable_options');
-    return isset($sortable_options[$attribute_code]);
+    return in_array($attribute_code, $sortable_options);
   }
 
   /**

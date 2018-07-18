@@ -262,9 +262,9 @@ $tooltip_icon: $nero;
 $tooltip_link: $black;
 
 // Back to top
-$btt_bg: $whisper-light;
+$btt_bg: rgba(35, 35, 35, 0.25);
 $btt_hover_text: $grey-ash;
-$btt_text: $black;
+$btt_text: $white-five;
 
 // Breadcrumb.
 $breadcrumb_bg: $white-smoke-light;
@@ -537,8 +537,8 @@ $plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
 $plp_tile_hover_slider_nav_hover: $grey-ash;
 $plp_tile_hover_slider_arrows: $_pink_one;
-$plp_pager_link: $marine-blue;
-$plp_pager_link_border: $marine-blue;
+$plp_pager_link: $nero;
+$plp_pager_link_border: $nero;
 
 // Product detail page.
 $pdp_product_title: $nero;
@@ -554,10 +554,13 @@ $pdp_mobile_wrapper: $white-five;
 $pdp_sell_title: $nero;
 $pdp_title_collection_name: $ash-triplet;
 $pdp_white_color_attribute: $white;
+$pdp_white_color_attribute_hover_border: $black;
+$pdp_white_color_attribute_border: $nero;
 
 // Product modal
 $pdp_modal_full_prodlink: $nero;
 $pdp_modal_full_prodlink_border: $gainsboro;
+$pdp_modal_sub_title_text: $ash-triplet;
 
 // Product Add to cart form.
 $pdp_sizeguide_link: $nero;
@@ -689,7 +692,7 @@ $checkout_header_border-bottom: $white-three;
 $checkout_pri_txt: $nero;
 $checkout_section_border: $gainsboro;
 $checkout_section_titles: $black;
-$checkout_section_title_border: $white;
+$checkout_section_title_border: $gainsboro;
 $secure_checkout_back_link: $black;
 $checkout_tab_active_head: transparent;
 $checkout_progress_border: $brilliant-rose;
@@ -949,6 +952,7 @@ $basket_tooltip_not_available: $white;
 $basket_promotion_input_border: $white;
 $basket_remove_link: $cerulean-two;
 $basket_horizontal_recommendation_slider_dots: $black;
+$basket_order_total_bg: $gainsboro;
 // Basket top promotions.
 $basket_header_promo_bg: $rosy-pink;
 $basket_header_promo_txt: $white-four;

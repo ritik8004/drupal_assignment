@@ -381,6 +381,16 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    a.promo-panel--mobile-link {
+      &::after {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
 #block-cartminiblock {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
@@ -399,4 +409,8 @@ header {
       display: block;
     }
   }
+}
+
+.form-autocomplete.ui-autocomplete-loading {
+  background-size: 1.5rem;
 }

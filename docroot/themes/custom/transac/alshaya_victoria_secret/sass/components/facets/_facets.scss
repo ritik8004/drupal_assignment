@@ -25,12 +25,13 @@
   .facet-item .facet-item__count {
     @include breakpoint($only-mobile) {
       vertical-align: middle;
+      margin-top: 0;
     }
   }
 
   input[type=checkbox] ~ label::before {
     @include breakpoint($only-mobile) {
-      top: 0.3rem;
+      top: 0.175rem;
 
       html[lang=ar] & {
         top: 0.125rem;
@@ -72,11 +73,49 @@
       }
     }
 
+    ul input[type=checkbox] {
+      & ~ label::before {
+        #{$left}: 0.25rem;
+      }
+    }
+
     input[type="text"] {
       width: 100%;
       height: 2.5rem;
       background: url(../imgs/assets/search.svg) 96% center no-repeat;
       background-size: 1rem;
+
+      html[lang=ar] & {
+        background-position-x: 4%;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=category] {
+  .facet-item--expanded {
+    & > ul ul .facet-item {
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 1px;
+      }
+    }
+  }
+}
+
+.c-plp {
+  .block-facet-blockcategory {
+    ul[data-drupal-facet-id=plp_category_facet],
+    ul[data-drupal-facet-id=category] {
+      & > .facet-item--expanded {
+        & > input[type=checkbox] ~ label::before {
+          font-size: 1.875rem;
+
+          @include breakpoint($only-mobile) {
+            top: 0.875rem;
+          }
+        }
+      }
     }
   }
 }

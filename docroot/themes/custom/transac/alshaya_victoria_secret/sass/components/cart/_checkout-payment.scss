@@ -24,6 +24,7 @@
           @include breakpoint($only-mobile) {
             padding-top: 0;
             padding-bottom: 0.5625rem;
+            margin-bottom: 0.5625rem;
           }
         }
       }
@@ -33,6 +34,7 @@
 
         margin: 1.5rem 1.5rem 0;
         border: 1px solid $checkout_section_border;
+        border-top: 0;
 
         @include breakpoint($only-mobile) {
           margin: 0;

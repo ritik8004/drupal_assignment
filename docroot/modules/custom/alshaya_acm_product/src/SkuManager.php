@@ -1612,6 +1612,11 @@ class SkuManager {
         continue;
       }
 
+      // Do not show OOS swatches.
+      if (!alshaya_acm_get_stock_from_sku($child)) {
+        continue;
+      }
+
       $swatch_item = $child->getSwatchImage();
 
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
