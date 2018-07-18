@@ -4,3 +4,5 @@ core: 8.x
 package: Alshaya
 configure: alshaya_image_sitemap.alshay_image_sitemap_controller_list
 type: module
+dependencies:
+  - alshaya_acm_product:alshaya_acm_product

@@ -318,6 +318,7 @@ function alshaya_transac_install() {
     'alshaya_acm_knet',
     'alshaya_static_html',
     'alshaya_product_options',
+    'alshaya_image_sitemap',
   ];
 
   global $_alshaya_modules_installed;
