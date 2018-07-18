@@ -9,4 +9,3 @@ services:
       - '@module_handler'
       - '@string_translation'
       - '@language_manager'
-      - '@alshaya_acm_product.sku_images_manager'
