@@ -12,7 +12,24 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Set the number of items to show in a product carousel
+ * on Department and Home page.
+ * Set the number of items to show in a related product carousel on Basket page.
+ */
+function alshaya_acm_product_update_8023() {
+  // Set default number of image items need to show in slider on PDP..
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('product_carousel_items_settings.dp_product_carousel_items_number', 5)
+    ->set('product_carousel_items_settings.hp_product_carousel_items_number', 6)
+    ->set('cross_up_sell_items_settings.basket_carousel_items_size', 5)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding description field to SKU.
+ * Add 'short_desc_characters' config.
  */
 function alshaya_acm_product_update_8022() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');

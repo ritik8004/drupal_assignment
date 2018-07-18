@@ -82,6 +82,11 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', $form_state->getValue('pdp_carousel_items_size_0'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', $form_state->getValue('pdp_carousel_items_size_768'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', $form_state->getValue('pdp_carousel_items_size_1025'));
+    $config->set('cross_up_sell_items_settings.basket_carousel_items_size', $form_state->getValue('basket_carousel_items_size'));
+    $config->set('pdp_slider_items_settings.pdp_slider_items_number', $form_state->getValue('pdp_slider_items_number'));
+    $config->set('product_carousel_items_settings.dp_product_carousel_items_number', $form_state->getValue('dp_product_carousel_items_number'));
+    $config->set('product_carousel_items_settings.hp_product_carousel_items_number', $form_state->getValue('hp_product_carousel_items_number'));
+
     $config->set('list_view_auto_page_load_count', $form_state->getValue('list_view_auto_page_load_count'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
@@ -207,6 +212,14 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025'),
     ];
 
+    $form['cross_up_sell_items_settings']['basket_carousel_items_size'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('slider items on basket page'),
+      '#description' => $this->t('Number of items to show in Related product carousel on Basket page.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('cross_up_sell_items_settings.basket_carousel_items_size'),
+    ];
+
     $form['brand_logo_base_path'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Base path on server for Brand Logo'),
@@ -221,6 +234,28 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Number of items to show in a slider on PDP.'),
       '#required' => TRUE,
       '#default_value' => $config->get('pdp_slider_items_settings.pdp_slider_items_number'),
+    ];
+
+    $form['product_carousel_items_settings'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Product carousel settings'),
+      '#open' => TRUE,
+    ];
+
+    $form['product_carousel_items_settings']['dp_product_carousel_items_number'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('product carousel item on DP'),
+      '#description' => $this->t('Number of items to show in product carousel on Department page.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('product_carousel_items_settings.dp_product_carousel_items_number'),
+    ];
+
+    $form['product_carousel_items_settings']['hp_product_carousel_items_number'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('product carousel item on HP'),
+      '#description' => $this->t('Number of items to show in product carousel on Home page.'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('product_carousel_items_settings.hp_product_carousel_items_number'),
     ];
 
     $form['brand_logo_extension'] = [

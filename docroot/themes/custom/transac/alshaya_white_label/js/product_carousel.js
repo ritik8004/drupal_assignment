@@ -11,13 +11,16 @@
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
       var pdp_items_desk = drupalSettings.pdp_items_desk;
+      var basket_carousel_items = drupalSettings.basket_carousel_items;
+      var dp_product_carousel_items = drupalSettings.dp_product_carousel_items;
+      var hp_product_carousel_items = drupalSettings.hp_product_carousel_items;
 
       var optionsBasket = {
         responsiveClass: true,
         dots: true,
         responsive: {
           1025: {
-            items: 5,
+            items: basket_carousel_items,
             nav: true
           }
         }
@@ -39,7 +42,7 @@
         dots: true,
         responsive: {
           1025: {
-            items: 5,
+            items: dp_product_carousel_items,
             nav: true
           }
         }
@@ -50,7 +53,7 @@
         dots: true,
         responsive: {
           1025: {
-            items: 6,
+            items: hp_product_carousel_items,
             nav: true
           }
         }
