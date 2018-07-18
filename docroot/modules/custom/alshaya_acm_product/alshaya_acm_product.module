@@ -331,25 +331,6 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
-  // Update composition field.
-  $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
-  if (!empty($composition)) {
-    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
-      ->transformCompositionArrayToList($composition));
-  }
-  else {
-    if (!empty($sku->get('attr_composition')->getString())) {
-      \Drupal::logger('alshaya_acm_product')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
-    }
-
-    $sku->set('attr_composition', NULL);
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
