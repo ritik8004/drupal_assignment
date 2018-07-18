@@ -11,6 +11,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -1125,6 +1126,42 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $dm_version;
+  }
+
+  /**
+   * Add available prefix for each components of given address.
+   *
+   * @param array $address
+   *   Address array.
+   */
+  public function getAddressWithPrefix(array $address) {
+    $prefix_settings = $this->configFactory->get('alshaya_addressbook.settings')->get('prefix_settings');
+    $mapping = $this->getMagentoFieldMappings();
+    $form_fields = $this->getMagentoFormFields();
+    $component_string = ":prefix :value";
+
+    // Reverse the string for rtl language.
+    $language = $this->languageManager->getCurrentLanguage();
+    if ($language->getDirection() == LanguageInterface::DIRECTION_RTL) {
+      $component_string = ":value :prefix";
+    }
+
+    $prefix_field = $prefix_settings['key'];
+    foreach ($address as $key => &$value) {
+      if (!isset($mapping[$key]) || in_array($key, $prefix_settings['except'])) {
+        continue;
+      }
+
+      $magento_key = $mapping[$key];
+      if (!empty($value) && !empty($form_fields[$magento_key][$prefix_field])) {
+        $value = strtr($component_string, [
+          ':prefix' => $form_fields[$magento_key][$prefix_field],
+          ':value' => ($key == 'mobile_number' && isset($value['value'])) ? $value['value'] : $value,
+        ]);
+      }
+    }
+
+    return $address;
   }
 
 }
