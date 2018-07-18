@@ -571,7 +571,6 @@ function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormSt
   }
 
   $brand = $form_state->getValue('brand');
-  
   if (!is_numeric($brand)) {
     $params = Url::fromUserInput("/$brand")->getRouteParameters();
     if (!empty($params['taxonomy_term'])) {
