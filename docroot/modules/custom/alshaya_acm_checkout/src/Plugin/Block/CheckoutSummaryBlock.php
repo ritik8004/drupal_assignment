@@ -412,15 +412,26 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     // COD Surcharge.
     $surcharge_label = '';
 
-    // We show surcharge only on payment page.
+    // We process surcharge only if enabled.
     if ($this->checkoutHelper->isSurchargeEnabled()) {
+      $cart_totals['grand'] = acq_commerce_get_clean_price($cart_totals['grand']);
+
       $surcharge = $cart->getExtension('surcharge');
       if ($surcharge && isset($surcharge['is_applied']) && $surcharge['is_applied']) {
         if ((float) $surcharge['amount'] > 0) {
-          $surcharge_label = $acm_config->get('cod_surcharge_label');
+          // We show surcharge only on payment page.
+          if ($current_step_id == 'payment') {
+            $surcharge_label = $acm_config->get('cod_surcharge_label');
 
-          $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
-          $totals['surcharge']['#markup'] = alshaya_acm_price_format($surcharge['amount'], [], $surcharge_tooltip);
+            $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
+            $totals['surcharge']['#markup'] = alshaya_acm_price_format(
+              $surcharge['amount'], [], $surcharge_tooltip
+            );
+          }
+          else {
+            // Another lie added to cover-up surcharge.
+            $cart_totals['grand'] -= $surcharge['amount'];
+          }
         }
       }
     }

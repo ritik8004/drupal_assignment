@@ -367,7 +367,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       return;
     }
 
-    $this->getCheckoutHelper()->setCartShippingHistory('hd', _alshaya_acm_checkout_clean_address($address));
+    $this->getCheckoutHelper()->setCartShippingHistory('hd', $address);
 
     $shipping_method = NULL;
 
