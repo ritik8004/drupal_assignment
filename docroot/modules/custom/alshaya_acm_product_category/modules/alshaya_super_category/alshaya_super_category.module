@@ -103,6 +103,11 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $langcode = \Drupal::service('language_manager')
         ->getCurrentLanguage()
         ->getId();
+
+      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
+      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($term);
+      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $term]);
+
       $langcode = ($langcode != 'en') ? '-' . $langcode : '';
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
@@ -118,7 +123,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       }
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt']    = $parent->label();
-      $variables['content']['site_name']['#markup'] = $parent->label();
+      $variables['content']['site_name']['#markup'] = $meta_title;
       // Set the site path to brand page.
       if ($parent->id() != alshaya_super_category_get_default_term()) {
         $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();

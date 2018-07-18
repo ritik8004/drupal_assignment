@@ -9,6 +9,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -150,7 +151,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
         $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
         $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
         $short_desc['value'] = [
-          '#markup' => $short_desc_html,
+          '#markup' => $short_desc_html . '...',
         ];
 
         // If short description is the same as description,
@@ -160,6 +161,11 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
             '#markup' => 'display:none;',
           ];
         }
+      }
+      else {
+        $build['read_more_style']['value'] = [
+          '#markup' => 'display:none;',
+        ];
       }
 
       $description['value'] = [
@@ -177,6 +183,29 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 }
 
 /**
+ * Implements template_preprocess_hook().
+ *
+ * Place today's offer links in shop by block for mobile.
+ */
+function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
+  $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
+
+  foreach (array_keys($promo_panel_blocks) as $block_plugin_id) {
+    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['plugin' => $block_plugin_id]);
+    $block = reset($blocks);
+
+    if ($block->access('view')) {
+      $item = [
+        'label' => $block->label(),
+        'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
+        'class' => 'promo-panel--mobile-link',
+      ];
+      array_unshift($variables['term_tree'], $item);
+    }
+  }
+}
+
+/**
  * Config of marker label position for arabic.
  *
  * @return array
@@ -186,7 +215,7 @@ function _alshaya_vs_transac_marker_label_position_ar() {
   return [
     'x' => 7,
     'y' => 17,
-    'single_x' => 10,
+    'single_x' => 11,
     'single_y' => 17,
   ];
 }

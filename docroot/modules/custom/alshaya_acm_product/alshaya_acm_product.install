@@ -12,6 +12,24 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add 'short_desc_characters' config.
+ */
+function alshaya_acm_product_update_8024() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $options['replace_keys'] = ['short_desc_characters'];
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_REPLACE_KEY,
+    $options
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new config value for size guide attributes.
  */
 function alshaya_acm_product_update_8023() {

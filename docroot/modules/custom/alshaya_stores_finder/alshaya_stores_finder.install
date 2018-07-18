@@ -13,7 +13,7 @@ use Drupal\Core\Site\Settings;
  *
  * Update the store finder label position for arabic.
  */
-function alshaya_stores_finder_update_8105() {
+function alshaya_stores_finder_update_8106() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
     ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
     ->save();

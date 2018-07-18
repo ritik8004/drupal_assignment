@@ -305,6 +305,6 @@ function _alshaya_stores_finder_marker_label_position_ar() {
     'x' => 7,
     'y' => 15,
     'single_x' => 11,
-    'single_y' => 15,
+    'single_y' => 16,
   ];
 }

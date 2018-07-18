@@ -167,6 +167,16 @@
       }
     }
   }
+
+  #product-image-gallery,
+  #lightSlider {
+    html[lang=ar] & {
+      .slick-next,
+      .slick-prev {
+        top: 0 !important;
+      }
+    }
+  }
 }
 
 .mobilegallery {

@@ -50,6 +50,11 @@
       @include breakpoint($only-tablet) {
         float: $left;
         margin-#{$left}: 1.5rem;
+
+        html[lang=ar] & {
+          padding: 0.725rem 0.5rem;
+          margin-right: 0.75rem;
+        }
       }
     }
   }
@@ -343,6 +348,10 @@
     #configurable_ajax {
       .form-item {
         padding: 0.875rem 0;
+
+        @include breakpoint($only-tablet) {
+          margin: 0;
+        }
       }
 
       @include breakpoint($only-mobile) {
@@ -448,6 +457,33 @@
       .store-sequence {
         line-height: 1.0625rem;
       }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .c-pdp,
+  #drupal-modal {
+    .content__title_wrapper {
+      .price {
+        margin-bottom: 0;
+      }
+
+      .promotions {
+        a {
+          margin-bottom: 0;
+        }
+      }
+
+      .vat-text {
+        margin-top: 0.75rem;
+      }
+    }
+  }
+
+  #drupal-modal {
+    .content--item-code {
+      margin-top: 0.75rem;
     }
   }
 }
