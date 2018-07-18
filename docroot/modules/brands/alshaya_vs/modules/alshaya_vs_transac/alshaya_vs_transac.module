@@ -149,6 +149,10 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 
         $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
         $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
+        // Remove empty paragraphs from short description.
+        $short_desc_html = preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $short_desc_html);
+        // Remove br at the end of short desc.
+        $short_desc_html = preg_replace('#(( ){0,}<br( {0,})(/{0,1})>){1,}$#i', '', $short_desc_html);
         $short_desc['value'] = [
           '#markup' => $short_desc_html . '...',
         ];
