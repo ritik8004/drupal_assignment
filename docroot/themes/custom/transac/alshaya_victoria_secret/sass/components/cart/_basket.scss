@@ -50,6 +50,12 @@
           .dark a {
             font-size: 0.875rem;
           }
+
+          &:first-child {
+            a {
+              margin-bottom: 0.3rem;
+            }
+          }
         }
       }
 
@@ -279,7 +285,7 @@
   }
 
   .messages {
-    .messages--status {
+    &.messages--status {
       &::before {
         margin-top: 0;
       }
@@ -353,6 +359,7 @@ body.alias--cart {
 
           span {
             font-family: $vs-regular;
+            font-size: 0.75rem;
           }
         }
 
