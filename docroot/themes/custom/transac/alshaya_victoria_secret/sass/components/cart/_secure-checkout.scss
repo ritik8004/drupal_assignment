@@ -24,6 +24,13 @@
         #add-address-button {
           font-family: $vs-regular;
           text-transform: capitalize;
+
+          @include breakpoint($only-mobile) {
+            position: absolute;
+            width: auto;
+            #{$right}: 0;
+            top: -3px;
+          }
         }
       }
     }

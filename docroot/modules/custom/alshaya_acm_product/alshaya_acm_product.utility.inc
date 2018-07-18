@@ -37,49 +37,16 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
 
     // Get the processed media data for the SKU.
     if ($sku_entity instanceof SKU) {
-      return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+      return $first_image_only
+        ? $skuImagesManager->getFirstImage($sku_entity)
+        : $skuImagesManager->getAllMediaItems($sku_entity);
     }
   }
 
   return NULL;
-}
-
-/**
- * Utility function to return media files for a SKU.
- *
- * @param mixed $sku
- *   SKU text or full entity object.
- * @param bool $first_image_only
- *   Flag to indicate if we want only the first image and not the whole array.
- *
- * @return array
- *   Array of media files.
- */
-function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
-  static $media = [];
-  static $thumbnail_media = [];
-
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
-  if (!($sku_entity instanceof SKU)) {
-    return [];
-  }
-
-  $langcode = $sku_entity->language()->getId();
-
-  if ($first_image_only) {
-    if (!isset($thumbnail_media[$sku_entity->id()], $thumbnail_media[$sku_entity->id()][$langcode])) {
-      $thumbnail_media[$sku_entity->id()][$langcode] = $sku_entity->getThumbnail();
-    }
-
-    return $thumbnail_media[$sku_entity->id()][$langcode];
-  }
-
-  if (!isset($media[$sku_entity->id()], $media[$sku_entity->id()][$langcode])) {
-    $media[$sku_entity->id()][$langcode] = $sku_entity->getMedia();
-  }
-
-  return $media[$sku_entity->id()][$langcode];
 }
 
 /**
@@ -176,32 +143,12 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
 function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity, $check_parent_child = TRUE) {
   \Drupal::moduleHandler()->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
 
-  // Fetch media.
-  $main_image = [];
-  $thumbnails = [];
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
-  $media = alshaya_acm_product_get_sku_media($sku_entity);
-  \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
-
-  // Avoid notices and warnings in local.
-  if (empty($media) && empty($main_image) && $check_parent_child) {
-    // Check once if there is parent SKU available, use media files of parent.
-    $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
-    if ($parent_sku instanceof SKU) {
-      alshaya_acm_product_get_gallery($build, $parent_sku, FALSE);
-      return;
-    }
-    elseif ($sku_entity->bundle() == 'configurable') {
-      // Try to get images from first child.
-      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-      $first_child = $skuImagesManager->getFirstChildWithMedia($sku_entity);
-      if ($first_child instanceof SKU) {
-        alshaya_acm_product_get_gallery($build, $first_child, FALSE);
-        return;
-      }
-    }
-  }
+  $media = $skuImagesManager->getAllMedia($sku_entity, $check_parent_child);
+  $main_image = $media['main'];
+  $thumbnails = $media['thumbs'];
 
   // Fetch settings.
   $settings = alshaya_product_zoom_cloudzoom_default_settings();
@@ -210,67 +157,50 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   $slide_style = $settings['slide_style'];
 
   // Create our thumbnails to be rendered for zoom.
-  if (!empty($media)) {
-    // Sort media items so that videos are at the end.
-    $order = ['image', 'external-video'];
-    usort($media, function ($item1, $item2) use ($order) {
-      $pos_1 = array_search($item1['media_type'], $order);
-      $pos_2 = array_search($item2['media_type'], $order);
-      return $pos_1 - $pos_2;
-    });
+  foreach ($media['media_items']['images'] ?? [] as $media_item) {
+    $file_uri = $media_item['file']->getFileUri();
 
-    foreach ($media as $media_item) {
-      if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
+    // Show original full image in the modal inside a draggable container.
+    $original_image = $media_item['file']->url();
 
-        $file_uri = $media_item['file']->getFileUri();
+    $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+    $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+    $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
-        // Show original full image in the modal inside a draggable container.
-        $original_image = $media_item['file']->url();
-
-        $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
-        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-        if (empty($main_image)) {
-          $main_image = [
-            'zoomurl' => $image_zoom,
-            'mediumurl' => $image_medium,
-            'label' => $media_item['label'],
-          ];
-        }
-
-        $thumbnails[] = [
-          'thumburl' => $image_small,
-          'mediumurl' => $image_medium,
-          'zoomurl' => $image_zoom,
-          'fullurl' => $original_image,
-          'label' => $media_item['label'],
-          'type' => 'image',
-        ];
-      }
-      elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'external-video') {
-        // @TODO:
-        // Receiving video_provider as NULL, should be set to youtube or vimeo.
-        // Till then using $type as provider flag.
-        $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-        $thumbnails[] = [
-          'thumburl' => $media_item['file'],
-          'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-          'video_title' => $media_item['video_title'],
-          'video_desc' => $media_item['video_description'],
-          'type' => $type,
-          // @TODO: should this be config?
-          'width' => 81,
-          // @TODO: should this be config?
-          'height' => 81,
-        ];
-      }
+    if (empty($main_image)) {
+      $main_image = [
+        'zoomurl' => $image_zoom,
+        'mediumurl' => $image_medium,
+        'label' => $media_item['label'],
+      ];
     }
-  }
 
-  // Invoke the alter hook to allow all modules to update the element.
-  // @TODO: Move this to hook_alshaya_acm_product_build_alter.
-  \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
+    $thumbnails[] = [
+      'thumburl' => $image_small,
+      'mediumurl' => $image_medium,
+      'zoomurl' => $image_zoom,
+      'fullurl' => $original_image,
+      'label' => $media_item['label'],
+      'type' => 'image',
+    ];
+  }
+  foreach ($media['media_items']['vidoes'] ?? [] as $media_item) {
+    // @TODO:
+    // Receiving video_provider as NULL, should be set to youtube or vimeo.
+    // Till then using $type as provider flag.
+    $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+    $thumbnails[] = [
+      'thumburl' => $media_item['file'],
+      'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+      'video_title' => $media_item['video_title'],
+      'video_desc' => $media_item['video_description'],
+      'type' => $type,
+      // @TODO: should this be config?
+      'width' => 81,
+      // @TODO: should this be config?
+      'height' => 81,
+    ];
+  }
 
   // If no main image, use default image.
   if (empty($main_image) && $check_parent_child) {
@@ -284,17 +214,6 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
         'mediumurl' => $image_medium,
         'label' => $sku_entity->label(),
       ];
-
-      if (empty($thumbnails)) {
-        $thumbnails[] = [
-          'thumburl' => $image_small,
-          'mediumurl' => $image_medium,
-          'zoomurl' => $image_zoom,
-          'fullurl' => file_create_url($default_image->getFileUri()),
-          'label' => $sku_entity->label(),
-          'type' => 'image',
-        ];
-      }
     }
   }
 
@@ -369,25 +288,23 @@ function alshaya_acm_product_get_display_node($sku, $langcode = '') {
  *   Return string of uri or Null if not found.
  */
 function alshaya_acm_get_product_display_image($sku, $image_style = '') {
+  $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
+
+  if (!($sku instanceof SKUInterface)) {
+    return [];
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
   // Load the first image.
-  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+  $media_image = $skuImagesManager->getFirstImage($sku);
   $image = [];
 
   // If we have image for the product.
   if (!empty($media_image)) {
     if ($media_image['file'] instanceof FileInterface) {
       $image = alshaya_acm_product_get_sku_image($media_image, $image_style);
-    }
-  }
-  // If no image found, check once for parent product as well.
-  elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    // Fire alter hook for cart image before looking for the image in the
-    // parent product.
-    // @TODO: Add in api.php file.
-    \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
-
-    if (!$image) {
-      $image = alshaya_acm_get_product_display_image($parent_sku, $image_style);
     }
   }
 
@@ -425,8 +342,11 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
  *   Url of the image.
  */
 function _alshaya_acm_get_product_display_image_url(SKU $sku) {
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
   // Load the first image.
-  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+  $media_image = $skuImagesManager->getFirstImage($sku);
 
   // If we have image for the product.
   if (!empty($media_image)) {

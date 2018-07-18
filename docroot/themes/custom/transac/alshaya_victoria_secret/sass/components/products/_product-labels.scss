@@ -11,6 +11,16 @@
             left: 5rem;
           }
         }
+
+        .view-product-slider & {
+          top: 0.5rem;
+          left: 0.5rem;
+        }
+
+        .c-products__item & {
+          top: 0.625rem;
+          left: 0.625rem;
+        }
       }
 
       &-right {
@@ -22,6 +32,16 @@
           @include breakpoint($only-tablet) {
             right: 5rem;
           }
+        }
+
+        .view-product-slider & {
+          top: 0.5rem;
+          right: 0.5rem;
+        }
+
+        .c-products__item & {
+          top: 0.625rem;
+          right: 0.625rem;
         }
       }
     }
@@ -38,6 +58,15 @@
             left: 5rem;
           }
         }
+
+        .view-product-slider & {
+          left: 0.5rem;
+        }
+
+        .c-products__item & {
+          bottom: 12.25rem;
+          left: 0.625rem;
+        }
       }
 
       &-right {
@@ -50,6 +79,15 @@
           @include breakpoint($only-tablet) {
             right: 5rem;
           }
+        }
+
+        .view-product-slider & {
+          right: 0.5rem;
+        }
+
+        .c-products__item & {
+          bottom: 12.25rem;
+          right: 0.625rem;
         }
       }
     }
