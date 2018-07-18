@@ -9,12 +9,13 @@
   </div>
   <ul class="menu__list menu--one__list">
     {% for key1, level1 in term_tree %}
+      {%  set promopanel_class =  'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
       {% if level1.class == true and level1.term_bg_color == true %}
-        <li class="menu__list-item menu--one__list-item {{ level1.class }} has-bg-color">
+        <li class="menu__list-item menu--one__list-item {{ level1.class }} {{ promopanel_class }} has-bg-color">
       {% elseif level1.term_bg_color == true %}
-        <li class="menu__list-item menu--one__list-item has-bg-color">
+        <li class="menu__list-item menu--one__list-item has-bg-color {{ promopanel_class }}">
       {% else %}
-        <li class="menu__list-item menu--one__list-item">
+        <li class="menu__list-item menu--one__list-item {{ promopanel_class }}">
       {% endif %}
           <div class="menu__link-wrapper menu-two__link-wrapper">
             {% set style = '' %}
@@ -25,9 +26,9 @@
                 {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
             {% endif %}
             {% if style is not empty %}
-                <a class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" href="{{ level1.path }}">{{ level1.label }}</a>
+                <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
             {% else %}
-                <a class="menu__link menu--one__link {{ level1.class }}" href="{{ level1.path }}">{{ level1.label }}</a>
+                <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
             {% endif %}
             {% set style = '' %}
           </div>

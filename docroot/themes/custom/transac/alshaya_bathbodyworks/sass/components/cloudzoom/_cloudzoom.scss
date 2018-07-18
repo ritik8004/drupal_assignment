@@ -31,6 +31,8 @@
 
 @include breakpoint($only-tablet) {
   #lightSlider {
+    height: auto;
+
     .slick-slide {
       width: auto;
 
@@ -42,7 +44,7 @@
 
     .slick {
       &-arrow {
-        top: 1.0625rem;
+        top: 0;
       }
     }
   }

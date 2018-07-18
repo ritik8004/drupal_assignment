@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
 
@@ -37,21 +38,54 @@ class SkuImagesManager {
   protected $configFactory;
 
   /**
+   * File storage.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
+                              EntityTypeManagerInterface $entity_type_manager,
                               SkuManager $sku_manager) {
     $this->moduleHandler = $module_handler;
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+  }
+
+  /**
+   * Utility function to return all media items for a SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param bool $check_parent_child
+   *   Check parent or child SKUs.
+   * @param string $default_label
+   *   Default value for alt/title.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getAllMediaItems(SKUInterface $sku, $check_parent_child = FALSE, $default_label = '') {
+    $media = $this->getAllMedia($sku, $check_parent_child, $default_label);
+    $media_items = [];
+    foreach ($media['media_items'] ?? [] as $items) {
+      $media_items = array_merge($media_items, $items);
+    }
+    return $media_items;
   }
 
   /**
@@ -61,12 +95,35 @@ class SkuImagesManager {
    *   SKU Entity.
    * @param bool $check_parent_child
    *   Check parent or child SKUs.
+   * @param string $default_label
+   *   Default value for alt/title.
    *
    * @return array
    *   Array of media files.
    */
-  public function getAllMedia(SKUInterface $sku, $check_parent_child = FALSE) {
-    $media = $sku->getMedia();
+  public function getAllMedia(SKUInterface $sku, $check_parent_child = FALSE, $default_label = '') {
+    // Here for_sku means it can be in parent or child.
+    // And from_sku means specifically for this SKU.
+    $cache_key = $check_parent_child ? 'media_for_sku' : 'media_from_sku';
+
+    $return = $this->skuManager->getProductCachedData($sku, $cache_key);
+
+    if (is_array($return)) {
+      return $this->addFileObjects($return);
+    }
+
+    $plugin = $sku->getPluginInstance();
+
+    if (empty($default_label) && $sku->bundle() == 'simple') {
+      $parent = $plugin->getParentSku($sku);
+
+      // Check if there is parent SKU available, we use label from that.
+      if ($parent instanceof SKUInterface) {
+        $default_label = $parent->label();
+      }
+    }
+
+    $media = $sku->getMedia(TRUE, FALSE, $default_label);
 
     $return = [
       'images' => [],
@@ -80,6 +137,9 @@ class SkuImagesManager {
 
     // Invoke the alter hook to allow all modules to update the element.
     $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $sku);
+
+    $return['main'] = $main;
+    $return['thumbs'] = $thumbs;
 
     // Avoid notices and warnings in local.
     if ($check_parent_child && empty($media) && empty($main)) {
@@ -98,7 +158,7 @@ class SkuImagesManager {
 
         // Check if there is child SKU available, use media files of child.
         if ($child instanceof SKUInterface) {
-          return $this->getAllMedia($child);
+          return $this->getAllMedia($child, FALSE, $default_label);
         }
       }
     }
@@ -134,7 +194,57 @@ class SkuImagesManager {
       $return['images'][$url] = $url;
     }
 
+    $this->skuManager->setProductCachedData(
+      $sku,
+      $cache_key,
+      $this->removeFileObjects($return)
+    );
+
     return $return;
+  }
+
+  /**
+   * Add file objects back to cached version of media.
+   *
+   * @param array $media
+   *   Media array.
+   *
+   * @return array
+   *   Processed media array.
+   */
+  private function addFileObjects(array $media) {
+    if (empty($media['media_items']['images'])) {
+      return $media;
+    }
+
+    foreach ($media['media_items']['images'] as &$item) {
+      if (isset($item['fid'])) {
+        $item['file'] = $this->fileStorage->load($item['fid']);
+      }
+    }
+
+    return $media;
+  }
+
+  /**
+   * Remove file objects for caching media.
+   *
+   * @param array $media
+   *   Media array.
+   *
+   * @return array
+   *   Processed media array.
+   */
+  private function removeFileObjects(array $media) {
+    if (empty($media['media_items']['images'])) {
+      return $media;
+    }
+
+    foreach ($media['media_items']['images'] as &$item) {
+      unset($item['file']);
+    }
+
+    return $media;
   }
 
   /**
@@ -147,7 +257,7 @@ class SkuImagesManager {
    *   First SKU entity with media if found else null.
    */
   public function getFirstChildWithMedia(SKUInterface $sku) {
-    $cache_key = 'first_child_sku_with_media_' . $sku->getSku() . '_' . $sku->language()->getId();
+    $cache_key = 'first_child_with_media';
 
     $child_sku = $this->skuManager->getProductCachedData($sku, $cache_key);
     if ($child_sku) {

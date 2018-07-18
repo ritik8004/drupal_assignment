@@ -1,0 +1,19 @@
+.vat-container {
+  .vat-text-footer {
+    @include breakpoint($only-mobile) {
+      padding: 0.3125rem 0;
+    }
+  }
+}
+
+.c-pdp {
+  .vat-text {
+    margin-top: 0;
+  }
+}
+
+.checkout {
+  .vat-text {
+    margin: 0.75rem 0 0;
+  }
+}

@@ -154,31 +154,6 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
- * Implements hook_language_switch_links_alter().
- */
-function alshaya_hm_language_switch_links_alter(array &$links, $type, Url $url) {
-  $color_query = \Drupal::request()->query->get('color');
-  /** @var \Drupal\Core\Routing\CurrentRouteMatch $current_route_matcher */
-  $current_route_matcher = \Drupal::service('current_route_match');
-
-  // Alter block only if we have color query parameter on a PDP.
-  if (($color_query) &&
-    ($current_route_matcher->getRouteName() == 'entity.node.canonical') &&
-    ($node = $current_route_matcher->getParameter('node')) &&
-    ($node->getType() == 'acq_product')) {
-
-    // Remove the color parameter in the query string for all except current
-    // language.
-    foreach ($links as $langcode => $link) {
-      if (($langcode != \Drupal::languageManager()->getCurrentLanguage()->getId()) &&
-        (isset($links[$langcode]['query']['color']))) {
-        unset($links[$langcode]['query']['color']);
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -297,5 +272,24 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
         $build['description'][] = $specifications;
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_hm_presave(SKUInterface $sku) {
+  // Update composition field.
+  $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
+  if (!empty($composition)) {
+    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
+      ->transformCompositionArrayToList($composition));
+  }
+  else {
+    if (!empty($sku->get('attr_composition')->getString())) {
+      \Drupal::logger('alshaya_hm')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
+    }
+
+    $sku->set('attr_composition', NULL);
   }
 }

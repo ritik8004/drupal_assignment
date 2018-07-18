@@ -797,7 +797,6 @@
     padding-bottom: 0.56rem;
     font-family: $alshaya-bold;
     font-size: 1rem;
-    margin-#{$left}: 0.875rem;
     font-weight: normal;
     text-transform: lowercase;
 
@@ -805,7 +804,6 @@
       font-size: 0.875rem;
       margin-bottom: 0;
       padding-bottom: 0;
-      margin-#{$left}: 2.75rem;
     }
 
     @include breakpoint($desktop) {
@@ -1432,12 +1430,8 @@ body .ladda-button {
 
   a {
     color: $primary_btn_text;
-    font-size: 1rem;
+    font-size: 0.75rem;
     text-decoration: underline;
-
-    @include breakpoint($tablet) {
-      font-size: 0.75rem;
-    }
   }
 }
 
@@ -1446,6 +1440,11 @@ body .ladda-button {
     color: $basket_sell_hover_link;
     text-decoration: underline;
   }
+}
+
+.path--cart .messages.messages--status::before {
+  font-size: 1.9rem;
+  margin-top: -0.5rem;
 }
 
 html[lang=ar] {

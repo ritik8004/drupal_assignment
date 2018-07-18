@@ -1,12 +1,15 @@
 .size-guide-link {
   float: $right;
   position: relative;
-  top: 0;
   padding-top: 0.875rem;
   font-size: 0.75rem;
   line-height: 1.33;
   text-decoration: underline;
-  padding-#{$right}: 0.625rem;
+  top: 0;
+
+  @include breakpoint($only-tablet) {
+    z-index: 2;
+  }
 
   @include breakpoint($only-mobile) {
     padding: 0;
@@ -33,7 +36,9 @@
 
       #product-image-gallery,
       #lightSlider {
-        height: 31rem;
+        @include breakpoint($desktop) {
+          height: 31rem;
+        }
       }
     }
   }

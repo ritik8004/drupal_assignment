@@ -25,5 +25,5 @@ fields:
     index: 1
     facet: 1
 
-  category:
-    label: 'Category'
+  product_category:
+    label: 'Product Category'

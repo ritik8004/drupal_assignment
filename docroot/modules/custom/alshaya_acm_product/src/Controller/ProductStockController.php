@@ -176,9 +176,8 @@ class ProductStockController extends ControllerBase {
     // passed to all the requests.
     // We use referer which always have proper value to solve.
     if ($referer) {
-      $referrer_query = $referer
-        ? parse_url($referer)['query']
-        : '';
+      $parsed = parse_url($referer);
+      $referrer_query = $parsed['query'] ?? '';
 
       if ($referrer_query) {
         $referrer_query_array = [];

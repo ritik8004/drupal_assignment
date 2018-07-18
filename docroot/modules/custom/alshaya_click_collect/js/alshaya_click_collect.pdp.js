@@ -180,6 +180,11 @@
       variant = $('.selected-variant-sku-' + skuClean).val();
     }
 
+    // We always use SKU as string. For numeric values JS converts it to int.
+    // This fails our === condition checks.
+    sku = (typeof sku === 'undefined') ? '' : sku.toString();
+    skuClean = (typeof skuClean === 'undefined') ? '' : skuClean.toString();
+
     return {
       type: type,
       sku: sku,

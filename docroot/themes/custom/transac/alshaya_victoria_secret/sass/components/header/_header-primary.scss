@@ -156,7 +156,7 @@ header {
       text-align: center;
       height: 2.5rem;
 
-      a.menu--one__link {
+      .menu--one__link {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
@@ -165,7 +165,7 @@ header {
         margin-top: 0;
       }
 
-      a.menu--one__link.active {
+      .menu--one__link.active {
         border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
@@ -173,7 +173,7 @@ header {
     .active--menu--links {
       li.menu--one__list-item {
         &:hover {
-          a.menu--one__link {
+          .menu--one__link {
             border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
@@ -181,7 +181,7 @@ header {
 
       &:hover {
         li.menu--one__list-item {
-          a.menu--one__link.active {
+          .menu--one__link.active {
             border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
@@ -304,7 +304,7 @@ header {
   .active--menu--links {
     &:hover {
       li.menu--one__list-item {
-        a.menu--one__link {
+        .menu--one__link {
           border-bottom: 1px solid transparent;
         }
       }
@@ -381,6 +381,16 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    a.promo-panel--mobile-link {
+      &::after {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
 #block-cartminiblock {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
@@ -399,4 +409,8 @@ header {
       display: block;
     }
   }
+}
+
+.form-autocomplete.ui-autocomplete-loading {
+  background-size: 1.5rem;
 }
