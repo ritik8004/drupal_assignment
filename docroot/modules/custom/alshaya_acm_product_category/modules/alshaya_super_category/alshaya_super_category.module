@@ -104,9 +104,9 @@ function alshaya_super_category_preprocess_block(&$variables) {
         ->getCurrentLanguage()
         ->getId();
 
-      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
-      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($term);
-      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $term]);
+      $super_category = \Drupal::service('entity.repository')->getTranslationFromContext($parent, $langcode);
+      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
+      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
 
       $langcode = ($langcode != 'en') ? '-' . $langcode : '';
       // Current active theme object.
