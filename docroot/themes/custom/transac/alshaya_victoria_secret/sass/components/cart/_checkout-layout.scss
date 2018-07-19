@@ -61,34 +61,12 @@
           }
         }
 
-        &.tab-click-collect {
-          @include breakpoint($desktop) {
-            margin-#{$left}: -2px;
+        &.tab-click-collect.active--tab--head {
+          html[lang=ar] & {
+            margin-right: -2px;
 
-            html[lang=ar] & {
-              margin-#{$left}: -3px;
-            }
-          }
-
-          @include breakpoint($only-tablet) {
-            margin-#{$left}: 0;
-          }
-
-          &.active--tab--head {
             @include breakpoint($only-tablet) {
-              margin-#{$left}: 0;
-            }
-          }
-        }
-
-        &.tab-home-delivery {
-          @include breakpoint($only-tablet) {
-            margin-#{$left}: 0;
-          }
-
-          &:not(.active--tab--head) {
-            @include breakpoint($tablet) {
-              margin-#{$left}: -1px;
+              margin-right: 2px;
             }
           }
         }
@@ -103,39 +81,12 @@
       }
 
       .tab-separator {
-        background: transparent;
-
         @include breakpoint($tablet) {
           width: 9.1%;
         }
 
         @include breakpoint($only-mobile) {
           margin-top: 0.5rem;
-        }
-      }
-    }
-  }
-
-  &.c-delivery-checkout {
-    main {
-      .tabs--content {
-        border-width: 1px;
-      }
-
-      #edit-delivery-tabs {
-        .tab {
-          &.active--tab--head {
-            border-width: 1px;
-          }
-        }
-      }
-
-      form {
-        fieldset.active--tab--content {
-          @include breakpoint($tablet) {
-            border-width: 1px !important;
-            top: -1px !important;
-          }
         }
       }
     }
