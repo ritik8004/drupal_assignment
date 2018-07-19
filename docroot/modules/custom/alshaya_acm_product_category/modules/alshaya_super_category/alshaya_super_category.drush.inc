@@ -79,6 +79,18 @@ function drush_alshaya_super_category_switch() {
     $path_alter,
   ]);
 
+  // On super category status switch, we change tokens.
+  $token = $status ? '[supercategory:meta_title]' : '[site:name]';
+
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')
+    ->set('tags.title', '[node:title] | ' . $token)->save();
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
+    ->set('tags.title', '[node:title] | ' . $token)->save();
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
+    ->set('tags.title', '[node:title] | ' . $token)->save();
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
+    ->set('tags.title', '[term:name] | ' . $token)->save();
+
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
   drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));
