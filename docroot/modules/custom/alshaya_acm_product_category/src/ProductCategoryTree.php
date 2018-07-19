@@ -182,6 +182,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // Get all child terms for the given parent.
     $terms = $this->allChildTerms($langcode, $parent_tid);
 
+    if (empty($terms)) {
+      return [];
+    }
+
     // Initialize the background color for term.
     $this->termsBackgroundColor = $this->getTermsColors($langcode, 'background');
 
@@ -191,20 +195,20 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // Initialize the image and image text font/bg color.
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
 
-    if (empty($terms)) {
-      return [];
-    }
-
     foreach ($terms as $term) {
+      $clickable_link = !is_null($term->field_display_as_clickable_link_value)
+        ? $term->field_display_as_clickable_link_value
+        : TRUE;
+      
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => $term->field_display_as_clickable_link_value ? 'href=' . Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString() : '',
+        'path' => $clickable_link ? 'href=' . Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString() : '',
         'active_class' => '',
-        'tag' => $term->field_display_as_clickable_link_value ? 'a' : 'div',
+        'tag' => $clickable_link ? 'a' : 'div',
       ];
 
       if ($highlight_paragraph) {
@@ -383,7 +387,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->fields('tfd', ['tid', 'name', 'description__value'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
-    $query->innerJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid AND ttdcl.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid AND ttdcl.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
