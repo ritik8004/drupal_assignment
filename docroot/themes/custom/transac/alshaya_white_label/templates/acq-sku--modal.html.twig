@@ -74,11 +74,9 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
             </div>
             {% if sku.description %}
               {% if sku.read_more_style.value|render %}
-                <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                <span class="read-more-description-link-gift" style="{{ sku.read_more_style.value }}">{{ 'Read more'|t }}</span>
               {% else %}
-                <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+                <span class="read-more-description-link-gift">{{ 'Read more'|t }}</span>
               {% endif %}
             {% endif %}
           </div>

@@ -117,7 +117,7 @@ function alshaya_mc_acq_sku_view(array &$build, EntityInterface $sku_entity, Ent
   if ($view_mode == 'modal') {
     $return = _alshaya_mc_get_product_description($sku_entity);
     $build['short_desc'] = $return['short_desc'];
-    $build['description'][] = $return['description'];
+    $build['description'] = $return['description'];
   }
 }
 
