@@ -147,9 +147,9 @@ function alshaya_super_category_theme_suggestions_block_alter(array &$suggestion
       $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
       $term = $product_category_tree->getCategoryTermFromRoute();
 
-      if($term instanceof TermInterface) {
+      if ($term instanceof TermInterface) {
         $root_terms = $product_category_tree->getCategoryRootTerms();
-        if(in_array($term->id(), array_keys($root_terms))) {
+        if (in_array($term->id(), array_keys($root_terms))) {
           $suggestions[] = "block__system_branding__home_block";
         }
       }
