@@ -16,7 +16,7 @@ use Drupal\Core\Url;
  * Implements hook_module_implements_alter().
  */
 function alshaya_vs_transac_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'form_alter') {
+  if ($hook == 'form_alter' && isset($implementations['alshaya_vs_transac'])) {
     $group = $implementations['alshaya_vs_transac'];
     unset($implementations['alshaya_vs_transac']);
     $implementations = ['alshaya_vs_transac' => $group] + $implementations;
