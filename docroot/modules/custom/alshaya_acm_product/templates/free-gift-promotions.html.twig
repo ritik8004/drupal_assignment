@@ -8,9 +8,11 @@
   <div class="free-gift-title">
     <span class="title"><a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.sku_modal', {'acq_sku': free_sku_entity_id, 'js': 'nojs'}) }}">{{ sku_title }}</a></span> with this product
   </div>
-  <div class="free-gift-coupon-code">
-    {% trans %}
-    Use Code <span class="coupon-code">{{ promo_code }}</span> with this product
-    {% endtrans %}
-  </div>
+  {% if promo_code is not empty %}
+    <div class="free-gift-coupon-code">
+      {% trans %}
+      Use Code <span class="coupon-code">{{ promo_code }}</span> with this product
+      {% endtrans %}
+    </div>
+  {% endif %}
 </div>
