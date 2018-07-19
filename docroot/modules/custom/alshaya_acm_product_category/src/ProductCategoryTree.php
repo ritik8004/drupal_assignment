@@ -205,7 +205,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           '#markup' => $term->description__value,
         ],
         'id' => $term->tid,
-        'path' => $clickable_link ? 'href=' . Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString() : '',
+        'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
         'tag' => $clickable_link ? 'a' : 'div',
       ];

@@ -1,9 +1,9 @@
 <ul class="menu__list menu--three__list">
   {% for key, level3 in data %}
-    <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>  
+    <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
     <li class="menu__list-item menu--three__list-item">
       <div class="menu__link-wrapper menu-two__link-wrapper">
-        <{{ level3.tag }} class="menu__link menu--three__link {{ data.sub-nav-class }}" {{ level3.path }}>{{ level3.label }}</{{ level3.tag }}>
+        <{{ level3.tag }} class="menu__link menu--three__link {{ data.sub-nav-class }}" {{ level3.anchor_att }}>{{ level3.label }}</{{ level3.tag }}>
       </div>
 
       {% if level3.child is not empty %}

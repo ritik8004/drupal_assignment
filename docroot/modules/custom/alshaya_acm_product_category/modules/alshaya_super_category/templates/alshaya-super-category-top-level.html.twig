@@ -7,7 +7,7 @@
         <li class="menu__list-item menu--one__list-item">
       {% endif %}
       <div class="menu__link-wrapper menu-two__link-wrapper">
-        <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" title="{{ level1.meta_title }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
+        <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" title="{{ level1.meta_title}}" {{ level1.anchor_att }}>{{ level1.label }}</{{ level1.tag }}>
       </div>
       </li>
     {% endfor %}

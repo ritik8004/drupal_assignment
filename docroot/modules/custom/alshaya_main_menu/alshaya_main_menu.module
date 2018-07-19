@@ -56,6 +56,58 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Prepares variables for menu items.
+ *
+ * @param array $variables
+ *   An associative array containing menu items.
+ */
+function template_preprocess_alshaya_main_menu_level1(array &$variables) {
+  _alshaya_main_menu_process_anchor_attributes($variables['term_tree']);
+}
+
+/**
+ * Prepares variables for menu items.
+ *
+ * @param array $variables
+ *   An associative array containing menu items.
+ */
+function template_preprocess_alshaya_main_menu_level2(array &$variables) {
+  _alshaya_main_menu_process_anchor_attributes($variables['term_tree']);
+}
+
+/**
+ * Prepares variables for menu items.
+ *
+ * @param array $variables
+ *   An associative array containing menu items.
+ */
+function template_preprocess_alshaya_main_menu_level3(array &$variables) {
+  _alshaya_main_menu_process_anchor_attributes($variables['term_tree']);
+}
+
+/**
+ * Prepares variables for menu items.
+ *
+ * @param array $variables
+ *   An associative array containing menu items.
+ */
+function template_preprocess_alshaya_main_menu_level4(array &$variables) {
+  _alshaya_main_menu_process_anchor_attributes($variables['term_tree']);
+}
+
+/**
+ * Prepares href for anchor tag for given term data.
+ */
+function _alshaya_main_menu_process_anchor_attributes(array &$data) {
+  foreach ($data as &$record) {
+    $record['anchor_att'] = ($record['tag'] == 'a') ? "href={$record['path']}" : '';
+    if (!empty($record['child'])) {
+      _alshaya_main_menu_process_anchor_attributes($record['child']);
+    }
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_main_menu_taxonomy_term_insert(TermInterface $term) {

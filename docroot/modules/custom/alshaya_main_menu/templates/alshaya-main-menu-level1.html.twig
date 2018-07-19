@@ -25,12 +25,8 @@
             {% if level1.term_font_color %}
                 {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
             {% endif %}
-            {% if style is not empty %}
-                <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" style="{{ style }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
-            {% else %}
-                <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" {{ level1.path }}>{{ level1.label }}</{{ level1.tag }}>
-            {% endif %}
-            {% set style = '' %}
+
+            <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" style="{{style}}" {{ level1.anchor_att }}>{{ level1.label }}</{{ level1.tag }}>
           </div>
           {% if level1.child is not empty %}
             {{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}
