@@ -1379,6 +1379,10 @@ header {
 }
 
 .html--overlay {
+  @include breakpoint($only-mobile) {
+    position: fixed;
+  }
+
   @include breakpoint($upto-desktop) {
     overflow: hidden;
   }
