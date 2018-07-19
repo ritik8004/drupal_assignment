@@ -38,18 +38,6 @@ function alshaya_super_category_theme($existing, $type, $theme, $path) {
 }
 
 /**
- * Prepares variables for super category menu items.
- *
- * @param array $variables
- *   An associative array containing menu items.
- */
-function template_preprocess_alshaya_super_category_top_level(array &$variables) {
-  foreach ($variables['term_tree'] as &$record) {
-    $record['anchor_att'] = ($record['tag'] == 'a') ? "href={$record['path']}" : '';
-  }
-}
-
-/**
  * Implements hook_preprocess_block().
  */
 function alshaya_super_category_preprocess_block(&$variables) {
