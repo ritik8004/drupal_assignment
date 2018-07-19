@@ -46,19 +46,9 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
     ->setValue(\Drupal::service('alshaya_acm_promotion.manager')
       ->getSubType($promotion));
 
+  // Set free skus for promotions.
   if (!empty($promotion['free_gift_products'])) {
-
-    $free_gift_skus = [];
-
-    // Format the free gift skus array to be inserted into Promotion node.
-    foreach ($promotion['free_gift_products'] as $free_gift_product) {
-      $free_gift_skus[] = $free_gift_product['product_sku'];
-    }
-
-    // Set free skus for promotions.
-    if (!empty($free_gift_skus)) {
-      $node->get('field_free_gift_skus')->setValue($free_gift_skus);
-    }
+    $node->get('field_free_gift_skus')->setValue($promotion['free_gift_products']);
   }
 }
 
@@ -66,23 +56,17 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
  * Implements hook_acq_promotion_data_alter().
  */
 function alshaya_acm_promotion_acq_promotion_data_alter(&$promotion) {
-  // Filter out free_gift_skus.
-  $promotion['free_gift_products'] = array_filter($promotion['products'], function ($product) {
-    if (!empty($product['ampromo_cart_sku']) &&
-      ($product['ampromo_cart_sku'])) {
-      return TRUE;
-    }
-    return FALSE;
-  });
+  $promotion['free_gift_products'] = [];
 
-  // Remove free gift skus.
-  $promotion['products'] = array_filter($promotion['products'], function ($product) {
+  // Extract free gift skus & remove them from list of products to be processed
+  // for this promotion.
+  foreach ($promotion['products'] as $key => $product) {
     if (!empty($product['ampromo_cart_sku']) &&
       ($product['ampromo_cart_sku'])) {
-      return FALSE;
+      $promotion['free_gift_products'][] = $product['product_sku'];
+      unset($promotion['products'][$key]);
     }
-    return TRUE;
-  });
+  }
 }
 
 /**
