@@ -29,6 +29,22 @@
     table {
       font-family: $vs-regular;
 
+      td {
+        select {
+          padding-#{$left}: 0.75rem;
+        }
+
+        .form-type-select {
+          .ajax-progress-throbber {
+            @include breakpoint($only-mobile) {
+              top: 0.8125rem;
+              #{$right}: auto;
+              #{$left}: -2.2rem;
+            }
+          }
+        }
+      }
+
       tr {
         td {
           .dark a {
@@ -66,10 +82,6 @@
       }
 
       &.name {
-        @include breakpoint($only-mobile) {
-          padding-top: 0;
-        }
-
         .image {
           @include breakpoint($only-mobile) {
             width: 7rem !important;
@@ -126,8 +138,16 @@
         @include breakpoint($desktop) {
           padding-#{$left}: 2.5rem !important;
 
-          .delivery-options-tooltip-wrapper .tooltip--wrap {
-            margin-bottom: 1rem;
+          .delivery-options-tooltip-wrapper {
+            .tooltip--wrap {
+              margin-bottom: 1rem;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          .delivery-options-tooltip-wrapper {
+            #{$left}: 9rem;
           }
         }
       }
@@ -139,15 +159,39 @@
   #coupon-button.add {
     text-transform: uppercase;
   }
+
+  .coupon-code-wrapper {
+    .card__header {
+      &.ui-state-active {
+        border-bottom: none;
+      }
+    }
+  }
 }
 
-.block-basket-horizontal-recommendation > h3 {
-  font-size: 1.125rem;
-  font-family: $vs-regular;
-  text-align: center;
-  text-transform: none;
-  margin-bottom: 0.3rem;
-  padding-bottom: 0.56rem;
+.block-basket-horizontal-recommendation {
+  > h3 {
+    font-size: 1.125rem;
+    font-family: $vs-regular;
+    text-align: center;
+    text-transform: none;
+    margin-bottom: 0.3rem;
+    padding-bottom: 0.56rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0;
+  }
+
+  .view-product-slider {
+    .owl-carousel {
+      .owl-item {
+        a > img {
+          max-width: 8.875rem;
+        }
+      }
+    }
+  }
 }
 
 .empty-cart-wrapper {
@@ -224,6 +268,21 @@
       max-width: none !important;
     }
   }
+
+  .customer-cart-form {
+    .items,
+    .item-code {
+      font-size: 0.75rem;
+    }
+  }
+
+  .messages {
+    .messages--status {
+      &::before {
+        margin-top: 0;
+      }
+    }
+  }
 }
 
 #cart_notification {
@@ -295,6 +354,10 @@ body.alias--cart {
           }
         }
 
+        td:last-child {
+          background: $basket_order_total_bg;
+        }
+
         td:last-child,
         .price-currency.suffix {
           font-family: $vs-bold;
@@ -305,16 +368,6 @@ body.alias--cart {
         .cart-promotions {
           top: 0.875rem;
         }
-      }
-    }
-  }
-}
-
-.alias--cart {
-  #table-cart-items {
-    td {
-      select {
-        padding-#{$left}: 0.75rem;
       }
     }
   }

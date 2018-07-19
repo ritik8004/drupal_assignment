@@ -10,6 +10,10 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Url;
+use Drupal\taxonomy\TermInterface;
+use Drupal\metatag\MetatagManagerInterface;
+use Drupal\Core\Utility\Token;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 
@@ -52,6 +56,27 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
   protected $configFactory;
 
   /**
+   * Meta tag manager.
+   *
+   * @var \Drupal\metatag\MetatagManagerInterface
+   */
+  protected $metaTagManager;
+
+  /**
+   * Token manager.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $tokenManager;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * AlshayaSuperCategoryBlock constructor.
    *
    * @param array $configuration
@@ -66,12 +91,21 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
    *   Language manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\metatag\MetatagManagerInterface $metatag_manager
+   *   Meta tag manager.
+   * @param \Drupal\Core\Utility\Token $token_manager
+   *   Token manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, LanguageManagerInterface $language_manager, ConfigFactoryInterface $config_factory, MetatagManagerInterface $metatag_manager, Token $token_manager, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
     $this->configFactory = $config_factory;
+    $this->metaTagManager = $metatag_manager;
+    $this->tokenManager = $token_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -84,7 +118,10 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
       $plugin_definition,
       $container->get('alshaya_acm_product_category.product_category_tree'),
       $container->get('language_manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('metatag.manager'),
+      $container->get('token'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -103,8 +140,29 @@ class AlshayaSuperCategoryBlock extends BlockBase implements ContainerFactoryPlu
     // Get all child terms for the given parent.
     $term_data_en = $this->productCategoryTree->getCategoryTree('en', 0, FALSE, FALSE);
 
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    $default_language = $this->languageManager->getDefaultLanguage()->getId();
+
     // Add class for all terms.
     foreach ($term_data as $term_id => &$term_info) {
+      $term_object = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
+
+      // We need to do this or meta tag always gets/renders value from default
+      // english term.
+      if ($current_language != $default_language
+        && $term_object->hasTranslation($current_language)) {
+        $term_object = $term_object->getTranslation($current_language);
+      }
+
+      if ($term_object instanceof TermInterface) {
+        if (!empty($meta_tags = $this->metaTagManager->tagsFromEntityWithDefaults($term_object))) {
+          $term_info['meta_title'] = $this->tokenManager->replace(
+            $meta_tags['title'],
+            ['term' => $term_object]
+          );
+        }
+      }
+
       $term_info_en = ($langcode !== 'en') ? $term_data_en[$term_id] : $term_info;
       $term_info['class'] = ' brand-' . Html::cleanCssIdentifier(Unicode::strtolower($term_info_en['label']));
     }

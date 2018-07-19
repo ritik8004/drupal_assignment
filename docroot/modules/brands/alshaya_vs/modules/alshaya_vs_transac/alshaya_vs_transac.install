@@ -17,8 +17,8 @@ function alshaya_vs_transac_update_dependencies() {
       '8003' => [
         'alshaya_stores_finder' => '8104',
       ],
-      '8004' => [
-        'alshaya_stores_finder' => '8105',
+      '8005' => [
+        'alshaya_stores_finder' => '8106',
       ],
     ],
   ];
@@ -27,12 +27,27 @@ function alshaya_vs_transac_update_dependencies() {
 /**
  * Implements hook_update().
  *
+ * Update soft limit for facets of actual_color_label_code.
+ */
+function alshaya_vs_transac_update_8006() {
+  // Update facets config to avoid recreating facets.
+  foreach(['', 'plp_', 'promo_'] as $prefix) {
+    \Drupal::configFactory()
+      ->getEditable("facets.facet.{$prefix}actual_color_label_code")
+      ->set('widget.config.soft_limit', 5)
+      ->save(TRUE);
+  }
+}
+
+/**
+ * Implements hook_update().
+ *
  * Update the store finder label position for arabic.
  */
-function alshaya_vs_transac_update_8004() {
+function alshaya_vs_transac_update_8005() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-     ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
-     ->save();
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
+    ->save();
 }
 
 /**
@@ -51,7 +66,7 @@ function alshaya_vs_transac_update_8003() {
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -172,7 +187,7 @@ function alshaya_vs_transac_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 
   $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');

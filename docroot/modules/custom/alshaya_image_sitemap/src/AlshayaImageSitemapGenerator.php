@@ -11,6 +11,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\node\Entity\Node;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -129,31 +131,44 @@ class AlshayaImageSitemapGenerator {
   public function process($nids) {
     $output = '';
     $total_urls = $this->state->get('alshaya_image_sitemap.url_count');
-    $this->moduleHandler
-      ->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    $languages = $this->languageManager->getLanguages();
+    $country_code = _alshaya_custom_get_site_level_country_code();
 
     if (count($nids) > 0) {
       foreach ($nids as $nid) {
         // Fetch list of media files for each nid.
-        $media = [];
-        $this->moduleHandler->invokeAll('image_sitemap_get_product_media', [&$media, &$nid]);
-        if (empty($media)) {
-          $media = alshaya_acm_product_get_product_media($nid);
+        // Load product from id.
+        $node_storage = $this->entityTypeManager->getStorage('node');
+        $product = $node_storage->load($nid);
+
+        if ($product instanceof Node) {
+          // Get SKU from product.
+          $skuId = $product->get('field_skus')->first()->getString();
+          if (isset($skuId)) {
+            $sku = SKU::loadFromSku($skuId);
+            if ($sku instanceof SKU) {
+              // @TODO: Add dependency injection when module is uninstalled from non-transac.
+              // @codingStandardsIgnoreStart
+              $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+              $all_media = $sku_images_manager->getAllMedia($sku, TRUE);
+              // @codingStandardsIgnoreEnd
+              if (!empty($all_media['images'])) {
+                // Changes for the image count.
+                $media = $all_media['images'];
+              }
+            }
+          }
         }
 
         if (!empty($media)) {
-          $languages = $this->languageManager->getLanguages();
-          $country_code = _alshaya_custom_get_site_level_country_code();
           $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE])->toString() . '</loc>';
           foreach ($languages as $language) {
             $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $language])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
           }
-          foreach ($media as $media_item) {
-            if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
-              $output .= '<image:image><image:loc>' . file_create_url($media_item['file']->getFileUri()) . '</image:loc><image:title>' . $media_item['file']->getFilename() . '</image:title></image:image>';
-            }
-            elseif (isset($media_item['url'])) {
-              $output .= '<image:image><image:loc>' . str_replace('&', '%26', $media_item['url']->toString()) . '</image:loc></image:image>';
+          foreach ($media as $key => $value) {
+            if ($key) {
+              $path = str_replace('&', '%26', $value);
+              $output .= '<image:image><image:loc>' . $path . '</image:loc></image:image>';
             }
             $total_urls++;
           }
