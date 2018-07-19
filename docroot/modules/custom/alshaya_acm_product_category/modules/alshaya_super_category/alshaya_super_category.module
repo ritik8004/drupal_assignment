@@ -133,6 +133,31 @@ function alshaya_super_category_preprocess_block(&$variables) {
 }
 
 /**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function alshaya_super_category_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  switch ($variables['elements']['#base_plugin_id']) {
+    case 'system_branding_block':
+      // Check super category feature status.
+      if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+        return;
+      }
+
+      /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+      $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+      $term = $product_category_tree->getCategoryTermFromRoute();
+
+      if($term instanceof TermInterface) {
+        $root_terms = $product_category_tree->getCategoryRootTerms();
+        if(in_array($term->id(), array_keys($root_terms))) {
+          $suggestions[] = "block__system_branding__home_block";
+        }
+      }
+      break;
+  }
+}
+
+/**
  * Implements hook_block_build_alter().
  */
 function alshaya_super_category_block_build_alter(array &$build, BlockPluginInterface $block) {
