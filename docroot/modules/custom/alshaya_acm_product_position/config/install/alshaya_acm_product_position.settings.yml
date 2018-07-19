@@ -2,3 +2,4 @@ sort_options:
   nid: nid
   name_1: name_1
   final_price: final_price
+  created: created

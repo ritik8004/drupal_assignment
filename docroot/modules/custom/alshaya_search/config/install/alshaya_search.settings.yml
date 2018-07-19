@@ -1,4 +1,5 @@
 sort_options:
+  created: created
   name_1: name_1
   final_price: final_price
 use_brand_specific_core: true
