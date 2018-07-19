@@ -287,20 +287,6 @@ class AcqPromotionsManager {
     $promotion_label_languages = [];
     $site_default_langcode = $this->languageManager->getDefaultLanguage()->getId();
 
-    // Filter out free_gift_skus.
-    $free_gift_products = array_filter($promotion['products'], function($product) {
-      if (!empty($product['ampromo_cart_sku']) &&
-        ($product['ampromo_cart_sku'])) {
-        return TRUE;
-      }
-      return FALSE;
-    });
-
-    // Format the free gift skus array to be inserted into Promotion node.
-    foreach ($free_gift_products as $free_gift_product) {
-      $free_gift_skus[] = $free_gift_product['product_sku'];
-    }
-
     foreach ($promotions_labels as $promotion_label) {
       $promotion_label_language = $this->i18nHelper->getLangcodeFromStoreId($promotion_label['store_id']);
 
@@ -331,11 +317,6 @@ class AcqPromotionsManager {
 
     // Set promotion coupon code.
     $promotion_node->get('field_coupon_code')->setValue($promotion['coupon_code']);
-
-    // Set free skus for promotions.
-    if (!empty($free_gift_skus)) {
-      $promotion_node->get('field_free_gift_skus')->setValue($free_gift_skus);
-    }
 
     // Set the Promotion label.
     if (isset($promotion_label_languages[$site_default_langcode])) {
@@ -406,20 +387,14 @@ class AcqPromotionsManager {
     $promotion_attach_queue->deleteQueue();
 
     foreach ($promotions as $promotion) {
+      // Alter hook to allow other moduled to pre-process promotion data.
+      \Drupal::moduleHandler()->alter('acq_promotion_data', $promotion);
+
       $fetched_promotion_skus = [];
       $fetched_promotion_sku_attach_data = [];
 
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
-
-      // Remove free gift skus.
-      $products = array_filter($products, function($product) {
-        if (!empty($product['ampromo_cart_sku']) &&
-          ($product['ampromo_cart_sku'])) {
-          return FALSE;
-        }
-        return TRUE;
-      });
 
       foreach ($products as $product) {
         if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
