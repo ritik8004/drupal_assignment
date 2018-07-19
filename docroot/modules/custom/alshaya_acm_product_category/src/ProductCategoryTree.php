@@ -199,7 +199,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $clickable_link = !is_null($term->field_display_as_clickable_link_value)
         ? $term->field_display_as_clickable_link_value
         : TRUE;
-      
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
