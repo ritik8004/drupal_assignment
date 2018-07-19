@@ -516,7 +516,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
                 '#promo_code' => $free_gift_promotion['coupon_code'],
               ];
 
-              $free_sku_media = alshaya_acm_product_get_sku_media($free_sku_entity, TRUE);
+              /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+              $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+              $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
 
               if ($free_sku_media) {
                 $build['free_gift_promotions']['#sku_image'] = $skuManager->getSkuImage($free_sku_media, '192x168');
@@ -655,7 +658,10 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
 
-    $sku_media = alshaya_acm_product_get_sku_media($entity, TRUE);
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+    $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
       $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
