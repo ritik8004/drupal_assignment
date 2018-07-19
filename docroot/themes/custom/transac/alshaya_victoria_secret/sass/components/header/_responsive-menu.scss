@@ -205,8 +205,11 @@ header {
     }
   }
 
-  .menu--active .mobile--close {
-    #{$left}: 16.875rem;
+  .mobile--close {
+    .menu--active & {
+      #{$left}: 16.875rem;
+    }
+
     top: 2.8125rem;
     height: 2.8125rem;
     width: 2.8125rem;
