@@ -16,6 +16,9 @@ use Drupal\Core\Url;
  * Implements hook_module_implements_alter().
  */
 function alshaya_vs_transac_module_implements_alter(&$implementations, $hook) {
+  // We want to alter only for sku_base_form_alter which is not available on
+  // all pages. Trying to alter for that hook directly seems not working as
+  // expected so added isset check.
   if ($hook == 'form_alter' && isset($implementations['alshaya_vs_transac'])) {
     $group = $implementations['alshaya_vs_transac'];
     unset($implementations['alshaya_vs_transac']);
