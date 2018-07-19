@@ -3,10 +3,12 @@
 .alias--cart-checkout-confirmation,
 .alias--cart-checkout-login {
   .site-brand-home {
-    @include breakpoint($desktop) {
-      html[lang=ar] & {
-        width: 77% !important;
-      }
+    html[lang=ar] & {
+      padding: 1rem 1.5rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 1rem 1.5rem;
     }
 
     a {
@@ -15,7 +17,32 @@
       max-width: 100%;
 
       @include breakpoint($only-mobile) {
-        margin-#{$left}: 2.5rem;
+        text-align: center;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 100%;
+        text-align: center;
+      }
+
+      img {
+        @include breakpoint($only-tablet) {
+          html[lang=ar] & {
+            width: 32%;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 1.25rem 1.5rem 0.25rem;
+
+      html[lang=ar] & {
+        top: 1.875rem;
       }
     }
 
@@ -31,6 +58,38 @@
         vertical-align: middle;
         border-radius: 100%;
         text-align: center;
+      }
+    }
+
+    .secure__checkout--block {
+      @include breakpoint($upto-desktop) {
+        position: absolute;
+        #{$right}: 1rem;
+        top: 1.25rem;
+
+        html[lang=ar] & {
+          left: 1.5rem;
+        }
+      }
+
+      html[lang=ar] & {
+        margin-top: 1rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: 0;
+          left: 0.5rem;
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        top: 0.75rem;
+        #{$right}: 0.5rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang=ar] & {
+          margin-top: 0.5rem;
+        }
       }
     }
   }
@@ -76,5 +135,13 @@
   .delivery-type,
   .address {
     padding: 1rem 0.5rem;
+  }
+}
+
+.path--cart {
+  .site-brand-home {
+    html[lang=ar] & {
+      max-width: 1284px !important;
+    }
   }
 }
