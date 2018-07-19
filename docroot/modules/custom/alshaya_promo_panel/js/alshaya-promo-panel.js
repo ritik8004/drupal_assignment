@@ -49,7 +49,7 @@
       });
 
       // Close Promo panel when clicked anywhere outside.
-      var $promo_panel_content = $('promo-panel > .field--name-field-paragraph-content', context);
+      var $promo_panel_content = $('.promo__panel > .field--name-field-paragraph-content', context);
       $('body', context).on('click', function(e) {
         if (!$(e.target).closest($promo_panel_content).length && !$(e.target).closest($offer_toggler).length) {
           $($offer_toggler).parent().removeClass('active-promo-panel');

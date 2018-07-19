@@ -13,7 +13,7 @@
     width: 100%;
     z-index: 10;
     bottom: 0;
-    transform: translateY(calc(100% - 49px));
+    transform: translateY(100%) translateY(-49px);
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 1;
     max-width: 80.25rem;
@@ -126,6 +126,8 @@
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
       border: 1px solid $promo_panel_border;
       cursor: pointer;
+      position: relative;
+      top: 1px;
 
       @include icon(price-tag, before) {
         color: $promo_panel_label_icon;
@@ -169,7 +171,6 @@
 
   .promo-panel-label {
     @include breakpoint($tablet) {
-      position: static;
       transform: none;
     }
   }
