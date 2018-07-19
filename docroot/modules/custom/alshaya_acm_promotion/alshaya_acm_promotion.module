@@ -55,7 +55,6 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
       $free_gift_skus[] = $free_gift_product['product_sku'];
     }
 
-
     // Set free skus for promotions.
     if (!empty($free_gift_skus)) {
       $node->get('field_free_gift_skus')->setValue($free_gift_skus);
