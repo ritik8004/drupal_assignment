@@ -52,7 +52,7 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
                   // We just removing the the token/pattern for the super
                   // category or we will stuck in infinite loop.
                   $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
-                  $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category, 'is_super_category' => TRUE]);
+                  $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
                   $replacements[$original] = $meta_title;
                 }
               }
