@@ -318,9 +318,6 @@ class AcqPromotionsManager {
     // Set promotion coupon code.
     $promotion_node->get('field_coupon_code')->setValue($promotion['coupon_code']);
 
-    // Set free skus for promotions.
-    $promotion_node->get('field_free_skus')->setValue($promotion['free_skus']);
-
     // Set the Promotion label.
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
@@ -390,11 +387,15 @@ class AcqPromotionsManager {
     $promotion_attach_queue->deleteQueue();
 
     foreach ($promotions as $promotion) {
+      // Alter hook to allow other moduled to pre-process promotion data.
+      \Drupal::moduleHandler()->alter('acq_promotion_data', $promotion);
+
       $fetched_promotion_skus = [];
       $fetched_promotion_sku_attach_data = [];
 
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
+
       foreach ($products as $product) {
         if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
           $fetched_promotion_skus[$product['product_sku']] = $product['product_sku'];
