@@ -987,6 +987,7 @@
           font-size: 0.75rem;
           min-width: 10.13rem;
           background: $checkout_cc_list_select_store_btn_bg;
+          line-height: normal;
 
           &:hover {
             background-color: $primary_btn_bg;
