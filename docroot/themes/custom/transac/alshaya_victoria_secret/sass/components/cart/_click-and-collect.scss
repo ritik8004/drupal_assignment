@@ -151,6 +151,19 @@
             &:last-child {
               border-bottom: none;
             }
+
+            .store-actions {
+              .select-store {
+                height: 2.5rem;
+                line-height: normal;
+              }
+
+              .view-on-map {
+                @include breakpoint($only-mobile) {
+                  height: 2.5rem;
+                }
+              }
+            }
           }
         }
 
@@ -240,6 +253,17 @@
           .view-on-map {
             text-transform: uppercase;
             font-size: 0.875rem;
+          }
+
+          .change-store {
+            height: 2.5rem;
+            line-height: normal;
+          }
+
+          .view-on-map {
+            @include breakpoint($only-mobile) {
+              height: 2.5rem;
+            }
           }
         }
 
