@@ -374,3 +374,15 @@ body.alias--cart {
     }
   }
 }
+
+.promo-continue-shopping-wrapper {
+  #coupon-button {
+    &.remove {
+      display: block;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
