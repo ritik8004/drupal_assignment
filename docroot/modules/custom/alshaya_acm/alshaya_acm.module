@@ -864,10 +864,23 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     $free_gift_label['#markup'] = t('Free Gift with Purchase.');
   }
 
+  if (empty($name)) {
+    $name = [
+      '#title' => $sku_entity->get('name')->getString(),
+      '#type' => 'link',
+      '#url' => Url::fromRoute('alshaya_acm_product.sku_modal', ['acq_sku' => $sku_entity->id(), 'js' => 'nojs',]),
+      '#attributes' => [
+        'class' => ["use-ajax above-mobile-block"],
+        'data-dialog-type' => "modal",
+        'data-dialog-options' => '{"width":"auto"}',
+      ],
+    ];
+  }
+
   return [
     '#theme' => 'alshaya_cart_product_name',
     '#sku_attributes' => $sku_attributes,
-    '#name' => $name ? $name : $sku_entity->get('name')->getString(),
+    '#name' => $name,
     '#promotions' => $promotions,
     '#free_gift_promos' => $free_gift_cart_promotions,
     '#image' => $sku_image,
