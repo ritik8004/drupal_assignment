@@ -861,7 +861,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
 
   // If line item's price is 0, its a free item & set the label for it.
   if (!empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
-    $free_gift_label['#markup'] = t('Free Gift with Purchase.');
+    $free_gift_label['#markup'] = t('Free Gift with Purchase');
   }
 
   if (empty($name)) {
