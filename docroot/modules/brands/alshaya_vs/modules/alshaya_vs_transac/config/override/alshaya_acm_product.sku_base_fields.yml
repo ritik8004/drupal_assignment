@@ -3,3 +3,4 @@ fields:
     source: 'brand'
   color:
     facet: 0
+    configurable: 1
