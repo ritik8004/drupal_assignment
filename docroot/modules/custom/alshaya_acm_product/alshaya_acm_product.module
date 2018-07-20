@@ -534,7 +534,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
               /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
               $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
               $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
 
               // If free gift sku has no media, then we check from the default
@@ -684,7 +683,6 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
     $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
