@@ -26,15 +26,6 @@ function alshaya_acm_product_update_8021() {
     AlshayaConfigManager::MODE_ADD_MISSING
   );
 
-  $options['replace_keys'] = ['short_desc_characters'];
-  $manager->updateConfigs(
-    ['alshaya_acm_product.display_settings'],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_REPLACE_KEY,
-    $options
-  );
-
   $manager->updateConfigs(
     ['alshaya_acm_product.size_guide'],
     'alshaya_acm_product',
