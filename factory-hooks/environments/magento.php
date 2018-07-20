@@ -217,11 +217,19 @@ function alshaya_get_magento_host_data() {
           'en' => 6,
           'ar' => 9,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 12,
           'ar' => 15,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
@@ -260,11 +268,19 @@ function alshaya_get_magento_host_data() {
           'en' => 7,
           'ar' => 10,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 13,
           'ar' => 16,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
@@ -281,11 +297,49 @@ function alshaya_get_magento_host_data() {
           'en' => 6,
           'ar' => 9,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 12,
           'ar' => 15,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
+        ],
+      ],
+    ],
+    // ENV specific defaults.
+    '01test' => [
+      'sa' => [
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
+      ],
+      'ae' => [
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
+        ],
+      ],
+    ],
+    // ENV specific defaults.
+    '01dev' => [
+      'sa' => [
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
+      ],
+      'ae' => [
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
@@ -298,8 +352,8 @@ function alshaya_get_magento_host_data() {
       ],
       'sa' => [
         'magento_lang_prefix' => [
-          'en' => 'sau_en',
-          'ar' => 'sau_ar',
+          'en' => 'ksa_en',
+          'ar' => 'ksa_ar',
         ],
       ],
       'ae' => [
