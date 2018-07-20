@@ -196,9 +196,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
 
     foreach ($terms as $term) {
-      $clickable_link = !is_null($term->field_display_as_clickable_link_value)
-        ? $term->field_display_as_clickable_link_value
-        : TRUE;
       $data[$term->tid] = [
         'label' => $term->name,
         'description' => [
@@ -207,7 +204,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'id' => $term->tid,
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
-        'tag' => $clickable_link ? 'a' : 'div',
+        'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
       ];
 
       if ($highlight_paragraph) {

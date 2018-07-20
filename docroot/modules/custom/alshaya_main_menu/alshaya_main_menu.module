@@ -62,19 +62,23 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
  *   An associative array containing menu items.
  */
 function template_preprocess_alshaya_main_menu_level1(array &$variables) {
-  _alshaya_main_menu_process_anchor_attributes($variables['term_tree']);
+  _alshaya_main_menu_process_tag_attributes($variables['term_tree']);
 }
 
 /**
  * Prepares href for anchor tag for given term data.
  */
-function _alshaya_main_menu_process_anchor_attributes(array &$data) {
+function _alshaya_main_menu_process_tag_attributes(array &$data) {
   foreach ($data as &$record) {
-    $record['anchor_att'] = isset($record['tag']) && $record['tag'] == 'a'
-      ? "href={$record['path']}"
-      : '';
+    $record['tag'] = 'div';
+    $record['tag_attr'] = '';
+    if (isset($record['clickable']) && $record['clickable']) {
+      $record['tag'] = 'a';
+      $record['tag_attr'] = "href={$record['path']}";
+    }
+
     if (!empty($record['child'])) {
-      _alshaya_main_menu_process_anchor_attributes($record['child']);
+      _alshaya_main_menu_process_tag_attributes($record['child']);
     }
   }
 }
