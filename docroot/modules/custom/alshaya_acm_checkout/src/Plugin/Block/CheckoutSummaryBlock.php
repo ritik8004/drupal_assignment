@@ -13,6 +13,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Url;
@@ -212,20 +213,23 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $image = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
 
       $node = alshaya_acm_product_get_display_node($item['sku']);
-      $sku_attributes = alshaya_acm_product_get_sku_configurable_values($item['sku']);
 
-      $item['name'] = [
-        '#theme' => 'alshaya_cart_product_name',
-        '#sku_attributes' => $sku_attributes,
-        '#name' => [
-          '#title' => $node->getTitle(),
-          '#type' => 'link',
-          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
-        ],
-        '#image' => NULL,
-        '#total_price' => NULL,
-        '#item_code' => NULL,
-      ];
+      if ($node instanceof NodeInterface) {
+        $sku_attributes = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+
+        $item['name'] = [
+          '#theme' => 'alshaya_cart_product_name',
+          '#sku_attributes' => $sku_attributes,
+          '#name' => [
+            '#title' => $node->getTitle(),
+            '#type' => 'link',
+            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
+          ],
+          '#image' => NULL,
+          '#total_price' => NULL,
+          '#item_code' => NULL,
+        ];
+      }
 
       // Create products array to be used in twig.
       $products[] = [
