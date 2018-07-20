@@ -269,3 +269,11 @@
     background: url(../imgs/icons/VS-loader.svg) center no-repeat;
   }
 }
+
+.cybersource-global-error {
+  margin: 1.5rem 0;
+
+  @include breakpoint($tablet) {
+    margin: 1.5rem 1.5rem 0;
+  }
+}
