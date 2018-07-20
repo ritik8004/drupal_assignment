@@ -867,7 +867,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   return [
     '#theme' => 'alshaya_cart_product_name',
     '#sku_attributes' => $sku_attributes,
-    '#name' => $name,
+    '#name' => $name ? $name : $sku_entity->get('name')->getString(),
     '#promotions' => $promotions,
     '#free_gift_promos' => $free_gift_cart_promotions,
     '#image' => $sku_image,
