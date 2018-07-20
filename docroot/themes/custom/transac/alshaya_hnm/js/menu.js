@@ -187,11 +187,15 @@
         var parent = $('.block-alshaya-main-menu li.menu--one__list-item');
 
         $('.block-alshaya-main-menu').mouseenter(function () {
-          $(parent).parent().addClass('active--menu--links');
+          setTimeout(function () {
+            $(parent).parent().addClass('active--menu--links');
+          }, 300);
+          $(parent).children('.menu--two__list').css('transition-delay', '0.3s');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
           $(parent).parent().removeClass('active--menu--links');
+          $(parent).children('.menu--two__list').css('transition-delay', '0s');
         });
       }
 
