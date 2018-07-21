@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Update new image resolutions.
+ */
+function alshaya_hm_images_update_8006() {
+  alshaya_config_install_configs(['alshaya_hm_images.settings'], 'alshaya_hm_images');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set image types for swatch images to use DescriptiveStillLife or
  * STILL_LIFE_FRONT_URL.
  */

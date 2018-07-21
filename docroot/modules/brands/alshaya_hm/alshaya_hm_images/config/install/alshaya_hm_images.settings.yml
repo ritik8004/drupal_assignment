@@ -2,26 +2,38 @@ base_url: 'https://lp2.hm.com/hmgoepprod'
 origin: 'dam'
 dimensions:
   plp:
-    width: 222
-    height: 333
+    desktop: z
+    mobile: z
   pdp_main:
-    width: 384
-    height: 576
+    desktop: y
+    mobile: w
   pdp_thumbnail:
-    width: 74
-    height: 111
+    desktop: y
+    mobile: m
   pdp_zoom:
-    width: 1152
-    height: 1728
+    desktop: y
+    mobile: w
   pdp_fullscreen:
-    width: 758
-    height: 1137
+    desktop: y
+    mobile: w
   swatch:
-    width: 11
-    height: 21
+    desktop: z
+    mobile: y
   cart:
-    width: 74
-    height: 111
+    desktop: q
+    mobile: q
+  product_category_carousel:
+    desktop: q
+    mobile: q
+  teaser:
+    desktop: z
+    mobile: q
+  cart_notification:
+    desktop: q
+    mobile: q
+  checkout_summary:
+    desktop: m
+    mobile: q
 # Weights are used to sort asset-types. Items with lower weight get precedence
 # while displaying them.
 weights:
