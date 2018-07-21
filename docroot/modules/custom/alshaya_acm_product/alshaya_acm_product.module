@@ -521,6 +521,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
               $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
 
+              // If free gift sku has no media, then we check from the default
+              // image from the configuration.
+              if (empty($free_sku_media) && !empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+                $free_sku_media = [
+                  'label' => $free_sku_entity->label(),
+                  'file' => $default_image,
+                ];
+              }
+
               if ($free_sku_media) {
                 $build['free_gift_promotions']['#sku_image'] = $skuManager->getSkuImage($free_sku_media, '192x168');
               }
