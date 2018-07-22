@@ -587,6 +587,7 @@ class SkuManager {
 
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
+          $free_gift_skus = [];
 
           if (($view_mode == 'links') &&
             ($product_view_mode == 'full') &&
