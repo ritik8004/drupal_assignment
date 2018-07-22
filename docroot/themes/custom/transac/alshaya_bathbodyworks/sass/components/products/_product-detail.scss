@@ -141,6 +141,18 @@
         padding-bottom: 0.25rem;
       }
     }
+
+    &-delivery-options {
+      &.click-collect,
+      &.home-delivery {
+        h3 {
+          &.ui-state-disabled {
+            opacity: 0.25;
+            pointer-events: none;
+          }
+        }
+      }
+    }
   }
 }
 
