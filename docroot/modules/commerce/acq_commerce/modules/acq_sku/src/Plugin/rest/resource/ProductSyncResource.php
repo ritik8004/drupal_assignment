@@ -302,11 +302,12 @@ class ProductSyncResource extends ResourceBase {
         $sku->price->value = $product['price'];
         $sku->special_price->value = $product['special_price'];
         $sku->final_price->value = $product['final_price'];
-        $sku->attributes = $this->formatProductAttributes($product['attributes']);
         $sku->get('attr_description')->setValue([
           'value' => (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '',
           'format' => 'rich_text',
         ]);
+
+        $sku->attributes = $this->formatProductAttributes($product['attributes']);
 
         // Set default value of stock to 0.
         $stock = 0;
@@ -610,8 +611,10 @@ class ProductSyncResource extends ResourceBase {
           break;
 
         case 'text_long':
-          $value = isset($field['serialize']) ? serialize($value) : $value;
-          $sku->{$field_key}->setValue($value);
+          if (!$field['display_html']) {
+            $value = isset($field['serialize']) ? serialize($value) : $value;
+            $sku->{$field_key}->setValue($value);
+          }
           break;
       }
     }
