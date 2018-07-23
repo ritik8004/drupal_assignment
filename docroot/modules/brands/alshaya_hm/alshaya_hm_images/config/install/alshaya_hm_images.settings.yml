@@ -16,21 +16,20 @@ dimensions:
   pdp_fullscreen:
     desktop: y
     mobile: w
-  swatch:
-    desktop: z
-    mobile: y
-  cart:
-    desktop: q
-    mobile: q
-  product_category_carousel:
-    desktop: q
-    mobile: q
   teaser:
     desktop: z
     mobile: q
-  cart_notification:
+  swatch: &common_style
     desktop: q
     mobile: q
+  cart:
+    <<: *common_style
+  product_category_carousel:
+    <<: *common_style
+  cart_notification:
+    <<: *common_style
+  order_detail:
+    <<: *common_style
   checkout_summary:
     desktop: m
     mobile: q
