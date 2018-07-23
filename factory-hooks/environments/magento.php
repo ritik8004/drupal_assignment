@@ -61,11 +61,19 @@ function alshaya_get_magento_host_data() {
           'en' => 7,
           'ar' => 10,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'ksa_en',
+          'ar' => 'ksa_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 16,
           'ar' => 13,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'uae_en',
+          'ar' => 'uae_ar',
         ],
       ],
     ],
@@ -82,11 +90,19 @@ function alshaya_get_magento_host_data() {
           'en' => 7,
           'ar' => 13,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'ksa_en',
+          'ar' => 'ksa_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 19,
           'ar' => 22,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'uae_en',
+          'ar' => 'uae_ar',
         ],
       ],
     ],
@@ -128,11 +144,19 @@ function alshaya_get_magento_host_data() {
           'en' => 8,
           'ar' => 5,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'ksa_en',
+          'ar' => 'ksa_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 14,
           'ar' => 11,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'uae_en',
+          'ar' => 'uae_ar',
         ],
       ],
     ],
@@ -152,11 +176,19 @@ function alshaya_get_magento_host_data() {
           'en' => 8,
           'ar' => 14,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'ksa_en',
+          'ar' => 'ksa_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 17,
           'ar' => 23,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'uae_en',
+          'ar' => 'uae_ar',
         ],
       ],
     ],
@@ -304,8 +336,8 @@ function alshaya_get_magento_host_data() {
       ],
       'ae' => [
         'magento_lang_prefix' => [
-          'en' => 'uae_en',
-          'ar' => 'uae_ar',
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],

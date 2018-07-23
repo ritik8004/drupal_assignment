@@ -243,7 +243,7 @@ class ClickCollectController extends ControllerBase {
 
     $cart = $this->cartStorage->getCart(FALSE);
 
-    if (empty(cart)) {
+    if (empty($cart)) {
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'cc']])->toString()));
       return $response;
     }

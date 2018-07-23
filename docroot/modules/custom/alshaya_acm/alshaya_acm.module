@@ -190,6 +190,11 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         'event' => 'change',
       ];
 
+      // For free gift item, disable quantity drop down.
+      if ($is_item_free) {
+        $item['quantity']['#attributes']['disabled'] = 'disabled';
+      }
+
       $token = $csrf_token_generator->get($cart->id() . '/' . $id);
 
       // Add remove link as suffix of quantity.
@@ -868,7 +873,11 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     $name = [
       '#title' => $sku_entity->get('name')->getString(),
       '#type' => 'link',
-      '#url' => Url::fromRoute('alshaya_acm_product.sku_modal', ['acq_sku' => $sku_entity->id(), 'js' => 'nojs',]),
+      '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+        [
+          'acq_sku' => $sku_entity->id(),
+          'js' => 'nojs',
+        ]),
       '#attributes' => [
         'class' => ["use-ajax above-mobile-block"],
         'data-dialog-type' => "modal",
