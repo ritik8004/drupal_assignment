@@ -41,5 +41,19 @@ function hook_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $s
 }
 
 /**
+ * Alter product image for cart.
+ *
+ * @param array $image
+ *   Array of image to alter.
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU entity.
+ * @param string $context
+ *   Context - pdp/search/modal/teaser.
+ */
+function hook_acq_sku_cart_media_alter(array &$image, SKUInterface $sku, $context = 'cart') {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
