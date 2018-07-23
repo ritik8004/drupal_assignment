@@ -57,7 +57,7 @@
 
 {% if label_hidden %}
   {% if multiple %}
-    <div{{ attributes.addClass('c-slider-promo__items owl-carousel') }}>
+    <div{{ attributes.addClass('c-slider-promo__items') }}>
       {% for item in items %}
         <div{{ item.attributes.addClass('c-slider-promo__item') }}>{{ item.content }}</div>
       {% endfor %}
@@ -71,7 +71,7 @@
   <div{{ attributes.addClass(classes) }}>
     <div{{ title_attributes.addClass(title_classes) }}>{{ label }}</div>
     {% if multiple %}
-    <div class='c-slider-promo__items owl-carousel'>
+    <div class='c-slider-promo__items'>
       {% endif %}
       {% for item in items %}
         <div{{ item.attributes.addClass('c-slider-promo__item') }}>{{ item.content }}</div>
