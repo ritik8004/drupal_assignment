@@ -17,6 +17,26 @@ use Drupal\node\Entity\Node;
 function alshaya_acm_product_update_8025() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  $strings = [
+    'Free Gift with Purchase' => [
+      'ar' => 'هدية مجانية عند الشراء',
+    ],
+    'Free Gift' => [
+      'ar' => 'هدية مجانية',
+    ],
+    'with this product' => [
+      'ar' => 'مع هذا المنتج',
+    ],
+    'Use Code <span class="coupon-code">@promo_code</span> with this product' => [
+      'ar' => 'استخدم الرمز <span class="coupon-code">@promo_code</span> مع هذا المنتج',
+    ],
+    'Click <span class="coupon-code">@promotion.coupon_code</span> to get a Free Gift' => [
+      'ar' => 'اضغط <span class="coupon-code">@promotion.coupon_code</span> للحصول على هدية مجانية',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
