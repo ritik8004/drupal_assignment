@@ -4,32 +4,30 @@ dimensions:
   plp:
     desktop: z
     mobile: z
-  pdp_main:
-    desktop: y
-    mobile: w
   pdp_thumbnail:
     desktop: y
     mobile: m
+  pdp_main: &common_pdp
+    desktop: y
+    mobile: w
   pdp_zoom:
-    desktop: y
-    mobile: w
+    <<: *common_pdp
   pdp_fullscreen:
-    desktop: y
-    mobile: w
+    <<: *common_pdp
   teaser:
     desktop: z
     mobile: q
-  swatch: &common_style
+  swatch: &common_cart
     desktop: q
     mobile: q
   cart:
-    <<: *common_style
+    <<: *common_cart
   product_category_carousel:
-    <<: *common_style
+    <<: *common_cart
   cart_notification:
-    <<: *common_style
+    <<: *common_cart
   order_detail:
-    <<: *common_style
+    <<: *common_cart
   checkout_summary:
     desktop: m
     mobile: q
