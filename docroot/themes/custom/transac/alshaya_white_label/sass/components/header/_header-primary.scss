@@ -137,6 +137,8 @@ header {
           font-size: 0.75rem;
           box-sizing: border-box;
           outline: transparent;
+          -webkit-appearance: none;
+          border-radius: 0;
 
           &::placeholder {
             font-size: 0.75rem;
