@@ -65,9 +65,13 @@
       padding-left: 1.5rem;
       font-size: 0;
 
+      @include breakpoint($desktop) {
+        height: 2.5rem;
+      }
+
       @include breakpoint($upto-desktop) {
         width: 100%;
-        background: $header_top_bg;
+        background-color: $header_super_category_bg;
         position: static;
         padding: 0;
         transform: none;
@@ -81,6 +85,11 @@
 
       li {
         display: inline-block;
+
+        @include breakpoint($upto-desktop) {
+          background: $header_top_bg;
+          height: 2.8125rem;
+        }
       }
     }
 
