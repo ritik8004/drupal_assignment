@@ -596,6 +596,6 @@ function alshaya_super_category_preprocess_html(&$variables) {
   $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired('en');
 
   if (!empty($term)) {
-    $variables['attributes']['class'][] = strtolower(Html::cleanCssIdentifier('brand--' . $term['label']));
+    $variables['attributes']['class'][] = strtolower(Html::cleanCssIdentifier('super-category-' . $term['label']));
   }
 }
