@@ -263,7 +263,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'free_sku_entity_id' => NULL,
       'free_sku_code' => NULL,
-      'sku_title' => NULL,
+      'free_sku_title' => NULL,
       'promo_title' => NULL,
       'sku_image' => NULL,
       'promo_code' => NULL,
@@ -506,12 +506,29 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
 
+              $free_sku_title = [
+                '#title' => $free_sku_entity->get('name')->getString(),
+                '#type' => 'link',
+                '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+                  [
+                    'acq_sku' => $free_sku_entity->id(),
+                    'js' => 'nojs',
+                  ]),
+                '#attributes' => [
+                  'class' => ["use-ajax above-mobile-block"],
+                  'data-dialog-type' => "modal",
+                  'data-dialog-options' => '{"width":"auto"}',
+                ],
+              ];
+
+              $free_sku_title = \Drupal::service('renderer')->render($free_sku_title);
+
               // Get sku title & image.
               $build['free_gift_promotions'] = [
                 '#theme' => 'free_gift_promotions',
                 '#free_sku_entity_id' => $free_sku_entity->id(),
                 '#free_sku_code' => $free_sku_entity->getSku(),
-                '#sku_title' => $free_sku_entity->get('name')->getString(),
+                '#free_sku_title' => $free_sku_title,
                 '#promo_title' => $free_gift_promotion['text'],
                 '#promo_code' => $free_gift_promotion['coupon_code'],
               ];
