@@ -65,7 +65,7 @@ class CartController extends ControllerBase {
   /**
    * Handler for cart/remove/{sku}.
    */
-  public function cartRemoveSku($sku, $token, $js) {
+  public function cartRemoveSku($sku, $token, $js, $coupon) {
     if (!empty($sku)) {
       $token_value = $this->cart->id() . '/' . $sku;
       if (!$this->csrfTokenGenerator->validate($token, $token_value)) {
@@ -83,6 +83,10 @@ class CartController extends ControllerBase {
 
       // Remove the item from cart.
       $this->cart->removeItemFromCart($sku);
+
+      if ($coupon === 'remove') {
+        $this->cart->setCoupon('');
+      }
 
       try {
         // Update cart, after the item has been removed.
