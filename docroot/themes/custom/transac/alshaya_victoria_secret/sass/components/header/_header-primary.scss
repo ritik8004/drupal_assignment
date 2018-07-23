@@ -414,3 +414,17 @@ header {
 .form-autocomplete.ui-autocomplete-loading {
   background-size: 1.5rem;
 }
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .ui-autocomplete {
+      @include breakpoint($only-mobile) {
+        top: 7.875rem !important;
+
+        html[lang=ar] & {
+          top: 8.5rem !important;
+        }
+      }
+    }
+  }
+}

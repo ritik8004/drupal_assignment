@@ -6,18 +6,6 @@
   .form-item input.error ~ label:not(.error) {
     font-size: 0.75rem;
   }
-
-  .user-form,
-  .change-pwd-form,
-  .user-login-form,
-  .user-pass {
-    .form-email,
-    .form-text,
-    .form-tel,
-    .text-full {
-      font-size: 0.875rem;
-    }
-  }
 }
 
 .path--user {
@@ -163,6 +151,22 @@
   .block-page-title-block {
     @include breakpoint($upto-tablet) {
       padding: 0.875rem 0 0.5rem;
+    }
+  }
+}
+
+.c-user-edit {
+  .field--name-field-first-name input,
+  .field--name-field-last-name input,
+  .mobile-input--wrapper .form-type-tel {
+    margin-top: 0;
+  }
+}
+
+.c-change-password {
+  .form-type-password {
+    label {
+      text-transform: capitalize;
     }
   }
 }

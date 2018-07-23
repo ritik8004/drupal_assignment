@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Re-create all facets and facet blocks.
+ */
+function alshaya_mc_update_8313() {
+  _alshaya_search_api_refactor_sku_base_fields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove 'alshaya_white_label_main_menu' and 'alshaya_white_label_powered'
  * block from DB.
  */

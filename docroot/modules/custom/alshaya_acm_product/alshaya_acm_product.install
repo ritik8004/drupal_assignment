@@ -14,71 +14,47 @@ use Drupal\node\Entity\Node;
  *
  * Adding description field to SKU.
  */
-function alshaya_acm_product_update_8025() {
+function alshaya_acm_product_update_8022() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   \Drupal::service('acq_sku.fields_manager')->addFields();
-}
 
-/**
- * Implements hook_update_N().
- *
- * Add 'short_desc_characters' config.
- */
-function alshaya_acm_product_update_8024() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $options['replace_keys'] = ['short_desc_characters'];
-  $manager->updateConfigs(
-    ['alshaya_acm_product.display_settings'],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_REPLACE_KEY,
-    $options
-  );
-}
+  $strings = [
+    'Free Gift with Purchase' => [
+      'ar' => 'هدية مجانية عند الشراء',
+    ],
+    '<div class="label">Free Gift</div> <div class="free-gift-title"> <span class="title">@free_sku_title</span> with this product </div>' => [
+      'ar' => '<div class="label">هدية مجانية</div><div class="free-gift-title"><span class="title">@free_sku_title</span> مع هذا المنتج </div>',
+    ],
+    'Use Code <span class="coupon-code">@promo_code</span> with this product' => [
+      'ar' => 'استخدم الرمز <span class="coupon-code">@promo_code</span> مع هذا المنتج',
+    ],
+    'Click <span class="coupon-code">@promotion.coupon_code</span> to get a Free Gift' => [
+      'ar' => 'اضغط <span class="coupon-code">@promotion.coupon_code</span> للحصول على هدية مجانية',
+    ],
+  ];
 
-/**
- * Implements hook_update_N().
- *
- * Add new config value for size guide attributes.
- */
-function alshaya_acm_product_update_8023() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.size_guide'],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Add 'short_desc_characters' config.
- */
-function alshaya_acm_product_update_8022() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.display_settings'],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
  * Implements hook_update_N().
  *
  * Update display settings to allow swatch field configuration.
+ * Add 'short_desc_characters' config.
+ * Add new config value for size guide attributes.
  */
 function alshaya_acm_product_update_8021() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.size_guide'],
     'alshaya_acm_product',
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
