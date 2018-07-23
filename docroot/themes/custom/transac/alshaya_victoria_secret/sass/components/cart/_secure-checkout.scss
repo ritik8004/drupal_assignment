@@ -106,6 +106,18 @@
 
   .checkout-progress__step.-previous {
     color: $checkout_progress_current_text;
+
+    &.-complete {
+      @include breakpoint($only-mobile) {
+        &::before {
+          font-size: 2.0625rem;
+        }
+
+        a {
+          line-height: 9.1;
+        }
+      }
+    }
   }
 
   .checkout-progress__step.-current,
@@ -124,9 +136,26 @@
     }
 
     @include breakpoint($only-mobile) {
+      line-height: 8;
+
       &::before {
-        font-size: 0.75rem;
+        font-size: 0.875rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        line-height: 24px;
       }
+
+      &::after {
+        #{$left}: 68%;
+        top: 1.5rem;
+      }
+    }
+  }
+
+  .checkout-progress {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.625rem;
+      padding-top: 0;
     }
   }
 }

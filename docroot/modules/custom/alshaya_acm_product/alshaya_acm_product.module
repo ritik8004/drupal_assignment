@@ -538,6 +538,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
               $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
 
+              // If free gift sku has no media, then we check from the default
+              // image from the configuration.
+              if (empty($free_sku_media) && !empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+                $free_sku_media = [
+                  'label' => $free_sku_entity->label(),
+                  'file' => $default_image,
+                ];
+              }
+
               if ($free_sku_media) {
                 $build['free_gift_promotions']['#sku_image'] = $skuManager->getSkuImage($free_sku_media, '192x168');
               }
@@ -554,7 +563,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
+          $build['image'] = $skuManager->getSkuImage($sku_media, '291x288');
         }
 
         $promotion_types = ['cart'];
@@ -683,6 +692,19 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     if ($sku_media) {
       $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
     }
+
+    // Add PDP slider position config to variable so it is available in themes.
+    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
+    $pdp_image_slider_position = $alshaya_acm_product_slider_settings->get('image_slider_position_pdp');
+    $build['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+    // Add PDP slider position config to drupalSettings so we can use it in JS.
+    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+
+    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+    // Number of items to show in a slider on PDP.
+    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
   }
 }
 

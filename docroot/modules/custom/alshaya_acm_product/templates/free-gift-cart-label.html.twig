@@ -1,5 +1,5 @@
 {% for id, promotion in promos %}
-  {% if promotion.sku_entity_id is not empty %}
+  {% if (promotion.sku_entity_id is not empty) and (promotion.coupon_code is not empty) %}
     <div class="free-gift-promo">
       <div class="gift-message">
         {% trans %}

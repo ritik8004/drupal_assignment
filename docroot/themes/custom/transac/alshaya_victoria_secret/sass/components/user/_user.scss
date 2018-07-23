@@ -162,3 +162,27 @@
     }
   }
 }
+
+.alias--user-register-complete {
+  .c-user-register-complete {
+    h1 {
+      font-family: $vs-regular;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  #block-content {
+    @include breakpoint($only-mobile) {
+      padding: 0;
+
+      html[lang=ar] & {
+        p {
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+}

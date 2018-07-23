@@ -11,6 +11,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Re-create all facets and facet blocks.
+ */
+function alshaya_hm_update_8023() {
+  _alshaya_search_api_refactor_sku_base_fields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the marker file name to make it consistent.
  */
 function alshaya_hm_update_8022() {

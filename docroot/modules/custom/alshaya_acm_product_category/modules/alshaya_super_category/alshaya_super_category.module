@@ -105,9 +105,9 @@ function alshaya_super_category_preprocess_block(&$variables) {
         ->getCurrentLanguage()
         ->getId();
 
-      $term = \Drupal::service('entity.repository')->getTranslationFromContext($term, $langcode);
-      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($term);
-      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $term]);
+      $super_category = \Drupal::service('entity.repository')->getTranslationFromContext($parent, $langcode);
+      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
+      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
 
       $langcode = ($langcode != 'en') ? '-' . $langcode : '';
       // Current active theme object.
@@ -128,6 +128,31 @@ function alshaya_super_category_preprocess_block(&$variables) {
       // Set the site path to brand page.
       if ($parent->id() != alshaya_super_category_get_default_term()) {
         $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function alshaya_super_category_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  switch ($variables['elements']['#base_plugin_id']) {
+    case 'system_branding_block':
+      // Check super category feature status.
+      if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+        return;
+      }
+
+      /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+      $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+      $term = $product_category_tree->getCategoryTermFromRoute();
+
+      if ($term instanceof TermInterface) {
+        $root_terms = $product_category_tree->getCategoryRootTerms();
+        if (in_array($term->id(), array_keys($root_terms))) {
+          $suggestions[] = "block__system_branding__home_block";
+        }
       }
       break;
   }
