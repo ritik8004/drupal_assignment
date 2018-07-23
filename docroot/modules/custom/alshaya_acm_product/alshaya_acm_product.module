@@ -263,7 +263,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'free_sku_entity_id' => NULL,
       'free_sku_code' => NULL,
-      'sku_title' => NULL,
+      'free_sku_title' => NULL,
       'promo_title' => NULL,
       'sku_image' => NULL,
       'promo_code' => NULL,
@@ -506,12 +506,29 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
 
+              $free_sku_title = [
+                '#title' => $free_sku_entity->get('name')->getString(),
+                '#type' => 'link',
+                '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+                  [
+                    'acq_sku' => $free_sku_entity->id(),
+                    'js' => 'nojs',
+                  ]),
+                '#attributes' => [
+                  'class' => ["use-ajax above-mobile-block"],
+                  'data-dialog-type' => "modal",
+                  'data-dialog-options' => '{"width":"auto"}',
+                ],
+              ];
+
+              $free_sku_title = \Drupal::service('renderer')->render($free_sku_title);
+
               // Get sku title & image.
               $build['free_gift_promotions'] = [
                 '#theme' => 'free_gift_promotions',
                 '#free_sku_entity_id' => $free_sku_entity->id(),
                 '#free_sku_code' => $free_sku_entity->getSku(),
-                '#sku_title' => $free_sku_entity->get('name')->getString(),
+                '#free_sku_title' => $free_sku_title,
                 '#promo_title' => $free_gift_promotion['text'],
                 '#promo_code' => $free_gift_promotion['coupon_code'],
               ];
@@ -520,6 +537,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
               $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
+
+              // If free gift sku has no media, then we check from the default
+              // image from the configuration.
+              if (empty($free_sku_media) && !empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+                $free_sku_media = [
+                  'label' => $free_sku_entity->label(),
+                  'file' => $default_image,
+                ];
+              }
 
               if ($free_sku_media) {
                 $build['free_gift_promotions']['#sku_image'] = $skuManager->getSkuImage($free_sku_media, '192x168');
@@ -666,6 +692,19 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     if ($sku_media) {
       $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
     }
+
+    // Add PDP slider position config to variable so it is available in themes.
+    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
+    $pdp_image_slider_position = $alshaya_acm_product_slider_settings->get('image_slider_position_pdp');
+    $build['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+    // Add PDP slider position config to drupalSettings so we can use it in JS.
+    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+
+    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+    // Number of items to show in a slider on PDP.
+    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
   }
 }
 

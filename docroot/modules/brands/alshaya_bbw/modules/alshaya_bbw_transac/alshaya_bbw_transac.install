@@ -11,6 +11,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Re-create all facets and facet blocks.
+ */
+function alshaya_bbw_transac_update_8005() {
+  _alshaya_search_api_refactor_sku_base_fields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update image style of thumbnail on PDP page product zoom.
  */
 function alshaya_bbw_transac_update_8004() {

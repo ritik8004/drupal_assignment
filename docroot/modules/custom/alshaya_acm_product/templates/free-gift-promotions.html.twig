@@ -2,12 +2,12 @@
   {{ sku_image }}
 </div>
 <div class="free-gift-promo-wrapper">
-  <div class="label">
-    {{ 'Free Gift'|t }}
-  </div>
-  <div class="free-gift-title">
-    <span class="title"><a class="use-ajax above-mobile-block" data-dialog-type="modal" data-dialog-options='{"width":"auto"}' href="{{ path('alshaya_acm_product.sku_modal', {'acq_sku': free_sku_entity_id, 'js': 'nojs'}) }}">{{ sku_title }}</a></span> with this product
-  </div>
+  {% trans %}
+    <div class="label">Free Gift</div>
+    <div class="free-gift-title">
+      <span class="title">{{ free_sku_title }}</span> with this product
+    </div>
+  {% endtrans %}
   {% if promo_code is not empty %}
     <div class="free-gift-coupon-code">
       {% trans %}
