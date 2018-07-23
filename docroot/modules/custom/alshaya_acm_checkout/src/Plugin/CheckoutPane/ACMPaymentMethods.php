@@ -129,6 +129,7 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // Since introduction of Surcharge, we inform Magento about selected
     // payment method even before user does place order. By default we select
     // a payment method, we inform Magento about that here.
+    // @TODO: Re-visit when working on CORE-4483.
     if (empty($cart_payment)) {
       $isSurchargeEnabled = $this->getCheckoutHelper()->isSurchargeEnabled();
 

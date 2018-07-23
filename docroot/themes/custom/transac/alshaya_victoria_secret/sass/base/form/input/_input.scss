@@ -32,13 +32,3 @@ form {
     }
   }
 }
-
-.user-page {
-  .user-login-form,
-  .user-form,
-  .change-pwd-form {
-    .form-type-textfield label:not(.error) {
-      font-size: 0.875rem;
-    }
-  }
-}
