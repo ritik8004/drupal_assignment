@@ -554,6 +554,9 @@ class SkuManager {
 
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
+    // Preserve the original view mode passed to this function, since we are
+    // altering this one in case of free gifts.
+    $view_mode_original = $view_mode;
     foreach ($promotion as $promo) {
       $promotion_nids[] = $promo['target_id'];
     }
@@ -589,10 +592,13 @@ class SkuManager {
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
           $free_gift_skus = [];
 
-          if (($view_mode == 'links') &&
-            ($product_view_mode == 'full') &&
+          // Alter view mode while rendering a promotion with free skus on PDP.
+          if (($product_view_mode == 'full') &&
             !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
             $view_mode = 'free_gift';
+          }
+          else {
+            $view_mode = $view_mode_original;
           }
 
           switch ($view_mode) {
