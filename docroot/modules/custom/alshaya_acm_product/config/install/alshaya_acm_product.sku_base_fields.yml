@@ -11,7 +11,6 @@ fields:
     label: 'Description'
     description: 'Descripton about the product.'
     type: 'text_long'
-    display_html: 1
 
   is_buyable:
     label: 'Is Buyable'
