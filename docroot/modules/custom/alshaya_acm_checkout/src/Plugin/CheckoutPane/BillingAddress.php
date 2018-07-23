@@ -95,8 +95,8 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         '#value' => $same_as_shipping,
       ];
 
-      // Sure we want to show shipping in billing for CC? Not really :)
-      // This are all lies added to cover-up surcharge.
+      // We don't want to show shipping in billing for CC.
+      // @TODO: Re-visit when working on CORE-4483.
       if ($is_same) {
         $billing_info['address'] = [];
       }

@@ -422,7 +422,8 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     $totals['grand'] -= $totals['shipping'];
   }
 
-  // Another lie added to cover-up surcharge.
+  // We don't show surcharge in totals on basket page.
+  // @TODO: Re-visit when working on CORE-4483.
   $surcharge = $cart->getExtension('surcharge');
 
   if ($surcharge) {

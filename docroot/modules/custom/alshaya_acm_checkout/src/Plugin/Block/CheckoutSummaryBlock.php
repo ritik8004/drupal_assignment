@@ -413,6 +413,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $surcharge_label = '';
 
     // We process surcharge only if enabled.
+    // @TODO: Re-visit when working on CORE-4483.
     if ($this->checkoutHelper->isSurchargeEnabled()) {
       $cart_totals['grand'] = acq_commerce_get_clean_price($cart_totals['grand']);
 
@@ -429,7 +430,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
             );
           }
           else {
-            // Another lie added to cover-up surcharge.
+            // Remove surcharge amount from grand total.
+            // We are not showing surcharge line item on delivery page.
             $cart_totals['grand'] -= $surcharge['amount'];
           }
         }
