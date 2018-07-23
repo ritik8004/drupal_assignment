@@ -121,6 +121,24 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
   $csrf_token_generator = \Drupal::service('csrf_token');
 
+  $cart_rules = $cart->getCart()->cart_rules;
+  $free_gift_skus = [];
+
+  // Get list of free gift skus based on the cart price rules applicable to
+  // current cart. This is used to mark items & label them as "Free Gift With
+  // Purchase" on the cart.
+  foreach ($cart_rules as $rule_id) {
+    $promotionManager = \Drupal::service('alshaya_acm_promotion.manager');
+    $promotion = $promotionManager->getPromotionByRuleId($rule_id);
+
+    // Get list of free gift skus from promotion node.
+    if (!empty($free_skus = $promotion->get('field_free_gift_skus')->getValue())) {
+      foreach ($free_skus as $free_sku) {
+        $free_gift_skus[] = $free_sku['value'];
+      }
+    }
+  }
+
   foreach ($form['cart'] as $id => &$item) {
     if (is_array($item) && isset($item['quantity'])) {
       /** @var \Drupal\acq_sku\Entity\SKU $sku_entity */
@@ -173,14 +191,16 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
           $item['price']['#final_price'] = $item_cart_price['final_price'];
         }
       }
-      $cart_rules = $cart->getCart()->cart_rules;
-      $cart_has_promo_code = FALSE;
 
-      if ($cart->getCoupon()) {
-        $cart_has_promo_code = TRUE;
+      $is_free_sku_item = FALSE;
+
+      // If current sku entity is one of the free gift sku items, mark it as
+      // free.
+      if (in_array($sku_entity->getSku(), $free_gift_skus)) {
+        $is_free_sku_item = TRUE;
       }
 
-      $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id], $is_item_free, $cart_rules, $cart_has_promo_code);
+      $item['name'] = _alshaya_acm_update_product_name($sku_entity, $item, $cart_item[$id], $is_item_free, $cart_rules, $is_free_sku_item);
 
       $item['quantity']['#type'] = 'select';
       $item['quantity']['#attributes']['gtm-type'] = 'gtm-quantity';
@@ -730,13 +750,13 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
  *   If the line item is  a free item.
  * @param array $cart_rules
  *   Promotion rules applicable to  this cart.
- * @param bool $cart_has_promo_code
- *   Boolean to denote if the cart has a promo code applied to it.
+ * @param bool $is_free_sku_item
+ *   Boolean to denote if the line item is a free gift.
  *
  * @return array
  *   Item name build array.
  */
-function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, array $cart_rules = [], $cart_has_promo_code = FALSE) {
+function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $cart_item, $is_free_item = FALSE, array $cart_rules = [], $is_free_sku_item = FALSE) {
   $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
   $sku_cart_data_cid = 'sku_cart_data:' . $langcode . ':' . $sku_entity->id();
   // If sku entity data exists in cache.
@@ -774,6 +794,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   if ($is_free_item) {
     foreach ($cart_rules as $cart_rule) {
       $promotion = \Drupal::service('alshaya_acm_promotion.manager')->getPromotionByRuleId($cart_rule);
+
       if ($promotion) {
         $promotion_action = $promotion->get('field_acq_promotion_action')->getString();
         if (($promotion_action === 'buy_x_get_y_cheapest_free') &&
@@ -824,6 +845,15 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     }
   }
 
+  // Check all promotions for this SKU entity & filter out the free gift
+  // promotion label which is already applied to the cart.
+  foreach ($promotions as $key => $promotion) {
+    $promotion['render'] = TRUE;
+    if (!empty($promotion['skus']) && in_array($promotion['rule_id'], $cart_rules)) {
+      unset($promotions[$key]);
+    }
+  }
+
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
   $total_price = [
@@ -841,7 +871,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
 
   foreach ($promotions as $key => $promotion) {
     // Render promo label only if no promo code is applied to the cart.
-    if (!empty($promotion['skus']) && (!$cart_has_promo_code)) {
+    if (!empty($promotion['skus']) && (!$is_free_sku_item)) {
       $free_gift_promos[$key] = $promotion;
       $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
       $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
@@ -860,7 +890,8 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   }
 
   // If line item's price is 0, its a free item & set the label for it.
-  if (!empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
+  if ($is_free_sku_item &&
+    !empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
     $free_gift_label['#markup'] = t('Free Gift with Purchase.');
   }
 

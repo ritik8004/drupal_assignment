@@ -617,6 +617,7 @@ class SkuManager {
                 'description' => $description,
                 'discount_type' => $discount_type,
                 'discount_value' => $discount_value,
+                'rule_id' => $promotion_node->get('field_acq_promotion_rule_id')->getString(),
               ];
 
               if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
