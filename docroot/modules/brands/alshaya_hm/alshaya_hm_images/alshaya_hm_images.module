@@ -133,18 +133,18 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       }
     }
   }
-  elseif ($context == 'teaser' && empty($build['image'])) {
-    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', ['plp']);
+  elseif (in_array($context, ['teaser', 'product_category_carousel']) && empty($build['image'])) {
+    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', [$context]);
 
     // If no assets attached & the sku is configurable, try to use the
     // assets attached with first child sku attached.
     if (empty($teaser_assets) && ($sku->bundle() === 'configurable')) {
-      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
+      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', [$context]);
     }
 
     // Try once with plp assets if nothing found for teaser.
     if (empty($teaser_assets)) {
-      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', [$context]);
     }
 
     if (!empty($teaser_assets)) {
