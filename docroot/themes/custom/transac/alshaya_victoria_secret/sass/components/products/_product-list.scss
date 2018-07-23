@@ -346,9 +346,8 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          line-height: 2.5rem;
+          line-height: 2.1875rem;
           font-size: 2rem;
-          z-index: auto;
         }
       }
     }
@@ -359,6 +358,7 @@
   .field--name-field-skus {
     .form-item-quantity::after {
       @include breakpoint($tablet) {
+        font-size: 2rem;
         #{$right}: 0;
       }
     }
@@ -381,6 +381,14 @@
           width: 100%;
         }
       }
+    }
+  }
+}
+
+.view-plp-promotional-banner {
+  img {
+    &:empty {
+      display: none;
     }
   }
 }

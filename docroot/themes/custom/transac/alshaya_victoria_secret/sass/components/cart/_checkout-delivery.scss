@@ -37,6 +37,39 @@
     }
   }
 
+  #edit-guest-delivery-home-address-shipping-methods--wrapper,
+  #edit-member-delivery-home-address-shipping-methods--wrapper,
+  .shipping-methods-container {
+    .form-type-radio {
+      @include breakpoint($tablet) {
+        height: auto;
+        padding: 0.6rem 0.75rem;
+      }
+
+      label.option {
+        &::before {
+          @include breakpoint($tablet) {
+            margin-#{$right}: 0;
+            height: 1rem;
+            width: 1rem;
+          }
+        }
+
+        .shipping-method-price {
+          font-size: 0.75rem;
+        }
+
+        .shipping-method-name {
+          font-size: 0.75rem;
+
+          @include breakpoint($tablet) {
+            width: calc(100% - 1.5rem);
+          }
+        }
+      }
+    }
+  }
+
   #edit-member-delivery-home-addresses {
     .address--controls {
       &.address--deliver-to-this-address a {
@@ -73,5 +106,122 @@
 
   main form .form-actions a {
     font-size: 0.875rem !important;
+  }
+
+  #selected-address-wrapper {
+    .address--controls {
+      &:first-child {
+        display: inline-block;
+        border-#{$right}: 0.0625rem solid $address_book_border;
+      }
+
+      #change-address {
+        padding: 0;
+        font-weight: normal;
+        font-family: $vs-regular;
+      }
+    }
+  }
+}
+
+.user-page.c-delivery-checkout {
+  main {
+    .tabs--content {
+      border-width: 0.0625rem;
+    }
+
+    form {
+      #edit-member-delivery-home.active--tab--content,
+      #edit-guest-delivery-home.active--tab--content {
+        @include breakpoint($tablet) {
+          top: -0.0625rem;
+          #{$left}: 0.0625rem;
+          border-width: 0.0625rem;
+          border-top-width: 0.0625rem;
+        }
+
+        .fieldset-wrapper {
+          @include breakpoint($tablet) {
+            position: relative;
+            #{$left}: -0.03125rem;
+          }
+        }
+      }
+
+      #edit-member-delivery-collect.active--tab--content,
+      #edit-guest-delivery-collect.active--tab--content {
+        #{$left}: -0.0625rem;
+        border-width: 0.0625rem;
+        top: -0.0625rem;
+      }
+    }
+  }
+}
+
+.page-standard.user-page.checkout-delivery {
+  #edit-delivery-tabs {
+    .tab {
+      &.tab-click-collect {
+        @include breakpoint($tablet) {
+          margin-#{$left}: 0.0625rem;
+
+          html[lang=ar] & {
+            margin-right: 0.03125rem;
+            position: relative;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: -0.125rem;
+
+          html[lang=ar] & {
+            margin-right: -0.1875rem;
+          }
+        }
+      }
+
+      &.active--tab--head {
+        @include breakpoint($tablet) {
+          border-width: 0.0625rem;
+        }
+      }
+
+      &.tab-home-delivery:not(.active--tab--head) {
+        @include breakpoint($tablet) {
+          margin-#{$left}: -0.0625rem;
+        }
+      }
+    }
+  }
+
+  &.l-container.l-two--sf.checkout {
+    #edit-delivery-tabs {
+      .tab {
+        &.tab-click-collect {
+          &.active--tab--head {
+            @include breakpoint($only-tablet) {
+              margin-#{$left}: 0;
+
+              html[lang=ar] & {
+                margin-right: 0;
+              }
+            }
+
+            @include breakpoint($desktop) {
+              html[lang=ar] & {
+                margin-right: -0.1875rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .address {
+    .address--deliver-to-this-address a,
+    .address--controls {
+      padding: 0.6rem 0.7rem;
+    }
   }
 }

@@ -703,7 +703,7 @@
   .c-facet__blocks {
     @include breakpoint($only-tablet) {
       top: 2.1875rem;
-      #{$right}: -8.938rem;
+      #{$left}: 0;
     }
 
     @include breakpoint($only-mobile) {
