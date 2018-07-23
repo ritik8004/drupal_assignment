@@ -21,6 +21,15 @@
           top: 0.625rem;
           left: 0.625rem;
         }
+
+        .acq-content-product-modal & {
+          left: 3rem !important;
+          z-index: 4;
+
+          @include breakpoint($only-tablet) {
+            left: 4rem !important;
+          }
+        }
       }
 
       &-right {
@@ -31,6 +40,15 @@
 
           @include breakpoint($only-tablet) {
             right: 5rem;
+          }
+        }
+
+        .acq-content-product-modal & {
+          right: 3rem !important;
+          z-index: 4;
+
+          @include breakpoint($only-tablet) {
+            right: 4rem !important;
           }
         }
 
@@ -59,6 +77,15 @@
           }
         }
 
+        .acq-content-product-modal & {
+          left: 3rem !important;
+          z-index: 4;
+
+          @include breakpoint($only-tablet) {
+            left: 4rem !important;
+          }
+        }
+
         .view-product-slider & {
           left: 0.5rem;
         }
@@ -78,6 +105,15 @@
 
           @include breakpoint($only-tablet) {
             right: 5rem;
+          }
+        }
+
+        .acq-content-product-modal & {
+          right: 3rem !important;
+          z-index: 4;
+
+          @include breakpoint($only-tablet) {
+            right: 4rem !important;
           }
         }
 

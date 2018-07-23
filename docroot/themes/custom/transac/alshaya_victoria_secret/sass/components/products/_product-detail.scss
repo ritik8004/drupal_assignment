@@ -170,10 +170,26 @@
         span {
           font-size: 0.875rem;
           line-height: 1.29;
-          padding: 0.5625rem 0.6119rem;
+          padding: 0.5625rem 0;
           margin: 0.4375rem 0 0;
           margin-#{$right}: 0.625rem;
-          min-width: 2.375rem;
+          width: 2.375rem;
+          border: 1px solid $pdp_color_attribute;
+          display: block;
+          text-align: center;
+
+          &:hover {
+            border: 1px solid $pdp_color_attribute_hover;
+            background-color: $pdp_color_attribute_hover_bg;
+          }
+
+          &.picked {
+            border: 1px solid $pdp_color_attribute_picked;
+
+            &:hover {
+              background-color: $pdp_color_attribute_picked_hover;
+            }
+          }
         }
       }
     }
@@ -395,6 +411,10 @@
           background-size: 100% 100%;
           border: 1px solid $pdp_swatch_disabled;
           color: $pdp_swatch_disabled;
+
+          &:hover {
+            border: 1px solid $pdp_color_attribute !important;
+          }
         }
       }
     }

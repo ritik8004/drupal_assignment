@@ -420,6 +420,17 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
     $totals['grand'] -= $totals['shipping'];
   }
 
+  // We don't show surcharge in totals on basket page.
+  // @TODO: Re-visit when working on CORE-4483.
+  $surcharge = $cart->getExtension('surcharge');
+
+  if ($surcharge) {
+    $surcharge['amount'] = (float) $surcharge['amount'];
+    if ($surcharge['amount'] > 0) {
+      $totals['grand'] -= $surcharge['amount'];
+    }
+  }
+
   // Add shipping info.
   $cart_rules_applied = $cart->getCart()->cart_rules;
   if (!empty($cart_rules_applied)) {
