@@ -5,42 +5,42 @@
   }
 
   .st_facebook_custom {
-    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-facebookselect.png', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-facebookselect.png', 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-facebookselect.png', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-facebookselect.png', 1.6875rem, 1.6875rem);
     }
   }
 
   .st_twitter_custom {
-    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-twitterselect.png', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-twitterselect.png', 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-twitterselect.png', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-twitterselect.png', 1.6875rem, 1.6875rem);
     }
   }
 
   .st_pinterest_custom {
-    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-pinterestselect.png', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-pinterestselect.png', 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-pinterestselect.png', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-pinterestselect.png', 1.6875rem, 1.6875rem);
     }
   }
 
   .st_instagram_custom {
-    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-instagramselect.png', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-instagramselect.png', 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-instagramselect.png', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-instagramselect.png', 1.6875rem, 1.6875rem);
     }
   }
 
   .st_youtube_custom {
-    @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-youtubeselect.png', 1.6875rem, 1.6875rem);
+    @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtubeselect.png', 1.6875rem, 1.6875rem);
 
     &:hover::before {
-      @include pdp_icon_img('../../alshaya_white_label/imgs/social-icons/pdp/ic-youtubeselect.png', 1.6875rem, 1.6875rem);
+      @include pdp_icon_img('#{$base_theme_img_directory_path}/social-icons/pdp/ic-youtubeselect.png', 1.6875rem, 1.6875rem);
     }
   }
 }
