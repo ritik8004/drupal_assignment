@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_search_api;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -21,6 +22,13 @@ class AlshayaSearchApiFacetsManager {
   private $configFactory;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  private $languageManager;
+
+  /**
    * The Theme Manager service.
    *
    * @var \Drupal\Core\Theme\ThemeManagerInterface
@@ -32,12 +40,16 @@ class AlshayaSearchApiFacetsManager {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The Config Factory service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
    *   The Theme Manager service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
+                              LanguageManagerInterface $language_manager,
                               ThemeManagerInterface $theme_manager) {
     $this->configFactory = $config_factory;
+    $this->languageManager = $language_manager;
     $this->themeManager = $theme_manager;
   }
 
@@ -101,6 +113,36 @@ class AlshayaSearchApiFacetsManager {
     $block_data['settings']['id'] = $block_data['plugin'];
     $block_data['settings']['label'] = $data['name'];
     $this->configFactory->getEditable($block_id)->setData($block_data)->save();
+
+    // Translate facet block titles.
+    foreach ($this->getNonDefaultLanguageCodes() ?? [] as $langcode) {
+      $config = $this->languageManager->getLanguageConfigOverride($langcode, $block_id);
+      $settings = [];
+      // @codingStandardsIgnoreLine
+      $settings['label'] = t($data['name'], [], ['langcode' => $langcode]);
+      $config->set('settings', $settings);
+      $config->save();
+    }
+  }
+
+  /**
+   * Get non default language codes.
+   *
+   * This will return [ar] for most of our cases.
+   *
+   * @return array
+   *   Non-default language codes.
+   */
+  private function getNonDefaultLanguageCodes() {
+    static $langcodes;
+
+    if (empty($langcodes)) {
+      $languages = $this->languageManager->getLanguages();
+      unset($languages[$this->languageManager->getDefaultLanguage()->getId()]);
+      $langcodes = array_keys($languages);
+    }
+
+    return $langcodes;
   }
 
   /**
