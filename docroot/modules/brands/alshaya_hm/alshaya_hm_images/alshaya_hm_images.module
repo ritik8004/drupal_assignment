@@ -226,10 +226,10 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
 /**
  * Implements hook_acq_sku_cart_media_alter().
  */
-function alshaya_hm_images_acq_sku_cart_media_alter($sku, &$sku_image) {
+function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $context = 'cart') {
   if (empty($sku_image)) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart', ['cart']);
+    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart', [$context]);
 
     if (!empty($cart_assets)) {
       $sku_image = [
