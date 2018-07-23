@@ -177,18 +177,20 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *
    * @param null|object $term
    *   (optional) The term object or nothing.
+   * @param string $langcode
+   *   (optional) The language code.
    *
    * @return \Drupal\taxonomy\TermInterface|mixed|null
    *   Return the parent term object or NULL.
    */
-  public function getCategoryTermRootParent($term = NULL) {
+  public function getCategoryTermRootParent($term = NULL, $langcode = NULL) {
     if (empty($term) || !$term instanceof  TermInterface) {
       $term = $this->getCategoryTermFromRoute();
     }
 
     if ($term instanceof TermInterface && parent::VOCABULARY_ID == $term->bundle()) {
       // Get the top level parent id if parent exists.
-      $parents = $this->getSuperCategoryMapping();
+      $parents = $this->getSuperCategoryMapping($langcode);
       return isset($parents[$term->id()]) ? $parents[$term->id()] : NULL;
     }
     return NULL;
@@ -200,10 +202,10 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    * @return array|\Drupal\taxonomy\TermInterface|mixed|null
    *   Return array of term or term object or term id.
    */
-  public function getCategoryTermRequired() {
-    $term = $this->getCategoryTermRootParent();
+  public function getCategoryTermRequired($langcode = NULL) {
+    $term = $this->getCategoryTermRootParent(NULL, $langcode);
     if (empty($term)) {
-      $parent_terms = $this->getCategoryTreeCached();
+      $parent_terms = $this->getCategoryTreeCached(0, $langcode);
       $tid = alshaya_super_category_get_default_term();
       return isset($parent_terms[$tid]) ? $parent_terms[$tid] : NULL;
     }
@@ -212,9 +214,18 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
 
   /**
    * Cache super category term mapping.
+   *
+   * @param string $langcode
+   *   (optional) The language code.
+   *
+   * @return array
+   *   Return the associative array of term.
    */
-  protected function getSuperCategoryMapping() {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  protected function getSuperCategoryMapping($langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
     $cid = 'super_category_map_' . $langcode;
 
     if ($cache_terms = $this->cache->get($cid)) {
