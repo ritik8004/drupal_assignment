@@ -983,6 +983,11 @@
     display: none !important;
   }
 
+  // Hide the div if no content.
+  &:empty {
+    display: none;
+  }
+
   .pac-icon {
     @include u-visibility(none);
   }

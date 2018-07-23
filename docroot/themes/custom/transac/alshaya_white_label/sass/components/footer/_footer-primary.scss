@@ -647,9 +647,11 @@
 
     li {
       padding: 0.375rem;
+      display: inline-flex;
 
       a {
         color: $lang_switch_list;
+        line-height: normal;
 
         &.is-active {
           color: $lang_switch_list;

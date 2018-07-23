@@ -202,6 +202,23 @@ trait CheckoutDeliveryMethodTrait {
   }
 
   /**
+   * Get Address Book Manager helper service object.
+   *
+   * @return \Drupal\alshaya_addressbook\AlshayaAddressBookManager
+   *   Address Book Manager service object.
+   */
+  protected static function getAddressBookManager() {
+    static $service;
+
+    if (empty($service)) {
+      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $service */
+      $service = \Drupal::service('alshaya_addressbook.manager');
+    }
+
+    return $service;
+  }
+
+  /**
    * Get address info from cart or history.
    *
    * @param string $method
