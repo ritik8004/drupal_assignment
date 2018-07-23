@@ -229,20 +229,11 @@ class SkuAssetManager {
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      // Use res attribute in place of width & height while calculating images
-      // for swatches.
-//      if (empty($style)) {
-//        $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-//        $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
-//      }
-//      else {
-
       $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] ."]";
       $detect = new MobileDetect();
       if ($detect->isMobile()) {
         $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] ."]";
       }
-      //}
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $page_type);
