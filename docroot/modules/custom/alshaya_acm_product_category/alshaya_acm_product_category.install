@@ -65,7 +65,7 @@ function alshaya_acm_product_category_update_8013() {
  *
  * Update view of PLP promotional banner to hide if empty.
  */
-function alshaya_acm_product_category_update_8013() {
+function alshaya_acm_product_category_update_8012() {
   alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_product_category');
 }
 
