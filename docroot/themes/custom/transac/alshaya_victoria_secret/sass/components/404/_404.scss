@@ -1,0 +1,89 @@
+.page-404,
+.page-maintenance {
+  .c-content__region {
+    padding: 1.5rem 0.5rem 0;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.5rem;
+    }
+
+    .not-found {
+      background: $maintenance_container_bg;
+      padding-top: 0;
+
+      @include breakpoint($only-mobile) {
+        height: 30.5rem;
+      }
+
+      &::after {
+        content: none;
+      }
+
+      .not-found__body {
+        top: 2.75rem;
+        #{$right}: 3.6875rem;
+
+        @include breakpoint($tablet) {
+          width: 50%;
+        }
+
+        @include breakpoint($only-tablet) {
+          position: absolute;
+          #{$right}: -19rem;
+          height: 16rem;
+          top: 0;
+        }
+
+        @include breakpoint($only-mobile) {
+          position: absolute;
+          height: 11.1875rem;
+          top: 63%;
+          padding-top: 0;
+          #{$right}: -1%;
+        }
+
+        .not-found__body__container {
+          p {
+            font-size: 2.25rem;
+            line-height: 1;
+
+            @include breakpoint($upto-desktop) {
+              font-size: 1.5rem;
+            }
+
+            a {
+              font-size: 1.25rem;
+
+              @include breakpoint($upto-desktop) {
+                font-size: 1rem;
+              }
+            }
+          }
+        }
+      }
+
+      .not-found__image {
+        display: block;
+
+        img {
+          @include breakpoint($only-tablet) {
+            width: 40%;
+          }
+
+          @include breakpoint($only-mobile) {
+            width: 100%;
+            max-height: 19.875rem;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+
+  .maintenance__logo {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    float: none;
+    margin-top: 0;
+  }
+}

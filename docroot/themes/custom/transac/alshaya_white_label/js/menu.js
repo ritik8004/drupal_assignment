@@ -190,7 +190,7 @@
         $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
           setTimeout(function () {
             $(parent).parent().addClass('active--menu--links');
-          }, 300);
+          }, 500);
           $(parent).children('.menu--two__list').css('transition-delay', '0.3s');
         });
 

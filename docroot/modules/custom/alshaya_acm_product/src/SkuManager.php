@@ -1453,6 +1453,7 @@ class SkuManager {
 
           if (isset($selected[$configurable_code]) && $selected[$configurable_code] == $key) {
             unset($selected[$configurable_code]);
+            unset($configurables[$configurable_code]['#options_attributes'][$key]['selected']);
           }
 
           $configurables[$configurable_code]['#options_attributes'][$key]['disabled'] = 'disabled';
@@ -1555,7 +1556,7 @@ class SkuManager {
     if ($sku_id) {
       $first_child = SKU::load($sku_id);
 
-      if ($first_child instanceof SKUInterface) {
+      if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
         // We do it again to get current translation.
         // We expect no performance impact as all the skus are already loaded
         // multiple times in the request.
