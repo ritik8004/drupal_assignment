@@ -21,6 +21,16 @@ function alshaya_super_category_update_dependencies() {
 /**
  * Implements hook_update_n().
  *
+ * Update meta tag title token for promotion content type.
+ */
+function alshaya_super_category_update_8003() {
+  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
+    ->set('tags.title', '[node:field_acq_promotion_label] | [supercategory:meta_title]')->save();
+}
+
+/**
+ * Implements hook_update_n().
+ *
  * Update meta tag title token for product, advanced page and product category.
  */
 function alshaya_super_category_update_8002() {
@@ -31,7 +41,7 @@ function alshaya_super_category_update_8002() {
     \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
       ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
     \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
-      ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
+      ->set('tags.title', '[node:field_acq_promotion_label] | [supercategory:meta_title]')->save();
     \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
       ->set('tags.title', '[term:name] | [supercategory:meta_title]')->save();
   }
