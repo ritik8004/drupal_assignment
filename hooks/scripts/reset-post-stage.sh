@@ -27,7 +27,7 @@ cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 # Take dumps of all the given sites before start.
 echo "$sites" | while IFS= read -r site
 do
-  drush8 sql-dump --result-folder=~/backup/$target_env/pre-stage --gzip
+  drush8 sql-dump --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
 done
 
 # Get the environment without the "01" prefix.
@@ -85,5 +85,5 @@ done
 # Take dumps of all the given sites at the end.
 echo "$sites" | while IFS= read -r site
 do
-  drush8 sql-dump --result-folder=~/backup/$target_env/post-stage --gzip
+  drush8 sql-dump --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
 done
