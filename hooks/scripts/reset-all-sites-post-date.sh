@@ -17,4 +17,4 @@ cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 # Get the list of all site names of the factory.
 sites=$(drush8 acsf-tools-list --fields)
 
-./../hooks/scripts/reset-post-stage.sh $target_env $sites
+./../hooks/scripts/reset-post-stage.sh $target_env "$sites"
