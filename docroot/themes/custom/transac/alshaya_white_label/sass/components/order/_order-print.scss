@@ -93,6 +93,16 @@ body {
         white-space: nowrap;
       }
     }
+
+    &.vat-row {
+      td.warm--white {
+        background-color: $basket_vat_price_bg;
+
+        .dark {
+          font-weight: normal;
+        }
+      }
+    }
   }
 
   .right--align {

@@ -36,6 +36,14 @@
     }
   }
 
+  .total-row {
+    &.vat-container {
+      td.warm--white {
+        font-family: $vs-regular;
+      }
+    }
+  }
+
   .sub-total-row td {
     padding-top: 1.125rem;
   }

@@ -1013,6 +1013,12 @@
       }
     }
   }
+
+  tr[data-drupal-selector=edit-totals-vat-tax] {
+    td:last-child {
+      background-color: $basket_vat_price_bg !important;
+    }
+  }
 }
 
 html[lang=ar] {

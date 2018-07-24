@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Database\Connection;
@@ -43,6 +44,13 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   protected $configFactory;
 
   /**
+   * The path alias manager.
+   *
+   * @var \Drupal\Core\Path\AliasManagerInterface
+   */
+  protected $aliasManager;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
@@ -61,11 +69,14 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   Database connection.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
+   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
+   *   The path alias manager.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->requestStack = $request_stack;
+    $this->aliasManager = $alias_manager;
     parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection);
   }
 
@@ -92,9 +103,37 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       elseif ($request->get('_route') == 'view.search.page') {
         if ($brand = $request->query->get('brand')) {
           if (!is_numeric($brand)) {
-            $params = Url::fromUserInput("/$brand")->getRouteParameters();
-            if (!empty($params['taxonomy_term'])) {
-              $brand = $params['taxonomy_term'];
+            // On search result page when user tries to switch content language,
+            // it throws an error.
+            //
+            // Because the url will generate link with /ar but other parameters
+            // are still in english and system will try to look for english
+            // brand name in arabic, and vice versa.
+            // Handle the error by loading the term id by detecting brand
+            // parameter's language.
+            $alias_lang = NULL;
+            if ($this->languageManager->getCurrentLanguage()->getId() == 'ar' && !preg_match("/\p{Arabic}/u", $brand)) {
+              $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
+            }
+            elseif ($this->languageManager->getCurrentLanguage()->getId() == 'en' && preg_match("/\p{Arabic}/u", $brand)) {
+              // Redirect to correct language, based on user input.
+              $languages = $this->languageManager->getLanguages();
+              if (count($languages) > 1 && array_key_exists('ar', $languages)) {
+                $alias_lang = $languages['ar']->getId();
+              }
+            }
+            else {
+              // If brand parameter and current language both are same then
+              // try to get taxonomy term from brand only.
+              $params = Url::fromUserInput("/$brand")->getRouteParameters();
+              if (!empty($params['taxonomy_term'])) {
+                $brand = $params['taxonomy_term'];
+              }
+            }
+
+            if ($alias_lang) {
+              $alias = $this->aliasManager->getPathByAlias('/' . $brand, $alias_lang);
+              $brand = str_replace('/taxonomy/term/', '', $alias);
             }
           }
 
@@ -199,11 +238,17 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   /**
    * Get super category term from url.
    *
+   * @param null|object $term
+   *   (optional) The term object.
+   * @param string $langcode
+   *   (optional) The language code.
+   *
    * @return array|\Drupal\taxonomy\TermInterface|mixed|null
    *   Return array of term or term object or term id.
    */
-  public function getCategoryTermRequired($langcode = NULL) {
-    $term = $this->getCategoryTermRootParent(NULL, $langcode);
+  public function getCategoryTermRequired($term = NULL, $langcode = NULL) {
+    $term = $this->getCategoryTermRootParent($term, $langcode);
+
     if (empty($term)) {
       $parent_terms = $this->getCategoryTreeCached(0, $langcode);
       $tid = alshaya_super_category_get_default_term();
