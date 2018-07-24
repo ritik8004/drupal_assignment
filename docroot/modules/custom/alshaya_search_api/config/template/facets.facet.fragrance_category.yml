@@ -11,9 +11,9 @@ third_party_settings:
   alshaya_search:
     display_textbox: 0
     display_textbox_item_count: ''
-id: fragrancecat
+id: fragrance_category
 name: Fragrance Category
-url_alias: fragrancecat
+url_alias: fragrance_category
 weight: 0
 min_count: 1
 show_only_one_result: false
