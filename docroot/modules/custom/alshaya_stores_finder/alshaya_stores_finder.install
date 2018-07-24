@@ -11,17 +11,6 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update().
  *
- * Update the store finder label position for arabic.
- */
-function alshaya_stores_finder_update_8106() {
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
-    ->save();
-}
-
-/**
- * Implements hook_update().
- *
  * Update the store finder config to install label position settings.
  */
 function alshaya_stores_finder_update_8104() {
@@ -34,7 +23,7 @@ function alshaya_stores_finder_update_8104() {
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -105,6 +94,6 @@ function alshaya_stores_finder_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_stores_finder_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }

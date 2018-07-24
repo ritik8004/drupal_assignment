@@ -18,12 +18,14 @@
     <div{{ attributes.addClass('l-container') }}>
 
       <main>
-        <div class="c-content">
+        <div class="c-content page-maintenance">
           <div class="c-content__region">
             <div class="maintenance__logo--wrapper">
+              {% block maintenanceLogo %}
               <div class="maintenance__logo">
                 {% include active_theme_path() ~ '/site-logo-ar.svg' %}
               </div>
+              {% endblock %}
             </div>
             <div class="l-container not-found">
               {% if maintenance_text is not empty %}

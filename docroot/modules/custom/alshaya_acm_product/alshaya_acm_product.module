@@ -431,7 +431,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if ($selected_value) {
           $selected_sku = SKU::load($selected_value);
 
-          if ($selected_sku instanceof SKUInterface) {
+          if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
             $sku_for_gallery = $selected_sku;
           }
         }
@@ -487,7 +487,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
+          $build['image'] = $skuManager->getSkuImage($sku_media, '291x288');
         }
 
         $promotion_types = ['cart'];

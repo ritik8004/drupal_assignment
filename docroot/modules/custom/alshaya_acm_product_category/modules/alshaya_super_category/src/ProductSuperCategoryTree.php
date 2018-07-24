@@ -236,11 +236,14 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   /**
    * Get super category term from url.
    *
+   * @param null|object $term
+   *   (optional) The term object.
+   *
    * @return array|\Drupal\taxonomy\TermInterface|mixed|null
    *   Return array of term or term object or term id.
    */
-  public function getCategoryTermRequired() {
-    $term = $this->getCategoryTermRootParent();
+  public function getCategoryTermRequired($term = NULL) {
+    $term = $this->getCategoryTermRootParent($term);
     if (empty($term)) {
       $parent_terms = $this->getCategoryTreeCached();
       $tid = alshaya_super_category_get_default_term();

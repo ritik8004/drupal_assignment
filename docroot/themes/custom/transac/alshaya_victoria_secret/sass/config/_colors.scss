@@ -273,10 +273,11 @@ $breadcrumb_link_hover: $black;
 $breadcrumb_link_active: $black;
 
 // 404
-$maintenance_container_border: $vanilla;
-$maintenance_container_border_top: $white-four;
-$maintenance_body_bg: $matterhorn;
-$maintenance_link: $cerulean-two;
+$maintenance_container_bg: $nero;
+$maintenance_container_border: $nero;
+$maintenance_container_border_top: $nero;
+$maintenance_body_bg: $vanilla;
+$maintenance_link: $brilliant-rose;
 
 // Language Switcher
 $lang_switch: $brilliant-rose;
@@ -553,6 +554,11 @@ $pdp_title_section_border: $gainsboro;
 $pdp_mobile_wrapper: $white-five;
 $pdp_sell_title: $nero;
 $pdp_title_collection_name: $ash-triplet;
+$pdp_color_attribute: $gainsboro;
+$pdp_color_attribute_hover: $nero;
+$pdp_color_attribute_hover_bg: $vanilla;
+$pdp_color_attribute_picked: $black;
+$pdp_color_attribute_picked_hover: rgba(51, 51, 51, 0.06);
 $pdp_white_color_attribute: $white;
 $pdp_white_color_attribute_hover_border: $black;
 $pdp_white_color_attribute_border: $nero;

@@ -9,6 +9,14 @@
   .c-products__item__label {
     font-size: 0.875rem;
   }
+
+  .owl-carousel {
+    .owl-item {
+      a > img {
+        max-width: 8.875rem;
+      }
+    }
+  }
 }
 
 .horizontal-upell,

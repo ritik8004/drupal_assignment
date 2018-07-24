@@ -65,7 +65,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
 
     $cart = $this->getCart();
     $address_info = $this->getAddressInfo('hd');
-    $address = !empty($address_info['address']) ? $address_info['address'] : [];
 
     $pane_form['address_form'] = [
       '#type' => 'container',
@@ -162,19 +161,17 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       ],
     ];
 
-    if (!empty($address['customer_address_id'])) {
+    if (!empty($address_info['customer_address_id'])) {
       $pane_form['header']['title']['#markup'] = '<div class="title delivery-address-title">' . $this->t('deliver to') . '</div>';
 
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
-      if ($entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id'])) {
+      if ($entity = self::getAddressBookManager()->getUserAddressByCommerceId($address_info['customer_address_id'])) {
         $view_builder = \Drupal::entityTypeManager()->getViewBuilder('profile');
         $pane_form['address']['selected']['display'] = $view_builder->view($entity, 'teaser');
 
         GuestDeliveryHome::exposeSelectedDeliveryAddressToGtm($entity->get('field_address')->first()->getValue());
 
-        $shipping_methods = self::generateShippingEstimates($entity);
+        $full_address = $this->getCheckoutHelper()->getFullAddressFromEntity($entity);
+        $shipping_methods = GuestDeliveryHome::generateShippingEstimates($full_address);
         $default_shipping = $cart->getShippingMethodAsString();
 
         // Convert to code.
@@ -245,18 +242,9 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       $address_info = $this->getAddressInfo('hd');
       $address = $address_info['address'];
 
-      /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-      $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-      $entity = $address_book_manager->getUserAddressByCommerceId($address['customer_address_id']);
+      $entity = self::getAddressBookManager()->getUserAddressByCommerceId($address_info['customer_address_id']);
       if ($entity instanceof Profile) {
-        $address = $address_book_manager->getAddressFromEntity($entity);
-
-        $update = [];
-        $update['customer_address_id'] = $address['customer_address_id'];
-        $update['country_id'] = $address['country_id'];
-        $update['customer_id'] = $cart->customerId();
-
-        $cart->setShipping($update);
+        $cart->setShipping($address);
 
         /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
         $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
@@ -281,26 +269,6 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
   }
 
   /**
-   * Helper function to get shipping estimates.
-   *
-   * @param \Drupal\profile\Entity\Profile $entity
-   *   Address entity.
-   *
-   * @return array
-   *   Available shipping methods.
-   */
-  public static function generateShippingEstimates(Profile $entity) {
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-    $full_address = $address_book_manager->getAddressFromEntity($entity);
-    // Use the estimate delivery method with full address every-time.
-    // This is a hack to avoid issues with estimate shipping having customer id.
-    unset($full_address['address_id']);
-    unset($full_address['customer_address_id']);
-    return GuestDeliveryHome::generateShippingEstimates($full_address);
-  }
-
-  /**
    * Validate callback to save new/updated address and use it for shipping.
    *
    * @param mixed|array $form
@@ -314,16 +282,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return;
     }
 
-    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-
     $values = $form_state->getValues();
     $address_values = $values['member_delivery_home']['address_form']['form'];
     $address_values['address_id'] = $values['member_delivery_home']['address_form']['address_id'];
 
     if (!empty($address_values['address_id'])) {
       /** @var \Drupal\profile\Entity\Profile $profile */
-      $profile = $address_book_manager->getUserAddressByCommerceId($address_values['address_id']);
+      $profile = self::getAddressBookManager()->getUserAddressByCommerceId($address_values['address_id']);
     }
     else {
       /** @var \Drupal\profile\Entity\Profile $profile */
@@ -347,12 +312,13 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
     try {
       $cart = $this->getCart();
 
-      if ($customer_address_id = $address_book_manager->pushUserAddressToApi($profile)) {
-        $update = [];
-        $update['customer_address_id'] = $customer_address_id;
-        $update['country_id'] = $address_values['country_code'];
-        $update['customer_id'] = $cart->customerId();
-
+      if ($customer_address_id = self::getAddressBookManager()->pushUserAddressToApi($profile)) {
+        $update = self::getCheckoutHelper()->getFullAddressFromEntity($profile);
+        $this->getCheckoutHelper()->setCartShippingHistory(
+          'hd',
+          $update,
+          ['customer_address_id' => $customer_address_id]
+        );
         $cart->setShipping($update);
       }
     }

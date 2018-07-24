@@ -56,12 +56,3 @@
     height: auto;
   }
 }
-
-.c-content {
-  form:not(.alshaya-acm-customer-order-list-search):not(.alshaya-stores-available-stores):not(.store-finder-exposed-form) {
-    input[type="tel"],
-    input[type="text"] {
-      font-size: 0.875rem;
-    }
-  }
-}

@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: node__advanced_page
+label: 'Content: Advanced Page'
+tags:
+  description: '[node:summary]'
+  title: '[node:title] | [site:name]'
+  og_description: '[node:summary_custom:155]'
+  og_locale_alternative: '[node:locale:alternate]'

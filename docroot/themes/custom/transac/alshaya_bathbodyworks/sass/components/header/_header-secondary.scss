@@ -72,6 +72,8 @@
 
   @include breakpoint($only-mobile) {
     height: 3rem;
+    box-shadow: initial;
+    border-bottom: 2px solid $header_border;
 
     .navbar-fixed-top {
       height: 3rem;

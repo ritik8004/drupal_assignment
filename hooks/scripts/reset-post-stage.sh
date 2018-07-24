@@ -11,19 +11,28 @@ then
   exit
 fi
 
-# Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+sites="$2"
 
-# Take dumps of all the sites before start.
-drush8 acsf-tools-dump --result-folder=~/backup/$target_env/pre-stage --gzip
+if [ -z "$sites" ]
+then
+  echo "A list of sites to reset is required. You probably need to use wrapper scripts reset-all-sites-post-stage.sh or reset-individual-sites-post-stage.sh instead."
+  exit
+fi
 
 # Get the environment without the "01" prefix.
 env=${target_env:2}
 
-# Get the list of all site names of the factory.
-echo "Fetching the list of sites."
-sites=$(drush8 acsf-tools-list --fields)
+# Move to proper directory to get access to drush acsf-tools commands.
+cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 
+echo "Starting post stage reset process on $sites."
+
+# Take dumps of all the given sites before start.
+echo "$sites" | while IFS= read -r site
+do
+  echo "Taking database dump of $site before doing anything."
+  drush8 @alshaya.$target_env sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
+done
 
 ###### CLEAR + SYNC.
 echo "$sites" | while IFS= read -r site
@@ -74,6 +83,9 @@ do
 
 done
 
-
-# Take dumps of all the sites.
-drush8 acsf-tools-dump --result-folder=~/backup/$target_env/post-stage --gzip
+# Take dumps of all the given sites at the end.
+echo "$sites" | while IFS= read -r site
+do
+  echo "Taking database dump of $site after process."
+  drush8 @alshaya.$target_env sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
+done

@@ -1044,7 +1044,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       return '';
     }
 
-    $shipping = (array) $cart->getShipping();
+    $shipping = $this->cartHelper->getShipping($cart);
     $address = $this->getAddressArrayFromMagentoAddress($shipping);
     return $this->getAddressShippingAreaParentValue($address, $shipping);
   }
