@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Adding description field to SKU.
  */
-function alshaya_acm_product_update_8022() {
+function alshaya_acm_product_update_8030() {
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
@@ -22,8 +22,11 @@ function alshaya_acm_product_update_8022() {
     'Free Gift with Purchase' => [
       'ar' => 'هدية مجانية عند الشراء',
     ],
-    '<div class="label">Free Gift</div> <div class="free-gift-title"> <span class="title">@free_sku_title</span> with this product </div>' => [
-      'ar' => '<div class="label">هدية مجانية</div><div class="free-gift-title"><span class="title">@free_sku_title</span> مع هذا المنتج </div>',
+    'Free Gift' => [
+      'ar' => 'هدية مجانية',
+    ],
+    'with this product' => [
+      'ar' => 'مع هذا المنتج',
     ],
     'Use Code <span class="coupon-code">@promo_code</span> with this product' => [
       'ar' => 'استخدم الرمز <span class="coupon-code">@promo_code</span> مع هذا المنتج',
