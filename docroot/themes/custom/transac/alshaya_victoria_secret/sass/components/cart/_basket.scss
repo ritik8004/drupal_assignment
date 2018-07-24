@@ -29,6 +29,22 @@
     table {
       font-family: $vs-regular;
 
+      td {
+        select {
+          padding-#{$left}: 0.75rem;
+        }
+
+        .form-type-select {
+          .ajax-progress-throbber {
+            @include breakpoint($only-mobile) {
+              top: 0.8125rem;
+              #{$right}: auto;
+              #{$left}: -2.2rem;
+            }
+          }
+        }
+      }
+
       tr {
         td {
           .dark a {
@@ -72,10 +88,6 @@
       }
 
       &.name {
-        @include breakpoint($only-mobile) {
-          padding-top: 0;
-        }
-
         .image {
           @include breakpoint($only-mobile) {
             width: 7rem !important;
@@ -90,12 +102,11 @@
           }
 
           img {
-            max-width: 6.5rem;
-            padding: 3px;
+            height: 8.125rem;
+            padding: 2px;
 
             @include breakpoint($only-tablet) {
-              max-width: 5.0625rem;
-              padding: 3px;
+              height: 6.3125rem;
             }
           }
         }
@@ -133,8 +144,16 @@
         @include breakpoint($desktop) {
           padding-#{$left}: 2.5rem !important;
 
-          .delivery-options-tooltip-wrapper .tooltip--wrap {
-            margin-bottom: 1rem;
+          .delivery-options-tooltip-wrapper {
+            .tooltip--wrap {
+              margin-bottom: 1rem;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          .delivery-options-tooltip-wrapper {
+            #{$left}: 9rem;
           }
         }
       }
@@ -146,15 +165,39 @@
   #coupon-button.add {
     text-transform: uppercase;
   }
+
+  .coupon-code-wrapper {
+    .card__header {
+      &.ui-state-active {
+        border-bottom: none;
+      }
+    }
+  }
 }
 
-.block-basket-horizontal-recommendation > h3 {
-  font-size: 1.125rem;
-  font-family: $vs-regular;
-  text-align: center;
-  text-transform: none;
-  margin-bottom: 0.3rem;
-  padding-bottom: 0.56rem;
+.block-basket-horizontal-recommendation {
+  > h3 {
+    font-size: 1.125rem;
+    font-family: $vs-regular;
+    text-align: center;
+    text-transform: none;
+    margin-bottom: 0.3rem;
+    padding-bottom: 0.56rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding-top: 0;
+  }
+
+  .view-product-slider {
+    .owl-carousel {
+      .owl-item {
+        a > img {
+          max-width: 8.875rem;
+        }
+      }
+    }
+  }
 }
 
 .empty-cart-wrapper {
@@ -176,8 +219,6 @@
   .edit-continue-shopping-mobile,
   #edit-continue-shopping {
     border: 0;
-    background-color: $primary_btn_bg;
-    color: $primary_btn_text;
     font-size: 0.875rem;
     text-transform: uppercase;
     font-family: $vs-bold;
@@ -227,12 +268,54 @@
       }
     }
   }
+
+  .price-wrapper .price {
+    @include breakpoint($only-tablet) {
+      max-width: none !important;
+    }
+  }
+
+  .customer-cart-form {
+    .items,
+    .item-code {
+      font-size: 0.75rem;
+    }
+  }
+
+  .messages {
+    .messages--status {
+      &::before {
+        margin-top: 0;
+      }
+    }
+  }
 }
 
 #cart_notification {
   .notification .col-2 a,
   .error .col-2 a {
     text-transform: uppercase;
+  }
+
+  @include breakpoint($desktop) {
+    #{$right}: 0.5rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    #{$right}: 5.1rem;
+    top: 3rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    #{$right}: 2.0625rem;
+    top: 3.1rem;
+  }
+
+  .notification,
+  .error {
+    .col-1 {
+      width: 4.875rem;
+    }
   }
 }
 
@@ -277,9 +360,19 @@ body.alias--cart {
           }
         }
 
+        td:last-child {
+          background: $basket_order_total_bg;
+        }
+
         td:last-child,
         .price-currency.suffix {
           font-family: $vs-bold;
+        }
+      }
+
+      tr[data-drupal-selector=edit-totals-discount] {
+        .cart-promotions {
+          top: 0.875rem;
         }
       }
     }

@@ -1,0 +1,53 @@
+.c-facet.block-facet--swatch-list {
+  li {
+    a {
+      .swatch {
+        border-radius: 1.6px;
+        display: inline-block;
+        width: 0.75rem;
+        height: 0.75rem;
+        margin-#{$right}: 1rem;
+        top: 1px;
+        position: relative;
+
+        &.swatch-image {
+          img {
+            border-radius: 1.6px;
+          }
+        }
+
+        &[class*='swatch-color-fffff'] {
+          -webkit-appearance: none;
+          box-shadow: 0 0 0 1px $plp_facet_white_color_attribute;
+        }
+      }
+
+      &.is-active {
+        .swatch {
+          &::before {
+            content: '';
+            border: 1px solid $color_facet_active_border;
+            position: absolute;
+            top: -2px;
+            bottom: -2px;
+            #{$left}: -2px;
+            #{$right}: -2px;
+            border-radius: 2.6px;
+          }
+        }
+      }
+
+      .facet-item__status {
+        @include u-visibility(none);
+      }
+
+      .facet-item__value,
+      .facet-item__count {
+        font-size: 0.875rem;
+      }
+
+      color: $plp_facet_label;
+      margin-top: 0;
+    }
+  }
+}

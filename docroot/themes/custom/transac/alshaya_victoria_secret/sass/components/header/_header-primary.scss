@@ -9,10 +9,16 @@
 }
 
 .c-pre-content__region {
-  border-top: 0;
+  border: 0;
 
   @include breakpoint($desktop) {
-    height: 2.6rem;
+    height: 2.5rem;
+  }
+
+  .region__pre-content {
+    @include breakpoint($desktop) {
+      border-bottom: 1px solid $header_border;
+    }
   }
 }
 
@@ -66,6 +72,7 @@ header {
         flex-grow: 1;
         vertical-align: middle;
         flex-basis: 33.33%;
+        display: block;
       }
     }
   }
@@ -155,6 +162,7 @@ header {
         text-transform: uppercase;
         padding: 0.625rem 0.9375rem;
         height: 2.5rem;
+        margin-top: 0;
       }
 
       a.menu--one__link.active {
@@ -373,6 +381,16 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    a.promo-panel--mobile-link {
+      &::after {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
 #block-cartminiblock {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
@@ -391,4 +409,8 @@ header {
       display: block;
     }
   }
+}
+
+.form-autocomplete.ui-autocomplete-loading {
+  background-size: 1.5rem;
 }

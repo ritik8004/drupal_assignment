@@ -160,7 +160,8 @@
   .sub-total-row,
   .delivery-charge-row,
   .total-row,
-  .discount-row {
+  .discount-row,
+  .surcharge-row {
     background: $order_detail_total_tr_row;
 
     td {
@@ -238,7 +239,8 @@
   .delivery-charge-row,
   .sub-total-row,
   .order-item-row,
-  .discount-row {
+  .discount-row,
+  .surcharge-row {
     .blend {
       background: $order_detail_total_tr_row_price_td;
 
@@ -264,14 +266,10 @@
     }
 
     img {
-      min-width: 8rem;
+      width: 8rem;
 
       @include breakpoint($tablet) {
-        min-width: 7.5rem;
-      }
-
-      @include breakpoint($desktop) {
-        min-width: 8.5625rem;
+        width: 7.125rem;
       }
     }
 
@@ -394,7 +392,8 @@
   .order-item-row,
   .sub-total-row,
   .delivery-charge-row,
-  .total-row {
+  .total-row,
+  .surcharge-row {
     .blend {
       min-width: 8rem;
     }
@@ -645,7 +644,8 @@
   .sub-total-row,
   .delivery-charge-row,
   .discount-row,
-  .total-row {
+  .total-row,
+  .surcharge-row {
     td.right--align {
       text-align: $right;
       min-width: 8rem;
@@ -654,6 +654,26 @@
         @include breakpoint($only-mobile) {
           min-width: 10rem;
           padding: 0.625rem 1rem;
+        }
+      }
+    }
+
+    td.blend {
+      div {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .total-row {
+    td {
+      .right--align {
+        margin-bottom: 0;
+      }
+
+      &.warm--white {
+        div {
+          margin-bottom: 0;
         }
       }
     }

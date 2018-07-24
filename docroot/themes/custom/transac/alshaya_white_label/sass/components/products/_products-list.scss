@@ -25,6 +25,10 @@
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
       @include breakpoint($only-mobile) {
         border: none;
+
+        .form--inline::after {
+          content: none;
+        }
       }
     }
 
@@ -1136,6 +1140,26 @@ html[lang=ar] {
 
     @include breakpoint($only-mobile) {
       margin-#{$left}: 0;
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .c-plp {
+    .c-products-list {
+      .views-infinite-scroll-content-wrapper {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+    }
+
+    .c-products__item {
+      width: calc((100% - 3rem) / 3);
+
+      &:nth-child(3n+2) {
+        margin: 0 1.5rem 1rem;
+      }
     }
   }
 }

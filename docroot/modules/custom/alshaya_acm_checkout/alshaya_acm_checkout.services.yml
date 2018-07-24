@@ -16,6 +16,7 @@ services:
     class: Drupal\alshaya_acm_checkout\CheckoutHelper
     arguments:
       - '@entity_type.manager'
+      - '@config.factory'
       - '@acq_commerce.api'
       - '@acq_cart.cart_storage'
       - '@alshaya_acm_customer.orders_manager'

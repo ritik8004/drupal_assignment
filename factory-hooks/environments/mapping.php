@@ -63,10 +63,14 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mc_prod',
       ],
+      '01test' => [
+        'magento' => 'mc_test',
+        'conductor' => 'mc_test',
+      ],
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_dev',
+        'conductor' => 'mc_v2',
       ],
     ],
     // Mothercare SA.
@@ -83,17 +87,18 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mcsa_prod',
       ],
-      'default' => [
+      '01test' => [
         'magento' => 'mc_qa',
         'conductor' => 'mcsa_test',
+      ],
+      // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
+      'default' => [
+        'magento' => 'mc_dev',
+        'conductor' => 'mc_v2',
       ],
     ],
     // Mothercare UAE.
     'mcae' => [
-      'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mcae_test',
-      ],
       '01uat' => [
         'magento' => 'mc_uat',
         'conductor' => 'mcae_uat',
@@ -101,6 +106,15 @@ function alshaya_get_env_keys($site, $env) {
       '01live' => [
         'magento' => 'mc_prod',
         'conductor' => 'mcae_prod',
+      ],
+      '01test' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mcae_test',
+      ],
+      // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
+      'default' => [
+        'magento' => 'mc_dev',
+        'conductor' => 'mc_v2',
       ],
     ],
     // H&M Kuwait.
@@ -212,6 +226,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret KW.
     'vskw' => [
+      '01uat' => [
+        'magento' => 'vs_uat',
+        'conductor' => 'vskw_uat',
+      ],
       'default' => [
         'magento' => 'vs_qa',
         'conductor' => 'vskw_test',
@@ -219,6 +237,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret SA.
     'vssa' => [
+      '01uat' => [
+        'magento' => 'vs_uat',
+        'conductor' => 'vssa_uat',
+      ],
       'default' => [
         'magento' => 'vs_qa',
         'conductor' => 'vssa_test',
@@ -226,6 +248,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret AE.
     'vsae' => [
+      '01uat' => [
+        'magento' => 'vs_uat',
+        'conductor' => 'vsae_uat',
+      ],
       'default' => [
         'magento' => 'vs_qa',
         'conductor' => 'vsae_test',

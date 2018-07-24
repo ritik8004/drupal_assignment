@@ -262,7 +262,7 @@ class KnetController extends ControllerBase {
 
     try {
       // Push the additional data to cart.
-      $cart->setPaymentMethod('knet', $data);
+      $this->checkoutHelper->setSelectedPayment('knet', $data, FALSE);
       $updatedCartObject = (object) $this->apiWrapper->updateCart($cart->id(), $cart->getCart());
       $cart->updateCartObject($updatedCartObject);
 

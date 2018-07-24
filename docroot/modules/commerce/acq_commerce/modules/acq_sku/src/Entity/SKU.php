@@ -58,12 +58,21 @@ use Drupal\user\UserInterface;
  */
 class SKU extends ContentEntityBase implements SKUInterface {
 
+  const SWATCH_IMAGE_ROLE = 'swatch_image';
+
   /**
    * Processed media array.
    *
    * @var array
    */
   protected $mediaData = [];
+
+  /**
+   * Processed swatch media item array.
+   *
+   * @var array
+   */
+  protected $swatchData = [];
 
   /**
    * {@inheritdoc}
@@ -99,11 +108,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Whether to download media or not.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
+   * @param string $default_label
+   *   Default value for alt/title.
    *
    * @return array
    *   Array of media files.
    */
-  public function getMedia($download_media = TRUE, $reset = FALSE) {
+  public function getMedia($download_media = TRUE, $reset = FALSE, $default_label = '') {
     if (!$reset && !empty($this->mediaData)) {
       return $this->mediaData;
     }
@@ -118,31 +129,20 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       foreach ($media_data as &$data) {
-        if (isset($data['media_type']) && $data['media_type'] == 'image') {
-          if (empty($data['fid']) && $download_media) {
-            try {
-              // Prepare the File object when we access it the first time.
-              $data['fid'] = $this->downloadMediaImage($data);
-              $update_sku = TRUE;
-            }
-            catch (\Exception $e) {
-              \Drupal::logger('acq_sku')->error($e->getMessage());
-              continue;
-            }
-          }
-
-          $data['file'] = File::load($data['fid']);
-          if (empty($data['file'])) {
-            \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku"', ['@fid' => $data['fid'], '@sku' => $this->getSku()]);
-            continue;
-          }
-
-          if (empty($data['label'])) {
-            $data['label'] = $this->label();
-          }
+        // We don't want to show disabled images.
+        if (isset($data['disabled']) && $data['disabled']) {
+          continue;
         }
 
-        $this->mediaData[] = $data;
+        $media_item = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
+
+        if ($media_item &&
+          isset($media_item['roles'])
+          && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+          continue;
+        }
+
+        $this->mediaData[] = $media_item;
       }
 
       if ($update_sku) {
@@ -155,13 +155,128 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
+   * Function to return swatch media item for a SKU.
+   *
+   * @param bool $download
+   *   Whether to download media or not.
+   * @param bool $reset
+   *   Flag to reset cache and generate array again from serialized string.
+   * @param string $default_label
+   *   Default value for alt/title.
+   *
+   * @return array
+   *   Array containing media item.
+   */
+  public function getSwatchImage($download = TRUE, $reset = FALSE, $default_label = '') {
+    if (!$reset && !empty($this->swatchData)) {
+      return $this->swatchData;
+    }
+
+    if ($media_data = $this->get('media')->getString()) {
+      $update_sku = FALSE;
+
+      $media_data = unserialize($media_data);
+
+      if (empty($media_data)) {
+        return [];
+      }
+
+      foreach ($media_data as &$data) {
+        // We don't want to show disabled images.
+        if (isset($data['disabled']) && $data['disabled']) {
+          continue;
+        }
+
+        $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
+
+        if ($media_item && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+          $this->swatchData = $media_item;
+          break;
+        }
+      }
+
+      if ($update_sku) {
+        $this->get('media')->setValue(serialize($media_data));
+        $this->save();
+      }
+    }
+
+    return $this->swatchData;
+  }
+
+  /**
+   * Function to get processed media item with File entity in array.
+   *
+   * @param bool $update_sku
+   *   Flag to specify if SKU should be updated or not.
+   *   Update is done in parent function, here we only update the flag.
+   * @param array $data
+   *   Media item array.
+   * @param bool $download
+   *   Flag to specify if we should download missing images or not.
+   * @param string $default_label
+   *   Default value for alt/title.
+   *
+   * @return array|null
+   *   Processed media item or null if some error occurred.
+   */
+  protected function processMediaItem(&$update_sku, array &$data, $download = FALSE, $default_label = '') {
+    $media_item = $data;
+
+    // Processing is required only for media type image as of now.
+    if (isset($data['media_type']) && $data['media_type'] == 'image') {
+      if (!empty($data['fid'])) {
+        $file = File::load($data['fid']);
+        if (!($file instanceof FileInterface)) {
+          \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku"', [
+            '@fid' => $data['fid'],
+            '@sku' => $this->getSku(),
+          ]);
+
+          unset($data['fid']);
+
+          // Try to download again if download flag is set to true.
+          if ($download) {
+            return $this->processMediaItem($update_sku, $data, TRUE, $default_label);
+          }
+        }
+      }
+      elseif ($download) {
+        try {
+          // Prepare the File object when we access it the first time.
+          $file = $this->downloadMediaImage($data);
+          $update_sku = TRUE;
+        }
+        catch (\Exception $e) {
+          \Drupal::logger('acq_sku')->error($e->getMessage());
+          return NULL;
+        }
+      }
+
+      if ($file instanceof FileInterface) {
+        $data['fid'] = $file->id();
+        $media_item['fid'] = $data['fid'];
+        $media_item['file'] = $file;
+      }
+
+      if (empty($data['label'])) {
+        $media_item['label'] = $default_label ?: $this->label();
+      }
+
+      return $media_item;
+    }
+  }
+
+  /**
    * Function to save image file into public dir.
    *
    * @param array $data
    *   File data.
    *
-   * @return int
+   * @return \Drupal\file\Entity\File
    *   File id.
+   *
+   * @throws \Exception
    */
   protected function downloadMediaImage(array $data) {
     // Preparing args for all info/error messages.
@@ -194,7 +309,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // Save the file as file entity.
     /** @var \Drupal\file\Entity\File $file */
     if ($file = file_save_data($file_data, $directory . '/' . $file_name, FILE_EXISTS_REPLACE)) {
-      return $file->id();
+      return $file;
     }
     else {
       throw new \Exception(new FormattableMarkup('Failed to save file "@file" for SKU id @sku_id.', $args));
@@ -276,11 +391,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // First check if we have some result before doing anything else.
     if (count($skus) == 0) {
-      // We don't log the error while doing sync.
-      if ($log_not_found) {
-        \Drupal::logger('acq_sku')->error('No SKU found for @sku.', ['@sku' => $sku]);
-      }
-
+      // We simply return NULL as this is very normal to have SKU missing.
       return NULL;
     }
 
@@ -706,6 +817,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
         if ($media['file'] instanceof FileInterface) {
           $media['file']->delete();
         }
+      }
+
+      $swatch = $entity->getSwatchImage(FALSE);
+      if ($swatch && $swatch['file'] instanceof FileInterface) {
+        $swatch['file']->delete();
       }
     }
   }

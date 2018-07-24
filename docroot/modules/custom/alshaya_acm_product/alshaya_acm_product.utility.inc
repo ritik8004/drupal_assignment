@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
@@ -38,49 +37,16 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
 
     // Get the processed media data for the SKU.
     if ($sku_entity instanceof SKU) {
-      return alshaya_acm_product_get_sku_media($sku_entity, $first_image_only);
+      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+      return $first_image_only
+        ? $skuImagesManager->getFirstImage($sku_entity)
+        : $skuImagesManager->getAllMediaItems($sku_entity);
     }
   }
 
   return NULL;
-}
-
-/**
- * Utility function to return media files for a SKU.
- *
- * @param mixed $sku
- *   SKU text or full entity object.
- * @param bool $first_image_only
- *   Flag to indicate if we want only the first image and not the whole array.
- *
- * @return array
- *   Array of media files.
- */
-function alshaya_acm_product_get_sku_media($sku, $first_image_only = FALSE) {
-  static $media = [];
-  static $thumbnail_media = [];
-
-  $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
-  if (!($sku_entity instanceof SKU)) {
-    return [];
-  }
-
-  $langcode = $sku_entity->language()->getId();
-
-  if ($first_image_only) {
-    if (!isset($thumbnail_media[$sku_entity->id()], $thumbnail_media[$sku_entity->id()][$langcode])) {
-      $thumbnail_media[$sku_entity->id()][$langcode] = $sku_entity->getThumbnail();
-    }
-
-    return $thumbnail_media[$sku_entity->id()][$langcode];
-  }
-
-  if (!isset($media[$sku_entity->id()], $media[$sku_entity->id()][$langcode])) {
-    $media[$sku_entity->id()][$langcode] = $sku_entity->getMedia();
-  }
-
-  return $media[$sku_entity->id()][$langcode];
 }
 
 /**
@@ -171,29 +137,18 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
  *   Build array to add the gallery and zoom elements to.
  * @param \Drupal\acq_commerce\SKUInterface $sku_entity
  *   SKU Entity for which we want to display the media.
+ * @param bool $check_parent_child
+ *   Check parent or child skus.
  */
-function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity) {
+function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity, $check_parent_child = TRUE) {
   \Drupal::moduleHandler()->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
 
-  // Fetch media.
-  $media = alshaya_acm_product_get_sku_media($sku_entity);
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
-  $main_image = [];
-  $thumbnails = [];
-
-  // Avoid notices and warnings in local.
-  if (empty($media)) {
-    // Check once if there is parent SKU available, use media files of parent.
-    if ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity)) {
-      // Give preference to child products to alter before checking for image in
-      // parent. Alter hook to allow all modules to update the element.
-      // @TODO: Move this to hook_alshaya_acm_product_build_alter.
-      \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
-      if (!$main_image) {
-        return alshaya_acm_product_get_gallery($build, $parent_sku);
-      }
-    }
-  }
+  $media = $skuImagesManager->getAllMedia($sku_entity, $check_parent_child);
+  $main_image = $media['main'];
+  $thumbnails = $media['thumbs'];
 
   // Fetch settings.
   $settings = alshaya_product_zoom_cloudzoom_default_settings();
@@ -202,70 +157,53 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
   $slide_style = $settings['slide_style'];
 
   // Create our thumbnails to be rendered for zoom.
-  if (!empty($media)) {
-    // Sort media items so that videos are at the end.
-    $order = ['image', 'external-video'];
-    usort($media, function ($item1, $item2) use ($order) {
-      $pos_1 = array_search($item1['media_type'], $order);
-      $pos_2 = array_search($item2['media_type'], $order);
-      return $pos_1 - $pos_2;
-    });
+  foreach ($media['media_items']['images'] ?? [] as $media_item) {
+    $file_uri = $media_item['file']->getFileUri();
 
-    foreach ($media as $media_item) {
-      if (isset($media_item['media_type']) && $media_item['media_type'] == 'image') {
+    // Show original full image in the modal inside a draggable container.
+    $original_image = $media_item['file']->url();
 
-        $file_uri = $media_item['file']->getFileUri();
+    $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+    $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+    $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
-        // Show original full image in the modal inside a draggable container.
-        $original_image = $media_item['file']->url();
-
-        $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
-        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-        if (empty($main_image)) {
-          $main_image = [
-            'zoomurl' => $image_zoom,
-            'mediumurl' => $image_medium,
-            'label' => $media_item['label'],
-          ];
-        }
-
-        $thumbnails[] = [
-          'thumburl' => $image_small,
-          'mediumurl' => $image_medium,
-          'zoomurl' => $image_zoom,
-          'fullurl' => $original_image,
-          'label' => $media_item['label'],
-          'type' => 'image',
-        ];
-      }
-      elseif (isset($media_item['media_type']) && $media_item['media_type'] == 'external-video') {
-        // @TODO:
-        // Receiving video_provider as NULL, should be set to youtube or vimeo.
-        // Till then using $type as provider flag.
-        $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-        $thumbnails[] = [
-          'thumburl' => $media_item['file'],
-          'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-          'video_title' => $media_item['video_title'],
-          'video_desc' => $media_item['video_description'],
-          'type' => $type,
-          // @TODO: should this be config?
-          'width' => 81,
-          // @TODO: should this be config?
-          'height' => 81,
-        ];
-      }
+    if (empty($main_image)) {
+      $main_image = [
+        'zoomurl' => $image_zoom,
+        'mediumurl' => $image_medium,
+        'label' => $media_item['label'],
+      ];
     }
+
+    $thumbnails[] = [
+      'thumburl' => $image_small,
+      'mediumurl' => $image_medium,
+      'zoomurl' => $image_zoom,
+      'fullurl' => $original_image,
+      'label' => $media_item['label'],
+      'type' => 'image',
+    ];
+  }
+  foreach ($media['media_items']['vidoes'] ?? [] as $media_item) {
+    // @TODO:
+    // Receiving video_provider as NULL, should be set to youtube or vimeo.
+    // Till then using $type as provider flag.
+    $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+    $thumbnails[] = [
+      'thumburl' => $media_item['file'],
+      'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+      'video_title' => $media_item['video_title'],
+      'video_desc' => $media_item['video_description'],
+      'type' => $type,
+      // @TODO: should this be config?
+      'width' => 81,
+      // @TODO: should this be config?
+      'height' => 81,
+    ];
   }
 
-  // Invoke the alter hook to allow all modules to update the element.
-  // @TODO: Move this to hook_alshaya_acm_product_build_alter.
-  \Drupal::moduleHandler()->alter('acq_sku_pdp_gallery_media', $main_image, $thumbnails, $sku_entity);
-
   // If no main image, use default image.
-  if (empty($main_image)) {
+  if (empty($main_image) && $check_parent_child) {
     if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
       $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
       $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
@@ -276,24 +214,10 @@ function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity
         'mediumurl' => $image_medium,
         'label' => $sku_entity->label(),
       ];
-
-      if (empty($thumbnails)) {
-        $thumbnails[] = [
-          'thumburl' => $image_small,
-          'mediumurl' => $image_medium,
-          'zoomurl' => $image_zoom,
-          'fullurl' => file_create_url($default_image->getFileUri()),
-          'label' => $sku_entity->label(),
-          'type' => 'image',
-        ];
-      }
     }
   }
 
-  if (empty($main_image)) {
-    return [];
-  }
-  else {
+  if (!empty($main_image)) {
     $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
     $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
@@ -364,25 +288,23 @@ function alshaya_acm_product_get_display_node($sku, $langcode = '') {
  *   Return string of uri or Null if not found.
  */
 function alshaya_acm_get_product_display_image($sku, $image_style = '') {
+  $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
+
+  if (!($sku instanceof SKUInterface)) {
+    return [];
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
   // Load the first image.
-  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+  $media_image = $skuImagesManager->getFirstImage($sku);
   $image = [];
 
   // If we have image for the product.
   if (!empty($media_image)) {
     if ($media_image['file'] instanceof FileInterface) {
       $image = alshaya_acm_product_get_sku_image($media_image, $image_style);
-    }
-  }
-  // If no image found, check once for parent product as well.
-  elseif ($parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-    // Fire alter hook for cart image before looking for the image in the
-    // parent product.
-    // @TODO: Add in api.php file.
-    \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
-
-    if (!$image) {
-      $image = alshaya_acm_get_product_display_image($parent_sku, $image_style);
     }
   }
 
@@ -420,8 +342,11 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
  *   Url of the image.
  */
 function _alshaya_acm_get_product_display_image_url(SKU $sku) {
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
   // Load the first image.
-  $media_image = alshaya_acm_product_get_sku_media($sku, TRUE);
+  $media_image = $skuImagesManager->getFirstImage($sku);
 
   // If we have image for the product.
   if (!empty($media_image)) {
@@ -635,81 +560,6 @@ function alshaya_acm_product_get_brand_logo($sku) {
   }
 
   return $image;
-}
-
-/**
- * Helper function to update config attributes depending on the selection made.
- *
- * @param array $form_parts
- *   Configurable parts of the form.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   Form state Object.
- *   contain the SKUs depending on the tree path traversed.
- * @param array $configurables
- *   List of values selected keyed by the config attribute.
- * @param bool $deselect_leaf_options
- *   Clear the leaf attribute selected while selecting the parent config.
- */
-function alshaya_acm_product_update_config_options(array &$form_parts, FormStateInterface &$form_state, array $configurables, $deselect_leaf_options = TRUE) {
-  $enabled_options = [];
-  $product_tree = $form_state->get('tree');
-  $leaf_attribute = end($product_tree['configurables'])['code'];
-
-  // To de-select all leaf options on parent change & not re-calculate
-  // availability of parent attributes in the opposite direction.
-  if ($deselect_leaf_options && !empty($configurables[$leaf_attribute])) {
-    foreach ($form_parts['configurables'][$leaf_attribute]['#options'] as $key => $value) {
-      // Deselect the leaf option once clicked on a non-leaf term.
-      if (($key == $configurables[$leaf_attribute]) &&
-        ($form_state->getTriggeringElement()['#name'] == 'configurables[' . $leaf_attribute . ']')) {
-        continue;
-      }
-      elseif ($form_state->getTriggeringElement()['#name'] != 'configurables[' . $leaf_attribute . ']') {
-        $form_parts['configurables'][$leaf_attribute]['#value'] = '';
-      }
-    }
-    unset($configurables[$leaf_attribute]);
-
-    $form_state->setValue('configurables', $configurables);
-    $user_input = $form_state->getUserInput();
-    $user_input['configurables'] = $configurables;
-    $form_state->setUserInput($user_input);
-  }
-
-  $tree_pointer_parent = alshaya_acm_product_fetch_selected_option_tree($product_tree, $configurables);
-
-  // Items are keyed by their attribute codes.
-  foreach ($tree_pointer_parent as $key => $value) {
-    $attribute = explode(':', $key);
-    $attribute_code = $attribute[0];
-    $enabled_options[$attribute_code][] = $attribute[1];
-  }
-
-  // Loop over all configurable attributes & disable all options that are not
-  // in the list of enabled options.
-  foreach ($form_parts['configurables'] as $key => $configurable) {
-    if ($key === '#tree') {
-      continue;
-    }
-
-    // Disable options which don't exist for the choosen config.
-    foreach ($configurable['#options'] as $option_key => $value) {
-      if (isset($enabled_options[$key]) && $option_key && !in_array($option_key, $enabled_options[$key])) {
-        unset($form_parts['configurables'][$key]['#options'][$option_key]);
-      }
-    }
-  }
-
-  // If leaf attribute only contains 1 option, mark this option as selected.
-  if (count($form_parts['configurables'][$attribute_code]['#options']) == 1) {
-    $configurables[$attribute_code] = key($form_parts['configurables'][$attribute_code]['#options']);
-    $form_state->setValue('configurables', $configurables);
-    $user_input = $form_state->getUserInput();
-    $user_input['configurables'] = $configurables;
-    $form_state->setUserInput($user_input);
-    // Setting value for the element.
-    $form_parts['configurables'][$attribute_code]['#value'] = key($form_parts['configurables'][$attribute_code]['#options']);
-  }
 }
 
 /**

@@ -10,6 +10,7 @@ jQuery.fn.select2Option = function (options) {
     var $ = jQuery;
     var select = $(this);
     var labeltext = '';
+    var defaultTitle = '';
     select.hide();
 
     var buttonsHtml = $('<div class="select2Option"></div>');
@@ -20,24 +21,47 @@ jQuery.fn.select2Option = function (options) {
       }
       var ulHtml = $('<ul class="select-buttons">');
       optGroup.children('option').each(function () {
-
         var liHtml = $('<li></li>');
-        if (selectIndex === 0) {
-          liHtml.hide();
-          var defaultTitle = $(this).parent().attr('data-default-title');
-          if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+
+        if ($(this).attr('swatch-image')) {
+          liHtml.addClass('li-swatch-image');
+          var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + $(this).text() + '" />';
+          if (selectIndex === 0) {
+            liHtml.hide();
+            defaultTitle = $(this).parent().attr('data-default-title');
+            if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
+              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+            }
+            else {
+              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+            }
+          }
+          else if ($(this).attr('disabled') || select.attr('disabled')) {
+            liHtml.addClass('disabled');
+            liHtml.append('<span class="' + $(this).text() + '">' + swatchImage + '</span>');
           }
           else {
-            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+            liHtml.append('<a href="#" class="' + $(this).text().replace(/\s+/g, '-') + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
           }
         }
-        else if ($(this).attr('disabled') || select.attr('disabled')) {
-          liHtml.addClass('disabled');
-          liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
-        }
         else {
-          liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+          if (selectIndex === 0) {
+            liHtml.hide();
+            defaultTitle = $(this).parent().attr('data-default-title');
+            if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
+              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+            }
+            else {
+              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+            }
+          }
+          else if ($(this).attr('disabled') || select.attr('disabled')) {
+            liHtml.addClass('disabled');
+            liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+          }
+          else {
+            liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+          }
         }
 
         // Mark current selection as "picked".

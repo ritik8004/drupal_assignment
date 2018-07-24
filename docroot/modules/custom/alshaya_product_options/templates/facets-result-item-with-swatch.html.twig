@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Default theme implementation of a facet result item with swatch.
+ *
+ * Available variables:
+ * - value: The item value.
+ * - show_count: If this facet provides count.
+ * - count: The amount of results.
+ * - is_active: The item is active.
+ * - swatch_image: Swatch Image.
+ * - swatch_text: Swatch Text.
+ * - swatch_color: Swatch Color.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{%
+set classes = [
+'swatch',
+'swatch-color',
+'swatch-color' ~ swatch_color|replace({'#': '-'}),
+]
+%}
+
+{% if is_active %}
+  <span class="facet-item__status js-facet-deactivate">(-)</span>
+{% endif %}
+
+{% if swatch_image %}
+  <span class="swatch swatch-image"><img src="{{ swatch_image }}" title="{{ value|raw }}" /></span>
+{% elseif swatch_color %}
+  <span {{ attributes.addClass(classes) }} style="background-color: {{ swatch_color }}" ></span>
+{% elseif swatch_text %}
+  <span class="swatch swatch-text">{{ swatch_text }}</span>
+{% endif %}
+
+<span class="facet-item__value">{{ value|raw }}
+  {% if show_count %}
+    <span class="facet-item__count">({{ count }})</span>
+  {% endif %}
+</span>

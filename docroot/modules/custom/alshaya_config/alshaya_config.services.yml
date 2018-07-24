@@ -4,3 +4,8 @@ services:
     arguments: [ '@module_handler', '@config.storage' ]
     tags:
       - {name: event_subscriber}
+  alshaya_config.manager:
+    class: Drupal\alshaya_config\AlshayaConfigManager
+    arguments:
+      - '@config.factory'
+      - '@entity_type.manager'

@@ -49,8 +49,9 @@ class Knet extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $cart = $this->getCart();
-    $cart->setPaymentMethodData([]);
+    /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+    $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    $helper->setSelectedPayment('knet', [], FALSE);
   }
 
 }

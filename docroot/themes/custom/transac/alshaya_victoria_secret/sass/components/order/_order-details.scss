@@ -15,6 +15,14 @@
     font-size: 0.875rem;
   }
 
+  .price {
+    min-width: 6.5rem;
+
+    @include breakpoint($tablet) {
+      min-width: 5.5rem;
+    }
+  }
+
   .total-row .warm--white {
     position: static;
   }
@@ -64,10 +72,6 @@
   .delivery-charge-row,
   .sub-total-row {
     font-size: 0.875rem;
-
-    .right--align {
-      color: $order_detail_td_light_content;
-    }
   }
 
   .address--contact {
@@ -128,6 +132,17 @@
     .light {
       font-size: 0.75rem;
     }
+
+    img {
+      width: auto;
+      height: 8.125rem;
+      border: 1px solid $basket_img_border;
+      padding: 1px;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+    }
   }
 
   .delivery--method {
@@ -155,6 +170,32 @@
       td:last-child {
         @include breakpoint($tablet) {
           display: table-cell !important;
+        }
+      }
+    }
+
+    .discount-row,
+    .surcharge-row {
+      td {
+        padding: 0.625rem 1rem;
+      }
+    }
+
+    .surcharge-row {
+      td:first-child {
+        @include breakpoint($only-tablet) {
+          display: none;
+        }
+      }
+    }
+
+    .price-type__wrapper {
+      .simple-tooltip-wrap {
+        top: -0.125rem;
+        #{$right}: auto;
+
+        @include breakpoint($desktop) {
+          top: -0.3125rem;
         }
       }
     }

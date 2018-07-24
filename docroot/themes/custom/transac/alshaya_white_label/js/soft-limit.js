@@ -32,7 +32,7 @@
     var facetsList = $('ul[data-drupal-facet-id="' + facet + '"]');
 
     // Hide facets over the limit.
-    facetsList.children('li:gt(' + zero_based_limit + ')').once('apply-soft-limit').hide();
+    facetsList.find('li:gt(' + zero_based_limit + ')').once('apply-soft-limit').hide();
 
     // Add "Show more" / "Show less" links.
     facetsList.once('apply-soft-limit').filter(function () {
@@ -41,7 +41,7 @@
       $('<a href="#" class="facets-soft-limit-link"></a>').text(Drupal.t('Show more')).click(function () {
         // Override to handle multiple instances of same facet in DOM & show
         // more link moved out of facet list in DOM.
-        var facet = $(this).siblings('ul.js-facets-checkbox-links');
+        var facet = $(this).siblings('ul.js-facets-checkbox-links, ul.item-list__swatch_list');
         if (facet.find('li:hidden').length > 0) {
           facet.find('li:gt(' + zero_based_limit + ')').slideDown(500);
           $(this).addClass('open').text(Drupal.t('Show less'));

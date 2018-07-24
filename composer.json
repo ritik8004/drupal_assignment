@@ -72,14 +72,15 @@
         "drupal/acquia_purge": "^1.0@beta",
         "drupal/video_embed_field": "2.0.0-alpha2",
         "drupal/role_delegation": "^1.0@alpha",
-        "geerlingguy/drupal-vm": "~4.3",
+        "geerlingguy/drupal-vm": "4.9.0",
         "drupal/amp": "^1.0",
         "drupal/amptheme": "^1.0",
         "drupal/media_entity_actions": "1.x-dev",
         "drupal/jquery_minicolors": "^1.2",
         "claviska/jquery-minicolors": "^2.2",
         "drupal/jsonapi": "1.18 as 1.4.0",
-        "drupal/restrict_role_login_by_ip": "^1.0"
+        "drupal/restrict_role_login_by_ip": "^1.0",
+        "hgoebl/mobile-detect": "^1.4.2"
     },
     "require-dev": {
         "drupal/console": "^1.0.0-rc13",
@@ -123,6 +124,18 @@
         "asset-packagist": {
             "type": "composer",
             "url": "https://asset-packagist.org"
+        },
+        "mobile-detect": {
+            "type": "package",
+            "package": {
+                "name": "hgoebl/mobile-detect",
+                "version": "1.4.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                    "type": "zip"
+                }
+            }
         }
     },
     "autoload-dev": {

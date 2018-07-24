@@ -1,0 +1,34 @@
+@include breakpoint($tablet) {
+  .acq-content-product-modal {
+    .field--name-field-skus {
+      .sku-base-form {
+        #configurable_ajax {
+          ~ button[type="submit"] {
+            margin-top: 2.125rem;
+          }
+        }
+
+        button[type="submit"] {
+          margin-top: 2.125rem;
+
+          @include breakpoint($only-tablet) {
+            html[lang=ar] & {
+              padding: 0.725rem 0.125rem;
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  #drupal-modal {
+    .pager-no {
+      &.slick-slider {
+        padding: 0;
+      }
+    }
+  }
+}

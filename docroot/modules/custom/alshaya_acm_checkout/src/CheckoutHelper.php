@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_checkout;
 
+use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
@@ -11,6 +12,7 @@ use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -51,12 +53,7 @@ class CheckoutHelper {
    */
   protected $cartHelper;
 
-  /**
-   * Address Book Manager service object.
-   *
-   * @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager
-   */
-  protected $addressBookManager;
+  protected $addressManager;
 
   /**
    * Current request object.
@@ -80,6 +77,13 @@ class CheckoutHelper {
   protected $entityTypeManager;
 
   /**
+   * The factory for configuration objects.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Cache Backend service for storing history of user data in cart.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -98,6 +102,8 @@ class CheckoutHelper {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager service object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   ApiWrapper object.
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
@@ -106,8 +112,8 @@ class CheckoutHelper {
    *   Orders manager service object.
    * @param \Drupal\alshaya_acm\CartHelper $cart_helper
    *   Cart Helper service object.
-   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
-   *   Address Book Manager service object.
+   * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_manager
+   *   Address Book Manager.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
@@ -120,22 +126,24 @@ class CheckoutHelper {
    *   The date time service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              ConfigFactoryInterface $config_factory,
                               APIWrapper $api_wrapper,
                               CartStorageInterface $cart_storage,
                               OrdersManager $orders_manager,
                               CartHelper $cart_helper,
-                              AlshayaAddressBookManager $address_book_manager,
+                              AlshayaAddressBookManager $address_manager,
                               RequestStack $request_stack,
                               AccountProxyInterface $current_user,
                               LoggerChannelFactoryInterface $logger_factory,
                               CacheBackendInterface $cache_cart_history,
                               TimeInterface $date_time) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->configFactory = $config_factory;
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
     $this->ordersManager = $orders_manager;
     $this->cartHelper = $cart_helper;
-    $this->addressBookManager = $address_book_manager;
+    $this->addressManager = $address_manager;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->currentUser = $current_user;
     $this->logger = $logger_factory->get('alshaya_acm_checkout');
@@ -164,7 +172,15 @@ class CheckoutHelper {
       Cache::invalidateTags(['cart:' . $cart->id()]);
 
       // @TODO: Remove the fix when we get the full order details.
-      $order_id = str_replace('"', '', $response['order']['id']);
+      if (isset($response['order_id'])) {
+        $order_id = $response['order_id'];
+      }
+      elseif (isset($response['order']['id'])) {
+        $order_id = str_replace('"', '', $response['order']['id']);
+      }
+      else {
+        throw new \Exception('Place order returned success in response but order id not returned in response.');
+      }
 
       $session = $this->currentRequest->getSession();
       $session->set('last_order_id', $order_id);
@@ -195,7 +211,7 @@ class CheckoutHelper {
 
       $this->ordersManager->clearOrderCache($email, $current_user_id);
       $this->ordersManager->clearLastOrderRelatedProductsCache();
-      $this->clearCartShippingHistory($cart->id());
+      $this->clearCartHistory($cart->id());
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id.', [
@@ -252,15 +268,37 @@ class CheckoutHelper {
 
     $this->setCartShippingHistory($current_method, $address, $extension);
 
-    $empty_address = $this->addressBookManager->getAddressStructureWithEmptyValues('');
-
     // Clear address and info from extension.
     $cart->setShippingMethod('', '');
-    $cart->setShipping($empty_address);
     $cart->setExtension('store_code', NULL);
     $cart->setExtension('click_and_collect_type', NULL);
     $cart->clearPayment();
     $this->cartStorage->updateCart();
+  }
+
+  /**
+   * Get cart history.
+   *
+   * @param string $key
+   *   Key for which we want data from cart history.
+   *
+   * @return array
+   *   History data if available or empty array.
+   */
+  public function getCartHistory($key) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if ($cart instanceof Cart) {
+      // Get cache id.
+      $cid = $this->getCartHistoryCacheId($cart->id());
+      $history = $this->cacheCartHistory->get($cid);
+
+      if ($history) {
+        return $history->data[$key] ?? [];
+      }
+    }
+
+    return [];
   }
 
   /**
@@ -273,25 +311,39 @@ class CheckoutHelper {
    *   History data if available or empty array.
    */
   public function getCartShippingHistory($method = '') {
-    $cart = $this->cartStorage->getCart(FALSE);
+    $history = $this->getCartHistory('shipping');
 
-    if (!empty($cart)) {
-      // Get cache id.
-      $cid = $this->getCartHistoryCacheId($cart->id());
-      $history = $this->cacheCartHistory->get($cid);
-
-      if ($history) {
-        $data = $history->data;
-        if (empty($method)) {
-          return $data;
-        }
-        elseif (isset($data[$method])) {
-          return $data[$method];
-        }
+    if (!empty($history)) {
+      if (empty($method)) {
+        return $history;
+      }
+      elseif (isset($history[$method])) {
+        return $history[$method];
       }
     }
 
     return [];
+  }
+
+  /**
+   * Set cart data into cache.
+   *
+   * @param string $key
+   *   Key in which data should be stored.
+   * @param mixed $data
+   *   Data to store in cache for particular key.
+   */
+  public function setCartHistory($key, $data) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if ($cart instanceof Cart) {
+      // Get cache id.
+      $cid = $this->getCartHistoryCacheId($cart->id());
+      $cache = $this->cacheCartHistory->get($cid);
+      $history = $cache->data ?? [];
+      $history[$key] = $data;
+      $this->cacheCartHistory->set($cid, $history);
+    }
   }
 
   /**
@@ -305,17 +357,8 @@ class CheckoutHelper {
    *   Values used from Cart extension.
    */
   public function setCartShippingHistory($method, array $address, array $extension = []) {
-    $cart = $this->cartStorage->getCart(FALSE);
-
-    if (empty($cart)) {
-      return;
-    }
-
-    // Get cache id.
-    $cid = $this->getCartHistoryCacheId($cart->id());
-
     // Current history.
-    $history = $this->getCartShippingHistory();
+    $history = $this->getCartHistory('shipping');
 
     // Prepare data to store in cache as history.
     // We will use it to restore in cart if user changes his mind again.
@@ -328,9 +371,7 @@ class CheckoutHelper {
       $history[$method][$code] = $value;
     }
 
-    // We will remember only for an hour.
-    $expire = $this->dateTime->getRequestTime() + 3600;
-    $this->cacheCartHistory->set($cid, $history, $expire);
+    $this->setCartHistory('shipping', $history);
   }
 
   /**
@@ -339,7 +380,7 @@ class CheckoutHelper {
    * @param int $cart_id
    *   Cart ID to use to prepare Cache ID.
    */
-  public function clearCartShippingHistory($cart_id) {
+  public function clearCartHistory($cart_id) {
     $cid = $this->getCartHistoryCacheId($cart_id);
     $this->cacheCartHistory->delete($cid);
   }
@@ -355,6 +396,196 @@ class CheckoutHelper {
    */
   private function getCartHistoryCacheId($cart_id) {
     return 'cart_history:' . $cart_id;
+  }
+
+  /**
+   * Get selected payment info from cache.
+   *
+   * @param bool $full_details
+   *   Flag to say if full details are required or just the name.
+   *
+   * @return array|string
+   *   Array if full details are required, string otherwise.
+   */
+  public function getSelectedPayment($full_details = FALSE) {
+    // Save the current selection into history.
+    $history = $this->getCartHistory('payment');
+
+    if ($history) {
+      return $full_details ? $history : $history['method'];
+    }
+
+    return $full_details ? [] : '';
+  }
+
+  /**
+   * Set selected payment into Cart and in History.
+   *
+   * @param string $method
+   *   Payment method code.
+   * @param array $data
+   *   Payment additional data.
+   * @param bool $push
+   *   Push the updates to Magento if true.
+   */
+  public function setSelectedPayment($method, array $data = [], $push = TRUE) {
+    $cart = $this->cartStorage->getCart(FALSE);
+    $cart->setPaymentMethod($method, $data);
+
+    if ($push) {
+      $this->cartStorage->updateCart(FALSE);
+    }
+
+    // Save the current selection into cache.
+    $history = [];
+    if ($method) {
+      $history = [
+        'method'          => $method,
+        'additional_data' => $data,
+      ];
+    }
+    $this->setCartHistory('payment', $history);
+  }
+
+  /**
+   * Clear payment info from cart.
+   */
+  public function clearPayment() {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if ($cart instanceof Cart) {
+      $cart->clearPayment();
+      $this->setCartHistory('payment', NULL);
+    }
+  }
+
+  /**
+   * Function to set billing address into cart and cache.
+   *
+   * @param bool $is_same
+   *   If billing is same as shipping or not.
+   * @param array $address
+   *   Magento address.
+   */
+  public function setBillingInfo($is_same, array $address = []) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (!($cart instanceof Cart)) {
+      return;
+    }
+
+    if ($is_same) {
+      $address = $this->cartHelper->getShipping($cart);
+      if (isset($address['customer_address_id'])) {
+        if ($entity = $this->addressManager->getUserAddressByCommerceId($address['customer_address_id'])) {
+          $address = $this->addressManager->getAddressFromEntity($entity, FALSE);
+        }
+      }
+    }
+
+    $address = $this->cleanCheckoutAddress($address);
+
+    $cart->setBilling($address);
+
+    $data = [
+      'is_same' => $is_same,
+      'address' => $address,
+    ];
+
+    $this->setCartHistory('billing', $data);
+  }
+
+  /**
+   * Get billing info from history.
+   *
+   * @return array
+   *   Billing info.
+   */
+  public function getBillingInfoFromHistory() {
+    return $this->getCartHistory('billing');
+  }
+
+  /**
+   * Check is cod surcharge is enabled or not.
+   *
+   * @return bool
+   *   TRUE if enabled.
+   */
+  public function isSurchargeEnabled() {
+    return (bool) $this->configFactory->get('alshaya_acm_checkout.settings')->get('cod_surcharge_status');
+  }
+
+  /**
+   * Set billing address from shipping.
+   *
+   * @param bool $override
+   *   Override current billing address.
+   */
+  public function setBillingFromShipping($override = TRUE) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if ($cart instanceof Cart) {
+      if (!$override) {
+        // Check if we already have it, do nothing.
+        $billing = $this->cartHelper->getBilling();
+        if (!empty($billing)) {
+          return;
+        }
+      }
+
+      $this->setBillingInfo(TRUE);
+    }
+  }
+
+  /**
+   * Helper function to clean address array.
+   *
+   * @param mixed $address
+   *   Address array or object.
+   *
+   * @return array
+   *   Cleaned address array.
+   */
+  public function cleanCheckoutAddress($address) {
+    $address = (array) $address;
+
+    $allowed_fields = [
+      'firstname',
+      'first_name',
+      'lastname',
+      'last_name',
+      'telephone',
+      'street',
+      'street2',
+      'city',
+      'region',
+      'postcode',
+      'country_id',
+      'extension',
+    ];
+
+    foreach ($address as $key => $value) {
+      if (!in_array($key, $allowed_fields)) {
+        unset($address[$key]);
+      }
+    }
+
+    if (!empty($address['region'])) {
+      // TODO: We may just require region and not region_id, need to verify.
+      $address['region_id'] = alshaya_acm_checkout_get_region_id_from_name($address['region'], $address['country_id']);
+      $address['region'] = $address['region_id'];
+    }
+
+    if (!empty($address['telephone'])) {
+      $address['telephone'] = _alshaya_acm_checkout_clean_address_phone($address['telephone']);
+    }
+
+    // City is Magento core field but we don't use it at all.
+    // But this is required by Cybersource so we need proper value.
+    // For now, we copy value of Area to City.
+    $address['city'] = $this->addressManager->getAddressShippingAreaValue($address);
+
+    return $address;
   }
 
 }

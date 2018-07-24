@@ -16,6 +16,8 @@ global:
   css:
     theme:
       components/dist/css/sass/global.ltr.css: {}
+  js:
+    /libraries/mobile-detect/mobile-detect.js: {}
 
 fonts:
   version: VERSION

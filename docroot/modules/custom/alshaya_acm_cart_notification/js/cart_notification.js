@@ -54,15 +54,14 @@
         }
       });
 
-      $('[data-drupal-selector="edit-configurables-size"], [data-drupal-selector="edit-configurables-article-castor-id"]').on('change', function () {
+      $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
         // Start loading.
         spinner_start();
       });
 
       $(document).ajaxComplete(function (event, xhr, settings) {
         if ((settings.hasOwnProperty('extraData')) &&
-          ((settings.extraData._triggering_element_name === 'configurables[size]') ||
-     (settings.extraData._triggering_element_name === 'configurables[article_castor_id]'))) {
+          ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0))) {
           spinner_stop();
         }
         else if (!settings.hasOwnProperty('extraData')) {

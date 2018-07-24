@@ -115,6 +115,13 @@
               color: $checkout_order_print_btn_txt;
             }
           }
+
+          .final-print-confirmation {
+            html[lang=ar] & {
+              min-width: 14.1875rem;
+              text-align: center;
+            }
+          }
         }
       }
 
@@ -254,5 +261,54 @@
       margin-#{$right}: inherit;
       #{$left}: 0;
     }
+  }
+
+  .user__order--detail {
+    .price {
+      min-width: 6.5rem;
+
+      @include breakpoint($tablet) {
+        min-width: 5.5rem;
+      }
+    }
+  }
+}
+
+#block-youllbeableto-checkout-confirm {
+  margin-bottom: 2.5rem;
+}
+
+#block-youllbeableto-checkout-confirm,
+#block-jointheclub-checkout-confirm {
+  h3 {
+    font-family: $vs-regular;
+  }
+}
+
+.user-page.checkout-login.order-confirmation {
+  #edit-field-subscribe-newsletter-wrapper {
+    p {
+      margin-#{$left}: 1.25rem;
+    }
+  }
+}
+
+.c-order-print {
+  .user__order--detail {
+    .surcharge-row td {
+      padding: 0.625rem 1rem;
+    }
+  }
+}
+
+@media print {
+  .page-standard {
+    &.c-order-print {
+      padding-bottom: 0;
+    }
+  }
+
+  .user__order--detail {
+    margin-bottom: 0;
   }
 }

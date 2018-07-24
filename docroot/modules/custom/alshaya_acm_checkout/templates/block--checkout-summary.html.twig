@@ -58,6 +58,14 @@
       </div>
     {% endif %}
 
+    {#Surcharge#}
+    {% if totals.surcharge %}
+      <div class="sub-total discount-surcharge">
+        <span>{{ surcharge_label }}</span>
+        {{ totals.surcharge }}
+      </div>
+    {% endif %}
+
     {#Order total#}
     <div class="order-total">
       <span>{% trans %}Order Total{% endtrans %}</span>

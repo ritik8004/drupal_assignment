@@ -1,3 +1,5 @@
+#block-youllbeableto-checkout-confirm,
+#block-jointheclub-checkout-confirm,
 #block-youllbeableto,
 #block-jointheclub {
   text-transform: none;
@@ -42,6 +44,7 @@
 }
 
 .user-page {
+  #block-youllbeableto-checkout-confirm,
   #block-youllbeableto {
     a {
       text-decoration: underline;
@@ -53,6 +56,7 @@
   }
 
   .c-sidebar-second,
+  #block-youllbeableto-checkout-confirm,
   #block-youllbeableto {
     h3 {
       font-family: $vs-regular;

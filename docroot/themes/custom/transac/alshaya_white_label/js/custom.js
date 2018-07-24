@@ -112,7 +112,7 @@
         });
       }
 
-      $('.nodetype--acq_product .owl-item .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').click(function () {
         $('body').addClass('pdp-modal-overlay');
         modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
 

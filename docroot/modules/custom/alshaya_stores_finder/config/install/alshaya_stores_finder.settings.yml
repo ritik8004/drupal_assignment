@@ -5,5 +5,8 @@ marker:
   path: ''
   url: ''
   use_default: true
+  label_position:
+    x: 15
+    y: 15
 store_list_label: 'List of all Stores'
 store_search_placeholder: 'e.g. Salmiya'

@@ -13,6 +13,7 @@ global_styles:
     js/one_time_language_slider.js: {}
     js/banner_margin_override.js: {}
     vendor/js/details-polyfill.js: {}
+    /libraries/mobile-detect/mobile-detect.js: {}
   dependencies:
     - core/modernizr
     - core/jquery
@@ -93,10 +94,10 @@ autosize:
   js:
     vendor/js/autosize.min.js: {}
 
-sizeguide:
+attribute:
   js:
     js/select2Option.js: {}
-    js/sizeguide.js: {}
+    js/attribute.js: {}
 
 ucfix:
   js:

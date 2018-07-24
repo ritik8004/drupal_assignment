@@ -62,7 +62,7 @@ function alshaya_main_menu_taxonomy_term_insert(TermInterface $term) {
   // Invalidate cache for main menu and sitemap or any other cache
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG, 'node:taxonomy_term.accordion']);
   }
 }
 
@@ -73,7 +73,7 @@ function alshaya_main_menu_taxonomy_term_update(TermInterface $term) {
   // Invalidate cache for main menu and sitemap or any other cache
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG, 'node:taxonomy_term.accordion']);
   }
 }
 
@@ -84,7 +84,7 @@ function alshaya_main_menu_taxonomy_term_delete(TermInterface $term) {
   // Invalidate cache for main menu and sitemap or any other cache
   // using our custom cache tag.
   if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG, 'node:taxonomy_term.accordion']);
   }
 }
 
@@ -95,9 +95,9 @@ function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$
   // Only for the term edit page.
   if (isset($form['tid']) && !empty($form['tid']['#value'])) {
     if ($term = Term::load($form['tid']['#value'])) {
-      // If term is greater that L1 level, then not show highlight field.
+      // Hide highlight field If term is greater than L1 level.
       if ($term->get('depth_level')->getString() > 1) {
-        unset($form['field_main_menu_highlight']);
+        $form['field_main_menu_highlight']['#access'] = FALSE;
       }
     }
   }

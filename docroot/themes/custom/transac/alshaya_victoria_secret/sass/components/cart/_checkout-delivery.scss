@@ -44,7 +44,20 @@
       }
     }
 
-    .address:hover,
+    .address:hover {
+      @include breakpoint($desktop) {
+        .address--data {
+          background: $checkout_hd_selected_add_bg;
+        }
+
+        .address--controls {
+          &.address--deliver-to-this-address a {
+            font-family: $vs-bold;
+          }
+        }
+      }
+    }
+
     .address.default {
       .address--data {
         background: $checkout_hd_selected_add_bg;

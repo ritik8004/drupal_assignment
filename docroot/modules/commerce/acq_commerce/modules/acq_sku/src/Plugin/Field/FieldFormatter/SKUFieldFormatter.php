@@ -104,8 +104,6 @@ class SKUFieldFormatter extends FormatterBase {
     $ids = $query->execute();
 
     if (empty($ids)) {
-      \Drupal::logger('acq_sku')
-        ->notice(t('No SKU found for @sku.', ['@sku' => $sku]));
       return '';
     }
     elseif (count($ids) > 1) {

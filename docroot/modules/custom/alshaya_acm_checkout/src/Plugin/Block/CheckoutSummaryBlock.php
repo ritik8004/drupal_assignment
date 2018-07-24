@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\alshaya_acm_checkout\CheckoutHelper;
 use Drupal\alshaya_acm_checkout\CheckoutOptionsManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\Component\Plugin\PluginManagerInterface;
@@ -12,6 +13,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -64,6 +66,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $checkoutOptionsManager;
 
   /**
+   * Checkout Helper.
+   *
+   * @var \Drupal\alshaya_acm_checkout\CheckoutHelper
+   */
+  protected $checkoutHelper;
+
+  /**
    * Module Handler service object.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -99,6 +108,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $addressCountryRepository;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Constructor.
    *
    * @param array $configuration
@@ -117,10 +133,14 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Cart Helper service object.
    * @param \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager
    *   Checkout Options Manager service object.
+   * @param \Drupal\alshaya_acm_checkout\CheckoutHelper $checkout_helper
+   *   Checkout Helper.
    * @param \Drupal\address\Repository\CountryRepository $address_country_repository
    *   Address Country Repository service object.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $plugin_manager
    *   ACQ Checkout Flow plugin manager object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -136,8 +156,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               AlshayaAddressBookManager $address_book_manager,
                               CartHelper $cart_helper,
                               CheckoutOptionsManager $checkout_options_manager,
+                              CheckoutHelper $checkout_helper,
                               CountryRepository $address_country_repository,
                               PluginManagerInterface $plugin_manager,
+                              LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
                               RequestStack $request_stack,
                               $store_finder_utility) {
@@ -147,11 +169,13 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->addressBookManager = $address_book_manager;
     $this->cartHelper = $cart_helper;
     $this->checkoutOptionsManager = $checkout_options_manager;
+    $this->checkoutHelper = $checkout_helper;
     $this->addressCountryRepository = $address_country_repository;
     $this->pluginManager = $plugin_manager;
     $this->moduleHandler = $module_handler;
     $this->requestStack = $request_stack;
     $this->storesFinderUtility = $store_finder_utility;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -175,8 +199,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('alshaya_addressbook.manager'),
       $container->get('alshaya_acm.cart_helper'),
       $container->get('alshaya_acm_checkout.options_manager'),
+      $container->get('alshaya_acm_checkout.checkout_helper'),
       $container->get('address.country_repository'),
       $container->get('plugin.manager.acq_checkout_flow'),
+      $container->get('language_manager'),
       $moduleHandler,
       $container->get('request_stack'),
       $store_finder_utility
@@ -189,6 +215,20 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   public function build() {
     // Load the CheckoutFlow plugin.
     $config = $this->configFactory->get('acq_checkout.settings');
+
+    $current_language = $this->languageManager->getCurrentLanguage()->getId();
+    $default_language = $this->languageManager->getDefaultLanguage()->getId();
+
+    // If current language is not what site's default language, then we pick
+    // language overridden config.
+    if ($current_language != $default_language) {
+      $acm_config = $this->languageManager->getLanguageConfigOverride($current_language, 'alshaya_acm_checkout.settings');
+    }
+    else {
+      // Use default config.
+      $acm_config = $this->configFactory->get('alshaya_acm_checkout.settings');
+    }
+
     $checkout_flow_plugin = $config->get('checkout_flow_plugin') ?: 'multistep_default';
     $checkout_flow = $this->pluginManager->createInstance($checkout_flow_plugin, []);
 
@@ -210,8 +250,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     foreach ($items as $item) {
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($item['sku'], 'checkout_summary_block_thumbnail');
-
+      $image = alshaya_acm_get_product_display_image($item['sku'], '291x288');
       $node = alshaya_acm_product_get_display_node($item['sku']);
 
       if ($node instanceof NodeInterface) {
@@ -361,7 +400,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['subtotal'] = alshaya_acm_price_format($cart_totals['sub']);
 
     // Tax.
-    $tax_config = $this->configFactory->get('alshaya_acm_checkout.settings')->get('checkout_show_tax_info');
+    $tax_config = $acm_config->get('checkout_show_tax_info');
     // Show tax info only if set to true.
     if ($tax_config) {
       $totals['tax'] = (float) $cart_totals['tax'] > 0 ? alshaya_acm_price_format($cart_totals['tax']) : NULL;
@@ -372,6 +411,22 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     // Shipping.
     $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
+
+    // COD Surcharge.
+    $surcharge_label = '';
+
+    // We show surcharge only on payment page.
+    if ($this->checkoutHelper->isSurchargeEnabled()) {
+      $surcharge = $cart->getExtension('surcharge');
+      if ($surcharge && isset($surcharge['is_applied']) && $surcharge['is_applied']) {
+        if ((float) $surcharge['amount'] > 0) {
+          $surcharge_label = $acm_config->get('cod_surcharge_label');
+
+          $surcharge_tooltip = $acm_config->get('cod_surcharge_tooltip');
+          $totals['surcharge']['#markup'] = alshaya_acm_price_format($surcharge['amount'], [], $surcharge_tooltip);
+        }
+      }
+    }
 
     // Grand Total or Order total.
     $totals['grand'] = alshaya_acm_price_format($cart_totals['grand']);
@@ -387,6 +442,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       '#cart_link' => $url,
       '#number_of_items' => $cart_count,
       '#products' => $products,
+      '#surcharge_label' => $surcharge_label,
       '#totals' => $totals,
       '#delivery' => $delivery,
       '#vat_text' => $vat_text,

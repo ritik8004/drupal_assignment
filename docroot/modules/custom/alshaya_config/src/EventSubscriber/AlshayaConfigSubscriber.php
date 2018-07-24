@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_config\EventSubscriber;
 
+use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
@@ -71,9 +72,10 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     // Get delete-overrides from enabled modules.
     $this->fetchOverrides($override_deletions, 'override-delete', $config_name);
-
-    // Get recursive diff of config data with delete-overrides.
-    $data = DiffArray::diffAssocRecursive($data, $override_deletions);
+    if (!empty($override_deletions)) {
+      // Get recursive diff of config data with delete-overrides.
+      $data = DiffArray::diffAssocRecursive($data, $override_deletions);
+    }
 
     // Allow other modules to alter the data.
     $this->moduleHandler->alter('alshaya_config_save', $data, $config_name);
@@ -94,15 +96,22 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Name of config for which we checking for overrides.
    */
   public function fetchOverrides(array &$data, $override_type, $config_name) {
+    $data_modified = FALSE;
     // We browse all the modules to check for override.
     foreach ($this->moduleHandler->getModuleList() as $module) {
       $override_path = drupal_get_path('module', $module->getName()) . '/config/' . $override_type . '/' . $config_name . '.yml';
 
       // If there is an override, we merge it with the initial config.
       if (file_exists($override_path)) {
+        $data_modified = TRUE;
         $override = Yaml::parse(file_get_contents($override_path));
         $data = NestedArray::mergeDeep($data, $override);
       }
+    }
+
+    // Remove duplicates in indexed arrays only if we have modified.
+    if ($data_modified && is_array($data)) {
+      AlshayaArrayUtils::arrayUnique($data);
     }
   }
 

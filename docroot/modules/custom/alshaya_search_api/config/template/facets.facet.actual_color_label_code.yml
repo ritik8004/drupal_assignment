@@ -5,7 +5,7 @@ dependencies:
   module:
     - alshaya_search_api
 id: actual_color_label_code
-name: 'Actual Color Label Code'
+name: 'Color'
 url_alias: actual_color_label_code
 weight: 0
 min_count: 1
@@ -13,7 +13,7 @@ show_only_one_result: false
 field_identifier: attr_actual_color_label_code
 facet_source_id: 'search_api:views_page__search__page'
 widget:
-  type: checkbox
+  type: swatch_list
   config:
     show_numbers: true
     soft_limit: 5

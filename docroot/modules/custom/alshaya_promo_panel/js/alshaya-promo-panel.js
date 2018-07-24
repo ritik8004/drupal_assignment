@@ -9,18 +9,16 @@
   Drupal.behaviors.promoPanel = {
     attach: function (context, settings) {
       var $offer_toggler = $('.block-promo-panel-wrapper .promo-panel-label', context);
-      var $mobile_link = $('.block-promo-panel-wrapper .promo-panel-label a');
-      var $offer_content = $('.block-promo-panel-wrapper > .field--name-field-paragraph-content');
+      var $mobile_link = $('.block-promo-panel-wrapper .promo-panel-label a', context);
       var $body = $('body');
 
-      $($offer_toggler).once().on('click', function () {
+      $($offer_toggler).once('alshaya_promo_panel').on('click', function () {
         $(window).trigger('resize');
         $(this).parent().toggleClass('active-promo-panel');
-        $($offer_content).slideToggle('1000');
         $($body).toggleClass('active-promo-panel-content');
       });
 
-      $($mobile_link).click(function(e) {
+      $($mobile_link).once('alshaya_promo_mobile_link').on('click', function(e) {
         if(/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
           return true;
         }
@@ -33,12 +31,12 @@
        * Promo panel sticky on scroll.
        */
       function checkOffset() {
-        if ($('.block-promo-panel-wrapper .promo-panel-label').offset().top + $('.block-promo-panel-wrapper .promo-panel-label').height() >= $('.block-promo-panel-wrapper').offset().top - 25) {
+        if ($('.block-promo-panel-wrapper .promo-panel-label').offset().top >= $('.c-footer').offset().top - 49) {
           $('.block-promo-panel-wrapper .promo-panel-label').addClass('label-not-fixed'); // restore on scroll down
           $('.block-promo-panel-wrapper').removeClass('promo-panel-fixed').addClass('promo-static'); // restore on scroll down
         }
 
-        if ($(document).scrollTop() + window.innerHeight < $('.block-promo-panel-wrapper').offset().top) {
+        if ($(document).scrollTop() + window.innerHeight < $('.c-footer').offset().top) {
           $('.block-promo-panel-wrapper .promo-panel-label').removeClass('label-not-fixed');
           $('.block-promo-panel-wrapper').addClass('promo-panel-fixed').removeClass('promo-static');
         }

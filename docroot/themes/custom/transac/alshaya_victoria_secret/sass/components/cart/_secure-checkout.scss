@@ -24,6 +24,13 @@
         #add-address-button {
           font-family: $vs-regular;
           text-transform: capitalize;
+
+          @include breakpoint($only-mobile) {
+            position: absolute;
+            width: auto;
+            #{$right}: 0;
+            top: -3px;
+          }
         }
       }
     }
@@ -125,6 +132,18 @@
 }
 
 .acq-cart-summary {
+  .left {
+    width: 27%;
+  }
+
+  .right {
+    float: $left;
+
+    .product-qty {
+      margin-bottom: 0.3125rem;
+    }
+  }
+
   .caption {
     padding: 0.875rem 0;
     font-size: 0.875rem;
@@ -148,6 +167,7 @@
     img {
       border: 1px solid $checkout_section_border;
       padding: 0.125rem;
+      width: 4.0625rem;
     }
   }
 
@@ -164,7 +184,15 @@
 
       .total--amount,
       .price-type__wrapper {
-        width: 51%;
+        width: 41%;
+
+        @include breakpoint($only-tablet) {
+          width: 47%;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 34%;
+        }
       }
     }
 
