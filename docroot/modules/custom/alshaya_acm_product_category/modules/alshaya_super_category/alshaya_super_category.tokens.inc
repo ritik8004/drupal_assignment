@@ -53,7 +53,11 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
 
               $valid_node = FALSE;
               if ($node = $current_route->getParameter('node')) {
-                $valid_node = $node instanceof Node && in_array($node->bundle(), ['acq_product', 'advanced_page', 'acq_promotion']);
+                $valid_node = $node instanceof Node && in_array($node->bundle(), [
+                  'acq_product',
+                  'advanced_page',
+                  'acq_promotion',
+                ]);
               }
 
               if ($valid_term || $valid_node) {
