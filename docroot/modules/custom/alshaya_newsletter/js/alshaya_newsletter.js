@@ -43,6 +43,7 @@
           // If there was an error due to ajax response, then remove it.
           if ($('.block-alshaya-newsletter-subscription #footer-newsletter-form-wrapper span.message').hasClass('error')) {
             $('.block-alshaya-newsletter-subscription #footer-newsletter-form-wrapper .subscription-status').remove()
+            $('.block-alshaya-newsletter-subscription input[name="email"]').removeClass('error');
           }
         }
       });
