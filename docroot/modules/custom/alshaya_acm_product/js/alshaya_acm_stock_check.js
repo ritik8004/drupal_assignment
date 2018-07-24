@@ -139,24 +139,10 @@
     var article = $(data).parents('article:first');
     if (status <= 0) {
       article.addClass('product-out-of-stock');
-      console.log(article.find('.sharethis-wrapper'));
       article.find('.sharethis-wrapper').addClass('out-of-stock');
-      article
-        .find('#pdp-home-delivery.home-delivery .c-accordion_content')
-        .addClass('hidden-important');
       article
         .find('#pdp-home-delivery.home-delivery')
         .accordion('option', 'disabled', true);
-    }
-    else {
-      article.addClass('product-out-of-stock');
-      article.find('.sharethis-wrapper').removeClass('out-of-stock');
-      article
-        .find('#pdp-home-delivery.home-delivery .c-accordion_content')
-        .removeClass('hidden-important');
-      article
-        .find('#pdp-home-delivery.home-delivery')
-        .accordion('option', 'disabled', false);
     }
   };
 

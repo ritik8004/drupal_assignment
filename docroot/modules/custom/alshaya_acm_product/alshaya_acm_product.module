@@ -1332,7 +1332,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   if ($tree_pointer instanceof SKU) {
-    $entity = alshaya_acm_product_get_display_node($tree_pointer);
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
@@ -1473,8 +1472,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
-
-    \Drupal::moduleHandler()->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $quantity);
     return $response;
   }
   else {
