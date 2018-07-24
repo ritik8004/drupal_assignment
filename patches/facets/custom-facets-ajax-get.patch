@@ -1,0 +1,50 @@
+--- src/Controller/FacetBlockAjaxController.php
++++ src/Controller/FacetBlockAjaxController.php
+@@ -131,9 +131,11 @@
+   public function ajaxFacetBlockView(Request $request) {
+     $response = new AjaxResponse();
+
++    $params = $request->getMethod() == 'GET' ? $request->query : $request->request;
++
+     // Rebuild the request and the current path, needed for facets.
+-    $path = $request->request->get('facet_link');
+-    $facets_blocks = $request->request->get('facets_blocks');
++    $path = $params->get('facet_link');
++    $facets_blocks = $params->get('facets_blocks');
+
+     // We get duplicates in parameters.
+     $facets_blocks = array_unique($facets_blocks);
+@@ -152,7 +154,7 @@
+     $requestStack->push($new_request);
+     $container = \Drupal::getContainer();
+     $container->set('request_stack', $requestStack);
+-    $activeFacet = $request->request->get('active_facet');
++    $activeFacet = $params->get('active_facet');
+
+     // Build the facets blocks found for the current request and update.
+     foreach ($facets_blocks as $facets_block) {
+@@ -175,11 +177,11 @@
+       }
+     }
+
+-    $update_summary_block = $request->request->get('update_summary_block');
++    $update_summary_block = $params->get('update_summary_block');
+
+     if ($update_summary_block) {
+-      $facet_summary_block_id = $request->request->get('facet_summary_block_id');
+-      $facet_summary_wrapper_id = $request->request->get('facet_summary_wrapper_id');
++      $facet_summary_block_id = $params->get('facet_summary_block_id');
++      $facet_summary_wrapper_id = $params->get('facet_summary_wrapper_id');
+       $facet_summary_block_id = str_replace('-', '_', $facet_summary_block_id);
+       // Update filter summary block.
+       if ($facet_summary_block_id) {
+--- js/facets-views-ajax.js
++++ js/facets-views-ajax.js
+@@ -101,6 +101,7 @@
+     // Update facet blocks.
+     var facet_settings = {
+       url: Drupal.url('facets-block/ajax'),
++      type: 'GET',
+       submit: {
+         facet_link: facetLink.attr('href'),
+         facets_blocks: facets_blocks
