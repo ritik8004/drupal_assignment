@@ -111,10 +111,10 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     if ($type == 'configurable') {
       // If we have a child_sku available.
       $child_sku_entity = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
-      $image = alshaya_acm_get_product_display_image($child_sku_entity, '291x288');
+      $image = alshaya_acm_get_product_display_image($child_sku_entity, '291x288', 'cart_notification');
     }
     else {
-      $image = alshaya_acm_get_product_display_image($sku_entity, '291x288');
+      $image = alshaya_acm_get_product_display_image($sku_entity, '291x288', 'cart_notification');
     }
 
     // Use the template to render the HTML.

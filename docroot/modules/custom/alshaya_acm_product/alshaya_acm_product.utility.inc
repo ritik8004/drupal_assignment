@@ -283,11 +283,13 @@ function alshaya_acm_product_get_display_node($sku, $langcode = '') {
  *   SKU text or full entity object.
  * @param string $image_style
  *   Image style to apply to the image.
+ * @param string $context
+ *   (optional) Context for image.
  *
  * @return array
  *   Return string of uri or Null if not found.
  */
-function alshaya_acm_get_product_display_image($sku, $image_style = '') {
+function alshaya_acm_get_product_display_image($sku, $image_style = '', $context = '') {
   $sku = $sku instanceof SKUInterface ? $sku : SKU::loadFromSku($sku);
 
   if (!($sku instanceof SKUInterface)) {
@@ -309,8 +311,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '') {
   }
 
   // Alter cart product image found in child sku in case of config products.
-  // @TODO: Add in api.php file.
-  \Drupal::moduleHandler()->alter('acq_sku_cart_media', $sku, $image);
+  \Drupal::moduleHandler()->alter('acq_sku_cart_media', $image, $sku, $context);
 
   // If still image is not available, set default one.
   if (empty($image)) {

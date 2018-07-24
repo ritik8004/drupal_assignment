@@ -118,25 +118,19 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   // If there is at least one item out of scope, show the error.
   $out_of_stock_message = '';
 
-  /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
-  $csrf_token_generator = \Drupal::service('csrf_token');
-
-  $cart_rules = $cart->getCart()->cart_rules;
+  $cart_rules = $cart->get('cart_rules');
   $free_gift_skus = [];
 
   // Get list of free gift skus based on the cart price rules applicable to
   // current cart. This is used to mark items & label them as "Free Gift With
   // Purchase" on the cart.
   foreach ($cart_rules as $rule_id) {
+    /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $promotionManager */
     $promotionManager = \Drupal::service('alshaya_acm_promotion.manager');
-    $promotion = $promotionManager->getPromotionByRuleId($rule_id);
-
-    // Get list of free gift skus from promotion node.
-    if (!empty($free_skus = $promotion->get('field_free_gift_skus')->getValue())) {
-      foreach ($free_skus as $free_sku) {
-        $free_gift_skus[] = $free_sku['value'];
-      }
-    }
+    $free_gift_skus = array_merge(
+      $free_gift_skus,
+      $promotionManager->getFreeSkusByRuleId($rule_id)
+    );
   }
 
   foreach ($form['cart'] as $id => &$item) {
@@ -215,26 +209,9 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
         $item['quantity']['#attributes']['disabled'] = 'disabled';
       }
 
-      $token = $csrf_token_generator->get($cart->id() . '/' . $id);
-
-      // Add remove link as suffix of quantity.
-      $remove_url = Url::fromRoute('alshaya_acm.cart_remove_sku',
-        [
-          'js' => 'nojs',
-          'sku' => $id,
-          'token' => $token,
-        ],
-        [
-          'attributes' => [
-            'gtm-type' => 'gtm-remove-cart',
-            'class' => 'use-ajax',
-          ],
-        ]
-      );
-
       $item['quantity']['#prefix'] = '<div class="select-quantity-' . str_replace(' ', '-', $id) . '">';
       $item['quantity']['#suffix'] = '</div>';
-      $item['quantity']['#suffix'] .= Link::fromTextAndUrl(t('Remove'), $remove_url)->toString();
+      $item['quantity']['#suffix'] .= alshaya_acm_get_remove_from_basket_link($cart, $sku_entity);
 
       _alshaya_acm_check_cart_item_stock($sku_entity, $item, $out_of_stock_message);
 
@@ -908,7 +885,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   // If line item's price is 0, its a free item & set the label for it.
   if ($is_free_sku_item &&
     !empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
-    $free_gift_label['#markup'] = t('Free Gift with Purchase.');
+    $free_gift_label['#markup'] = t('Free Gift with Purchase');
   }
 
   if (empty($name)) {
@@ -995,4 +972,44 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
  */
 function alshaya_acm_acsf_duplication_scrub_admin_roles_alter(array &$admin_roles) {
   $admin_roles[] = 'acq_commerce_sync';
+}
+
+/**
+ * Get remove from basket link.
+ *
+ * @param \Drupal\acq_cart\CartInterface $cart
+ *   Cart object.
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU entity.
+ *
+ * @return \Drupal\Core\GeneratedLink|null
+ *   Link or empty string.
+ */
+function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) {
+  /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
+  $csrf_token_generator = \Drupal::service('csrf_token');
+
+  $token = $csrf_token_generator->get($cart->id() . '/' . $sku->getSku());
+
+  // Add remove link as suffix of quantity.
+  $remove_url = Url::fromRoute('alshaya_acm.cart_remove_sku',
+    [
+      'js' => 'nojs',
+      'sku' => $sku->getSku(),
+      'token' => $token,
+      'coupon' => 'nochange',
+    ],
+    [
+      'attributes' => [
+        'gtm-type' => 'gtm-remove-cart',
+        'class' => 'use-ajax',
+      ],
+    ]
+  );
+
+  \Drupal::moduleHandler()->alter('alshaya_acm_get_remove_from_basket_link', $remove_url, $cart, $sku);
+
+  return $remove_url
+    ? Link::fromTextAndUrl(t('Remove'), $remove_url)->toString()
+    : NULL;
 }
