@@ -555,7 +555,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
       }
       elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
-        $context = 'teaser';
+        $context = $view_mode;
 
         // Get the image.
         $build['image'] = [];
