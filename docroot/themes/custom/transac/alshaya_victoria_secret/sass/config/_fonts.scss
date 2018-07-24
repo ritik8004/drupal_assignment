@@ -120,7 +120,7 @@
 }
 
 @font-face {
-  font-family: "sport-title";
+  font-family: "BentonSansCompMedium";
   src: url("../fonts/vsfonts/sport/titles/BentonSansComp_Medium.eot");
   src:
     url("../fonts/vsfonts/sport/titles/BentonSansComp_Medium.eot?#iefix") format("embedded-opentype"),
@@ -155,7 +155,7 @@ $PinkSans: 'PinkSans';
 $PinkSlab: 'PinkSlab';
 
 // Used for victoria's sport super category content.
-$sport-title: 'sport-title';
+$vs-sport: 'BentonSansCompMedium';
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in VS theme.
 $arial: $vs-regular;
