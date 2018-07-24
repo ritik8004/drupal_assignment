@@ -1,4 +1,4 @@
-#!/bin/bash[
+#!/bin/bash
 #
 # This script clean production data from a specific site, synchronize the
 # commerce data with the appropriate Magento and take database dump
@@ -17,19 +17,17 @@ site_code="$2"
 # Move to proper directory to get access to drush acsf-tools commands.
 cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 
-# Get the list of all site names of the factory.
-sites=$(drush8 acsf-tools-list --fields)
-
 # Check the given site_code exists.
 exist=false
-echo "$sites" | while IFS= read -r site
+while IFS= read -r site
 do
 
-  if [ $site = $site_code ]
+  if [ "$site" = "$site_code" ]
   then
     exist=true
   fi
-done
+
+done <<< "$(drush8 acsf-tools-list --fields)"
 
 # If the given site_code is valid, launch the reset.
 if [ $exist ]
