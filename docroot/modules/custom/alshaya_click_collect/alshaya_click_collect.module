@@ -141,14 +141,5 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
  * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
  */
 function alshaya_click_collect_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
-  if ($stock <= 0) {
-    $response->addCommand(new InvokeCommand("#pdp-stores-container.click-collect .c-accordion_content", 'addClass', ['hidden-important']));
-    // @codingStandardsIgnoreLine
-    $response->addCommand(new InvokeCommand("#pdp-stores-container.click-collect", 'accordion', ['option', 'disabled', TRUE]));
-  }
-  else {
-    $response->addCommand(new InvokeCommand("#pdp-stores-container.click-collect .c-accordion_content", 'removeClass', ['hidden-important']));
-    // @codingStandardsIgnoreLine
-    $response->addCommand(new InvokeCommand("#pdp-stores-container.click-collect", 'accordion', ['option', 'disabled', FALSE]));
-  }
+  $response->addCommand(new InvokeCommand(NULL, 'clickCollectProductStockStatusAction', ['article[data-skuid="' . $entity->id() . '"]:visible', $stock]));
 }

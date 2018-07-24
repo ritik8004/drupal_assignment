@@ -389,4 +389,33 @@
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
 
+
+  /**
+   * Mark product out of stock.
+   *
+   * @param data
+   *   SKU selector.
+   * @param status
+   *   Stock status.
+   */
+  $.fn.clickCollectProductStockStatusAction = function (data, status) {
+    var article = $(data).parents('article:first');
+    if (status <= 0) {
+      article
+        .find('#pdp-stores-container.click-collect .c-accordion_content')
+        .addClass('hidden-important');
+      article
+        .find('#pdp-stores-container.click-collect')
+        .accordion('option', 'disabled', true);
+    }
+    else {
+      article
+        .find('#pdp-stores-container.click-collect .c-accordion_content')
+        .removeClass('hidden-important');
+      article
+        .find('#pdp-stores-container.click-collect')
+        .accordion('option', 'disabled', false);
+    }
+  }
+
 })(jQuery, Drupal);
