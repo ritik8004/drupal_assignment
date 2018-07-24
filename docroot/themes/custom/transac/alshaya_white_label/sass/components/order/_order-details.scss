@@ -677,6 +677,20 @@
         }
       }
     }
+
+    &.vat-container {
+      td {
+        &:nth-child(3) {
+          @include breakpoint($only-mobile) {
+            display: block;
+          }
+        }
+
+        &.warm--white {
+          background-color: $basket_vat_price_bg !important;
+        }
+      }
+    }
   }
 }
 
