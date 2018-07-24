@@ -388,7 +388,7 @@ body {
   li.menu--one__list-item ul.menu--two__list {
     @include breakpoint($desktop) {
       display: block;
-      transition: all ease-in 0s;
+      transition: none;
     }
   }
 }

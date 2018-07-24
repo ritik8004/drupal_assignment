@@ -10,10 +10,42 @@
  *
  * Add alshaya_remove_supercategory_term processor to SRP/PLP category facet.
  */
-function alshaya_super_category_update_8002() {
+function alshaya_super_category_update_8003() {
   \Drupal::configFactory()->getEditable('facets.facet.category')->save();
   \Drupal::configFactory()->getEditable('facets.facet.plp_category_facet')->save();
   \Drupal::configFactory()->getEditable('facets.facet.category_promotion')->save();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_super_category_update_dependencies() {
+  return [
+    'alshaya_super_category' => [
+      '8002' => [
+        'alshaya_seo_transac' => '8401',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_update_n().
+ *
+ * Update meta tag title token for product, advanced page and product category.
+ */
+function alshaya_super_category_update_8002() {
+  // Only if super category feature is enabled.
+  if (\Drupal::configFactory()->get('alshaya_super_category.settings')->get('status')) {
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')
+      ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
+      ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
+      ->set('tags.title', '[node:title] | [supercategory:meta_title]')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
+      ->set('tags.title', '[term:name] | [supercategory:meta_title]')->save();
+  }
 }
 
 /**

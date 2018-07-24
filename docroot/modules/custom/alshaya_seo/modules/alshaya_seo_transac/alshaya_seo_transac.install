@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding meta tag config for the 'advanced_page' bundle.
+ */
+function alshaya_seo_transac_update_8401() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['metatag.metatag_defaults.node__advanced_page'],
+    'alshaya_seo_transac',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
