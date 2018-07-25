@@ -588,6 +588,17 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
 }
 
 /**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_super_category_preprocess_html(&$variables) {
+  $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired('en');
+
+  if (!empty($term)) {
+    $variables['attributes']['class'][] = strtolower(Html::cleanCssIdentifier('super-category-' . $term['label']));
+  }
+}
+
+/**
  * Implements hook_alshaya_search_query_param_alter().
  */
 function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormStateInterface $form_state, $redirect_lang) {
