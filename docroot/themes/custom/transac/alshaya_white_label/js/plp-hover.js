@@ -10,7 +10,7 @@
     attach: function (context, settings) {
       var Hgt = 0;
       $('.c-products__item').each(function () {
-        var Height = $(this).find('> article').height();
+        var Height = $(this).find('> article').outerHeight(true);
         Hgt = (Hgt > Height) ? Hgt : Height;
       });
 
