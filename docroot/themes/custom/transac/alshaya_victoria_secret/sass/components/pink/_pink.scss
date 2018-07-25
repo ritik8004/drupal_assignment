@@ -57,10 +57,12 @@
 
     .c-plp,
     .c-department {
-      font-family: $pink-pinkslab;
-      font-size: 1.5rem !important;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      .c-page-title {
+        font-family: $pink-pinkslab;
+        font-size: 1.5rem !important;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
     }
 
     .acq-content-product,
