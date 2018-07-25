@@ -3,14 +3,14 @@
     .block-alshaya-main-menu {
       a {
         &.menu--one__link {
-          font-family: $PinkSans;
+          font-family: $pink-pinksans;
           font-size: 1.25rem !important;
           letter-spacing: 1px;
         }
 
         &.menu__link {
           @include breakpoint($upto-desktop) {
-            font-family: $PinkSans;
+            font-family: $pink-pinksans;
             font-size: 1.5rem !important;
             letter-spacing: 1px;
           }
@@ -39,7 +39,7 @@
 
       .back--link {
         @include breakpoint($upto-desktop) {
-          font-family: $PinkSans;
+          font-family: $pink-pinksans;
           font-size: 1.5rem !important;
           letter-spacing: 1px;
         }
@@ -48,7 +48,7 @@
 
     .term-description-mobile-only {
       .c-page-title {
-        font-family: $PinkSlab;
+        font-family: $pink-pinkslab;
         font-size: 2.25rem !important;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -57,7 +57,7 @@
 
     .c-plp,
     .c-department {
-      font-family: $PinkSlab;
+      font-family: $pink-pinkslab;
       font-size: 1.5rem !important;
       letter-spacing: 1px;
       text-transform: uppercase;
@@ -74,13 +74,13 @@
             text-transform: uppercase;
 
             &.title--sub {
-              font-family: $PinkSans;
+              font-family: $pink-pinksans;
               font-size: 1.125rem;
               letter-spacing: 1px;
             }
 
             &.title--main {
-              font-family: $PinkSlab;
+              font-family: $pink-pinkslab;
               font-size: 2.25rem;
               letter-spacing: 2px;
             }
@@ -92,7 +92,7 @@
     .field--name-field-skus {
       .sku-base-form {
         button[type="submit"] {
-          font-family: $PinkSans;
+          font-family: $pink-pinksans;
           font-size: 1.25rem;
           letter-spacing: 1px;
           font-weight: 700;
@@ -104,7 +104,7 @@
     .short-description-wrapper,
     .delivery-options-wrapper {
       .field__label {
-        font-family: $PinkSlab;
+        font-family: $pink-pinkslab;
         font-size: 1.5rem;
         letter-spacing: 1.5px;
         text-transform: uppercase;
@@ -113,7 +113,7 @@
 
     .subtitle {
       &.crossell-title {
-        font-family: $PinkSlab;
+        font-family: $pink-pinkslab;
         font-size: 1.5rem;
         letter-spacing: 1.5px;
         text-transform: uppercase;
@@ -123,7 +123,7 @@
     .promo-panel-fixed {
       &.block-promo-panel-wrapper {
         .promo-panel-label {
-          font-family: $PinkSlab;
+          font-family: $pink-pinkslab;
           font-size: 1.25rem;
           text-transform: uppercase;
         }
@@ -133,21 +133,21 @@
     .promo__panel {
       .paragraph--type--offers-bordered {
         .field--name-field-heading {
-          font-family: $PinkSans;
+          font-family: $pink-pinksans;
           font-size: 1.125rem;
           letter-spacing: 1.2px;
           text-transform: uppercase;
         }
 
         .field--name-field-title {
-          font-family: $PinkSlab;
+          font-family: $pink-pinkslab;
           font-size: 2.25rem;
           letter-spacing: 2px;
         }
 
         .field--name-field-link {
           a {
-            font-family: $PinkSans;
+            font-family: $pink-pinksans;
             font-size: 1.125rem;
             letter-spacing: 1.9px;
           }
@@ -158,7 +158,7 @@
     .primary__footer--menu,
     .footer--social {
       h3 {
-        font-family: $PinkSans;
+        font-family: $pink-pinksans;
         font-size: 1.25rem;
         letter-spacing: 1.9px;
       }
