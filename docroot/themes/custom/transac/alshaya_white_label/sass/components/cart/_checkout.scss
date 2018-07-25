@@ -1331,12 +1331,6 @@ html[lang=ar] {
   }
 }
 
-html[lang=ar] .alias--cart-checkout-login {
-  .site-brand-home {
-    max-width: 100%;
-  }
-}
-
 html[lang=ar] .alias--cart #table-cart-items tr th {
   @include breakpoint($tablet) {
     font-size: 0.75rem;
