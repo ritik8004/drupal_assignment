@@ -135,12 +135,16 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *
    * @param int $parent_id
    *   The term parent id, default 0.
+   * @param string $langcode
+   *   (optional) The language code.
    *
    * @return array
    *   Processed term data from cache if available or fresh.
    */
-  public function getCategoryTreeCached($parent_id = 0) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  public function getCategoryTreeCached($parent_id = 0, $langcode = NULL) {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
 
     $cid = self::CACHE_ID . '_' . $langcode . '_' . $parent_id;
 
