@@ -28,7 +28,9 @@
     }
 
     & > .menu__link-wrapper.menu-two__link-wrapper {
-      margin-bottom: 0.3125rem !important;
+      @include breakpoint($desktop) {
+        margin-bottom: 0.3125rem !important;
+      }
     }
 
     & > .menu-two__link-wrapper {
