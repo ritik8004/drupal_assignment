@@ -126,7 +126,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $variables['content']['site_name']['#markup'] = $meta_title;
       // Set the site path to brand page.
       if ($parent->id() != alshaya_super_category_get_default_term()) {
-        $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
+        $variables['content']['site_path']['#markup'] = $super_category->toUrl()->toString();
       }
       break;
   }
