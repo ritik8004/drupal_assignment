@@ -46,22 +46,19 @@
       }
     }
 
-    .term-description-mobile-only {
+    .term-description-mobile-only,
+    .c-plp,
+    .c-department {
       .c-page-title {
         font-family: $pink-pinkslab;
         font-size: 2.25rem !important;
         letter-spacing: 2px;
         text-transform: uppercase;
-      }
-    }
 
-    .c-plp,
-    .c-department {
-      .c-page-title {
-        font-family: $pink-pinkslab;
-        font-size: 1.5rem !important;
-        letter-spacing: 1px;
-        text-transform: uppercase;
+        @include breakpoint($only-mobile) {
+          font-size: 1.5rem !important;
+          letter-spacing: 1px;
+        }
       }
     }
 
@@ -74,17 +71,14 @@
 
           span {
             text-transform: uppercase;
+            font-family: $pink-pinkslab;
+            font-size: 2.25rem;
+            letter-spacing: 2px;
 
             &.title--sub {
               font-family: $pink-pinksans;
               font-size: 1.125rem;
               letter-spacing: 1px;
-            }
-
-            &.title--main {
-              font-family: $pink-pinkslab;
-              font-size: 2.25rem;
-              letter-spacing: 2px;
             }
           }
         }
