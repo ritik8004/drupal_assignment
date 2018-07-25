@@ -186,12 +186,15 @@
     }
   }
 
-  .term-description-mobile-only {
-    @include breakpoint($tablet) {
-      @include container(80.25rem);
+  .l-one--w {
+    .term-description-mobile-only {
+      @include breakpoint($tablet) {
+        @include container(80.25rem);
 
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+        width: 100%;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
     }
   }
 }

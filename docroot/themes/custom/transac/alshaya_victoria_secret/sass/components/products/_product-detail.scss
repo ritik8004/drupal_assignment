@@ -179,17 +179,14 @@
           display: block;
           text-align: center;
 
-          &:hover {
+          &:hover,
+          &.picked {
             border: 1px solid $pdp_color_attribute_hover;
-            background-color: $pdp_color_attribute_hover_bg;
+            font-weight: normal;
           }
 
-          &.picked {
-            border: 1px solid $pdp_color_attribute_picked;
-
-            &:hover {
-              background-color: $pdp_color_attribute_picked_hover;
-            }
+          &:hover {
+            background-color: $pdp_color_attribute_hover_bg;
           }
         }
       }

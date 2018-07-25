@@ -127,7 +127,7 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $variables['content']['site_name']['#markup'] = $meta_title;
       // Set the site path to brand page.
       if ($parent->id() != alshaya_super_category_get_default_term()) {
-        $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
+        $variables['content']['site_path']['#markup'] = $super_category->toUrl()->toString();
       }
       break;
   }
@@ -597,6 +597,17 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_super_category_preprocess_html(&$variables) {
+  $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired('en');
+
+  if (!empty($term)) {
+    $variables['attributes']['class'][] = strtolower(Html::cleanCssIdentifier('super-category-' . $term['label']));
   }
 }
 
