@@ -151,11 +151,11 @@ $vs-icons: 'alshaya-icons';
 $body_font: $vs-regular;
 
 // Used for victoria's pink super category content.
-$PinkSans: 'PinkSans';
-$PinkSlab: 'PinkSlab';
+$pink-pinksans: 'PinkSans';
+$pink-pinkslab: 'PinkSlab';
 
 // Used for victoria's sport super category content.
-$vs-sport: 'BentonSansCompMedium';
+$vs-sport-bentonsanscomp: 'BentonSansCompMedium';
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in VS theme.
 $arial: $vs-regular;

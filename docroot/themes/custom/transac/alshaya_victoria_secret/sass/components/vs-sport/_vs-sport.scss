@@ -4,7 +4,7 @@
     .c-plp,
     .c-department {
       .c-page-title {
-        font-family: $vs-sport;
+        font-family: $vs-sport-bentonsanscomp;
       }
     }
 
@@ -17,11 +17,11 @@
 
           span {
             &.title--sub {
-              font-family: $vs-sport;
+              font-family: $vs-sport-bentonsanscomp;
             }
 
             &.title--main {
-              font-family: $vs-sport;
+              font-family: $vs-sport-bentonsanscomp;
             }
           }
         }
@@ -31,7 +31,7 @@
     .field--name-field-skus {
       .sku-base-form {
         button[type="submit"] {
-          font-family: $vs-sport;
+          font-family: $vs-sport-bentonsanscomp;
         }
       }
     }
@@ -39,20 +39,20 @@
     .short-description-wrapper,
     .delivery-options-wrapper {
       .field__label {
-        font-family: $vs-sport;
+        font-family: $vs-sport-bentonsanscomp;
       }
     }
 
     .subtitle {
       &.crossell-title {
-        font-family: $vs-sport;
+        font-family: $vs-sport-bentonsanscomp;
       }
     }
 
     .promo-panel-fixed {
       &.block-promo-panel-wrapper {
         .promo-panel-label {
-          font-family: $vs-sport;
+          font-family: $vs-sport-bentonsanscomp;
         }
       }
     }
@@ -60,16 +60,16 @@
     .promo__panel {
       .paragraph--type--offers-bordered {
         .field--name-field-heading {
-          font-family: $vs-sport;
+          font-family: $vs-sport-bentonsanscomp;
         }
 
         .field--name-field-title {
-          font-family: $vs-sport;
+          font-family: $vs-sport-bentonsanscomp;
         }
 
         .field--name-field-link {
           a {
-            font-family: $vs-sport;
+            font-family: $vs-sport-bentonsanscomp;
           }
         }
       }
