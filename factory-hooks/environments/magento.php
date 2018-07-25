@@ -61,11 +61,19 @@ function alshaya_get_magento_host_data() {
           'en' => 7,
           'ar' => 10,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 16,
           'ar' => 13,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
@@ -122,20 +130,25 @@ function alshaya_get_magento_host_data() {
           'en' => 1,
           'ar' => 2,
         ],
-        'magento_lang_prefix' => [
-          'en' => 'default',
-        ],
       ],
       'sa' => [
         'store_id' => [
           'en' => 8,
           'ar' => 5,
         ],
+        'magento_lang_prefix' => [
+          'en' => 'sau_en',
+          'ar' => 'sau_ar',
+        ],
       ],
       'ae' => [
         'store_id' => [
           'en' => 14,
           'ar' => 11,
+        ],
+        'magento_lang_prefix' => [
+          'en' => 'are_en',
+          'ar' => 'are_ar',
         ],
       ],
     ],
