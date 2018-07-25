@@ -103,8 +103,8 @@
         });
       }
 
-      var plpfeaturedproduct = $('.nodetype--advanced_page .paragraph--type--product-carousel-category .product-category-carousel');
-      var advancedfeaturedproduct = $('.frontpage .paragraph--type--product-carousel-category .product-category-carousel');
+      var plpfeaturedproduct = $('.l-two--sf  .paragraph--type--product-carousel-category .product-category-carousel');
+      var advancedfeaturedproduct = $('.l-one--w .paragraph--type--product-carousel-category .product-category-carousel');
       var crossSell = $('.horizontal-crossell .owl-carousel');
       var upSell = $('.horizontal-upell .owl-carousel');
       var relatedSell = $('.horizontal-related .owl-carousel');
