@@ -1,0 +1,47 @@
+﻿aftershave,perfume,edt,edp,perfume,parfum,eau de toilette,fragrance,mist
+aromatherapy
+bath fizzy,bath bomb
+bath,soak
+body bar,soap,bar of soap
+body cream,body butter,moisturiser
+body oil,massage oil,essential oil
+body scrub,scrub,exfoliating,exfoliate
+body wash,shower gel
+bronzer,fake tan,self tan,tanning,tanner
+bubble bath,foam bath,bath soak
+candle sleeve,candle holder,candle sleeves,candle holders
+candle,candles,tealight,tealights
+cleanser
+comfort,relax,relaxation,relaxing
+cosmetic bag,make-up bag,makeup bag
+cream,lotion
+deodorizing,deoderant,anti perspirant
+energy,energising
+essential oil,body oil,massage oil
+face mask,facial,mudpack,face pack
+foam bath,bubble bath,bath soak,bath salts
+foot scrub
+fragrance mist,aftershave,perfume,edt,edp,perfume,parfum,eau de toilette,splash
+fragrance,aftershave,perfume,edt,edp,perfume,parfum,eau de toilette,splash
+hair mist,hair spray
+hair wash,shampoo,hair cleanser
+hand cream,hand lotion
+hand soap,hand wash,handwash,kitchen soap
+japanese cherry blossom,jcb
+lotion,cream
+mini,travel,travel size,small
+mist,spray
+moisturising,softening,moisturiser,softener
+pocketbac,antibacterial,antibac
+refill,re-fill,re fill,replacement
+room spray,air freshener,air freshner
+scentportable,car
+shimmer,sparkling,sparkle
+shower gel,body wash
+sleep,relax,relaxation,relaxing
+sleeve,holder
+soak,salts
+sponge,pouffe,puff
+towelette,towelettes,wipe,wipes
+travel size,mini,small,micro,travel
+wallflower,wall flower,diffuser,air freshener,plug
