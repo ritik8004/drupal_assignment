@@ -65,9 +65,13 @@
       padding-left: 1.5rem;
       font-size: 0;
 
+      @include breakpoint($desktop) {
+        height: 2.5rem;
+      }
+
       @include breakpoint($upto-desktop) {
         width: 100%;
-        background: $header_top_bg;
+        background-color: $header_super_category_bg;
         position: static;
         padding: 0;
         transform: none;
@@ -81,12 +85,40 @@
 
       li {
         display: inline-block;
+
+        @include breakpoint($upto-desktop) {
+          background: $header_top_bg;
+          height: 2.8125rem;
+        }
       }
     }
 
     .active--menu--links li.menu--one__list-item:hover {
       a.menu--one__link {
         border: 0;
+      }
+    }
+  }
+}
+
+// Hotfix for chrome / opera spacing bug.
+.chrome,
+.opera {
+  .c-menu-primary {
+    .block-alshaya-super-category-menu {
+      .menu--one__list {
+        @include breakpoint($upto-desktop) {
+          display: flex !important;
+        }
+
+        li {
+          @include breakpoint($upto-desktop) {
+            display: block;
+            margin-#{$left}: -1px;
+            flex-grow: 1;
+            width: auto;
+          }
+        }
       }
     }
   }

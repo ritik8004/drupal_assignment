@@ -121,16 +121,12 @@ class CheckoutController implements ContainerInjectionInterface {
    *   AjaxResponse object.
    */
   public function useAddress(Profile $profile) {
-    $cart = $this->cartStorage->getCart();
-
-    $address = $this->addressBookManager->getAddressFromEntity($profile);
-
-    $update = [];
-    $update['customer_address_id'] = $address['customer_address_id'];
-    $update['country_id'] = $address['country_id'];
-    $update['customer_id'] = $cart->customerId();
-
-    $this->checkoutHelper->setCartShippingHistory('hd', $update);
+    $update = $this->checkoutHelper->getFullAddressFromEntity($profile);
+    $this->checkoutHelper->setCartShippingHistory(
+      'hd',
+      $update,
+      ['customer_address_id' => $profile->get('field_address_id')->getString()]
+    );
 
     // Clear the shipping method info now to ensure we set it properly again.
     $this->cartStorage->clearShippingMethodSession();

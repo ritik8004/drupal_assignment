@@ -97,7 +97,7 @@ ul[data-drupal-facet-id=category] {
   .facet-item--expanded {
     & > ul ul .facet-item {
       @include breakpoint($only-tablet) {
-        margin-#{$left}: 1px;
+        margin-#{$left}: 0;
       }
     }
   }
@@ -114,6 +114,22 @@ ul[data-drupal-facet-id=category] {
           @include breakpoint($only-mobile) {
             top: 0.875rem;
           }
+        }
+
+        & > ul {
+          & > li > ul {
+            margin-#{$left}: 1rem !important;
+
+            input[type=checkbox] ~ label::before {
+              top: -1px;
+            }
+          }
+        }
+      }
+
+      ul ul {
+        ul {
+          margin-#{$left}: 1.5rem;
         }
       }
     }

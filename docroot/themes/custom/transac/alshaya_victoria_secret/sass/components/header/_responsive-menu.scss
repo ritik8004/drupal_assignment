@@ -190,10 +190,13 @@ header {
     position: fixed;
     display: block;
     z-index: 3;
+    transform: translate3d(0, 0, 0);
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
   .block-cart-mini-block {
-    width: 25%;
+    width: 26%;
     #{$right}: 0;
     top: 2.8125rem;
     z-index: 1;
@@ -205,8 +208,11 @@ header {
     }
   }
 
-  .menu--active .mobile--close {
-    #{$left}: 16.875rem;
+  .mobile--close {
+    .menu--active & {
+      #{$left}: 16.875rem;
+    }
+
     top: 2.8125rem;
     height: 2.8125rem;
     width: 2.8125rem;
@@ -274,7 +280,7 @@ header {
 
   &.navbar-fixed-top {
     @include breakpoint($upto-desktop) {
-      z-index: 6;
+      position: static;
     }
   }
 
@@ -306,12 +312,8 @@ header {
 }
 
 .mobile--overlay {
-  .menu--mobile-navigation {
-    background-color: transparent;
-  }
-
   .c-menu-primary .region__menu-primary .menu--mobile-navigation {
-    border-bottom-color: transparent;
+    z-index: 5;
   }
 }
 
