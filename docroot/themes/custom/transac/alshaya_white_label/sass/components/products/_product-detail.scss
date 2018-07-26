@@ -1580,12 +1580,15 @@
         &.picked,
         &:hover {
           color: $pdp_size_option_selected_text;
-          font-weight: bold;
           background: $pdp_size_option_selected_bg;
 
           html[lang=ar] .safari & {
             font-weight: normal;
           }
+        }
+
+        &.picked {
+          font-weight: bold;
         }
       }
 
