@@ -506,8 +506,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
 
-              $free_sku_title = [
-                '#title' => $free_sku_entity->get('name')->getString(),
+              $free_sku_title = $free_sku_image = [
                 '#type' => 'link',
                 '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
                   [
@@ -520,7 +519,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
                   'data-dialog-options' => '{"width":"auto"}',
                 ],
               ];
-
+              $free_sku_title['#title'] = $free_sku_entity->get('name')->getString();
               $free_sku_title = \Drupal::service('renderer')->render($free_sku_title);
 
               // Get sku title & image.
@@ -548,21 +547,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               }
 
               if ($free_sku_media) {
-                $free_sku_media = [
-                  '#title' => $skuManager->getSkuImage($free_sku_media, '192x168'),
-                  '#type' => 'link',
-                  '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
-                    [
-                      'acq_sku' => $free_sku_entity->id(),
-                      'js' => 'nojs',
-                    ]),
-                  '#attributes' => [
-                    'class' => ["use-ajax"],
-                    'data-dialog-type' => "modal",
-                    'data-dialog-options' => '{"width":"auto"}',
-                  ],
-                ];
-                $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_media);
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, '192x168');
+                $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
           }
