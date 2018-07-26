@@ -11,7 +11,7 @@
 
   #edit-actions-top .checkout-top-button {
     max-height: inherit;
-    line-height: 1.1;
+    line-height: 0.9;
   }
 
   #table-cart-items table {
@@ -26,14 +26,95 @@
     tr {
       border-bottom: 1px solid $primary_table_border;
 
+      td {
+        &.name {
+          @include breakpoint ($desktop) {
+            html[lang=ar] & {
+              padding-right: 1.375rem;
+              padding-left: 0.25rem;
+            }
+          }
+        }
+
+        .form-type-select .select2-selection {
+          height: 2.5rem;
+          padding-top: 0.5rem;
+
+          .select2-selection__arrow {
+            height: 2.5rem;
+
+            &::after {
+              line-height: 1.5;
+            }
+          }
+        }
+
+        select {
+          height: 2.5rem;
+          padding-top: 0.875rem;
+          padding-#{$left}: 0.625rem;
+        }
+
+        .form-type-select::after {
+          height: 2.5rem;
+          line-height: 1.5;
+        }
+
+        img {
+          max-width: 100%;
+        }
+      }
+
       @include breakpoint ($upto-tablet) {
         td {
           &.name {
             padding-#{$left}: 0;
+            padding-#{$right}: 0;
+
+            div.image {
+              width: 6.125rem;
+            }
+
+            div.items {
+              width: 58%;
+
+              html[lang=ar] & {
+                width: 58%;
+              }
+
+              & > .dark {
+                margin-bottom: 0.5rem;
+              }
+            }
           }
 
           &.quantity {
-            padding-#{$left}: 0.312rem;
+            float: $right;
+            margin-left: 0;
+            width: calc(100% - 6.5rem);
+            margin-top: -2.2rem;
+
+            html[lang=ar] & {
+              width: calc(100% - 6rem);
+            }
+
+            a {
+              line-height: 3.4;
+            }
+          }
+
+          .image {
+            html[lang=ar] & {
+              border: 0;
+            }
+          }
+
+          img {
+            max-width: 100%;
+
+            html[lang=ar] & {
+              border: 1px solid $basket_img_border;
+            }
           }
 
           .dark a {
@@ -51,17 +132,33 @@
           &.delivery-option {
             float: $right;
             padding-#{$right}: 0;
+            width: calc(100% - 6.5rem);
+
+            html[lang=ar] & {
+              width: calc(100% - 6rem);
+            }
 
             .delivery-options-mobile {
               float: $right;
               font-size: 0.875rem;
               font-family: $alshaya-bold;
               margin-bottom: 0.9375rem;
+              width: 100%;
+              color: $primary_text;
             }
 
             .delivery-options-tooltip-wrapper {
               float: $right;
               position: static;
+              width: 100%;
+
+              .tooltip--head {
+                font-size: 0.875rem;
+              }
+
+              .tooltip--wrap {
+                margin-bottom: 0.9375rem;
+              }
             }
           }
         }
@@ -81,12 +178,19 @@
         color: $basket_td_sec_txt;
       }
     }
+
+    .edit-checkout .ladda-label {
+      html[lang=ar] & {
+        font-size: 0.875rem !important;
+      }
+    }
   }
 
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
     color: $basket_continue_shopping_link;
+    font-size: 0.875rem;
   }
 
   .empty-cart-wrapper {

@@ -771,6 +771,7 @@
       font-family: $arial;
       font-size: 0.75rem;
       margin-bottom: 0.75rem;
+      display: block;
     }
   }
 
@@ -1017,6 +1018,12 @@
       span {
         display: block;
       }
+    }
+  }
+
+  tr[data-drupal-selector=edit-totals-vat-tax] {
+    td:last-child {
+      background-color: $basket_vat_price_bg !important;
     }
   }
 }

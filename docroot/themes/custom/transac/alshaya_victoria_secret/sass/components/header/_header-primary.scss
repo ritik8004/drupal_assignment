@@ -428,3 +428,11 @@ header {
     }
   }
 }
+
+@include breakpoint($upto-desktop) {
+  .menu--two__list-item {
+    .menu__in {
+      margin-top: -2.25rem;
+    }
+  }
+}

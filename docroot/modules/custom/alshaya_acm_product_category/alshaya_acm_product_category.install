@@ -54,9 +54,25 @@ function alshaya_acm_product_category_update_8014() {
 /**
  * Implements hook_update_N().
  *
- * Update view of PLP promotional banner to hide if empty.
+ * Update views for product category taxonomy terms.
  */
 function alshaya_acm_product_category_update_8013() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'views.view.product_category_level_3',
+    'views.view.product_category_level_2_3',
+  ],
+    'alshaya_acm_product_category'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update view of PLP promotional banner to hide if empty.
+ */
+function alshaya_acm_product_category_update_8012() {
   alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_product_category');
 }
 
@@ -71,22 +87,6 @@ function alshaya_acm_product_category_update_dependencies() {
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update views for product category taxonomy terms.
- */
-function alshaya_acm_product_category_update_8012() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs([
-    'views.view.product_category_level_3',
-    'views.view.product_category_level_2_3',
-  ],
-    'alshaya_acm_product_category'
-  );
 }
 
 /**

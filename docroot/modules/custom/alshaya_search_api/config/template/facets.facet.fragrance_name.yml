@@ -11,9 +11,9 @@ third_party_settings:
   alshaya_search:
     display_textbox: 1
     display_textbox_item_count: '1'
-id: fragrancename
+id: fragrance_name
 name: Fragrance Name
-url_alias: fragrancename
+url_alias: fragrance_name
 weight: 0
 min_count: 1
 show_only_one_result: false

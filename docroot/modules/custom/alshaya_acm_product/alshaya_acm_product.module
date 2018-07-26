@@ -439,7 +439,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if ($selected_value) {
           $selected_sku = SKU::load($selected_value);
 
-          if ($selected_sku instanceof SKUInterface) {
+          if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
             $sku_for_gallery = $selected_sku;
           }
         }
