@@ -973,6 +973,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
+    $user_input_configurables = $form_state->getUserInput();
+    $selected = $user_input_configurables['configurables'] ?? [];
+    $selected = array_filter($selected);
+
     // Prepare array of just the configurable options.
     $configurables = [];
     foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
@@ -984,17 +988,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // If there are no options to display, we show the product as not
     // available.
     if (empty($configurables)) {
-      $form['ajax']['configurables'] = [
-        '#markup' => '',
-      ];
-      $form['quantity'] = [
-        '#title' => '',
-        '#markup' => '',
-      ];
-      $form['add_to_cart'] = [
-        '#markup' => '<span class="out-of-stock">' . t('not available') . '</span>',
-      ];
-
+      $form = _alshaya_acm_product_get_not_available_form_with_text(t('not available'));
       return;
     }
 
@@ -1015,10 +1009,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $sku_entity->get('attribute_set')->getString()
       );
 
-      $user_input_configurables = $form_state->getUserInput();
-      $selected = $user_input_configurables['configurables'] ?? [];
-      $selected = array_filter($selected);
-
       if ($selected && count($selected) != count($product_tree['configurables'])) {
         $delete_next = FALSE;
 
@@ -1034,10 +1024,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             $delete_next = TRUE;
           }
         }
-
-        $form_state->setValue('configurables', $selected);
-        $user_input_configurables['configurables'] = $selected;
-        $form_state->setUserInput($user_input_configurables);
       }
 
       $first_child = $sku_manager->getFirstChildForSku(
@@ -1060,32 +1046,24 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         (!isset($user_input_configurables['configurables'], $user_input_configurables['configurables'][$root_attribute_code]))) {
         $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
         $selected = [$root_attribute_code => $first_child_root_attr_value];
-        $form_state->setValue('configurables', $selected);
-        $user_input_configurables['configurables'] = $selected;
-        $form_state->setUserInput($user_input_configurables);
       }
-
-      // Avoid NULL values.
-      $selected = $selected ?? [];
 
       $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
-
-      $form_state->setValue('configurables', $selected);
-      $user_input_configurables['configurables'] = $selected;
-      $form_state->setUserInput($user_input_configurables);
     }
-    else {
-      // If only one configurable option there, select first value as default.
-      if (count($configurables) == 1) {
-        $options = $configurable['#options'];
-        if (count($options) == 1) {
-          $form['ajax']['configurables'][key($configurables)]['#value'] = key($options);
-          $user_input = $form_state->getUserInput();
-          $user_input['configurables'] = [key($configurables) => key($options)];
-          $form_state->setUserInput($user_input);
-        }
+    // If only one configurable option there, select first value as default.
+    elseif (count($form['ajax']['configurables']) == 1) {
+      $key = key($form['ajax']['configurables']);
+      $options = $form['ajax']['configurables'][$key]['#options'];
+      if (count($options) == 1) {
+        $value = key($options);
+        $form['ajax']['configurables'][$key]['#value'] = $value;
+        $selected = [$key => $value];
       }
     }
+
+    $form_state->setValue('configurables', $selected);
+    $user_input_configurables['configurables'] = $selected;
+    $form_state->setUserInput($user_input_configurables);
 
     foreach ($form['ajax']['configurables'] as $key => &$configurable) {
       if (!is_array($configurable)) {
@@ -1134,6 +1112,33 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
+    // Process stock now.
+    if (!empty($selected)) {
+      // Get all child SKUs possible for the selected root attribute to do a
+      // stock check on visible child attributes that belong to the child
+      // SKUs.
+      $variations = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
+
+      // Check stock for variations & update options.
+      foreach ($variations as $key => $variation) {
+        if ($key === '#available_config') {
+          continue;
+        }
+
+        if ($variation instanceof SKU) {
+          $attribute_parts = explode(':', $key);
+
+          $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
+          if ($quantity > 0) {
+            // Set the dropdown quantity options only for selected option.
+            if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
+              $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+            }
+          }
+        }
+      }
+    }
+
     // We show the size guide link if available as prefix.
     $size_guide = _alshaya_acm_product_get_size_guide_info();
     if (isset($size_guide['link'])) {
@@ -1171,113 +1176,33 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
       }
     }
-
-    // Process stock now.
-    if (count($product_tree['configurables']) > 1) {
-      if (!empty($selected)) {
-        // Get all child SKUs possible for the selected root attribute to do a
-        // stock check on visible child attributes that belong to the child
-        // SKUs.
-        $variations = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
-
-        // Check stock for variations & update options.
-        foreach ($variations as $key => $variation) {
-          if ($key === '#available_config') {
-            continue;
-          }
-
-          if ($variation instanceof SKU) {
-            $attribute_parts = explode(':', $key);
-
-            $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
-            if ($quantity > 0) {
-              // Set the dropdown quantity options only for selected option.
-              if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
-                $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-              }
-            }
-          }
-        }
-      }
-    }
-    else {
-      foreach ($form['ajax']['configurables'] as $configurable_key => &$configurable) {
-        if (!is_array($configurable)) {
-          continue;
-        }
-
-        // Check if it is a dropdown, we disable the options for which we don't
-        // have stock. Apply this check only if we have just 1 configurable
-        // attribute. With multiple conf attributes, we cannot get the SKU with
-        // a single option.
-        if (isset($configurable['#options'])) {
-          foreach ($configurable['#options'] as $key => $value) {
-            $sku = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), [$configurable_key => $key]);
-            if ($sku instanceof SKU) {
-              $quantity = (int) alshaya_acm_get_stock_from_sku($sku);
-              if ($quantity > 0) {
-                // Set the dropdown quantity options only for selected option.
-                if (isset($selected[$configurable_key]) && $selected[$configurable_key] == $key) {
-                  $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-                }
-              }
-              else {
-                $configurable['#options_attributes'][$key]['disabled'] = 'disabled';
-              }
-            }
-            // For some reason we don't have proper data for the option.
-            else {
-              unset($configurable['#options'][$key]);
-            }
-          }
-        }
-
-        // If there are no options to display for any of the option, we show the
-        // product as not available.
-        if (empty($configurable['#options'])) {
-          $configurable = [
-            '#markup' => '',
-          ];
-          $form['quantity'] = [
-            '#title' => '',
-            '#markup' => '',
-          ];
-          $form['add_to_cart'] = [
-            '#markup' => '<span class="out-of-stock">' . t('not available') . '</span>',
-          ];
-        }
-
-        // If all the options are disabled, we show the product is out of stock.
-        // We reduce one in options_attributes count as we will always have
-        // empty_option disabled.
-        elseif (count($configurable['#options']) == (count(array_column($configurable['#options_attributes'], 'disabled')) - 1)) {
-          $configurable = [
-            '#markup' => '',
-          ];
-          $form['quantity'] = [
-            '#title' => '',
-            '#markup' => '',
-          ];
-          $form['add_to_cart'] = [
-            '#markup' => '<span class="out-of-stock">' . t('Out of stock') . '</span>',
-          ];
-        }
-      }
-    }
   }
   // Stock check for quantity for all other products.
   elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
-    $form['quantity'] = [
-      '#title' => '',
-      '#markup' => '',
-    ];
-    $form['add_to_cart'] = [
-      '#markup' => '<span class="out-of-stock">' . t('out of stock') . '</span>',
-    ];
+    $form = _alshaya_acm_product_get_not_available_form_with_text(t('Out of stock'));
   }
+}
+
+/**
+ * Get small form just to show OOS or Not available message.
+ *
+ * @param \Drupal\Core\StringTranslation\TranslatableMarkup|string $text
+ *   Text to show.
+ *
+ * @return array
+ *   Small form with just the message.
+ */
+function _alshaya_acm_product_get_not_availabble_form_with_text($text) {
+  $form = [];
+
+  $form['add_to_cart'] = [
+    '#markup' => '<span class="out-of-stock">' . $text . '</span>',
+  ];
+
+  return $form;
 }
 
 /**
