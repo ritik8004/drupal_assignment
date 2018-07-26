@@ -8,22 +8,6 @@
 use Drupal\Core\Site\Settings;
 
 /**
- * Implements hook_update_N().
- *
- * Create you'll be able to block for checkout confirmation.
- */
-function alshaya_vs_transac_update_8001() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  $manager->updateConfigs(
-    ['block.block.youllbeableto_checkout_confirm'],
-    'alshaya_vs_transac',
-    'optional'
-  );
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_vs_transac_install() {
