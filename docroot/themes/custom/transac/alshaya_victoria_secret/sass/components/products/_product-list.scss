@@ -46,7 +46,7 @@
     @include breakpoint ($desktop) {
       width: 31.6%;
       max-width: 18.1875rem;
-      margin-#{$right}: 2.4%;
+      margin-#{$right}: 2.5%;
       margin-bottom: 2rem;
     }
 
@@ -207,6 +207,7 @@
               text-transform: none;
               padding: 0.75rem 1rem;
               height: 2.5rem;
+              line-height: 1.2;
             }
 
             &.facet-item__status {
@@ -261,6 +262,7 @@
                 text-transform: uppercase;
                 font-family: $vs-bold;
                 border-width: 1px;
+                line-height: 1.2;
               }
             }
           }
@@ -287,11 +289,7 @@
 
 .price--discount {
   font-size: 0.75rem;
-
-  @include breakpoint($only-tablet) {
-    margin-top: 0.625rem;
-    margin-bottom: 0.625rem;
-  }
+  margin: 0.625rem 0;
 }
 
 .alshaya_search_slider {
@@ -336,6 +334,11 @@
           padding: 0.5rem;
           position: static;
           line-height: 1.4;
+
+          html[lang=ar] & {
+            height: 2.5rem;
+            padding-left: 3rem;
+          }
         }
 
         &::after {
@@ -343,9 +346,8 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          line-height: 2.5rem;
+          line-height: 2.1875rem;
           font-size: 2rem;
-          z-index: auto;
         }
       }
     }
@@ -356,16 +358,29 @@
   .field--name-field-skus {
     .form-item-quantity::after {
       @include breakpoint($tablet) {
+        font-size: 2rem;
         #{$right}: 0;
       }
     }
   }
 }
 
-.view-plp-promotional-banner {
-  img {
-    &:empty {
-      display: none;
+.c-plp {
+  ul {
+    &.js-pager__items {
+      margin-top: 3rem;
+
+      a {
+        font-size: 0.875rem;
+        line-height: 1.29;
+        text-transform: uppercase;
+        padding: 0.62625rem 3.9375rem;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          width: 100%;
+        }
+      }
     }
   }
 }

@@ -13,21 +13,6 @@ use Drupal\Core\Site\Settings;
  *
  * Update the store finder config to install label position settings.
  */
-function alshaya_stores_finder_update_8105() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_stores_finder.settings'],
-    'alshaya_stores_finder',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-  );
-}
-
-/**
- * Implements hook_update().
- *
- * Update the store finder config to install label position settings.
- */
 function alshaya_stores_finder_update_8104() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -38,12 +23,7 @@ function alshaya_stores_finder_update_8104() {
   );
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', [
-      'x' => 7,
-      'y' => 17,
-      'single_x' => 10,
-      'single_y' => 17,
-    ])
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }
 
@@ -114,11 +94,6 @@ function alshaya_stores_finder_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', [
-      'x' => 7,
-      'y' => 15,
-      'single_x' => 11,
-      'single_y' => 15,
-    ])
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 }

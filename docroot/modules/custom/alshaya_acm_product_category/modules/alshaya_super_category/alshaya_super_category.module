@@ -103,6 +103,11 @@ function alshaya_super_category_preprocess_block(&$variables) {
       $langcode = \Drupal::service('language_manager')
         ->getCurrentLanguage()
         ->getId();
+
+      $super_category = \Drupal::service('entity.repository')->getTranslationFromContext($parent, $langcode);
+      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
+      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
+
       $langcode = ($langcode != 'en') ? '-' . $langcode : '';
       // Current active theme object.
       $theme = \Drupal::service('theme.manager')->getActiveTheme();
@@ -118,10 +123,35 @@ function alshaya_super_category_preprocess_block(&$variables) {
       }
       // Set image Alt based on current brand.
       $variables['content']['site_logo']['#alt']    = $parent->label();
-      $variables['content']['site_name']['#markup'] = $parent->label();
+      $variables['content']['site_name']['#markup'] = $meta_title;
       // Set the site path to brand page.
       if ($parent->id() != alshaya_super_category_get_default_term()) {
-        $variables['content']['site_path']['#markup'] = $parent->toUrl()->toString();
+        $variables['content']['site_path']['#markup'] = $super_category->toUrl()->toString();
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_block_alter().
+ */
+function alshaya_super_category_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  switch ($variables['elements']['#base_plugin_id']) {
+    case 'system_branding_block':
+      // Check super category feature status.
+      if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+        return;
+      }
+
+      /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+      $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+      $term = $product_category_tree->getCategoryTermFromRoute();
+
+      if ($term instanceof TermInterface) {
+        $root_terms = $product_category_tree->getCategoryRootTerms();
+        if (in_array($term->id(), array_keys($root_terms))) {
+          $suggestions[] = "block__system_branding__home_block";
+        }
       }
       break;
   }
@@ -438,15 +468,17 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
 
     if (is_array($term)) {
+
       $form['brand'] = [
         '#type' => 'hidden',
         '#value' => $term['id'],
       ];
 
       $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      $path = str_replace("/$lang/", '', $term['path']);
+      $path = str_replace("/$lang/", '', urldecode($term['path']));
+
       if (strpos($path, 'taxonomy') === FALSE) {
-        $form['brand']['#value'] = $path;
+        $form['brand']['#value'] = ($lang == 'ar') ? urldecode($path) : $path;
       }
     }
 
@@ -474,7 +506,7 @@ function alshaya_super_category_get_default_term() {
  * Implements hook_block_access().
  */
 function alshaya_super_category_block_access(Block $block, $operation, AccountInterface $account) {
-  if ($operation !== 'view' || !in_array($block->id(), ['breadcrumbs'])) {
+  if ($operation != 'view' || !in_array($block->getPluginId(), ['system_breadcrumb_block', 'page_title_block'])) {
     return;
   }
 
@@ -485,7 +517,7 @@ function alshaya_super_category_block_access(Block $block, $operation, AccountIn
   }
 
   $route = \Drupal::routeMatch();
-  if ($route->getRouteName() !== 'entity.node.canonical') {
+  if ($route->getRouteName() != 'entity.node.canonical') {
     return;
   }
 
@@ -493,8 +525,7 @@ function alshaya_super_category_block_access(Block $block, $operation, AccountIn
   $node = $route->getParameter('node');
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
     /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
-    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    $terms = $product_category_tree->getCategoryRootTerms();
+    $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
 
     $category_id = NULL;
     if ($category = $node->get('field_product_category')->getValue()) {
@@ -554,4 +585,60 @@ function alshaya_super_category_language_switch_links_alter(array &$links, $type
       }
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function alshaya_super_category_preprocess_html(&$variables) {
+  $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired('en');
+
+  if (!empty($term)) {
+    $variables['attributes']['class'][] = strtolower(Html::cleanCssIdentifier('super-category-' . $term['label']));
+  }
+}
+
+/**
+ * Implements hook_alshaya_search_query_param_alter().
+ */
+function alshaya_super_category_alshaya_search_query_param_alter(&$query, FormStateInterface $form_state, $redirect_lang) {
+  if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    return;
+  }
+
+  $brand = $form_state->getValue('brand');
+  if (!is_numeric($brand)) {
+    $params = Url::fromUserInput("/$brand")->getRouteParameters();
+    if (!empty($params['taxonomy_term'])) {
+      $brand = $params['taxonomy_term'];
+    }
+  }
+
+  // Get brand path in given language to redirect.
+  $alias = \Drupal::service('path.alias_manager')->getAliasByPath('/taxonomy/term/' . $brand, $redirect_lang->getId());
+  // Decode url string of encoded value. (arabic strings are encoded).
+  if ($brand = str_replace("/", '', urldecode($alias))) {
+    $query['brand'] = $brand;
+  }
+}
+
+/**
+ * Get super category for a given the term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   Term object.
+ *
+ * @return \Drupal\Core\Entity\EntityInterface|null|static
+ *   Super category term.
+ */
+function _alshaya_super_category_get_super_category_for_term(TermInterface $term) {
+  if (!empty($super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired($term))) {
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    if (!empty($super_category_term = Term::load($super_category['id']))) {
+      // We doing this as we not getting translated values.
+      return \Drupal::service('entity.repository')->getTranslationFromContext($super_category_term, $langcode);
+    }
+  }
+
+  return NULL;
 }

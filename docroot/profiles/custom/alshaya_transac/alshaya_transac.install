@@ -13,30 +13,19 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Create "join the club" block for checkout confirm page.
- */
-function alshaya_transac_update_8116() {
-  alshaya_config_install_configs(['block.block.jointheclub_checkout_confirm'], 'alshaya_transac', 'optional');
-  // Move "join the club" block  from alshaya_white_label to default theme.
-  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
-}
-
-/**
- * Implements hook_update_N().
- *
- * Install alshaya_product_options module.
- */
-function alshaya_transac_update_8115() {
-  \Drupal::service('module_installer')->install(['alshaya_product_options']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Change stock mode based on settings.
+ * Install alshaya_product_options module.
+ * Create "join the club" block for checkout confirm page.
  */
 function alshaya_transac_update_8114() {
   \Drupal::configFactory()->getEditable('acq_sku.settings')->save();
+
+  \Drupal::service('module_installer')->install(['alshaya_product_options']);
+
+  alshaya_config_install_configs(['block.block.jointheclub_checkout_confirm'], 'alshaya_transac', 'optional');
+
+  // Move "join the club" block  from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
 }
 
 /**
@@ -318,6 +307,7 @@ function alshaya_transac_install() {
     'alshaya_acm_knet',
     'alshaya_static_html',
     'alshaya_product_options',
+    'alshaya_image_sitemap',
   ];
 
   global $_alshaya_modules_installed;

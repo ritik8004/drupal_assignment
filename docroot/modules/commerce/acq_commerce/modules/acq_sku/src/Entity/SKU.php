@@ -108,11 +108,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Whether to download media or not.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
+   * @param string $default_label
+   *   Default value for alt/title.
    *
    * @return array
    *   Array of media files.
    */
-  public function getMedia($download_media = TRUE, $reset = FALSE) {
+  public function getMedia($download_media = TRUE, $reset = FALSE, $default_label = '') {
     if (!$reset && !empty($this->mediaData)) {
       return $this->mediaData;
     }
@@ -132,7 +134,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        $media_item = $this->processMediaItem($update_sku, $data, $download_media);
+        $media_item = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
 
         if ($media_item &&
           isset($media_item['roles'])
@@ -159,11 +161,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Whether to download media or not.
    * @param bool $reset
    *   Flag to reset cache and generate array again from serialized string.
+   * @param string $default_label
+   *   Default value for alt/title.
    *
    * @return array
    *   Array containing media item.
    */
-  public function getSwatchImage($download = TRUE, $reset = FALSE) {
+  public function getSwatchImage($download = TRUE, $reset = FALSE, $default_label = '') {
     if (!$reset && !empty($this->swatchData)) {
       return $this->swatchData;
     }
@@ -183,7 +187,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        $media_item = $this->processMediaItem($update_sku, $data, $download);
+        $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
 
         if ($media_item && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
           $this->swatchData = $media_item;
@@ -210,11 +214,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Media item array.
    * @param bool $download
    *   Flag to specify if we should download missing images or not.
+   * @param string $default_label
+   *   Default value for alt/title.
    *
    * @return array|null
    *   Processed media item or null if some error occurred.
    */
-  protected function processMediaItem(&$update_sku, array &$data, $download = FALSE) {
+  protected function processMediaItem(&$update_sku, array &$data, $download = FALSE, $default_label = '') {
     $media_item = $data;
 
     // Processing is required only for media type image as of now.
@@ -231,7 +237,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
           // Try to download again if download flag is set to true.
           if ($download) {
-            return $this->processMediaItem($update_sku, $data, TRUE);
+            return $this->processMediaItem($update_sku, $data, TRUE, $default_label);
           }
         }
       }
@@ -254,7 +260,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       }
 
       if (empty($data['label'])) {
-        $media_item['label'] = $this->label();
+        $media_item['label'] = $default_label ?: $this->label();
       }
 
       return $media_item;

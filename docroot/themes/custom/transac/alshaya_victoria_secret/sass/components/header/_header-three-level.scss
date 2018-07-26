@@ -27,6 +27,12 @@
       }
     }
 
+    & > .menu__link-wrapper.menu-two__link-wrapper {
+      @include breakpoint($desktop) {
+        margin-bottom: 0.3125rem !important;
+      }
+    }
+
     & > .menu-two__link-wrapper {
       &:hover::after,
       &::after {
@@ -89,7 +95,7 @@
           height: 2px;
           background: $mm_top_border;
           position: relative;
-          top: -2.55rem;
+          top: -2.5rem;
         }
       }
     }

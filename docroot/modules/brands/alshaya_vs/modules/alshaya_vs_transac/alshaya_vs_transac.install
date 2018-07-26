@@ -6,101 +6,21 @@
  */
 
 use Drupal\Core\Site\Settings;
-use Drupal\alshaya_config\AlshayaConfigManager;
-
-/**
- * Implements hook_update_dependencies().
- */
-function alshaya_vs_transac_update_dependencies() {
-  return [
-    'alshaya_vs_transac' => [
-      '8003' => [
-        'alshaya_stores_finder' => '8104',
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_update().
- *
- * Update the store finder config to install label position settings.
- */
-function alshaya_vs_transac_update_8003() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_stores_finder.settings'],
-    'alshaya_vs_transac',
-    'override',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
-    ->save();
-}
 
 /**
  * Implements hook_update_N().
  *
- * Update plp slider configuration.
- */
-function alshaya_vs_transac_update_8002() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.display_settings'],
-    'alshaya_vs_transac',
-    'override',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Override image styles to match VS designs.
+ * Create you'll be able to block for checkout confirmation.
  */
 function alshaya_vs_transac_update_8001() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
-  $styles = [
-    'image.style.137x144',
-    'image.style.192x168',
-    'image.style.291x288',
-    'image.style.59x60',
-    'image.style.product_zoom_medium_606x504',
-    'image.style.product_zoom_small_81x72',
-  ];
-
-  $manager->updateConfigs($styles, 'alshaya_image_styles');
-
-  $manager->updateConfigs(
-    ['image.style.cart_notification_thumbnail'],
-    'alshaya_acm_cart_notification'
-  );
-
-  $manager->updateConfigs(
-    ['image.style.checkout_summary_block_thumbnail'],
-    'alshaya_acm'
-  );
   $manager->updateConfigs(
     ['block.block.youllbeableto_checkout_confirm'],
     'alshaya_vs_transac',
     'optional'
   );
-
-  $manager->updateConfigs(
-    ['alshaya_acm_product_position.settings'],
-    'alshaya_vs_transac',
-    'override'
-  );
-
-  $field_newsletter = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'field.field.user.user.field_subscribe_newsletter');
-  $field_newsletter->set('label', 'أرغب في استلام عروض حصرية من فيكتورياز سيكريت');
-  $field_newsletter->save();
 }
 
 /**
@@ -158,7 +78,7 @@ function alshaya_vs_transac_install() {
   alshaya_i18n_save_translations($strings);
 
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
-    ->set('marker.label_position', _alshaya_vs_transac_marker_label_position_ar())
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
     ->save();
 
   $view_store_finder = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'views.view.stores_finder');

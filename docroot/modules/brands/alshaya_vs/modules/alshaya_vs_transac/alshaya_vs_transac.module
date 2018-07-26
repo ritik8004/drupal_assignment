@@ -9,6 +9,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -118,7 +119,7 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
   $collection = $sku->get('attr_product_collection')->getString();
   $short_description = $sku->label();
 
-  if ($context === 'pdp') {
+  if ($context === 'pdp' || $context === 'modal') {
     $title = '<span class="title--sub">' . $collection . '</span>';
     $title .= '<span class="title--main">' . $new . ' ' . $short_description . '</span>';
   }
@@ -149,8 +150,12 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 
         $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
         $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
+        // Remove empty paragraphs from short description.
+        $short_desc_html = preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $short_desc_html);
+        // Remove br at the end of short desc.
+        $short_desc_html = preg_replace('#(( ){0,}<br( {0,})(/{0,1})>){1,}$#i', '', $short_desc_html);
         $short_desc['value'] = [
-          '#markup' => $short_desc_html,
+          '#markup' => $short_desc_html . '...',
         ];
 
         // If short description is the same as description,
@@ -160,6 +165,11 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
             '#markup' => 'display:none;',
           ];
         }
+      }
+      else {
+        $build['read_more_style']['value'] = [
+          '#markup' => 'display:none;',
+        ];
       }
 
       $description['value'] = [
@@ -177,16 +187,32 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 }
 
 /**
- * Config of marker label position for arabic.
+ * Implements template_preprocess_hook().
  *
- * @return array
- *   Return array of arabic settings override.
+ * Place today's offer links in shop by block for mobile.
  */
-function _alshaya_vs_transac_marker_label_position_ar() {
-  return [
-    'x' => 7,
-    'y' => 17,
-    'single_x' => 10,
-    'single_y' => 17,
-  ];
+function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
+  $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
+
+  foreach (array_keys($promo_panel_blocks) as $block_plugin_id) {
+    $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['plugin' => $block_plugin_id]);
+    $block = reset($blocks);
+
+    if ($block->access('view')) {
+      $item = [
+        'label' => $block->label(),
+        'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
+        'class' => 'promo-panel--mobile-link',
+      ];
+      array_unshift($variables['term_tree'], $item);
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_stores_finder_marker_label_position_alter().
+ */
+function alshaya_vs_transac_alshaya_stores_finder_marker_label_position_alter(array &$label_position) {
+  $label_position['y'] = 17;
+  $label_position['single_y'] = 17;
 }
