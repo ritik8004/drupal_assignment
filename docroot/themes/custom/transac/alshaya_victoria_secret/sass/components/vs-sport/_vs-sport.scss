@@ -5,6 +5,14 @@
     .c-department {
       .c-page-title {
         font-family: $vs-sport-bentonsanscomp;
+        text-transform: uppercase;
+        font-size: 2rem;
+        letter-spacing: 1.6px;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.125rem;
+          letter-spacing: 1px;
+        }
       }
     }
 
@@ -16,12 +24,15 @@
           width: 100%;
 
           span {
-            &.title--sub {
-              font-family: $vs-sport-bentonsanscomp;
-            }
+            font-family: $vs-sport-bentonsanscomp;
+            text-transform: uppercase;
+            font-size: 2rem;
+            letter-spacing: 1.6px;
 
-            &.title--main {
-              font-family: $vs-sport-bentonsanscomp;
+            &.title--sub {
+              font-family: $vs-regular;
+              font-size: 0.875rem;
+              letter-spacing: 0.8px;
             }
           }
         }
@@ -32,6 +43,8 @@
       .sku-base-form {
         button[type="submit"] {
           font-family: $vs-sport-bentonsanscomp;
+          font-size: 1.125rem;
+          letter-spacing: 0.9px;
         }
       }
     }
@@ -40,12 +53,18 @@
     .delivery-options-wrapper {
       .field__label {
         font-family: $vs-sport-bentonsanscomp;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
     }
 
     .subtitle {
       &.crossell-title {
         font-family: $vs-sport-bentonsanscomp;
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
       }
     }
 
@@ -53,6 +72,9 @@
       &.block-promo-panel-wrapper {
         .promo-panel-label {
           font-family: $vs-sport-bentonsanscomp;
+          font-size: 1.125rem;
+          letter-spacing: 1px;
+          text-transform: uppercase;
         }
       }
     }
@@ -61,15 +83,21 @@
       .paragraph--type--offers-bordered {
         .field--name-field-heading {
           font-family: $vs-sport-bentonsanscomp;
+          font-size: 1.125rem;
+          letter-spacing: 1.2px;
         }
 
         .field--name-field-title {
           font-family: $vs-sport-bentonsanscomp;
+          font-size: 2rem;
+          letter-spacing: 1.8px;
         }
 
         .field--name-field-link {
           a {
             font-family: $vs-sport-bentonsanscomp;
+            font-size: 1.125rem;
+            letter-spacing: 1.9px;
           }
         }
       }
