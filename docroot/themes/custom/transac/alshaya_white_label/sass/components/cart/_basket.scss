@@ -109,6 +109,12 @@
       }
 
       td {
+        &.name {
+          .use-ajax + .ajax-progress-throbber {
+            display: none;
+          }
+        }
+
         @include breakpoint($upto-tablet) {
           display: block;
 
