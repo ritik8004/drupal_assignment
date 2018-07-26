@@ -85,11 +85,15 @@ jQuery.fn.select2Option = function (options) {
       });
     }
 
-    select.after(buttonsHtml);
-
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
+
+      // Do nothing, it is already the selected one.
+      if (clickedOption.is(':selected')) {
+        return;
+      }
+
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
       $(this).closest('.sku-base-form').find('.error').remove();
       $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
@@ -104,5 +108,8 @@ jQuery.fn.select2Option = function (options) {
       }
       select.trigger('change');
     });
+
+    select.parent().find('.select2Option').remove();
+    select.after(buttonsHtml);
   });
 };
