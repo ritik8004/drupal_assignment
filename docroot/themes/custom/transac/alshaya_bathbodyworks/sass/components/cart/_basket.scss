@@ -1,4 +1,26 @@
 .path--cart {
+  .customer-cart-form {
+    .image {
+      @include breakpoint($desktop) {
+        width: 26.4%;
+      }
+
+      @include breakpoint($only-tablet) {
+        width: 37%;
+      }
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    .items > div {
+      html[lang=ar] & {
+        line-height: 1.4;
+      }
+    }
+  }
+
   .view-product-slider {
     .price-wrapper {
       clear: both;
@@ -14,16 +36,40 @@
       color: $tooltip_icon;
       margin-#{$left}: 0.3rem;
     }
+
+    &.not-available {
+      opacity: 0.25;
+    }
   }
 
   .contains--tooltip {
+    display: inline-block;
+
     .click-collect.tooltip--head,
     .home-delivery.tooltip--head {
+      position: relative;
+      padding-#{$right}: 1.25rem;
+
+      &::after {
+        position: absolute;
+        #{$right}: 0;
+        top: -0.125rem;
+      }
+
       & + .tooltip {
         font-size: 0.75rem;
+        line-height: 1.4;
+        #{$right}: -5rem !important;
+        #{$left}: inherit !important;
 
-        @include breakpoint($desktop) {
-          #{$left}: 1.3rem;
+        @include breakpoint($upto-tablet) {
+          #{$right}: -0.875rem !important;
+          #{$left}: inherit !important;
+        }
+
+        @include breakpoint($only-tablet) {
+          #{$right}: -0.1875rem !important;
+          #{$left}: inherit !important;
         }
       }
     }
