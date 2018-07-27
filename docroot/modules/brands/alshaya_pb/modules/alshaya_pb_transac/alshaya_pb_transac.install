@@ -39,4 +39,18 @@ function alshaya_pb_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
   }
+
+  // Add string translations.
+  $strings = [
+    'our company' => [
+      'ar' => 'شركتنا',
+    ],
+    'Connect with us' => [
+      'ar' => 'تواصلي معنا',
+    ],
+    'I would like to receive exclusive deals from PotteryBarn.' => [
+      'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
