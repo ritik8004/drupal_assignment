@@ -27,6 +27,16 @@
       border-bottom: 0;
     }
   }
+
+  .total-row {
+    &.vat-row {
+      td.warm--white {
+        .dark {
+          font-family: $vs-regular;
+        }
+      }
+    }
+  }
 }
 
 .c-order-print {

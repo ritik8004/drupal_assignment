@@ -64,8 +64,9 @@ function alshaya_acm_promotion_acq_promotion_data_alter(&$promotion) {
   // Extract free gift skus & remove them from list of products to be processed
   // for this promotion.
   foreach ($promotion['products'] as $key => $product) {
-    if (!empty($product['ampromo_cart_sku']) &&
-      ($product['ampromo_cart_sku'])) {
+    if (!empty($product['extension_attributes'])
+      && !empty($product['extension_attributes']['ampromo_cart_sku'])
+      && ($product['extension_attributes']['ampromo_cart_sku'])) {
       $promotion['free_gift_products'][] = $product['product_sku'];
       unset($promotion['products'][$key]);
     }

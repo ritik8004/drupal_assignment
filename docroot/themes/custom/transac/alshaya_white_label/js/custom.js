@@ -130,7 +130,7 @@
         });
       });
 
-      $('.free-gift-title a').click(function () {
+      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').click(function () {
         $('body').addClass('free-gifts-modal-overlay');
         modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
 

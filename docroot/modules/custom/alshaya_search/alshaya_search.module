@@ -296,30 +296,33 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
       unset($languages['ar']);
       $default_language = current($languages);
     }
+
+    $redirect = FALSE;
     if (\Drupal::languageManager()->getCurrentLanguage()->getId() == 'ar') {
       // If none of the characters of the keywords are in arabic.
       if (!preg_match("/\p{Arabic}/u", $keyword)) {
-        // Redirect to the previously identified non arabic language.
-        $url = Url::fromUserInput('/search', [
-          'query' => ['keywords' => $keyword],
-          'absolute' => TRUE,
-          'language' => $default_language,
-        ])->toString();
-        $response = new RedirectResponse($url);
-        $response->send();
+        $redirect = TRUE;
+        $redirect_lang = $default_language;
       }
     }
-    else {
-      if (preg_match("/^\p{Arabic}+$/u", $keyword)) {
-        // Redirect to arabic, if all characters are in arabic.
-        $url = Url::fromUserInput('/search', [
-          'query' => ['keywords' => $keyword],
-          'absolute' => TRUE,
-          'language' => $languages['ar'],
-        ])->toString();
-        $response = new RedirectResponse($url);
-        $response->send();
-      }
+    elseif (preg_match("/\p{Arabic}+$/u", $keyword)) {
+      // Redirect to arabic, if all characters are in arabic.
+      $redirect = TRUE;
+      $redirect_lang = $languages['ar'];
+    }
+
+    if ($redirect) {
+      $query = ['keywords' => $keyword];
+      \Drupal::moduleHandler()->alter('alshaya_search_query_param', $query, $form_state, $redirect_lang);
+
+      // Redirect to keyword language.
+      $url = Url::fromUserInput('/search', [
+        'query' => $query,
+        'absolute' => TRUE,
+        'language' => $redirect_lang,
+      ])->toString();
+      $response = new RedirectResponse($url);
+      $response->send();
     }
   }
 }

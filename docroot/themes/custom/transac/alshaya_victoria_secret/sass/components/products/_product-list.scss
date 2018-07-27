@@ -100,6 +100,12 @@
       position: relative;
     }
 
+    .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+      @include breakpoint($only-mobile) {
+        padding-top: 0.5rem;
+      }
+    }
+
     .filter--mobile {
       .c-facet__blocks__wrapper--mobile {
         .c-facet__label {
@@ -164,6 +170,12 @@
 
         @include breakpoint($tablet) {
           margin-top: 1.5625rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          margin-top: 0.3125rem;
+          padding-top: 0.1875rem;
+          padding-bottom: 0.5rem;
         }
       }
     }
@@ -346,7 +358,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          line-height: 2.1875rem;
+          line-height: 40px;
           font-size: 2rem;
         }
       }
@@ -385,10 +397,16 @@
   }
 }
 
-.view-plp-promotional-banner {
-  img {
-    &:empty {
-      display: none;
+.c-content__highlighted {
+  .promo-banner {
+    @include breakpoint($only-mobile) {
+      picture {
+        display: block;
+      }
+
+      img {
+        margin-bottom: 0.75rem;
+      }
     }
   }
 }

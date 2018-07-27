@@ -194,26 +194,18 @@ class ProductStockController extends ControllerBase {
     $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
 
     $buyable = alshaya_acm_product_is_buyable($entity);
-    $stock = 0;
+
     if ($buyable) {
       $stock = alshaya_acm_get_stock_from_sku($entity);
-    }
-
-    if (!$buyable) {
-      $response->addCommand(new HtmlCommand($wrapper, ''));
-    }
-    elseif ($stock) {
-      $form = $this->fetchAddCartForm($entity, $view_mode);
-      $response->addCommand(new HtmlCommand($wrapper, $form));
-    }
-    else {
-      $html = [
+      $html = $stock ? $this->fetchAddCartForm($entity, $view_mode) : [
         '#markup' => '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>',
       ];
       $response->addCommand(new HtmlCommand($wrapper, $html));
+      $this->moduleHandler->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $stock);
     }
-
-    $this->moduleHandler->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $stock);
+    else {
+      $response->addCommand(new HtmlCommand($wrapper, ''));
+    }
 
     return $response;
   }
