@@ -32,7 +32,7 @@
         height: auto;
         bottom: inherit;
         top: 5.3125rem;
-        #{$left}: 23.0625rem;
+        #{$left}: calc(50% - 20.52rem);
       }
 
       .not-found__body__container {
