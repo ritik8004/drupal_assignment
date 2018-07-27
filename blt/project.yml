@@ -17,31 +17,6 @@ drush:
     local: self
     ci: self
   default_alias: '${drush.aliases.local}'
-target-hooks:
-  frontend-validate:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-validate.sh ${docroot}'
-  frontend-setup:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-setup.sh ${docroot}'
-  frontend-build:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash frontend-build.sh ${docroot}'
-  pre-config-import:
-    dir: '${docroot}'
-    command: 'echo ''No pre-config-import configured.'''
-  post-deploy-build:
-    dir: '${repo.root}/blt/scripts'
-    command: 'bash post-deploy-build.sh ${deploy.dir}'
-  post-setup-build:
-    dir: '${docroot}'
-    command: 'echo ''No post-setup build configured.'''
-  post-deploy:
-    dir: '${docroot}'
-    command: 'echo ''No post-deploy build configured.'''
-import: '${repo.root}/blt/setup.local.xml'
-deploy:
-  gitignore_file: ${repo.root}/blt/config/.gitignore
 modules:
   local:
     enable: [dblog, devel, seckit, views_ui]
@@ -67,6 +42,31 @@ modules:
   pprod:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [devel, views_ui]
+target-hooks:
+  frontend-validate:
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-validate.sh ${docroot}'
+  frontend-setup:
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-setup.sh ${docroot}'
+  frontend-build:
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash frontend-build.sh ${docroot}'
+  pre-config-import:
+    dir: '${docroot}'
+    command: 'echo ''No pre-config-import configured.'''
+  post-deploy-build:
+    dir: '${repo.root}/blt/scripts'
+    command: 'bash post-deploy-build.sh ${deploy.dir}'
+  post-setup-build:
+    dir: '${docroot}'
+    command: 'echo ''No post-setup build configured.'''
+  post-deploy:
+    dir: '${docroot}'
+    command: 'echo ''No post-deploy build configured.'''
+import: '${repo.root}/blt/setup.local.xml'
+deploy:
+  gitignore_file: '${repo.root}/blt/config/.gitignore'
 behat:
   paths:
     - '${repo.root}/tests/behat'
