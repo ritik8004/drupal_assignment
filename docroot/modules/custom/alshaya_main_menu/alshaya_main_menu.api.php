@@ -11,7 +11,7 @@
  */
 
 /**
- * Allow other modules to modify remove from Basket link for a cart item.
+ * Allow other modules to modify alshaya_main_menu link items.
  *
  * @param array $term_tree
  *   Array of term tree elements.
