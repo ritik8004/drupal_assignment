@@ -65,7 +65,7 @@ class ProductController extends ControllerBase {
    * Page callback for size guide modal.
    */
   public function sizeGuideModal() {
-    $config = $this->config('alshaya_acm_product.size_guide');
+    $config = $this->config('alshaya_acm_product.pdp_modal_links');
     $size_guide_enabled = $config->get('size_guide_enabled');
     $build = [];
 

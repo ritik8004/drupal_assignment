@@ -10,6 +10,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Grant 'administer PDP modal links settings' permissions to the webmaster.
+ */
+function alshaya_permissions_update_8016() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['webmaster']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Grant 'use text format mail_text' permissions to the webmaster.
  */
 function alshaya_permissions_update_8015() {
