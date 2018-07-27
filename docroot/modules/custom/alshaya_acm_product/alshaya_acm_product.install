@@ -21,6 +21,9 @@ function alshaya_acm_product_update_8024() {
   // Delete the configuration.
   $existing_config->delete();
 
+  // Set the attribute for the delivery.
+  $existing_data['delivery_content_attribute'] = 'white_glove_delivery';
+
   // Save the configuration.
   \Drupal::configFactory()->getEditable('alshaya_acm_product.pdp_modal_links')
     ->setData($existing_data)->save();
