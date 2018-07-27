@@ -52,6 +52,7 @@
 
     @include breakpoint($only-mobile) {
       width: calc(50% - 0.5rem);
+      height: auto !important;
     }
 
     &:nth-child(3n) {
