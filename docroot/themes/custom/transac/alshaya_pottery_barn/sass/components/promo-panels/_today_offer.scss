@@ -1,27 +1,23 @@
 .promo__panel {
-  bottom: -9px;
+  bottom: -0.5625rem;
 
   .promo-panel-label {
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.9);
+    color: $promo_panel_label;
+    background-color: $promo_panel_label_bg;
     box-shadow: none;
     border: none;
     border-radius: 0;
-    width: 330px;
+    width: 20.625rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    height: 40px;
+    height: 2.5rem;
     transition: background-color 0.5s ease-in-out;
 
     @include icon(chevronup, after) {
       padding-#{$left}: 0.5rem;
       font-size: 1.5rem;
-    }
-
-    a {
-      color: #fff;
     }
 
     &::before {
@@ -31,7 +27,7 @@
 
   &.active-promo-panel {
     .promo-panel-label {
-      background-color: #000;
+      background-color: $promo_panel_label_bg_active;
 
       @include icon(chevrondown, after) {
         padding-#{$left}: 0.5rem;
