@@ -235,7 +235,7 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret KW.
     'vskw' => [
-      '01prod' => [
+      '01live' => [
         'magento' => 'vs_prod',
         'conductor' => 'vskw_prod',
       ],
@@ -250,7 +250,7 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret SA.
     'vssa' => [
-      '01prod' => [
+      '01live' => [
         'magento' => 'vs_prod',
         'conductor' => 'vssa_prod',
       ],
@@ -265,7 +265,7 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret AE.
     'vsae' => [
-      '01prod' => [
+      '01live' => [
         'magento' => 'vs_prod',
         'conductor' => 'vsae_prod',
       ],

@@ -12,6 +12,25 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Set the number of items to show in a product carousel
+ * on Department and Home page.
+ * Set the number of items to show in a related product carousel on Basket page.
+ */
+function alshaya_acm_product_update_8023() {
+  // Set default number of image items need to show in slider on PDP..
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding description field to SKU.
  */
 function alshaya_acm_product_update_8022() {

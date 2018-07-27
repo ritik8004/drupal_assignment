@@ -12,6 +12,21 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Update views for product category taxonomy terms to use status field.
+ */
+function alshaya_acm_product_category_update_8016() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'views.view.product_category_level_3',
+  ],
+    'alshaya_acm_product_category'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Making 'field_promotion_banner_mobile' translatable.
  */
 function alshaya_acm_product_category_update_8015() {
