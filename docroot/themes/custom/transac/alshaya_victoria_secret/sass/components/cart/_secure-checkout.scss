@@ -38,6 +38,10 @@
 
   .block-page-title-block h1 {
     text-transform: capitalize;
+
+    @include breakpoint($only-mobile) {
+      font-size: 1rem;
+    }
   }
 
   #edit-delivery-tabs {
@@ -127,8 +131,45 @@
   }
 
   .checkout-progress__step {
+    &::before {
+      font-size: 0.875rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      line-height: 24px;
+    }
+
+    @include breakpoint($desktop) {
+      &::before {
+        margin-#{$right}: 0.375rem;
+      }
+
+      &::after {
+        width: 53%;
+        margin-#{$left}: 0.75rem;
+      }
+
+      &:nth-child(2)::after {
+        width: 55%;
+        margin-#{$left}: 1.25rem;
+      }
+    }
+
     @include breakpoint($only-tablet) {
       font-size: 0.875rem;
+      width: 33.5%;
+
+      &:nth-child(2) {
+        width: 31%;
+
+        &::after {
+          margin-#{$left}: 0;
+        }
+      }
+
+      &:nth-child(3) {
+        width: 33%;
+        margin-#{$right}: 0;
+      }
 
       &.-complete {
         line-height: normal;
@@ -137,13 +178,6 @@
 
     @include breakpoint($only-mobile) {
       line-height: 8;
-
-      &::before {
-        font-size: 0.875rem;
-        width: 1.5rem;
-        height: 1.5rem;
-        line-height: 24px;
-      }
 
       &::after {
         #{$left}: 68%;
