@@ -48,11 +48,11 @@ function alshaya_pb_transac_install() {
     'Connect with us' => [
       'ar' => 'اتصل بنا'
     ],
-    'resources' => [
-      'ar' => 'الموارد'
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
     ],
-    'help' => [
-      'ar' => 'مساعدة'
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
     ],
     'I would like to receive exclusive deals from PotteryBarn.' => [
       'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
