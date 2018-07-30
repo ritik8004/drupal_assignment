@@ -11,7 +11,7 @@ jQuery.fn.select2Option = function (options) {
     var select = $(this);
     var labeltext = '';
     var defaultTitle = '';
-    select.hide();
+    select.addClass('visually-hidden');
 
     var buttonsHtml = $('<div class="select2Option"></div>');
     var selectIndex = 0;
@@ -95,7 +95,7 @@ jQuery.fn.select2Option = function (options) {
       }
 
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
-      $(this).closest('.sku-base-form').find('.error').remove();
+      $(this).closest('.sku-base-form').find('label.error, span.error, div.error').remove();
       $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');

@@ -942,6 +942,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
+  // Ensure clientside validation is triggered to have proper data in maximum
+  // number of the requests that reach server.
+  $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
+
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */

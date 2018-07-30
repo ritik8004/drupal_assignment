@@ -266,6 +266,9 @@
             "acquia/acsf-tools" : {
                 "Create an acsf-tools-restore command to restore dumps.": "https://patch-diff.githubusercontent.com/raw/acquia/acsf-tools/pull/12.patch"
             },
+            "drupal/clientside_validation": {
+                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
+            },
             "drupal/restrict_role_login_by_ip" : {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
             }

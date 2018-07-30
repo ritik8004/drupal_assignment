@@ -10,6 +10,9 @@
     if ($(window).width() > drupalSettings.show_configurable_boxes_after) {
       Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-select'));
     }
+    else {
+      $('.form-item-configurable-select').removeClass('visually-hidden');
+    }
 
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
   };
@@ -37,7 +40,7 @@
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {
       $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
-      $('#configurable_ajax .form-item-configurable-select').parent().addClass('configurable-select');
+      $('.form-item-configurable-select').parent().addClass('configurable-select');
 
       // Show mobile slider only on mobile resolution.
       Drupal.select2OptionConvert();
@@ -46,8 +49,8 @@
       });
 
       if ($(window).width() <= drupalSettings.show_configurable_boxes_after) {
-        $('.form-item-configurable-select').on('change', function () {
-          $(this).closest('.sku-base-form').find('.error').remove();
+        $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
+          $(this).closest('.sku-base-form').find('div.error, label.error, span.error').remove();
         });
       }
     }
