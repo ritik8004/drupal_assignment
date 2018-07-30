@@ -5,7 +5,10 @@
  * Module file.
  */
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -96,5 +99,68 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['description'][] = $specifications;
       }
     }
+  }
+}
+
+/**
+ * Implements template_preprocess_alshaya_cart_product_name().
+ */
+function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
+  if (empty($variables['item_code'])) {
+    return;
+  }
+
+  $sku = SKU::loadFromSku($variables['item_code']);
+
+  if (!($sku instanceof SKU)) {
+    return;
+  }
+
+  $variables['name'] = _alshaya_pb_transac_get_sku_title($sku);
+}
+
+/**
+ * Wrapper function to get product title as per PB logic.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU entity.
+ *
+ * @return string
+ *   Product Title.
+ */
+function _alshaya_pb_transac_get_sku_title(SKU $sku) {
+  // @TODO: Update to use combination of attributes when we have info.
+  return $sku->label();
+}
+
+/**
+ * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
+ */
+function alshaya_acm_pb_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKU $sku, SKUInterface $selected_sku = NULL) {
+  if ($sku->bundle() != 'configurable') {
+    return;
+  }
+
+  // Update title of parent product based on selected sku if available.
+  if ($selected_sku instanceof SKUInterface) {
+    // For modal and teaser it will be h2, for main product h1.
+    $selector = 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h1,';
+    $selector .= 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h2';
+    $response->addCommand(new HtmlCommand($selector, _alshaya_pb_transac_get_sku_title($selected_sku)));
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_customer_build_order_detail_alter().
+ */
+function hook_alshaya_acm_customer_build_order_detail_alter(array &$build, array $order) {
+  foreach ($build['#products'] as &$product) {
+    $sku = SKU::loadFromSku($product['sku']);
+
+    if (!($sku instanceof SKUInterface)) {
+      continue;
+    }
+
+    $product['name'] = _alshaya_pb_transac_get_sku_title($sku);
   }
 }
