@@ -17,4 +17,10 @@ cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 # Get the list of all site names of the factory.
 sites=$(drush8 acsf-tools-list --fields)
 
+echo "Deleting all existing pre-stage database dump for all sites."
+rm -rf ~/backup/$target_env/pre-stage/*
+
+echo "Deleting existing post-stage database dump for all sites."
+rm -rf ~/backup/$target_env/post-stage/*
+
 ./../hooks/scripts/reset-post-stage.sh $target_env "$sites"
