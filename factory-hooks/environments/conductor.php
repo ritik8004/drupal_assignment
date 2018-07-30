@@ -28,6 +28,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'ec11fb2f54d34b2f9d35ec1d3575b89e',
       'hmac_secret' => 'gpW7PQFKKDU-qPrcIgaYNQ',
     ],
+    'mckw_uat_v2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
+      'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
+      'api_version' => 'v2',
+    ],
     'mckw_pprod' => [
       'url' => 'https://alshaya-mckw-pprod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '676f2059d53d407791472c31783ae32c',
@@ -55,6 +61,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '6686b9362f9c48789c08782dc0f85b59',
       'hmac_secret' => 'QIMU6nVtVUVJ3NtSErE5PA',
     ],
+    'mcsa_uat_v2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd5cf13ff42204e4d940d0fe66987f025',
+      'hmac_secret' => 'Zjk5ZjhkYzgtYmRmZC00',
+      'api_version' => 'v2',
+    ],
     'mcsa_pprod' => [
       'url' => 'https://alshaya-mcksa-pprod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '08bf3c91aeba4b18b78354b38e0ef566',
@@ -76,6 +88,12 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://alshaya-mcae-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'c47e33167b1d4031a18acbf8c9fb9aa8',
       'hmac_secret' => 'QK1RFjIn1Subjk7m-1A2hw',
+    ],
+    'mcae_uat_v2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '843bb58e8fff4c37bdfa17675497c80e',
+      'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
+      'api_version' => 'v2',
     ],
     'mcae_prod' => [
       'url' => 'https://alshaya-mcae-prod.eu-west-1.prod.acm.acquia.io/',
