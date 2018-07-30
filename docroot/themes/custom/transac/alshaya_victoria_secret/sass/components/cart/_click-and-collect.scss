@@ -207,6 +207,10 @@
         padding-bottom: 1.5625rem;
       }
 
+      .cc-help-text {
+        font-weight: normal;
+      }
+
       .mobile-number-field {
         label.error {
           top: 1.625rem !important;
@@ -252,7 +256,7 @@
           .store-on-map,
           .view-on-map {
             text-transform: uppercase;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
           }
 
           .change-store {
