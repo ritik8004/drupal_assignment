@@ -453,6 +453,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $build['item_code']['#markup'] = $sku;
 
+        // If white glove delivery available for the SKU.
+        if ($white_glove_delivery_data = _alshaya_acm_product_get_white_glove_delivery_link($sku_entity)) {
+          $build['white_glove_delivery']['link_title'] = [
+            '#markup' => '<div class="white-glove-title">' . $white_glove_delivery_data['title'] . '</div>',
+          ];
+          $build['white_glove_delivery']['link_data'] = [
+            '#type' => 'inline_template',
+            '#template' => '<div class="white-glove-content">{{ white_glove_content }}</div>',
+            '#context' => [
+              'white_glove_content' => $white_glove_delivery_data['title'],
+            ],
+          ];
+        }
+
         // Initialise home delivery variable.
         $build['home_delivery'] = [];
 
@@ -1679,4 +1693,41 @@ function alshaya_acm_product_language_switch_links_alter(array &$links, $type, U
       }
     }
   }
+}
+
+/**
+ * Get white glove delivery data.
+ *
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   SKU object.
+ *
+ * @return array|null
+ *   Link title and content.
+ */
+function _alshaya_acm_product_get_white_glove_delivery_link(SKU $sku) {
+  $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
+  // If WGD attribute is available for the SKU and config is set for the WGD.
+  if (($attribute = $config->get('delivery_content_attribute'))
+    && (!empty($nid = $config->get('delivery_content_node')))
+    && $sku->hasField($attribute)) {
+    $wgd_applicable = (bool) $sku->get($attribute)->getString();
+    // If white glove delivery not applicable.
+    if (!$wgd_applicable) {
+      return NULL;
+    }
+
+    $link = [];
+    // Load node object.
+    $delivery_node_content = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+    $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    // Get translated node object.
+    $delivery_node_content = \Drupal::service('entity.repository')->getTranslationFromContext($delivery_node_content, $current_language);
+    $link['title'] = $delivery_node_content->getTitle();
+    // Unset the title.
+    $delivery_node_content->setTitle('');
+    $link['content'] = render(\Drupal::entityTypeManager()->getViewBuilder('node')->view($delivery_node_content, 'full'));
+    return $link;
+  }
+
+  return NULL;
 }
