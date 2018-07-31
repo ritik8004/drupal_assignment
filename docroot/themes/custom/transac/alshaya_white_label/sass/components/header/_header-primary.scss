@@ -782,7 +782,7 @@ header {
 
         &:hover {
           &::after {
-            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+            background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next--hover.svg');
           }
         }
       }
