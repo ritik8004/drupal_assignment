@@ -1475,6 +1475,7 @@
           &.hide-button {
             display: block;
             position: relative !important;
+            z-index: auto !important;
 
             .ladda-label {
               html[lang=ar] & {
