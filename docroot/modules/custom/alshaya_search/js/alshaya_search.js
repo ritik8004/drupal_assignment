@@ -236,16 +236,12 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     attach: function (context, settings) {
       // Convert the list to slider.
       $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
-        var gallery = $(this);
         if (isRTL()) {
           $(this, context).lightSlider({
             vertical: false,
             item: settings.plp_slider.item,
             rtl: true,
             slideMargin: settings.plp_slider.margin,
-            onSliderLoad: function () {
-              gallery.css('height', settings.plp_slider.height + 'px');
-            }
           });
         }
         else {
@@ -254,9 +250,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             item: settings.plp_slider.item,
             rtl: false,
             slideMargin: settings.plp_slider.margin,
-            onSliderLoad: function () {
-              gallery.css('height', settings.plp_slider.height + 'px');
-            }
           });
         }
       });
