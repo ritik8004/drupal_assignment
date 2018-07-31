@@ -12,7 +12,7 @@
         column-width: 13.2rem;
         padding-#{$left}: 5.75rem;
         padding-bottom: 2.5rem;
-        height: 17rem;
+        height: 18rem;
         min-height: 0;
       }
     }
@@ -92,7 +92,7 @@
         &::before {
           content: " ";
           display: block;
-          height: 2px;
+          height: 1px;
           background: $mm_top_border;
           position: relative;
           top: -2.5rem;
