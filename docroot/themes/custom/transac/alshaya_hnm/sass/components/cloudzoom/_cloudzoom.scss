@@ -31,6 +31,14 @@
   }
 }
 
+.cloudzoom {
+  &.thumbnail-count-1 {
+    #cloud-zoom-big {
+      #{$left}: 146.5% !important;
+    }
+  }
+}
+
 @include breakpoint($only-tablet) {
   #product-image-gallery,
   #lightSlider {
