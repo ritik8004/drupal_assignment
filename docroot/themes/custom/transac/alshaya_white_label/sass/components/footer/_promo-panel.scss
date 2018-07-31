@@ -129,7 +129,9 @@
       position: relative;
       top: 1px;
 
-      @include icon(price-tag, before) {
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/price-tag.svg') no-repeat;
         color: $promo_panel_label_icon;
         display: inline-block;
         margin-#{$right}: 0.5rem;
@@ -141,6 +143,7 @@
         html[lang=ar] & {
           transform: rotate(270deg);
           margin-left: 0.625rem;
+          vertical-align: top;
         }
       }
     }
@@ -166,7 +169,7 @@
     z-index: 1001;
     width: 100%;
     transform: translateY(0);
-    max-height: 37.5rem;
+    max-height: 45.5rem;
   }
 
   .promo-panel-label {
