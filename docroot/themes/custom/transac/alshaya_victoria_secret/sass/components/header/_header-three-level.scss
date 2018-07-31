@@ -22,7 +22,11 @@
 .menu--two__list {
   .menu--two__list-item {
     @include breakpoint($desktop) {
-      margin-bottom: 0.3125rem;
+      margin-bottom: 1.563rem;
+
+      &.has-child {
+        margin-bottom: 0.3125rem;
+      }
     }
 
     .menu-two__link {
