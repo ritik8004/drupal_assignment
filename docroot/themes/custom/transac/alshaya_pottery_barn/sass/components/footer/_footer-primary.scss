@@ -26,6 +26,23 @@
     }
   }
 
+  .c-footer-primary__region {
+    min-height: 14.25rem;
+  }
+
+  .c-footer-menu--category {
+    .c-footer-menu {
+      @include breakpoint($desktop) {
+        width: 45%;
+        padding-#{$right}: 1rem;
+
+        &:last-child {
+          padding-#{$left}: 0;
+        }
+      }
+    }
+  }
+
   .primary--footer--right {
     @include breakpoint($desktop) {
       width: 26.5%;
@@ -41,6 +58,16 @@
   .footer--abouthelp {
     @include breakpoint($desktop) {
       width: 58.7%;
+    }
+  }
+
+  .language--switcher {
+    .language-switcher-language-url ul {
+      li:first-child a {
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
     }
   }
 }
