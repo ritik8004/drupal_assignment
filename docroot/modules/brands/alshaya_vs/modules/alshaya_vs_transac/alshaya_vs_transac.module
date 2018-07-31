@@ -251,11 +251,9 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
 }
 
 /**
- * Implements template_preprocess_hook().
- *
- * Place today's offer links in shop by block for mobile.
+ * Implements hook_alshaya_main_menu_links_alter().
  */
-function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
+function alshaya_vs_transac_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
 
   foreach (array_keys($promo_panel_blocks) as $block_plugin_id) {
@@ -267,9 +265,9 @@ function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
         'label' => $block->label(),
         'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
         'class' => 'promo-panel--mobile-link',
-        'tag' => 'a',
+        'clickable' => TRUE,
       ];
-      array_unshift($variables['term_tree'], $item);
+      array_unshift($term_tree, $item);
     }
   }
 }
