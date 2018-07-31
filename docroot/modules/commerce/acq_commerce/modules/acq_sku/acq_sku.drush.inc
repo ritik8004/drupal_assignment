@@ -40,7 +40,7 @@ function acq_sku_drush_command() {
     'required-arguments' => TRUE,
     'options'     => [
       'skus' => 'SKUs to import (like query).',
-      'category_id' => 'Magento category id to sync the products for.'
+      'category_id' => 'Magento category id to sync the products for.',
     ],
   ];
 
@@ -114,7 +114,6 @@ function acq_sku_drush_command() {
       'drush accsc --sku=SKU' => 'Clear linked SKUs cache for particular SKU.',
     ],
   ];
-
 
   $commands['sync-commerce-products-test'] = [
     'description' => 'Run a partial synchronization of commerce product records synchronously for testing / dev.',
@@ -638,7 +637,7 @@ function drush_acq_sku_clear_linked_skus_cache() {
     if ($sku_entity = SKU::loadFromSku($sku)) {
       Cache::invalidateTags([
         'acq_sku:linked_skus:' . $sku_entity->id(),
-        'acq_sku:' . $sku_entity->id()
+        'acq_sku:' . $sku_entity->id(),
       ]);
 
       drush_print(dt('Invalidated linked SKUs cache for @sku.', [

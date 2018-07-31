@@ -1,0 +1,44 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.limited_options
+  module:
+    - ckeditor
+format: limited_options
+editor: ckeditor
+settings:
+  toolbar:
+    rows:
+      -
+        -
+          name: Formatting
+          items:
+            - Bold
+            - Italic
+            - Underline
+            - Strike
+            - Font
+            - FontSize
+            - Format
+            - Source
+        -
+          name: Links
+          items:
+            - DrupalLink
+            - DrupalUnlink
+  plugins:
+    language:
+      language_list: un
+    stylescombo:
+      styles: ''
+    colorbutton:
+      colors: ''
+image_upload:
+  status: false
+  scheme: public
+  directory: inline-images
+  max_size: ''
+  max_dimensions:
+    width: null
+    height: null

@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Class AlshayaPromotionsManager.
@@ -95,6 +96,35 @@ class AlshayaPromotionsManager {
    */
   public function getPromotionByRuleId($rule_id, $rule_type = 'cart') {
     return $this->acqPromotionsManager->getPromotionByRuleId($rule_id, $rule_type);
+  }
+
+  /**
+   * Get free gift skus for a particular promotion rule.
+   *
+   * @param int $rule_id
+   *   Rule id of promotion to load.
+   *
+   * @return array
+   *   Free gift SKUs.
+   */
+  public function getFreeSkusByRuleId($rule_id) {
+    static $free_gift_skus = [];
+
+    if (isset($free_gift_skus[$rule_id])) {
+      return $free_gift_skus[$rule_id];
+    }
+
+    $promotion = $this->acqPromotionsManager->getPromotionByRuleId($rule_id, 'cart');
+    $free_skus = [];
+
+    if ($promotion instanceof NodeInterface) {
+      $free_skus = $promotion->get('field_free_gift_skus')->getValue();
+      $free_skus = is_array($free_skus) ? array_column($free_skus, 'value') : [];
+    }
+
+    $free_gift_skus[$rule_id] = $free_skus;
+
+    return $free_skus;
   }
 
   /**

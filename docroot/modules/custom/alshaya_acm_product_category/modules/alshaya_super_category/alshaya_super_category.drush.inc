@@ -88,7 +88,7 @@ function drush_alshaya_super_category_switch() {
     \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
       ->set('tags.title', '[node:title] | ' . $token)->save();
     \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
-      ->set('tags.title', '[node:title] | ' . $token)->save();
+      ->set('tags.title', '[node:field_acq_promotion_label] | ' . $token)->save();
     \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
       ->set('tags.title', '[term:name] | ' . $token)->save();
   }

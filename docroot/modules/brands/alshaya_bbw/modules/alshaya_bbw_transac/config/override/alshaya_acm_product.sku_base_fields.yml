@@ -1,0 +1,6 @@
+fields:
+  product_brand:
+    index: 0
+    facet: 0
+  color:
+    facet: 0

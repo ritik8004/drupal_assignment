@@ -74,6 +74,11 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
           $overview_desc['value'] = [
             '#markup' => $overview[0]['value'],
           ];
+          // Display product desc as short desc in case fragrance desc is empty.
+          if (empty($build['short_desc'])) {
+            $build['short_desc'] = $overview_desc;
+          }
+
           $build['description'][] = $overview_desc;
         }
 

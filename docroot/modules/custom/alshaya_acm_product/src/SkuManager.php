@@ -532,17 +532,20 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The SKU Entity, for which linked promotions need to be fetched.
-   * @param bool $getLinks
-   *   Boolen to identify if Links are required.
+   * @param string $view_mode
+   *   View mode around how the promotion needs to be rendered.
    * @param array $types
    *   Type of promotion to filter on.
+   * @param string $product_view_mode
+   *   Product view mode for which promotion is being rendered.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function getPromotionsFromSkuId(SKU $sku,
-                                         $getLinks = FALSE,
-                                         array $types = ['cart', 'category']) {
+                                         string $view_mode,
+                                         array $types = ['cart', 'category'],
+                                         $product_view_mode = NULL) {
 
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
@@ -551,6 +554,9 @@ class SkuManager {
 
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
+    // Preserve the original view mode passed to this function, since we are
+    // altering this one in case of free gifts.
+    $view_mode_original = $view_mode;
     foreach ($promotion as $promo) {
       $promotion_nids[] = $promo['target_id'];
     }
@@ -576,26 +582,59 @@ class SkuManager {
             continue;
           }
 
+          $description = '';
+          $description_item = $promotion_node->get('field_acq_promotion_description')->first();
+          if ($description_item) {
+            $description = $description_item->getValue();
+          }
+
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
+          $free_gift_skus = [];
 
-          if ($getLinks) {
-            $promos[$promotion_node->id()] = $promotion_node->toLink($promotion_text)
-              ->toString()
-              ->getGeneratedLink();
+          // Alter view mode while rendering a promotion with free skus on PDP.
+          if (($product_view_mode == 'full') &&
+            !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+            $view_mode = 'free_gift';
           }
           else {
-            $description = '';
-            $description_item = $promotion_node->get('field_acq_promotion_description')->first();
-            if ($description_item) {
-              $description = $description_item->getValue();
-            }
-            $promos[$promotion_node->id()] = [
-              'text' => $promotion_text,
-              'description' => $description,
-              'discount_type' => $discount_type,
-              'discount_value' => $discount_value,
-            ];
+            $view_mode = $view_mode_original;
+          }
+
+          switch ($view_mode) {
+            case 'links':
+              $promos[$promotion_node->id()] = $promotion_node->toLink($promotion_text)
+                ->toString()
+                ->getGeneratedLink();
+              break;
+
+            case 'free_gift':
+              $promos[$promotion_node->id()] = [];
+              $promos[$promotion_node->id()]['text'] = $promotion_text;
+              $promos[$promotion_node->id()]['description'] = $description;
+              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getString();
+              foreach ($free_gift_skus as $free_gift_sku) {
+                $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
+              }
+              break;
+
+            default:
+              $promos[$promotion_node->id()] = [
+                'text' => $promotion_text,
+                'description' => $description,
+                'discount_type' => $discount_type,
+                'discount_value' => $discount_value,
+                'rule_id' => $promotion_node->get('field_acq_promotion_rule_id')->getString(),
+              ];
+
+              if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+                $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
+              }
+
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+                $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
+              }
+              break;
           }
         }
       }
@@ -611,7 +650,7 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos)) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        return $this->getPromotionsFromSkuId($parentSku, $getLinks, $types);
+        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
       }
     }
 

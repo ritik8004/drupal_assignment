@@ -112,6 +112,13 @@ header {
     }
   }
 
+  .main--menu ul.menu--one__list {
+    .menu__link {
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+  }
+
   .menu__list-item,
   .back--link {
     text-transform: uppercase;
@@ -189,7 +196,7 @@ header {
   #block-cartminiblock {
     position: fixed;
     display: block;
-    z-index: 3;
+    z-index: 5;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
     -webkit-overflow-scrolling: touch;

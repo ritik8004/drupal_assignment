@@ -5,10 +5,33 @@
  * Install, update and uninstall hooks for the alshaya_transac subprofile.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
 use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable 'New In' sort option for all brands.
+ */
+function alshaya_transac_update_8115() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product_position.settings'],
+    'alshaya_acm_product_position',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  $manager->updateConfigs(
+    ['alshaya_search.settings'],
+    'alshaya_search',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
 
 /**
  * Implements hook_update_N().

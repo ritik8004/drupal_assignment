@@ -119,7 +119,7 @@
 }
 
 .menu--three__list-item {
-  .menu--three__link {
+  a.menu--three__link {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
         color: $mm_mobile_icon;

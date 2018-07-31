@@ -7,7 +7,6 @@
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\taxonomy\TermInterface;
-use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\Node;
 
 /**
@@ -36,6 +35,11 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
   $replacements = [];
 
   if ($type == 'supercategory') {
+    if (!\Drupal::config('alshaya_super_category.settings')->get('status')) {
+      \Drupal::logger('alshaya_super_category')
+        ->notice('super category feature is not enabled, But trying to use for token replacement.');
+      return;
+    }
 
     foreach ($tokens as $name => $original) {
       switch ($name) {
@@ -44,9 +48,20 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
           switch ($current_route->getRouteName()) {
             // If term page.
             case 'entity.taxonomy_term.canonical':
-              if (!empty($term = $current_route->getParameter('taxonomy_term'))) {
-                // Get super category term.
-                $super_category = _alshaya_super_category_get_super_category_for_term($term);
+            case 'entity.node.canonical':
+              $valid_term = $current_route->getParameter('taxonomy_term');
+
+              $valid_node = FALSE;
+              if ($node = $current_route->getParameter('node')) {
+                $valid_node = $node instanceof Node && in_array($node->bundle(), [
+                  'acq_product',
+                  'advanced_page',
+                  'acq_promotion',
+                ]);
+              }
+
+              if ($valid_term || $valid_node) {
+                $super_category = _alshaya_super_category_get_super_category_for_term();
                 if ($super_category instanceof TermInterface) {
                   $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
                   // We just removing the the token/pattern for the super
@@ -54,76 +69,6 @@ function alshaya_super_category_tokens($type, $tokens, array $data, array $optio
                   $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
                   $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
                   $replacements[$original] = $meta_title;
-                }
-              }
-              break;
-
-            // If node page.
-            case 'entity.node.canonical':
-              $node = $current_route->getParameter('node');
-              // For 'product' node bundle.
-              if ($node instanceof Node && $node->bundle() == 'acq_product') {
-                $referenced_tid = $node->get('field_category')->first()->getString();
-                if (!empty($term = Term::load($referenced_tid))) {
-                  $super_category = _alshaya_super_category_get_super_category_for_term($term);
-                  if ($super_category instanceof TermInterface) {
-                    $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
-                    // We just removing the the token/pattern for the super
-                    // category or we will stuck in infinite loop.
-                    $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
-                    $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
-                    $replacements[$original] = $meta_title;
-                  }
-                }
-              }
-              // If 'advanced_page' node bundle.
-              elseif ($node instanceof Node && $node->bundle() == 'advanced_page') {
-                $department_pages = alshaya_advanced_page_get_pages();
-                // If department page.
-                if ($tid = array_search($node->id(), $department_pages)) {
-                  if (!empty($term = Term::load($tid))) {
-                    $super_category = _alshaya_super_category_get_super_category_for_term($term);
-                    if ($super_category instanceof TermInterface) {
-                      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
-                      // We just removing the the token/pattern for the super
-                      // category or we will stuck in infinite loop.
-                      $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
-                      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
-                      $replacements[$original] = $meta_title;
-                    }
-                  }
-                }
-                else {
-                  // If normal advanced pages.
-                  if (!empty($tid = alshaya_super_category_get_default_term())) {
-                    if (!empty($term = Term::load($tid))) {
-                      $super_category = _alshaya_super_category_get_super_category_for_term($term);
-                      if ($super_category instanceof TermInterface) {
-                        $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
-                        // We just removing the the token/pattern for the super
-                        // category or we will stuck in infinite loop.
-                        $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
-                        $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
-                        $replacements[$original] = $meta_title;
-                      }
-                    }
-                  }
-                }
-              }
-              elseif ($node instanceof Node && $node->bundle() == 'acq_promotion') {
-                // If promotional node type.
-                if (!empty($tid = alshaya_super_category_get_default_term())) {
-                  if (!empty($term = Term::load($tid))) {
-                    $super_category = _alshaya_super_category_get_super_category_for_term($term);
-                    if ($super_category instanceof TermInterface) {
-                      $meta_tags = \Drupal::service('metatag.manager')->tagsFromEntityWithDefaults($super_category);
-                      // We just removing the the token/pattern for the super
-                      // category or we will stuck in infinite loop.
-                      $meta_tags['title'] = str_replace('[supercategory:meta_title]', '', $meta_tags['title']);
-                      $meta_title = \Drupal::service('token')->replace($meta_tags['title'], ['term' => $super_category]);
-                      $replacements[$original] = $meta_title;
-                    }
-                  }
                 }
               }
               break;

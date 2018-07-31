@@ -9,7 +9,22 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_vs_transac_module_implements_alter(&$implementations, $hook) {
+  // We want to alter only for sku_base_form_alter which is not available on
+  // all pages. Trying to alter for that hook directly seems not working as
+  // expected so added isset check.
+  if ($hook == 'form_alter' && isset($implementations['alshaya_vs_transac'])) {
+    $group = $implementations['alshaya_vs_transac'];
+    unset($implementations['alshaya_vs_transac']);
+    $implementations = ['alshaya_vs_transac' => $group] + $implementations;
+  }
+}
 
 /**
  * Implements hook_alshaya_stores_finder_store_update_alter().
@@ -17,6 +32,32 @@ use Drupal\Core\Url;
 function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, array $store) {
   if (isset($store['included_in_store'])) {
     $node->get('field_brand')->setValue(trim($store['included_in_store']));
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_vs_transac_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  // Load SKU entity.
+  $sku_entity = SKU::load($form['sku_id']['#value']);
+
+  if (!($sku_entity instanceof SKUInterface)) {
+    return;
+  }
+
+  if (isset($form['ajax'], $form['ajax']['configurables'], $form['ajax']['configurables']['fragrance'])) {
+    // For condition check, we need the English value.
+    if ($sku_entity->hasTranslation('en')) {
+      $sku_entity = $sku_entity->getTranslation('en');
+    }
+
+    // Try to get value for product_category. We need to set fragrance field's
+    // label based on that.
+    $product_category = $sku_entity->get('attr_product_category')->getString();
+    if (strtolower($product_category) == 'lip-color') {
+      $form['ajax']['configurables']['fragrance']['#title'] = t('Color');
+    }
   }
 }
 
@@ -47,8 +88,8 @@ function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variab
  * Implements hook_acq_sku_base_field_additions_alter().
  */
 function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
-  $alshaya_bbw_transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
-  $fields = array_merge($fields, $alshaya_bbw_transac_fields);
+  $transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $transac_fields);
 }
 
 /**
@@ -187,11 +228,9 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
 }
 
 /**
- * Implements template_preprocess_hook().
- *
- * Place today's offer links in shop by block for mobile.
+ * Implements hook_alshaya_main_menu_links_alter().
  */
-function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
+function alshaya_vs_transac_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
 
   foreach (array_keys($promo_panel_blocks) as $block_plugin_id) {
@@ -203,8 +242,9 @@ function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
         'label' => $block->label(),
         'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
         'class' => 'promo-panel--mobile-link',
+        'clickable' => TRUE,
       ];
-      array_unshift($variables['term_tree'], $item);
+      array_unshift($term_tree, $item);
     }
   }
 }

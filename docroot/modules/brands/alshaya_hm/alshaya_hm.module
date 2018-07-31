@@ -30,16 +30,6 @@ function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id)
 }
 
 /**
- * Implements hook_acq_sku_product_sku_alter().
- */
-function alshaya_hm_acq_sku_product_sku_alter(&$sku, $product) {
-  // Set sku activation date if product activation date available.
-  if (isset($product['attributes']['product_activation_date'])) {
-    $sku->created = strtotime($product['attributes']['product_activation_date']);
-  }
-}
-
-/**
  * Implements template_preprocess_block().
  */
 function alshaya_hm_preprocess_block(&$variables) {
@@ -114,8 +104,9 @@ function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
  *   Return the array of images or empty array.
  */
 function alshaya_hm_get_product_images(NodeInterface $product) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
-    $skuId = $product->get('field_skus')->first()->getString();
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') &&
+    !empty($product_field_sku = $product->get('field_skus')->first())) {
+    $skuId = $product_field_sku->getString();
     return alshaya_hm_get_sku_images($skuId);
   }
   return [];
@@ -271,5 +262,24 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
         $build['description'][] = $specifications;
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_hm_presave(SKUInterface $sku) {
+  // Update composition field.
+  $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
+  if (!empty($composition)) {
+    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
+      ->transformCompositionArrayToList($composition));
+  }
+  else {
+    if (!empty($sku->get('attr_composition')->getString())) {
+      \Drupal::logger('alshaya_hm')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
+    }
+
+    $sku->set('attr_composition', NULL);
   }
 }

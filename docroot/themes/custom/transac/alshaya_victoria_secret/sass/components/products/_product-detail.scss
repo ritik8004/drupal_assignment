@@ -22,6 +22,10 @@
 
   .field__label {
     margin: 0.5rem 0 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.5rem;
+    }
   }
 }
 
@@ -434,6 +438,10 @@
 .delivery-options-wrapper {
   .field__label {
     margin-top: 1.625rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.5rem;
+    }
   }
 
   .c-accordion__title {

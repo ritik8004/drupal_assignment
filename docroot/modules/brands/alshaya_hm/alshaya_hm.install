@@ -11,6 +11,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Re-create all facets and facet blocks.
+ */
+function alshaya_hm_update_8023() {
+  _alshaya_search_api_refactor_sku_base_fields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the marker file name to make it consistent.
  */
 function alshaya_hm_update_8022() {
@@ -414,8 +423,8 @@ function alshaya_hm_update_8001() {
 function alshaya_hm_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_hm', 'inc', 'alshaya_hm.content');
 
-  // Enable and set alshaya_hnm as default theme and set the site logo, favicon
-  // icon and email logo path.
+  // Enable and set alshaya_hnm as default theme and set the site logo,
+  // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_hnm');
 
   // Set store id - EN.
@@ -454,24 +463,6 @@ function alshaya_hm_install() {
   $checkout_customer_service = \Drupal::configFactory()->getEditable('alshaya_acm_checkout.settings');
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
-
-  // Enable "Best seller" and "New in" sort options.
-  $config = \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings');
-  $sort_options = [
-    'created' => 'created',
-    'nid' => 'nid',
-  ];
-  $sort_options += $config->get('sort_options');
-  $config->set('sort_options', $sort_options);
-  $config->save();
-
-  // Enable "New in" sort options.
-  $config = \Drupal::configFactory()->getEditable('alshaya_search.settings');
-  $sort_options = $config->get('sort_options');
-  $sort_options['search_api_relevance'] = 'search_api_relevance';
-  $sort_options['created'] = 'created';
-  $config->set('sort_options', $sort_options);
-  $config->save();
 
   // Disable loyalty.
   \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')

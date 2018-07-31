@@ -109,6 +109,12 @@
       }
 
       td {
+        &.name {
+          .use-ajax + .ajax-progress-throbber {
+            display: none;
+          }
+        }
+
         @include breakpoint($upto-tablet) {
           display: block;
 
@@ -1447,11 +1453,6 @@ body .ladda-button {
     color: $basket_sell_hover_link;
     text-decoration: underline;
   }
-}
-
-.path--cart .messages.messages--status::before {
-  font-size: 1.9rem;
-  margin-top: -0.5rem;
 }
 
 html[lang=ar] {

@@ -165,7 +165,11 @@
     .content--item-code {
       font-size: 0.6875rem;
       color: $pdp_product_itemcode;
-      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+
+      @include breakpoint($only-mobile) {
+        border-bottom: 1px solid $pdp_product_itemcode_border;
+      }
     }
 
     .has--special--price,
@@ -1520,6 +1524,16 @@
   }
 }
 
+.basic-details-wrapper {
+  .field--name {
+    &-field-skus {
+      @include breakpoint($only-mobile) {
+        min-height: 6.5rem;
+      }
+    }
+  }
+}
+
 .acq-sku-configurable-64__sku-base-form.sku-base-form {
   @include breakpoint($only-mobile) {
     min-height: 8rem;
@@ -1580,12 +1594,15 @@
         &.picked,
         &:hover {
           color: $pdp_size_option_selected_text;
-          font-weight: bold;
           background: $pdp_size_option_selected_bg;
 
           html[lang=ar] .safari & {
             font-weight: normal;
           }
+        }
+
+        &.picked {
+          font-weight: bold;
         }
       }
 

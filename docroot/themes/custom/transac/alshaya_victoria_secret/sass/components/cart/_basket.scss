@@ -316,6 +316,26 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    h1 {
+      &.c-page-title {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    #table-cart-items {
+      margin-top: 0.5rem;
+
+      tr {
+        td {
+          &.name {
+            padding-top: 1.5rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 #cart_notification {
@@ -402,6 +422,18 @@ body.alias--cart {
         .cart-promotions {
           top: 0.875rem;
         }
+      }
+    }
+  }
+}
+
+.promo-continue-shopping-wrapper {
+  #coupon-button {
+    &.remove {
+      display: block;
+
+      &:hover {
+        opacity: 1;
       }
     }
   }
