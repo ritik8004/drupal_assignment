@@ -129,6 +129,9 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
       }
     }
 
+    // Allow other module to alter links.
+    $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
+
     return [
       '#theme' => 'alshaya_main_menu_level1',
       '#term_tree' => $term_data,
