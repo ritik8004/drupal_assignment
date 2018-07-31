@@ -207,6 +207,16 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    .menu--one__link {
+      html[lang="en"] & {
+        letter-spacing: 2.4px;
+      }
+    }
+  }
+}
+
 .c-header .block-views-exposed-filter-blocksearch-page {
   @include breakpoint($desktop) {
     left: 0;

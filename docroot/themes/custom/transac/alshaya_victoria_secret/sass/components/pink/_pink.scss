@@ -161,3 +161,15 @@
     }
   }
 }
+
+html[lang=“en”] .super-category-pink {
+  .block-alshaya-main-menu {
+    li.menu--one__list-item {
+      .menu--one__link {
+        html[lang="en"] & {
+          letter-spacing: 0.07em;
+        }
+      }
+    }
+  }
+}
