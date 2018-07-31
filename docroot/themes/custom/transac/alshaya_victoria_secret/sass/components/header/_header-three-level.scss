@@ -21,6 +21,10 @@
 
 .menu--two__list {
   .menu--two__list-item {
+    @include breakpoint($desktop) {
+      margin-bottom: 0.3125rem;
+    }
+
     .menu-two__link {
       @include breakpoint($desktop) {
         font-size: 0.75rem;
