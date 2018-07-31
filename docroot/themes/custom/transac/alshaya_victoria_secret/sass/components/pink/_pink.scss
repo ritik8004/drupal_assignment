@@ -5,14 +5,14 @@
         &.menu--one__link {
           font-family: $pink-pinksans;
           font-size: 1.25rem !important;
-          letter-spacing: 1px;
+          letter-spacing: 0.07em;
         }
 
         &.menu__link {
           @include breakpoint($upto-desktop) {
             font-family: $pink-pinksans;
             font-size: 1.5rem !important;
-            letter-spacing: 1px;
+            letter-spacing: 0.07em;
           }
         }
       }
@@ -157,6 +157,18 @@
         font-family: $pink-pinksans;
         font-size: 1.25rem;
         letter-spacing: 1.9px;
+      }
+    }
+  }
+}
+
+html[lang=“en”] .super-category-pink {
+  .block-alshaya-main-menu {
+    li.menu--one__list-item {
+      .menu--one__link {
+        html[lang="en"] & {
+          letter-spacing: 0.07em;
+        }
       }
     }
   }
