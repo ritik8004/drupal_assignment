@@ -1069,6 +1069,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $user_input_configurables['configurables'] = $selected;
     $form_state->setUserInput($user_input_configurables);
 
+    /** @var \Drupal\alshaya_acm_product\SkuFieldsHelper $skuFieldsHelper */
+    $skuFieldsHelper = \Drupal::service('alshaya_acm_product.sku_fields_helper');
+
     foreach ($form['ajax']['configurables'] as $key => &$configurable) {
       if (!is_array($configurable)) {
         continue;
@@ -1084,10 +1087,20 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       $configurable['#options_attributes'] = $configurable['#options_attributes'] ?? [];
       if (isset($configurable['#type']) && $configurable['#type'] == 'select') {
+        $overridden_label = $skuFieldsHelper->getOverriddenAttributeLabel($key);
+
         $configurable['#empty_value'] = '';
         $configurable['#options_attributes']['']['disabled'] = 'disabled';
-        $configurable['#empty_option'] = t('Select @title', ['@title' => $configurable['#title']]);
-        $configurable['#attributes']['data-default-title'] = $configurable['#title'];
+        $configurable['#empty_option'] = $overridden_label ?? t('Select @title', ['@title' => $configurable['#title']]);
+        $configurable['#attributes']['data-default-title'] = $overridden_label ?? $configurable['#title'];
+
+        $overridden_selected_label = $skuFieldsHelper->getOverriddenAttributeSelectedLabel($key);
+        $configurable['#attributes']['data-selected-title'] = $overridden_selected_label ?? $configurable['#attributes']['data-default-title'];
+
+        $overridden_error = $skuFieldsHelper->getOverriddenAttributeError($key);
+        if ($overridden_error) {
+          $configurable['#required_error'] = $overridden_error;
+        }
 
         if (in_array($key, $swatches)) {
           $configurable['#attributes']['class'][] = 'form-item-configurable-swatch';
@@ -1158,8 +1171,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // Attach size guide link to size attribute. This is statically attached to
     // size, we don't want it for any other attributes.
     if (isset($form['ajax']['configurables']['size'])) {
-      $form['ajax']['configurables']['size']['#required_error'] = t('Please select a size.');
-
       // @TODO: This looks like related to GTM, also for now only limited to
       // size attribute and not checking for other attributes.
       $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
@@ -1168,6 +1179,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         $options = [];
 
         foreach ($configurable_sizes['#options'] as $key => $option) {
+          /** @var \Drupal\acq_sku\ProductOptionsManager $product_options_manager */
           $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
 
           // Fetch taxonomy_term from option Id.

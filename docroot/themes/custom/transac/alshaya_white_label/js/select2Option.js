@@ -10,7 +10,6 @@ jQuery.fn.select2Option = function (options) {
     var $ = jQuery;
     var select = $(this);
     var labeltext = '';
-    var defaultTitle = '';
     select.addClass('visually-hidden');
 
     var buttonsHtml = $('<div class="select2Option"></div>');
@@ -28,13 +27,6 @@ jQuery.fn.select2Option = function (options) {
           var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + $(this).text() + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
-            defaultTitle = $(this).parent().attr('data-default-title');
-            if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
-            }
-            else {
-              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
-            }
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
@@ -47,13 +39,6 @@ jQuery.fn.select2Option = function (options) {
         else {
           if (selectIndex === 0) {
             liHtml.hide();
-            defaultTitle = $(this).parent().attr('data-default-title');
-            if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
-            }
-            else {
-              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
-            }
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
@@ -71,7 +56,7 @@ jQuery.fn.select2Option = function (options) {
         ulHtml.append(liHtml);
         selectIndex++;
       });
-      buttonsHtml.prepend(labeltext);
+
       buttonsHtml.append(ulHtml);
     };
 
@@ -84,6 +69,15 @@ jQuery.fn.select2Option = function (options) {
         addOptGroup($(this));
       });
     }
+
+    labeltext = select.attr('data-default-title');
+
+    if (select.val() !== '' && select.val() !== null) {
+      labeltext = select.attr('data-selected-title');
+    }
+
+    labeltext = '<h4 class="list-title"><span>' + labeltext + ' : <span></h4>';
+    buttonsHtml.prepend(labeltext);
 
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();
