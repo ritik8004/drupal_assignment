@@ -11,37 +11,6 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
- * Change name of promotion category facet.
- */
-function alshaya_search_update_8022() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['facets.facet.promotion_category_facet'],
-    'alshaya_acm_promotion',
-    'optional'
-  );
-
-  $manager->updateConfigs(
-    ['block.block.promotioncategoryfacet'],
-    'alshaya_transac',
-    'optional'
-  );
-
-  // Get current default theme.
-  $current_theme = \Drupal::config('system.theme')->get('default');
-
-  // Move blocks to current default theme.
-  if (!empty($current_theme)) {
-    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
-  }
-
-  Drupal::configFactory()->getEditable('facets.facet.category_promotion')->delete();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update search_api_autocomplete permission.
  */
 function alshaya_search_update_8019() {
