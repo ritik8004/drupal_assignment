@@ -54,56 +54,74 @@ function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, E
       }
 
       if ($view_mode == 'full') {
-        if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
-          $fragrance_desc['label'] = [
-            '#markup' => t('Fragrance Description'),
-          ];
-          $fragrance_desc['value'] = [
-            '#markup' => $fragrance_description,
-          ];
-          // $build['short_desc'] contains the description that should be
-          // displayed before 'Read More'.
-          $build['short_desc'] = $fragrance_desc;
-          $build['description'][] = $fragrance_desc;
-        }
-
-        if ($overview = $entity->get('body')->getValue()) {
-          $overview_desc['label'] = [
-            '#markup' => t('Overview'),
-          ];
-          $overview_desc['value'] = [
-            '#markup' => $overview[0]['value'],
-          ];
-          // Display product desc as short desc in case fragrance desc is empty.
-          if (empty($build['short_desc'])) {
-            $build['short_desc'] = $overview_desc;
-          }
-
-          $build['description'][] = $overview_desc;
-        }
-
-        if ($usage = $sku_entity->get('attr_usage')->getString()) {
-          $usage_desc['label'] = [
-            '#markup' => t('Usage'),
-          ];
-          $usage_desc['value'] = [
-            '#markup' => $usage,
-          ];
-          $build['description'][] = $usage_desc;
-        }
-
-        if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
-          $more_info_desc['label'] = [
-            '#markup' => t('More info'),
-          ];
-          $more_info_desc['value'] = [
-            '#markup' => $more_info,
-          ];
-          $build['description'][] = $more_info_desc;
-        }
+        $return = _alshaya_bbw_transac_get_product_description($sku_entity);
+        $build['short_desc'] = $return['short_desc'];
+        $build['description'] = $return['description'];
       }
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_bbw_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $return = _alshaya_bbw_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_bbw_transac_get_product_description($sku_entity) {
+  $return = [];
+  if ($fragrance_description = $sku_entity->get('attr_fragrance_description')->getString()) {
+    $fragrance_desc['label'] = [
+      '#markup' => t('Fragrance Description'),
+    ];
+    $fragrance_desc['value'] = [
+      '#markup' => $fragrance_description,
+    ];
+    // $build['short_desc'] contains the description that should be
+    // displayed before 'Read More'.
+    $return['short_desc'] = $fragrance_desc;
+    $return['description'][] = $fragrance_desc;
+  }
+
+  if ($overview = $sku_entity->get('attr_description')->getValue()) {
+    $overview_desc['label'] = [
+      '#markup' => t('Overview'),
+    ];
+    $overview_desc['value'] = [
+      '#markup' => $overview[0]['value'],
+    ];
+    $return['description'][] = $overview_desc;
+  }
+
+  if ($usage = $sku_entity->get('attr_usage')->getString()) {
+    $usage_desc['label'] = [
+      '#markup' => t('Usage'),
+    ];
+    $usage_desc['value'] = [
+      '#markup' => $usage,
+    ];
+    $return['description'][] = $usage_desc;
+  }
+
+  if ($more_info = $sku_entity->get('attr_more_info')->getString()) {
+    $more_info_desc['label'] = [
+      '#markup' => t('More info'),
+    ];
+    $more_info_desc['value'] = [
+      '#markup' => $more_info,
+    ];
+    $return['description'][] = $more_info_desc;
+  }
+
+  return $return;
 }
 
 /**
