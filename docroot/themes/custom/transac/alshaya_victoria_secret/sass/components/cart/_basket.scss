@@ -316,6 +316,26 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    h1 {
+      &.c-page-title {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    #table-cart-items {
+      margin-top: 0.5rem;
+
+      tr {
+        td {
+          &.name {
+            padding-top: 1.5rem;
+          }
+        }
+      }
+    }
+  }
 }
 
 #cart_notification {
@@ -334,7 +354,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    #{$right}: 2.0625rem;
+    #{$right}: 36%;
     top: 3.1rem;
   }
 
