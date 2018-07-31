@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -237,7 +238,7 @@ function alshaya_vs_transac_alshaya_main_menu_links_alter(array &$term_tree, $pa
     $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['plugin' => $block_plugin_id]);
     $block = reset($blocks);
 
-    if ($block->access('view')) {
+    if ($block instanceof Block && $block->access('view')) {
       $item = [
         'label' => $block->label(),
         'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
