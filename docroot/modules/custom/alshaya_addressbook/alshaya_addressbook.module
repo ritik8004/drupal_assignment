@@ -720,6 +720,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     $country_list = \Drupal::service('address.country_repository')->getList();
     $variables['delivery_address']['country'] = $country_list[$values[0]['country_code']];
 
+    $variables['delivery_address'] = \Drupal::service('alshaya_addressbook.manager')->getAddressWithPrefix($variables['delivery_address']);
     // If profile is default profile.
     $variables['is_default_profile'] = $profile->isDefault() ?: '';
 

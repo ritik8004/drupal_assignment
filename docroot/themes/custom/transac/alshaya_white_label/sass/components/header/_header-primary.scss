@@ -644,10 +644,6 @@ header {
         }
       }
 
-      a {
-        font-family: $alshaya-thin;
-      }
-
       &:hover {
         & > ul.menu--two__list {
           visibility: visible;
@@ -659,12 +655,18 @@ header {
 
       a {
         font-size: 0.75rem;
+        font-family: $alshaya-thin;
         color: $mm_l1_link;
         text-decoration: none;
       }
 
       .menu__link {
         color: $mm_l1_link;
+      }
+
+      .menu--one__link {
+        font-size: 0.75rem;
+        font-family: $alshaya-thin;
       }
 
       ul ul {
@@ -780,7 +782,7 @@ header {
 
         &:hover {
           &::after {
-            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+            background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next--hover.svg');
           }
         }
       }
