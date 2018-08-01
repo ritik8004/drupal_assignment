@@ -160,9 +160,14 @@ header {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
-        padding: 0.625rem 0.9375rem;
+        padding: 0.625rem 0;
+        margin: 0 1.5rem;
         height: 2.5rem;
         margin-top: 0;
+
+        html[lang="en"] & {
+          letter-spacing: 2.4px;
+        }
       }
 
       .menu--one__link.active {
@@ -175,6 +180,7 @@ header {
         &:hover {
           .menu--one__link {
             border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+            color: $mm_l1_link_active;
           }
         }
       }
@@ -197,6 +203,16 @@ header {
 
     .menu--three__list {
       font-size: 0.875rem;
+    }
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    .menu--one__link {
+      html[lang="en"] & {
+        letter-spacing: 2.4px;
+      }
     }
   }
 }
