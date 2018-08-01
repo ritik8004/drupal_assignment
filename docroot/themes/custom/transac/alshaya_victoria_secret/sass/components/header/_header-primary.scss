@@ -167,7 +167,7 @@ header {
       }
 
       .menu--one__link.active {
-        border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+        border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
 
@@ -175,7 +175,7 @@ header {
       li.menu--one__list-item {
         &:hover {
           .menu--one__link {
-            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+            border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
             color: $mm_l1_link_active;
           }
         }
@@ -184,7 +184,7 @@ header {
       &:hover {
         li.menu--one__list-item {
           .menu--one__link.active {
-            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+            border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
       }
