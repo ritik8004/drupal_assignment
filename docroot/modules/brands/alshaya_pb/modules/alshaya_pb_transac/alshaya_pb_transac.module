@@ -197,6 +197,9 @@ function _alshaya_pb_transac_get_product_description($sku_entity) {
   }
 
   return $return;
+}
+
+/**
  * Implements template_preprocess_alshaya_cart_product_name().
  */
 function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
