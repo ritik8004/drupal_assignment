@@ -2,11 +2,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - paragraphs.paragraphs_type.1_row_2_col
-id: paragraph.1_row_2_col.created
+    - paragraphs.paragraphs_type.1_row_2_col_dept
+id: paragraph.1_row_2_col_dept.created
 field_name: created
 entity_type: paragraph
-bundle: 1_row_2_col
+bundle: 1_row_2_col_dept
 label: 'Authored on'
 description: 'The time that the Paragraph was created.'
 required: false

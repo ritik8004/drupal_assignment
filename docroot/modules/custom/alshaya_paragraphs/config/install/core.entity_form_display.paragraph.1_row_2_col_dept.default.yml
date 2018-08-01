@@ -2,16 +2,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.1_row_2_col.field_1_row_2_col
-    - paragraphs.paragraphs_type.1_row_2_col
+    - field.field.paragraph.1_row_2_col_dept.field_1_row_2_col
+    - paragraphs.paragraphs_type.1_row_2_col_dept
   module:
     - paragraphs
-id: paragraph.1_row_2_col.default
+id: paragraph.1_row_2_col_dept.default
 targetEntityType: paragraph
-bundle: 1_row_2_col
+bundle: 1_row_2_col_dept
 mode: default
 content:
   field_1_row_2_col:
+    type: entity_reference_paragraphs
     weight: 6
     settings:
       title: Paragraph
@@ -21,7 +22,6 @@ content:
       form_display_mode: default
       default_paragraph_type: ''
     third_party_settings: {  }
-    type: entity_reference_paragraphs
     region: content
   translation:
     weight: 10
