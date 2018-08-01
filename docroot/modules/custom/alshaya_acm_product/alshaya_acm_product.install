@@ -27,6 +27,7 @@ function alshaya_acm_product_update_8024() {
 /**
  * Implements hook_update_N().
  *
+ * Remove height config from plp slider config.
  * Set the number of items to show in a product carousel
  * on Department and Home page.
  * Set the number of items to show in a related product carousel on Basket page.

@@ -21,6 +21,11 @@
     width: 4.6875rem;
     margin-#{$right}: 1rem;
 
+    a {
+      display: block;
+      line-height: 0;
+    }
+
     @include breakpoint($only-mobile) {
       margin-#{$right}: 0.75rem;
     }
@@ -260,6 +265,20 @@
     }
 
     &:empty {
+      display: none;
+    }
+  }
+}
+
+.acq-content-product-modal {
+  .short-description-wrapper {
+    .read-more-description-link-gift {
+      display: block;
+    }
+  }
+
+  .mobilegallery {
+    .labels-container {
       display: none;
     }
   }

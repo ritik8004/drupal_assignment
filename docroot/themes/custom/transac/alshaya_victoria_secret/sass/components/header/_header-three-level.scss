@@ -12,7 +12,7 @@
         column-width: 13.2rem;
         padding-#{$left}: 5.75rem;
         padding-bottom: 2.5rem;
-        height: 17rem;
+        height: 18rem;
         min-height: 0;
       }
     }
@@ -21,6 +21,14 @@
 
 .menu--two__list {
   .menu--two__list-item {
+    @include breakpoint($desktop) {
+      margin-bottom: 1.563rem;
+
+      &.has-child {
+        margin-bottom: 0.3125rem;
+      }
+    }
+
     .menu-two__link {
       @include breakpoint($desktop) {
         font-size: 0.75rem;
@@ -92,7 +100,7 @@
         &::before {
           content: " ";
           display: block;
-          height: 2px;
+          height: 1px;
           background: $mm_top_border;
           position: relative;
           top: -2.5rem;

@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -180,73 +181,94 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
-      $description_value = '';
-      $short_desc = [];
-
-      if ($body = $entity->get('body')->getValue()) {
-        $description_value = $body[0]['value'];
-        $short_desc['label'] = [
-          '#markup' => t('Short Description'),
-        ];
-
-        $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
-        $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
-        // Remove empty paragraphs from short description.
-        $short_desc_html = preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $short_desc_html);
-        // Remove br at the end of short desc.
-        $short_desc_html = preg_replace('#(( ){0,}<br( {0,})(/{0,1})>){1,}$#i', '', $short_desc_html);
-        $short_desc['value'] = [
-          '#markup' => $short_desc_html . '...',
-        ];
-
-        // If short description is the same as description,
-        // do not show 'Read More' button.
-        if (strlen($description_value) <= $short_desc_len) {
-          $build['read_more_style']['value'] = [
-            '#markup' => 'display:none;',
-          ];
-        }
-      }
-      else {
-        $build['read_more_style']['value'] = [
-          '#markup' => 'display:none;',
-        ];
-      }
-
-      $description['value'] = [
-        '#markup' => $description_value,
-      ];
-
-      // Add all variables to $build in the sequence in
-      // which they should be displayed.
-      // $build['short_desc'] contains the description that should be
-      // displayed before 'Read More'.
-      $build['short_desc'] = $short_desc;
-      $build['description'][] = $description;
+      $return = _alshaya_vs_transac_get_product_description($sku_entity);
+      $build['short_desc'] = $return['short_desc'];
+      $build['description'] = $return['description'];
     }
   }
 }
 
 /**
- * Implements template_preprocess_hook().
- *
- * Place today's offer links in shop by block for mobile.
+ * Implements hook_ENTITY_TYPE_view().
  */
-function alshaya_promo_panel_preprocess_alshaya_main_menu_level1(&$variables) {
+function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $return = _alshaya_vs_transac_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_vs_transac_get_product_description($sku_entity) {
+  $return = [];
+  $description_value = '';
+  $short_desc = [];
+
+  if ($body = $sku_entity->get('attr_description')->getValue()) {
+    $description_value = $body[0]['value'];
+    $short_desc['label'] = [
+      '#markup' => t('Short Description'),
+    ];
+
+    $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
+    $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
+    // Remove empty paragraphs from short description.
+    $short_desc_html = preg_replace("/<p[^>]*>[\s|&nbsp;]*<\/p>/", '', $short_desc_html);
+    // Remove br at the end of short desc.
+    $short_desc_html = preg_replace('#(( ){0,}<br( {0,})(/{0,1})>){1,}$#i', '', $short_desc_html);
+    $short_desc['value'] = [
+      '#markup' => $short_desc_html . '...',
+    ];
+
+    // If short description is the same as description,
+    // do not show 'Read More' button.
+    if (strlen($description_value) <= $short_desc_len) {
+      $build['read_more_style']['value'] = [
+        '#markup' => 'display:none;',
+      ];
+    }
+  }
+  else {
+    $build['read_more_style']['value'] = [
+      '#markup' => 'display:none;',
+    ];
+  }
+
+  $description['value'] = [
+    '#markup' => $description_value,
+  ];
+
+  // Add all variables to $build in the sequence in
+  // which they should be displayed.
+  // $build['short_desc'] contains the description that should be
+  // displayed before 'Read More'.
+  $return['short_desc'] = $short_desc;
+  $return['description'][] = $description;
+
+  return $return;
+}
+
+/**
+ * Implements hook_alshaya_main_menu_links_alter().
+ */
+function alshaya_vs_transac_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $promo_panel_blocks = alshaya_promo_panel_blocks_get_plugin_ids();
 
   foreach (array_keys($promo_panel_blocks) as $block_plugin_id) {
     $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['plugin' => $block_plugin_id]);
     $block = reset($blocks);
 
-    if ($block->access('view')) {
+    if ($block instanceof Block && $block->access('view')) {
       $item = [
         'label' => $block->label(),
         'path' => Url::fromUserInput($promo_panel_blocks[$block_plugin_id])->toString(),
         'class' => 'promo-panel--mobile-link',
-        'tag' => 'a',
+        'clickable' => TRUE,
       ];
-      array_unshift($variables['term_tree'], $item);
+      array_unshift($term_tree, $item);
     }
   }
 }

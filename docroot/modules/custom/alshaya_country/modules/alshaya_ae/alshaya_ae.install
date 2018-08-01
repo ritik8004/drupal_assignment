@@ -6,6 +6,16 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Set 'en' as the default lang code for the users when visits site without any
+ * lang code.
+ */
+function alshaya_ae_update_8002() {
+  \Drupal::configFactory()->getEditable('alshaya_i18n.settings')->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_ae_install() {

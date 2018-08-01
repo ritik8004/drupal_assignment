@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - facets.facet.category_promotion
+    - facets.facet.promotion_category_facet
   module:
     - ctools
     - facets
@@ -13,9 +13,9 @@ theme: alshaya_white_label
 region: sidebar_first
 weight: -37
 provider: null
-plugin: 'facet_block:category_promotion'
+plugin: 'facet_block:promotion_category_facet'
 settings:
-  id: 'facet_block:category_promotion'
+  id: 'facet_block:promotion_category_facet'
   label: Category
   provider: facets
   label_display: visible

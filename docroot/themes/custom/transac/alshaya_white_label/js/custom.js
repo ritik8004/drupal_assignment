@@ -31,6 +31,9 @@
     // Do nothing here.
   }
 
+  // Adding class at field-promo-block level to differentiate department page drop down.
+  $('.c-accordion-delivery-options').parent().parent().addClass('field--name-field-promo-block-accordion-delivery-options');
+
   Drupal.behaviors.removeContentLoadingThrobber = {
     attach: function (context, settings) {
       setTimeout(function () {

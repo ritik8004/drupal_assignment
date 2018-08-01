@@ -393,6 +393,7 @@ $mm_body_overlay: rgba(0, 0, 0, 0.48);
 $mm_l1_border: $gainsboro;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $brilliant-rose;
+$mm_l1_link_active: $brilliant-rose;
 $mm_l1_link_hover: $black;
 $mm_l1_link_hover_border_to_fill_space: $brilliant-rose;
 $mm_l1_link_active_border: transparent;
@@ -627,6 +628,8 @@ $not_buyable_help: $brilliant-rose;
 
 // Department page
 $department_category_list_hover: $brilliant-rose;
+$department_category_accordion_title_arrow: $nero;
+$department_category_accordion_link_arrow: $nero;
 
 // Store finder page.
 // Store finder header form.
