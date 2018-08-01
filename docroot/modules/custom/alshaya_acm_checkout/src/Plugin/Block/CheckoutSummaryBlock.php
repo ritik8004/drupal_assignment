@@ -417,15 +417,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         $totals['shipping'] = alshaya_acm_price_format($cart_totals['shipping']);
       }
       else {
-        $totals['shipping']['#markup'] = '
-          <div class="price-type__wrapper">
-              <span class="price-wrapper">
-              <div class="price">
-                  <span class="price-amount">FREE</span>
-          </div>
-          </span>
-          </div>
-          ';
+        $totals['shipping']['value']['#markup'] = $this->t('FREE');
       }
     }
     else {
