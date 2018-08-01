@@ -19,8 +19,17 @@ $site_name = preg_replace('/\d/', '',explode('.', $_SERVER['HTTP_HOST'])[0]);
 $site_code = substr($site_name, 0, -2);
 $country_code = substr($site_name, -2);
 
-echo $site_name . ' - ' . $site_code . ' - ' . $country_code;
+$f = fopen('/home/alshaya/debug.txt', 'a');
+fwrite($f, 'TEST VBO');
+fwrite($f, "\n");
+fwrite($f, $_SERVER['HTTP_HOST'] . ' - ' . $site_name . ' - ' . $site_code . ' - ' . $country_code);
+fwrite($f, "\n");
+fclose($f);
 
-if ($site_code !== 'vs') {
+if ($site_code == 'vb') {
+  $f = fopen('/home/alshaya/debug.txt', 'a');
+  fwrite($f, 'Enter the condition and run exec');
+  fclose($f);
+
   exec(dirname(__FILE__) . 'post-install.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $site_code . '" "' . $country_code . '"');
 }
