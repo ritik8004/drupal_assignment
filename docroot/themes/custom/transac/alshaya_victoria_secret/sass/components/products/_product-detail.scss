@@ -545,3 +545,23 @@ html[lang="en"] .super-category-victorias-secret {
     }
   }
 }
+
+html[lang="ar"] {
+  .acq-content-product,
+  .acq-content-product-modal {
+    .content__title_wrapper {
+      h1,
+      h2 {
+        width: 100%;
+
+        span {
+          font-size: 1.5rem;
+
+          &.title--sub {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}
