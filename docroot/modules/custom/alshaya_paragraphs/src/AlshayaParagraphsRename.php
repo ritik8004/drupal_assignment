@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_paragraphs_rename;
+namespace Drupal\alshaya_paragraphs;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\DatabaseExceptionWrapper;
@@ -128,12 +128,12 @@ class AlshayaParagraphsRename {
    * Get the paragraph item ids of given bundle.
    *
    * @param string $bundle
-   *   The pagraph bundle name.
+   *   The pargraph bundle name.
    *
    * @return array|int
    *   Return array of paragraph item ids.
    */
-  protected function getPargraphItems($bundle) {
+  protected function getParagraphItems($bundle) {
     return $this->paragraph->getQuery()
       ->condition('type', $bundle)
       ->execute();
@@ -148,7 +148,7 @@ class AlshayaParagraphsRename {
    *   New bundle name.
    */
   public function renameParagraphBundle($current_name, $new_name) {
-    $migrate_ids = $this->getPargraphItems($current_name);
+    $migrate_ids = $this->getParagraphItems($current_name);
     if (count($migrate_ids) == 0) {
       return;
     }

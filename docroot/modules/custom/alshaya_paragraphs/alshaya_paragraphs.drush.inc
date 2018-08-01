@@ -8,7 +8,7 @@
 /**
  * Implements hook_drush_command().
  */
-function alshaya_paragraphs_rename_drush_command() {
+function alshaya_paragraphs_drush_command() {
   $commands = [];
 
   $commands['alshaya-paragraphs-rename'] = [
@@ -36,7 +36,7 @@ function alshaya_paragraphs_rename_drush_command() {
  *   New bundle name.
  */
 function drush_alshaya_paragraphs_rename($current_name, $new_name) {
-  $paragraph_rename = \Drupal::service('alshaya_paragraphs_rename');
+  $paragraph_rename = \Drupal::service('alshaya_paragraphs.rename');
   $paragraph_rename->renameParagraphBundle($current_name, $new_name);
 
   $msg = dt('All the paragraph items are renamed, Do you want to delete bundle with old name?');

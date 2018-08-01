@@ -1,6 +1,0 @@
-name: 'Alshaya Paragraphs Rename'
-type: module
-core: 8.x
-description: 'Rename alshaya paragraphs bundle and delete unnecessary bundles.'
-dependencies:
-  - alshaya_paragraphs:alshaya_paragraphs
