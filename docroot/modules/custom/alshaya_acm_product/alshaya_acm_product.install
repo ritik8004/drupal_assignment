@@ -12,6 +12,7 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Remove height config from plp slider config.
  * Changing 'size_guide' config to 'pdp_modal_links'.
  */
 function alshaya_acm_product_update_8024() {
