@@ -22,6 +22,10 @@
 
   .field__label {
     margin: 0.5rem 0 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.5rem;
+    }
   }
 }
 
@@ -434,6 +438,10 @@
 .delivery-options-wrapper {
   .field__label {
     margin-top: 1.625rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.5rem;
+    }
   }
 
   .c-accordion__title {
@@ -514,6 +522,46 @@
   #drupal-modal {
     .content--item-code {
       margin-top: 0.75rem;
+    }
+  }
+}
+
+html[lang="en"] .super-category-victorias-secret {
+  .acq-content-product,
+  .acq-content-product-modal {
+    .content__title_wrapper {
+      h1,
+      h2 {
+        width: 100%;
+
+        span {
+          font-size: 1.625rem;
+
+          &.title--sub {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+html[lang="ar"] {
+  .acq-content-product,
+  .acq-content-product-modal {
+    .content__title_wrapper {
+      h1,
+      h2 {
+        width: 100%;
+
+        span {
+          font-size: 1.5rem;
+
+          &.title--sub {
+            font-size: 0.875rem;
+          }
+        }
+      }
     }
   }
 }
