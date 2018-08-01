@@ -471,16 +471,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $build['item_code']['#markup'] = $sku;
 
         // If delivery available for the SKU.
-        if ($delivery_data = _alshaya_acm_product_get_delivery_link($sku_entity)) {
-          $build['delivery_data']['link_title'] = [
-            '#markup' => '<div class="delivery-title">' . $delivery_data['title'] . '</div>',
-          ];
-          $build['delivery_data']['link_data'] = [
-            '#type' => 'inline_template',
-            '#template' => '<div class="delivery-content">{{ delivery_content }}</div>',
-            '#context' => [
-              'delivery_content' => $delivery_data['title'],
-            ],
+        if (!empty($delivery_data = _alshaya_acm_product_get_delivery_link($sku_entity))) {
+          $build['delivery_link'] = [
+            '#markup' => $delivery_data['link'],
           ];
         }
 
@@ -1522,26 +1515,12 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  *   Array containing link html and attributes.
  */
 function _alshaya_acm_product_get_size_guide_info() {
-  $info = [];
-
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
-
   if ($config->get('size_guide_enabled')) {
-    $options = [
-      'attributes' => [
-        'class' => ['size-guide-link', 'use-ajax'],
-        'data-dialog-type' => 'dialog',
-        'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
-      ],
-    ];
-    $url = Url::fromRoute('alshaya_acm_product.size_guide_modal', [], $options);
-    $link = Link::fromTextAndUrl(t('Size Guide'), $url);
-    $info['link'] = $link->toString();
-
-    $info['attributes'] = explode(',', $config->get('size_guide_attributes'));
+    return _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size_guide_attributes');
   }
 
-  return $info;
+  return [];
 }
 
 /**
@@ -1655,6 +1634,34 @@ function alshaya_acm_product_language_switch_links_alter(array &$links, $type, U
 }
 
 /**
+ * Returns link for PDP modal content.
+ *
+ * @param string|mixed $link_title
+ *   Link title.
+ * @param string $attribute_key
+ *   Attribute key.
+ *
+ * @return array
+ *   Array of link.
+ */
+function _alshaya_acm_product_get_modal_link($link_title, $attribute_key) {
+  $info = [];
+  $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
+  $options = [
+    'attributes' => [
+      'class' => ['size-guide-link', 'use-ajax'],
+      'data-dialog-type' => 'dialog',
+      'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
+    ],
+  ];
+  $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [], $options);
+  $link = Link::fromTextAndUrl($link_title, $url);
+  $info['link'] = $link->toString();
+  $info['attributes'] = explode(',', $config->get($attribute_key));
+  return $info;
+}
+
+/**
  * Get delivery data.
  *
  * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -1676,18 +1683,13 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
       return NULL;
     }
 
-    $link = [];
     // Load node object.
     $delivery_node_content = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
     $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
     // Get translated node object.
     $delivery_node_content = \Drupal::service('entity.repository')->getTranslationFromContext($delivery_node_content, $current_language);
-    $link['title'] = $delivery_node_content->getTitle();
-    // Unset the title.
-    $delivery_node_content->setTitle('');
-    $link['content'] = render(\Drupal::entityTypeManager()->getViewBuilder('node')->view($delivery_node_content, 'full'));
-    return $link;
+    return _alshaya_acm_product_get_modal_link($delivery_node_content->getTitle(), 'delivery_content_attribute');
   }
 
-  return NULL;
+  return [];
 }
