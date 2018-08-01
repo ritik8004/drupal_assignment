@@ -12,6 +12,23 @@ use Drupal\field\Entity\FieldConfig;
 /**
  * Implements hook_update_N().
  *
+ * Change name of promotion category facet.
+ */
+function alshaya_acm_promotion_update_8014() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['facets.facet.promotion_category_facet'],
+    'alshaya_acm_promotion',
+    'optional'
+  );
+
+  Drupal::configFactory()->getEditable('facets.facet.category_promotion')->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding fields for coupon code & free gift skus.
  */
 function alshaya_acm_promotion_update_8013() {
@@ -157,4 +174,15 @@ function alshaya_acm_promotion_update_8001() {
   // Getting editable SOLR facet config.
   $facet_promotion_collection = \Drupal::configFactory()->getEditable('facets.facet.promotion_collection_facet');
   $facet_promotion_collection->set('widget.config.show_numbers', TRUE)->save();
+}
+
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_acm_promotion_update_dependencies() {
+  $dependencies['alshaya_transac'][8116] = [
+    'alshaya_acm_promotion' => 8014,
+  ];
+  return $dependencies;
 }

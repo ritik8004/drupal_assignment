@@ -14,6 +14,29 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Re-install promotion category facet block.
+ */
+function alshaya_transac_update_8116() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.promotioncategoryfacet'],
+    'alshaya_transac',
+    'optional'
+  );
+
+  // Get current default theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable 'New In' sort option for all brands.
  */
 function alshaya_transac_update_8115() {
