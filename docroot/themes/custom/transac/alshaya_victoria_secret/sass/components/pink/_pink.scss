@@ -6,6 +6,10 @@
           font-family: $pink-pinksans;
           font-size: 1.25rem !important;
           letter-spacing: 0.07em;
+
+          @include breakpoint($desktop) {
+            font-size: 1.1875rem !important;
+          }
         }
 
         &.menu__link {
@@ -116,7 +120,7 @@
       }
     }
 
-    .promo-panel-fixed {
+    .promo__panel {
       &.block-promo-panel-wrapper {
         .promo-panel-label {
           font-family: $pink-pinkslab;
