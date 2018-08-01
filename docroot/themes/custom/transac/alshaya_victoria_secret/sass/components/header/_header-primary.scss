@@ -164,10 +164,6 @@ header {
         margin: 0 1.5rem;
         height: 2.5rem;
         margin-top: 0;
-
-        html[lang="en"] & {
-          letter-spacing: 2.4px;
-        }
       }
 
       a.menu--one__link.active {
@@ -203,16 +199,6 @@ header {
 
     .menu--three__list {
       font-size: 0.875rem;
-    }
-  }
-}
-
-.block-alshaya-main-menu {
-  li.menu--one__list-item {
-    .menu--one__link {
-      html[lang="en"] & {
-        letter-spacing: 2.4px;
-      }
     }
   }
 }
@@ -449,6 +435,16 @@ header {
   .menu--two__list-item {
     .menu__in {
       margin-top: -2.25rem;
+    }
+  }
+}
+
+html[lang="en"] {
+  .block-alshaya-main-menu {
+    a {
+      &.menu__link {
+        letter-spacing: 2.4px;
+      }
     }
   }
 }
