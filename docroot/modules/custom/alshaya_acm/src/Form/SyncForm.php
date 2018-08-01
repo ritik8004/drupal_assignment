@@ -232,6 +232,8 @@ class SyncForm extends FormBase {
 
       case $this->t('Synchronize promotions'):
         $this->promotionsManager->syncPromotions();
+        drush_invoke_process('@self', 'queue-run', ['acq_promotion_detach_queue']);
+        drush_invoke_process('@self', 'queue-run', ['acq_promotion_attach_queue']);
         drupal_set_message($this->t('Promotions synchronization complete.'), 'status');
         break;
 

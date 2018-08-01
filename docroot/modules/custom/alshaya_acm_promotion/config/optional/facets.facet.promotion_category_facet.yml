@@ -11,9 +11,9 @@ third_party_settings:
   alshaya_search:
     display_textbox: 0
     display_textbox_item_count: ''
-id: category_promotion
+id: promotion_category_facet
 name: Category
-url_alias: category_promotion
+url_alias: promotion_category_facet
 weight: 0
 min_count: 1
 show_only_one_result: false

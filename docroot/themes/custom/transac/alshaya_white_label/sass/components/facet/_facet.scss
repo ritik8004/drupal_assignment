@@ -129,6 +129,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > label {
       &::before {
         content: unset;
+        display: none;
       }
     }
 
@@ -149,6 +150,7 @@ ul[data-drupal-facet-id=plp_category_facet] {
         > label {
           &::before {
             content: unset;
+            display: none;
           }
         }
 
