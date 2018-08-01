@@ -1,0 +1,8 @@
+services:
+  alshaya_paragraphs_rename:
+    class: Drupal\alshaya_paragraphs_rename\AlshayaParagraphsRename
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@database'
+      - '@string_translation'
