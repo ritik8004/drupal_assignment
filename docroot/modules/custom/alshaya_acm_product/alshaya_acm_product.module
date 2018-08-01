@@ -361,6 +361,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
+      $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
 
       // Make product node dependent on all child-skus in case of configurable
@@ -1306,6 +1307,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
  *   Build array.
  */
 function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormStateInterface $form_state) {
+  $response = new AjaxResponse();
+
   // Product attributes that can possibly change whith selected attribute values
   // & hence need to be re-rendered in the AJAX callback.
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
@@ -1346,6 +1349,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   if ($tree_pointer instanceof SKU) {
+    $selected_sku = $tree_pointer;
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
@@ -1368,8 +1372,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       ],
       '#value' => $tree_pointer->getSku(),
     ];
-
-    $response = new AjaxResponse();
 
     $price_block = $skuManager->getPriceBlock($tree_pointer);
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
@@ -1486,7 +1488,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
-    return $response;
   }
   else {
     $build = [];
@@ -1499,6 +1500,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Pull out & update gallery image based on the selected color & first item.
     // @TODO: Verify this in HnM and MC.
     $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
+    $selected_sku = $first_child;
     alshaya_acm_product_get_gallery($build, $first_child);
 
     // If no image found on simple SKUs, use parent SKUs image.
@@ -1508,7 +1510,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
 
-    $response = new AjaxResponse();
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
@@ -1534,11 +1535,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // Send the updated settings in ajax response.
     $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
-
-    return $response;
   }
 
-  return $dynamic_parts;
+  \Drupal::moduleHandler()->alter('alshaya_acm_product_add_to_cart_ajax_response', $response, $sku, $selected_sku);
+
+  return $response;
 }
 
 /**
