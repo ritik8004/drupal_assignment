@@ -6,6 +6,10 @@
           font-family: $pink-pinksans;
           font-size: 1.25rem !important;
           letter-spacing: 0.07em;
+
+          @include breakpoint($desktop) {
+            font-size: 1.1875rem !important;
+          }
         }
 
         &.menu__link {
