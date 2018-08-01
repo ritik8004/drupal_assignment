@@ -18,6 +18,3 @@ alshaya_acm_product.display_settings:
         margin:
           type: integer
           label: 'Margin between images in slider'
-        height:
-          type: integer
-          label: 'Height of slider'
