@@ -68,7 +68,7 @@
       }
     }
 
-    .promo-panel-fixed {
+    .promo__panel {
       &.block-promo-panel-wrapper {
         .promo-panel-label {
           font-family: $vs-sport-bentonsanscomp;
@@ -98,6 +98,22 @@
             font-family: $vs-sport-bentonsanscomp;
             font-size: 1.125rem;
             letter-spacing: 1.9px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  html[lang="en"] {
+    .super-category-victorias-secret,
+    .super-category-victoria-sport {
+      .block-alshaya-main-menu {
+        a {
+          &.menu__link {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
           }
         }
       }
