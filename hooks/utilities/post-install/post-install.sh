@@ -10,6 +10,8 @@ cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 ## Push the updb logs on Slack channel.
 FILE=$HOME/slack_settings
 
+echo "this is in the bash" >> $HOME/debug.txt
+
 if [ -f $FILE ]; then
   # Load the Slack webhook URL (which is not stored in this repo).
   . $HOME/slack_settings
