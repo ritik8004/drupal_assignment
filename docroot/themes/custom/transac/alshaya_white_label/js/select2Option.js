@@ -76,7 +76,7 @@ jQuery.fn.select2Option = function (options) {
       labeltext = select.attr('data-selected-title');
     }
 
-    labeltext = '<h4 class="list-title"><span>' + labeltext + ' : <span></h4>';
+    labeltext = '<h4 class="list-title"><span>' + labeltext + ' : </span><span class="selected-text"></span></h4>';
     buttonsHtml.prepend(labeltext);
 
     buttonsHtml.find('a').on('click', function (e) {
@@ -88,9 +88,8 @@ jQuery.fn.select2Option = function (options) {
         return;
       }
 
-      $(this).closest('.select2Option').find('.list-title .selected-text').remove();
       $(this).closest('.sku-base-form').find('label.error, span.error, div.error').remove();
-      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');

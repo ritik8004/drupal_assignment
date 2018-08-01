@@ -28,11 +28,11 @@
       var that = $(this).parent();
       $('select', that).select2Option();
 
-      $('.select2Option', that).find('.list-title .selected-text').remove();
+      $('.select2Option', that).find('.list-title .selected-text').html('');
 
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
-        $('.select2Option', that).find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+        $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
       }
     });
   };
