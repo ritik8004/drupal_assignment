@@ -130,7 +130,7 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
  */
 function _alshaya_pb_transac_get_sku_title(SKU $sku) {
   // @TODO: Update to use combination of attributes when we have info.
-  return $sku->label();
+  return $sku->label() . ' - ' . $sku->getSku();
 }
 
 /**
