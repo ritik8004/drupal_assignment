@@ -24,6 +24,7 @@ services:
       - '@entity.repository'
       - '@logger.factory'
       - '@acq_sku.linked_sku'
+      - '@acq_sku.cart_form_helper'
       - '@module_handler'
       - '@cache.alshaya'
       - '@cache.product_labels'
