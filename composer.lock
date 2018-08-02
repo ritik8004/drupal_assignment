@@ -14000,6 +14000,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.2-dev"
+                },
+                "patches_applied": {
+                    "Apply security update - SA-CORE-2018-005": "patches/http_foundation-request.patch"
                 }
             },
             "autoload": {
