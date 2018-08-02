@@ -54,7 +54,17 @@
     {% if totals.shipping %}
       <div class="sub-total discount-shipping">
         <span>{{ 'Delivery'|t }}</span>
-        {{ totals.shipping }}
+        {% if totals.shipping.value|render %}
+          <div class="price-type__wrapper">
+            <span class="price-wrapper">
+              <div class="price">
+                <span class="price-amount">{{ totals.shipping.value }}</span>
+              </div>
+            </span>
+          </div>
+        {% else %}
+          {{ totals.shipping }}
+        {% endif %}
       </div>
     {% endif %}
 
