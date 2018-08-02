@@ -53,7 +53,22 @@
       @include breakpoint($desktop) {
         a.menu--one__link {
           @include mm-l1-highlight;
+
+          font-weight: 600;
         }
+      }
+    }
+
+    // Add title content on ::after to prevent the menu links
+    // from shifting when the text is bold on hover.
+    .menu--one__link::after {
+      @include breakpoint($desktop) {
+        content: attr(title);
+        display: block;
+        font-weight: 600;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
       }
     }
 
