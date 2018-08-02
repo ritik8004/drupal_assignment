@@ -230,6 +230,19 @@
   legend {
     color: $webform_contact_legend;
   }
+
+  .form-item-mobile-number-country-code {
+    .form-item--error-message {
+      display: none;
+    }
+  }
+
+  .mobile-input--wrapper {
+    #edit-mobile-number-mobile-error {
+      margin-top: -0.875rem;
+      padding-top: 0.25rem;
+    }
+  }
 }
 
 .alias--contact {

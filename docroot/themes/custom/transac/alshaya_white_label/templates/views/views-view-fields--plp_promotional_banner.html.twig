@@ -1,15 +1,15 @@
 {% if fields.field_promotion_banner or fields.field_promotion_banner_mobile %}
     <div class="picture-tag">
         <picture>
-          {% if fields.field_promotion_banner and fields.field_promotion_banner_mobile %}
+          {% if fields.field_promotion_banner.content and fields.field_promotion_banner_mobile.content %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner.content }}">
               <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner_mobile.content }}">
               <img src="{{ fields.field_promotion_banner.content }}"/>
-          {% elseif fields.field_promotion_banner is empty %}
+          {% elseif fields.field_promotion_banner.content is empty and fields.field_promotion_banner_mobile.content %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner_mobile.content }}">
               <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner_mobile.content }}">
               <img src="{{ fields.field_promotion_banner_mobile.content }}"/>
-          {% elseif fields.field_promotion_banner_mobile is empty %}
+          {% elseif fields.field_promotion_banner_mobile.content is empty and fields.field_promotion_banner.content %}
               <source media="(min-width: 768px)" srcset="{{ fields.field_promotion_banner.content }}">
               <source media="(max-width: 767px)" srcset="{{ fields.field_promotion_banner.content }}">
               <img src="{{ fields.field_promotion_banner.content }}"/>

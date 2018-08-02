@@ -1,0 +1,95 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.delivery_usp_block.field_arrow_color
+    - field.field.paragraph.delivery_usp_block.field_usp_text_background
+    - field.field.paragraph.delivery_usp_block.field_usp_text
+    - field.field.paragraph.delivery_usp_block.field_usp_text_font_color
+    - field.field.paragraph.delivery_usp_block.field_usp_timer
+    - paragraphs.paragraphs_type.delivery_usp_block
+  module:
+    - content_moderation
+    - jquery_minicolors
+    - paragraphs
+    - text
+id: paragraph.delivery_usp_block.default
+targetEntityType: paragraph
+bundle: delivery_usp_block
+mode: default
+content:
+  field_arrow_color:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_usp_text:
+    weight: 5
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_usp_text_background:
+    weight: 3
+    settings:
+      size: '15'
+      placeholder: ''
+      control: hue
+      format: rgb
+      swatches: ''
+      position: 'bottom left'
+      theme: default
+      animation_speed: 50
+      animation_easing: swing
+      change_delay: 0
+      letter_case: lowercase
+      show_speed: 100
+      hide_speed: 100
+      keywords: ''
+      opacity: 0
+      inline: 0
+    third_party_settings: {  }
+    type: jquery_minicolors_widget
+    region: content
+  field_usp_text_font_color:
+    weight: 4
+    settings:
+      size: '15'
+      placeholder: ''
+      control: hue
+      format: rgb
+      swatches: ''
+      position: 'bottom left'
+      theme: default
+      animation_speed: 50
+      animation_easing: swing
+      change_delay: 0
+      letter_case: lowercase
+      show_speed: 100
+      hide_speed: 100
+      keywords: ''
+      opacity: 0
+      inline: 0
+    third_party_settings: {  }
+    type: jquery_minicolors_widget
+    region: content
+  field_usp_timer:
+    weight: 1
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true
+  uid: true

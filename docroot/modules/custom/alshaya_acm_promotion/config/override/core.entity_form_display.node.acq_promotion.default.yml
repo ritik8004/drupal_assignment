@@ -1,6 +1,8 @@
 dependencies:
   config:
     - field.field.node.acq_promotion.field_alshaya_promotion_subtype
+    - field.field.node.acq_promotion.field_coupon_code
+    - field.field.node.acq_promotion.field_free_gift_skus
 content:
   field_alshaya_promotion_subtype:
     type: options_select
@@ -8,3 +10,19 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_coupon_code:
+    type: string_textfield
+    weight: 18
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_free_gift_skus:
+    weight: 19
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content

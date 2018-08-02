@@ -17,10 +17,6 @@
     padding-bottom: 0.5rem;
     padding-top: 0.75rem;
 
-    @include breakpoint($only-mobile) {
-      z-index: 10;
-    }
-
     a:hover {
       text-decoration: none;
     }
@@ -38,5 +34,19 @@
     @include breakpoint($only-mobile) {
       @include icon(chevronup, before);
     }
+  }
+}
+
+.c-communication-preferences,
+.c-address-book {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 1.5rem;
+  }
+}
+
+.user-page {
+  @include breakpoint($only-mobile) {
+    padding-bottom: 0;
+    margin-bottom: 0;
   }
 }

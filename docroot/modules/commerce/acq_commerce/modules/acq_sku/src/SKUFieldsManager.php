@@ -222,7 +222,7 @@ class SKUFieldsManager {
 
     $this->moduleHandler->alter('acq_sku_base_field_additions', $fields);
 
-    foreach ($fields as $field_code =>  $field) {
+    foreach ($fields as $field_code => $field) {
       $fields[$field_code] = $this->applyDefaults($field_code, $field);
     }
 
@@ -295,6 +295,19 @@ class SKUFieldsManager {
       // Whether the field should be visible in form.
       'visible_form' => 1,
     ];
+  }
+
+  /**
+   * Reset facets and facet blocks for base fields from ones provided by config.
+   *
+   * Also reset the base fields data in main config.
+   */
+  public function resetBaseFields() {
+    $fields = $this->getAllCustomFields();
+    $config = $this->configFactory->getEditable(self::BASE_FIELD_ADDITIONS_CONFIG);
+    $config->setData($fields);
+    $config->save();
+    $this->moduleHandler->invokeAll('acq_sku_base_fields_updated', [$fields, 'add']);
   }
 
 }

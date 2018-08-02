@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\Controller;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
@@ -30,6 +31,31 @@ class ProductController extends ControllerBase {
     }
 
     $response = new RedirectResponse(Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString());
+    $response->send();
+    exit;
+
+  }
+
+  /**
+   * Title callback for the modal.
+   */
+  public function skumodalTitle($acq_sku) {
+    $acq_sku = SKU::load($acq_sku);
+    return $acq_sku->get('name')->getString();
+  }
+
+  /**
+   * Page callback for the modal.
+   */
+  public function skumodalView($acq_sku, $js) {
+    $acq_sku = SKU::load($acq_sku);
+    if ($js === 'ajax') {
+      $view_builder = $this->entityTypeManager()->getViewBuilder($acq_sku->getEntityTypeId());
+      $build = $view_builder->view($acq_sku, 'modal');
+      return $build;
+    }
+
+    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $acq_sku->id()])->toString());
     $response->send();
     exit;
 

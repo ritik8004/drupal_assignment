@@ -32,6 +32,12 @@
         });
       });
 
+      // Trigger coupon apply button when clicking on coupon code in promo label.
+      $('.sku-promotions .coupon-code').click(function() {
+        $('#edit-coupon').val($(this).text());
+        $('#coupon-button').click();
+      });
+
       $('#coupon-button.add').once('load').each(function () {
         // Hide the apply button on page load or after AJAX call replacing form.
         $(this).hide();

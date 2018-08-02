@@ -57,17 +57,6 @@ function alshaya_i18n_install() {
     ->getEditable('pathauto.settings')
     ->set('transliterate', FALSE)
     ->save();
-
-  // Configure alshaya_i18n settings.
-  $config = \Drupal::configFactory()->getEditable('alshaya_i18n.settings');
-
-  $alshaya_i18n_settings = Settings::get('alshaya_i18n.settings');
-
-  foreach ($alshaya_i18n_settings as $key => $value) {
-    $config->set($key, $value);
-  }
-
-  $config->save();
 }
 
 /**

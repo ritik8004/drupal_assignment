@@ -456,7 +456,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['image'] = '';
 
     // Load the first image.
-    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288');
+    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'order_detail');
 
     $products[] = $product;
   }

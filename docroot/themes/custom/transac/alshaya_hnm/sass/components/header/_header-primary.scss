@@ -579,7 +579,7 @@ header {
       text-transform: lowercase;
       height: 2.6875rem;
 
-      a.menu--one__link {
+      .menu--one__link {
         @include arabic-letter-spacing;
 
         padding: 0.625rem 0.8rem;
@@ -599,7 +599,7 @@ header {
 
       &:hover,
       &.active {
-        a.menu--one__link {
+        .menu--one__link {
           &::after {
             content: '';
             height: 2px;
@@ -670,7 +670,7 @@ header {
     .active--menu--links {
       li.menu--one__list-item {
         &:hover {
-          a.menu--one__link {
+          .menu--one__link {
             &::after {
               content: '';
               height: 2px;
@@ -721,7 +721,7 @@ header {
         vertical-align: top;
         z-index: 10;
 
-        a {
+        .menu__link {
           @include arabic-letter-spacing;
 
           font-family: $hnm-demibold;
@@ -730,7 +730,9 @@ header {
           line-height: 1.69;
           text-transform: uppercase;
           color: $mm_l2_hover_border;
+        }
 
+        a {
           &:hover {
             color: $mm_l2_bg !important;
           }
@@ -851,7 +853,7 @@ header {
     margin-#{$right}: 2rem;
     margin-bottom: 1.5rem;
 
-    > .menu-two__link-wrapper a {
+    > .menu-two__link-wrapper .menu__link {
       font-family: $hnm-bold !important;
       font-size: 0.875rem !important;
       color: $marine-blue !important;
@@ -929,7 +931,7 @@ header {
     }
   }
 
-  .main--menu a {
+  .main--menu .menu__link {
     @include arabic-letter-spacing;
 
     font-family: $hnm-regular;
@@ -983,7 +985,7 @@ header {
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $mm_border;
 
-      a {
+      .menu__link {
         padding-top: 0.9375rem;
         padding-bottom: 0.9375rem;
       }
@@ -1004,7 +1006,7 @@ header {
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $mm_border;
 
-      a {
+      .menu__link {
         padding-top: 0.9375rem;
         padding-bottom: 0.9375rem;
       }
@@ -1557,12 +1559,10 @@ html {
     li {
       &.menu--one__list-item {
         &:hover {
-          a {
-            &.menu--one__link {
-              border: none;
-              color: $mm_l1_link2;
-              border-top: 2px solid transparent;
-            }
+          .menu--one__link {
+            border: none;
+            color: $mm_l1_link2;
+            border-top: 2px solid transparent;
           }
         }
       }
@@ -1571,10 +1571,8 @@ html {
     &:hover {
       li {
         &.menu--one__list-item {
-          a {
-            &.menu--one__link {
-              border-bottom: none;
-            }
+          .menu--one__link {
+            border-bottom: none;
           }
         }
       }

@@ -11,6 +11,7 @@ use Drupal\Core\Cache\CacheableJsonResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\node\Entity\Node;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -53,6 +54,13 @@ class ProductStockController extends ControllerBase {
   protected $skuFormBuilder;
 
   /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -60,7 +68,8 @@ class ProductStockController extends ControllerBase {
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
       $container->get('plugin.manager.sku'),
-      $container->get('acq_sku.form_builder')
+      $container->get('acq_sku.form_builder'),
+      $container->get('module_handler')
     );
   }
 
@@ -75,15 +84,19 @@ class ProductStockController extends ControllerBase {
    *   SKU Plugin manager.
    * @param \Drupal\acq_sku\Form\AcqSkuFormBuilder $sku_form_builder
    *   ACQ SKU Form builder.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
    */
   public function __construct(Request $current_request,
                               Renderer $renderer,
                               PluginManagerInterface $plugin_manager,
-                              AcqSkuFormBuilder $sku_form_builder) {
+                              AcqSkuFormBuilder $sku_form_builder,
+                              ModuleHandlerInterface $module_handler) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->pluginManager = $plugin_manager;
     $this->skuFormBuilder = $sku_form_builder;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -180,18 +193,18 @@ class ProductStockController extends ControllerBase {
 
     $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
 
-    if (!alshaya_acm_product_is_buyable($entity)) {
-      $response->addCommand(new HtmlCommand($wrapper, ''));
-    }
-    elseif (alshaya_acm_get_stock_from_sku($entity)) {
-      $form = $this->fetchAddCartForm($entity, $view_mode);
-      $response->addCommand(new HtmlCommand($wrapper, $form));
-    }
-    else {
-      $html = [
+    $buyable = alshaya_acm_product_is_buyable($entity);
+
+    if ($buyable) {
+      $stock = alshaya_acm_get_stock_from_sku($entity);
+      $html = $stock ? $this->fetchAddCartForm($entity, $view_mode) : [
         '#markup' => '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>',
       ];
       $response->addCommand(new HtmlCommand($wrapper, $html));
+      $this->moduleHandler->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $stock);
+    }
+    else {
+      $response->addCommand(new HtmlCommand($wrapper, ''));
     }
 
     return $response;

@@ -605,8 +605,8 @@ class Cart implements CartInterface {
 
       if (isset($cart->billing)) {
         if (is_object($cart->billing) && empty($cart->billing->country_id)) {
-        unset($cart->billing);
-      }
+          unset($cart->billing);
+        }
         elseif (is_array($cart->billing) && empty($cart->billing['country_id'])) {
           unset($cart->billing);
         }

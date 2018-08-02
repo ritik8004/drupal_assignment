@@ -1,0 +1,108 @@
+.page-maintenance {
+  .maintenance__logo {
+    @include breakpoint($mobile) {
+      text-align: center;
+      float: none;
+      margin: 0.75rem 0 27px;
+    }
+
+    svg,
+    img {
+      height: auto;
+
+      @include breakpoint($tablet) {
+        width: 28.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        width: 15.5rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 2.375rem;
+      margin-bottom: 27px;
+    }
+  }
+
+  .not-found {
+    &::after {
+      display: none;
+    }
+
+    max-width: calc(97% - 57px);
+
+    @include breakpoint($only-mobile) {
+      padding-top: 0;
+      max-width: calc(100% - 30px);
+    }
+  }
+
+  .not-found__body {
+    position: relative;
+    width: 100%;
+    #{$right}: auto;
+    bottom: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $maintenance_container_bg;
+    height: 34.75rem;
+
+    @include breakpoint($only-mobile) {
+      height: 27.75rem;
+    }
+
+    &::after {
+      content: '';
+      border: 1px solid $maintenance_container_border;
+      position: absolute;
+      top: -21px;
+      left: -21px;
+      right: -21px;
+      bottom: -21px;
+
+      @include breakpoint($only-mobile) {
+        top: -8px;
+        left: -7px;
+        right: -7px;
+        bottom: -8px;
+      }
+    }
+
+    strong,
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: $maintenance_body_text_strong;
+      font-size: 28px;
+      line-height: 1.14;
+      text-transform: uppercase;
+
+      @include breakpoint($only-mobile) {
+        font-size: 18px;
+      }
+    }
+
+    p {
+      color: $maintenance_body_text_regular;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+
+      @include breakpoint($only-mobile) {
+        font-size: 0.875rem;
+      }
+    }
+
+    .ar {
+      color: $maintenance_body_text_arabic;
+    }
+  }
+}
+
+.maintenance-page {
+  @include breakpoint($only-mobile) {
+    border-top-width: 0.75rem;
+  }
+}

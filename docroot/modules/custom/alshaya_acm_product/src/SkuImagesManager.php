@@ -264,13 +264,20 @@ class SkuImagesManager {
       return SKU::loadFromSku($child_sku, $sku->language()->getId());
     }
 
-    $childs = $this->skuManager->getChildSkus($sku);
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
 
-    foreach ($childs as $child) {
-      $media = $this->getAllMedia($child, FALSE);
-      if ($media['images'] || $media['videos']) {
-        $this->skuManager->setProductCachedData($sku, $cache_key, $child->getSku());
-        return $child;
+    foreach ($combinations['attribute_sku'] ?? [] as $children) {
+      foreach ($children as $child_skus) {
+        foreach ($child_skus as $child_sku) {
+          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+          $media = $this->getAllMedia($child, FALSE);
+          if ($media['images'] || $media['videos']) {
+            $this->skuManager->setProductCachedData(
+              $sku, $cache_key, $child->getSku()
+            );
+            return $child;
+          }
+        }
       }
     }
 

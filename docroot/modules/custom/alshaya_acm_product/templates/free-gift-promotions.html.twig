@@ -1,0 +1,16 @@
+<div class="free-gift-image">
+  {{ sku_image }}
+</div>
+<div class="free-gift-promo-wrapper">
+  <div class="label">{{ 'Free Gift'|t }}</div>
+  <div class="free-gift-title">
+    <span class="title">{{ free_sku_title }}</span> {{ 'with this product'|t }}
+  </div>
+  {% if promo_code is not empty %}
+    <div class="free-gift-coupon-code">
+      {% trans %}
+      Use Code <span class="coupon-code">{{ promo_code }}</span> with this product
+      {% endtrans %}
+    </div>
+  {% endif %}
+</div>

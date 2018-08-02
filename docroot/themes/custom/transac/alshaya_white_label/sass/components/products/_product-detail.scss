@@ -165,7 +165,11 @@
     .content--item-code {
       font-size: 0.6875rem;
       color: $pdp_product_itemcode;
-      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+
+      @include breakpoint($only-mobile) {
+        border-bottom: 1px solid $pdp_product_itemcode_border;
+      }
     }
 
     .has--special--price,
@@ -561,7 +565,8 @@
     cursor: pointer;
   }
 
-  .read-more-description-link {
+  .read-more-description-link,
+  .read-more-description-link-gift {
     font-family: $arial;
     font-size: 0.875rem;
     font-weight: bold;
@@ -1471,6 +1476,7 @@
           &.hide-button {
             display: block;
             position: relative !important;
+            z-index: auto !important;
 
             .ladda-label {
               html[lang=ar] & {
@@ -1515,6 +1521,16 @@
           margin-#{$left}: 2rem;
           margin-top: 1.45rem;
         }
+      }
+    }
+  }
+}
+
+.basic-details-wrapper {
+  .field--name {
+    &-field-skus {
+      @include breakpoint($only-mobile) {
+        min-height: 6.5rem;
       }
     }
   }
