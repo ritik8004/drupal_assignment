@@ -412,7 +412,17 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['discount'] = ((float) ($cart_totals['discount'])) != 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
 
     // Shipping.
-    $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
+    if ($delivery) {
+      if ((float) $cart_totals['shipping'] > 0) {
+        $totals['shipping'] = alshaya_acm_price_format($cart_totals['shipping']);
+      }
+      else {
+        $totals['shipping']['value']['#markup'] = $this->t('FREE');
+      }
+    }
+    else {
+      $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
+    }
 
     // COD Surcharge.
     $surcharge_label = '';
