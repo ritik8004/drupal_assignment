@@ -127,10 +127,6 @@ header {
           color: $primary_search_input_placeholder;
           font-size: 0.875rem;
           text-transform: capitalize;
-
-          @include breakpoint($desktop) {
-            font-size: 0.6875rem !important;
-          }
         }
       }
     }
