@@ -43,6 +43,7 @@
       .label-store-location {
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
+        text-transform: none;
 
         @include breakpoint($tablet) {
           padding-#{$left}: 1rem;
