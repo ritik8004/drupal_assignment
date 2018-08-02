@@ -49,7 +49,7 @@
               $('.selected-text', $(parent)).append($(this));
             }
             else {
-              $('label.form-required', $(parent)).apend($(this));
+              $('label.form-required', $(parent)).append($(this));
             }
           });
         }
