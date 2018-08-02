@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c3d9974482d4870069a12d8f0e6299b",
+    "content-hash": "eb136461330fc2bf509c7c14a6ab0d0c",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -13573,6 +13573,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.2-dev"
+                },
+                "patches_applied": {
+                    "Apply security update - SA-CORE-2018-005": "patches/http_foundation-request.patch"
                 }
             },
             "autoload": {
