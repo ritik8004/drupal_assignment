@@ -62,9 +62,6 @@ settings:
       video:
         enabled: true
         weight: 22
-      1_row_1_col_dept:
-        weight: 23
-        enabled: false
       1_row_1st_col_2_row_2nd_col:
         weight: 24
         enabled: false
@@ -79,9 +76,6 @@ settings:
         enabled: false
       1_row_3_col_delivery_banner:
         weight: 29
-        enabled: false
-      1_row_3_col_dept:
-        weight: 30
         enabled: false
       block_reference:
         weight: 34
