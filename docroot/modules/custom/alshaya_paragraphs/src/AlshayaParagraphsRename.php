@@ -15,6 +15,10 @@ use Drupal\paragraphs\Entity\ParagraphsType;
  */
 class AlshayaParagraphsRename {
 
+  const PARAGRAPH_NOT_EXISTS = 'paragraph not exists';
+
+  const PARAGRAPH_EMPTY = 'no data';
+
   /**
    * Entity type manager object.
    *
@@ -148,9 +152,13 @@ class AlshayaParagraphsRename {
    *   New bundle name.
    */
   public function renameParagraphBundle($current_name, $new_name) {
+    if (!$this->checkParagraphBundle($current_name) || !$this->checkParagraphBundle($new_name)) {
+      return self::PARAGRAPH_NOT_EXISTS;
+    }
+
     $migrate_ids = $this->getParagraphItems($current_name);
     if (count($migrate_ids) == 0) {
-      return;
+      return self::PARAGRAPH_EMPTY;
     }
 
     try {
@@ -176,6 +184,26 @@ class AlshayaParagraphsRename {
     catch (DatabaseExceptionWrapper $e) {
       throw $e;
     }
+  }
+
+  /**
+   * Check given bundle is exists.
+   *
+   * @param string $bundle
+   *   The Paragraph bundle name.
+   *
+   * @return bool
+   *   Return false if not exists.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   */
+  public function checkParagraphBundle($bundle) {
+    $paragraph_type = $this->entityTypeManager->getStorage('paragraphs_type');
+    $paragraph_type = $paragraph_type->load($bundle);
+    if (!$paragraph_type instanceof ParagraphsType) {
+      return FALSE;
+    }
+    return TRUE;
   }
 
   /**

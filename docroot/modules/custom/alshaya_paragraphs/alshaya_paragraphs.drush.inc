@@ -5,6 +5,8 @@
  * Drush file for alshaya_paragraphs_rename.
  */
 
+use Drupal\alshaya_paragraphs\AlshayaParagraphsRename;
+
 /**
  * Implements hook_drush_command().
  */
@@ -37,7 +39,9 @@ function alshaya_paragraphs_drush_command() {
  */
 function drush_alshaya_paragraphs_rename($current_name, $new_name) {
   $paragraph_rename = \Drupal::service('alshaya_paragraphs.rename');
-  $paragraph_rename->renameParagraphBundle($current_name, $new_name);
+  if ($paragraph_rename->renameParagraphBundle($current_name, $new_name) == AlshayaParagraphsRename::PARAGRAPH_NOT_EXISTS) {
+    return drush_set_error(dt('Paragraph bundle does not exists, please check bundle name.'));
+  }
 
   $msg = dt('All the paragraph items are renamed, Do you want to delete bundle with old name?');
   if (drush_confirm($msg)) {
