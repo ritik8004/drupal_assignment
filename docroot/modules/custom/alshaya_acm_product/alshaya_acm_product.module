@@ -276,6 +276,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['empty_add_to_cart_form'] = [
+    'variables' => [
+      'text' => NULL,
+    ],
+  ];
+
   return $items;
 }
 
@@ -614,10 +620,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['mobile_add_to_cart_form'] = [
             '#type' => 'link',
             '#title' => '',
-            '#url' => Url::fromRoute('alshaya_acm_product.get_cart_form', [
-              'view_mode' => 'teaser',
-              'entity' => $sku_entity->id(),
-            ]),
+            '#url' => Url::fromRoute(
+              'alshaya_acm_product.get_cart_form',
+              ['view_mode' => 'teaser', 'entity' => $sku_entity->id()],
+              ['query' => ['cacheable' => 1]]
+            ),
             '#attributes' => [
               'class' => [
                 'use-ajax',
@@ -793,10 +800,9 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
           '#type' => 'link',
           '#title' => '',
           '#url' => Url::fromRoute(
-            'alshaya_acm_product.get_cart_form', [
-              'view_mode' => $node_view_mode,
-              'entity' => $entity->id(),
-            ]
+            'alshaya_acm_product.get_cart_form',
+            ['view_mode' => $node_view_mode, 'entity' => $entity->id()],
+            ['query' => ['cacheable' => 1]]
           ),
           '#attributes' => [
             'class' => [
@@ -973,9 +979,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
-    $user_input_configurables = $form_state->getUserInput();
-    $selected = $user_input_configurables['configurables'] ?? [];
-    $selected = array_filter($selected);
+    $product_tree = $form_state->get('tree');
+
+    // Do first to disable for level one or only configurable options.
+    $empty_selected = [];
+    $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $empty_selected);
 
     // Prepare array of just the configurable options.
     $configurables = [];
@@ -988,19 +996,20 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // If there are no options to display, we show the product as not
     // available.
     if (empty($configurables)) {
-      $form = _alshaya_acm_product_get_not_available_form_with_text(t('not available'));
+      $form = [
+        '#theme' => 'empty_add_to_cart_form',
+        '#text' => t('not available'),
+      ];
       return;
     }
 
+    $user_input_configurables = $form_state->getUserInput();
+    $selected = $user_input_configurables['configurables'] ?? [];
+    $selected = array_filter($selected);
+
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
-    $product_tree = $form_state->get('tree');
-
-    // Do first to disable for level one or only configurable options.
-    $empty_selected = [];
-    $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $empty_selected);
-
-    if (count($form['ajax']['configurables']) > 1) {
+    if (count($configurables) > 1) {
       /** @var \Drupal\acq_sku\CartFormHelper $cart_form_helper */
       $cart_form_helper = \Drupal::service('acq_sku.cart_form_helper');
 
@@ -1051,7 +1060,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
     }
     // If only one configurable option there, select first value as default.
-    elseif (count($form['ajax']['configurables']) == 1) {
+    elseif (count($configurables) == 1) {
       $key = key($form['ajax']['configurables']);
       $options = $form['ajax']['configurables'][$key]['#options'];
       if (count($options) == 1) {
@@ -1194,27 +1203,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
-    $form = _alshaya_acm_product_get_not_available_form_with_text(t('Out of stock'));
+    $form = [
+      '#theme' => 'empty_add_to_cart_form',
+      '#text' => t('Out of stock'),
+    ];
   }
-}
-
-/**
- * Get small form just to show OOS or Not available message.
- *
- * @param \Drupal\Core\StringTranslation\TranslatableMarkup|string $text
- *   Text to show.
- *
- * @return array
- *   Small form with just the message.
- */
-function _alshaya_acm_product_get_not_availabble_form_with_text($text) {
-  $form = [];
-
-  $form['add_to_cart'] = [
-    '#markup' => '<span class="out-of-stock">' . $text . '</span>',
-  ];
-
-  return $form;
 }
 
 /**
