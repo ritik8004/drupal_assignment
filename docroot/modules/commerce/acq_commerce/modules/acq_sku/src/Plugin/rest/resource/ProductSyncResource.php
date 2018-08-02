@@ -10,8 +10,8 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -160,7 +160,7 @@ class ProductSyncResource extends ResourceBase {
    * @param array $products
    *   Product / SKU Data.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
   public function post(array $products = []) {
@@ -431,7 +431,7 @@ class ProductSyncResource extends ResourceBase {
       'deleted' => $deleted,
     ];
 
-    return (new ResourceResponse($response));
+    return (new ModifiedResourceResponse($response));
   }
 
   /**
