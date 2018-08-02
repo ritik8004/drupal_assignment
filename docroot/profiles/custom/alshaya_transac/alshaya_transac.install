@@ -5,6 +5,7 @@
  * Install, update and uninstall hooks for the alshaya_transac subprofile.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
@@ -13,22 +14,64 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Install alshaya_product_options module.
+ * Re-install promotion category facet block.
+ */
+function alshaya_transac_update_8116() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['block.block.promotioncategoryfacet'],
+    'alshaya_transac',
+    'optional'
+  );
+
+  // Get current default theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable 'New In' sort option for all brands.
  */
 function alshaya_transac_update_8115() {
-  \Drupal::service('module_installer')->install(['alshaya_product_options']);
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product_position.settings'],
+    'alshaya_acm_product_position',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+
+  $manager->updateConfigs(
+    ['alshaya_search.settings'],
+    'alshaya_search',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
 }
 
 /**
  * Implements hook_update_N().
  *
  * Change stock mode based on settings.
+ * Install alshaya_product_options module.
+ * Create "join the club" block for checkout confirm page.
  */
 function alshaya_transac_update_8114() {
-  // Set stock mode.
-  \Drupal::configFactory()->getEditable('acq_sku.settings')
-    ->set('stock_mode', Settings::get('stock_mode'))
-    ->save();
+  \Drupal::configFactory()->getEditable('acq_sku.settings')->save();
+
+  \Drupal::service('module_installer')->install(['alshaya_product_options']);
+
+  alshaya_config_install_configs(['block.block.jointheclub_checkout_confirm'], 'alshaya_transac', 'optional');
+
+  // Move "join the club" block  from alshaya_white_label to default theme.
+  alshaya_block_move_blocks_theme_to_theme(\Drupal::service('theme_handler')->getDefault(), 'alshaya_white_label');
 }
 
 /**
@@ -310,6 +353,7 @@ function alshaya_transac_install() {
     'alshaya_acm_knet',
     'alshaya_static_html',
     'alshaya_product_options',
+    'alshaya_image_sitemap',
   ];
 
   global $_alshaya_modules_installed;

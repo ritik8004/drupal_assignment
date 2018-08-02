@@ -1,0 +1,167 @@
+.super-category-pink {
+  html[lang="en"] & {
+    .block-alshaya-main-menu {
+      a {
+        &.menu--one__link {
+          font-family: $pink-pinksans;
+          font-size: 1.25rem !important;
+          letter-spacing: 0.07em;
+
+          @include breakpoint($desktop) {
+            font-size: 1.1875rem !important;
+          }
+        }
+
+        &.menu__link {
+          @include breakpoint($upto-desktop) {
+            font-family: $pink-pinksans;
+            font-size: 1.5rem !important;
+            letter-spacing: 0.07em;
+          }
+        }
+      }
+
+      @include breakpoint($upto-desktop) {
+        .menu--one__list-item {
+          .menu__in {
+            margin-top: -2.5625rem;
+          }
+        }
+
+        .menu__back {
+          margin-top: -0.25rem;
+        }
+      }
+
+      .menu--two__list-item {
+        .menu__in {
+          @include breakpoint($upto-desktop) {
+            margin-top: -2.5625rem;
+          }
+        }
+      }
+
+      .back--link {
+        @include breakpoint($upto-desktop) {
+          font-family: $pink-pinksans;
+          font-size: 1.5rem !important;
+          letter-spacing: 1px;
+        }
+      }
+    }
+
+    .term-description-mobile-only,
+    .c-plp,
+    .c-department {
+      .c-page-title {
+        font-family: $pink-pinkslab;
+        font-size: 2.25rem !important;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+
+        @include breakpoint($only-mobile) {
+          font-size: 1.5rem !important;
+          letter-spacing: 1px;
+        }
+      }
+    }
+
+    .acq-content-product,
+    .acq-content-product-modal {
+      .content__title_wrapper {
+        h1,
+        h2 {
+          width: 100%;
+
+          span {
+            text-transform: uppercase;
+            font-family: $pink-pinkslab;
+            font-size: 2.25rem;
+            letter-spacing: 2px;
+
+            &.title--sub {
+              font-family: $pink-pinksans;
+              font-size: 1.125rem;
+              letter-spacing: 1px;
+            }
+          }
+        }
+      }
+    }
+
+    .field--name-field-skus {
+      .sku-base-form {
+        button[type="submit"] {
+          font-family: $pink-pinksans;
+          font-size: 1.25rem;
+          letter-spacing: 1px;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .short-description-wrapper,
+    .delivery-options-wrapper {
+      .field__label {
+        font-family: $pink-pinkslab;
+        font-size: 1.5rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+    }
+
+    .subtitle {
+      &.crossell-title {
+        font-family: $pink-pinkslab;
+        font-size: 1.5rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+    }
+
+    .promo__panel {
+      &.block-promo-panel-wrapper {
+        .promo-panel-label {
+          font-family: $pink-pinkslab;
+          font-size: 1.25rem;
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    .promo__panel {
+      .paragraph--type--offers-bordered {
+        .field--name-field-heading {
+          font-family: $pink-pinksans;
+          font-size: 1.125rem;
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+        }
+
+        .field--name-field-title {
+          font-family: $pink-pinkslab;
+          font-size: 2.25rem;
+          letter-spacing: 2px;
+        }
+
+        .field--name-field-link {
+          a {
+            font-family: $pink-pinksans;
+            font-size: 1.125rem;
+            letter-spacing: 1.9px;
+          }
+        }
+      }
+    }
+
+    .primary__footer--menu,
+    .footer--social {
+      h3 {
+        font-family: $pink-pinksans;
+        font-size: 1.25rem;
+        letter-spacing: 1.9px;
+      }
+    }
+  }
+}

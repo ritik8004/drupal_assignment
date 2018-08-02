@@ -41,17 +41,17 @@
 {{ attach_library('alshaya_white_label/slider_banner') }}
 
 {% if slider_usp_data is not empty %}
-    {% for paragraph_type, data in slider_usp_data %}
-        {% if paragraph_type == 'banner' %}
-            <div class="paragraph-{{ paragraph_type }}">
-                {% for render_data in data %}
-                    <div{{ attributes.addClass('c-slider-promo__item') }}>{{ render_data }}</div>
-                {% endfor %}
-            </div>
-        {% else %}
-            {% for render_data in data %}
-                <div class="paragraph-{{ paragraph_type }}">{{ render_data }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
+  {% for paragraph_type, data in slider_usp_data %}
+    {% if paragraph_type == 'banner' %}
+      <div class="paragraph-{{ paragraph_type }}">
+        {% for render_data in data %}
+          <div{{ attributes.addClass('c-slider-promo__item') }}>{{ render_data }}</div>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% for render_data in data %}
+        <div class="paragraph-{{ paragraph_type }}">{{ render_data }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
 {% endif %}

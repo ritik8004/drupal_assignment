@@ -2,15 +2,22 @@
   overflow: hidden;
   text-align: center;
 
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+
   @include breakpoint($tablet) {
     left: 0;
     right: 0;
     position: fixed;
+    width: 100%;
     z-index: 10;
     bottom: 0;
-    transform: translateY(calc(100% - 49px));
-    transition: transform 0.4s ease-in, opacity 0.4s ease-in;
+    transform: translateY(100%) translateY(-49px);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 1;
+    max-width: 80.25rem;
+    margin: 0 auto;
   }
 
   @include breakpoint($upto-tablet) {
@@ -87,6 +94,7 @@
 
     html[lang=ar] & {
       left: -0.875rem;
+      right: auto;
     }
   }
 
@@ -118,8 +126,12 @@
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
       border: 1px solid $promo_panel_border;
       cursor: pointer;
+      position: relative;
+      top: 1px;
 
-      @include icon(price-tag, before) {
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/price-tag.svg') no-repeat;
         color: $promo_panel_label_icon;
         display: inline-block;
         margin-#{$right}: 0.5rem;
@@ -131,6 +143,7 @@
         html[lang=ar] & {
           transform: rotate(270deg);
           margin-left: 0.625rem;
+          vertical-align: top;
         }
       }
     }
@@ -156,12 +169,11 @@
     z-index: 1001;
     width: 100%;
     transform: translateY(0);
-    max-height: 37.5rem;
+    max-height: 45.5rem;
   }
 
   .promo-panel-label {
     @include breakpoint($tablet) {
-      position: static;
       transform: none;
     }
   }
@@ -180,13 +192,6 @@
 
 .promo-panel-fixed {
   &.block-promo-panel-wrapper {
-    @include breakpoint($tablet) {
-      position: fixed;
-      z-index: 10;
-      bottom: 0;
-      width: 100%;
-    }
-
     &.active-promo-panel {
       @include breakpoint($tablet) {
         z-index: 1001;

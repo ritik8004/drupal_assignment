@@ -5,7 +5,10 @@
  * Contains general hooks and alters.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\acq_cart\CartInterface;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_views_data_alter().
@@ -45,6 +48,29 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
   $node->get('field_alshaya_promotion_subtype')
     ->setValue(\Drupal::service('alshaya_acm_promotion.manager')
       ->getSubType($promotion));
+
+  // Set free skus for promotions.
+  if (!empty($promotion['free_gift_products'])) {
+    $node->get('field_free_gift_skus')->setValue($promotion['free_gift_products']);
+  }
+}
+
+/**
+ * Implements hook_acq_promotion_data_alter().
+ */
+function alshaya_acm_promotion_acq_promotion_data_alter(&$promotion) {
+  $promotion['free_gift_products'] = [];
+
+  // Extract free gift skus & remove them from list of products to be processed
+  // for this promotion.
+  foreach ($promotion['products'] as $key => $product) {
+    if (!empty($product['extension_attributes'])
+      && !empty($product['extension_attributes']['ampromo_cart_sku'])
+      && ($product['extension_attributes']['ampromo_cart_sku'])) {
+      $promotion['free_gift_products'][] = $product['product_sku'];
+      unset($promotion['products'][$key]);
+    }
+  }
 }
 
 /**
@@ -77,5 +103,50 @@ function alshaya_acm_promotion_acq_sku_base_fields_updated(array $fields, $op = 
         }
       }
       break;
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_get_remove_from_basket_link_alter().
+ */
+function alshaya_acm_promotion_alshaya_acm_get_remove_from_basket_link_alter(&$remove_url, CartInterface $cart, SKUInterface $sku) {
+  // If for any reason we set it to empty value in any other alter
+  // implementation, we don't want to modify again.
+  if (empty($remove_url)) {
+    return;
+  }
+
+  // We need to modify here only if there are rules applied in cart.
+  $rules_applied = $cart->get('cart_rules');
+  if (empty($rules_applied)) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $manager */
+  $manager = \Drupal::service('alshaya_acm_promotion.manager');
+
+  $coupon = $cart->getCoupon();
+
+  foreach ($rules_applied as $rule_id) {
+    $promotion = $manager->getPromotionByRuleId($rule_id);
+
+    if (!($promotion instanceof NodeInterface)) {
+      continue;
+    }
+
+    $free_skus = $manager->getFreeSkusByRuleId($rule_id);
+
+    if (in_array($sku->getSku(), $free_skus)) {
+      if ($coupon && $promotion->get('field_coupon_code')->getString() == $coupon) {
+        // For coupon based promotions we want to allow removal.
+        // But we need to remove the coupon as well.
+        $remove_url->setRouteParameter('coupon', 'remove');
+      }
+      else {
+        // For non-coupon based free gifts, we don't want to allow removal
+        // for now.
+        $remove_url = NULL;
+      }
+    }
   }
 }

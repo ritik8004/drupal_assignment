@@ -79,6 +79,38 @@ function drush_alshaya_super_category_switch() {
     $path_alter,
   ]);
 
+  if ($status) {
+    // If super category feature is enabled, we change the title meta tag
+    // token to contain [supercategory:meta_title] token.
+    $token = '[supercategory:meta_title]';
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')
+      ->set('tags.title', '[node:title] | ' . $token)->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
+      ->set('tags.title', '[node:title] | ' . $token)->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
+      ->set('tags.title', '[node:field_acq_promotion_label] | ' . $token)->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
+      ->set('tags.title', '[term:name] | ' . $token)->save();
+  }
+  else {
+    $meta_configs = [
+      'metatag.metatag_defaults.node__advanced_page',
+      'metatag.metatag_defaults.node__acq_product',
+      'metatag.metatag_defaults.node__acq_promotion',
+      'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+    ];
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
+      $config_manager = \Drupal::service('alshaya_config.manager');
+      // When super category feature is disabled, we just reset the tokens from
+      // the module config YML.
+      foreach ($meta_configs as $meta_config) {
+        $config_data = $config_manager->getDataFromCode($meta_config, 'alshaya_seo_transac', 'install');
+        \Drupal::configFactory()->getEditable($meta_config)
+          ->set('tags.title', $config_data['tags']['title'])->save();
+      }
+    }
+  }
+
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
   drush_print(dt('Successfully !action super category feature.', ['!action' => $action . 'd']));

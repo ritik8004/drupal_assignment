@@ -66,10 +66,12 @@
           padding: 0.5rem;
           margin-bottom: 1.375rem;
           border: 1px solid $checkout_section_border;
+          padding-#{$right}: 1.6875rem;
         }
 
         @include breakpoint($only-tablet) {
           margin-top: 1.5rem;
+          padding-#{$right}: 0.5rem;
         }
 
         .order-id-details {
@@ -90,7 +92,7 @@
           &::before {
             color: $checkout_confirm_info_icon;
             position: absolute;
-            top: 0;
+            top: 3px;
 
             @include breakpoint($only-mobile) {
               top: 0.5rem;
@@ -110,6 +112,12 @@
             font-family: $vs-bold;
             font-weight: normal;
             text-transform: uppercase;
+            width: 11.5rem;
+            padding: 0;
+            height: 2.5rem;
+            // line-height in px for IE.
+            line-height: 40px;
+            text-align: center;
 
             &:hover {
               color: $checkout_order_print_btn_txt;
@@ -270,6 +278,25 @@
       @include breakpoint($tablet) {
         min-width: 5.5rem;
       }
+    }
+  }
+}
+
+#block-youllbeableto-checkout-confirm {
+  margin-bottom: 2.5rem;
+}
+
+#block-youllbeableto-checkout-confirm,
+#block-jointheclub-checkout-confirm {
+  h3 {
+    font-family: $vs-regular;
+  }
+}
+
+.user-page.checkout-login.order-confirmation {
+  #edit-field-subscribe-newsletter-wrapper {
+    p {
+      margin-#{$left}: 1.25rem;
     }
   }
 }

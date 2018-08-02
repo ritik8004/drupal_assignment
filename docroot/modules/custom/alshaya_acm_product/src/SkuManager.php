@@ -4,7 +4,10 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -132,6 +135,13 @@ class SkuManager {
   protected $currentRequest;
 
   /**
+   * Cart Form helper service.
+   *
+   * @var \Drupal\acq_sku\CartFormHelper
+   */
+  protected $cartFormHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -152,6 +162,8 @@ class SkuManager {
    *   The logger service.
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
+   * @param \Drupal\acq_sku\CartFormHelper $cart_form_helper
+   *   Cart Form helper service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -170,6 +182,7 @@ class SkuManager {
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
+                              CartFormHelper $cart_form_helper,
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
@@ -185,6 +198,7 @@ class SkuManager {
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
+    $this->cartFormHelper = $cart_form_helper;
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
@@ -535,13 +549,16 @@ class SkuManager {
    *   View mode around how the promotion needs to be rendered.
    * @param array $types
    *   Type of promotion to filter on.
+   * @param string $product_view_mode
+   *   Product view mode for which promotion is being rendered.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function getPromotionsFromSkuId(SKU $sku,
                                          string $view_mode,
-                                         array $types = ['cart', 'category']) {
+                                         array $types = ['cart', 'category'],
+                                         $product_view_mode = NULL) {
 
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
@@ -550,6 +567,9 @@ class SkuManager {
 
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
+    // Preserve the original view mode passed to this function, since we are
+    // altering this one in case of free gifts.
+    $view_mode_original = $view_mode;
     foreach ($promotion as $promo) {
       $promotion_nids[] = $promo['target_id'];
     }
@@ -583,9 +603,15 @@ class SkuManager {
 
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
+          $free_gift_skus = [];
 
-          if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+          // Alter view mode while rendering a promotion with free skus on PDP.
+          if (($product_view_mode == 'full') &&
+            !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
             $view_mode = 'free_gift';
+          }
+          else {
+            $view_mode = $view_mode_original;
           }
 
           switch ($view_mode) {
@@ -611,7 +637,16 @@ class SkuManager {
                 'description' => $description,
                 'discount_type' => $discount_type,
                 'discount_value' => $discount_value,
+                'rule_id' => $promotion_node->get('field_acq_promotion_rule_id')->getString(),
               ];
+
+              if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+                $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
+              }
+
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+                $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
+              }
               break;
           }
         }
@@ -628,7 +663,7 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos)) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types);
+        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
       }
     }
 
@@ -1323,6 +1358,7 @@ class SkuManager {
     $tree = $plugin->deriveProductTree($sku);
 
     $configurable_codes = array_keys($tree['configurables']);
+    $all_combinations = AlshayaArrayUtils::getAllCombinations($configurable_codes);
 
     $combinations = [];
 
@@ -1332,21 +1368,44 @@ class SkuManager {
         continue;
       }
 
-      foreach ($sku_entity->get('attributes')->getValue() as $attribute) {
-        if (in_array($attribute['key'], $configurable_codes)) {
-          $combinations['by_sku'][$sku_code][$attribute['key']] = $attribute['value'];
-          $combinations['attribute_sku'][$attribute['key']][$attribute['value']][] = $sku_code;
+      // Disable OOS combinations too.
+      if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+        continue;
+      }
+
+      $attributes = $sku_entity->get('attributes')->getValue();
+      $attributes = array_column($attributes, 'value', 'key');
+      foreach ($configurable_codes as $code) {
+        $value = $attributes[$code] ?? '';
+
+        if (empty($value)) {
+          continue;
         }
+
+        $combinations['by_sku'][$sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $sku_code;
+      }
+    }
+
+    // Sort the values in attribute_sku so we can use it later.
+    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
+      if ($this->cartFormHelper->isAttributeSortable($code)) {
+        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
       }
     }
 
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
+    $combinations['by_attribute'] = [];
+
     foreach ($combinations['by_sku'] ?? [] as $combination) {
-      foreach ($combination as $key1 => $value1) {
-        foreach ($combination as $key2 => $value2) {
-          $combinations['by_attribute'][$key1][$value1][$key2][$value2] = $value2;
+      foreach ($all_combinations as $possible_combination) {
+        $combination_string = '';
+        foreach ($possible_combination as $code) {
+          $combination_string .= $code . '|' . $combination[$code] . '||';
+          $combinations['by_attribute'][$combination_string] = 1;
         }
+        $combinations['by_attribute'][$combination_string] = 1;
       }
     }
 
@@ -1394,18 +1453,30 @@ class SkuManager {
       }
     }
 
-    foreach ($configurable_codes as $index => $code) {
-      if (isset($selected[$code])) {
-        $selected_value = $selected[$code];
-        for ($i = ++$index; $i < count($configurable_codes); $i++) {
-          $code_to_check = $configurable_codes[$i];
-          foreach ($configurables[$code_to_check]['#options'] as $key => $value) {
-            if (empty($key) || isset($combinations['by_attribute'][$code][$selected_value][$code_to_check][$key])) {
-              continue;
-            }
+    $combination_key = '';
+    foreach ($selected as $code => $value) {
+      $index = array_search($code, $configurable_codes);
+      if ($index !== FALSE) {
+        unset($configurable_codes[$index]);
+      }
 
-            $configurables[$code_to_check]['#options_attributes'][$key]['disabled'] = 'disabled';
+      $combination_key .= $code . '|' . $value . '||';
+      foreach ($configurable_codes as $configurable_code) {
+        foreach ($configurables[$configurable_code]['#options'] as $key => $value) {
+          $check_key1 = $combination_key . $configurable_code . '|' . $key . '||';
+          $check_key2 = $configurable_code . '|' . $key . '||' . $combination_key;
+
+          if (isset($combinations['by_attribute'][$check_key1])
+            || isset($combinations['by_attribute'][$check_key2])) {
+            continue;
           }
+
+          if (isset($selected[$configurable_code]) && $selected[$configurable_code] == $key) {
+            unset($selected[$configurable_code]);
+            unset($configurables[$configurable_code]['#options_attributes'][$key]['selected']);
+          }
+
+          $configurables[$configurable_code]['#options_attributes'][$key]['disabled'] = 'disabled';
         }
       }
     }
@@ -1505,7 +1576,7 @@ class SkuManager {
     if ($sku_id) {
       $first_child = SKU::load($sku_id);
 
-      if ($first_child instanceof SKUInterface) {
+      if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
         // We do it again to get current translation.
         // We expect no performance impact as all the skus are already loaded
         // multiple times in the request.
@@ -1551,6 +1622,14 @@ class SkuManager {
    *   Swatches array.
    */
   public function getSwatches(SKUInterface $sku, $attribute_code = 'color') {
+    $swatches = $this->getProductCachedData($sku, 'swatches');
+
+    // We may have nothing for an SKU, we should not keep processing for it.
+    // If value is not set, function returns NULL above so we check for array.
+    if (is_array($swatches)) {
+      return $swatches;
+    }
+
     $swatches = [];
     $duplicates = [];
     $children = $this->getChildSkus($sku);
@@ -1559,6 +1638,11 @@ class SkuManager {
       $value = $child->get('attr_' . $attribute_code)->getString();
 
       if (empty($value) || isset($duplicates[$value])) {
+        continue;
+      }
+
+      // Do not show OOS swatches.
+      if (!alshaya_acm_get_stock_from_sku($child)) {
         continue;
       }
 
@@ -1571,6 +1655,8 @@ class SkuManager {
       $duplicates[$value] = 1;
       $swatches[$child->id()] = $swatch_item['file']->url();
     }
+
+    $this->setProductCachedData($sku, 'swatches', $swatches);
 
     return $swatches;
   }

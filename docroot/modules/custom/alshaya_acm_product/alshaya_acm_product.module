@@ -164,6 +164,16 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 }
 
 /**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_acm_product_acq_sku_product_sku_alter(&$sku, $product) {
+  // Set sku activation date if product activation date available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $sku->created = strtotime($product['attributes']['product_activation_date']);
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function alshaya_acm_product_theme($existing, $type, $theme, $path) {
@@ -253,7 +263,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'free_sku_entity_id' => NULL,
       'free_sku_code' => NULL,
-      'sku_title' => NULL,
+      'free_sku_title' => NULL,
       'promo_title' => NULL,
       'sku_image' => NULL,
       'promo_code' => NULL,
@@ -331,25 +341,6 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function alshaya_acm_product_acq_sku_presave(SKUInterface $sku) {
-  // Update composition field.
-  $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
-  if (!empty($composition)) {
-    $sku->set('attr_composition', \Drupal::service('alshaya_acm_product.skumanager')
-      ->transformCompositionArrayToList($composition));
-  }
-  else {
-    if (!empty($sku->get('attr_composition')->getString())) {
-      \Drupal::logger('alshaya_acm_product')->info('Invalid JSON. Unable to parse JSON data for SKU: @sku. JSON: @json', ['@sku' => $sku->getSku(), '@json' => $sku->get('attr_composition')->getString()]);
-    }
-
-    $sku->set('attr_composition', NULL);
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -396,6 +387,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       elseif ($view_mode == 'full') {
         $context = 'pdp';
 
+        // This is required to allow showing different gallery on page load
+        // when user clicked on swatch.
+        $build['#cache']['contexts'][] = 'url';
+
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
           if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
@@ -436,7 +431,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['related']['#weight'] = 11;
         }
 
-        alshaya_acm_product_get_gallery($build, $sku_entity);
+        // Get the gallery for selected SKU if selected sku id available in
+        // query params, else show it from main parent sku itself.
+        $sku_for_gallery = $sku_entity;
+
+        $selected_value = \Drupal::request()->query->get('selected');
+        if ($selected_value) {
+          $selected_sku = SKU::load($selected_value);
+
+          if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
+            $sku_for_gallery = $selected_sku;
+          }
+        }
+
+        alshaya_acm_product_get_gallery($build, $sku_for_gallery);
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
@@ -471,7 +479,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $promotion_types = ['cart'];
 
         // Get promotions for the product.
-        $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, 'links', $promotion_types);
+        $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($sku_entity, 'links', $promotion_types, 'full');
 
         if (!empty($promotions)) {
           $free_gift_promotions = $generic_promotions = [];
@@ -498,27 +506,55 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
 
+              $free_sku_title = $free_sku_image = [
+                '#type' => 'link',
+                '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+                  [
+                    'acq_sku' => $free_sku_entity->id(),
+                    'js' => 'nojs',
+                  ]),
+                '#attributes' => [
+                  'class' => ["use-ajax"],
+                  'data-dialog-type' => "modal",
+                  'data-dialog-options' => '{"width":"auto"}',
+                ],
+              ];
+              $free_sku_title['#title'] = $free_sku_entity->get('name')->getString();
+              $free_sku_title = \Drupal::service('renderer')->render($free_sku_title);
+
               // Get sku title & image.
               $build['free_gift_promotions'] = [
                 '#theme' => 'free_gift_promotions',
                 '#free_sku_entity_id' => $free_sku_entity->id(),
                 '#free_sku_code' => $free_sku_entity->getSku(),
-                '#sku_title' => $free_sku_entity->get('name')->getString(),
+                '#free_sku_title' => $free_sku_title,
                 '#promo_title' => $free_gift_promotion['text'],
                 '#promo_code' => $free_gift_promotion['coupon_code'],
               ];
 
-              $free_sku_media = alshaya_acm_product_get_sku_media($free_sku_entity, TRUE);
+              /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+              $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+              $free_sku_media = $skuImagesManager->getFirstImage($free_sku_entity);
+
+              // If free gift sku has no media, then we check from the default
+              // image from the configuration.
+              if (empty($free_sku_media) && !empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+                $free_sku_media = [
+                  'label' => $free_sku_entity->label(),
+                  'file' => $default_image,
+                ];
+              }
 
               if ($free_sku_media) {
-                $build['free_gift_promotions']['#sku_image'] = $skuManager->getSkuImage($free_sku_media, '192x168');
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, '192x168');
+                $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
           }
         }
       }
       elseif ($view_mode == 'teaser' || $view_mode == 'product_category_carousel') {
-        $context = 'teaser';
+        $context = $view_mode;
 
         // Get the image.
         $build['image'] = [];
@@ -526,7 +562,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
+          $build['image'] = $skuManager->getSkuImage($sku_media, '291x288');
         }
 
         $promotion_types = ['cart'];
@@ -607,16 +643,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
-
         $build['item_code']['#markup'] = $sku;
-
-        $sku_media = alshaya_acm_product_get_sku_media($sku_entity, TRUE);
-
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
-
-        if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
-        }
 
         $promotion_types = ['cart'];
 
@@ -651,15 +679,28 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     $build['item_code']['#markup'] = $entity->getSku();
 
-    $build['description']['#markup'] = $entity->get('attr_description')->getValue()[0]['value'];
-
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
 
-    $sku_media = alshaya_acm_product_get_sku_media($entity, TRUE);
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+    $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
       $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
     }
+
+    // Add PDP slider position config to variable so it is available in themes.
+    $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
+    $pdp_image_slider_position = $alshaya_acm_product_slider_settings->get('image_slider_position_pdp');
+    $build['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+    // Add PDP slider position config to drupalSettings so we can use it in JS.
+    $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
+
+    $build['#attached']['drupalSettings']['pdp_items_mob'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $build['#attached']['drupalSettings']['pdp_items_tab'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+    // Number of items to show in a slider on PDP.
+    $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
   }
 }
 
@@ -858,6 +899,7 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
       $line_item_promotions = $sku_manager->getPromotionsFromSkuId($sku_entity, 'default', ['cart']);
 
       // Extract free gift promos.
+      $free_gift_promos = [];
       foreach ($line_item_promotions as $promo) {
         if (!empty($promo['skus'])) {
           $free_gift_promos[] = $promo;
@@ -865,18 +907,20 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
       }
 
       // Render each free gift promo via a theme function.
-      foreach ($free_gift_promos as $key => $promotion) {
-        if (!empty($free_gift_promos)) {
-          $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
-          $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
-          $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
+      if (!empty($free_gift_promos)) {
+        foreach ($free_gift_promos as $key => $promotion) {
+          if (!empty($free_gift_promos)) {
+            $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
+            $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
+            $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
+          }
         }
-      }
 
-      $form['cart'][$id]['promo_text'] = [
-        '#theme' => "free_gift_cart_label",
-        '#promos' => $free_gift_promos,
-      ];
+        $form['cart'][$id]['promo_text'] = [
+          '#theme' => "free_gift_cart_label",
+          '#promos' => $free_gift_promos,
+        ];
+      }
 
       $form['cart'][$id]['promo_text']['#wrapper_attributes'] = ['class' => ['free-gifts-wrapper']];
     }
@@ -969,6 +1013,29 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
       $user_input_configurables = $form_state->getUserInput();
       $selected = $user_input_configurables['configurables'] ?? [];
+      $selected = array_filter($selected);
+
+      if ($selected && count($selected) != count($product_tree['configurables'])) {
+        $delete_next = FALSE;
+
+        // Cleanup selected value.
+        foreach ($selected as $code => $value) {
+          if ($delete_next) {
+            unset($selected[$code]);
+            continue;
+          }
+
+          // We will remove all selected values after matching trigger.
+          if ($user_input_configurables['_triggering_element_name'] == 'configurables[' . $code . ']') {
+            $delete_next = TRUE;
+          }
+        }
+
+        $form_state->setValue('configurables', $selected);
+        $user_input_configurables['configurables'] = $selected;
+        $form_state->setUserInput($user_input_configurables);
+      }
+
       $first_child = $sku_manager->getFirstChildForSku(
         $sku_entity,
         $root_attribute_code,
@@ -988,26 +1055,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
         (!isset($user_input_configurables['configurables'], $user_input_configurables['configurables'][$root_attribute_code]))) {
         $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
-        $form_state->setValue('configurables', [$root_attribute_code => $first_child_root_attr_value]);
-        $user_input_configurables['configurables'] = [$root_attribute_code => $first_child_root_attr_value];
-        $form_state->setUserInput($user_input_configurables);
-      }
-
-      // Check stock in case of Configurable products with multiple attributes.
-      $selected = $form_state->getValue('configurables');
-
-      // While selecting an attribute, the user input is available under inputs.
-      if (empty($selected)) {
-        $selected = $form_state->getUserInput()['configurables'];
-      }
-
-      $selected = array_filter($selected);
-
-      // If we selected more than one attribute and we clicked on the root
-      // attribute, then reset all child/leaf attributes.
-      if (count($selected) > 1
-        && $user_input_configurables['_triggering_element_name'] == 'configurables[' . $root_attribute_code . ']') {
-        $selected = [$root_attribute_code => $selected[$root_attribute_code]];
+        $selected = [$root_attribute_code => $first_child_root_attr_value];
         $form_state->setValue('configurables', $selected);
         $user_input_configurables['configurables'] = $selected;
         $form_state->setUserInput($user_input_configurables);
@@ -1017,6 +1065,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $selected = $selected ?? [];
 
       $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
+
+      $form_state->setValue('configurables', $selected);
+      $user_input_configurables['configurables'] = $selected;
+      $form_state->setUserInput($user_input_configurables);
     }
     else {
       // If only one configurable option there, select first value as default.
@@ -1118,7 +1170,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // Process stock now.
     if (count($product_tree['configurables']) > 1) {
-      // @TODO: Improve this in CORE-2169.
       if (!empty($selected)) {
         // Get all child SKUs possible for the selected root attribute to do a
         // stock check on visible child attributes that belong to the child
@@ -1137,13 +1188,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
             if ($quantity > 0) {
               // Set the dropdown quantity options only for selected option.
-              if (isset($selected[$configurable_key]) && $selected[$attribute_parts[0]] == $key) {
+              if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
                 $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-              }
-            }
-            else {
-              if (isset($form['ajax']['configurables'][$attribute_parts[0]])) {
-                $form['ajax']['configurables'][$attribute_parts[0]]['#options_attributes'][$attribute_parts[1]]['disabled'] = 'disabled';
               }
             }
           }
@@ -1200,7 +1246,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         // If all the options are disabled, we show the product is out of stock.
         // We reduce one in options_attributes count as we will always have
         // empty_option disabled.
-        elseif (count($configurable['#options']) == count($configurable['#options_attributes']) - 1) {
+        elseif (count($configurable['#options']) == (count(array_column($configurable['#options_attributes'], 'disabled')) - 1)) {
           $configurable = [
             '#markup' => '',
           ];
@@ -1282,7 +1328,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   if ($tree_pointer instanceof SKU) {
-    $entity = alshaya_acm_product_get_display_node($tree_pointer);
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
@@ -1334,10 +1379,21 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Update the promotions for the product.
     $promotion_links = '';
     $promotion_types = ['cart'];
-    $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, 'links', $promotion_types);
+    $promotions = \Drupal::service('alshaya_acm_product.skumanager')->getPromotionsFromSkuId($tree_pointer, 'links', $promotion_types, 'full');
+
+    // Filter out free gift promos.
+    $promotions = array_filter($promotions, function ($promo) {
+      if (!empty($promo['skus'])) {
+        return FALSE;
+      }
+
+      return TRUE;
+    });
+
     if (!empty($promotions)) {
       $promotion_links = implode('</br>', $promotions);
     }
+
     $response->addCommand(new HtmlCommand('.promotions', $promotion_links));
 
     // Update the article class to include out of stock class if not in stock.
@@ -1412,8 +1468,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
-
-    \Drupal::moduleHandler()->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $quantity);
     return $response;
   }
   else {
@@ -1594,14 +1648,31 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
  * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
  */
 function alshaya_acm_product_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
-  if ($stock <= 0) {
-    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'addClass', ['hidden-important']));
-    // @codingStandardsIgnoreLine
-    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', TRUE]));
-  }
-  else {
-    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery .c-accordion_content", 'removeClass', ['hidden-important']));
-    // @codingStandardsIgnoreLine
-    $response->addCommand(new InvokeCommand("#pdp-home-delivery.home-delivery", 'accordion', ['option', 'disabled', FALSE]));
+  $response->addCommand(new InvokeCommand(NULL, 'markProductStockStatusAction', ['article[data-skuid="' . $entity->id() . '"]:visible', $stock]));
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_acm_product_language_switch_links_alter(array &$links, $type, Url $url) {
+  $selected_query = \Drupal::request()->query->get('selected');
+
+  /** @var \Drupal\Core\Routing\CurrentRouteMatch $current_route_matcher */
+  $current_route_matcher = \Drupal::service('current_route_match');
+
+  // Alter block only if we have selected color query parameter on a PDP.
+  if (($selected_query) &&
+    $current_route_matcher->getRouteName() == 'entity.node.canonical' &&
+    ($node = $current_route_matcher->getParameter('node')) &&
+    $node->getType() == 'acq_product') {
+
+    // Remove the selected color parameter in the query string for all except
+    // current language.
+    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    foreach ($links as $langcode => $link) {
+      if ($langcode != $current_langcode && isset($links[$langcode]['query']['selected'])) {
+        unset($links[$langcode]['query']['selected']);
+      }
+    }
   }
 }

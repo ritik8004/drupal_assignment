@@ -1,3 +1,5 @@
+#block-youllbeableto-checkout-confirm,
+#block-jointheclub-checkout-confirm,
 #block-youllbeableto,
 #block-jointheclub {
   text-transform: none;
@@ -42,6 +44,7 @@
 }
 
 .user-page {
+  #block-youllbeableto-checkout-confirm,
   #block-youllbeableto {
     a {
       text-decoration: underline;
@@ -53,6 +56,7 @@
   }
 
   .c-sidebar-second,
+  #block-youllbeableto-checkout-confirm,
   #block-youllbeableto {
     h3 {
       font-family: $vs-regular;
@@ -153,6 +157,30 @@
         p {
           font-size: 0.875rem;
           padding-#{$left}: 2.125rem;
+        }
+      }
+    }
+  }
+}
+
+.alias--user-register-complete {
+  .c-user-register-complete {
+    h1 {
+      font-family: $vs-regular;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  #block-content {
+    @include breakpoint($only-mobile) {
+      padding: 0;
+
+      html[lang=ar] & {
+        p {
+          line-height: 1.5;
         }
       }
     }

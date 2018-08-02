@@ -51,6 +51,7 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#required' => TRUE,
       '#attributes' => [
         'class' => ['cybersource-credit-card-input', 'cybersource-input'],
+        'autocomplete' => 'cc-number',
       ],
     ];
 
@@ -62,6 +63,7 @@ class Cybersource extends PaymentMethodBase implements PaymentMethodInterface {
       '#required' => TRUE,
       '#attributes' => [
         'class' => ['cybersource-credit-card-cvv-input', 'cybersource-input'],
+        'autocomplete' => 'cc-csc',
       ],
     ];
 

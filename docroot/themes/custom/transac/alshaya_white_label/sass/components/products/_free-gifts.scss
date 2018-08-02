@@ -21,8 +21,13 @@
     width: 4.6875rem;
     margin-#{$right}: 1rem;
 
+    a {
+      display: block;
+      line-height: 0;
+    }
+
     @include breakpoint($only-mobile) {
-      margin: 0 0.75rem 0 0;
+      margin-#{$right}: 0.75rem;
     }
   }
 
@@ -86,9 +91,45 @@
     #drupal-modal {
       overflow: auto !important;
 
+      @include breakpoint($only-mobile) {
+        padding: 0 !important;
+      }
+
       .content__main {
-        min-height: auto;
-        height: 31.5rem;
+        @include breakpoint($tablet) {
+          min-height: auto;
+          height: 31.5rem;
+        }
+      }
+
+      .gallery-wrapper {
+        @include breakpoint($only-mobile) {
+          min-height: auto;
+
+          .slick-arrow {
+            display: none;
+          }
+        }
+      }
+
+      .content__sidebar,
+      .content__title_wrapper {
+        @include breakpoint($only-mobile) {
+          padding: 0 0.5rem;
+          margin-bottom: 0;
+        }
+      }
+
+      .content--item-code {
+        margin-bottom: 0;
+
+        @include breakpoint($only-mobile) {
+          border-bottom: 1px solid $free-gift-modal-item-code-border;
+        }
+
+        @include breakpoint($tablet) {
+          margin-bottom: 0.75rem;
+        }
       }
     }
   }
@@ -224,6 +265,20 @@
     }
 
     &:empty {
+      display: none;
+    }
+  }
+}
+
+.acq-content-product-modal {
+  .short-description-wrapper {
+    .read-more-description-link-gift {
+      display: block;
+    }
+  }
+
+  .mobilegallery {
+    .labels-container {
       display: none;
     }
   }

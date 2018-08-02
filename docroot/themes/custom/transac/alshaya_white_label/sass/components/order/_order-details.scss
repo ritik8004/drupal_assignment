@@ -266,14 +266,10 @@
     }
 
     img {
-      min-width: 8rem;
+      width: 8rem;
 
       @include breakpoint($tablet) {
-        min-width: 7.5rem;
-      }
-
-      @include breakpoint($desktop) {
-        min-width: 8.5625rem;
+        width: 7.125rem;
       }
     }
 
@@ -678,6 +674,20 @@
       &.warm--white {
         div {
           margin-bottom: 0;
+        }
+      }
+    }
+
+    &.vat-container {
+      td {
+        &:nth-child(3) {
+          @include breakpoint($only-mobile) {
+            display: block;
+          }
+        }
+
+        &.warm--white {
+          background-color: $basket_vat_price_bg !important;
         }
       }
     }

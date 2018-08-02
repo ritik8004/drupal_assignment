@@ -43,6 +43,7 @@
       .label-store-location {
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
+        text-transform: none;
 
         @include breakpoint($tablet) {
           padding-#{$left}: 1rem;
@@ -101,7 +102,13 @@
         margin-top: 9.125rem;
 
         .scroll-fix {
-          padding: 0.5rem 1.25rem;
+          padding: 0.5rem 0;
+
+          .open--hours {
+            .key-value-value {
+              float: $right;
+            }
+          }
         }
 
         .select-store {
@@ -145,6 +152,19 @@
             &:last-child {
               border-bottom: none;
             }
+
+            .store-actions {
+              .select-store {
+                height: 2.5rem;
+                line-height: normal;
+              }
+
+              .view-on-map {
+                @include breakpoint($only-mobile) {
+                  height: 2.5rem;
+                }
+              }
+            }
           }
         }
 
@@ -170,12 +190,26 @@
         font-family: $vs-bold;
         font-weight: normal !important;
       }
+
+      .geolocation-common-map-container {
+        .store-open-hours {
+          .hours--label {
+            &::after {
+              top: 2px;
+            }
+          }
+        }
+      }
     }
 
     #selected-store-wrapper {
       @include breakpoint($desktop) {
         margin-top: 0.9375rem;
         padding-bottom: 1.5625rem;
+      }
+
+      .cc-help-text {
+        font-weight: normal;
       }
 
       .mobile-number-field {
@@ -196,8 +230,7 @@
           align-items: flex-start;
 
           .prefix {
-            font-size: 0.875rem;
-            line-height: 1.8;
+            line-height: 1.6;
             min-width: 2.5rem;
           }
         }
@@ -224,7 +257,18 @@
           .store-on-map,
           .view-on-map {
             text-transform: uppercase;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
+          }
+
+          .change-store {
+            height: 2.5rem;
+            line-height: normal;
+          }
+
+          .view-on-map {
+            @include breakpoint($only-mobile) {
+              height: 2.5rem;
+            }
           }
         }
 

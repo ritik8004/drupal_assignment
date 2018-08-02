@@ -133,18 +133,18 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       }
     }
   }
-  elseif ($context == 'teaser' && empty($build['image'])) {
-    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', ['plp']);
+  elseif (in_array($context, ['teaser', 'product_category_carousel']) && empty($build['image'])) {
+    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', [$context]);
 
     // If no assets attached & the sku is configurable, try to use the
     // assets attached with first child sku attached.
     if (empty($teaser_assets) && ($sku->bundle() === 'configurable')) {
-      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
+      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', [$context]);
     }
 
     // Try once with plp assets if nothing found for teaser.
     if (empty($teaser_assets)) {
-      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', [$context]);
     }
 
     if (!empty($teaser_assets)) {
@@ -226,10 +226,10 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
 /**
  * Implements hook_acq_sku_cart_media_alter().
  */
-function alshaya_hm_images_acq_sku_cart_media_alter($sku, &$sku_image) {
+function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $context = 'cart') {
   if (empty($sku_image)) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart', ['cart']);
+    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart', [$context]);
 
     if (!empty($cart_assets)) {
       $sku_image = [
@@ -304,30 +304,6 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
  */
 function alshaya_hm_images_preprocess_product_zoom(&$variables) {
   $variables['#cache']['contexts'][] = 'url.query_args:color';
-}
-
-/**
- * Implements hook_image_sitemap_get_product_media().
- */
-function alshaya_hm_images_image_sitemap_get_product_media(&$media, &$nid) {
-  // Load product from id.
-  $product = Node::load($nid);
-
-  if ($product instanceof Node) {
-    // Get SKU from product.
-    $skuId = $product->get('field_skus')->first()->getString();
-    if (isset($skuId)) {
-      $sku = SKU::loadFromSku($skuId);
-      $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-      if ($sku instanceof SKU) {
-        $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
-        if (!empty($images)) {
-          // Changes for the image count.
-          $media = $images;
-        }
-      }
-    }
-  }
 }
 
 /**

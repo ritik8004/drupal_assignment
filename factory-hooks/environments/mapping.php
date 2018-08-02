@@ -212,6 +212,20 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'bbwae_prod'
       ],
     ],
+    // Pottery Barn KW.
+    'pbkw' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_test',
+      ],
+    ],
+    // Pottery Barn SA.
+    'pbsa' => [
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_test',
+      ],
+    ],
     // Pottery Barn AE.
     'pbae' => [
       'default' => [
@@ -221,35 +235,47 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Victoria Secret KW.
     'vskw' => [
+      '01live' => [
+        'magento' => 'vs_prod',
+        'conductor' => 'vskw_prod',
+      ],
       '01uat' => [
         'magento' => 'vs_uat',
         'conductor' => 'vskw_uat',
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vskw_test',
+        'conductor' => 'vskw_test_v1',
       ],
     ],
     // Victoria Secret SA.
     'vssa' => [
+      '01live' => [
+        'magento' => 'vs_prod',
+        'conductor' => 'vssa_prod',
+      ],
       '01uat' => [
         'magento' => 'vs_uat',
         'conductor' => 'vssa_uat',
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vssa_test',
+        'conductor' => 'vssa_test_v1',
       ],
     ],
     // Victoria Secret AE.
     'vsae' => [
+      '01live' => [
+        'magento' => 'vs_prod',
+        'conductor' => 'vsae_prod',
+      ],
       '01uat' => [
         'magento' => 'vs_uat',
         'conductor' => 'vsae_uat',
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vsae_test',
+        'conductor' => 'vsae_test_v1',
       ],
     ],
   ];

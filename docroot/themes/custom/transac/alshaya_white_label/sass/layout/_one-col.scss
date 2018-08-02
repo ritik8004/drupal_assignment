@@ -1,4 +1,5 @@
-.c-front.l-one--w {
+.c-front.l-one--w,
+.c-department.l-one--w {
   @include breakpoint($mobile) {
     @include container(100%);
 

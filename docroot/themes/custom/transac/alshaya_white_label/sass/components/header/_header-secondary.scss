@@ -261,7 +261,7 @@
 }
 
 .menu--three__list-item {
-  .menu--three__link {
+  a.menu--three__link {
     position: relative;
 
     @include breakpoint($upto-desktop) {
@@ -388,7 +388,7 @@ body {
   li.menu--one__list-item ul.menu--two__list {
     @include breakpoint($desktop) {
       display: block;
-      transition: all ease-in 0s;
+      transition: none;
     }
   }
 }

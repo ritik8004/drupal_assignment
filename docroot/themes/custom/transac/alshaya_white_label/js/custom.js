@@ -31,6 +31,9 @@
     // Do nothing here.
   }
 
+  // Adding class at field-promo-block level to differentiate department page drop down.
+  $('.c-accordion-delivery-options').parent().parent().addClass('field--name-field-promo-block-accordion-delivery-options');
+
   Drupal.behaviors.removeContentLoadingThrobber = {
     attach: function (context, settings) {
       setTimeout(function () {
@@ -112,7 +115,7 @@
         });
       }
 
-      $('.nodetype--acq_product .owl-item .above-mobile-block, .path--cart .owl-item .above-mobile-block').click(function () {
+      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').click(function () {
         $('body').addClass('pdp-modal-overlay');
         modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
 
@@ -130,7 +133,7 @@
         });
       });
 
-      $('.free-gift-title a').click(function () {
+      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').click(function () {
         $('body').addClass('free-gifts-modal-overlay');
         modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
 

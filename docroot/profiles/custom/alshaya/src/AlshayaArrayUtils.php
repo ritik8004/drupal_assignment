@@ -57,16 +57,54 @@ class AlshayaArrayUtils {
    *   Multi-dimensional array to make it unique.
    */
   public static function arrayUnique(array &$array) {
-    // Make indexed arrays unique.
-    $array = (array_values($array) === $array)
+    // Make indexed single dimensional arrays unique.
+    $array = (array_values($array) === $array) && (count($array) === count($array, COUNT_RECURSIVE))
       ? array_unique($array)
       : $array;
 
-    foreach ($array as $value) {
+    foreach ($array as &$value) {
       if (is_array($value)) {
         self::arrayUnique($value);
       }
     }
+  }
+
+  /**
+   * Get all possible combinations for array values.
+   *
+   * @param array $source
+   *   Array to process.
+   * @param array $partial
+   *   Array to store partial combinations.
+   * @param array $used
+   *   Array to store used combinations.
+   *
+   * @return array
+   *   Processed array.
+   */
+  public static function getAllCombinations(array $source, array $partial = [], array $used = []) {
+    if (count($partial) == count($source)) {
+     return [$partial];
+    }
+
+    $combinations = [];
+    foreach ($source as $key => $value) {
+      if (isset($used[$key])) {
+        continue;
+      }
+
+      $new_partial = $partial;
+      $new_partial[] = $value;
+      $new_used = $used;
+      $new_used[$key] = $key;
+
+      $combinations = array_merge(
+        $combinations,
+        self::getAllCombinations($source, $new_partial, $new_used)
+      );
+    }
+
+    return $combinations;
   }
 
 }

@@ -5,14 +5,89 @@
  * Contains install, update, uninstall hooks for alshaya_acm_product_category.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update views for product category taxonomy terms to use status field.
+ */
+function alshaya_acm_product_category_update_8016() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'views.view.product_category_level_3',
+  ],
+    'alshaya_acm_product_category'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Making 'field_promotion_banner_mobile' translatable.
+ */
+function alshaya_acm_product_category_update_8015() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile'],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new field 'Display as clickable link' to product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8014() {
+  $configs = [
+    'field.storage.taxonomy_term.field_display_as_clickable_link',
+    'field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_acm_product_category');
+
+  // Update value of existing taxonomy terms.
+  $query = \Drupal::entityQuery('taxonomy_term');
+  $query->condition('vid', 'acq_product_category');
+  $tids = $query->execute();
+  foreach ($tids as $tid) {
+    $term = Term::load($tid);
+    if (!empty($term)) {
+      $term->field_display_as_clickable_link->setValue('1');
+      $term->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update views for product category taxonomy terms.
+ */
+function alshaya_acm_product_category_update_8013() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs([
+    'views.view.product_category_level_3',
+    'views.view.product_category_level_2_3',
+  ],
+    'alshaya_acm_product_category'
+  );
+}
 
 /**
  * Implements hook_update_N().
  *
  * Update view of PLP promotional banner to hide if empty.
  */
-function alshaya_acm_product_category_update_8013() {
+function alshaya_acm_product_category_update_8012() {
   alshaya_config_install_configs(['views.view.plp_promotional_banner'], 'alshaya_acm_product_category');
 }
 
@@ -27,22 +102,6 @@ function alshaya_acm_product_category_update_dependencies() {
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update views for product category taxonomy terms.
- */
-function alshaya_acm_product_category_update_8012() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs([
-    'views.view.product_category_level_3',
-    'views.view.product_category_level_2_3',
-  ],
-    'alshaya_acm_product_category'
-  );
 }
 
 /**

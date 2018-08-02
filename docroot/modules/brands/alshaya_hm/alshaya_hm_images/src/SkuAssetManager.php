@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_hm_images;
 
 use Detection\MobileDetect;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -229,19 +230,10 @@ class SkuAssetManager {
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      // Use res attribute in place of width & height while calculating images
-      // for swatches.
-      if (empty($style)) {
-        $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-        $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
-      }
-      else {
-        $detect = new MobileDetect();
-        $set['res'] = "res[z]";
-
-        if ($detect->isMobile()) {
-          $set['res'] = "res[y]";
-        }
+      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] ."]";
+      $detect = new MobileDetect();
+      if ($detect->isMobile()) {
+        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] ."]";
       }
 
       // Check for overrides for style identifiers & dimensions.
@@ -253,12 +245,15 @@ class SkuAssetManager {
           $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
         }
 
-        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['width'])) {
-          $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
+        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['desktop'])) {
+          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] ."]";
         }
 
-        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['height'])) {
-          $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+        $detect = new MobileDetect();
+        if ($detect->isMobile()) {
+          if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['mobile'])) {
+            $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['mobile'] . "]";
+          }
         }
       }
     }
@@ -365,9 +360,9 @@ class SkuAssetManager {
 
             // Use number for sorting in case we land onto 2 images with same
             // asset type & facing type.
-            if ((($weight_a - $weight_b) === 0) &&
-              (!empty($a['Data'])) &&
-              (!empty($b['Data']))) {
+            if (($weight_a - $weight_b) === 0
+              && isset($a['Data'], $a['Data']['Angle'], $a['Data']['Angle']['Number'])
+              && isset($b['Data'], $b['Data']['Angle'], $b['Data']['Angle']['Number'])) {
               $weight_a = $a['Data']['Angle']['Number'];
               $weight_b = $b['Data']['Angle']['Number'];
             }
@@ -489,32 +484,43 @@ class SkuAssetManager {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
-    $child_skus = $this->skuManager->getChildrenSkuIds($sku);
-    $article_castor_ids = [];
-    $traversed_article_castor_ids = [];
+    if ($cache = $this->skuManager->getProductCachedData($sku, 'hm_colors_for_sku')) {
+      return $cache;
+    }
 
-    if (empty($child_skus)) {
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    if (empty($combinations)) {
       return [];
     }
 
-    $child_sku_ids = $this->skuManager->getEntityIdsBySku($child_skus);
-    $plugin_definition = $this->skuPluginManager->pluginFromSKU($sku);
+    $article_castor_ids = [];
 
-    $class = $plugin_definition['class'];
-    $plugin = new $class();
+    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $article_castor_id => $skus) {
+      $child_sku_entity = NULL;
+      $color_attributes = [];
 
-    foreach ($child_sku_ids as $child_sku) {
-      // Avoid duplicate colors in cases of corrupt data.
-      // e.g., color label= '' for rgb_color=#234567 &
-      // color_label=grey for rgb_color=#234567. Also, return back
-      // color label-code mapping uniquely identified by an article_castor_id.
-      if (!empty($article_castor_id = $plugin->getAttributeValue($child_sku, 'article_castor_id')) &&
-        (!in_array($article_castor_id, $traversed_article_castor_ids))) {
-        $traversed_article_castor_ids[] = $article_castor_id;
-        $color_attributes = $this->getColorAttributesFromSku($child_sku);
-        $article_castor_ids[$child_sku] = $color_attributes['attr_rgb_color'];
+      // Use only the first SKU for which we get color attributes
+      foreach ($skus as $child_sku) {
+        // Show only for colors for which we have stock.
+        $child_sku_entity = SKU::loadFromSku($child_sku);
+
+        if (!(alshaya_acm_get_stock_from_sku($child_sku_entity))) {
+          continue;
+        }
+
+        $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
+
+        if ($color_attributes) {
+          break;
+        }
+      }
+
+      if ($child_sku_entity instanceof SKUInterface && $color_attributes) {
+        $article_castor_ids[$child_sku_entity->id()] = $color_attributes['attr_rgb_color'];
       }
     }
+
+    $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
 
     return $article_castor_ids;
   }

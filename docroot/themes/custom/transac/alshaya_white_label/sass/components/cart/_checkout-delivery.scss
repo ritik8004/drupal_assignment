@@ -988,11 +988,8 @@
           font-size: 1rem;
           font-family: $alshaya-bold;
           font-weight: normal;
-
-          @include breakpoint($tablet) {
-            padding-bottom: 0.4375rem;
-            border-bottom: 1px solid $checkout_section_title_border;
-          }
+          padding-bottom: 0.4375rem;
+          border-bottom: 1px solid $checkout_section_title_border;
         }
 
         .fieldset-wrapper {
@@ -1229,11 +1226,11 @@ html[lang=ar] {
   text-transform: lowercase;
 
   @include breakpoint($tablet) {
-    margin: 1rem;
+    margin: 1.375rem;
   }
 
   @include breakpoint($desktop) {
-    margin: 2rem 2rem 1rem;
+    margin: 1.375rem 2rem 1rem;
   }
 }
 

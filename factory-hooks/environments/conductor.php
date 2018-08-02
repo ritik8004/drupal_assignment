@@ -28,6 +28,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'ec11fb2f54d34b2f9d35ec1d3575b89e',
       'hmac_secret' => 'gpW7PQFKKDU-qPrcIgaYNQ',
     ],
+    'mckw_uat_v2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
+      'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
+      'api_version' => 'v2',
+    ],
     'mckw_pprod' => [
       'url' => 'https://alshaya-mckw-pprod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '676f2059d53d407791472c31783ae32c',
@@ -55,6 +61,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '6686b9362f9c48789c08782dc0f85b59',
       'hmac_secret' => 'QIMU6nVtVUVJ3NtSErE5PA',
     ],
+    'mcsa_uat_v2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd5cf13ff42204e4d940d0fe66987f025',
+      'hmac_secret' => 'Zjk5ZjhkYzgtYmRmZC00',
+      'api_version' => 'v2',
+    ],
     'mcsa_pprod' => [
       'url' => 'https://alshaya-mcksa-pprod.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '08bf3c91aeba4b18b78354b38e0ef566',
@@ -76,6 +88,12 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://alshaya-mcae-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'c47e33167b1d4031a18acbf8c9fb9aa8',
       'hmac_secret' => 'QK1RFjIn1Subjk7m-1A2hw',
+    ],
+    'mcae_uat_v2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '843bb58e8fff4c37bdfa17675497c80e',
+      'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
+      'api_version' => 'v2',
     ],
     'mcae_prod' => [
       'url' => 'https://alshaya-mcae-prod.eu-west-1.prod.acm.acquia.io/',
@@ -143,17 +161,33 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
       'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
     ],
+    // Pottery Barn KW.
+    'pbkw_test' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
+      'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
+      'api_version' => 'v2',
+    ],
+    // Pottery Barn SA.
+    'pbsa_test' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
+      'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
+      'api_version' => 'v2',
+    ],
     // Pottery Barn AE.
     'pbae_test' => [
-      'url' => 'https://alshaya-pbae-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'cbf73a1b03eb43369149662f41980491',
-      'hmac_secret' => '_tcQBAc4nXGPNsSH1AAARw',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
+      'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
+      'api_version' => 'v2',
     ],
     // BathBodyWorks KW.
     'bbwkw_test' => [
-      'url' => 'https://alshaya-bbwkw-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '4b7670dccafa42b18084c613863aa486',
-      'hmac_secret' => 'qeDLTRfJKqqiyE0oOTTS9Q',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '0b92904888cd422f8acd2938e199916e',
+      'hmac_secret' => 'YWFiMzI4M2QtMzY5ZC00',
+      'api_version' => 'v2',
     ],
     'bbwkw_uat' => [
       'url' => 'https://alshaya-bbwkw-uat.eu-west-1.prod.acm.acquia.io/',
@@ -167,9 +201,10 @@ function alshaya_get_conductor_host_data() {
     ],
     // BathBodyWorks SA.
     'bbwsa_test' => [
-      'url' => 'https://alshaya-bbwsa-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => 'a07fe12b7a28450682a893de129dcf62',
-      'hmac_secret' => 'HouU54QMztLm8rbTIPUHsA',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '52fd839150734f1c8afe9db8c7f688e8',
+      'hmac_secret' => 'ZTFjNTIzZTUtYzI3YS00',
+      'api_version' => 'v2',
     ],
     'bbwsa_uat' => [
       'url' => 'https://alshaya-bbwsa-uat.eu-west-1.prod.acm.acquia.io/',
@@ -183,9 +218,10 @@ function alshaya_get_conductor_host_data() {
     ],
     // BathBodyWorks AE.
     'bbwae_test' => [
-      'url' => 'https://alshaya-bbwae-test.eu-west-1.prod.acm.acquia.io/',
-      'hmac_id' => '2c9c003acdf34ae29fb2c87a7401cf0a',
-      'hmac_secret' => '8UUzR1z6OcFbnjhtl5U8Vg',
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '83a388d79f834d20bef67de19ee177d7',
+      'hmac_secret' => 'M2MyOWQ3YjgtNTJiNy00',
+      'api_version' => 'v2',
     ],
     'bbwae_uat' => [
       'url' => 'https://alshaya-bbwae-uat.eu-west-1.prod.acm.acquia.io/',
@@ -198,6 +234,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
     ],
     // VictoriaSecret KW.
+    'vskw_test_v1' => [
+      'url' => 'https://alshaya-vskw-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '43d835c683544f16ae02b6738bd30246',
+      'hmac_secret' => 'mkvCzZn8C70jN8TdKJT6ww',
+      'api_version' => 'v1',
+    ],
     'vskw_test' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
@@ -209,7 +251,18 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => 'c1827b63783d4ea698d06c32d0ab9095',
       'hmac_secret' => 'Of6wIihr4XqR0zKIncywiw',
     ],
+    'vskw_prod' => [
+      'url' => 'https://alshaya-vskw-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd8a71262da2740b6b9f56638f4a7a3a8',
+      'hmac_secret' => '3oj9IfqBOCauQSH6Ig86og',
+    ],
     // VictoriaSecret SA.
+    'vssa_test_v1' => [
+      'url' => 'https://alshaya-vssa-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '8f0cca86f92c4d4899c0cefd69c3ab80',
+      'hmac_secret' => 'vUGB9pW4Wif8Kuqu_Wa3DA',
+      'api_version' => 'v1',
+    ],
     'vssa_test' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'b88bad1f106b439ea3a156bd2085e178',
@@ -221,7 +274,18 @@ function alshaya_get_conductor_host_data() {
       'hmac_id' => '399c5db05806456a9843cf604d979b8e',
       'hmac_secret' => 'vj9fxpaBVCSogIzZl7QumQ',
     ],
+    'vssa_prod' => [
+      'url' => 'https://alshaya-vssa-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '4484e41f3b7c4783a41d9a0d36ad858e',
+      'hmac_secret' => 'gHyLRfMO86zarwkP_nG1Hw',
+    ],
     // VictoriaSecret AE.
+    'vsae_test_v1' => [
+      'url' => 'https://alshaya-vsae-test.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '814e195c622042219be0c36566078bec',
+      'hmac_secret' => 'rboHiF67oDbiBjtCKufN3g',
+      'api_version' => 'v1',
+    ],
     'vsae_test' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'c938cdcc017b44bfb7bc736a0ab8a150',
@@ -232,6 +296,11 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://alshaya-vsae-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '3ac23a0b214f45a1a756db7092d315dd',
       'hmac_secret' => 'RpbFWVOiVjltkXrTbmv2Ng',
+    ],
+    'vsae_prod' => [
+      'url' => 'https://alshaya-vsae-prod.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '0272644d5be84efb9dd246478367e947',
+      'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
     ],
   ];
 }

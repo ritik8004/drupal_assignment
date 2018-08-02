@@ -1,0 +1,16 @@
+{% extends "paragraph.html.twig" %}
+{% block content %}
+  {{ content.field_heading }}
+
+  {% if content.field_link|render %}
+    <a href="{{ content.field_link[0]['#url'] }}">
+  {% endif %}
+    {{ content.field_banner }}
+  {% if content.field_link|render %}
+    </a>
+  {% endif %}
+
+  {{ content.field_title }}
+  {{ content.field_sub_title }}
+  {{ content.field_link }}
+{% endblock %}

@@ -16,6 +16,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\profile\Entity\Profile;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -221,7 +222,7 @@ class CheckoutHelper {
 
       // While debugging we log the whole cart object.
       $this->logger->debug('Placed order for cart: @cart', [
-        '@cart' => json_encode($cart->getCart()),
+        '@cart' => $this->cartHelper->getCleanCartToLog($cart),
       ]);
 
       // Clear the cart in session.
@@ -233,7 +234,7 @@ class CheckoutHelper {
 
       // Add message in logs.
       $this->logger->critical('Error occurred while placing order. Cart: @cart. Exception: @message', [
-        '@cart' => json_encode($cart->getCart()),
+        '@cart' => $this->cartHelper->getCleanCartToLog($cart),
         '@message' => $e->getMessage(),
       ]);
 
@@ -360,6 +361,8 @@ class CheckoutHelper {
     // Current history.
     $history = $this->getCartHistory('shipping');
 
+    $address = $this->cleanCheckoutAddress($address);
+
     // Prepare data to store in cache as history.
     // We will use it to restore in cart if user changes his mind again.
     $history[$method] = [
@@ -476,11 +479,6 @@ class CheckoutHelper {
 
     if ($is_same) {
       $address = $this->cartHelper->getShipping($cart);
-      if (isset($address['customer_address_id'])) {
-        if ($entity = $this->addressManager->getUserAddressByCommerceId($address['customer_address_id'])) {
-          $address = $this->addressManager->getAddressFromEntity($entity, FALSE);
-        }
-      }
     }
 
     $address = $this->cleanCheckoutAddress($address);
@@ -586,6 +584,26 @@ class CheckoutHelper {
     $address['city'] = $this->addressManager->getAddressShippingAreaValue($address);
 
     return $address;
+  }
+
+  /**
+   * Helper function to get full address from Profile.
+   *
+   * @param \Drupal\profile\Entity\Profile $entity
+   *   Profile entity.
+   *
+   * @return array
+   *   Full address.
+   */
+  public function getFullAddressFromEntity(Profile $entity) {
+    $full_address = $this->addressManager->getAddressFromEntity($entity);
+    $full_address = $this->cleanCheckoutAddress($full_address);
+
+    // Use the estimate delivery method with full address every-time.
+    // This is a hack to avoid issues with estimate shipping having customer id.
+    unset($full_address['address_id']);
+    unset($full_address['customer_address_id']);
+    return $full_address;
   }
 
 }

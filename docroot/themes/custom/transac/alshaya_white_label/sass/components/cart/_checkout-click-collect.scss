@@ -987,6 +987,7 @@
           font-size: 0.75rem;
           min-width: 10.13rem;
           background: $checkout_cc_list_select_store_btn_bg;
+          line-height: normal;
 
           &:hover {
             background-color: $primary_btn_bg;
@@ -1259,10 +1260,10 @@
 
     #store-finder-wrapper {
       position: relative;
-      margin: 1.125rem 2rem 0;
+      margin: 0 1.375rem;
 
       @include breakpoint($only-tablet) {
-        margin: 1.125rem 1.5rem 0;
+        margin: 1.375rem 1.375rem 0;
       }
 
       @include breakpoint($only-mobile) {

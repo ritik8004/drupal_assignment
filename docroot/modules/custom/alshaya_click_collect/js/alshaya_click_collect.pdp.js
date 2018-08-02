@@ -180,6 +180,11 @@
       variant = $('.selected-variant-sku-' + skuClean).val();
     }
 
+    // We always use SKU as string. For numeric values JS converts it to int.
+    // This fails our === condition checks.
+    sku = (typeof sku === 'undefined') ? '' : sku.toString();
+    skuClean = (typeof skuClean === 'undefined') ? '' : skuClean.toString();
+
     return {
       type: type,
       sku: sku,
@@ -383,5 +388,23 @@
 
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
+
+
+  /**
+   * Mark product out of stock.
+   *
+   * @param data
+   *   SKU selector.
+   * @param status
+   *   Stock status.
+   */
+  $.fn.clickCollectProductStockStatusAction = function (data, status) {
+    var article = $(data).parents('article:first');
+    if (status <= 0) {
+      article
+        .find('#pdp-stores-container.click-collect')
+        .accordion('option', 'disabled', true);
+    }
+  }
 
 })(jQuery, Drupal);

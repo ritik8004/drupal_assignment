@@ -105,9 +105,12 @@
       &__title {
         border-top: 1px solid $department_category_accordion_border;
         border-bottom: 1px solid $department_category_accordion_border;
+        height: 2.5rem;
+        line-height: 40px;
 
         &::after {
           color: $department_category_accordion_title_arrow;
+          font-size: 2rem;
         }
 
         a {
@@ -182,6 +185,33 @@
         border-bottom: 1px solid $content_pagetitle_border;
         padding-bottom: 0.75rem;
         font-family: $alshaya-bold;
+      }
+    }
+  }
+
+  .l-one--w {
+    .term-description-mobile-only {
+      @include breakpoint($tablet) {
+        @include container(80.25rem);
+
+        width: 100%;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .field--name-field-promo-block {
+    .field__item {
+      &.field--name-field-promo-block-accordion-delivery-options {
+        margin-bottom: 0;
+
+        .paragraph--type--product-carousel-category {
+          padding-top: 0;
+          margin-top: -1px;
+        }
       }
     }
   }

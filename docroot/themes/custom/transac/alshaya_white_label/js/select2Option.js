@@ -41,7 +41,7 @@ jQuery.fn.select2Option = function (options) {
             liHtml.append('<span class="' + $(this).text() + '">' + swatchImage + '</span>');
           }
           else {
-            liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
+            liHtml.append('<a href="#" class="' + $(this).text().replace(/\s+/g, '-') + '" data-select-index="' + selectIndex + '">' + swatchImage + '</a>');
           }
         }
         else {

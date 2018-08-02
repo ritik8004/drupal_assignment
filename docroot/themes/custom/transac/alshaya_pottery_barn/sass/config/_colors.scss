@@ -21,6 +21,7 @@ $medium-green: #3ab549;
 
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
+$_black_three: #353132;
 $_gray_two: #b3b3b3;
 $_gray_three: #f0f0f0;
 $_gray_four: #e8e8e8;
@@ -393,3 +394,19 @@ $checkout_payment_option_border: $_gray_eleven;
 $section_divider_border: $_black_two;
 $section_divider_text: $_black_two;
 $section_divider_bg: $white-two;
+
+// 404 & Maintenance Pages.
+// 404
+$maintenance_body_bg: $white-two;
+$maintenance_link: $white-two;
+$maintenance_link_border: $white-two;
+$maintenance_titles: $white-two;
+$maintenance_container_border_top: $_gray_five;
+$maintenance_container_bg: $_gray_five;
+$maintenance_container_border: $PB_deep_red;
+$maintenance_body_text_strong: $_black_three;
+$maintenance_body_text_regular: $_black_two;
+$maintenance_body_text_arabic: $PB_black_one;
+
+// Back to top.
+$btt_text: $PB_deep_red;

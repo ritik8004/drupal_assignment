@@ -6,8 +6,11 @@
  */
 
 use Drupal\acq_cart\CartInterface;
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -391,4 +394,37 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
     $helper->setBillingInfo(FALSE, $address);
   }
 
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function alshaya_acm_checkout_block_access(Block $block, $operation, AccountInterface $account) {
+  // Add "join the club" block only if user has not entered loyalty card
+  // number in basket.
+  if ($operation == 'view' && $block->id() == 'jointheclub_checkout_confirm') {
+    $current_route = \Drupal::routeMatch();
+    if ($current_route->getRouteName() == 'acq_checkout.form'
+        && $current_route->getParameter('step') == 'confirmation') {
+      $order = _alshaya_acm_checkout_get_last_order_from_session();
+      // We check if we have valid order id.
+      if (!empty($order)) {
+        return AccessResult::forbiddenIf(!empty($order['extension']['loyalty_card']));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_acm_checkout_preprocess_checkout_selected_address(&$variables) {
+  $variables['delivery_address'] = \Drupal::service('alshaya_addressbook.manager')->getAddressWithPrefix($variables['delivery_address']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_acm_checkout_preprocess_alshaya_address(&$variables) {
+  $variables['address'] = \Drupal::service('alshaya_addressbook.manager')->getAddressWithPrefix($variables['address']);
 }

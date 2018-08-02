@@ -3,7 +3,7 @@
   height: auto;
 
   .region__menu-primary {
-    @include breakpoint ($desktop) {
+    @include breakpoint($desktop) {
       float: $left;
       width: 50%;
     }
@@ -11,6 +11,10 @@
     .menu--one__list {
       .menu--one__link {
         font-size: 0;
+
+        @include breakpoint($only-tablet) {
+          padding-bottom: 0.5625rem;
+        }
       }
     }
 
@@ -18,7 +22,7 @@
       &::after {
         content: "";
         width: 3.4375rem;
-        height: 1.5625rem;
+        height: 1.625rem;
         display: block;
         margin: auto;
       }

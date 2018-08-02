@@ -54,8 +54,6 @@ set classes = [
 
       <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
-      <div class="free-gift-promotions">{% if content.free_gift_promotions %}{{ content.free_gift_promotions }}{% endif %}</div>
-
       <div class="content--item-code">
         <span class="field__label">{{ 'Item Code'|t }}:</span>
         {{ content.item_code }}
@@ -82,19 +80,33 @@ set classes = [
             <h2 class="field__label">{{ 'Product Description'|t }}</h2>
             <div class="field__content-wrapper">
               <div class="field__content">
-                {% if content.short_desc.value|render %}
-                  <div class="desc-wrapper">
-                    {% if content.short_desc.label|render %}
-                      <div class="desc-label">
-                        {{ content.short_desc.label }}
-                      </div>
-                    {% endif %}
-
+                <div class="desc-wrapper">
+                  {% if content.short_desc.label|render %}
+                    <div class="desc-label">
+                      {{ content.short_desc.label }}
+                    </div>
+                  {% endif %}
+                  {% if content.short_desc.value|render %}
                     <div class="desc-value">
                       {{ content.short_desc.value }}
                     </div>
-                  </div>
-                {% endif %}
+                  {% endif %}
+                </div>
+                {% for desc in content.description %}
+                  {% if desc.value|render %}
+                    <div class="desc-wrapper">
+                      {% if desc.label|render %}
+                        <div class="desc-label">
+                          {{ desc.label }}
+                        </div>
+                      {% endif %}
+
+                      <div class="desc-value">
+                        {{ desc.value }}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
               </div>
               {% if content.description %}
                 {% if content.read_more_style.value|render %}

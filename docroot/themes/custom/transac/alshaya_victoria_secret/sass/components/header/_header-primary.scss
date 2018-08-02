@@ -85,6 +85,10 @@ header {
       width: 1rem;
       height: 1rem;
       margin: 0.65rem 0.75rem;
+
+      @include breakpoint($desktop) {
+        background-size: 0.75rem;
+      }
     }
   }
 
@@ -106,7 +110,8 @@ header {
         @include breakpoint($desktop) {
           background-position-x: 84% !important;
           width: 12.5rem;
-          padding-#{$right}: 3.5rem;
+          padding-#{$left}: 2.625rem;
+          padding-#{$right}: 0.4375rem;
 
           html[lang="ar"] & {
             background-position-x: 16% !important;
@@ -116,6 +121,7 @@ header {
 
       input {
         color: $primary_search_input;
+        text-transform: none;
 
         &::placeholder {
           color: $primary_search_input_placeholder;
@@ -137,6 +143,11 @@ header {
         top: 0;
         #{$right}: 0;
       }
+
+      @include breakpoint($desktop) {
+        #{$right}: auto;
+        #{$left}: 0;
+      }
     }
   }
 }
@@ -156,33 +167,35 @@ header {
       text-align: center;
       height: 2.5rem;
 
-      a.menu--one__link {
+      .menu--one__link {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
-        padding: 0.625rem 0.9375rem;
+        padding: 0.625rem 0;
+        margin: 0 1.5rem;
         height: 2.5rem;
         margin-top: 0;
       }
 
-      a.menu--one__link.active {
-        border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+      .menu--one__link.active {
+        border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
 
     .active--menu--links {
       li.menu--one__list-item {
         &:hover {
-          a.menu--one__link {
-            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+          .menu--one__link {
+            border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
+            color: $mm_l1_link_active;
           }
         }
       }
 
       &:hover {
         li.menu--one__list-item {
-          a.menu--one__link.active {
-            border-bottom: 3px solid $mm_l1_link_hover_border_to_fill_space;
+          .menu--one__link.active {
+            border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
       }
@@ -304,7 +317,7 @@ header {
   .active--menu--links {
     &:hover {
       li.menu--one__list-item {
-        a.menu--one__link {
+        .menu--one__link {
           border-bottom: 1px solid transparent;
         }
       }
@@ -381,6 +394,16 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    a.promo-panel--mobile-link {
+      &::after {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
 #block-cartminiblock {
   @include breakpoint($desktop) {
     padding-top: 0.75rem;
@@ -397,6 +420,42 @@ header {
 
     @include breakpoint($desktop) {
       display: block;
+    }
+  }
+}
+
+.form-autocomplete.ui-autocomplete-loading {
+  background-size: 1.5rem;
+}
+
+.c-header__region {
+  .block-views-exposed-filter-blocksearch-page {
+    .ui-autocomplete {
+      @include breakpoint($only-mobile) {
+        top: 7.875rem !important;
+
+        html[lang=ar] & {
+          top: 8.5rem !important;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .menu--two__list-item {
+    .menu__in {
+      margin-top: -2.25rem;
+    }
+  }
+}
+
+html[lang="en"] {
+  .block-alshaya-main-menu {
+    a {
+      &.menu__link {
+        letter-spacing: 2.4px;
+      }
     }
   }
 }
