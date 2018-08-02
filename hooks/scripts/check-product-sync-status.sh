@@ -21,7 +21,7 @@ do
   sleep $sleepd
   old_count=$new_count
   new_count=$(drush8 @$site.$target_env --uri=$uri sqlq "select count(*) from acq_sku")
-  echo "There is now $old_count SKUs, there was $new_count SKUs $sleepd seconds ago."
+  echo "There is now $new_count SKUs, there was $old_count SKUs $sleepd seconds ago."
 
   if [ $old_count != "0" -a $old_count == $new_count ]
   then

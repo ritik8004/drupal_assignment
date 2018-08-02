@@ -1,0 +1,4 @@
+services:
+  alshaya_admin.queue_helper:
+    class: Drupal\alshaya_admin\QueueHelper
+    arguments: ['@queue', '@plugin.manager.queue_worker']

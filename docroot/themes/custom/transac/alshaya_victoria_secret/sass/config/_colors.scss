@@ -550,6 +550,7 @@ $pdp_product_special_price_text: $red-error;
 $pdp_product_discount_price: $red-error;
 $pdp_product_discount_text: $red-error;
 $pdp_product_itemcode: $ash-triplet;
+$pdp_product_itemcode_border: $gainsboro;
 $pdp_filter_selector_label: $nero;
 $pdp_title_section_border: $gainsboro;
 $pdp_mobile_wrapper: $white-five;
@@ -627,6 +628,8 @@ $not_buyable_help: $brilliant-rose;
 
 // Department page
 $department_category_list_hover: $brilliant-rose;
+$department_category_accordion_title_arrow: $nero;
+$department_category_accordion_link_arrow: $nero;
 
 // Store finder page.
 // Store finder header form.
@@ -956,7 +959,7 @@ $basket_td_sec_txt: $greyish;
 $basket_item_bundle: $cerulean-two;
 $basket_tooltip_not_available: $white;
 $basket_promotion_input_border: $white;
-$basket_remove_link: $cerulean-two;
+$basket_remove_link: $nero;
 $basket_horizontal_recommendation_slider_dots: $black;
 $basket_order_total_bg: $gainsboro;
 // Basket top promotions.
@@ -1022,3 +1025,15 @@ $category_facet_active_icon: $nero;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $black;
+
+// Free Gifts
+$free-gifts-label: $red-error;
+$free-gifts-title-text: $nero;
+$free-gifts-coupon-code-text: $brilliant-rose;
+$free-gifts-border: $brilliant-rose;
+$free-gifts-text: $nero;
+$free-gift-modal-item-code-border: $gainsboro;
+$cart-free-gifts-message: $nero;
+$cart-free-gifts-title: $nero;
+$cart-free-gifts-label: $vanilla;
+$cart-free-gifts-label-background: $brilliant-rose;

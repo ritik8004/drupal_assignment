@@ -5,17 +5,15 @@ dependencies:
     - field.storage.node.field_promo_blocks
     - node.type.advanced_page
     - paragraphs.paragraphs_type.1_row_1_col
-    - paragraphs.paragraphs_type.1_row_1_col_dept
     - paragraphs.paragraphs_type.1_row_1st_col_2_row_2nd_col
-    - paragraphs.paragraphs_type.1_row_2_col
     - paragraphs.paragraphs_type.1_row_2_col_1_2_dept
     - paragraphs.paragraphs_type.1_row_2_col_2_1_dept
     - paragraphs.paragraphs_type.1_row_2_col_dept
     - paragraphs.paragraphs_type.1_row_3_col
-    - paragraphs.paragraphs_type.1_row_3_col_dept
     - paragraphs.paragraphs_type.1_row_3_col_text
     - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.section_divider
+    - paragraphs.paragraphs_type.delivery_usp_block
     - paragraphs.paragraphs_type.views_reference
   module:
     - entity_reference_revisions
@@ -37,16 +35,14 @@ settings:
       1_row_1st_col_2_row_2nd_col: 1_row_1st_col_2_row_2nd_col
       1_row_1_col: 1_row_1_col
       1_row_3_col: 1_row_3_col
-      1_row_2_col: 1_row_2_col
       1_row_3_col_text: 1_row_3_col_text
-      1_row_1_col_dept: 1_row_1_col_dept
       1_row_2_col_1_2_dept: 1_row_2_col_1_2_dept
       1_row_2_col_2_1_dept: 1_row_2_col_2_1_dept
       1_row_2_col_dept: 1_row_2_col_dept
-      1_row_3_col_dept: 1_row_3_col_dept
       block_reference: block_reference
       views_reference: views_reference
       section_divider: section_divider
+      delivery_usp_block: delivery_usp_block
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         enabled: true
@@ -75,9 +71,6 @@ settings:
       1_row_3_col_text:
         enabled: true
         weight: 16
-      1_row_1_col_dept:
-        enabled: true
-        weight: 18
       1_row_2_col_1_2_dept:
         enabled: true
         weight: 20
@@ -87,9 +80,6 @@ settings:
       1_row_2_col_dept:
         enabled: true
         weight: 22
-      1_row_3_col_dept:
-        enabled: true
-        weight: 24
       1_row_3_col_delivery_banner:
         weight: 25
         enabled: false
@@ -111,6 +101,9 @@ settings:
       offers_bordered:
         weight: 41
         enabled: false
+      delivery_usp_block:
+        enabled: true
+        weight: 42
       promo_block_button:
         weight: 43
         enabled: false

@@ -7,6 +7,11 @@ fields:
     type: 'text_long'
     visible_form: 0
 
+  description:
+    label: 'Description'
+    description: 'Descripton about the product.'
+    type: 'text_long'
+
   is_buyable:
     label: 'Is Buyable'
     description: 'Flag to check if product is available for purchase or not.'
@@ -28,14 +33,6 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
-
-  rgb_color:
-    label: 'RGB color'
-    type: 'string'
-
-  color_label:
-    label: 'Color label'
-    type: 'string'
 
   size:
     label: 'Size'
@@ -84,60 +81,4 @@ fields:
   whats_in_the_box:
     label: 'Whats in the box'
     description: 'Part of description.'
-    type: 'text_long'
-
-  concept:
-    label: 'Concept'
-
-  washing_instructions:
-    label: 'Washing Instructions'
-    cardinality: -1
-
-  dry_cleaning_instructions:
-    label: 'Dry Cleaning Instructions'
-    cardinality: -1
-
-  article_visual_description:
-    label: 'Visual description'
-    description: 'A visual description of the article.'
-    type: 'string'
-
-  product_designer_collection:
-    label: 'Product Designer Collection'
-    cardinality: -1
-
-  product_feature:
-    label: 'Product Feature'
-    cardinality: -1
-
-  product_environment:
-    label: 'Product Environment'
-    cardinality: -1
-
-  product_quality:
-    label: 'Product Quality'
-    cardinality: -1
-
-  article_pattern:
-    label: 'Article Pattern'
-    cardinality: -1
-
-  article_license_company:
-    label: 'Article License Company'
-    cardinality: -1
-
-  article_license_item:
-    label: 'Article License Item'
-    cardinality: -1
-
-  article_fragrance_description:
-    label: 'Article Fragrance Description'
-    cardinality: -1
-
-  article_warning:
-    label: 'Article Warning'
-
-  composition:
-    label: 'Composition'
-    description: 'Product Composition.'
     type: 'text_long'

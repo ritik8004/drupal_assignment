@@ -625,7 +625,7 @@ header {
       text-transform: lowercase;
       height: 2.6875rem;
 
-      a.menu--one__link {
+      .menu--one__link {
         padding: 0.625rem;
         padding-bottom: 0.6rem;
         display: block;
@@ -638,14 +638,10 @@ header {
       }
 
       &.active {
-        a.menu--one__link {
+        .menu--one__link {
           background: $mm_bg;
           border-top: 2px solid $mm_l1_link_active_border;
         }
-      }
-
-      a {
-        font-family: $alshaya-thin;
       }
 
       &:hover {
@@ -659,8 +655,18 @@ header {
 
       a {
         font-size: 0.75rem;
+        font-family: $alshaya-thin;
         color: $mm_l1_link;
         text-decoration: none;
+      }
+
+      .menu__link {
+        color: $mm_l1_link;
+      }
+
+      .menu--one__link {
+        font-size: 0.75rem;
+        font-family: $alshaya-thin;
       }
 
       ul ul {
@@ -688,7 +694,7 @@ header {
     .active--menu--links {
       &:hover {
         li.menu--one__list-item {
-          a.menu--one__link {
+          .menu--one__link {
             border-bottom: 1px solid $mm_l1_border;
           }
         }
@@ -696,7 +702,7 @@ header {
 
       li.menu--one__list-item {
         &:hover {
-          a.menu--one__link {
+          .menu--one__link {
             border-bottom: 1px solid $mm_l1_link_hover_border_to_fill_space;
             color: $mm_l1_link_hover;
             border-top: 2px solid $mm_l1_link_active_border;
@@ -734,11 +740,14 @@ header {
         vertical-align: top;
         z-index: 10;
 
-        a {
+        .menu__link {
           font-family: $alshaya-bold;
           font-weight: normal;
           color: $mm_l2_link;
+          line-height: 1.4;
+        }
 
+        a {
           &:hover {
             color: $mm_l2_link_hover !important;
           }
@@ -773,7 +782,7 @@ header {
 
         &:hover {
           &::after {
-            background: url('../imgs/icons/icon-chevron-next--hover.svg');
+            background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next--hover.svg');
           }
         }
       }
@@ -822,6 +831,18 @@ header {
   }
 }
 
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    .menu--one__link {
+      @include breakpoint($upto-desktop) {
+        padding: 1rem 0;
+        padding-bottom: 0.9375rem;
+        padding-#{$right}: 1.4rem;
+      }
+    }
+  }
+}
+
 @include breakpoint($desktop) {
   .overlay::before {
     content: '';
@@ -860,7 +881,7 @@ header {
     margin-#{$right}: 2rem;
     margin-bottom: 1.5rem;
 
-    > .menu-two__link-wrapper a {
+    > .menu-two__link-wrapper .menu__link {
       font-family: $alshaya-bold !important;
       font-size: 0.875rem !important;
       color: $mm_l2_link !important;
@@ -963,7 +984,7 @@ header {
     }
   }
 
-  .main--menu a {
+  .main--menu .menu__link {
     font-family: $alshaya-thin;
     font-size: 0.75rem;
     text-decoration: none;
@@ -1010,7 +1031,7 @@ header {
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $mm_l1_border;
 
-      a {
+      .menu-two__link {
         padding-top: 0.9375rem;
         padding-bottom: 0.9375rem;
       }
@@ -1031,7 +1052,7 @@ header {
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $mm_l1_border;
 
-      a {
+      .menu--three__link {
         padding-top: 0.9375rem;
         padding-bottom: 0.9375rem;
       }

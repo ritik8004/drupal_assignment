@@ -247,15 +247,11 @@
     #change-address {
       font-size: 0.875rem;
       font-weight: normal;
-      padding: 0.875rem;
+      padding: 0.875rem 0.875rem 0.4375rem;
       display: inline-block;
       color: $address_book_change_link;
       text-transform: uppercase;
       border-#{$right}: 1px solid $address_book_border;
-
-      html[lang=en] & {
-        padding-top: 1.125rem;
-      }
     }
   }
 }
