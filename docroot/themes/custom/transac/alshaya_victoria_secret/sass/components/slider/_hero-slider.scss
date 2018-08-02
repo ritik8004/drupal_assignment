@@ -1,0 +1,21 @@
+.c-content__slider {
+  .paragraph-banner.slick-slider {
+    .slick-track,
+    .slick-list {
+      @include breakpoint($tablet) {
+        width: 100% !important;
+      }
+    }
+
+    .slick-list {
+      @include breakpoint($tablet) {
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
+}
