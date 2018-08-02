@@ -1,5 +1,14 @@
 %page-title {
   text-transform: uppercase;
+  font-size: 1.125rem;
+
+  @include breakpoint($tablet) {
+    font-size: 1.375rem;
+  }
+
+  @include breakpoint($desktop) {
+    font-size: 1.25rem;
+  }
 }
 
 .subtitle,
