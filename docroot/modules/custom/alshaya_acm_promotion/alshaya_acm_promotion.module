@@ -91,7 +91,7 @@ function alshaya_acm_promotion_acq_sku_base_fields_updated(array $fields, $op = 
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
       }
       break;
 

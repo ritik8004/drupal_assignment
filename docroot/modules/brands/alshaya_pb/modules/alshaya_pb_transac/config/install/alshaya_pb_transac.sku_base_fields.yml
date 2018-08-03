@@ -1,0 +1,47 @@
+fields:
+  color_lhn:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
+    index: 1
+    facet: 1
+  finish_lhn:
+    label: 'Finish'
+    cardinality: -1
+    index: 1
+    facet: 1
+  furniturefinish_lhn:
+    label: 'Furniture Finish'
+    cardinality: -1
+    index: 1
+    facet: 1
+  material_lhn:
+    label: 'Material'
+    cardinality: -1
+    index: 1
+    facet: 1
+  producttype_lhn:
+    label: 'Product Type'
+    cardinality: -1
+    index: 1
+    facet: 1
+  size_lhn:
+    label: 'Size'
+    cardinality: -1
+    index: 1
+    facet: 1
+  style_lhn:
+    label: 'Style'
+    cardinality: -1
+    index: 1
+    facet: 1
+  finish:
+    label: 'Finish'
+    configurable: 1
+  furniture_finish:
+    label: 'Furniture Finish'
+    configurable: 1
+  white_glove_delivery:
+    label: 'White Glove Delivery'
+    type: 'string'
+
