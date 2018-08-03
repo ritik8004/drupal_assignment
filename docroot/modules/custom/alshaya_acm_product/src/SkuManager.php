@@ -4,7 +4,9 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -133,6 +135,13 @@ class SkuManager {
   protected $currentRequest;
 
   /**
+   * Cart Form helper service.
+   *
+   * @var \Drupal\acq_sku\CartFormHelper
+   */
+  protected $cartFormHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -153,6 +162,8 @@ class SkuManager {
    *   The logger service.
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
+   * @param \Drupal\acq_sku\CartFormHelper $cart_form_helper
+   *   Cart Form helper service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -171,6 +182,7 @@ class SkuManager {
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
+                              CartFormHelper $cart_form_helper,
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
@@ -186,6 +198,7 @@ class SkuManager {
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
+    $this->cartFormHelper = $cart_form_helper;
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
@@ -1371,6 +1384,13 @@ class SkuManager {
 
         $combinations['by_sku'][$sku_code][$code] = $value;
         $combinations['attribute_sku'][$code][$value][] = $sku_code;
+      }
+    }
+
+    // Sort the values in attribute_sku so we can use it later.
+    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
+      if ($this->cartFormHelper->isAttributeSortable($code)) {
+        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
       }
     }
 

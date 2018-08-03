@@ -19,6 +19,20 @@
   }
 
   &.checkout-delivery {
+    form.show-only-buttons {
+      #edit-delivery-tabs {
+        .tab:not(.tab-separator) {
+          @include breakpoint($only-mobile) {
+            border: 1px solid $checkout_tab_default_border !important;
+
+            h2 {
+              font-family: $vs-regular;
+            }
+          }
+        }
+      }
+    }
+
     #edit-delivery-tabs {
       @include breakpoint($only-tablet) {
         margin-top: 0;

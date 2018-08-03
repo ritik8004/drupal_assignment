@@ -6,9 +6,9 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -294,7 +294,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function alshaya_hm_presave(SKUInterface $sku) {
+function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
   // Update composition field.
   $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
   if (!empty($composition)) {
