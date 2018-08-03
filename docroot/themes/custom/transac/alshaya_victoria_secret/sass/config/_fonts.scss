@@ -68,6 +68,34 @@
 }
 
 @font-face {
+  font-family: "BentonSans-Medium";
+  src: url("../fonts/BentonSans-Medium.eot");
+  src:
+    url("../fonts/BentonSans-Medium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Medium.otf") format("opentype"),
+    url("../fonts/BentonSans-Medium.svg") format("svg"),
+    url("../fonts/BentonSans-Medium.ttf") format("truetype"),
+    url("../fonts/BentonSans-Medium.woff") format("woff"),
+    url("../fonts/BentonSans-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BentonSans-Regular";
+  src: url("../fonts/BentonSans-Regular.eot");
+  src:
+    url("../fonts/BentonSans-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Regular.otf") format("opentype"),
+    url("../fonts/BentonSans-Regular.svg") format("svg"),
+    url("../fonts/BentonSans-Regular.ttf") format("truetype"),
+    url("../fonts/BentonSans-Regular.woff") format("woff"),
+    url("../fonts/BentonSans-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "HarrietDisplay";
   src: url("../fonts/HarrietDisplay.eot");
   src:
@@ -139,6 +167,10 @@ $vs-bold: 'BentonSans-Bold', 'DroidArabicKufi-Bold';
 $vs-regular: 'BentonSans-Book', 'DroidArabicKufi';
 $vspromo: 'HarrietDisplay', 'DroidArabicKufi';
 $vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light';
+
+// Extra fonts for PDP and Today's Offer
+$vs-to-medium: 'BentonSans-Medium';
+$vs-to-regular: 'BentonSans-Regular';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
