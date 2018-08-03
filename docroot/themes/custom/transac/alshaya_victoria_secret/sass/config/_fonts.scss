@@ -183,10 +183,10 @@ $vspromo: 'HarrietDisplay', 'DroidArabicKufi';
 $vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light';
 
 // Extra fonts for PDP and Today's Offer
-$vs-medium: 'BentonSans-Medium';
-$vs-light: 'BentonSans-Light';
-$vs-to-regular: 'BentonSans-Regular';
-$vs-bentonsanscomp: 'BentonSansCompMedium';
+$vs-bentonsans-medium: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
+$vs-bentonsans-light: 'BentonSans-Light', 'DroidArabicKufi';
+$vs-bentonsans-regular: 'BentonSans-Regular', 'DroidArabicKufi';
+$vs-bentonsanscomp-medium: 'BentonSansCompMedium', 'DroidArabicKufi-Bold';
 
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
