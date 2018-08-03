@@ -9,6 +9,7 @@
       // Using px value for 0.25em.
       letter-spacing: 2.75px;
       text-align: $left;
+      margin-#{$left}: 1.25rem;
 
       @include normal-arabic-letter-spacing;
     }
