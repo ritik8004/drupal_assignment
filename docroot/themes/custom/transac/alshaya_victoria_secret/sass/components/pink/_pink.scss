@@ -76,13 +76,13 @@
           span {
             text-transform: uppercase;
             font-family: $pink-pinkslab;
-            font-size: 2.25rem;
-            letter-spacing: 2px;
+            font-size: 2.625rem;
+            letter-spacing: 2.1px;
 
             &.title--sub {
               font-family: $pink-pinksans;
-              font-size: 1.125rem;
-              letter-spacing: 1px;
+              font-size: 1.1875rem !important;
+              letter-spacing: 1.33px;
             }
           }
         }
@@ -94,9 +94,10 @@
         button[type="submit"] {
           font-family: $pink-pinksans;
           font-size: 1.25rem;
-          letter-spacing: 1px;
-          font-weight: 700;
+          // Using px value for 0.07em.
+          letter-spacing: 1.4px;
           text-transform: uppercase;
+          line-height: 28px;
         }
       }
     }
@@ -105,7 +106,8 @@
     .delivery-options-wrapper {
       .field__label {
         font-family: $pink-pinkslab;
-        font-size: 1.5rem;
+        font-size: 1.875rem;
+        // Using px value for 0.05em.
         letter-spacing: 1.5px;
         text-transform: uppercase;
       }
@@ -114,7 +116,8 @@
     .subtitle {
       &.crossell-title {
         font-family: $pink-pinkslab;
-        font-size: 1.5rem;
+        font-size: 1.875rem;
+        // Using px value for 0.05em.
         letter-spacing: 1.5px;
         text-transform: uppercase;
       }
@@ -153,7 +156,7 @@
         }
 
         .field--name-field-title {
-          font-family: $pink-pinksans;
+          font-family: $pink-pinksans-130;
           font-size: 2rem;
           // Using px value for 0.07em.
           letter-spacing: 2.24px;
