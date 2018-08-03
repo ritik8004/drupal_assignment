@@ -96,6 +96,20 @@
 }
 
 @font-face {
+  font-family: "BentonSans-Light";
+  src: url("../fonts/BentonSans-Light.eot");
+  src:
+    url("../fonts/BentonSans-Light.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Light.otf") format("opentype"),
+    url("../fonts/BentonSans-Light.svg") format("svg"),
+    url("../fonts/BentonSans-Light.ttf") format("truetype"),
+    url("../fonts/BentonSans-Light.woff") format("woff"),
+    url("../fonts/BentonSans-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "HarrietDisplay";
   src: url("../fonts/HarrietDisplay.eot");
   src:
@@ -169,7 +183,8 @@ $vspromo: 'HarrietDisplay', 'DroidArabicKufi';
 $vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light';
 
 // Extra fonts for PDP and Today's Offer
-$vs-to-medium: 'BentonSans-Medium';
+$vs-medium: 'BentonSans-Medium';
+$vs-light: 'BentonSans-Light';
 $vs-to-regular: 'BentonSans-Regular';
 $vs-bentonsanscomp: 'BentonSansCompMedium';
 
