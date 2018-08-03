@@ -53,9 +53,20 @@
       height: 2.5rem;
       margin-top: 2.125rem;
 
+      .super-category-victorias-secret & {
+        font-family: $vs-bentonsanscomp;
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+      }
+
       @include breakpoint($only-tablet) {
         float: $left;
         margin-#{$left}: 1.5rem;
+
+        .super-category-victorias-secret & {
+          margin-#{$left}: 1.25rem;
+        }
 
         html[lang=ar] & {
           padding: 0.725rem 0.5rem;
