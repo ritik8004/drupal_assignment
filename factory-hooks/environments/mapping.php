@@ -214,6 +214,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn KW.
     'pbkw' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_dev2',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbkw_test',
@@ -221,6 +225,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn SA.
     'pbsa' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_dev2',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbsa_test',
@@ -228,6 +236,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn AE.
     'pbae' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_dev2',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbae_test',
