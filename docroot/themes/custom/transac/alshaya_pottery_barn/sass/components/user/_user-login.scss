@@ -39,6 +39,10 @@
         @include breakpoint($desktop) {
           margin-top: 2.3rem;
         }
+
+        .form-submit {
+          font-size: 0.75rem;
+        }
       }
     }
   }

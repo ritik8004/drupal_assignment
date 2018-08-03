@@ -13,6 +13,16 @@
   }
 
   @include breakpoint($desktop) {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+  }
+}
+
+.c-user-password,
+.c-user-register,
+.c-user-login {
+  &.user-page form {
+    .form-submit {
+      color: $secondary_brand_button_text;
+    }
   }
 }
