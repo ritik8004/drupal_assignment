@@ -275,7 +275,7 @@ header {
     .site-brand-home {
       img {
         @include breakpoint($desktop) {
-          max-width: 21.875rem;
+          max-width: 18.75rem;
           width: auto;
           margin: auto;
           text-align: center;
