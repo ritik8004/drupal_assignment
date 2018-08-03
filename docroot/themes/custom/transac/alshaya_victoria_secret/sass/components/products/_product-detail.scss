@@ -54,10 +54,12 @@
       margin-top: 2.125rem;
 
       .super-category-victorias-secret & {
-        font-family: $vs-bentonsanscomp;
+        font-family: $vs-bentonsanscomp-medium;
         font-size: 1.1875rem;
         font-weight: 700;
         letter-spacing: 0.15em;
+
+        @include normal-arabic-letter-spacing;
       }
 
       @include breakpoint($only-tablet) {
