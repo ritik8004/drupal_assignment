@@ -68,6 +68,48 @@
 }
 
 @font-face {
+  font-family: "BentonSans-Medium";
+  src: url("../fonts/BentonSans-Medium.eot");
+  src:
+    url("../fonts/BentonSans-Medium.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Medium.otf") format("opentype"),
+    url("../fonts/BentonSans-Medium.svg") format("svg"),
+    url("../fonts/BentonSans-Medium.ttf") format("truetype"),
+    url("../fonts/BentonSans-Medium.woff") format("woff"),
+    url("../fonts/BentonSans-Medium.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BentonSans-Regular";
+  src: url("../fonts/BentonSans-Regular.eot");
+  src:
+    url("../fonts/BentonSans-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Regular.otf") format("opentype"),
+    url("../fonts/BentonSans-Regular.svg") format("svg"),
+    url("../fonts/BentonSans-Regular.ttf") format("truetype"),
+    url("../fonts/BentonSans-Regular.woff") format("woff"),
+    url("../fonts/BentonSans-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BentonSans-Light";
+  src: url("../fonts/BentonSans-Light.eot");
+  src:
+    url("../fonts/BentonSans-Light.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/BentonSans-Light.otf") format("opentype"),
+    url("../fonts/BentonSans-Light.svg") format("svg"),
+    url("../fonts/BentonSans-Light.ttf") format("truetype"),
+    url("../fonts/BentonSans-Light.woff") format("woff"),
+    url("../fonts/BentonSans-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "HarrietDisplay";
   src: url("../fonts/HarrietDisplay.eot");
   src:
@@ -107,6 +149,19 @@
 }
 
 @font-face {
+  font-family: "PinkSans-130";
+  src: url("../fonts/vsfonts/pink/PinkSans-130.eot");
+  src:
+    url("../fonts/vsfonts/pink/PinkSans-130.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/vsfonts/pink/PinkSans-130.svg") format("svg"),
+    url("../fonts/vsfonts/pink/PinkSans-130.ttf") format("truetype"),
+    url("../fonts/vsfonts/pink/PinkSans-130.woff") format("woff"),
+    url("../fonts/vsfonts/pink/PinkSans-130.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "PinkSlab";
   src: url("../fonts/vsfonts/pink/titles/PinkSlab-130.eot");
   src:
@@ -140,6 +195,12 @@ $vs-regular: 'BentonSans-Book', 'DroidArabicKufi';
 $vspromo: 'HarrietDisplay', 'DroidArabicKufi';
 $vspromo-regular: 'BentonSans-Book', 'GESSTwoLight-Light';
 
+// Extra fonts for PDP and Today's Offer
+$vs-bentonsans-medium: 'BentonSans-Medium', 'DroidArabicKufi-Bold';
+$vs-bentonsans-light: 'BentonSans-Light', 'DroidArabicKufi';
+$vs-bentonsans-regular: 'BentonSans-Regular', 'DroidArabicKufi';
+$vs-bentonsanscomp-medium: 'BentonSansCompMedium', 'DroidArabicKufi-Bold';
+
 // Arabic fonts.
 // Adding En fonts so browser prints English characters & numbers correctly in arabic.
 $vs-arabic-bold: 'DroidArabicKufi-Bold', 'BentonSans-Bold';
@@ -151,11 +212,9 @@ $vs-icons: 'alshaya-icons';
 $body_font: $vs-regular;
 
 // Used for victoria's pink super category content.
-$pink-pinksans: 'PinkSans';
-$pink-pinkslab: 'PinkSlab';
-
-// Used for victoria's sport super category content.
-$vs-sport-bentonsanscomp: 'BentonSansCompMedium';
+$pink-pinksans: 'PinkSans', 'DroidArabicKufi';
+$pink-pinksans-130: 'PinkSans-130', 'DroidArabicKufi';
+$pink-pinkslab: 'PinkSlab', 'DroidArabicKufi-Bold';
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in VS theme.
 $arial: $vs-regular;
