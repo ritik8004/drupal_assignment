@@ -275,7 +275,7 @@ header {
     .site-brand-home {
       img {
         @include breakpoint($desktop) {
-          max-width: 21.875rem;
+          max-width: 18.75rem;
           width: auto;
           margin: auto;
           text-align: center;
@@ -320,6 +320,10 @@ header {
 .mobile--overlay {
   .c-menu-primary .region__menu-primary .menu--mobile-navigation {
     z-index: 5;
+  }
+
+  #block-cartminiblock {
+    z-index: 4;
   }
 }
 

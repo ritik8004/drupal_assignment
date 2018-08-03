@@ -1,5 +1,5 @@
 .c-content__slider {
-  .paragraph-banner.slick-slider {
+  .slick-slider {
     .slick-track,
     .slick-list {
       @include breakpoint($tablet) {
@@ -9,13 +9,9 @@
 
     .slick-list {
       @include breakpoint($tablet) {
-        left: 0;
-        right: 0;
+        #{$left}: 0 !important;
+        #{$right}: 0;
       }
     }
-  }
-
-  @include breakpoint($only-mobile) {
-    display: none;
   }
 }
