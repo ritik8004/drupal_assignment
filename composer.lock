@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a504ad2f9cea0ab2732265e8d11637c",
+    "content-hash": "5b9cd69ffb4c48f8ad738b203de6049e",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -2837,17 +2837,17 @@
         },
         {
             "name": "drupal/amptheme",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/amptheme",
-                "reference": "8.x-1.0"
+                "reference": "8.x-1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/amptheme-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "d515a1b7be432101593634ba8accf3752813e2fb"
+                "url": "https://ftp.drupal.org/files/projects/amptheme-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "c969746f56cbff42fc93678271179307e2a8e995"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -2858,22 +2858,23 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1467417239",
+                    "version": "8.x-1.1",
+                    "datestamp": "1523124480",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Add svg file with defined viewbox height and width": "https://www.drupal.org/files/issues/amptheme-do_not_use_the_network_for_loading_logo_information-2753089-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "KarenS",
+                    "homepage": "https://www.drupal.org/user/45874"
+                },
                 {
                     "name": "mdrummond",
                     "homepage": "https://www.drupal.org/user/360968"
@@ -2883,6 +2884,7 @@
                     "homepage": "https://www.drupal.org/user/751908"
                 }
             ],
+            "description": "The AMP Base theme converts core templates to use AMP HTML.",
             "homepage": "https://www.drupal.org/project/amptheme",
             "support": {
                 "source": "http://cgit.drupalcode.org/amptheme"
@@ -3041,7 +3043,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/better_exposed_filters",
-                "reference": "d554c78fd329c29831778aa297e654d6b54923af"
+                "reference": "cbe7f88e01ef11ebcc6a4c03b50d599dab616bce"
             },
             "require": {
                 "drupal/core": "*"
@@ -3052,8 +3054,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha3+4-dev",
-                    "datestamp": "1503116944",
+                    "version": "8.x-3.0-alpha4+2-dev",
+                    "datestamp": "1528693089",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -3062,12 +3064,24 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
+                    "name": "jkopel",
+                    "homepage": "https://www.drupal.org/user/66207"
+                },
+                {
                     "name": "mikeker",
                     "homepage": "https://www.drupal.org/user/192273"
+                },
+                {
+                    "name": "mortona2k",
+                    "homepage": "https://www.drupal.org/user/1029484"
+                },
+                {
+                    "name": "rlhawk",
+                    "homepage": "https://www.drupal.org/user/352283"
                 }
             ],
             "description": "Provides advanced options (such as links, checkboxes, or jQueryUI widgets) for exposed Views elements.",
@@ -3075,7 +3089,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/better_exposed_filters"
             },
-            "time": "2017-11-03T01:51:12+00:00"
+            "time": "2018-07-28T20:33:13+00:00"
         },
         {
             "name": "drupal/block_content_machine_name",
@@ -6824,17 +6838,17 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "1.2.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/metatag",
-                "reference": "8.x-1.2"
+                "reference": "8.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "f64745456579bb0ff8139a38d8d5de673868d94c"
+                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "48f1c2a4e93ef1af1eb4b5b6cc6321e951fd1002"
             },
             "require": {
                 "drupal/core": "*",
@@ -6844,8 +6858,8 @@
                 "drupal/devel": "^1.0",
                 "drupal/metatag_dc": "*",
                 "drupal/metatag_open_graph": "*",
-                "drupal/restui": "*",
-                "restui/restui": "^1.0"
+                "drupal/redirect": "^1.0",
+                "drupal/restui": "^1.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -6853,15 +6867,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1506714244",
+                    "version": "8.x-1.5",
+                    "datestamp": "1522344484",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/metatag-n2628934-23.patch"
+                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2018-04-23/2628934-32.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6882,7 +6896,7 @@
             "description": "Manage meta tags for all entities.",
             "homepage": "https://www.drupal.org/project/metatag",
             "keywords": [
-                "php",
+                "Drupal",
                 "seo"
             ],
             "support": {
@@ -8164,15 +8178,21 @@
         },
         {
             "name": "drupal/recaptcha",
-            "version": "dev-2.x",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/recaptcha",
-                "reference": "19c973d76ea1c3a5cea2dabc593ffc8f0ebb428c"
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/recaptcha-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "bd77c79c33c6732328a7c582adbe0aaffe704e74"
             },
             "require": {
                 "drupal/captcha": "^1.0.0-alpha1",
-                "drupal/core": "*"
+                "drupal/core": "~8.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -8180,15 +8200,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.3+15-dev",
-                    "datestamp": "1533491581",
+                    "version": "8.x-2.3",
+                    "datestamp": "1521320880",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-76.patch"
+                    "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8220,10 +8240,9 @@
             "description": "Protect your website from spam and abuse while letting real people pass through with ease.",
             "homepage": "https://www.drupal.org/project/recaptcha",
             "support": {
-                "source": "https://git.drupal.org/project/recaptcha.git",
+                "source": "http://git.drupal.org/project/recaptcha.git",
                 "issues": "https://www.drupal.org/project/issues/recaptcha"
-            },
-            "time": "2018-08-08T18:24:33+00:00"
+            }
         },
         {
             "name": "drupal/redirect",
@@ -16777,7 +16796,6 @@
         "drupal/default_content": 15,
         "drupal/taxonomy_term_depth": 20,
         "drupal/captcha": 10,
-        "drupal/recaptcha": 20,
         "drupal/clientside_validation": 20,
         "drupal/profile": 15,
         "drupal/field_group": 10,
