@@ -10,7 +10,7 @@ then
   echo "No need to run validations."
 else
   blt validate:all
-  #blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
+  blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
   # Disabling Behat tests on CI.
   #blt tests:all --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
 fi
