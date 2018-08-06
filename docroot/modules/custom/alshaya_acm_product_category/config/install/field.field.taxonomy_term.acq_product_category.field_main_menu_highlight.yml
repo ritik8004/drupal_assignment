@@ -48,9 +48,6 @@ settings:
       related_info_one_column:
         weight: 16
         enabled: false
-      1_row_1_col_dept:
-        weight: 27
-        enabled: false
       1_row_2_col:
         weight: 28
         enabled: false
@@ -65,9 +62,6 @@ settings:
         enabled: false
       1_row_3_col_delivery_banner:
         weight: 33
-        enabled: false
-      1_row_3_col_dept:
-        weight: 34
         enabled: false
       1_row_3_col_text:
         weight: 35

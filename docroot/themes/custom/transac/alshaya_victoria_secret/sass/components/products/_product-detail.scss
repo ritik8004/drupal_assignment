@@ -53,9 +53,22 @@
       height: 2.5rem;
       margin-top: 2.125rem;
 
+      .super-category-victorias-secret & {
+        font-family: $vs-bentonsanscomp-medium;
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+
+        @include normal-arabic-letter-spacing;
+      }
+
       @include breakpoint($only-tablet) {
         float: $left;
         margin-#{$left}: 1.5rem;
+
+        .super-category-victorias-secret & {
+          margin-#{$left}: 1.25rem;
+        }
 
         html[lang=ar] & {
           padding: 0.725rem 0.5rem;
@@ -536,14 +549,17 @@ html[lang="en"] .super-category-victorias-secret {
       h2 {
         width: 100%;
 
-        span {
+        .title--main {
           font-size: 1.625rem;
-
-          &.title--sub {
-            font-size: 0.875rem;
-          }
         }
       }
+    }
+  }
+
+  .subtitle {
+    &.crossell-title {
+      font-family: $vs-bentonsans-light;
+      font-size: 1.375rem;
     }
   }
 }
@@ -563,6 +579,44 @@ html[lang="ar"] {
             font-size: 0.875rem;
           }
         }
+      }
+    }
+  }
+}
+
+.acq-content-product,
+.acq-content-product-modal {
+  .content__title_wrapper {
+    span {
+      &.title--sub {
+        font-family: $vs-regular;
+        font-size: 0.75rem !important;
+        letter-spacing: 2.4px;
+      }
+
+      &.title--main {
+        font-family: $vs-bentonsans-light;
+        color: $pdp_product_title;
+      }
+    }
+
+    .price-block {
+      .price,
+      .price--discount {
+        font-family: $vs-bentonsans-regular;
+        font-size: 0.875rem;
+        // Using px value for .04em.
+        letter-spacing: 0.56px;
+      }
+    }
+  }
+
+  .content__sidebar {
+    .short-description-wrapper,
+    .delivery-options-wrapper {
+      .field__label {
+        font-family: $vs-bentonsans-light;
+        font-size: 1.375rem;
       }
     }
   }

@@ -84,7 +84,7 @@ header {
       background-size: contain;
       width: 1rem;
       height: 1rem;
-      margin: 0.65rem 0.75rem;
+      margin: 0.65rem 0.5rem;
 
       @include breakpoint($desktop) {
         background-size: 0.75rem;
@@ -110,7 +110,7 @@ header {
         @include breakpoint($desktop) {
           background-position-x: 84% !important;
           width: 12.5rem;
-          padding-#{$left}: 2.625rem;
+          padding-#{$left}: 2rem;
           padding-#{$right}: 0.4375rem;
 
           html[lang="ar"] & {
@@ -127,10 +127,6 @@ header {
           color: $primary_search_input_placeholder;
           font-size: 0.875rem;
           text-transform: capitalize;
-
-          @include breakpoint($desktop) {
-            font-size: 0.6875rem !important;
-          }
         }
       }
     }
@@ -158,6 +154,14 @@ header {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    .menu--two__list {
+      .menu--two__list-item {
+        .menu--three__list li {
+          max-width: 12rem;
+        }
+      }
+    }
+
     ul.menu--one__list {
       text-align: center;
       width: 100%;
@@ -456,9 +460,11 @@ header {
 
 html[lang="en"] {
   .block-alshaya-main-menu {
-    a {
-      &.menu__link {
-        letter-spacing: 2.4px;
+    .menu--one__list-item {
+      & > .menu__link-wrapper {
+        & > a.menu__link {
+          letter-spacing: 2.4px;
+        }
       }
     }
   }

@@ -6,9 +6,9 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -16,14 +16,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  * Implements hook_form_alter().
  */
 function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
-    // Change position label.
-    if (isset($form['sort_bef_combine']['#options']['nid ASC']) && $form['sort_bef_combine']['#options']['nid ASC']) {
-      $form['sort_bef_combine']['#options']['nid ASC'] = t('Best Seller');
-    }
-
-  }
-
   if ($form_id == 'alshaya_newsletter_subscribe') {
     $form['email']['#prefix'] = '<div class="newsletter-block-label">' . t('Be the first to know about our newest arrivals, special offers and store events near you.') . '</div>';
   }
@@ -294,7 +286,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function alshaya_hm_presave(SKUInterface $sku) {
+function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
   // Update composition field.
   $composition = json_decode($sku->get('attr_composition')->getString(), TRUE);
   if (!empty($composition)) {
