@@ -58,6 +58,26 @@
   }
 }
 
+.c-menu-secondary,
+.toggle--sign,
+.main--menu ul.menu--one__list {
+  @include breakpoint($upto-desktop) {
+    width: 16.8125rem;
+  }
+}
+
+.c-my-account-nav {
+  @include breakpoint($upto-desktop) {
+    width: 16.8125rem !important;
+  }
+}
+
+.menu--active .mobile--close {
+  @include breakpoint($upto-desktop) {
+    #{$left}: 17.25rem;
+  }
+}
+
 .toggle--sign {
   .active {
     font-weight: bold;
@@ -101,8 +121,8 @@
   @include breakpoint($upto-desktop) {
     &::after {
       position: absolute;
-      top: -2px;
-      font-size: 1.4375rem;
+      #{$right}: -0.1875rem;
+      font-size: 1.313rem;
     }
   }
 }
