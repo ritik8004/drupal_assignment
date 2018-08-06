@@ -33,6 +33,14 @@
     @include breakpoint($only-tablet) {
       margin-top: 3.25rem;
     }
+
+    .user-login-form {
+      #edit-actions {
+        @include breakpoint($desktop) {
+          margin-top: 2.3rem;
+        }
+      }
+    }
   }
 }
 

@@ -79,25 +79,14 @@
 
       .hover-text {
         @include breakpoint($desktop) {
-          text-align: $right;
           padding-#{$right}: 0;
           position: relative;
           font-size: 0.6875rem;
-
-          &::before {
-            content: '';
-            background: url(../imgs/icons/magnifier-wth-plus.svg) center no-repeat;
-            width: 1.1875rem;
-            height: 1.0625rem;
-            background-size: contain;
-            position: absolute;
-            #{$right}: 33%;
-            top: 1.375rem;
-
-            html[lang=ar] & {
-              #{$right}: 47%;
-            }
-          }
+          background: url(../imgs/icons/magnifier-wth-plus.svg) $left no-repeat;
+          background-size: 1.1875rem 1.0625rem;
+          display: inline-block;
+          float: $right;
+          width: auto;
         }
       }
     }
