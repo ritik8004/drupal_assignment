@@ -16,6 +16,7 @@
     @include breakpoint($tablet) {
       font-size: 0.75rem;
       text-align: $right;
+
       .country-ae & {
         text-align: center;
       }
