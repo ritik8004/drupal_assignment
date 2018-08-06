@@ -233,7 +233,8 @@
             "drupal/password_policy" : {
                 "Code logic will never reset password expiry - update" : "https://www.drupal.org/files/issues/2867089-9.patch",
                 "Cron expire date format and timezone is incorrect, leads to infinite password resets." : "https://www.drupal.org/files/issues/cron_expire_date_format-2860671-7.patch",
-                "Integration with change_pwd_page" : "https://www.drupal.org/files/issues/2933746-3.patch"
+                "Integration with change_pwd_page" : "https://www.drupal.org/files/issues/2933746-3.patch",
+                "Remove 'bypass password policies' permission" : "https://www.drupal.org/files/issues/password_policy-2862906-2.patch"
             },
             "drupal/change_pwd_page" : {
                 "Integration with password_policy" : "https://www.drupal.org/files/issues/2933747-4.patch"
