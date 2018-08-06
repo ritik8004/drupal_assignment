@@ -26,3 +26,17 @@
     }
   }
 }
+
+.path--user {
+  .l-two--sf {
+    @include breakpoint($desktop) {
+      margin-top: 2rem;
+    }
+  }
+
+  .my-account-nav {
+    @include breakpoint($desktop) {
+      margin-top: -0.75rem;
+    }
+  }
+}
