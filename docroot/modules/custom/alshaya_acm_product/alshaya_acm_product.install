@@ -12,19 +12,6 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Clear alshaya_product cache, there is change in logic to calculate prices.
- */
-function alshaya_acm_product_update_8025() {
-  // This is added here again (instead of re-using 8024 as it is part of next
-  // release.
-  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
-  $cache = \Drupal::service('cache.alshaya_product');
-  $cache->deleteAllPermanent();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Clear alshaya_product cache as there is change in data structure.
  */
 function alshaya_acm_product_update_8024() {
