@@ -16,14 +16,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  * Implements hook_form_alter().
  */
 function alshaya_hm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
-    // Change position label.
-    if (isset($form['sort_bef_combine']['#options']['nid ASC']) && $form['sort_bef_combine']['#options']['nid ASC']) {
-      $form['sort_bef_combine']['#options']['nid ASC'] = t('Best Seller');
-    }
-
-  }
-
   if ($form_id == 'alshaya_newsletter_subscribe') {
     $form['email']['#prefix'] = '<div class="newsletter-block-label">' . t('Be the first to know about our newest arrivals, special offers and store events near you.') . '</div>';
   }
