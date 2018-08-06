@@ -318,9 +318,12 @@ class SkuManager {
 
     $sku_price = 0;
 
-    foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
+    $combinations = $this->getConfigurableCombinations($sku_entity);
+    $children = isset($combinations['by_sku']) ? array_keys($combinations['by_sku']) : [];
+
+    foreach ($children as $child_sku_code) {
       try {
-        $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $sku_entity->language()->getId());
+        $child_sku_entity = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
 
         if ($child_sku_entity instanceof SKU) {
           $price = (float) $child_sku_entity->get('price')->getString();
@@ -1494,11 +1497,23 @@ class SkuManager {
    *   Data if found or null.
    */
   public function getProductCachedData(SKU $sku, $key = 'price') {
+    $static = &drupal_static('alshaya_product_cached_data', []);
+
     $cid = $this->getProductCachedId($sku);
+
+    // Try once in static cache.
+    if (isset($static[$cid], $static[$cid][$key])) {
+      return $static[$cid][$key];
+    }
+
+    // Load from cache.
     $cache = $this->productCache->get($cid);
+
     if (isset($cache->data, $cache->data[$key])) {
+      $static[$cid][$key] = $cache->data[$key];
       return $cache->data[$key];
     }
+
     return NULL;
   }
 
@@ -1518,6 +1533,12 @@ class SkuManager {
     $data = $cache->data ?? [];
     $data[$key] = $value;
     $this->productCache->set($cid, $data);
+
+    // Update value in static cache too.
+    $static = &drupal_static('alshaya_product_cached_data', []);
+    if (isset($static[$cid], $static[$cid][$key])) {
+      $static[$cid][$key] = $value;
+    }
   }
 
   /**
