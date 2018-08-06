@@ -85,7 +85,8 @@
         "drupal/scheduled_updates": "^1.0@alpha",
         "drupal/ckeditor_font": "^1.0",
         "ckeditor/font": "^4.9",
-        "springimport/magento2-api-v1": "^1.0"
+        "springimport/magento2-api-v1": "^1.0",
+        "HubSpot/pace": "^1.0"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
@@ -151,6 +152,18 @@
                 "type": "drupal-library",
                 "dist": {
                     "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        "pace": {
+            "type": "package",
+            "package": {
+                "name": "HubSpot/pace",
+                "version": "1.0.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/HubSpot/pace/archive/master.zip",
                     "type": "zip"
                 }
             }
