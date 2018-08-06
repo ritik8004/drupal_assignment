@@ -233,12 +233,14 @@ $store_finder_icon: $PB_deep_red;
 $store_finder_text_hover: $PB_deep_red;
 $store_finder_border_hover: $PB_deep_red;
 $store_finder_backbtn: $_black_two;
-$store_finder_search_results_hour_label: $_black_two;
+$store_finder_search_results_hour_label: $PB_deep_red;
 $store_finder_get_direction_label_color: $PB_deep_red;
 $store_finder_search_results_tile_link: $PB_deep_red;
+$store_finder_search_results_label: $PB_black_one;
+$store_finder_search_results_hour_icon_open: $_black_two;
 
 // Store finder - search results.
-$store_finder_search_results_tile_icon: $PB_grey_one;
+$store_finder_search_results_tile_icon: $_black_two;
 $store_finder_search_results_tile_bg: $PB_white;
 $store_finder_search_results_tile_hover_bg: $PB_white;
 $store_finder_search_results_counter_bg: $PB_deep_red;
