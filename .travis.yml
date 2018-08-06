@@ -63,7 +63,7 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer validate --no-check-all --ansi
-  - composer install
+  - composer install --prefer-source --no-interaction --dev
   # Exit build early if only documentation was changed in a Pull Request.
   - source ${BLT_DIR}/scripts/travis/exit_early
 
