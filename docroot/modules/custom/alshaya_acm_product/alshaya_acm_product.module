@@ -1401,8 +1401,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $class_command = $quantity ? 'removeClass' : 'addClass';
     $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
 
-    // Update simple product description attributes. Composition is H&M
-    // specific attribute & hence should be handled conditionally.
+    // Update simple product description attributes.
     if ($tree_pointer->hasField('attr_composition')) {
       $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
       $composition_markup = [
@@ -1417,16 +1416,18 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     // Update simple product description attributes.
-    $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
-    $warning_markup = [
-      '#theme' => 'product_article_warning_markup',
-    ];
+    if ($tree_pointer->hasField('attr_article_warning')) {
+      $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
+      $warning_markup = [
+        '#theme' => 'product_article_warning_markup',
+      ];
 
-    if (!empty($warning)) {
-      $warning_markup['#warning']['#markup'] = $warning;
+      if (!empty($warning)) {
+        $warning_markup['#warning']['#markup'] = $warning;
+      }
+
+      $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
     }
-
-    $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
 
     // Update cross-sell region with products.
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')
