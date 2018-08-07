@@ -29,7 +29,7 @@
 }
 
 .c-footer__logos {
-  line-height: 4.375rem;
+  line-height: 70px;
 
   .country-ae & {
     padding-#{$right}: 0;
@@ -55,7 +55,7 @@
     margin-#{$right}: 0;
 
     ul {
-      margin-top: 4px;
+      margin-top: 0.25rem;
     }
   }
 
@@ -78,7 +78,7 @@
 }
 
 .menu--customer-rights-logo {
-  line-height: 4.375rem;
+  line-height: 70px;
 
   @include breakpoint($only-mobile) {
     float: none;
@@ -86,7 +86,7 @@
 
   @include breakpoint($only-tablet) {
     ul {
-      margin-top: 4px;
+      margin-top: 0.25rem;
     }
   }
 
@@ -112,28 +112,28 @@
   background-image: url(#{$base_theme_img_directory_path}/cards/card-verisign.svg);
   background-size: contain;
   background-repeat: no-repeat;
-  width: 70px;
-  height: 35px;
+  width: 4.375rem;
+  height: 2.1875rem;
 }
 
 .c-footer__logo--visa {
   background-image: url(#{$base_theme_img_directory_path}/cards/card-visa.svg);
   background-size: contain;
   background-repeat: no-repeat;
-  width: 65px;
-  height: 28px;
+  width: 4.0625rem;
+  height: 1.75rem;
 }
 
 .c-footer__logo--mastercard {
   background-image: url(#{$base_theme_img_directory_path}/cards/card-mastercard.svg);
-  width: 85px;
-  height: 26px;
+  width: 5.3125rem;
+  height: 1.625rem;
 }
 
 .c-footer__logo--customer-rights {
   background-image: url(#{$base_theme_img_directory_path}/cards/customer-right.svg);
-  width: 291px;
-  height: 33px;
+  width: 18.1875rem;
+  height: 2.0625rem;
 }
 
 .c-footer__copy {
