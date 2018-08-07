@@ -18,7 +18,19 @@
         &.search-active {
           .mobile--search {
             &::before {
-              color: transparent;
+              color: $header_c_menu_search_active_icon;
+            }
+          }
+        }
+
+        .store {
+          &:hover {
+            background-color: transparent;
+          }
+
+          &.is-active {
+            &::before {
+              color: $header_c_menu_store_active_icon;
             }
           }
         }
