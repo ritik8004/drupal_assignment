@@ -95,7 +95,7 @@ $settings['views_to_disable'] = [
 $settings['additional_modules'] = [];
 
 // Set page cache duration to 24 hours by default.
-$config['system.performance']['cache']['page']['max_age'] = 86400;
+$config['system.performance']['cache']['page']['max_age'] = 14400;
 
 // ################################################################
 // This switch/case is ONLY for per environment settings. If any of these
@@ -110,7 +110,7 @@ switch ($env) {
     $settings['additional_modules'][] = 'features_ui';
 
     // Increase autologout timeout on local so we are not always logged out.
-    $config['autologout.settings']['timeout'] = 14400;
+    $config['autologout.settings']['timeout'] = 86400;
 
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
