@@ -110,7 +110,7 @@ switch ($env) {
     $settings['additional_modules'][] = 'features_ui';
 
     // Increase autologout timeout on local so we are not always logged out.
-    $config['autologout.settings']['timeout'] = 86400;
+    $config['autologout.settings']['timeout'] = 14400;
 
     $config['simple_oauth.settings']['private_key'] = $settings['alshaya_acm_soauth_private_key'];
     $config['simple_oauth.settings']['public_key'] = $settings['alshaya_acm_soauth_public_key'];
