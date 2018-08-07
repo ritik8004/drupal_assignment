@@ -13,6 +13,29 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding new paragraph type 'Text links'.
+ */
+function alshaya_paragraphs_update_8118() {
+  $configs = [
+    'paragraphs.paragraphs_type.text_links',
+    'field.storage.paragraph.field_sub_link',
+    'field.storage.paragraph.field_heading_link',
+    'field.field.paragraph.text_links.field_sub_link',
+    'field.field.paragraph.text_links.field_heading_link',
+    'core.entity_view_display.paragraph.text_links.default',
+    'core.entity_form_display.paragraph.text_links.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+
+  $configs = [
+    'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_acm_product_category');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new paragraph type 'Delivery USP Block'.
  */
 function alshaya_paragraphs_update_8117() {

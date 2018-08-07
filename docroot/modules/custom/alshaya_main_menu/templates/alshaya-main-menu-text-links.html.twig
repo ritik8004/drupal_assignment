@@ -1,0 +1,14 @@
+{% if data.heading_link_title is not empty %}
+    <div class="text-links">
+        <div class="heading">
+            {{ link(data.heading_link_title, data.link) }}
+        </div>
+        <div class="sub-heading">
+            <ul>
+                {% for subheading in data.subheading %}
+                    <li>{{ link(subheading.subheading_link_title, subheading.link) }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

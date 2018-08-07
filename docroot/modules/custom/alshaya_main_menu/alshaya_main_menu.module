@@ -52,6 +52,12 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
         'data' => NULL,
       ],
     ],
+    'alshaya_main_menu_text_links' => [
+      'template' => 'alshaya-main-menu-text-links',
+      'variables' => [
+        'data' => NULL,
+      ],
+    ],
   ];
 }
 
@@ -137,7 +143,8 @@ function alshaya_main_menu_form_taxonomy_term_acq_product_category_form_alter(&$
 function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) {
   $variables['title_class'] = '';
   foreach ($variables['data']['highlight_paragraph'] as $highlight_paragraph) {
-    if ($highlight_paragraph['highlight_type'] == 'promo_block' || $highlight_paragraph['highlight_type'] == 'title_subtitle') {
+    if (($highlight_paragraph['paragraph_type'] == 'main_menu_highlight')
+      && ($highlight_paragraph['highlight_type'] == 'promo_block' || $highlight_paragraph['highlight_type'] == 'title_subtitle')) {
       // Adding the class only if promo block or combination of
       // image + title + subtitle is added.
       $variables['title_class'] = 'empty-highlight-title';
