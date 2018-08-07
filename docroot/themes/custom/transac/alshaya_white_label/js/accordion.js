@@ -237,6 +237,12 @@
     $(element).siblings().slideToggle('slow');
     $(element).toggleClass('ui-state-active');
     $(element).parent().toggleClass('facet-active');
+    if ($(element).hasClass('ui-state-active')) {
+      $(element).siblings('.facets-soft-limit-link').show();
+    }
+    else {
+      $(element).siblings('.facets-soft-limit-link').hide();
+    }
   };
 
 })(jQuery, Drupal);
