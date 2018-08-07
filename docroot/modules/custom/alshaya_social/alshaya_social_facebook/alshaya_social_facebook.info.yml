@@ -1,0 +1,5 @@
+name: 'Alshaya Social Facebook login'
+type: module
+core: 8.x
+dependencies:
+  - alshaya_social:alshaya_social
