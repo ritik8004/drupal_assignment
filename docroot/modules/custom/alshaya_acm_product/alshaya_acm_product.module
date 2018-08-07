@@ -1401,17 +1401,20 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $class_command = $quantity ? 'removeClass' : 'addClass';
     $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
 
-    // Update simple product description attributes.
-    $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
-    $composition_markup = [
-      '#theme' => 'product_composition_markup',
-    ];
+    // Update simple product description attributes. Composition is H&M
+    // specific attribute & hence should be handled conditionally.
+    if ($tree_pointer->hasField('attr_composition')) {
+      $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
+      $composition_markup = [
+        '#theme' => 'product_composition_markup',
+      ];
 
-    if (!empty($composition)) {
-      $composition_markup['#composition']['#markup'] = $composition;
+      if (!empty($composition)) {
+        $composition_markup['#composition']['#markup'] = $composition;
+      }
+
+      $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
     }
-
-    $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
     // Update simple product description attributes.
     $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
