@@ -315,7 +315,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
               $subheading_links[] = [
                 'subheading_link_uri' => $sublink['uri'],
                 'subheading_link_title' => $sublink['title'],
-                'link' => Url::fromUri($sublink['uri']),
+                'link' => $sublink['uri'] == 'internal:#' ? '' : Url::fromUri($sublink['uri']),
               ];
             }
           }
@@ -323,7 +323,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           $highlight_paragraphs[] = [
             'heading_link_uri' => $heading_link[0]['uri'],
             'heading_link_title' => $heading_link[0]['title'],
-            'link' => Url::fromUri($heading_link[0]['uri']),
+            'link' => $heading_link[0]['uri'] == 'internal:#' ? '' : Url::fromUri($heading_link[0]['uri']),
             'subheading' => $subheading_links,
             'paragraph_type' => $paragraph->getType(),
           ];
