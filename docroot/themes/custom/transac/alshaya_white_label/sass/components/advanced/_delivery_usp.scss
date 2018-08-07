@@ -23,7 +23,7 @@
         }
 
         &.slick-prev {
-          #{$left}: -4px;
+          #{$left}: -0.25rem;
 
           @include breakpoint($tablet) {
             #{$left}: 1.25rem;
@@ -31,7 +31,7 @@
         }
 
         &.slick-next {
-          #{$right}: -4px;
+          #{$right}: -0.25rem;
 
           @include breakpoint($tablet) {
             #{$right}: 1.25rem;
