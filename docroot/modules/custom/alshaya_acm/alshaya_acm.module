@@ -255,11 +255,6 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $form['actions']['checkout']['#attributes']['data-twig-suggestion'] = 'secure-checkout';
   $form['actions']['checkout']['#attributes']['class'][] = 'bottom-edit-checkout';
 
-  // Added link markup.
-  $form['actions_top']['checkout_top'] = [
-    '#markup' => '<a class="checkout-top-button top-edit-checkout" id="checkout-top">' . $form['actions']['checkout']['#value']->render() . '</a>',
-  ];
-
   if (!empty($out_of_stock_message)) {
     $form['actions']['checkout']['#attributes']['disabled'] = 'disabled';
 
