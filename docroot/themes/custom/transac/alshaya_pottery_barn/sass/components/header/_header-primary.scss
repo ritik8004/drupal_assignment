@@ -59,7 +59,7 @@ header {
           height: 1.3125rem;
 
           html[lang=ar] & {
-            margin-top: 0.625rem;
+            margin-top: 1rem;
           }
         }
       }
@@ -177,6 +177,10 @@ header {
 body {
   @include breakpoint($only-tablet) {
     margin-top: 7.875rem;
+
+    html[lang=ar] & {
+      margin-top: 8rem;
+    }
   }
 
   @include breakpoint($only-mobile) {
