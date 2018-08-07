@@ -174,6 +174,16 @@ function alshaya_acm_product_acq_sku_product_sku_alter(&$sku, $product) {
 }
 
 /**
+ * Implements hook_acq_sku_product_node_alter().
+ */
+function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $product) {
+  // Set node activation date if product activation date available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $node->setCreatedTime(strtotime($product['attributes']['product_activation_date']));
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function alshaya_acm_product_theme($existing, $type, $theme, $path) {
@@ -1402,28 +1412,32 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
 
     // Update simple product description attributes.
-    $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
-    $composition_markup = [
-      '#theme' => 'product_composition_markup',
-    ];
+    if ($tree_pointer->hasField('attr_composition')) {
+      $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
+      $composition_markup = [
+        '#theme' => 'product_composition_markup',
+      ];
 
-    if (!empty($composition)) {
-      $composition_markup['#composition']['#markup'] = $composition;
+      if (!empty($composition)) {
+        $composition_markup['#composition']['#markup'] = $composition;
+      }
+
+      $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
     }
-
-    $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
     // Update simple product description attributes.
-    $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
-    $warning_markup = [
-      '#theme' => 'product_article_warning_markup',
-    ];
+    if ($tree_pointer->hasField('attr_article_warning')) {
+      $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
+      $warning_markup = [
+        '#theme' => 'product_article_warning_markup',
+      ];
 
-    if (!empty($warning)) {
-      $warning_markup['#warning']['#markup'] = $warning;
+      if (!empty($warning)) {
+        $warning_markup['#warning']['#markup'] = $warning;
+      }
+
+      $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
     }
-
-    $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
 
     // Update cross-sell region with products.
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')

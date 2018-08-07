@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: customer-rights-logo
+label: 'Customer Rights Logo'
+description: 'Customer Rights Logo'
+locked: false
