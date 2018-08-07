@@ -655,3 +655,35 @@ function _alshaya_super_category_get_super_category_for_term(TermInterface $term
 
   return NULL;
 }
+
+/**
+ * Implements hook_alshaya_config_save_alter().
+ */
+function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_name) {
+  // Token to replace in title.
+  $token = '[supercategory:meta_title]';
+  $meta_configs = [
+    'metatag.metatag_defaults.node__advanced_page'                 => '[node:title] | ' . $token,
+    'metatag.metatag_defaults.node__acq_product'                   => '[node:title] | ' . $token,
+    'metatag.metatag_defaults.node__acq_promotion'                 => '[node:field_acq_promotion_label] | ' . $token,
+    'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[term:name] | ' . $token,
+  ];
+
+  // Only for the meta tag configs.
+  if (array_key_exists($config_name, $meta_configs)) {
+    // Super category status.
+    $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
+    // If super category feature is enabled.
+    if ($super_category_feature_enabled) {
+      // Just replace the title.
+      $data['tags']['title'] = $meta_configs[$config_name];
+    }
+    else {
+      $config_manager = \Drupal::service('alshaya_config.manager');
+      // When super category feature is disabled, we just reset the tokens from
+      // the module config YML.
+      $config_data = $config_manager->getDataFromCode($config_name, 'alshaya_seo_transac', 'install');
+      $data['tags']['title'] = $config_data['tags']['title'];
+    }
+  }
+}
