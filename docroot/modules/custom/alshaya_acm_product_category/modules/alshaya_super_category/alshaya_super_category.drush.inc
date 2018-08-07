@@ -80,10 +80,30 @@ function drush_alshaya_super_category_switch() {
   ]);
 
   // Update the meta title.
-  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')->save();
-  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')->save();
-  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')->save();
-  \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')->save();
+  if ($status) {
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')->save();
+  }
+  else {
+    $meta_configs = [
+      'metatag.metatag_defaults.node__advanced_page',
+      'metatag.metatag_defaults.node__acq_product',
+      'metatag.metatag_defaults.node__acq_promotion',
+      'metatag.metatag_defaults.taxonomy_term__acq_product_category',
+    ];
+    if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
+      $config_manager = \Drupal::service('alshaya_config.manager');
+      // When super category feature is disabled, we just reset the tokens from
+      // the module config YML.
+      foreach ($meta_configs as $meta_config) {
+        $config_data = $config_manager->getDataFromCode($meta_config, 'alshaya_seo_transac', 'install');
+        \Drupal::configFactory()->getEditable($meta_config)
+          ->set('tags.title', $config_data['tags']['title'])->save();
+      }
+    }
+  }
 
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
