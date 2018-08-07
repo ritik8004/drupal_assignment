@@ -14,13 +14,15 @@ else
   isTravisPr=1
 fi
 
+git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+
 # Only build any theme if we are outside of travis PR or no theme file was changed in PR
-if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep /themes/) ]])
+if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep /themes/) ]])
 then
   docrootDir="$1"
 
   # Skip building particular theme if we are in PRs and the theme files were not changed
-  if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep themes/custom/transac) ]])
+  if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/transac) ]])
   then
     echo -en "travis_fold:start:FE-Setup"
     echo -en "Start - Installing npm for transac themes"
@@ -30,7 +32,7 @@ then
   fi
 
   # Skip building particular theme if we are in PRs and the theme files were not changed
-  if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep themes/custom/non-transac) ]])
+  if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/non-transac) ]])
   then
     echo -en "Start - Installing npm for non-transac themes"
     cd $docrootDir/themes/custom/non_transac
@@ -39,7 +41,7 @@ then
   fi
 
   # Skip building particular theme if we are in PRs and the theme files were not changed
-  if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep themes/custom/amp) ]])
+  if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/amp) ]])
   then
     echo -en "Start - Installing npm amp themes"
     cd $docrootDir/themes/custom/amp
