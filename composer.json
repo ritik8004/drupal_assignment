@@ -28,7 +28,7 @@
         "drupal/facets": "1.0-alpha11",
         "drupal/profile": "^1.0@alpha",
         "drupal/field_group": "^3.0@beta",
-        "drupal/webform": "^5.0@beta",
+        "drupal/webform": "5.0.0-rc1",
         "drupal/back_to_top": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/mobile_number": "^1.0@alpha",
