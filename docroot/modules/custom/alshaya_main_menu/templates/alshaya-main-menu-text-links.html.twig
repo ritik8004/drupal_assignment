@@ -1,12 +1,22 @@
 {% if data.heading_link_title is not empty %}
     <div class="text-links">
         <div class="heading">
-            {{ link(data.heading_link_title, data.link) }}
+            {% if data.link is not empty %}
+              {{ link(data.heading_link_title, data.link) }}
+            {% else %}
+              {{ data.heading_link_title }}
+            {% endif %}
         </div>
         <div class="sub-heading">
             <ul>
                 {% for subheading in data.subheading %}
-                    <li>{{ link(subheading.subheading_link_title, subheading.link) }}</li>
+                    <li>
+                      {% if subheading.link is not empty %}
+                        {{ link(subheading.subheading_link_title, subheading.link) }}
+                      {% else %}
+                        {{ subheading.subheading_link_title }}
+                      {% endif %}
+                    </li>
                 {% endfor %}
             </ul>
         </div>
