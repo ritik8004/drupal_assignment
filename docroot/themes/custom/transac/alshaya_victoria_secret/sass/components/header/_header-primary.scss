@@ -154,6 +154,14 @@ header {
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
+    .menu--two__list {
+      .menu--two__list-item {
+        .menu--three__list li {
+          max-width: 12rem;
+        }
+      }
+    }
+
     ul.menu--one__list {
       text-align: center;
       width: 100%;
@@ -452,9 +460,11 @@ header {
 
 html[lang="en"] {
   .block-alshaya-main-menu {
-    a {
-      &.menu__link {
-        letter-spacing: 2.4px;
+    .menu--one__list-item {
+      & > .menu__link-wrapper {
+        & > a.menu__link {
+          letter-spacing: 2.4px;
+        }
       }
     }
   }
