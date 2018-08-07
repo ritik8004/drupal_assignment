@@ -18,7 +18,7 @@
         "drupal/default_content": "^1.0@alpha",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/password_policy": "^3.0",
-        "drupal/taxonomy_term_depth": "1.x-dev",
+        "drupal/taxonomy_term_depth": "2.x-dev",
         "drupal/email_registration": "^1.0",
         "drupal/captcha": "^1.0@beta",
         "drupal/recaptcha": "^2.3",
@@ -149,9 +149,6 @@
         },
         "enable-patching": true,
         "patches": {
-            "drupal/taxonomy_term_depth": {
-                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
-            },
             "drupal/search_api_solr": {
                 "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
             },
@@ -201,17 +198,13 @@
                 "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch",
                 "Add alter hook for admin check": "https://www.drupal.org/files/issues/2892237-2.patch"
             },
-            "drupal/r4032login": {
-                "Alter/Override options parameter": "https://www.drupal.org/files/issues/2883264-4.patch"
-            },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
                 "Fix more notices": "patches/mobile_number/2978729-custom.patch",
                 "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
             },
             "drupal/redirect": {
-                "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch",
-                "Fix - Integrity constraint violation": "https://www.drupal.org/files/issues/duplicate-entry-fix-2887866-9.patch"
+                "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
             },
             "drupal/simple_sitemap": {
                 "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
