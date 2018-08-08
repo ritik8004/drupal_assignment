@@ -549,7 +549,8 @@ html[lang="en"] .super-category-victorias-secret {
       h2 {
         width: 100%;
 
-        .title--main {
+        .title--main,
+        &.field--name-name {
           font-size: 1.625rem;
         }
       }
@@ -587,14 +588,17 @@ html[lang="ar"] {
 .acq-content-product,
 .acq-content-product-modal {
   .content__title_wrapper {
-    span {
-      &.title--sub {
+    h1,
+    h2 {
+      .title--sub {
         font-family: $vs-regular;
         font-size: 0.75rem !important;
         letter-spacing: 2.4px;
+        text-transform: uppercase;
       }
 
-      &.title--main {
+      .title--main,
+      &.field--name-name {
         font-family: $vs-bentonsans-light;
         color: $pdp_product_title;
       }

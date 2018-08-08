@@ -69,6 +69,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  // Add country specific class for doing any style overrides.
+  $variables['attributes']['class'][] = Html::cleanCssIdentifier('country-' . strtolower(_alshaya_custom_get_site_level_country_code()));
+
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
 

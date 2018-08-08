@@ -558,6 +558,7 @@ function alshaya_acm_theme($existing, $type, $theme, $path) {
         'available_delivery_methods' => '',
         'free_gift_label' => '',
         'free_gift_promos' => '',
+        'is_free_gift_item' => '',
       ],
     ],
     'global_error' => [
@@ -915,6 +916,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     '#total_price' => $total_price,
     '#item_code' => $sku_entity->getSku(),
     '#free_gift_label' => !empty($free_gift_label) ? $free_gift_label : '',
+    '#is_free_gift_item' => $is_free_item,
   ];
 }
 

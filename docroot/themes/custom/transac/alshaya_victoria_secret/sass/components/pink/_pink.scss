@@ -1,23 +1,21 @@
 .super-category-pink {
   html[lang="en"] & {
     .block-alshaya-main-menu {
-      a {
-        &.menu--one__link {
-          font-family: $pink-pinksans;
-          font-size: 1.25rem !important;
-          letter-spacing: 0.07em;
+      .menu--one__link {
+        font-family: $pink-pinksans;
+        font-size: 1.25rem !important;
+        letter-spacing: 0.07em;
 
-          @include breakpoint($desktop) {
-            font-size: 1.1875rem !important;
-          }
+        @include breakpoint($desktop) {
+          font-size: 1.1875rem !important;
         }
+      }
 
-        &.menu__link {
-          @include breakpoint($upto-desktop) {
-            font-family: $pink-pinksans;
-            font-size: 1.5rem !important;
-            letter-spacing: 0.07em;
-          }
+      .menu__link {
+        @include breakpoint($upto-desktop) {
+          font-family: $pink-pinksans;
+          font-size: 1.5rem !important;
+          letter-spacing: 0.07em;
         }
       }
 
@@ -73,17 +71,19 @@
         h2 {
           width: 100%;
 
-          span {
+          .title--main,
+          &.field--name-name {
             text-transform: uppercase;
             font-family: $pink-pinkslab;
             font-size: 2.625rem;
             letter-spacing: 2.1px;
+          }
 
-            &.title--sub {
-              font-family: $pink-pinksans;
-              font-size: 1.1875rem !important;
-              letter-spacing: 1.33px;
-            }
+          .title--sub {
+            font-family: $pink-pinksans;
+            text-transform: none;
+            font-size: 1.1875rem !important;
+            letter-spacing: 1.33px;
           }
         }
       }

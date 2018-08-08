@@ -109,3 +109,9 @@
     max-width: none;
   }
 }
+
+.menu--customer-rights-logo {
+  @include breakpoint($mobile) {
+    float: none;
+  }
+}
