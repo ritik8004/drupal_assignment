@@ -91,7 +91,6 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
-    $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
     $config->set('back_to_list', $form_state->getValue('back_to_list'));
 
     // Product default image.
@@ -254,16 +253,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('VAT disclaimer text for the footer'),
       '#default_value' => $config->get('vat_text_footer'),
-    ];
-
-    $form['image_slider_position_pdp'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Image slider position on PDP'),
-      '#default_value' => $config->get('image_slider_position_pdp'),
-      '#options' => [
-        'left' => $this->t('Left'),
-        'bottom' => $this->t('Bottom'),
-      ],
     ];
 
     $form['product_default_image'] = [
