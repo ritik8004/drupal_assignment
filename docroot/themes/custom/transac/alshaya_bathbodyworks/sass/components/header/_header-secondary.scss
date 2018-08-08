@@ -56,7 +56,7 @@
 }
 
 .menu--three__list-item {
-  .menu--three__link {
+  a.menu--three__link {
     @include breakpoint($upto-desktop) {
       @include icon(chevron#{$right}, after) {
         font-size: 2rem;
