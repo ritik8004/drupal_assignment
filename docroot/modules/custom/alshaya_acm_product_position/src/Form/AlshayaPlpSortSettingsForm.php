@@ -32,15 +32,17 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $sort_options = $form_state->getValue('sort_options');
     // Sort the options based on weight.
     uasort($sort_options, [$this, 'weightArraySort']);
-    $result = [];
+    $labels = $result = [];
     // Prepare sort option array for saving in config.
     foreach ($sort_options as $key => $sort_option) {
       $result[$key] = $sort_option['enable'] ? $key : 0;
+      $labels[$key] = $sort_option['enable'] ? $sort_option['label'] : 0;
     }
 
     $config = $this->config('alshaya_acm_product_position.settings');
     $config->set('sort_options', $result);
-    $config->save();
+    $config->set('sort_options_labels', $labels);
+    $config->save(TRUE);
     return parent::submitForm($form, $form_state);
   }
 
@@ -54,6 +56,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       '#type' => 'table',
       '#header' => [
         $this->t('Enable/Disable'),
+        $this->t('Admin Label'),
         $this->t('Name'),
         $this->t('Weight'),
       ],
@@ -89,8 +92,15 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
         '#default_value' => (bool) $option,
       ];
 
-      $form['sort_options'][$id]['label'] = [
+      $form['sort_options'][$id]['admin_label'] = [
         '#plain_text' => $title,
+      ];
+
+      $form['sort_options'][$id]['label'] = [
+        '#type' => 'textfield',
+        '#title' => $this->t('sort label'),
+        '#title_display' => 'invisible',
+        '#value' => $title,
       ];
 
       $form['sort_options'][$id]['weight'] = [
