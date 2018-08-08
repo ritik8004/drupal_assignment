@@ -39,7 +39,9 @@ function alshaya_vs_transac_update_8001() {
   $fieldsManager = \Drupal::service('acq_sku.fields_manager');
   $fieldsManager->resetBaseFields();
 
-  _alshaya_search_resave_indexes();
+  // Re-save index configs to ensure overrides are taken into consideration.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
 }
 
 /**
