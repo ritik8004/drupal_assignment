@@ -979,6 +979,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
+    $product_tree = $form_state->get('tree');
+
     // Prepare array of just the configurable options.
     $configurables = [];
     foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
@@ -989,7 +991,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // If there are no options to display, we show the product as not
     // available.
-    if (empty($configurables)) {
+    if (empty($configurables) || count($configurables) != count(array_keys($product_tree['configurables']))) {
       $form['ajax']['configurables'] = [
         '#markup' => '',
       ];
@@ -1005,8 +1007,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
-
-    $product_tree = $form_state->get('tree');
 
     // Do first to disable for level one or only configurable options.
     $empty_selected = [];
