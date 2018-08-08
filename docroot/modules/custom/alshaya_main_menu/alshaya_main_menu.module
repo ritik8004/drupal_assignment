@@ -156,3 +156,18 @@ function alshaya_main_menu_preprocess_alshaya_main_menu_highlights(&$variables) 
     }
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_main_menu_preprocess_alshaya_main_menu_level2(&$variables) {
+  if (!empty($variables['data']['highlight_paragraph'])) {
+    foreach ($variables['data']['highlight_paragraph'] as $highlight_para) {
+      // If there is at least one paragraph of type 'text_links'.
+      if ($highlight_para['paragraph_type'] == 'text_links') {
+        $variables['data']['text_links_paragraph'] = TRUE;
+        break;
+      }
+    }
+  }
+}
