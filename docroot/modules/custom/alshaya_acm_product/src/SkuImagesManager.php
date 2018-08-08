@@ -10,6 +10,8 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Class SkuImagesManager.
@@ -47,6 +49,13 @@ class SkuImagesManager {
   protected $fileStorage;
 
   /**
+   * Cache Backend object for "cache.data".
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -57,15 +66,19 @@ class SkuImagesManager {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache backend object.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              CacheBackendInterface $cache) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -485,7 +498,7 @@ class SkuImagesManager {
 
         // Finally use default image if still empty.
         if (empty($gallery)) {
-          $default_image = _alshaya_acm_product_get_product_default_main_image();
+          $default_image = $this->getProductDefaultImage();
           if ($default_image) {
             $gallery = [
               '#theme' => 'alshaya_assets_gallery',
@@ -504,15 +517,14 @@ class SkuImagesManager {
         }
         break;
 
+      case 'modal':
       case 'pdp':
-        $this->moduleHandler->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
-
         $media = $this->getAllMedia($sku, $check_parent_child);
         $main_image = $media['main'];
         $thumbnails = $media['thumbs'];
 
         // Fetch settings.
-        $settings = alshaya_product_zoom_cloudzoom_default_settings();
+        $settings = $this->getCloudZoomDefaultSettings();
         $thumbnail_style = $settings['thumb_style'];
         $zoom_style = $settings['zoom_style'];
         $slide_style = $settings['slide_style'];
@@ -565,8 +577,7 @@ class SkuImagesManager {
 
         // If no main image, use default image.
         if (empty($main_image) && $check_parent_child) {
-          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-            $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
+          if (!empty($default_image = $this->getProductDefaultImage())) {
             $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
             $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
 
@@ -582,7 +593,7 @@ class SkuImagesManager {
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
           $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
-          $gallery['gallery'] = [
+          $gallery = [
             '#type' => 'container',
             '#attributes' => [
               'class' => ['gallery-wrapper'],
@@ -602,12 +613,12 @@ class SkuImagesManager {
           // Add PDP slider position class in template.
           $pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')->get('image_slider_position_pdp');
 
-          $gallery['gallery']['product_zoom'] = [
+          $gallery['product_zoom'] = [
             '#theme' => 'product_zoom',
             '#mainImage' => $main_image,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
-            '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
+            '#properties' => $this->getRelCloudZoom($settings),
             '#labels' => $labels,
             '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
@@ -621,6 +632,91 @@ class SkuImagesManager {
     }
 
     return $gallery;
+  }
+
+  /**
+   * Get default settings for CloudZoom library.
+   *
+   * @return array
+   *   Returns the default settings for CloudZoom library.
+   */
+  protected function getCloudZoomDefaultSettings() {
+    return [
+      'slide_style' => 'product_zoom_medium_606x504',
+      'zoom_style' => 'product_zoom_large_800x800',
+      'thumb_style' => '291x288',
+      'zoom_width' => 'auto',
+      'zoom_height' => 'auto',
+      'zoom_position' => 'right',
+      'adjust_x' => '0',
+      'adjust_y' => '0',
+      'tint' => '',
+      'tint_opacity' => '0.25',
+      'lens_opacity' => '0.85',
+      'soft_focus' => 'false',
+      'smooth_move' => '3',
+    ];
+  }
+
+  /**
+   * Get the rel attribute for Alshaya Product zoom.
+   *
+   * @param array $settings
+   *   Product CloudZoom settings.
+   *
+   * @return string
+   *   return the rel attribute.
+   */
+  protected function getRelCloudZoom(array $settings) {
+    $string = '';
+    $string .= "zoomWidth:'" . $settings['zoom_width'] . "'";
+    $string .= ",zoomHeight:'" . $settings['zoom_height'] . "'";
+    $string .= ",position:'" . $settings['zoom_position'] . "'";
+    $string .= ",adjustX:'" . $settings['adjust_x'] . "'";
+    $string .= ",adjustY:'" . $settings['adjust_y'] . "'";
+    $string .= ",tint:'" . $settings['tint'] . "'";
+    $string .= ",tintOpacity:'" . $settings['tint_opacity'] . "'";
+    $string .= ",lensOpacity:'" . $settings['lens_opacity'] . "'";
+    $string .= ",softFocus:" . $settings['soft_focus'];
+    $string .= ",smoothMove:'" . $settings['smooth_move'] . "'";
+    return $string;
+  }
+
+  /**
+   * Get the default image url for the product.
+   *
+   * @return \Drupal\file\Entity\File|null|static
+   *   File object.
+   */
+  protected function getProductDefaultImage() {
+    static $product_default_image;
+
+    // If default image available in static cache, then use it.
+    if (!empty($product_default_image)) {
+      return $product_default_image;
+    }
+
+    // If cached version available.
+    if ($cached_default_product_image = $this->cache->get('product_default_image')) {
+      // Set in static cache.
+      $product_default_image = $cached_default_product_image->data;
+      return $product_default_image;
+    }
+
+    // Get file id from config.
+    $default_image_fid = $this->config->get('alshaya_acm_product.settings')->get('product_default_image');
+    if (!empty($default_image_fid)) {
+      $file = $this->fileStorage->load($default_image_fid);
+      if ($file instanceof File) {
+        // Set the cache.
+        $this->cache->set('product_default_image', $file);
+        // Set the static cache.
+        $product_default_image = $file;
+        return $product_default_image;
+      }
+    }
+
+    return NULL;
   }
 
 }
