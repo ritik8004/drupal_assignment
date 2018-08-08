@@ -16,20 +16,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * We do this in post update hook as it doesn't work together with config update
  * in normal hook_update.
  */
-function alshaya_vs_transac_post_update_8002(&$sandbox) {
-  _alshaya_search_resave_indexes();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Stop indexing color and size and remove facets for them.
- */
-function alshaya_vs_transac_update_8002() {
-  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
-  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
-  $fieldsManager->resetBaseFields();
-
+function alshaya_vs_transac_post_update_8001(&$sandbox) {
   _alshaya_search_resave_indexes();
 }
 
@@ -38,6 +25,7 @@ function alshaya_vs_transac_update_8002() {
  *
  * Add product_category field.
  * Make color configurable.
+ * Stop indexing color and remove facets for it.
  */
 function alshaya_vs_transac_update_8001() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -47,15 +35,11 @@ function alshaya_vs_transac_update_8001() {
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->addFields();
 
-  // Make color configurable.
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_vs_transac',
-    'override',
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-  );
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
 
-  $sku_fields_manager->updateFieldMetaInfo('color', ['configurable' => 1]);
+  _alshaya_search_resave_indexes();
 }
 
 /**
