@@ -1,23 +1,21 @@
 .super-category-pink {
   html[lang="en"] & {
     .block-alshaya-main-menu {
-      a {
-        &.menu--one__link {
-          font-family: $pink-pinksans;
-          font-size: 1.25rem !important;
-          letter-spacing: 0.07em;
+      .menu--one__link {
+        font-family: $pink-pinksans;
+        font-size: 1.25rem !important;
+        letter-spacing: 0.07em;
 
-          @include breakpoint($desktop) {
-            font-size: 1.1875rem !important;
-          }
+        @include breakpoint($desktop) {
+          font-size: 1.1875rem !important;
         }
+      }
 
-        &.menu__link {
-          @include breakpoint($upto-desktop) {
-            font-family: $pink-pinksans;
-            font-size: 1.5rem !important;
-            letter-spacing: 0.07em;
-          }
+      .menu__link {
+        @include breakpoint($upto-desktop) {
+          font-family: $pink-pinksans;
+          font-size: 1.5rem !important;
+          letter-spacing: 0.07em;
         }
       }
 
