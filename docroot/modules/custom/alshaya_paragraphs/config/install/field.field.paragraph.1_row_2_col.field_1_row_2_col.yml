@@ -2,17 +2,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.paragraph.field_promo_block
-    - paragraphs.paragraphs_type.1_row_3_col_text
+    - field.storage.paragraph.field_1_row_2_col
+    - paragraphs.paragraphs_type.1_row_2_col
     - paragraphs.paragraphs_type.section_divider
-    - paragraphs.paragraphs_type.promo_block_text
+    - paragraphs.paragraphs_type.promo_block
   module:
     - entity_reference_revisions
-id: paragraph.1_row_3_col_text.field_promo_block
-field_name: field_promo_block
+id: paragraph.1_row_2_col.field_1_row_2_col
+field_name: field_1_row_2_col
 entity_type: paragraph
-bundle: 1_row_3_col_text
-label: 'Promo Block'
+bundle: 1_row_2_col
+label: '1 row 2 col'
 description: ''
 required: false
 translatable: true
@@ -22,53 +22,71 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      promo_block_text: promo_block_text
+      promo_block: promo_block
       section_divider: section_divider
     target_bundles_drag_drop:
-      1_row_3_col_text:
-        weight: 16
-        enabled: false
-      1_row_1_col:
-        weight: 17
-        enabled: false
-      1_row_1_col_dept:
-        weight: 18
-        enabled: false
-      1_row_1st_col_2_row_2nd_col:
-        weight: 19
-        enabled: false
-      1_row_2_col_1_2_dept:
-        weight: 20
-        enabled: false
-      1_row_2_col_2_1_dept:
-        weight: 21
-        enabled: false
-      1_row_2_col_dept:
+      1_row_2_col:
         weight: 22
         enabled: false
-      1_row_3_col:
+      1_row_1_col:
         weight: 23
         enabled: false
-      1_row_3_col_dept:
+      1_row_1_col_dept:
         weight: 24
         enabled: false
-      banner:
+      1_row_1st_col_2_row_2nd_col:
         weight: 25
         enabled: false
-      banner_full_width:
+      1_row_2_col_1_2_dept:
         weight: 26
         enabled: false
-      main_menu_highlight:
+      1_row_2_col_2_1_dept:
         weight: 27
         enabled: false
-      promo_block:
+      1_row_2_col_dept:
         weight: 28
         enabled: false
-      promo_block_text:
-        enabled: true
+      1_row_3_col:
         weight: 29
-      related_info_one_column:
+        enabled: false
+      1_row_3_col_delivery_banner:
         weight: 30
+        enabled: false
+      1_row_3_col_dept:
+        weight: 31
+        enabled: false
+      1_row_3_col_text:
+        weight: 32
+        enabled: false
+      banner:
+        weight: 33
+        enabled: false
+      banner_full_width:
+        weight: 34
+        enabled: false
+      block_reference:
+        weight: 35
+        enabled: false
+      image_title_subtitle:
+        weight: 36
+        enabled: false
+      main_menu_highlight:
+        weight: 37
+        enabled: false
+      offers_bordered:
+        weight: 38
+        enabled: false
+      promo_block:
+        enabled: true
+        weight: 39
+      promo_block_text:
+        weight: 40
+        enabled: false
+      related_info_one_column:
+        weight: 41
+        enabled: false
+      views_reference:
+        weight: 42
         enabled: false
       section_divider:
         enabled: true
