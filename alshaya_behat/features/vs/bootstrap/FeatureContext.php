@@ -489,14 +489,17 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       throw new \Exception('No products are listed on PLP');
     }
     foreach ($all_products as $item) {
-      $item_status = count($item->find('css', 'div.out-of-stock span'));
-      if ($item_status) {
-        $total_products--;
-        if (!$total_products) {
-          throw new \Exception('All products are out of stock on PLP');
+        $outofstock = $item->find('css', 'div.out-of-stock span');
+        if(is_array($outofstock))
+        {
+            if (count($outofstock) > 0) {
+                $total_products--;
+                if (!$total_products) {
+                    throw new \Exception('All products are out of stock on PLP');
+                }
+                continue;
+            }
         }
-        continue;
-      }
       $this->product = $item->find('css', 'h2.field--name-name')->getText();
       $page->clickLink($this->product);
       break;
@@ -546,35 +549,33 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
     }
 
-  /**
-   * @Given /^I select a size for the product$/
-   */
-  public function iSelectASizeForTheProduct()
-  {
-    $page = $this->getSession()->getPage();
-    $all_sizes = $page->findById('configurable_ajax');
-    if ($all_sizes !== NULL) {
-     # $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
-        $all_sizes = $all_sizes->findAll('css', 'div.form-item-configurables-size > div.select2Option > ul li');
-        $total_sizes = count($all_sizes);
-      foreach ($all_sizes as $size) {
-        $check_li = $size->find('css', 'li')->getText();
-   //     $size_status = count($size->find('css', '.disabled'));
-     //     print($size_status);
-       // if ($size_status || !$check_li) {
-         // $total_sizes--;
-          if (!$total_sizes) {
-            throw new \Exception('All sizes are disabled');
-          }
-          continue;
-
-        $size->find('css', 'a')->click();
-        break;
-      }
-    } else {
-      echo 'No size attribute is available for this product';
+    /**
+     * @Given /^I select "([^"]*)" attribute for the product$/
+     */
+    public function iSelectAttributeForTheProduct($attribute = 'size')
+    {
+        $session = $this->getSession();
+        $page = $session->getPage();
+        $attribute_wrapper = $page->findById('configurable_ajax');
+        if ($attribute_wrapper) {
+            $element = $attribute_wrapper->find('css', "select[name='configurables[$attribute]']")->getParent();
+            if ($element) {
+                $links = $element->findAll('css', '.select2Option li');
+                if($links)
+                {
+                foreach($links as $link){
+                if ($link->isVisible()) {
+//                    var_dump($link->getOuterHtml());
+                    $link->find('css', 'a')->click();
+                    break;
+                }
+                }
+                }
+            }
+        }
+//        if($attribute == 'size')
+//        die();
     }
-  }
 
   /**
    * @Given /^I check the "([^"]*)" radio button with "([^"]*)" value$/
@@ -1020,7 +1021,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     {
         $element = $this->getSession()
             ->getPage()
-            ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(4) > img');
+            ->find('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div:nth-child(1) > img');
         if ($element !== null) {
             $element->click();
         } else {
@@ -1959,6 +1960,50 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
         else{
             echo 'Address is auto selected';
+        }
+    }
+
+    /**
+     * @When I remove promo panel
+     */
+    public function iRemovePromoPanel()
+    {
+        $page = $this->getSession()->getPage();
+        $promopanel= $page->has('css','.promo-panel-fixed');
+        if (null === $promopanel) {
+            throw new \Exception("The element is not found");
+         }
+        else
+        {
+//    $this->getSession()->evaluateScript("jQuery('.promo-panel-fixed').remove();");
+    $this->getSession()->executeScript("jQuery('.promo-panel-fixed').remove();");
+        }
+    }
+
+    /**
+     * @Given /^I select a product in stock$/
+     */
+    public function iSelectAProductInStock() {
+        $page = $this->getSession()->getPage();
+        $all_products = $page->findById('block-content');
+        if ($all_products !== NULL) {
+            $all_products = $all_products->findAll('css', '.c-products__item');
+            $total_products = count($all_products);
+        } else {
+            throw new Exception('Search passed, but search results were empty');
+        }
+        foreach ($all_products as $item) {
+            $item_status = count($item->find('css', 'div.out-of-stock span'));
+            if ($item_status) {
+                $total_products--;
+                if (!$total_products) {
+                    throw new Exception('All products are out of stock');
+                }
+                continue;
+            }
+            $this->product = $item->find('css', 'h2.field--name-name')->getText();
+            $page->clickLink($this->product);
+            break;
         }
     }
 }
