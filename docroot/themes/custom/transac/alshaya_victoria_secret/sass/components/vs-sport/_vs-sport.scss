@@ -23,7 +23,8 @@
         h2 {
           width: 100%;
 
-          .title--main {
+          .title--main,
+          &.field--name-name {
             font-family: $vs-bentonsanscomp-medium;
             text-transform: uppercase;
             font-size: 2rem;
