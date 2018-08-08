@@ -1406,6 +1406,10 @@ class SkuManager {
 
       $combination_key .= $code . '|' . $value . '||';
       foreach ($configurable_codes as $configurable_code) {
+        if (!isset($configurables[$configurable_code]) || empty($configurables[$configurable_code]['#options'])) {
+          continue;
+        }
+
         foreach ($configurables[$configurable_code]['#options'] as $key => $value) {
           $check_key1 = $combination_key . $configurable_code . '|' . $key . '||';
           $check_key2 = $configurable_code . '|' . $key . '||' . $combination_key;
