@@ -144,4 +144,22 @@
     }
   };
 
+  // Add loader on plp search page.
+  Drupal.behaviors.facetSearchLoader = {
+    attach: function (context, settings) {
+      $(document).ajaxSend(function (event, jqxhr, settings) {
+        if (settings.url.includes('facets-block')) {
+          if ($('.page-standard > .checkout-ajax-progress-fullsreen').length === 0) {
+            $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
+          }
+        }
+      });
+      $(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings.url.includes('facets-block')) {
+          $('div.ajax-progress-fullscreen').remove();
+        }
+      });
+    }
+  };
+
 })(jQuery, Drupal);
