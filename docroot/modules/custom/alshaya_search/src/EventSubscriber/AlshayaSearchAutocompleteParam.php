@@ -52,8 +52,10 @@ class AlshayaSearchAutocompleteParam implements EventSubscriberInterface {
       // In auto complete, field to query is 'spell' and we need to change it
       // to according to language and thus adding lang code. So it will be like
       // 'spell_ar' or 'spell_en'.
-      $options['fields'][0] = $field . '_' . $this->languageManager->getCurrentLanguage()->getId();
-      $query->setOptions($options);
+      if ($field == 'spell') {
+        $options['fields'][0] = $field . '_' . $this->languageManager->getCurrentLanguage()->getId();
+        $query->setOptions($options);
+      }
     }
   }
 
