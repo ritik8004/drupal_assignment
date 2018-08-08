@@ -463,7 +463,7 @@ header .block-views-exposed-filter-blocksearch-page {
       > .menu-two__link-wrapper {
         width: 13.125rem;
 
-        a {
+        .menu__link {
           @include arabic-letter-spacing;
 
           line-height: 1.69;
