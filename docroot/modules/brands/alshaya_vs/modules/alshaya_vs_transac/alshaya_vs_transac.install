@@ -9,6 +9,31 @@ use Drupal\Core\Site\Settings;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_post_update_NAME().
+ *
+ * Re-save index to create/remove index tables.
+ *
+ * We do this in post update hook as it doesn't work together with config update
+ * in normal hook_update.
+ */
+function alshaya_vs_transac_post_update_8002(&$sandbox) {
+  _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Stop indexing color and size and remove facets for them.
+ */
+function alshaya_vs_transac_update_8002() {
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
+
+  _alshaya_search_resave_indexes();
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add product_category field.

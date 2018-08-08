@@ -89,6 +89,14 @@ function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variab
  * Implements hook_acq_sku_base_field_additions_alter().
  */
 function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
+  // Somehow config override or config override-delete are not working during
+  // installation so we modify the fields from CORE here.
+  if (isset($fields['color'])) {
+    unset($fields['color']['configurable']);
+    unset($fields['color']['index']);
+    unset($fields['color']['facet']);
+  }
+
   $transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $transac_fields);
 }
