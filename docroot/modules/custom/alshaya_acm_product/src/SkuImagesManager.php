@@ -8,6 +8,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Component\Utility\Html;
 
 /**
  * Class SkuImagesManager.
@@ -503,7 +505,118 @@ class SkuImagesManager {
         break;
 
       case 'pdp':
-        // @TODO: Copy alshaya_acm_product_get_gallery() here.
+        $this->moduleHandler->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
+
+        $media = $this->getAllMedia($sku, $check_parent_child);
+        $main_image = $media['main'];
+        $thumbnails = $media['thumbs'];
+
+        // Fetch settings.
+        $settings = alshaya_product_zoom_cloudzoom_default_settings();
+        $thumbnail_style = $settings['thumb_style'];
+        $zoom_style = $settings['zoom_style'];
+        $slide_style = $settings['slide_style'];
+
+        // Create our thumbnails to be rendered for zoom.
+        foreach ($media['media_items']['images'] ?? [] as $media_item) {
+          $file_uri = $media_item['file']->getFileUri();
+
+          // Show original full image in the modal inside a draggable container.
+          $original_image = $media_item['file']->url();
+
+          $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+          if (empty($main_image)) {
+            $main_image = [
+              'zoomurl' => $image_zoom,
+              'mediumurl' => $image_medium,
+              'label' => $media_item['label'],
+            ];
+          }
+
+          $thumbnails[] = [
+            'thumburl' => $image_small,
+            'mediumurl' => $image_medium,
+            'zoomurl' => $image_zoom,
+            'fullurl' => $original_image,
+            'label' => $media_item['label'],
+            'type' => 'image',
+          ];
+        }
+        foreach ($media['media_items']['vidoes'] ?? [] as $media_item) {
+          // @TODO:
+          // Receiving video_provider as NULL, should be set to youtube
+          // or vimeo. Till then using $type as provider flag.
+          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+          $thumbnails[] = [
+            'thumburl' => $media_item['file'],
+            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+            'video_title' => $media_item['video_title'],
+            'video_desc' => $media_item['video_description'],
+            'type' => $type,
+            // @TODO: should this be config?
+            'width' => 81,
+            // @TODO: should this be config?
+            'height' => 81,
+          ];
+        }
+
+        // If no main image, use default image.
+        if (empty($main_image) && $check_parent_child) {
+          if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+            $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
+            $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
+            $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+
+            $main_image = [
+              'zoomurl' => $image_zoom,
+              'mediumurl' => $image_medium,
+              'label' => $sku->label(),
+            ];
+          }
+        }
+
+        if (!empty($main_image)) {
+          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+
+          $gallery['gallery'] = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['gallery-wrapper'],
+            ],
+          ];
+
+          $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+
+          $labels = [
+            '#theme' => 'product_labels',
+            '#labels' => $this->skuManager->getLabels($sku, 'pdp'),
+            '#sku' => $sku_identifier,
+            '#mainsku' => $sku_identifier,
+            '#type' => 'pdp',
+          ];
+
+          // Add PDP slider position class in template.
+          $pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')->get('image_slider_position_pdp');
+
+          $gallery['gallery']['product_zoom'] = [
+            '#theme' => 'product_zoom',
+            '#mainImage' => $main_image,
+            '#thumbnails' => $thumbnails,
+            '#pager_flag' => $pager_flag,
+            '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
+            '#labels' => $labels,
+            '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
+            '#attached' => [
+              'library' => [
+                'alshaya_product_zoom/product.cloud_zoom',
+              ],
+            ],
+          ];
+        }
         break;
     }
 
