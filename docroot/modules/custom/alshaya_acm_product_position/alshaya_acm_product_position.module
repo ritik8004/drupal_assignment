@@ -161,6 +161,11 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
         }
       }
 
+      $labels = _alshaya_acm_product_position_get_config(TRUE);
+      array_walk($form['sort_bef_combine']['#options'], function(&$value, $key) use ($labels) {
+        $value = !empty($labels[$key]) ? t($labels[$key]) : t($value);
+      });
+
       // Re-order select options based on the config position.
       $form['sort_bef_combine']['#options'] = _alshaya_acm_product_position_sorted_options($form['sort_bef_combine']['#options']);
 
@@ -174,7 +179,6 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       // otherwise the user selected value will be used.
       $sort_bef_combine = !empty($applied_sort_option['sort_bef_combine']) ? $applied_sort_option['sort_bef_combine'] : NULL;
       $form['sort_bef_combine']['#value'] = !empty($sort_bef_combine) && isset($form['sort_bef_combine']['#options'][$sort_bef_combine]) ? $sort_bef_combine : $default_sort_option;
-
     }
   }
 }
@@ -223,8 +227,11 @@ function _alshaya_acm_product_position_sorted_options(array $options) {
 /**
  * Function to get sort options config.
  *
+ * @param boolean $label
+ *   (Optional) True to get label else returns enabled options.
+ *
  * @return array
- *   Array of enabled options.
+ *   Array of enabled options / label of options.
  */
 function _alshaya_acm_product_position_get_config($label = FALSE) {
   $position = \Drupal::config('alshaya_acm_product_position.settings');

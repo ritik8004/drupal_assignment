@@ -8,13 +8,13 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Class AlshayaPlpSortSettingsForm.
  */
-class AlshayaPlpSortSettingsForm extends ConfigFormBase {
+class AlshayaPlpSortSettingsAdminForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_plp_sort_settings_form';
+    return 'alshaya_plp_sort_settings_admin_form';
   }
 
   /**
@@ -32,16 +32,14 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $sort_options = $form_state->getValue('sort_options');
     // Sort the options based on weight.
     uasort($sort_options, [$this, 'weightArraySort']);
-    $labels = $result = [];
+    $result = [];
     // Prepare sort option array for saving in config.
     foreach ($sort_options as $key => $sort_option) {
       $result[$key] = $sort_option['enable'] ? $key : 0;
-      $labels[$key] = $sort_option['enable'] ? $sort_option['label'] : 0;
     }
 
     $config = $this->config('alshaya_acm_product_position.settings');
     $config->set('sort_options', $result);
-    $config->set('sort_options_labels', $labels);
     $config->save(TRUE);
     return parent::submitForm($form, $form_state);
   }
@@ -57,7 +55,6 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       '#header' => [
         $this->t('Enable/Disable'),
         $this->t('Admin Label'),
-        $this->t('Name'),
         $this->t('Weight'),
       ],
       '#tabledrag' => [
@@ -70,14 +67,15 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     ];
 
     // Sort options from config.
-    $sort_options = $this->config('alshaya_acm_product_position.settings')->get('sort_options');
+    $position_settings = $this->config('alshaya_acm_product_position.settings');
+    $sort_options = $position_settings->get('sort_options');
 
     // Sort options.
     $options = [
-      'nid' => $this->t('Position'),
-      'created' => $this->t('New IN'),
-      'name_1' => $this->t('Name'),
-      'final_price' => $this->t('Final Price'),
+      'nid' => 'Position',
+      'created' => 'New IN',
+      'name_1' => 'Name',
+      'final_price' => 'Final Price',
     ];
 
     // Maintaining the weight.
@@ -94,13 +92,6 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
 
       $form['sort_options'][$id]['admin_label'] = [
         '#plain_text' => $title,
-      ];
-
-      $form['sort_options'][$id]['label'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('sort label'),
-        '#title_display' => 'invisible',
-        '#value' => $title,
       ];
 
       $form['sort_options'][$id]['weight'] = [

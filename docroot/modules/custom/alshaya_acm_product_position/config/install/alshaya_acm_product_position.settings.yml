@@ -3,3 +3,12 @@ sort_options:
   name_1: name_1
   final_price: final_price
   created: created
+sort_options_labels:
+  'nid ASC': 'Position'
+  'nid DESC': ''
+  'name_1 ASC': 'Name A to Z'
+  'name_1 DESC': 'Name Z to A'
+  'final_price ASC': 'Price Low to High'
+  'final_price DESC': 'Price High to Low'
+  'created ASC': ''
+  'created DESC': 'New In'

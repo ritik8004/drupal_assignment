@@ -6,6 +6,21 @@
  * Contains install, update, uninstall hooks for alshaya_acm_product_position module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_acm_product_position_update_8002() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_acm_product_position.settings'],
+      'alshaya_acm_product_position',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING
+    );
+}
+
 /**
  * Implements hook_update_N().
  */
