@@ -51,6 +51,7 @@ class AlshayaPlpSortLabelSettingsForm extends ConfigFormBase {
         '#type' => 'textfield',
         '#title' => $this->t('label for @title', ['@title' => $value]),
         '#title_display' => 'invisible',
+        // @codingStandardsIgnoreLine
         '#default_value' => $this->t($value),
       ];
     }
@@ -64,7 +65,7 @@ class AlshayaPlpSortLabelSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Get form values.
     $sort_options = $form_state->getValue('sort_options');
-    $labels = array_map(function($sort_option) {
+    $labels = array_map(function ($sort_option) {
       return $sort_option['label'];
     }, $sort_options);
 

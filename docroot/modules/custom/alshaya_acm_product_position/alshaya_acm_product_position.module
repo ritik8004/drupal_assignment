@@ -162,7 +162,8 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       }
 
       $labels = _alshaya_acm_product_position_get_config(TRUE);
-      array_walk($form['sort_bef_combine']['#options'], function(&$value, $key) use ($labels) {
+      array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
+        // @codingStandardsIgnoreLine
         $value = !empty($labels[$key]) ? t($labels[$key]) : t($value);
       });
 
@@ -227,7 +228,7 @@ function _alshaya_acm_product_position_sorted_options(array $options) {
 /**
  * Function to get sort options config.
  *
- * @param boolean $label
+ * @param bool $label
  *   (Optional) True to get label else returns enabled options.
  *
  * @return array
