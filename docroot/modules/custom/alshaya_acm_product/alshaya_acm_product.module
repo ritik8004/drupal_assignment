@@ -445,12 +445,23 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // query params, else show it from main parent sku itself.
         $sku_for_gallery = $sku_entity;
 
-        $selected_value = \Drupal::request()->query->get('selected');
-        if ($selected_value) {
-          $selected_sku = SKU::load($selected_value);
+        if ($sku_entity->bundle() == 'configurable') {
+          $selected_value = \Drupal::request()->query->get('selected');
+          if ($selected_value) {
+            $selected_sku = SKU::load($selected_value);
 
-          if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
-            $sku_for_gallery = $selected_sku;
+            if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
+              $sku_for_gallery = $selected_sku;
+            }
+            else {
+              // Set it to NULL to indicate code below that we didn't change.
+              $selected_value = NULL;
+            }
+          }
+
+          // Try to load images first for the child we will display as selected.
+          if (empty($selected_value)) {
+            $sku_for_gallery = $skuManager->getFirstValidConfigurableChild($sku_entity);
           }
         }
 
