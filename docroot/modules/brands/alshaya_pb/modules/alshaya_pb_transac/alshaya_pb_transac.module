@@ -59,7 +59,7 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
           '#markup' => $body[0]['value'],
         ];
 
-        $productHelper->getShortDescription($build, $body[0]['value']);
+        $productHelper->updateShortDescription($build, $body[0]['value']);
       }
 
       if ($product_info = $entity->get('attr_short_description')->getValue()) {
@@ -73,7 +73,7 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
 
         // Take some characters from product info if nothing available in Copy.
         if (!isset($build['short_desc'])) {
-          $productHelper->getShortDescription($build, $product_info[0]['value']);
+          $productHelper->updateShortDescription($build, $product_info[0]['value']);
         }
       }
 
