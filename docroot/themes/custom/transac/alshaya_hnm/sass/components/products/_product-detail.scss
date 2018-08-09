@@ -132,35 +132,51 @@
       background: $pdp_color_swatch_mobile_bg;
       margin-left: -0.5rem;
       margin-right: -0.5rem;
-      padding: 0 0.5rem !important;
+      padding-#{$left}: 0.5rem !important;
       margin-bottom: 2.375rem;
     }
   }
 }
 
 .form-item-configurables-article-castor-id {
-  .select2Option .select-buttons li {
-    a[data-swatch-type=miniature_image] {
-      max-width: 3rem;
-      padding: 0;
-      border: 1px solid $pdp_swatch_border;
-      background: none;
+  .select2Option {
+    .select-buttons {
+      li {
+        a[data-swatch-type=miniature_image] {
+          max-width: 3rem;
+          padding: 0;
+          border: 1px solid $pdp_swatch_border;
+          background: none;
 
-      &.picked {
-        border: 1px solid $pdp_swatch_selected_border;
-        background: none;
+          &.picked {
+            border: 1px solid $pdp_swatch_selected_border;
+            background: none;
+          }
+
+          &:hover {
+            &::after {
+              content: '';
+              background-color: $pdp_swatch_hover;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              #{$left}: 0;
+              #{$right}: 0;
+            }
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          a {
+            margin-#{$right}: 0.125rem;
+          }
+        }
       }
 
-      &:hover {
-        &::after {
-          content: '';
-          background-color: $pdp_swatch_hover;
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          #{$left}: 0;
-          #{$right}: 0;
-        }
+      @include breakpoint($only-mobile) {
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
   }
@@ -760,7 +776,16 @@
 
   .select-buttons {
     li {
+      &:nth-child(2) {
+        @include breakpoint($only-mobile) {
+          a[data-swatch-type=RGB].picked {
+            margin-#{$left}: 0.1875rem;
+          }
+        }
+      }
+
       a:hover {
+        color: $pdp_select_selectedtext;
         background: $pdp_select_hover;
       }
 
@@ -789,13 +814,26 @@
 
           &:not([data-swatch-type=RGB]) {
             border: none;
-            width: 2.75rem;
+            width: 3.25rem;
             max-height: 100%;
             padding: 0;
 
+            @include breakpoint($only-mobile) {
+              width: 5.25rem;
+            }
+
             &.picked {
               background: none;
-              border: 1px solid $pdp_swatch_selected_border;
+
+              &::before {
+                content: '';
+                border: 1px solid $pdp_swatch_selected_border;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+              }
             }
 
             &:hover {
@@ -819,6 +857,12 @@
             width: 2.375rem;
             height: 2.375rem;
             border: none;
+
+            @include breakpoint($only-mobile) {
+              width: 5.25rem;
+              height: 5.25rem;
+              max-height: 5.25rem;
+            }
           }
 
           &[data-swatch-type=RGB] {
