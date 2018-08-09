@@ -250,7 +250,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     foreach ($items as $item) {
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($item['sku'], '291x288');
+      $image = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'checkout_summary');
+
       $node = alshaya_acm_product_get_display_node($item['sku']);
 
       if ($node instanceof NodeInterface) {
