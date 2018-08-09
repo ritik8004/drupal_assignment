@@ -63,6 +63,14 @@ sites:
   dhuae:
     module: alshaya_d
     type: alshaya_non_transac
+  pbkw:
+    module: alshaya_pb
+    type: alshaya_transac
+    country: kw
+  pbsa:
+    module: alshaya_pb
+    type: alshaya_transac
+    country: sa
   pbae:
     module: alshaya_pb
     type: alshaya_transac
