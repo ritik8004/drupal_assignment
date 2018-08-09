@@ -176,6 +176,7 @@
       @include breakpoint($only-mobile) {
         white-space: nowrap;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
   }
