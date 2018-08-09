@@ -169,6 +169,7 @@
 
       @include breakpoint($only-mobile) {
         border-bottom: 1px solid $pdp_product_itemcode_border;
+        padding-bottom: 0.75rem;
       }
     }
 
@@ -1840,6 +1841,14 @@ article.product-out-of-stock {
     @include breakpoint($only-mobile) {
       .field--name-field-skus {
         height: 0;
+        min-height: auto;
+        border: none;
+
+        .field {
+          &::after {
+            display: block;
+          }
+        }
       }
     }
   }
