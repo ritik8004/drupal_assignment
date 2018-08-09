@@ -45,7 +45,7 @@ while getopts "e:s:p:b:idtah" OPTION; do
       echo "   -e     sf drush alias"
       echo "   -s     site url on which to execute commands"
       echo "   -o     execute old store drush command"
-      echo "   -p     command separated list of sku's to load"
+      echo "   -p     comma separated list of sku's to load"
       echo "   -i     run initial site setup commands. This includes setup of username and password, uninstall of shield"
       echo "   -d     clear all existing products. -a to load all of them again"
       echo "   -a     load or updated all products, categories, options"
@@ -98,8 +98,8 @@ if [ "$loadProducts" = "yes" ]
 then
   drush $envn -l $site sync-commerce-product-options;
   drush $envn -l $site sync-commerce-cats;
-  drush $envn -l $site sync-stores;
   drush $envn -l $site sync-areas;
+  drush $envn -l $site sync-stores;
 
   if [ "$loadsku" != "" ]
   then
@@ -109,7 +109,7 @@ then
   else
     echo "loading all products"
     drush $envn -l $site acsp en 5 -y;
-    drush $envn -l $site acsp ar 3;
+    drush $envn -l $site acsp ar 3 -y;
   fi
 
   drush $envn -l $site acspm;
