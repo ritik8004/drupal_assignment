@@ -453,6 +453,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $sku_for_gallery = $selected_sku;
           }
         }
+        // Try to load images first for the child we will display as selected.
+        elseif ($sku_entity->bundle() == 'configurable') {
+          $sku_for_gallery = $skuManager->getFirstValidConfigurableChild($sku_entity);
+        }
 
         alshaya_acm_product_get_gallery($build, $sku_for_gallery);
 
