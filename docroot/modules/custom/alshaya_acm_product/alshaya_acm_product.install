@@ -12,9 +12,18 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add new config which contains configurable field label, error and label when
+ * a value is selected.
  * Clear alshaya_product cache as there is change in data structure.
  */
 function alshaya_acm_product_update_8024() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.fields_labels_n_error'],
+    'alshaya_acm_product'
+  );
+
   /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
   $cache = \Drupal::service('cache.alshaya_product');
   $cache->deleteAllPermanent();
