@@ -174,6 +174,16 @@ function alshaya_acm_product_acq_sku_product_sku_alter(&$sku, $product) {
 }
 
 /**
+ * Implements hook_acq_sku_product_node_alter().
+ */
+function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $product) {
+  // Set node activation date if product activation date available.
+  if (isset($product['attributes']['product_activation_date'])) {
+    $node->setCreatedTime(strtotime($product['attributes']['product_activation_date']));
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function alshaya_acm_product_theme($existing, $type, $theme, $path) {
@@ -931,6 +941,20 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
           }
         }
 
+        $cart_storage = \Drupal::service('acq_cart.cart_storage');
+        /** @var \Drupal\acq_cart\Cart $cart */
+        $cart = $cart_storage->getCart(FALSE);
+
+        foreach ($free_gift_promos as $key => $promo) {
+          // Get coupon applied on cart.
+          $coupon_applied_on_cart = $cart->getCoupon();
+          // If promo/free gift coupon is already applied on cart, don't show
+          // it with the item on cart page.
+          if ($promo['coupon_code'] == $coupon_applied_on_cart) {
+            unset($free_gift_promos[$key]);
+          }
+        }
+
         $form['cart'][$id]['promo_text'] = [
           '#theme' => "free_gift_cart_label",
           '#promos' => $free_gift_promos,
@@ -984,6 +1008,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
+    $product_tree = $form_state->get('tree');
+
     // Prepare array of just the configurable options.
     $configurables = [];
     foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
@@ -994,7 +1020,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     // If there are no options to display, we show the product as not
     // available.
-    if (empty($configurables)) {
+    if (empty($configurables) || count($configurables) != count(array_keys($product_tree['configurables']))) {
       $form['ajax']['configurables'] = [
         '#markup' => '',
       ];
@@ -1010,8 +1036,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
-
-    $product_tree = $form_state->get('tree');
 
     // Do first to disable for level one or only configurable options.
     $empty_selected = [];
@@ -1418,28 +1442,32 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new InvokeCommand('article[data-vmode="full"]', $class_command, ['product-out-of-stock']));
 
     // Update simple product description attributes.
-    $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
-    $composition_markup = [
-      '#theme' => 'product_composition_markup',
-    ];
+    if ($tree_pointer->hasField('attr_composition')) {
+      $composition = $skuManager->fetchProductAttribute($tree_pointer, 'attr_composition', 'self');
+      $composition_markup = [
+        '#theme' => 'product_composition_markup',
+      ];
 
-    if (!empty($composition)) {
-      $composition_markup['#composition']['#markup'] = $composition;
+      if (!empty($composition)) {
+        $composition_markup['#composition']['#markup'] = $composition;
+      }
+
+      $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
     }
-
-    $response->addCommand(new ReplaceCommand('.composition-wrapper', $composition_markup));
 
     // Update simple product description attributes.
-    $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
-    $warning_markup = [
-      '#theme' => 'product_article_warning_markup',
-    ];
+    if ($tree_pointer->hasField('attr_article_warning')) {
+      $warning = $skuManager->fetchProductAttribute($tree_pointer, 'attr_article_warning', 'self');
+      $warning_markup = [
+        '#theme' => 'product_article_warning_markup',
+      ];
 
-    if (!empty($warning)) {
-      $warning_markup['#warning']['#markup'] = $warning;
+      if (!empty($warning)) {
+        $warning_markup['#warning']['#markup'] = $warning;
+      }
+
+      $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
     }
-
-    $response->addCommand(new ReplaceCommand('.warning-wrapper', $warning_markup));
 
     // Update cross-sell region with products.
     if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')

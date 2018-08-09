@@ -19,6 +19,23 @@
         &::before {
           background: none;
           color: inherit;
+          font-size: 1.5rem;
+        }
+
+        &.slick-prev {
+          #{$left}: -0.25rem;
+
+          @include breakpoint($tablet) {
+            #{$left}: 1.25rem;
+          }
+        }
+
+        &.slick-next {
+          #{$right}: -0.25rem;
+
+          @include breakpoint($tablet) {
+            #{$right}: 1.25rem;
+          }
         }
       }
 
@@ -43,7 +60,7 @@
       text-align: center;
       padding: 0.375rem 0.8125rem;
       line-height: 1;
-      min-height: 2.5rem;
+      height: 2.5rem;
 
       @include breakpoint($desktop) {
         display: inline-flex;

@@ -13,6 +13,30 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
+ * Implements hook_acq_sku_base_field_additions_alter().
+ */
+function alshaya_pb_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
+  // Somehow config override or config override-delete are not working during
+  // installation so we modify the fields from CORE here.
+  if (isset($fields['color'])) {
+    $fields['color']['configurable'] = 1;
+    unset($fields['color']['cardinality']);
+    unset($fields['color']['index']);
+    unset($fields['color']['facet']);
+  }
+
+  if (isset($fields['size'])) {
+    $fields['size']['configurable'] = 1;
+    unset($fields['size']['cardinality']);
+    unset($fields['size']['index']);
+    unset($fields['size']['facet']);
+  }
+
+  $transac_fields = \Drupal::config('alshaya_pb_transac.sku_base_fields')->get('fields');
+  $fields = array_merge($fields, $transac_fields);
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
@@ -21,83 +45,39 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
-      // Prepare the at_glance variable.
-      $at_glance['label'] = [
-        '#markup' => t('At a glance'),
-      ];
-      $at_glance['value'] = [
-        '#markup' => $sku_entity->get('attr_at_glance')->getString(),
-      ];
+      /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
+      $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
-      // Prepare the description variable.
-      $description_value = '';
-      $description['label'] = [
-        '#markup' => t('Features and benefits'),
-      ];
+      $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
-        $description_value = $body[0]['value'];
-      }
-
-      if ($bullet_points = $sku_entity->get('attr_bullet_points')
-        ->getString()) {
-        $description_value .= '<div class="bullet-points-wrapper">';
-        $description_value .= $bullet_points;
-        $description_value .= '</div>';
-      }
-
-      $description['value'] = [
-        '#markup' => $description_value,
-      ];
-
-      // If specifications are enabled, prepare the specification variable.
-      if (\Drupal::config('alshaya_acm.settings')
-        ->get('pdp_show_specifications')) {
-        $specifications['label'] = [
-          '#markup' => t('Specifications'),
+        $description['label'] = [
+          '#markup' => t('Product Description'),
         ];
 
-        $specifications['value'] = [
-          "#theme" => 'item_list',
-          '#items' => [],
+        $description['value'] = [
+          '#markup' => $body[0]['value'],
         ];
 
-        if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
-          $specifications['value']['#items'][] = t('Style Code: @value', [
-            '@value' => $attr_style_code,
-          ]);
-        }
+        $productHelper->getShortDescription($build, $body[0]['value']);
+      }
 
-        if ($attr_color = $sku_entity->get('attr_color')->getString()) {
-          $specifications['value']['#items'][] = t('Color: @value', [
-            '@value' => $attr_color,
-          ]);
-        }
+      if ($product_info = $entity->get('attr_short_description')->getValue()) {
+        $description['label'] = [
+          '#markup' => t('Dimensions and Care'),
+        ];
 
-        if ($attr_season = $sku_entity->get('attr_season')->getString()) {
-          $specifications['value']['#items'][] = t('Season: @value', [
-            '@value' => $attr_season,
-          ]);
-        }
+        $description['value'] = [
+          '#markup' => $product_info[0]['value'],
+        ];
 
-        if ($attr_brand = $sku_entity->get('attr_product_brand')
-          ->getString()) {
-          $specifications['value']['#items'][] = t('Product brand: @value', [
-            '@value' => $attr_brand,
-          ]);
+        // Take some characters from product info if nothing available in Copy.
+        if (!isset($build['short_desc'])) {
+          $productHelper->getShortDescription($build, $product_info[0]['value']);
         }
       }
 
-      // Add all variables to $build in the sequence in
-      // which they should be displayed.
-      // $build['short_desc'] contains the description that should be
-      // displayed before 'Read More'.
-      $build['short_desc'] = $at_glance;
-      $build['description'][] = $at_glance;
       $build['description'][] = $description;
-      if (!empty($specifications)) {
-        $build['description'][] = $specifications;
-      }
     }
   }
 }

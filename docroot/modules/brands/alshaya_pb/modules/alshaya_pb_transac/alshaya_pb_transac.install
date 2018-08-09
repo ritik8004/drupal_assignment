@@ -59,4 +59,7 @@ function alshaya_pb_transac_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  // Re-save indexes to ensure config overrides are taken into consideration.
+  _alshaya_search_resave_indexes();
 }

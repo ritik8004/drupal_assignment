@@ -7,7 +7,7 @@
 .c-address-book .block-page-title-block {
   .back-link {
     @include breakpoint($only-mobile) {
-      color: $user_dashboard_back_link;
+      color: $my_account_dashboard_back_link;
     }
   }
 }

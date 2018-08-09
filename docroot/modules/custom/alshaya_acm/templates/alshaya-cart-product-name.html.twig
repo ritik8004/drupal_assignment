@@ -20,7 +20,11 @@
             <div class="item--bundle">{{ include_in_bundle }}</div>
         {% endif %}
         {% if total_price is not empty %}
-            <div class="mobile-only dark">{{ total_price }}</div>
+            {% if is_free_gift_item is not empty %}
+                <div class="mobile-only dark free-gift-item">{{ total_price }}</div>
+            {% else %}
+                <div class="mobile-only dark">{{ total_price }}</div>
+            {% endif %}
         {% endif %}
         <div class="free-gift-label">{{ free_gift_label }}</div>
         {%  if  promotions is not empty %}

@@ -88,3 +88,16 @@
     }
   }
 }
+
+.c-user-edit {
+  .user-form {
+    .field--type-mobile-number {
+      .form-item {
+        &.form-type-tel {
+          margin-top: 0.5rem;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
