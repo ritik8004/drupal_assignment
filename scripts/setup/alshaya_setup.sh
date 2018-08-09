@@ -43,10 +43,10 @@ while getopts "e:s:p:b:idtah" OPTION; do
       echo "Usage:"
       echo "alshaya_setup.sh -a -e @alshaya.test -s \"whitelabel15.test\" -i -p='testsimple,MY1245"
       echo "   -e     sf drush alias"
-      echo "   -s     site url on which to execute commmands"
+      echo "   -s     site url on which to execute commands"
       echo "   -o     execute old store drush command"
-      echo "   -p     command seperated list of sku's to load"
-      echo "   -i     run inital site setup commands. This includes setup of usernamme and passowrd, uninstall of shield"
+      echo "   -p     command separated list of sku's to load"
+      echo "   -i     run initial site setup commands. This includes setup of username and password, uninstall of shield"
       echo "   -d     clear all existing products. -a to load all of them again"
       echo "   -a     load or updated all products, categories, options"
       echo "   -h     help (this output)"
@@ -71,7 +71,7 @@ drush $envn -l $site status;
 if [ "$initialSetup" = "yes" ]
 then
   echo "inital setup"
-  drush $envn -l $site apdi --brand_module="$brandName"
+  drush $envn -l $site apdi --brand_module="$brandName" --country_code="$countryCode"
   drush $envn -l $site upwd "Site factory admin" --password="AlShAyAU1@123" 
   drush $envn -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin;
   drush $envn -l $site user-add-role "administrator" --name=siteadmin;
@@ -99,16 +99,17 @@ then
   drush $envn -l $site sync-commerce-product-options;
   drush $envn -l $site sync-commerce-cats;
   drush $envn -l $site sync-stores;
+  drush $envn -l $site sync-areas;
 
   if [ "$loadsku" != "" ]
   then
     echo "loading product skus"
-    drush $envn -l $site acsp en 30 --skus="$loadsku"
-    drush $envn -l $site acsp ar 15 --skus="$loadsku"
+    drush $envn -l $site acsp en 5 --skus="$loadsku" -y;
+    drush $envn -l $site acsp ar 3 --skus="$loadsku" -y;
   else
     echo "loading all products"
-    drush $envn -l $site acsp en 30;
-    drush $envn -l $site acsp ar 15;
+    drush $envn -l $site acsp en 5 -y;
+    drush $envn -l $site acsp ar 3;
   fi
 
   drush $envn -l $site acspm;
