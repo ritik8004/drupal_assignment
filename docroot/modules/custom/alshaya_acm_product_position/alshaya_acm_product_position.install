@@ -19,6 +19,28 @@ function alshaya_acm_product_position_update_8002() {
       'install',
       AlshayaConfigManager::MODE_ADD_MISSING
     );
+
+  $translation = [
+    'Position' => [
+      'ar' => 'ما ننصح به',
+    ],
+    'Name A to Z' => [
+      'ar' => 'الاسم من أ إلى ي',
+    ],
+    'Name Z to A' => [
+      'ar' => 'الاسم من ي إلى أ',
+    ],
+    'Price Low to High' => [
+      'ar' => 'السعر من الأدنى إلى الأعلى',
+    ],
+    'Price High to Low' => [
+      'ar' => 'السعر من الأعلى إلى الأدنى',
+    ],
+    'New In' => [
+      'ar' => 'جديدنا',
+    ],
+  ];
+  alshaya_i18n_save_translations($translation);
 }
 
 /**
