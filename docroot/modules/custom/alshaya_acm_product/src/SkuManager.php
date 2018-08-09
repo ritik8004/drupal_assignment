@@ -1689,6 +1689,10 @@ class SkuManager {
   /**
    * Get first valid configurable child.
    *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Configurable SKU entity.
    *
