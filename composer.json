@@ -82,10 +82,10 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "drupal/ckeditor_font": "^1.0",
         "ckeditor/font": "^4.9",
-        "drupal/allowed_formats": "^1.1"
+        "drupal/allowed_formats": "^1.1",
+        "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
-        "drupal/console": "^1.0.0-rc13",
         "drupal/devel": "^1.0.0-alpha1",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
@@ -268,6 +268,9 @@
             },
             "drupal/restrict_role_login_by_ip" : {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
+            },
+            "symfony/http-foundation" : {
+                "Apply security update - SA-CORE-2018-005": "patches/http_foundation-request.patch"
             }
         },
         "installer-paths": {

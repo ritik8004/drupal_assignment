@@ -33,7 +33,11 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
 
   private $config_url;
 
-  private $config_variant;
+  private $config_variant_size;
+
+  private $config_variant_cup_size;
+
+  private $config_variant_color;
 
   private $simple_title;
 
@@ -58,7 +62,11 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $this->config_url = $parameters['configurl'];
     $this->config_title = $parameters['configtitle'];
     $this->config_title_ar = $parameters['configtitlear'];
-    $this->config_variant = $parameters['configvariant'];
+    $this->config_variant_size = $parameters['configvariant_size'];
+    $this->config_variant_color = $parameters['config_variant_color'];
+      $this->config_variant_cup_size = $parameters['config_variant_cup_size'];
+
+
 
   }
 
@@ -88,16 +96,46 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $this->visitPath($this->simple_url);
   }
 
-  /**
-   * @Given /^I am on a configurable product$/
-   */
-  public function iAmOnAConfigurableProduct()
-  {
-    $this->visitPath($this->config_url);
-    $this->iWaitForThePageToLoad();
-  }
+    /**
+     * @Given /^I am on a bra product$/
+     */
+    public function iAmOnABraProduct() {
+        $this->visitPath($this->config_url);
 
-  /**
+        $this->iWaitForThePageToLoad();
+        $color = $this->getSession()->getPage()->clickLink($this->config_variant_color);
+        $this->iWaitForThePageToLoad();
+        $size = $this->getSession()->getPage()->clickLink($this->config_variant_size);
+        $this->iWaitForThePageToLoad();
+        $size_2 = $this->getSession()->getPage()->clickLink($this->config_variant_cup_size);
+        $this->getSession()
+            ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given /^I am on a beauty product$/
+     */
+    public function iAmOnABeautyProduct() {
+        $this->visitPath($this->config_url);
+        $this->iWaitForThePageToLoad();
+    }
+
+    /**
+     * @Given /^I am on a sport product$/
+     */
+    public function iAmOnASportProduct() {
+        $this->visitPath($this->config_url);
+
+        $this->iWaitForThePageToLoad();
+        $color = $this->getSession()->getPage()->clickLink($this->config_variant_color);
+        $this->iWaitForThePageToLoad();
+        $size = $this->getSession()->getPage()->clickLink($this->config_variant_size);
+        $this->getSession()
+            ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+
+    /**
    * @Then /^I should see the link for simple product$/
    */
   public function iShouldSeeTheLinkForSimpleProduct()
@@ -516,18 +554,20 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     $page = $this->getSession()->getPage();
     $all_sizes = $page->findById('configurable_ajax');
     if ($all_sizes !== NULL) {
-      $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
-      $total_sizes = count($all_sizes);
+     # $all_sizes = $all_sizes->findAll('css', 'div > div.select2Option > ul li');
+        $all_sizes = $all_sizes->findAll('css', 'div.form-item-configurables-size > div.select2Option > ul li');
+        $total_sizes = count($all_sizes);
       foreach ($all_sizes as $size) {
         $check_li = $size->find('css', 'li')->getText();
-        $size_status = count($size->find('css', '.disabled'));
-        if ($size_status || !$check_li) {
-          $total_sizes--;
+   //     $size_status = count($size->find('css', '.disabled'));
+     //     print($size_status);
+       // if ($size_status || !$check_li) {
+         // $total_sizes--;
           if (!$total_sizes) {
             throw new \Exception('All sizes are disabled');
           }
           continue;
-        }
+
         $size->find('css', 'a')->click();
         break;
       }
@@ -575,7 +615,31 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
     }
 
-  /**
+    /**
+     * @When /^I select a store for UAE$/
+     */
+    public function iSelectAStoreForUAE()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('change store');
+        if ($address_button !== null && $address_button->isVisible()) {
+            $this->iSelectAnElementHavingClass('.cc-action');
+        } else {
+            $this->iSelectFirstAutocomplete('Dubai', 'edit-store-location');
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iWaitSeconds('5');
+            $select_store = $page->findLink('select this store');
+            if ($select_store->isVisible()) {
+                $select_store->click();
+            }
+            $this->getSession()->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+            $this->iSelectAnElementHavingClass('.cc-action');
+            $this->iWaitForThePageToLoad();
+        }
+    }
+
+
+    /**
    * @Given /^I select a payment option "([^"]*)"$/
    */
   public function iSelectAPaymentOption($payment)
@@ -1827,5 +1891,74 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
     }
 
+    /**
+     * @Given /^it should display color$/
+     */
+    public function itShouldDisplayColor()
+    {
+        $page = $this->getSession()->getPage();
+        $eng_size = $page->find('css','#configurable_ajax > div.form-item.js-form-type-select.form-type-select.form-item-configurables-color.configurable-swatch > div.select2Option > ul')
+            ->find('named',array('content','Color : '));
+        $eng_size = $page->find('css','.form-item-configurables-color')
+            ->find('named',array('content','Color : '));
+        $arb_size = $page->find('css','.form-item-configurables-color')
+            ->find('named',array('content','اللون : '));
+        if(!($eng_size or $arb_size)){
+            throw new Exception('Color is not displayed on PDP');
+        }
+    }
 
+    /**
+     * @Given /^it should display size$/
+     */
+    public function itShouldDisplaySizeAndQuantity() {
+        $page = $this->getSession()->getPage();
+        $eng_size = $page->find('css','#configurable_ajax > div.form-item.js-form-type-select.form-type-select.form-item-configurables-size.configurable-select > div.select2Option > ul')
+            ->find('named',array('content','Size : '));
+        $eng_size = $page->find('css','.form-item-configurables-size')
+            ->find('named',array('content','Size'));
+        $arb_size = $page->find('css','.form-item-configurables-size')
+            ->find('named',array('content','المقاس :'));
+        if(!($eng_size or $arb_size)){
+            throw new Exception('Size is not displayed on PDP');
+        }
+    }
+
+    /**
+     * @When /^I select a color for the product$/
+     */
+    public function iSelectAColorForTheProduct()
+    {
+        $page = $this->getSession()->getPage();
+        $all_colors = $page->findById('configurable_ajax');
+        if ($all_colors !== NULL) {
+            $all_colors = $all_colors->findAll('css', 'div.form-item-configurables-article-castor-id > div.select2Option > ul li');
+            foreach ($all_colors as $color) {
+                $check_empty_li = $color->find('css','li')->getHtml();
+                if($check_empty_li == null) {
+                    $color++;
+                    continue;
+                }
+                $color->find('css', 'a')->click();
+                break;
+            }
+        } else {
+            echo 'No color attribute is available for this product';
+        }
+    }
+
+    /**
+     * @When /^I select address for Arabic$/
+     */
+    public function iSelectAddressForArabic()
+    {
+        $page = $this->getSession()->getPage();
+        $address_button = $page->findLink('توصيل إلى هذا العنوان')->isVisible();
+        if($address_button == true){
+            $page->findLink('توصيل إلى هذا العنوان')->click();
+        }
+        else{
+            echo 'Address is auto selected';
+        }
+    }
 }

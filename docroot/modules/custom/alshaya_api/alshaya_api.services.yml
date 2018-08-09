@@ -5,7 +5,6 @@ services:
       - '@config.factory'
       - '@language_manager'
       - '@datetime.time'
-      - '@cache.data'
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
 

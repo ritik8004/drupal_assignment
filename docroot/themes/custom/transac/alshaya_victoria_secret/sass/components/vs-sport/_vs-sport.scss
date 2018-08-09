@@ -4,7 +4,7 @@
     .c-plp,
     .c-department {
       .c-page-title {
-        font-family: $vs-sport-bentonsanscomp;
+        font-family: $vs-bentonsanscomp-medium;
         text-transform: uppercase;
         font-size: 2rem;
         letter-spacing: 1.6px;
@@ -23,17 +23,12 @@
         h2 {
           width: 100%;
 
-          span {
-            font-family: $vs-sport-bentonsanscomp;
+          .title--main,
+          &.field--name-name {
+            font-family: $vs-bentonsanscomp-medium;
             text-transform: uppercase;
             font-size: 2rem;
             letter-spacing: 1.6px;
-
-            &.title--sub {
-              font-family: $vs-regular;
-              font-size: 0.875rem;
-              letter-spacing: 0.8px;
-            }
           }
         }
       }
@@ -42,7 +37,7 @@
     .field--name-field-skus {
       .sku-base-form {
         button[type="submit"] {
-          font-family: $vs-sport-bentonsanscomp;
+          font-family: $vs-bentonsanscomp-medium;
           font-size: 1.125rem;
           letter-spacing: 0.9px;
         }
@@ -52,52 +47,52 @@
     .short-description-wrapper,
     .delivery-options-wrapper {
       .field__label {
-        font-family: $vs-sport-bentonsanscomp;
-        font-size: 1.25rem;
-        letter-spacing: 1px;
+        font-family: $vs-bentonsanscomp-medium;
+        font-size: 1.3125rem;
+        // Using px value for 0.05em.
+        letter-spacing: 1.05px;
         text-transform: uppercase;
       }
     }
 
     .subtitle {
       &.crossell-title {
-        font-family: $vs-sport-bentonsanscomp;
-        font-size: 1.25rem;
-        letter-spacing: 1px;
+        font-family: $vs-bentonsanscomp-medium;
+        font-size: 1.3125rem;
+        // Using px value for 0.05em.
+        letter-spacing: 1.05px;
         text-transform: uppercase;
       }
     }
 
-    .promo-panel-fixed {
+    .promo__panel {
       &.block-promo-panel-wrapper {
         .promo-panel-label {
-          font-family: $vs-sport-bentonsanscomp;
+          font-family: $vs-bentonsanscomp-medium;
           font-size: 1.125rem;
           letter-spacing: 1px;
           text-transform: uppercase;
         }
       }
     }
+  }
+}
 
-    .promo__panel {
-      .paragraph--type--offers-bordered {
-        .field--name-field-heading {
-          font-family: $vs-sport-bentonsanscomp;
-          font-size: 1.125rem;
-          letter-spacing: 1.2px;
+@include breakpoint($desktop) {
+  html[lang="en"] {
+    .super-category-victorias-secret,
+    .super-category-victoria-sport {
+      .block-alshaya-main-menu {
+        a.menu__link {
+          letter-spacing: 0.44px;
         }
 
-        .field--name-field-title {
-          font-family: $vs-sport-bentonsanscomp;
-          font-size: 2rem;
-          letter-spacing: 1.8px;
-        }
-
-        .field--name-field-link {
-          a {
-            font-family: $vs-sport-bentonsanscomp;
-            font-size: 1.125rem;
-            letter-spacing: 1.9px;
+        .menu--one__list-item {
+          & > .menu__link-wrapper {
+            & > a.menu__link {
+              font-size: 0.75rem;
+              letter-spacing: 2.4px;
+            }
           }
         }
       }

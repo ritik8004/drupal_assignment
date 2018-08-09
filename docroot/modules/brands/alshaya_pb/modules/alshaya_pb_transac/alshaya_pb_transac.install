@@ -54,9 +54,12 @@ function alshaya_pb_transac_install() {
     'Discover' => [
       'ar' => ' تعرفي إلينا ',
     ],
-    'I would like to receive exclusive deals from PotteryBarn.' => [
+    'I would like to receive exclusive deals from Pottery Barn.' => [
       'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
     ],
   ];
   alshaya_i18n_save_translations($strings);
+
+  // Re-save indexes to ensure config overrides are taken into consideration.
+  _alshaya_search_resave_indexes();
 }

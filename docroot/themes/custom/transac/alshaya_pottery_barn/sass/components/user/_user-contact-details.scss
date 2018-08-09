@@ -3,3 +3,24 @@
     line-height: 1.6;
   }
 }
+
+.c-user-edit {
+  .user-form {
+    .field--type-mobile-number {
+      .form-item {
+        &.form-type-tel {
+          margin-top: 0.5rem;
+          width: 100%;
+        }
+      }
+
+      .mobile-number-field {
+        margin-bottom: 0.4375rem;
+      }
+    }
+
+    #edit-account {
+      overflow: auto;
+    }
+  }
+}

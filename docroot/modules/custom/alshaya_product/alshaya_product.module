@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Database\Query\SelectInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\views\ViewExecutable;
@@ -126,6 +127,18 @@ function alshaya_product_search_api_db_query_alter(SelectInterface &$db_query, Q
 }
 
 /**
+ * Implements hook_form_alter().
+ */
+function alshaya_product_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-alshaya-product-list-block-1') {
+    // Change position label.
+    if (isset($form['sort_bef_combine']['#options']['nid ASC']) && $form['sort_bef_combine']['#options']['nid ASC']) {
+      $form['sort_bef_combine']['#options']['nid ASC'] = t('Best Seller');
+    }
+  }
+}
+
+/**
  * Implements hook_acq_sku_base_fields_updated().
  */
 function alshaya_product_acq_sku_base_fields_updated(array $fields, $op = 'add') {
@@ -145,7 +158,7 @@ function alshaya_product_acq_sku_base_fields_updated(array $fields, $op = 'add')
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
       }
       break;
 

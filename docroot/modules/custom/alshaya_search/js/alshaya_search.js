@@ -172,8 +172,8 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Hide other category filter options when one of the L1 items is selected.
-      if ($('ul[data-drupal-facet-id="category"]').find('input[checked="checked"]').length > 0) {
-        $('ul[data-drupal-facet-id="category"]').children('li').each(function() {
+      if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
+        $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
           if ($(this).hasClass('facet-item--expanded') ||
             ($(this).children('input[checked="checked"]').length > 0)) {
             return;
@@ -185,7 +185,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
 
       // Append active-item class to L2 active items in facet category list on SRP.
-      $('ul[data-drupal-facet-id="category"] > li > ul > li > a').each(function() {
+      $('ul[data-drupal-facet-id="category"] > li > ul > li > a, ul[data-drupal-facet-id="promotion_category_facet"] > li > ul > li > a').each(function() {
         if ($(this).hasClass('is-active')) {
           $(this).parent('li').addClass('active-item');
         }
@@ -198,9 +198,9 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         if ($(window).width() < 768) {
           // Finding the active facet and showing/hidding category facets accordingly.
           var alshayaPlpSearchActiveFacet = $('.current-active-facet').attr('data-block-plugin-id');
-          var alshayaPlpSearchActiveCategoryFacet = $('.current-active-facet.block-facet-blockplp-category-facet, .current-active-facet.block-facet-blockcategory');
-          var alshayaPlpSearchCategoryFacet = $('ul[data-drupal-facet-id=category].js-facets-checkbox-links, ul[data-drupal-facet-id=plp_category_facet].js-facets-checkbox-links');
-          var alshayaPlpSearchCategoryFacetTitle = $('.block-facet-blockplp-category-facet .c-accordion__title, .block-facet-blockcategory .c-accordion__title');
+          var alshayaPlpSearchActiveCategoryFacet = $('.current-active-facet.block-facet-blockplp-category-facet, .current-active-facet.block-facet-blockcategory, .current-active-facet.block-facet-blockpromotion-category-facet');
+          var alshayaPlpSearchCategoryFacet = $('ul[data-drupal-facet-id=category].js-facets-checkbox-links, ul[data-drupal-facet-id=plp_category_facet].js-facets-checkbox-links, ul[data-drupal-facet-id=promotion_category_facet].js-facets-checkbox-links ');
+          var alshayaPlpSearchCategoryFacetTitle = $('.block-facet-blockplp-category-facet .c-accordion__title, .block-facet-blockcategory .c-accordion__title, .block-facet-blockpromotion-category-facet .c-accordion__title');
 
           if (alshayaPlpSearchActiveFacet) {
             if (alshayaPlpSearchActiveCategoryFacet.length > 0) {
@@ -297,7 +297,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.convertL2ToAccordion = {
     attach: function (context, settings) {
-      $('[data-drupal-facet-id="category"] .facet-item, [data-drupal-facet-id="plp_category_facet"] .facet-item').each(function () {
+      $('[data-drupal-facet-id="category"] .facet-item, [data-drupal-facet-id="plp_category_facet"] .facet-item, [data-drupal-facet-id="promotion_category_facet"] .facet-item').each(function () {
         if ($(this).children('a').length > 0) {
           // Extract query string from the relative url string.
           var facet_url_query_string = ($(this).children('a').attr('href')).match(/(\?.*)/);

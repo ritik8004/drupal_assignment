@@ -12,6 +12,10 @@ services:
       - '@path.validator'
       - '@title_resolver'
       - '@request_stack'
+  alshaya_acm_product.helper:
+    class: Drupal\alshaya_acm_product\ProductHelper
+    arguments:
+      - '@config.factory'
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
     arguments:
@@ -24,6 +28,7 @@ services:
       - '@entity.repository'
       - '@logger.factory'
       - '@acq_sku.linked_sku'
+      - '@acq_sku.cart_form_helper'
       - '@module_handler'
       - '@cache.alshaya'
       - '@cache.product_labels'

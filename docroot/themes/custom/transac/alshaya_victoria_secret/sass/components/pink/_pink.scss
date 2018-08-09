@@ -1,19 +1,21 @@
 .super-category-pink {
   html[lang="en"] & {
     .block-alshaya-main-menu {
-      a {
-        &.menu--one__link {
-          font-family: $pink-pinksans;
-          font-size: 1.25rem !important;
-          letter-spacing: 0.07em;
-        }
+      .menu--one__link {
+        font-family: $pink-pinksans;
+        font-size: 1.25rem !important;
+        letter-spacing: 0.07em;
 
-        &.menu__link {
-          @include breakpoint($upto-desktop) {
-            font-family: $pink-pinksans;
-            font-size: 1.5rem !important;
-            letter-spacing: 0.07em;
-          }
+        @include breakpoint($desktop) {
+          font-size: 1.1875rem !important;
+        }
+      }
+
+      .menu__link {
+        @include breakpoint($upto-desktop) {
+          font-family: $pink-pinksans;
+          font-size: 1.5rem !important;
+          letter-spacing: 0.07em;
         }
       }
 
@@ -69,17 +71,19 @@
         h2 {
           width: 100%;
 
-          span {
+          .title--main,
+          &.field--name-name {
             text-transform: uppercase;
             font-family: $pink-pinkslab;
-            font-size: 2.25rem;
-            letter-spacing: 2px;
+            font-size: 2.625rem;
+            letter-spacing: 2.1px;
+          }
 
-            &.title--sub {
-              font-family: $pink-pinksans;
-              font-size: 1.125rem;
-              letter-spacing: 1px;
-            }
+          .title--sub {
+            font-family: $pink-pinksans;
+            text-transform: none;
+            font-size: 1.1875rem !important;
+            letter-spacing: 1.33px;
           }
         }
       }
@@ -90,9 +94,10 @@
         button[type="submit"] {
           font-family: $pink-pinksans;
           font-size: 1.25rem;
-          letter-spacing: 1px;
-          font-weight: 700;
+          // Using px value for 0.07em.
+          letter-spacing: 1.4px;
           text-transform: uppercase;
+          line-height: 28px;
         }
       }
     }
@@ -101,7 +106,8 @@
     .delivery-options-wrapper {
       .field__label {
         font-family: $pink-pinkslab;
-        font-size: 1.5rem;
+        font-size: 1.875rem;
+        // Using px value for 0.05em.
         letter-spacing: 1.5px;
         text-transform: uppercase;
       }
@@ -110,43 +116,19 @@
     .subtitle {
       &.crossell-title {
         font-family: $pink-pinkslab;
-        font-size: 1.5rem;
+        font-size: 1.875rem;
+        // Using px value for 0.05em.
         letter-spacing: 1.5px;
         text-transform: uppercase;
       }
     }
 
-    .promo-panel-fixed {
+    .promo__panel {
       &.block-promo-panel-wrapper {
         .promo-panel-label {
           font-family: $pink-pinkslab;
           font-size: 1.25rem;
           text-transform: uppercase;
-        }
-      }
-    }
-
-    .promo__panel {
-      .paragraph--type--offers-bordered {
-        .field--name-field-heading {
-          font-family: $pink-pinksans;
-          font-size: 1.125rem;
-          letter-spacing: 1.2px;
-          text-transform: uppercase;
-        }
-
-        .field--name-field-title {
-          font-family: $pink-pinkslab;
-          font-size: 2.25rem;
-          letter-spacing: 2px;
-        }
-
-        .field--name-field-link {
-          a {
-            font-family: $pink-pinksans;
-            font-size: 1.125rem;
-            letter-spacing: 1.9px;
-          }
         }
       }
     }
@@ -160,14 +142,45 @@
       }
     }
   }
-}
 
-html[lang=“en”] .super-category-pink {
-  .block-alshaya-main-menu {
-    li.menu--one__list-item {
-      .menu--one__link {
-        html[lang="en"] & {
-          letter-spacing: 0.07em;
+  .promo__panel {
+    > .field--name-field-paragraph-content {
+      .slick-slide {
+        .field--name-field-heading {
+          font-family: $pink-pinksans;
+          font-size: 1.0625rem;
+          // Using px value for 0.25em.
+          letter-spacing: 1.19px;
+
+          @include normal-arabic-letter-spacing;
+        }
+
+        .field--name-field-title {
+          font-family: $pink-pinksans-130;
+          font-size: 2rem;
+          // Using px value for 0.07em.
+          letter-spacing: 2.24px;
+
+          @include normal-arabic-letter-spacing;
+        }
+
+        .field--name-field-sub-title {
+          font-family: $vs-bentonsans-regular;
+          font-size: 0.875rem;
+          // Using px value for 0.04em.
+          letter-spacing: 0.98px;
+
+          @include normal-arabic-letter-spacing;
+        }
+
+        .field--name-field-link {
+          a {
+            font-family: $pink-pinksans;
+            font-size: 1.1875rem;
+            letter-spacing: 1.9px;
+
+            @include normal-arabic-letter-spacing;
+          }
         }
       }
     }

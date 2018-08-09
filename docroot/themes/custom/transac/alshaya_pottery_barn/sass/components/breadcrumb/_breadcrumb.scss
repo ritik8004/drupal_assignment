@@ -3,8 +3,21 @@
     background: $breadcrumb_bg_tablet;
   }
 
+  ol {
+    font-size: 0.625rem;
+    padding: 0.5rem 1.5rem;
+
+    @include breakpoint($desktop) {
+      padding: 0.5rem 1.5rem 1rem;
+    }
+  }
+
   li {
     font-weight: 600;
     text-transform: capitalize;
+
+    &::after {
+      padding: 0 0.1875rem;
+    }
   }
 }
