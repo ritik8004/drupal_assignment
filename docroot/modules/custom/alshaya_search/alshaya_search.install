@@ -7,6 +7,20 @@
 
 use Drupal\search_api\Entity\Index;
 use Drupal\user\Entity\Role;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_search_update_8020() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_search.settings'],
+      'alshaya_search',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING
+    );
+}
 
 /**
  * Implements hook_update_N().
