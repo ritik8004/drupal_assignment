@@ -130,7 +130,8 @@
 }
 
 ul[data-drupal-facet-id=category],
-ul[data-drupal-facet-id=plp_category_facet] {
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
   &.js-facets-checkbox-links {
     display: block;
     max-height: none;
@@ -145,14 +146,15 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > label {
       &::before {
         content: unset;
-        display: none;
       }
     }
 
     > input[type=checkbox] {
       &:checked {
         ~ label {
-          font-family: $alshaya-bold;
+          span {
+            font-family: $alshaya-bold;
+          }
 
           &::before {
             content: unset;
@@ -166,14 +168,15 @@ ul[data-drupal-facet-id=plp_category_facet] {
         > label {
           &::before {
             content: unset;
-            display: none;
           }
         }
 
         > input[type=checkbox] {
           &:checked {
             ~ label {
-              font-family: $alshaya-bold;
+              span {
+                font-family: $alshaya-bold;
+              }
 
               &::before {
                 content: unset;
@@ -237,11 +240,13 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
     > input[type=checkbox]:checked {
       ~ label {
-        font-family: $alshaya-thin;
-
         @include icon(chevron#{$left}, before) {
           top: 0.875rem;
           cursor: pointer;
+        }
+
+        span {
+          font-family: $alshaya-thin;
         }
       }
     }
@@ -322,7 +327,8 @@ ul[data-drupal-facet-id=category] {
   }
 }
 
-ul[data-drupal-facet-id=plp_category_facet] {
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
   li {
     label {
       &::before {
