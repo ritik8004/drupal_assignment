@@ -5,12 +5,7 @@
  * Provides drush commands for the products of Acquia Commerce connector.
  */
 
-use Drupal\Core\Cache\Cache;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_sku\Plugin\rest\resource\ProductSyncResource;
 use Drupal\Core\Url;
-
-const DELETE_BATCH_COUNT = 200;
 
 /**
  * Implements hook_drush_command().
@@ -33,7 +28,6 @@ function alshaya_hm_images_drush_command() {
 function drush_alshaya_hm_images_alshaya_hm_faulty_images() {
   $faulty_image = 'eefda5660843594e82bf807be8edbe69';
 
-
   $select = \Drupal::database()->select('acq_sku_field_data');
   $select->fields('acq_sku_field_data', ['id', 'langcode', 'sku', 'attr_assets__value']);
   $select->addField('acq_sku_field_data', 'attr_assets__value', 'assets');
@@ -43,7 +37,7 @@ function drush_alshaya_hm_images_alshaya_hm_faulty_images() {
   $skus = $select->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
   $base_url = \Drupal::config('alshaya_hm_images.settings')->get('base_url');
-  $fault_asset = [];
+  $faulty_assets = [];
   foreach($skus as $sku) {
     $assets = unserialize($sku['assets']);
     foreach ($assets as $key => $asset) {
@@ -65,7 +59,7 @@ function drush_alshaya_hm_images_alshaya_hm_faulty_images() {
       $file_path = Url::fromUri($base_url, $options)->toString();
       $output = md5_file($file_path);
       if ($output == $faulty_image) {
-        $fault_asset[] = [
+        $faulty_assets[] = [
           'id' => $sku['id'],
           'sku' => $sku['sku'],
           'AssetId' => $asset['Data']['AssetId'],
@@ -75,5 +69,5 @@ function drush_alshaya_hm_images_alshaya_hm_faulty_images() {
     }
   }
 
-  print_r($fault_asset);
+  print_r($faulty_assets);
 }
