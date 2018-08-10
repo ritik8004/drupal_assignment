@@ -6,6 +6,21 @@
     font-weight: normal;
   }
 
+  ul[data-drupal-facet-id=category],
+  ul[data-drupal-facet-id=promotion_category_facet],
+  ul[data-drupal-facet-id=plp_category_facet] {
+    a {
+      font-weight: normal;
+      line-height: 2;
+      margin: 0.25rem;
+      display: inline-block;
+      text-transform: capitalize;
+      font-size: 0.875rem;
+      color: $plp_facet_filter;
+      position: relative;
+    }
+  }
+
   ul {
     @include breakpoint($desktop) {
       padding-top: 0.625rem;

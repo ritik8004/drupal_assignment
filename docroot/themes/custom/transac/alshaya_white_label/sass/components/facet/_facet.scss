@@ -9,6 +9,22 @@
     text-transform: lowercase;
   }
 
+  ul[data-drupal-facet-id=category],
+  ul[data-drupal-facet-id=promotion_category_facet],
+  ul[data-drupal-facet-id=plp_category_facet] {
+    a {
+      font-weight: normal;
+      line-height: 2;
+      margin: 0.25rem 0;
+      margin-#{$left}: 1rem;
+      display: inline-block;
+      text-transform: lowercase;
+      font-size: 0.875rem;
+      color: $plp_facet_item_label;
+      position: relative;
+    }
+  }
+
   ul {
     @extend %list-clear;
 
