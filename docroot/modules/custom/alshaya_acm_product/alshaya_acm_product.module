@@ -527,6 +527,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
 
+              // If not sku entity object.
+              if (!$free_sku_entity instanceof SKUInterface) {
+                continue;
+              }
+
               $free_sku_title = $free_sku_image = [
                 '#type' => 'link',
                 '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
@@ -932,6 +937,12 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
         foreach ($free_gift_promos as $key => $promotion) {
           if (!empty($free_gift_promos)) {
             $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
+
+            // If not sku entity object.
+            if (!$free_sku_entity instanceof SKUInterface) {
+              continue;
+            }
+
             $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
             $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
           }
