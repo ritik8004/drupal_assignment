@@ -130,7 +130,6 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > label {
       &::before {
         content: unset;
-        display: none;
       }
     }
 
@@ -151,7 +150,6 @@ ul[data-drupal-facet-id=plp_category_facet] {
         > label {
           &::before {
             content: unset;
-            display: none;
           }
         }
 
@@ -307,7 +305,8 @@ ul[data-drupal-facet-id=category] {
   }
 }
 
-ul[data-drupal-facet-id=plp_category_facet] {
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
   li {
     label {
       &::before {
