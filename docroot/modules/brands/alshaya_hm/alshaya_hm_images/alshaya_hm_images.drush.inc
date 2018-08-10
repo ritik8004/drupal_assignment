@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides drush commands for the products of Acquia Commerce connector.
+ * Provides drush commands for the H&M images module.
  */
 
 use Drupal\Core\Url;
@@ -14,10 +14,15 @@ function alshaya_hm_images_drush_command() {
   $commands = [];
 
   $commands['alshaya-hm-faulty-images'] = [
-    'description' => 'Run a full synchronization of all commerce product options.',
-    'aliases'     => ['hmfaulty'],
+    'description' => 'Command to get faulty images of H&M.',
+    'aliases'     => ['hm-faulty-images'],
+    'arguments' => [
+      'start' => 'Starting limit.',
+      'length' => 'total number of records to execute.',
+    ],
     'examples'    => [
-      'drush acsp' => 'Run a full product synchronization of all available product options.',
+      'drush hm-faulty-images' => 'Command to get faulty images of H&M.',
+      'drush hm-faulty-images 0 100' => 'Print my example command with an argument "myargument".',
     ],
   ];
 
@@ -25,28 +30,25 @@ function alshaya_hm_images_drush_command() {
 }
 
 
-function drush_alshaya_hm_images_alshaya_hm_faulty_images() {
+function drush_alshaya_hm_images_alshaya_hm_faulty_images($start = 0, $length = 1000) {
   $faulty_image = 'c6bcf0e84423a68fa8d32f14bfc2dc80';
 
   $select = \Drupal::database()->select('acq_sku_field_data');
-  $select->fields('acq_sku_field_data', ['id', 'langcode', 'sku', 'attr_assets__value']);
+  $select->fields('acq_sku_field_data', ['id', 'langcode', 'sku']);
   $select->addField('acq_sku_field_data', 'attr_assets__value', 'assets');
   $select->condition('langcode', 'en');
   $select->condition('attr_assets__value', 'a:0:{}', '<>');
+  $select->range($start, $length);
   $select->orderBy('id', 'DESC');
-  $select->range(0, 1000);
   $skus = $select->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
   $alshaya_hm_images_settings = \Drupal::config('alshaya_hm_images.settings');
   $base_url = $alshaya_hm_images_settings->get('base_url');
-  $faulty_assets = $checked_assets = [];
+  $line = 0;
 
+  $checked_assets = [];
   foreach ($skus as $index => $sku) {
     $assets = unserialize($sku['assets']);
-
-    if ($index > 0 && $index%10 == 0) {
-      echo date('H:i:s') . "- Processing " . $index . "/" . count($skus) . "\n";
-    }
 
     foreach ($assets as $key => $asset) {
       if ((isset($asset['is_old_format']) && $asset['is_old_format']) || empty($asset['Data']['FilePath'])) {
@@ -68,22 +70,17 @@ function drush_alshaya_hm_images_alshaya_hm_faulty_images() {
       $options = [
         'query' => [
           'set' => implode(',', $set),
-          'call' => 'url[file:/product/listing]',
+          'call' => 'url[file:/product/miniature]',
         ],
       ];
 
       $file_path = Url::fromUri($base_url, $options)->toString();
       $output = md5_file($file_path);
       if ($output == $faulty_image) {
-        $faulty_assets[] = [
-          'id' => $sku['id'],
-          'sku' => $sku['sku'],
-          'AssetId' => $asset['Data']['AssetId'],
-          'file_path' => urldecode($file_path),
-        ];
+        echo $line++ . " sku {$sku['id']} / {$sku['sku']} has invalid image for {$asset['Data']['AssetId']} ({$file_path}) \n";
       }
     }
   }
 
-  print_r($faulty_assets);
+ // print_r($faulty_assets);
 }
