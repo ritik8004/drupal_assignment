@@ -505,10 +505,16 @@ class APIWrapper implements APIWrapperInterface {
    * {@inheritdoc}
    */
   public function authenticateCustomer($email, $password) {
+    $versionInClosure = $this->apiVersion;
     $endpoint = $this->apiVersion . "/agent/customer/$email";
 
-    $doReq = function ($client, $opt) use ($endpoint, $password) {
-      $opt['form_params']['password'] = $password;
+    $doReq = function ($client, $opt) use ($endpoint, $password, $versionInClosure) {
+      if ($versionInClosure === 'v1') {
+        $opt['form_params']['password'] = $password;
+      }
+      else {
+        $opt['json']['password'] = $password;
+      }
 
       return ($client->post($endpoint, $opt));
     };
