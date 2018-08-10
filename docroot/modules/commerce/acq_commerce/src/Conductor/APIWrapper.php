@@ -382,13 +382,19 @@ class APIWrapper implements APIWrapperInterface {
    * {@inheritdoc}
    */
   public function updateCustomer($customer, array $options = []) {
+    $versionInClosure = $this->apiVersion;
     $endpoint = $this->apiVersion . "/agent/customer";
 
-    $doReq = function ($client, $opt) use ($endpoint, $customer, $options) {
+    $doReq = function ($client, $opt) use ($endpoint, $customer, $options, $versionInClosure) {
       $opt['json']['customer'] = $customer;
 
       if (isset($options['password']) && !empty($options['password'])) {
-        $opt['json']['password'] = $options['password'];
+        if ($versionInClosure === 'v1') {
+          $opt['json']['password'] = $options['password'];
+        }
+        else {
+          $opt['json']['customer']['password'] = $options['password'];
+        }
       }
 
       if (isset($options['password_old']) && !empty($options['password_old'])) {
@@ -505,10 +511,16 @@ class APIWrapper implements APIWrapperInterface {
    * {@inheritdoc}
    */
   public function authenticateCustomer($email, $password) {
+    $versionInClosure = $this->apiVersion;
     $endpoint = $this->apiVersion . "/agent/customer/$email";
 
-    $doReq = function ($client, $opt) use ($endpoint, $password) {
-      $opt['form_params']['password'] = $password;
+    $doReq = function ($client, $opt) use ($endpoint, $password, $versionInClosure) {
+      if ($versionInClosure === 'v1') {
+        $opt['form_params']['password'] = $password;
+      }
+      else {
+        $opt['json']['password'] = $password;
+      }
 
       return ($client->post($endpoint, $opt));
     };
