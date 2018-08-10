@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f9b182c5a7e8f70b46c78a516f1552b",
+    "content-hash": "a792737e521e36cea2401d09bf1677cd",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3385,6 +3385,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
