@@ -848,9 +848,6 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     }
   }
 
-  // Load the first image.
-  $sku_image = alshaya_acm_get_product_display_image($sku_entity, '291x288', 'cart');
-
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $item_cart_price = $skuManager->buildCartItemPrice($sku_entity, $cart_item['price']);
   $total_price = [
