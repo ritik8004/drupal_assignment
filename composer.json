@@ -6,7 +6,7 @@
     "prefer-stable": true,
     "require": {
         "acquia/blt": "^8.9.7",
-        "acquia/lightning": "^2.2.0",
+        "acquia/lightning": "^3.0.0",
         "drupal/address": "^1.0-rc4",
         "drupal/acsf": "^1.48.0",
         "drupal/key_value_field": "^1.0-beta1",
@@ -37,7 +37,7 @@
         "drupal/mimemail": "1.x-dev",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_autocomplete": "^1.0",
-        "drupal/acquia_connector": "1.9.0",
+        "drupal/acquia_connector": "^1.9.0",
         "drupal/geolocation": "^1.10",
         "drupal/block_field": "^1.0@alpha",
         "drupal/google_tag": "1.x-dev",
@@ -78,15 +78,15 @@
         "drupal/media_entity_actions": "1.x-dev",
         "drupal/jquery_minicolors": "^1.2",
         "claviska/jquery-minicolors": "^2.2",
-        "drupal/jsonapi": "1.18 as 1.4.0",
+        "drupal/jsonapi": "^1.18",
         "drupal/restrict_role_login_by_ip": "^1.0",
         "hgoebl/mobile-detect": "^1.4.2"
     },
     "require-dev": {
-        "drupal/console": "^1.0.0-rc13",
         "drupal/devel": "^1.0.0-alpha1",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "drupal/stage_file_proxy": "^1.0@alpha"
+        "drupal/stage_file_proxy": "^1.0@alpha",
+        "drupal/console": "^1.8"
     },
     "repositories": {
         "drupal": {
@@ -184,14 +184,14 @@
             "drupal/core": {
                 "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
                 "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/add_views_render-2500313-39.patch",
+                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2018-03-14/views-render_caching_ajax_requests-2500313-44-85x.patch",
                 "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
                 "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
-                "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-324.patch",
+                "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-296.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
-                "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/missing_contexts-2521956-32.patch"
+                "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
@@ -233,9 +233,7 @@
                 "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
             },
             "acquia/blt": {
-                "ACR2-2704 css linting sniff": "./patches/blt/css_lint_sniff_ACR2-2704.patch",
-                "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch",
-                "Travis marked as success despite error after core update": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2578.patch"
+                "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch"
             },
             "drupal/views_infinite_scroll" : {
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
@@ -245,9 +243,6 @@
             },
             "drupal/restrict_role_login_by_ip" : {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
-            },
-            "symfony/http-foundation" : {
-                "Apply security update - SA-CORE-2018-005": "patches/http_foundation-request.patch"
             }
         },
         "installer-paths": {

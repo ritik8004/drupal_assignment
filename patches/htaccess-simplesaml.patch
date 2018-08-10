@@ -1,13 +1,13 @@
 diff --git a/.htaccess b/.htaccess
-index 4716fa1..93f9ab6 100644
+index 1dad3c1..dc494a7 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -150,6 +150,8 @@ AddEncoding gzip svgz
+@@ -184,6 +184,8 @@ AddEncoding gzip svgz
    # Copy and adapt this rule to directly execute PHP files in contributed or
    # custom modules or to run another PHP application in the same directory.
    RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
 +  # Allow access to simplesaml paths
 +  RewriteCond %{REQUEST_URI} !^/simplesaml
+   # ACSF requirement: allow access to apc_rebuild.php.
+   RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild.php$
    # Deny access to any other PHP files that do not match the rules above.
-   # Specifically, disallow autoload.php from being served directly.
-   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
