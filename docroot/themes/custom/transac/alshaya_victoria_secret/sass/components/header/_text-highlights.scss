@@ -25,6 +25,12 @@
 
     .sub-heading {
       li {
+        a {
+          @include breakpoint($upto-desktop) {
+            font-size: 0.875rem;
+          }
+        }
+
         @include breakpoint($desktop) {
           padding: 0.3125rem 0;
         }
