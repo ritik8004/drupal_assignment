@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+id: video_file_upload
+label: 'Video File Upload'
+description: 'Upload Video file (mov, avi, mp4, flv).'
+source: file
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_media_file
+field_map: {  }

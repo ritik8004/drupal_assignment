@@ -10,6 +10,21 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Implements hook_update_N().
  *
+ * Adding new media type for video file upload .
+ */
+function alshaya_media_update_8102() {
+  $configs = [
+    'media.type.video_file_upload',
+    'field.field.media.video_file_upload.field_document',
+    'field.field.media.video_file_upload.field_media_in_library',
+    'core.entity_form_display.media.video_file_upload.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_media');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install lightning_media_video module and remove unnecessary bundle of media.
  */
 function alshaya_media_update_8101() {
