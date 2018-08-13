@@ -3,23 +3,23 @@ status: true
 dependencies:
   config:
     - field.storage.media.field_document
-    - media.type.video_file_upload
+    - media.type.video
   module:
     - file
-id: media.video_file_upload.field_document
+id: media.video.field_document
 field_name: field_document
 entity_type: media
-bundle: video_file_upload
-label: File
+bundle: video
+label: 'Video File Upload'
 description: ''
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
   file_directory: '[date:custom:Y]-[date:custom:m]'
   file_extensions: 'avi mov mp4 wmv flv'
-  max_filesize: ''
+  max_filesize: 2GB
   description_field: false
   handler: 'default:file'
   handler_settings: {  }
