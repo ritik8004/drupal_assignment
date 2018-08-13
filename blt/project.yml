@@ -76,5 +76,4 @@ multisite:
   name:
     - g
 cm:
-  strategy: features
-  allow-overrides: true
+  strategy: none
