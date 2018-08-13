@@ -24,6 +24,11 @@ function alshaya_api_update_8002() {
     $config->set($key, $value);
   }
 
+  // We know we are removing few fields, delete them from existing config here.
+  $config->clear('token_cache_time');
+  $config->clear('username');
+  $config->clear('password');
+
   $config->save();
 }
 
