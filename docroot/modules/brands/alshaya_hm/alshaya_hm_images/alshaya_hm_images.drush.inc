@@ -25,7 +25,7 @@ function alshaya_hm_images_drush_command() {
 }
 
 
-function drush_alshaya_api_alshaya_hm_images_report() {
+function alshaya_hm_images_alshaya_hm_images_report() {
 // product/listing without dam
 //  $faulty_image = 'eefda5660843594e82bf807be8edbe69';
 // product/miniature without dam
