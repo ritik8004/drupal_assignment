@@ -35,6 +35,31 @@
       }
     }
   }
+
+  .c-products-list {
+    .view-content {
+      & > div {
+        @include breakpoint($desktop) {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+
+  .c-products__item {
+    @include breakpoint($desktop) {
+      width: 32%;
+    }
+
+    .alshaya_search_gallery {
+      .alshaya_search_mainimage {
+        height: auto;
+        min-height: auto;
+      }
+    }
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
