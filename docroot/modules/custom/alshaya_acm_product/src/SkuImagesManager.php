@@ -123,6 +123,17 @@ class SkuImagesManager {
       }
     }
 
+    // For configurable ones, starting from CORE-4775 we first load images from
+    // first child.
+    if ($sku->bundle() == 'configurable' && $check_parent_child) {
+      $child = $this->getFirstChildWithMedia($sku);
+
+      // Check if there is child SKU available, use media files of child.
+      if ($child instanceof SKUInterface) {
+        return $this->getAllMedia($child, FALSE, $default_label);
+      }
+    }
+
     $media = $sku->getMedia(TRUE, FALSE, $default_label);
 
     $return = [
@@ -141,25 +152,14 @@ class SkuImagesManager {
     $return['main'] = $main;
     $return['thumbs'] = $thumbs;
 
-    // Avoid notices and warnings in local.
-    if ($check_parent_child && empty($media) && empty($main)) {
-      if ($sku->bundle() == 'simple') {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku->getPluginInstance();
-        $parent = $plugin->getParentSku($sku);
+    if ($check_parent_child && empty($media) && empty($main) && $sku->bundle() == 'simple') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
 
-        // Check if there is parent SKU available, use media files of parent.
-        if ($parent instanceof SKUInterface) {
-          return $this->getAllMedia($parent);
-        }
-      }
-      elseif ($sku->bundle() == 'configurable') {
-        $child = $this->getFirstChildWithMedia($sku);
-
-        // Check if there is child SKU available, use media files of child.
-        if ($child instanceof SKUInterface) {
-          return $this->getAllMedia($child, FALSE, $default_label);
-        }
+      // Check if there is parent SKU available, use media files of parent.
+      if ($parent instanceof SKUInterface) {
+        return $this->getAllMedia($parent);
       }
     }
 

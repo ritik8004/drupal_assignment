@@ -77,15 +77,21 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
 
   // Check if the gallery has a main image. If not, look for assets.
   if ($context == 'search') {
-    // Get the assets.
-    $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
-    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
+    $main_image_assets = NULL;
+    $hover_image_assets = NULL;
 
-    // If no assets attached & the sku is configurable, try to use the
-    // assets attached with first child sku attached.
-    if ((!$main_image_assets) && (!$hover_image_assets) && ($sku->bundle() === 'configurable')) {
+    // For configurable ones, starting from CORE-4775 we first load images from
+    // first child.
+    if ($sku->bundle() === 'configurable') {
       $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
       $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp']);
+    }
+
+    // If no assets attached to children or sku is simple, try to use the
+    // assets attached with the main sku.
+    if (($sku->bundle() === 'simple') || ((!$main_image_assets) && (!$hover_image_assets))) {
+      $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
     }
 
     $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
