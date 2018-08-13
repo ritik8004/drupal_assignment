@@ -13,16 +13,11 @@ use Drupal\Core\Url;
 function alshaya_hm_images_drush_command() {
   $commands = [];
 
-  $commands['alshaya-hm-faulty-images'] = [
+  $commands['alshaya-hm-images-report'] = [
     'description' => 'Command to get faulty images of H&M.',
-    'aliases'     => ['hm-faulty-images'],
-    'arguments' => [
-      'start' => 'Starting limit.',
-      'length' => 'total number of records to execute.',
-    ],
-    'examples'    => [
-      'drush hm-faulty-images' => 'Command to get faulty images of H&M.',
-      'drush hm-faulty-images 0 100' => 'Print my example command with an argument "myargument".',
+    'aliases'     => ['hmir'],
+    'options' => [
+      'check_faults' => 'List only gray images.',
     ],
   ];
 
@@ -30,7 +25,7 @@ function alshaya_hm_images_drush_command() {
 }
 
 
-function drush_alshaya_hm_images_alshaya_hm_faulty_images($start = 0, $length = 1000) {
+function drush_alshaya_api_alshaya_hm_images_report() {
 // product/listing without dam
 //  $faulty_image = 'eefda5660843594e82bf807be8edbe69';
 // product/miniature without dam
