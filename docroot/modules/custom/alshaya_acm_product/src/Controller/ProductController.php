@@ -64,9 +64,13 @@ class ProductController extends ControllerBase {
   /**
    * Page callback for modal content.
    */
-  public function pdpModalLinkView($config_key = 'size_guide_modal_content_node') {
-    $config = $this->config('alshaya_acm_product.pdp_modal_links');
-    $content_nid = $config->get($config_key);
+  public function pdpModalLinkView($type = 'size-guide') {
+    // Type mapping.
+    $types = [
+      'size-guide' => 'size_guide_modal_content_node',
+      'delivery' => 'delivery_content_node',
+    ];
+    $content_nid = $this->config('alshaya_acm_product.pdp_modal_links')->get($types[$type]);
     $content = '';
     if (!empty($content_nid)) {
       $content = $this->entityTypeManager()->getStorage('node')->load($content_nid);

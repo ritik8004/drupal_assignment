@@ -47,7 +47,7 @@ alshaya_acm_product.product_home_delivery_settings_form:
     _permission: 'access commerce administration pages'
 
 alshaya_acm_product.pdp_modal_links:
-  path: '/modal-link-views'
+  path: '/modal-link-views/{type}'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::pdpModalLinkView'
     _title: 'Size guide'

@@ -1517,7 +1517,9 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 function _alshaya_acm_product_get_size_guide_info() {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
-    return _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size_guide_attributes');
+    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide');
+    $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
+    return $link_info;
   }
 
   return [];
@@ -1638,15 +1640,14 @@ function alshaya_acm_product_language_switch_links_alter(array &$links, $type, U
  *
  * @param string|mixed $link_title
  *   Link title.
- * @param string $attribute_key
- *   Attribute key.
+ * @param string $type
+ *   Link type.
  *
  * @return array
  *   Array of link.
  */
-function _alshaya_acm_product_get_modal_link($link_title, $attribute_key) {
+function _alshaya_acm_product_get_modal_link($link_title, $type) {
   $info = [];
-  $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   $options = [
     'attributes' => [
       'class' => ['size-guide-link', 'use-ajax'],
@@ -1654,10 +1655,13 @@ function _alshaya_acm_product_get_modal_link($link_title, $attribute_key) {
       'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
     ],
   ];
-  $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [], $options);
+
+  $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [
+    'type' => $type,
+  ], $options);
+
   $link = Link::fromTextAndUrl($link_title, $url);
   $info['link'] = $link->toString();
-  $info['attributes'] = explode(',', $config->get($attribute_key));
   return $info;
 }
 
@@ -1676,8 +1680,8 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
   // delivery.
   if (($attribute = $config->get('delivery_content_attribute'))
     && (!empty($nid = $config->get('delivery_content_node')))
-    && $sku->hasField($attribute)) {
-    $delivery_applicable = (bool) $sku->get($attribute)->getString();
+    && $sku->hasField('attr_' . $attribute)) {
+    $delivery_applicable = (bool) $sku->get('attr_' . $attribute)->getString();
     // If delivery not applicable.
     if (!$delivery_applicable) {
       return NULL;
@@ -1688,7 +1692,7 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
     $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
     // Get translated node object.
     $delivery_node_content = \Drupal::service('entity.repository')->getTranslationFromContext($delivery_node_content, $current_language);
-    return _alshaya_acm_product_get_modal_link($delivery_node_content->getTitle(), 'delivery_content_attribute');
+    return _alshaya_acm_product_get_modal_link($delivery_node_content->getTitle(), 'delivery');
   }
 
   return [];
