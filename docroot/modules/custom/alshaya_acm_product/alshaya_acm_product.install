@@ -12,6 +12,50 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Remove fields specific to HnM from core.
+ */
+function alshaya_acm_product_update_8025() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  // Remove color description field for all brands.
+  $sku_fields_manager->removeField('color_description');
+
+  // Remove fields from all sites except HnM.
+  if (!\Drupal::moduleHandler()->moduleExists('alshaya_hm')) {
+    $removed_fields = [
+      'concept',
+      'washing_instructions',
+      'dry_cleaning_instructions',
+      'rgb_color',
+      'color_label',
+      'article_visual_description',
+      'product_designer_collection',
+      'product_feature',
+      'product_environment',
+      'product_quality',
+      'article_pattern',
+      'article_license_company',
+      'article_license_item',
+      'article_fragrance_description',
+      'article_warning',
+      'composition',
+    ];
+    foreach ($removed_fields as $field) {
+      $sku_fields_manager->removeField($field);
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Clear alshaya_product cache as there is change in data structure.
  */
 function alshaya_acm_product_update_8024() {
