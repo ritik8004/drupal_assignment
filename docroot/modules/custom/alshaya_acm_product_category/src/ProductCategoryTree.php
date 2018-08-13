@@ -302,6 +302,33 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
           ];
         }
       }
+
+      // If 'text_link' paragraph.
+      if ($paragraph && $paragraph->getType() == 'text_links') {
+        // Get heading link.
+        $heading_link = $paragraph->get('field_heading_link')->getValue();
+        // If heading link available, only then we render.
+        if (!empty($heading_link)) {
+          $subheading_links = [];
+          if (!empty($sub_heading_links = $paragraph->get('field_sub_link')->getValue())) {
+            foreach ($sub_heading_links as $sublink) {
+              $subheading_links[] = [
+                'subheading_link_uri' => $sublink['uri'],
+                'subheading_link_title' => $sublink['title'],
+                'link' => $sublink['uri'] == 'internal:#' ? '' : Url::fromUri($sublink['uri']),
+              ];
+            }
+          }
+
+          $highlight_paragraphs[] = [
+            'heading_link_uri' => $heading_link[0]['uri'],
+            'heading_link_title' => $heading_link[0]['title'],
+            'link' => $heading_link[0]['uri'] == 'internal:#' ? '' : Url::fromUri($heading_link[0]['uri']),
+            'subheading' => $subheading_links,
+            'paragraph_type' => $paragraph->getType(),
+          ];
+        }
+      }
     }
 
     return $highlight_paragraphs;
