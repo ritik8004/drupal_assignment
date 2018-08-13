@@ -1686,4 +1686,40 @@ class SkuManager {
     return $swatches;
   }
 
+  /**
+   * Get first valid configurable child.
+   *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Valid child SKU or parent itself.
+   */
+  public function getFirstValidConfigurableChild(SKU $sku) {
+    $cache_key = 'first_valid_child';
+
+    $child_sku = $this->getProductCachedData($sku, $cache_key);
+    if ($child_sku) {
+      return SKU::loadFromSku($child_sku, $sku->language()->getId());
+    }
+
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    foreach ($combinations['attribute_sku'] ?? [] as $children) {
+      foreach ($children as $child_skus) {
+        foreach ($child_skus as $child_sku) {
+          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+          $this->setProductCachedData($sku, $cache_key, $child->getSku());
+          return $child;
+        }
+      }
+    }
+
+    return $sku;
+  }
+
 }

@@ -11,6 +11,26 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Make color configurable.
+ */
+function alshaya_hm_update_8024() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+
+  // Make color configurable.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  $sku_fields_manager->updateFieldMetaInfo('color', ['configurable' => 1]);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-create all facets and facet blocks.
  */
 function alshaya_hm_update_8023() {

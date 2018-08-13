@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Controller\ProductStockController;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
@@ -452,12 +453,23 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // query params, else show it from main parent sku itself.
         $sku_for_gallery = $sku_entity;
 
-        $selected_value = \Drupal::request()->query->get('selected');
-        if ($selected_value) {
-          $selected_sku = SKU::load($selected_value);
+        if ($sku_entity->bundle() == 'configurable') {
+          $selected_value = \Drupal::request()->query->get('selected');
+          if ($selected_value) {
+            $selected_sku = SKU::load($selected_value);
 
-          if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
-            $sku_for_gallery = $selected_sku;
+            if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
+              $sku_for_gallery = $selected_sku;
+            }
+            else {
+              // Set it to NULL to indicate code below that we didn't change.
+              $selected_value = NULL;
+            }
+          }
+
+          // Try to load images first for the child we will display as selected.
+          if (empty($selected_value)) {
+            $sku_for_gallery = $skuManager->getFirstValidConfigurableChild($sku_entity);
           }
         }
 
@@ -536,6 +548,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($free_gift_promotions)) {
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
+
+              // If not sku entity object.
+              if (!$free_sku_entity instanceof SKUInterface) {
+                continue;
+              }
 
               $free_sku_title = $free_sku_image = [
                 '#type' => 'link',
@@ -805,39 +822,6 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
         ],
       ];
     }
-    else {
-      if (!isset($build['#no_add_to_cart']) || !$build['#no_add_to_cart']) {
-        $route = \Drupal::routeMatch();
-        if ($route->getRouteName() == 'alshaya_acm_product.product_modal') {
-          return;
-        }
-
-        $build['#no_add_to_cart'] = TRUE;
-
-        $node = $route->getParameter('node');
-        $node_view_mode = 'teaser';
-        if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
-          $node_sku = $node->get('field_skus')->first()->getString();
-          $node_view_mode = $entity->getSku() == $node_sku ? 'full' : 'teaser';
-        }
-
-        $build['cart_form_placeholder'] = [
-          '#type' => 'link',
-          '#title' => '',
-          '#url' => Url::fromRoute(
-            'alshaya_acm_product.get_cart_form',
-            ['view_mode' => $node_view_mode, 'entity' => $entity->id()],
-            ['query' => ['cacheable' => 1]]
-          ),
-          '#attributes' => [
-            'class' => [
-              'use-ajax',
-              'add-to-cart-form-placeholder',
-            ],
-          ],
-        ];
-      }
-    }
   }
 }
 
@@ -942,6 +926,12 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
         foreach ($free_gift_promos as $key => $promotion) {
           if (!empty($free_gift_promos)) {
             $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
+
+            // If not sku entity object.
+            if (!$free_sku_entity instanceof SKUInterface) {
+              continue;
+            }
+
             $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
             $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
           }
@@ -983,6 +973,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
+  // Process the alter hook only once.
+  static $processed = [];
+  if (isset($processed[$sku_entity->id()])) {
+    return;
+  }
+  $processed[$sku_entity->id()] = 1;
+
   // Ensure clientside validation is triggered to have proper data in maximum
   // number of the requests that reach server.
   $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
@@ -1012,6 +1009,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['add_to_cart']['#id'] = 'edit-add-to-cart-' . $sku_entity->id();
   $form['add_to_cart']['#attributes']['id'] = 'edit-add-to-cart-' . $sku_entity->id();
   $form['add_to_cart']['#name'] = 'add_to_cart_' . $sku_entity->id();
+
+  $form['add_to_cart']['#ajax'] = [
+    'url' => Url::fromRoute(
+      'alshaya_acm_product.add_to_cart_submit',
+      ['entity' => $sku_entity->id()]
+    ),
+  ];
 
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $swatches = $display_settings->get('swatches')['pdp'];
@@ -1122,7 +1126,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
 
       // Add custom ajax callback for configurables to refresh the gallery.
-      $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
+      $configurable['#validate'][] = 'alshaya_acm_product_configurable_form_ajax_callback';
+      $configurable['#ajax']['url'] = Url::fromRoute(
+        'alshaya_acm_product.select_configurable_option',
+        ['entity' => $sku_entity->id()]
+      );
 
       // Disable refocus.
       $configurable['#ajax']['disable-refocus'] = TRUE;
@@ -1261,7 +1269,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
  *   Build array.
  */
 function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormStateInterface $form_state) {
-  $response = new AjaxResponse();
+  $response = ProductStockController::$response;
 
   // Product attributes that can possibly change whith selected attribute values
   // & hence need to be re-rendered in the AJAX callback.

@@ -64,3 +64,6 @@ fields:
     label: 'Composition'
     description: 'Product Composition.'
     type: 'text_long'
+
+  color:
+    configurable: 1
