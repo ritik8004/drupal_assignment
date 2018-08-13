@@ -62,7 +62,7 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $productHelper->updateShortDescription($build, $body[0]['value']);
       }
 
-      if ($product_info = $entity->get('attr_short_description')->getValue()) {
+      if ($product_info = $sku_entity->get('attr_short_description')->getValue()) {
         $description['label'] = [
           '#markup' => t('Dimensions and Care'),
         ];
