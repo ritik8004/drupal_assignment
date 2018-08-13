@@ -193,7 +193,10 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
     return;
   }
 
-  $variables['name'] = _alshaya_pb_transac_get_sku_title($sku);
+  $title = _alshaya_pb_transac_get_sku_title($sku);
+  if ($title) {
+    $variables['name'] = $title;
+  }
 }
 
 /**
@@ -206,24 +209,45 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
  *   Product Title.
  */
 function _alshaya_pb_transac_get_sku_title(SKU $sku) {
-  // @TODO: Update to use combination of attributes when we have info.
-  return $sku->label() . ' - ' . $sku->getSku();
+  $title = NULL;
+
+  $group_name = $sku->get('attr_group_name')->getString();
+  $sku_name = $sku->get('attr_sku_name')->getString();
+
+  if ($group_name && $sku_name) {
+    $title = t('@group_name/@sku_name', [
+      '@group_name' => $group_name,
+      '@sku_name' => $sku_name,
+    ]);
+  }
+  elseif ($group_name) {
+    $title = $group_name;
+  }
+  elseif ($sku_name) {
+    $title = $sku_name;
+  }
+
+  return $title;
 }
 
 /**
  * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
  */
-function alshaya_acm_pb_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKU $sku, SKUInterface $selected_sku = NULL) {
+function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKU $sku, SKUInterface $selected_sku = NULL) {
   if ($sku->bundle() != 'configurable') {
     return;
   }
 
   // Update title of parent product based on selected sku if available.
   if ($selected_sku instanceof SKUInterface) {
-    // For modal and teaser it will be h2, for main product h1.
-    $selector = 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h1,';
-    $selector .= 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h2';
-    $response->addCommand(new HtmlCommand($selector, _alshaya_pb_transac_get_sku_title($selected_sku)));
+    $title = _alshaya_pb_transac_get_sku_title($selected_sku);
+
+    if ($title) {
+      // For modal and teaser it will be h2, for main product h1.
+      $selector = 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h1,';
+      $selector .= 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h2';
+      $response->addCommand(new HtmlCommand($selector, $title));
+    }
   }
 }
 
@@ -238,7 +262,10 @@ function hook_alshaya_acm_customer_build_order_detail_alter(array &$build, array
       continue;
     }
 
-    $product['name'] = _alshaya_pb_transac_get_sku_title($sku);
+    $title = _alshaya_pb_transac_get_sku_title($sku);
+    if ($title) {
+      $product['name'] = $title;
+    }
   }
 }
 
