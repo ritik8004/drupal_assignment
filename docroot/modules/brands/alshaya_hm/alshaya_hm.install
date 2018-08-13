@@ -25,7 +25,8 @@ function alshaya_hm_update_8024() {
     'install'
   );
 
-  $sku_fields_manager->updateFieldMetaInfo('color', ['configurable' => 1]);
+  $sku_fields_manager->updateFieldMetaInfo('color', ['configurable' => 0]);
+  $sku_fields_manager->updateFieldMetaInfo('color_label', ['configurable' => 1]);
 }
 
 /**
