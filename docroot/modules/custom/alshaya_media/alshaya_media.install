@@ -12,7 +12,7 @@ use Drupal\field\Entity\FieldStorageConfig;
  *
  * Adding new field for video file upload in video media_type.
  */
-function alshaya_media_update_8152() {
+function alshaya_media_update_8102() {
   $configs = [
     'media.type.video',
     'field.field.media.video.field_document',
