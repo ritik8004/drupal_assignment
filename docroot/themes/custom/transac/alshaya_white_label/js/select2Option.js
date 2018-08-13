@@ -10,8 +10,7 @@ jQuery.fn.select2Option = function (options) {
     var $ = jQuery;
     var select = $(this);
     var labeltext = '';
-    var defaultTitle = '';
-    select.hide();
+    select.addClass('visually-hidden');
 
     var buttonsHtml = $('<div class="select2Option"></div>');
     var selectIndex = 0;
@@ -28,13 +27,6 @@ jQuery.fn.select2Option = function (options) {
           var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + $(this).text() + '" />';
           if (selectIndex === 0) {
             liHtml.hide();
-            defaultTitle = $(this).parent().attr('data-default-title');
-            if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
-            }
-            else {
-              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
-            }
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
@@ -47,13 +39,6 @@ jQuery.fn.select2Option = function (options) {
         else {
           if (selectIndex === 0) {
             liHtml.hide();
-            defaultTitle = $(this).parent().attr('data-default-title');
-            if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-              labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
-            }
-            else {
-              labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
-            }
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
@@ -71,7 +56,7 @@ jQuery.fn.select2Option = function (options) {
         ulHtml.append(liHtml);
         selectIndex++;
       });
-      buttonsHtml.prepend(labeltext);
+
       buttonsHtml.append(ulHtml);
     };
 
@@ -85,14 +70,26 @@ jQuery.fn.select2Option = function (options) {
       });
     }
 
-    select.after(buttonsHtml);
+    labeltext = select.attr('data-default-title');
+
+    if (select.val() !== '' && select.val() !== null) {
+      labeltext = select.attr('data-selected-title');
+    }
+
+    labeltext = '<h4 class="list-title"><span>' + labeltext + ' : </span><span class="selected-text"></span></h4>';
+    buttonsHtml.prepend(labeltext);
 
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
-      $(this).closest('.select2Option').find('.list-title .selected-text').remove();
-      $(this).closest('.sku-base-form').find('.error').remove();
-      $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + clickedOption.text() + '</span>');
+
+      // Do nothing, it is already the selected one.
+      if (clickedOption.is(':selected')) {
+        return;
+      }
+
+      $(this).closest('.sku-base-form').find('label.error, span.error, div.error').remove();
+      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');
@@ -104,5 +101,8 @@ jQuery.fn.select2Option = function (options) {
       }
       select.trigger('change');
     });
+
+    select.parent().find('.select2Option').remove();
+    select.after(buttonsHtml);
   });
 };
