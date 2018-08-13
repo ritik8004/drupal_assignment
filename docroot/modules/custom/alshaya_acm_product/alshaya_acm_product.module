@@ -451,12 +451,23 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // query params, else show it from main parent sku itself.
         $sku_for_gallery = $sku_entity;
 
-        $selected_value = \Drupal::request()->query->get('selected');
-        if ($selected_value) {
-          $selected_sku = SKU::load($selected_value);
+        if ($sku_entity->bundle() == 'configurable') {
+          $selected_value = \Drupal::request()->query->get('selected');
+          if ($selected_value) {
+            $selected_sku = SKU::load($selected_value);
 
-          if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
-            $sku_for_gallery = $selected_sku;
+            if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
+              $sku_for_gallery = $selected_sku;
+            }
+            else {
+              // Set it to NULL to indicate code below that we didn't change.
+              $selected_value = NULL;
+            }
+          }
+
+          // Try to load images first for the child we will display as selected.
+          if (empty($selected_value)) {
+            $sku_for_gallery = $skuManager->getFirstValidConfigurableChild($sku_entity);
           }
         }
 
@@ -521,6 +532,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (!empty($free_gift_promotions)) {
             foreach ($free_gift_promotions as $free_gift_promotion) {
               $free_sku_entity = SKU::loadFromSku($free_gift_promotion['skus'][0]['value']);
+
+              // If not sku entity object.
+              if (!$free_sku_entity instanceof SKUInterface) {
+                continue;
+              }
 
               $free_sku_title = $free_sku_image = [
                 '#type' => 'link',
@@ -927,6 +943,12 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
         foreach ($free_gift_promos as $key => $promotion) {
           if (!empty($free_gift_promos)) {
             $free_sku_entity = SKU::loadFromSku($promotion['skus'][0]['value']);
+
+            // If not sku entity object.
+            if (!$free_sku_entity instanceof SKUInterface) {
+              continue;
+            }
+
             $free_gift_promos[$key]['sku_title'] = $free_sku_entity->get('name')->getString();
             $free_gift_promos[$key]['sku_entity_id'] = $free_sku_entity->id();
           }
