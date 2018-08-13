@@ -79,7 +79,8 @@ class ProductController extends ControllerBase {
         // Get translated node object.
         $size_guide_content = $this->entityManager()->getTranslationFromContext($size_guide_content, $current_language);
         $size_guide_content->setTitle('');
-        $size_guide_content = render($this->entityTypeManager()->getViewBuilder('node')->view($size_guide_content, 'full'));
+        $view = $this->entityTypeManager()->getViewBuilder('node')->view($size_guide_content, 'full');
+        $size_guide_content = render($view);
       }
 
       $build = [
