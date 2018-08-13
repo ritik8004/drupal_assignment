@@ -1,0 +1,17 @@
+hidden:
+  attr_concept: true
+  attr_washing_instructions: true
+  attr_dry_cleaning_instructions: true
+  attr_rgb_color: true
+  attr_color_label: true
+  attr_article_visual_description: true
+  attr_product_designer_collection: true
+  attr_product_feature: true
+  attr_product_environment: true
+  attr_product_quality: true
+  attr_article_pattern: true
+  attr_article_license_company: true
+  attr_article_license_item: true
+  attr_article_fragrance_description: true
+  attr_article_warning: true
+  attr_composition: true
