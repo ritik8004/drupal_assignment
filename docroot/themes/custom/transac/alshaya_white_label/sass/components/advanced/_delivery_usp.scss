@@ -1,5 +1,9 @@
 .paragraph_usp_delivery {
   .usp_list {
+    @include breakpoint($desktop) {
+      @include container(80.25rem);
+    }
+
     &.arrow--black {
       button.slick-arrow {
         color: $delivery_usp_arrow_black;
@@ -53,6 +57,7 @@
       @include breakpoint($desktop) {
         display: flex;
         justify-content: space-around;
+        padding: 0 10%;
       }
     }
 
@@ -77,6 +82,10 @@
         margin-bottom: 0;
         line-height: 1;
         font-size: 0.875rem;
+
+        a {
+          color: inherit;
+        }
 
         @include breakpoint($tablet) {
           display: inline-block;
