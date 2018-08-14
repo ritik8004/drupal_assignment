@@ -61,6 +61,13 @@ class ProductStockController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * AjaxResponse object to use in ajax form callbacks.
+   *
+   * @var \Drupal\Core\Ajax\AjaxResponse
+   */
+  public static $response;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -208,6 +215,38 @@ class ProductStockController extends ControllerBase {
     }
 
     return $response;
+  }
+
+  /**
+   * Ajax - page callback when selecting a configurable option.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   SKU entity.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   AJAX Response with all commands.
+   */
+  public function selectConfigurableOption(EntityInterface $entity) {
+    self::$response = new AjaxResponse();
+    $plugin = $entity->getPluginInstance();
+    $this->skuFormBuilder->getForm($plugin, $entity);
+    return self::$response;
+  }
+
+  /**
+   * Ajax submit - page callback for add to cart.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   SKU entity.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   AJAX Response with all commands.
+   */
+  public function addToCartSubmit(EntityInterface $entity) {
+    self::$response = new AjaxResponse();
+    $plugin = $entity->getPluginInstance();
+    $this->skuFormBuilder->getForm($plugin, $entity);
+    return self::$response;
   }
 
   /**
