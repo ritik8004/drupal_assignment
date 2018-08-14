@@ -80,7 +80,10 @@
         "claviska/jquery-minicolors": "^2.2",
         "drupal/jsonapi": "^1.18",
         "drupal/restrict_role_login_by_ip": "^1.0",
-        "hgoebl/mobile-detect": "^1.4.2"
+        "hgoebl/mobile-detect": "^1.4.2",
+        "drupal/allowed_formats": "^1.1",
+        "drupal/media_entity": "^1.8",
+        "drupal/scheduled_updates": "^1.0@alpha"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
