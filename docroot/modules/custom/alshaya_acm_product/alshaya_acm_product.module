@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Controller\ProductStockController;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
@@ -806,39 +807,6 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
         ],
       ];
     }
-    else {
-      if (!isset($build['#no_add_to_cart']) || !$build['#no_add_to_cart']) {
-        $route = \Drupal::routeMatch();
-        if ($route->getRouteName() == 'alshaya_acm_product.product_modal') {
-          return;
-        }
-
-        $build['#no_add_to_cart'] = TRUE;
-
-        $node = $route->getParameter('node');
-        $node_view_mode = 'teaser';
-        if ($node instanceof NodeInterface && $node->bundle() == 'acq_product') {
-          $node_sku = $node->get('field_skus')->first()->getString();
-          $node_view_mode = $entity->getSku() == $node_sku ? 'full' : 'teaser';
-        }
-
-        $build['cart_form_placeholder'] = [
-          '#type' => 'link',
-          '#title' => '',
-          '#url' => Url::fromRoute(
-            'alshaya_acm_product.get_cart_form',
-            ['view_mode' => $node_view_mode, 'entity' => $entity->id()],
-            ['query' => ['cacheable' => 1]]
-          ),
-          '#attributes' => [
-            'class' => [
-              'use-ajax',
-              'add-to-cart-form-placeholder',
-            ],
-          ],
-        ];
-      }
-    }
   }
 }
 
@@ -990,6 +958,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
+  // Process the alter hook only once.
+  static $processed = [];
+  if (isset($processed[$sku_entity->id()])) {
+    return;
+  }
+  $processed[$sku_entity->id()] = 1;
+
   // Ensure clientside validation is triggered to have proper data in maximum
   // number of the requests that reach server.
   $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
@@ -1019,6 +994,13 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['add_to_cart']['#id'] = 'edit-add-to-cart-' . $sku_entity->id();
   $form['add_to_cart']['#attributes']['id'] = 'edit-add-to-cart-' . $sku_entity->id();
   $form['add_to_cart']['#name'] = 'add_to_cart_' . $sku_entity->id();
+
+  $form['add_to_cart']['#ajax'] = [
+    'url' => Url::fromRoute(
+      'alshaya_acm_product.add_to_cart_submit',
+      ['entity' => $sku_entity->id()]
+    ),
+  ];
 
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
   $swatches = $display_settings->get('swatches')['pdp'];
@@ -1129,7 +1111,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
 
       // Add custom ajax callback for configurables to refresh the gallery.
-      $configurable['#ajax']['callback'] = 'alshaya_acm_product_configurable_form_ajax_callback';
+      $configurable['#validate'][] = 'alshaya_acm_product_configurable_form_ajax_callback';
+      $configurable['#ajax']['url'] = Url::fromRoute(
+        'alshaya_acm_product.select_configurable_option',
+        ['entity' => $sku_entity->id()]
+      );
 
       // Disable refocus.
       $configurable['#ajax']['disable-refocus'] = TRUE;
@@ -1268,6 +1254,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
  *   Build array.
  */
 function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormStateInterface $form_state) {
+  $response = ProductStockController::$response;
+
   // Product attributes that can possibly change whith selected attribute values
   // & hence need to be re-rendered in the AJAX callback.
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
@@ -1330,8 +1318,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       ],
       '#value' => $tree_pointer->getSku(),
     ];
-
-    $response = new AjaxResponse();
 
     $price_block = $skuManager->getPriceBlock($tree_pointer);
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
@@ -1452,7 +1438,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
     }
-    return $response;
   }
   else {
     $build = [];
@@ -1474,7 +1459,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
 
-    $response = new AjaxResponse();
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
@@ -1500,11 +1484,9 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     // Send the updated settings in ajax response.
     $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
-
-    return $response;
   }
 
-  return $dynamic_parts;
+  return $response;
 }
 
 /**
