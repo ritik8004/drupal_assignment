@@ -83,13 +83,13 @@
     .super-category-victorias-secret,
     .super-category-victoria-sport {
       .block-alshaya-main-menu {
-        a.menu__link {
+        .menu__link {
           letter-spacing: 0.44px;
         }
 
         .menu--one__list-item {
           & > .menu__link-wrapper {
-            & > a.menu__link {
+            & > .menu__link {
               font-size: 0.75rem;
               letter-spacing: 2.4px;
             }

@@ -57,6 +57,9 @@ function alshaya_pb_transac_install() {
     'I would like to receive exclusive deals from Pottery Barn.' => [
       'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
     ],
+    '@group_name/@sku_name' => [
+      'ar' => '@sku_name/@group_name'
+    ]
   ];
   alshaya_i18n_save_translations($strings);
 

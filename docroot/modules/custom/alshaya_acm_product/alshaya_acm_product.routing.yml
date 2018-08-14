@@ -78,6 +78,30 @@ alshaya_acm_product.get_cart_form:
       entity:
         type: entity:acq_sku
 
+alshaya_acm_product.select_configurable_option:
+  path: '/select-configurable-option/{entity}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::selectConfigurableOption'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      entity:
+        type: entity:acq_sku
+
+alshaya_acm_product.add_to_cart_submit:
+  path: '/add-to-cart-submit/{entity}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::addToCartSubmit'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      entity:
+        type: entity:acq_sku
+
 alshaya_acm_product.product_display_settings:
   path: '/admin/config/alshaya/product-display'
   defaults:

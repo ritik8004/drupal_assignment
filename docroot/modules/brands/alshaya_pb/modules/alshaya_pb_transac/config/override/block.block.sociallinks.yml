@@ -1,2 +1,3 @@
 settings:
-  label_display: '0'
+  label: 'Connect with us'
+  label_display: visible

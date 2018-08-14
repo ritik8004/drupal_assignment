@@ -47,6 +47,9 @@ fields:
   group_name:
     label: 'Group Name'
     type: 'string'
+  sku_name:
+    label: 'SKU Name'
+    type: 'string'
   short_description:
     label: 'Product Info'
     type: 'text_long'
