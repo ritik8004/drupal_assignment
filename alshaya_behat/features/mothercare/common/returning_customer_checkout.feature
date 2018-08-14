@@ -36,6 +36,11 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    And I should see text matching "size:"
+    And I should see text matching "Item code:"
+    And I should see text matching "Quantity:"
+
 
   @hd @knet
   Scenario: As a returning customer
@@ -66,6 +71,11 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    And I should see text matching "size:"
+    And I should see text matching "Item code:"
+    And I should see text matching "Quantity:"
+
 
   @cc @knet
   Scenario: As a returning customer
@@ -100,6 +110,10 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    And I should see text matching "size:"
+    And I should see text matching "Item code:"
+    And I should see text matching "Quantity:"
 
   @hd @cs
   Scenario: As a returning customer
@@ -123,6 +137,11 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    And I should see text matching "size:"
+    And I should see text matching "Item code:"
+    And I should see text matching "Quantity:"
+
 
   @cc @cs
   Scenario: As a returning customer
@@ -151,3 +170,8 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    And I should see text matching "size:"
+    And I should see text matching "Item code:"
+    And I should see text matching "Quantity:"
+

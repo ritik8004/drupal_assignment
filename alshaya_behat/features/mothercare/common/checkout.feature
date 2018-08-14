@@ -44,6 +44,15 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    And I wait 10 seconds
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+
+
 
   @hd @knet
   Scenario: As a Guest,
@@ -80,6 +89,13 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+
 
   @cc @knet @fail
   Scenario: As a Guest
@@ -122,6 +138,12 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
 
   @knet @fail
   Scenario: As a Guest
@@ -153,6 +175,7 @@ Feature: Test Checkout feature
     Then I should see text matching "Sorry, we are unable to process your payment. Please contact our customer service team for assistance."
     And the url should match "/cart/checkout/payment"
 
+
   @cc
   Scenario: As a Guest
     I should be able to view the number of results displayed
@@ -168,6 +191,7 @@ Feature: Test Checkout feature
     And I should see the link "List view"
     And I should see the link "Map view"
     And I should see the link "back to basket"
+
 
   @cc
   Scenario: As a Guest
@@ -253,6 +277,13 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+
 
   @cc @cs
   Scenario:  As a Guest
@@ -289,6 +320,12 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
 
   @hd
   Scenario: As a Guest user
@@ -376,6 +413,13 @@ Feature: Test Checkout feature
     When I wait for the page to load
     And I wait 10 seconds
     Then I should see text matching "Thank you for shopping online with us, Test Test "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+
 
   @cc
   Scenario: As a Guest user

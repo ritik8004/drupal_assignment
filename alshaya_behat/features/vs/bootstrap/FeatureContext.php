@@ -2005,5 +2005,14 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
             $page->clickLink($this->product);
             break;
         }
+
+    }
+    /**
+     * @When /^I click on "([^"]*)" element$/
+     */
+    public function iClickOnElement($css_selector)
+    {
+        $element = $this->getSession()->getPage()->find("css", $css_selector);
+        $element->click();
     }
 }
