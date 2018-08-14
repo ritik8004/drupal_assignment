@@ -27,7 +27,7 @@
       var $listItems = $('.menu__list-item');
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
-        var submenu = $(this).find('> .menu__list');
+        var submenu = $(this).find('> .menu__list .menu--three__list-item');
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
