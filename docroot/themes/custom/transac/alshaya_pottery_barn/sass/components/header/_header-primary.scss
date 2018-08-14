@@ -176,7 +176,7 @@ header {
 
 body {
   @include breakpoint($only-tablet) {
-    margin-top: 7.875rem;
+    margin-top: 9rem;
 
     html[lang=ar] & {
       margin-top: 8rem;
