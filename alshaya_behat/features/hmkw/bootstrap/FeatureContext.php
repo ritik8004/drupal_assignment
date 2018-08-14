@@ -2115,4 +2115,12 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
             $this->iWaitForThePageToLoad();
         }
     }
+    /**
+     * @When /^I click on "([^"]*)" element$/
+     */
+    public function iClickOnElement($css_selector)
+    {
+        $element = $this->getSession()->getPage()->find("css", $css_selector);
+        $element->click();
+    }
 }

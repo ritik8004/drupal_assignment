@@ -33,6 +33,14 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "color:"
+
 
   @hd @knet
   Scenario: As a returning customer
@@ -61,6 +69,14 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "color:"
+
 
   @cc @knet
   Scenario: As a returning customer
@@ -88,6 +104,14 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "color:"
+
 
   @hd @cs
   Scenario: As a returning customer
@@ -111,6 +135,14 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "color:"
+
 
   @cc @cs
   Scenario: As a returning customer
@@ -135,3 +167,11 @@ Feature: Test various checkout scenarios as returning customer
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
+
