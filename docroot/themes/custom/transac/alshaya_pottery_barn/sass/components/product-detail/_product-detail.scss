@@ -74,6 +74,28 @@
       }
     }
   }
+
+  .basic-details-wrapper {
+    .field--name-field-skus {
+      .form-item-configurables-size,
+      .form-item-configurables-color,
+      .form-item-quantity {
+        select.form-select {
+          font-size: 0.75rem;
+          color: $pdp_size_option_text;
+        }
+      }
+
+      .form-item-quantity {
+        .select2-container {
+          .select2-selection .select2-selection__rendered {
+            font-size: 0.75rem;
+            color: $pdp_size_option_text;
+          }
+        }
+      }
+    }
+  }
 }
 
 .field--name {
@@ -81,6 +103,64 @@
     .sku-base-form {
       button[type="submit"] {
         text-transform: uppercase;
+      }
+
+      .form-type-select {
+        .form-select {
+          @include breakpoint($upto-desktop) {
+            clip: auto;
+          }
+        }
+      }
+
+      .form-item-configurables-color {
+        @include breakpoint($upto-desktop) {
+          @include select-wrapper(100%);
+
+          padding: 0;
+          min-height: 2.188rem;
+          margin-top: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .form-select {
+          @include breakpoint($upto-desktop) {
+            appearance: none;
+            border: 1px solid $primary_dropdown_arrow_bg;
+            border-radius: 0;
+            background-color: $primary_dropdown_arrow_bg;
+            padding: 0.5rem;
+            padding-left: 0.35rem;
+            padding-right: 1.5rem;
+            height: 2.1875rem;
+            font-size: 0.75rem;
+            outline: none;
+            width: 100%;
+            position: static !important;
+          }
+        }
+
+        label {
+          display: block;
+          position: absolute;
+          left: 0;
+          top: -1.5625rem;
+          font-size: 0.6875rem;
+          padding: 0.3125rem 0;
+          padding-right: 1.25rem;
+
+          @include breakpoint($desktop) {
+            display: none;
+          }
+        }
+      }
+
+      .form-item-configurables-size,
+      .form-item-configurables-color {
+        @include breakpoint($only-tablet) {
+          margin-top: 1.45rem;
+          margin-bottom: 1.5rem;
+        }
       }
     }
   }

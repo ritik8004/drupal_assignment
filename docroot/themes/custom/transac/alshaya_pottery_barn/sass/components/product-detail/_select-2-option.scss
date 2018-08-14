@@ -1,6 +1,13 @@
 .select2Option {
   .select-buttons {
     li {
+      a {
+        @include breakpoint($desktop) {
+          font-size: 0.625rem;
+          padding: 0.6rem 0.75rem;
+        }
+      }
+
       a.picked {
         font-weight: normal;
       }
@@ -22,5 +29,6 @@
 
   .selected-text {
     font-weight: 600;
+    color: $pdp_size_option_text;
   }
 }
