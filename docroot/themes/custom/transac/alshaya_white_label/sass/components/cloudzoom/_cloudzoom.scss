@@ -153,6 +153,24 @@
   }
 }
 
+.cloudzoom {
+  &.thumbnail-count-1 {
+    #cloud-zoom-big {
+      #{$left}: 134.8% !important;
+    }
+  }
+
+  &.thumbnail-count-0 {
+    .cloudzoom__thumbnails {
+      display: none;
+    }
+
+    .cloudzoom__herocontainer {
+      width: 100%;
+    }
+  }
+}
+
 .cloud-zoom-lens {
   @include breakpoint($only-tablet) {
     @include u-visibility(none, true);

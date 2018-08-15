@@ -21,6 +21,6 @@ index dcd85eb..0ee33cb 100644
    RewriteCond %{REQUEST_URI} !=/favicon.ico
 -  RewriteRule ^ index.php [L]
 +  RewriteRule ^ index.php [L,E=internal_redirect:true]
- 
+
    # For security reasons, deny access to other PHP files on public sites.
    # Note: The following URI conditions are not anchored at the start (^),

@@ -76,6 +76,12 @@
       }
     }
 
+    .free-gift-title {
+      .ajax-progress-throbber {
+        display: none;
+      }
+    }
+
     td .form-type-select {
       &::after {
         font-size: 2rem;
@@ -91,6 +97,7 @@
         @include breakpoint($only-mobile) {
           padding-#{$left}: 0 !important;
           margin-top: -2rem !important;
+          margin-#{$left}: 9.1875rem;
         }
       }
 
@@ -422,6 +429,18 @@ body.alias--cart {
         .cart-promotions {
           top: 0.875rem;
         }
+      }
+    }
+  }
+}
+
+.promo-continue-shopping-wrapper {
+  #coupon-button {
+    &.remove {
+      display: block;
+
+      &:hover {
+        opacity: 1;
       }
     }
   }

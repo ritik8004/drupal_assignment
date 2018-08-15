@@ -85,8 +85,6 @@ class SkuAssetManager {
    *   Sku manager service.
    * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
    *   Sku Plugin Manager.
-   * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
-   *   Sku Plugin Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -191,7 +189,8 @@ class SkuAssetManager {
       }
     }
 
-    // If there is only a single location_image, we don't want the results to be grouped.
+    // If there is only a single location_image, we don't want the results to
+    // be grouped.
     if (count($location_images) === 1) {
       return $asset_urls;
     }
@@ -210,6 +209,8 @@ class SkuAssetManager {
    *   Page type on which this asset needs to be rendered.
    * @param string $location_image
    *   Location on page e.g., main image, thumbnails etc.
+   * @param string $style
+   *   CSS style.
    *
    * @return array
    *   Array of asset attributes.
@@ -229,21 +230,11 @@ class SkuAssetManager {
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      // Use res attribute in place of width & height while calculating images
-      // for swatches.
-      if (empty($style)) {
-        $set['width'] = "width[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['width'] . "]";
-        $set['height'] = "height[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['height'] . "]";
+      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] ."]";
+      $detect = new MobileDetect();
+      if ($detect->isMobile()) {
+        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] ."]";
       }
-      else {
-        $detect = new MobileDetect();
-        $set['res'] = "res[z]";
-
-        if ($detect->isMobile()) {
-          $set['res'] = "res[y]";
-        }
-      }
-
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $page_type);
@@ -254,12 +245,15 @@ class SkuAssetManager {
           $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
         }
 
-        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['width'])) {
-          $set['width'] = "width[" . $config_overrides['dimensions'][$location_image]['width'] . "]";
+        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['desktop'])) {
+          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] ."]";
         }
 
-        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['height'])) {
-          $set['height'] = "height[" . $config_overrides['dimensions'][$location_image]['height'] . "]";
+        $detect = new MobileDetect();
+        if ($detect->isMobile()) {
+          if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['mobile'])) {
+            $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['mobile'] . "]";
+          }
         }
       }
     }
@@ -316,8 +310,8 @@ class SkuAssetManager {
   /**
    * Helper function to sort based on angles.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU for which the assets needs to be sorted on angles.
+   * @param string $sku
+   *   SKU code for which the assets needs to be sorted on angles.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
    * @param array $assets
@@ -466,7 +460,7 @@ class SkuAssetManager {
 
     if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
       if (!empty($terms)) {
-        foreach ($terms as $key => $value) {
+        foreach ($terms as $value) {
           $tid = $value['target_id'];
           $term = $this->termStorage->load($tid);
           if ($term instanceof TermInterface) {
@@ -494,13 +488,28 @@ class SkuAssetManager {
       return $cache;
     }
 
+    // Get list of configurable article castor ids
+    $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $article_castor_ids_configs = [];
+
+    // Get list of article castor ids in order of their display on PDP.
+    foreach ($configurables as $configurable) {
+      if ($configurable['code'] === 'article_castor_id') {
+        $article_castor_ids_configs = $configurable['values'];
+        break;
+      }
+    }
+
+    // Get the order of castor ids as they stored with the configurable product.
+    $castor_id_weights = array_flip(array_column($article_castor_ids_configs, 'value_id'));
+
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
     if (empty($combinations)) {
       return [];
     }
 
     $article_castor_ids = [];
-
+    $child_castor_ids = [];
     foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $article_castor_id => $skus) {
       $child_sku_entity = NULL;
       $color_attributes = [];
@@ -514,6 +523,7 @@ class SkuAssetManager {
           continue;
         }
 
+        $child_castor_ids[$child_sku_entity->id()] = $article_castor_id;
         $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
 
         if ($color_attributes) {
@@ -525,6 +535,11 @@ class SkuAssetManager {
         $article_castor_ids[$child_sku_entity->id()] = $color_attributes['attr_rgb_color'];
       }
     }
+
+    // Sort article castor ids in the same order as on PDP.
+    uksort($article_castor_ids, function($a, $b) use ($castor_id_weights, $child_castor_ids) {
+      return $castor_id_weights[$child_castor_ids[$a]] - $castor_id_weights[$child_castor_ids[$b]];
+    });
 
     $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
 

@@ -1,27 +1,38 @@
 base_url: 'https://lp2.hm.com/hmgoepprod'
 origin: 'dam'
+# For any new key in 'dimension', update 'style_identifiers' with appropriate
+# file path.
 dimensions:
   plp:
-    width: 222
-    height: 333
-  pdp_main:
-    width: 384
-    height: 576
+    desktop: z
+    mobile: z
   pdp_thumbnail:
-    width: 74
-    height: 111
+    desktop: y
+    mobile: m
+  pdp_main: &common_pdp
+    desktop: y
+    mobile: w
   pdp_zoom:
-    width: 1152
-    height: 1728
+    <<: *common_pdp
   pdp_fullscreen:
-    width: 758
-    height: 1137
-  swatch:
-    width: 11
-    height: 21
+    <<: *common_pdp
+  teaser:
+    desktop: z
+    mobile: q
+  swatch: &common_cart
+    desktop: q
+    mobile: q
   cart:
-    width: 74
-    height: 111
+    <<: *common_cart
+  product_category_carousel:
+    <<: *common_cart
+  cart_notification:
+    <<: *common_cart
+  order_detail:
+    <<: *common_cart
+  checkout_summary:
+    desktop: m
+    mobile: q
 # Weights are used to sort asset-types. Items with lower weight get precedence
 # while displaying them.
 weights:
@@ -94,9 +105,14 @@ style_identifiers:
   pdp_zoom: 'file:/product/zoom'
   pdp_fullscreen: 'file:/product/fullscreen'
   teaser: 'file:/product/style'
+  product_category_carousel: 'file:/product/style'
   swatch: 'file:/product/miniature'
   cart: 'file:/product/thumb'
+  cart_notification: 'file:/product/thumb'
+  order_detail: 'file:/product/thumb'
+  checkout_summary: 'file:/product/thumb'
 swatch_plp_limit: 3
+config_sku_plp_lookup: FALSE
 # Sample structure for override, until we have a config UI.
 #overrides:
 #  146:

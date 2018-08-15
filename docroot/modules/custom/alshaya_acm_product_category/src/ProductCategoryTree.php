@@ -117,10 +117,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Database connection.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
-    LanguageManagerInterface $language_manager,
-    CacheBackendInterface $cache,
-    RouteMatchInterface $route_match,
-    Connection $connection) {
+                              LanguageManagerInterface $language_manager,
+                              CacheBackendInterface $cache,
+                              RouteMatchInterface $route_match,
+                              Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
@@ -186,6 +186,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     // Get all child terms for the given parent.
     $terms = $this->allChildTerms($langcode, $parent_tid);
 
+    if (empty($terms)) {
+      return [];
+    }
+
     // Initialize the background color for term.
     $this->termsBackgroundColor = $this->getTermsColors($langcode, 'background');
 
@@ -194,10 +198,6 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
     // Initialize the image and image text font/bg color.
     $this->termsImagesAndColors = $this->getTermsImageAndColor($langcode);
-
-    if (empty($terms)) {
-      return [];
-    }
 
     foreach ($terms as $term) {
       $data[$term->tid] = [
@@ -208,6 +208,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'id' => $term->tid,
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
+        'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
       ];
 
       if ($highlight_paragraph) {
@@ -383,8 +384,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'description__value']);
+    $query->fields('tfd', ['tid', 'name', 'description__value'])
+      ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid AND ttdcl.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {

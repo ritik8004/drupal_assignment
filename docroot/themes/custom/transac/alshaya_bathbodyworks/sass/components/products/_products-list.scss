@@ -1,7 +1,7 @@
 .c-plp {
   padding-top: 1.5rem;
 
-  @include breakpoint($tablet) {
+  @include breakpoint($only-tablet) {
     padding-top: 0.75rem;
   }
 
@@ -153,6 +153,7 @@
       &.only-mobile {
         margin-top: 0;
         padding-bottom: 0.5rem;
+        padding-top: 0.5rem;
       }
     }
 

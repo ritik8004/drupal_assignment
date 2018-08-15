@@ -13,6 +13,11 @@
 
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    margin: 1.5rem auto 0.5rem;
+
+    .alias--user-login & {
+      max-width: 65.35rem;
+    }
   }
 
   @include breakpoint($desktop) {
@@ -58,33 +63,25 @@
   &.messages--error {
     box-shadow: none;
     font-family: $arial;
-    font-size: 0.75rem;
-    padding: 0.66rem 1.5625rem;
+    font-size: 0.875rem;
+    padding: 0.5625rem 0.9375rem;
     font-weight: 700;
 
     @include breakpoint($upto-tablet) {
-      padding-#{$left}: 3.8125rem;
+      padding-#{$left}: 3.4375rem;
       text-indent: -2.725rem;
-      line-height: 1.5;
+      line-height: 1;
     }
 
     &::before {
       content: '';
-      width: 26px;
-      height: 26px;
+      width: 2.125rem;
+      height: 2.125rem;
       display: inline-block;
-      font-size: 1.6rem;
-      margin-#{$right}: 0.875rem;
+      font-size: 2rem;
+      margin-#{$right}: 0.3125rem;
       vertical-align: middle;
       text-indent: 0;
-
-      @include breakpoint($tablet) {
-        margin-#{$right}: 1rem;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      font-size: 0.9375rem;
     }
   }
 
@@ -125,4 +122,9 @@
       float: $right;
     }
   }
+}
+
+.messages__wrapper {
+  display: table;
+  width: 100%;
 }

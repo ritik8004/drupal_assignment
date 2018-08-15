@@ -90,6 +90,22 @@
         });
       }
 
+      $('#drupal-modal .short-description-wrapper').once('readmore').each(function () {
+        $(this).on('click', '.read-more-description-link-gift', function () {
+          $(this).parent().toggleClass('show-gift-detail');
+          $(this).parent().find('.desc-wrapper:first-child').hide();
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).parent().scroll();
+          $(this).replaceWith('<span class="show-less-link">' + Drupal.t('show less') + '</span>');
+        });
+        $(this).on('click', '.show-less-link', function () {
+          $(this).parent().toggleClass('show-gift-detail');
+          $(this).parent().find('.desc-wrapper:first-child').show();
+          $(this).parent().find('.desc-wrapper:not(:first-child)').slideToggle('slow');
+          $(this).replaceWith('<span class="read-more-description-link-gift">' + Drupal.t('Read more') + '</span>');
+        });
+      });
+
       if (context === document) {
         // Toggle for Product description.
         $('.read-more-description-link').on('click', function () {
@@ -221,6 +237,12 @@
     $(element).siblings().slideToggle('slow');
     $(element).toggleClass('ui-state-active');
     $(element).parent().toggleClass('facet-active');
+    if ($(element).hasClass('ui-state-active')) {
+      $(element).siblings('.facets-soft-limit-link').show();
+    }
+    else {
+      $(element).siblings('.facets-soft-limit-link').hide();
+    }
   };
 
 })(jQuery, Drupal);

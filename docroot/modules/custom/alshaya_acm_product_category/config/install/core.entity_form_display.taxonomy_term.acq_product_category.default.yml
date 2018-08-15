@@ -19,6 +19,7 @@ dependencies:
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
     - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
+    - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
   module:
     - field_group
     - image
@@ -102,6 +103,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
+  field_display_as_clickable_link:
+    weight: 20
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   field_image_text_bg_color:
     weight: 16
     settings:

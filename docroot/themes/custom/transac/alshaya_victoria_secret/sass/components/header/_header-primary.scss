@@ -175,7 +175,7 @@ header {
       text-align: center;
       height: 2.5rem;
 
-      a.menu--one__link {
+      .menu--one__link {
         border-bottom: none;
         font-size: 0.875rem;
         text-transform: uppercase;
@@ -185,7 +185,7 @@ header {
         margin-top: 0;
       }
 
-      a.menu--one__link.active {
+      .menu--one__link.active {
         border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
       }
     }
@@ -193,7 +193,7 @@ header {
     .active--menu--links {
       li.menu--one__list-item {
         &:hover {
-          a.menu--one__link {
+          .menu--one__link {
             border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
             color: $mm_l1_link_active;
           }
@@ -202,7 +202,7 @@ header {
 
       &:hover {
         li.menu--one__list-item {
-          a.menu--one__link.active {
+          .menu--one__link.active {
             border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
@@ -325,7 +325,7 @@ header {
   .active--menu--links {
     &:hover {
       li.menu--one__list-item {
-        a.menu--one__link {
+        .menu--one__link {
           border-bottom: 1px solid transparent;
         }
       }
@@ -462,7 +462,7 @@ html[lang="en"] {
   .block-alshaya-main-menu {
     .menu--one__list-item {
       & > .menu__link-wrapper {
-        & > a.menu__link {
+        & > .menu__link {
           letter-spacing: 2.4px;
         }
       }

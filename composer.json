@@ -72,7 +72,6 @@
         "drupal/acquia_purge": "^1.0@beta",
         "drupal/video_embed_field": "2.0.0-alpha2",
         "drupal/role_delegation": "^1.0@alpha",
-        "geerlingguy/drupal-vm": "4.9.0",
         "drupal/amp": "^1.0",
         "drupal/amptheme": "^1.0",
         "drupal/media_entity_actions": "1.x-dev",
@@ -83,13 +82,16 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "drupal/allowed_formats": "^1.1",
         "drupal/media_entity": "^1.8",
-        "drupal/scheduled_updates": "^1.0@alpha"
+        "drupal/scheduled_updates": "^1.0@alpha",
+        "drupal/ckeditor_font": "^1.0",
+        "ckeditor/font": "^4.9"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
-        "drupal/console": "^1.8"
+        "drupal/console": "^1.8",
+        "geerlingguy/drupal-vm": "^4.9"
     },
     "repositories": {
         "drupal": {
@@ -136,6 +138,18 @@
                 "type": "drupal-library",
                 "dist": {
                     "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        "ckeditor_font": {
+            "type": "package",
+            "package": {
+                "name": "ckeditor/font",
+                "version": "4.9.2",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
                     "type": "zip"
                 }
             }
@@ -312,7 +326,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
             "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

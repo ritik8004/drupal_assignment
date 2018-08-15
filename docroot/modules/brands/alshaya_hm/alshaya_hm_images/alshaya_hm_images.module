@@ -74,18 +74,32 @@ function alshaya_hm_images_theme($existing, $type, $theme, $path) {
 function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  $config_sku_plp_lookup = \Drupal::config('alshaya_hm_images.settings')->get('config_sku_plp_lookup');
 
   // Check if the gallery has a main image. If not, look for assets.
   if ($context == 'search') {
-    // Get the assets.
-    $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
-    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
+    $main_image_assets = $hover_image_assets = '';
+
+    // Lookup images on current SKU if its a simple SKU. In case of configurable
+    // SKU, if the config is setup for looking config SKU for images, lookup for
+    // it on config SKU.
+    if (($sku->bundle() !== 'configurable') || ($config_sku_plp_lookup)) {
+      $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
+    }
 
     // If no assets attached & the sku is configurable, try to use the
-    // assets attached with first child sku attached.
+    // assets attached with first child sku.
     if ((!$main_image_assets) && (!$hover_image_assets) && ($sku->bundle() === 'configurable')) {
       $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
       $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp']);
+    }
+
+    // If no assets attached to children or sku is simple, try to use the
+    // assets attached with the main sku.
+    if (($sku->bundle() === 'simple') || ((!$main_image_assets) && (!$hover_image_assets))) {
+      $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
     }
 
     $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
@@ -133,18 +147,18 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       }
     }
   }
-  elseif ($context == 'teaser' && empty($build['image'])) {
-    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', ['plp']);
+  elseif (in_array($context, ['teaser', 'product_category_carousel']) && empty($build['image'])) {
+    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', [$context]);
 
     // If no assets attached & the sku is configurable, try to use the
     // assets attached with first child sku attached.
     if (empty($teaser_assets) && ($sku->bundle() === 'configurable')) {
-      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
+      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', [$context]);
     }
 
     // Try once with plp assets if nothing found for teaser.
     if (empty($teaser_assets)) {
-      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', [$context]);
     }
 
     if (!empty($teaser_assets)) {
@@ -152,6 +166,20 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
         '#theme' => 'image',
         '#attributes' => [
           'src' => $teaser_assets[0]['url']->toString(),
+          'title' => $sku->label(),
+          'alt' => $sku->label(),
+        ],
+      ];
+    }
+  }
+  elseif ($context == 'pdp' && !empty($build['free_gift_promotions']['#free_sku_code']) && empty($build['free_gift_promotions']['#sku_image'])) {
+    $free_sku_assets = $sku_assets_manager->getSkuAssets($build['free_gift_promotions']['#free_sku_code'], 'swatch', ['swatch'], 'details', FALSE);
+
+    if (!empty($free_sku_assets)) {
+      $build['free_gift_promotions']['#sku_image'] = [
+        '#theme' => 'image',
+        '#attributes' => [
+          'src' => $free_sku_assets[0]['url']->toString(),
           'title' => $sku->label(),
           'alt' => $sku->label(),
         ],
@@ -212,10 +240,10 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
 /**
  * Implements hook_acq_sku_cart_media_alter().
  */
-function alshaya_hm_images_acq_sku_cart_media_alter($sku, &$sku_image) {
+function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $context = 'cart') {
   if (empty($sku_image)) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart', ['cart']);
+    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart', [$context]);
 
     if (!empty($cart_assets)) {
       $sku_image = [

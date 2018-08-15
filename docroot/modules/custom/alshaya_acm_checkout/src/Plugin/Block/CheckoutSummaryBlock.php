@@ -250,7 +250,8 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
 
     foreach ($items as $item) {
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($item['sku'], '291x288');
+      $image = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'checkout_summary');
+
       $node = alshaya_acm_product_get_display_node($item['sku']);
 
       if ($node instanceof NodeInterface) {
@@ -344,6 +345,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
         }
 
         $shipping_address = $this->addressBookManager->getAddressArrayFromMagentoAddress($shipping_address);
+        $shipping_address = $this->addressBookManager->getAddressWithPrefix($shipping_address);
 
         $comma = $this->t(',')->render();
 
@@ -410,7 +412,17 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $totals['discount'] = ((float) ($cart_totals['discount'])) != 0 ? alshaya_acm_price_format($cart_totals['discount']) : NULL;
 
     // Shipping.
-    $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
+    if ($delivery) {
+      if ((float) $cart_totals['shipping'] > 0) {
+        $totals['shipping'] = alshaya_acm_price_format($cart_totals['shipping']);
+      }
+      else {
+        $totals['shipping']['value']['#markup'] = $this->t('FREE');
+      }
+    }
+    else {
+      $totals['shipping'] = (float) $cart_totals['shipping'] > 0 ? alshaya_acm_price_format($cart_totals['shipping']) : NULL;
+    }
 
     // COD Surcharge.
     $surcharge_label = '';

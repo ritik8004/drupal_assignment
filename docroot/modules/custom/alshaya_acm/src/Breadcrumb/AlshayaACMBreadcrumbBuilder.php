@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -31,6 +32,10 @@ class AlshayaACMBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     $breadcrumb->addLink(Link::createFromRoute($this->t('Home'), '<front>'));
     $breadcrumb->addLink(Link::createFromRoute($this->t('Basket'), 'acq_cart.cart'));
     $breadcrumb->addCacheableDependency(['url.path']);
+    // For 'cart' page, route name and breadcrumb will be same for all users.
+    // So caching cart page breadcrumb permanently.
+    $breadcrumb->addCacheContexts(['route']);
+    $breadcrumb->mergeCacheMaxAge(Cache::PERMANENT);
 
     return $breadcrumb;
   }

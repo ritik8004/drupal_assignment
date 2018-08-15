@@ -11,13 +11,16 @@
   Drupal.behaviors.productCategoryCarousel = {
     attach: function (context, settings) {
       var pdp_items_desk = drupalSettings.pdp_items_desk;
+      var basket_carousel_items = drupalSettings.basket_carousel_items;
+      var dp_product_carousel_items = drupalSettings.dp_product_carousel_items;
+      var hp_product_carousel_items = drupalSettings.hp_product_carousel_items;
 
       var optionsBasket = {
         responsiveClass: true,
         dots: true,
         responsive: {
           1025: {
-            items: 5,
+            items: basket_carousel_items,
             nav: true
           }
         }
@@ -39,7 +42,7 @@
         dots: true,
         responsive: {
           1025: {
-            items: 5,
+            items: dp_product_carousel_items,
             nav: true
           }
         }
@@ -50,7 +53,7 @@
         dots: true,
         responsive: {
           1025: {
-            items: 6,
+            items: hp_product_carousel_items,
             nav: true
           }
         }
@@ -100,8 +103,8 @@
         });
       }
 
-      var plpfeaturedproduct = $('.nodetype--advanced_page .paragraph--type--product-carousel-category .product-category-carousel');
-      var advancedfeaturedproduct = $('.frontpage .paragraph--type--product-carousel-category .product-category-carousel');
+      var plpfeaturedproduct = $('.l-two--sf .paragraph--type--product-carousel-category .product-category-carousel');
+      var advancedfeaturedproduct = $('.l-one--w .paragraph--type--product-carousel-category .product-category-carousel, .frontpage .paragraph--type--product-carousel-category .product-category-carousel');
       var crossSell = $('.horizontal-crossell .owl-carousel');
       var upSell = $('.horizontal-upell .owl-carousel');
       var relatedSell = $('.horizontal-related .owl-carousel');
