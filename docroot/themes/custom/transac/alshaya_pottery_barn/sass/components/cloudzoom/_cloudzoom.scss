@@ -1,0 +1,43 @@
+.cloudzoom {
+  &.thumbnail-count-1 {
+    @include breakpoint($tablet) {
+      .cloudzoom__thumbnails {
+        display: none;
+      }
+
+      .cloudzoom__herocontainer {
+        width: 100%;
+      }
+    }
+  }
+
+  .cloudzoom__herocontainer {
+    width: 100%;
+
+    .product-labels {
+      position: absolute;
+    }
+
+    .img-wrap img {
+      width: 711px !important;
+      height: 552px !important;
+    }
+  }
+
+  .cloudzoom__thumbnails {
+    #lightSlider {
+      .slick-slide {
+        width: 7.0625rem !important;
+        height: 6.5rem !important;
+        margin: 0.3125rem 0.5rem;
+        padding: 3px;
+      }
+    }
+  }
+}
+
+.cloudzoom__image {
+  .hover-text {
+    padding: 1rem 1.5rem;
+  }
+}
