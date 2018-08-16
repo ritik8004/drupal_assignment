@@ -84,6 +84,13 @@
         }
       }
 
+      .select2-container {
+        .select2-selection .select2-selection__rendered {
+          font-size: 0.75rem;
+          color: $pdp_size_option_text;
+        }
+      }
+
       .form-item-quantity {
         .select2-container {
           .select2-selection .select2-selection__rendered {
@@ -123,6 +130,23 @@
         @include breakpoint($only-tablet) {
           margin-top: 1.45rem;
           margin-bottom: 1.5rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          &:first-child {
+            margin-bottom: 0.75rem;
+          }
+        }
+
+        &.configurable-swatch {
+          @include breakpoint($upto-desktop) {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            margin-bottom: 1.5rem;
+          }
         }
 
         .form-select {

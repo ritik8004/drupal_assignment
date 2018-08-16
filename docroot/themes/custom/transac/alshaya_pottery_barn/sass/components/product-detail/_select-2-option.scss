@@ -1,7 +1,9 @@
 .select2Option {
   .select-buttons {
-    li {
-      a {
+    li,
+    li.disabled {
+      a,
+      span {
         @include breakpoint($desktop) {
           font-size: 0.625rem;
           padding: 0.6rem 0.75rem;
@@ -24,6 +26,10 @@
           border-color: $pdp_swatch_disabled;
         }
       }
+    }
+
+    li.disabled {
+      pointer-events: none;
     }
   }
 
