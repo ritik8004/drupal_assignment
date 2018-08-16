@@ -56,9 +56,9 @@ function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state
         unset($form['field_product_category']['widget']['#options'][$tid]);
       }
     }
-
-    array_unshift($form['#validate'], 'alshaya_advanced_page_node_form_validate');
   }
+
+  array_unshift($form['#validate'], 'alshaya_advanced_page_node_form_validate');
 }
 
 /**

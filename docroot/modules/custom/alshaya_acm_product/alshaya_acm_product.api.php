@@ -42,20 +42,6 @@ function hook_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, 
 }
 
 /**
- * Alter response in ajax callback for add to cart form configurable options.
- *
- * @param \Drupal\Core\Ajax\AjaxResponse $response
- *   Current AJAX response.
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   SKU Entity for which cart form is submitted.
- * @param \Drupal\acq_commerce\SKUInterface|null $selected_sku
- *   Child SKU based on selected values.
- */
-function hook_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
-
-}
-
-/**
  * Alter product gallery to match brand needs.
  *
  * @param array $gallery

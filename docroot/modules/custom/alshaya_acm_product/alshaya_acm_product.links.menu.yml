@@ -16,12 +16,12 @@ alshaya_acm_product.product_home_delivery_settings_form:
   description: 'ACM Product Home Delivery settings.'
   weight: 11
   route_name: alshaya_acm_product.product_home_delivery_settings_form
-alshaya_acm_product.pdp_modal_links_settings_form:
-  title: 'PDP modal links settings'
+alshaya_acm_product.size_guide_settings_form:
+  title: 'Size guide settings'
   parent: acq_commerce.configuration
-  description: 'PDP modal links settings.'
+  description: 'Size guide settings.'
   weight: 12
-  route_name: alshaya_acm_product.pdp_modal_links_settings_form
+  route_name: alshaya_acm_product.size_guide_settings_form
 alshaya_acm_product.product_display_settings:
   title: 'Product display settings'
   description: 'Configuration form to manage display custom fields for product view.'

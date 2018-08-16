@@ -24,26 +24,6 @@ function alshaya_acm_product_post_update_8025(&$sandbox) {
 /**
  * Implements hook_update_N().
  *
- * Changing 'size_guide' config to 'pdp_modal_links'.
- */
-function alshaya_acm_product_update_8026() {
-  $existing_config = \Drupal::configFactory()->getEditable('alshaya_acm_product.size_guide');
-  // Get existing config.
-  $existing_data = $existing_config->getRawData();
-  // Delete the configuration.
-  $existing_config->delete();
-
-  // Set the attribute for the delivery.
-  $existing_data['delivery_content_attribute'] = 'delivery';
-
-  // Save the configuration.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.pdp_modal_links')
-    ->setData($existing_data)->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Remove fields specific to HnM from core.
  */
 function alshaya_acm_product_update_8025() {

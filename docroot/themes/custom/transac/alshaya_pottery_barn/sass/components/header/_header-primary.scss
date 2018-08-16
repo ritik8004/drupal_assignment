@@ -59,7 +59,7 @@ header {
           height: 1.3125rem;
 
           html[lang=ar] & {
-            margin-top: 1rem;
+            margin-top: 0.625rem;
           }
         }
       }
@@ -171,20 +171,6 @@ header {
         }
       }
     }
-  }
-}
-
-body {
-  @include breakpoint($only-tablet) {
-    margin-top: 7.875rem;
-
-    html[lang=ar] & {
-      margin-top: 8rem;
-    }
-  }
-
-  @include breakpoint($only-mobile) {
-    margin-top: 3.6875rem;
   }
 }
 

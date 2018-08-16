@@ -81,8 +81,7 @@ class AlshayaSearchApiFacetsManager {
 
     $data['id'] = $id;
     $data['facet_source_id'] = $facet_source_id;
-    $data['url_alias'] = $field_key;
-    $data['field_identifier'] = $data['field_identifier'] ?? 'attr_' . $field_key;
+    $data['url_alias'] = $id;
     $data = array_replace_recursive($data, $overrides);
     $this->configFactory->getEditable($facet_id)->setData($data)->save();
 
@@ -108,11 +107,6 @@ class AlshayaSearchApiFacetsManager {
     $block_id = 'block.block.' . $formatted_id;
 
     $block_data = $this->getFromTemplate($template_id);
-
-    if (empty($block_data)) {
-      return;
-    }
-
     $block_data['id'] = $formatted_id;
     $block_data['theme'] = $this->themeManager->getActiveTheme()->getName();
     $block_data['plugin'] = 'facet_block:' . $id;
@@ -199,15 +193,7 @@ class AlshayaSearchApiFacetsManager {
    */
   private function getFromTemplate($template_id) {
     $path = drupal_get_path('module', 'alshaya_search_api') . '/config/template/';
-    $content = '';
-
-    if (file_exists($path . $template_id . '.yml')) {
-      $content = file_get_contents($path . $template_id . '.yml');
-    }
-    elseif (strpos($template_id, 'facets.facet') === 0) {
-      $content = file_get_contents($path . 'facets.facet.default.yml');
-    }
-
+    $content = file_get_contents($path . $template_id . '.yml');
     return Yaml::parse($content);
   }
 

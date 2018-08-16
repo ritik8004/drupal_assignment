@@ -1114,7 +1114,7 @@
   .hours--wrapper {
     .hours--label.open {
       @include icon(chevronup, after) {
-        color: $store_finder_search_results_hour_icon_open;
+        color: $marine-blue-two;
       }
     }
   }

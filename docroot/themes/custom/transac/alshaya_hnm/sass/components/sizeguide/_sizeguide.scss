@@ -57,7 +57,7 @@
   }
 
   #drupal-modal,
-  div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"] {
+  div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
     @include breakpoint($tablet) {
       height: 39rem !important;
     }
@@ -85,7 +85,7 @@
       padding: calc((100vh - 34.75rem) / 2) calc((100vw - 33.375rem) / 2);
     }
 
-    div[id^="drupal-dialog-alshaya-acm-productpdp-modal-links-"] {
+    div[id^="drupal-dialog-alshaya-acm-productsize-guide-modal-"] {
       margin: 0 auto;
       width: 100%;
       overflow: auto !important;

@@ -26,7 +26,7 @@
                 {% set style = style ~ 'color:' ~ level1.term_font_color ~ ';' %}
             {% endif %}
 
-            <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" style="{{style}}" title="{{ level1.label }}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
+            <{{ level1.tag }} class="menu__link menu--one__link {{ level1.class }}" style="{{style}}" {{ level1.tag_attr }}>{{ level1.label }}</{{ level1.tag }}>
           </div>
           {% if level1.child is not empty %}
             {{ alshaya_main_menu('alshaya_main_menu_level2', level1) }}
