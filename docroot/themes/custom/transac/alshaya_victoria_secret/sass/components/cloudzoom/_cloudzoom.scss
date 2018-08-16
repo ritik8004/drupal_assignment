@@ -85,6 +85,7 @@
           background: url(../imgs/icons/magnifier-wth-plus.svg) $left no-repeat;
           background-size: 1.1875rem 1.0625rem;
           display: inline-block;
+          float: $right;
           width: auto;
         }
       }
