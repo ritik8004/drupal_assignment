@@ -320,7 +320,50 @@ class SkuImagesManager {
   public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '') {
     $gallery = [];
 
-    $display_thumbnails = $this->configFactory->get('alshaya_acm_product.display_settings')->get('image_thumb_gallery');
+    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $display_thumbnails = $config->get('image_thumb_gallery');
+
+    $check_parent_child = TRUE;
+    $is_configurable = $sku->bundle() == 'configurable';
+    $configurable_use_parent_images = $config->get('configurable_use_parent_images');
+
+    switch ($configurable_use_parent_images) {
+      case 'never':
+        // Case were we will show default/empty gallery but never use
+        // from parent.
+        $check_parent_child = FALSE;
+
+        if ($is_configurable) {
+          $child = $this->getFirstChildWithMedia($sku);
+
+          if ($child instanceof SKU) {
+            $sku = $child;
+          }
+          else {
+            return [];
+          }
+        }
+        break;
+
+      case 'fallback':
+        // Here we first check if images are there in child.
+        // If not only then we use image from parent.
+        if ($is_configurable) {
+          $check_parent_child = FALSE;
+          $child = $this->getFirstChildWithMedia($sku);
+          if ($child instanceof SKU) {
+            $sku = $child;
+          }
+        }
+        break;
+
+      case 'always':
+      default:
+        // Case were we will show image from parent first, if not available
+        // image from child, if still not - empty/default image.
+        // Let it execute as is, this is default code.
+        break;
+    }
 
     switch ($context) {
       case 'search':
@@ -333,7 +376,7 @@ class SkuImagesManager {
         if (empty($gallery)) {
           $search_main_image = $thumbnails = [];
 
-          $media = $this->getAllMedia($sku, TRUE);
+          $media = $this->getAllMedia($sku, $check_parent_child);
 
           // Loop through all media items and prepare thumbnails array.
           foreach ($media['media_items']['images'] ?? [] as $media_item) {
