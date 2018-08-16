@@ -1390,10 +1390,29 @@ class SkuManager {
       }
     }
 
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+
     // Sort the values in attribute_sku so we can use it later.
     foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
       if ($this->cartFormHelper->isAttributeSortable($code)) {
         $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
+
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
       }
     }
 
