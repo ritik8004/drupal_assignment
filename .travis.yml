@@ -97,7 +97,7 @@ deploy:
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
-       branch: pwa
+       branch: pb
        php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"
