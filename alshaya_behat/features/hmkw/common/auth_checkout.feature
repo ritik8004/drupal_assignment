@@ -35,6 +35,13 @@ Feature: As an authenticated user
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+       #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @hd @knet
   Scenario: As an authenticated user
@@ -65,6 +72,14 @@ Feature: As an authenticated user
       And I wait for the page to load
       Then I should see text matching "Thank you for shopping online with us, Test Test "
       And I should see text matching "Your order number is "
+  #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
+
 
   @hd @cs
     Scenario: As an authenticated user
@@ -89,6 +104,13 @@ Feature: As an authenticated user
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @cc @knet
   Scenario: As an authenticated user
@@ -118,6 +140,13 @@ Feature: As an authenticated user
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @cc @cs
   Scenario: As an authenticated user
@@ -143,3 +172,10 @@ Feature: As an authenticated user
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+    #checking product attributes on order confirmation
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
