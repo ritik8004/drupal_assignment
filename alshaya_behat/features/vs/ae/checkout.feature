@@ -173,7 +173,6 @@ Feature: Test Checkout feature
     And I fill in "edit-cc-mobile-number-mobile" with "555667756"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
-  #  When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
