@@ -69,6 +69,7 @@ Feature: Test Store finder page
     And I wait for AJAX to finish
     Then the "Map view" tab should be highlighted
     And I wait for AJAX to finish
+    And I scroll to x "200" y "400" coordinates of page
     When I click a pointer on the map
     And I wait for AJAX to finish
     Then I should see title, address, Opening hours and Get directions link on the popup
