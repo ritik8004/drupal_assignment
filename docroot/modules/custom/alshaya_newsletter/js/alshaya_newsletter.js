@@ -36,17 +36,31 @@
         }
       };
 
-      // On focus out on button click.
-      $('.block-alshaya-newsletter-subscription button.edit-newsletter').on('focusout', function() {
+      //On focus-out from button/email field.
+      $('.block-alshaya-newsletter-subscription button.edit-newsletter, .block-alshaya-newsletter-subscription input[name="email"]').on('focusout', function() {
+        hideNewsLetterError();
+      });
+
+      /**
+       * Hide/Remove error on focus out if email field empty.
+       */
+      var hideNewsLetterError = function() {
         // If email field is empty.
         if ($('.block-alshaya-newsletter-subscription input[name="email"]').val().length < 1) {
           // If there was an error due to ajax response, then remove it.
           if ($('.block-alshaya-newsletter-subscription #footer-newsletter-form-wrapper span.message').hasClass('error')) {
             $('.block-alshaya-newsletter-subscription #footer-newsletter-form-wrapper .subscription-status').remove()
-            $('.block-alshaya-newsletter-subscription input[name="email"]').removeClass('error');
           }
+
+          // If error due to inline js error.
+          if ($('.block-alshaya-newsletter-subscription label[for="edit-email"]').hasClass('error')) {
+            $('.block-alshaya-newsletter-subscription label[for="edit-email"]').html('');
+          }
+
+          // Remove error class from the email field.
+          $('.block-alshaya-newsletter-subscription input[name="email"]').removeClass('error');
         }
-      });
+      }
     }
   };
 
