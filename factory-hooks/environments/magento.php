@@ -195,6 +195,27 @@ function alshaya_get_magento_host_data() {
         ],
       ],
     ],
+    'pb_uat' => [
+      'url' => 'https://pb-uat.store.alshaya.com',
+      'kw' => [
+        'store_id' => [
+          'en' => 1,
+          'ar' => 18,
+        ],
+      ],
+      'sa' => [
+        'store_id' => [
+          'en' => 6,
+          'ar' => 9,
+        ],
+      ],
+      'ae' => [
+        'store_id' => [
+          'en' => 12,
+          'ar' => 15,
+        ],
+      ],
+    ],
     // Victoria Secret.
     'vs_qa' => [
       'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
