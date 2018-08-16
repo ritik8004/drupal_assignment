@@ -45,7 +45,7 @@ Feature: Advanced Page test
       |field_slider[0][subform][field_banner][0][alt]|test Image|
       |edit-field-slider-0-subform-field-link-0-uri|Website Terms and Conditions (196)|
       |field_slider[0][subform][field_link][0][uri]|Home (126)                        |
-      #adding live text|
+      adding live text|
     Then I press "Add Live text"
     And I wait 30 seconds
     And I fill in the following:
