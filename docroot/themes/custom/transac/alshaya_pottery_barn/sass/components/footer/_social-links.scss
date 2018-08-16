@@ -1,18 +1,4 @@
 .c-social-links {
-  li:not(:last-child) {
-    margin-#{$right}: 0.875rem;
-
-    @include breakpoint($tablet) {
-      margin-#{$right}: 0.87rem;
-    }
-  }
-
-  [class^="c-social-links--"]::before {
-    @include breakpoint($tablet) {
-      font-size: 2rem;
-    }
-  }
-
   .c-social-links--facebook {
     &:hover::before {
       background: url("../imgs/icons/ic-facebookselect.svg") no-repeat center;

@@ -1,6 +1,6 @@
-alshaya_acm_product.pdp_modal_links:
+alshaya_acm_product.size_guide:
   type: config_object
-  label: 'Alshaya PDP Modal Links Config'
+  label: 'Alshaya Style Guide Config'
   mapping:
     size_guide_enabled:
       type: integer

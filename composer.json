@@ -82,8 +82,7 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "drupal/ckeditor_font": "^1.0",
         "ckeditor/font": "^4.9",
-        "drupal/allowed_formats": "^1.1",
-        "springimport/magento2-api-v1": "^1.0"
+        "drupal/allowed_formats": "^1.1"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",

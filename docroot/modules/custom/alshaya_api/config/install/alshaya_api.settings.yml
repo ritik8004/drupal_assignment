@@ -2,8 +2,7 @@ magento_host: ''
 magento_lang_prefix: ''
 magento_api_base: ''
 verify_ssl: 1
-consumer_key: ''
-consumer_secret: ''
-access_token: ''
-access_token_secret: ''
+token_cache_time: 86400
+username: ''
+password: ''
 langcode: en

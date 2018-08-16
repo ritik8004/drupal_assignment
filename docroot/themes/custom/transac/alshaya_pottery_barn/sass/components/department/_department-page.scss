@@ -1,8 +1,4 @@
 .c-department {
-  @include breakpoint($tablet) {
-    margin-top: 0;
-  }
-
   .c-category-list__title {
     text-transform: uppercase;
     font-weight: bold;
@@ -17,14 +13,6 @@
 
     a:hover {
       color: $content_link_color;
-    }
-  }
-}
-
-.nodetype--advanced_page {
-  .c-department {
-    @include breakpoint($only-mobile) {
-      margin-top: 0.75rem;
     }
   }
 }

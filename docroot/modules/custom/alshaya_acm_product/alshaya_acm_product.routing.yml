@@ -22,13 +22,13 @@ alshaya_acm_product.product_settings_form:
   requirements:
     _permission: 'access commerce product settings'
 
-alshaya_acm_product.pdp_modal_links_settings_form:
-  path: '/admin/commerce/config/pdp-modal-links-settings'
+alshaya_acm_product.size_guide_settings_form:
+  path: '/admin/commerce/config/size-guide-settings'
   defaults:
-    _form: '\Drupal\alshaya_acm_product\Form\PDPModalLinksForm'
-    _title: 'PDP modal links'
+    _form: '\Drupal\alshaya_acm_product\Form\SizeGuideSettingsForm'
+    _title: 'Size Guide Settings'
   requirements:
-    _permission: 'administer PDP modal links settings'
+    _permission: 'administer size guide settings'
 
 alshaya_acm_product.basket_delivery_settings_form:
   path: '/admin/commerce/config/basket-delivery'
@@ -46,10 +46,10 @@ alshaya_acm_product.product_home_delivery_settings_form:
   requirements:
     _permission: 'access commerce administration pages'
 
-alshaya_acm_product.pdp_modal_links:
-  path: '/modal-link-views/{type}'
+alshaya_acm_product.size_guide_modal:
+  path: '/size-guide-view'
   defaults:
-    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::pdpModalLinkView'
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::sizeGuideModal'
     _title: 'Size guide'
   requirements:
     _permission: 'access content'

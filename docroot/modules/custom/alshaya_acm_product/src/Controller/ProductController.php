@@ -62,33 +62,35 @@ class ProductController extends ControllerBase {
   }
 
   /**
-   * Page callback for modal content.
+   * Page callback for size guide modal.
    */
-  public function pdpModalLinkView($type = 'size-guide') {
-    // Type mapping.
-    $types = [
-      'size-guide' => 'size_guide_modal_content_node',
-      'delivery' => 'delivery_content_node',
-    ];
-    $content_nid = $this->config('alshaya_acm_product.pdp_modal_links')->get($types[$type]);
-    $content = '';
-    if (!empty($content_nid)) {
-      $content = $this->entityTypeManager()->getStorage('node')->load($content_nid);
-      $current_language = $this->languageManager()->getCurrentLanguage()->getId();
-      // Get translated node object.
-      $content = $this->entityManager()->getTranslationFromContext($content, $current_language);
-      $content->setTitle('');
-      $content = render($this->entityTypeManager()->getViewBuilder('node')->view($content, 'full'));
+  public function sizeGuideModal() {
+    $config = $this->config('alshaya_acm_product.size_guide');
+    $size_guide_enabled = $config->get('size_guide_enabled');
+    $build = [];
+
+    // If size guide is enabled on site.
+    if ($size_guide_enabled) {
+      $size_guide_content_nid = $config->get('size_guide_modal_content_node');
+      $size_guide_content = '';
+      if (!empty($size_guide_content_nid)) {
+        $size_guide_content = $this->entityTypeManager()->getStorage('node')->load($size_guide_content_nid);
+        $current_language = $this->languageManager()->getCurrentLanguage()->getId();
+        // Get translated node object.
+        $size_guide_content = $this->entityManager()->getTranslationFromContext($size_guide_content, $current_language);
+        $size_guide_content->setTitle('');
+        $view = $this->entityTypeManager()->getViewBuilder('node')->view($size_guide_content, 'full');
+        $size_guide_content = render($view);
+      }
+
+      $build = [
+        '#type' => 'inline_template',
+        '#template' => '<div class="size-guide-content">{{ size_guide_content }}</div>',
+        '#context' => [
+          'size_guide_content' => $size_guide_content,
+        ],
+      ];
     }
-
-    $build = [
-      '#type' => 'inline_template',
-      '#template' => '<div class="modal-content">{{ modal_content }}</div>',
-      '#context' => [
-        'modal_content' => $content,
-      ],
-    ];
-
     return $build;
   }
 

@@ -1,7 +1,0 @@
-image_thumb_gallery: true
-color_swatches: true
-swatches:
-  pdp:
-    - color
-  plp:
-    - color_lhn

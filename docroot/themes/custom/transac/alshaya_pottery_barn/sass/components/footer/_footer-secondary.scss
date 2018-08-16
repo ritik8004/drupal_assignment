@@ -2,16 +2,22 @@
 .c-footer__logo--visa,
 .c-footer__logo--mastercard {
   background-position: center;
-  background-repeat: no-repeat;
+}
+
+.c-footer__logo--verisign {
+  background-image: url("../../alshaya_white_label/imgs/cards/card-verisign.png");
+  height: 2.25rem;
+  width: 4.375rem;
 }
 
 .c-footer__logo--visa {
-  width: 3.75rem;
+  background-image: url("../../alshaya_white_label/imgs/cards/card-visa.png");
+  height: 1.75rem;
+  width: 4.125rem;
 }
 
 .c-footer__logo--mastercard {
-  background-size: contain;
-  width: 4.125rem;
+  background-image: url("../../alshaya_white_label/imgs/cards/card-mastercard.png");
 }
 
 .c-footer-secondary {
@@ -21,24 +27,8 @@
       margin-#{$right}: 0;
     }
 
-    @include breakpoint($only-mobile) {
-      padding: 1.5rem 1.25rem;
-      text-align: center;
-      margin-#{$right}: 0;
-    }
-
     .field--name-body p {
-      font-size: 0.6875rem;
-
-      @include breakpoint($tablet) {
-        font-size: 0.75rem;
-      }
-    }
-  }
-
-  .c-footer__logos {
-    @include breakpoint($only-mobile) {
-      background-color: $footer_bg;
+      font-size: 0.75rem;
     }
   }
 }
