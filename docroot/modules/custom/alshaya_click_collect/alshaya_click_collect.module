@@ -6,6 +6,8 @@
  */
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -133,4 +135,11 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
       ],
     ];
   }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
+ */
+function alshaya_click_collect_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
+  $response->addCommand(new InvokeCommand(NULL, 'clickCollectProductStockStatusAction', ['article[data-skuid="' . $entity->id() . '"]:visible', $stock]));
 }

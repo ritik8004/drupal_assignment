@@ -69,6 +69,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  // Add country specific class for doing any style overrides.
+  $variables['attributes']['class'][] = Html::cleanCssIdentifier('country-' . strtolower(_alshaya_custom_get_site_level_country_code()));
+
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
 
@@ -280,6 +283,20 @@ function alshaya_white_label_preprocess_field__node__field_store_open_hours__sto
 }
 
 /**
+ * Implements hook_preprocess_field().
+ */
+function alshaya_white_label_preprocess_field__field_slider(&$variables) {
+  $data = [];
+  if (!empty($variables['items'])) {
+    foreach ($variables['items'] as $item) {
+      $data[$item['content']['#paragraph']->getType()][] = $item['content'];
+    }
+  }
+
+  $variables['slider_usp_data'] = $data;
+}
+
+/**
  * Implements hook_preprocess_node().
  */
 function alshaya_white_label_preprocess_node(&$variables) {
@@ -306,15 +323,23 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['label'] = NULL;
   }
   elseif ($variables['node']->bundle() === 'acq_product') {
-    $variables['vat_text_footer'] = \Drupal::config('alshaya_acm_product.settings')->get('vat_text_footer');
+    $settings = \Drupal::config('alshaya_acm_product.settings');
+
+    $variables['vat_text_footer'] = $settings->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
-    // Cross sell/ Up sell items count on caraousel on pdp page.
-    $variables['#attached']['drupalSettings']['pdp_items_mob'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
-    $variables['#attached']['drupalSettings']['pdp_items_tab'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
-    $variables['#attached']['drupalSettings']['pdp_items_desk'] = \Drupal::config('alshaya_acm_product.settings')->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+
+    // Cross sell/ Up sell items count on carousel on pdp page.
+    $variables['#attached']['drupalSettings']['pdp_items_mob'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
+    $variables['#attached']['drupalSettings']['pdp_items_tab'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_768');
+    $variables['#attached']['drupalSettings']['pdp_items_desk'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
+    // Related product items count on carousel on Basket page.
+    $variables['#attached']['drupalSettings']['basket_carousel_items'] = $settings->get('cross_up_sell_items_settings.basket_carousel_items_size');
+    // Product items count on carousel.
+    $variables['#attached']['drupalSettings']['dp_product_carousel_items'] = $settings->get('product_carousel_items_settings.dp_product_carousel_items_number');
+    $variables['#attached']['drupalSettings']['hp_product_carousel_items'] = $settings->get('product_carousel_items_settings.hp_product_carousel_items_number');
     // Number of items to show in a slider on PDP.
-    $variables['#attached']['drupalSettings']['pdp_slider_items'] = \Drupal::config('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number');
+    $variables['#attached']['drupalSettings']['pdp_slider_items'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
@@ -1005,6 +1030,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         }
       }
     }
+  }
+  elseif ($variables['elements']['#paragraph']->getType() == 'delivery_usp_block') {
+    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $paragraph = $variables['paragraph'];
+    $timer_value = [];
+    $timer_value[$paragraph->id()] = $paragraph->get('field_usp_timer')->getString();
+    // Passing value so that can be used in slider JS.
+    $variables['#attached']['drupalSettings']['usp_text_timer'] = $timer_value;
   }
 }
 

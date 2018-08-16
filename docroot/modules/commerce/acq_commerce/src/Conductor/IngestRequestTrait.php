@@ -51,9 +51,9 @@ trait IngestRequestTrait {
    *
    * @throws ConnectorException
    */
-  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL) {
+  protected function tryIngestRequest(callable $doReq, $action, $reskey = NULL, $acm_uuid = '') {
 
-    $client = $this->clientFactory->createClient();
+    $client = $this->clientFactory->createClient($acm_uuid);
     $reqOpts = [];
 
     $logger = ($this->logger) ?: \Drupal::logger('acq_commerce');

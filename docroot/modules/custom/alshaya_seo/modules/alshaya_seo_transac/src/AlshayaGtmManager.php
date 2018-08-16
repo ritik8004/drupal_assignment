@@ -1085,7 +1085,7 @@ class AlshayaGtmManager {
 
         if ($cart) {
           $cart_totals = $cart->totals();
-          $cart_items = $cart->get('items');
+          $cart_items = $cart->get('items') ?? [];
           $productStyleCode = [];
           $productSKU = [];
 

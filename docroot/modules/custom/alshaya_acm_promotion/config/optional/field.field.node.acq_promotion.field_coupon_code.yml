@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_coupon_code
+    - node.type.acq_promotion
+id: node.acq_promotion.field_coupon_code
+field_name: field_coupon_code
+entity_type: node
+bundle: acq_promotion
+label: Coupon Code
+description: 'Hold the coupon code to apply this promotion on cart.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

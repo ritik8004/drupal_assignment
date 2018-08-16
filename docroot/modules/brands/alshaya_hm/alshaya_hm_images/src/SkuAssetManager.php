@@ -85,8 +85,6 @@ class SkuAssetManager {
    *   Sku manager service.
    * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
    *   Sku Plugin Manager.
-   * @param \Drupal\acq_sku\AcquiaCommerce\SKUPluginManager $skuPluginManager
-   *   Sku Plugin Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
@@ -191,7 +189,8 @@ class SkuAssetManager {
       }
     }
 
-    // If there is only a single location_image, we don't want the results to be grouped.
+    // If there is only a single location_image, we don't want the results to
+    // be grouped.
     if (count($location_images) === 1) {
       return $asset_urls;
     }
@@ -210,6 +209,8 @@ class SkuAssetManager {
    *   Page type on which this asset needs to be rendered.
    * @param string $location_image
    *   Location on page e.g., main image, thumbnails etc.
+   * @param string $style
+   *   CSS style.
    *
    * @return array
    *   Array of asset attributes.
@@ -234,7 +235,6 @@ class SkuAssetManager {
       if ($detect->isMobile()) {
         $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] ."]";
       }
-
 
       // Check for overrides for style identifiers & dimensions.
       $config_overrides = $this->overrideConfig($sku, $page_type);
@@ -310,8 +310,8 @@ class SkuAssetManager {
   /**
    * Helper function to sort based on angles.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU for which the assets needs to be sorted on angles.
+   * @param string $sku
+   *   SKU code for which the assets needs to be sorted on angles.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
    * @param array $assets
@@ -460,7 +460,7 @@ class SkuAssetManager {
 
     if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
       if (!empty($terms)) {
-        foreach ($terms as $key => $value) {
+        foreach ($terms as $value) {
           $tid = $value['target_id'];
           $term = $this->termStorage->load($tid);
           if ($term instanceof TermInterface) {
@@ -484,6 +484,10 @@ class SkuAssetManager {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
     if ($cache = $this->skuManager->getProductCachedData($sku, 'hm_colors_for_sku')) {
       return $cache;
     }
@@ -494,7 +498,6 @@ class SkuAssetManager {
     }
 
     $article_castor_ids = [];
-
     foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $article_castor_id => $skus) {
       $child_sku_entity = NULL;
       $color_attributes = [];
@@ -504,14 +507,11 @@ class SkuAssetManager {
         // Show only for colors for which we have stock.
         $child_sku_entity = SKU::loadFromSku($child_sku);
 
-        if (!(alshaya_acm_get_stock_from_sku($child_sku_entity))) {
-          continue;
-        }
-
-        $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
-
-        if ($color_attributes) {
-          break;
+        if (alshaya_acm_get_stock_from_sku($child_sku_entity)) {
+          $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
+          if ($color_attributes) {
+            break;
+          }
         }
       }
 

@@ -4,7 +4,9 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcqSkuLinkedSku;
+use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -133,6 +135,13 @@ class SkuManager {
   protected $currentRequest;
 
   /**
+   * Cart Form helper service.
+   *
+   * @var \Drupal\acq_sku\CartFormHelper
+   */
+  protected $cartFormHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -153,6 +162,8 @@ class SkuManager {
    *   The logger service.
    * @param \Drupal\acq_sku\AcqSkuLinkedSku $linked_skus
    *   Linked SKUs service.
+   * @param \Drupal\acq_sku\CartFormHelper $cart_form_helper
+   *   Cart Form helper service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -171,6 +182,7 @@ class SkuManager {
                               EntityRepositoryInterface $entityRepository,
                               LoggerChannelFactoryInterface $logger_factory,
                               AcqSkuLinkedSku $linked_skus,
+                              CartFormHelper $cart_form_helper,
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
@@ -186,6 +198,7 @@ class SkuManager {
     $this->entityRepository = $entityRepository;
     $this->logger = $logger_factory->get('alshaya_acm_product');
     $this->linkedSkus = $linked_skus;
+    $this->cartFormHelper = $cart_form_helper;
     $this->moduleHandler = $module_handler;
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
@@ -535,17 +548,20 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The SKU Entity, for which linked promotions need to be fetched.
-   * @param bool $getLinks
-   *   Boolen to identify if Links are required.
+   * @param string $view_mode
+   *   View mode around how the promotion needs to be rendered.
    * @param array $types
    *   Type of promotion to filter on.
+   * @param string $product_view_mode
+   *   Product view mode for which promotion is being rendered.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
    */
   public function getPromotionsFromSkuId(SKU $sku,
-                                         $getLinks = FALSE,
-                                         array $types = ['cart', 'category']) {
+                                         string $view_mode,
+                                         array $types = ['cart', 'category'],
+                                         $product_view_mode = NULL) {
 
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
@@ -554,6 +570,9 @@ class SkuManager {
 
     $promotion = $sku->get('field_acq_sku_promotions')->getValue();
 
+    // Preserve the original view mode passed to this function, since we are
+    // altering this one in case of free gifts.
+    $view_mode_original = $view_mode;
     foreach ($promotion as $promo) {
       $promotion_nids[] = $promo['target_id'];
     }
@@ -579,26 +598,59 @@ class SkuManager {
             continue;
           }
 
+          $description = '';
+          $description_item = $promotion_node->get('field_acq_promotion_description')->first();
+          if ($description_item) {
+            $description = $description_item->getValue();
+          }
+
           $discount_type = $promotion_node->get('field_acq_promotion_disc_type')->getString();
           $discount_value = $promotion_node->get('field_acq_promotion_discount')->getString();
+          $free_gift_skus = [];
 
-          if ($getLinks) {
-            $promos[$promotion_node->id()] = $promotion_node->toLink($promotion_text)
-              ->toString()
-              ->getGeneratedLink();
+          // Alter view mode while rendering a promotion with free skus on PDP.
+          if (($product_view_mode == 'full') &&
+            !empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+            $view_mode = 'free_gift';
           }
           else {
-            $description = '';
-            $description_item = $promotion_node->get('field_acq_promotion_description')->first();
-            if ($description_item) {
-              $description = $description_item->getValue();
-            }
-            $promos[$promotion_node->id()] = [
-              'text' => $promotion_text,
-              'description' => $description,
-              'discount_type' => $discount_type,
-              'discount_value' => $discount_value,
-            ];
+            $view_mode = $view_mode_original;
+          }
+
+          switch ($view_mode) {
+            case 'links':
+              $promos[$promotion_node->id()] = $promotion_node->toLink($promotion_text)
+                ->toString()
+                ->getGeneratedLink();
+              break;
+
+            case 'free_gift':
+              $promos[$promotion_node->id()] = [];
+              $promos[$promotion_node->id()]['text'] = $promotion_text;
+              $promos[$promotion_node->id()]['description'] = $description;
+              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getString();
+              foreach ($free_gift_skus as $free_gift_sku) {
+                $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
+              }
+              break;
+
+            default:
+              $promos[$promotion_node->id()] = [
+                'text' => $promotion_text,
+                'description' => $description,
+                'discount_type' => $discount_type,
+                'discount_value' => $discount_value,
+                'rule_id' => $promotion_node->get('field_acq_promotion_rule_id')->getString(),
+              ];
+
+              if (!empty($free_gift_skus = $promotion_node->get('field_free_gift_skus')->getValue())) {
+                $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
+              }
+
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+                $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
+              }
+              break;
           }
         }
       }
@@ -614,7 +666,7 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos)) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        return $this->getPromotionsFromSkuId($parentSku, $getLinks, $types);
+        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
       }
     }
 
@@ -1338,6 +1390,32 @@ class SkuManager {
       }
     }
 
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+
+    // Sort the values in attribute_sku so we can use it later.
+    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
+      if ($this->cartFormHelper->isAttributeSortable($code)) {
+        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
+
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
+      }
+    }
+
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
     $combinations['by_attribute'] = [];
@@ -1625,6 +1703,42 @@ class SkuManager {
     $this->setProductCachedData($sku, 'swatches', $swatches);
 
     return $swatches;
+  }
+
+  /**
+   * Get first valid configurable child.
+   *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Valid child SKU or parent itself.
+   */
+  public function getFirstValidConfigurableChild(SKU $sku) {
+    $cache_key = 'first_valid_child';
+
+    $child_sku = $this->getProductCachedData($sku, $cache_key);
+    if ($child_sku) {
+      return SKU::loadFromSku($child_sku, $sku->language()->getId());
+    }
+
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    foreach ($combinations['attribute_sku'] ?? [] as $children) {
+      foreach ($children as $child_skus) {
+        foreach ($child_skus as $child_sku) {
+          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+          $this->setProductCachedData($sku, $cache_key, $child->getSku());
+          return $child;
+        }
+      }
+    }
+
+    return $sku;
   }
 
 }

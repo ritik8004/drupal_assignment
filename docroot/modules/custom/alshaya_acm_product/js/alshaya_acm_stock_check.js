@@ -129,4 +129,21 @@
     }
   };
 
+  /**
+   * Mark product out of stock.
+   *
+   * @param data
+   *   SKU selector.
+   */
+  $.fn.markProductStockStatusAction = function (data, status) {
+    var article = $(data).parents('article:first');
+    if (status <= 0) {
+      article.addClass('product-out-of-stock');
+      article.find('.sharethis-wrapper').addClass('out-of-stock');
+      article
+        .find('#pdp-home-delivery.home-delivery')
+        .accordion('option', 'disabled', true);
+    }
+  };
+
 })(jQuery, Drupal);

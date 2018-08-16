@@ -52,9 +52,21 @@
           }
         }
         else {
-          ocObject.slick(options);
-          if (context !== document) {
-            ocObject.slick('resize');
+          // When Arabic and slider position is bottom, we need RTL support.
+          if (isRTL() && getPDPSliderParameter('vertical') === false) {
+            ocObject.attr('dir', 'rtl');
+            ocObject.slick(
+              $.extend({}, options, {rtl: true})
+            );
+            if (context !== document) {
+              ocObject.slick('resize');
+            }
+          }
+          else {
+            ocObject.slick(options);
+            if (context !== document) {
+              ocObject.slick('resize');
+            }
           }
         }
       }

@@ -277,6 +277,12 @@ function alshaya_search_search_api_solr_query_alter(QueryInterface $solarium_que
  * Submit function to redirect user to correct language, based on keyword.
  */
 function alshaya_search_keyword_language_redirect($form, FormStateInterface $form_state) {
+  // Do not redirect if it is an ajax request,
+  // so that autocomplete works correctly.
+  if (\Drupal::request()->isXmlHttpRequest()) {
+    return;
+  }
+
   $keyword = $form_state->getValue('keywords');
 
   // Don't process if some notorious guy reached search page directly.
@@ -382,9 +388,20 @@ function alshaya_search_alshaya_profile_installed_final_task() {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_search_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'facets_query_string_alter') {
+    $group = $implementations['alshaya_search'];
+    unset($implementations['alshaya_search']);
+    $implementations['alshaya_search'] = $group;
+  }
+}
+
+/**
  * Implements hook_facets_query_string_alter().
  */
-function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array $context) {
+function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
   $facet = $context['facet'];
 
   // If we processing the URL for an L1 item, remove all category
@@ -403,6 +420,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     // We doing this as for the PLP page, we not show the L1
     // (current active) item.
     $facet_count = $facet_source_id == 'search_api:views_block__alshaya_product_list__block_1' ? 1 : 0;
+    $facet_count += isset($context['facet_count']) ? $context['facet_count'] : 0;
 
     if ((count($parent_ids) === $facet_count) &&
       (isset($context['active_filters'][$url_alias])) &&
@@ -471,7 +489,10 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // Handling with an L2 whose children are active. 1 parent means the
     // item is L2 & check if one of its children is selected.
-    if ((count($parent_ids) == 1) &&
+    $parent_id_count = 1;
+    $parent_id_count += isset($context['parent_id_count']) ? $context['parent_id_count'] : 0;
+
+    if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
       ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
         (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
@@ -491,7 +512,8 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     // If L3 active item for 'search' page.
     if (count($parent_ids) == 2
       && $context['result']->isActive()
-      && $facet_source_id == 'search_api:views_page__search__page') {
+      && $facet_source_id == 'search_api:views_page__search__page'
+      || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2') {
       // Index 0 will always be the L2 parent.
       $parent_id = $parent_ids[0];
       // Get all children of L2 parent.
@@ -543,6 +565,8 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
+          // We use add even when resetting. Remove facet if available.
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
           continue;
         }
 
