@@ -17,7 +17,7 @@ use Drupal\node\Entity\Node;
  * We do this in post update hook as it doesn't work together with config update
  * in normal hook_update.
  */
-function alshaya_acm_product_post_update_8025(&$sandbox) {
+function alshaya_acm_product_post_update_8026(&$sandbox) {
   _alshaya_search_resave_indexes();
 }
 

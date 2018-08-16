@@ -167,12 +167,20 @@ header {
   }
 
   body {
-    margin-top: 5.4rem;
+    margin-top: 5.5rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 5.4375rem;
+    }
   }
 
   body {
     html[lang="ar"] & {
-      margin-top: 5.4rem;
+      margin-top: 5.5rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 5.4375rem;
+      }
     }
   }
 
