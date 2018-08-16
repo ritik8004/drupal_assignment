@@ -1,12 +1,43 @@
+.nodetype--acq_product {
+  .region__content {
+    margin: 1.5rem 0;
+  }
+}
+
+@include breakpoint($desktop) {
+  .content__main {
+    .gallery-wrapper {
+      margin-#{$right}: 1.5rem;
+    }
+  }
+}
+
 .c-pdp {
-  .content__title_wrapper h1 span {
-    font-weight: 300;
+  .content__title_wrapper h1 {
+    width: auto;
+
+    span {
+      font-weight: 300;
+    }
+  }
+
+  .sku-base-form {
+    label {
+      display: none;
+    }
   }
 
   .delivery-options-wrapper,
   .short-description-wrapper {
     .field__label {
+      font-size: 0.875rem;
       font-weight: 600;
+    }
+  }
+
+  .short-description-wrapper {
+    .field__content {
+      font-size: 0.75rem;
     }
   }
 
