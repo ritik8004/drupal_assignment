@@ -8,6 +8,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     And I go to "/cart"
     And I wait for the page to load
+    And I remove promo panel
     And I press "checkout securely"
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
@@ -21,6 +22,7 @@ Feature: Test Checkout feature
     And I should not see the link "Sign in"
     And I should not see the link "Find Store"
     And I should not see "عربية"
+    And I scroll to x "200" y "400" coordinates of page
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -94,6 +96,9 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I select the first autocomplete option for "Dubai - United Arab Emirates" on the "edit-store-location" field
     And I wait for AJAX to finish
+    And I remove promo panel from delivery page
+    And I wait for AJAX to finish
+    And I scroll to x "200" y "1500" coordinates of page
     When I wait 5 seconds
     When I follow "Back to basket"
     Then I should see the button "checkout securely"
@@ -120,6 +125,9 @@ Feature: Test Checkout feature
   Scenario: As a Guest
     I should be able to checkout on HD
     using Cybersource payment method
+    And I remove promo panel from delivery page
+    And I wait for AJAX to finish
+    And I scroll to x "200" y "300" coordinates of page
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -137,6 +145,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
+    And I scroll to x "100" y "400" coordinates of page
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
@@ -164,7 +173,6 @@ Feature: Test Checkout feature
     And I fill in "edit-cc-mobile-number-mobile" with "555667756"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
-  #  When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
@@ -208,11 +216,9 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     When I follow "Map view"
     Then the "Map view" tab should be selected
-#    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div:nth-child(1) > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
-#    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
     And I wait for AJAX to finish
     And I wait for the page to load
     When I fill in "edit-cc-firstname" with "Test"
@@ -221,7 +227,6 @@ Feature: Test Checkout feature
     And I fill in "edit-cc-mobile-number-mobile" with "555667733"
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
-#    When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
@@ -251,9 +256,6 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     When I follow "Map view"
     Then the "Map view" tab should be selected
-#    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(4) > div:nth-child(3) > div > img"
-#    When I wait 2 seconds
-#    When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div:nth-child(1) > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
