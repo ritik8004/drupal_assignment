@@ -108,3 +108,15 @@
   font-weight: 600;
   font-size: 0.75rem;
 }
+
+@include breakpoint($only-mobile) {
+  .content__title_wrapper {
+    border-bottom: 1px solid $pdp_product_itemcode_border;
+    margin-bottom: 0.75rem;
+
+    .content--item-code {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+  }
+}
