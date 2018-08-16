@@ -19,7 +19,12 @@
   }
 
   .form-item {
+    &.error,
     label#edit-email-error {
+      background-color: transparent;
+    }
+
+    .form-email {
       background-color: transparent;
     }
   }
