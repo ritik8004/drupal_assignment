@@ -77,9 +77,7 @@
 
   .basic-details-wrapper {
     .field--name-field-skus {
-      .form-item-configurables-size,
-      .form-item-configurables-color,
-      .form-item-quantity {
+      .form-type-select {
         select.form-select {
           font-size: 0.75rem;
           color: $pdp_size_option_text;
@@ -105,38 +103,31 @@
         text-transform: uppercase;
       }
 
-      .form-type-select {
-        .form-select {
-          @include breakpoint($upto-desktop) {
-            clip: auto;
+      .form-item.form-type-select {
+        &.form-item-quantity {
+          @include breakpoint($only-mobile) {
+            top: 0;
           }
         }
-      }
 
-      .form-item-configurables-color {
-        @include breakpoint($upto-desktop) {
-          @include select-wrapper(100%);
+        &.form-item-configurables-size {
+          @include breakpoint($upto-desktop) {
+            padding: 0;
 
-          padding: 0;
-          min-height: 2.188rem;
-          margin-top: 1rem;
+            &::after {
+              top: 0;
+            }
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-top: 1.45rem;
           margin-bottom: 1.5rem;
         }
 
         .form-select {
           @include breakpoint($upto-desktop) {
-            appearance: none;
-            border: 1px solid $primary_dropdown_arrow_bg;
-            border-radius: 0;
-            background-color: $primary_dropdown_arrow_bg;
-            padding: 0.5rem;
-            padding-left: 0.35rem;
-            padding-right: 1.5rem;
-            height: 2.1875rem;
-            font-size: 0.75rem;
-            outline: none;
-            width: 100%;
-            position: static !important;
+            clip: auto;
           }
         }
 
@@ -155,11 +146,24 @@
         }
       }
 
-      .form-item-configurables-size,
+      .form-item-configurables-material,
+      .form-item-configurables-subset-name,
       .form-item-configurables-color {
-        @include breakpoint($only-tablet) {
+        @include breakpoint($upto-desktop) {
+          @include select-wrapper(100%);
+
+          padding: 0;
+          min-height: 2.188rem;
           margin-top: 1.45rem;
           margin-bottom: 1.5rem;
+        }
+
+        .form-select {
+          @include select-style(100%);
+
+          @include breakpoint($upto-desktop) {
+            position: static !important;
+          }
         }
       }
     }
