@@ -437,8 +437,38 @@
 
 // Horizontal main slider on PDP.
 .slider-position-bottom {
-  .cloudzoom .cloudzoom__thumbnails {
+  .cloudzoom {
+    .cloudzoom__thumbnails {
+      width: 100%;
+
+      #lightSlider {
+        .slick-slide {
+          width: 7rem !important;
+          height: 6.5rem !important;
+          margin: 0;
+          padding: 2px;
+
+          @include breakpoint($desktop) {
+            margin: 0.3125rem 0.5rem;
+            padding: 3px;
+          }
+        }
+      }
+    }
+
+    #cloud-zoom-wrap {
+      img {
+        height: auto;
+      }
+    }
+  }
+
+  .cloudzoom__herocontainer {
     width: 100%;
+
+    .product-labels {
+      position: absolute;
+    }
   }
 
   #product-image-gallery,
@@ -448,6 +478,25 @@
 
     .slick-slide {
       width: auto !important;
+      display: inline-block;
+      float: none;
+    }
+
+    .slick-track {
+      text-align: center;
+      margin: 0 auto;
+      transform: none !important;
+    }
+  }
+}
+
+#product-image-gallery-container {
+  .imagegallery__wrapper {
+    & > .imagegallery__full {
+      .imagegallery__full__image {
+        height: auto;
+        width: 100%;
+      }
     }
   }
 }
