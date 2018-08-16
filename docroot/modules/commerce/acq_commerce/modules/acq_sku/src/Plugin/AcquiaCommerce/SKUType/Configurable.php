@@ -73,7 +73,7 @@ class Configurable extends SKUPluginBase {
           '#type' => 'select',
           '#title' => $configurable['label'],
           '#options' => $sorted_options,
-          '#weight' => $configurable_weights[$attribute_code],
+          '#weight' => $configurable_weights[$attribute_code] ?? 500,
           '#required' => TRUE,
           '#ajax' => [
             'callback' => [$this, 'configurableAjaxCallback'],
