@@ -95,6 +95,13 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
       $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp']);
     }
 
+    // If no assets attached to children or sku is simple, try to use the
+    // assets attached with the main sku.
+    if (($sku->bundle() === 'simple') || ((!$main_image_assets) && (!$hover_image_assets))) {
+      $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+      $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
+    }
+
     $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
     $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
 
