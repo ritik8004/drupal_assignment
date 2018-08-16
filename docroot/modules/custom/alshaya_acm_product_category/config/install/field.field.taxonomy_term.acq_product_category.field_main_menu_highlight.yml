@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.storage.taxonomy_term.field_main_menu_highlight
     - paragraphs.paragraphs_type.main_menu_highlight
-    - paragraphs.paragraphs_type.main_menu_highlight
+    - paragraphs.paragraphs_type.text_links
     - taxonomy.vocabulary.acq_product_category
   module:
     - entity_reference_revisions
@@ -23,6 +23,7 @@ settings:
   handler_settings:
     target_bundles:
       main_menu_highlight: main_menu_highlight
+      text_links: text_links
     target_bundles_drag_drop:
       main_menu_highlight:
         enabled: true
@@ -96,4 +97,7 @@ settings:
       views_reference:
         weight: 48
         enabled: false
+      text_links:
+        enabled: true
+        weight: 53
 field_type: entity_reference_revisions
