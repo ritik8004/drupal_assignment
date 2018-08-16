@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Implements hook_module_implements_alter().
@@ -234,7 +235,7 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
 
     // If after removing html tags, short description and description are not
     // same, only then we shows ellipses.
-    if (strlen($short_desc_html) !== strlen($full_description_without_tags)) {
+    if (Unicode::strlen($short_desc_html) !== Unicode::strlen($full_description_without_tags)) {
       $short_desc['value'] = [
         '#markup' => $short_desc_html . '...',
       ];
@@ -242,7 +243,7 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
 
     // If short description is the same as description,
     // do not show 'Read More' button.
-    if (strlen($short_desc_html) === strlen($full_description_without_tags)) {
+    if (Unicode::strlen($short_desc_html) === Unicode::strlen($full_description_without_tags)) {
       $read_more_link = FALSE;
     }
   }
