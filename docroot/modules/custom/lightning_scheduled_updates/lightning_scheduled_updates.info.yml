@@ -1,0 +1,5 @@
+name: 'Lightning Scheduled Updates (temporary)'
+type: module
+core: 8.x
+description: 'Temporary, empty module only to fix and uninstall this module properly.'
+package: Alshaya
