@@ -1,0 +1,9 @@
+.user-page.c-delivery-checkout {
+  #selected-address-wrapper {
+    .address {
+      .address--controls {
+        border-#{$right}: none;
+      }
+    }
+  }
+}
