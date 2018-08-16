@@ -1,0 +1,7 @@
+<?php
+
+/**
+ * @file
+ * Temporary, empty module only to fix and uninstall this module properly.
+ * After upgrading to Drupal 8.5 and uninstalling, this module can be removed.
+ */
