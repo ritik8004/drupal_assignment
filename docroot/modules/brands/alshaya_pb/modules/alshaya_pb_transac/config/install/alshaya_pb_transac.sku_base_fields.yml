@@ -20,11 +20,17 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
-  producttype_lhn:
+  material:
+    label: 'Material'
+    configurable: 1
+  product_type_lhn:
     label: 'Product Type'
     cardinality: -1
     index: 1
     facet: 1
+  product_type:
+    label: 'Product Type'
+    configurable: 1
   size_lhn:
     label: 'Size'
     cardinality: -1
@@ -35,11 +41,20 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+  style:
+    label: 'Style'
+    configurable: 1
   finish:
     label: 'Finish'
     configurable: 1
   furniture_finish:
     label: 'Furniture Finish'
+    configurable: 1
+  height:
+    label: 'Height'
+    configurable: 1
+  length:
+    label: 'Length'
     configurable: 1
   white_glove_delivery:
     label: 'White Glove Delivery'
