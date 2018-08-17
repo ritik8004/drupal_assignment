@@ -39,10 +39,10 @@ field_settings:
       - field.storage.node.field_skus
       module:
       - acq_sku
-  attr_producttype_lhn:
+  attr_product_type_lhn:
     label: 'Product Type'
     datasource_id: entity:node
-    property_path: field_skus:entity:attr_producttype_lhn
+    property_path: field_skus:entity:attr_product_type_lhn
     type: string
     dependencies:
       config:
