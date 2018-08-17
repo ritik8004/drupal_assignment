@@ -213,6 +213,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'gallery' => NULL,
       'product_url' => NULL,
+      'product_base_url' => NULL,
       'product_label' => NULL,
       'price_block' => NULL,
       'price_block_identifier' => NULL,
@@ -453,6 +454,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // query params, else show it from main parent sku itself.
         $sku_for_gallery = $sku_entity;
 
+        $check_parent_child = TRUE;
         if ($sku_entity->bundle() == 'configurable') {
           $selected_value = \Drupal::request()->query->get('selected');
           if ($selected_value) {
@@ -469,11 +471,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
           // Try to load images first for the child we will display as selected.
           if (empty($selected_value)) {
-            $sku_for_gallery = $skuManager->getFirstValidConfigurableChild($sku_entity);
+            $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
           }
         }
 
-        alshaya_acm_product_get_gallery($build, $sku_for_gallery);
+        alshaya_acm_product_get_gallery($build, $sku_for_gallery, $check_parent_child);
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
@@ -681,7 +683,14 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       elseif ($view_mode == 'modal') {
         $context = 'modal';
 
-        alshaya_acm_product_get_gallery($build, $sku_entity);
+        try {
+          $check_parent_child = TRUE;
+          $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
+          alshaya_acm_product_get_gallery($build, $sku_for_gallery, $check_parent_child);
+        }
+        catch (\Exception $e) {
+          // Do nothing.
+        }
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
