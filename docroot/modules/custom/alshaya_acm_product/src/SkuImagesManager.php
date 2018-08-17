@@ -89,6 +89,20 @@ class SkuImagesManager {
   }
 
   /**
+   * Wrapper function to check if particular SKU has images or not.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return bool
+   *   TRUE if SKU has images.
+   */
+  public function hasMediaImages(SKUInterface $sku) {
+    $media = $this->getAllMedia($sku, FALSE);
+    return !empty($media['images']);
+  }
+
+  /**
    * Utility function to return all media files for a SKU.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -270,8 +284,7 @@ class SkuImagesManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          $media = $this->getAllMedia($child, FALSE);
-          if ($media['images'] || $media['videos']) {
+          if ($this->hasMediaImages($child)) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
@@ -365,6 +378,15 @@ class SkuImagesManager {
           $child = $this->getFirstChildWithMedia($sku);
           if ($child instanceof SKU) {
             $sku = $child;
+          }
+
+          // Check if parent has image before fallbacking to OOS children.
+          if (!$this->hasMediaImages($sku)) {
+            // Try to get first available child for OOS.
+            $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
+            if ($child instanceof SKU) {
+              $sku = $child;
+            }
           }
         }
         break;
