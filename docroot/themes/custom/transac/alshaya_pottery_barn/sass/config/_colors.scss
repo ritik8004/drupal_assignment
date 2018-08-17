@@ -84,7 +84,8 @@ $primary_dropdown_option_disbled: $PB_grey_one;
 $primary_dropdown_focus: $_black_two;
 
 // Radio Buttons.
-$primary_radiobtn_filled: $PB_deep_red;
+$primary_radiobtn_filled: $PB_confirmation_blue;
+$primary_radiobtn_empty: $PB_black_one;
 
 // Tables.
 $primary_th_bg: $_gray_three;
@@ -342,6 +343,7 @@ $checkout_login_guest_email_text_mobile: $PB_black_one;
 $checkout_login_guest_email_text: $PB_black_one;
 $checkout_header_border-bottom: $PB_black_one;
 $checkout_header_border-top: $white;
+$checkout_delivery_shipping_row_border: $_gray_eleven;
 
 // Counters.
 $primary_counter_bg: $PB_deep_red;
