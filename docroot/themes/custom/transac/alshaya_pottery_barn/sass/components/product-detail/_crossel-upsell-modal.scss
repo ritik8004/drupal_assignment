@@ -1,6 +1,6 @@
 // Cross sell and up sell theming.
 .subtitle {
-  .crossell-title {
+  &.crossell-title {
     font-size: 1.125rem;
     font-weight: 300;
     text-align: $left;
@@ -8,6 +8,24 @@
 
     @include breakpoint($tablet) {
       padding-#{$left}: 8%;
+    }
+  }
+}
+
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell {
+  .view-product-slider {
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .ui-dialog {
+    #drupal-modal {
+      height: auto !important;
     }
   }
 }

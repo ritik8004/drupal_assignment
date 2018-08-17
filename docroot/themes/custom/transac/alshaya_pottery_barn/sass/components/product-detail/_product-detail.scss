@@ -14,10 +14,12 @@
 
     @include breakpoint($desktop) {
       margin-#{$right}: 1.5rem;
+      margin-bottom: 3rem;
     }
   }
 }
 
+.acq-content-product-modal,
 .c-pdp {
   .content__title_wrapper h1 {
     width: auto;
