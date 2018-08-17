@@ -37,6 +37,16 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
     $config->set('consumer_secret', $form_state->getValue('consumer_secret'));
     $config->set('access_token', $form_state->getValue('access_token'));
     $config->set('access_token_secret', $form_state->getValue('access_token_secret'));
+    $config->set('token_cache_time', $form_state->getValue('token_cache_time'));
+    $config->set('username', $form_state->getValue('username'));
+
+    // Update value for password in config only if it is changed.
+    // Password is required and it will never be empty string.
+    // But since we use password field, value won't be available when
+    // re-saving the form.
+    if ($form_state->getValue('password')) {
+      $config->set('password', $form_state->getValue('password'));
+    }
 
     $config->save();
 
@@ -76,6 +86,26 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
       '#default_value' => $config->get('verify_ssl'),
       '#options' => [0 => $this->t('Disable'), 1 => $this->t('Enable')],
+    ];
+
+    $form['token_cache_time'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Token cache time'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('token_cache_time'),
+    ];
+
+    $form['username'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Username'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('username'),
+    ];
+
+    $form['password'] = [
+      '#type' => 'password',
+      '#title' => $this->t('Password'),
+      '#default_value' => $config->get('password'),
     ];
 
     $form['consumer_key'] = [
