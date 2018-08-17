@@ -16,13 +16,11 @@ alshaya_api.settings:
       label: 'API Base'
     verify_ssl:
       type: integer
-    token_cache_time:
-      type: integer
-    username:
+    consumer_key:
       type: string
-      label: 'Username'
-    password:
+    consumer_secret:
       type: string
-      label: 'Password'
-    dm_version:
-      type: integer
+    access_token:
+      type: string
+    access_token_secret:
+      type: string

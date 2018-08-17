@@ -1,0 +1,58 @@
+.cloudzoom {
+  &.thumbnail-count-1 {
+    @include breakpoint($tablet) {
+      .cloudzoom__thumbnails {
+        display: none;
+      }
+
+      .cloudzoom__herocontainer {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.mobilegallery {
+  padding-bottom: 0;
+}
+
+.cloudzoom__image {
+  .hover-text {
+    padding: 1rem 1.5rem;
+  }
+}
+
+#cloud-zoom-big {
+  left: 103.5% !important;
+  top: 12.65rem !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+  @include breakpoint($only-tablet) {
+    $right: -1.35rem;
+  }
+}
+
+#product-image-gallery-container {
+  .imagegallery__wrapper {
+    @include breakpoint($only-tablet) {
+      padding: 0 2rem;
+    }
+  }
+
+  .imagegallery__thumbnails {
+    .slick-slide {
+      @include breakpoint($only-tablet) {
+        display: inline-block;
+        margin: 0 0.5rem;
+      }
+    }
+
+    .slick-track {
+      @include breakpoint($only-tablet) {
+        text-align: center;
+        margin: 0 auto;
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 <div id="product-zoom-container">
-  <div class="cloudzoom thumbnail-count-{{ thumbnails|length }}">
+  {% block defaultGallery %}
+    <div class="cloudzoom thumbnail-count-{{ thumbnails|length }}">
     <div class="cloudzoom__herocontainer">
       <div id="cloud-zoom-wrap" class="cloudzoom__image">
         <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
@@ -36,28 +37,30 @@
       </ul>
     </div>
   </div>
-  <div class="mobilegallery">
-    <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
-      {% for thumbs in thumbnails %}
-        {% if thumbs.type == 'youtube' %}
-          <li class="mobilegallery__thumbnails__video youtube">
-            <div class="mobileplayer-wrapper">
-              <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-            </div>
-          </li>
-        {% elseif thumbs.type == 'vimeo' %}
-          <li class="mobilegallery__thumbnails__video vimeo">
-            <div class="mobileplayer-wrapper">
-              <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-            </div>
-          </li>
-        {% else %}
-          <li>
-            <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
+  {% endblock %}
+  {% block mobileGallery %}
+    <div class="mobilegallery">
+      <ul id="product-image-gallery-mobile" class="mobilegallery__thumbnails {{ pager_flag }}">
+        {% for thumbs in thumbnails %}
+          {% if thumbs.type == 'youtube' %}
+            <li class="mobilegallery__thumbnails__video youtube">
+              <div class="mobileplayer-wrapper">
+                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+              </div>
+            </li>
+          {% elseif thumbs.type == 'vimeo' %}
+            <li class="mobilegallery__thumbnails__video vimeo">
+              <div class="mobileplayer-wrapper">
+                <iframe class="mobileplayer" src={{ thumbs.url }} style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+              </div>
+            </li>
+          {% else %}
+            <li>
+              <img src="{{ thumbs.fullurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
     {%  if labels|length > 0 %}
       <div class="product-labels">
         {{ labels }}
@@ -65,7 +68,9 @@
     {% endif %}
     <div class="subtext"><p>{{ 'Tap to enlarge'|t }}</p><p>{{ 'Swipe to view more images'|t }}</p></div>
   </div>
-  <div id="product-image-gallery-container" class="imagegallery {{ image_slider_position_pdp }}" style="display: none;">
+  {% endblock %}
+  {% block modalGallery %}
+    <div id="product-image-gallery-container" class="imagegallery {{ image_slider_position_pdp }}" style="display: none;">
     <div class="imagegallery__wrapper thumbnail-count-{{ thumbnails|length }}">
       {% set firstItem =  thumbnails | first %}
       <div id="full-image-wrapper" class="imagegallery__full" style="width: 100%; height: 700px; overflow: hidden;">
@@ -102,6 +107,8 @@
       <button class="zoomin"></button><button class="zoomout"></button>
     </div>
   </div>
+  {% endblock %}
+  {% block modalMobileGallery %}
   <div id="product-image-gallery-container-mobile" class="mob-imagegallery" style="display: none;">
     <div class="mob-imagegallery__wrapper">
       <ul id="product-image-gallery-mob" class="mob-imagegallery__thumbnails {{ pager_flag }}">
@@ -133,4 +140,5 @@
       <div class="subtext"><p>{{ 'Double tap to zoom'|t }}</p></div>
     </div>
   </div>
+  {% endblock %}
 </div>

@@ -1,12 +1,51 @@
+.nodetype--acq_product {
+  .region__content {
+    @include breakpoint($desktop) {
+      margin: 1.5rem 0;
+    }
+  }
+}
+
+.content__main {
+  .gallery-wrapper {
+    @include breakpoint($only-mobile) {
+      min-height: auto;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 1.5rem;
+      margin-bottom: 3rem;
+    }
+  }
+}
+
+.acq-content-product-modal,
 .c-pdp {
-  .content__title_wrapper h1 span {
-    font-weight: 300;
+  .content__title_wrapper h1 {
+    width: auto;
+
+    span {
+      font-weight: 300;
+    }
+  }
+
+  .sku-base-form {
+    label {
+      display: none;
+    }
   }
 
   .delivery-options-wrapper,
   .short-description-wrapper {
     .field__label {
+      font-size: 0.875rem;
       font-weight: 600;
+    }
+  }
+
+  .short-description-wrapper {
+    .field__content {
+      font-size: 0.75rem;
     }
   }
 
@@ -76,4 +115,16 @@
   text-transform: uppercase;
   font-weight: 600;
   font-size: 0.75rem;
+}
+
+@include breakpoint($only-mobile) {
+  .content__title_wrapper {
+    border-bottom: 1px solid $pdp_product_itemcode_border;
+    margin-bottom: 0.75rem;
+
+    .content--item-code {
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+  }
 }

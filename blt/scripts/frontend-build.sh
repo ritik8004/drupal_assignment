@@ -17,15 +17,16 @@ then
   isTravisPr=0
 else
   isTravisPr=1
+  git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
 fi
 
 # Only build any theme if we are outside of travis PR or no theme file was changed in PR
-if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep /themes/) ]])
+if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep /themes/) ]])
 then
   for i in "${transac[@]}"
   do
     # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep themes/custom/transac/$i) ]])
+    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/transac/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
       cd $docrootDir/themes/custom/transac/$i
@@ -37,7 +38,7 @@ then
   for i in "${non_transac[@]}"
   do
     # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep themes/custom/non_transac/$i) ]])
+    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/non_transac/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
       cd $docrootDir/themes/custom/non_transac/$i
@@ -49,7 +50,7 @@ then
   for i in "${amp[@]}"
   do
     # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH |grep themes/custom/amp/$i) ]])
+    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/amp/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
       cd $docrootDir/themes/custom/amp/$i

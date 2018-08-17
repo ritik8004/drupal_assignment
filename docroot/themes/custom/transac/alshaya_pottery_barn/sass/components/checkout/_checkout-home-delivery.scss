@@ -11,6 +11,26 @@
           font-weight: 600 !important;
         }
       }
+
+      #shipping_methods_wrapper {
+        @include breakpoint($tablet) {
+          margin: 1.75rem 1.375rem;
+        }
+
+        legend {
+          padding: 0;
+
+          span {
+            font-weight: normal;
+          }
+        }
+
+        .form-type-radio {
+          border-left: 1px solid $checkout_delivery_shipping_row_border;
+          border-right: 1px solid $checkout_delivery_shipping_row_border;
+          border-color: $checkout_delivery_shipping_row_border !important;
+        }
+      }
     }
   }
 }

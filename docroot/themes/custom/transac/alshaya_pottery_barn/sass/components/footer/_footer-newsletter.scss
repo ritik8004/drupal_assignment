@@ -8,6 +8,38 @@
   }
 }
 
-.alshaya-newsletter-subscribe .form-submit {
-  font-weight: 600;
+.alshaya-newsletter-subscribe {
+  .form-email {
+    font-size: 0.875rem;
+    margin-top: 0.875rem;
+
+    @include breakpoint($desktop) {
+      margin-top: 0.25rem;
+    }
+  }
+
+  .form-item {
+    &.error,
+    label#edit-email-error {
+      background-color: transparent;
+    }
+
+    .form-email {
+      background-color: transparent;
+    }
+  }
+
+  .newsletter-block-label {
+    font-size: 0.875rem;
+
+    @include breakpoint($only-mobile) {
+      padding: 0 2rem;
+    }
+  }
+
+  .form-submit {
+    padding: 0.525rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
 }
