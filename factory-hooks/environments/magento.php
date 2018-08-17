@@ -26,6 +26,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 6,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'mc_qa' => [
       'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
@@ -47,6 +51,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 6,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'mc_uat' => [
       'url' => 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud',
@@ -68,6 +76,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 13,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'mc_prod' => [
       'url' => 'https://mcmena.store.alshaya.com',
@@ -97,6 +109,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 'uae_ar',
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     // H&M.
     'hm_qa' => [
@@ -119,6 +135,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 5,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'hm_uat' => [
       'url' => 'https://hm-uat.store.alshaya.com',
@@ -140,6 +160,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 11,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'hm_prod' => [
       'url' => 'https://hm.store.alshaya.com',
@@ -172,6 +196,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 'uae_ar',
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     // Pottery Barn.
     'pb_qa' => [
@@ -219,6 +247,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 15,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     // Victoria Secret.
     'vs_qa' => [
@@ -241,6 +273,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 5,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'vs_uat' => [
       'url' => 'https://vs-uat.store.alshaya.com',
@@ -262,6 +298,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 15,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'vs_prod' => [
       'url' => 'https://vs.store.alshaya.com',
@@ -283,6 +323,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 15,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     // BathBodyWorks.
     'bbw_qa' => [
@@ -305,6 +349,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 6,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'bbw_uat' => [
       'url' => 'https://staging-bbw.store.alshaya.com.c.bbk3lvknero4c.ent.magento.cloud',
@@ -326,6 +374,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 16,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'bbw_prod' => [
       'url' => 'http://bbw.store.alshaya.com',
@@ -347,6 +399,10 @@ function alshaya_get_magento_host_data() {
           'ar' => 15,
         ],
       ],
+      'consumer_key' => '',
+      'consumer_secret' => '',
+      'access_token' => '',
+      'access_token_secret' => '',
     ],
     'default' => [
       'kw' => [
