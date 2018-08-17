@@ -15,7 +15,7 @@ use Drupal\node\Entity\Node;
  * Update display_settings config to have value for
  * configurable_use_parent_images.
  */
-function alshaya_acm_product_update_8026() {
+function alshaya_acm_product_update_8027() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
