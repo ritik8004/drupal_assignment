@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Utility function to return media files for a product.
@@ -373,10 +374,15 @@ function alshaya_acm_product_get_brand_logo($sku) {
     }
     else {
       // Download the file contents.
-      $file_data = file_get_contents($image_url);
+      $client = \Drupal::httpClient();
+      try {
+        $file_data = $client->get($image_url);
+      }
+      catch (RequestException $e) {
+        watchdog_exception('alshaya_acm_product', $e->getMessage());
+      }
 
-      // Check to ensure errors like 404, 403, etc. are catched and empty file
-      // not saved in SKU.
+      // Check to ensure empty file is not saved in SKU.
       if (empty($file_data)) {
         \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
       }
