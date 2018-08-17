@@ -5,6 +5,7 @@
  * Contains utility functions to process orders and provide related data.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Unicode;
 use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
@@ -439,16 +440,15 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     $product['total'] = alshaya_acm_price_format($item['ordered'] * $item['price']);
     $product['attributes'] = [];
 
-    $product_node = alshaya_acm_product_get_display_node($item['sku']);
+    $sku = SKU::loadFromSku($item['sku']);
+
+    $product_node = alshaya_acm_product_get_display_node($sku);
     if ($product_node instanceof NodeInterface) {
       $product['name'] = $product_node->getTitle();
     }
-    else {
-      $product['name'] = $item['name'];
-    }
 
     // Check if we can find a parent SKU for this to get proper name.
-    if (alshaya_acm_product_get_parent_sku_by_sku($item['sku'])) {
+    if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
       // Try to find attributes to display for this product.
       $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
     }
@@ -472,6 +472,8 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $checkoutOptionsManager = \Drupal::service('alshaya_acm_checkout.options_manager');
   $shippingTerm = $checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
   $build['#delivery_detail_notice'] = $shippingTerm->get('field_shipping_method_desc')->getString();
+
+  \Drupal::moduleHandler()->alter('alshaya_acm_customer_build_order_detail', $build, $order);
 
   return $build;
 }

@@ -38,3 +38,29 @@
     color: $store_finder_get_direction_label_color;
   }
 }
+
+.geolocation-common-map-container {
+  .view-on--map,
+  .get--directions {
+    font-weight: 300;
+  }
+
+  .hours--label {
+    color: $store_finder_search_results_hour_label;
+
+    &.open {
+      font-weight: 300;
+    }
+
+    &::after {
+      color: $store_finder_search_results_hour_icon_open;
+    }
+  }
+
+  .views-field-title {
+    span {
+      font-weight: 600;
+      color: $store_finder_header;
+    }
+  }
+}

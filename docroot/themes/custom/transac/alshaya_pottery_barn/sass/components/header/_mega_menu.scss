@@ -48,6 +48,7 @@
 
   // MM L1 active.
   li.menu--one__list-item {
+    &:hover,
     &.active {
       @include breakpoint($desktop) {
         a.menu--one__link {
@@ -55,6 +56,31 @@
 
           font-weight: 600;
         }
+      }
+    }
+
+    // Add title content on ::after to prevent the menu links
+    // from shifting when the text is bold on hover.
+    .menu--one__link::after {
+      @include breakpoint($desktop) {
+        content: attr(title);
+        display: block;
+        font-weight: 600;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+      }
+    }
+
+    .menu--one__link {
+      @include breakpoint($upto-desktop) {
+        padding-bottom: 0.875rem;
+      }
+    }
+
+    ul.menu--two__list {
+      @include breakpoint($desktop) {
+        border-top-width: 1rem;
       }
     }
   }
@@ -81,6 +107,34 @@
 
 .highlights {
   .title {
+    font-weight: bold;
+  }
+}
+
+.menu--two__list {
+  .menu--two__list-item {
+    .menu-two__link {
+      @include breakpoint($desktop) {
+        font-size: 0.75rem;
+      }
+    }
+
+    .menu--three__list {
+      @include breakpoint($desktop) {
+        margin-bottom: 2rem;
+      }
+
+      li {
+        @include breakpoint($desktop) {
+          padding-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+}
+
+.highlights {
+  .hightlight__title {
     font-weight: bold;
   }
 }

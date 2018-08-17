@@ -66,14 +66,14 @@ class Configurable extends SKUPluginBase {
         $sorted_options = $options;
 
         if ($helper->isAttributeSortable($attribute_code)) {
-          $sorted_options = $this->sortConfigOptions($options, $attribute_code);
+          $sorted_options = self::sortConfigOptions($options, $attribute_code);
         }
 
         $form['ajax']['configurables'][$attribute_code] = [
           '#type' => 'select',
           '#title' => $configurable['label'],
           '#options' => $sorted_options,
-          '#weight' => $configurable_weights[$attribute_code],
+          '#weight' => $configurable_weights[$attribute_code] ?? 500,
           '#required' => TRUE,
           '#ajax' => [
             'callback' => [$this, 'configurableAjaxCallback'],
@@ -388,7 +388,12 @@ class Configurable extends SKUPluginBase {
 
     // Sort configurables based on the config.
     uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
-      return $configurable_weights[$a['code']] - $configurable_weights[$b['code']];
+      // We may keep getting new configurable options not defined in config.
+      // Use default values for them and keep their sequence as is.
+      // Still move the ones defined in our config as per weight in config.
+      $a = $configurable_weights[$a['code']] ?? -50;
+      $b = $configurable_weights[$b['code']] ?? 50;
+      return $a - $b;
     });
 
     $tree['options'] = Configurable::recursiveConfigurableTree(
@@ -586,7 +591,7 @@ class Configurable extends SKUPluginBase {
    * @return array
    *   Array of options sorted based on term weight.
    */
-  public static function sortConfigOptions(&$options, $attribute_code) {
+  public static function sortConfigOptions($options, $attribute_code) {
     $sorted_options = [];
 
     $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
@@ -605,7 +610,7 @@ class Configurable extends SKUPluginBase {
       $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
     }
 
-    return $sorted_options;
+    return $sorted_options ?: $options;
   }
 
   /**
