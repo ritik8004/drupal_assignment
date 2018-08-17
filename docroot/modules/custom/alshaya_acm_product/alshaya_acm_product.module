@@ -1204,31 +1204,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         }
       }
     }
-
-    // Attach size guide link to size attribute. This is statically attached to
-    // size, we don't want it for any other attributes.
-    if (isset($form['ajax']['configurables']['size'])) {
-      // @TODO: This looks like related to GTM, also for now only limited to
-      // size attribute and not checking for other attributes.
-      $site_default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
-      $configurable_sizes = $form['ajax']['configurables']['size'];
-      if (\Drupal::languageManager()->getCurrentLanguage()->getId() !== $site_default_langcode) {
-        $options = [];
-
-        foreach ($configurable_sizes['#options'] as $key => $option) {
-          /** @var \Drupal\acq_sku\ProductOptionsManager $product_options_manager */
-          $product_options_manager = \Drupal::service('acq_sku.product_options_manager');
-
-          // Fetch taxonomy_term from option Id.
-          $default_language_option = $product_options_manager->loadProductOptionByOptionId('size', $key, $site_default_langcode);
-          if ($default_language_option) {
-            $options[$option] = $default_language_option->getName();
-          }
-        }
-
-        $form['#attached']['drupalSettings']['alshaya_product_size_config'] = $options;
-      }
-    }
   }
   // Stock check for quantity for all other products.
   elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
