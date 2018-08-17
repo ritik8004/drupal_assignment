@@ -11,23 +11,19 @@
       a.picked {
         font-weight: normal;
       }
-
-      &.disabled {
-        &:hover {
-          cursor: default;
-        }
-
-        a,
-        span {
-          background: none;
-          color: $pdp_swatch_disabled;
-          border-color: $pdp_swatch_disabled;
-        }
-      }
     }
 
     li.disabled {
-      pointer-events: none;
+      &:hover {
+        cursor: default;
+      }
+
+      a,
+      span {
+        background: none;
+        color: $pdp_swatch_disabled;
+        border-color: $pdp_swatch_disabled;
+      }
     }
   }
 

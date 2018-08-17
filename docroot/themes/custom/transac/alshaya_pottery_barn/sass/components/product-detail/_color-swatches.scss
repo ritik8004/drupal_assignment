@@ -6,59 +6,6 @@
       label {
         display: none;
       }
-
-      .select2Option {
-        display: block;
-
-        .select-buttons {
-          display: flex;
-          flex-flow: row wrap;
-          margin-top: 0;
-        }
-      }
-
-      ul {
-        margin-#{$left}: -0.125rem;
-      }
-
-      .li-swatch-image {
-        display: flex;
-        align-items: center;
-
-        img {
-          height: 2.375rem;
-          width: 2.375rem;
-          padding: 1px;
-        }
-
-        a {
-          border: 1px solid transparent;
-          width: 2.625rem;
-          height: 2.625rem;
-          position: relative;
-          padding: 1px;
-
-          &.picked,
-          &:hover {
-            border: 1px solid $pdp_color_attribute_border;
-            background-color: transparent;
-          }
-        }
-      }
-    }
-  }
-}
-
-.c-pdp {
-  .field--name-field-skus {
-    .form-wrapper {
-      .configurable-swatch {
-        &.form-type-select {
-          label {
-            display: none;
-          }
-        }
-      }
     }
   }
 }
