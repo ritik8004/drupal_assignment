@@ -1,6 +1,12 @@
 .promo__panel {
   bottom: -0.5625rem;
 
+  @include breakpoint($only-tablet) {
+    .mobile--overlay & {
+      z-index: 5;
+    }
+  }
+
   .promo-panel-label {
     color: $promo_panel_label;
     background-color: $promo_panel_label_bg;
