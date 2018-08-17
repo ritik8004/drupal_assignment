@@ -1,12 +1,18 @@
 .nodetype--acq_product {
   .region__content {
-    margin: 1.5rem 0;
+    @include breakpoint($desktop) {
+      margin: 1.5rem 0;
+    }
   }
 }
 
-@include breakpoint($desktop) {
-  .content__main {
-    .gallery-wrapper {
+.content__main {
+  .gallery-wrapper {
+    @include breakpoint($only-mobile) {
+      min-height: auto;
+    }
+
+    @include breakpoint($desktop) {
       margin-#{$right}: 1.5rem;
     }
   }
