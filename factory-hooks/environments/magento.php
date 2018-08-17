@@ -199,6 +199,27 @@ function alshaya_get_magento_host_data() {
       'access_token' => 's4rfv318v1gxmrnq8mjdn01uhejd8760',
       'access_token_secret' => '4x5otnn378pjr1v3acnmoe934niwjlw7',
     ],
+    'pb_uat' => [
+      'url' => 'https://pb-uat.store.alshaya.com',
+      'kw' => [
+        'store_id' => [
+          'en' => 1,
+          'ar' => 18,
+        ],
+      ],
+      'sa' => [
+        'store_id' => [
+          'en' => 6,
+          'ar' => 9,
+        ],
+      ],
+      'ae' => [
+        'store_id' => [
+          'en' => 12,
+          'ar' => 15,
+        ],
+      ],
+    ],
     // Victoria Secret.
     'vs_qa' => [
       'url' => 'https://integration-5ojmyuq-kpwgmbven7d7y.eu-3.magentosite.cloud',
