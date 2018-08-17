@@ -5,12 +5,6 @@
  */
 function alshaya_get_conductor_host_data() {
   return [
-    // V2 Sandbox.
-    'mc_v2' => [
-      'url' => 'https://davylamp.us-east-1.dev.acm.acquia.io/',
-      'hmac_id' => '2d045a6b604c4f9b8493ffcff4733907',
-      'hmac_secret' => 'MzMwNzJlYzYtYWMzYy00',
-    ],
     // Mothercare KW.
     'mckw_dev' => [
       'url' => 'https://alshaya-mckw-dev.eu-west-1.prod.acm.acquia.io/',
@@ -23,12 +17,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
       'api_version' => 'v2',
     ],
-    'mckw_uat' => [
+    'mckw_uat_v1' => [
       'url' => 'https://alshaya-mckw-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'ec11fb2f54d34b2f9d35ec1d3575b89e',
       'hmac_secret' => 'gpW7PQFKKDU-qPrcIgaYNQ',
     ],
-    'mckw_uat_v2' => [
+    'mckw_uat' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
       'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
