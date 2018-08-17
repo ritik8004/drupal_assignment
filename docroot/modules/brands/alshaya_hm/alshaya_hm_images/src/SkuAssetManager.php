@@ -502,12 +502,12 @@ class SkuAssetManager {
       $child_sku_entity = NULL;
       $color_attributes = [];
 
-      // Use only the first SKU for which we get color attributes
+      // Use only the first SKU for which we get color attributes.
       foreach ($skus as $child_sku) {
         // Show only for colors for which we have stock.
         $child_sku_entity = SKU::loadFromSku($child_sku);
 
-        if (alshaya_acm_get_stock_from_sku($child_sku_entity)) {
+        if ($child_sku_entity instanceof SKUInterface && alshaya_acm_get_stock_from_sku($child_sku_entity)) {
           $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
           if ($color_attributes) {
             break;
