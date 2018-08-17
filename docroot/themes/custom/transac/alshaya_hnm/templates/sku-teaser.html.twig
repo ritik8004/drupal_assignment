@@ -5,7 +5,7 @@
 		<div class="swatches">
 			{% for key,swatch in swatches %}
 				{% if swatch is not empty %}
-					<a href="{{ product_url }}?selected={{ key }}">
+					<a href="{{ product_base_url }}?selected={{ key }}">
 						{% if (swatch == '#FFFFFF') or (swatch == '#ffffff') or (swatch == '#fff') or (swatch == '#FFF') %}
 							<span class='swatch-block' style="background-color:{{ swatch }}; box-shadow: 0px 0px 0px 1px inset #C8C8C8;"></span>
 						{% else %}

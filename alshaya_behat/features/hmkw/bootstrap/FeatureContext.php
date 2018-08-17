@@ -2121,6 +2121,11 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     public function iClickOnElement($css_selector)
     {
         $element = $this->getSession()->getPage()->find("css", $css_selector);
-        $element->click();
+        if(count($element) > 0) {
+            $element->click();
+        }
+        else {
+            throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
+        }
     }
 }
