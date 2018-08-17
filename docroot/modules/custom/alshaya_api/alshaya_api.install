@@ -12,6 +12,29 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Update config to have proper integration credentials.
+ */
+function alshaya_api_update_8002() {
+  // Configure alshaya_api settings.
+  $config = \Drupal::configFactory()->getEditable('alshaya_api.settings');
+
+  $alshaya_api_settings = Settings::get('alshaya_api.settings');
+
+  foreach ($alshaya_api_settings as $key => $value) {
+    $config->set($key, $value);
+  }
+
+  // We know we are removing few fields, delete them from existing config here.
+  $config->clear('token_cache_time');
+  $config->clear('username');
+  $config->clear('password');
+
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create role, enable resource, create user and consumer for Alshaya API.
  */
 function alshaya_api_update_8001() {

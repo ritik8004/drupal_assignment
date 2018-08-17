@@ -4,11 +4,12 @@ namespace Drupal\alshaya_api;
 
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use springimport\magento2\apiv1\ApiFactory;
+use springimport\magento2\apiv1\Configuration;
 
 /**
  * Class AlshayaApiWrapper.
@@ -23,13 +24,6 @@ class AlshayaApiWrapper {
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   protected $config;
-
-  /**
-   * Token to access APIs.
-   *
-   * @var string
-   */
-  protected $token;
 
   /**
    * The language manager.
@@ -53,13 +47,6 @@ class AlshayaApiWrapper {
   protected $dateTime;
 
   /**
-   * Cache Backend object for "cache.data".
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  protected $cache;
-
-  /**
    * I18n Helper.
    *
    * @var \Drupal\acq_commerce\I18nHelper
@@ -75,8 +62,6 @@ class AlshayaApiWrapper {
    *   The language manager.
    * @param \Drupal\Component\Datetime\TimeInterface $date_time
    *   The date time service.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
@@ -85,7 +70,6 @@ class AlshayaApiWrapper {
   public function __construct(ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
-                              CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory,
                               I18nHelper $i18n_helper) {
     $this->config = $config_factory->get('alshaya_api.settings');
@@ -93,7 +77,6 @@ class AlshayaApiWrapper {
     $this->languageManager = $language_manager;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
     $this->dateTime = $date_time;
-    $this->cache = $cache;
     $this->i18nHelper = $i18n_helper;
   }
 
@@ -135,48 +118,23 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to get token to access Magento APIs.
+   * Wrapper function to get authenticated http client.
    *
-   * @return string
-   *   Token as string.
+   * @param string $url
+   *   Base URL.
+   *
+   * @return \GuzzleHttp\Client
+   *   Client object.
    */
-  private function getToken() {
-    if ($this->token) {
-      return $this->token;
-    }
+  private function getClient($url) {
+    $configuration = new Configuration();
+    $configuration->setBaseUri($url);
+    $configuration->setConsumerKey($this->config->get('consumer_key'));
+    $configuration->setConsumerSecret($this->config->get('consumer_secret'));
+    $configuration->setToken($this->config->get('access_token'));
+    $configuration->setTokenSecret($this->config->get('access_token_secret'));
 
-    $cid = 'alshaya_api_token';
-
-    if ($cache = $this->cache->get($cid)) {
-      $this->token = $cache->data;
-    }
-    else {
-      $endpoint = 'integration/admin/token';
-
-      $data = [];
-      $data['username'] = $this->config->get('username');
-      $data['password'] = $this->config->get('password');
-
-      $response = $this->invokeApi($endpoint, $data, 'POST', FALSE);
-      $token = trim($response, '"');
-
-      // We always get token wrapped in double quotes.
-      // For any other case we get either an array of full html.
-      if (strlen($token) !== strlen($response) - 2) {
-        $this->logger->critical('Unable to get token from magento');
-        throw new \Exception('Unable to get token from magento');
-      }
-
-      $this->token = $token;
-
-      // Calculate the timestamp when we want the cache to expire.
-      $expire = $this->dateTime->getRequestTime() + $this->config->get('token_cache_time');
-
-      // Set the stock in cache.
-      $this->cache->set($cid, $this->token, $expire);
-    }
-
-    return $this->token;
+    return (new ApiFactory($configuration))->getApiClient();
   }
 
   /**
@@ -190,58 +148,37 @@ class AlshayaApiWrapper {
    *   Post data to send to API.
    * @param string $method
    *   GET or POST.
-   * @param bool $requires_token
-   *   Flag to specify if this API requires token or not.
    *
    * @return mixed
    *   Response from the API.
    */
-  public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
-    $url = $this->config->get('magento_host');
-    $url .= '/' . $this->getMagentoLangPrefix();
-    $url .= '/' . $this->config->get('magento_api_base');
-    $url .= '/' . $endpoint;
+  public function invokeApi($endpoint, array $data = [], $method = 'POST') {
+    try {
+      $url = $this->config->get('magento_host');
+      $url .= '/' . $this->getMagentoLangPrefix();
+      $url .= '/' . $this->config->get('magento_api_base');
 
-    $header = [];
+      $client = $this->getClient($url);
+      $url .= '/' . $endpoint;
 
-    $curl = curl_init();
-
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-    if ($requires_token) {
-      try {
-        $token = $this->getToken();
+      $options = [];
+      if ($method == 'POST') {
+        $options['form_params'] = $data;
       }
-      catch (\Exception $e) {
-        return NULL;
+      elseif ($method == 'JSON') {
+        $options['json'] = $data;
       }
 
-      $header[] = 'Authorization: Bearer ' . $token;
+      $response = $client->request($method, $url, $options);
+      $result = $response->getBody()->getContents();
     }
-
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $this->config->get('verify_ssl'));
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $this->config->get('verify_ssl'));
-
-    if ($method == 'POST') {
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+    catch (\Exception $e) {
+      $result = NULL;
+      $this->logger->error('Exception while invoking API @api. Message: @message.', [
+        '@api' => $url,
+        '@message' => $e->getMessage(),
+      ]);
     }
-    elseif ($method == 'JSON') {
-      $data_string = json_encode($data);
-
-      $header[] = 'Content-Type: application/json';
-      $header[] = 'Content-Length: ' . strlen($data_string);
-
-      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
-      curl_setopt($curl, CURLOPT_POST, TRUE);
-      curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-    }
-
-    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
-
-    $result = curl_exec($curl);
-    curl_close($curl);
 
     return $result;
   }

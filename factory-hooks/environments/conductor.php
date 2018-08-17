@@ -168,6 +168,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
       'api_version' => 'v2',
     ],
+    'pbkw_dev2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'cfe59305b0354659bb9ba1bf07361ad7',
+      'hmac_secret' => 'ZjE2NjNiMWQtYTAwOS00',
+      'api_version' => 'v2',
+    ],
     'pbkw_uat' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
@@ -181,6 +187,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
       'api_version' => 'v2',
     ],
+    'pbsa_dev2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '2f619f435eb8427f9444492d65a0820d',
+      'hmac_secret' => 'MzY5ZjA2MmMtMTQzYi00',
+      'api_version' => 'v2',
+    ],
     'pbsa_uat' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'eb9126f28aaf466fab9494405fc6a4fe',
@@ -192,6 +204,12 @@ function alshaya_get_conductor_host_data() {
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
       'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
+      'api_version' => 'v2',
+    ],
+    'pbae_dev2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd638da4e7c5545f9b15b302bcc77f049',
+      'hmac_secret' => 'MGFhMmQyMTAtN2FkYS00',
       'api_version' => 'v2',
     ],
     'pbae_uat' => [

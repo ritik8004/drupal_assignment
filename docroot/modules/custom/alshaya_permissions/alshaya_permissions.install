@@ -10,6 +10,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Grant 'administer PDP modal links settings' permissions to the webmaster.
  * Grant 'use text format limited_options' permissions to the webmaster.
  */
 function alshaya_permissions_update_8016() {

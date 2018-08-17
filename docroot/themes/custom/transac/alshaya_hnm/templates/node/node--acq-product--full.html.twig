@@ -55,6 +55,12 @@ set classes = [
         {{ content.item_code }}
       </div>
 
+      {% if content.delivery_link is not empty %}
+        <div class="delivery">
+          {{ content.delivery_link }}
+        </div>
+      {% endif %}
+
       {% if content.free_gift_promotions %}
         <div class="free-gift-promotions">
             {{ content.free_gift_promotions }}

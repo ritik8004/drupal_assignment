@@ -1,0 +1,12 @@
+.paragraph-banner {
+  .slick-dots {
+    @include breakpoint($tablet) {
+      margin-bottom: 0.625rem;
+    }
+
+    li {
+      height: 0.5rem;
+      width: 0.5rem;
+    }
+  }
+}

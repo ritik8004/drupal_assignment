@@ -10,3 +10,15 @@
     }
   }
 }
+
+.c-footer-primary {
+  .language--switcher {
+    .language-switcher-language-url ul {
+      li:first-child a {
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+      }
+    }
+  }
+}

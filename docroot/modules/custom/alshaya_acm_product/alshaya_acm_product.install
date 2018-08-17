@@ -10,6 +10,23 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\node\Entity\Node;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update display_settings config to have value for
+ * configurable_use_parent_images.
+ */
+function alshaya_acm_product_update_8026() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
  * Implements hook_post_update_NAME().
  *
  * Re-save index to create required tables.
@@ -19,6 +36,26 @@ use Drupal\node\Entity\Node;
  */
 function alshaya_acm_product_post_update_8026(&$sandbox) {
   _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Changing 'size_guide' config to 'pdp_modal_links'.
+ */
+function alshaya_acm_product_update_8026() {
+  $existing_config = \Drupal::configFactory()->getEditable('alshaya_acm_product.size_guide');
+  // Get existing config.
+  $existing_data = $existing_config->getRawData();
+  // Delete the configuration.
+  $existing_config->delete();
+
+  // Set the attribute for the delivery.
+  $existing_data['delivery_content_attribute'] = 'delivery';
+
+  // Save the configuration.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.pdp_modal_links')
+    ->setData($existing_data)->save();
 }
 
 /**
