@@ -42,10 +42,10 @@ jQuery.fn.select2Option = function (options) {
           }
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
-            liHtml.append('<span class="' + $(this).text() + '">' + $(this).html() + '</span>');
+            liHtml.append('<span class="' + $(this).text() + '">' + $(this).text() + '</span>');
           }
           else {
-            liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).html() + '</a>');
+            liHtml.append('<a href="#" class="' + $(this).text() + '" data-select-index="' + selectIndex + '">' + $(this).text() + '</a>');
           }
         }
 

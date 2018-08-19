@@ -228,8 +228,14 @@ class ProductStockController extends ControllerBase {
    */
   public function selectConfigurableOption(EntityInterface $entity) {
     self::$response = new AjaxResponse();
-    $plugin = $entity->getPluginInstance();
-    $this->skuFormBuilder->getForm($plugin, $entity);
+    $html = $this->fetchAddCartForm($entity, 'full');
+
+    $commands = self::$response->getCommands();
+    if (empty($commands)) {
+      $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
+      self::$response->addCommand(new HtmlCommand($wrapper, $html));
+    }
+
     return self::$response;
   }
 
@@ -244,8 +250,14 @@ class ProductStockController extends ControllerBase {
    */
   public function addToCartSubmit(EntityInterface $entity) {
     self::$response = new AjaxResponse();
-    $plugin = $entity->getPluginInstance();
-    $this->skuFormBuilder->getForm($plugin, $entity);
+    $html = $this->fetchAddCartForm($entity, 'full');
+
+    $commands = self::$response->getCommands();
+    if (empty($commands)) {
+      $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
+      self::$response->addCommand(new HtmlCommand($wrapper, $html));
+    }
+
     return self::$response;
   }
 

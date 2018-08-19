@@ -169,6 +169,7 @@
 
       @include breakpoint($only-mobile) {
         border-bottom: 1px solid $pdp_product_itemcode_border;
+        padding-bottom: 0.75rem;
       }
     }
 
@@ -573,7 +574,10 @@
     line-height: 1.83;
     color: $pdp_sidebar_link;
     cursor: pointer;
-    display: none;
+
+    @include breakpoint($only-mobile) {
+      display: none !important;
+    }
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -589,7 +593,7 @@
     cursor: pointer;
 
     @include breakpoint($tablet) {
-      display: none;
+      display: none !important;
     }
   }
 }
@@ -1846,6 +1850,14 @@ article.product-out-of-stock {
     @include breakpoint($only-mobile) {
       .field--name-field-skus {
         height: 0;
+        min-height: auto;
+        border: none;
+
+        .field {
+          &::after {
+            display: block;
+          }
+        }
       }
     }
   }

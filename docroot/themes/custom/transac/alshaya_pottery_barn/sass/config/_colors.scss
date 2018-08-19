@@ -11,6 +11,7 @@ $PB_warning_red: #d0021b;
 $PB_tint_red: #dd8a8a;
 $PB_deep_blue: #0e3e6f;
 $PB_confirmation_blue: #3680cb;
+$PB_blue_turquoise: #367fca;
 $PB_alshaya_priv: #ac8e54;
 $PB_info_blue: #e8eff5;
 $white: #ddd;
@@ -66,7 +67,9 @@ $pending_btn_bg: $tomato;
 $returned_btn_bg: $PB_grey_one;
 $complete_btn_bg: $medium-green;
 $primary_brand_button_text: $white-two;
+$secondary_brand_button_text: $white;
 $primary_brand_button: $_black_two;
+$secondary_submit_button_text: $PB_white;
 
 // Dropdown.
 $primary_dropdown_bg: $PB_grey_four;
@@ -79,6 +82,10 @@ $primary_dropdown_option_hover: $PB_grey_four;
 $primary_dropdown_option_border: $white-two;
 $primary_dropdown_option_disbled: $PB_grey_one;
 $primary_dropdown_focus: $_black_two;
+
+// Radio Buttons.
+$primary_radiobtn_filled: $PB_confirmation_blue;
+$primary_radiobtn_empty: $PB_black_one;
 
 // Tables.
 $primary_th_bg: $_gray_three;
@@ -126,6 +133,8 @@ $header_secondary_menu_link_border: $white-two;
 $header_c_menu_text: $_black_two;
 $header_c_menu_icon_color: $_black_two;
 $header_toggle_sign_active_tab: $_black_two;
+$header_c_menu_search_active_icon: $PB_deep_red;
+$header_c_menu_store_active_icon: $PB_deep_red;
 $header_mobile_menu_arrow: $_black_two;
 $header_c_menu_search_icon: $_black_two;
 $header_search_border_mobile: $_black_two;
@@ -164,6 +173,10 @@ $desktop_continue_shopping_btn_border: $_black_two;
 // User - My account nav & dashboard.
 $my_account_nav_active: $PB_deep_red;
 $user_recent_order_icon: $_black_two;
+$my_account_dashboard_back_link: $PB_deep_red;
+$my_account_no_order_button_bg: $white-two;
+$my_account_no_order_button_text: $_black_two;
+$my_account_no_order_button_border: $PB_black_one;
 
 // Join the club block - user dashboard page.
 $joinclubblock_title: $PB_alshaya_priv;
@@ -171,9 +184,9 @@ $joinclubblock_title: $PB_alshaya_priv;
 // Breadcrumb.
 $breadcrumb_bg: $white-two;
 $breadcrumb_bg_tablet: $PB_white;
-$breadcrumb_link: $PB_grey_one;
+$breadcrumb_link: $PB_grey_two;
 $breadcrumb_link_hover: $PB_grey_one;
-$breadcrumb_link_active: $_black_two;
+$breadcrumb_link_active: $PB_black_one;
 
 // Mega menu.
 $pre_content_region_bg: $_black_two;
@@ -186,10 +199,12 @@ $mm_l2_link_mobile_menu: $_black_two;
 $mm_l3_link: $PB_grey_one;
 $mm_l3_link_hover: $PB_deep_red;
 $mm_highlight_label: $PB_deep_red;
+$mm_highlight_title: $PB_deep_red;
 
 // Home page - slider.
 $gallery_arrows_bg: $PB_deep_red;
 $hp_slider_dots: $PB_deep_red;
+$slider_arrow_bg: rgba(255, 255, 255, 0.5);
 
 // Delivery banner.
 // Delivery tabs.
@@ -232,12 +247,14 @@ $store_finder_icon: $PB_deep_red;
 $store_finder_text_hover: $PB_deep_red;
 $store_finder_border_hover: $PB_deep_red;
 $store_finder_backbtn: $_black_two;
-$store_finder_search_results_hour_label: $_black_two;
+$store_finder_search_results_hour_label: $PB_deep_red;
 $store_finder_get_direction_label_color: $PB_deep_red;
 $store_finder_search_results_tile_link: $PB_deep_red;
+$store_finder_search_results_label: $PB_black_one;
+$store_finder_search_results_hour_icon_open: $_black_two;
 
 // Store finder - search results.
-$store_finder_search_results_tile_icon: $PB_grey_one;
+$store_finder_search_results_tile_icon: $_black_two;
 $store_finder_search_results_tile_bg: $PB_white;
 $store_finder_search_results_tile_hover_bg: $PB_white;
 $store_finder_search_results_counter_bg: $PB_deep_red;
@@ -270,6 +287,7 @@ $plp_facet_clear_bg: $_black_two;
 $plp_facet_clear_text: $white-two;
 $plp_facet_label_border_mobile: $PB_grey_four;
 $plp_facet_label_bg_mobile: $PB_grey_four;
+$plp_facet_label: $PB_grey_one;
 
 // Sharethis
 $sharethis_icon: $white;
@@ -290,11 +308,16 @@ $modal_close_icon: $_black-two;
 $modal_close_bg: $white;
 $pdp_size_option_bg: $white-two;
 $pdp_size_option_border: $_black-two;
-$pdp_size_option_text: $_black-two;
+$pdp_size_option_text: $_black_two;
 $pdp_size_option_selected_text: $PB_white;
 $pdp_size_option_selected_bg: $_black-two;
 $pdp_size_option_text_hover : $PB_white;
 $pdp_size_option_bg_hover: $_black-two;
+$pdp_sizeguide_link: $PB_confirmation_blue;
+$pdp_swatch_disabled: $white;
+$pdp_white_color_attribute: $white-two;
+$pdp_white_color_attribute_hover_border: $_black_two;
+$pdp_white_color_attribute_border: $_black_two;
 
 // PDP CS/US
 $pdp_modal_full_prodlink: $PB_grey_one;
@@ -307,6 +330,8 @@ $webform_contact_legend: $_black_two;
 $address_primary_controls_active: $_black_two;
 $address_pp_delete_closebtn: $white;
 $address_pp_delete_closebtn_icon: $_black_two;
+$address_cancel_button: $PB_blue_turquoise;
+$address_book_delete_cancel: $PB_confirmation_blue;
 
 // Basket.
 $basket_page_title: $_black_two;
@@ -322,6 +347,7 @@ $checkout_login_guest_email_text_mobile: $PB_black_one;
 $checkout_login_guest_email_text: $PB_black_one;
 $checkout_header_border-bottom: $PB_black_one;
 $checkout_header_border-top: $white;
+$checkout_delivery_shipping_row_border: $_gray_eleven;
 
 // Counters.
 $primary_counter_bg: $PB_deep_red;
@@ -408,5 +434,10 @@ $maintenance_body_text_strong: $_black_three;
 $maintenance_body_text_regular: $_black_two;
 $maintenance_body_text_arabic: $PB_black_one;
 
+// Promo Panel - Today's Offer / Featured Savings.
+$promo_panel_label: $white-two;
+$promo_panel_mobile_label: $white-two;
+$promo_panel_label_bg: rgba(0, 0, 0, 0.9);
+$promo_panel_label_bg_active: $PB_black_one;
 // Back to top.
 $btt_text: $PB_deep_red;

@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Update missing style_identifiers.
+ */
+function alshaya_hm_images_update_8007() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(['alshaya_hm_images.settings'], 'alshaya_hm_images');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update new image resolutions.
  */
 function alshaya_hm_images_update_8006() {

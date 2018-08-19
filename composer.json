@@ -18,10 +18,10 @@
         "drupal/default_content": "^1.0@alpha",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/password_policy": "^3.0",
-        "drupal/taxonomy_term_depth": "1.x-dev",
+        "drupal/taxonomy_term_depth": "^2.0",
         "drupal/email_registration": "^1.0",
         "drupal/captcha": "^1.0@beta",
-        "drupal/recaptcha": "2.x-dev",
+        "drupal/recaptcha": "^2.3",
         "drupal/views_field_view": "1.0-beta2",
         "drupal/user_registrationpassword": "^1.0",
         "drupal/clientside_validation": "1.x-dev",
@@ -68,7 +68,7 @@
         "drupal/menu_link_modal": "^1.3",
         "drupal/imagemagick": "^2.3",
         "acquia/acsf-tools": "^8.1",
-        "drupal/metatag": "1.2",
+        "drupal/metatag": "^1.5",
         "drupal/acquia_purge": "^1.0@beta",
         "drupal/video_embed_field": "2.0.0-alpha2",
         "drupal/role_delegation": "^1.0@alpha",
@@ -82,7 +82,8 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "drupal/ckeditor_font": "^1.0",
         "ckeditor/font": "^4.9",
-        "drupal/allowed_formats": "^1.1"
+        "drupal/allowed_formats": "^1.1",
+        "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
@@ -164,9 +165,6 @@
         },
         "enable-patching": true,
         "patches": {
-            "drupal/taxonomy_term_depth": {
-                "Fix install and uninstall issue #2863541": "https://www.drupal.org/files/issues/fix-install-uninstall-2863541-7_0.patch"
-            },
             "drupal/search_api_solr": {
                 "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
             },
@@ -179,7 +177,7 @@
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
             },
             "drupal/metatag": {
-                "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/metatag-n2628934-23.patch"
+                "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2018-04-23/2628934-32.patch"
             },
             "drupal/acquia_connector": {
                 "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
@@ -243,7 +241,7 @@
                 "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
             },
             "drupal/recaptcha": {
-                "modal support": "https://www.drupal.org/files/issues/2493183-recaptcha-use-behaviors-76.patch"
+                "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
             },
             "drupal/paragraphs": {
                 "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
@@ -253,9 +251,6 @@
             },
             "drupal/media_entity": {
                 "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
-            },
-            "drupal/amptheme": {
-                "Add svg file with defined viewbox height and width": "https://www.drupal.org/files/issues/amptheme-do_not_use_the_network_for_loading_logo_information-2753089-7.patch"
             },
             "acquia/blt": {
                 "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch"

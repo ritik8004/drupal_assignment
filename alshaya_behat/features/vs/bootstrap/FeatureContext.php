@@ -125,10 +125,11 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
      */
     public function iAmOnASportProduct() {
         $this->visitPath($this->config_url);
-
         $this->iWaitForThePageToLoad();
+        $this->iRemovePromoPanel();
         $color = $this->getSession()->getPage()->clickLink($this->config_variant_color);
-        $this->iWaitForThePageToLoad();
+        $this->getSession()
+            ->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
         $size = $this->getSession()->getPage()->clickLink($this->config_variant_size);
         $this->getSession()
             ->wait(45000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
@@ -1110,7 +1111,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     if (!$title) {
       throw new \Exception('Title is not displayed on the Map popup');
     }
-    $address = $page->has('css', 'div.views-field.views-field-field-store-address > div.field-content > p');
+    $address = $page->has('css', '.gm-style-iw .views-field-field-store-address');
     if (!$address) {
       throw new \Exception('Address is not displayed on the map popup');
     }
@@ -1130,7 +1131,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
   public function theNumberOfStoresDisplayedShouldMatchThePointerDisplayedOnMap()
   {
     $page = $this->getSession()->getPage();
-    $all_pointers = $page->findAll('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) div');
+    $all_pointers = $page->findAll('css', 'div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div');
     $actual_count = count($all_pointers);
     $count = (string)$actual_count;
     $actual_text = $page->find('css', '.view-header')->getText();
@@ -1975,11 +1976,25 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
          }
         else
         {
-//    $this->getSession()->evaluateScript("jQuery('.promo-panel-fixed').remove();");
     $this->getSession()->executeScript("jQuery('.promo-panel-fixed').remove();");
         }
     }
 
+    /**
+     * @When I remove promo panel from delivery page
+     */
+    public function iRemovePromoPanelFromDeliveryPage()
+    {
+        $page = $this->getSession()->getPage();
+        $promopanel= $page->has('css','.promo-panel-label');
+        if (null === $promopanel) {
+            throw new \Exception("The element is not found");
+        }
+        else
+        {
+            $this->getSession()->executeScript("jQuery('.promo-panel-label').remove();");
+        }
+    }
     /**
      * @Given /^I select a product in stock$/
      */
@@ -2005,5 +2020,21 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
             $page->clickLink($this->product);
             break;
         }
+
+    }
+    #I close the pop up Line
+    /**
+     * @When /^I click on "([^"]*)" element$/
+     */
+    public function iClickOnElement($css_selector)
+    {
+        $element = $this->getSession()->getPage()->find("css", $css_selector);
+        if(count($element) > 0) {
+            $element->click();
+        }
+        else {
+            throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
+        }
     }
 }
+
