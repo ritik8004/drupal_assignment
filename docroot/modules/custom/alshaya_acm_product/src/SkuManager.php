@@ -1844,8 +1844,7 @@ class SkuManager {
       return FALSE;
     }
 
-    $value = strtolower($value);
-    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
+    return strtolower($value) === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
   }
 
   /**
