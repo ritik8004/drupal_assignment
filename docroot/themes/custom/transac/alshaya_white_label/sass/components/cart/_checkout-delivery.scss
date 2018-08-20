@@ -605,7 +605,9 @@
 .page-standard.c-address-book,
 .page-standard.checkout-login,
 .page-standard.user-page.checkout-payment,
-.page-standard.user-page.c-delivery-checkout {
+.page-standard.user-page.c-delivery-checkout,
+.pdp-modal-overlay .page-standard,
+.free-gifts-modal-overlay .page-standard {
   .ajax-progress-throbber {
     position: fixed !important;
     width: 100% !important;
