@@ -1059,63 +1059,51 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $form['ajax']['#attributes']['class'][] = 'configurable-wrapper-' . $sku_identifier;
 
-    if (count($configurables) > 1) {
-      // Use the first code from tree as root. We already sort it in
-      // Configurable plugin.
-      $root_attribute_code = reset($configurable_codes);
+    // Use the first code from tree as root. We already sort it in
+    // Configurable plugin.
+    $root_attribute_code = reset($configurable_codes);
 
-      if ($selected && count($selected) != count($product_tree['configurables'])) {
-        $delete_next = FALSE;
+    if ($selected && count($selected) != count($product_tree['configurables'])) {
+      $delete_next = FALSE;
 
-        // Cleanup selected value.
-        foreach ($selected as $code => $value) {
-          if ($delete_next) {
-            unset($selected[$code]);
-            continue;
-          }
+      // Cleanup selected value.
+      foreach ($selected as $code => $value) {
+        if ($delete_next) {
+          unset($selected[$code]);
+          continue;
+        }
 
-          // We will remove all selected values after matching trigger.
-          if ($user_input_configurables['_triggering_element_name'] == 'configurables[' . $code . ']') {
-            $delete_next = TRUE;
-          }
+        // We will remove all selected values after matching trigger.
+        if ($user_input_configurables['_triggering_element_name'] == 'configurables[' . $code . ']') {
+          $delete_next = TRUE;
         }
       }
-
-      $first_child = $sku_manager->getFirstChildForSku(
-        $sku_entity,
-        $root_attribute_code,
-        $selected,
-        $form['ajax']['configurables'][$root_attribute_code]
-      );
-
-      if ($first_child instanceof SKU) {
-        /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-        $first_child_root_attr_value = $plugin->getAttributeValue($first_child->id(), $root_attribute_code);
-      }
-
-      $root_attribute_options = $form['ajax']['configurables'][$root_attribute_code]['#options'];
-
-      // Set the color attribute as default only if user has not made a
-      // selection.
-      if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
-        (!isset($user_input_configurables['configurables'], $user_input_configurables['configurables'][$root_attribute_code]))) {
-        $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
-        $selected = [$root_attribute_code => $first_child_root_attr_value];
-      }
-
-      $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
     }
-    // If only one configurable option there, select first value as default.
-    elseif (count($configurables) == 1) {
-      $key = key($form['ajax']['configurables']);
-      $options = $form['ajax']['configurables'][$key]['#options'];
-      if (count($options) == 1) {
-        $value = key($options);
-        $form['ajax']['configurables'][$key]['#value'] = $value;
-        $selected = [$key => $value];
-      }
+
+    $first_child = $sku_manager->getFirstChildForSku(
+      $sku_entity,
+      $root_attribute_code,
+      $selected,
+      $form['ajax']['configurables'][$root_attribute_code]
+    );
+
+    if ($first_child instanceof SKU) {
+      /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
+      $plugin = $sku_entity->getPluginInstance();
+      $first_child_root_attr_value = $plugin->getAttributeValue($first_child->id(), $root_attribute_code);
     }
+
+    $root_attribute_options = $form['ajax']['configurables'][$root_attribute_code]['#options'];
+
+    // Set the color attribute as default only if user has not made a
+    // selection.
+    if ((isset($root_attribute_options[$first_child_root_attr_value])) &&
+      (!isset($user_input_configurables['configurables'], $user_input_configurables['configurables'][$root_attribute_code]))) {
+      $form['ajax']['configurables'][$root_attribute_code]['#options_attributes'][$first_child_root_attr_value]['selected'] = 'selected';
+      $selected = [$root_attribute_code => $first_child_root_attr_value];
+    }
+
+    $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
 
     $form_state->setValue('configurables', $selected);
     $user_input_configurables['configurables'] = $selected;
