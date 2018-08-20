@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73752ce3072d18a9d5a9319af61aea17",
+    "content-hash": "cbe29be70b9a53c11bd80ac1a93f532b",
     "packages": [
         {
             "name": "acquia/acsf-tools",
@@ -3215,11 +3215,17 @@
         },
         {
             "name": "drupal/clientside_validation",
-            "version": "dev-1.x",
+            "version": "1.0.0-rc4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/clientside_validation",
-                "reference": "d65b355a086812d7d3c84945da2a5df01b7815cf"
+                "reference": "8.x-1.0-rc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/clientside_validation-8.x-1.0-rc4.zip",
+                "reference": "8.x-1.0-rc4",
+                "shasum": "65bbb858493a8cd884873c79b7a82d7542ccad01"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -3234,12 +3240,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc3+17-dev",
-                    "datestamp": "1517296980",
+                    "version": "8.x-1.0-rc4",
+                    "datestamp": "1534320480",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3264,8 +3273,7 @@
             "homepage": "https://www.drupal.org/project/clientside_validation",
             "support": {
                 "source": "http://cgit.drupalcode.org/clientside_validation"
-            },
-            "time": "2018-01-30T07:21:06+00:00"
+            }
         },
         {
             "name": "drupal/coder",
@@ -7043,6 +7051,10 @@
                     "homepage": "https://www.drupal.org/user/409"
                 },
                 {
+                    "name": "bdragon",
+                    "homepage": "https://www.drupal.org/user/53081"
+                },
+                {
                     "name": "catch",
                     "homepage": "https://www.drupal.org/user/35733"
                 },
@@ -8224,7 +8236,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc2",
-                    "datestamp": "1509593587",
+                    "datestamp": "1534594084",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -8240,10 +8252,6 @@
                     "name": "Nikunj Kotecha (nikunjkotecha)",
                     "homepage": "https://www.drupal.org/u/nikunjkotecha",
                     "role": "Maintainer"
-                },
-                {
-                    "name": "piyuesh23",
-                    "homepage": "https://www.drupal.org/user/1116218"
                 }
             ],
             "description": "Permanent Cache Bin module adds support for cache bins which are not cleared during drush cr.",
@@ -10043,11 +10051,17 @@
         },
         {
             "name": "drupal/taxonomy_term_depth",
-            "version": "dev-2.x",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/taxonomy_term_depth",
-                "reference": "25b07242ec76f7d54e9ce2ce00ea255c4f0ff847"
+                "reference": "8.x-2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/taxonomy_term_depth-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "36584817961ea57312b4a320e33420e35ea08b58"
             },
             "require": {
                 "drupal/core": "*"
@@ -10058,8 +10072,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.x-dev",
-                    "datestamp": "1493381884",
+                    "version": "8.x-2.0",
+                    "datestamp": "1520433784",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -10084,8 +10098,7 @@
             "homepage": "https://www.drupal.org/project/taxonomy_term_depth",
             "support": {
                 "source": "http://cgit.drupalcode.org/taxonomy_term_depth"
-            },
-            "time": "2018-03-22T19:09:58+00:00"
+            }
         },
         {
             "name": "drupal/token",
@@ -17921,7 +17934,6 @@
         "drupal/menu_link_attributes": 10,
         "drupal/default_content": 15,
         "drupal/captcha": 10,
-        "drupal/clientside_validation": 20,
         "drupal/profile": 15,
         "drupal/field_group": 10,
         "drupal/back_to_top": 10,
