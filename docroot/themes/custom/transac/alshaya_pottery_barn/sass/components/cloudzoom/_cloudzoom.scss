@@ -17,6 +17,10 @@
 }
 
 .cloudzoom__image {
+  .img-wrap {
+    height: auto;
+  }
+
   .hover-text {
     padding: 1rem 1.5rem;
   }
@@ -52,6 +56,29 @@
       @include breakpoint($only-tablet) {
         text-align: center;
         margin: 0 auto;
+      }
+    }
+  }
+}
+
+#product-image-gallery-container {
+  #product-image-gallery {
+    .slick-arrow {
+      background: none;
+
+      @include breakpoint($desktop) {
+        height: 28.125rem;
+      }
+    }
+
+    .slick-track {
+      @include breakpoint($only-tablet) {
+        height: 6.5rem;
+        overflow: hidden;
+      }
+
+      @include breakpoint($desktop) {
+        transform: none !important;
       }
     }
   }
