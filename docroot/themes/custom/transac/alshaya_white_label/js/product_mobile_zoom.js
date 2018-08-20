@@ -13,6 +13,12 @@ function hammerIt(elm) {
   hammertime.get('pinch').set({
     enable: true
   });
+  hammertime.get('pan').set({
+    enable: true
+  });
+  hammertime.get('doubletap').set({
+    enable: true
+  });
   var posX = 0;
   var posY = 0;
   var scale = 1;
@@ -147,11 +153,9 @@ function hammerIt(elm) {
           applyRtl(gallery, slickModalOptions);
 
           $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
-          hammerIt(document.querySelector('.mob-imagegallery__thumbnails__image[data-slick-index="' + currentmobSlide + '"] img'));
-
-          $('#product-image-gallery-mob').on('swipe', function (event, slick) {
-            var image = '.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img';
-            hammerIt(document.querySelector(image));
+          var mImages = Array.prototype.slice.call(document.querySelectorAll('.mob-imagegallery__thumbnails__image img'));
+          mImages.forEach(function (ele) {
+            hammerIt(ele);
           });
 
           $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {

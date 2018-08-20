@@ -30,7 +30,11 @@
           </li>
         {% endfor %}
     </div>
+    {% if data.text_links_paragraph is not empty %}
+    <div class="term-image__wrapper text-link-para">
+    {% else %}
     <div class="term-image__wrapper">
+    {% endif %}
         {#Term image starts#}
         {{ alshaya_main_menu('alshaya_main_menu_category_image', data) }}
         {#Term image ends#}

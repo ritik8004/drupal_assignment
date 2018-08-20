@@ -147,7 +147,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     }
 
     $elements = [];
-    $product_url = $product_label = '';
+    $product_url = $product_base_url = $product_label = '';
 
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
@@ -155,7 +155,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $node = $entity_adapter->getValue();
       if ($node instanceof Node) {
         $translatedNode = $node->getTranslation(\Drupal::service('language_manager')->getCurrentLanguage()->getId());
-        $product_url = $translatedNode->url();
+        $product_base_url = $product_url = $translatedNode->url();
         $product_label = $translatedNode->getTitle();
       }
     }
@@ -165,7 +165,15 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $sku = $this->viewValue($item);
       $skus[$delta] = $sku;
       if ($sku instanceof SKU) {
-        $sku_gallery = $this->skuImagesManager->getGallery($sku, 'search', $product_label);
+        try {
+          $check_parent_child = TRUE;
+          $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child);
+          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, $check_parent_child);
+          $product_url .= '?selected=' . $sku_for_gallery->id();
+        }
+        catch (\Exception $e) {
+          $sku_gallery = [];
+        }
 
         $promotion_types = ['cart'];
         $promotions = $this->skuManager->getPromotionsFromSkuId($sku, 'default', $promotion_types);
@@ -201,6 +209,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           '#theme' => 'sku_teaser',
           '#gallery' => $sku_gallery,
           '#product_url' => $product_url,
+          '#product_base_url' => $product_base_url,
           '#product_label' => $product_label,
           '#promotions' => $promotions,
           '#stock_placeholder' => $stock_placeholder,

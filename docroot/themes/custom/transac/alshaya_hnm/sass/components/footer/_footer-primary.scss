@@ -510,6 +510,7 @@
 
 .alshaya-newsletter-subscribe .form-item,
 .block-alshaya-newsletter .form-type-email {
+  label.error,
   label#edit-email-error {
     line-height: 1.36;
     display: inline-block;

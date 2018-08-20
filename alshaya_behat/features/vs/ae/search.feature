@@ -5,7 +5,7 @@ Feature: Search feature
     I should be able to search products
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-keywords" with "tops"
     And I press "Search"
@@ -16,7 +16,7 @@ Feature: Search feature
   I should be able to view filters and load more items
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-keywords" with "leggings"
     And I press "Search"
@@ -32,7 +32,7 @@ Feature: Search feature
     I should be able to view filters and load more items
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-keywords" with "من قطعتين "
     And I press "Search"
@@ -49,7 +49,7 @@ Feature: Search feature
   I should be able to search products
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
@@ -79,7 +79,7 @@ Feature: Search feature
     when my search yields no results
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     And I follow "English"
     And I wait for the page to load
@@ -93,7 +93,7 @@ Feature: Search feature
   when my search yields no results
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-keywords" with "من قطعتين"
     And I press "Search"
@@ -105,7 +105,7 @@ Feature: Search feature
     and add it to the cart
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     And I follow "English"
     And I wait for the page to load
@@ -153,7 +153,7 @@ Feature: Search feature
   and add it to the cart on Arabic site
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-keywords" with "ليغنغز"
     And I press "Search"
@@ -199,7 +199,7 @@ Feature: Search feature
     in ascending, descending order
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
@@ -224,7 +224,7 @@ Feature: Search feature
     then I should be redirected to to the Arabic site and vice-versa
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     And I wait for the page to load
     When I fill in "edit-keywords" with "ليغنغز"
@@ -235,3 +235,4 @@ Feature: Search feature
     And I press "Search"
     When I wait for the page to load
     Then I should see Search results page for "tops"
+

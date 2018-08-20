@@ -484,24 +484,13 @@ class SkuAssetManager {
    *   Array of RGB color values keyed by article_castor_id.
    */
   public function getColorsForSku(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
     if ($cache = $this->skuManager->getProductCachedData($sku, 'hm_colors_for_sku')) {
       return $cache;
     }
-
-    // Get list of configurable article castor ids
-    $configurables = unserialize($sku->field_configurable_attributes->getString());
-    $article_castor_ids_configs = [];
-
-    // Get list of article castor ids in order of their display on PDP.
-    foreach ($configurables as $configurable) {
-      if ($configurable['code'] === 'article_castor_id') {
-        $article_castor_ids_configs = $configurable['values'];
-        break;
-      }
-    }
-
-    // Get the order of castor ids as they stored with the configurable product.
-    $castor_id_weights = array_flip(array_column($article_castor_ids_configs, 'value_id'));
 
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
     if (empty($combinations)) {
@@ -509,25 +498,20 @@ class SkuAssetManager {
     }
 
     $article_castor_ids = [];
-    $child_castor_ids = [];
     foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $article_castor_id => $skus) {
       $child_sku_entity = NULL;
       $color_attributes = [];
 
-      // Use only the first SKU for which we get color attributes
+      // Use only the first SKU for which we get color attributes.
       foreach ($skus as $child_sku) {
         // Show only for colors for which we have stock.
         $child_sku_entity = SKU::loadFromSku($child_sku);
 
-        if (!(alshaya_acm_get_stock_from_sku($child_sku_entity))) {
-          continue;
-        }
-
-        $child_castor_ids[$child_sku_entity->id()] = $article_castor_id;
-        $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
-
-        if ($color_attributes) {
-          break;
+        if ($child_sku_entity instanceof SKUInterface && alshaya_acm_get_stock_from_sku($child_sku_entity)) {
+          $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
+          if ($color_attributes) {
+            break;
+          }
         }
       }
 
@@ -535,11 +519,6 @@ class SkuAssetManager {
         $article_castor_ids[$child_sku_entity->id()] = $color_attributes['attr_rgb_color'];
       }
     }
-
-    // Sort article castor ids in the same order as on PDP.
-    uksort($article_castor_ids, function($a, $b) use ($castor_id_weights, $child_castor_ids) {
-      return $castor_id_weights[$child_castor_ids[$a]] - $castor_id_weights[$child_castor_ids[$b]];
-    });
 
     $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
 
