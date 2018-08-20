@@ -14,7 +14,6 @@
         vertical: getPDPSliderParameter('vertical'),
         arrows: true,
         focusOnSelect: false,
-        centerMode: true,
         infinite: false,
         touchThreshold: 1000,
         responsive: [
@@ -117,7 +116,6 @@
             slidesToShow: getPDPSliderParameter('slidesToShow'),
             vertical: getPDPSliderParameter('vertical'),
             arrows: true,
-            centerMode: true,
             infinite: false,
             focusOnSelect: false,
             touchThreshold: 1000,

@@ -395,7 +395,16 @@ class SkuImagesManager {
       default:
         // Case were we will show image from parent first, if not available
         // image from child, if still not - empty/default image.
-        // Let it execute as is, this is default code.
+        if ($this->hasMediaImages($sku)) {
+          // Do nothing.
+        }
+        elseif ($is_configurable) {
+          $check_parent_child = FALSE;
+          $child = $this->getFirstChildWithMedia($sku);
+          if ($child instanceof SKU) {
+            $sku = $child;
+          }
+        }
         break;
     }
 

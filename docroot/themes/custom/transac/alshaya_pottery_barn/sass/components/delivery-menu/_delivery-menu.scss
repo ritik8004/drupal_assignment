@@ -10,7 +10,7 @@
     font-size: 1rem;
 
     @include breakpoint($desktop) {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
     }
   }
 
@@ -23,7 +23,7 @@
     color: $deliverybanner_subtitle;
 
     @include breakpoint($desktop) {
-      font-size: 1rem;
+      font-size: 0.875rem;
     }
   }
 }
