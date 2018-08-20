@@ -21,6 +21,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Link;
@@ -304,11 +305,6 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  *   SKU for which display node is to be updated.
  */
 function _alshaya_acm_product_post_sku_operation(SKU $entity) {
-  // Don't do anything if search_api is not enabled.
-  if (!\Drupal::moduleHandler()->moduleExists('search_api')) {
-    return;
-  }
-
   try {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
@@ -322,14 +318,20 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
     if ($parent = $plugin->getParentSku($entity)) {
       // Clear cached data for configurable products.
       $skuManager->clearProductCachedData($parent);
+
+      // @TODO: Make this smart in CORE-3443.
+      Cache::invalidateTags($parent->getCacheTagsToInvalidate());
     }
 
-    // Check if node is available.
-    if ($node = $plugin->getDisplayNode($entity)) {
-      $node->original = clone $node;
+    // Re-index if search_api is enabled.
+    if (\Drupal::moduleHandler()->moduleExists('search_api')) {
+      // Check if node is available.
+      if ($node = $plugin->getDisplayNode($entity)) {
+        $node->original = clone $node;
 
-      // Mark node for reindexing on add/update/delete of SKUs.
-      search_api_entity_update($node);
+        // Mark node for reindexing on add/update/delete of SKUs.
+        search_api_entity_update($node);
+      }
     }
   }
   catch (\Exception $e) {
