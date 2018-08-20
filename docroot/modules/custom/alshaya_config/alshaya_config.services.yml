@@ -1,7 +1,10 @@
 services:
   alshaya_config.config_subscriber:
     class: Drupal\alshaya_config\EventSubscriber\AlshayaConfigSubscriber
-    arguments: [ '@module_handler', '@config.storage' ]
+    arguments:
+      - '@module_handler'
+      - '@config.storage'
+      - '@config.factory'
     tags:
       - {name: event_subscriber}
   alshaya_config.manager:

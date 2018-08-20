@@ -17,6 +17,10 @@
 }
 
 .cloudzoom__image {
+  .img-wrap {
+    height: auto;
+  }
+
   .hover-text {
     padding: 1rem 1.5rem;
   }
@@ -34,6 +38,18 @@
 }
 
 #product-image-gallery-container {
+  .button__wrapper {
+    .zoomin {
+      background: url(../imgs/assets/ic-zoomin.svg) no-repeat;
+      background-size: contain;
+    }
+
+    .zoomout {
+      background: url(../imgs/assets/ic-zoomout.svg) no-repeat;
+      background-size: contain;
+    }
+  }
+
   .imagegallery__wrapper {
     @include breakpoint($only-tablet) {
       padding: 0 2rem;
@@ -52,6 +68,27 @@
       @include breakpoint($only-tablet) {
         text-align: center;
         margin: 0 auto;
+      }
+    }
+  }
+}
+
+#product-image-gallery-container {
+  #product-image-gallery {
+    .slick-arrow {
+      background: none;
+    }
+
+    .slick-track {
+      @include breakpoint($only-tablet) {
+        height: 6.5rem;
+        overflow: hidden;
+      }
+
+      @include breakpoint($desktop) {
+        transform: none !important;
+        height: 28.125rem;
+        overflow: hidden;
       }
     }
   }

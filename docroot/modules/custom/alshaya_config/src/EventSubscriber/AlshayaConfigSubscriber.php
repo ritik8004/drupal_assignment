@@ -8,6 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,17 +34,28 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
   protected $configStorage;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Constructs a new AlshayaConfigSubscriber object.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler object.
    * @param \Drupal\Core\Config\StorageInterface $configStorage
    *   Config storage object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config Factory.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler,
-                              StorageInterface $configStorage) {
+                              StorageInterface $configStorage,
+                              ConfigFactoryInterface $configFactory) {
     $this->moduleHandler = $moduleHandler;
     $this->configStorage = $configStorage;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -83,6 +95,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     // Re-write the config to make sure the overrides are not lost.
     $this->configStorage->write($config->getName(), $data);
     Cache::invalidateTags($config->getCacheTags());
+    $this->configFactory->reset($config_name);
   }
 
   /**

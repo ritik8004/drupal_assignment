@@ -1,4 +1,14 @@
 fields:
+  color:
+    configurable: 1
+    cardinality: 1
+    index: 0
+    facet: 0
+  size:
+    configurable: 1
+    cardinality: 1
+    index: 0
+    facet: 0
   color_lhn:
     label: 'Color'
     type: 'string'
