@@ -453,6 +453,33 @@
             padding: 3px;
           }
         }
+
+        &.pager-yes {
+          height: auto;
+          padding: 0 2.6rem;
+
+          .slick-arrow {
+            background: none;
+            height: 100%;
+            width: 2.5rem;
+            top: 0;
+            bottom: 0;
+          }
+
+          .slick-prev {
+            @include icon(chevronleft);
+
+            left: 0;
+            right: auto !important;
+          }
+
+          .slick-next {
+            @include icon(chevronright);
+
+            right: 0;
+            left: auto !important;
+          }
+        }
       }
     }
 
@@ -473,20 +500,21 @@
 
   #product-image-gallery,
   #lightSlider {
-    height: auto;
-    width: 100% !important;
+    &.pager-no {
+      height: auto;
+      width: 100% !important;
 
-    .slick-slide {
-      width: auto !important;
-      display: inline-block;
-      float: none;
-    }
+      .slick-slide {
+        width: auto !important;
+        display: inline-block;
+        float: none;
+      }
 
-    .slick-track {
-      text-align: center;
-      margin: 0 auto;
-      transform: none !important;
-      width: auto !important;
+      .slick-track {
+        text-align: center;
+        margin: 0 auto;
+        width: auto !important;
+      }
     }
   }
 }

@@ -1617,7 +1617,7 @@ class SkuManager {
     $sku_id = (int) $this->currentRequest->query->get('selected');
 
     // Give preference to sku id passed via query params.
-    if ($sku_id) {
+    if ($sku_id && $sku_id != $sku->id()) {
       $first_child = SKU::load($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
