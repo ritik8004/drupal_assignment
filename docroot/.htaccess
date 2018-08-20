@@ -69,6 +69,9 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
+  # Rewrite rule to remove .html and remove kwt-* from url.
+  RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
+
   # Set "protossl" to "s" if we were accessed via https://.  This is used later
   # if you enable "www." stripping or enforcement, in order to ensure that
   # you don't bounce between http and https.
@@ -128,6 +131,8 @@ AddEncoding gzip svgz
   RewriteCond %{HTTP_HOST} !\.factory\.alshaya\.com$ [NC]
   # Don't redirect local dev sites.
   RewriteCond %{HTTP_HOST} !^local\. [NC]
+  # Don't redirect on all *.hm.com domains.
+  RewriteCond %{HTTP_HOST} !\.hm\.com$ [NC]
   RewriteRule ^ http%{ENV:protossl}://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
