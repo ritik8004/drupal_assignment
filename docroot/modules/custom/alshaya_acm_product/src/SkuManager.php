@@ -7,6 +7,7 @@ use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -35,6 +36,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class SkuManager {
 
   use StringTranslationTrait;
+
+  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'not required';
 
   /**
    * The database service.
@@ -142,6 +145,13 @@ class SkuManager {
   protected $cartFormHelper;
 
   /**
+   * SKU Fields Manager.
+   *
+   * @var \Drupal\acq_sku\SKUFieldsManager
+   */
+  protected $skuFieldsManager;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -172,6 +182,8 @@ class SkuManager {
    *   Cache Backend service for product labels.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_cache
    *   Cache Backend service for configurable price info.
+   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
+   *   SKU Fields Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -186,7 +198,8 @@ class SkuManager {
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
-                              CacheBackendInterface $product_cache) {
+                              CacheBackendInterface $product_cache,
+                              SKUFieldsManager $sku_fields_manager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -203,6 +216,7 @@ class SkuManager {
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
+    $this->skuFieldsManager = $sku_fields_manager;
   }
 
   /**
@@ -1761,6 +1775,107 @@ class SkuManager {
 
     $children = Configurable::getChildren($sku);
     return reset($children);
+  }
+
+  /**
+   * Utility function to return configurable values for a SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Array of configurable field values.
+   */
+  public function getConfigurableValues(SKUInterface $sku) {
+    $configurableFieldValues = [];
+
+    $fields = $this->skuFieldsManager->getFieldAdditions();
+    $configurableFields = array_filter($fields, function ($field) {
+      return (bool) $field['configurable'];
+    });
+
+    foreach ($configurableFields as $key => $field) {
+      $fieldKey = 'attr_' . $key;
+
+      if ($sku->get($fieldKey)->getString()) {
+        $value = $sku->get($fieldKey)->getString();
+
+        if ($this->isAttributeOptionNotRequired($value)) {
+          continue;
+        }
+
+        $configurableFieldValues[$fieldKey] = [
+          'label' => $sku->get($fieldKey)
+            ->getFieldDefinition()
+            ->getLabel(),
+          'value' => $sku->get($fieldKey)->getString(),
+        ];
+      }
+    }
+
+    return $configurableFieldValues;
+  }
+
+  /**
+   * Check if we need to process and hide not required options.
+   *
+   * @return bool
+   *   TRUE if we need to process and hide not required options.
+   */
+  public function isNotRequiredOptionsToBeRemoved() {
+    $hide_not_required_option = $this->configFactory
+      ->get('alshaya_acm_product.display_settings')
+      ->get('hide_not_required_option');
+
+    return (bool) $hide_not_required_option;
+  }
+
+  /**
+   * Wrapper function to check if value is matches not required value.
+   *
+   * @param string $value
+   *   Attribute option value to check.
+   *
+   * @return bool
+   *   TRUE if value matches not required value.
+   */
+  public function isAttributeOptionNotRequired($value) {
+    if (!$this->isNotRequiredOptionsToBeRemoved()) {
+      return FALSE;
+    }
+
+    $value = strtolower($value);
+    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
+  }
+
+  /**
+   * Process a configurable attribute to remove not required items.
+   *
+   * @param array $configurable
+   *   Configurable attribute form item.
+   */
+  public function processAttribute(array &$configurable) {
+    if (!$this->isNotRequiredOptionsToBeRemoved()) {
+      return;
+    }
+
+    $availableOptions = [];
+    $notRequiredValue = NULL;
+    foreach ($configurable['#options'] as $id => $value) {
+      if ($this->isAttributeOptionNotRequired($value)) {
+        $configurable['#options_attributes'][$id]['class'][] = 'hidden';
+        $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
+        $notRequiredValue = $id;
+      }
+      elseif (empty($configurable['#options_attributes'][$id]['disabled'])) {
+        $availableOptions[$id] = $value;
+      }
+    }
+
+    if ($notRequiredValue && empty($availableOptions)) {
+      $configurable['#value'] = $notRequiredValue;
+      $configurable['#access'] = FALSE;
+    }
   }
 
 }

@@ -1171,6 +1171,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           $configurable['#attributes']['class'][] = 'form-item-configurable-select';
         }
       }
+
+      $sku_manager->processAttribute($configurable);
     }
 
     // Process stock now.

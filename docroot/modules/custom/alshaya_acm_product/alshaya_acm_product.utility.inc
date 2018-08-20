@@ -89,26 +89,11 @@ function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel
  */
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
-
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
   if ($sku_entity) {
-    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
-    $configurableFields = array_filter($fields, function ($field) {
-      return (bool) $field['configurable'];
-    });
-
-    foreach ($configurableFields as $key => $field) {
-      $fieldKey = 'attr_' . $key;
-
-      if ($sku_entity->get($fieldKey)->getString()) {
-        $configurableFieldValues[$fieldKey] = [
-          'label' => $sku_entity->get($fieldKey)->getFieldDefinition()->getLabel(),
-          'value' => $sku_entity->get($fieldKey)->getString(),
-        ];
-      }
-    }
-
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $configurableFieldValues = $skuManager->getConfigurableValues($sku_entity);
   }
   return $configurableFieldValues;
 }

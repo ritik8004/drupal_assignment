@@ -22,6 +22,8 @@ jQuery.fn.select2Option = function (options) {
       optGroup.children('option').each(function () {
         var liHtml = $('<li></li>');
 
+        liHtml.attr('class', $(this).attr('class'));
+
         if ($(this).attr('swatch-image')) {
           liHtml.addClass('li-swatch-image');
           var swatchImage = '<img src="' + $(this).attr('swatch-image') + '" alt="' + $(this).text() + '" />';

@@ -5,3 +5,4 @@ swatches:
     - color
   plp:
     - color_lhn
+hide_not_required_option: true
