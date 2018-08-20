@@ -37,7 +37,7 @@ class SkuManager {
 
   use StringTranslationTrait;
 
-  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'not required';
+  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'NOT REQUIRED';
 
   /**
    * The database service.
@@ -1794,13 +1794,15 @@ class SkuManager {
       return (bool) $field['configurable'];
     });
 
+    $remove_not_required_option = $this->isNotRequiredOptionsToBeRemoved();
+
     foreach ($configurableFields as $key => $field) {
       $fieldKey = 'attr_' . $key;
 
       if ($sku->get($fieldKey)->getString()) {
         $value = $sku->get($fieldKey)->getString();
 
-        if ($this->isAttributeOptionNotRequired($value)) {
+        if ($remove_not_required_option && $this->isAttributeOptionNotRequired($value)) {
           continue;
         }
 
@@ -1840,11 +1842,7 @@ class SkuManager {
    *   TRUE if value matches not required value.
    */
   public function isAttributeOptionNotRequired($value) {
-    if (!$this->isNotRequiredOptionsToBeRemoved()) {
-      return FALSE;
-    }
-
-    return strtolower($value) === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
+    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
   }
 
   /**
