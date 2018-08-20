@@ -38,6 +38,18 @@
 }
 
 #product-image-gallery-container {
+  .button__wrapper {
+    .zoomin {
+      background: url(../imgs/assets/ic-zoomin.svg) no-repeat;
+      background-size: contain;
+    }
+
+    .zoomout {
+      background: url(../imgs/assets/ic-zoomout.svg) no-repeat;
+      background-size: contain;
+    }
+  }
+
   .imagegallery__wrapper {
     @include breakpoint($only-tablet) {
       padding: 0 2rem;
