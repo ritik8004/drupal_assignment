@@ -975,6 +975,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
+  $form['#cache']['contexts'][] = 'url';
+
   // Process the alter hook only once.
   static $processed = [];
   if (isset($processed[$sku_entity->id()])) {
@@ -1085,6 +1087,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       );
 
       if ($first_child instanceof SKU) {
+        /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
         $plugin = $sku_entity->getPluginInstance();
         $first_child_root_attr_value = $plugin->getAttributeValue($first_child->id(), $root_attribute_code);
       }
