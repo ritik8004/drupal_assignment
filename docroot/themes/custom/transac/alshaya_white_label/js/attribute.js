@@ -7,6 +7,8 @@
   'use strict';
 
   Drupal.select2OptionConvert = function () {
+    $('.form-item-configurable-swatch').removeClass('visually-hidden');
+
     if ($(window).width() > drupalSettings.show_configurable_boxes_after) {
       Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-select'));
     }

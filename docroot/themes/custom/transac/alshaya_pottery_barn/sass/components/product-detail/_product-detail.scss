@@ -149,12 +149,6 @@
           }
         }
 
-        .form-select {
-          @include breakpoint($upto-desktop) {
-            clip: auto;
-          }
-        }
-
         label {
           display: block;
           position: absolute;
@@ -170,9 +164,7 @@
         }
       }
 
-      .form-item-configurables-material,
-      .form-item-configurables-subset-name,
-      .form-item-configurables-color {
+      .configurable-select {
         @include breakpoint($upto-desktop) {
           @include select-wrapper(100%);
 
