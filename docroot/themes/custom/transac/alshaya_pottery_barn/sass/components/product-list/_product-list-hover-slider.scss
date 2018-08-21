@@ -1,0 +1,50 @@
+.alshaya_search_slider {
+  .lslide {
+    img {
+      height: 4.5rem;
+      max-width: 5rem;
+    }
+  }
+
+  .lSSlideWrapper {
+    .lSAction {
+      > a {
+        top: 2.3rem;
+
+        &.lSNext {
+          #{$right}: -1.5rem;
+        }
+      }
+    }
+
+    li {
+      margin-top: 0.3125rem;
+
+      &:first-child {
+        margin-#{$left}: -1px;
+
+        &:hover {
+          margin-#{$left}: 0;
+
+          &::after {
+            #{$left}: 0;
+          }
+        }
+      }
+
+      &:hover {
+        &::after {
+          top: -0.25rem;
+          left: -1px;
+          right: -1px;
+          bottom: -0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.search-lightSlider {
+  // This is intentionally in px.
+  height: 81px !important;
+}
