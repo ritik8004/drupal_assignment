@@ -17,8 +17,8 @@ function alshaya_ae_update_8003() {
 
   $current_theme = _alshaya_get_theme_by_theme_type('transac', ['alshaya_white_label']);
   if (!empty($current_theme)) {
-    // If module not already installed, then install it and
-    // Move customer rights logo block from whitelabel to current brand.
+    // If 'alshaya_block' is not installed, then install it and Move
+    // customer rights logo block from alshaya_white_label to current brand.
     if (!\Drupal::moduleHandler()->moduleExists('alshaya_block')) {
       \Drupal::service('module_installer')->install(['alshaya_block']);
     }
