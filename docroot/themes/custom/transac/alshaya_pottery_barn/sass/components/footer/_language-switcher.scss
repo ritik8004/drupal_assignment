@@ -13,6 +13,10 @@
 
 .c-footer-primary {
   .language--switcher {
+    @include breakpoint($only-tablet) {
+      margin-top: 1.5rem;
+    }
+
     .language-switcher-language-url ul {
       li:first-child a {
         @include breakpoint($only-tablet) {
