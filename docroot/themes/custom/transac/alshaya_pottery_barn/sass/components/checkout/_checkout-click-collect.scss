@@ -31,6 +31,23 @@
           }
         }
       }
+
+      ul {
+        li {
+          .store-actions {
+            .store-on-map {
+              color: $checkout_cc_list_map_link_default;
+            }
+          }
+        }
+      }
+    }
+
+    .label-store-location {
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0.3125rem !important;
+        font-weight: 600;
+      }
     }
 
     .stores-list-view,
@@ -38,9 +55,42 @@
       border: none !important;
       text-transform: none;
       font-weight: normal !important;
+      display: flex !important;
+      justify-content: center;
 
       &.active {
         border: 1px solid $checkout_cc_list_map_link_active !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        padding-top: 0;
+      }
+
+      &::before {
+        color: $checkout_cc_list_map_link_active;
+        display: flex;
+        align-items: center;
+
+        @include breakpoint($only-tablet) {
+          top: auto !important;
+          #{$left}: auto !important;
+          justify-content: center;
+          height: inherit;
+          width: inherit;
+        }
+      }
+    }
+
+    .stores-list-view {
+      &::before {
+        font-size: 2rem;
+      }
+    }
+
+    .stores-map-view {
+      &::before {
+        font-size: 1.8rem;
+        margin-#{$right}: 0.5rem;
       }
     }
 
@@ -50,6 +100,7 @@
 
         &::after {
           color: $checkout_cc_list_hours_label_icon;
+          top: 0.75rem !important;
         }
       }
 
@@ -82,5 +133,25 @@
     .cc-help-text {
       font-weight: normal;
     }
+  }
+}
+
+.alias--cart-checkout-delivery {
+  #edit-member-delivery-collect,
+  #edit-guest-delivery-collect {
+    #store-finder-wrapper {
+      .cc-near-me,
+      .current-location {
+        &::before {
+          background: url(../imgs/icons/current.svg) no-repeat;
+        }
+      }
+    }
+  }
+}
+
+.path--cart {
+  .pac-container {
+    min-width: auto;
   }
 }
