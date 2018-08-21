@@ -19,6 +19,24 @@
       color: $content_link_color;
     }
   }
+
+  .crossell-title {
+    &.subtitle {
+      padding-#{$left}: 0;
+      font-size: 1.125rem;
+      font-weight: 300;
+
+      @include breakpoint($tablet) {
+        padding: 0 12%;
+        margin-bottom: 1.625rem;
+      }
+
+      @include breakpoint($desktop) {
+        padding: 0 5%;
+        margin-bottom: 1.625rem;
+      }
+    }
+  }
 }
 
 .nodetype--advanced_page {
