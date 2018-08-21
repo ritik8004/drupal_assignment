@@ -15,9 +15,16 @@ function alshaya_ae_update_8003() {
   // Install Customer rights logo block on whitelabel theme.
   alshaya_config_install_configs(['block.block.customerrightslogo'], 'alshaya_ae', 'optional');
 
+  // If module not already installed, then install it and
   // Move customer rights logo block from whitelabel to current brand.
-  $current_theme = _alshaya_get_theme_by_theme_type('transac');
-  alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  if (!\Drupal::moduleHandler()->moduleExists('alshaya_block')) {
+    \Drupal::service('module_installer')->install(['alshaya_block']);
+  }
+
+  if (function_exists('alshaya_block_move_blocks_theme_to_theme')) {
+    $current_theme = _alshaya_get_theme_by_theme_type('transac');
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
 }
 
 /**
