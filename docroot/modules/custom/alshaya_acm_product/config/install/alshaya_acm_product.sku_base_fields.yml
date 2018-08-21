@@ -9,7 +9,7 @@ fields:
 
   description:
     label: 'Description'
-    description: 'Descripton about the product.'
+    description: 'Description about the product.'
     type: 'text_long'
 
   is_buyable:

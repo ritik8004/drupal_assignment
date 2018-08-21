@@ -283,3 +283,16 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .mobile-only {
+    &.free-gift-item {
+      margin-bottom: 0.5313rem !important;
+
+      .special--price,
+      .price--discount {
+        display: none;
+      }
+    }
+  }
+}

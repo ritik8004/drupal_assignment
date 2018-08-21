@@ -169,6 +169,7 @@
 
       @include breakpoint($only-mobile) {
         border-bottom: 1px solid $pdp_product_itemcode_border;
+        padding-bottom: 0.75rem;
       }
     }
 
@@ -573,7 +574,10 @@
     line-height: 1.83;
     color: $pdp_sidebar_link;
     cursor: pointer;
-    display: none;
+
+    @include breakpoint($only-mobile) {
+      display: none !important;
+    }
 
     @include breakpoint($tablet) {
       display: inline-block;
@@ -589,7 +593,7 @@
     cursor: pointer;
 
     @include breakpoint($tablet) {
-      display: none;
+      display: none !important;
     }
   }
 }
@@ -1450,6 +1454,12 @@
 
       .form-item {
         padding: 0.5rem 0;
+
+        > label {
+          &.error {
+            display: none !important;
+          }
+        }
       }
 
       .ladda-button .ladda-spinner {
@@ -1840,6 +1850,14 @@ article.product-out-of-stock {
     @include breakpoint($only-mobile) {
       .field--name-field-skus {
         height: 0;
+        min-height: auto;
+        border: none;
+
+        .field {
+          &::after {
+            display: block;
+          }
+        }
       }
     }
   }
@@ -1939,6 +1957,28 @@ html[lang=ar] {
   .select2-container--open {
     .select2-dropdown {
       z-index: 1001;
+    }
+  }
+}
+
+.basic-details-wrapper {
+  .field--name-field-skus {
+    #configurable_ajax {
+      .form-item {
+        label {
+          &.error {
+            @include breakpoint($upto-desktop) {
+              display: inline-block;
+              position: static;
+            }
+
+            font-family: $alshaya-thin;
+            font-size: 0.6875rem;
+            color: $pdp_form_selection_error_text;
+            padding-#{$left}: 0.375rem;
+          }
+        }
+      }
     }
   }
 }

@@ -1,0 +1,64 @@
+@javascript
+Feature: Test generic features on the site
+  like Header, footer and subscription
+
+  Scenario: As a Guest user
+    I should be able to view the header and the footer
+    Given I am on homepage
+    And I wait for the page to load
+    #When I close the popup
+    And I wait for the page to load
+    When I follow "English"
+    And I wait for the page to load
+    Then I should be able to see the header
+    And I should be able to see the footer
+
+  Scenario: As a Guest user
+  I should be able to subscribe with Victoria Secret
+    Given I am on homepage
+    And I wait for the page to load
+    #When I close the popup
+    And I wait for the page to load
+    When I follow "English"
+    And I wait for the page to load
+    When I enter a valid Email ID in field "edit-email"
+    And I press "sign up"
+    And I wait for AJAX to finish
+    Then I should see "Thank you for your subscription."
+
+  Scenario: As a Guest user
+  I should be able to subscribe with Mothercare
+    Given I am on homepage
+    And I wait for the page to load
+    #When I close the popup
+    And I wait for the page to load
+    When I enter a valid Email ID in field "edit-email"
+    And I press "سجل الآن"
+    And I wait for AJAX to finish
+    Then I should see "شكراً لاشتراككم في نشرتنا الاخبارية"
+
+  Scenario: As a Guest user
+    I should be displayed a warning message
+    If I try to subscribe with subscribed Email ID
+    Given I am on homepage
+    And I wait for the page to load
+    #When I close the popup
+    And I wait for the page to load
+    When I follow "English"
+    And I wait for the page to load
+    When I fill in "edit-email" with "trupti@axelerant.com"
+    And I press "sign up"
+    And I wait for AJAX to finish
+    Then I should see "This email address is already subscribed."
+
+  Scenario: As a Guest user
+  I should be displayed a warning message
+  If I try to subscribe with subscribed Email ID
+    Given I am on homepage
+    And I wait for the page to load
+    #When I close the popup
+    And I wait for the page to load
+    When I fill in "edit-email" with "trupti@axelerant.com"
+    And I press "سجل الآن"
+    And I wait for AJAX to finish
+    Then I should see "هذا العنوان البريد الإلكتروني مستعمل مسبقاً"

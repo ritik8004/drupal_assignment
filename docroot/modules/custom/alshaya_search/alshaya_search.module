@@ -404,6 +404,12 @@ function alshaya_search_module_implements_alter(&$implementations, $hook) {
 function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
   $facet = $context['facet'];
 
+  // If not using hierarchy, then no need to process. Using this check because
+  // for the few facets, it always process.
+  if (!$facet->getUseHierarchy()) {
+    return;
+  }
+
   // If we processing the URL for an L1 item, remove all category
   // filters. Clicking on an L1 item when the active filter is something
   // else, should return back to default state.
@@ -565,10 +571,12 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
+          // We use add even when resetting. Remove facet if available.
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
       }
       break;
 

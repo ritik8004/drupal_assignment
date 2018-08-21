@@ -19,6 +19,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
 use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Solarium\Core\Query\QueryInterface as SolariumQueryInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -654,4 +655,51 @@ function _alshaya_super_category_get_super_category_for_term(TermInterface $term
   }
 
   return NULL;
+}
+
+/**
+ * Implements hook_alshaya_config_save_alter().
+ */
+function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_name) {
+  // Token to replace in title.
+  $token = '[supercategory:meta_title]';
+  $meta_configs = [
+    'metatag.metatag_defaults.node__advanced_page'                 => '[node:title] | ' . $token,
+    'metatag.metatag_defaults.node__acq_product'                   => '[node:title] | ' . $token,
+    'metatag.metatag_defaults.node__acq_promotion'                 => '[node:field_acq_promotion_label] | ' . $token,
+    'metatag.metatag_defaults.taxonomy_term__acq_product_category' => '[term:name] | ' . $token,
+  ];
+
+  // Only for the meta tag configs.
+  if (array_key_exists($config_name, $meta_configs)) {
+    // Super category status.
+    $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
+    // If super category feature is enabled.
+    if ($super_category_feature_enabled) {
+      // Just replace the title.
+      $data['tags']['title'] = $meta_configs[$config_name];
+    }
+  }
+}
+
+/**
+ * Implements hook_views_query_alter().
+ */
+function alshaya_super_category_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+  // Super category status.
+  $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
+  // If super category feature is enabled.
+  if ($super_category_feature_enabled
+    && $view->id() == 'product_category_level_2_3'
+    && $view->current_display == 'block_2') {
+    foreach ($query->where as &$condition_group) {
+      foreach ($condition_group['conditions'] as &$condition) {
+        // If depth level condition, then update it as with super category
+        // feature, we have this applicable at level 3 only.
+        if ($condition['field'] == 'taxonomy_term_field_data.depth_level') {
+          $condition['value'] += 1;
+        }
+      }
+    }
+  }
 }

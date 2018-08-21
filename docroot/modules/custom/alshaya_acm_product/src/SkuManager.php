@@ -1390,10 +1390,29 @@ class SkuManager {
       }
     }
 
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+
     // Sort the values in attribute_sku so we can use it later.
     foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
       if ($this->cartFormHelper->isAttributeSortable($code)) {
         $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
+
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
       }
     }
 
@@ -1465,6 +1484,10 @@ class SkuManager {
 
       $combination_key .= $code . '|' . $value . '||';
       foreach ($configurable_codes as $configurable_code) {
+        if (!isset($configurables[$configurable_code]) || empty($configurables[$configurable_code]['#options'])) {
+          continue;
+        }
+
         foreach ($configurables[$configurable_code]['#options'] as $key => $value) {
           $check_key1 = $combination_key . $configurable_code . '|' . $key . '||';
           $check_key2 = $configurable_code . '|' . $key . '||' . $combination_key;
@@ -1594,7 +1617,7 @@ class SkuManager {
     $sku_id = (int) $this->currentRequest->query->get('selected');
 
     // Give preference to sku id passed via query params.
-    if ($sku_id) {
+    if ($sku_id && $sku_id != $sku->id()) {
       $first_child = SKU::load($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
@@ -1680,6 +1703,64 @@ class SkuManager {
     $this->setProductCachedData($sku, 'swatches', $swatches);
 
     return $swatches;
+  }
+
+  /**
+   * Get first valid configurable child.
+   *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Valid child SKU or parent itself.
+   */
+  public function getFirstValidConfigurableChild(SKU $sku) {
+    $cache_key = 'first_valid_child';
+
+    $child_sku = $this->getProductCachedData($sku, $cache_key);
+    if ($child_sku) {
+      return SKU::loadFromSku($child_sku, $sku->language()->getId());
+    }
+
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    foreach ($combinations['attribute_sku'] ?? [] as $children) {
+      foreach ($children as $child_skus) {
+        foreach ($child_skus as $child_sku) {
+          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+          $this->setProductCachedData($sku, $cache_key, $child->getSku());
+          return $child;
+        }
+      }
+    }
+
+    return $sku;
+  }
+
+  /**
+   * Get first valid configurable child.
+   *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Valid child SKU or parent itself.
+   */
+  public function getFirstAvailableConfigurableChild(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return $sku;
+    }
+
+    $children = Configurable::getChildren($sku);
+    return reset($children);
   }
 
 }
