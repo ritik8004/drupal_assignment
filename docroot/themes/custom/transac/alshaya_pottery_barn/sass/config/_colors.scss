@@ -16,6 +16,7 @@ $PB_alshaya_priv: #ac8e54;
 $PB_info_blue: #e8eff5;
 $white: #ddd;
 $white-two: #fff;
+$white-smoke: #f3f3f3;
 $scarlet: #d0011b;
 $tomato: #e6591a;
 $medium-green: #3ab549;
@@ -34,6 +35,7 @@ $_gray_nine: #555;
 $_gray_ten: #777;
 $_gray_eleven: #dadada;
 $_gray_twelve: #f9f9f9;
+$_gray_thirteen: #acacac;
 
 // Overrides for variables.
 // Global elements.
@@ -420,6 +422,16 @@ $checkout_payment_method_title: $PB_black_one;
 $checkout_payment_method_icon_bg: $_gray_twelve;
 $checkout_payment_method_desc: $PB_grey_one;
 $checkout_payment_option_border: $_gray_eleven;
+
+//Checkout Confirmation
+$checkout_order_print_btn_border: $PB_black_one;
+$checkout_order_print_btn_text: $PB_black_one;
+$checkout_confirm_continue_shopping_border: $PB_black_one;
+$checkout_confirmation_detail_bg: $white-smoke;
+$checkout_confirmation_detail_primary_text: $_gray_nine;
+$checkout_confirmation_detail_secondary_text: $PB_grey_one;
+$checkout_confirmation_detail_dark_text: $_black_two;
+$checkout_confirmation_detail_light_text: $_gray_thirteen;
 
 // Section divider
 $section_divider_border: $_black_two;
