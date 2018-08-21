@@ -1,13 +1,13 @@
 diff --git a/.htaccess b/.htaccess
-index 83cb71a04..ffcc2bbfd 100644
+index 1dad3c1..dc494a7 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -138,6 +138,8 @@ AddEncoding gzip svgz
-   RewriteCond %{REQUEST_URI} !=/favicon.ico
-   RewriteRule ^ index.php [L]
-
+@@ -184,6 +184,8 @@ AddEncoding gzip svgz
+   # Copy and adapt this rule to directly execute PHP files in contributed or
+   # custom modules or to run another PHP application in the same directory.
+   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
 +  # Allow access to simplesaml paths
 +  RewriteCond %{REQUEST_URI} !^/simplesaml
-   # For security reasons, deny access to other PHP files on public sites.
-   # Note: The following URI conditions are not anchored at the start (^),
-   # because Drupal may be located in a subdirectory. To further improve
+   # ACSF requirement: allow access to apc_rebuild.php.
+   RewriteCond %{REQUEST_URI} !/sites/g/apc_rebuild.php$
+   # Deny access to any other PHP files that do not match the rules above.

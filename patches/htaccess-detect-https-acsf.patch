@@ -1,5 +1,5 @@
 diff --git a/.htaccess b/.htaccess
-index 83cb71a04..4885ce5c6 100644
+index c2b6d95..1dad3c1 100644
 --- a/.htaccess
 +++ b/.htaccess
 @@ -75,6 +75,8 @@ AddEncoding gzip svgz
@@ -9,5 +9,5 @@ index 83cb71a04..4885ce5c6 100644
 +  RewriteCond %{HTTP:X-Forwarded-Proto} https
 +  RewriteRule ^ - [E=protossl:s]
 
-   # Make sure Authorization HTTP header is available to PHP
-   # even when running as CGI or FastCGI.
+   # Remove trailing slash from all URLs (except home which is practically not possible).
+   # We also don't remove it from /forwarded/* URLs as these are redirects from

@@ -380,14 +380,6 @@ function alshaya_master_block_access(Block $block, $operation, AccountInterface 
 }
 
 /**
- * Implements hook_r4032login_redirect_option_alter().
- */
-function alshaya_master_r4032login_redirect_option_alter(array &$options) {
-  // Unset destination query parameter for both logged-in and anon user.
-  unset($options['query']);
-}
-
-/**
  * Function to sort an array based on a specific key.
  *
  * @param array $array
