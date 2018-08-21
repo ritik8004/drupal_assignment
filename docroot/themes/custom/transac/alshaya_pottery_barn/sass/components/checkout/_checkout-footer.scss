@@ -27,3 +27,21 @@
     }
   }
 }
+
+@media print {
+  .alias--confirmation-print {
+    .block-customer-service-block {
+      text-align: $left;
+    }
+  }
+}
+
+body {
+  &.alias--confirmation-print {
+    html[lang=ar] & {
+      @include breakpoint($only-mobile) {
+        margin-top: 0;
+      }
+    }
+  }
+}
