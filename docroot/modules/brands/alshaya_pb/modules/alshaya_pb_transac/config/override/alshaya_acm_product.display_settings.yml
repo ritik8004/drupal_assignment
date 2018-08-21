@@ -6,3 +6,6 @@ swatches:
   plp:
     - color_lhn
 hide_not_required_option: true
+plp_slider:
+  item: 3
+  margin: 3
