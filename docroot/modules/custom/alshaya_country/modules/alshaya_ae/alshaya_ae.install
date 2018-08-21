@@ -21,10 +21,8 @@ function alshaya_ae_update_8003() {
     \Drupal::service('module_installer')->install(['alshaya_block']);
   }
 
-  if (function_exists('alshaya_block_move_blocks_theme_to_theme')) {
-    $current_theme = _alshaya_get_theme_by_theme_type('transac');
-    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
-  }
+  $current_theme = _alshaya_get_theme_by_theme_type('transac');
+  alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
 }
 
 /**
