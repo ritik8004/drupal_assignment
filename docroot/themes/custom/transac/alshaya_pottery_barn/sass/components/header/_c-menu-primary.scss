@@ -60,6 +60,12 @@
       top: 1.25rem;
     }
   }
+
+  li.search-active {
+    @include breakpoint($only-mobile) {
+      background: none;
+    }
+  }
 }
 
 .mobile--close {
