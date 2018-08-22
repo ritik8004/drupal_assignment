@@ -21,10 +21,10 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
   $env_keys = alshaya_get_env_keys($site, $env);
 
   include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
-  $magentos = alshaya_get_magento_host_data();
+  global $magentos;
 
   include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
-  $conductors = alshaya_get_conductor_host_data();
+  global $conductors;
 
   // This is the format to be merge with $settings.
   $settings = [];
@@ -33,10 +33,7 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
     $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
-    $settings['alshaya_api.settings']['consumer_key'] = $magentos[$env_keys['magento']]['consumer_key'];
-    $settings['alshaya_api.settings']['consumer_secret'] = $magentos[$env_keys['magento']]['consumer_secret'];
-    $settings['alshaya_api.settings']['access_token'] = $magentos[$env_keys['magento']]['access_token'];
-    $settings['alshaya_api.settings']['access_token_secret'] = $magentos[$env_keys['magento']]['access_token_secret'];
+    $settings['magento_secrets'] = $magentos[$env_keys['magento']]['magento_secrets'];
 
     $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
@@ -60,21 +57,16 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'mckw_uat',
       ],
       '01pprod' => [
-        'magento' => 'mc_dev',
+        'magento' => 'mc_uat',
         'conductor' => 'mckw_pprod',
       ],
       '01live' => [
         'magento' => 'mc_prod',
         'conductor' => 'mckw_prod',
       ],
-      '01test' => [
+      'default' => [
         'magento' => 'mc_qa',
         'conductor' => 'mckw_test',
-      ],
-      // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
-      'default' => [
-        'magento' => 'mc_dev',
-        'conductor' => 'mc_v2',
       ],
     ],
     // Mothercare SA.
@@ -91,14 +83,9 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mcsa_prod',
       ],
-      '01test' => [
+      'default' => [
         'magento' => 'mc_qa',
         'conductor' => 'mcsa_test',
-      ],
-      // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
-      'default' => [
-        'magento' => 'mc_dev',
-        'conductor' => 'mc_v2',
       ],
     ],
     // Mothercare UAE.
@@ -111,14 +98,9 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_prod',
         'conductor' => 'mcae_prod',
       ],
-      '01test' => [
+      'default' => [
         'magento' => 'mc_qa',
         'conductor' => 'mcae_test',
-      ],
-      // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
-      'default' => [
-        'magento' => 'mc_dev',
-        'conductor' => 'mc_v2',
       ],
     ],
     // H&M Kuwait.
@@ -135,7 +117,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_prod',
         'conductor' => 'hmkw_prod'
       ],
-      // Local, travis, 01dev, 01dev2, 01dev3.
       'default' => [
         'magento' => 'hm_qa',
         'conductor' => 'hmkw_test',
