@@ -37,7 +37,7 @@ class SkuManager {
 
   use StringTranslationTrait;
 
-  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'NOT REQUIRED';
+  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
 
   /**
    * The database service.
