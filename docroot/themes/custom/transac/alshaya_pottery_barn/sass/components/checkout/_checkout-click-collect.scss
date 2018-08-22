@@ -55,8 +55,6 @@
       border: none !important;
       text-transform: none;
       font-weight: normal !important;
-      display: flex !important;
-      justify-content: center;
 
       &.active {
         border: 1px solid $checkout_cc_list_map_link_active !important;
@@ -145,6 +143,12 @@
         &::before {
           background: url(../imgs/icons/current.svg) no-repeat;
         }
+      }
+
+      .stores-list-view,
+      .stores-map-view {
+        display: flex;
+        justify-content: center;
       }
     }
   }

@@ -13,7 +13,7 @@ use Drupal\node\Entity\Node;
  * Implements hook_update_N().
  *
  * Update display_settings config to have value for
- * configurable_use_parent_images.
+ * configurable_use_parent_images and hide_not_required_option.
  */
 function alshaya_acm_product_update_8027() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */

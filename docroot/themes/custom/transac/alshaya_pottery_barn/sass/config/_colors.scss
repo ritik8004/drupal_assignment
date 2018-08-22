@@ -34,10 +34,13 @@ $_gray_nine: #555;
 $_gray_ten: #777;
 $_gray_eleven: #dadada;
 $_gray_twelve: #f9f9f9;
+$_gray_thirteen: #efefef;
+$_gray_fourteen: #f3f3f3;
 
 // Overrides for variables.
 // Global elements.
 $content_link_color: $PB_confirmation_blue;
+$primary_link: $PB_confirmation_blue;
 $primary_input_focus_border: $PB_confirmation_blue;
 $secondary_link: $PB_deep_red;
 
@@ -111,7 +114,7 @@ $total_td_2nd_child_bg: $_gray_seven;
 $tooltip_bg: $_gray_seven;
 $tooltip_text: $PB_black_one;
 $tooltip_border: $PB_black_one;
-$tooltip_border_2: $PB_black_one;
+$tooltip_border_2: $white-two;
 $tooltip_icon: $PB_confirmation_blue;
 $tooltip_link: $PB_confirmation_blue;
 
@@ -288,6 +291,8 @@ $plp_facet_clear_text: $white-two;
 $plp_facet_label_border_mobile: $PB_grey_four;
 $plp_facet_label_bg_mobile: $PB_grey_four;
 $plp_facet_label: $PB_grey_one;
+$plp_facet_filter_count: $_black_two;
+$plp_facet_filter_count_background: $PB_confirmation_blue;
 
 // Sharethis
 $sharethis_icon: $white;
@@ -348,6 +353,7 @@ $checkout_login_guest_email_text: $PB_black_one;
 $checkout_header_border-bottom: $PB_black_one;
 $checkout_header_border-top: $white;
 $checkout_delivery_shipping_row_border: $_gray_eleven;
+$checkout_login_btn_bg: $_black_two;
 
 // Counters.
 $primary_counter_bg: $PB_deep_red;
@@ -442,3 +448,18 @@ $promo_panel_label_bg: rgba(0, 0, 0, 0.9);
 $promo_panel_label_bg_active: $PB_black_one;
 // Back to top.
 $btt_text: $PB_deep_red;
+
+// Order Print
+$order_print_dark_txt: $PB_black_one;
+$order_print_delivery_details_row: $white-two;
+$order_print_delivery_details_row_border: $PB_black_one;
+$order_print_order_details_row_label: $PB_black_one;
+$order_print_order_details_row_dark_label: $_gray_nine;
+$order_print_order_details_row_bg: $white-two;
+$order_print_order_details_row_bg_blend: $_gray_thirteen;
+$order_print_product_count_row_bg: $_gray_fourteen;
+$order_print_order_details_price_wrapper: $PB_black_one;
+$order_print_order_details_row_light: $_gray_two;
+$order_print_order_details_total_label: $_gray_ten;
+$order_print_order_details_item_row_details: $PB_grey_two;
+$order_print_delivery_details_price_label: $_black_two;
