@@ -19,7 +19,17 @@
       color: $content_link_color;
     }
   }
+}
 
+.nodetype--advanced_page {
+  .c-department {
+    @include breakpoint($only-mobile) {
+      margin-top: 0.75rem;
+    }
+  }
+}
+
+.paragraph--type--product-carousel-category {
   .crossell-title {
     &.subtitle {
       padding-#{$left}: 0;
@@ -35,14 +45,6 @@
         padding: 0 5%;
         margin-bottom: 1.625rem;
       }
-    }
-  }
-}
-
-.nodetype--advanced_page {
-  .c-department {
-    @include breakpoint($only-mobile) {
-      margin-top: 0.75rem;
     }
   }
 }
