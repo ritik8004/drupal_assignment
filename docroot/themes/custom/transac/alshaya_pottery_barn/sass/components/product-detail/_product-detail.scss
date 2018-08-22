@@ -112,6 +112,8 @@
 
       .form-item.form-type-select {
         &.form-item-quantity {
+          width: 4.375rem;
+
           @include breakpoint($only-mobile) {
             top: 0;
           }
@@ -129,10 +131,43 @@
           }
         }
 
+        @include breakpoint($only-tablet) {
+          margin-top: 1.45rem;
+          margin-bottom: 1.5rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          @include select-wrapper(100%);
+
+          padding: 0;
+          min-height: 2.188rem;
+          margin-top: 1.45rem;
+          margin-bottom: 1.5rem;
+          position: relative;
+
+          &::before {
+            content: none;
+          }
+
+          &:first-child {
+            margin-bottom: 0.75rem;
+          }
+        }
+
         &.configurable-swatch {
           @include breakpoint($only-mobile) {
             margin: 0;
             padding: 0 0 1rem;
+            margin-bottom: 1.5rem;
+          }
+        }
+
+        .form-select {
+          @include breakpoint($upto-desktop) {
+            @include select-style(100%);
+
+            clip: auto;
+            position: static !important;
           }
         }
 
