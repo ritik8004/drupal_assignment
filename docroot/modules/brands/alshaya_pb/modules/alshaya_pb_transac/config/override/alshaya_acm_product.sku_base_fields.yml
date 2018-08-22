@@ -4,32 +4,38 @@ fields:
     cardinality: 1
     index: 0
     facet: 0
+    swatch: 0
   size:
     configurable: 1
     cardinality: 1
     index: 0
     facet: 0
+    swatch: 0
   color_lhn:
     label: 'Color'
     type: 'string'
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 1
   finish_lhn:
     label: 'Finish'
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 0
   furniturefinish_lhn:
     label: 'Furniture Finish'
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 0
   material_lhn:
     label: 'Material'
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 0
   material:
     label: 'Material'
     configurable: 1
@@ -38,6 +44,7 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 0
   product_type:
     label: 'Product Type'
     configurable: 1
@@ -46,11 +53,13 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 0
   style_lhn:
     label: 'Style'
     cardinality: -1
     index: 1
     facet: 1
+    swatch: 0
   style:
     label: 'Style'
     configurable: 1
