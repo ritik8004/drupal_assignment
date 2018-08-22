@@ -428,7 +428,15 @@
   .form-item input:not(:focus):valid ~ label:not(.error),
   .form-item input:active ~ label:not(.error),
   .form-item input:not(:active):valid ~ label:not(.error),
-  .form-item input.error ~ label:not(.error),
+  .form-item input.error ~ label:not(.error) {
+    top: -1.25em;
+    bottom: 0;
+    #{$left}: 0;
+    opacity: 1;
+    font-size: 0.75rem;
+  }
+
+  // Separating -webkit-autofill styles to prevent Firefox from applying styles on labels.
   .form-item input:-webkit-autofill ~ label:not(.error),
   .form-item input:-webkit-autofill:hover ~ label:not(.error),
   .form-item input:-webkit-autofill:focus ~ label:not(.error) {
@@ -436,7 +444,7 @@
     bottom: 0;
     #{$left}: 0;
     opacity: 1;
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .form-type-checkbox .option {

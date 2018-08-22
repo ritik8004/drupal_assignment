@@ -20,7 +20,7 @@ use Drupal\acq_cart\CartInterface;
  * @param array $form_data
  *   Form data available in form.
  * @param array $errors
- *  Array to allow modules to respond back with any form errors.
+ *   Array to allow modules to respond back with any form errors.
  */
 function hook_acq_cybersource_before_get_token_cart_alter(CartInterface $cart, array $form_data, array &$errors) {
 

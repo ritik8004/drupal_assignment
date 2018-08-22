@@ -1,4 +1,6 @@
 .c-breadcrumb {
+  background: none;
+
   ol {
     padding: 0.675rem 1.5rem;
   }
@@ -8,6 +10,10 @@
 
     &:last-of-type {
       font-family: $vs-bold;
+    }
+
+    &::after {
+      content: '/';
     }
   }
 }

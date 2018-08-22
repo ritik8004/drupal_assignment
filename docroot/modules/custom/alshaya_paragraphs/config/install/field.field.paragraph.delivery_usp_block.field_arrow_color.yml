@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_arrow_color
+    - paragraphs.paragraphs_type.delivery_usp_block
+  module:
+    - options
+id: paragraph.delivery_usp_block.field_arrow_color
+field_name: field_arrow_color
+entity_type: paragraph
+bundle: delivery_usp_block
+label: 'Arrow Color'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: black
+default_value_callback: ''
+settings: {  }
+field_type: list_string

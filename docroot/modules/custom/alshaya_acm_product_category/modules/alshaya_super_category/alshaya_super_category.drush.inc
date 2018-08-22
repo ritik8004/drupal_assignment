@@ -79,18 +79,12 @@ function drush_alshaya_super_category_switch() {
     $path_alter,
   ]);
 
+  // Update the meta title.
   if ($status) {
-    // If super category feature is enabled, we change the title meta tag
-    // token to contain [supercategory:meta_title] token.
-    $token = '[supercategory:meta_title]';
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')
-      ->set('tags.title', '[node:title] | ' . $token)->save();
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')
-      ->set('tags.title', '[node:title] | ' . $token)->save();
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')
-      ->set('tags.title', '[node:title] | ' . $token)->save();
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')
-      ->set('tags.title', '[term:name] | ' . $token)->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')->save();
+    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')->save();
   }
   else {
     $meta_configs = [

@@ -99,7 +99,7 @@ class AcqPromotionsManager {
    *   Queue factory service.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config factory service.
-   * @param Connection $connection
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
    *   Database connection service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
@@ -315,6 +315,9 @@ class AcqPromotionsManager {
     // Set the Promotion type.
     $promotion_node->get('field_acq_promotion_type')->setValue($promotion['promotion_type']);
 
+    // Set promotion coupon code.
+    $promotion_node->get('field_coupon_code')->setValue($promotion['coupon_code']);
+
     // Set the Promotion label.
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);
@@ -384,11 +387,15 @@ class AcqPromotionsManager {
     $promotion_attach_queue->deleteQueue();
 
     foreach ($promotions as $promotion) {
+      // Alter hook to allow other moduled to pre-process promotion data.
+      \Drupal::moduleHandler()->alter('acq_promotion_data', $promotion);
+
       $fetched_promotion_skus = [];
       $fetched_promotion_sku_attach_data = [];
 
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
+
       foreach ($products as $product) {
         if (!in_array($product['product_sku'], array_keys($fetched_promotion_skus))) {
           $fetched_promotion_skus[$product['product_sku']] = $product['product_sku'];

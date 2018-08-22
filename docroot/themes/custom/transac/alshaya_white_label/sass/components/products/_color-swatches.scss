@@ -1,0 +1,82 @@
+.sku-base-form {
+  .form-wrapper {
+    .configurable-swatch {
+      .form-select,
+      &::after,
+      label {
+        display: none;
+      }
+
+      .select2Option {
+        display: block;
+
+        .select-buttons {
+          display: flex;
+          flex-flow: row wrap;
+          margin-top: 0;
+        }
+      }
+
+      .li-swatch-image {
+        display: flex;
+        align-items: center;
+
+        img {
+          height: 2.375rem;
+          width: 2.375rem;
+          padding: 1px;
+        }
+
+        a,
+        span {
+          border: none;
+          position: relative;
+          padding: 0;
+
+          &.picked,
+          &:hover {
+            background: transparent;
+
+            &::after {
+              content: '';
+              position: absolute;
+              display: inline-block;
+              width: 2.625rem;
+              height: 2.625rem;
+              top: -0.125rem;
+              #{$left}: -0.125rem;
+              z-index: 1;
+              border: 1px solid $pdp_white_color_attribute_border;
+              pointer-events: none;
+            }
+          }
+
+          &:hover {
+            &::after {
+              border: 1px solid $pdp_white_color_attribute_hover_border;
+            }
+          }
+
+          &.white {
+            -webkit-appearance: none;
+            box-shadow: 0 0 0 1px $pdp_white_color_attribute;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-pdp {
+  .field--name-field-skus {
+    .form-wrapper {
+      .configurable-swatch {
+        &.form-type-select {
+          label {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}

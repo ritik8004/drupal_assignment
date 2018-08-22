@@ -3,8 +3,8 @@
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
 use Drupal\acq_sku\CategoryManagerInterface;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -97,7 +97,7 @@ class CategorySyncResource extends ResourceBase {
    * @param array $categories
    *   Category data for update.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response.
    */
   public function post(array $categories = []) {
@@ -109,7 +109,7 @@ class CategorySyncResource extends ResourceBase {
 
     $response['success'] = (bool) (($response['created'] > 0) || ($response['updated'] > 0));
 
-    return (new ResourceResponse($response));
+    return (new ModifiedResourceResponse($response));
   }
 
 }

@@ -33,6 +33,10 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
     $config->set('magento_lang_prefix', $form_state->getValue('magento_lang_prefix'));
     $config->set('magento_api_base', $form_state->getValue('magento_api_base'));
     $config->set('verify_ssl', $form_state->getValue('verify_ssl'));
+    $config->set('consumer_key', $form_state->getValue('consumer_key'));
+    $config->set('consumer_secret', $form_state->getValue('consumer_secret'));
+    $config->set('access_token', $form_state->getValue('access_token'));
+    $config->set('access_token_secret', $form_state->getValue('access_token_secret'));
     $config->set('token_cache_time', $form_state->getValue('token_cache_time'));
     $config->set('username', $form_state->getValue('username'));
 
@@ -94,12 +98,42 @@ class AlshayaApiSettingsForm extends ConfigFormBase {
     $form['username'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Username'),
+      '#required' => TRUE,
       '#default_value' => $config->get('username'),
     ];
 
     $form['password'] = [
       '#type' => 'password',
       '#title' => $this->t('Password'),
+      '#default_value' => $config->get('password'),
+    ];
+
+    $form['consumer_key'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Consumer Key'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('consumer_key'),
+    ];
+
+    $form['consumer_secret'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Consumer Secret'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('consumer_secret'),
+    ];
+
+    $form['access_token'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Access Token'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('access_token'),
+    ];
+
+    $form['access_token_secret'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Access Token Secret'),
+      '#required' => TRUE,
+      '#default_value' => $config->get('access_token_secret'),
     ];
 
     return $form;

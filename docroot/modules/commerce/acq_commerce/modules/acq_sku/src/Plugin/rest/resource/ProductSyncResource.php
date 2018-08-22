@@ -10,8 +10,8 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -160,7 +160,7 @@ class ProductSyncResource extends ResourceBase {
    * @param array $products
    *   Product / SKU Data.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
   public function post(array $products = []) {
@@ -303,6 +303,10 @@ class ProductSyncResource extends ResourceBase {
         $sku->special_price->value = $product['special_price'];
         $sku->final_price->value = $product['final_price'];
         $sku->attributes = $this->formatProductAttributes($product['attributes']);
+        $sku->get('attr_description')->setValue([
+          'value' => (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '',
+          'format' => 'rich_text',
+        ]);
 
         // Set default value of stock to 0.
         $stock = 0;
@@ -427,7 +431,7 @@ class ProductSyncResource extends ResourceBase {
       'deleted' => $deleted,
     ];
 
-    return (new ResourceResponse($response));
+    return (new ModifiedResourceResponse($response));
   }
 
   /**
@@ -606,13 +610,16 @@ class ProductSyncResource extends ResourceBase {
           break;
 
         case 'text_long':
-          $value = isset($field['serialize']) ? serialize($value) : $value;
+          $value = !empty($field['serialize']) ? serialize($value) : $value;
           $sku->{$field_key}->setValue($value);
           break;
       }
     }
   }
 
+  /**
+   *
+   */
   protected function getProcessedMedia($product, $current_value) {
     $media = [];
 
@@ -627,7 +634,7 @@ class ProductSyncResource extends ResourceBase {
         $image = $product['attributes']['image'];
 
         foreach ($media as &$data) {
-          if (substr_compare($data['file'], $image, -strlen($image) ) === 0) {
+          if (substr_compare($data['file'], $image, -strlen($image)) === 0) {
             $data['position'] = -1;
             break;
           }

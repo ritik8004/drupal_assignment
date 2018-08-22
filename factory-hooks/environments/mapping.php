@@ -33,6 +33,10 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
     $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
+    $settings['alshaya_api.settings']['consumer_key'] = $magentos[$env_keys['magento']]['consumer_key'];
+    $settings['alshaya_api.settings']['consumer_secret'] = $magentos[$env_keys['magento']]['consumer_secret'];
+    $settings['alshaya_api.settings']['access_token'] = $magentos[$env_keys['magento']]['access_token'];
+    $settings['alshaya_api.settings']['access_token_secret'] = $magentos[$env_keys['magento']]['access_token_secret'];
 
     $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
@@ -53,19 +57,19 @@ function alshaya_get_env_keys($site, $env) {
     'mckw' => [
       '01uat' => [
         'magento' => 'mc_uat',
-        'conductor' => 'mc_uat',
+        'conductor' => 'mckw_uat',
       ],
       '01pprod' => [
         'magento' => 'mc_dev',
-        'conductor' => 'mc_pprod',
+        'conductor' => 'mckw_pprod',
       ],
       '01live' => [
         'magento' => 'mc_prod',
-        'conductor' => 'mc_prod',
+        'conductor' => 'mckw_prod',
       ],
       '01test' => [
-        'magento' => 'mc_test',
-        'conductor' => 'mc_test',
+        'magento' => 'mc_qa',
+        'conductor' => 'mckw_test',
       ],
       // Local, travis, 01dev, 01dev2, 01dev3, 01qa2.
       'default' => [
@@ -121,20 +125,20 @@ function alshaya_get_env_keys($site, $env) {
     'hmkw' => [
       '01uat' => [
         'magento' => 'hm_uat',
-        'conductor' => 'hm_uat'
+        'conductor' => 'hmkw_uat'
       ],
       '01pprod' => [
         'magento' => 'hm_uat',
-        'conductor' => 'hm_pprod'
+        'conductor' => 'hmkw_pprod'
       ],
       '01live' => [
         'magento' => 'hm_prod',
-        'conductor' => 'hm_prod'
+        'conductor' => 'hmkw_prod'
       ],
       // Local, travis, 01dev, 01dev2, 01dev3.
       'default' => [
         'magento' => 'hm_qa',
-        'conductor' => 'hm_test',
+        'conductor' => 'hmkw_test',
       ],
     ],
     // H&M SA.
@@ -212,21 +216,54 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'bbwae_prod'
       ],
     ],
+    // Pottery Barn KW.
+    'pbkw' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_dev2',
+      ],
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_test',
+      ],
+      '01uat' => [
+        'magento' => 'pb_uat',
+        'conductor' => 'pbkw_uat',
+      ],
+    ],
+    // Pottery Barn SA.
+    'pbsa' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_dev2',
+      ],
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_test',
+      ],
+      '01uat' => [
+        'magento' => 'pb_uat',
+        'conductor' => 'pbsa_uat',
+      ],
+    ],
     // Pottery Barn AE.
     'pbae' => [
-      // PBAE is connected to MC UAT for now.
-      'default' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcae_uat',
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_dev2',
       ],
-      //'default' => [
-      //  'magento' => 'pb_qa',
-      //  'conductor' => 'pbae_test',
-      //],
+      'default' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_test',
+      ],
+      '01uat' => [
+        'magento' => 'pb_uat',
+        'conductor' => 'pbae_uat',
+      ],
     ],
     // Victoria Secret KW.
     'vskw' => [
-      '01prod' => [
+      '01live' => [
         'magento' => 'vs_prod',
         'conductor' => 'vskw_prod',
       ],
@@ -236,12 +273,12 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vskw_test',
+        'conductor' => 'vskw_test_v1',
       ],
     ],
     // Victoria Secret SA.
     'vssa' => [
-      '01prod' => [
+      '01live' => [
         'magento' => 'vs_prod',
         'conductor' => 'vssa_prod',
       ],
@@ -251,12 +288,12 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vssa_test',
+        'conductor' => 'vssa_test_v1',
       ],
     ],
     // Victoria Secret AE.
     'vsae' => [
-      '01prod' => [
+      '01live' => [
         'magento' => 'vs_prod',
         'conductor' => 'vsae_prod',
       ],
@@ -266,7 +303,7 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vsae_test',
+        'conductor' => 'vsae_test_v1',
       ],
     ],
   ];

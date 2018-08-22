@@ -5,13 +5,14 @@ dependencies:
     - field.storage.node.field_slider
     - node.type.advanced_page
     - paragraphs.paragraphs_type.banner
+    - paragraphs.paragraphs_type.delivery_usp_block
   module:
     - entity_reference_revisions
 id: node.advanced_page.field_slider
 field_name: field_slider
 entity_type: node
 bundle: advanced_page
-label: Slider
+label: 'Slider/Deliver USP'
 description: ''
 required: false
 translatable: true
@@ -22,6 +23,7 @@ settings:
   handler_settings:
     target_bundles:
       banner: banner
+      delivery_usp_block: delivery_usp_block
     target_bundles_drag_drop:
       banner:
         enabled: true
@@ -31,5 +33,74 @@ settings:
         enabled: false
       related_info_one_column:
         weight: 6
+        enabled: false
+      1_row_1_col:
+        weight: 28
+        enabled: false
+      1_row_1_col_dept:
+        weight: 29
+        enabled: false
+      1_row_1st_col_2_row_2nd_col:
+        weight: 30
+        enabled: false
+      1_row_2_col:
+        weight: 31
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 32
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 33
+        enabled: false
+      1_row_2_col_dept:
+        weight: 34
+        enabled: false
+      1_row_3_col:
+        weight: 35
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 36
+        enabled: false
+      1_row_3_col_dept:
+        weight: 37
+        enabled: false
+      1_row_3_col_text:
+        weight: 38
+        enabled: false
+      block_reference:
+        weight: 41
+        enabled: false
+      delivery_usp_block:
+        enabled: true
+        weight: 42
+      image_title_subtitle:
+        weight: 44
+        enabled: false
+      main_menu_highlight:
+        weight: 45
+        enabled: false
+      offers_bordered:
+        weight: 46
+        enabled: false
+      product_carousel_category:
+        weight: 47
+        enabled: false
+      promo_block:
+        weight: 48
+        enabled: false
+      promo_block_button:
+        weight: 49
+        enabled: false
+      promo_block_text:
+        weight: 50
+        enabled: false
+      title_textarea:
+        weight: 52
+        enabled: false
+      video:
+        weight: 53
+        enabled: false
+      views_reference:
+        weight: 54
         enabled: false
 field_type: entity_reference_revisions

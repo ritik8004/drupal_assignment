@@ -9,6 +9,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
+/**
+ *
+ */
 class AcqSkuLinkedSku {
 
   /**
@@ -71,7 +74,7 @@ class AcqSkuLinkedSku {
   /**
    * Get linked skus for a given sku by linked type.
    *
-   * @param SKU $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The sku entity.
    * @param string $type
    *   The linked type. Like - related/crosssell/upsell.
@@ -90,7 +93,7 @@ class AcqSkuLinkedSku {
 
     // If already cached.
     if ($cache) {
-      // If only for specific type like cross_sell/upsell/related
+      // If only for specific type like cross_sell/upsell/related.
       if (isset($cache->data[$type])) {
         return $cache->data[$type];
       }
@@ -129,7 +132,7 @@ class AcqSkuLinkedSku {
         '@linked_sku_type' => $type,
         '@sku' => $sku->getSku(),
         '@message' => $e->getMessage(),
-        ]
+      ]
       );
     }
 

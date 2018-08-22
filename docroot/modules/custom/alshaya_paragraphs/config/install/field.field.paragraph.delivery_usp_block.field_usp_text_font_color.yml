@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_usp_text_font_color
+    - paragraphs.paragraphs_type.delivery_usp_block
+id: paragraph.delivery_usp_block.field_usp_text_font_color
+field_name: field_usp_text_font_color
+entity_type: paragraph
+bundle: delivery_usp_block
+label: 'USP Text Font Color'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

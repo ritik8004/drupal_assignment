@@ -8,7 +8,6 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a service for category data to taxonomy synchronization.

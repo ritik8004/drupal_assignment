@@ -21,10 +21,20 @@
     float: $left;
     width: 100%;
   }
+
+  .country-ae & {
+    float: none;
+    text-align: center;
+  }
 }
 
 .c-footer__logos {
-  line-height: 4.375rem;
+  line-height: 70px;
+
+  .country-ae & {
+    padding-#{$right}: 0;
+    margin-#{$right}: 0;
+  }
 
   @include breakpoint($tablet) {
     float: $left;
@@ -45,7 +55,7 @@
     margin-#{$right}: 0;
 
     ul {
-      margin-top: 4px;
+      margin-top: 0.25rem;
     }
   }
 
@@ -67,6 +77,29 @@
   }
 }
 
+.menu--customer-rights-logo {
+  line-height: 70px;
+
+  @include breakpoint($only-mobile) {
+    float: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    ul {
+      margin-top: 0.25rem;
+    }
+  }
+
+  @include breakpoint($tablet) {
+    float: $right;
+  }
+
+  ul {
+    @extend %list-clear;
+    @extend %list--horizontal;
+  }
+}
+
 [class^="c-footer__logo--"] {
   @include u-image-replacement;
 
@@ -79,31 +112,52 @@
   background-image: url(#{$base_theme_img_directory_path}/cards/card-verisign.svg);
   background-size: contain;
   background-repeat: no-repeat;
-  width: 70px;
-  height: 35px;
+  width: 4.375rem;
+  height: 2.1875rem;
 }
 
 .c-footer__logo--visa {
   background-image: url(#{$base_theme_img_directory_path}/cards/card-visa.svg);
   background-size: contain;
   background-repeat: no-repeat;
-  width: 65px;
-  height: 28px;
+  width: 4.0625rem;
+  height: 1.75rem;
 }
 
 .c-footer__logo--mastercard {
   background-image: url(#{$base_theme_img_directory_path}/cards/card-mastercard.svg);
-  width: 85px;
-  height: 26px;
+  width: 5.3125rem;
+  height: 1.625rem;
+}
+
+.c-footer__logo--customer-rights {
+  background-image: url(#{$base_theme_img_directory_path}/cards/customer-right.svg);
+  width: 18.1875rem;
+  height: 2.0625rem;
 }
 
 .c-footer__copy {
   color: $copyright_footer_text;
   line-height: 1.5;
 
+  .c-footer-secondary & {
+    .country-ae & {
+      padding: 1.875rem 0;
+      display: inline-block;
+
+      html[lang=ar] & {
+        padding: 0.875rem 0;
+      }
+    }
+  }
+
   @include breakpoint($only-tablet) {
     max-width: 59%;
     width: 55%;
+
+    .c-footer-secondary & {
+      width: auto;
+    }
 
     .field--name-body {
       p {
@@ -118,11 +172,26 @@
     display: table;
     float: $right;
     margin-#{$right}: 1rem;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        display: inline-block;
+        float: none;
+        margin: 0 auto;
+        width: 30%;
+      }
+    }
   }
 
   @include breakpoint($only-mobile) {
     padding: 2rem 1.25rem;
     line-height: 1.5;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        padding: 2rem 1.25rem;
+      }
+    }
   }
 
   .field--name-body p {
@@ -145,11 +214,22 @@
     @include breakpoint($tablet) {
       display: table-cell;
       vertical-align: middle;
+
+      .country-ae & {
+        display: inline-block;
+      }
     }
   }
 
   @include breakpoint($desktop) {
     width: 65%;
     margin-#{$right}: 3rem;
+
+    .c-footer-secondary & {
+      .country-ae & {
+        width: 30%;
+        margin: 0 auto;
+      }
+    }
   }
 }

@@ -52,3 +52,9 @@ do
     fi
   fi
 done
+
+# Delete devel from code base.
+if [ -d $deployDir/docroot/modules/contrib/devel ]
+then
+  rm -Rf $deployDir/docroot/modules/contrib/devel
+fi

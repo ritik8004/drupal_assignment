@@ -3,4 +3,5 @@ services:
     class: Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager
     arguments:
       - '@config.factory'
+      - '@language_manager'
       - '@theme.manager'

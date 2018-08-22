@@ -1,4 +1,4 @@
-.c-delivery-checkout {
+.user-page.c-delivery-checkout {
   #selected-address-wrapper {
     .address--controls #change-address {
       text-transform: uppercase;
@@ -33,6 +33,42 @@
 
       .shipping-method-price {
         color: $checkout_hd_delivery_options_shipping_price;
+      }
+    }
+  }
+
+  main form {
+    #edit-guest-delivery-home,
+    #edit-member-delivery-home {
+      .fieldset-wrapper {
+        > .title {
+          @include breakpoint($only-mobile) {
+            margin: 0 0 1.0625rem !important;
+          }
+        }
+      }
+
+      #shipping_methods_wrapper {
+        @include breakpoint($only-mobile) {
+          margin-top: 1.0625rem;
+
+          .form-type-radio {
+            &:first-child {
+              margin-top: 1.0625rem;
+            }
+          }
+        }
+
+        .shipping-methods-container > .fieldset-wrapper {
+          @include breakpoint($tablet) {
+            margin: 0 1.375rem;
+          }
+
+          .form-type-radio {
+            border-left: 1px solid $checkout_section_border;
+            border-right: 1px solid $checkout_section_border;
+          }
+        }
       }
     }
   }

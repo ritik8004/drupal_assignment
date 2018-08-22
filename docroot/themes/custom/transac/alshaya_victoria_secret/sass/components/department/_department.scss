@@ -31,3 +31,25 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .paragraph--type--product-carousel-category {
+    .c-accordion__title {
+      &::after {
+        #{$right}: 0;
+      }
+    }
+
+    .c-accordion_content {
+      ul {
+        li {
+          a {
+            &::after {
+              #{$right}: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}

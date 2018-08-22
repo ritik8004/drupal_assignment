@@ -5,6 +5,7 @@
  * Module file for alshaya_promo_panel.
  */
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 
 /**
@@ -88,6 +89,23 @@ function alshaya_promo_panel_theme_suggestions_alter(array &$suggestions, array 
           $suggestions[] = 'block__block_content__alshaya_promo_panel';
         }
       }
+    }
+  }
+}
+
+/**
+ * Delete block from promo panel config on block delete.
+ *
+ * Implements hook_entity_delete().
+ */
+function alshaya_promo_panel_entity_delete(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() == 'block') {
+    $promo_config = \Drupal::configFactory()->getEditable('alshaya_promo_panel.settings');
+    $promo_panel_blocks = $promo_config->get('promo_panel_blocks');
+    if (in_array($entity->id(), array_keys($promo_panel_blocks))) {
+      unset($promo_panel_blocks[$entity->id()]);
+      $promo_config->set('promo_panel_blocks', $promo_panel_blocks);
+      $promo_config->save();
     }
   }
 }

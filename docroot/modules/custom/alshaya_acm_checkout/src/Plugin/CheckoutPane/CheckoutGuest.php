@@ -6,6 +6,7 @@ use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneBase;
 use Drupal\acq_checkout\Plugin\CheckoutPane\CheckoutPaneInterface;
 use Drupal\alshaya_acm_checkout\CheckoutLoginTabsTrait;
 use Drupal\block\BlockViewBuilder;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 
@@ -68,8 +69,10 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
     ];
 
     // Load the block 'youllbeableto' and render it.
-    $block = BlockViewBuilder::lazyBuilder('youllbeableto', 'full');
-    if ($block) {
+    $blockContent = Block::load('youllbeableto');
+
+    if ($blockContent instanceof Block && $blockContent->get('status')) {
+      $block = BlockViewBuilder::lazyBuilder('youllbeableto', 'full');
       $block_markup = \Drupal::service('renderer')->renderPlain($block);
       $pane_form['you_will_able_to'] = [
         '#markup' => $block_markup->__toString(),
@@ -77,7 +80,6 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
         '#suffix' => '<div>',
       ];
     }
-
     return $pane_form;
   }
 

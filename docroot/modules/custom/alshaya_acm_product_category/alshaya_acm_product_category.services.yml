@@ -9,3 +9,9 @@ services:
           - { name: cache.bin, default_backend: cache.backend.permanent_database }
         factory: cache_factory:get
         arguments: [product_category_tree]
+
+    alshaya_acm_product_category.event_subscriber:
+      class: Drupal\alshaya_acm_product_category\EventSubscriber\ProductCategoryRequestSubscriber
+      arguments: ['@current_route_match']
+      tags:
+        - { name: event_subscriber }

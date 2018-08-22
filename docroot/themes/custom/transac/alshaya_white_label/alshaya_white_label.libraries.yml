@@ -49,6 +49,13 @@ slider_banner:
     - core/jquery
     - alshaya_white_label/slick
 
+delivery_usp:
+  js:
+    js/delivery_usp.js: {}
+  dependencies:
+    - core/jquery
+    - alshaya_white_label/slick
+
 product_carousel:
   js:
     js/product_carousel.js: {}

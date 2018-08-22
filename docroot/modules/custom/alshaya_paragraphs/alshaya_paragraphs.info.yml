@@ -27,4 +27,7 @@ dependencies:
   - drupal:views
   - field_group:field_group
   - viewsreference:viewsreference
+  - jquery_minicolors:jquery_minicolors
+  - ckeditor_font:ckeditor_font
+  - allowed_formats:allowed_formats
 package: Alshaya

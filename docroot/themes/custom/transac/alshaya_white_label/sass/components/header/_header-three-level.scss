@@ -54,14 +54,20 @@
       }
     }
 
-    .menu--three__list-item > .menu-two__link-wrapper a {
+    .menu--three__list-item > .menu-two__link-wrapper .menu__link {
       font-size: 0.75rem !important;
       color: $mm_l3_link !important;
       font-family: $arial !important;
+    }
 
+    .menu--three__list-item > .menu-two__link-wrapper a {
       &:hover {
         color: $mm_l3_link_hover !important;
       }
+    }
+
+    .menu--three__list-item > .menu-two__link-wrapper div.menu--three__link {
+      margin-bottom: 0;
     }
 
     .menu--two__list .menu--three__list-item {
@@ -95,7 +101,7 @@
   .active--menu--links {
     &:hover {
       li.menu--one__list-item {
-        a.menu--one__link {
+        .menu--one__link {
           @include breakpoint($desktop) {
             border-bottom: 1px solid transparent;
           }

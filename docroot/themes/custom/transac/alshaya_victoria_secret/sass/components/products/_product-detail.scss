@@ -11,17 +11,23 @@
   .field__content,
   .show-less-link,
   .read-more-description-link-mobile,
-  .read-more-description-link {
+  .read-more-description-link,
+  .read-more-description-link-gift {
     font-size: 0.75rem;
     font-weight: normal;
   }
 
-  .read-more-description-link {
+  .read-more-description-link,
+  .read-more-description-link-gift {
     margin: 0.75rem 0 0.875rem;
   }
 
   .field__label {
     margin: 0.5rem 0 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 1.5rem;
+    }
   }
 }
 
@@ -47,9 +53,22 @@
       height: 2.5rem;
       margin-top: 2.125rem;
 
+      .super-category-victorias-secret & {
+        font-family: $vs-bentonsanscomp-medium;
+        font-size: 1.1875rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+
+        @include normal-arabic-letter-spacing;
+      }
+
       @include breakpoint($only-tablet) {
         float: $left;
         margin-#{$left}: 1.5rem;
+
+        .super-category-victorias-secret & {
+          margin-#{$left}: 1.25rem;
+        }
 
         html[lang=ar] & {
           padding: 0.725rem 0.5rem;
@@ -208,54 +227,27 @@
   .form-item-configurables-color {
     .select2Option {
       li {
-        display: flex;
-        align-items: center;
-
         &.li-swatch-image {
+          img {
+            padding: 0;
+          }
+
           a,
           span {
             border: none;
-            width: 2.375rem;
-            height: 2.375rem;
-            position: relative;
             padding: 0;
 
             &.picked,
             &:hover {
-              background: transparent;
-
               &::after {
-                content: '';
-                position: absolute;
-                display: inline-block;
+                height: 2.75rem;
+                width: 2.75rem;
                 top: -0.1875rem;
                 #{$left}: -0.1875rem;
-                #{$right}: -0.1875rem;
-                bottom: -0.1875rem;
-                z-index: 1;
-                border: 1px solid $pdp_white_color_attribute_border;
-                pointer-events: none;
               }
-            }
-
-            &:hover {
-              &::after {
-                border: 1px solid $pdp_white_color_attribute_hover_border;
-              }
-            }
-
-            &.white {
-              -webkit-appearance: none;
-              box-shadow: 0 0 0 1px $pdp_white_color_attribute;
             }
           }
         }
-      }
-
-      .select-buttons {
-        display: flex;
-        flex-flow: row wrap;
-        margin-top: 0;
       }
     }
   }
@@ -434,6 +426,10 @@
 .delivery-options-wrapper {
   .field__label {
     margin-top: 1.625rem;
+
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0.5rem;
+    }
   }
 
   .c-accordion__title {
@@ -514,6 +510,91 @@
   #drupal-modal {
     .content--item-code {
       margin-top: 0.75rem;
+    }
+  }
+}
+
+html[lang="en"] .super-category-victorias-secret {
+  .acq-content-product,
+  .acq-content-product-modal {
+    .content__title_wrapper {
+      h1,
+      h2 {
+        width: 100%;
+
+        .title--main,
+        &.field--name-name {
+          font-size: 1.625rem;
+        }
+      }
+    }
+  }
+
+  .subtitle {
+    &.crossell-title {
+      font-family: $vs-bentonsans-light;
+      font-size: 1.375rem;
+    }
+  }
+}
+
+html[lang="ar"] {
+  .acq-content-product,
+  .acq-content-product-modal {
+    .content__title_wrapper {
+      h1,
+      h2 {
+        width: 100%;
+
+        span {
+          font-size: 1.5rem;
+
+          &.title--sub {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.acq-content-product,
+.acq-content-product-modal {
+  .content__title_wrapper {
+    h1,
+    h2 {
+      .title--sub {
+        font-family: $vs-regular;
+        font-size: 0.75rem !important;
+        letter-spacing: 2.4px;
+        text-transform: uppercase;
+      }
+
+      .title--main,
+      &.field--name-name {
+        font-family: $vs-bentonsans-light;
+        color: $pdp_product_title;
+      }
+    }
+
+    .price-block {
+      .price,
+      .price--discount {
+        font-family: $vs-bentonsans-regular;
+        font-size: 0.875rem;
+        // Using px value for .04em.
+        letter-spacing: 0.56px;
+      }
+    }
+  }
+
+  .content__sidebar {
+    .short-description-wrapper,
+    .delivery-options-wrapper {
+      .field__label {
+        font-family: $vs-bentonsans-light;
+        font-size: 1.375rem;
+      }
     }
   }
 }

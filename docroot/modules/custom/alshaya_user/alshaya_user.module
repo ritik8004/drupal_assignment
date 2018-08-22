@@ -32,6 +32,8 @@ function alshaya_user_form_user_form_alter(&$form, FormStateInterface $form_stat
   // First name and last name will not accept some special characters.
   $form['field_first_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
   $form['field_last_name']['widget'][0]['value']['#attributes']['specialchar'] = 'specialchar';
+  $form['field_first_name']['widget'][0]['value']['#maxlength'] = 50;
+  $form['field_last_name']['widget'][0]['value']['#maxlength'] = 50;
 
   $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
   $form['#attached']['library'][] = 'alshaya_user/clear_autofill';

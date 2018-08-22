@@ -1,13 +1,13 @@
 diff --git a/.htaccess b/.htaccess
-index 4716fa1..93f9ab6 100644
+index 83cb71a04..ffcc2bbfd 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -150,6 +150,8 @@ AddEncoding gzip svgz
-   # Copy and adapt this rule to directly execute PHP files in contributed or
-   # custom modules or to run another PHP application in the same directory.
-   RewriteCond %{REQUEST_URI} !/core/modules/statistics/statistics.php$
+@@ -138,6 +138,8 @@ AddEncoding gzip svgz
+   RewriteCond %{REQUEST_URI} !=/favicon.ico
+   RewriteRule ^ index.php [L]
+
 +  # Allow access to simplesaml paths
 +  RewriteCond %{REQUEST_URI} !^/simplesaml
-   # Deny access to any other PHP files that do not match the rules above.
-   # Specifically, disallow autoload.php from being served directly.
-   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
+   # For security reasons, deny access to other PHP files on public sites.
+   # Note: The following URI conditions are not anchored at the start (^),
+   # because Drupal may be located in a subdirectory. To further improve

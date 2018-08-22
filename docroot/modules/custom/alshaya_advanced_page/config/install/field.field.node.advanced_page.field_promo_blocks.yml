@@ -16,6 +16,7 @@ dependencies:
     - paragraphs.paragraphs_type.1_row_3_col_text
     - paragraphs.paragraphs_type.block_reference
     - paragraphs.paragraphs_type.section_divider
+    - paragraphs.paragraphs_type.delivery_usp_block
     - paragraphs.paragraphs_type.views_reference
   module:
     - entity_reference_revisions
@@ -47,6 +48,7 @@ settings:
       block_reference: block_reference
       views_reference: views_reference
       section_divider: section_divider
+      delivery_usp_block: delivery_usp_block
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         enabled: true
@@ -111,6 +113,9 @@ settings:
       offers_bordered:
         weight: 41
         enabled: false
+      delivery_usp_block:
+        enabled: true
+        weight: 42
       promo_block_button:
         weight: 43
         enabled: false

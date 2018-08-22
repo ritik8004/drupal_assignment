@@ -28,3 +28,88 @@ function _alshaya_search_api_remove_field_from_indexes($field_code, $index) {
     $index->reindex();
   }
 }
+
+/**
+ * This code is to be executed one time only but on MC, HM, BBW.
+ */
+function _alshaya_search_api_refactor_sku_base_fields() {
+  $configFactory = \Drupal::configFactory();
+
+  // First remove all existing block and facet configs.
+  $blocks = [
+    "block.block.size",
+    "block.block.collection",
+    "block.block.color",
+    "block.block.brand",
+    "block.block.promotionsizefacet",
+    "block.block.promotionbrandfacet",
+    "block.block.promotioncollectionfacet",
+    "block.block.promotioncolorfacet",
+    "block.block.skusskureferencebrand",
+    "block.block.skusskureferencecollection",
+    "block.block.skusskureferencecolor",
+    "block.block.skusskureferencesize",
+    "block.block.concept",
+    "block.block.plpconcept",
+    "block.block.promotionconcept",
+    "block.block.collection1",
+    "block.block.fragrancecat",
+    "block.block.fragrancename",
+    "block.block.plpcollection1",
+    "block.block.plpfragrancecat",
+    "block.block.plpfragrancename",
+    "block.block.promotioncollection1",
+    "block.block.promotionfragrancecat",
+    "block.block.promotionfragrancename",
+  ];
+
+  foreach ($blocks as $block) {
+    $config = $configFactory->getEditable($block);
+    if ($config) {
+      $config->delete();
+    }
+  }
+
+  $facets = [
+    "facets.facet.plp_concept",
+    "facets.facet.promotion_concept",
+    "facets.facet.promotion_brand_facet",
+    "facets.facet.promotion_collection_facet",
+    "facets.facet.promotion_color_facet",
+    "facets.facet.promotion_size_facet",
+    "facets.facet.skus_sku_reference_brand",
+    "facets.facet.skus_sku_reference_collection",
+    "facets.facet.skus_sku_reference_color",
+    "facets.facet.skus_sku_reference_size",
+    "facets.facet.concept",
+    "facets.facet.fragrancecat",
+    "facets.facet.fragrancename",
+    "facets.facet.collection1",
+    "facets.facet.color",
+    "facets.facet.brand",
+    "facets.facet.collection",
+    "facets.facet.size",
+    "facets.facet.plp_collection1",
+    "facets.facet.plp_fragrancecat",
+    "facets.facet.plp_fragrancename",
+    "facets.facet.promotion_collection1",
+    "facets.facet.promotion_fragrancecat",
+    "facets.facet.promotion_fragrancename",
+  ];
+
+  foreach ($facets as $facet) {
+    $config = $configFactory->getEditable($facet);
+    if ($config) {
+      $config->delete();
+    }
+  }
+
+  // Reset filter bar configs.
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar'], 'alshaya_search');
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar_plp'], 'alshaya_product', 'optional');
+  alshaya_config_install_configs(['facets_summary.facets_summary.filter_bar_promotions'], 'alshaya_acm_promotion', 'optional');
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
+  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
+  $fieldsManager->resetBaseFields();
+}

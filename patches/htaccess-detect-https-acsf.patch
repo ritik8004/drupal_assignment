@@ -1,13 +1,13 @@
 diff --git a/.htaccess b/.htaccess
-index bdacc40..0629f97 100644
+index 83cb71a04..4885ce5c6 100644
 --- a/.htaccess
 +++ b/.htaccess
-@@ -78,6 +78,11 @@ AddEncoding gzip svgz
-  RewriteRule ^ - [E=protossl]
-  RewriteCond %{HTTPS} on
-  RewriteRule ^ - [E=protossl:s]
+@@ -75,6 +75,8 @@ AddEncoding gzip svgz
+   RewriteRule ^ - [E=protossl]
+   RewriteCond %{HTTPS} on
+   RewriteRule ^ - [E=protossl:s]
 +  RewriteCond %{HTTP:X-Forwarded-Proto} https
 +  RewriteRule ^ - [E=protossl:s]
 
-  # Make sure Authorization HTTP header is available to PHP
-  # even when running as CGI or FastCGI.
+   # Make sure Authorization HTTP header is available to PHP
+   # even when running as CGI or FastCGI.

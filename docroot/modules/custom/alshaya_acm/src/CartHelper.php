@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm;
 
+use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 
@@ -97,6 +98,30 @@ class CartHelper {
     }
 
     return $address;
+  }
+
+  /**
+   * Get clean cart to log.
+   *
+   * @param \Drupal\acq_cart\Cart|object $cart
+   *   Cart object to clean.
+   *
+   * @return string
+   *   Cleaned cart data as JSON string.
+   */
+  public function getCleanCartToLog($cart) {
+    $object = $cart instanceof Cart ? $cart->getCart() : $cart;
+    $shipping = $this->getAddressArray($object->shipping);
+
+    // Billing is not required for debugging.
+    unset($object->billing);
+
+    // We will remove all at root level.
+    // We will leave fields in extension here.
+    unset($object->shipping);
+    $object->shipping['extension'] = $shipping['extension'];
+
+    return json_encode($object);
   }
 
 }

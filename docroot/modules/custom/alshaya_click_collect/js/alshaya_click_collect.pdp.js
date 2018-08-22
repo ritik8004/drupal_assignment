@@ -39,7 +39,7 @@
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.
-        if ($(this).attr('state') === 'disabled') {
+        if ($(this).data('state') === 'disabled') {
           $('#pdp-stores-container.click-collect .c-accordion_content').addClass('hidden-important');
           $('#pdp-stores-container.click-collect').accordion('option', 'disabled', true);
         }
@@ -388,5 +388,23 @@
 
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
+
+
+  /**
+   * Mark product out of stock.
+   *
+   * @param data
+   *   SKU selector.
+   * @param status
+   *   Stock status.
+   */
+  $.fn.clickCollectProductStockStatusAction = function (data, status) {
+    var article = $(data).parents('article:first');
+    if (status <= 0) {
+      article
+        .find('#pdp-stores-container.click-collect')
+        .accordion('option', 'disabled', true);
+    }
+  }
 
 })(jQuery, Drupal);

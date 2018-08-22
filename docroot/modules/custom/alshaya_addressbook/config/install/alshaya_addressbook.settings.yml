@@ -10,3 +10,8 @@ mapping:
   dependent_locality: 'address_building_segment'
   administrative_area: 'area'
   area_parent: 'governate'
+prefix_settings:
+  key: 'display_prefix'
+  except:
+    - country_code
+    - mobile_number

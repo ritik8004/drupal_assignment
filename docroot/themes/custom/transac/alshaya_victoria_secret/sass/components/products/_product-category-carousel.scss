@@ -7,3 +7,30 @@
     }
   }
 }
+
+// Adjusting image size and hence product tile size as per VS.
+.paragraph--type--product-carousel-category,
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell,
+.block-basket-horizontal-recommendation {
+  .view-product-slider {
+    .owl-carousel {
+      .views-row {
+        a > img {
+          @include breakpoint($upto-desktop) {
+            max-width: 8.875rem;
+            max-height: none;
+            height: auto;
+          }
+        }
+
+        @include breakpoint($upto-desktop) {
+          width: 8.875rem;
+          margin-#{$right}: 0.625rem;
+          padding-#{$right}: 0;
+        }
+      }
+    }
+  }
+}

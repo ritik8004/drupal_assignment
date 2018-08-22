@@ -82,6 +82,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_0', $form_state->getValue('pdp_carousel_items_size_0'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_768', $form_state->getValue('pdp_carousel_items_size_768'));
     $config->set('cross_up_sell_items_settings.pdp_carousel_items_size_1025', $form_state->getValue('pdp_carousel_items_size_1025'));
+
     $config->set('list_view_auto_page_load_count', $form_state->getValue('list_view_auto_page_load_count'));
     $config->set('brand_logo_base_path', $form_state->getValue('brand_logo_base_path'));
     $config->set('brand_logo_extension', $form_state->getValue('brand_logo_extension'));
@@ -90,7 +91,6 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('not_buyable_help_text', $form_state->getValue('not_buyable_help_text'));
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
-    $config->set('image_slider_position_pdp', $form_state->getValue('image_slider_position_pdp'));
     $config->set('back_to_list', $form_state->getValue('back_to_list'));
 
     // Product default image.
@@ -215,14 +215,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('brand_logo_base_path'),
     ];
 
-    $form['pdp_slider_items_settings']['pdp_slider_items_number'] = [
-      '#type' => 'textfield',
-      '#title' => $this->t('slider items'),
-      '#description' => $this->t('Number of items to show in a slider on PDP.'),
-      '#required' => TRUE,
-      '#default_value' => $config->get('pdp_slider_items_settings.pdp_slider_items_number'),
-    ];
-
     $form['brand_logo_extension'] = [
       '#type' => 'textfield',
       '#title' => $this->t('File extension for Brand Logo'),
@@ -261,16 +253,6 @@ class ProductSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('VAT disclaimer text for the footer'),
       '#default_value' => $config->get('vat_text_footer'),
-    ];
-
-    $form['image_slider_position_pdp'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Image slider position on PDP'),
-      '#default_value' => $config->get('image_slider_position_pdp'),
-      '#options' => [
-        'left' => $this->t('Left'),
-        'bottom' => $this->t('Bottom'),
-      ],
     ];
 
     $form['product_default_image'] = [

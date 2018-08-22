@@ -6,8 +6,8 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -96,7 +96,7 @@ class ProductStockSyncResource extends ResourceBase {
    * @param array $stock
    *   Stock Data.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
   public function post(array $stock = []) {
@@ -122,7 +122,7 @@ class ProductStockSyncResource extends ResourceBase {
 
     if (!isset($stock['sku']) || !strlen($stock['sku'])) {
       $this->logger->error('Invalid or empty product SKU.');
-      return (new ResourceResponse($response));
+      return (new ModifiedResourceResponse($response));
     }
 
     $langcode = NULL;
@@ -132,7 +132,7 @@ class ProductStockSyncResource extends ResourceBase {
 
       if (empty($langcode)) {
         // It could be for a different store/website, don't do anything.
-        return (new ResourceResponse($response));
+        return (new ModifiedResourceResponse($response));
       }
     }
 
@@ -190,7 +190,7 @@ class ProductStockSyncResource extends ResourceBase {
       'success' => TRUE,
     ];
 
-    return (new ResourceResponse($response));
+    return (new ModifiedResourceResponse($response));
   }
 
 }

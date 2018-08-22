@@ -1,0 +1,50 @@
+// Today's Offer Promo panel.
+// For VS and VS-Sport.
+.paragraph--type--block-reference .block__reference--block-promo-panel-wrapper,
+.promo__panel {
+  > .field--name-field-paragraph-content {
+    .field--name-field-heading {
+      font-family: $vs-bentonsans-medium;
+      font-size: 0.6875rem;
+      // Using px value for 0.25em.
+      letter-spacing: 2.75px;
+      text-align: $left;
+      margin-#{$left}: 1.25rem;
+
+      @include normal-arabic-letter-spacing;
+    }
+
+    .field--name-field-title {
+      font-family: $vs-bentonsanscomp-medium;
+      font-size: 1.5625rem;
+      // Using px value for 0.07em.
+      letter-spacing: 1.75px;
+
+      @include normal-arabic-letter-spacing;
+    }
+
+    .field--name-field-sub-title {
+      font-family: $vs-bentonsans-regular;
+      font-size: 0.875rem;
+      // Using px value for 0.04em.
+      letter-spacing: 0.56px;
+
+      @include normal-arabic-letter-spacing;
+    }
+
+    .field--name-field-link a {
+      font-family: $vs-bentonsanscomp-medium;
+      font-size: 0.9375rem;
+      // Using px value for 0.12em.
+      letter-spacing: 1.8px;
+      border: none;
+      padding: 0;
+
+      @include normal-arabic-letter-spacing;
+
+      &::after {
+        content: ' >';
+      }
+    }
+  }
+}

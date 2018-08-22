@@ -383,6 +383,10 @@ $mm_highlight_title: $marine-blue;
 $mm_highlight_description: $grey-ash;
 $mm_p_a_text: $white-five;
 
+// Delivery USP
+$delivery_usp_arrow_black: $black;
+$delivery_usp_arrow_white: $white-five;
+
 //  Mini Cart.
 $primary_minicart_text: $black;
 $primary_minicart_quantity_text: $white-five;
@@ -522,9 +526,13 @@ $pdp_product_special_price_text: $scarlet;
 $pdp_product_discount_price: $scarlet;
 $pdp_product_discount_text: $scarlet;
 $pdp_product_itemcode: $grey-ash;
+$pdp_product_itemcode_border: $warm-grey-two;
 $pdp_title_section_border: $white;
 $pdp_mobile_wrapper: $white-five;
 $pdp_sell_title: $grey-ash;
+$pdp_white_color_attribute: $white-five;
+$pdp_white_color_attribute_hover_border: $black;
+$pdp_white_color_attribute_border: $black;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
@@ -585,6 +593,7 @@ $clear_btn_border: $whisper-dark;
 $clear_btn_text: $whisper-dark;
 $not_buyable_msg: $marine-blue;
 $not_buyable_help: $cerulean-two;
+$pdp_form_selection_error_text: $scarlet;
 
 // Cross sell and Up Sell
 $sell_list_label: $grey-ash;
@@ -593,10 +602,10 @@ $sell_owl_dots_bg: $whisper-light;
 
 // Department page
 $department_category_list_hover: $cerulean-two;
-$department_category_accordion_title: $black-two;
+$department_category_accordion_title: $marine-blue-two;
 $department_category_accordion_link: $grey-light;
 $department_category_accordion_border: $warm-grey-two;
-$department_category_accordion_title_arrow: $peacock-blue;
+$department_category_accordion_title_arrow: $marine-blue-two;
 $department_category_accordion_link_arrow: $warm-grey-two;
 
 // Promo Blocks
@@ -977,3 +986,18 @@ $block_acm_customer_txt: $windows-blue;
 $section_divider_border: $black;
 $section_divider_text: $black;
 $section_divider_bg: $white-five;
+
+// Free Gifts
+$free-gifts-label: $scarlet;
+$free-gifts-title-text: $grey-ash;
+$free-gifts-coupon-code-text: $marine-blue;
+$free-gifts-border: $marine-blue;
+$free-gifts-text: $grey-ash;
+$free-gifts-modal-product-name: $black;
+$free-gift-modal-item-code-border: $warm-grey-two;
+$free-gifts-modal-product-description-label: $black;
+$free-gifts-modal-product-item-code: $grey-light;
+$cart-free-gifts-message: $grey-ash;
+$cart-free-gifts-title: $grey-ash;
+$cart-free-gifts-label: $white-five;
+$cart-free-gifts-label-background: $marine-blue;

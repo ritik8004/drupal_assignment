@@ -97,13 +97,15 @@ class NewsLetterForm extends FormBase {
       try {
         $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
 
-        if ($subscription['status'] === 0) {
-          $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
-          $data['message'] = 'failure';
-        }
-        else {
+        $status = is_array($subscription) ? $subscription['status'] : $subscription;
+
+        if ($status) {
           $message = '<span class="message success">' . $this->t('Thank you for your subscription.') . '</span>';
           $data['message'] = 'success';
+        }
+        else {
+          $message = '<span class="message error">' . $this->t('This email address is already subscribed.') . '</span>';
+          $data['message'] = 'failure';
         }
       }
       catch (\Exception $e) {

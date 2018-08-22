@@ -51,6 +51,9 @@ alshaya_acm_product.settings:
         pdp_carousel_items_size_1025:
           type: integer
           label: 'Desktop view'
+        basket_carousel_items_size:
+          type: integer
+          label: 'product item on basket page carousel'
     pdp_slider_items_settings:
       type: mapping
       label: 'pdp slider settings'
@@ -58,3 +61,14 @@ alshaya_acm_product.settings:
         pdp_slider_items_number:
           type: integer
           label: 'Image item for slider'
+
+    product_carousel_items_settings:
+      type: mapping
+      label: 'product carousel settings'
+      mapping:
+        dp_product_carousel_items_number:
+          type: integer
+          label: 'product item on Department page'
+        hp_product_carousel_items_number:
+          type: integer
+          label: 'product item on Home page'

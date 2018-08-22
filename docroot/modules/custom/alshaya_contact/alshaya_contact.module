@@ -30,6 +30,8 @@ function alshaya_contact_form_alter(&$form, FormStateInterface $form_state, $for
 
     $form['elements']['first_name']['#attributes']['specialchar'] = 'specialchar';
     $form['elements']['last_name']['#attributes']['specialchar'] = 'specialchar';
+    $form['elements']['first_name']['#maxlength'] = 50;
+    $form['elements']['last_name']['#maxlength'] = 50;
 
     // Override mail validation pattern.
     $form['#attached']['library'][] = 'alshaya_user/email_validator_override';

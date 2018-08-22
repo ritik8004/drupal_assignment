@@ -14,7 +14,6 @@
         vertical: getPDPSliderParameter('vertical'),
         arrows: true,
         focusOnSelect: false,
-        centerMode: true,
         infinite: false,
         touchThreshold: 1000,
         responsive: [
@@ -52,9 +51,21 @@
           }
         }
         else {
-          ocObject.slick(options);
-          if (context !== document) {
-            ocObject.slick('resize');
+          // When Arabic and slider position is bottom, we need RTL support.
+          if (isRTL() && getPDPSliderParameter('vertical') === false) {
+            ocObject.attr('dir', 'rtl');
+            ocObject.slick(
+              $.extend({}, options, {rtl: true})
+            );
+            if (context !== document) {
+              ocObject.slick('resize');
+            }
+          }
+          else {
+            ocObject.slick(options);
+            if (context !== document) {
+              ocObject.slick('resize');
+            }
           }
         }
       }
@@ -105,7 +116,6 @@
             slidesToShow: getPDPSliderParameter('slidesToShow'),
             vertical: getPDPSliderParameter('vertical'),
             arrows: true,
-            centerMode: true,
             infinite: false,
             focusOnSelect: false,
             touchThreshold: 1000,

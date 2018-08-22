@@ -9,6 +9,8 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use springimport\magento2\apiv1\ApiFactory;
+use springimport\magento2\apiv1\Configuration;
 
 /**
  * Class AlshayaApiWrapper.
@@ -157,7 +159,7 @@ class AlshayaApiWrapper {
       $data['username'] = $this->config->get('username');
       $data['password'] = $this->config->get('password');
 
-      $response = $this->invokeApi($endpoint, $data, 'POST', FALSE);
+      $response = $this->invokeApiWithToken($endpoint, $data, 'POST', FALSE);
       $token = trim($response, '"');
 
       // We always get token wrapped in double quotes.
@@ -180,7 +182,78 @@ class AlshayaApiWrapper {
   }
 
   /**
+   * Wrapper function to get authenticated http client.
+   *
+   * @param string $url
+   *   Base URL.
+   *
+   * @return \GuzzleHttp\Client
+   *   Client object.
+   */
+  private function getClient($url) {
+    $configuration = new Configuration();
+    $configuration->setBaseUri($url);
+    $configuration->setConsumerKey($this->config->get('consumer_key'));
+    $configuration->setConsumerSecret($this->config->get('consumer_secret'));
+    $configuration->setToken($this->config->get('access_token'));
+    $configuration->setTokenSecret($this->config->get('access_token_secret'));
+
+    return (new ApiFactory($configuration))->getApiClient();
+  }
+
+  /**
    * Function to invoke the API and get response.
+   *
+   * Note: GET parameters must be handled in invoking function itself.
+   *
+   * @param string $endpoint
+   *   Endpoint URL, specific for the API call.
+   * @param array $data
+   *   Post data to send to API.
+   * @param string $method
+   *   GET or POST.
+   *
+   * @return mixed
+   *   Response from the API.
+   */
+  public function invokeApi($endpoint, array $data = [], $method = 'POST') {
+    $consumer_key = $this->config->get('consumer_key');
+    if (empty($consumer_key)) {
+      return $this->invokeApiWithToken($endpoint, $data, $method, TRUE);
+    }
+
+    try {
+      $url = $this->config->get('magento_host');
+      $url .= '/' . $this->getMagentoLangPrefix();
+      $url .= '/' . $this->config->get('magento_api_base');
+
+      $client = $this->getClient($url);
+      $url .= '/' . $endpoint;
+
+      $options = [];
+      if ($method == 'POST') {
+        $options['form_params'] = $data;
+      }
+      elseif ($method == 'JSON') {
+        $options['json'] = $data;
+      }
+
+      $response = $client->request($method, $url, $options);
+      $result = $response->getBody()->getContents();
+    }
+    catch (\Exception $e) {
+      $result = NULL;
+      $this->logger->error('Exception while invoking API @api. Message: @message.', [
+        '@api' => $url,
+        '@message' => $e->getMessage(),
+      ]);
+    }
+
+    return $result;
+  }
+
+  /**
+   * Function to invoke the API using user/password based token.
    *
    * Note: GET parameters must be handled in invoking function itself.
    *
@@ -196,7 +269,7 @@ class AlshayaApiWrapper {
    * @return mixed
    *   Response from the API.
    */
-  public function invokeApi($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
+  public function invokeApiWithToken($endpoint, array $data = [], $method = 'POST', $requires_token = TRUE) {
     $url = $this->config->get('magento_host');
     $url .= '/' . $this->getMagentoLangPrefix();
     $url .= '/' . $this->config->get('magento_api_base');

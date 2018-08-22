@@ -1,28 +1,30 @@
 // Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_white_label/fonts';
+
 @font-face {
   font-family: 'Mothercare';
-  src: url('../fonts/alshaya-bold.woff2') format('woff2'), url('../fonts/alshaya-bold.woff') format('woff');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff2') format('woff2'), url('#{$base_theme_fonts_directory_path}/alshaya-bold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'MothercareThin';
-  src: url('../fonts/alshaya-thin.woff2') format('woff2'), url('../fonts/alshaya-thin.woff') format('woff');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff2') format('woff2'), url('#{$base_theme_fonts_directory_path}/alshaya-thin.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Cairo-300';
-  src: url('../fonts/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-thin.woff') format('woff'), url('../fonts/alshaya-arabic-thin.ttf')  format('truetype'), url('../fonts/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.eot?#iefix') format('embedded-opentype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.woff') format('woff'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.ttf')  format('truetype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-thin.svg#NotoKufiArabic-Bold') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Cairo-bold';
-  src: url('../fonts/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('../fonts/alshaya-arabic-bold.woff') format('woff'), url('../fonts/alshaya-arabic-bold.ttf')  format('truetype'), url('../fonts/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.eot?#iefix') format('embedded-opentype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.woff') format('woff'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.ttf')  format('truetype'), url('#{$base_theme_fonts_directory_path}/alshaya-arabic-bold.svg#NotoKufiArabic-Bold') format('svg');
   font-weight: normal;
   font-style: normal;
 }

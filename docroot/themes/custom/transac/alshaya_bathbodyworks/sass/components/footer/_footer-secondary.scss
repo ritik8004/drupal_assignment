@@ -16,6 +16,18 @@
     @include breakpoint($tablet) {
       font-size: 0.75rem;
       text-align: $right;
+
+      .country-ae & {
+        text-align: center;
+      }
+    }
+  }
+
+  .c-footer-secondary & {
+    .country-ae & {
+      html[lang=ar] & {
+        padding: 1.875rem 0;
+      }
     }
   }
 }

@@ -112,6 +112,13 @@ header {
     }
   }
 
+  .main--menu ul.menu--one__list {
+    .menu__link {
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+  }
+
   .menu__list-item,
   .back--link {
     text-transform: uppercase;
@@ -160,12 +167,20 @@ header {
   }
 
   body {
-    margin-top: 5.4rem;
+    margin-top: 5.5rem;
+
+    @include breakpoint($only-tablet) {
+      margin-top: 5.4375rem;
+    }
   }
 
   body {
     html[lang="ar"] & {
-      margin-top: 5.4rem;
+      margin-top: 5.5rem;
+
+      @include breakpoint($only-tablet) {
+        margin-top: 5.4375rem;
+      }
     }
   }
 
@@ -189,9 +204,8 @@ header {
   #block-cartminiblock {
     position: fixed;
     display: block;
-    z-index: 3;
+    z-index: 6;
     transform: translate3d(0, 0, 0);
-    overflow: hidden;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -269,7 +283,7 @@ header {
     .site-brand-home {
       img {
         @include breakpoint($desktop) {
-          max-width: 21.875rem;
+          max-width: 18.75rem;
           width: auto;
           margin: auto;
           text-align: center;
@@ -314,6 +328,10 @@ header {
 .mobile--overlay {
   .c-menu-primary .region__menu-primary .menu--mobile-navigation {
     z-index: 5;
+  }
+
+  #block-cartminiblock {
+    z-index: 4;
   }
 }
 

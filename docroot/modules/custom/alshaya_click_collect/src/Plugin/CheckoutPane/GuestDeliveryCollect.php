@@ -230,6 +230,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#type' => 'textfield',
       '#title' => t('First Name'),
       '#required' => TRUE,
+      '#maxlength' => 50,
       '#default_value' => $default_firstname,
     ];
 
@@ -238,6 +239,7 @@ class GuestDeliveryCollect extends CheckoutPaneBase implements CheckoutPaneInter
       '#type' => 'textfield',
       '#title' => t('Last Name'),
       '#required' => TRUE,
+      '#maxlength' => 50,
       '#default_value' => $default_lastname,
     ];
 

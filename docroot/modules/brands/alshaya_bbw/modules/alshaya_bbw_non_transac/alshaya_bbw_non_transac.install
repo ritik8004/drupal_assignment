@@ -18,7 +18,7 @@ function alshaya_bbw_non_transac_install() {
   // Disable some default blocks provided by whitelabel_non_transac that we
   // don't want on bath_body_works.
   alshaya_block_delete_blocks(['branding']);
-  
+
   // Override join the club default value.
   $join_the_club_body = "<div class=\"block-join-the-club__title-wrapper\"><h2 class=\"block-join-the-club__title\">Join the club</h2><p class=\"block-join-the-club__title-link\"><a class=\"final-pc-learn-more\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></p></div><div class=\"block-join-the-club__list\"><p><span class=\"icon-prize\"></span>Win exciting prizes</p><p><span class=\"icon-rewards\"></span>Unlock exclusive rewards</p><p><span class=\"icon-newsletter\"></span>Be the first to know</p><a class=\"block-join-the-club__list-link\" href=\"http://hyperurl.co/PRIVILEGES\" target=\"_blank\">Learn more</a></div>";
   $join_the_club_desc = ['value' => $join_the_club_body, 'format' => 'full_text'];

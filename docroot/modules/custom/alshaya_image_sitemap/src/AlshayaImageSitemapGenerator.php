@@ -13,6 +13,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\Entity\Node;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -66,6 +67,13 @@ class AlshayaImageSitemapGenerator {
   protected $languageManager;
 
   /**
+   * SKU Images Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -82,6 +90,8 @@ class AlshayaImageSitemapGenerator {
    *   The module handler service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager
+   *   SKU Images Manager.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -89,7 +99,8 @@ class AlshayaImageSitemapGenerator {
                               EntityTypeManagerInterface $entity_manager,
                               ModuleHandlerInterface $module_handler,
                               TranslationInterface $string_translation,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              SkuImagesManager $skuImagesManager) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -97,6 +108,7 @@ class AlshayaImageSitemapGenerator {
     $this->moduleHandler = $module_handler;
     $this->stringTranslation = $string_translation;
     $this->languageManager = $language_manager;
+    $this->skuImagesManager = $skuImagesManager;
   }
 
   /**
@@ -147,11 +159,7 @@ class AlshayaImageSitemapGenerator {
           if (isset($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
-              // @TODO: Add dependency injection when module is uninstalled from non-transac.
-              // @codingStandardsIgnoreStart
-              $sku_images_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-              $all_media = $sku_images_manager->getAllMedia($sku, TRUE);
-              // @codingStandardsIgnoreEnd
+              $all_media = $this->skuImagesManager->getAllMedia($sku);
               if (!empty($all_media['images'])) {
                 // Changes for the image count.
                 $media = $all_media['images'];

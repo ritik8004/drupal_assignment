@@ -17,6 +17,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - taxonomy.vocabulary.acq_product_category
     - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
+    - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
   module:
     - metatag
     - text
@@ -48,3 +49,4 @@ hidden:
   field_term_background_color: true
   field_term_font_color: true
   langcode: true
+  field_display_as_clickable_link: true

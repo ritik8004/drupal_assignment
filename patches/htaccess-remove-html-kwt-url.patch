@@ -1,0 +1,14 @@
+diff --git a/.htaccess b/.htaccess
+index 83cb71a04..b8d81c3bc 100644
+--- a/.htaccess
++++ b/.htaccess
+@@ -69,6 +69,9 @@ AddEncoding gzip svgz
+ <IfModule mod_rewrite.c>
+   RewriteEngine on
+ 
++  # Rewrite rule to remove .html and remove kwt-* from url.
++  RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
++
+   # Set "protossl" to "s" if we were accessed via https://.  This is used later
+   # if you enable "www." stripping or enforcement, in order to ensure that
+   # you don't bounce between http and https.

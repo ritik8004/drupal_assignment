@@ -26,6 +26,11 @@ class RouteSubscriber extends RouteSubscriberBase {
         $route->setOption('_maintenance_access', TRUE);
       }
     }
+
+    // Change the title of the cart page.
+    if ($route = $collection->get('acq_cart.cart')) {
+      $route->setDefault('_title', 'Basket');
+    }
   }
 
   /**

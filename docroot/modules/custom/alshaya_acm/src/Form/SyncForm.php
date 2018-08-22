@@ -9,6 +9,7 @@ use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
+use Drupal\alshaya_admin\QueueHelper;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\alshaya_stores_finder_transac\StoresFinderManager;
 use Drupal\Core\Form\FormBase;
@@ -87,6 +88,13 @@ class SyncForm extends FormBase {
   private $addressBookManager;
 
   /**
+   * Queue Helper service object.
+   *
+   * @var \Drupal\alshaya_admin\QueueHelper
+   */
+  private $queueHelper;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
@@ -107,6 +115,8 @@ class SyncForm extends FormBase {
    *   Stores Finder Manager service object.
    * @param \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager
    *   AddressBook Manager service object.
+   * @param \Drupal\alshaya_admin\QueueHelper $queue_helper
+   *   Queue Helper service object.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
@@ -117,7 +127,8 @@ class SyncForm extends FormBase {
     I18nHelper $i18n_helper,
     LanguageManagerInterface $language_manager,
     StoresFinderManager $stores_manager,
-    AlshayaAddressBookManager $address_book_manager) {
+    AlshayaAddressBookManager $address_book_manager,
+    QueueHelper $queue_helper) {
     $this->productCategoriesManager = $product_categories_manager;
     $this->productOptionsManager = $product_options_manager;
     $this->promotionsManager = $promotions_manager;
@@ -127,6 +138,7 @@ class SyncForm extends FormBase {
     $this->languageManager = $language_manager;
     $this->storesManager = $stores_manager;
     $this->addressBookManager = $address_book_manager;
+    $this->queueHelper = $queue_helper;
   }
 
   /**
@@ -142,7 +154,8 @@ class SyncForm extends FormBase {
       $container->get('acq_commerce.i18n_helper'),
       $container->get('language_manager'),
       $container->get('alshaya_stores_finder_transac.manager'),
-      $container->get('alshaya_addressbook.manager')
+      $container->get('alshaya_addressbook.manager'),
+      $container->get('alshaya_admin.queue_helper')
     );
   }
 
@@ -222,8 +235,8 @@ class SyncForm extends FormBase {
         $message_addition = $this->formatPlural(
           count($message_addition),
           implode(' and ', $message_addition) . ' language',
-            implode(' and ', $message_addition) . ' languages'
-          );
+          implode(' and ', $message_addition) . ' languages'
+        );
 
         drupal_set_message($this->t('Full product synchronization launched on @addition.', [
           '@addition' => $message_addition,
@@ -232,6 +245,7 @@ class SyncForm extends FormBase {
 
       case $this->t('Synchronize promotions'):
         $this->promotionsManager->syncPromotions();
+        $this->queueHelper->processQueues(['acq_promotion_detach_queue', 'acq_promotion_attach_queue']);
         drupal_set_message($this->t('Promotions synchronization complete.'), 'status');
         break;
 

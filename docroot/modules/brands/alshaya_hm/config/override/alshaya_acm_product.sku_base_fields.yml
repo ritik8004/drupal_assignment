@@ -1,4 +1,68 @@
 fields:
+  rgb_color:
+    label: 'RGB color'
+    type: 'string'
+
+  color_label:
+    label: 'Color label'
+    type: 'string'
+    configurable: 1
+
   concept:
+    label: 'Concept'
     cardinality: -1
     facet: 1
+
+  washing_instructions:
+    label: 'Washing Instructions'
+    cardinality: -1
+
+  dry_cleaning_instructions:
+    label: 'Dry Cleaning Instructions'
+    cardinality: -1
+
+  article_visual_description:
+    label: 'Visual description'
+    description: 'A visual description of the article.'
+    type: 'string'
+
+  product_designer_collection:
+    label: 'Product Designer Collection'
+    cardinality: -1
+
+  product_feature:
+    label: 'Product Feature'
+    cardinality: -1
+
+  product_environment:
+    label: 'Product Environment'
+    cardinality: -1
+
+  product_quality:
+    label: 'Product Quality'
+    cardinality: -1
+
+  article_pattern:
+    label: 'Article Pattern'
+    cardinality: -1
+
+  article_license_company:
+    label: 'Article License Company'
+    cardinality: -1
+
+  article_license_item:
+    label: 'Article License Item'
+    cardinality: -1
+
+  article_fragrance_description:
+    label: 'Article Fragrance Description'
+    cardinality: -1
+
+  article_warning:
+    label: 'Article Warning'
+
+  composition:
+    label: 'Composition'
+    description: 'Product Composition.'
+    type: 'text_long'
+

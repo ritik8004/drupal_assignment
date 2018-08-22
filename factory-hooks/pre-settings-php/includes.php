@@ -78,9 +78,6 @@ $config['acq_commerce.conductor']['debug'] = FALSE;
 // Set page size to sync products to 30.
 $settings['acq_commerce.conductor']['product_page_size'] = 30;
 
-// Default language code for redirects.
-$settings['alshaya_i18n.settings']['default_langcode'] = 'ar';
-
 // Disable unwanted core views.
 $settings['views_to_disable'] = [
   'frontpage',
@@ -93,6 +90,9 @@ $settings['views_to_disable'] = [
 
 // Specify the modules to be enabled/uninstalled - just initialised here.
 $settings['additional_modules'] = [];
+
+// Set page cache duration to 24 hours by default.
+$config['system.performance']['cache']['page']['max_age'] = 14400;
 
 // ################################################################
 // This switch/case is ONLY for per environment settings. If any of these

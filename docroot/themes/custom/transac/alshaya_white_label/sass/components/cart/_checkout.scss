@@ -627,11 +627,6 @@ body.alias--cart {
         @include breakpoint($tablet) {
           background: $primary_tr_hover;
         }
-
-        .name .items a {
-          color: $content_link_color;
-          text-decoration: underline;
-        }
       }
     }
 
@@ -1328,12 +1323,6 @@ html[lang=ar] {
     @include breakpoint (($only-tablet) (orientation landscape)) {
       #{$left}: -2.3rem;
     }
-  }
-}
-
-html[lang=ar] .alias--cart-checkout-login {
-  .site-brand-home {
-    max-width: 100%;
   }
 }
 

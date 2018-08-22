@@ -113,6 +113,10 @@ function drush_alshaya_acm_alshaya_switch_config() {
       // Update the magento host.
       $config = $configFactory->getEditable('alshaya_api.settings');
       $config->set('magento_host', $mdcs[$mdc]['url']);
+      $config->set('consumer_key', $mdcs[$mdc]['consumer_key']);
+      $config->set('consumer_secret', $mdcs[$mdc]['consumer_secret']);
+      $config->set('access_token', $mdcs[$mdc]['access_token']);
+      $config->set('access_token_secret', $mdcs[$mdc]['access_token_secret']);
       $config->save();
 
       drush_print(dt('Configuring alshaya_api.settings.magento_host to @value.', [

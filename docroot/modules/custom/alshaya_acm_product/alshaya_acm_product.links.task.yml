@@ -10,7 +10,7 @@ alshaya_acm_product.product_home_delivery_settings_form:
   route_name: alshaya_acm_product.product_home_delivery_settings_form
   title: 'ACM Product Home Delivery settings'
   base_route: alshaya_acm_product.product_home_delivery_settings_form
-alshaya_acm_product.size_guide_settings_form:
-  route_name: alshaya_acm_product.size_guide_settings_form
-  title: 'Size Guide Settings'
+alshaya_acm_product.pdp_modal_links_settings_form:
+  route_name: alshaya_acm_product.pdp_modal_links_settings_form
+  title: 'PDP modal links settings'
   base_route: alshaya_acm_product.product_home_delivery_settings_form

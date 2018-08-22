@@ -23,10 +23,14 @@
 
     .content--item-code {
       font-size: 0.625rem;
+
+      @include breakpoint($only-mobile) {
+        padding-bottom: 0.25rem;
+      }
     }
 
     .content--brand {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       color: $pdp_product_brand_text;
     }
   }
@@ -47,11 +51,17 @@
 
       @include breakpoint($only-mobile) {
         padding: 0 0.5rem;
-        margin: 0.5rem 0 1rem;
+        margin: 0.5rem 0 0.625rem;
       }
 
       .field__label {
         color: $pdp_product_volume_label;
+      }
+    }
+
+    .mobile-related-wrapper {
+      @include breakpoint($only-mobile) {
+        padding: 0;
       }
     }
   }
@@ -87,6 +97,13 @@
   .field {
     &__label {
       font-weight: normal;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    &__content {
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
     }
   }
 }
@@ -97,6 +114,8 @@
   .read-more-description-link-mobile {
     font-weight: normal;
     line-height: 1.33;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
   }
 
   .show-less-link,
@@ -109,13 +128,29 @@
   .field {
     &__label {
       font-weight: normal;
+      margin: 0.875rem 0 0.5rem;
+      font-size: 0.875rem;
     }
   }
 
   .c-accordion {
     &__title {
       .subtitle {
-        line-height: 1.33;
+        line-height: 1.2;
+        font-size: 0.75rem;
+        padding-bottom: 0.25rem;
+      }
+    }
+
+    &-delivery-options {
+      &.click-collect,
+      &.home-delivery {
+        h3 {
+          &.ui-state-disabled {
+            opacity: 0.25;
+            pointer-events: none;
+          }
+        }
       }
     }
   }
@@ -169,10 +204,45 @@
 }
 
 .basic-details-wrapper .field--name-field-skus {
+  @include breakpoint($only-mobile) {
+    min-height: 5.5rem;
+  }
+
   .form-item-quantity {
     label {
       color: $pdp_product_qty_text;
       font-size: 0.875rem;
+    }
+
+    select {
+      &.form-select {
+        height: 2.5rem;
+        padding: 0.875rem 0.875rem 0.75rem;
+      }
+    }
+
+    &::after {
+      top: 0.1875rem;
+      font-size: 2rem;
+    }
+  }
+
+  .sku-base-form {
+    button[type="submit"] {
+      @include breakpoint($only-mobile) {
+        padding: 0.5rem 0 0.125rem;
+      }
+    }
+  }
+
+  button[type="submit"] {
+    @include breakpoint($only-mobile) {
+      &.hide-button {
+        height: 2.5rem;
+        width: 70%;
+        float: $right;
+        margin-top: 1.0625rem;
+      }
     }
   }
 }

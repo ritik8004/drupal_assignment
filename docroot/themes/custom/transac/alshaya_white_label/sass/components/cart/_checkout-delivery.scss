@@ -605,7 +605,9 @@
 .page-standard.c-address-book,
 .page-standard.checkout-login,
 .page-standard.user-page.checkout-payment,
-.page-standard.user-page.c-delivery-checkout {
+.page-standard.user-page.c-delivery-checkout,
+.pdp-modal-overlay .page-standard,
+.free-gifts-modal-overlay .page-standard {
   .ajax-progress-throbber {
     position: fixed !important;
     width: 100% !important;
@@ -1226,11 +1228,11 @@ html[lang=ar] {
   text-transform: lowercase;
 
   @include breakpoint($tablet) {
-    margin: 1rem;
+    margin: 1.375rem;
   }
 
   @include breakpoint($desktop) {
-    margin: 2rem 2rem 1rem;
+    margin: 1.375rem 2rem 1rem;
   }
 }
 

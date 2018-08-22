@@ -1,0 +1,6 @@
+processor_configs:
+  alshaya_remove_supercategory_term:
+    processor_id: alshaya_remove_supercategory_term
+    weights:
+      build: -10
+    settings: {  }

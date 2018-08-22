@@ -1,7 +1,7 @@
 .has--three-levels {
-  .menu--three__list-item > .menu-two__link-wrapper a {
+  .menu--three__list-item > .menu-two__link-wrapper .menu__link {
     @include breakpoint($desktop) {
-      font-size: 0.875rem !important;
+      font-size: 0.75rem !important;
       text-transform: none;
     }
   }
@@ -12,7 +12,7 @@
         column-width: 13.2rem;
         padding-#{$left}: 5.75rem;
         padding-bottom: 2.5rem;
-        height: 17rem;
+        height: 18rem;
         min-height: 0;
       }
     }
@@ -21,9 +21,25 @@
 
 .menu--two__list {
   .menu--two__list-item {
-    .menu-two__link {
+    @include breakpoint($desktop) {
+      margin-bottom: 1.563rem;
+
+      &.has-child {
+        margin-bottom: 0.3125rem;
+      }
+    }
+
+    .menu__link-wrapper {
+      .menu-two__link {
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+        }
+      }
+    }
+
+    & > .menu__link-wrapper.menu-two__link-wrapper {
       @include breakpoint($desktop) {
-        font-size: 0.75rem;
+        margin-bottom: 0.3125rem !important;
       }
     }
 
@@ -42,12 +58,14 @@
   }
 
   .highlights {
-    background: $mm_highlight_bg;
-    margin-#{$right}: 0;
-    padding: 2.5rem;
-    padding-bottom: 0;
-    height: 18.4rem;
-    margin-top: -2.55rem;
+    @include breakpoint($desktop) {
+      background: $mm_highlight_bg;
+      margin-#{$right}: 0;
+      padding: 2.5rem;
+      padding-bottom: 0;
+      height: 18.4rem;
+      margin-top: -2.55rem;
+    }
   }
 }
 
@@ -86,7 +104,7 @@
         &::before {
           content: " ";
           display: block;
-          height: 2px;
+          height: 1px;
           background: $mm_top_border;
           position: relative;
           top: -2.5rem;

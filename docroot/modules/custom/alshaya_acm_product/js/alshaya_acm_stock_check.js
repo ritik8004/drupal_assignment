@@ -41,6 +41,20 @@
         });
       });
 
+      $('.edit-add-to-cart').once('js-to-move-error-message').on('click', function () {
+        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
+          $('.form-item > label.error', $(this).closest('form')).each(function () {
+            var parent = $(this).closest('.form-item');
+            if (parent.find('.select2Option').length > 0) {
+              $('.selected-text', $(parent)).append($(this));
+            }
+            else {
+              $('label.form-required', $(parent)).append($(this));
+            }
+          });
+        }
+      });
+
       // Stock check on PDP main product / product in modal view.
       $('.add-to-cart-form-placeholder').once('js-event').each(function () {
         var $wrapper = $(this).closest('article');
@@ -126,6 +140,23 @@
         var $wrapper = skuArticle;
         $wrapper.find('.add-to-cart-form-placeholder-teaser').trigger('click');
       }
+    }
+  };
+
+  /**
+   * Mark product out of stock.
+   *
+   * @param data
+   *   SKU selector.
+   */
+  $.fn.markProductStockStatusAction = function (data, status) {
+    var article = $(data).parents('article:first');
+    if (status <= 0) {
+      article.addClass('product-out-of-stock');
+      article.find('.sharethis-wrapper').addClass('out-of-stock');
+      article
+        .find('#pdp-home-delivery.home-delivery')
+        .accordion('option', 'disabled', true);
     }
   };
 

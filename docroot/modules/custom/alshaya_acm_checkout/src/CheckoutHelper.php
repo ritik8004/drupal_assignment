@@ -222,7 +222,7 @@ class CheckoutHelper {
 
       // While debugging we log the whole cart object.
       $this->logger->debug('Placed order for cart: @cart', [
-        '@cart' => json_encode($cart->getCart()),
+        '@cart' => $this->cartHelper->getCleanCartToLog($cart),
       ]);
 
       // Clear the cart in session.
@@ -234,7 +234,7 @@ class CheckoutHelper {
 
       // Add message in logs.
       $this->logger->critical('Error occurred while placing order. Cart: @cart. Exception: @message', [
-        '@cart' => json_encode($cart->getCart()),
+        '@cart' => $this->cartHelper->getCleanCartToLog($cart),
         '@message' => $e->getMessage(),
       ]);
 

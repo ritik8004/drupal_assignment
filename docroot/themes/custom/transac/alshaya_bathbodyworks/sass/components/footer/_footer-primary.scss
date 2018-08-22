@@ -312,3 +312,9 @@
     }
   }
 }
+
+.c-footer {
+  @include breakpoint($only-mobile) {
+    padding-top: 0;
+  }
+}

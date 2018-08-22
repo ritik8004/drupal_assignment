@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Re-create all facets and facet blocks.
+ */
+function alshaya_mc_update_8313() {
+  _alshaya_search_api_refactor_sku_base_fields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove 'alshaya_white_label_main_menu' and 'alshaya_white_label_powered'
  * block from DB.
  */
@@ -247,7 +256,8 @@ function alshaya_mc_update_8301() {
 function alshaya_mc_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_mc', 'inc', 'alshaya_mc.content');
 
-  // Enable and set alshaya_mothercare as default theme and set the site logo, favicon icon and email logo path.
+  // Enable and set alshaya_mothercare as default theme and set the site logo,
+  // favicon icon and email logo path.
   _alshaya_master_initialize_brand_theme('alshaya_mothercare');
 
   // Translate store finder block's link title.

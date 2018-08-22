@@ -9,11 +9,6 @@
     list-style: none;
     padding: 0;
 
-    @include breakpoint($upto-tablet) {
-      padding: 0 0.625rem;
-      padding-top: 0.1875rem;
-    }
-
     @include breakpoint($only-tablet) {
       padding: 0.5rem 0 0;
       padding-#{$left}: 1rem;
@@ -97,7 +92,6 @@
     &:first-child {
       @include breakpoint($upto-tablet) {
         position: relative;
-        #{$left}: -0.8rem;
       }
     }
 
@@ -125,11 +119,6 @@
 
       @include breakpoint($only-mobile) {
         width: 35%;
-        padding-#{$left}: 0.5rem;
-
-        &::before {
-          margin-#{$left}: 0.5rem;
-        }
       }
 
       @include breakpoint($desktop) {
@@ -203,7 +192,7 @@
       height: 0;
 
       @include breakpoint($only-mobile) {
-        width: 76%;
+        width: 61%;
         #{$left}: 65%;
       }
 

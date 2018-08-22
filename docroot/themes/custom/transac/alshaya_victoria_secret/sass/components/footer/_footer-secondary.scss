@@ -40,6 +40,12 @@
         font-size: 0.75rem;
       }
     }
+
+    .country-ae & {
+      html[lang=ar] & {
+        padding: 1.875rem 0;
+      }
+    }
   }
 }
 

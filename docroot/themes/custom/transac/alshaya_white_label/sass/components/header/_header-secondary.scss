@@ -261,7 +261,7 @@
 }
 
 .menu--three__list-item {
-  .menu--three__link {
+  a.menu--three__link {
     position: relative;
 
     @include breakpoint($upto-desktop) {
@@ -342,7 +342,7 @@
 
 body {
   @include breakpoint($only-mobile) {
-    margin-top: 3.8125rem;
+    margin-top: 3.6875rem;
 
     html[lang=ar] & {
       margin-top: 4.0625rem;

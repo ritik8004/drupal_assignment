@@ -294,7 +294,7 @@ $accordion_sub_title: $ash-triplet;
 $accordion_title_disabled: $gainsboro;
 
 // Cloudzoom
-$cloudzoom_hovertext: $grey-ash;
+$cloudzoom_hovertext: $mothercare-black;
 $cloudzoom_zoombox_border: $white;
 
 // Mobile Gallery
@@ -393,6 +393,7 @@ $mm_body_overlay: rgba(0, 0, 0, 0.48);
 $mm_l1_border: $gainsboro;
 $mm_l1_link: $black;
 $mm_l1_link_bg: $brilliant-rose;
+$mm_l1_link_active: $brilliant-rose;
 $mm_l1_link_hover: $black;
 $mm_l1_link_hover_border_to_fill_space: $brilliant-rose;
 $mm_l1_link_active_border: transparent;
@@ -542,18 +543,19 @@ $plp_pager_link: $nero;
 $plp_pager_link_border: $nero;
 
 // Product detail page.
-$pdp_product_title: $nero;
-$pdp_product_price: $black;
+$pdp_product_title: $mothercare-black;
+$pdp_product_price: $mothercare-black;
 $pdp_product_special_price: $red-error;
 $pdp_product_special_price_text: $red-error;
 $pdp_product_discount_price: $red-error;
 $pdp_product_discount_text: $red-error;
 $pdp_product_itemcode: $ash-triplet;
+$pdp_product_itemcode_border: $gainsboro;
 $pdp_filter_selector_label: $nero;
 $pdp_title_section_border: $gainsboro;
 $pdp_mobile_wrapper: $white-five;
 $pdp_sell_title: $nero;
-$pdp_title_collection_name: $ash-triplet;
+$pdp_title_collection_name: $mothercare-black;
 $pdp_color_attribute: $gainsboro;
 $pdp_color_attribute_hover: $nero;
 $pdp_color_attribute_hover_bg: rgba(51, 51, 51, 0.06);
@@ -565,7 +567,7 @@ $pdp_white_color_attribute_border: $nero;
 // Product modal
 $pdp_modal_full_prodlink: $nero;
 $pdp_modal_full_prodlink_border: $gainsboro;
-$pdp_modal_sub_title_text: $ash-triplet;
+$pdp_modal_sub_title_text: $mothercare-black;
 
 // Product Add to cart form.
 $pdp_sizeguide_link: $nero;
@@ -579,7 +581,7 @@ $pdp_size_option_selected_bg: $vanilla;
 $pdp_swatch_disabled: $white;
 $pdp_size_option_text_hover : $white-five;
 $pdp_size_option_bg_hover: $black;
-$pdp_sidebar_label: $black;
+$pdp_sidebar_label: $mothercare-black;
 $pdp_sidebar_link: $brilliant-rose;
 $pdp_desc_wrapper: $white-five;
 $pdp_desc_wrapper_border: $black;
@@ -626,6 +628,9 @@ $not_buyable_help: $brilliant-rose;
 
 // Department page
 $department_category_list_hover: $brilliant-rose;
+$department_category_accordion_title_arrow: $nero;
+$department_category_accordion_link_arrow: $nero;
+$department_category_accordion_title: $black;
 
 // Store finder page.
 // Store finder header form.
@@ -955,7 +960,7 @@ $basket_td_sec_txt: $greyish;
 $basket_item_bundle: $cerulean-two;
 $basket_tooltip_not_available: $white;
 $basket_promotion_input_border: $white;
-$basket_remove_link: $cerulean-two;
+$basket_remove_link: $nero;
 $basket_horizontal_recommendation_slider_dots: $black;
 $basket_order_total_bg: $gainsboro;
 // Basket top promotions.
@@ -1021,3 +1026,15 @@ $category_facet_active_icon: $nero;
 
 // Block Alshaya ACM customer .block-alshaya-acm-customer
 $block_acm_customer_txt: $black;
+
+// Free Gifts
+$free-gifts-label: $red-error;
+$free-gifts-title-text: $nero;
+$free-gifts-coupon-code-text: $brilliant-rose;
+$free-gifts-border: $brilliant-rose;
+$free-gifts-text: $nero;
+$free-gift-modal-item-code-border: $gainsboro;
+$cart-free-gifts-message: $nero;
+$cart-free-gifts-title: $nero;
+$cart-free-gifts-label: $vanilla;
+$cart-free-gifts-label-background: $brilliant-rose;

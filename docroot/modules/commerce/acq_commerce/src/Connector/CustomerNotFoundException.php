@@ -15,4 +15,3 @@ class CustomerNotFoundException extends ConnectorException {
   const CUSTOMER_NOT_FOUND_MESSAGE = "Customer not found";
 
 }
-
