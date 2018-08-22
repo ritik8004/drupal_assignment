@@ -15,6 +15,10 @@ header {
           }
         }
 
+        @include breakpoint($only-mobile) {
+          top: 3.5625rem;
+        }
+
         @include breakpoint($desktop) {
           width: 14.4375rem;
         }
