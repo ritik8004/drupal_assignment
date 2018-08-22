@@ -163,7 +163,7 @@
     attach: function (context, settings) {
       $(document).ajaxSend(function (event, jqxhr, settings) {
         if (settings.url.includes('facets-block')) {
-          if ($('.page-standard > .checkout-ajax-progress-fullsreen').length === 0) {
+          if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
             $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
           }
         }
