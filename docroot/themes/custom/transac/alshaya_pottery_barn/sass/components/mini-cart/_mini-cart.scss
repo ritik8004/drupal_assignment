@@ -28,8 +28,13 @@ header .block-cart-mini-block {
   }
 
   .cart-link-total {
+    @include breakpoint($only-tablet) {
+      margin-top: 0.5rem !important;
+    }
+
     @include breakpoint($desktop) {
       margin-top: 0.625rem;
+      padding-#{$right}: 0.65625rem;
     }
 
     .price-amount {
