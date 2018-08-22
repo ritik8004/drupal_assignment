@@ -5,14 +5,21 @@ namespace Drupal\alshaya_custom;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 
+/**
+ * Utilty Class.
+ */
 class Utility {
 
   /**
+   * Theme Handler service.
+   *
    * @var \Drupal\Core\Extension\ThemeHandlerInterface
    */
   protected $themeHandler;
 
   /**
+   * Entity Type Manager service.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
@@ -21,7 +28,9 @@ class Utility {
    * Utility constructor.
    *
    * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
+   *   Theme Handler service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager service.
    */
   public function __construct(ThemeHandlerInterface $theme_handler, EntityTypeManagerInterface $entity_type_manager) {
     $this->themeHandler = $theme_handler;
