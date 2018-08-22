@@ -730,7 +730,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     // Add PDP slider position config to variable so it is available in themes.
     $alshaya_acm_product_slider_settings = \Drupal::config('alshaya_acm_product.settings');
-    $pdp_image_slider_position = $alshaya_acm_product_slider_settings->get('image_slider_position_pdp');
+    $pdp_image_slider_position = $skuManager->getImageSliderPosition($entity);
     $build['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
     // Add PDP slider position config to drupalSettings so we can use it in JS.
     $build['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
