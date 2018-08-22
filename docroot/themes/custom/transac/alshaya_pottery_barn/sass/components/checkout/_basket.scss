@@ -35,6 +35,10 @@
         td {
           a {
             font-weight: 600;
+
+            &.sku-promotion-link {
+              text-decoration: underline;
+            }
           }
         }
 
