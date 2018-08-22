@@ -10,3 +10,4 @@ swatches:
   pdp: {  }
   plp: {  }
 short_desc_characters: 160
+hide_not_required_option: false

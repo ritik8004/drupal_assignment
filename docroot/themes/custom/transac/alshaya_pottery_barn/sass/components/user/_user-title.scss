@@ -10,4 +10,18 @@
       color: $my_account_dashboard_back_link;
     }
   }
+
+  @include breakpoint($desktop) {
+    padding-bottom: 0.75rem;
+  }
+}
+
+.c-user--node.l-two--sf {
+  aside.c-sidebar-first {
+    .my-account-mobile-title1 {
+      @include breakpoint($only-mobile) {
+        padding: 0.45rem 0 0.3rem;
+      }
+    }
+  }
 }
