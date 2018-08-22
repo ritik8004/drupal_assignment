@@ -32,7 +32,7 @@ function alshaya_block_themes_installed($theme_list) {
       && strpos($theme_info[$theme]->getPathname(), '/custom/')
       && \Drupal::service('theme_handler')->hasUi($theme)
       && !empty($theme_info[$theme]->info['alshaya_theme_type'])
-      && !empty($source_theme = _alshaya_get_theme_by_theme_type($theme_info[$theme]->info['alshaya_theme_type'], [$theme]))
+      && !empty($source_theme = \Drupal::service('alshaya_custom.utility')->getThemeByThemeType($theme_info[$theme]->info['alshaya_theme_type'], [$theme]))
     ) {
       alshaya_block_move_blocks_theme_to_theme($theme, $source_theme);
     }
