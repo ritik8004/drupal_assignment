@@ -8,7 +8,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
@@ -187,19 +186,17 @@ class AlshayaApiWrapper {
    *
    * @param string $url
    *   Base URL.
-   * @param array $secrets
-   *   Secret info to authenticate request.
    *
    * @return \GuzzleHttp\Client
    *   Client object.
    */
-  private function getClient($url, array $secrets) {
+  private function getClient($url) {
     $configuration = new Configuration();
     $configuration->setBaseUri($url);
-    $configuration->setConsumerKey($secrets['consumer_key']);
-    $configuration->setConsumerSecret($secrets['consumer_secret']);
-    $configuration->setToken($secrets['access_token']);
-    $configuration->setTokenSecret($secrets['access_token_secret']);
+    $configuration->setConsumerKey($this->config->get('consumer_key'));
+    $configuration->setConsumerSecret($this->config->get('consumer_secret'));
+    $configuration->setToken($this->config->get('access_token'));
+    $configuration->setTokenSecret($this->config->get('access_token_secret'));
 
     return (new ApiFactory($configuration))->getApiClient();
   }
@@ -220,8 +217,8 @@ class AlshayaApiWrapper {
    *   Response from the API.
    */
   public function invokeApi($endpoint, array $data = [], $method = 'POST') {
-    $secrets = Settings::get('magento_secrets');
-    if (empty($secrets) || empty($secrets['consumer_key'])) {
+    $consumer_key = $this->config->get('consumer_key');
+    if (empty($consumer_key)) {
       return $this->invokeApiWithToken($endpoint, $data, $method, TRUE);
     }
 
@@ -230,7 +227,7 @@ class AlshayaApiWrapper {
       $url .= '/' . $this->getMagentoLangPrefix();
       $url .= '/' . $this->config->get('magento_api_base');
 
-      $client = $this->getClient($url, $secrets);
+      $client = $this->getClient($url);
       $url .= '/' . $endpoint;
 
       $options = [];
