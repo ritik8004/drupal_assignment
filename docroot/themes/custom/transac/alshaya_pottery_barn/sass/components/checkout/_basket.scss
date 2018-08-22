@@ -112,3 +112,33 @@
     }
   }
 }
+
+.block-basket-horizontal-recommendation {
+  h3 {
+    padding-#{$left}: 0;
+    font-size: 1.125rem;
+    font-weight: 300;
+
+    @include breakpoint($tablet) {
+      padding: 0 12%;
+      margin-bottom: 1.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 0 1.5rem;
+      margin-bottom: 1.625rem;
+    }
+  }
+
+  .view-product-slider {
+    padding: 0 0.75rem;
+
+    .owl-carousel {
+      .owl-item {
+        img {
+          max-width: 13.125rem;
+        }
+      }
+    }
+  }
+}

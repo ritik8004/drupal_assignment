@@ -2,7 +2,7 @@
   .cvv-help-text-wrapper {
     .cc_cvv_help_text {
       &::before {
-        background: url(../imgs/cards/back-of-card.svg);
+        background: url('../imgs/cards/back-of-card.svg');
         width: 3.1875rem;
         height: 2.0625rem;
       }
@@ -12,7 +12,7 @@
       span.tooltip-content {
         p {
           &::before {
-            background: url(../imgs/cards/back-of-card.svg);
+            background: url('../imgs/cards/back-of-card.svg');
             background-size: contain;
           }
         }
@@ -90,6 +90,14 @@
       }
     }
   }
+
+  #edit-checkout-terms {
+    margin-top: 0 !important;
+
+    @include breakpoint($only-mobile) {
+      padding: 0.25rem 0;
+    }
+  }
 }
 
 #payment_method_cybersource {
@@ -102,22 +110,23 @@
   .card-types-wrapper {
     .card-type {
       opacity: 0.3;
-      background-size: contain !important;
+      background-size: 100% 100% !important;
 
       &.active {
         opacity: 1;
       }
 
       &.card-type-visa {
-        background: url(../imgs/cards/visa-active.svg) no-repeat;
+        background: url('../imgs/cards/visa-active.svg') no-repeat;
       }
 
       &.card-type-mastercard {
-        background: url(../imgs/cards/mastercard-active.svg) no-repeat;
+        background: url('../imgs/cards/mastercard-active.svg') no-repeat;
       }
 
       &.card-type-diners-club {
-        background: url(../imgs/cards/dinersclub-active.svg) no-repeat;
+        background: url('../imgs/cards/dinersclub-active.svg') no-repeat;
+        width: 2.6875rem;
       }
     }
   }

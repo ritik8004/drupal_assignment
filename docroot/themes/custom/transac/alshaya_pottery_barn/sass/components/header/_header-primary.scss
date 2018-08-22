@@ -15,6 +15,10 @@ header {
           }
         }
 
+        @include breakpoint($only-mobile) {
+          top: 3.5625rem;
+        }
+
         @include breakpoint($desktop) {
           width: 14.4375rem;
         }
@@ -39,7 +43,11 @@ header {
       }
 
       @include breakpoint($only-mobile) {
-        top: 2.75rem;
+        top: 3.5rem;
+
+        html[lang=ar] & {
+          top: 4rem;
+        }
       }
     }
 
@@ -47,6 +55,7 @@ header {
       .cart-link {
         background-size: 2rem;
         margin-bottom: 0.5rem;
+        background-image: none;
 
         @include breakpoint($only-tablet) {
           background-size: 1.625rem;
@@ -60,6 +69,34 @@ header {
 
           html[lang=ar] & {
             margin-top: 1rem;
+          }
+        }
+
+        @include icon(shoppingbag) {
+          font-size: 1.6875rem;
+          position: absolute;
+          #{$right}: -0.09375rem;
+          top: -0.1875rem;
+          color: #333;
+
+          @include breakpoint($only-tablet) {
+            font-size: 2.125rem;
+            top: -0.3125rem;
+            #{$right}: 0.125rem;
+
+            html[lang=ar] & {
+              left: -0.25rem;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            font-size: 2.5rem;
+            top: -0.3125rem;
+            #{$right}: -0.3125rem;
+
+            html[lang=ar] & {
+              left: -0.25rem;
+            }
           }
         }
       }

@@ -6,6 +6,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -73,12 +74,18 @@ class ProductController extends ControllerBase {
     $content_nid = $this->config('alshaya_acm_product.pdp_modal_links')->get($types[$type]);
     $content = '';
     if (!empty($content_nid)) {
-      $content = $this->entityTypeManager()->getStorage('node')->load($content_nid);
-      $current_language = $this->languageManager()->getCurrentLanguage()->getId();
-      // Get translated node object.
-      $content = $this->entityManager()->getTranslationFromContext($content, $current_language);
-      $content->setTitle('');
-      $content = render($this->entityTypeManager()->getViewBuilder('node')->view($content, 'full'));
+      $node = $this->entityTypeManager()->getStorage('node')->load($content_nid);
+
+      if ($node instanceof NodeInterface) {
+        // Get translated node object.
+        $node = $this->entityManager()->getTranslationFromContext($node);
+
+        // Set the title to empty string. We don't want to display title.
+        $node->setTitle('');
+
+        // Prepare content using full view mode.
+        $content = $this->entityTypeManager()->getViewBuilder('node')->view($node, 'full');
+      }
     }
 
     $build = [
