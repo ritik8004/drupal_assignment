@@ -1180,6 +1180,10 @@ body {
   }
 }
 
-.select2-container--open {
-  z-index: 4;
+.path--search,
+.path--taxonomy,
+.nodetype--acq_promotion {
+  .select2-container--open {
+    z-index: 4;
+  }
 }
