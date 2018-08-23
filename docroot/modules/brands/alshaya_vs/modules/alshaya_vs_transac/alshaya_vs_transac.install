@@ -27,14 +27,9 @@ function alshaya_vs_transac_post_update_8001(&$sandbox) {
  */
 function alshaya_vs_transac_update_8002() {
   alshaya_config_install_configs(['alshaya_vs_transac.sku_base_fields'], 'alshaya_vs_transac');
-  $config = \Drupal::config('alshaya_vs_transac.sku_base_fields')->getRawData();
-  foreach ($config['fields'] as $key => $field) {
-    /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
-    $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
-    $sku_fields_manager->updateFieldMetaInfo($key, [
-      'swatch' => isset($field['swatch']) ? $field['swatch'] : 0,
-    ]);
-  }
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('actual_color_label_code', ['swatch' => 1]);
 }
 
 /**
