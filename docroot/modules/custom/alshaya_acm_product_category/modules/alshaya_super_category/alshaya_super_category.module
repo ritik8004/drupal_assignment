@@ -692,15 +692,12 @@ function alshaya_super_category_views_query_alter(ViewExecutable $view, QueryPlu
   if ($super_category_feature_enabled
     && $view->id() == 'product_category_level_2_3'
     && $view->current_display == 'block_2') {
-    $display = $view->storage->getDisplay($view->current_display);
-    // Get depth from views.
-    $depth = $display['display_options']['filters']['depth_level']['value']['value'];
     foreach ($query->where as &$condition_group) {
       foreach ($condition_group['conditions'] as &$condition) {
         // If depth level condition, then update it as with super category
         // feature, we have this applicable at level 3 only.
         if ($condition['field'] == 'taxonomy_term_field_data.depth_level') {
-          $condition['value'] = $depth + 1;
+          $condition['value'] += 1;
         }
       }
     }
