@@ -14,7 +14,7 @@ use Drupal\node\Entity\NodeType;
  * Uninstall lightning_scheduler module.
  */
 function alshaya_update_8008() {
-  if (!\Drupal::moduleHandler()->moduleExists('lightning_scheduler')) {
+  if (\Drupal::moduleHandler()->moduleExists('lightning_scheduler')) {
     \Drupal::service('module_installer')->uninstall(['lightning_scheduler']);
   }
 }
