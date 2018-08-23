@@ -126,7 +126,12 @@ $magentos = [
   ],
   'pb_uat' => [
     'url' => 'https://pb-uat.store.alshaya.com',
-    'magento_secrets' => [],
+    'magento_secrets' => [
+      'consumer_key' => 'u59m0076qalrjodhiwoekpt2qpens7c4',
+      'consumer_secret' => '521nybox1a70rjpwf1yxyfoqhiyrv7x1',
+      'access_token' => 'gsw0sb6xy52kfww9yufgcu6dsixka3g9',
+      'access_token_secret' => '6a38i2p1qaxa1hfkjrdmhjtwluy57itq',
+    ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 18],
     ],
