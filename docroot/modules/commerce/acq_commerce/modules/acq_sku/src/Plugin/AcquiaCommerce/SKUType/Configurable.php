@@ -52,6 +52,16 @@ class Configurable extends SKUPluginBase {
       $sku->get('attribute_set')->getString()
     );
 
+    // Sort configurables based on the config.
+    uasort($configurables, function ($a, $b) use ($configurable_weights) {
+      // We may keep getting new configurable options not defined in config.
+      // Use default values for them and keep their sequence as is.
+      // Still move the ones defined in our config as per weight in config.
+      $a = $configurable_weights[$a['code']] ?? -50;
+      $b = $configurable_weights[$b['code']] ?? 50;
+      return $a - $b;
+    });
+
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
 
@@ -73,7 +83,6 @@ class Configurable extends SKUPluginBase {
           '#type' => 'select',
           '#title' => $configurable['label'],
           '#options' => $sorted_options,
-          '#weight' => $configurable_weights[$attribute_code] ?? 500,
           '#required' => TRUE,
           '#ajax' => [
             'callback' => [$this, 'configurableAjaxCallback'],

@@ -150,6 +150,7 @@ class AlshayaConfigManager {
         $existing = is_array($existing) ? $existing : [];
         $updated = $this->getUpdatedData($existing, $data, $mode, $options);
         $config->setData($updated)->save(TRUE);
+        $this->configFactory->reset($config_id);
       }
 
       // Flush image cache for style we updated.

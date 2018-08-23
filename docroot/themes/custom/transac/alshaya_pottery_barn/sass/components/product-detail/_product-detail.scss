@@ -129,10 +129,28 @@
           }
         }
 
+        @include breakpoint($only-tablet) {
+          margin-top: 1.45rem;
+          margin-bottom: 1.5rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          &:first-child {
+            margin-bottom: 0.75rem;
+          }
+        }
+
         &.configurable-swatch {
           @include breakpoint($only-mobile) {
             margin: 0;
             padding: 0 0 1rem;
+            margin-bottom: 1.5rem;
+          }
+        }
+
+        .form-select {
+          @include breakpoint($upto-desktop) {
+            clip: auto;
           }
         }
 
@@ -278,6 +296,39 @@
         &.form-item-quantity {
           width: 100%;
           margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.basic-details-wrapper {
+  .field--name-field-skus {
+    #configurable_ajax {
+      .form-item-configurables-color {
+        .select2Option {
+          li {
+            &.disabled {
+              img {
+                opacity: 0.2;
+                padding: 0.125rem;
+              }
+
+              a,
+              span {
+                background: url("../imgs/icons/disabled.png") no-repeat;
+                background-size: 100% 100%;
+                border: 1px solid $pdp_swatch_disabled;
+                height: 2.5rem;
+
+                &:hover {
+                  &::after {
+                    border: none;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

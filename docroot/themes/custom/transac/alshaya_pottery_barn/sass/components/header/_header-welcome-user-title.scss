@@ -1,0 +1,7 @@
+#block-welcomeuser {
+  h3 {
+    @include breakpoint($desktop) {
+      font-weight: 400;
+    }
+  }
+}

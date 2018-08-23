@@ -4,3 +4,6 @@ services:
     arguments: ['@current_route_match']
     tags:
       - { name: 'context_provider' }
+  alshaya_custom.utility:
+    class: Drupal\alshaya_custom\Utility
+    arguments: [ '@theme_handler', '@entity_type.manager' ]

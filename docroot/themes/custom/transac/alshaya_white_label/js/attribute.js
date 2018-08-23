@@ -7,14 +7,22 @@
   'use strict';
 
   Drupal.select2OptionConvert = function () {
-    $('.form-item-configurable-swatch').addClass('visually-hidden');
-
     if ($(window).width() > drupalSettings.show_configurable_boxes_after) {
+      // Show the boxes again if we had hidden them when user resized window.
+      $('.configurable-select .select2Option').show();
+      // Hide the dropdowns when user resizes window and is now in desktop mode.
+      $('.form-item-configurable-select').addClass('visually-hidden');
       Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-select'));
     }
     else {
+      // Show the dropdowns when user is in mobile mode.
       $('.form-item-configurable-select').removeClass('visually-hidden');
+      // Hide the boxes if user loaded the page in desktop mode and then resized.
+      $('.configurable-select .select2Option').hide();
     }
+
+    // Always hide the dropdown for swatch field.
+    $('.form-item-configurable-swatch').addClass('visually-hidden');
 
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
   };
@@ -39,8 +47,18 @@
     });
   };
 
+  // Hide configurable options of add to cart form on page load.
+  // We do not want to show ugly drop downs.
+  // We will show them again after window load is finished.
+  $('#configurable_ajax').hide();
+
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {
+      $(window).on('load', function () {
+        // Show configurable options again as window is loaded.
+        $('#configurable_ajax').show();
+      });
+
       $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
       $('.form-item-configurable-select').parent().addClass('configurable-select');
 

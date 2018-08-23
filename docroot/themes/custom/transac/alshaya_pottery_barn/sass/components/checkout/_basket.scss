@@ -12,6 +12,15 @@
     }
   }
 
+  #edit-actions-top {
+    .checkout-top-button {
+      -webkit-font-smoothing: antialiased;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   #table-cart-items {
     table {
       font-family: $body_font;
@@ -35,6 +44,10 @@
         td {
           a {
             font-weight: 600;
+
+            &.sku-promotion-link {
+              text-decoration: underline;
+            }
           }
         }
 

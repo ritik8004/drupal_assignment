@@ -11,7 +11,11 @@ set classes = [
   <article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     <div class="content__main {{ image_slider_position_pdp }}">
-      {{ content.gallery }}
+      {% if content.gallery is not null %}
+        {{ content.gallery }}
+      {% else %}
+        <div id="product-zoom-container"></div>
+      {% endif %}
 
       {% if content.cross_sell %}
         <div class="horizontal-crossell above-mobile-block">

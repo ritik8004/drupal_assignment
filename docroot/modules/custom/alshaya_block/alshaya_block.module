@@ -32,44 +32,11 @@ function alshaya_block_themes_installed($theme_list) {
       && strpos($theme_info[$theme]->getPathname(), '/custom/')
       && \Drupal::service('theme_handler')->hasUi($theme)
       && !empty($theme_info[$theme]->info['alshaya_theme_type'])
-      && !empty($source_theme = _alshaya_get_theme_by_theme_type($theme_info[$theme]->info['alshaya_theme_type'], [$theme]))
+      && !empty($source_theme = \Drupal::service('alshaya_custom.utility')->getThemeByThemeType($theme_info[$theme]->info['alshaya_theme_type'], [$theme]))
     ) {
       alshaya_block_move_blocks_theme_to_theme($theme, $source_theme);
     }
   }
-}
-
-/**
- * Get theme name by alshaya_theme_type theme key.
- *
- * Get the theme name for the key 'alshaya_theme_type' set in the themes
- * *.info.yml file. $skip_themes variable checks if we need to skip few themes
- * or not as at the point of installation, installed themed is also available.
- *
- * @param string $theme_type
- *   Theme type.
- * @param array $skip_themes
- *   Themes for which need to skip value.
- *
- * @return mixed|string
- *   Theme name.
- */
-function _alshaya_get_theme_by_theme_type($theme_type = '', array $skip_themes = []) {
-  if (!empty($theme_type)) {
-    foreach (\Drupal::service('theme_handler')->listInfo() as $theme) {
-      // If the key matches the expected type and the theme has not been
-      // flagged to be ignored.
-      if (!empty($theme->info['alshaya_theme_type'])
-        && $theme->info['alshaya_theme_type'] == $theme_type
-        && !in_array($theme->getName(), $skip_themes)
-        && !empty(\Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['theme' => $theme->getName()]))
-      ) {
-        return $theme->getName();
-      }
-    }
-  }
-
-  return NULL;
 }
 
 /**

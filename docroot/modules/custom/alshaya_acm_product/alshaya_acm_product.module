@@ -474,6 +474,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           // Try to load images first for the child we will display as selected.
           if (empty($selected_value)) {
             $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
+
+            // Set the id in $_GET to use later for add to cart form.
+            \Drupal::request()->query->set('selected', $sku_for_gallery->id());
           }
         }
 

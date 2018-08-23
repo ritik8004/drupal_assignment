@@ -37,7 +37,7 @@ class SkuManager {
 
   use StringTranslationTrait;
 
-  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'NOT REQUIRED';
+  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
 
   /**
    * The database service.
@@ -400,8 +400,12 @@ class SkuManager {
     // Do not pass VAT text part of the price block for teaser and
     // product_category_carousel modes.
     if ($view_mode != 'teaser' && $view_mode != 'product_category_carousel') {
-      if ($this->currentRoute->getRouteName() == 'entity.node.canonical'
-        || $this->currentRoute->getRouteName() == 'alshaya_acm_product.get_cart_form') {
+      $routes = [
+        'entity.node.canonical',
+        'alshaya_acm_product.get_cart_form',
+        'alshaya_acm_product.select_configurable_option',
+      ];
+      if (in_array($this->currentRoute->getRouteName(), $routes)) {
         $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
       }
     }
