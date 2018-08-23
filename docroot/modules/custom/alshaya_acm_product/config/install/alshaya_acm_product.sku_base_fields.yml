@@ -33,7 +33,6 @@ fields:
     cardinality: -1
     index: 1
     facet: 1
-    swatch: 0
 
   size:
     label: 'Size'
@@ -41,7 +40,6 @@ fields:
     configurable: 1
     index: 1
     facet: 1
-    swatch: 0
 
   bullet_points:
     label: 'Bullet points'
@@ -66,13 +64,11 @@ fields:
     label: 'Collection'
     description: 'Part of description.'
     facet: 1
-    swatch: 0
 
   product_brand:
     label: 'Brand'
     description: 'Part of description.'
     facet: 1
-    swatch: 0
 
   brand_logo:
     label: 'Brand Logo'

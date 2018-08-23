@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Adding 'swatch: 0/1' key to the '*.sku_base_fields' for facets.
  */
-function alshaya_acm_product_update_8028() {
+function alshaya_acm_product_update_8029() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.sku_base_fields')->save();
   $config = \Drupal::config('alshaya_acm_product.sku_base_fields')->getRawData();
   foreach ($config['fields'] as $key => $field) {

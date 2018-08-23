@@ -3,7 +3,6 @@ fields:
     label: 'Fragrance Name'
     index: 1
     facet: 1
-    swatch: 0
 
   fragrance_description:
     label: 'Fragrance Description'
@@ -13,7 +12,6 @@ fields:
     label: 'Fragrance Category'
     index: 1
     facet: 1
-    swatch: 0
 
   brand:
     label: 'Product Brand'
@@ -23,7 +21,6 @@ fields:
     label: 'Product Type'
     index: 1
     facet: 1
-    swatch: 0
 
   descriptive_name:
     label: 'Description Name'

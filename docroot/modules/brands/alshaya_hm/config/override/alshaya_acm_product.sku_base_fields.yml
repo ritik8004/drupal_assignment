@@ -12,7 +12,6 @@ fields:
     label: 'Concept'
     cardinality: -1
     facet: 1
-    swatch: 0
 
   washing_instructions:
     label: 'Washing Instructions'
