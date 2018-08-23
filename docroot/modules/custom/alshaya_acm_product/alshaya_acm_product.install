@@ -16,7 +16,11 @@ use Drupal\node\Entity\Node;
  */
 function alshaya_acm_product_update_8028() {
   $options_standard_subtitle = \Drupal::configFactory()->get('alshaya_acm_product.home_delivery')->get('options_standard_subtitle');
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.home_delivery')->set('options_standard_subtitle', '(' . $options_standard_subtitle . ')')->save();
+
+  // If subtitle is set, wrap it in brackets & save config.
+  if ($options_standard_subtitle) {
+    \Drupal::configFactory()->getEditable('alshaya_acm_product.home_delivery')->set('options_standard_subtitle', '(' . $options_standard_subtitle . ')')->save();
+  }
 }
 
 /**
