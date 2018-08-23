@@ -534,6 +534,17 @@
   }
 }
 
+.alias--cart {
+  #edit-actions-top {
+    .checkout-top-button {
+      -webkit-font-smoothing: antialiased;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 #details-privilege-card-wrapper {
   .privilege-card-wrapper {
     padding-left: 0;
