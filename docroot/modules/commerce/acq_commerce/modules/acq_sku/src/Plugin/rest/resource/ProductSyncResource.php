@@ -172,6 +172,7 @@ class ProductSyncResource extends ResourceBase {
     $failed = 0;
     $ignored = 0;
     $deleted = 0;
+    $ignored_skus = $updated_skus = $deleted_skus = $created_skus = [];
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
@@ -187,6 +188,7 @@ class ProductSyncResource extends ResourceBase {
             '@store_id' => $product['store_id'],
             '@sku' => $product['sku'],
           ]);
+          $ignored_skus[] = $product['sku'] . '(unsupported store)';
           $ignored++;
           continue;
         }
@@ -215,12 +217,14 @@ class ProductSyncResource extends ResourceBase {
           $this->logger->warning('Product type @type not supported.', [
             '@type' => $product['type'],
           ]);
+          $ignored_skus[] = $product['sku'] . '(unsupported product type)';
           $ignored++;
           continue;
         }
 
         if (!isset($product['sku']) || !strlen($product['sku'])) {
           $this->logger->warning('Invalid or empty product SKU.');
+          $ignored_skus[] = $product['sku'] . '(invalid sku)';
           $ignored++;
           continue;
         }
@@ -228,6 +232,7 @@ class ProductSyncResource extends ResourceBase {
         // Don't import configurable SKU if it has no configurable options.
         if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
           $this->logger->warning('Empty configurable options for SKU: @sku', ['@sku' => $product['sku']]);
+          $ignored_skus[] = $product['sku'] . '(empty configurable options)';
           $ignored++;
           continue;
         }
@@ -263,7 +268,7 @@ class ProductSyncResource extends ResourceBase {
 
             // Delete the SKU.
             $sku->delete();
-
+            $deleted_skus[] = $product['sku'];
             $deleted++;
 
             // Release the lock.
@@ -273,11 +278,13 @@ class ProductSyncResource extends ResourceBase {
           }
 
           $this->logger->info('Updating product SKU @sku.', ['@sku' => $product['sku']]);
+          $updated_skus[] = $product['skus'];
           $updated++;
         }
         else {
           if ($product['status'] != 1) {
             $this->logger->info('Not creating disabled SKU in system: @sku.', ['@sku' => $product['sku']]);
+            $ignored_skus['disabled'][] = $product['sku'] . '(disabled)';
             $ignored++;
 
             // Release the lock.
@@ -294,7 +301,7 @@ class ProductSyncResource extends ResourceBase {
           ]);
 
           $this->logger->info('Creating product SKU @sku.', ['@sku' => $product['sku']]);
-
+          $created_skus[] = $product['sku'];
           $created++;
         }
 
@@ -394,6 +401,7 @@ class ProductSyncResource extends ResourceBase {
       catch (\Exception $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
+        $failed_skus[] = $product['sku'];
         $failed++;
 
         // Add the unknown reason to logs.
@@ -430,6 +438,14 @@ class ProductSyncResource extends ResourceBase {
       'ignored' => $ignored,
       'deleted' => $deleted,
     ];
+
+    // Log Product sync summary.
+    $this->logger->info('New SKUs: @created_skus | Updated SKUs: @updated_skus | Ignored SKUs: @ignored_skus | Deleted: @deleted_skus.', [
+      '@created_skus' => implode(',', $created_skus),
+      '@updated_skus' => implode(',', $updated_skus),
+      '@ignored_skus' => implode(',', $ignored_skus),
+      '@deleted_skus' => implode(',', $deleted_skus),
+    ]);
 
     return (new ModifiedResourceResponse($response));
   }
