@@ -12,6 +12,20 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Update hook to wrap delivery option sub-title in brackets.
+ */
+function alshaya_acm_product_update_8028() {
+  $options_standard_subtitle = \Drupal::configFactory()->get('alshaya_acm_product.home_delivery')->get('options_standard_subtitle');
+
+  // If subtitle is set, wrap it in brackets & save config.
+  if ($options_standard_subtitle) {
+    \Drupal::configFactory()->getEditable('alshaya_acm_product.home_delivery')->set('options_standard_subtitle', '(' . $options_standard_subtitle . ')')->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update display_settings config to have value for
  * configurable_use_parent_images and hide_not_required_option.
  */
