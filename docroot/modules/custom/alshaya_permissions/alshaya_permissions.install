@@ -6,7 +6,6 @@
  */
 
 use Drupal\user\Entity\Role;
-use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_update_N().
@@ -14,12 +13,8 @@ use Drupal\user\RoleInterface;
  * Grant 'view terms in acq_product_category' to anonymous/authenticated user.
  */
 function alshaya_permissions_update_8017() {
-  $role = Role::load(RoleInterface::ANONYMOUS_ID);
-  $role->grantPermission('view terms in acq_product_category');
-  $role->save();
-  $role = Role::load(RoleInterface::AUTHENTICATED_ID);
-  $role->grantPermission('view terms in acq_product_category');
-  $role->save();
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['anonymous', 'authenticated'], 'override');
 }
 
 /**
@@ -207,10 +202,6 @@ function alshaya_permissions_update_8009() {
  * Implements hook_install().
  */
 function alshaya_permissions_install() {
-  $role = Role::load(RoleInterface::ANONYMOUS_ID);
-  $role->grantPermission('view terms in acq_product_category');
-  $role->save();
-  $role = Role::load(RoleInterface::AUTHENTICATED_ID);
-  $role->grantPermission('view terms in acq_product_category');
-  $role->save();
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['anonymous', 'authenticated'], 'override');
 }
