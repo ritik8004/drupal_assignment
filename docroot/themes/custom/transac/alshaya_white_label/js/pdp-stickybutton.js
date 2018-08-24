@@ -19,7 +19,7 @@
     // 4 is the offset to smooth the toggle from fixed to scroll.
     var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height();
     if (direction === 'up') {
-      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + button.outerHeight();
+      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + button.outerHeight() - 4;
     }
 
     // Screen scroll offset.
@@ -31,15 +31,13 @@
     else {
       button.removeClass('hide-button');
     }
+
   }
 
   Drupal.behaviors.stickyAddtobasketButton = {
     attach: function (context, settings) {
       // Only on mobile.
       if ($(window).width() < 768) {
-        var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
-        var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
-        mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
         mobileStickyAddtobasketButton('bottom');
         var lastScrollTop = 0;
         $(window).on('scroll', function () {

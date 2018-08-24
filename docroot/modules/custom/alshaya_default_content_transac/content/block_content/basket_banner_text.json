@@ -43,22 +43,6 @@
       "target_id": "basic"
     }
   ],
-  "revision_created": [
-    {
-      "value": "2017-05-10T12:47:49+00:00",
-      "format": "Y-m-d\\TH:i:sP"
-    }
-  ],
-  "status": [
-    {
-      "value": true,
-      "lang": "en"
-    },
-    {
-      "value": true,
-      "lang": "ar"
-    }
-  ],
   "info": [
     {
       "value": "Basket Promotion message",
@@ -71,24 +55,17 @@
   ],
   "changed": [
     {
-      "value": "2017-05-10T12:47:49+00:00",
-      "lang": "en",
-      "format": "Y-m-d\\TH:i:sP"
-    },
-    {
-      "value": "2018-08-20T09:53:05+00:00",
-      "lang": "ar",
-      "format": "Y-m-d\\TH:i:sP"
-    }
-  ],
-  "default_langcode": [
-    {
-      "value": true,
+      "value": 1494420469,
       "lang": "en"
     },
     {
-      "value": false,
+      "value": 1495713253,
       "lang": "ar"
+    }
+  ],
+  "revision_created": [
+    {
+      "value": 1494420469
     }
   ],
   "revision_translation_affected": [
@@ -101,15 +78,14 @@
       "lang": "ar"
     }
   ],
-  "metatag": [
+  "default_langcode": [
     {
-      "value": {
-        "title": "| Alshaya",
-        "og_site_name": "Alshaya",
-        "canonical_url": "http:\/\/local.alshaya.com\/en\/home",
-        "og_locale": "en_KW",
-        "og_locale_alternative_0": "ar_KW"
-      }
+      "value": true,
+      "lang": "en"
+    },
+    {
+      "value": false,
+      "lang": "ar"
     }
   ],
   "content_translation_source": [
@@ -118,7 +94,7 @@
       "lang": "en"
     },
     {
-      "value": "und",
+      "value": "en",
       "lang": "ar"
     }
   ],
@@ -145,23 +121,31 @@
         },
         "uuid": [
           {
-            "value": "5e50d7c6-bc7d-4773-a149-d9804bcaec2b"
+            "value": "2841dccf-cb4b-4a6a-a098-c4d5b1cae207"
           }
         ],
         "lang": "ar"
       }
     ]
   },
-  "content_translation_created": [
+  "content_translation_status": [
     {
-      "value": "2017-05-10T12:47:49+00:00",
-      "lang": "en",
-      "format": "Y-m-d\\TH:i:sP"
+      "value": true,
+      "lang": "en"
     },
     {
-      "value": "2018-08-20T09:53:05+00:00",
-      "lang": "ar",
-      "format": "Y-m-d\\TH:i:sP"
+      "value": true,
+      "lang": "ar"
+    }
+  ],
+  "content_translation_created": [
+    {
+      "value": 1494420469,
+      "lang": "en"
+    },
+    {
+      "value": 1495713253,
+      "lang": "ar"
     }
   ]
 }

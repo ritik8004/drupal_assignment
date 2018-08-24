@@ -22,11 +22,3 @@ alshaya_master.404_maintenance_setting:
     _title: 'Alshaya 404 and maintenance mode settings'
   requirements:
     _permission: 'administer site configuration'
-
-alshaya_master.loader_settings:
-  path: '/admin/config/alshaya/loader-settings'
-  defaults:
-    _form: '\Drupal\alshaya_master\Form\LoaderConfigForm'
-    _title: 'Alshaya progress loader settings'
-  requirements:
-    _permission: 'administer site configuration'
