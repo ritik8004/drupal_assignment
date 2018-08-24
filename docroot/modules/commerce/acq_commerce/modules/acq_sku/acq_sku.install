@@ -14,6 +14,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Remove join index on acq_sku__attributes
+ */
+function acq_sku_update_8009() {
+  \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_join');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add attribute set as parent key for attribute_weights.
  */
 function acq_sku_update_8008() {
@@ -229,26 +238,6 @@ function _acq_sku_indexes() {
           'default' => '',
         ],
         'langcode' => [
-          'type' => 'varchar',
-          'length' => 255,
-          'default' => '',
-        ],
-      ],
-    ],
-  ];
-
-  $indexes['acq_sku__attr_join'] = [
-    'table' => 'acq_sku__attributes',
-    'fields' => [
-      'entity_id',
-      ['attributes_key', 128],
-    ],
-    'spec' => [
-      'fields' => [
-        'entity_id' => [
-          'type' => 'integer',
-        ],
-        'attributes_key' => [
           'type' => 'varchar',
           'length' => 255,
           'default' => '',
