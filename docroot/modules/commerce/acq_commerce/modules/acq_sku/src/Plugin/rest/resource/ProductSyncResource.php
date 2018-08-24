@@ -163,7 +163,7 @@ class ProductSyncResource extends ResourceBase {
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
-  public function post(array $products = []) {
+  public function post(array $products) {
     $lock = \Drupal::lock();
 
     $em = $this->entityManager->getStorage('acq_sku');
