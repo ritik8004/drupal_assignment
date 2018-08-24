@@ -46,6 +46,10 @@ $primary_link: $PB_confirmation_blue;
 $primary_input_focus_border: $PB_confirmation_blue;
 $secondary_link: $PB_deep_red;
 
+// Errors.
+$content_error_msg_bg: $PB_warning_red;
+$content_error_msg_text: $PB_white;
+
 // Titles.
 $page_title: $_black_two;
 $block_title: $_black_two;
@@ -356,6 +360,13 @@ $checkout_header_border-bottom: $PB_black_one;
 $checkout_header_border-top: $white;
 $checkout_delivery_shipping_row_border: $_gray_eleven;
 $checkout_login_btn_bg: $_black_two;
+
+// Checkout home delivery.
+$checkout_default_address_border: $_black_two;
+$checkout_default_address_bg: $_black_two;
+$checkout_deliver_address_btn_txt: $white-two;
+$address_button_text: $PB_black_one;
+$address_button_border: $PB_black_one;
 
 // Counters.
 $primary_counter_bg: $PB_deep_red;
