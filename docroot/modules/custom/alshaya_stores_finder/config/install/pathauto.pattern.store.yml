@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+    - node
+id: store
+label: 'Store Url Pattern'
+type: 'canonical_entities:node'
+pattern: '[node:title]'
+selection_criteria:
+  f011b7a5-90ff-4773-843d-16244f89838e:
+    id: node_type
+    bundles:
+      store: store
+    negate: false
+    context_mapping:
+      node: node
+    uuid: f011b7a5-90ff-4773-843d-16244f89838e
+  fc98d9dc-72d1-4079-8eca-bb078a7d094b:
+    id: language
+    langcodes:
+      en: en
+      ar: ar
+    negate: false
+    context_mapping:
+      language: 'node:langcode:language'
+    uuid: fc98d9dc-72d1-4079-8eca-bb078a7d094b
+selection_logic: and
+weight: -10
+relationships:
+  'node:langcode:language':
+    label: Language
