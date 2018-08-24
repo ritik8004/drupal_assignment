@@ -7,8 +7,15 @@
       var l = $('.edit-newsletter').ladda();
 
       $('.edit-newsletter').on('click', function () {
-        // Start loading
-        l.ladda('start');
+        // Doing this as we checking class and its not available immediately
+        // due to race condition.
+        setTimeout(function() {
+          if (!$('form#alshaya-newsletter-subscribe').hasClass('ajax-submit-prevented')) {
+            console.error("adsfsdfs");
+            // Start loading
+            l.ladda('start');
+          }
+        }, 10);
       });
 
       // Hide multiple inline error messages for email field.
