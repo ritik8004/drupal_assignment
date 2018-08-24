@@ -323,11 +323,11 @@
         right: 0;
         top: 100%;
         color: $primary_input_inline_error;
-        padding: 0.3125rem 0;
+        margin: 0.3125rem 0;
+        padding: 0;
         z-index: 9;
         font-size: 0.75rem;
-        background: $primary_bg;
-        margin-top: 0.1875rem;
+        background: $footer_bg;
         text-align: $left;
       }
     }
@@ -413,8 +413,8 @@
     }
 
     .error {
-      margin-top: 0.1875rem;
-      padding: 0.3125rem 0;
+      margin: 0.3125rem 0;
+      padding: 0;
       display: block;
     }
   }

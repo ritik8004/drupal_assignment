@@ -155,3 +155,9 @@
     }
   }
 }
+
+.cybersource-global-error {
+  @include breakpoint($tablet) {
+    margin: 0 1.5rem;
+  }
+}
