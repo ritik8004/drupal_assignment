@@ -79,12 +79,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $current_theme = $current_theme == 'alshaya_mothercare' ? 'alshaya_white_label' : $current_theme;
 
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
-
-  // If loader is enabled for the site, attach PACE library.
-  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
-  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
-    $variables['#attached']['library'][] = 'alshaya_white_label/pace';
-  }
 }
 
 /**

@@ -27,11 +27,6 @@
           $('#alshaya-newsletter-subscribe .form-type-email input').val('');
           setTimeout(Drupal.clearNewsletterForm, parseInt(data.interval));
         }
-        else {
-          // In case error due to form submit, hide earlier/inline error.
-          var email_field_id = $('#alshaya-newsletter-subscribe .form-type-email input').attr('id');
-          $('label[for="' + email_field_id +'"]').html('');
-        }
       };
     }
   };

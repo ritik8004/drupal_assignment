@@ -161,7 +161,3 @@ checkout_scroll:
 plp_hover:
   js:
     js/plp-hover.js: {}
-
-pace:
-  js:
-    /libraries/pace/pace.min.js: {}
