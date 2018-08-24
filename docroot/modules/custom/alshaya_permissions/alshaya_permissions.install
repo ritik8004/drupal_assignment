@@ -6,6 +6,18 @@
  */
 
 use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant 'view terms in acq_product_category' to anonymous user.
+ */
+function alshaya_permissions_update_8017() {
+  $role = Role::load(RoleInterface::ANONYMOUS_ID);
+  $role->grantPermission('view terms in acq_product_category');
+  $role->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -186,4 +198,13 @@ function alshaya_permissions_update_8008() {
 function alshaya_permissions_update_8009() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['seo_admin']);
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_permissions_install() {
+  $role = Role::load(RoleInterface::ANONYMOUS_ID);
+  $role->grantPermission('view terms in acq_product_category');
+  $role->save();
 }
