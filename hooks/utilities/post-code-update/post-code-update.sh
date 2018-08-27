@@ -16,48 +16,39 @@
 site="$1"
 target_env="$2"
 
-nothingstr="no update performed"
-
 cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
-## Checking if there is pending database updates.
-echo "Checking pending updates."
-drush8 acsf-tools-ml updatedb-status 2> /tmp/temp
-updates=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
-rm /tmp/temp
-echo $updates
+nothingstr="no update performed"
 
-pendingstr="Update ID"
+## Checking if there any install files has been updated.
+echo "Checking git diff to identify hook_update() change."
+git diff HEAD^ HEAD --name-only -- *.install
 
-if [ -n "$updates" ]; then
-  ## In case there is database updates pending.
-  if echo $updates | grep -q $pendingstr; then
-    ## Restore database dumps before applying database updates.
-    echo "There is database updates pending, restoring database dumps first."
-    drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
+## In case install file have been updated.
+if [ "$(git diff HEAD^ HEAD --name-only -- *.install)" ]; then
+  ## Restore database dumps before applying database updates.
+  echo "Change in install file detected, restoring database before executing updb."
+  drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
 
-    ## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5.
-    ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
-    drush acsf-tools-ml cr
-    drush acsf-tools-ml sqlq "DELETE FROM key_value WHERE collection='system.schema' AND name='lightning_scheduled_updates';"
+  ## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5.
+  ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
+  drush acsf-tools-ml cr
+  drush acsf-tools-ml sqlq "DELETE FROM key_value WHERE collection='system.schema' AND name='lightning_scheduled_updates';"
 
-    ## Apply the database updates to all sites.
-    echo "Executing updb."
-    drush8 acsf-tools-ml updb 2> /tmp/temp
-    output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
-    rm /tmp/temp
-    echo $output
-  ## In case there is no database updates pending.
-  else
-    ## Clear cache for frontend change.
-    echo "Clearing caches."
-    drush8 acsf-tools-ml cr
-
-    ## Set the output variable which is used to update the Slack channel.
-    output=$nothingstr
-  fi
+  ## Apply the database updates to all sites.
+  echo "Executing updb."
+  drush8 acsf-tools-ml updb 2> /tmp/temp
+  output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
+  rm /tmp/temp
+  echo $output
+## In case there is no database updates pending.
 else
-  echo "No update variable to check."
+  ## Clear cache for frontend change.
+  echo "No change in install files, clearing caches only."
+  drush8 acsf-tools-ml cr
+
+  ## Set the output variable which is used to update the Slack channel.
+  output=$nothingstr
 fi
 
 ## Clear varnish caches for all sites of the factory.
