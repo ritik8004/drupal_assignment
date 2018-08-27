@@ -980,6 +980,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
+  // Hide the form on page load.
+  $form['#attributes']['class'][] = 'visually-hidden';
+
   $form['#cache']['contexts'][] = 'url';
 
   // Process the alter hook only once.
