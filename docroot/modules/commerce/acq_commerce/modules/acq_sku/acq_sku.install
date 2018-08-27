@@ -16,8 +16,27 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Remove join index on acq_sku__attributes
  */
-function acq_sku_update_8009() {
+function acq_sku_update_8015() {
   \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_join');
+  \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_where');
+
+  // Add back index on attributes_value.
+  $index_attributes_value= [
+    'fields' => [
+      ['attributes_value', 128],
+    ],
+    'spec' => [
+      'fields' => [
+        'attributes_value' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+
+  \Drupal::database()->schema()->addIndex('acq_sku__attributes', 'acq_sku__attr_where', $index_attributes_value['fields'], $index_attributes_value['spec']);
 }
 
 /**
@@ -249,20 +268,10 @@ function _acq_sku_indexes() {
   $indexes['acq_sku__attr_where'] = [
     'table' => 'acq_sku__attributes',
     'fields' => [
-      'entity_id',
-      ['attributes_key', 128],
       ['attributes_value', 128],
     ],
     'spec' => [
       'fields' => [
-        'entity_id' => [
-          'type' => 'integer',
-        ],
-        'attributes_key' => [
-          'type' => 'varchar',
-          'length' => 255,
-          'default' => '',
-        ],
         'attributes_value' => [
           'type' => 'varchar',
           'length' => 255,
