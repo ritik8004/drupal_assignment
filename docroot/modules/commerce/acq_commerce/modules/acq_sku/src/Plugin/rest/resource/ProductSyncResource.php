@@ -201,6 +201,7 @@ class ProductSyncResource extends ResourceBase {
 
         if (!isset($product['type'])) {
           $ignored_skus[] = $product['sku'] . '(Missing product type)';
+          $ignored++;
           continue;
         }
 
