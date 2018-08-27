@@ -16,29 +16,49 @@
 site="$1"
 target_env="$2"
 
+nothingstr="no update performed"
+
 cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
-## Restore the database dumps before applying database updates.
-echo "Restore database dumps."
-drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
-
-## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5
-## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment
-drush acsf-tools-ml cr
-drush acsf-tools-ml sqlq "DELETE FROM key_value WHERE collection='system.schema' AND name='lightning_scheduled_updates';"
-
-## Apply the database updates to all sites.
-echo "Executing updb."
-drush8 acsf-tools-ml updb 2> /tmp/temp
-output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
+## Checking if there is pending database updates.
+echo "Checking pending updates."
+drush8 acsf-tools-ml updatedb-status 2> /tmp/temp
+updates=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
 rm /tmp/temp
-echo $output
+echo $updates
 
-## Clear caches as it is not done if there is database updates but may still
-## be required for some frontend changes.
-## We may want to do it only on sites without updates.
-echo "Clearing caches."
-drush8 acsf-tools-ml cr
+pendingstr="Update ID"
+
+if [ -n "$updates" ]; then
+  ## In case there is database updates pending.
+  if echo $updates | grep -q $pendingstr; then
+    ## Restore database dumps before applying database updates.
+    echo "There is database updates pending, restoring database dumps first."
+    drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
+
+    ## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5.
+    ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
+    drush acsf-tools-ml cr
+    drush acsf-tools-ml sqlq "DELETE FROM key_value WHERE collection='system.schema' AND name='lightning_scheduled_updates';"
+
+    ## Apply the database updates to all sites.
+    echo "Executing updb."
+    drush8 acsf-tools-ml updb 2> /tmp/temp
+    output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
+    rm /tmp/temp
+    echo $output
+  ## In case there is no database updates pending.
+  else
+    ## Clear cache for frontend change.
+    echo "Clearing caches."
+    drush8 acsf-tools-ml cr
+
+    ## Set the output variable which is used to update the Slack channel.
+    output=$nothingstr
+  fi
+else
+  echo "No update variable to check."
+fi
 
 ## Clear varnish caches for all sites of the factory.
 domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
@@ -66,9 +86,12 @@ if [ -f $FILE ]; then
     if echo $output | grep -q $errorstr; then
       echo "Sending error notification to Slack channel."
       curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+    elif echo $output | grep -q $nothingstr; then
+      echo "Sending success notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully cleared cache on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
     else
       echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed updb on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
     fi
   else
     echo "No output variable to check."
