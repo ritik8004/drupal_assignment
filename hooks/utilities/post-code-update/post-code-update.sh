@@ -41,7 +41,10 @@ if [ "$(git diff HEAD^ HEAD --name-only -- *.install)" ]; then
   output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
   rm /tmp/temp
   echo $output
-## In case there is no database updates pending.
+
+  ## Temporary "manual steps" (part 2) that need to be performed when upgrading to Drupal 8.5.
+  ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
+  drush acsf-tools-ml entity-updates
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."
