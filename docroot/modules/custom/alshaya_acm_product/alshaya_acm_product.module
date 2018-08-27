@@ -1166,9 +1166,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               $value
             );
 
-            $image = $swatch_sku->getSwatchImage();
-            if (isset($image['file']) && $image['file'] instanceof FileInterface) {
-              $configurable['#options_attributes'][$value]['swatch-image'] = file_create_url($image['file']->url());
+            if ($swatch_sku instanceof SKU) {
+              $image = $swatch_sku->getSwatchImage();
+              if (isset($image['file']) && $image['file'] instanceof FileInterface) {
+                $configurable['#options_attributes'][$value]['swatch-image'] = file_create_url($image['file']->url());
+              }
             }
 
           }
@@ -1442,7 +1444,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // @TODO: Verify this in HnM and MC.
     $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
     $selected_sku = $first_child;
-    alshaya_acm_product_get_gallery($build, $first_child);
+
+    if ($first_child instanceof SKU) {
+      alshaya_acm_product_get_gallery($build, $first_child);
+    }
 
     // If no image found on simple SKUs, use parent SKUs image.
     if (empty($build['gallery']['product_zoom'])) {
