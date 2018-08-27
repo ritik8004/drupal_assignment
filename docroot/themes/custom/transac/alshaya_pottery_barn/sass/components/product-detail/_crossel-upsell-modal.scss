@@ -63,7 +63,7 @@
 .nodetype--acq_product {
   .ui-dialog {
     #drupal-modal {
-      height: auto !important;
+      overflow-y: scroll;
     }
   }
 }
