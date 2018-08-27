@@ -3,17 +3,50 @@
     text-transform: uppercase !important;
     font-weight: 600 !important;
   }
+
+  .block-page-title-block {
+    @include breakpoint($desktop) {
+      padding-bottom: 1.75rem;
+    }
+  }
+
+  .profile-form {
+    .form-submit {
+      color: $secondary_submit_button_text;
+    }
+
+    .form-actions {
+      .cancel-button {
+        font-weight: 600;
+        color: $address_cancel_button;
+      }
+    }
+  }
 }
 
 .address {
   .address--content {
     font-weight: 600;
+    word-break: break-word;
+  }
+
+  .address--options {
+    @include breakpoint($desktop) {
+      padding: 1.125rem 1.5rem;
+    }
+  }
+
+  .address--data {
+    @include breakpoint($tablet) {
+      min-height: 12.75rem;
+    }
   }
 
   .address--edit a,
   .address--delete a {
     @include breakpoint($desktop) {
       font-weight: 600;
+      padding: 0.5rem 1.5rem;
     }
   }
 
@@ -38,11 +71,12 @@
   }
 
   .ui-button {
-    text-transform: uppercase;
+    text-transform: none;
     font-weight: 600;
 
     &.dialog-cancel {
       text-transform: capitalize;
+      font-size: 0.75rem;
     }
   }
 }

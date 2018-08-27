@@ -1,3 +1,73 @@
+// Cross sell and up sell theming.
+.subtitle {
+  &.crossell-title {
+    font-size: 1.125rem;
+    font-weight: 300;
+    text-align: $left;
+    margin-bottom: 0.3rem;
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 12%;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$left}: 8%;
+    }
+  }
+}
+
+.paragraph--type--product-carousel-category,
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell,
+.block-basket-horizontal-recommendation {
+  .mobile--only--sell {
+    min-height: auto;
+
+    .sell--image {
+      @include breakpoint($only-mobile) {
+        min-height: auto;
+      }
+    }
+  }
+
+  .view-product-slider {
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          width: 37%;
+          margin-#{$left}: 0;
+          margin-#{$right}: 0.625rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 0 12%;
+
+      .owl-carousel {
+        .views-row {
+          width: 50%;
+          padding-#{$left}: 0;
+          padding-#{$right}: 0.375rem;
+        }
+      }
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .ui-dialog {
+    #drupal-modal {
+      height: auto !important;
+    }
+  }
+}
+
 .acq-content-product-modal {
   .full-prod-link {
     font-weight: normal;

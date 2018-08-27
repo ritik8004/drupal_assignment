@@ -33,6 +33,10 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
   }
   if (isset($env_keys['magento']) && isset($magentos[$env_keys['magento']])) {
     $settings['alshaya_api.settings']['magento_host'] = $magentos[$env_keys['magento']]['url'];
+    $settings['alshaya_api.settings']['consumer_key'] = $magentos[$env_keys['magento']]['consumer_key'];
+    $settings['alshaya_api.settings']['consumer_secret'] = $magentos[$env_keys['magento']]['consumer_secret'];
+    $settings['alshaya_api.settings']['access_token'] = $magentos[$env_keys['magento']]['access_token'];
+    $settings['alshaya_api.settings']['access_token_secret'] = $magentos[$env_keys['magento']]['access_token_secret'];
 
     $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
@@ -214,23 +218,47 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Pottery Barn KW.
     'pbkw' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbkw_dev2',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbkw_test',
       ],
+      '01uat' => [
+        'magento' => 'pb_uat',
+        'conductor' => 'pbkw_uat',
+      ],
     ],
     // Pottery Barn SA.
     'pbsa' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbsa_dev2',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbsa_test',
       ],
+      '01uat' => [
+        'magento' => 'pb_uat',
+        'conductor' => 'pbsa_uat',
+      ],
     ],
     // Pottery Barn AE.
     'pbae' => [
+      '01dev2' => [
+        'magento' => 'pb_qa',
+        'conductor' => 'pbae_dev2',
+      ],
       'default' => [
         'magento' => 'pb_qa',
         'conductor' => 'pbae_test',
+      ],
+      '01uat' => [
+        'magento' => 'pb_uat',
+        'conductor' => 'pbae_uat',
       ],
     ],
     // Victoria Secret KW.

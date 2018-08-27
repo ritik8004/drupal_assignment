@@ -69,6 +69,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  // Add country specific class for doing any style overrides.
+  $variables['attributes']['class'][] = Html::cleanCssIdentifier('country-' . strtolower(_alshaya_custom_get_site_level_country_code()));
+
   $current_theme = \Drupal::theme()->getActiveTheme()->getName();
   $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
 
@@ -76,6 +79,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $current_theme = $current_theme == 'alshaya_mothercare' ? 'alshaya_white_label' : $current_theme;
 
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
+
+  // If loader is enabled for the site, attach PACE library.
+  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
+  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/pace';
+  }
 }
 
 /**
@@ -453,7 +462,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       }
       break;
 
-    case "webform_submission_alshaya_contact_form":
+    case "webform_submission_alshaya_contact_add_form":
       $form['#attached']['library'][] = 'alshaya_white_label/autosize_textarea';
       $form['elements']['message']['#rows'] = 1;
       $form['elements']['message']['#attributes']['maxlength'] = 220;
@@ -503,9 +512,8 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
 
-    // For now we want to update only the department_page template.
-    if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
-      $suggestions[] = 'page__department';
+    if ($node->bundle() == 'advanced_page') {
+      $suggestions[] = 'page__advanced';
     }
     elseif ($node->bundle() == 'acq_product') {
       $suggestions[] = 'page__pdp';
@@ -904,7 +912,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       // If category value is filled.
       if (!empty($category = $paragraph->get('field_category_carousel'))) {
         // Fetch values from the paragraph.
-        $category_id = $category->getValue()[0]['target_id'];
+        $category_id = $category->getValue()[0]['target_id'] ?? NULL;
 
         $is_accordion = FALSE;
         if ($paragraph->hasField('field_use_as_accordion')

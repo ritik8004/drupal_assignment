@@ -22,6 +22,11 @@ cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 echo "Restore database dumps."
 drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
 
+## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5
+## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment
+drush acsf-tools-ml cr
+drush acsf-tools-ml sqlq "DELETE FROM key_value WHERE collection='system.schema' AND name='lightning_scheduled_updates';"
+
 ## Apply the database updates to all sites.
 echo "Executing updb."
 drush8 acsf-tools-ml updb 2> /tmp/temp

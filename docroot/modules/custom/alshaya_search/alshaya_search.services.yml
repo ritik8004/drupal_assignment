@@ -24,3 +24,8 @@ services:
     arguments: ['@request_stack']
     tags:
       - { name: cache.context }
+  alshaya_search.search_autocomplete_alter:
+    class: Drupal\alshaya_search\EventSubscriber\AlshayaSearchAutocompleteParam
+    arguments: ['@language_manager']
+    tags:
+      - { name: event_subscriber }

@@ -328,6 +328,7 @@
         $(this).find('input.facets-checkbox:checkbox:checked').each(function () {
           if (!$(this).closest('div.block-facets-ajax').hasClass('facet-active')) {
             $(this).closest('div.block-facets-ajax').addClass('facet-active');
+            $(this).closest('ul').siblings('.facets-soft-limit-link').show();
             return false;
           }
         });

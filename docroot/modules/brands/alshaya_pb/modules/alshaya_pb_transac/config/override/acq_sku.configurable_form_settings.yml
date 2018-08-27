@@ -1,0 +1,26 @@
+attribute_weights:
+  default:
+    option: 1
+    subset_name: 2
+    color: 3
+    material: 4
+    finish: 5
+    furniture_finish: 6
+    style: 7
+    product_type: 8
+    size: 9
+    height: 10
+    length: 11
+show_quantity: TRUE
+sortable_options:
+  - option
+  - subset_name
+  - color
+  - size
+  - finish
+  - furniture_finish
+  - material
+  - style
+  - product_type
+  - height
+  - length

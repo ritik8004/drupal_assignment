@@ -14,7 +14,6 @@
         vertical: getPDPSliderParameter('vertical'),
         arrows: true,
         focusOnSelect: false,
-        centerMode: true,
         infinite: false,
         touchThreshold: 1000,
         responsive: [
@@ -52,9 +51,21 @@
           }
         }
         else {
-          ocObject.slick(options);
-          if (context !== document) {
-            ocObject.slick('resize');
+          // When Arabic and slider position is bottom, we need RTL support.
+          if (isRTL() && getPDPSliderParameter('vertical') === false) {
+            ocObject.attr('dir', 'rtl');
+            ocObject.slick(
+              $.extend({}, options, {rtl: true})
+            );
+            if (context !== document) {
+              ocObject.slick('resize');
+            }
+          }
+          else {
+            ocObject.slick(options);
+            if (context !== document) {
+              ocObject.slick('resize');
+            }
           }
         }
       }
@@ -105,7 +116,6 @@
             slidesToShow: getPDPSliderParameter('slidesToShow'),
             vertical: getPDPSliderParameter('vertical'),
             arrows: true,
-            centerMode: true,
             infinite: false,
             focusOnSelect: false,
             touchThreshold: 1000,
@@ -307,7 +317,7 @@
       });
 
       // Adding class if there is no slider.
-      if ($(window).width() < 1024) {
+      if ($(window).width() < 1025) {
         if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
           $('#drupal-modal #lightSlider').addClass('pager-no');
         }
@@ -315,6 +325,15 @@
         else {
           $('#drupal-modal #lightSlider').addClass('pager-yes');
           $('#drupal-modal #lightSlider').removeClass('pager-no');
+        }
+
+        if ($('#product-zoom-container #lightSlider .slick-track > li').length < 4) {
+          $('#product-zoom-container #lightSlider').addClass('pager-no');
+        }
+
+        else {
+          $('#product-zoom-container #lightSlider').addClass('pager-yes');
+          $('#product-zoom-container #lightSlider').removeClass('pager-no');
         }
       }
 

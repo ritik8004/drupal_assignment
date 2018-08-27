@@ -76,4 +76,4 @@ multisite:
   name:
     - g
 cm:
-  strategy: features
+  strategy: none

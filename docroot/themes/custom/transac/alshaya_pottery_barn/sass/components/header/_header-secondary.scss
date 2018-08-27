@@ -5,6 +5,14 @@
     @include breakpoint($desktop) {
       border-#{$left}: 1px solid $header_secondary_menu_link_border;
     }
+
+    &::after {
+      @include breakpoint($upto-desktop) {
+        &::after {
+          #{$right}: -0.1875rem;
+        }
+      }
+    }
   }
 
   .block-alshaya-stores-finder a {

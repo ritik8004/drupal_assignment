@@ -1,0 +1,26 @@
+.text-link-para {
+  .text-links {
+    .heading {
+      a,
+      .menu__link {
+        @include breakpoint($upto-desktop) {
+          color: $mm_l3_link;
+        }
+
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+          text-transform: none;
+        }
+      }
+    }
+
+    .sub-heading {
+      li {
+        a,
+        .menu__link {
+          color: $mm_l3_link;
+        }
+      }
+    }
+  }
+}

@@ -579,22 +579,24 @@ header {
       text-transform: lowercase;
       height: 2.6875rem;
 
-      .menu--one__link {
-        @include arabic-letter-spacing;
+      .menu__link-wrapper {
+        .menu--one__link {
+          @include arabic-letter-spacing;
 
-        padding: 0.625rem 0.8rem;
-        padding-bottom: 0.6rem;
-        display: block;
-        height: 2.75rem;
-        border-top: 2px solid transparent !important;
-        border-bottom: none;
-        position: relative;
-        z-index: 100;
-        margin-top: -1px;
-        font-size: 0.9375rem;
-        text-transform: uppercase;
-        font-family: $hnm-demibold;
-        letter-spacing: 1px;
+          padding: 0.625rem 0.8rem;
+          padding-bottom: 0.6rem;
+          display: block;
+          height: 2.75rem;
+          border-top: 2px solid transparent !important;
+          border-bottom: none;
+          position: relative;
+          z-index: 100;
+          margin-top: -1px;
+          font-size: 0.9375rem;
+          text-transform: uppercase;
+          font-family: $hnm-demibold;
+          letter-spacing: 1px;
+        }
       }
 
       &:hover,
@@ -637,7 +639,7 @@ header {
         }
       }
 
-      a {
+      .menu__link {
         font-size: 0.75rem;
         color: $mm_l1_link;
         text-decoration: none;
@@ -772,8 +774,10 @@ header {
         }
       }
 
-      .menu-two__link {
-        font-size: 0.8125rem;
+      .menu__link-wrapper {
+        .menu-two__link {
+          font-size: 0.8125rem;
+        }
       }
 
       &:hover {

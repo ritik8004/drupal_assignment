@@ -10,3 +10,9 @@ alshaya_master.alshaya_admin:
   parent: system.admin_config
   description: 'Configure alshaya related settings.'
   weight: -15
+
+alshaya_master.loader_settings:
+  route_name: alshaya_master.loader_settings
+  title: 'Alshaya loader settings'
+  description: 'Configure the settings for progress loader.'
+  parent: alshaya_master.alshaya_admin

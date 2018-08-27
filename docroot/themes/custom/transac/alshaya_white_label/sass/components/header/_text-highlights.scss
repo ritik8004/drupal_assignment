@@ -1,0 +1,155 @@
+.text-link-para {
+  @include breakpoint($upto-desktop) {
+    display: block;
+    text-align: $left;
+    float: none;
+    font-size: 0.75rem;
+    max-width: 100%;
+    position: static;
+  }
+
+  .category-term-image {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+
+  .menu--three__list-item {
+    a {
+      position: relative;
+
+      @include breakpoint($upto-desktop) {
+        @include icon(chevron#{$right}, after) {
+          position: absolute;
+          color: $header_mobile_menu_arrow;
+          #{$right}: 0;
+          font-size: 1.25rem;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+    }
+  }
+
+  a,
+  .menu__link {
+    display: block;
+    text-transform: lowercase;
+
+    @include breakpoint($upto-desktop) {
+      padding: 1rem 0;
+      padding-bottom: 0.875rem;
+    }
+  }
+
+  .highlights {
+    display: block;
+
+    .promo_block,
+    .highlighted {
+      @include breakpoint($upto-desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .text-links {
+    @include breakpoint($desktop) {
+      padding-#{$left}: 0;
+      padding-#{$right}: 2.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .contains-sublink a {
+      @include breakpoint($upto-desktop) {
+        pointer-events: none;
+      }
+    }
+
+    .heading {
+      @include breakpoint($desktop) {
+        margin-bottom: 0.1875rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        margin-left: 0.625rem;
+        margin-right: 0.625rem;
+      }
+
+      .menu--three__list-item {
+        @include breakpoint($upto-desktop) {
+          border-bottom: 1px solid $mm_l1_border;
+        }
+      }
+
+      a,
+      .menu__link {
+        font-family: $alshaya-thin;
+        font-size: 0.75rem;
+
+        @include breakpoint($upto-desktop) {
+          color: $mm_l1_link;
+        }
+
+        @include breakpoint($desktop) {
+          font-family: $alshaya-bold;
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .sub-heading {
+      padding: 0;
+      margin: 0;
+
+      @include breakpoint($desktop) {
+        background: transparent;
+        position: static;
+      }
+
+      li {
+        @include breakpoint($upto-desktop) {
+          margin-left: 0.625rem;
+          margin-right: 0.625rem;
+        }
+
+        @include breakpoint($desktop) {
+          padding: 0.3125rem 0;
+          width: auto;
+          margin: 0;
+        }
+
+        a,
+        .menu__link {
+          font-family: $arial;
+          font-size: 0.75rem;
+          color: $mm_l1_link;
+
+          &:hover {
+            color: $mm_l3_link_hover;
+          }
+
+          @include breakpoint($upto-desktop) {
+            font-family: $alshaya-thin;
+          }
+        }
+      }
+    }
+  }
+}
+
+.block-alshaya-main-menu {
+  .has--three-levels.menu--one__list-item {
+    ul {
+      .text-links {
+        @include breakpoint($desktop) {
+          display: inline-block;
+
+          + .text-links {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}

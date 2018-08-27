@@ -5,12 +5,6 @@
  */
 function alshaya_get_conductor_host_data() {
   return [
-    // V2 Sandbox.
-    'mc_v2' => [
-      'url' => 'https://davylamp.us-east-1.dev.acm.acquia.io/',
-      'hmac_id' => '2d045a6b604c4f9b8493ffcff4733907',
-      'hmac_secret' => 'MzMwNzJlYzYtYWMzYy00',
-    ],
     // Mothercare KW.
     'mckw_dev' => [
       'url' => 'https://alshaya-mckw-dev.eu-west-1.prod.acm.acquia.io/',
@@ -23,12 +17,12 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
       'api_version' => 'v2',
     ],
-    'mckw_uat' => [
+    'mckw_uat_v1' => [
       'url' => 'https://alshaya-mckw-uat.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => 'ec11fb2f54d34b2f9d35ec1d3575b89e',
       'hmac_secret' => 'gpW7PQFKKDU-qPrcIgaYNQ',
     ],
-    'mckw_uat_v2' => [
+    'mckw_uat' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
       'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
@@ -168,6 +162,18 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
       'api_version' => 'v2',
     ],
+    'pbkw_dev2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'cfe59305b0354659bb9ba1bf07361ad7',
+      'hmac_secret' => 'ZjE2NjNiMWQtYTAwOS00',
+      'api_version' => 'v2',
+    ],
+    'pbkw_uat' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'cf6afd0bd1624636bd21f4581dc5e252',
+      'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
+      'api_version' => 'v2',
+    ],
     // Pottery Barn SA.
     'pbsa_test' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -175,11 +181,35 @@ function alshaya_get_conductor_host_data() {
       'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
       'api_version' => 'v2',
     ],
+    'pbsa_dev2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => '2f619f435eb8427f9444492d65a0820d',
+      'hmac_secret' => 'MzY5ZjA2MmMtMTQzYi00',
+      'api_version' => 'v2',
+    ],
+    'pbsa_uat' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'eb9126f28aaf466fab9494405fc6a4fe',
+      'hmac_secret' => 'ZTdjNWY1ZTktYzMyMC00',
+      'api_version' => 'v2',
+    ],
     // Pottery Barn AE.
     'pbae_test' => [
       'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
       'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
       'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
+      'api_version' => 'v2',
+    ],
+    'pbae_dev2' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'd638da4e7c5545f9b15b302bcc77f049',
+      'hmac_secret' => 'MGFhMmQyMTAtN2FkYS00',
+      'api_version' => 'v2',
+    ],
+    'pbae_uat' => [
+      'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+      'hmac_id' => 'f3e36947161c4cb2bbe1448a890eb45c',
+      'hmac_secret' => 'NmFlNDgwY2YtNzFjYS00',
       'api_version' => 'v2',
     ],
     // BathBodyWorks KW.

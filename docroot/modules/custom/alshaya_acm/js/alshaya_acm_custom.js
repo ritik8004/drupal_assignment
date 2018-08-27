@@ -33,7 +33,7 @@
       });
 
       // Trigger coupon apply button when clicking on coupon code in promo label.
-      $('.sku-promotions .coupon-code').click(function() {
+      $('.sku-promotions .coupon-code, .free-gifts-wrapper .coupon-code').click(function() {
         $('#edit-coupon').val($(this).text());
         $('#coupon-button').click();
       });

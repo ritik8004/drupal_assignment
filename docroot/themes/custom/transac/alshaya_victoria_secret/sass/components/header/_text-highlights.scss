@@ -1,0 +1,79 @@
+.text-link-para {
+  .text-links {
+    .heading {
+      a,
+      .menu__link {
+        font-family: $arial;
+        font-size: 0.875rem;
+
+        @include breakpoint($desktop) {
+          font-size: 0.75rem;
+        }
+      }
+    }
+
+    .menu-two__link-wrapper {
+      a,
+      .menu__link {
+        text-transform: uppercase;
+
+        @include breakpoint($desktop) {
+          font-family: $alshaya-bold;
+        }
+      }
+    }
+
+    .sub-heading {
+      li {
+        a {
+          @include breakpoint($upto-desktop) {
+            font-size: 0.875rem;
+          }
+        }
+
+        @include breakpoint($desktop) {
+          padding: 0.3125rem 0;
+        }
+      }
+    }
+  }
+
+  a,
+  .menu__link {
+    text-transform: none;
+
+    @include breakpoint($desktop) {
+      letter-spacing: 0.44px;
+    }
+  }
+}
+
+.super-category-pink .block-alshaya-main-menu {
+  .text-links {
+    .heading {
+      a,
+      .menu__link {
+        font-family: $pink-pinksans;
+        font-size: 1.5rem;
+        letter-spacing: 0.07em;
+
+        @include breakpoint($desktop) {
+          font-family: $alshaya-bold;
+          font-size: 0.75rem;
+          letter-spacing: 0;
+        }
+      }
+    }
+
+    .sub-heading {
+      li {
+        a,
+        .menu__link {
+          @include breakpoint($desktop) {
+            font-family: $arial;
+          }
+        }
+      }
+    }
+  }
+}

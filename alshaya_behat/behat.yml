@@ -47,10 +47,10 @@ mcqa:
               simpleurl: '/stronglax'
               simpletitle: 'Stronglax'
               simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
-              configurl: '/pink-and-white-cami-vests-5-pack'
-              configtitle: 'Pink and White Cami Vests - 5 Pack'
-              configtitlear: 'سترات تحتية بحمالات باللون الأبيض والوردي - عبوة من 5 قطع'
-              configvariant: '2-3 Years'
+              configurl: '/horse-photographic-t-shirt'
+              configtitle: 'Horse Photographic T-Shirt'
+              configtitlear: 'Horse Photographic تي- شيرت'
+              configvariant: '18-24 Months'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -59,7 +59,7 @@ mcqa:
         output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mckw-test.factory.alshaya.com/'
+      base_url: 'https://mckw-uat.factory.alshaya.com/'
       files_path: "%paths.base%/images"
 
 mcuat:
@@ -162,11 +162,11 @@ hmsa:
               simpleurl: '/knitted-jumper'
               simpletitle: 'Knitted jumper'
               simpletitlear: 'Knitted jumper'
-              configurl: '/bikini-bottoms-0'
-              configtitle: 'Bikini bottoms'
-              configtitlear: 'سروال سباحة'
-              configvariant: '8'
-              base_url: 'https://hmsa.dev3-alshaya.acsitefactory.com/en'
+              configurl: '/suit-trousers-slim-fittest'
+              configtitle: 'Suit trousers Slim fit_test'
+              configtitlear: 'بنطلون بدلة بقصة Slim'
+              configvariant: '46'
+              base_url: 'https://hmsa-uat.factory.alshaya.com/en'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -175,7 +175,7 @@ hmsa:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://hmsa.dev3-alshaya.acsitefactory.com/en'
+      base_url: 'https://hmsa-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/images"
 
 hmuat:
@@ -192,10 +192,10 @@ hmuat:
               simpleurl: '/knitted-jumper'
               simpletitle: 'Knitted jumper'
               simpletitlear: 'Knitted jumper'
-              configurl: '/leggings'
-              configtitle: 'Leggings'
-              configtitlear: 'ليغنغز'
-              configvariant: 'S'
+              configurl: '/leaf-print-cushion-cover'
+              configtitle: 'Leaf-print cushion cover'
+              configtitlear: 'غطاء وسادة بطبعة ورقة شجر'
+              configvariant: '50x50'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -233,7 +233,7 @@ hmqa:
         output_path: %paths.base%/features/hmkw/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://hmae-uat.factory.alshaya.com/en/'
+      base_url: 'https://hmkw-test.factory.alshaya.com/en/'
       files_path: "%paths.base%/images"
 
 hmprod:
@@ -267,27 +267,28 @@ hmprod:
 
 vsqa:
   autoload:
-    '': %paths.base%/features/vskw/bootstrap
+    '': %paths.base%/features/vs/bootstrap
   suites:
     default:
-      paths: [ %paths.base%/features/vskw/manual ]
+      paths:
+          - %paths.base%/features/vs/common
+          - %paths.base%/features/vs/ae
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/stronglax'
-              simpletitle: 'Stronglax'
-              simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
-              configurl: '/grey-navy-and-yellow-jersey-shorts-3-pack'
-              configtitle: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
-              configtitlear: 'Grey, Navy and Yellow Jersey Shorts - 3 Pack'
-              configvariant: '2-3 Years'
+              configurl: '/victoria-sport/flat-waist-cotton-yoga-legging'
+              configtitle: 'FLAT WAIST COTTON YOGA LEGGING'
+              configtitlear: 'Flat Waist Cotton Yoga Legging_AR'
+              configvariant_size: 'XS'
+              config_variant_color: 'black'
+              config_variant_cup_size: 'DD'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
-  formatters:
-      html:
-        output_path: %paths.base%/features/vskw/reports/html/behat
+#  formatters:
+#      html:
+  #     output_path: %paths.base%/features/vs/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://alshaya_shield:AS_S@vskw.factory.alshaya.com/en'
+      base_url: 'https://vsae-uat.factory.alshaya.com/en/'
       files_path: "%paths.base%/images"

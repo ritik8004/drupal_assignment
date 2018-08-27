@@ -22,13 +22,13 @@ alshaya_acm_product.product_settings_form:
   requirements:
     _permission: 'access commerce product settings'
 
-alshaya_acm_product.size_guide_settings_form:
-  path: '/admin/commerce/config/size-guide-settings'
+alshaya_acm_product.pdp_modal_links_settings_form:
+  path: '/admin/commerce/config/pdp-modal-links-settings'
   defaults:
-    _form: '\Drupal\alshaya_acm_product\Form\SizeGuideSettingsForm'
-    _title: 'Size Guide Settings'
+    _form: '\Drupal\alshaya_acm_product\Form\PDPModalLinksForm'
+    _title: 'PDP modal links'
   requirements:
-    _permission: 'administer size guide settings'
+    _permission: 'administer PDP modal links settings'
 
 alshaya_acm_product.basket_delivery_settings_form:
   path: '/admin/commerce/config/basket-delivery'
@@ -46,10 +46,10 @@ alshaya_acm_product.product_home_delivery_settings_form:
   requirements:
     _permission: 'access commerce administration pages'
 
-alshaya_acm_product.size_guide_modal:
-  path: '/size-guide-view'
+alshaya_acm_product.pdp_modal_links:
+  path: '/modal-link-views/{type}'
   defaults:
-    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::sizeGuideModal'
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductController::pdpModalLinkView'
     _title: 'Size guide'
   requirements:
     _permission: 'access content'
@@ -70,6 +70,30 @@ alshaya_acm_product.get_cart_form:
   path: '/get-cart-form/{view_mode}/{entity}'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::getCartForm'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      entity:
+        type: entity:acq_sku
+
+alshaya_acm_product.select_configurable_option:
+  path: '/select-configurable-option/{entity}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::selectConfigurableOption'
+    _title: ''
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      entity:
+        type: entity:acq_sku
+
+alshaya_acm_product.add_to_cart_submit:
+  path: '/add-to-cart-submit/{entity}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductStockController::addToCartSubmit'
     _title: ''
   requirements:
     _permission: 'access content'

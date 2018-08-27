@@ -1,0 +1,13 @@
+.messages {
+  &.messages--status,
+  &.messages--warning,
+  &.messages--error {
+    display: flex;
+    align-items: center;
+
+    > div {
+      font-weight: normal;
+      padding-top: 0;
+    }
+  }
+}

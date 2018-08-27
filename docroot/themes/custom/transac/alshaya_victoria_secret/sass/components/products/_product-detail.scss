@@ -227,54 +227,27 @@
   .form-item-configurables-color {
     .select2Option {
       li {
-        display: flex;
-        align-items: center;
-
         &.li-swatch-image {
+          img {
+            padding: 0;
+          }
+
           a,
           span {
             border: none;
-            width: 2.375rem;
-            height: 2.375rem;
-            position: relative;
             padding: 0;
 
             &.picked,
             &:hover {
-              background: transparent;
-
               &::after {
-                content: '';
-                position: absolute;
-                display: inline-block;
+                height: 2.75rem;
+                width: 2.75rem;
                 top: -0.1875rem;
                 #{$left}: -0.1875rem;
-                #{$right}: -0.1875rem;
-                bottom: -0.1875rem;
-                z-index: 1;
-                border: 1px solid $pdp_white_color_attribute_border;
-                pointer-events: none;
               }
-            }
-
-            &:hover {
-              &::after {
-                border: 1px solid $pdp_white_color_attribute_hover_border;
-              }
-            }
-
-            &.white {
-              -webkit-appearance: none;
-              box-shadow: 0 0 0 1px $pdp_white_color_attribute;
             }
           }
         }
-      }
-
-      .select-buttons {
-        display: flex;
-        flex-flow: row wrap;
-        margin-top: 0;
       }
     }
   }
@@ -549,7 +522,8 @@ html[lang="en"] .super-category-victorias-secret {
       h2 {
         width: 100%;
 
-        .title--main {
+        .title--main,
+        &.field--name-name {
           font-size: 1.625rem;
         }
       }
@@ -587,15 +561,17 @@ html[lang="ar"] {
 .acq-content-product,
 .acq-content-product-modal {
   .content__title_wrapper {
-    span {
-      &.title--sub {
+    h1,
+    h2 {
+      .title--sub {
         font-family: $vs-regular;
         font-size: 0.75rem !important;
         letter-spacing: 2.4px;
         text-transform: uppercase;
       }
 
-      &.title--main {
+      .title--main,
+      &.field--name-name {
         font-family: $vs-bentonsans-light;
         color: $pdp_product_title;
       }

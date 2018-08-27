@@ -7,6 +7,7 @@ use Drupal\acq_sku\AcqSkuLinkedSku;
 use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
@@ -35,6 +36,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class SkuManager {
 
   use StringTranslationTrait;
+
+  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
 
   /**
    * The database service.
@@ -142,6 +145,13 @@ class SkuManager {
   protected $cartFormHelper;
 
   /**
+   * SKU Fields Manager.
+   *
+   * @var \Drupal\acq_sku\SKUFieldsManager
+   */
+  protected $skuFieldsManager;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -172,6 +182,8 @@ class SkuManager {
    *   Cache Backend service for product labels.
    * @param \Drupal\Core\Cache\CacheBackendInterface $product_cache
    *   Cache Backend service for configurable price info.
+   * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
+   *   SKU Fields Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -186,7 +198,8 @@ class SkuManager {
                               ModuleHandlerInterface $module_handler,
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
-                              CacheBackendInterface $product_cache) {
+                              CacheBackendInterface $product_cache,
+                              SKUFieldsManager $sku_fields_manager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -203,6 +216,7 @@ class SkuManager {
     $this->cache = $cache;
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
+    $this->skuFieldsManager = $sku_fields_manager;
   }
 
   /**
@@ -386,8 +400,12 @@ class SkuManager {
     // Do not pass VAT text part of the price block for teaser and
     // product_category_carousel modes.
     if ($view_mode != 'teaser' && $view_mode != 'product_category_carousel') {
-      if ($this->currentRoute->getRouteName() == 'entity.node.canonical'
-        || $this->currentRoute->getRouteName() == 'alshaya_acm_product.get_cart_form') {
+      $routes = [
+        'entity.node.canonical',
+        'alshaya_acm_product.get_cart_form',
+        'alshaya_acm_product.select_configurable_option',
+      ];
+      if (in_array($this->currentRoute->getRouteName(), $routes)) {
         $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
       }
     }
@@ -1390,10 +1408,29 @@ class SkuManager {
       }
     }
 
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+
     // Sort the values in attribute_sku so we can use it later.
     foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
       if ($this->cartFormHelper->isAttributeSortable($code)) {
         $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
+
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
       }
     }
 
@@ -1465,6 +1502,10 @@ class SkuManager {
 
       $combination_key .= $code . '|' . $value . '||';
       foreach ($configurable_codes as $configurable_code) {
+        if (!isset($configurables[$configurable_code]) || empty($configurables[$configurable_code]['#options'])) {
+          continue;
+        }
+
         foreach ($configurables[$configurable_code]['#options'] as $key => $value) {
           $check_key1 = $combination_key . $configurable_code . '|' . $key . '||';
           $check_key2 = $configurable_code . '|' . $key . '||' . $combination_key;
@@ -1594,7 +1635,7 @@ class SkuManager {
     $sku_id = (int) $this->currentRequest->query->get('selected');
 
     // Give preference to sku id passed via query params.
-    if ($sku_id) {
+    if ($sku_id && $sku_id != $sku->id()) {
       $first_child = SKU::load($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
@@ -1680,6 +1721,162 @@ class SkuManager {
     $this->setProductCachedData($sku, 'swatches', $swatches);
 
     return $swatches;
+  }
+
+  /**
+   * Get first valid configurable child.
+   *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Valid child SKU or parent itself.
+   */
+  public function getFirstValidConfigurableChild(SKU $sku) {
+    $cache_key = 'first_valid_child';
+
+    $child_sku = $this->getProductCachedData($sku, $cache_key);
+    if ($child_sku) {
+      return SKU::loadFromSku($child_sku, $sku->language()->getId());
+    }
+
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    foreach ($combinations['attribute_sku'] ?? [] as $children) {
+      foreach ($children as $child_skus) {
+        foreach ($child_skus as $child_sku) {
+          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+          $this->setProductCachedData($sku, $cache_key, $child->getSku());
+          return $child;
+        }
+      }
+    }
+
+    return $sku;
+  }
+
+  /**
+   * Get first valid configurable child.
+   *
+   * For a configurable product, we may have many children as disabled or OOS.
+   * We don't show them as selected on page load. Here we find the first one
+   * which is enabled and in stock.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU entity.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU
+   *   Valid child SKU or parent itself.
+   */
+  public function getFirstAvailableConfigurableChild(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return $sku;
+    }
+
+    $children = Configurable::getChildren($sku);
+    return reset($children);
+  }
+
+  /**
+   * Utility function to return configurable values for a SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Array of configurable field values.
+   */
+  public function getConfigurableValues(SKUInterface $sku) {
+    $configurableFieldValues = [];
+
+    $fields = $this->skuFieldsManager->getFieldAdditions();
+    $configurableFields = array_filter($fields, function ($field) {
+      return (bool) $field['configurable'];
+    });
+
+    $remove_not_required_option = $this->isNotRequiredOptionsToBeRemoved();
+
+    foreach ($configurableFields as $key => $field) {
+      $fieldKey = 'attr_' . $key;
+
+      if ($sku->get($fieldKey)->getString()) {
+        $value = $sku->get($fieldKey)->getString();
+
+        if ($remove_not_required_option && $this->isAttributeOptionNotRequired($value)) {
+          continue;
+        }
+
+        $configurableFieldValues[$fieldKey] = [
+          'label' => $sku->get($fieldKey)
+            ->getFieldDefinition()
+            ->getLabel(),
+          'value' => $sku->get($fieldKey)->getString(),
+        ];
+      }
+    }
+
+    return $configurableFieldValues;
+  }
+
+  /**
+   * Check if we need to process and hide not required options.
+   *
+   * @return bool
+   *   TRUE if we need to process and hide not required options.
+   */
+  public function isNotRequiredOptionsToBeRemoved() {
+    $hide_not_required_option = $this->configFactory
+      ->get('alshaya_acm_product.display_settings')
+      ->get('hide_not_required_option');
+
+    return (bool) $hide_not_required_option;
+  }
+
+  /**
+   * Wrapper function to check if value is matches not required value.
+   *
+   * @param string $value
+   *   Attribute option value to check.
+   *
+   * @return bool
+   *   TRUE if value matches not required value.
+   */
+  public function isAttributeOptionNotRequired($value) {
+    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
+  }
+
+  /**
+   * Process a configurable attribute to remove not required items.
+   *
+   * @param array $configurable
+   *   Configurable attribute form item.
+   */
+  public function processAttribute(array &$configurable) {
+    if (!$this->isNotRequiredOptionsToBeRemoved()) {
+      return;
+    }
+
+    $availableOptions = [];
+    $notRequiredValue = NULL;
+    foreach ($configurable['#options'] as $id => $value) {
+      if ($this->isAttributeOptionNotRequired($value)) {
+        $configurable['#options_attributes'][$id]['class'][] = 'hidden';
+        $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
+        $notRequiredValue = $id;
+      }
+      elseif (empty($configurable['#options_attributes'][$id]['disabled'])) {
+        $availableOptions[$id] = $value;
+      }
+    }
+
+    if ($notRequiredValue && empty($availableOptions)) {
+      $configurable['#value'] = $notRequiredValue;
+      $configurable['#access'] = FALSE;
+    }
   }
 
 }

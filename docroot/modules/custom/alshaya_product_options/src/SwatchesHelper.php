@@ -89,6 +89,13 @@ class SwatchesHelper {
   protected $skuFieldsManager;
 
   /**
+   * Contain the sku base field array.
+   *
+   * @var array
+   */
+  protected $skuBaseFieldDefination = [];
+
+  /**
    * SwatchesHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -346,7 +353,7 @@ class SwatchesHelper {
 
           /** @var \Drupal\file\Entity\File $file */
           $file = $this->fileStorage->load($file_value['target_id']);
-          $data['swatch'] = file_create_url($file->getFileUri());
+          $data['swatch'] = file_url_transform_relative(file_create_url($file->getFileUri()));
         }
         break;
 
@@ -369,9 +376,19 @@ class SwatchesHelper {
    *   Swatch data or empty array.
    */
   public function getSwatchForFacet(FacetInterface $facet, $value) {
-    $fields = $this->skuFieldsManager->getFieldAdditions();
+    if (empty($this->skuBaseFieldDefination)) {
+      $this->skuBaseFieldDefination = $this->skuFieldsManager->getFieldAdditions();
+    }
+
     $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());
-    $attribute_code = $fields[$field_code]['source'] ?? $field_code;
+
+    // If field/facet is not swatchable, no need to process further.
+    if (isset($this->skuBaseFieldDefination[$field_code])
+      && empty($this->skuBaseFieldDefination[$field_code]['swatch'])) {
+      return [];
+    }
+
+    $attribute_code = $this->skuBaseFieldDefination[$field_code]['source'] ?? $field_code;
     return $this->getSwatch($attribute_code, $value);
   }
 

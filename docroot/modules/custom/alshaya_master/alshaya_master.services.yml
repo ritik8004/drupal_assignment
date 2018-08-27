@@ -3,3 +3,7 @@ services:
     class: Drupal\alshaya_master\Decorator\AlshayaMasterMobileUtilDecorator
     decorates: mobile_number.util
     arguments: ['@alshaya_master.mobile_util.inner', '@config.factory', '@flood', '@entity_field.manager', '@module_handler', '@country_manager', '@token']
+  alshaya_master.redirect_options_subscriber:
+    class: Drupal\alshaya_master\EventSubscriber\RedirectOptionsSubscriber
+    tags:
+      - { name: event_subscriber }
