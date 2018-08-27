@@ -47,18 +47,8 @@
     });
   };
 
-  // Hide configurable options of add to cart form on page load.
-  // We do not want to show ugly drop downs.
-  // We will show them again after window load is finished.
-  $('#configurable_ajax').hide();
-
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {
-      $(window).on('load', function () {
-        // Show configurable options again as window is loaded.
-        $('#configurable_ajax').show();
-      });
-
       $('.form-item-configurable-swatch').parent().addClass('configurable-swatch');
       $('.form-item-configurable-select').parent().addClass('configurable-select');
 

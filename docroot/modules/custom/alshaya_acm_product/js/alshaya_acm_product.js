@@ -24,8 +24,16 @@
           }
         });
       }
+
+      // For modal windows we do in attach.
+      $('[data-vmode="modal"] .sku-base-form').removeClass('visually-hidden');
     }
   };
+
+  $(window).on('load', function () {
+    // Show add to cart form now.
+    $('.sku-base-form').removeClass('visually-hidden');
+  });
 
   $.fn.replaceDynamicParts = function (data) {
     if (data.replaceWith === '') {
