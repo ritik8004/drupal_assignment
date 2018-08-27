@@ -80,7 +80,7 @@
         slidesToShow: 1,
         vertical: false,
         dots: true,
-        centerMode: getPDPSliderParameter('vertical'),
+        centerMode: false,
         infinite: false,
         focusOnSelect: true,
         touchThreshold: 1000,
