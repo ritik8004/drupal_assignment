@@ -32,6 +32,20 @@
     .store-row--counter {
       line-height: 1.1;
     }
+
+    .views-field-field-store-open-hours {
+      .hours--wrapper {
+        .hours--label {
+          &.open {
+            border-bottom: none;
+          }
+
+          + .open--hours {
+            padding-top: 0;
+          }
+        }
+      }
+    }
   }
 
   .get--directions div {
@@ -62,5 +76,10 @@
       font-weight: 600;
       color: $store_finder_header;
     }
+  }
+
+  .hours--wrapper .hours--label,
+  .get--directions {
+    font-size: 0.875rem;
   }
 }
