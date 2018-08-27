@@ -14,6 +14,29 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Enable views_ajax_get and configure search, promo, plp views to use GET.
+ */
+function alshaya_transac_update_8117() {
+  // Install alshaya_paragraphs_transac module.
+  \Drupal::service('module_installer')->install(['views_ajax_get']);
+
+  // Reinstall views configs for search, plp and promo pages and views settings.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.settings'],
+    'views',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+
+  $manager->updateConfigs(['views.view.alshaya_product_list'], 'alshaya_product');
+  $manager->updateConfigs(['views.view.search'], 'alshaya_search');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-install promotion category facet block.
  */
 function alshaya_transac_update_8116() {
