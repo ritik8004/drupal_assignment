@@ -47,6 +47,11 @@ if [ -n "$updates" ]; then
     output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
     rm /tmp/temp
     echo $output
+
+    ## Temporary "manual steps" (part 2) that need to be performed when upgrading to Drupal 8.5.
+    ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
+    drush acsf-tools-ml entity-updates
+
   ## In case there is no database updates pending.
   else
     ## Clear cache for frontend change.
