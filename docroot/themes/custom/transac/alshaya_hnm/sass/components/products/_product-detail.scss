@@ -878,6 +878,8 @@
                 #{$left}: -0.1875rem;
                 #{$right}: -0.1875rem;
                 bottom: -0.1875rem;
+                height: auto;
+                width: auto;
                 z-index: 1;
                 border: 1px solid $pdp_swatch_selected_border;
                 pointer-events: none;

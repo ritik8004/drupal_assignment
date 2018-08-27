@@ -35,6 +35,10 @@
     }
 
     .site-brand-home {
+      @include breakpoint($only-tablet) {
+        padding: 0.75rem 1.5rem;
+      }
+
       a {
         @include breakpoint($only-mobile) {
           max-width: 14.9375rem;
@@ -59,6 +63,51 @@
           padding-top: 0.5rem;
         }
       }
+
+      .icon-ic_login {
+        background: transparent;
+        display: inline-block;
+        height: 2.3125rem;
+        width: 1.75rem;
+
+        @include breakpoint($desktop) {
+          height: 2.8125rem;
+          width: 2.125rem;
+        }
+      }
+    }
+  }
+
+  .secure__checkout--block {
+    @include breakpoint($only-tablet) {
+      margin-top: 0.3125rem;
+      padding-#{$right}: 0.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: -0.625rem;
+      padding-#{$right}: 0.1875rem;
+    }
+
+    .secure__checkout--label {
+      @include breakpoint($desktop) {
+        position: relative;
+        top: 0.25rem;
+        padding-#{$right}: 0.125rem;
+      }
+    }
+  }
+}
+
+.secure__checkout--block {
+  .icon-ic_login {
+    &::before {
+      content: " ";
+      display: block;
+      background: url(../imgs/icons/ic-secure-checkout.svg) no-repeat;
+      background-size: contain;
+      height: 100%;
+      width: 100%;
     }
   }
 }

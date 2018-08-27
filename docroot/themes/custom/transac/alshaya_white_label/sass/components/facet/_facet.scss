@@ -9,6 +9,22 @@
     text-transform: lowercase;
   }
 
+  ul[data-drupal-facet-id=category],
+  ul[data-drupal-facet-id=promotion_category_facet],
+  ul[data-drupal-facet-id=plp_category_facet] {
+    a {
+      font-weight: normal;
+      line-height: 2;
+      margin: 0.25rem 0;
+      margin-#{$left}: 1rem;
+      display: inline-block;
+      text-transform: lowercase;
+      font-size: 0.875rem;
+      color: $plp_facet_item_label;
+      position: relative;
+    }
+  }
+
   ul {
     @extend %list-clear;
 
@@ -114,8 +130,8 @@
 }
 
 ul[data-drupal-facet-id=category],
-ul[data-drupal-facet-id=promotion_category_facet],
-ul[data-drupal-facet-id=plp_category_facet] {
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
   &.js-facets-checkbox-links {
     display: block;
     max-height: none;
@@ -136,7 +152,9 @@ ul[data-drupal-facet-id=plp_category_facet] {
     > input[type=checkbox] {
       &:checked {
         ~ label {
-          font-family: $alshaya-bold;
+          span {
+            font-family: $alshaya-bold;
+          }
 
           &::before {
             content: unset;
@@ -156,7 +174,9 @@ ul[data-drupal-facet-id=plp_category_facet] {
         > input[type=checkbox] {
           &:checked {
             ~ label {
-              font-family: $alshaya-bold;
+              span {
+                font-family: $alshaya-bold;
+              }
 
               &::before {
                 content: unset;
@@ -220,11 +240,13 @@ ul[data-drupal-facet-id=plp_category_facet] {
 
     > input[type=checkbox]:checked {
       ~ label {
-        font-family: $alshaya-thin;
-
         @include icon(chevron#{$left}, before) {
           top: 0.875rem;
           cursor: pointer;
+        }
+
+        span {
+          font-family: $alshaya-thin;
         }
       }
     }

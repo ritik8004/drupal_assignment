@@ -74,23 +74,16 @@ function alshaya_hm_images_theme($existing, $type, $theme, $path) {
 function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-  $config_sku_plp_lookup = \Drupal::config('alshaya_hm_images.settings')->get('config_sku_plp_lookup');
 
   // Check if the gallery has a main image. If not, look for assets.
   if ($context == 'search') {
-    $main_image_assets = $hover_image_assets = '';
-
-    // Lookup images on current SKU if its a simple SKU. In case of configurable
-    // SKU, if the config is setup for looking config SKU for images, lookup for
-    // it on config SKU.
-    if (($sku->bundle() !== 'configurable') || ($config_sku_plp_lookup)) {
-      $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
-      $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
-    }
+    // Lookup images on current SKU if its a simple SKU.
+    $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
+    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp']);
 
     // If no assets attached & the sku is configurable, try to use the
     // assets attached with first child sku.
-    if ((!$main_image_assets) && (!$hover_image_assets) && ($sku->bundle() === 'configurable')) {
+    if (empty($main_image_assets) && empty($hover_image_assets) && ($sku->bundle() === 'configurable')) {
       $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
       $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp']);
     }
@@ -148,17 +141,22 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
     }
   }
   elseif (in_array($context, ['teaser', 'product_category_carousel']) && empty($build['image'])) {
-    $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'teaser', [$context]);
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+    $check_parent_child = TRUE;
 
-    // If no assets attached & the sku is configurable, try to use the
-    // assets attached with first child sku attached.
-    if (empty($teaser_assets) && ($sku->bundle() === 'configurable')) {
-      $teaser_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', [$context]);
+    try {
+      $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku, $check_parent_child);
     }
+    catch (\Exception $e) {
+      return;
+    }
+
+    $teaser_assets = $sku_assets_manager->getSkuAssets($sku_for_gallery, 'teaser', [$context]);
 
     // Try once with plp assets if nothing found for teaser.
     if (empty($teaser_assets)) {
-      $teaser_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', [$context]);
+      $teaser_assets = $sku_assets_manager->getSkuAssets($sku_for_gallery, 'plp', [$context]);
     }
 
     if (!empty($teaser_assets)) {

@@ -6,7 +6,7 @@ Feature: Test generic features on the site
     I should be able to view the header and the footer
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I follow "English"
     And I wait for the page to load
@@ -17,7 +17,7 @@ Feature: Test generic features on the site
   I should be able to subscribe with Victoria Secret
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I follow "English"
     And I wait for the page to load
@@ -30,7 +30,7 @@ Feature: Test generic features on the site
   I should be able to subscribe with Mothercare
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I enter a valid Email ID in field "edit-email"
     And I press "سجل الآن"
@@ -42,7 +42,7 @@ Feature: Test generic features on the site
     If I try to subscribe with subscribed Email ID
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I follow "English"
     And I wait for the page to load
@@ -56,7 +56,7 @@ Feature: Test generic features on the site
   If I try to subscribe with subscribed Email ID
     Given I am on homepage
     And I wait for the page to load
-    When I close the popup
+    #When I close the popup
     And I wait for the page to load
     When I fill in "edit-email" with "trupti@axelerant.com"
     And I press "سجل الآن"

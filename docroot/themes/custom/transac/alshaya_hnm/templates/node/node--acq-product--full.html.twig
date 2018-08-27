@@ -12,7 +12,12 @@ set classes = [
   <article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
     <div class="content__main {{ image_slider_position_pdp }}">
-      {{ content.gallery }}
+      {% if content.gallery is not null %}
+        {{ content.gallery }}
+      {% else %}
+        <div id="product-zoom-container"></div>
+      {% endif %}
+
       <div class="horizontal-crossell above-mobile-block">
         {{ content.cross_sell }}
       </div>
@@ -54,6 +59,12 @@ set classes = [
         <span class="field__label">{{ 'Item Code'|t }}:</span>
         {{ content.item_code }}
       </div>
+
+      {% if content.delivery_link is not empty %}
+        <div class="delivery">
+          {{ content.delivery_link }}
+        </div>
+      {% endif %}
 
       {% if content.free_gift_promotions %}
         <div class="free-gift-promotions">

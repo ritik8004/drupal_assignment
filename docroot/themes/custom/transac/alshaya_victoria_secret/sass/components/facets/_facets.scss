@@ -52,6 +52,7 @@
   a {
     text-transform: none;
     font-weight: normal;
+    color: $plp_facet_item_label;
   }
 
   & > a {
@@ -93,7 +94,8 @@
 }
 
 ul[data-drupal-facet-id=plp_category_facet],
-ul[data-drupal-facet-id=category] {
+ul[data-drupal-facet-id=category],
+ul[data-drupal-facet-id=promotion_category_facet] {
   .facet-item--expanded {
     & > ul ul .facet-item {
       @include breakpoint($only-tablet) {
@@ -106,7 +108,8 @@ ul[data-drupal-facet-id=category] {
 .c-plp {
   .block-facet-blockcategory {
     ul[data-drupal-facet-id=plp_category_facet],
-    ul[data-drupal-facet-id=category] {
+    ul[data-drupal-facet-id=category],
+    ul[data-drupal-facet-id=promotion_category_facet] {
       & > .facet-item--expanded {
         & > input[type=checkbox] ~ label::before {
           font-size: 1.875rem;

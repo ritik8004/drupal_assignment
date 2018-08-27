@@ -13,7 +13,7 @@ jQuery.fn.select2Option = function (options) {
     var option_id;
     var swatch_markup;
 
-    select.hide();
+    select.addClass('visually-hidden');
 
     var buttonsHtml = $('<div class="select2Option"></div>');
     var selectIndex = 0;
@@ -82,9 +82,14 @@ jQuery.fn.select2Option = function (options) {
     Drupal.alshaya_hm_images_update_selected_label();
     buttonsHtml.find('a').on('click', function (e) {
       e.preventDefault();
+
+      if ($(this).hasClass('picked')) {
+        return false;
+      }
+
       var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
-      $(this).closest('.sku-base-form').find('.error').remove();
+      $(this).closest('.sku-base-form').find('label.error, span.error, div.error').remove();
 
       var selectedText = clickedOption.text();
 

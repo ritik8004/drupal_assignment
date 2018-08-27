@@ -20,9 +20,13 @@ alshaya_api.settings:
       type: integer
     username:
       type: string
-      label: 'Username'
     password:
       type: string
-      label: 'Password'
-    dm_version:
-      type: integer
+    consumer_key:
+      type: string
+    consumer_secret:
+      type: string
+    access_token:
+      type: string
+    access_token_secret:
+      type: string

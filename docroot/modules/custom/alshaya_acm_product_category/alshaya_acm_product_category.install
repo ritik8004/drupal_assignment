@@ -12,6 +12,21 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Updating product category vocab highlight paragraph field.
+ */
+function alshaya_acm_product_category_update_8017() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['field.field.taxonomy_term.acq_product_category.field_main_menu_highlight'],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update views for product category taxonomy terms to use status field.
  */
 function alshaya_acm_product_category_update_8016() {
@@ -99,6 +114,9 @@ function alshaya_acm_product_category_update_dependencies() {
     'alshaya_acm_product_category' => [
       '8007' => [
         'acq_sku' => '8006',
+      ],
+      '8017' => [
+        'alshaya_paragraphs' => '8118',
       ],
     ],
   ];

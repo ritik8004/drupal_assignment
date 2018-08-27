@@ -58,12 +58,14 @@
   }
 
   .highlights {
-    background: $mm_highlight_bg;
-    margin-#{$right}: 0;
-    padding: 2.5rem;
-    padding-bottom: 0;
-    height: 18.4rem;
-    margin-top: -2.55rem;
+    @include breakpoint($desktop) {
+      background: $mm_highlight_bg;
+      margin-#{$right}: 0;
+      padding: 2.5rem;
+      padding-bottom: 0;
+      height: 18.4rem;
+      margin-top: -2.55rem;
+    }
   }
 }
 

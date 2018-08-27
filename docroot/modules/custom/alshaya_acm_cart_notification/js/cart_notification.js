@@ -37,17 +37,26 @@
       // Create a new instance of ladda for the specified button
       $('.edit-add-to-cart').attr('data-style', 'zoom-in');
 
-      $('.edit-add-to-cart', context).on('click', function () {
-        // Start loading
-        spinner_start();
-      });
-
       $('.edit-add-to-cart', context).on('mousedown', function () {
-        // Start loading
-        spinner_start();
+        var that = this;
+        // Delay loader for 10ms, we use the same event as AJAX and
+        // we might have some client side validation error preventing
+        // ajax call.
+        setTimeout(function () {
+          if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
+            return;
+          }
+
+          // Start loading
+          spinner_start();
+        }, 10);
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
+        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
+          return;
+        }
+
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
           spinner_start();

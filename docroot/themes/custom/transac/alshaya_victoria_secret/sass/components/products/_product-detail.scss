@@ -227,54 +227,27 @@
   .form-item-configurables-color {
     .select2Option {
       li {
-        display: flex;
-        align-items: center;
-
         &.li-swatch-image {
+          img {
+            padding: 0;
+          }
+
           a,
           span {
             border: none;
-            width: 2.375rem;
-            height: 2.375rem;
-            position: relative;
             padding: 0;
 
             &.picked,
             &:hover {
-              background: transparent;
-
               &::after {
-                content: '';
-                position: absolute;
-                display: inline-block;
+                height: 2.75rem;
+                width: 2.75rem;
                 top: -0.1875rem;
                 #{$left}: -0.1875rem;
-                #{$right}: -0.1875rem;
-                bottom: -0.1875rem;
-                z-index: 1;
-                border: 1px solid $pdp_white_color_attribute_border;
-                pointer-events: none;
               }
-            }
-
-            &:hover {
-              &::after {
-                border: 1px solid $pdp_white_color_attribute_hover_border;
-              }
-            }
-
-            &.white {
-              -webkit-appearance: none;
-              box-shadow: 0 0 0 1px $pdp_white_color_attribute;
             }
           }
         }
-      }
-
-      .select-buttons {
-        display: flex;
-        flex-flow: row wrap;
-        margin-top: 0;
       }
     }
   }

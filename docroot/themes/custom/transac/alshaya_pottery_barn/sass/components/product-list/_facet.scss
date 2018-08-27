@@ -12,6 +12,10 @@
     }
   }
 
+  a {
+    font-weight: normal;
+  }
+
   input[type=checkbox] ~ label::before {
     @include breakpoint($only-mobile) {
       position: relative;

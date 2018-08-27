@@ -79,7 +79,7 @@ class NewsLetterForm extends FormBase {
       ],
       '#suffix' => '<div id="footer-newsletter-form-wrapper"></div>',
       '#attributes' => [
-        'class' => ['edit-newsletter'],
+        'class' => ['edit-newsletter', 'cv-validate-before-ajax'],
         'data-twig-suggestion' => 'newsletter',
         'data-style' => 'zoom-in',
       ],

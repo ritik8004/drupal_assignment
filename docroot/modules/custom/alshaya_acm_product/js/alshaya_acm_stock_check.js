@@ -41,6 +41,20 @@
         });
       });
 
+      $('.edit-add-to-cart').once('js-to-move-error-message').on('click', function () {
+        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
+          $('.form-item > label.error', $(this).closest('form')).each(function () {
+            var parent = $(this).closest('.form-item');
+            if (parent.find('.select2Option').length > 0) {
+              $('.selected-text', $(parent)).append($(this));
+            }
+            else {
+              $('label.form-required', $(parent)).append($(this));
+            }
+          });
+        }
+      });
+
       // Stock check on PDP main product / product in modal view.
       $('.add-to-cart-form-placeholder').once('js-event').each(function () {
         var $wrapper = $(this).closest('article');

@@ -91,7 +91,7 @@ permissions:
   - 'create content translations'
   - 'migrate alshaya_stores'
   - 'access site in maintenance mode'
-  - 'administer size guide settings'
+  - 'administer PDP modal links settings'
   - 'administer sitemap settings'
   - 'edit terms in area_list'
   - 'alshaya create user'

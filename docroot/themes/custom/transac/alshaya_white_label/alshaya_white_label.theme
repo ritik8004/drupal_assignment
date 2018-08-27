@@ -456,7 +456,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
       }
       break;
 
-    case "webform_submission_alshaya_contact_form":
+    case "webform_submission_alshaya_contact_add_form":
       $form['#attached']['library'][] = 'alshaya_white_label/autosize_textarea';
       $form['elements']['message']['#rows'] = 1;
       $form['elements']['message']['#attributes']['maxlength'] = 220;
@@ -907,7 +907,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       // If category value is filled.
       if (!empty($category = $paragraph->get('field_category_carousel'))) {
         // Fetch values from the paragraph.
-        $category_id = $category->getValue()[0]['target_id'];
+        $category_id = $category->getValue()[0]['target_id'] ?? NULL;
 
         $is_accordion = FALSE;
         if ($paragraph->hasField('field_use_as_accordion')
