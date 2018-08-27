@@ -197,11 +197,3 @@ function alshaya_permissions_update_8009() {
   // Update role permissions from the config.
   _alshaya_permissions_update_role_from_config(['seo_admin']);
 }
-
-/**
- * Implements hook_install().
- */
-function alshaya_permissions_install() {
-  // Update role permissions from the config.
-  _alshaya_permissions_update_role_from_config(['anonymous', 'authenticated'], 'override');
-}
