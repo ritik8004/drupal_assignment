@@ -557,6 +557,16 @@ class SkuManager {
    */
   public function getChildSkuFromAttribute(SKU $parent_sku, $attribute, $option_id) {
     $combinations = $this->getConfigurableCombinations($parent_sku);
+    // If combination not available.
+    if (empty($combinations['attribute_sku'][$attribute][$option_id])) {
+      $this->logger->warning('No combination available for attribute @attribute and option @option for SKU @sku', [
+        '@attribute' => $attribute,
+        '@option' => $option_id,
+        '@sku' => $parent_sku->getSku(),
+      ]);
+      return NULL;
+    }
+
     $sku = reset($combinations['attribute_sku'][$attribute][$option_id]);
     return SKU::loadFromSku($sku);
   }
