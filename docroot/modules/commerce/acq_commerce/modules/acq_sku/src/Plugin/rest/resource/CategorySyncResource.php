@@ -100,7 +100,7 @@ class CategorySyncResource extends ResourceBase {
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response.
    */
-  public function post(array $categories = []) {
+  public function post(array $categories) {
 
     $response = $this->categoryManager->synchronizeCategory(
       self::CATEGORY_TAXONOMY,

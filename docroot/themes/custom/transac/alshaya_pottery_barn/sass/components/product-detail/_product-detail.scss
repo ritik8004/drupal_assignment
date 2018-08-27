@@ -129,10 +129,28 @@
           }
         }
 
+        @include breakpoint($only-tablet) {
+          margin-top: 1.45rem;
+          margin-bottom: 1.5rem;
+        }
+
+        @include breakpoint($upto-desktop) {
+          &:first-child {
+            margin-bottom: 0.75rem;
+          }
+        }
+
         &.configurable-swatch {
           @include breakpoint($only-mobile) {
             margin: 0;
             padding: 0 0 1rem;
+            margin-bottom: 1.5rem;
+          }
+        }
+
+        .form-select {
+          @include breakpoint($upto-desktop) {
+            clip: auto;
           }
         }
 
