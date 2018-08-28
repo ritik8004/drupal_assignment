@@ -57,8 +57,7 @@
 
       @include breakpoint($desktop) {
         #{$right}: 0;
-        height: 2.125rem;
-        border-bottom: none;
+        height: 2.1875rem;
       }
     }
   }
@@ -417,7 +416,7 @@
       @include breakpoint($desktop) {
         width: 62.5%;
         padding-right: 0;
-        padding-left: 0;
+        padding-left: 2rem;
 
         html[lang=ar] & {
           padding-right: 1rem;
