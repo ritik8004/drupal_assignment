@@ -13,8 +13,8 @@ use Drupal\user\Entity\Role;
  * Grant 'view terms in acq_product_category' to anonymous/authenticated user.
  */
 function alshaya_permissions_update_8017() {
-  // Update role permissions from the config.
-  _alshaya_permissions_update_role_from_config(['anonymous', 'authenticated'], 'override');
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
 }
 
 /**
