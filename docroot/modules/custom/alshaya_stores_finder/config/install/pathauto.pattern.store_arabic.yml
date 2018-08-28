@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+    - node
+id: store_arabic
+label: 'Store Arabic'
+type: 'canonical_entities:node'
+pattern: 'محل/[node:title]'
+selection_criteria:
+  622c0bea-fd2d-4ced-87e7-9348a2eeb69a:
+    id: node_type
+    bundles:
+      store: store
+    negate: false
+    context_mapping:
+      node: node
+    uuid: 622c0bea-fd2d-4ced-87e7-9348a2eeb69a
+  d4bc5fe0-9d5d-4ce9-90e0-cbe3686f2d02:
+    id: language
+    langcodes:
+      ar: ar
+    negate: false
+    context_mapping:
+      language: 'node:langcode:language'
+    uuid: d4bc5fe0-9d5d-4ce9-90e0-cbe3686f2d02
+selection_logic: and
+weight: -10
+relationships:
+  'node:langcode:language':
+    label: Language
