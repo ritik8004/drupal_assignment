@@ -183,10 +183,6 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
   if (isset($product['attributes']['product_activation_date'])) {
     $node->setCreatedTime(strtotime($product['attributes']['product_activation_date']));
   }
-
-  if (isset($node->path)) {
-    $node->path->pathauto = 1;
-  }
 }
 
 /**

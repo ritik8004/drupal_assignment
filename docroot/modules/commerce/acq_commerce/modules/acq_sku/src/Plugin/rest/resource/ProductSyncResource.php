@@ -369,6 +369,11 @@ class ProductSyncResource extends ResourceBase {
 
           $node->setPublished(TRUE);
 
+          // Alias for the product if path auto enabled.
+          if (\Drupal::moduleHandler()->moduleExists('pathauto')) {
+            $node->path->pathauto = 1;
+          }
+
           // Invoke the alter hook to allow all modules to update the node.
           \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
 
