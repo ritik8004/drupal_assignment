@@ -452,7 +452,6 @@ $section_divider_text: $_black_two;
 $section_divider_bg: $white-two;
 
 // 404 & Maintenance Pages.
-// 404
 $maintenance_body_bg: $white-two;
 $maintenance_link: $white-two;
 $maintenance_link_border: $white-two;
@@ -469,6 +468,7 @@ $promo_panel_label: $white-two;
 $promo_panel_mobile_label: $white-two;
 $promo_panel_label_bg: rgba(0, 0, 0, 0.9);
 $promo_panel_label_bg_active: $PB_black_one;
+
 // Back to top.
 $btt_text: $PB_deep_red;
 
@@ -486,3 +486,8 @@ $order_print_order_details_row_light: $_gray_two;
 $order_print_order_details_total_label: $_gray_ten;
 $order_print_order_details_item_row_details: $PB_grey_two;
 $order_print_delivery_details_price_label: $_black_two;
+
+// Department page
+$department_category_list_hover: $PB_deep_red;
+$department_category_accordion_title: $_black_two;
+$department_category_accordion_title_arrow: $PB_deep_red;
