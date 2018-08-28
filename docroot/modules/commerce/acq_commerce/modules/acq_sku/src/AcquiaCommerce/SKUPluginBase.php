@@ -252,7 +252,6 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
           $stock = \Drupal::database()->select('acq_sku_field_data', 'asfd')
             ->fields('asfd', ['stock'])
             ->condition('asfd.sku', $sku_string)
-            ->condition('asfd.langcode', \Drupal::languageManager()->getCurrentLanguage()->getId())
             ->execute()
             ->fetchField();
         }
