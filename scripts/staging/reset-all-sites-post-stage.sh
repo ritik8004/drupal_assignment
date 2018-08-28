@@ -23,4 +23,4 @@ rm -rf ~/backup/$target_env/pre-stage/*
 echo "Deleting existing post-stage database dump for all sites."
 rm -rf ~/backup/$target_env/post-stage/*
 
-./../hooks/scripts/reset-post-stage.sh $target_env "$sites"
+./../scripts/staging/reset-post-stage.sh $target_env "$sites"
