@@ -22,10 +22,10 @@ nothingstr="no update performed"
 
 ## Checking if there any install files has been updated.
 echo "Checking git diff to identify hook_update() change."
-git diff HEAD^ HEAD --name-only -- *.install
+echo $(cat ../git-diff.txt)
 
 ## In case install file have been updated.
-if [ "$(git diff HEAD^ HEAD --name-only -- *.install)" ]; then
+if echo $(cat ../git-diff.txt) | grep ".install"; then
   ## Restore database dumps before applying database updates.
   echo "Change in install file detected, restoring database before executing updb."
   drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
@@ -59,11 +59,11 @@ domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | a
 
 echo "$domains" | while IFS= read -r line
 do
- echo "Clearing varnish cache for $line"
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2296.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k
+ echo "\rClearing varnish cache for $line"
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
+ curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2296.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
 done
 
 ## Push the updb logs on Slack channel.
@@ -77,15 +77,15 @@ if [ -f $FILE ]; then
   errorstr="error"
 
   if [ -n "$output" ]; then
-    if echo $output | grep -q $errorstr; then
-      echo "Sending error notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
-    elif echo $output | grep -q $nothingstr; then
-      echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully cleared cache on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+    if echo $output | grep -q "$errorstr"; then
+      echo "\rSending error notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    elif echo $output | grep -q "$nothingstr"; then
+      echo "\rSending success notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully cleared cache on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     else
-      echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+      echo "\rSending success notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     fi
   else
     echo "No output variable to check."
