@@ -59,7 +59,7 @@ domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | a
 
 echo "$domains" | while IFS= read -r line
 do
- echo "Clearing varnish cache for $line"
+ echo "\rClearing varnish cache for $line"
  curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
  curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
  curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
@@ -78,14 +78,14 @@ if [ -f $FILE ]; then
 
   if [ -n "$output" ]; then
     if echo $output | grep -q "$errorstr"; then
-      echo "Sending error notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+      echo "\rSending error notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     elif echo $output | grep -q "$nothingstr"; then
-      echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully cleared cache on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+      echo "\rSending success notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully cleared cache on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     else
-      echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL
+      echo "\rSending success notification to Slack channel."
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     fi
   else
     echo "No output variable to check."
