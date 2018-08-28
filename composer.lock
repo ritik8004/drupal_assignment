@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b18ada856fe2d154c936c2995c52730f",
+    "content-hash": "464f2d38044700bc73c692ee45d89b56",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -19,27 +19,22 @@
         },
         {
             "name": "acquia/acsf-tools",
-            "version": "8.1.2",
+            "version": "8.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "fc80b5603de7efe90419e5dbdf21a24fc140f493"
+                "reference": "ac48f8ee0591782ea793b5ada90c1cff0693da3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/fc80b5603de7efe90419e5dbdf21a24fc140f493",
-                "reference": "fc80b5603de7efe90419e5dbdf21a24fc140f493",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/ac48f8ee0591782ea793b5ada90c1cff0693da3d",
+                "reference": "ac48f8ee0591782ea793b5ada90c1cff0693da3d",
                 "shasum": ""
             },
             "require": {
                 "symfony/yaml": "^3.0"
             },
             "type": "drupal-drush",
-            "extra": {
-                "patches_applied": {
-                    "Create an acsf-tools-restore command to restore dumps.": "https://patch-diff.githubusercontent.com/raw/acquia/acsf-tools/pull/12.patch"
-                }
-            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0+"
@@ -58,7 +53,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-02-15T00:21:25+00:00"
+            "time": "2018-08-28T12:45:52+00:00"
         },
         {
             "name": "acquia/blt",
