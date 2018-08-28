@@ -118,7 +118,7 @@ class SkuAssetManager {
    * @param bool $first_image_only
    *   Return only the first image.
    * @param array $avoid_assets
-   *   Array of sortAssetType to avoid.
+   *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of urls to sku assets.
@@ -144,7 +144,7 @@ class SkuAssetManager {
     foreach ($location_images as $location_image) {
       $asset_urls = [];
       foreach ($assets as $asset) {
-        if (!empty($avoid_assets) && in_array($asset['sortAssetType'], $avoid_assets)) {
+        if (!empty($avoid_assets) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
           continue;
         }
         list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
@@ -429,11 +429,13 @@ class SkuAssetManager {
    *   Flag to indicate we need the assets of the first child only.
    * @param bool $first_image_only
    *   Return only the first image.
+   * @param array $avoid_assets
+   *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, $avoid_assets = NULL) {
+  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
     $assets = [];
 

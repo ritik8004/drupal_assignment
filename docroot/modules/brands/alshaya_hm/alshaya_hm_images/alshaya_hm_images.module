@@ -79,15 +79,15 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
   if ($context == 'search') {
     // Lookup images on current SKU if its a simple SKU.
     $main_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp', ['plp']);
-    $avoid_asset = !empty($main_image_assets) ? [$main_image_assets[0]['sortAssetType']] : [];
-    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_asset);
+    $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
+    $hover_image_assets = $sku_assets_manager->getSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_assets);
 
     // If no assets attached & the sku is configurable, try to use the
     // assets attached with first child sku.
     if (empty($main_image_assets) && empty($hover_image_assets) && ($sku->bundle() === 'configurable')) {
       $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
-      $avoid_asset = !empty($main_image_assets) ? [$main_image_assets[0]['sortAssetType']] : [];
-      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_asset);
+      $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
+      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_assets);
     }
 
     $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
