@@ -78,11 +78,11 @@ function alshaya_permissions_form_alter(array &$form, FormStateInterface $form_s
 /**
  * Implements a helper to update role permissions from config.
  */
-function _alshaya_permissions_update_role_from_config(array $roles = NULL, string $directory = 'install') {
+function _alshaya_permissions_update_role_from_config(array $roles = NULL) {
   $roles = Role::loadMultiple($roles);
   $module_handler = Drupal::service('module_handler');
   foreach ($roles as $rid => $role) {
-    $path = $module_handler->getModule('alshaya_permissions')->getPath() . '/config/' . $directory . '/user.role.' . $rid . '.yml';
+    $path = $module_handler->getModule('alshaya_permissions')->getPath() . '/config/install/user.role.' . $rid . '.yml';
     if (file_exists($path)) {
       $ymldata = Yaml::parse(file_get_contents($path));
       foreach ($ymldata['permissions'] as $permission) {
