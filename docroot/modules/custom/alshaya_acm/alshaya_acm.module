@@ -344,7 +344,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     ];
   }
 
-  // Add class to continut shopping link.
+  // Add class to continue shopping link.
   $form['actions']['continue_shopping_mobile']['#attributes']['class'][] = 'edit-continue-shopping-mobile';
 
   // Attach library, to cater to Coupon submit button.
