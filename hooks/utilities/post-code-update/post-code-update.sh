@@ -22,10 +22,10 @@ nothingstr="no update performed"
 
 ## Checking if there any install files has been updated.
 echo "Checking git diff to identify hook_update() change."
-git diff HEAD^ HEAD --name-only -- *.install
+echo $(cat ../git-diff.txt)
 
 ## In case install file have been updated.
-if [ "$(git diff HEAD^ HEAD --name-only -- *.install)" ]; then
+if echo $(cat ../git-diff.txt) | grep ".install"; then
   ## Restore database dumps before applying database updates.
   echo "Change in install file detected, restoring database before executing updb."
   drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
