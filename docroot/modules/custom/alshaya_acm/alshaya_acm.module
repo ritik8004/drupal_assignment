@@ -32,7 +32,6 @@ function alshaya_acm_drush_command_alter(&$command) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
-  // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
   $form['form_level_error_wrapper'] = [

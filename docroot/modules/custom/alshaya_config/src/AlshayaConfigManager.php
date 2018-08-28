@@ -42,6 +42,13 @@ class AlshayaConfigManager {
   const MODE_REPLACE_KEY = 'replace_key';
 
   /**
+   * Just resave existing config and let overrides get applied.
+   *
+   * This is mainly used for overriding config from CORE or Contrib.
+   */
+  const MODE_RESAVE = 'resave';
+
+  /**
    * Config Storage service.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -150,6 +157,7 @@ class AlshayaConfigManager {
         $existing = is_array($existing) ? $existing : [];
         $updated = $this->getUpdatedData($existing, $data, $mode, $options);
         $config->setData($updated)->save(TRUE);
+        $this->configFactory->reset($config_id);
       }
 
       // Flush image cache for style we updated.
@@ -205,6 +213,12 @@ class AlshayaConfigManager {
           $existing[$replace_key] = $data[$replace_key];
           $data = $existing;
         }
+        break;
+
+      case self::MODE_RESAVE:
+        // We just want the overrides to be applied and not actually change
+        // anything in existing config or re-read from config yaml.
+        $data = $existing;
         break;
 
       case self::MODE_REPLACE:

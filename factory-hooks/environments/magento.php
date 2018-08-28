@@ -87,10 +87,12 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 14, 'ar' => 11],
     ],
-    'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
-    'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
-    'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
-    'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
+    'magento_secrets' => [
+      'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
+      'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
+      'access_token' => 'ncevhsnmxu35fln4fq3c009lo09frfgm',
+      'access_token_secret' => 'dm4h99kjd387rv29ivthpbatx7dn5g1b',
+    ],
   ],
   'hm_prod' => [
     'url' => 'https://hm.store.alshaya.com',
