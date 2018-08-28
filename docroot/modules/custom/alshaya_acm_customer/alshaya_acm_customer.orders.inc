@@ -5,6 +5,7 @@
  * Contains utility functions to process orders and provide related data.
  */
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Unicode;
 use Drupal\node\NodeInterface;
@@ -442,23 +443,31 @@ function alshaya_acm_customer_build_order_detail(array $order) {
 
     $sku = SKU::loadFromSku($item['sku']);
 
-    $product_node = alshaya_acm_product_get_display_node($sku);
-    if ($product_node instanceof NodeInterface) {
-      $product['name'] = $product_node->getTitle();
+    // If SKU not found in Drupal, skip it.
+    if (!$sku instanceof SKUInterface) {
+      $product['name'] = $item['name'];
+      $product['image'] = '';
+      $products[] = $product;
     }
+    else {
+      $product_node = alshaya_acm_product_get_display_node($sku);
+      if ($product_node instanceof NodeInterface) {
+        $product['name'] = $product_node->getTitle();
+      }
 
-    // Check if we can find a parent SKU for this to get proper name.
-    if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
-      // Try to find attributes to display for this product.
-      $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+      // Check if we can find a parent SKU for this to get proper name.
+      if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
+        // Try to find attributes to display for this product.
+        $product['attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+      }
+
+      $product['image'] = '';
+
+      // Load the first image.
+      $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'order_detail');
+
+      $products[] = $product;
     }
-
-    $product['image'] = '';
-
-    // Load the first image.
-    $product['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'order_detail');
-
-    $products[] = $product;
   }
 
   $build = [];
