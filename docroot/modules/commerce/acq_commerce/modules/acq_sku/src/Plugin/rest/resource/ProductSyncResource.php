@@ -269,7 +269,7 @@ class ProductSyncResource extends ResourceBase {
             continue;
           }
 
-          $updated_skus[] = $product['skus'];
+          $updated_skus[] = $product['sku'];
           $updated++;
         }
         else {
