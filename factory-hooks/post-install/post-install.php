@@ -42,7 +42,7 @@ if (file_exists('/home/alshaya/post-install-override.txt')) {
 
   $fh = fopen('/home/alshaya/post-install-override.txt','r');
   while ($line = fgets($fh)) {
-    list($key, $value) = explode(': ', $line);
+    list($key, $value) = array_map('trim', explode(':', $line));
     switch ($key) {
       case 'action':
         $action = ($value == ACTION_DISABLE) ? ACTION_DISABLE : ACTION_OVERRIDE;
