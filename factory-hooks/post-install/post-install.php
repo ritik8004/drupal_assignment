@@ -19,22 +19,6 @@ $domain = preg_replace('/\d/', '',explode('.', $_SERVER['HTTP_HOST'])[0]);
 $site_code = substr($domain, 0, -2);
 $country_code = substr($domain, -2);
 
-$f = fopen('/home/alshaya/debug.txt', 'a');
-fwrite($f, "\n");
-fwrite($f, 'TEST VBO');
-fwrite($f, "\n");
-fwrite($f, $_SERVER['HTTP_HOST'] . ' - ' . $domain . ' - ' . $site_code . ' - ' . $country_code);
-fwrite($f, "\n");
-fwrite($f, 'group ' . $_ENV['AH_SITE_GROUP'] . ' - env ' . $_ENV['AH_SITE_ENVIRONMENT']);
-fwrite($f, "\n");
-fclose($f);
-
 if ($site_code == 'vb') {
-  $f = fopen('/home/alshaya/debug.txt', 'a');
-  fwrite($f, 'Enter the condition and run exec');
-  fwrite($f, dirname(__FILE__) . '/post-install.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $domain . '" "' . $site_code . '" "' . $country_code . '"');
-  fwrite($f, "\n");
-  fclose($f);
-
   exec(dirname(__FILE__) . '/post-install.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $domain . '" "' . $site_code . '" "' . $country_code . '"');
 }
