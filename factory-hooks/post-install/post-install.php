@@ -12,6 +12,13 @@
  *
  */
 
+// @TODO: Add a way to by-pass commerce data sync via post-install-override.txt.
+// @TODO: Add possibility to override ACM+MDC stream before commerce data sync. See alshaya-switch-config.
+// @TODO: Add possibility to use synchronous product sync instead of default async.
+
+define('ACTION_DISABLE', 'disable');
+define('ACTION_OVERRIDE', 'override');
+
 // Detect the site name (mckw, hmsa, bbwae, ...) from the domain.
 $domain = preg_replace('/\d/', '', explode('.', $_SERVER['HTTP_HOST'])[0]);
 
@@ -19,7 +26,43 @@ $domain = preg_replace('/\d/', '', explode('.', $_SERVER['HTTP_HOST'])[0]);
 $site_code = substr($domain, 0, -2);
 $country_code = substr($domain, -2);
 
-if ($site_code == 'vb') {
-  $site_code = 'mc';
-  exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $domain . '" "' . $site_code . '" "' . $country_code . '"');
+/**
+ * Check if we need to override the arguments or cancel the process by reading
+ * /home/alshaya/post-install-override.txt file. Expected content is:
+ *
+ * action: disable|override
+ * brand_code: mc|hm|...
+ * country_code: kw|sa|ae
+ *
+ * If the file exists and no action is configured, "disable" will be
+ * considered the default action.
+ */
+if (file_exists('/home/alshaya/post-install-override.txt')) {
+  $action = ACTION_DISABLE;
+
+  $fh = fopen('/home/alshaya/post-install-override.txt','r');
+  while ($line = fgets($fh)) {
+    list($key, $value) = explode(': ', $line);
+    switch ($key) {
+      case 'action':
+        $action = ($value == ACTION_DISABLE) ? ACTION_DISABLE : ACTION_OVERRIDE;
+        break;
+
+      case 'brand_code':
+        $site_code = $value;
+        break;
+
+      case 'country_code':
+        $country_code = $value;
+        break;
+    }
+  }
+  fclose($fh);
+
+  // If post-install is disabled, stop here.
+  if ($action == ACTION_DISABLE) {
+    return;
+  }
 }
+
+exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');
