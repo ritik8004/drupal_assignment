@@ -29,7 +29,7 @@ echo -e "\n"
 if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   ## Restore database dumps before applying database updates.
   echo "Change in install file detected, restoring database before executing updb."
-  drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt=yes
+  drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt
 
   ## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5.
   ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
