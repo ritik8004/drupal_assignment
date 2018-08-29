@@ -63,7 +63,4 @@ if (file_exists('/home/alshaya/post-install-override.txt')) {
   }
 }
 
-if ($site_code == 'vb') {
-  $site_code = 'mc';
-  exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');
-}
+exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $_SERVER['HTTP_HOST'] . '" "' . $site_code . '" "' . $country_code . '"');
