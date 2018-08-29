@@ -5,6 +5,9 @@ site="$2"
 brand_code="$3"
 country_code="$4"
 
+// @TODO: To be removed.
+brand_code="mc"
+
 cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
 
 ## Push the updb logs on Slack channel.
