@@ -32,5 +32,5 @@ done <<< "$(drush8 acsf-tools-list --fields)"
 # If the given site_code is valid, launch the reset.
 if [ $exist ]
 then
-  ./../hooks/scripts/reset-post-stage.sh $target_env $site_code
+  ./../scripts/staging/reset-post-stage.sh $target_env $site_code
 fi
