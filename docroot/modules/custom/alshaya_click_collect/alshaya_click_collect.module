@@ -136,10 +136,3 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
     ];
   }
 }
-
-/**
- * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
- */
-function alshaya_click_collect_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
-  $response->addCommand(new InvokeCommand(NULL, 'clickCollectProductStockStatusAction', ['article[data-skuid="' . $entity->id() . '"]:visible', $stock]));
-}
