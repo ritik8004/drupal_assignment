@@ -21,14 +21,17 @@ drush8 @alshaya.$target_env -l $site status;
 echo "\nEnabling brand and country modules."
 drush8 @alshaya.$target_env -l $site apdi --brand_module="alshaya_$brand_code" --country_code="$country_code"
 
-echo "\nConfiguring default users."
-drush8 @alshaya.$target_env -l $site upwd "Site factory admin" --password="AlShAyAU1@123"
+if [ $target_env != "01live" -o $target_env != "01update" ]
+then
+  echo "\nConfiguring default users."
+  drush8 @alshaya.$target_env -l $site upwd "Site factory admin" --password="AlShAyAU1@123"
 
-drush8 @alshaya.$target_env -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin;
-drush8 @alshaya.$target_env -l $site user-add-role "administrator" --name=siteadmin;
+  drush8 @alshaya.$target_env -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin;
+  drush8 @alshaya.$target_env -l $site user-add-role "administrator" --name=siteadmin;
 
-drush8 @alshaya.$target_env -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster;
-drush8 @alshaya.$target_env -l $site user-add-role "webmaster" --name=webmaster;
+  drush8 @alshaya.$target_env -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster;
+  drush8 @alshaya.$target_env -l $site user-add-role "webmaster" --name=webmaster;
+fi
 
 drush8 @alshaya.$target_env -l $site cr;
 
