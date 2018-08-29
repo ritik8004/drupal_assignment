@@ -9,6 +9,8 @@ site="$2"
 brand_code="$3"
 country_code="$4"
 
+echo "In setup-fresh-site.sh with $target_env - $site - $brand_code - $country_code" >> $HOME/debug.txt
+
 echo "Starting site setup with following arguments:"
 echo "\nEnvironment: $target_env"
 echo "\nDomain: $site"
