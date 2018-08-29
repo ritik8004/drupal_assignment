@@ -234,24 +234,37 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      // Convert the list to slider.
-      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
-        if (isRTL()) {
-          $(this, context).lightSlider({
-            vertical: false,
-            item: settings.plp_slider.item,
-            rtl: true,
-            slideMargin: settings.plp_slider.margin,
-          });
+      var slickOptions = {
+        slidesToShow: settings.plp_slider.item,
+        slidesToScroll: 1,
+        vertical: false,
+        arrows: true,
+        focusOnSelect: false,
+        infinite: false,
+        touchThreshold: 1000,
+      };
+
+      function applyRtl(ocObject, options) {
+        if (isRTL() && $(window).width() > 1025) {
+          ocObject.attr('dir', 'rtl');
+          ocObject.slick(
+            $.extend({}, options, {rtl: true})
+          );
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
         else {
-          $(this, context).lightSlider({
-            vertical: false,
-            item: settings.plp_slider.item,
-            rtl: false,
-            slideMargin: settings.plp_slider.margin,
-          });
+          ocObject.slick(options);
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
+      }
+
+      // Convert the list to slider.
+      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
+        applyRtl($(this), slickOptions);
       });
 
       // Change the image on Mouse hover.
@@ -280,7 +293,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         $('.c-products__item').each(function () {
           var slider = $(this).find('.alshaya_search_slider');
           // Iterate over each slider thumbnail.
-          slider.find('.lslide').each(function () {
+          slider.find('.slick-slide').each(function () {
             var imgURL = $(this).children('img').attr('rel');
             // Preload image.
             var img = new Image();
