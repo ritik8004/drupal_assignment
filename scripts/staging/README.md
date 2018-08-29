@@ -7,24 +7,21 @@ operations for the sites of Alshaya Factory. Staging a site from production to
 a sub environment is a feature provided by ACSF but because of the Alshaya 
 specificity, additional operation are required post stage.
 
-Indeed, some
-configuration may differ from production but specially the products catalog and
-other commerce data given the target environment is not connected to the same 
-Acquia Commerce Manager (ACM) and Magento (MDC) stream. For these reasons, the
-staged sites must be cleaned from production data and synchronized with the
-appropriate ACM and MDC stream.
+Indeed, some configuration may differ from production but specially the
+products catalog and other commerce data given the target environment is not 
+connected to the same Acquia Commerce Manager (ACM) and Magento (MDC) stream. 
+For these reasons, the staged sites must be cleaned from production data and 
+synchronized with the appropriate ACM and MDC stream.
 
 ## Staging modes:
 
 #### Hard stage
-
 This mode does some operation on the target environment before staging the 
 selected sites. It deletes ALL the sites of the target environment and switch
 the code base to the same branch/tag that is deployed on production. Doing that
 way, the staged sites are iso-prod after staging.
 
 #### Soft stage
-
 This mode only stage the selected sites on the target environment. If these
 already exist here, there will be deleted first. But the other sites remain
 untouched and the code base as well. **It is critical to understand the staged
@@ -52,13 +49,11 @@ These scripts must be executed from the target environment after connecting via
 ssh.
 
 #### After hard stage
-
 After a hard stage, all the sites of the factory must be reset:
 `./scripts/staging/reset-all-sites-post-stage.sh "<env>"` where `<env>` is the 
 current ACSF environment (01dev, 01test, 01uat, ...).
 
 #### After soft stage
-
 After a soft stage, only the selected site must be reset:
 `./scripts/staging/reset-individual-site-post-stage.sh "<env>" "<site-code>"` 
 where `<env>` is the current ACSF environment (01dev, 01test, 01uat, ...) and
@@ -77,7 +72,6 @@ multiple sub-scripts stored in `scripts/staging/sub/`.
 ## Expected workflow:
 
 #### Hard stage
-
 * From [production factory UI](https://www.alshaya.acsitefactory.com/admin/gardens/staging/deploy),
 select the target environment, select the sites to be staged, click the 
 "Wipe target environment" checkbox and submit the form.
@@ -88,7 +82,6 @@ so the process is not stopped in case ssh connection is lost.
 * Finally, deploy the new code using "Code and databases" option.
 
 #### Soft stage
-
 * From [production factory UI](https://www.alshaya.acsitefactory.com/admin/gardens/staging/deploy),
 select the target environment, select the sites to be staged and submit the
 form.
