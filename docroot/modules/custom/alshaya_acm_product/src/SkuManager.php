@@ -402,8 +402,8 @@ class SkuManager {
     if ($view_mode != 'teaser' && $view_mode != 'product_category_carousel') {
       $routes = [
         'entity.node.canonical',
-        'alshaya_acm_product.get_cart_form',
         'alshaya_acm_product.select_configurable_option',
+        'alshaya_acm_product.add_to_cart_submit',
       ];
       if (in_array($this->currentRoute->getRouteName(), $routes)) {
         $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');

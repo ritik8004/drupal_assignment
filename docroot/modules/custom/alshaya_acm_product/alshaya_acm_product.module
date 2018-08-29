@@ -365,7 +365,6 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
     $product_settings = \Drupal::config('alshaya_acm_product.settings');
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
@@ -651,39 +650,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
         $build['show_cart_form']['#markup'] = $class;
 
-        if ($view_mode != 'product_category_carousel'
-          && $product_settings->get('show_cart_form_in_related')
-          && alshaya_acm_product_is_buyable($sku_entity)) {
+        $build['sku_id'] = [
+          '#markup' => $sku_entity->id(),
+        ];
 
-          $build['sku_id'] = [
-            '#markup' => $sku_entity->id(),
-          ];
-
-          $build['mobile_add_to_cart_form'] = [
-            '#type' => 'link',
-            '#title' => '',
-            '#url' => Url::fromRoute(
-              'alshaya_acm_product.get_cart_form',
-              ['view_mode' => 'teaser', 'entity' => $sku_entity->id()],
-              ['query' => ['cacheable' => 1]]
-            ),
-            '#attributes' => [
-              'class' => [
-                'use-ajax',
-                'add-to-cart-form-placeholder-teaser',
-              ],
-            ],
-          ];
-
-          // In push mode check if product is out of stock here itself.
-          if ($stock_mode != 'pull' && !alshaya_acm_get_stock_from_sku($sku_entity)) {
-            $build['stock_placeholder'] = [
-              '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
-            ];
-
-            $build['mobile_add_to_cart_form'] = $build['stock_placeholder'];
-          }
-        }
+        $build['mobile_add_to_cart_form'] = [];
       }
       elseif ($view_mode == 'modal') {
         $context = 'modal';
