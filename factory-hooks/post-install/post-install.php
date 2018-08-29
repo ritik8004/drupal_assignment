@@ -20,5 +20,6 @@ $site_code = substr($domain, 0, -2);
 $country_code = substr($domain, -2);
 
 if ($site_code == 'vb') {
-  exec(dirname(__FILE__) . '/../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $domain . '" "' . $site_code . '" "' . $country_code . '"');
+  $site_code = 'mc';
+  exec(dirname(__FILE__) . '/../../scripts/setup/setup-fresh-site.sh "' . $_ENV['AH_SITE_ENVIRONMENT'] . '" "' . $domain . '" "' . $site_code . '" "' . $country_code . '"');
 }
