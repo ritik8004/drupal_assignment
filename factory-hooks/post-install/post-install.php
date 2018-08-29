@@ -13,6 +13,8 @@
  */
 
 // @TODO: Add a way to by-pass commerce data sync via post-install-override.txt.
+// @TODO: Add possibility to override ACM+MDC stream before commerce data sync. See alshaya-switch-config.
+// @TODO: Add possibility to use synchronous product sync instead of default async.
 
 define('ACTION_DISABLE', 'disable');
 define('ACTION_OVERRIDE', 'override');
