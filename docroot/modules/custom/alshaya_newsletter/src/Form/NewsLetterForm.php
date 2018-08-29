@@ -63,7 +63,6 @@ class NewsLetterForm extends FormBase {
       '#title' => $this->t('Email address'),
       '#title_display' => 'invisible',
       '#type' => 'email',
-      '#required' => TRUE,
       '#placeholder' => $this->t('Enter your email address'),
       '#prefix' => '<div class="newsletter-block-label">' . $this->t('get email offers and the latest news from @site_name', ['@site_name' => $site_name]) . '</div>',
       '#element_validate' => ['alshaya_valid_email_address'],
@@ -79,7 +78,7 @@ class NewsLetterForm extends FormBase {
       ],
       '#suffix' => '<div id="footer-newsletter-form-wrapper"></div>',
       '#attributes' => [
-        'class' => ['edit-newsletter'],
+        'class' => ['edit-newsletter', 'cv-validate-before-ajax'],
         'data-twig-suggestion' => 'newsletter',
         'data-style' => 'zoom-in',
       ],
@@ -93,7 +92,7 @@ class NewsLetterForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitFormAjax(array &$form, FormStateInterface $form_state) {
-    if (!$form_state->hasAnyErrors()) {
+    if (!$form_state->hasAnyErrors() && !empty($form_state->getValue('email'))) {
       try {
         $subscription = $this->apiWrapper->subscribeNewsletter($form_state->getValue('email'));
 

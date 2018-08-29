@@ -18,7 +18,7 @@
 
     .slick-slider {
       button.slick-arrow {
-        top: 0.15rem;
+        top: 0.15rem !important;
 
         &::before {
           background: none;
@@ -27,18 +27,18 @@
         }
 
         &.slick-prev {
-          #{$left}: -0.25rem;
+          left: -0.25rem;
 
           @include breakpoint($tablet) {
-            #{$left}: 1.25rem;
+            left: 1.25rem;
           }
         }
 
         &.slick-next {
-          #{$right}: -0.25rem;
+          right: -0.25rem;
 
           @include breakpoint($tablet) {
-            #{$right}: 1.25rem;
+            right: 1.25rem;
           }
         }
       }

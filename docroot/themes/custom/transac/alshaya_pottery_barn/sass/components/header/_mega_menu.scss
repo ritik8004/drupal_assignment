@@ -76,6 +76,10 @@
       @include breakpoint($upto-desktop) {
         padding-bottom: 0.875rem;
       }
+
+      @include breakpoint($desktop) {
+        margin-top: 0;
+      }
     }
 
     ul.menu--two__list {

@@ -86,7 +86,8 @@
         "drupal/ckeditor_font": "^1.0",
         "ckeditor/font": "^4.9",
         "springimport/magento2-api-v1": "^1.0",
-        "HubSpot/pace": "^1.0"
+        "HubSpot/pace": "^1.0",
+        "drupal/views_ajax_get": "^1.0@beta"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
@@ -207,7 +208,8 @@
                 "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
                 "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                 "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
-                "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch"
+                "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
+                "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -269,9 +271,6 @@
             },
             "drupal/views_infinite_scroll" : {
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
-            },
-            "acquia/acsf-tools" : {
-                "Create an acsf-tools-restore command to restore dumps.": "https://patch-diff.githubusercontent.com/raw/acquia/acsf-tools/pull/12.patch"
             },
             "drupal/clientside_validation": {
                 "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"

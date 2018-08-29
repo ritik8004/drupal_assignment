@@ -624,6 +624,13 @@
     @include breakpoint($desktop) {
       margin-#{$left}: 1.5rem;
     }
+
+    label {
+      &.error {
+        top: 3.125rem !important;
+        color: $primary_input_inline_error;
+      }
+    }
   }
 
   #selected-store-elements-wrapper {
