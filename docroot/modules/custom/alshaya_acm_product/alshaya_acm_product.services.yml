@@ -41,6 +41,7 @@ services:
       - '@config.factory'
       - '@entity_type.manager'
       - '@alshaya_acm_product.skumanager'
+      - '@cache.data'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
