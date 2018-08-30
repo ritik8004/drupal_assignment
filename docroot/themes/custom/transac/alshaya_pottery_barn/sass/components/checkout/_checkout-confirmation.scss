@@ -10,7 +10,7 @@
     background-color: $checkout_confirmation_detail_bg;
 
     .dark {
-      font-weight: normal;
+      font-weight: bold;
       color: $checkout_confirmation_detail_primary_text;
     }
 
@@ -23,7 +23,8 @@
     .order-item-row {
       .price-currency,
       .price-amount {
-        font-weight: normal;
+        font-weight: bold;
+        color: $checkout_confirmation_detail_primary_text;
       }
     }
 
@@ -75,10 +76,6 @@
   .sub-total-row,
   .delivery-charge-row,
   .total-row {
-    .right--align {
-      color: $checkout_confirmation_detail_secondary_text;
-    }
-
     .price {
       color: $checkout_confirmation_detail_dark_text;
     }
