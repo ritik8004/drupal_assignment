@@ -360,7 +360,7 @@
 
       .address--deliver-to-this-address {
         a {
-          color: $white-five;
+          color: $checkout_deliver_address_btn_txt;
           border: 1px solid $checkout_default_address_border;
           background-color: $checkout_default_address_bg;
 
@@ -623,6 +623,13 @@
 
     @include breakpoint($desktop) {
       margin-#{$left}: 1.5rem;
+    }
+
+    label {
+      &.error {
+        top: 3.125rem !important;
+        color: $primary_input_inline_error;
+      }
     }
   }
 

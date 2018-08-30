@@ -1,5 +1,7 @@
 base_url: 'https://lp2.hm.com/hmgoepprod'
 origin: 'dam'
+# For any new key in 'dimension', update 'style_identifiers' with appropriate
+# file path.
 dimensions:
   plp:
     desktop: z
@@ -103,8 +105,12 @@ style_identifiers:
   pdp_zoom: 'file:/product/zoom'
   pdp_fullscreen: 'file:/product/fullscreen'
   teaser: 'file:/product/style'
+  product_category_carousel: 'file:/product/style'
   swatch: 'file:/product/miniature'
   cart: 'file:/product/thumb'
+  cart_notification: 'file:/product/thumb'
+  order_detail: 'file:/product/thumb'
+  checkout_summary: 'file:/product/thumb'
 swatch_plp_limit: 3
 # Sample structure for override, until we have a config UI.
 #overrides:

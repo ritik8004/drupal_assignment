@@ -141,6 +141,38 @@
           modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
         });
       });
+
+      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
+
+      $(document).on('keyup', function (evt) {
+        // Remove class when esc button is used to remove the overlay.
+        if (evt.keyCode === 27) {
+          for (var i = 0; i < modal_overlay_class.length; i++) {
+            if ($('body').hasClass(modal_overlay_class[i])) {
+              $('body').removeClass(modal_overlay_class[i]);
+              i = modal_overlay_class.length;
+            }
+          }
+        }
+      });
+    }
+  };
+
+  // Add loader on plp search page.
+  Drupal.behaviors.facetSearchLoader = {
+    attach: function (context, settings) {
+      $(document).ajaxSend(function (event, jqxhr, settings) {
+        if (settings.url.includes('facets-block')) {
+          if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
+            $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
+          }
+        }
+      });
+      $(document).ajaxComplete(function (event, xhr, settings) {
+        if (settings.url.includes('facets-block')) {
+          $('div.ajax-progress-fullscreen').remove();
+        }
+      });
     }
   };
 

@@ -9,6 +9,36 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adding alias pattern for 'store' content type for English and Arabic.
+ */
+function alshaya_stores_finder_update_8106() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'pathauto.pattern.store_arabic',
+      'pathauto.pattern.store_english',
+    ],
+    'alshaya_stores_finder',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update the store finder config to install label position settings.
+ */
+function alshaya_stores_finder_update_8105() {
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_stores_finder.settings')
+    ->set('marker.label_position', alshaya_stores_finder_marker_label_position_ar())
+    ->save();
+}
+
+/**
  * Implements hook_update().
  *
  * Update the store finder config to install label position settings.

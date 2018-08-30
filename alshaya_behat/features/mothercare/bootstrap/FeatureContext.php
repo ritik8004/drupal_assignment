@@ -1898,4 +1898,18 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
     }
 
+    /**
+     * @When /^I click on "([^"]*)" element$/
+     */
+    public function iClickOnElement($css_selector)
+    {
+     $element = $this->getSession()->getPage()->find("css", $css_selector);
+     if(count($element) > 0) {
+         $element->click();
+     }
+     else {
+         throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
+     }
+    }
+
 }

@@ -1114,7 +1114,7 @@
   .hours--wrapper {
     .hours--label.open {
       @include icon(chevronup, after) {
-        color: $marine-blue-two;
+        color: $store_finder_search_results_hour_icon_open;
       }
     }
   }
@@ -1386,5 +1386,24 @@
 .path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
   @include breakpoint($desktop) {
     #{$right}: 0.5rem;
+  }
+}
+
+.path--store-finder,
+.nodetype--store {
+  .store-finder--wrapper {
+    .block-store-finder-form__form__label {
+      width: auto;
+    }
+
+    .block-store-finder-form__input__wrapper {
+      overflow: auto;
+      width: auto;
+
+      .form-item-geolocation-geocoder-google-places-api,
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api {
+        width: 100% !important;
+      }
+    }
   }
 }

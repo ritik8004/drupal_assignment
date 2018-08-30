@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Implements hook_module_implements_alter().
@@ -89,6 +90,14 @@ function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variab
  * Implements hook_acq_sku_base_field_additions_alter().
  */
 function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
+  // Somehow config override or config override-delete are not working during
+  // installation so we modify the fields from CORE here.
+  if (isset($fields['color'])) {
+    $fields['color']['configurable'] = 1;
+    unset($fields['color']['index']);
+    unset($fields['color']['facet']);
+  }
+
   $transac_fields = \Drupal::config('alshaya_vs_transac.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $transac_fields);
 }
@@ -184,6 +193,7 @@ function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, En
       $return = _alshaya_vs_transac_get_product_description($sku_entity);
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];
+      $build['read_more_style']['value'] = $return['read_more'] ? 'display:block;' : 'display:none;';
     }
   }
 }
@@ -196,6 +206,7 @@ function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
     $return = _alshaya_vs_transac_get_product_description($sku_entity);
     $build['short_desc'] = $return['short_desc'];
     $build['description'] = $return['description'];
+    $build['read_more_style']['value'] = $return['read_more'] ? 'display:block;' : 'display:none;';
   }
 }
 
@@ -206,6 +217,7 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
   $return = [];
   $description_value = '';
   $short_desc = [];
+  $read_more_link = TRUE;
 
   if ($body = $sku_entity->get('attr_description')->getValue()) {
     $description_value = $body[0]['value'];
@@ -217,22 +229,26 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
     $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
     // Remove html tags from short description.
     $short_desc_html = strip_tags($short_desc_html);
-    $short_desc['value'] = [
-      '#markup' => $short_desc_html . '...',
-    ];
+
+    // Description without html tags.
+    $full_description_without_tags = strip_tags($description_value);
+
+    // If after removing html tags, short description and description are not
+    // same, only then we shows ellipses.
+    if (Unicode::strlen($short_desc_html) !== Unicode::strlen($full_description_without_tags)) {
+      $short_desc['value'] = [
+        '#markup' => $short_desc_html . '...',
+      ];
+    }
 
     // If short description is the same as description,
     // do not show 'Read More' button.
-    if (strlen($description_value) <= $short_desc_len) {
-      $build['read_more_style']['value'] = [
-        '#markup' => 'display:none;',
-      ];
+    if (Unicode::strlen($short_desc_html) === Unicode::strlen($full_description_without_tags)) {
+      $read_more_link = FALSE;
     }
   }
   else {
-    $build['read_more_style']['value'] = [
-      '#markup' => 'display:none;',
-    ];
+    $read_more_link = FALSE;
   }
 
   $description['value'] = [
@@ -245,6 +261,7 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
   // displayed before 'Read More'.
   $return['short_desc'] = $short_desc;
   $return['description'][] = $description;
+  $return['read_more'] = $read_more_link;
 
   return $return;
 }

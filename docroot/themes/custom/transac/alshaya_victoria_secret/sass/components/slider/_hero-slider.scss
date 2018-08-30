@@ -1,5 +1,5 @@
 .c-content__slider {
-  .slick-slider {
+  .paragraph-banner.slick-slider {
     .slick-track,
     .slick-list {
       @include breakpoint($tablet) {

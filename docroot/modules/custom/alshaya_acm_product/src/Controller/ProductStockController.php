@@ -61,6 +61,13 @@ class ProductStockController extends ControllerBase {
   protected $moduleHandler;
 
   /**
+   * AjaxResponse object to use in ajax form callbacks.
+   *
+   * @var \Drupal\Core\Ajax\AjaxResponse
+   */
+  public static $response;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -208,6 +215,50 @@ class ProductStockController extends ControllerBase {
     }
 
     return $response;
+  }
+
+  /**
+   * Ajax - page callback when selecting a configurable option.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   SKU entity.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   AJAX Response with all commands.
+   */
+  public function selectConfigurableOption(EntityInterface $entity) {
+    self::$response = new AjaxResponse();
+    $html = $this->fetchAddCartForm($entity, 'full');
+
+    $commands = self::$response->getCommands();
+    if (empty($commands)) {
+      $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
+      self::$response->addCommand(new HtmlCommand($wrapper, $html));
+    }
+
+    return self::$response;
+  }
+
+  /**
+   * Ajax submit - page callback for add to cart.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   SKU entity.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   AJAX Response with all commands.
+   */
+  public function addToCartSubmit(EntityInterface $entity) {
+    self::$response = new AjaxResponse();
+    $html = $this->fetchAddCartForm($entity, 'full');
+
+    $commands = self::$response->getCommands();
+    if (empty($commands)) {
+      $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
+      self::$response->addCommand(new HtmlCommand($wrapper, $html));
+    }
+
+    return self::$response;
   }
 
   /**

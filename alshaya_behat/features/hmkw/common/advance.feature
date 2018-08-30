@@ -39,6 +39,7 @@ Feature: Advanced Page test
       |field_delivery_banner[2][subform][field_sub_title][0][value]|Subtitle 3 test|
       |field_delivery_banner[2][subform][field_link][0][uri]|Home (126)|
     #banner
+    And I wait 10 seconds
     Then I attach the file "image1.jpg" to "edit-field-slider-0-subform-field-banner-0-upload"
     And I wait 30 seconds
     Then I fill in the following:

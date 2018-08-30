@@ -134,7 +134,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
     'views-exposed-form-alshaya-product-list-block-2',
   ];
 
-  if (in_array($form['#id'], $plp_forms)) {
+  if (isset($form['#id']) && in_array($form['#id'], $plp_forms)) {
     // Best seller descending option removed.
     if (isset($form['sort_bef_combine']['#options']['nid DESC'])) {
       unset($form['sort_bef_combine']['#options']['nid DESC']);

@@ -77,6 +77,22 @@ function _alshaya_paragraphs_correct_file_status(EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_field_widget_form_alter().
+ */
+function alshaya_paragraphs_field_widget_form_alter(&$element, &$form_state, $context) {
+  $widget_type = $context['widget']->getPluginId();
+  $field_name = $context['items']->getFieldDefinition()->getName();
+  $fields_to_check = [
+    'field_sub_link',
+    'field_heading_link',
+  ];
+  // Altering description of uri as its hardcoded in LinkWidget class.
+  if ($widget_type == 'link_default' && in_array($field_name, $fields_to_check)) {
+    $element['uri']['#description'] = $element['uri']['#description'] . t('For not making link, just enter #.');
+  }
+}
+
+/**
  * Helper function to get array of bundle fields mapped with its type as value.
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity

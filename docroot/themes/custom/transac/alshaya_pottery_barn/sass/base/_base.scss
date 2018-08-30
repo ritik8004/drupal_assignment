@@ -1,3 +1,14 @@
 body {
   font-family: $primary-font;
 }
+
+strong,
+b,
+optgroup {
+  font-weight: 700;
+}
+
+a,
+.link {
+  color: $primary_link;
+}

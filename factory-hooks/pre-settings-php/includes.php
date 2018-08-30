@@ -64,10 +64,6 @@ $settings['alshaya_magento_soauth_client_secret'] = 'AlShAyA';
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
 
-// TODO: Security.
-$settings['alshaya_api.settings']['username'] = 'acquiaapi';
-$settings['alshaya_api.settings']['password'] = 'password123';
-
 // Security - autologout settings.
 $settings['autologout.settings']['timeout'] = 1200;
 

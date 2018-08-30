@@ -32,7 +32,6 @@ function alshaya_acm_drush_command_alter(&$command) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
-  // Including the utility file.
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
   $form['form_level_error_wrapper'] = [
@@ -345,7 +344,7 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
     ];
   }
 
-  // Add class to continut shopping link.
+  // Add class to continue shopping link.
   $form['actions']['continue_shopping_mobile']['#attributes']['class'][] = 'edit-continue-shopping-mobile';
 
   // Attach library, to cater to Coupon submit button.
@@ -762,7 +761,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   else {
     // Get SKU attributes.
     $sku_attributes = alshaya_acm_product_get_sku_configurable_values($sku_entity);
-    $sku_image = alshaya_acm_get_product_display_image($sku_entity, '291x288');
+    $sku_image = alshaya_acm_get_product_display_image($sku_entity, '291x288', 'cart');
     $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku_entity);
 
     // Set the cache.
