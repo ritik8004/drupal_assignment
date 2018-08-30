@@ -352,22 +352,48 @@ class SkuAssetManager {
       foreach ($grouped_assets as $key => $asset) {
         if (!empty($asset)) {
           $sort_angle_weights = array_flip($sort_angle_weights);
-          uasort($asset, function ($a, $b) use ($sort_angle_weights) {
-            // If weight is set in config, use that else use a default high
-            // weight to push the items to bottom of the list.
-            $weight_a = isset($sort_angle_weights[$a['sortFacingType']]) ? $sort_angle_weights[$a['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
-            $weight_b = isset($sort_angle_weights[$b['sortFacingType']]) ? $sort_angle_weights[$b['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
+          uasort($asset, function ($a, $b) use ($sort_angle_weights, $key) {
+            // Different rules for LookBook and reset.
+            if ($key != 'Lookbook') {
+              // For non-lookbook first check packaging in/out.
+              // packaging=false first.
 
-            // Use number for sorting in case we land onto 2 images with same
-            // asset type & facing type.
-            if (($weight_a - $weight_b) === 0
-              && isset($a['Data'], $a['Data']['Angle'], $a['Data']['Angle']['Number'])
-              && isset($b['Data'], $b['Data']['Angle'], $b['Data']['Angle']['Number'])) {
-              $weight_a = $a['Data']['Angle']['Number'];
-              $weight_b = $b['Data']['Angle']['Number'];
+              // IsMultiPack didn't help, we check Facing now.
+              $a_packaging = isset($a['Data']['Angle']['Packaging'])
+                ? (float) $a['Data']['Angle']['Packaging']
+                : NULL;
+              $b_packaging = isset($b['Data']['Angle']['Packaging'])
+                ? (float) $b['Data']['Angle']['Packaging']
+                : NULL;
+
+              if ($a_packaging != $b_packaging) {
+                return $a_packaging === 'true' ? -1 : 1;
+              }
             }
 
-            return $weight_a - $weight_b < 0 ? -1 : 1;
+            $a_multi_pack = isset($a['Data']['IsMultiPack'])
+              ? $a['Data']['IsMultiPack']
+              : NULL;
+            $b_multi_pack = isset($b['Data']['IsMultiPack'])
+              ? $b['Data']['IsMultiPack']
+              : NULL;
+            if ($a_multi_pack != $b_multi_pack) {
+              return $a_multi_pack === 'true' ? -1 : 1;
+            }
+
+            // IsMultiPack didn't help, we check Facing now.
+            $a_facing = isset($a['Data']['Angle']['Facing'])
+              ? (float) $a['Data']['Angle']['Facing']
+              : 0;
+            $b_facing = isset($b['Data']['Angle']['Facing'])
+              ? (float) $b['Data']['Angle']['Facing']
+              : 0;
+
+            if ($a_facing != $b_facing) {
+              return $a_facing - $b_facing < 0 ? -1 : 1;
+            }
+
+            return 0;
           });
           $grouped_assets[$key] = $asset;
         }
