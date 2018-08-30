@@ -15,6 +15,8 @@ else
   git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
 fi
 
+echo -en "Is travis PR $isTravisPr"
+
 # Only build any theme if we are outside of travis PR or no theme file was changed in PR
 if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep /themes/) ]])
 then
