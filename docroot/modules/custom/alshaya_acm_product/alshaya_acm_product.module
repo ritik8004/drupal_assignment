@@ -477,7 +477,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         if ($sku_for_gallery instanceof SKUInterface) {
-          alshaya_acm_product_get_gallery($build, $sku_for_gallery, $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, 'pdp', '', $check_parent_child);
         }
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
@@ -661,7 +661,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         try {
           $check_parent_child = TRUE;
           $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
-          alshaya_acm_product_get_gallery($build, $sku_for_gallery, $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, 'pdp', '', $check_parent_child);
         }
         catch (\Exception $e) {
           // Do nothing.
@@ -699,7 +699,10 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
   if ($view_mode == 'modal') {
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    alshaya_acm_product_get_gallery($build, $entity);
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
+    $build['gallery'] = $skuImagesManager->getGallery($entity, 'modal');
 
     $build['price_block']['#markup'] = '<div class="free-price-markup">' . t('FREE') . '</div>';
 
@@ -707,8 +710,6 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 
     $build['brand_logo'] = alshaya_acm_product_get_brand_logo($entity);
 
-    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
     $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
@@ -1264,7 +1265,11 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     $build = [];
-    alshaya_acm_product_get_gallery($build, $tree_pointer, FALSE);
+
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, 'pdp', '', FALSE);
+
     if (isset($build['gallery'], $build['gallery']['product_zoom'])) {
       $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
     }
@@ -1415,13 +1420,16 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
     $selected_sku = $first_child;
 
+    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.skumanager');
+
     if ($first_child instanceof SKU) {
-      alshaya_acm_product_get_gallery($build, $first_child);
+      $build['gallery'] = $skuImagesManager->getGallery($first_child, 'pdp');
     }
 
     // If no image found on simple SKUs, use parent SKUs image.
     if (empty($build['gallery']['product_zoom'])) {
-      alshaya_acm_product_get_gallery($build, $sku);
+      $build['gallery'] = $skuImagesManager->getGallery($sku, 'pdp');
     }
 
     $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
