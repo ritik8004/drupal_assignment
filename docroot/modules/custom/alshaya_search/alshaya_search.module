@@ -122,7 +122,6 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
         $labels = _alshaya_search_get_config(TRUE);
 
         array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
-          // @codingStandardsIgnoreLine
           $value = !empty($labels[$key]) ? $labels[$key] : $value;
         });
 
