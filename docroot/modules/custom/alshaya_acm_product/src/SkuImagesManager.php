@@ -223,6 +223,20 @@ class SkuImagesManager {
       $return['images'][$url] = $url;
     }
 
+    if ($sku->bundle() === 'simple' && !$check_parent_child) {
+      $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+      if ($config->get('show_parent_images_in_child')) {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku->getPluginInstance();
+        $parent = $plugin->getParentSku($sku);
+
+        if ($parent instanceof SKUInterface) {
+          $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
+          $return = array_merge_recursive($return, $parent_media);
+        }
+      }
+    }
+
     $this->skuManager->setProductCachedData(
       $sku,
       $cache_key,
@@ -348,16 +362,22 @@ class SkuImagesManager {
    *   SKU entity.
    * @param bool $check_parent_child
    *   Flag (by reference) to mention if parent/child should be checked later.
+   * @param string $case
+   *   Case to override config.
    *
    * @return \Drupal\acq_commerce\SKUInterface
    *   SKU to be used for gallery.
    *
    * @throws \Exception
    */
-  public function getSkuForGallery(SKUInterface $sku, &$check_parent_child) {
+  public function getSkuForGallery(SKUInterface $sku, &$check_parent_child, string $case = '') {
     $config = $this->configFactory->get('alshaya_acm_product.display_settings');
     $configurable_use_parent_images = $config->get('configurable_use_parent_images');
     $is_configurable = $sku->bundle() == 'configurable';
+
+    if (!empty($case) && $configurable_use_parent_images != 'never') {
+      $configurable_use_parent_images = $case;
+    }
 
     switch ($configurable_use_parent_images) {
       case 'never':
