@@ -39,6 +39,7 @@ class AlshayaPlpSortLabelSettingsForm extends AlshayaSortOptionsLabelBase {
       '#default_value' => $this->arrayValuesToString($sort_options_label),
       '#rows' => 10,
       '#element_validate' => [[get_class($this), 'validateLabelValues']],
+      '#description' => $this->allowedValuesDescription(),
     ];
 
     return $form;
@@ -49,8 +50,8 @@ class AlshayaPlpSortLabelSettingsForm extends AlshayaSortOptionsLabelBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Get form values.
-    $sort_options = $form_state->getValue('sort_options_labels');
-    $labels = static::valuesToSchemaLikeArray($sort_options);
+    $sort_options_labels = $form_state->getValue('sort_options_labels');
+    $labels = static::valuesToSchemaLikeArray($sort_options_labels);
 
     $config = $this->config('alshaya_acm_product_position.settings');
     $config->set('sort_options_labels', $labels);

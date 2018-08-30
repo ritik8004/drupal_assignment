@@ -11,6 +11,16 @@ use Drupal\Core\Form\FormStateInterface;
 abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
 
   /**
+   * {@inheritdoc}
+   */
+  public function allowedValuesDescription() {
+    $description = '<p>' . $this->t('The possible values this field can contain. Enter one value per line, in the format key|label.');
+    $description .= '<br/>' . $this->t('The key is the stored value. The label will be used in displayed values.');
+    $description .= '</p>';
+    return $description;
+  }
+
+  /**
    * Callback for #element_validate.
    *
    * @param array $element
