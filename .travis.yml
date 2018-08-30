@@ -70,7 +70,7 @@ script:
 # - source $BLT_DIR/scripts/travis/run_tests
   - source ${BUILD_DIR}/blt/scripts/run_tests
   # Setup frontend early so result can be cached by Travis.
-  - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh
+  - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
 
 deploy:
    - provider: script
