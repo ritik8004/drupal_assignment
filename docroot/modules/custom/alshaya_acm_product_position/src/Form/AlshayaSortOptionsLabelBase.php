@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_product_position\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Base abstract class with helper methods.
@@ -10,7 +11,29 @@ use Drupal\Core\Form\ConfigFormBase;
 abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
 
   /**
-   * Generates a string representation of an array of 'allowed values'.
+   * Callback for #element_validate.
+   *
+   * @param array $element
+   *   An associative array containing the properties and children of the
+   *   generic form element.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form for the form this element belongs to.
+   *
+   * @see \Drupal\Core\Render\Element\FormElement::processPattern()
+   */
+  public static function validateLabelValues(array $element, FormStateInterface $form_state) {
+    $values = static::extractKeyLabelValues($element['#value']);
+
+    if (!is_array($values)) {
+      $form_state->setError($element, t('Allowed values list: invalid input.'));
+    }
+    else {
+      $form_state->setValueForElement($element, $values);
+    }
+  }
+
+  /**
+   * Generates a string representation of an array values.
    *
    * This string format is suitable for edition in a textarea.
    *
@@ -23,7 +46,7 @@ abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
    *    - Values are separated by a carriage return.
    *    - Each value is in the format "value|label" or "value".
    */
-  public function allowedValuesString(array $values) {
+  public function arrayValuesToString(array $values) {
     $lines = [];
     foreach ($values as $key => $value) {
       $lines[] = "$key|$value";
@@ -32,7 +55,7 @@ abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
   }
 
   /**
-   * Extracts the allowed values array from the allowed_values element.
+   * Extracts the values array from the string.
    *
    * @param string $string
    *   The raw string to extract values from.
@@ -42,7 +65,7 @@ abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
    *
    * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::allowedValuesString()
    */
-  public static function extractAllowedValues($string) {
+  public static function extractKeyLabelValues($string) {
     $values = [];
 
     $list = explode("\n", $string);
@@ -75,7 +98,7 @@ abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
   }
 
   /**
-   * Creates a structured array of allowed values from a key-value array.
+   * Creates structured array as defined in schema from key-value array.
    *
    * @param array $values
    *   Allowed values were the array key is the 'value' value, the value is
@@ -85,16 +108,16 @@ abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
    *   Array of items with a 'value' and 'label' key each for the allowed
    *   values.
    *
-   * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::simplifyAllowedValues()
+   * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::structureAllowedValues()
    */
-  public static function structureAllowedValues(array $values) {
+  public static function valuesToSchemaLikeArray(array $values) {
     $structured_values = [];
     foreach ($values as $value => $label) {
       if (is_array($label)) {
-        $label = static::structureAllowedValues($label);
+        $label = static::valuesToSchemaLikeArray($label);
       }
       $structured_values[] = [
-        'value' => static::castAllowedValue($value),
+        'value' => $value,
         'label' => $label,
       ];
     }
@@ -112,31 +135,18 @@ abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
    *   Allowed values were the array key is the 'value' value, the value is
    *   the 'label' value.
    *
-   * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::structureAllowedValues()
+   * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::simplifyAllowedValues()
    */
-  public static function simplifyAllowedValues(array $structured_values) {
+  public static function schemaArrayToKeyValue(array $structured_values) {
     $values = [];
     foreach ($structured_values as $item) {
       if (is_array($item['label'])) {
         // Nested elements are embedded in the label.
-        $item['label'] = static::simplifyAllowedValues($item['label']);
+        $item['label'] = static::schemaArrayToKeyValue($item['label']);
       }
       $values[$item['value']] = $item['label'];
     }
     return $values;
-  }
-
-  /**
-   * Converts a value to the correct type.
-   *
-   * @param mixed $value
-   *   The value to cast.
-   *
-   * @return mixed
-   *   The casted value.
-   */
-  public static function castAllowedValue($value) {
-    return $value;
   }
 
 }
