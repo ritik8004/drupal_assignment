@@ -2045,5 +2045,222 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         }
     }
 
+    /**
+     * @Given I enter address for Saudi Arabia
+     */
+    public function iEnterAddressForSaudiArabia()
+    {
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-family-name', "Test");
+        $this->iEnterAValidEmailID('edit-guest-delivery-home-address-shipping-organization');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', "555675765");
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-area-parent',"Abha");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-administrative-area',"Abha");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', "Builing C5");
+        $this->getSession()->getPage()->pressButton('deliver to this address');
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given I enter arabic address for Saudi Arabia
+     */
+    public function iEnterArabicAddressForSaudiArabia()
+    {
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-family-name', "Test");
+        $this->iEnterAValidEmailID('edit-guest-delivery-home-address-shipping-organization');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', "555675765");
+        $this->iScrollToXYCoordinatesOfPage('200','700');
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-area-parent',"أبها");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-administrative-area',"أبها");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', "Builing C5");
+        $this->getSession()->getPage()->pressButton('توصيل إلى هذا العنوان');
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given I enter address for Kuwait
+     */
+    public function iEnterAddressForKuwait()
+    {
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-family-name', "Test");
+        $this->iEnterAValidEmailID('edit-guest-delivery-home-address-shipping-organization');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', "55004455");
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-administrative-area',"Kuwait International Airport");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-locality', "Block A");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', "Builing C5");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line2', "2");
+        $this->getSession()->getPage()->pressButton('deliver to this address');
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given I enter arabic address for Kuwait
+     */
+    public function iEnterArabicAddressForKuwait()
+    {
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-family-name', "Test");
+        $this->iEnterAValidEmailID('edit-guest-delivery-home-address-shipping-organization');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', "55004455");
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-administrative-area',"العباسية");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-locality', "كتلة A");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line1', "الشارع ب");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', "بناء C");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line2', "2");
+        $this->getSession()->getPage()->pressButton('توصيل إلى هذا العنوان');
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given I enter address for UAE
+     */
+    public function iEnterAddressForUAE()
+    {
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-family-name', "Test");
+        $this->iEnterAValidEmailID('edit-guest-delivery-home-address-shipping-organization');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', "554044555");
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-area-parent',"Dubai");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-administrative-area',"Abu Hail");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', "Builing C5");
+        $this->getSession()->getPage()->pressButton('deliver to this address');
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given I enter arabic address for UAE
+     */
+    public function iEnterArabicAddressForUAE()
+    {
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-family-name', "Test");
+        $this->iEnterAValidEmailID('edit-guest-delivery-home-address-shipping-organization');
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-mobile-number-mobile', "554044555");
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-area-parent',"دبي");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-guest-delivery-home-address-shipping-administrative-area',"داون تاون دبي");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-guest-delivery-home-address-shipping-dependent-locality', "Builing C5");
+        $this->getSession()->getPage()->pressButton('توصيل إلى هذا العنوان');
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+    }
+
+    /**
+     * @Given I enter billing address for Saudi Arabia
+     */
+    public function iEnterBillingAddressForSaudiArabia()
+    {
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-family-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-mobile-number-mobile', "555675765");
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-area-parent',"Abha");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-administrative-area',"Abha");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-dependent-locality', "Builing C5");
+    }
+
+    /**
+     * @Given I enter arabic billing address for Saudi Arabia
+     */
+    public function iEnterArabicBillingAddressForSaudiArabia()
+    {
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-family-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-mobile-number-mobile', "555675765");
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-area-parent',"أبها");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-administrative-area',"أبها");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-dependent-locality', "Builing C5");
+    }
+
+    /**
+     * @Given I enter billing address for UAE
+     */
+    public function iEnterBillingAddressForUAE()
+    {
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-family-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-mobile-number-mobile', "555667733");
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-area-parent',"Dubai");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-administrative-area',"Abu Hail");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-dependent-locality', "Builing C5");
+    }
+
+    /**
+     * @Given I enter arabic billing address for UAE
+     */
+    public function iEnterArabicBillingAddressForUAE()
+    {
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-family-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-mobile-number-mobile', "555004455");
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-area-parent',"دبي");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-administrative-area',"داون تاون دبي");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-address-line1', "الشارع ب");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-dependent-locality', "بناء C");
+    }
+
+    /**
+     * @Given I enter billing address for Kuwait
+     */
+    public function iEnterBillingAddressForKuwait()
+    {
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-family-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-mobile-number-mobile', "55004455");
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-administrative-area',"Kuwait International Airport");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-locality', "Block A");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-address-line1', "Street B");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-dependent-locality', "Building C");
+
+    }
+
+    /**
+     * @Given I enter arabic billing address for Kuwait
+     */
+    public function iEnterArabicBillingAddressForKuwait()
+    {
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-given-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-family-name', "Test");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-mobile-number-mobile', "55004455");
+        $this->iSelectValueFromDropdownField('edit-billing-address-address-billing-administrative-area',"العباسية");
+        $this->getSession()->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-locality', "كتلة A");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-address-line1', "الشارع ب");
+        $this->getSession()->getPage()->fillField('edit-billing-address-address-billing-dependent-locality', "بناء C");
+
+    }
+
+    /**
+     * @Given I select value :value from dropdown field :option
+     */
+    public function iSelectValueFromDropdownField($value, $option)
+    {
+        $select = $this->StepArgument($value);
+        $option = $this->StepArgument($option);
+        $this->getSession()->getPage()->selectFieldOption($value, $option);
+    }
+
+    protected function StepArgument($argument)
+    {
+        return str_replace('\\"', '"', $argument);
+    }
 }
 
