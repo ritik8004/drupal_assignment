@@ -77,9 +77,9 @@ mcuat:
               simpleurl: '/baby-boys-socks-gift-box-test'
               simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
-              configurl: '/pink-hareem-trousers'
-              configtitle: 'pink hareem trousers'
-              configtitlear: 'بنطلون hareem باللون الوردي'
+              configurl: '/white-fish-print-shirt'
+              configtitle: 'White Fish Print Shirt'
+              configtitlear: 'قميص باللون الأبيض وطبعة سمكة'
               configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
@@ -89,7 +89,7 @@ mcuat:
         output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mcsa.factory.alshaya.com/en'
+      base_url: 'https://mckw-uat.factory.alshaya.com/en'
       files_path: "%paths.base%/features/mothercare/media"
 
 mcprod:
