@@ -365,7 +365,6 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
     $product_settings = \Drupal::config('alshaya_acm_product.settings');
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
@@ -384,18 +383,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
 
-      // Make product node dependent on all child-skus in case of configurable
-      // product.
-      if (!empty($child_skus = $skuManager->getChildrenSkuIds($sku_entity))) {
-        // Check for disabled simple SKUs on Magento. Make sure the sku entity
-        // is available on Drupal before adding cache tag.
-        if ($sku_entity_ids = $skuManager->getEntityIdsBySku($child_skus)) {
-          foreach ($sku_entity_ids as $sku_entity_id) {
-            $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity_id;
-          }
-        }
-      }
-
       if ($view_mode == 'search_result') {
         $build['labels'] = [
           '#theme' => 'product_labels',
@@ -411,6 +398,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // This is required to allow showing different gallery on page load
         // when user clicked on swatch.
         $build['#cache']['contexts'][] = 'url';
+
+        if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+          $build['#attributes']['class'][] = 'product-out-of-stock';
+        }
 
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
@@ -658,39 +649,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
         $build['show_cart_form']['#markup'] = $class;
 
-        if ($view_mode != 'product_category_carousel'
-          && $product_settings->get('show_cart_form_in_related')
-          && alshaya_acm_product_is_buyable($sku_entity)) {
+        $build['sku_id'] = [
+          '#markup' => $sku_entity->id(),
+        ];
 
-          $build['sku_id'] = [
-            '#markup' => $sku_entity->id(),
-          ];
-
-          $build['mobile_add_to_cart_form'] = [
-            '#type' => 'link',
-            '#title' => '',
-            '#url' => Url::fromRoute(
-              'alshaya_acm_product.get_cart_form',
-              ['view_mode' => 'teaser', 'entity' => $sku_entity->id()],
-              ['query' => ['cacheable' => 1]]
-            ),
-            '#attributes' => [
-              'class' => [
-                'use-ajax',
-                'add-to-cart-form-placeholder-teaser',
-              ],
-            ],
-          ];
-
-          // In push mode check if product is out of stock here itself.
-          if ($stock_mode != 'pull' && !alshaya_acm_get_stock_from_sku($sku_entity)) {
-            $build['stock_placeholder'] = [
-              '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
-            ];
-
-            $build['mobile_add_to_cart_form'] = $build['stock_placeholder'];
-          }
-        }
+        $build['mobile_add_to_cart_form'] = [];
       }
       elseif ($view_mode == 'modal') {
         $context = 'modal';
@@ -1602,13 +1565,6 @@ function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields =
 function alshaya_acm_product_alshaya_master_post_drupal_install() {
   // Add fields to store the values from attributes as fields.
   \Drupal::service('acq_sku.fields_manager')->addFields();
-}
-
-/**
- * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
- */
-function alshaya_acm_product_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
-  $response->addCommand(new InvokeCommand(NULL, 'markProductStockStatusAction', ['article[data-skuid="' . $entity->id() . '"]:visible', $stock]));
 }
 
 /**
