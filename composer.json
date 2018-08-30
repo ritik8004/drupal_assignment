@@ -224,7 +224,8 @@
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-296.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
-                "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch"
+                "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch",
+                "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
