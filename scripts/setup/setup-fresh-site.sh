@@ -24,76 +24,83 @@ drush8 @alshaya.$target_env -l $site status &>> $HOME/site-install.log
 ## Enable brand and country modules.
 drush8 @alshaya.$target_env -l $site apdi --brand_module="alshaya_$brand_code" --country_code="$country_code" &>> $HOME/site-install.log
 
-## Create default users (not on production).
-if [ $target_env != "01live" -o $target_env != "01update" ]
-then
-  drush8 @alshaya.$target_env -l $site upwd "Site factory admin" --password="AlShAyAU1@123" &>> $HOME/site-install.log
+# Get the installed profile on the given site.
+profile="$(drush8 @alshaya.$target_env -l $site php-eval 'echo drupal_get_profile();')"
 
-  drush8 @alshaya.$target_env -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site user-add-role "administrator" --name=siteadmin &>> $HOME/site-install.log
+# Next operations are for transac sites only.
+if [ $profile = "alshaya_transac" ]; then
 
-  drush8 @alshaya.$target_env -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site user-add-role "webmaster" --name=webmaster &>> $HOME/site-install.log
-fi
+  ## Next operations are not done on production.
+  if [ $target_env != "01live" -o $target_env != "01update" ]; then
+    ## Create default users (not on production).
+    drush8 @alshaya.$target_env -l $site upwd "Site factory admin" --password="AlShAyAU1@123" &>> $HOME/site-install.log
 
-drush8 @alshaya.$target_env -l $site cr &>> $HOME/site-install.log
+    drush8 @alshaya.$target_env -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin &>> $HOME/site-install.log
+    drush8 @alshaya.$target_env -l $site user-add-role "administrator" --name=siteadmin &>> $HOME/site-install.log
 
-## Remove shield and configure sync.
-drush8 @alshaya.$target_env -l $site pm-uninstall shield -y &>> $HOME/site-install.log
-drush8 @alshaya.$target_env -l $site en basic_auth -y &>> $HOME/site-install.log
-drush8 @alshaya.$target_env -l $site sqlq "update users_field_data set name='admin' where name='Site Factory admin'" &>> $HOME/site-install.log
-drush8 @alshaya.$target_env -l $site upwd "admin" --password="AlShAyAU1" &>> $HOME/site-install.log
+    drush8 @alshaya.$target_env -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster &>> $HOME/site-install.log
+    drush8 @alshaya.$target_env -l $site user-add-role "webmaster" --name=webmaster &>> $HOME/site-install.log
 
-## Synchronize commerce data.
-conductor=$(drush8 @alshaya.$target_env -l $site cget acq_commerce.conductor url --format=string)
+    drush8 @alshaya.$target_env -l $site cr &>> $HOME/site-install.log
 
-if [ ! -z "$conductor" ]; then
-  echo "Synchronizing commerce data." &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site sync-commerce-product-options &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site sync-commerce-cats &>> $HOME/site-install.log
+    ## Remove shield.
+    drush8 @alshaya.$target_env -l $site pm-uninstall shield -y &>> $HOME/site-install.log
 
-  drush8 @alshaya.$target_env -l $site sync-areas &>> $HOME/site-install.log
+    ## Synchronize commerce data.
+    conductor=$(drush8 @alshaya.$target_env -l $site cget acq_commerce.conductor url --format=string)
 
-  drush8 @alshaya.$target_env -l $site sync-stores &>> $HOME/site-install.log
+    if [ ! -z "$conductor" ]; then
+      echo "Synchronizing commerce data." &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site sync-commerce-product-options &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site sync-commerce-cats &>> $HOME/site-install.log
 
-  ## Synchronize products.
-  drush8 @alshaya.$target_env -l $site acsp en 5 -y &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site acsp ar 3 -y &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site sync-areas &>> $HOME/site-install.log
 
-  sleepd=15
-  max_loop_count=180
-  new_count="0"
-  loop_count=0
-  while :
-  do
-    sleep $sleepd
-    old_count=$new_count
-    new_count=$(drush8 @alshaya.$target_env -l $site sqlq "select count(*) from acq_sku")
-    echo "There is now $new_count SKUs, there was $old_count SKUs $sleepd seconds ago." &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site sync-stores &>> $HOME/site-install.log
 
-    if [ $old_count != "0" -a $old_count == $new_count ]
-    then
-      echo "SKUs count has not changed since $sleepd seconds. Considering the sync done." &>> $HOME/site-install.log
-      break
+      ## Synchronize products.
+      drush8 @alshaya.$target_env -l $site acsp en 5 -y &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site acsp ar 3 -y &>> $HOME/site-install.log
+
+      sleepd=15
+      max_loop_count=180
+      new_count="0"
+      loop_count=0
+      while :
+      do
+        sleep $sleepd
+        old_count=$new_count
+        new_count=$(drush8 @alshaya.$target_env -l $site sqlq "select count(*) from acq_sku")
+        echo "There is now $new_count SKUs, there was $old_count SKUs $sleepd seconds ago." &>> $HOME/site-install.log
+
+        if [ $old_count != "0" -a $old_count == $new_count ]
+        then
+          echo "SKUs count has not changed since $sleepd seconds. Considering the sync done." &>> $HOME/site-install.log
+          break
+        fi
+
+        if [ $max_loop_count == $loop_count ]
+        then
+          echo "We have been waiting for SKUs to sync too long now. There is probably an issue with sync on $site. Break!" &>> $HOME/site-install.log
+          break
+         fi
+
+        echo "Waiting $sleepd seconds for more SKUs to come." &>> $HOME/site-install.log
+        loop_count=$((loop_count+1))
+      done
+
+      ## Synchronize promotions.
+      drush8 @alshaya.$target_env -l $site acspm &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site queue-run acq_promotion_attach_queue &>> $HOME/site-install.log
+      drush8 @alshaya.$target_env -l $site queue-run acq_promotion_detach_queue &>> $HOME/site-install.log
+    else
+      echo "Commerce data sync have been by-passed given the conductor settings are not set." &>> $HOME/site-install.log
+      slack="$slack \n*Commerce data sync have been by-passed given the conductor settings are not set.*"
     fi
-
-    if [ $max_loop_count == $loop_count ]
-    then
-      echo "We have been waiting for SKUs to sync too long now. There is probably an issue with sync on $site. Break!" &>> $HOME/site-install.log
-      break
-     fi
-
-    echo "Waiting $sleepd seconds for more SKUs to come." &>> $HOME/site-install.log
-    loop_count=$((loop_count+1))
-  done
-
-  ## Synchronize promotions.
-  drush8 @alshaya.$target_env -l $site acspm &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site queue-run acq_promotion_attach_queue &>> $HOME/site-install.log
-  drush8 @alshaya.$target_env -l $site queue-run acq_promotion_detach_queue &>> $HOME/site-install.log
-else
-  echo "Commerce data sync have been by-passed given the conductor settings are not set." &>> $HOME/site-install.log
-  slack="$slack \n*Commerce data sync have been by-passed given the conductor settings are not set.*"
+  else
+    echo "Commerce data sync have been by-passed given we are on production environment." &>> $HOME/site-install.log
+    slack="$slack \n*Commerce data sync have been by-passed given we are on production environment.*"
+  fi
 fi
 
 ## Push the post-install logs on Slack channel.
