@@ -8,14 +8,19 @@
 
   .user__order--detail {
     background-color: $checkout_confirmation_detail_bg;
+    line-height: normal;
 
     .dark {
-      font-weight: bold;
+      font-weight: normal;
       color: $checkout_confirmation_detail_primary_text;
     }
 
+    td div {
+      margin-bottom: 0;
+    }
+
     .price {
-      @include breakpoint($only-tablet) {
+      @include breakpoint($tablet) {
         min-width: 6.625rem;
       }
     }
@@ -23,8 +28,22 @@
     .order-item-row {
       .price-currency,
       .price-amount {
-        font-weight: bold;
-        color: $checkout_confirmation_detail_primary_text;
+        font-weight: normal;
+        color: $checkout_confirmation_detail_amount;
+      }
+
+      td {
+        background: $checkout_confirm_order_item_bg;
+
+        &.blend {
+          background: $checkout_confirm_order_item_bg_blend;
+        }
+
+        &:last-child {
+          @include breakpoint($desktop) {
+            display: table-cell !important;
+          }
+        }
       }
     }
 
@@ -47,8 +66,6 @@
 
   .order__product--details,
   .order-item-row {
-    font-size: 0.75rem;
-
     .dark {
       color: $checkout_confirmation_detail_dark_text;
     }
@@ -63,6 +80,10 @@
     .price-amount {
       font-weight: bold;
     }
+
+    .upcase {
+      text-transform: capitalize;
+    }
   }
 
   .multistep-checkout {
@@ -71,6 +92,7 @@
 
   .product--count {
     color: $checkout_confirmation_detail_secondary_text;
+    background: $checkout_confirmation_detail_product_count;
   }
 
   .sub-total-row,
@@ -78,6 +100,18 @@
   .total-row {
     .price {
       color: $checkout_confirmation_detail_dark_text;
+    }
+  }
+
+  .subtitle {
+    font-weight: normal;
+  }
+
+  .barcode--wrapper {
+    .inner--wrap {
+      strong {
+        font-weight: 600;
+      }
     }
   }
 }
