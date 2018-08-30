@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm_product_position\Form;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaPlpSortSettingsForm.
+ * Class AlshayaPlpSortLabelSettingsForm.
  */
 class AlshayaPlpSortLabelSettingsForm extends AlshayaSortOptionsLabelBase {
 
