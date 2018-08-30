@@ -11,6 +11,21 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall features_ui and features module.
+ */
+function alshaya_update_8009() {
+  if (\Drupal::moduleHandler()->moduleExists('features_ui')) {
+    \Drupal::service('module_installer')->uninstall(['features_ui']);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('features')) {
+    \Drupal::service('module_installer')->uninstall(['features']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall lightning_scheduler module.
  */
 function alshaya_update_8008() {
