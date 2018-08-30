@@ -13,6 +13,8 @@ use Drupal\node\Entity\Node;
  * Implements hook_update_N().
  *
  * Update hook to wrap delivery option sub-title in brackets.
+ * Update display_settings config to have value for
+ * show_child_images_after_selecting and show_parent_images_in_child.
  */
 function alshaya_acm_product_update_8028() {
   $options_standard_subtitle = \Drupal::configFactory()->get('alshaya_acm_product.home_delivery')->get('options_standard_subtitle');
@@ -21,6 +23,15 @@ function alshaya_acm_product_update_8028() {
   if ($options_standard_subtitle) {
     \Drupal::configFactory()->getEditable('alshaya_acm_product.home_delivery')->set('options_standard_subtitle', '(' . $options_standard_subtitle . ')')->save();
   }
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
 }
 
 /**
