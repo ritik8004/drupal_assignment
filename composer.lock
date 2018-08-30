@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0611ee59cdcd869ead1162da5646c578",
+    "content-hash": "932d666d31efa0b6b2c79d7792ec00b3",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10373,11 +10373,17 @@
         },
         {
             "name": "drupal/views_block_filter_block",
-            "version": "dev-1.x",
+            "version": "1.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/views_block_filter_block",
-                "reference": "29f6523ac806afadc48d9a6ab0c5eb13f6256a1a"
+                "reference": "8.x-1.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_block_filter_block-8.x-1.0-beta1.zip",
+                "reference": "8.x-1.0-beta1",
+                "shasum": "2c76bfb153cc8fa352c35bd5755fc09d433b89b7"
             },
             "require": {
                 "drupal/core": "*"
@@ -10388,8 +10394,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.x-dev",
-                    "datestamp": "1507815243",
+                    "version": "8.x-1.0-beta1",
+                    "datestamp": "1522761486",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -10398,7 +10404,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -10418,8 +10424,7 @@
             "homepage": "https://www.drupal.org/project/views_block_filter_block",
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
-            },
-            "time": "2017-10-13T06:53:22+00:00"
+            }
         },
         {
             "name": "drupal/views_field_view",
@@ -18003,7 +18008,7 @@
         "drupal/r4032login": 20,
         "drupal/datalayer": 10,
         "drupal/search_api_solr_multilingual": 10,
-        "drupal/views_block_filter_block": 20,
+        "drupal/views_block_filter_block": 10,
         "drupal/pcb": 5,
         "drupal/acquia_purge": 10,
         "drupal/role_delegation": 15,

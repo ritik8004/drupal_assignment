@@ -50,7 +50,7 @@
         "drupal/r4032login": "1.x-dev",
         "drupal/datalayer": "^1.0@beta",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
-        "drupal/views_block_filter_block": "1.x-dev",
+        "drupal/views_block_filter_block": "^1.0@beta",
         "mobiledetect/mobiledetectlib": "^2.8",
         "acquia/http-hmac-php": "~3.2",
         "drupal/simple_oauth": "^3.0",
