@@ -4,11 +4,27 @@ sort_options:
   final_price: final_price
 use_brand_specific_core: true
 sort_options_labels:
-  'search_api_relevance ASC': ''
-  'search_api_relevance DESC': 'Relevance'
-  'name_1 ASC': 'Name A to Z'
-  'name_1 DESC': 'Name Z to A'
-  'final_price ASC': 'Price Low to High'
-  'final_price DESC': 'Price High to Low'
-  'created ASC': ''
-  'created DESC': 'New In'
+  -
+    value: 'search_api_relevance ASC'
+    label: ''
+  -
+    value: 'search_api_relevance DESC'
+    label: 'Relevance'
+  -
+    value: 'name_1 ASC'
+    label: 'Name A to Z'
+  -
+    value: 'name_1 DESC'
+    label: 'Name Z to A'
+  -
+    value: 'final_price ASC'
+    label: 'Price Low to High'
+  -
+    value: 'final_price DESC'
+    label: 'Price High to Low'
+  -
+    value: 'created ASC'
+    label: ''
+  -
+    value: 'created DESC'
+    label: 'New In'

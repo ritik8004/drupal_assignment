@@ -2,13 +2,13 @@
 
 namespace Drupal\alshaya_search\Form;
 
-use Drupal\Core\Form\ConfigFormBase;
+use Drupal\alshaya_acm_product_position\Form\AlshayaSortOptionsLabelBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Class AlshayaPlpSortSettingsForm.
  */
-class AlshayaSrpSortLabelSettingsForm extends ConfigFormBase {
+class AlshayaSrpSortLabelSettingsForm extends AlshayaSortOptionsLabelBase {
 
   /**
    * {@inheritdoc}
@@ -30,31 +30,19 @@ class AlshayaSrpSortLabelSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $form['sort_options'] = [
-      '#type' => 'table',
-      '#header' => [
-        $this->t('Admin Label'),
-        $this->t('Label'),
-      ],
-    ];
-
     // Sort options from config.
     $position_settings = $this->config('alshaya_search.settings');
-    $sort_options_label = $position_settings->get('sort_options_labels');
+    $sort_options_label = static::schemaArrayToKeyValue($position_settings->get('sort_options_labels'));
 
-    foreach ($sort_options_label as $key => $value) {
-      $form['sort_options'][$key]['admin_label'] = [
-        '#plain_text' => $key,
-      ];
+    $form['sort_options_labels'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Search sort options labels'),
+      '#default_value' => $this->arrayValuesToString($sort_options_label),
+      '#rows' => 10,
+      '#element_validate' => [[get_class($this), 'validateLabelValues']],
+      '#description' => $this->allowedValuesDescription(),
+    ];
 
-      $form['sort_options'][$key]['label'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('label for @title', ['@title' => $key]),
-        '#title_display' => 'invisible',
-        // @codingStandardsIgnoreLine
-        '#default_value' => $this->t($value),
-      ];
-    }
     return $form;
   }
 
@@ -63,14 +51,12 @@ class AlshayaSrpSortLabelSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     // Get form values.
-    $sort_options = $form_state->getValue('sort_options');
-    $labels = array_map(function ($sort_option) {
-      return $sort_option['label'];
-    }, $sort_options);
+    $sort_options_labels = $form_state->getValue('sort_options_labels');
+    $labels = static::valuesToSchemaLikeArray($sort_options_labels);
 
     $config = $this->config('alshaya_search.settings');
     $config->set('sort_options_labels', $labels);
-    $config->save(TRUE);
+    $config->save();
     return parent::submitForm($form, $form_state);
   }
 

@@ -18,14 +18,8 @@ function alshaya_search_update_8020() {
       ['alshaya_search.settings'],
       'alshaya_search',
       'install',
-      AlshayaConfigManager::MODE_ADD_MISSING
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
     );
-  $translation = [
-    'Relevance' => [
-      'ar' => 'التطابق',
-    ],
-  ];
-  alshaya_i18n_save_translations($translation);
 }
 
 /**

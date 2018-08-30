@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_acm_product_position\Form\AlshayaSortOptionsLabelBase;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -122,7 +123,7 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
 
         array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
           // @codingStandardsIgnoreLine
-          $value = !empty($labels[$key]) ? t($labels[$key]) : $value;
+          $value = !empty($labels[$key]) ? $labels[$key] : $value;
         });
 
         foreach ($enabled_sorts as $key => $sort) {
@@ -352,7 +353,7 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
 function _alshaya_search_get_config($label = FALSE) {
   $position = \Drupal::config('alshaya_search.settings');
   if ($label) {
-    return $position->get('sort_options_labels');
+    return AlshayaSortOptionsLabelBase::schemaArrayToKeyValue($position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
 }
