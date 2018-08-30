@@ -4,6 +4,12 @@
       float: $left;
     }
 
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0;
+      }
+    }
+
     .user-register-form {
       margin-top: 1.6rem;
     }
