@@ -117,11 +117,13 @@ class SkuAssetManager {
    *   Style string.
    * @param bool $first_image_only
    *   Return only the first image.
+   * @param array $avoid_assets
+   *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE) {
+  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE, array $avoid_assets = []) {
     $sku = $sku instanceof SKU ? $sku->getSku() : $sku;
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
@@ -142,6 +144,9 @@ class SkuAssetManager {
     foreach ($location_images as $location_image) {
       $asset_urls = [];
       foreach ($assets as $asset) {
+        if (!empty($avoid_assets) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
+          continue;
+        }
         list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
 
         // Prepare query options for image url.
@@ -424,21 +429,23 @@ class SkuAssetManager {
    *   Flag to indicate we need the assets of the first child only.
    * @param bool $first_image_only
    *   Return only the first image.
+   * @param array $avoid_assets
+   *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE) {
+  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
     $assets = [];
 
     if (($first_only) && (!empty($child_skus))) {
-      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only);
+      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only, $avoid_assets);
     }
 
     if (!empty($child_skus)) {
       foreach ($child_skus as $child_sku) {
-        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only);
+        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only, $avoid_assets);
       }
     }
 
