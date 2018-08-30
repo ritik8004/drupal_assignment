@@ -5,6 +5,7 @@
  * Module file for Alshaya ACM Product Position.
  */
 
+use Drupal\alshaya_acm_product_position\Form\AlshayaSortOptionsLabelBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -164,7 +165,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $labels = _alshaya_acm_product_position_get_config(TRUE);
       array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
         // @codingStandardsIgnoreLine
-        $value = !empty($labels[$key]) ? t($labels[$key]) : t($value);
+        $value = !empty($labels[$key]) ? $labels[$key] : $value;
       });
 
       // Re-order select options based on the config position.
@@ -237,7 +238,7 @@ function _alshaya_acm_product_position_sorted_options(array $options) {
 function _alshaya_acm_product_position_get_config($label = FALSE) {
   $position = \Drupal::config('alshaya_acm_product_position.settings');
   if ($label) {
-    return $position->get('sort_options_labels');
+    return AlshayaSortOptionsLabelBase::simplifyAllowedValues($position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
 }
