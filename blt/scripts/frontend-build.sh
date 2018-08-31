@@ -5,59 +5,52 @@ set -e
 
 docrootDir="$1"
 
-transac=( "alshaya_white_label" "alshaya_hnm" "pottery_barn_non_trans" "alshaya_pottery_barn" "alshaya_victoria_secret" "alshaya_bathbodyworks" )
-non_transac=( "debenhams" "whitelabel" "whitelabel_non_transac" "victoria_secret" "bath_body_works" "bouchon_bakery" )
-amp=( "alshaya_amp_white_label" "alshaya_amp_hnm" "alshaya_amp_victoria_secret")
+sTravis=0
+isTravisPr=0
+isTravisMerge=0
 
-# This evaluates if we are inside of travis PR
-# This script is used by blt, hence firstly the test around the variable existing
-# Then the second part is set to true if PR is invoked from travis (otherwise it's deployment)
-if ([ -z "$TRAVIS_PULL_REQUEST" ]) || ([ $TRAVIS_PULL_REQUEST == "false" ])
-then
-  isTravisPr=0
-else
-  isTravisPr=1
-  git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+# Determine if we are on Travis.
+if [[ $TRAVIS && $TRAVIS == "true" ]]; then
+  isTravis=1
+
+  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "true" ]]; then
+    isTravisMerge=1
+  else
+    isTravisPr=1
+    git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+  fi
 fi
+
+# Display some log information.
+echo "isTravis: $isTravis"
+echo "isTravisPr: $isTravisPr"
+echo "isTravisMerge: $isTravisMerge"
 
 # Only build any theme if we are outside of travis PR or no theme file was changed in PR
 if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep /themes/) ]])
 then
-  for i in "${transac[@]}"
+  for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
   do
-    # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/transac/$i) ]])
-    then
-      echo -en "travis_fold:start:FE-Build-${i}\r"
-      cd $docrootDir/themes/custom/transac/$i
-      npm run build
-      echo -en "travis_fold:end:FE-Build-${i}\r"
-    fi
-  done
+    theme_type_dir=${dir##*/}
 
-  for i in "${non_transac[@]}"
-  do
-    # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/non_transac/$i) ]])
-    then
-      echo -en "travis_fold:start:FE-Build-${i}\r"
-      cd $docrootDir/themes/custom/non_transac/$i
-      npm run build
-      echo -en "travis_fold:end:FE-Build-${i}\r"
-    fi
-  done
+    for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
+    do
+      theme_dir=${subdir##*/}
 
-  for i in "${amp[@]}"
-  do
-    # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/amp/$i) ]])
-    then
-      echo -en "travis_fold:start:FE-Build-${i}\r"
-      cd $docrootDir/themes/custom/amp/$i
-      npm run build
-      echo -en "travis_fold:end:FE-Build-${i}\r"
-    fi
+      if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/$theme_type_dir/$theme_dir) ]])
+      then
+        echo -en "travis_fold:start:FE-$theme_dir-Build\r"
+        cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
+        npm run build
+        echo -en "travis_fold:end:FE-$theme_dir-Build\r"
+      else
+        echo "No need to build $theme_dir theme. There is no change in $theme_dir theme."
+        # @TODO: In case isTravisMerge=1 and no change in this theme, we should
+        # not build the it but simply copy the css directory from deploy.
+      fi
+    done
+
   done
 else
-  echo "No need to build frontend on PR. We are only building frontend if there are changed theme files."
+  echo "No need to build any theme. There is no frontend change at all."
 fi
