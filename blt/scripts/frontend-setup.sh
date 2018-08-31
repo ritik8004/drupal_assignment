@@ -9,6 +9,7 @@ docrootDir="$1"
 isTravis=0
 isTravisPr=0
 isTravisMerge=0
+diff=""
 
 # Determine if we are on Travis.
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
@@ -16,13 +17,11 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
 
   if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "true" ]]; then
     isTravisMerge=1
-    # @TODO: For now we do nothing here but if we can achieve to avoid
-    # rebuilding frontend which have not changed during merge, we should
-    # update the setup script to only install tools if there is a frontend to
-    # build.
+    diff=$(git whatchanged -n 1 --name-only)
   else
     isTravisPr=1
     git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+    diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
   fi
 fi
 
@@ -31,15 +30,14 @@ echo "isTravis: $isTravis"
 echo "isTravisPr: $isTravisPr"
 echo "isTravisMerge: $isTravisMerge"
 
-# We always setup frontend tools unless we are
-if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep /themes/) ]])
+# We only setup themes on if we are not on Travis or if themes have changed.
+if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
 then
   for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
   do
     theme_type_dir=${dir##*/}
 
-    # Skip setup particular theme type if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/$theme_type_dir) ]])
+    if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir) ]])
     then
       echo -en "travis_fold:start:FE-$theme_type_dir-Setup\r"
       echo -en "Start - Installing npm for $theme_type_dir themes"
