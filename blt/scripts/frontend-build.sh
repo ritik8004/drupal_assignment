@@ -14,7 +14,7 @@ diff=""
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
   isTravis=1
 
-  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "true" ]]; then
+  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false" ]]; then
     isTravisMerge=1
     diff=$(git whatchanged -n 1 --name-only)
   else
@@ -52,8 +52,24 @@ then
         # folder from deploy (it contains the source from acquia git).
         if ([ $isTravisMerge == 1 ])
         then
-          cp -r $docrootDir/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/
-          echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
+          if ([ ! -d "$docrootDir/themes/custom/$theme_type_dir/$theme_dir/css" ])
+          then
+            echo -en "travis_fold:start:FE-$theme_type_dir-Setup\r"
+            echo -en "Start - Installing npm for $theme_type_dir themes"
+            cd $docrootDir/themes/custom/$theme_type_dir
+            npm run install-tools
+            echo -en "End - Installing npm for $theme_type_dir themes"
+            echo -en "travis_fold:end:FE-$theme_type_dir-Setup\r"
+
+            echo -en "travis_fold:start:FE-$theme_dir-Build\r"
+            cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
+            npm run build
+            echo -en "travis_fold:end:FE-$theme_dir-Build\r"
+            echo "The $theme_dir theme has not changed in this merge but the css folder does not exist in deploy."
+          else
+            cp -r $docrootDir/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/
+            echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
+          fi
         else
           echo "No need to build $theme_dir theme. There is no change in $theme_dir theme."
         fi
