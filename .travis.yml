@@ -67,7 +67,7 @@ install:
   - ls ${BUILD_DIR}/docroot/themes/custom/amp
   - ls ${BUILD_DIR}/docroot/themes/custom/amp/node_modules
   - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
-  - cd {BUILD_DIR}
+  - cd ${BUILD_DIR}
 
 script:
 # Changing path to disable behat test on Travis.
