@@ -39,7 +39,27 @@ then
   do
     theme_type_dir=${dir##*/}
 
-    if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir) ]])
+    forceSetup=0
+    if ([ $isTravisMerge == 1 ])
+    then
+      for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
+      do
+        theme_dir=${subdir##*/}
+
+        if [[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) && ! -d "$docrootDir/themes/custom/$theme_type_dir/$theme_dir/css" ]]
+        then
+          forceSetup=1
+        fi
+      done
+    fi
+
+    echo "forceSetup: $forceSetup"
+
+    # We build the theme if:
+      # - We are outside Travis context.
+      # - The theme has changed.
+      # - We are merging but the theme (css) does not exist on deploy directory.
+    if ([ $isTravis == 0 ]) || ([ $forceSetup == 1 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir) ]])
     then
       echo -en "travis_fold:start:FE-$theme_type_dir-Setup\r"
       echo -en "Start - Installing npm for $theme_type_dir themes"
