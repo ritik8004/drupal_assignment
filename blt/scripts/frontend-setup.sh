@@ -17,7 +17,7 @@ echo $TRAVIS_PULL_REQUEST
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
   isTravis=1
 
-  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "true" ]]; then
+  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false" ]]; then
     isTravisMerge=1
     diff=$(git whatchanged -n 1 --name-only)
   else
