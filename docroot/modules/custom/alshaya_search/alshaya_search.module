@@ -5,7 +5,7 @@
  * Module file.
  */
 
-use Drupal\alshaya_acm_product_position\Form\AlshayaSortOptionsLabelBase;
+use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -352,7 +352,7 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
 function _alshaya_search_get_config($label = FALSE) {
   $position = \Drupal::config('alshaya_search.settings');
   if ($label) {
-    return AlshayaSortOptionsLabelBase::schemaArrayToKeyValue($position->get('sort_options_labels'));
+    return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue($position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
 }

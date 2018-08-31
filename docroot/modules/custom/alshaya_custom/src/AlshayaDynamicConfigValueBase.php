@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_product_position\Form;
+namespace Drupal\alshaya_custom;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Base abstract class with helper methods.
  */
-abstract class AlshayaSortOptionsLabelBase extends ConfigFormBase {
+abstract class AlshayaDynamicConfigValueBase extends ConfigFormBase {
 
   /**
    * {@inheritdoc}

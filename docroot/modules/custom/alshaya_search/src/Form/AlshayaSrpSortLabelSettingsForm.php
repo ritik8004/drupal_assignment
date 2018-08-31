@@ -2,13 +2,13 @@
 
 namespace Drupal\alshaya_search\Form;
 
-use Drupal\alshaya_acm_product_position\Form\AlshayaSortOptionsLabelBase;
+use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AlshayaPlpSortSettingsForm.
+ * Class AlshayaSrpSortLabelSettingsForm.
  */
-class AlshayaSrpSortLabelSettingsForm extends AlshayaSortOptionsLabelBase {
+class AlshayaSrpSortLabelSettingsForm extends AlshayaDynamicConfigValueBase {
 
   /**
    * {@inheritdoc}
