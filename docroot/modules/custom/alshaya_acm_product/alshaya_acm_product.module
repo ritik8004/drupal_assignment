@@ -1278,7 +1278,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, 'pdp', '', FALSE);
 
     if (isset($build['gallery'], $build['gallery']['product_zoom'])) {
@@ -1433,7 +1433,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $selected_sku = $first_child;
 
       /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-      $skuImagesManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
       if ($first_child instanceof SKU) {
         $build['gallery'] = $skuImagesManager->getGallery($first_child, 'pdp');

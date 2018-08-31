@@ -724,7 +724,7 @@ class SkuImagesManager {
     }
 
     // Get file id from config.
-    $default_image_fid = $this->config->get('alshaya_acm_product.settings')->get('product_default_image');
+    $default_image_fid = $this->configFactory->get('alshaya_acm_product.settings')->get('product_default_image');
     if (!empty($default_image_fid)) {
       $file = $this->fileStorage->load($default_image_fid);
       if ($file instanceof File) {
