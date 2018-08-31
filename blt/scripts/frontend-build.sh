@@ -29,8 +29,10 @@ then
     if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/transac/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
+      echo -en "travis_time:start\r"
       cd $docrootDir/themes/custom/transac/$i
       npm run build
+      echo -en "travis_time:end\r"
       echo -en "travis_fold:end:FE-Build-${i}\r"
     fi
   done
@@ -41,8 +43,10 @@ then
     if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/non_transac/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
+      echo -en "travis_time:start\r"
       cd $docrootDir/themes/custom/non_transac/$i
       npm run build
+      echo -en "travis_time:end\r"
       echo -en "travis_fold:end:FE-Build-${i}\r"
     fi
   done
@@ -53,8 +57,10 @@ then
     if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/amp/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
+      echo -en "travis_time:start\r"
       cd $docrootDir/themes/custom/amp/$i
       npm run build
+      echo -en "travis_time:end\r"
       echo -en "travis_fold:end:FE-Build-${i}\r"
     fi
   done
