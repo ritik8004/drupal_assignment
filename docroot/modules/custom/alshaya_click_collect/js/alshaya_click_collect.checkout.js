@@ -172,8 +172,8 @@
             $('#click-and-collect-list-view').hide();
             $('#click-and-collect-map-view').show();
 
-            $('.stores-list-view').toggleClass('active');
-            $('.stores-map-view').toggleClass('active');
+            $('.stores-list-view').removeClass('active');
+            $('.stores-map-view').addClass('active');
             slectedStoreObj = _.findWhere(storeList, {code: $(this).data('store-code')});
             if (slectedStoreObj) {
               newMap = false;
