@@ -6,7 +6,6 @@ dependencies:
   - acsf:acsf
   - block_content_machine_name:block_content_machine_name
   - drupal:color
-  - features:features
   - drupal:syslog
   - menu_link_modal:menu_link_modal
 

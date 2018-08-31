@@ -30,7 +30,8 @@ where `<env>` is the current ACSF environment (01dev, 01test, 01uat, ...),
 `<url>` is the site url, `<brand-code>` is the brand (mc, vs, hm, ...) and
 `<country-code>` is the country (kw, sa, ae).
 
-## Override / Disable
+## Override / Disable:
+
 There may be some situation where we don't want to execute the post-install 
 operations or we may want to override the brand or country to be configured.
 (For example, we may want to install a Kuwait Mothercare site on 
@@ -53,7 +54,8 @@ results given the ACM and MDC configuration will remain based on the domain.
 :warning: In case of shared environment (dev/test for example), the override
 file will impact all the environments.
 
-## Logging
+## Logging:
+
 By default, the script does not display anything in the terminal (it is not
 possible to view it on ACSF anyway). To ease debugging and monitoring, 
 operations results are redirected to `/home/alshaya/site-install.log`. This

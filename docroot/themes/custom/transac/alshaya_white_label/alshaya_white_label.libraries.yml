@@ -125,7 +125,6 @@ cloud_zoom_common:
     - alshaya_product_zoom/cloud_zoom
     - alshaya_white_label/slick
     - alshaya_white_label/utils
-    - alshaya_product_zoom/lightslider
 
 cloud_zoom:
   version: 1.x

@@ -234,43 +234,83 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      // Convert the list to slider.
-      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
-        if (isRTL()) {
-          $(this, context).lightSlider({
-            vertical: false,
-            item: settings.plp_slider.item,
-            rtl: true,
-            slideMargin: settings.plp_slider.margin,
-          });
+      var slickOptions = {
+        slidesToShow: settings.plp_slider.item,
+        slidesToScroll: 1,
+        vertical: false,
+        arrows: true,
+        focusOnSelect: false,
+        infinite: false,
+        touchThreshold: 1000,
+      };
+
+      function applyRtl(ocObject, options) {
+        if (isRTL() && $(window).width() > 1025) {
+          ocObject.attr('dir', 'rtl');
+          ocObject.slick(
+            $.extend({}, options, {rtl: true})
+          );
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
         else {
-          $(this, context).lightSlider({
-            vertical: false,
-            item: settings.plp_slider.item,
-            rtl: false,
-            slideMargin: settings.plp_slider.margin,
-          });
+          ocObject.slick(options);
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
+      }
+
+      // Convert the list to slider.
+      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
+        // Create the slider.
+        applyRtl($(this), slickOptions);
+
+        // Handle click events in hover slider arrows without triggering click to PDP.
+        $(this).find('.slick-arrow').on('click', function(e) {
+          if (e.preventDefault) {
+            e.preventDefault();
+          }
+          else {
+            e.returnValue = false;
+          }
+
+          if(!$(this).hasClass('slick-disabled')) {
+            if ($(this).attr('class') === 'slick-prev') {
+              $(this).parent().slick('slickPrev');
+            }
+            else {
+              $(this).parent().slick('slickNext');
+            }
+          }
+          return false;
+        });
       });
 
       // Change the image on Mouse hover.
-      $('.alshaya_search_slider img', context).hover(
+      // Adding a delay here to avoid flicker during scroll in between two slides.
+      // This also helps in smoothing the mouseout behaviour.
+      var delay = 500;
+      var setTimeoutConst;
+      $('.alshaya_search_slider .slick-slide', context).once('alshayaSearchSlider').hover(
         function () {
+          // Clear timer when we enter a new thumbnail.
+          clearTimeout(setTimeoutConst);
           $(this)
             .closest('.alshaya_search_gallery')
             .find('.alshaya_search_mainimage img')
-            .attr('src', $(this).attr('rel'));
+            .attr('src', $(this).find('img').attr('rel'));
         },
         function () {
-          $(this)
-            .closest('.alshaya_search_gallery')
-            .find('.alshaya_search_mainimage img')
-            .attr('src', $(this)
-              .parent()
-              .parent()
-              .find('li:first-child img')
-              .attr('rel'));
+          // Store this as after delay the mouse is not on element, so this changes.
+          var el = $(this);
+          // Delay the resetting of main image post hover out.
+          setTimeoutConst = setTimeout(function() {
+            el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
+              el.parent().find('li:first-child').find('img').attr('rel')
+            );
+          }, delay);
         }
       );
 
@@ -280,7 +320,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         $('.c-products__item').each(function () {
           var slider = $(this).find('.alshaya_search_slider');
           // Iterate over each slider thumbnail.
-          slider.find('.lslide').each(function () {
+          slider.find('.slick-slide').each(function () {
             var imgURL = $(this).children('img').attr('rel');
             // Preload image.
             var img = new Image();
