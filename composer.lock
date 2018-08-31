@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2454a43d0669c98e95d4e6ba5af2af6c",
+    "content-hash": "3332049c9e07c65bf8a3b7b53dc72204",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9699,7 +9699,8 @@
                     }
                 },
                 "patches_applied": {
-                    "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
+                    "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch",
+                    "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
