@@ -385,6 +385,9 @@ class AlshayaApiWrapper {
     $handle = fopen($url, 'r', FALSE, stream_context_create($context));
 
     $mskus = [];
+    foreach ($types as $type) {
+      $mskus[$type] = [];
+    }
 
     // We have not been able to open the stream.
     if (!$handle) {
@@ -411,6 +414,11 @@ class AlshayaApiWrapper {
       }
 
       $type = $data[$sku_type_index] == 'Simple Product' ? 'simple' : 'configurable';
+
+      // We filter the types we don't want to get.
+      if (!in_array($type, $types)) {
+        continue;
+      }
 
       $mskus[$type][] = $data[$sku_index];
     }
@@ -471,6 +479,9 @@ class AlshayaApiWrapper {
     ];
 
     $mskus = [];
+    foreach ($types as $type) {
+      $mskus[$type] = [];
+    }
 
     foreach ($types as $type) {
       $query['searchCriteria']['filterGroups'][1]['filters'][0]['value'] = $type;
