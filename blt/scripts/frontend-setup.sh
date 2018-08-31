@@ -11,6 +11,8 @@ isTravisPr=0
 isTravisMerge=0
 diff=""
 
+echo $TRAVIS_PULL_REQUEST
+
 # Determine if we are on Travis.
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
   isTravis=1
