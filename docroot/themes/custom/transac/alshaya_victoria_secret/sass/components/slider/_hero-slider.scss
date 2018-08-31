@@ -13,5 +13,10 @@
         #{$right}: 0;
       }
     }
+
+    .field--type-image {
+      max-width: 120rem;
+      margin: 0 auto;
+    }
   }
 }
