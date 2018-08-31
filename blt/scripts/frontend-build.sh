@@ -29,8 +29,8 @@ echo "isTravis: $isTravis"
 echo "isTravisPr: $isTravisPr"
 echo "isTravisMerge: $isTravisMerge"
 
-# Only build any theme if we are outside of travis PR or no theme file was changed in PR
-if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
+# We always build themes unless we are testing a simple push on Travis and there is no change in themes.
+if ([ $isTravis == 0 ]) || ([ $isTravisMerge == 1 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
 then
   for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
   do
