@@ -4,22 +4,36 @@
 
 set -e
 
-# This evaluates if we are inside of travis PR
-# This script is used by blt, hence firstly the test around the variable existing
-# Then the second part is set to true if PR is invoked from travis (otherwise it's deployment)
-if ([ -z "$TRAVIS_PULL_REQUEST" ]) || ([ $TRAVIS_PULL_REQUEST == "false" ])
-then
-  isTravisPr=0
-else
-  isTravisPr=1
-  git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+isTravis=0
+isTravisPr=0
+isTravisMerge=0
+
+# Determine if we are on Travis.
+if [[ $TRAVIS && $TRAVIS == "true" ]]; then
+  isTravis=1
+
+  # Determine if we are merging a PR or simply validating a push.
+  # If we are merging a PR, we get a list of files updated since the previous
+  # merge commit. If we are validating a push, we checkout the origin branch
+  # and do a diff with current branch to get the list of updated files.
+  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "true" ]]; then
+    isTravisMerge=1
+    # @TODO: For now we do nothing here but if we can achieve to avoid
+    # rebuilding frontend which have not changed during merge, we should
+    # update the setup script to only install tools if there is a frontend to
+    # build.
+  else
+    isTravisPr=1
+    git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+  fi
 fi
 
-docrootDir="$1"
-
+# Display some log information.
+echo "isTravis: $isTravis"
 echo "isTravisPr: $isTravisPr"
+echo "isTravisMerge: $isTravisMerge"
 
-# Only setup any theme type if we are outside of travis PR or no theme file was changed in PR
+# We always setup frontend tools unless we are
 if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep /themes/) ]])
 then
   for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
