@@ -284,7 +284,9 @@ class SkuImagesManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          if ($this->hasMediaImages($child)) {
+
+          if (($child instanceof SKUInterface) &&
+            ($this->hasMediaImages($child))) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
