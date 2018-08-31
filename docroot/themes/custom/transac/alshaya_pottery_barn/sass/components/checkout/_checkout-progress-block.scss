@@ -76,3 +76,21 @@
     }
   }
 }
+
+.order-confirmation {
+  #block-acmcheckoutprogress {
+    @include breakpoint($only-tablet) {
+      width: 100%;
+    }
+
+    .checkout-progress__step {
+      @include breakpoint($tablet) {
+        padding: 0.5rem 0 !important;
+
+        &::after {
+          top: 1.313rem !important;
+        }
+      }
+    }
+  }
+}
