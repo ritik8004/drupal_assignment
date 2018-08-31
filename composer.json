@@ -28,7 +28,7 @@
         "drupal/facets": "1.0-alpha11",
         "drupal/profile": "^1.0@alpha",
         "drupal/field_group": "^3.0@beta",
-        "drupal/webform": "5.0.0-rc1",
+        "drupal/webform": "^5.0.0-rc1",
         "drupal/back_to_top": "^1.0@beta",
         "drupal/change_pwd_page": "^1.0@beta",
         "drupal/mobile_number": "^1.0@alpha",
@@ -50,7 +50,7 @@
         "drupal/r4032login": "1.x-dev",
         "drupal/datalayer": "^1.0@beta",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
-        "drupal/views_block_filter_block": "1.x-dev",
+        "drupal/views_block_filter_block": "^1.0@beta",
         "mobiledetect/mobiledetectlib": "^2.8",
         "acquia/http-hmac-php": "~3.2",
         "drupal/simple_oauth": "^3.0",
@@ -191,9 +191,6 @@
             },
             "drupal/search_api_spellcheck": {
                 "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
-            },
-            "drupal/metatag": {
-                "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2018-04-23/2628934-32.patch"
             },
             "drupal/acquia_connector": {
                 "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
