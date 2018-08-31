@@ -21,18 +21,16 @@ else
 fi
 
 # Only build any theme if we are outside of travis PR or no theme file was changed in PR
-if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep /themes/) ]])
+if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep /themes/) ]])
 then
   for i in "${transac[@]}"
   do
     # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/transac/$i) ]])
+    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/transac/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
-      echo -en "travis_time:start\r"
       cd $docrootDir/themes/custom/transac/$i
       npm run build
-      echo -en "travis_time:end\r"
       echo -en "travis_fold:end:FE-Build-${i}\r"
     fi
   done
@@ -40,13 +38,11 @@ then
   for i in "${non_transac[@]}"
   do
     # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/non_transac/$i) ]])
+    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/non_transac/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
-      echo -en "travis_time:start\r"
       cd $docrootDir/themes/custom/non_transac/$i
       npm run build
-      echo -en "travis_time:end\r"
       echo -en "travis_fold:end:FE-Build-${i}\r"
     fi
   done
@@ -54,13 +50,11 @@ then
   for i in "${amp[@]}"
   do
     # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/amp/$i) ]])
+    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check | grep themes/custom/amp/$i) ]])
     then
       echo -en "travis_fold:start:FE-Build-${i}\r"
-      echo -en "travis_time:start\r"
       cd $docrootDir/themes/custom/amp/$i
       npm run build
-      echo -en "travis_time:end\r"
       echo -en "travis_fold:end:FE-Build-${i}\r"
     fi
   done
