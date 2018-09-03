@@ -510,17 +510,6 @@ header {
       padding: 0.9rem 0.875rem 0.664rem 0.625rem;
     }
 
-    .store {
-      &:hover {
-        background-color: $header_c_menu_icon_color;
-        color: $header_c_menu_icon_text;
-
-        @include icon(mappin) {
-          color: $header_c_menu_icon_text;
-        }
-      }
-    }
-
     .mobile--search {
       &::before {
         margin-#{$right}: 0.3125rem;
