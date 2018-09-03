@@ -57,27 +57,39 @@ then
         continue
       fi
 
-      ls $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir
-
       # We build the theme if:
       # - We are outside Travis context.
       # - The theme has changed.
       # - We are merging but the theme (css) does not exist on deploy directory.
-      if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]) || ([[ $isTravisMerge == 1 && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ]])
-      then
-        echo -en "travis_fold:start:FE-$theme_dir-Build\r"
-
-        if ([ $isTravis == 0 ])
+      build=0
+      if [ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]; then
+        echo "Build $theme_type_dir because there is some change in this folder."
+        setup=1
+      elif [ $isTravis == 0 ]; then
+        echo "Build $theme_type_dir because it is outside Travis."
+        build=1
+      elif [ $isTravisMerge == 1 ]; then
+        if ([ $theme_type_dir == "non_transac" ])
         then
-          echo -en "Building $theme_dir because we are not on Travis."
-        elif ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]])
-        then
-          echo -en "Building $theme_dir because it has been updated."
-        elif ([[ $isTravisMerge == 1 && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ]])
+          if [[ $theme_dir == "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist" ]]
+          then
+            echo -en "Building $theme_dir because there is no dist folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components"
+            build=1
+          elif [[ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist" ]]
+          then
+            echo -en "Building $theme_dir because there is no dist folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir"
+            build=1
+          fi
+        elif ([ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ])
         then
           echo -en "Building $theme_dir because there is no css folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir"
+          build=1
         fi
+      fi
 
+      if ([ $build == 0 ])
+      then
+        echo -en "travis_fold:start:FE-$theme_dir-Build\r"
         echo -en "Start - Building $theme_dir theme"
         cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
         npm run build
@@ -85,11 +97,25 @@ then
         echo -en "travis_fold:end:FE-$theme_dir-Build\r"
       else
         # If the theme has not changed are we are on a merge, we copy the css
-        # folder from deploy (it contains the source from acquia git).
+        # or dist folder from deploy (it contains the source from acquia git).
         if ([ $isTravisMerge == 1 ])
         then
-          cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
-          echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
+          if ([ $theme_type_dir == "non_transac" ])
+          then
+            if [[ $theme_dir == "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist" ]]
+            then
+              cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/components/
+              echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied components/dist folder from deploy directory."
+            elif [[ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist" ]]
+            then
+              cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
+          echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
+            fi
+          elif ([ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ])
+          then
+            cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
+            echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
+          fi
         else
           echo "No need to build $theme_dir theme. There is no change in $theme_dir theme."
         fi
