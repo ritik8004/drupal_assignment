@@ -56,8 +56,6 @@ do
     setup=1
   fi
 
-  echo "setup: $setup"
-
   if ([ $setup == 1 ])
   then
     echo -en "travis_fold:start:FE-$theme_type_dir-Setup\r"
