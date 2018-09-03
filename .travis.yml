@@ -34,9 +34,9 @@ cache:
   - "docroot/profiles/contrib"
   - "docroot/core"
   - "docroot/libraries"
-#  - "docroot/themes/custom/amp/node_modules"
-#  - "docroot/themes/custom/non_transac/node_modules"
-#  - "docroot/themes/custom/transac/node_modules"
+  - "docroot/themes/custom/amp/node_modules"
+  - "docroot/themes/custom/non_transac/node_modules"
+  - "docroot/themes/custom/transac/node_modules"
 
 addons:
   ssh_known_hosts:
