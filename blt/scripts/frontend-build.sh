@@ -34,7 +34,7 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     fi
   else
     isTravisPr=1
-    git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+    #git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
     diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
   fi
 fi
