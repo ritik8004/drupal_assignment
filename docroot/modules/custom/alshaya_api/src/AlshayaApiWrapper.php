@@ -395,32 +395,55 @@ class AlshayaApiWrapper {
       return $mskus;
     }
 
-    // Data index in row.
-    $sku_index = 4;
-    $status_index = 6;
-    $visibility_index = 7;
-    $sku_type_index = 23;
+    // Because the column position may vary across brands, we are browsing the
+    // report's first line to identify the position of each column we need.
+    $indexes = [
+      'partnum' => FALSE,
+      'status' => FALSE,
+      'visibility' => FALSE,
+      'type' => FALSE,
+    ];
 
-    while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
-      // We don't deal with disabled SKUs.
-      if ($data[$status_index] !== 'Enabled') {
-        continue;
+    if ($data = fgetcsv($handle, 1000, ',')) {
+      foreach ($data as $position => $key) {
+        foreach ($indexes as $name => $index) {
+          if (trim(strtolower($key)) == $name) {
+            $indexes[$name] = $position;
+            continue;
+          }
+        }
       }
 
-      // This is a weird case where not visible SKU does not have any related
-      // configurable.
-      if (empty($data[$sku_type_index]) && $data[$visibility_index] == 'Not Visible Individually') {
-        continue;
+      if (in_array(FALSE, $indexes)) {
+        return $mskus;
       }
 
-      $type = $data[$sku_type_index] == 'Simple Product' ? 'simple' : 'configurable';
+      while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+        // We don't deal with disabled SKUs.
+        if (trim(strtolower($data[$indexes['status']])) !== 'enabled') {
+          continue;
+        }
 
-      // We filter the types we don't want to get.
-      if (!in_array($type, $types)) {
-        continue;
+        // This is a weird case where not visible SKU does not have any related
+        // configurable.
+        if (empty($data[$indexes['type']]) && trim(strtolower($data[$indexes['visibility']])) == 'not visible individually') {
+          continue;
+        }
+
+        // We only deal with simple and configurable products.
+        if (!in_array(trim(strtolower($data[$indexes['type']])), ['simple product', 'configurable product'])) {
+          continue;
+        }
+
+        $type = trim(strtolower($data[$indexes['type']])) == 'simple product' ? 'simple' : 'configurable';
+
+        // We filter the types we don't want to get.
+        if (!in_array($type, $types)) {
+          continue;
+        }
+
+        $mskus[$type][] = $data[$indexes['partnum']];
       }
-
-      $mskus[$type][] = $data[$sku_index];
     }
     fclose($handle);
 
