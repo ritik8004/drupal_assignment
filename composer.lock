@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2db389f8f5969ff46bb1a06fd522371",
+    "content-hash": "111002ff63b633a6c85672d3db356c97",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10648,6 +10648,9 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "patches_applied": {
+                    "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
