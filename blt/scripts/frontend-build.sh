@@ -75,7 +75,7 @@ then
           then
             echo -en "Building $theme_dir because there is no dist folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components"
             build=1
-          elif [[ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist" ]]
+          elif [[ $theme_dir != "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist" ]]
           then
             echo -en "Building $theme_dir because there is no dist folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir"
             build=1
@@ -87,7 +87,7 @@ then
         fi
       fi
 
-      if ([ $build == 0 ])
+      if ([ $build == 1 ])
       then
         echo -en "travis_fold:start:FE-$theme_dir-Build\r"
         echo -en "Start - Building $theme_dir theme"
