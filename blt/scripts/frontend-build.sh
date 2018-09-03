@@ -10,6 +10,8 @@ isTravisPr=0
 isTravisMerge=0
 diff=""
 
+ignoredDirs=( "alshaya_mothercare" "alshaya_amp_mothercare" "alshaya_example_subtheme" "node_modules" )
+
 # Determine if we are on Travis.
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
   isTravis=1
@@ -40,7 +42,17 @@ then
     do
       theme_dir=${subdir##*/}
 
-      if ([ $theme_dir == "alshaya_mothercare" ])
+      # Ignore some directories which are not themes or which not be build.
+      ignore=0
+      for ignoredDir in "${ignoredDirs[@]}"
+      do
+        if ([[ $(echo "$theme_dir" | grep $ignoredDir) ]])
+        then
+          ignore=1
+        fi
+      done
+
+      if ([ $ignore == 1 ])
       then
         continue
       fi
