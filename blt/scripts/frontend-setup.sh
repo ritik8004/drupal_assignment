@@ -41,20 +41,8 @@ do
     # - We are merging but the theme (css) does not exist on deploy directory.
   setup=0
   if [ $isTravisMerge == 1 ]; then
-    for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
-    do
-      theme_dir=${subdir##*/}
-
-      if [[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]
-      then
-        echo "Setup $theme_type_dir because there is diff in $theme_dir"
-        setup=1
-      elif [[ ! -d "$docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir/css" ]]
-      then
-        echo "Setup $theme_type_dir because there is no css folder in $docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir/css"
-        setup=1
-      fi
-    done
+    echo "Setup $theme_type_dir because we are merging a PR."
+    setup=1
   elif [ $isTravis == 0 ]; then
     echo "Setup $theme_type_dir because it is outside Travis."
     setup=1
