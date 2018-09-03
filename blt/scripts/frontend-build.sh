@@ -40,6 +40,11 @@ then
     do
       theme_dir=${subdir##*/}
 
+      if ([ $theme_dir == "alshaya_mothercare" ])
+      then
+        continue
+      fi
+
       # We build the theme if:
       # - We are outside Travis context.
       # - The theme has changed.
