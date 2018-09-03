@@ -31,7 +31,6 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     if ([[ $(echo "$log" | grep "FORCE") ]])
     then
       isTravis=0
-      echo "All themes will be build given the PR message explicitly asks for it."
     fi
   else
     isTravisPr=1
@@ -39,11 +38,6 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
   fi
 fi
-
-# Display some log information.
-echo "isTravis: $isTravis"
-echo "isTravisPr: $isTravisPr"
-echo "isTravisMerge: $isTravisMerge"
 
 # We always build themes unless we are testing a simple push on Travis and there is no change in themes.
 if ([ $isTravis == 0 ]) || ([ $isTravisMerge == 1 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
@@ -55,6 +49,8 @@ then
     for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
     do
       theme_dir=${subdir##*/}
+
+      echo -en "travis_fold:start:FE-$theme_dir-Build\r"
 
       # Ignore some directories which are not themes or which not be build.
       ignore=0
@@ -77,10 +73,10 @@ then
       # - We are merging but the theme (css) does not exist on deploy directory.
       build=0
       if [ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]; then
-        echo "Build $theme_type_dir because there is some change in this folder."
+        echo -en "Building $theme_dir because there is some change in this folder."
         build=1
       elif [ $isTravis == 0 ]; then
-        echo "Build $theme_type_dir because it is outside Travis."
+        echo -en "Building $theme_dir because we are outside Travis (or force build is requested)."
         build=1
       elif [ $isTravisMerge == 1 ]; then
         if ([ $theme_type_dir == "non_transac" ])
@@ -103,12 +99,8 @@ then
 
       if ([ $build == 1 ])
       then
-        echo -en "travis_fold:start:FE-$theme_dir-Build\r"
-        echo -en "Start - Building $theme_dir theme"
         cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
         npm run build
-        echo -en "End - Building $theme_dir theme"
-        echo -en "travis_fold:end:FE-$theme_dir-Build\r"
       else
         # If the theme has not changed are we are on a merge, we copy the css
         # or dist folder from deploy (it contains the source from acquia git).
@@ -119,22 +111,24 @@ then
             if [[ $theme_dir == "whitelabel" ]]
             then
               cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/components/
-              echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied components/dist folder from deploy directory."
+              echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied components/dist folder from deploy directory."
             else
               cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
-          echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
+          echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
             fi
           else
             cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
-            echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
+            echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
           fi
         else
-          echo "No need to build $theme_dir theme. There is no change in $theme_dir theme."
+          echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme."
         fi
       fi
+
+      echo -en "travis_fold:end:FE-$theme_dir-Build\r"
     done
 
   done
 else
-  echo "No need to build any theme. There is no frontend change at all."
+  echo -en "No need to build any theme. There is no frontend change at all."
 fi
