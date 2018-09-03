@@ -45,14 +45,21 @@ do
     do
       theme_dir=${subdir##*/}
 
-      if [[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) || ! -d "$docrootDir/themes/custom/$theme_type_dir/$theme_dir/css" ]]
+      if [[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]
       then
+        echo "Setup $theme_type_dir because there is diff in $theme_dir"
+        setup=1
+      elif [[ ! -d "$docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir/css" ]]
+      then
+        echo "Setup $theme_type_dir because there is no css folder in $docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir/css"
         setup=1
       fi
     done
   elif [ $isTravis == 0 ]; then
+    echo "Setup $theme_type_dir because it is outside Travis."
     setup=1
   elif [ $(echo "$diff" | grep themes/custom/$theme_type_dir) ]; then
+    echo "Setup $theme_type_dir because there is some change in this folder."
     setup=1
   fi
 
