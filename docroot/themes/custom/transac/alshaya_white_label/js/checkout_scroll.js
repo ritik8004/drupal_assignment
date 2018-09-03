@@ -41,6 +41,17 @@
         }, 'slow');
         localStorage.removeItem('address_save_scroll');
       }
+
+      // Scroll the checkout delivery page to 'Delivery to' section for mobile devices.
+      if ($(window).width() < 768) {
+        if ($('.multistep-checkout').hasClass('show-form')) {
+          if ($('#edit-member-delivery-home').length || $('#edit-guest-delivery-home').length) {
+            $('html, body').animate({
+              scrollTop: $('#edit-member-delivery-home, #edit-guest-delivery-home').offset().top
+            }, 'slow');
+          }
+        }
+      }
     }
   };
 
