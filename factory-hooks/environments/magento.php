@@ -244,6 +244,19 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
   ],
+  // Footlocker.
+  'fl_qa' => [
+    'url' => 'https://qa-h47ppbq-z3gmkbwmwrl4g.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '0dx3ftegdr4us9aklfhcr66nu43l75ob',
+      'consumer_secret' => 'dtr2rqe8cnbx0rt6npv5pilukkcrkwt7',
+      'access_token' => '5um6y5nxl3oqms9qw0jai36qkryrrocg',
+      'access_token_secret' => '4cfruica5gbgdn2eq269ndl5rccubslc',
+    ],
+    'sa' => [
+      'store_id' => ['en' => 5, 'ar' => 4],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [
