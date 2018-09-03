@@ -64,7 +64,7 @@ then
       build=0
       if [ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]; then
         echo "Build $theme_type_dir because there is some change in this folder."
-        setup=1
+        build=1
       elif [ $isTravis == 0 ]; then
         echo "Build $theme_type_dir because it is outside Travis."
         build=1
