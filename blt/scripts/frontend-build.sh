@@ -64,8 +64,10 @@ then
       if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]) || ([[ $isTravisMerge == 1 && ! -d "$docrootDir/themes/custom/$theme_type_dir/$theme_dir/css" ]])
       then
         echo -en "travis_fold:start:FE-$theme_dir-Build\r"
+        echo -en "Start - Building $theme_dir theme"
         cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
         npm run build
+        echo -en "End - Building $theme_dir theme"
         echo -en "travis_fold:end:FE-$theme_dir-Build\r"
       else
         # If the theme has not changed are we are on a merge, we copy the css
