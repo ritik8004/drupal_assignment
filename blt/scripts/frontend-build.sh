@@ -57,13 +57,13 @@ then
         continue
       fi
 
-      ls $docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir
+      ls $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir
 
       # We build the theme if:
       # - We are outside Travis context.
       # - The theme has changed.
       # - We are merging but the theme (css) does not exist on deploy directory.
-      if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]) || ([[ $isTravisMerge == 1 && ! -d "$docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir/css" ]])
+      if ([ $isTravis == 0 ]) || ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]) || ([[ $isTravisMerge == 1 && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ]])
       then
         echo -en "travis_fold:start:FE-$theme_dir-Build\r"
 
@@ -73,9 +73,9 @@ then
         elif ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]])
         then
           echo -en "Building $theme_dir because it has been updated."
-        elif ([[ $isTravisMerge == 1 && ! -d "$docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir/css" ]])
+        elif ([[ $isTravisMerge == 1 && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ]])
         then
-          echo -en "Building $theme_dir because there is no css folder in $docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir"
+          echo -en "Building $theme_dir because there is no css folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir"
         fi
 
         echo -en "Start - Building $theme_dir theme"
