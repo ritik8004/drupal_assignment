@@ -88,7 +88,7 @@ then
         # folder from deploy (it contains the source from acquia git).
         if ([ $isTravisMerge == 1 ])
         then
-          cp -r $docrootDir/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/
+          cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
           echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
         else
           echo "No need to build $theme_dir theme. There is no change in $theme_dir theme."
