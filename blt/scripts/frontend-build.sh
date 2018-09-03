@@ -12,8 +12,6 @@ diff=""
 
 ignoredDirs=( "alshaya_mothercare" "alshaya_amp_mothercare" "alshaya_example_subtheme" "node_modules" )
 
-echo -en "travis_fold:start:FE-Build\r"
-
 # Determine if we are on Travis.
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
   isTravis=1
@@ -33,7 +31,6 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     if ([[ $(echo "$log" | grep "FORCE") ]])
     then
       isTravis=0
-      echo "All themes will be build given the PR message explicitly asks for it. isTravis set to 0 to force that."
     fi
   else
     isTravisPr=1
@@ -41,11 +38,6 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
   fi
 fi
-
-# Display some log information.
-echo -en "isTravis: $isTravis"
-echo -en "isTravisPr: $isTravisPr"
-echo -en "isTravisMerge: $isTravisMerge"
 
 # We always build themes unless we are testing a simple push on Travis and there is no change in themes.
 if ([ $isTravis == 0 ]) || ([ $isTravisMerge == 1 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
@@ -81,10 +73,10 @@ then
       # - We are merging but the theme (css) does not exist on deploy directory.
       build=0
       if [ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]; then
-        echo "Build $theme_dir because there is some change in this folder."
+        echo -en "Building $theme_dir because there is some change in this folder."
         build=1
       elif [ $isTravis == 0 ]; then
-        echo "Build $theme_dir because it is outside Travis."
+        echo -en "Building $theme_dir because we are outside Travis (or force build is requested)."
         build=1
       elif [ $isTravisMerge == 1 ]; then
         if ([ $theme_type_dir == "non_transac" ])
@@ -107,10 +99,8 @@ then
 
       if ([ $build == 1 ])
       then
-        echo -en "Start - Building $theme_dir theme"
         cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
         npm run build
-        echo -en "End - Building $theme_dir theme"
       else
         # If the theme has not changed are we are on a merge, we copy the css
         # or dist folder from deploy (it contains the source from acquia git).
@@ -142,5 +132,3 @@ then
 else
   echo -en "No need to build any theme. There is no frontend change at all."
 fi
-
-echo -en "travis_fold:end:FE-Build\r"

@@ -11,8 +11,6 @@ isTravisPr=0
 isTravisMerge=0
 diff=""
 
-echo -en "travis_fold:start:FE-Setup\r"
-
 # Determine if we are on Travis.
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
   isTravis=1
@@ -25,11 +23,6 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
   fi
 fi
-
-# Display some log information.
-echo -en "isTravis: $isTravis"
-echo -en "isTravisPr: $isTravisPr"
-echo -en "isTravisMerge: $isTravisMerge"
 
 # We only setup themes on if we are not on Travis or if themes have changed.
 for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
@@ -66,5 +59,3 @@ do
 
   echo -en "travis_fold:end:FE-$theme_type_dir-Setup\r"
 done
-
-echo -en "travis_fold:end:FE-Setup\r"
