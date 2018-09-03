@@ -102,17 +102,15 @@ then
         then
           if ([ $theme_type_dir == "non_transac" ])
           then
-            if [[ $theme_dir == "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist" ]]
+            if [[ $theme_dir == "whitelabel" ]]
             then
               cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/components/
               echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied components/dist folder from deploy directory."
-            elif [[ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist" ]]
-            then
+            else
               cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
           echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
             fi
-          elif ([ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ])
-          then
+          else
             cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
             echo "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
           fi
