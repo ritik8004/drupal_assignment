@@ -175,6 +175,7 @@ class SkuAssetManager {
           'url' => Url::fromUri($base_url, $options),
           'sortAssetType' => $asset['sortAssetType'],
           'sortFacingType' => $asset['sortFacingType'],
+          'Data' => $asset['Data'],
         ];
 
         if ($first_image_only) {
