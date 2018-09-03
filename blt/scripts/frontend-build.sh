@@ -57,6 +57,8 @@ then
         continue
       fi
 
+      ls $docrootDir/../deploy/themes/custom/$theme_type_dir/$theme_dir
+
       # We build the theme if:
       # - We are outside Travis context.
       # - The theme has changed.
