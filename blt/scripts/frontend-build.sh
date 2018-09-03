@@ -18,7 +18,21 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
 
   if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false" ]]; then
     isTravisMerge=1
-    diff=$(git whatchanged -n 1 --name-only)
+    log=$(git log -n 1)
+
+    # Extract commit IDs from git log.
+    re="Merge: ([abcdef0-9]{7}) ([abcdef0-9]{7})"
+    [[ $log =~ $re ]]
+
+    # Get a list of updated files in this PR.
+    diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
+
+    # If the PR title or merge contains "FORCE" we will build all themes.
+    if ([[ $(echo "$log" | grep "FORCE") ]])
+    then
+      isTravis=0
+      echo "All themes will be build given the PR message explicitly asks for it."
+    fi
   else
     isTravisPr=1
     git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
