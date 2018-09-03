@@ -49,10 +49,8 @@ do
 
   if ([ $setup == 1 ])
   then
-    echo -en "Start - Installing npm for $theme_type_dir themes"
     cd $docrootDir/themes/custom/$theme_type_dir
     npm run install-tools
-    echo -en "End - Installing npm for $theme_type_dir themes"
   else
     echo -en "No need to setup $theme_type_dir frontend. There is no change in any $theme_type_dir themes."
   fi
