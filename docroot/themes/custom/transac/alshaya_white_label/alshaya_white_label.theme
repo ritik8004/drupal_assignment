@@ -55,6 +55,11 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  // Add body class for slug banner.
+  if (isset($variables['page']['banner_top'])) {
+    $variables['attributes']['class'][] = 'slug-banner-processed';
+  }
+
   $current_route = \Drupal::routeMatch();
   // If store finder glossary view.
   if ($current_route->getRouteName() == 'view.stores_finder.page_2') {
@@ -1043,6 +1048,38 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     $timer_value[$paragraph->id()] = $paragraph->get('field_usp_timer')->getString();
     // Passing value so that can be used in slider JS.
     $variables['#attached']['drupalSettings']['usp_text_timer'] = $timer_value;
+  }
+  elseif ($variables['elements']['#paragraph']->getType() == 'slug_banner') {
+
+    /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
+    $advanced_page_slug_banner = $variables['paragraph'];
+
+    // Get the desktop and mobile slug text if available.
+    $desktop_slug_text = $advanced_page_slug_banner->get('field_default_slug_text')->value ?? NULL;
+    $mobile_slug_text = $advanced_page_slug_banner->get('field_mobile_slug_text')->value ?? $desktop_slug_text;
+
+    // Get the desktop and mobile slug background color if available.
+    $desktop_slug_bkg_color = $advanced_page_slug_banner->get('field_default_slug_bkg_color')->value ?? NULL;
+    $mobile_slug_bkg_color = $advanced_page_slug_banner->get('field_mobile_slug_bkg_color')->value ?? $desktop_slug_bkg_color;
+
+    // Get the desktop and mobile slug font color if available.
+    $desktop_slug_font_color = $advanced_page_slug_banner->get('field_default_slug_font_color')->value ?? NULL;
+    $mobile_slug_font_color = $advanced_page_slug_banner->get('field_mobile_slug_font_color')->value ?? $desktop_slug_font_color;
+
+    if (!empty($desktop_slug_text) || !empty($mobile_slug_text)) {
+      $variables['desktop_slug_text']['#markup'] = $desktop_slug_text;
+      $variables['mobile_slug_text']['#markup'] = $mobile_slug_text;
+    }
+
+    if (!empty($desktop_slug_bkg_color) || !empty($mobile_slug_bkg_color)) {
+      $variables['desktop_slug_bkg_color'] = $desktop_slug_bkg_color;
+      $variables['mobile_slug_bkg_color'] = $mobile_slug_bkg_color;
+    }
+
+    if (!empty($desktop_slug_font_color) || !empty($mobile_slug_font_color)) {
+      $variables['desktop_slug_font_color'] = $desktop_slug_font_color;
+      $variables['mobile_slug_font_color'] = $mobile_slug_font_color;
+    }
   }
 }
 
