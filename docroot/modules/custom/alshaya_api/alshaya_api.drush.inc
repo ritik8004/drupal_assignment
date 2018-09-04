@@ -13,9 +13,9 @@ use Drupal\acq_sku\Entity\SKU;
 function alshaya_api_drush_command() {
   $commands = [];
 
-  $commands['alshaya-api-sanity-check'] = [
-    'description' => 'Run sanity check to validate SKU with Magento',
-    'aliases'     => ['aasc'],
+  $commands['alshaya-api-sanity-check-sku-diff'] = [
+    'description' => 'Run sanity check to get a diff of SKUs between Drupal and Magento.',
+    'aliases' => ['aasc'],
     'options' => [
       'types' => 'The comma-separated list of SKUs types to check (simple, configurable)',
       'magento_source' => 'The source to get the SKUs (api, report). Default is merchandising report.',
@@ -30,7 +30,7 @@ function alshaya_api_drush_command() {
 /**
  * Implements drush sanity check command.
  */
-function drush_alshaya_api_sanity_check() {
+function drush_alshaya_api_sanity_check_sku_diff() {
   $types = array_map('trim', explode(',', drush_get_option('types', 'simple,configurable')));
 
   $msource = drush_get_option('magento_source', 'report');
