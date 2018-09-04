@@ -289,6 +289,13 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'vsae_test_v1',
       ],
     ],
+    // Footlocker SA.
+    'flsa' => [
+      'default' => [
+        'magento' => 'mc_qa',
+        'conductor' => 'mcsa_test',
+      ],
+    ],
   ];
 
   // All 01update should match 01live.
