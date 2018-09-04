@@ -6,25 +6,8 @@
  * Contains install, update, uninstall hooks for alshaya_acm_promotion module.
  */
 
-use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Config\FileStorage;
 use Drupal\field\Entity\FieldConfig;
-
-/**
- * Implements hook_update_N().
- *
- * Making promotion coupon field cardinality unlimited.
- */
-function alshaya_acm_promotion_update_8015() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['field.storage.node.field_coupon_code'],
-    'alshaya_acm_promotion',
-    'install',
-    AlshayaConfigManager::MODE_MERGE
-  );
-}
 
 /**
  * Implements hook_update_N().
