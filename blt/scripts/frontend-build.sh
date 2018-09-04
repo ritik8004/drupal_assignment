@@ -51,7 +51,8 @@ then
 
       echo -en "travis_fold:start:FE-$theme_dir-Build\r"
 
-      # Ignore some directories which are not themes or which not be build.
+      # Ignore some directories which are not themes (node_modules) or which
+      # don't need to be build (alshaya_example_subtheme or mothercare themes).
       ignore=0
       for ignoredDir in "${ignoredDirs[@]}"
       do
