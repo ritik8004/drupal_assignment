@@ -5,7 +5,7 @@ set -e
 
 docrootDir="$1"
 
-sTravis=0
+isTravis=0
 isTravisPr=0
 isTravisMerge=0
 diff=""
