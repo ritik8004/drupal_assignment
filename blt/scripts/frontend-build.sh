@@ -34,7 +34,6 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     fi
   else
     isTravisPr=1
-    #git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
     diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
   fi
 fi
@@ -52,7 +51,8 @@ then
 
       echo -en "travis_fold:start:FE-$theme_dir-Build\r"
 
-      # Ignore some directories which are not themes or which not be build.
+      # Ignore some directories which are not themes (node_modules) or which
+      # don't need to be build (alshaya_example_subtheme or mothercare themes).
       ignore=0
       for ignoredDir in "${ignoredDirs[@]}"
       do
@@ -114,7 +114,7 @@ then
               echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied components/dist folder from deploy directory."
             else
               cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
-          echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
+              echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
             fi
           else
             cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
