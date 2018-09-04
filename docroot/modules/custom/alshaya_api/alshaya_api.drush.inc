@@ -306,6 +306,11 @@ function drush_alshaya_api_sanity_check_visibility() {
   }
   fclose($handle);
 
+  if (empty($not_visible_ind_skus)) {
+    drush_print(dt("There is no SKU which are not visible individually as per the merchandising report."));
+    return;
+  }
+
   $database = \Drupal::database();
 
   $query = $database->select('node__field_skus', 'n');
