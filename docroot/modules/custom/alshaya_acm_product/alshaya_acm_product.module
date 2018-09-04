@@ -1112,6 +1112,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
 
+    // Select configurable attrubutes for which only one option is available.
+    // We do this before adding empty option.
+    foreach ($form['ajax']['configurables'] as $key => &$configurable) {
+      if (is_array($configurable) && !empty($configurable['#options'])) {
+        if (count($configurable['#options']) === 1) {
+          $selected[$key] = key($configurable['#options']);
+          $configurable['#options_attributes'][$selected[$key]]['selected'] = 'selected';
+        }
+      }
+    }
+
     $form_state->setValue('configurables', $selected);
     $user_input_configurables['configurables'] = $selected;
     $form_state->setUserInput($user_input_configurables);
@@ -1207,6 +1218,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
             }
           }
+
+          $form['selected_variant_sku'] = [
+            '#type' => 'hidden',
+            '#attributes' => [
+              'class' => [
+                'selected-variant-sku',
+                'selected-variant-sku-' . $sku_identifier,
+              ],
+            ],
+            '#value' => $variation->getSku(),
+          ];
         }
       }
     }
