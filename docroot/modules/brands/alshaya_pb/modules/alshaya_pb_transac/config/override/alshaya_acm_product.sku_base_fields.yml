@@ -67,6 +67,12 @@ fields:
   length:
     label: 'Length'
     configurable: 1
+  frame:
+    label: 'Frame'
+    configurable: 1
+  fabric:
+    label: 'Fabric'
+    configurable: 1
   white_glove_delivery:
     label: 'White Glove Delivery'
     type: 'string'
