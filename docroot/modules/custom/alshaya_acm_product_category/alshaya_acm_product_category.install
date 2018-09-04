@@ -12,6 +12,33 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Create "size guide anchor" field for product category taxonomy.
+ */
+function alshaya_acm_product_category_update_8018() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'field.storage.taxonomy_term.field_size_guide_anchor',
+      'field.field.taxonomy_term.acq_product_category.field_size_guide_anchor',
+    ],
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  $manager->updateConfigs(
+    [
+      'core.entity_form_display.taxonomy_term.acq_product_category.default',
+      'core.entity_view_display.taxonomy_term.acq_product_category.default',
+    ],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating product category vocab highlight paragraph field.
  */
 function alshaya_acm_product_category_update_8017() {
