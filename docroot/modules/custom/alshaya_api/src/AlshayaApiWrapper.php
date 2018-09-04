@@ -361,15 +361,12 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to get all the enabled SKUs from the Merchandising Report.
+   * Function to get the merchandising report from Magento.
    *
-   * @param array|string $types
-   *   The SKUs type to get from Magento (simple, configurable).
-   *
-   * @return array
-   *   An array of SKUs indexed by type.
+   * @return bool|resource
+   *   The file opened or FALSE if not accessible.
    */
-  public function getSkusFromMerchandisingReport($types = ['simple', 'configurable']) {
+  public function getMerchandisingReport() {
     $lang_prefix = explode('_', $this->config->get('magento_lang_prefix'))[0];
 
     $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
@@ -382,7 +379,20 @@ class AlshayaApiWrapper {
       ],
     ];
 
-    $handle = fopen($url, 'r', FALSE, stream_context_create($context));
+    return fopen($url, 'r', FALSE, stream_context_create($context));
+  }
+
+  /**
+   * Function to get all the enabled SKUs from the Merchandising Report.
+   *
+   * @param array|string $types
+   *   The SKUs type to get from Magento (simple, configurable).
+   *
+   * @return array
+   *   An array of SKUs indexed by type.
+   */
+  public function getEnabledSkusFromMerchandisingReport($types = ['simple', 'configurable']) {
+    $handle = $this->getMerchandisingReport();
 
     $mskus = [];
 
