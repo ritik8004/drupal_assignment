@@ -273,6 +273,11 @@ function drush_alshaya_api_sanity_check_visibility() {
 
   $handle = \Drupal::service('alshaya_api.api')->getMerchandisingReport();
 
+  if (!$handle) {
+    drush_print(dt('Impossible to get the merchandising report from Magento.'));
+    return;
+  }
+
   // Because the column position may vary across brands, we are browsing the
   // report's first line to identify the position of each column we need.
   $indexes = [
@@ -306,6 +311,11 @@ function drush_alshaya_api_sanity_check_visibility() {
   }
   fclose($handle);
 
+  if (empty($not_visible_ind_skus)) {
+    drush_print(dt('There is no SKU which are not visible individually as per the merchandising report.'));
+    return;
+  }
+
   $database = \Drupal::database();
 
   $query = $database->select('node__field_skus', 'n');
@@ -314,7 +324,7 @@ function drush_alshaya_api_sanity_check_visibility() {
   $query->condition('n.field_skus_value', $not_visible_ind_skus, 'IN');
   $nids = $query->execute()->fetchAllKeyed(0, 0);
 
-  drush_print(dt("\n@count product nodes are related to SKUs which are not supposed to be visible individually!nids", [
+  drush_print(dt('@count product nodes are related to SKUs which are not supposed to be visible individually!nids', [
     '@count' => count($nids),
     '!nids' => $verbose ? ":\n'" . implode("','", $nids) . "'" : '.',
   ]));

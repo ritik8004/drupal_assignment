@@ -379,7 +379,7 @@ class AlshayaApiWrapper {
       ],
     ];
 
-    return fopen($url, 'r', FALSE, stream_context_create($context));
+    return @fopen($url, 'r', FALSE, stream_context_create($context));
   }
 
   /**
