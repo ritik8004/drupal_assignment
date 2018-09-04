@@ -334,13 +334,6 @@ $conductors = [
     'hmac_id' => '0272644d5be84efb9dd246478367e947',
     'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
   ],
-  // Footlocker SA.
-  'flsa_test' => [
-    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => '57ec2ca3b0d54828a264ab529b7fab39',
-    'hmac_secret' => 'M2I1YjMwZjctYzgzNS00',
-    'api_version' => 'v2',
-  ],
 ];
 
 $conductor_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/conductor.php';

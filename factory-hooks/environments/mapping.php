@@ -292,8 +292,8 @@ function alshaya_get_env_keys($site, $env) {
     // Footlocker SA.
     'flsa' => [
       'default' => [
-        'magento' => 'fl_qa',
-        'conductor' => 'flsa_test',
+        'magento' => 'mc_qa',
+        'conductor' => 'mcsa_test',
       ],
     ],
   ];
