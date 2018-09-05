@@ -27,7 +27,7 @@ $magentos = [
     ],
   ],
   'mc_uat' => [
-    'url' => 'https://staging-api.mothercare.com.kw.c.z3gmkbwmwrl4g.ent.magento.cloud',
+    'url' => 'https://mc-uat.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => '3ewl8lsult7l5mpp1ckv0hw1ftk0u2bc',
       'consumer_secret' => '84avnwtrinkpt2jmda6f61l8vy5cabb1',
