@@ -401,12 +401,20 @@ class SkuManager {
     // product_category_carousel modes.
     if ($view_mode != 'teaser' && $view_mode != 'product_category_carousel') {
       $routes = [
-        'entity.node.canonical',
-        'alshaya_acm_product.get_cart_form',
         'alshaya_acm_product.select_configurable_option',
+        'alshaya_acm_product.add_to_cart_submit',
       ];
       if (in_array($this->currentRoute->getRouteName(), $routes)) {
         $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
+      }
+      elseif ($this->currentRoute->getRouteName() == 'entity.node.canonical') {
+        /* @var \Drupal\node\Entity\Node $node */
+        $node = $this->currentRoute->getParameter('node');
+        // We showing vat info on the PDP page and not on promo page as promo
+        // page is also a node page.
+        if ($node->bundle() == 'acq_product') {
+          $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
+        }
       }
     }
     $price_build = [

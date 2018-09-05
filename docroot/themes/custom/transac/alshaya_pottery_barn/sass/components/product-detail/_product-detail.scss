@@ -278,6 +278,12 @@
         &.form-item-quantity {
           width: 100%;
           margin-bottom: 1.5rem;
+
+          select {
+            &.form-select {
+              width: 100%;
+            }
+          }
         }
       }
     }

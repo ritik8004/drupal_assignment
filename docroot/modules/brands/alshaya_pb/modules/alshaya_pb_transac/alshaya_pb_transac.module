@@ -13,30 +13,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
- * Implements hook_acq_sku_base_field_additions_alter().
- */
-function alshaya_pb_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
-  // Somehow config override or config override-delete are not working during
-  // installation so we modify the fields from CORE here.
-  if (isset($fields['color'])) {
-    $fields['color']['configurable'] = 1;
-    unset($fields['color']['cardinality']);
-    unset($fields['color']['index']);
-    unset($fields['color']['facet']);
-  }
-
-  if (isset($fields['size'])) {
-    $fields['size']['configurable'] = 1;
-    unset($fields['size']['cardinality']);
-    unset($fields['size']['index']);
-    unset($fields['size']['facet']);
-  }
-
-  $transac_fields = \Drupal::config('alshaya_pb_transac.sku_base_fields')->get('fields');
-  $fields = array_merge($fields, $transac_fields);
-}
-
-/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {

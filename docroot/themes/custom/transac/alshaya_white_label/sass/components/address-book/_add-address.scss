@@ -159,3 +159,13 @@
     }
   }
 }
+
+.mobile-input--wrapper {
+  .form-type-tel {
+    label.error {
+      + div + label + div.form-item--error-message {
+        display: none;
+      }
+    }
+  }
+}
