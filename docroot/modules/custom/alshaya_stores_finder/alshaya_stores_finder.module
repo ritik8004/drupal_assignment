@@ -30,7 +30,7 @@ function alshaya_stores_finder_acq_sku_clean_synced_data_alter(&$context) {
  * Implements hook_page_attachments().
  */
 function alshaya_stores_finder_page_attachments(array &$attachments) {
-  // Remove canonical link for search page.
+  // Attach store finder js only on store-finder pages.
   if (strpos(\Drupal::service('path.current')->getPath(), '/store-finder') !== FALSE) {
     $site_country = _alshaya_custom_get_site_level_country_code();
     $marker = \Drupal::configFactory()->get('alshaya_stores_finder.settings');
