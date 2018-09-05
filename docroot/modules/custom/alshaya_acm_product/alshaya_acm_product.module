@@ -1219,6 +1219,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             }
           }
 
+          // If we already have the selected variant based on selections done
+          // automatically or by user, add that in form so JS can use it to do
+          // operations like getting Click n Collect stores for that variant.
           $form['selected_variant_sku'] = [
             '#type' => 'hidden',
             '#attributes' => [
