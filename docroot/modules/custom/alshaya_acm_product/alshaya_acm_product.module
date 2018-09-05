@@ -32,6 +32,7 @@ use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 
@@ -1236,8 +1237,19 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
+    // Fetch product for this sku to get the category.
+    $productNode = alshaya_acm_product_get_display_node($sku_entity->getSku());
+
+    $category = NULL;
+    if ($productNode instanceof NodeInterface) {
+      $field_category = $productNode->get('field_category')->first();
+      if (!empty($field_category)) {
+        $category = $field_category->entity;
+      }
+    }
+
     // We show the size guide link if available as prefix.
-    $size_guide = _alshaya_acm_product_get_size_guide_info();
+    $size_guide = _alshaya_acm_product_get_size_guide_info($category);
     if (isset($size_guide['link'])) {
       $configurable_options = array_keys($form['ajax']['configurables']);
 
@@ -1542,15 +1554,53 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  * @return array
  *   Array containing link html and attributes.
  */
-function _alshaya_acm_product_get_size_guide_info() {
+function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
-    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide');
+    $size_guide_anchor = alshaya_acm_product_get_size_guide_anchor($taxonomy_term);
+    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', $size_guide_anchor);
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
   }
 
   return [];
+}
+
+/**
+ * Get size guide anchor value from given taxonomy term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $taxonomy_term
+ *   The taxonomy term object.
+ * @param bool $load_parents
+ *   (optional) False if already looping through all parents.
+ *
+ * @return array|\Drupal\Core\TypedData\TypedDataInterface|null
+ *   Return array value or null.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+ */
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, $load_parents = TRUE) {
+  $anchor = $taxonomy_term->get('field_size_guide_anchor');
+  if (!empty($anchor) && !empty($anchor->first())) {
+    return array_map(function ($string) {
+      list($key, $value) = explode('=', trim($string));
+      return [trim($key) => trim($value)];
+    }, explode(',', $anchor->first()->getString()));
+  }
+  elseif ($load_parents) {
+    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+    foreach ($parent_terms as $term) {
+      $anchor = alshaya_acm_product_get_size_guide_anchor($term, FALSE);
+      if (!empty($anchor)) {
+        return $anchor;
+      }
+    }
+  }
+  else {
+    return NULL;
+  }
 }
 
 /**
@@ -1670,11 +1720,13 @@ function alshaya_acm_product_language_switch_links_alter(array &$links, $type, U
  *   Link title.
  * @param string $type
  *   Link type.
+ * @param array $size_guide_anchor
+ *   String contains the value to pass with modal link.
  *
  * @return array
  *   Array of link.
  */
-function _alshaya_acm_product_get_modal_link($link_title, $type) {
+function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_guide_anchor = []) {
   $info = [];
   $options = [
     'attributes' => [
@@ -1683,6 +1735,7 @@ function _alshaya_acm_product_get_modal_link($link_title, $type) {
       'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
       'rel' => 'nofollow',
     ],
+    'query' => $size_guide_anchor,
   ];
 
   $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [
