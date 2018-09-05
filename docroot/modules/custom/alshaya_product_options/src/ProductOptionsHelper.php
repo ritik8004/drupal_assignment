@@ -57,6 +57,8 @@ class ProductOptionsHelper {
    */
   protected $logger;
 
+  protected $syncedOptions = [];
+
   /**
    * ProductOptionsHelper constructor.
    *
@@ -115,6 +117,12 @@ class ProductOptionsHelper {
       }
     }
 
+    // We won't do this cleanup for single sync.
+    // All code here is only till the time we get it working through ACM.
+    // And single option sync `drush sync-option` is only for testing.
+    // On prod we do sync of all options only.
+    $this->productOptionsManager->deleteUnavailableOptions($this->syncedOptions);
+
     $this->apiWrapper->resetStoreContext();
     $this->logger->debug('Sync for all product attribute options finished.');
   }
@@ -154,7 +162,6 @@ class ProductOptionsHelper {
     };
 
     $weight = 0;
-    $options_available = [];
     foreach ($attribute['options'] as $option) {
       if (empty($option['value'])) {
         continue;
@@ -173,19 +180,13 @@ class ProductOptionsHelper {
         continue;
       }
 
-      $options_available[$option['value']] = $option['value'];
+      $this->syncedOptions[$attribute_code][$option['value']] = $option['value'];
 
       // Check if we have value for swatch and it is changed, we trigger
       // save only if value changed.
       if (isset($swatches[$option['value']])) {
         $this->swatches->updateAttributeOptionSwatch($term, $swatches[$option['value']]);
       }
-    }
-
-    if ($options_available) {
-      $this->productOptionsManager->deleteUnavailableOptions([
-        $attribute_code => $options_available,
-      ]);
     }
 
     $this->logger->debug('Sync for product attribute options finished of attribute @attribute_code in language @langcode.', [
