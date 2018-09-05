@@ -407,13 +407,15 @@ interface APIWrapperInterface {
    *
    * Primarily for dev / testing when async API traffic is not possible.
    *
+   * @param string $acm_uuid
+   *   The acm_uuid to pass into the Commerce Connector (via the client).
    * @param int $count
    *   Number of products to sync.
    *
    * @return array
    *   Array of products.
    */
-  public function getProducts($count = 100);
+  public function getProducts($acm_uuid, $count = 100);
 
   /**
    * Fetches a token for the requested payment method.
