@@ -207,10 +207,8 @@
       }
 
       label {
-        @include u-visibility(none);
-
         position: absolute;
-        top: -1rem;
+        top: -0.625rem;
         font-size: 0.6875rem;
         padding: 0.3125rem 0;
         padding-#{$right}: 1.25rem;

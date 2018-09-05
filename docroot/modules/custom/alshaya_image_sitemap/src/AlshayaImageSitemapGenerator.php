@@ -159,7 +159,7 @@ class AlshayaImageSitemapGenerator {
           if (isset($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
-              $all_media = $this->skuImagesManager->getAllMedia($sku);
+              $all_media = $this->skuImagesManager->getAllMedia($sku, TRUE);
               if (!empty($all_media['images'])) {
                 // Changes for the image count.
                 $media = $all_media['images'];
