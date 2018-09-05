@@ -56,7 +56,6 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   echo "Executing updb."
   drush8 acsf-tools-ml updb 2> /tmp/temp
   output=$(cat /tmp/temp | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
-  rm /tmp/temp
   echo $output
 
   ## Temporary "manual steps" (part 2) that need to be performed when upgrading to Drupal 8.5.
