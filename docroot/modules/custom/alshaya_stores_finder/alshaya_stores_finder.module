@@ -78,6 +78,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#type' => 'link',
         '#url' => Url::fromRoute('view.stores_finder.page_2'),
         '#attributes' => [
+          'rel' => 'nofollow',
           'class' => [
             'list-view-link',
             'block-store-finder-form__list-view',
@@ -93,6 +94,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#type' => 'link',
         '#url' => Url::fromRoute('alshaya_stores_finder.view_toggle', ['view_type' => 'map_view']),
         '#attributes' => [
+          'rel' => 'nofollow',
           'class' => [
             'use-ajax',
             'map-view-link',
@@ -108,6 +110,7 @@ function alshaya_stores_finder_form_alter(array &$form, FormStateInterface $form
         '#type' => 'link',
         '#url' => Url::fromRoute('view.stores_finder.page_2'),
         '#attributes' => [
+          'rel' => 'nofollow',
           'class' => [
             'back-to-glossary',
             $hidden_class_glossary_back,

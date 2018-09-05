@@ -1656,6 +1656,7 @@ function _alshaya_acm_product_get_modal_link($link_title, $type) {
       'class' => ['size-guide-link', 'use-ajax'],
       'data-dialog-type' => 'dialog',
       'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
+      'rel' => 'nofollow',
     ],
   ];
 
