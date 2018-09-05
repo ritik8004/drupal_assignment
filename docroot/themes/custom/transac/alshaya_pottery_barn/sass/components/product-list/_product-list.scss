@@ -117,6 +117,12 @@
       border-color: $plp_facet_label_border_mobile;
       background: $plp_facet_label_bg_mobile;
 
+      &.is-active {
+        &::after {
+          line-height: 1.23;
+        }
+      }
+
       &::after {
         border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
         color: $primary_dropdown_arrow_icon;
