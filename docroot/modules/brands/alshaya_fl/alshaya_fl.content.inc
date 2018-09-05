@@ -8,7 +8,7 @@
 use Drupal\block_content\Entity\BlockContent;
 
 /**
- * Create default content for footlooker.
+ * Create default content for footlocker.
  */
 function alshaya_fl_create_default_content() {
   // Create copyright block content.
@@ -16,7 +16,7 @@ function alshaya_fl_create_default_content() {
 }
 
 /**
- * Create copyright block content for footlooker.
+ * Create copyright block content for footlocker.
  */
 function alshaya_fl_create_copyright_block() {
   // Create copyright block content.
@@ -24,7 +24,7 @@ function alshaya_fl_create_copyright_block() {
     'info' => 'Copyright',
     'uuid' => '340b823b-e16c-457a-bc03-4a096f8ae171',
     'body' => [
-      'value' => "<p>&copy; Copyright footlooker UK Limited 2017</p>",
+      'value' => "<p>&copy; 2018 Foot Locker. All rights reserved.</p>",
       'format' => 'rich_text',
     ],
     'type' => 'basic',
@@ -37,7 +37,7 @@ function alshaya_fl_create_copyright_block() {
   $ar_block_content = $block_content->addTranslation('ar', [
     'info' => 'Copyright',
     'body' => [
-      'value' => "<p>حقوق النشر محفوظة لشركة مذركير المحدودة المملكة المتحدة 2017 | مذركير المحدودة المملكة المتحدة</p>\r\n<p>(شركة خاصة محدودة)</p>",
+      'value' => "<p>&copy; 2018 فوت لوكر. جميع الحقوق محفوظة</p>",
       'format' => 'rich_text',
     ],
   ]);
