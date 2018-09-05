@@ -145,9 +145,6 @@ class ProductStockController extends ControllerBase {
       $build['max_quantity'] = 0;
     }
 
-    $build['max_quantity'] = 100;
-    $build['html'] = '';
-
     $response = new CacheableJsonResponse($build, 200);
     $response->addCacheableDependency($sku_entity);
     $response->addcacheabledependency(['url.path']);
