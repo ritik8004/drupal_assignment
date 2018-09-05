@@ -352,7 +352,7 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
 function _alshaya_search_get_config($label = FALSE) {
   $position = \Drupal::config('alshaya_search.settings');
   if ($label) {
-    return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue($position->get('sort_options_labels'));
+    return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue((array) $position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
 }
