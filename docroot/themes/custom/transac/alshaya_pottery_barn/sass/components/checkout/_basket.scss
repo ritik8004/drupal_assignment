@@ -35,12 +35,6 @@
       }
 
       tr {
-        background: $basket_tr;
-
-        &:hover {
-          background: $basket_tr;
-        }
-
         td {
           a {
             font-weight: 600;
@@ -153,5 +147,11 @@
         }
       }
     }
+  }
+}
+
+.continue-shopping {
+  @include breakpoint($desktop) {
+    #{$right}: 24.25%;
   }
 }
