@@ -13,9 +13,9 @@ use Drupal\Core\Site\Settings;
 function alshaya_fl_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_fl', 'inc', 'alshaya_fl.content');
 
-  // Enable and set alshaya_footlooker as default theme and set the site logo,
+  // Enable and set alshaya_footlocker as default theme and set the site logo,
   // favicon icon and email logo path.
-  _alshaya_master_initialize_brand_theme('alshaya_footlooker');
+  _alshaya_master_initialize_brand_theme('alshaya_footlocker');
 
   // Translate store finder block's link title.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
@@ -34,7 +34,7 @@ function alshaya_fl_install() {
 
   // Set the default value for back to store list link.
   $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
-  $config->set('store_list_label', 'List of all footlooker Stores');
+  $config->set('store_list_label', 'List of all footlocker Stores');
   $config->save();
 
   // Setting all products buyable to be false by default.
@@ -42,6 +42,6 @@ function alshaya_fl_install() {
     ->set('all_products_buyable', 0)
     ->save();
 
-  // Create default content for footlooker.
+  // Create default content for footlocker.
   alshaya_fl_create_default_content();
 }
