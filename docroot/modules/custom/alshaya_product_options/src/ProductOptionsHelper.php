@@ -154,6 +154,7 @@ class ProductOptionsHelper {
     };
 
     $weight = 0;
+    $options_available = [];
     foreach ($attribute['options'] as $option) {
       if (empty($option['value'])) {
         continue;
@@ -172,11 +173,19 @@ class ProductOptionsHelper {
         continue;
       }
 
+      $options_available[$option['value']] = $option['value'];
+
       // Check if we have value for swatch and it is changed, we trigger
       // save only if value changed.
       if (isset($swatches[$option['value']])) {
         $this->swatches->updateAttributeOptionSwatch($term, $swatches[$option['value']]);
       }
+    }
+
+    if ($options_available) {
+      $this->productOptionsManager->deleteUnavailableOptions([
+        $attribute_code => $options_available,
+      ]);
     }
 
     $this->logger->debug('Sync for product attribute options finished of attribute @attribute_code in language @langcode.', [

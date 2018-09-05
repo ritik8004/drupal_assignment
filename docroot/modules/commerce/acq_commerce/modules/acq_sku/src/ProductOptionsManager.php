@@ -195,6 +195,8 @@ class ProductOptionsManager {
    * Synchronize all product options.
    */
   public function synchronizeProductOptions() {
+    $options_available = [];
+
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($store_id);
       $option_sets = $this->apiWrapper->getProductOptions();
@@ -203,7 +205,42 @@ class ProductOptionsManager {
       foreach ($option_sets as $options) {
         foreach ($options['options'] as $key => $value) {
           $this->createProductOption($langcode, $key, $value, $options['attribute_id'], $options['attribute_code'], $weight++);
+          $options_available[$options['attribute_code']][$options['attribute_id']] = $options['attribute_id'];
         }
+      }
+    }
+
+    try {
+      $this->deleteUnavailableOptions($options_available);
+    }
+    catch (\Exception $e) {
+      $this->logger->error(t('Error occurred while deleting options not available in MDC. Error: @message', [
+        '@message' => $e->getMessage(),
+      ]));
+    }
+  }
+
+  /**
+   * Delete all the options that are no longer available in MDC.
+   *
+   * @param array $options_available
+   *   Multi-dimensional array containing attribute codes as key and option ids
+   *   currently available in values.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function deleteUnavailableOptions(array $options_available) {
+    foreach ($options_available as $attribute_code => $ids) {
+      $query = $this->termStorage->getQuery();
+      $query->condition('field_sku_option_id', $ids, 'NOT IN');
+      $query->condition('field_sku_attribute_code', $attribute_code);
+      $query->condition('vid', self::PRODUCT_OPTIONS_VOCABULARY);
+      $tids = $query->execute();
+
+      if ($tids) {
+        $this->termStorage->resetCache();
+        $entities = $this->termStorage->loadMultiple($tids);
+        $this->termStorage->delete($entities);
       }
     }
   }
