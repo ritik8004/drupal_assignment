@@ -1,0 +1,266 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_fl.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-create all facets and facet blocks.
+ */
+function alshaya_fl_update_8313() {
+  _alshaya_search_api_refactor_sku_base_fields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove 'alshaya_white_label_main_menu' and 'alshaya_white_label_powered'
+ * block from DB.
+ */
+function alshaya_fl_update_8312() {
+  if ($config = \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_main_menu')) {
+    $config->delete();
+  }
+
+  if ($config = \Drupal::configFactory()->getEditable('block.block.alshaya_white_label_powered')) {
+    $config->delete();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Re-order the PLP sort config by re-saving config.
+ */
+function alshaya_fl_update_8311() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product_position.settings')
+    ->setData([
+      'sort_options' => [
+        'nid' => 'nid',
+        'name_1' => 'name_1',
+        'final_price' => 'final_price',
+        'created' => 0,
+      ],
+    ])
+    ->save();
+}
+
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update EN, AR paths for site log and email logo.
+ */
+function alshaya_fl_update_8309() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+
+  // Save english site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('en', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', $current_theme . '.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable($current_theme . '.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Hook update to update brand specific favicon.
+ */
+function alshaya_fl_update_8307() {
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Default site favicon path with default name.
+  $site_favicon = $active_theme->getPath() . '/favicon';
+
+  // Save default site favicon.
+  \Drupal::configFactory()->getEditable('alshaya_footlooker.settings')
+    ->set('favicon', ['path' => $site_favicon . '.ico'])
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Hook update to enable alshaya footlooker theme.
+ */
+function alshaya_fl_update_8306() {
+  \Drupal::service('theme_handler')->install(['alshaya_footlooker'], TRUE);
+  \Drupal::service('theme_handler')->setDefault('alshaya_footlooker');
+
+  // Get current active theme.
+  $active_theme = \Drupal::theme()->getActiveTheme();
+  // Get current theme name.
+  $current_theme = $active_theme->getName();
+  // Default site logo path with default name.
+  $site_logo = $active_theme->getPath() . '/site-logo';
+
+  // Save default site logo.
+  \Drupal::configFactory()->getEditable('alshaya_footlooker.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '.svg',
+      ],
+    ])
+    ->save();
+  // Save arabic site logo.
+  \Drupal::languageManager()
+    ->getLanguageConfigOverride('ar', 'alshaya_footlooker.settings')
+    ->setData([
+      'logo' => [
+        'path' => $site_logo . '-ar.svg',
+      ],
+    ])
+    ->save();
+
+  // Save default logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.en')
+    ->set('email_logo_path', $site_logo . '.png')
+    ->save();
+  // Save arabic logo for email.
+  \Drupal::configFactory()->getEditable('alshaya_master.theme.' . $current_theme . '.ar')
+    ->set('email_logo_path', $site_logo . '-ar.png')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Default config for all_products_buyable.
+ */
+function alshaya_fl_update_8305() {
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Update config file for store configuration.
+ */
+function alshaya_fl_update_8303() {
+  // Set the default value.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all footlooker Stores');
+  $config->save();
+}
+
+/**
+ * Implements hook_update().
+ *
+ * Rename block IDs to generic ones.
+ */
+function alshaya_fl_update_8301() {
+  $blocks = [
+    'alshaya_white_label_branding' => 'branding',
+    'alshaya_white_label_content' => 'content',
+    'alshaya_white_label_account_menu' => 'account_menu',
+    'alshaya_white_label_breadcrumbs' => 'breadcrumbs',
+    'alshaya_white_label_help' => 'help',
+    'alshaya_white_label_local_actions' => 'local_actions',
+    'alshaya_white_label_local_tasks' => 'local_tasks',
+    'alshaya_white_label_messages' => 'messages',
+    'alshaya_white_label_page_title' => 'page_title',
+  ];
+
+  foreach ($blocks as $old_block_id => $new_block_id) {
+    $old_block = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $old_block_id]);
+
+    if (!empty($old_block)) {
+      $old_block = reset($old_block);
+      $new_block = $old_block->createDuplicateBlock($new_block_id);
+      $old_block->delete();
+      $new_block->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_fl_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_fl', 'inc', 'alshaya_fl.content');
+
+  // Enable and set alshaya_footlooker as default theme and set the site logo,
+  // favicon icon and email logo path.
+  _alshaya_master_initialize_brand_theme('alshaya_footlooker');
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Set store id - EN.
+  \Drupal::configFactory()->getEditable('acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['en'])
+    ->save();
+
+  // Translate store id in config.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
+    ->set('store_id', Settings::get('store_id')['ar'])
+    ->save();
+
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all footlooker Stores');
+  $config->save();
+
+  // Setting all products buyable to be false by default.
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
+    ->set('all_products_buyable', 0)
+    ->save();
+
+  // Create default content for footlooker.
+  alshaya_fl_create_default_content();
+}
