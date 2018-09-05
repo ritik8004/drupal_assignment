@@ -13,9 +13,9 @@ use Drupal\acq_sku\Entity\SKU;
 function alshaya_api_drush_command() {
   $commands = [];
 
-  $commands['alshaya-api-sanity-check'] = [
-    'description' => 'Run sanity check to validate SKU with Magento',
-    'aliases'     => ['aasc'],
+  $commands['alshaya-api-sanity-check-sku-diff'] = [
+    'description' => 'Run sanity check to get a diff of SKUs between Drupal and Magento.',
+    'aliases' => ['aascsd'],
     'options' => [
       'types' => 'The comma-separated list of SKUs types to check (simple, configurable)',
       'magento_source' => 'The source to get the SKUs (api, report). Default is merchandising report.',
@@ -24,13 +24,18 @@ function alshaya_api_drush_command() {
     ],
   ];
 
+  $commands['alshaya-api-sanity-check-visibility'] = [
+    'description' => 'Run sanity check to identify products from SKUs which are not supposed to be visible.',
+    'aliases' => ['aascv'],
+  ];
+
   return $commands;
 }
 
 /**
- * Implements drush sanity check command.
+ * Implements drush sanity check sku diff command.
  */
-function drush_alshaya_api_sanity_check() {
+function drush_alshaya_api_sanity_check_sku_diff() {
   $types = array_map('trim', explode(',', drush_get_option('types', 'simple,configurable')));
 
   $msource = drush_get_option('magento_source', 'report');
@@ -47,7 +52,7 @@ function drush_alshaya_api_sanity_check() {
 
   // Retrieve all enabled SKUs from Magento indexed by type.
   if ($msource == 'report') {
-    $mskus = \Drupal::service('alshaya_api.api')->getSkusFromMerchandisingReport($types);
+    $mskus = \Drupal::service('alshaya_api.api')->getEnabledSkusFromMerchandisingReport($types);
   }
   else {
     $mskus = \Drupal::service('alshaya_api.api')->getSkusFromApi($types);
@@ -255,6 +260,96 @@ function drush_alshaya_api_sanity_check() {
             ]));
           }
         }
+      }
+    }
+  }
+}
+
+/**
+ * Implements drush sanity check visibility command.
+ */
+function drush_alshaya_api_sanity_check_visibility() {
+  $verbose = drush_get_option('verbose', FALSE);
+
+  $handle = \Drupal::service('alshaya_api.api')->getMerchandisingReport();
+
+  if (!$handle) {
+    drush_print(dt('Impossible to get the merchandising report from Magento.'));
+    return;
+  }
+
+  // Because the column position may vary across brands, we are browsing the
+  // report's first line to identify the position of each column we need.
+  $indexes = [
+    'partnum' => FALSE,
+    'visibility' => FALSE,
+  ];
+
+  $not_visible_ind_skus = [];
+
+  if ($data = fgetcsv($handle, 1000, ',')) {
+    foreach ($data as $position => $key) {
+      foreach ($indexes as $name => $index) {
+        if (trim(strtolower($key)) == $name) {
+          $indexes[$name] = $position;
+          continue;
+        }
+      }
+    }
+
+    if (in_array(FALSE, $indexes)) {
+      return FALSE;
+    }
+
+    while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+      // This is a weird case where not visible SKU does not have any related
+      // configurable.
+      if (trim(strtolower($data[$indexes['visibility']])) == 'not visible individually') {
+        $not_visible_ind_skus[] = $data[$indexes['partnum']];
+      }
+    }
+  }
+  fclose($handle);
+
+  if (empty($not_visible_ind_skus)) {
+    drush_print(dt('There is no SKU which are not visible individually as per the merchandising report.'));
+    return;
+  }
+
+  $database = \Drupal::database();
+
+  $query = $database->select('node__field_skus', 'n');
+  $query->fields('n', ['entity_id']);
+  $query->condition('n.bundle', 'acq_product');
+  $query->condition('n.field_skus_value', $not_visible_ind_skus, 'IN');
+  $nids = $query->execute()->fetchAllKeyed(0, 0);
+
+  drush_print(dt('@count product nodes are related to SKUs which are not supposed to be visible individually!nids', [
+    '@count' => count($nids),
+    '!nids' => $verbose ? ":\n'" . implode("','", $nids) . "'" : '.',
+  ]));
+
+  if (!empty($nids) && drush_confirm(dt('Do you want to delete the @count product nodes?', [
+    '@count' => count($nids),
+  ]))) {
+    $count = 1;
+    foreach ($nids as $nid) {
+      try {
+        $storage = \Drupal::entityTypeManager()->getStorage('node');
+        if ($node = $storage->load($nid)) {
+          $node->delete();
+
+          if ($count % 100 == 0) {
+            drush_print(dt("Delete @count/@total...", [
+              '@count' => $count,
+              '@total' => count($nids),
+            ]));
+          }
+          $count++;
+        }
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_api')->warning('Impossible to delete the product node @nid', ['@nid' => $nid]);
       }
     }
   }

@@ -68,6 +68,7 @@
                 (!mutation.target.classList.contains('visually-hidden'))) {
               var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
               var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
+              mobileContentWrapper.css('height', 'auto');
               mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
               observer.disconnect();
             }
