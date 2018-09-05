@@ -837,15 +837,7 @@ body.alias--cart {
       }
 
       img {
-        max-width: 8rem;
-
-        @include breakpoint($tablet) {
-          max-width: 7.125rem;
-        }
-
-        @include breakpoint($desktop) {
-          max-width: 8.56rem;
-        }
+        max-width: 100%;
       }
 
       a {

@@ -9697,7 +9697,8 @@
                     }
                 },
                 "patches_applied": {
-                    "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
+                    "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch",
+                    "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

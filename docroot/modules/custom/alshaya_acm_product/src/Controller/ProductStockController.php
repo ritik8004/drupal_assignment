@@ -161,63 +161,6 @@ class ProductStockController extends ControllerBase {
   }
 
   /**
-   * Controller to get for cart form for product/sku.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   Request object.
-   * @param string $view_mode
-   *   View mode of the SKU entity for which the form is being pulled up.
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   Entity related to SKU for which we checking the stock.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Response object returning cart form or out of stock message.
-   */
-  public function getCartForm(Request $request, $view_mode, EntityInterface $entity) {
-    $referer = $request->headers->get('referer');
-
-    // Set params from referer to current request.
-    // For swatches we set color param on PDP url.
-    // This is not forwarded to get cart form request. If we add
-    // it in hook_node_view it is cached and then first value is
-    // passed to all the requests.
-    // We use referer which always have proper value to solve.
-    if ($referer) {
-      $parsed = parse_url($referer);
-      $referrer_query = $parsed['query'] ?? '';
-
-      if ($referrer_query) {
-        $referrer_query_array = [];
-        parse_str($referrer_query, $referrer_query_array);
-
-        foreach ($referrer_query_array as $key => $value) {
-          $request->query->set($key, $value);
-        }
-      }
-    }
-
-    $response = new AjaxResponse();
-
-    $wrapper = 'article[data-skuid="' . $entity->id() . '"]:visible';
-
-    $buyable = alshaya_acm_product_is_buyable($entity);
-
-    if ($buyable) {
-      $stock = alshaya_acm_get_stock_from_sku($entity);
-      $html = $stock ? $this->fetchAddCartForm($entity, $view_mode) : [
-        '#markup' => '<span class="out-of-stock">' . $this->t('out of stock')->render() . '</span>',
-      ];
-      $response->addCommand(new HtmlCommand($wrapper, $html));
-      $this->moduleHandler->alter('alshaya_acm_product_ajax_cart_form', $response, $entity, $stock);
-    }
-    else {
-      $response->addCommand(new HtmlCommand($wrapper, ''));
-    }
-
-    return $response;
-  }
-
-  /**
    * Ajax - page callback when selecting a configurable option.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity

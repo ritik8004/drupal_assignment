@@ -28,20 +28,6 @@ function hook_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, 
 }
 
 /**
- * Alter ajax response on ajax cart render.
- *
- * @param \Drupal\Core\Ajax\AjaxResponse $response
- *   Add response command to react on stock status or for ajax cart render.
- * @param object $entity
- *   The node for which ajax cart is being rendered.
- * @param int $stock
- *   The stock status of current product.
- */
-function hook_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
-
-}
-
-/**
  * Alter response in ajax callback for add to cart form configurable options.
  *
  * @param \Drupal\Core\Ajax\AjaxResponse $response

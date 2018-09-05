@@ -1483,33 +1483,19 @@
         line-height: 1;
 
         @include breakpoint($only-mobile) {
-          &.hide-button {
-            display: block;
-            position: relative !important;
-            z-index: auto !important;
-
-            .ladda-label {
-              html[lang=ar] & {
-                position: static !important;
-              }
-            }
-          }
-        }
-
-        @include breakpoint($only-mobile) {
           .basic-details-wrapper & {
-            @include stickyButton();
-
             border-color: $pdp_basic_wrapper_border;
             float: none;
             width: 100%;
             margin: 0;
-            height: 3.5rem;
+            height: 2.5rem;
+            border: none;
+            box-shadow: none;
 
-            &.hide-button {
-              border: none;
-              height: 2.5rem;
-              box-shadow: none;
+            &.fix-button {
+              @include stickyButton();
+
+              height: 3.5rem;
             }
 
             .ladda-label {
