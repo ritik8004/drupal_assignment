@@ -3,6 +3,3 @@ type: module
 description: 'The dedicated module for Foot Looker brand.'
 package: Alshaya
 core: 8.x
-
-themes:
-  - alshaya_white_label
