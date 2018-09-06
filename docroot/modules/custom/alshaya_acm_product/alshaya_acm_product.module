@@ -18,7 +18,6 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Cache\Cache;
@@ -32,6 +31,7 @@ use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 
@@ -365,8 +365,8 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
     $product_settings = \Drupal::config('alshaya_acm_product.settings');
+    $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
 
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
@@ -384,18 +384,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
 
-      // Make product node dependent on all child-skus in case of configurable
-      // product.
-      if (!empty($child_skus = $skuManager->getChildrenSkuIds($sku_entity))) {
-        // Check for disabled simple SKUs on Magento. Make sure the sku entity
-        // is available on Drupal before adding cache tag.
-        if ($sku_entity_ids = $skuManager->getEntityIdsBySku($child_skus)) {
-          foreach ($sku_entity_ids as $sku_entity_id) {
-            $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity_id;
-          }
-        }
-      }
-
       if ($view_mode == 'search_result') {
         $build['labels'] = [
           '#theme' => 'product_labels',
@@ -411,6 +399,10 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // This is required to allow showing different gallery on page load
         // when user clicked on swatch.
         $build['#cache']['contexts'][] = 'url';
+
+        if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+          $build['#attributes']['class'][] = 'product-out-of-stock';
+        }
 
         // Get cross sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
@@ -458,29 +450,47 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         $check_parent_child = TRUE;
         if ($sku_entity->bundle() == 'configurable') {
-          $selected_value = \Drupal::request()->query->get('selected');
-          if ($selected_value) {
-            $selected_sku = SKU::load($selected_value);
+          $combinations = $skuManager->getConfigurableCombinations($sku_entity);
 
-            if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
-              $sku_for_gallery = $selected_sku;
+          // Show images from parent only on page load if images from child
+          // are to be shown after selection of all children and there are more
+          // then one configuration for this product.
+          if ($display_settings->get('show_child_images_after_selecting') !== 'all'
+            || count($combinations['attribute_sku']) === 1) {
+
+            $selected_value = \Drupal::request()->query->get('selected');
+            $selected_value = $selected_value != $sku_entity->id() ? $selected_value : NULL;
+
+            if ($selected_value) {
+              $selected_sku = SKU::load($selected_value);
+
+              if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
+                $sku_for_gallery = $selected_sku;
+              }
+              else {
+                // Set it to NULL to indicate code below that we didn't change.
+                $selected_value = NULL;
+              }
             }
-            else {
-              // Set it to NULL to indicate code below that we didn't change.
-              $selected_value = NULL;
+
+            // Try to load images first for child we will display as selected.
+            if (empty($selected_value)) {
+              try {
+                $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child, 'fallback');
+
+                // Set the id in $_GET to use later for add to cart form.
+                \Drupal::request()->query->set('selected', $sku_for_gallery->id());
+              }
+              catch (\Exception $e) {
+                $sku_for_gallery = $sku_entity;
+              }
             }
-          }
-
-          // Try to load images first for the child we will display as selected.
-          if (empty($selected_value)) {
-            $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
-
-            // Set the id in $_GET to use later for add to cart form.
-            \Drupal::request()->query->set('selected', $sku_for_gallery->id());
           }
         }
 
-        $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, 'pdp', '', $check_parent_child);
+        if ($sku_for_gallery instanceof SKUInterface) {
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, 'pdp', '', $check_parent_child);
+        }
 
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
@@ -651,39 +661,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $class = $product_settings->get('show_cart_form_in_related') == 0 ? 'no-cart-form' : '';
         $build['show_cart_form']['#markup'] = $class;
 
-        if ($view_mode != 'product_category_carousel'
-          && $product_settings->get('show_cart_form_in_related')
-          && alshaya_acm_product_is_buyable($sku_entity)) {
+        $build['sku_id'] = [
+          '#markup' => $sku_entity->id(),
+        ];
 
-          $build['sku_id'] = [
-            '#markup' => $sku_entity->id(),
-          ];
-
-          $build['mobile_add_to_cart_form'] = [
-            '#type' => 'link',
-            '#title' => '',
-            '#url' => Url::fromRoute(
-              'alshaya_acm_product.get_cart_form',
-              ['view_mode' => 'teaser', 'entity' => $sku_entity->id()],
-              ['query' => ['cacheable' => 1]]
-            ),
-            '#attributes' => [
-              'class' => [
-                'use-ajax',
-                'add-to-cart-form-placeholder-teaser',
-              ],
-            ],
-          ];
-
-          // In push mode check if product is out of stock here itself.
-          if ($stock_mode != 'pull' && !alshaya_acm_get_stock_from_sku($sku_entity)) {
-            $build['stock_placeholder'] = [
-              '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
-            ];
-
-            $build['mobile_add_to_cart_form'] = $build['stock_placeholder'];
-          }
-        }
+        $build['mobile_add_to_cart_form'] = [];
       }
       elseif ($view_mode == 'modal') {
         $context = 'modal';
@@ -1055,7 +1037,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     if (empty($configurables) || count($configurables) != count($configurable_codes)) {
       $form = [
         '#theme' => 'empty_add_to_cart_form',
-        '#text' => t('not available'),
+        '#text' => t('Out of stock'),
       ];
       return;
     }
@@ -1236,8 +1218,19 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       }
     }
 
+    // Fetch product for this sku to get the category.
+    $productNode = alshaya_acm_product_get_display_node($sku_entity->getSku());
+
+    $category = NULL;
+    if ($productNode instanceof NodeInterface) {
+      $field_category = $productNode->get('field_category')->first();
+      if (!empty($field_category)) {
+        $category = $field_category->entity;
+      }
+    }
+
     // We show the size guide link if available as prefix.
-    $size_guide = _alshaya_acm_product_get_size_guide_info();
+    $size_guide = _alshaya_acm_product_get_size_guide_info($category);
     if (isset($size_guide['link'])) {
       $configurable_options = array_keys($form['ajax']['configurables']);
 
@@ -1322,7 +1315,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $build = [];
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, 'pdp', '', FALSE);
 
     if (isset($build['gallery'], $build['gallery']['product_zoom'])) {
@@ -1470,24 +1463,27 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $attribute = reset($configurable_codes);
     $option_id = $selected[$attribute];
 
-    // Pull out & update gallery image based on the selected color & first item.
-    // @TODO: Verify this in HnM and MC.
-    $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
-    $selected_sku = $first_child;
+    $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    if ($display_settings->get('show_child_images_after_selecting') !== 'all') {
+      // Pull out & update gallery image based on the selected first item.
+      $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
+      $selected_sku = $first_child;
 
-    /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-    $skuImagesManager = \Drupal::service('alshaya_acm_product.skumanager');
+      /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+      $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
-    if ($first_child instanceof SKU) {
-      $build['gallery'] = $skuImagesManager->getGallery($first_child, 'pdp');
+      if ($first_child instanceof SKU) {
+        $build['gallery'] = $skuImagesManager->getGallery($first_child, 'pdp');
+
+        if (!empty($build['gallery'])) {
+          $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
+        }
+      }
     }
-
     // If no image found on simple SKUs, use parent SKUs image.
     if (empty($build['gallery']['product_zoom'])) {
       $build['gallery'] = $skuImagesManager->getGallery($sku, 'pdp');
     }
-
-    $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
 
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -1542,15 +1538,53 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
  * @return array
  *   Array containing link html and attributes.
  */
-function _alshaya_acm_product_get_size_guide_info() {
+function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
-    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide');
+    $size_guide_anchor = alshaya_acm_product_get_size_guide_anchor($taxonomy_term);
+    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', $size_guide_anchor);
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
   }
 
   return [];
+}
+
+/**
+ * Get size guide anchor value from given taxonomy term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $taxonomy_term
+ *   The taxonomy term object.
+ * @param bool $load_parents
+ *   (optional) False if already looping through all parents.
+ *
+ * @return array|\Drupal\Core\TypedData\TypedDataInterface|null
+ *   Return array value or null.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+ */
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, $load_parents = TRUE) {
+  $anchor = $taxonomy_term->get('field_size_guide_anchor');
+  if (!empty($anchor) && !empty($anchor->first())) {
+    return array_map(function ($string) {
+      list($key, $value) = explode('=', trim($string));
+      return [trim($key) => trim($value)];
+    }, explode(',', $anchor->first()->getString()));
+  }
+  elseif ($load_parents) {
+    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+    foreach ($parent_terms as $term) {
+      $anchor = alshaya_acm_product_get_size_guide_anchor($term, FALSE);
+      if (!empty($anchor)) {
+        return $anchor;
+      }
+    }
+  }
+  else {
+    return NULL;
+  }
 }
 
 /**
@@ -1631,13 +1665,6 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
 }
 
 /**
- * Implements hook_alshaya_acm_product_ajax_cart_form_alter().
- */
-function alshaya_acm_product_alshaya_acm_product_ajax_cart_form_alter(AjaxResponse &$response, $entity, $stock) {
-  $response->addCommand(new InvokeCommand(NULL, 'markProductStockStatusAction', ['article[data-skuid="' . $entity->id() . '"]:visible', $stock]));
-}
-
-/**
  * Implements hook_language_switch_links_alter().
  */
 function alshaya_acm_product_language_switch_links_alter(array &$links, $type, Url $url) {
@@ -1670,11 +1697,13 @@ function alshaya_acm_product_language_switch_links_alter(array &$links, $type, U
  *   Link title.
  * @param string $type
  *   Link type.
+ * @param array $size_guide_anchor
+ *   String contains the value to pass with modal link.
  *
  * @return array
  *   Array of link.
  */
-function _alshaya_acm_product_get_modal_link($link_title, $type) {
+function _alshaya_acm_product_get_modal_link($link_title, $type, array $size_guide_anchor = []) {
   $info = [];
   $options = [
     'attributes' => [
@@ -1683,6 +1712,7 @@ function _alshaya_acm_product_get_modal_link($link_title, $type) {
       'data-dialog-options' => Json::encode(['height' => 400, 'width' => 700]),
       'rel' => 'nofollow',
     ],
+    'query' => $size_guide_anchor,
   ];
 
   $url = Url::fromRoute('alshaya_acm_product.pdp_modal_links', [

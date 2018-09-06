@@ -150,6 +150,10 @@
   }
 }
 
+#out-of-stock-message {
+  font-weight: normal;
+}
+
 .continue-shopping {
   @include breakpoint($desktop) {
     #{$right}: 24.25%;

@@ -303,6 +303,12 @@ body.path--confirmation.alias--confirmation-print {
       margin-bottom: 3.5rem;
     }
 
+    .price {
+      @include breakpoint($only-tablet) {
+        min-width: 6.625rem;
+      }
+    }
+
     .order-details-row {
       .above-mobile.blend,
       .desktop-only {

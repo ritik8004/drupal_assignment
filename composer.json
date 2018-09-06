@@ -253,7 +253,8 @@
                 "Integration with password_policy" : "https://www.drupal.org/files/issues/2933747-4.patch"
             },
             "drupal/sharethis": {
-                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch"
+                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch",
+                "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
             },
             "drupal/recaptcha": {
                 "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
@@ -278,6 +279,9 @@
             },
             "drupal/restrict_role_login_by_ip" : {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
+            },
+            "drupal/user_registrationpassword": {
+                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
             }
         },
         "installer-paths": {

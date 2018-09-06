@@ -237,7 +237,7 @@ function _alshaya_acm_product_position_sorted_options(array $options) {
 function _alshaya_acm_product_position_get_config($label = FALSE) {
   $position = \Drupal::config('alshaya_acm_product_position.settings');
   if ($label) {
-    return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue($position->get('sort_options_labels'));
+    return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue((array) $position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
 }
