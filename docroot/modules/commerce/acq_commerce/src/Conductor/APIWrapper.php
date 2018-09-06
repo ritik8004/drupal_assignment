@@ -779,11 +779,10 @@ class APIWrapper implements APIWrapperInterface {
   /**
    * {@inheritdoc}
    */
-  public function getProducts($store_id, $count = 100) {
+  public function getProducts($count = 100) {
     $endpoint = $this->apiVersion . "/agent/products";
-    $doReq = function ($client, $opt) use ($endpoint, $store_id, $count) {
+    $doReq = function ($client, $opt) use ($endpoint, $count) {
       $opt['query']['page_size'] = $count;
-      $opt['query']['store_id'] = $store_id;
 
       // To allow hmac sign to be verified properly we need them in asc order.
       ksort($opt['query']);
