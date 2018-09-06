@@ -30,7 +30,7 @@ function drush_alshaya_image_sitemap_create_img_sitemap() {
 
   $batch = [
     'operations' => [],
-    'finished' => 'batch_end_callback',
+    'finished' => '_alshaya_image_sitemap_batch_end_callback',
     'title' => t('Create Image Sitemap'),
     'init_message' => t('Starting sitemap creation.....'),
     'progress_message' => t('Completed @current step of @total.'),
@@ -42,7 +42,7 @@ function drush_alshaya_image_sitemap_create_img_sitemap() {
   $nid_chunks = array_chunk($nids, $batch_size);
   foreach ($nid_chunks as $nid_chunk) {
     $batch['operations'][] = [
-      'batch_start_callback',
+      '_alshaya_image_sitemap_batch_start_callback',
       [$nid_chunk],
     ];
   }
@@ -60,7 +60,7 @@ function drush_alshaya_image_sitemap_create_img_sitemap() {
  * @param array $nids
  *   Array of nids.
  */
-function batch_start_callback(array $nids) {
+function _alshaya_image_sitemap_batch_start_callback(array $nids) {
   \Drupal::service('alshaya_image_sitemap.generator')->process($nids);
 }
 
@@ -74,7 +74,7 @@ function batch_start_callback(array $nids) {
  * @param array $operations
  *   Operation array.
  */
-function batch_end_callback($success, array $results = [], array $operations = []) {
+function _alshaya_image_sitemap_batch_end_callback($success, array $results = [], array $operations = []) {
   if ($success) {
     \Drupal::service('alshaya_image_sitemap.generator')
       ->sitemapGenerateFinished();
