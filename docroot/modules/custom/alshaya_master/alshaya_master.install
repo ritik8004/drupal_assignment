@@ -10,7 +10,7 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update().
  *
- * Update config file for progress loader.
+ * Update configuration file for progress loader.
  */
 function alshaya_master_update_8014() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
