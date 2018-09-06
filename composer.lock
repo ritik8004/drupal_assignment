@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "affe832ebcc00f7e73995fab6a2a0166",
+    "content-hash": "4c92d9aa86f213a6c4446a635bce7a2f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -7227,17 +7227,17 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "1.6.0",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/metatag",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "481ad1cdf4a4faac268fdf6901920c537a15fa53"
+                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "48f1c2a4e93ef1af1eb4b5b6cc6321e951fd1002"
             },
             "require": {
                 "drupal/core": "*",
@@ -7247,7 +7247,6 @@
                 "drupal/devel": "^1.0",
                 "drupal/metatag_dc": "*",
                 "drupal/metatag_open_graph": "*",
-                "drupal/page_manager": "^4.0",
                 "drupal/redirect": "^1.0",
                 "drupal/restui": "^1.0"
             },
@@ -7257,12 +7256,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1534867985",
+                    "version": "8.x-1.5",
+                    "datestamp": "1522344484",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "support for meta tags that allow multiple values": "https://www.drupal.org/files/issues/2018-04-23/2628934-32.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -10378,17 +10380,11 @@
         },
         {
             "name": "drupal/views_block_filter_block",
-            "version": "1.0.0-beta1",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/views_block_filter_block",
-                "reference": "8.x-1.0-beta1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_block_filter_block-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "2c76bfb153cc8fa352c35bd5755fc09d433b89b7"
+                "reference": "29f6523ac806afadc48d9a6ab0c5eb13f6256a1a"
             },
             "require": {
                 "drupal/core": "*"
@@ -10399,8 +10395,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
-                    "datestamp": "1522761486",
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1507815243",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -10409,7 +10405,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -10429,7 +10425,8 @@
             "homepage": "https://www.drupal.org/project/views_block_filter_block",
             "support": {
                 "source": "http://cgit.drupalcode.org/views_block_filter_block"
-            }
+            },
+            "time": "2017-10-13T06:53:22+00:00"
         },
         {
             "name": "drupal/views_field_view",
@@ -10612,28 +10609,20 @@
         },
         {
             "name": "drupal/webform",
-            "version": "5.0.0-rc18",
+            "version": "5.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/webform",
-                "reference": "8.x-5.0-rc18"
+                "reference": "8.x-5.0-rc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.0-rc18.zip",
-                "reference": "8.x-5.0-rc18",
-                "shasum": "f4c1854e8c4c1deaebfd452718d7aa67b01777ac"
+                "url": "https://ftp.drupal.org/files/projects/webform-8.x-5.0-rc1.zip",
+                "reference": "8.x-5.0-rc1",
+                "shasum": "44d0dc4194f9ce3217e4d333a40ed6b88815d83b"
             },
             "require": {
                 "drupal/core": "*"
-            },
-            "require-dev": {
-                "drupal/address": "~1.4",
-                "drupal/devel": "*",
-                "drupal/token": "~1.3",
-                "drupal/webform_node": "*",
-                "drupal/webform_scheduled_email": "*",
-                "drupal/webform_ui": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -10641,20 +10630,12 @@
                     "dev-5.x": "5.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-5.0-rc18",
-                    "datestamp": "1533682980",
+                    "version": "8.x-5.0-rc1",
+                    "datestamp": "1514196484",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
                     }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9"
-                    }
-                },
-                "patches_applied": {
-                    "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -10668,13 +10649,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "Alexander Trotsenko (bucefal91)",
-                    "homepage": "https://www.drupal.org/u/bucefal91",
-                    "role": "Co-maintainer"
-                },
-                {
-                    "name": "bucefal91",
-                    "homepage": "https://www.drupal.org/user/504128"
+                    "name": "Liam Morland",
+                    "homepage": "https://www.drupal.org/user/493050"
                 },
                 {
                     "name": "fenstrat",
@@ -10709,9 +10685,7 @@
             "homepage": "https://drupal.org/project/webform",
             "support": {
                 "source": "http://cgit.drupalcode.org/webform",
-                "issues": "https://www.drupal.org/project/issues/webform?version=8.x",
-                "docs": "https://www.drupal.org/docs/8/modules/webform",
-                "forum": "https://drupal.stackexchange.com/questions/tagged/webform"
+                "issues": "https://drupal.org/project/issues/webform"
             }
         },
         {
@@ -18016,7 +17990,7 @@
         "drupal/r4032login": 20,
         "drupal/datalayer": 10,
         "drupal/search_api_solr_multilingual": 10,
-        "drupal/views_block_filter_block": 10,
+        "drupal/views_block_filter_block": 20,
         "drupal/pcb": 5,
         "drupal/acquia_purge": 10,
         "drupal/role_delegation": 15,
