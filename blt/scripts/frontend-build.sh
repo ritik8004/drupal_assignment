@@ -21,11 +21,15 @@ if [[ $TRAVIS && $TRAVIS == "true" ]]; then
     log=$(git log -n 1)
 
     # Extract commit IDs from git log.
-    re="Merge: ([abcdef0-9]{7}) ([abcdef0-9]{7})"
-    [[ $log =~ $re ]]
+    re="Merge: ([abcdef0-9]{7,8}) ([abcdef0-9]{7,8})"
 
-    # Get a list of updated files in this PR.
-    diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
+    if [[ $log =~ $re ]]; then
+      # Get a list of updated files in this PR.
+      diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
+    else
+      isTravis=0
+      echo "Not able to identify commit IDs to do the diff. Building all the themes."
+    fi
 
     # If the PR title or merge contains "FORCE" we will build all themes.
     if ([[ $(echo "$log" | grep "FORCE") ]])
