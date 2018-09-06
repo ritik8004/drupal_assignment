@@ -13,6 +13,8 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       if ($('.view-id-search .view-empty').length !== 0) {
         $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();
         $('.c-sidebar-first__region .c-facet__blocks__wrapper .c-facet__label').remove();
+        // Hide count item on no result.
+        $('.search-count').hide();
       }
       // Do not allow search form submit on empty search text.
       $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
