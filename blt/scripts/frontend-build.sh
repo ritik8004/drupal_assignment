@@ -10,7 +10,7 @@ isTravisPr=0
 isTravisMerge=0
 diff=""
 
-ignoredDirs=( "alshaya_mothercare" "alshaya_amp_mothercare" "alshaya_example_subtheme" "node_modules" )
+ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
 
 # Determine if we are on Travis.
 if [[ $TRAVIS && $TRAVIS == "true" ]]; then
@@ -65,6 +65,11 @@ then
           ignore=1
         fi
       done
+
+      if [ ! -f $docrootDir/themes/custom/$theme_type_dir/$theme_dir/gulpfile.js ]; then
+        echo -en "$theme_dir seems to not be a valid theme. No gulpfile.js. Not building."
+        ignore=1
+      fi
 
       if ([ $ignore == 1 ])
       then
