@@ -1,0 +1,76 @@
+// Define Fonts
+@font-face {
+  font-family: "Roboto-Bold";
+  src: url("../fonts/roboto-bold.eot");
+  src:
+    url("../fonts/roboto-bold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Roboto-bold.otf") format("opentype"),
+    url("../fonts/roboto-bold.svg") format("svg"),
+    url("../fonts/Roboto-bold.ttf") format("truetype"),
+    url("../fonts/roboto-bold.woff") format("woff"),
+    url("../fonts/roboto-bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("../fonts/roboto-regular.eot");
+  src:
+    url("../fonts/roboto-regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Roboto-Regular.otf") format("opentype"),
+    url("../fonts/roboto-regular.svg") format("svg"),
+    url("../fonts/Roboto-Regular.ttf") format("truetype"),
+    url("../fonts/roboto-regular.woff") format("woff"),
+    url("../fonts/roboto-regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DroidArabicKufi_Bold";
+  src: url("../fonts/DroidArabicKufi-Bold.eot");
+  src:
+    url("../fonts/DroidArabicKufi-Bold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/DroidArabicKufi-Bold.otf") format("opentype"),
+    url("../fonts/DroidArabicKufi-Bold.svg") format("svg"),
+    url("../fonts/DroidArabicKufi-Bold.ttf") format("truetype"),
+    url("../fonts/DroidArabicKufi-Bold.woff") format("woff"),
+    url("../fonts/DroidArabicKufi-Bold.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DroidKufi_Regular";
+  src: url("../fonts/DroidKufi-Regular.eot");
+  src:
+    url("../fonts/DroidKufi-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/DroidKufi-Regular.otf") format("opentype"),
+    url("../fonts/DroidKufi-Regular.svg") format("svg"),
+    url("../fonts/DroidKufi-Regular.ttf") format("truetype"),
+    url("../fonts/DroidKufi-Regular.woff") format("woff"),
+    url("../fonts/DroidKufi-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Font Family
+$fl-bold: 'Roboto-Bold', 'DroidArabicKufi_Bold';
+$fl-bold-nodir: 'Roboto-Bold', 'DroidArabicKufi_Bold';
+
+$fl-thin: 'Roboto-Regular', 'DroidKufi_Regular';
+$fl-thin-nodir: 'Roboto-Regular', 'DroidKufi_Regular';
+
+$fl-arabic-bold: 'DroidArabicKufi_Bold', 'Roboto-Bold';
+$fl-arabic-bold-nodir: 'DroidArabicKufi_Bold', 'Roboto-Bold';
+
+$fl-arabic-thin: 'DroidKufi_Regular', 'Roboto-Regular';
+$fl-arabic-thin-nodir: 'DroidKufi_Regular', 'Roboto-Regular';
+
+$arial: $fl-thin;
+$arial-nodir: $fl-thin-nodir;
+$alshaya-bold: $fl-bold;
+$alshaya-arabic-bold: $fl-arabic-bold;
+$alshaya-thin: $fl-thin;
+$alshaya-arabic-thin: $fl-arabic-thin;
