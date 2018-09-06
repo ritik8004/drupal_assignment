@@ -35,12 +35,6 @@
       }
 
       tr {
-        background: $basket_tr;
-
-        &:hover {
-          background: $basket_tr;
-        }
-
         td {
           a {
             font-weight: 600;
@@ -158,4 +152,10 @@
 
 #out-of-stock-message {
   font-weight: normal;
+}
+
+.continue-shopping {
+  @include breakpoint($desktop) {
+    #{$right}: 24.25%;
+  }
 }
