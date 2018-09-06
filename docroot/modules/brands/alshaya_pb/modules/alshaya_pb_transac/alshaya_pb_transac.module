@@ -27,10 +27,6 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
-        $description['label'] = [
-          '#markup' => t('Product Description'),
-        ];
-
         $description['value'] = [
           '#markup' => $body[0]['value'],
         ];
