@@ -35,13 +35,3 @@ $dir: rtl;
 // Importing browser specific hot fixes.
 @import "../../alshaya_white_label/sass/hotfix";
 // @import "hotfix";
-
-// RTL specific Styles for desktop
-
-@include breakpoint($desktop) {
-  .menu--two__list-item {
-    > .menu-two__link-wrapper::after {
-      transform: rotate(180deg);
-    }
-  }
-}
