@@ -175,6 +175,7 @@ header {
       bottom: -0.3125rem;
       line-height: 1.87;
       #{$left}: -0.1875rem;
+      padding-top: 1px;
 
       @include breakpoint($only-mobile) {
         line-height: 1.7;
