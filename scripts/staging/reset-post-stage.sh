@@ -43,42 +43,10 @@ do
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
   then
-    echo "Execute data commerce clean + initiate commerce sync on $site."
+    echo "Cleaning and syncing commerce data on $site."
     ./../scripts/staging/sub/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
     ./../scripts/staging/sub/clean-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/sync-commerce-data-step-1.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-  fi
-
-done
-
-###### WAIT PRODUCTS.
-echo "$sites" | while IFS= read -r site
-do
-  # Get the installed profile on the given site.
-  profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
-
-  # For transac sites, we check the product sync status.
-  if [ $profile = "alshaya_transac" ]
-  then
-    echo "Check product sync status on $site."
-    ./../scripts/staging/sub/check-product-sync-status.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    echo "Product sync is finished on $site."
-  fi
-
-done
-
-###### FINALIZE SYNC.
-echo "$sites" | while IFS= read -r site
-do
-  # Get the installed profile on the given site.
-  profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
-
-  # For transac sites, we finalize commence data sync and reset some config.
-  if [ $profile = "alshaya_transac" ]
-  then
-    echo "Check product sync status on $site."
-    ./../scripts/staging/sub/sync-commerce-data-step-2.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    echo "Product sync is finished on $site."
+    ./../scripts/staging/sub/sync-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
   fi
 
 done

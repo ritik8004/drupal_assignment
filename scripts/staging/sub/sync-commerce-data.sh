@@ -8,6 +8,18 @@ then
   exit
 fi
 
+echo "Syncing product categories."
+drush8 @$site.$target_env --uri=$uri sync-commerce-cats
+
+echo "Syncing product options."
+drush8 @$site.$target_env --uri=$uri sync-commerce-product-options
+
+echo "Syncing products."
+drush8 @$site.$target_env --uri=$uri acdsp 1000
+
+echo "Syncing stores."
+drush8 @$site.$target_env --uri=$uri sync-stores
+
 echo "Syncing promotions."
 drush8 @$site.$target_env --uri=$uri sync-commerce-promotions
 
