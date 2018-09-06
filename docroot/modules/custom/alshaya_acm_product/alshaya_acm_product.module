@@ -1558,7 +1558,7 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  * @param bool $load_parents
  *   (optional) False if already looping through all parents.
  *
- * @return array|\Drupal\Core\TypedData\TypedDataInterface|null
+ * @return array|\Drupal\Core\TypedData\TypedDataInterface
  *   Return array value or null.
  *
  * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -1583,7 +1583,7 @@ function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term,
     }
   }
   else {
-    return NULL;
+    return [];
   }
 }
 
