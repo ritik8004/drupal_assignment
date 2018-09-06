@@ -164,8 +164,8 @@ class SkuImagesManager {
     $main = [];
     $thumbs = [];
 
-    // Invoke the alter hook to allow all modules to update the element.
-    $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $sku);
+    // Invoke the alter hook to allow all modules to update media related data.
+    $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $media, $sku);
 
     $return['main'] = $main;
     $return['thumbs'] = $thumbs;
