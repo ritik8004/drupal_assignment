@@ -179,7 +179,7 @@ class AlshayaImageSitemapGenerator {
         $product = $node_storage->load($nid);
         $media = [];
         $all_media = [];
-        $sku_for_gallery = [];
+        $sku_for_gallery = NULL;
 
         if ($product instanceof Node) {
           // Get SKU from product.
@@ -189,6 +189,8 @@ class AlshayaImageSitemapGenerator {
             if ($sku instanceof SKU) {
               $combinations = $this->skuManager->getConfigurableCombinations($sku);
               $check_parent_child = TRUE;
+              // This code need to be in sync with PDP. The images that
+              // are displayed on PDP page should be fetched here.
               if ($sku->bundle() == 'configurable') {
                 // Add images from parent only on page load if images from child
                 // are to be shown after selection of all children and there are
