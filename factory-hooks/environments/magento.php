@@ -214,7 +214,7 @@ $magentos = [
     ],
   ],
   'bbw_uat' => [
-    'url' => 'https://staging-bbw.store.alshaya.com.c.bbk3lvknero4c.ent.magento.cloud',
+    'url' => 'https://staging-bbw.store.alshaya.com',
     'magento_secrets' => [
       'consumer_key' => 'nilvx16kpllrdfevec15aer2u1ahusto',
       'consumer_secret' => '4rin9lodbf263w9sdc9hmei8i67p0mhc',
