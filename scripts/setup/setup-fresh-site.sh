@@ -3,6 +3,9 @@
 # This script aims to be executed after a fresh installation of a site on ACSF.
 # It will take care of the branding, creating the default users and
 # synchronize the content with MDC.
+#
+# ./scripts/setup/setup-fresh-site.sh "01dev" "hmkw-dev.factory.alshaya.com" "hm" "kw"
+#
 
 target_env="$1"
 site="$2"
@@ -59,35 +62,7 @@ if [ $profile = "alshaya_transac" ]; then
       drush8 @alshaya.$target_env -l $site sync-stores &>> $HOME/site-install.log
 
       ## Synchronize products.
-      drush8 @alshaya.$target_env -l $site acsp en 5 -y &>> $HOME/site-install.log
-      drush8 @alshaya.$target_env -l $site acsp ar 3 -y &>> $HOME/site-install.log
-
-      sleepd=15
-      max_loop_count=180
-      new_count="0"
-      loop_count=0
-      while :
-      do
-        sleep $sleepd
-        old_count=$new_count
-        new_count=$(drush8 @alshaya.$target_env -l $site sqlq "select count(*) from acq_sku")
-        echo "There is now $new_count SKUs, there was $old_count SKUs $sleepd seconds ago." &>> $HOME/site-install.log
-
-        if [ $old_count != "0" -a $old_count == $new_count ]
-        then
-          echo "SKUs count has not changed since $sleepd seconds. Considering the sync done." &>> $HOME/site-install.log
-          break
-        fi
-
-        if [ $max_loop_count == $loop_count ]
-        then
-          echo "We have been waiting for SKUs to sync too long now. There is probably an issue with sync on $site. Break!" &>> $HOME/site-install.log
-          break
-         fi
-
-        echo "Waiting $sleepd seconds for more SKUs to come." &>> $HOME/site-install.log
-        loop_count=$((loop_count+1))
-      done
+      drush8 @alshaya.$target_env -l $site acdsp 1000 &>> $HOME/site-install.log
 
       ## Synchronize promotions.
       drush8 @alshaya.$target_env -l $site acspm &>> $HOME/site-install.log
