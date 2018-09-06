@@ -180,10 +180,16 @@ function drush_acq_sku_sync_commerce_products($langcode, $page_size) {
  */
 function drush_acq_sku_sync_commerce_products_test($count = 100) {
   drush_print(dt('Synchronizing @count commerce products for testing / dev...', ['@count' => $count]));
+
   $container = \Drupal::getContainer();
-  $products = \Drupal::service('acq_commerce.api')->getProducts($count);
-  $product_sync_resource = ProductSyncResource::create($container, [], NULL, NULL);
-  $product_sync_resource->post($products);
+  $api_wrapper = \Drupal::service('acq_commerce.api');
+  foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
+    $api_wrapper->updateStoreContext($store_id);
+
+    $products = $api_wrapper->getProducts($count);
+    $product_sync_resource = ProductSyncResource::create($container, [], NULL, NULL);
+    $product_sync_resource->post($products);
+  }
 }
 
 /**
