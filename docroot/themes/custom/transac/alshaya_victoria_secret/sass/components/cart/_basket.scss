@@ -116,11 +116,12 @@
           }
 
           img {
-            height: 8.125rem;
+            max-height: 8.125rem;
             padding: 2px;
+            height: auto;
 
             @include breakpoint($only-tablet) {
-              height: 6.3125rem;
+              max-height: 6.3125rem;
             }
           }
         }

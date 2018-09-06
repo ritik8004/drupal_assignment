@@ -64,6 +64,10 @@ install:
   - source $BLT_DIR/scripts/travis/setup_project
   - nvm install 6.10.0
   - nvm use 6.10.0
+  # Setup the themes here so the node_modules folders can be cached.
+  - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
+  # Frontend-setup.sh changed directory, hence we return to the original dir.
+  - cd ${BUILD_DIR}
 
 script:
 # Changing path to disable behat test on Travis.
@@ -87,7 +91,7 @@ deploy:
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
-       branch: pb
+       branch: travis
        php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"

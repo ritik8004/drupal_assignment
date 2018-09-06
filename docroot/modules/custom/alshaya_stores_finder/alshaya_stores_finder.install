@@ -11,6 +11,18 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Save single_x and single_y in default config.
+ */
+function alshaya_stores_finder_update_8107() {
+  // Not having single_x and single_y in default english config also
+  // removes the keys from from arabic config on config save from admin, to
+  // avoid happening that, add single_x and single_y keys in default config.
+  alshaya_stores_finder_update_8104();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding alias pattern for 'store' content type for English and Arabic.
  */
 function alshaya_stores_finder_update_8106() {

@@ -322,9 +322,7 @@
       margin-#{$left}: -0.125rem;
 
       .checkout-progress__step {
-        &:not(:first-child) {
-          line-height: 8.1;
-        }
+        line-height: 8.1;
       }
     }
 

@@ -87,7 +87,7 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
     if (empty($main_image_assets) && empty($hover_image_assets) && ($sku->bundle() === 'configurable')) {
       $main_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp', ['plp']);
       $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
-      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_assets);
+      $hover_image_assets = $sku_assets_manager->getChildSkuAssets($sku, 'plp_hover', ['plp'], TRUE, TRUE, $avoid_assets);
     }
 
     $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;

@@ -24,6 +24,8 @@ $medium-green: #3ab549;
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
 $_black_three: #353132;
+$_light_blue_one: #e0eaf2;
+$_light_blue_two: #e1eaf2;
 $_gray_two: #b3b3b3;
 $_gray_three: #f0f0f0;
 $_gray_four: #e8e8e8;
@@ -49,6 +51,8 @@ $secondary_link: $PB_deep_red;
 // Errors.
 $content_error_msg_bg: $PB_warning_red;
 $content_error_msg_text: $PB_white;
+$basket_header_oos_txt: $PB_white;
+$basket_header_oos_bg: $PB_warning_red;
 
 // Titles.
 $page_title: $_black_two;
@@ -99,11 +103,12 @@ $primary_radiobtn_empty: $PB_black_one;
 // Tables.
 $primary_th_bg: $_gray_three;
 $primary_td_highlight3: $PB_white;
+$primary_tr_hover: $_gray_six;
 
 // Basket table.
 $basket_th_4th_child: $_gray_four;
 $basket_th_text: $PB_black_one;
-$basket_tr: $_gray_six;
+$basket_tr: $_gray_three;
 $primary_td_bg_highlight: $_gray_five;
 $basket_content_link_color: $PB_confirmation_blue;
 $basket_tooltip_not_available: $white;
@@ -443,11 +448,20 @@ $checkout_payment_option_border: $_gray_eleven;
 $checkout_order_print_btn_border: $PB_black_one;
 $checkout_order_print_btn_text: $PB_black_one;
 $checkout_confirm_continue_shopping_border: $PB_black_one;
-$checkout_confirmation_detail_bg: $white-smoke;
+$checkout_confirmation_detail_bg: $white-two;
+$checkout_confirmation_detail_product_count: $white-smoke;
 $checkout_confirmation_detail_primary_text: $_gray_nine;
 $checkout_confirmation_detail_secondary_text: $PB_grey_one;
 $checkout_confirmation_detail_dark_text: $_black_two;
 $checkout_confirmation_detail_light_text: $_gray_fifteen;
+$checkout_confirm_order_summary_row: $_light_blue_one;
+$checkout_confirm_order_summary_row_text: $PB_confirmation_blue;
+$order_detail_order_details_row: $PB_info_blue;
+$order_detail_order_details_row_td_blend: $_light_blue_two;
+$checkout_order_details_label: $PB_confirmation_blue;
+$checkout_confirm_order_item_bg: $white-two;
+$checkout_confirm_order_item_bg_blend: $_gray_thirteen;
+$checkout_confirmation_detail_amount: $PB_black_one;
 
 // Section divider
 $section_divider_border: $_black_two;

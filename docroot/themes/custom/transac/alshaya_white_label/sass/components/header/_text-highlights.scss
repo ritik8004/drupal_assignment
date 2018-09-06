@@ -58,6 +58,10 @@
       padding-#{$left}: 0;
       padding-#{$right}: 2.5rem;
       margin-bottom: 1.25rem;
+
+      > li.menu__list-item {
+        padding-#{$left}: 0;
+      }
     }
 
     .contains-sublink a {

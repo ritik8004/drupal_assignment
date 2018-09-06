@@ -20,6 +20,7 @@ services:
       - '@acq_commerce.api'
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
+      - '@database'
 
   acq_sku.category_repo:
     class: Drupal\acq_sku\ConductorCategoryRepository
