@@ -225,6 +225,14 @@ body {
   }
 }
 
+.branding__menu {
+  &.show-overlay {
+    @include breakpoint($only-tablet) {
+      padding-bottom: 1.125rem;
+    }
+  }
+}
+
 .header--fixed .branding__menu {
   @include breakpoint($desktop) {
     box-shadow: none;
