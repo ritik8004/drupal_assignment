@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3332049c9e07c65bf8a3b7b53dc72204",
+    "content-hash": "4c92d9aa86f213a6c4446a635bce7a2f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10245,6 +10245,9 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
