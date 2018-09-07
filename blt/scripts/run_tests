@@ -16,8 +16,6 @@ else
 
   echo -en "travis_fold:start:Setup\r"
   blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
-  drush sa
-  drush @self --uri=default status
 
   echo -en "travis_fold:end:Setup\r"
   # Disabling Behat tests on CI.
