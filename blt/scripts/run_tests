@@ -10,14 +10,13 @@ else
   yaml-cli update:value blt/project.yml project.local.hostname '127.0.0.1:8888'
   yaml-cli update:value blt/project.yml project.profile.name ${PROFILE}
 
-  echo '${drush.aliases.ci}'
-
   echo -en "travis_fold:start:Validate\r"
   blt validate:all
   echo -en "travis_fold:end:Validate\r"
 
   echo -en "travis_fold:start:Setup\r"
   blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
+  drush @site status
 
   echo -en "travis_fold:end:Setup\r"
   # Disabling Behat tests on CI.
