@@ -17,7 +17,7 @@ else
   echo -en "travis_fold:start:Setup\r"
   blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
   cd ${BUILD_DIR}/docroot
-  drush @alshaya.local --uri=default alshaya-post-drupal-install --brand_module="alshaya_vs" --country_code="ae"
+  drush @self --uri=default alshaya-post-drupal-install --brand_module="alshaya_vs" --country_code="ae"
   cd ${BUILD_DIR}
 
   echo -en "travis_fold:end:Setup\r"
