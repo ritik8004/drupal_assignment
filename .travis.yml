@@ -14,7 +14,9 @@ matrix:
 env:
   matrix:
     - SETUP=install_transac
+      if: type = push
     - SETUP=install_non_transac
+      if: type = cron
   global:
     - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
