@@ -207,6 +207,9 @@ class AlshayaImageSitemapGenerator {
                   }
                 }
               }
+              else {
+                $sku_for_gallery = $sku;
+              }
               if ($sku_for_gallery instanceof SKU) {
                 $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery, $check_parent_child);
               }
