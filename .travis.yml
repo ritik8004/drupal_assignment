@@ -8,19 +8,21 @@ dist: trusty
 php:
   - 7.1
 
-stages:
-  - name: script
-    if: type = push
-
 matrix:
   fast_finish: true
-#  include:
-#    - if: type = push
-#      env:
-#      - SETUP=install_transac
-#      - SETUP=install_non_transac
-#      - SETUP=update_transac
-#      - SETUP=update_non_transac
+  include:
+  - php: 7.1
+    env: SETUP=install_transac
+    if: type = pull_request
+  - php: 7.1
+    env: SETUP=install_non_transac
+    if: type = pull_request
+  - php: 7.1
+    env: SETUP=update_transac
+    if: type = pull_request
+  - php: 7.1
+    env: SETUP=update_non_transac
+    if: type = pull_request
 
 env:
   global:
