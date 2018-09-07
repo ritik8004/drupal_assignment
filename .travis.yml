@@ -10,7 +10,7 @@ php:
 
 matrix:
   fast_finish: true
-  exclude:
+  include:
     - if: type = push
       env:
         - SETUP=install_transac
