@@ -15,7 +15,7 @@ stages:
 matrix:
   fast_finish: true
   include:
-    - stage: is push
+    - if: type = push
       env:
       - SETUP=install_transac
       - SETUP=install_non_transac
