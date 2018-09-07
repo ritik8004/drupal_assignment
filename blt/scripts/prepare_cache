@@ -3,6 +3,6 @@
 for file in $(find /home/travis/.drush/cache/default -name "*.cache")
 do
   cache_file=${file##*/}
-  grep -v '"created":' $cache_file > /home/travis/.drush/cache/default/tmp
+  grep -v '"created":' /home/travis/.drush/cache/default/$cache_file > /home/travis/.drush/cache/default/tmp
   mv /home/travis/.drush/cache/default/tmp /home/travis/.drush/cache/default/$cache_file
 done
