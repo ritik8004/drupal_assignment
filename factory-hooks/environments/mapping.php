@@ -256,7 +256,7 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vskw_test_v1',
+        'conductor' => 'vskw_test',
       ],
     ],
     // Victoria Secret SA.
@@ -271,7 +271,7 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vssa_test_v1',
+        'conductor' => 'vssa_test',
       ],
     ],
     // Victoria Secret AE.
@@ -286,7 +286,7 @@ function alshaya_get_env_keys($site, $env) {
       ],
       'default' => [
         'magento' => 'vs_qa',
-        'conductor' => 'vsae_test_v1',
+        'conductor' => 'vsae_test',
       ],
     ],
   ];
