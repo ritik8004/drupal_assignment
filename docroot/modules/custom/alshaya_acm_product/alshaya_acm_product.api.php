@@ -70,21 +70,5 @@ function hook_acq_sku_cart_media_alter(array &$image, SKUInterface $sku, $contex
 }
 
 /**
- * Alter hook to allow all modules to update the media related data.
- *
- * @param array $main_image
- *   Array to store main image. Used only in HnM right now.
- * @param array $thumb_images
- *   Array to store thumbnail images. Used only in HnM right now.
- * @param array $media
- *   Media Items array from SKU.
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   SKU entity.
- */
-function hook_acq_sku_pdp_gallery_media_alter(array &$main_image, array &$thumb_images, array &$media, SKUInterface $sku) {
-
-}
-
-/**
  * @} End of "addtogroup hooks".
  */

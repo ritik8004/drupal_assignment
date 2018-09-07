@@ -184,7 +184,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
 /**
  * Implements hook_acq_sku_pdp_gallery_media_alter().
  */
-function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(array &$main_image, array &$thumb_images, array &$media, SKUInterface $sku) {
+function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb_images, $sku) {
   if (empty($main_image) && ($sku instanceof SKU)) {
     /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');

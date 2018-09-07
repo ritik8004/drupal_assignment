@@ -154,6 +154,19 @@ class SkuImagesManager {
 
     $media = $sku->getMedia(TRUE, FALSE, $default_label);
 
+    // Remove thumbnails from media items.
+    // @TODO: This is added for CORE-5026 and will be reworked in CORE-5208.
+    foreach ($media ?? [] as $index => $media_item) {
+      if (!isset($media_item['media_type'])) {
+        continue;
+      }
+
+      if (isset($media_item['roles'])
+        && in_array('thumbnail', $media_item['roles'])) {
+        unset($media[$index]);
+      }
+    }
+
     $return = [
       'images' => [],
       'videos' => [],
@@ -164,8 +177,8 @@ class SkuImagesManager {
     $main = [];
     $thumbs = [];
 
-    // Invoke the alter hook to allow all modules to update media related data.
-    $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $media, $sku);
+    // Invoke the alter hook to allow all modules to update the element.
+    $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $sku);
 
     $return['main'] = $main;
     $return['thumbs'] = $thumbs;
