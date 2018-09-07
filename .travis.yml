@@ -13,10 +13,8 @@ matrix:
   include:
   - php: 7.1
     env: SETUP=install_transac
-    if: type = push
   - php: 7.1
     env: SETUP=install_non_transac
-    if: type = push
   - php: 7.1
     env: SETUP=update_transac
     if: type = push
