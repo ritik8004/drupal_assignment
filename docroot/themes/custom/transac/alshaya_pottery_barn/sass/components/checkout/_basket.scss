@@ -43,11 +43,11 @@
 
         td {
           a {
-            font-weight: 600;
-
             &.sku-promotion-link {
               text-decoration: underline;
             }
+
+            font-weight: 600;
           }
 
           &.name {
@@ -77,12 +77,12 @@
               }
 
               @include breakpoint($only-mobile) {
-                #{$left}: 48%;
-                top: 1.8125rem;
-
                 .throbber {
                   background-size: 1.25rem;
                 }
+
+                #{$left}: 48%;
+                top: 1.8125rem;
               }
             }
 
