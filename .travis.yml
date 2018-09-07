@@ -10,15 +10,13 @@ php:
 
 matrix:
   fast_finish: true
-  exclude:
+  include:
     - if: type = push
       env: SETUP=install_transac
-
+    - if: type = pull_request
+      env: SETUP=install_non_transac
 
 env:
-  matrix:
-    - SETUP=install_transac
-    - SETUP=install_non_transac
   global:
     - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
