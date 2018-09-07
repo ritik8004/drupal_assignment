@@ -1,3 +1,4 @@
+if: type = pull_request
 # Note that the example .travis.yml file for child projects lives in /install.
 # Temporarily use legacy infrastructure until Travis resolves MySQL issues with their containerized infrastructure.
 # @see https://github.com/travis-ci/travis-ci/issues/6842
