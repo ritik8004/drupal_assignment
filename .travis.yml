@@ -13,7 +13,7 @@ matrix:
   include:
     - if: type = push
       env: SETUP=install_transac
-    - if: type = pull_request
+    - if: type = push
       env: SETUP=install_non_transac
 
 env:
