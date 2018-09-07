@@ -6,6 +6,26 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating block label display.
+ */
+function alshaya_pb_transac_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'block.block.alshayanewslettersubscription',
+      'block.block.sociallinks',
+      'block.block.alshaya_help'
+    ],
+    'alshaya_pb_transac',
+    'override',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
 
 /**
  * Implements hook_update_N().
