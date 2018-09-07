@@ -58,7 +58,7 @@ Drupal.setFocusToFirstError =  function(errorElement) {
 
     // Scroll to the first element with error.
     $('html, body').animate({
-      scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
+      scrollTop: focusElement.offset().top - parseInt(stickyHeaderHeight)
     });
   }
   catch (e) {
