@@ -15,11 +15,17 @@ matrix:
       env:
         - SETUP=install_transac
         - SETUP=install_non_transac
+    - if: type = push
+      env:
+        - SETUP=update_transac
+        - SETUP=update_non_transac
 
 env:
   matrix:
     - SETUP=install_transac
     - SETUP=install_non_transac
+    - SETUP=update_transac
+    - SETUP=update_non_transac
   global:
     - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
