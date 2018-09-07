@@ -12,6 +12,26 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Add new pdp image slider position field.
+ */
+function alshaya_acm_product_category_update_8019() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'field.storage.taxonomy_term.field_pdp_image_slider_position',
+    'field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create "size guide anchor" field for product category taxonomy.
  */
 function alshaya_acm_product_category_update_8018() {

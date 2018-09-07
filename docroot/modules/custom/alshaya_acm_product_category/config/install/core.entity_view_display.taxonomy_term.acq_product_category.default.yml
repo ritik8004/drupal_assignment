@@ -20,6 +20,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_term_background_color
   - field.field.taxonomy_term.acq_product_category.field_term_font_color
   - taxonomy.vocabulary.acq_product_category
+  - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
   module:
   - metatag
 id: taxonomy_term.acq_product_category.default
@@ -53,3 +54,4 @@ hidden:
   field_term_background_color: true
   field_term_font_color: true
   langcode: true
+  field_pdp_image_slider_position: true

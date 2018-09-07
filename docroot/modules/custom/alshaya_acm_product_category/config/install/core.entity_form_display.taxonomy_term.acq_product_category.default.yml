@@ -21,6 +21,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_term_font_color
   - image.style.thumbnail
   - taxonomy.vocabulary.acq_product_category
+  - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
   module:
   - field_group
   - image
@@ -180,6 +181,14 @@ content:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
+    region: content
+  field_pdp_image_slider_position:
+    weight: 21
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_promo_banner_for_mobile:
     weight: 8
