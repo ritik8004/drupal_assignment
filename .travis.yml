@@ -10,11 +10,11 @@ php:
 
 matrix:
   fast_finish: true
-  include:
+  exclude:
     - if: type = push
-      env: SETUP=install_transac
-    - if: type = push
-      env: SETUP=install_non_transac
+      env:
+        - SETUP=install_transac
+        - SETUP=install_non_transac
 
 env:
   global:
