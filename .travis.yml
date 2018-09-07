@@ -8,25 +8,23 @@ dist: trusty
 php:
   - 7.1
 
-stages:
-  - name: script
-    if: type = push
-
 matrix:
   fast_finish: true
-#  include:
-#    - if: type = push
-#      env:
-#      - SETUP=install_transac
-#      - SETUP=install_non_transac
-#      - SETUP=update_transac
-#      - SETUP=update_non_transac
 
 env:
   global:
     - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
     - BUILD_DIR=$TRAVIS_BUILD_DIR
+
+jobs:
+  include:
+    - stage: install-transac
+      script: ${BUILD_DIR}/blt/scripts/run_tests
+      if: type = push
+    - stage: install-non-transac
+      script: ${BUILD_DIR}/blt/scripts/run_tests
+      if: type = push
 
 jdk:
   - oraclejdk8
