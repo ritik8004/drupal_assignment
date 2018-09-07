@@ -11,8 +11,9 @@ php:
 matrix:
   fast_finish: true
   exclude:
-    - env: SETUP=install_transac
-      if: type = push
+    - if: type = push
+      env: SETUP=install_transac
+
 
 env:
   matrix:
