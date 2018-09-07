@@ -1,4 +1,3 @@
-if: type = pull_request
 # Note that the example .travis.yml file for child projects lives in /install.
 # Temporarily use legacy infrastructure until Travis resolves MySQL issues with their containerized infrastructure.
 # @see https://github.com/travis-ci/travis-ci/issues/6842
@@ -13,11 +12,13 @@ matrix:
   fast_finish: true
 
 env:
-  matrix:
-    - SETUP=install_transac
-    - SETUP=install_non_transac
-    - SETUP=update_transac
-    - SETUP=update_non_transac
+  if [ $TRAVIS_PULL_REQUEST == "false" ]; then
+    matrix:
+      - SETUP=install_transac
+      - SETUP=install_non_transac
+      - SETUP=update_transac
+      - SETUP=update_non_transac
+  fi
   global:
     - COMPOSER_BIN=$TRAVIS_BUILD_DIR/vendor/bin
     - BLT_DIR=$TRAVIS_BUILD_DIR/vendor/acquia/blt
