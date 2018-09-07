@@ -42,14 +42,6 @@
         }
 
         td {
-          a {
-            &.sku-promotion-link {
-              text-decoration: underline;
-            }
-
-            font-weight: 600;
-          }
-
           &.name {
             .image {
               max-width: 8rem;
@@ -104,6 +96,14 @@
                   background-size: 1.25rem;
                 }
               }
+            }
+          }
+
+          a {
+            font-weight: 600;
+
+            &.sku-promotion-link {
+              text-decoration: underline;
             }
           }
         }
