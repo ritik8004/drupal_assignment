@@ -20,6 +20,11 @@
         display: flex;
         align-items: center;
 
+        a,
+        span {
+          height: 2.375rem;
+        }
+
         img {
           height: 2.375rem;
           width: 2.375rem;
