@@ -83,8 +83,7 @@ install:
 script:
 # Changing path to disable behat test on Travis.
 # - source $BLT_DIR/scripts/travis/run_tests
-  - if: type = push
-    source ${BUILD_DIR}/blt/scripts/run_tests
+  - source ${BUILD_DIR}/blt/scripts/run_tests
 
 deploy:
    - provider: script
