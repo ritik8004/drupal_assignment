@@ -520,8 +520,17 @@
         });
       });
 
-      if ($(context).filter('article[data-vmode="modal"]').length === 1) {
-        var product = Drupal.alshaya_seo_gtm_get_product_values($(context).filter('article[data-vmode="modal"]'));
+      if ($(context).filter('article[data-vmode="modal"]').length === 1
+        || $(document).find('article[data-vmode="full"]').length === 1) {
+
+        if ($(document).find('article[data-vmode="full"]').length === 1) {
+          var productContext = $(document).find('article[data-vmode="full"]');
+        }
+        else {
+          var productContext = $(context).filter('article[data-vmode="modal"]');
+        }
+
+        var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
         product.variant = '';
 
         var data = {
