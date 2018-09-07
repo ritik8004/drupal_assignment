@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ev
+set -e
 
 if ([ $TRAVIS_PULL_REQUEST == "false" ])
 then
@@ -10,7 +10,7 @@ else
   yaml-cli update:value blt/project.yml project.local.hostname '127.0.0.1:8888'
   yaml-cli update:value blt/project.yml project.profile.name ${PROFILE}
 
-  echo ${SETUP}
+  echo ${drush.aliases.ci}
 
   echo -en "travis_fold:start:Validate\r"
   blt validate:all
@@ -18,9 +18,8 @@ else
 
   echo -en "travis_fold:start:Setup\r"
   blt setup --define drush.alias='${drush.aliases.ci}' --define environment=ci --no-interaction --yes -v
+
   echo -en "travis_fold:end:Setup\r"
   # Disabling Behat tests on CI.
   #blt tests:all --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
 fi
-
-set +v
