@@ -42,7 +42,7 @@ do
   elif [ $isTravis == 0 ]; then
     echo -en "Setup $theme_type_dir because it is outside Travis."
     setup=1
-  elif [ $(echo "$diff" | grep themes/custom/$theme_type_dir) ]; then
+  elif ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir) ]]); then
     echo -en "Setup $theme_type_dir because there is some change in this folder."
     setup=1
   fi
