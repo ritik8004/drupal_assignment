@@ -9,17 +9,25 @@ matrix:
   fast_finish: true
   include:
   - php: 7.1
-    env: SETUP=install_transac
+    env:
+      - INSTALL_TYPE=install
+      - PROFILE=alshaya_transac
     if: type = pull_request
-  - php: 7.1
-    env: SETUP=install_non_transac
-    if: type = pull_request
-  - php: 7.1
-    env: SETUP=update_transac
-    if: type = pull_request
-  - php: 7.1
-    env: SETUP=update_non_transac
-    if: type = pull_request
+  #- php: 7.1
+  #  env:
+  #  - INSTALL_TYPE=install
+  #  - PROFILE=alshaya_non_transac
+  #  if: type = pull_request
+  #- php: 7.1
+  #  env:
+  #  - INSTALL_TYPE=update
+  #  - PROFILE=alshaya_transac
+  #  if: type = pull_request
+  #- php: 7.1
+  #  env:
+  #  - INSTALL_TYPE=update
+  #  - PROFILE=alshaya_non_transac
+  #  if: type = pull_request
   - php: 7.1
     if: type = push
 
