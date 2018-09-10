@@ -106,6 +106,16 @@
               text-decoration: underline;
             }
           }
+
+          &.price {
+            .price--discount {
+              .discount-prefix {
+                @include breakpoint($tablet) {
+                  margin-right: 1.125rem;
+                }
+              }
+            }
+          }
         }
 
         &:last-child {
