@@ -34,7 +34,7 @@ function alshaya_pb_transac_update_8001() {
  *
  * Added for release 21 Sep 2018.
  */
-function alshaya_pb_transac_update_8001() {
+function alshaya_pb_transac_update_8002() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
