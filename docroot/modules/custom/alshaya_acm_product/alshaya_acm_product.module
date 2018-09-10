@@ -75,8 +75,11 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
       $sku = $object->get('field_skus')->first()->getString();
 
       if (!empty($sku)) {
+        // Reset static cache for SKU::loadFromSku().
+        drupal_static_reset('loadFromSku');
+
         $langcode = $object->language()->getId();
-        $sku_entity = SKU::loadFromSku($sku, $langcode);
+        $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE);
 
         if (empty($sku_entity)) {
           continue;
@@ -305,6 +308,9 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  */
 function _alshaya_acm_product_post_sku_operation(SKU $entity) {
   try {
+    // Reset static cache for SKU::loadFromSku().
+    drupal_static_reset('loadFromSku');
+
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 

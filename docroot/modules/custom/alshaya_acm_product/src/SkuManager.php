@@ -1426,6 +1426,25 @@ class SkuManager {
       }
     }
 
+    // Don't store in cache and return empty array here if no valid
+    // SKU / combination found.
+    if (empty($combinations)) {
+      $stock = alshaya_acm_get_stock_from_sku($sku);
+
+      if ($stock > 0) {
+        // Log message here to allow debugging further.
+        $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $sku->language()->getId(),
+          '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+          '@page' => $this->currentRequest->getRequestUri(),
+
+        ]));
+      }
+
+      return [];
+    }
+
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
     // Sort the values in attribute_sku so we can use it later.
