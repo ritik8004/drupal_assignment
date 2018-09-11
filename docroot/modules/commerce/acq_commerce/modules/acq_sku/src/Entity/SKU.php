@@ -826,4 +826,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+
+    // Reset static cache after saving any SKU.
+    // This is done by default when using entity storage.
+    // We don't use entity storage and use custom code for static cache.
+    drupal_static_reset('loadFromSku');
+  }
+
 }

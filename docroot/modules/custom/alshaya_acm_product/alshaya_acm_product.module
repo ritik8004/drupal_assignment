@@ -76,7 +76,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
       if (!empty($sku)) {
         $langcode = $object->language()->getId();
-        $sku_entity = SKU::loadFromSku($sku, $langcode);
+        $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE);
 
         if (empty($sku_entity)) {
           continue;
