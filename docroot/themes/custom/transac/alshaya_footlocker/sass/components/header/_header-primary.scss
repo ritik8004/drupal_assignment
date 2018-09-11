@@ -26,7 +26,7 @@ header {
   .block-views-exposed-filter-blocksearch-page {
     @include breakpoint($upto-desktop) {
       #{$right}: 6.5625rem;
-      margin-top: -3px;
+      margin-top: -0.1875rem;
       bottom: auto;
       #{$left}: 0;
       width: 100%;
@@ -98,7 +98,7 @@ header .block-views-exposed-filter-blocksearch-page {
 
       &.active {
         .menu--one__link {
-          border-top: 2px solid $mm_l1_link_active_border;
+          border-top: 0.125rem solid $mm_l1_link_active_border;
         }
       }
     }
@@ -107,8 +107,8 @@ header .block-views-exposed-filter-blocksearch-page {
       li.menu--one__list-item {
         &:hover {
           .menu--one__link {
-            border-bottom: 2px solid $mm_l1_link_active_border;
-            border-top: 2px solid $mm_l1_link_hover_border_to_fill_space;
+            border-bottom: 0.125rem solid $mm_l1_link_active_border;
+            border-top: 0.125rem solid $mm_l1_link_hover_border_to_fill_space;
           }
         }
       }
