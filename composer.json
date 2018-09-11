@@ -227,11 +227,6 @@
                 "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch",
                 "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch"
             },
-            "drupal/back_to_top": {
-                "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
-                "Add config translation issue #2865388": "https://www.drupal.org/files/issues/translation-support-2865388-12.patch",
-                "Add alter hook for admin check": "https://www.drupal.org/files/issues/2892237-2.patch"
-            },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
                 "Fix more notices": "patches/mobile_number/2978729-custom.patch",
@@ -267,9 +262,6 @@
             },
             "drupal/media_entity": {
                 "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
-            },
-            "acquia/blt": {
-                "Allow validation of frontend files": "https://patch-diff.githubusercontent.com/raw/acquia/blt/pull/2571.patch"
             },
             "drupal/views_infinite_scroll" : {
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
