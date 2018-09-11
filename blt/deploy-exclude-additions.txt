@@ -8,7 +8,7 @@
 /docroot/themes/custom/*/package.json
 /docroot/themes/custom/*/package-lock.json
 /docroot/themes/custom/transac/alshaya_example_subtheme
-/docroot/themes/README.md
+/docroot/themes/custom/README.md
 /patches
 /phpcs.xml.dist
 /hooks/samples
