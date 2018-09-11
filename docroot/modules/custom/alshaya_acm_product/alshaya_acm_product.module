@@ -936,8 +936,12 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
           $coupon_applied_on_cart = $cart->getCoupon();
           // If promo/free gift coupon is already applied on cart, don't show
           // it with the item on cart page.
-          if ($promo['coupon_code'] == $coupon_applied_on_cart) {
-            unset($free_gift_promos[$key]);
+          if (!empty($promo['coupon_code'])) {
+            foreach ($promo['coupon_code'] as $key => $coupon_val) {
+              if ($coupon_val['value'] == $coupon_applied_on_cart) {
+                unset($free_gift_promos[$key]);
+              }
+            }
           }
         }
 
