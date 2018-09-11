@@ -21,3 +21,4 @@ dependencies:
   - drupal:user
   - drupal:views
   - views_infinite_scroll:views_infinite_scroll
+  - alshaya_advanced_page:alshaya_advanced_page
