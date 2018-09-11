@@ -117,11 +117,13 @@ class SkuAssetManager {
    *   Style string.
    * @param bool $first_image_only
    *   Return only the first image.
+   * @param array $avoid_assets
+   *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE) {
+  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE, array $avoid_assets = []) {
     $sku = $sku instanceof SKU ? $sku->getSku() : $sku;
 
     $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
@@ -142,6 +144,9 @@ class SkuAssetManager {
     foreach ($location_images as $location_image) {
       $asset_urls = [];
       foreach ($assets as $asset) {
+        if (!empty($avoid_assets) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
+          continue;
+        }
         list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
 
         // Prepare query options for image url.
@@ -170,6 +175,7 @@ class SkuAssetManager {
           'url' => Url::fromUri($base_url, $options),
           'sortAssetType' => $asset['sortAssetType'],
           'sortFacingType' => $asset['sortFacingType'],
+          'Data' => $asset['Data'],
         ];
 
         if ($first_image_only) {
@@ -352,22 +358,48 @@ class SkuAssetManager {
       foreach ($grouped_assets as $key => $asset) {
         if (!empty($asset)) {
           $sort_angle_weights = array_flip($sort_angle_weights);
-          uasort($asset, function ($a, $b) use ($sort_angle_weights) {
-            // If weight is set in config, use that else use a default high
-            // weight to push the items to bottom of the list.
-            $weight_a = isset($sort_angle_weights[$a['sortFacingType']]) ? $sort_angle_weights[$a['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
-            $weight_b = isset($sort_angle_weights[$b['sortFacingType']]) ? $sort_angle_weights[$b['sortFacingType']] : self::LP_DEFAULT_WEIGHT;
+          uasort($asset, function ($a, $b) use ($sort_angle_weights, $key) {
+            // Different rules for LookBook and reset.
+            if ($key != 'Lookbook') {
+              // For non-lookbook first check packaging in/out.
+              // packaging=false first.
 
-            // Use number for sorting in case we land onto 2 images with same
-            // asset type & facing type.
-            if (($weight_a - $weight_b) === 0
-              && isset($a['Data'], $a['Data']['Angle'], $a['Data']['Angle']['Number'])
-              && isset($b['Data'], $b['Data']['Angle'], $b['Data']['Angle']['Number'])) {
-              $weight_a = $a['Data']['Angle']['Number'];
-              $weight_b = $b['Data']['Angle']['Number'];
+              // IsMultiPack didn't help, we check Facing now.
+              $a_packaging = isset($a['Data']['Angle']['Packaging'])
+                ? (float) $a['Data']['Angle']['Packaging']
+                : NULL;
+              $b_packaging = isset($b['Data']['Angle']['Packaging'])
+                ? (float) $b['Data']['Angle']['Packaging']
+                : NULL;
+
+              if ($a_packaging != $b_packaging) {
+                return $a_packaging === 'true' ? -1 : 1;
+              }
             }
 
-            return $weight_a - $weight_b < 0 ? -1 : 1;
+            $a_multi_pack = isset($a['Data']['IsMultiPack'])
+              ? $a['Data']['IsMultiPack']
+              : NULL;
+            $b_multi_pack = isset($b['Data']['IsMultiPack'])
+              ? $b['Data']['IsMultiPack']
+              : NULL;
+            if ($a_multi_pack != $b_multi_pack) {
+              return $a_multi_pack === 'true' ? -1 : 1;
+            }
+
+            // IsMultiPack didn't help, we check Facing now.
+            $a_facing = isset($a['Data']['Angle']['Facing'])
+              ? (float) $a['Data']['Angle']['Facing']
+              : 0;
+            $b_facing = isset($b['Data']['Angle']['Facing'])
+              ? (float) $b['Data']['Angle']['Facing']
+              : 0;
+
+            if ($a_facing != $b_facing) {
+              return $a_facing - $b_facing < 0 ? -1 : 1;
+            }
+
+            return 0;
           });
           $grouped_assets[$key] = $asset;
         }
@@ -424,21 +456,23 @@ class SkuAssetManager {
    *   Flag to indicate we need the assets of the first child only.
    * @param bool $first_image_only
    *   Return only the first image.
+   * @param array $avoid_assets
+   *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE) {
+  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
     $assets = [];
 
     if (($first_only) && (!empty($child_skus))) {
-      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only);
+      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only, $avoid_assets);
     }
 
     if (!empty($child_skus)) {
       foreach ($child_skus as $child_sku) {
-        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only);
+        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only, $avoid_assets);
       }
     }
 

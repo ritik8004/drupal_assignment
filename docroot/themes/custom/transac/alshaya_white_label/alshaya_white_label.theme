@@ -79,6 +79,12 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $current_theme = $current_theme == 'alshaya_mothercare' ? 'alshaya_white_label' : $current_theme;
 
   $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
+
+  // If loader is enabled for the site, attach PACE library.
+  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
+  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
+    $variables['#attached']['library'][] = 'alshaya_white_label/pace';
+  }
 }
 
 /**
@@ -506,9 +512,8 @@ function alshaya_white_label_theme_suggestions_page_alter(array &$suggestions, a
   if ($routmatch->getRouteName() == 'entity.node.canonical') {
     $node = Drupal::request()->attributes->get('node');
 
-    // For now we want to update only the department_page template.
-    if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
-      $suggestions[] = 'page__department';
+    if ($node->bundle() == 'advanced_page') {
+      $suggestions[] = 'page__advanced';
     }
     elseif ($node->bundle() == 'acq_product') {
       $suggestions[] = 'page__pdp';

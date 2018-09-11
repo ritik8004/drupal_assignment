@@ -52,13 +52,13 @@ Drupal.behaviors.alshayaFormError = {
 Drupal.setFocusToFirstError =  function(errorElement) {
   try {
     var focusElement = errorElement.find('input.error:first');
-    var stickyHeaderHeight = $('branding__menu').height();
+    var stickyHeaderHeight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() + 40 : 40;
 
     focusElement.focus();
 
     // Scroll to the first element with error.
     $('html, body').animate({
-      scrollTop: focusElement.offset().top + parseInt(stickyHeaderHeight)
+      scrollTop: focusElement.offset().top - parseInt(stickyHeaderHeight)
     });
   }
   catch (e) {

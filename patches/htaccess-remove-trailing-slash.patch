@@ -1,7 +1,7 @@
 diff --git a/.htaccess b/.htaccess
-index 91bb98aeb..dcd85eb13 100644
+index 91bb98a..dcd85eb 100644
 --- a/.htaccess
-+++ b/.htaccess 
++++ b/.htaccess
 @@ -76,6 +76,13 @@ AddEncoding gzip svgz
    RewriteCond %{HTTPS} on
    RewriteRule ^ - [E=protossl:s]

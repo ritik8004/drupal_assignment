@@ -401,12 +401,20 @@ class SkuManager {
     // product_category_carousel modes.
     if ($view_mode != 'teaser' && $view_mode != 'product_category_carousel') {
       $routes = [
-        'entity.node.canonical',
-        'alshaya_acm_product.get_cart_form',
         'alshaya_acm_product.select_configurable_option',
+        'alshaya_acm_product.add_to_cart_submit',
       ];
       if (in_array($this->currentRoute->getRouteName(), $routes)) {
         $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
+      }
+      elseif ($this->currentRoute->getRouteName() == 'entity.node.canonical') {
+        /* @var \Drupal\node\Entity\Node $node */
+        $node = $this->currentRoute->getParameter('node');
+        // We showing vat info on the PDP page and not on promo page as promo
+        // page is also a node page.
+        if ($node->bundle() == 'acq_product') {
+          $vat_text = $this->configFactory->get('alshaya_acm_product.settings')->get('vat_text');
+        }
       }
     }
     $price_build = [
@@ -1381,7 +1389,11 @@ class SkuManager {
     }
 
     if ($cache = $this->getProductCachedData($sku, 'combinations')) {
-      return $cache;
+      // @TODO: Condition to be removed in: CORE-5271.
+      // Do additional check for cached data.
+      if (isset($cache['by_sku'])) {
+        return $cache;
+      }
     }
 
     /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
@@ -1416,6 +1428,27 @@ class SkuManager {
         $combinations['by_sku'][$sku_code][$code] = $value;
         $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
+    }
+
+    // Don't store in cache and return empty array here if no valid
+    // SKU / combination found.
+    if (empty($combinations)) {
+      // Below code is only for debugging issues around cache having empty data
+      // even when there are children in stock.
+      // @TODO: To be removed in: CORE-5271.
+      // Done for: CORE-5200, CORE-5248.
+      $stock = alshaya_acm_get_stock_from_sku($sku);
+      if ($stock > 0) {
+        // Log message here to allow debugging further.
+        $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $sku->language()->getId(),
+          '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+          '@page' => $this->currentRequest->getRequestUri(),
+        ]));
+      }
+
+      return [];
     }
 
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());

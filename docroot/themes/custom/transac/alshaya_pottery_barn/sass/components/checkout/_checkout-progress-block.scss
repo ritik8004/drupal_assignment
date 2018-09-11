@@ -30,6 +30,10 @@
         @include breakpoint($only-tablet) {
           margin-#{$right}: 0.25rem;
           width: 34%;
+
+          &:nth-child(2)::after {
+            margin-#{$left}: 0.25rem;
+          }
         }
 
         &.-current {
@@ -71,6 +75,24 @@
 
         a {
           color: $checkout_progress_complete_text;
+        }
+      }
+    }
+  }
+}
+
+.order-confirmation {
+  #block-acmcheckoutprogress {
+    @include breakpoint($only-tablet) {
+      width: 100%;
+    }
+
+    .checkout-progress__step {
+      @include breakpoint($tablet) {
+        padding: 0.5rem 0 !important;
+
+        &::after {
+          top: 1.313rem !important;
         }
       }
     }

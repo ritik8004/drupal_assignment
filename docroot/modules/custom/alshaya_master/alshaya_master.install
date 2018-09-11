@@ -8,6 +8,21 @@
 use Drupal\Core\Config\FileStorage;
 
 /**
+ * Implements hook_update().
+ *
+ * Update configuration file for progress loader.
+ */
+function alshaya_master_update_8014() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_master.loader_settings'],
+    'alshaya_master',
+    'install'
+  );
+}
+
+/**
  * Implements hook_update_N().
  *
  * Add new string translations.

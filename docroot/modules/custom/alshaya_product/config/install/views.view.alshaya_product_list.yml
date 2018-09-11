@@ -550,7 +550,9 @@ display:
     display_title: Block
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        views_ajax_get:
+          ajax_get: 1
       cache:
         type: search_api_tag
         options: {  }

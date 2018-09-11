@@ -228,11 +228,14 @@ class LocalCommand extends BltTasks {
       ->drush('sql-dump')
       ->alias($info['remote']['alias'])
       ->uri($info['remote']['url'])
-      ->rawArg(' > ' . $info['archive']);
+      ->rawArg(' > ' . $info['archive'] . '.gz --gzip');
 
     $result = $task->run();
 
     if ($result->wasSuccessful()) {
+      $gunzip = $this->taskExec('gunzip -f ' . $info['archive'] . '.gz');
+      $gunzip->run();
+
       $this->say('Download complete.');
       return TRUE;
     }
