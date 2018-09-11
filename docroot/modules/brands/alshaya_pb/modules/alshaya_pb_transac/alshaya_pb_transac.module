@@ -27,10 +27,6 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
-        $description['label'] = [
-          '#markup' => t('Product Description'),
-        ];
-
         $description['value'] = [
           '#markup' => $body[0]['value'],
         ];
@@ -171,41 +167,12 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
     return;
   }
 
-  $title = _alshaya_pb_transac_get_sku_title($sku);
+  /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+  $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+  $title = $productInfoHelper->getTitle($sku, 'basket');
   if ($title) {
     $variables['name'] = $title;
   }
-}
-
-/**
- * Wrapper function to get product title as per PB logic.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU entity.
- *
- * @return string
- *   Product Title.
- */
-function _alshaya_pb_transac_get_sku_title(SKU $sku) {
-  $title = NULL;
-
-  $group_name = $sku->get('attr_group_name')->getString();
-  $sku_name = $sku->get('attr_sku_name')->getString();
-
-  if ($group_name && $sku_name) {
-    $title = t('@group_name/@sku_name', [
-      '@group_name' => $group_name,
-      '@sku_name' => $sku_name,
-    ]);
-  }
-  elseif ($group_name) {
-    $title = $group_name;
-  }
-  elseif ($sku_name) {
-    $title = $sku_name;
-  }
-
-  return $title;
 }
 
 /**
@@ -218,7 +185,9 @@ function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(
 
   // Update title of parent product based on selected sku if available.
   if ($selected_sku instanceof SKUInterface) {
-    $title = _alshaya_pb_transac_get_sku_title($selected_sku);
+    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+    $title = $productInfoHelper->getTitle($sku, 'pdp');
 
     if ($title) {
       // For modal and teaser it will be h2, for main product h1.
@@ -240,7 +209,9 @@ function hook_alshaya_acm_customer_build_order_detail_alter(array &$build, array
       continue;
     }
 
-    $title = _alshaya_pb_transac_get_sku_title($sku);
+    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+    $title = $productInfoHelper->getTitle($sku, 'basket');
     if ($title) {
       $product['name'] = $title;
     }

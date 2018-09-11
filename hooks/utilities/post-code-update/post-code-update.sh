@@ -16,9 +16,21 @@
 site="$1"
 target_env="$2"
 
+slack=0
+
+FILE=$HOME/slack_settings
+if [ -f $FILE ]; then
+  # Load the Slack webhook URL (which is not stored in this repo).
+  . $HOME/slack_settings
+  slack=1
+else
+  echo "$HOME/slack_settings does not exist. Slack won't be notified."
+fi
+
 cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
 
 nothingstr="no update performed"
+errorstr="error"
 
 ## Checking if there any install files has been updated.
 echo "Checking git diff to identify hook_update() change."
@@ -27,6 +39,10 @@ echo -e "\n"
 
 ## In case install file have been updated.
 if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
+  if [ $slack == 1 ]; then
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" We are about to restore database and run updb on $target_env. Sites won't be available during some minutes. This channel will be updated once the process is done.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  fi
+
   ## Restore database dumps before applying database updates.
   echo "Change in install file detected, restoring database before executing updb."
   drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt
@@ -70,16 +86,7 @@ done
 
 echo -e "\n"
 
-## Push the updb logs on Slack channel.
-FILE=$HOME/slack_settings
-
-if [ -f $FILE ]; then
-  # Load the Slack webhook URL (which is not stored in this repo).
-  . $HOME/slack_settings
-
-  # Post updb done notice to Slack channel.
-  errorstr="error"
-
+if [ $slack == 1 ]; then
   if [ -n "$output" ]; then
     if echo $output | grep -q "$errorstr"; then
       echo "Sending error notification to Slack channel."
@@ -94,6 +101,4 @@ if [ -f $FILE ]; then
   else
     echo "No output variable to check."
   fi
-else
-  echo "File $FILE does not exist."
 fi

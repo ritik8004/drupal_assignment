@@ -101,8 +101,9 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
      */
     public function iAmOnABraProduct() {
         $this->visitPath($this->config_url);
-
         $this->iWaitForThePageToLoad();
+        $this->iRemovePromoPanel();
+        $this->iScrollToXYCoordinatesOfPage(200, 400);
         $color = $this->getSession()->getPage()->clickLink($this->config_variant_color);
         $this->iWaitForThePageToLoad();
         $size = $this->getSession()->getPage()->clickLink($this->config_variant_size);
@@ -118,6 +119,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     public function iAmOnABeautyProduct() {
         $this->visitPath($this->config_url);
         $this->iWaitForThePageToLoad();
+        $this->iRemovePromoPanel();
     }
 
     /**
@@ -127,6 +129,7 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
         $this->visitPath($this->config_url);
         $this->iWaitForThePageToLoad();
         $this->iRemovePromoPanel();
+        $this->iScrollToXYCoordinatesOfPage(200, 400);
         $color = $this->getSession()->getPage()->clickLink($this->config_variant_color);
         $this->getSession()
             ->wait(5000, '(typeof(jQuery)=="undefined" || (0 === jQuery.active && 0 === jQuery(\':animated\').length))');
@@ -2036,5 +2039,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
             throw new Exception("Element " . $css_selector . " not found on " . $this->getSession()->getCurrentUrl());
         }
     }
+
 }
 

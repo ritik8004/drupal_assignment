@@ -1,6 +1,5 @@
 .page-404 {
   .not-found {
-    min-height: 0;
     padding-top: 0;
     max-width: 100%;
     margin: 0;
@@ -59,6 +58,11 @@
         font-size: 1rem;
         line-height: 1.25;
 
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+        }
+
         a {
           font-size: 0.875rem;
           border: 2px solid $maintenance_link_border;
@@ -71,6 +75,7 @@
           justify-content: center;
           margin-top: 1rem;
           line-height: 36px;
+          text-shadow: none;
         }
       }
     }

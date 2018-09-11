@@ -7,6 +7,43 @@
 
 use Drupal\search_api\Entity\Index;
 use Drupal\user\Entity\Role;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_search_update_8020() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_search.settings'],
+      'alshaya_search',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    );
+
+  $sort_options_labels_ar = [
+    // Search_api_relevance ASC.
+    ['label' => ''],
+    // Relevance.
+    ['label' => 'التطابق'],
+    // Name A to Z.
+    ['label' => 'الاسم من أ إلى ي'],
+    // Name Z to A.
+    ['label' => 'الاسم من ي إلى أ'],
+    // Price Low to High.
+    ['label' => 'السعر من الأدنى إلى الأعلى'],
+    // Price High to Low.
+    ['label' => 'السعر من الأعلى إلى الأدنى'],
+    // Created ASC.
+    ['label' => ''],
+    // New In.
+    ['label' => 'جديدنا'],
+  ];
+
+  $sort_options_labels = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings');
+  $sort_options_labels->set('sort_options_labels', $sort_options_labels_ar);
+  $sort_options_labels->save();
+}
 
 /**
  * Implements hook_update_N().

@@ -27,6 +27,9 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 
 /**
  * Class SkuManager.
@@ -131,6 +134,13 @@ class SkuManager {
   protected $skuStorage;
 
   /**
+   * SKU storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * Request stock service object.
    *
    * @var null|\Symfony\Component\HttpFoundation\Request
@@ -150,6 +160,13 @@ class SkuManager {
    * @var \Drupal\acq_sku\SKUFieldsManager
    */
   protected $skuFieldsManager;
+
+  /**
+   * PDP Breadcrumb service.
+   *
+   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   */
+  protected $pdpBreadcrumbBuiler;
 
   /**
    * SkuManager constructor.
@@ -184,6 +201,8 @@ class SkuManager {
    *   Cache Backend service for configurable price info.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
+   *   PDP Breadcrumb service.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -199,13 +218,15 @@ class SkuManager {
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
@@ -217,6 +238,7 @@ class SkuManager {
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
   }
 
   /**
@@ -664,7 +686,7 @@ class SkuManager {
               $promos[$promotion_node->id()] = [];
               $promos[$promotion_node->id()]['text'] = $promotion_text;
               $promos[$promotion_node->id()]['description'] = $description;
-              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getString();
+              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
               foreach ($free_gift_skus as $free_gift_sku) {
                 $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
               }
@@ -683,7 +705,7 @@ class SkuManager {
                 $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
               }
 
-              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
                 $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
               }
               break;
@@ -1877,7 +1899,6 @@ class SkuManager {
     if (!$this->isNotRequiredOptionsToBeRemoved()) {
       return;
     }
-
     $availableOptions = [];
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
@@ -1890,10 +1911,63 @@ class SkuManager {
         $availableOptions[$id] = $value;
       }
     }
-
     if ($notRequiredValue && empty($availableOptions)) {
       $configurable['#value'] = $notRequiredValue;
       $configurable['#access'] = FALSE;
+    }
+  }
+
+  /**
+   * Helper function to fetch image slide position on pdp for the sku or node.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity for which image slider position needs to be fetched.
+   *
+   * @return string
+   *   Image slider position type for the sku.
+   */
+  public function getImageSliderPosition(EntityInterface $entity) {
+    $default_pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')
+      ->get('image_slider_position_pdp');
+    if ($entity instanceof SKUInterface) {
+      $entity = alshaya_acm_product_get_display_node($entity);
+    }
+    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+      $inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list);
+      if ($inner_term) {
+        $term = $this->termStorage->load($inner_term);
+        if ($term instanceof TermInterface) {
+          if ($pdp_image_slider_position = $this->getImagePositionFromTerm($term)) {
+            return $pdp_image_slider_position;
+          }
+        }
+        $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          if ($pdp_image_slider_position = $this->getImagePositionFromTerm($taxonomy_parent)) {
+            return $pdp_image_slider_position;
+          }
+        }
+      }
+      $pdp_image_slider_position = (!empty($pdp_image_slider_position)) ? $pdp_image_slider_position : $default_pdp_image_slider_position;
+      return $pdp_image_slider_position;
+    }
+  }
+
+  /**
+   * Helper function to fetch image slide position for term.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Taxonomy term for which image slider position needs to be fetched.
+   *
+   * @return string
+   *   Image slider position type for the term.
+   *
+   * @throws \InvalidArgumentException
+   */
+  protected function getImagePositionFromTerm(TermInterface $term) {
+    if ($term->get('field_pdp_image_slider_position')->first()) {
+      return $term->get('field_pdp_image_slider_position')
+        ->getString();
     }
   }
 

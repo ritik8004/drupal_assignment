@@ -20,6 +20,7 @@ services:
       - '@acq_commerce.api'
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
+      - '@database'
 
   acq_sku.category_repo:
     class: Drupal\acq_sku\ConductorCategoryRepository
@@ -82,3 +83,8 @@ services:
       - { name: cache.bin }
     factory: cache_factory:get
     arguments: [linked_skus]
+
+  acq_sku.product_info_helper:
+    class: Drupal\acq_sku\ProductInfoHelper
+    arguments:
+      - '@event_dispatcher'

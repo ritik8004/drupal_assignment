@@ -326,7 +326,9 @@ class SkuImagesManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          if ($this->hasMediaImages($child)) {
+
+          if (($child instanceof SKUInterface) &&
+            ($this->hasMediaImages($child))) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
@@ -644,7 +646,7 @@ class SkuImagesManager {
           ];
 
           // Add PDP slider position class in template.
-          $pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')->get('image_slider_position_pdp');
+          $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
 
           $gallery['product_zoom'] = [
             '#theme' => 'product_zoom',
@@ -737,7 +739,7 @@ class SkuImagesManager {
     }
 
     // Get file id from config.
-    $default_image_fid = $this->configFactory->get('alshaya_acm_product.settings')->get('product_default_image');
+    $default_image_fid = $this->config->get('alshaya_acm_product.settings')->get('product_default_image');
     if (!empty($default_image_fid)) {
       $file = $this->fileStorage->load($default_image_fid);
       if ($file instanceof File) {

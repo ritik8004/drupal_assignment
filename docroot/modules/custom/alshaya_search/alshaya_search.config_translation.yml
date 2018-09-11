@@ -1,0 +1,5 @@
+alshaya_search.settings:
+  title: 'Search sorting settings'
+  base_route_name: alshaya_search.srp_sort_settings_form
+  names:
+    - alshaya_search.settings

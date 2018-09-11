@@ -269,7 +269,7 @@ class ProductSyncResource extends ResourceBase {
             continue;
           }
 
-          $updated_skus[] = $product['skus'];
+          $updated_skus[] = $product['sku'];
           $updated++;
         }
         else {
@@ -368,6 +368,14 @@ class ProductSyncResource extends ResourceBase {
           $node->field_category = $categories;
 
           $node->setPublished(TRUE);
+
+          // We doing this because when the translation of node is created by
+          // addTranslation(), pathauto alias is not created for the translated
+          // version.
+          // @see https://www.drupal.org/project/pathauto/issues/2995829.
+          if (\Drupal::moduleHandler()->moduleExists('pathauto')) {
+            $node->path->pathauto = 1;
+          }
 
           // Invoke the alter hook to allow all modules to update the node.
           \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
@@ -591,34 +599,51 @@ class ProductSyncResource extends ResourceBase {
     foreach ($additionalFields as $key => $field) {
       $source = isset($field['source']) ? $field['source'] : $key;
 
-      if (!isset($values[$source])) {
-        continue;
-      }
-
-      $value = $values[$source];
+      // Field key.
       $field_key = 'attr_' . $key;
 
       switch ($field['type']) {
         case 'attribute':
-          $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
-          foreach ($value as $index => $val) {
-            if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
-              $sku->{$field_key}->set($index, $term->getName());
-            }
-            else {
-              $sku->{$field_key}->set($index, $val);
+          // If attribute is not coming in response, then unset it.
+          if (!isset($values[$source])) {
+            $sku->{$field_key}->set(0, NULL);
+          }
+          else {
+            $value = $values[$source];
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
+            foreach ($value as $index => $val) {
+              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
+                $sku->{$field_key}->set($index, $term->getName());
+              }
+              else {
+                $sku->{$field_key}->set($index, $val);
+              }
             }
           }
           break;
 
         case 'string':
-          $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-          $sku->{$field_key}->setValue($value);
+          // If attribute is not coming in response, then unset it.
+          if (!isset($values[$source])) {
+            $sku->{$field_key}->setValue(NULL);
+          }
+          else {
+            $value = $values[$source];
+            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+            $sku->{$field_key}->setValue($value);
+          }
           break;
 
         case 'text_long':
-          $value = !empty($field['serialize']) ? serialize($value) : $value;
-          $sku->{$field_key}->setValue($value);
+          // If attribute is not coming in response, then unset it.
+          if (!isset($values[$source])) {
+            $sku->{$field_key}->setValue(NULL);
+          }
+          else {
+            $value = $values[$source];
+            $value = !empty($field['serialize']) ? serialize($value) : $value;
+            $sku->{$field_key}->setValue($value);
+          }
           break;
       }
     }

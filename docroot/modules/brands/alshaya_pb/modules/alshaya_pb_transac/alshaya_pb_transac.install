@@ -11,6 +11,30 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add new configurale fields fabric and frame.
+ *
+ * Added for release 21 Sep 2018.
+ */
+function alshaya_pb_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating block label display.
  */
 function alshaya_pb_transac_update_8001() {

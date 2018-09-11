@@ -307,7 +307,6 @@
                 background: url("../imgs/icons/disabled.png") no-repeat;
                 background-size: 100% 100%;
                 border: 1px solid $pdp_swatch_disabled;
-                height: 2.5rem;
 
                 &:hover {
                   &::after {
@@ -316,9 +315,47 @@
                 }
               }
             }
+
+            &.li-swatch-image {
+              &.disabled {
+                a,
+                span {
+                  height: 2.5rem;
+                }
+              }
+            }
           }
         }
       }
     }
   }
+}
+
+.short-description-wrapper,
+.description-wrapper {
+  .field__content {
+    font-size: 0.75rem;
+
+    .desc-wrapper {
+      .desc-label,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .desc-value,
+  .text {
+    padding-top: 0.9375rem;
+  }
+}
+
+.gradient-holder {
+  background: linear-gradient(to bottom, rgba(235, 235, 235, 0), rgba(235, 235, 235, 0.93) 30%, $gradient-holder 97%);
 }

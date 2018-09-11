@@ -1,0 +1,5 @@
+name: 'Alshaya Foot Locker'
+type: module
+description: 'The dedicated module for Foot Locker brand.'
+package: Alshaya
+core: 8.x
