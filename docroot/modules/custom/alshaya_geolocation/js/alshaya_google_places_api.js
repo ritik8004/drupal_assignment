@@ -51,9 +51,6 @@
     if (!$.isEmptyObject(restriction)) {
       location_autocomplete_instance.setComponentRestrictions(restriction);
     }
-    else if (typeof drupalSettings.alshaya_click_collect !== 'undefined' && typeof drupalSettings.alshaya_click_collect.country !== 'undefined') {
-      location_autocomplete_instance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
-    }
 
     location_autocomplete_instance.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
@@ -80,10 +77,28 @@
     $(field).once('autocomplete-init').on('keyup', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
-        return false;
+        var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
+        geocoder.geocode({
+          'componentRestrictions': {
+            'locality': $(this).val(),
+            'country': restriction.country
+          }
+        }, function (results, status) {
+          if (status == 'OK') {
+            var coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(results[0]);
+            console.log(results[0]);
+            if ($.isEmptyObject(coords) || results[0].address_components.length <= 1) {
+              return false;
+            }
+            else if ($.isArray(callbacks)) {
+              callbacks.forEach(function (callback) {
+                callback.call(null, coords, field, restriction, $trigger);
+              });
+            }
+          }
+        });
       }
-
-      if ($(this).val().length > 0) {
+      else if ($(this).val().length > 0) {
         // Remove the no results found html, we will add again in timeout if no results.
         $('.pac-container').find('.pac-not-found').remove();
 
