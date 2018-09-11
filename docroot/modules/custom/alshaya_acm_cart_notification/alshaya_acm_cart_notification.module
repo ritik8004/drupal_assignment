@@ -15,6 +15,7 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 
 /**
@@ -130,7 +131,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   }
 
   // Unset all status messages as we already show the message in modal.
-  unset($_SESSION['messages']['status']);
+  \Drupal::service('messenger')->deleteByType(MessengerInterface::TYPE_STATUS);
 
   // Get the rendered html to pass into HtmlCommand.
   $html = render($output);
