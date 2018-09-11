@@ -14,6 +14,8 @@ use Drupal\Core\State\StateInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\Entity\Node;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Config\ConfigFactory;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -74,6 +76,20 @@ class AlshayaImageSitemapGenerator {
   protected $skuImagesManager;
 
   /**
+   * SKU Manager service object.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
+   * The Config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactory
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -92,6 +108,10 @@ class AlshayaImageSitemapGenerator {
    *   The language manager service.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager
    *   SKU Images Manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager service object.
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
+   *   Config Factory service.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -100,7 +120,9 @@ class AlshayaImageSitemapGenerator {
                               ModuleHandlerInterface $module_handler,
                               TranslationInterface $string_translation,
                               LanguageManagerInterface $language_manager,
-                              SkuImagesManager $skuImagesManager) {
+                              SkuImagesManager $skuImagesManager,
+                              SkuManager $sku_manager,
+                              ConfigFactory $configFactory) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -109,6 +131,8 @@ class AlshayaImageSitemapGenerator {
     $this->stringTranslation = $string_translation;
     $this->languageManager = $language_manager;
     $this->skuImagesManager = $skuImagesManager;
+    $this->skuManager = $sku_manager;
+    $this->configFactory = $configFactory;
   }
 
   /**
@@ -145,13 +169,17 @@ class AlshayaImageSitemapGenerator {
     $total_urls = $this->state->get('alshaya_image_sitemap.url_count');
     $languages = $this->languageManager->getLanguages();
     $country_code = _alshaya_custom_get_site_level_country_code();
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    $display_settings = $this->configFactory->get('alshaya_acm_product.display_settings');
 
     if (count($nids) > 0) {
       foreach ($nids as $nid) {
         // Fetch list of media files for each nid.
         // Load product from id.
-        $node_storage = $this->entityTypeManager->getStorage('node');
         $product = $node_storage->load($nid);
+        $media = [];
+        $all_media = [];
+        $sku_for_gallery = NULL;
 
         if ($product instanceof Node) {
           // Get SKU from product.
@@ -159,7 +187,33 @@ class AlshayaImageSitemapGenerator {
           if (isset($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
-              $all_media = $this->skuImagesManager->getAllMedia($sku);
+              $combinations = $this->skuManager->getConfigurableCombinations($sku);
+              $check_parent_child = TRUE;
+              // This code need to be in sync with PDP. The images that
+              // are displayed on PDP page should be fetched here.
+              if ($sku->bundle() == 'configurable') {
+                // Add images from parent only on page load if images from child
+                // are to be shown after selection of all children and there are
+                // more than one configuration for this product.
+                if ($display_settings->get('show_child_images_after_selecting') !== 'all'
+                  || count($combinations['attribute_sku']) === 1) {
+
+                  // Try to load images first for child to be displayed.
+                  try {
+                    $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child, 'fallback');
+                  }
+                  catch (\Exception $e) {
+                    $sku_for_gallery = $sku;
+                  }
+                }
+              }
+              else {
+                $sku_for_gallery = $sku;
+              }
+              if ($sku_for_gallery instanceof SKU) {
+                $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery, $check_parent_child);
+              }
+
               if (!empty($all_media['images'])) {
                 // Changes for the image count.
                 $media = $all_media['images'];

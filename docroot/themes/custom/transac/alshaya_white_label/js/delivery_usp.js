@@ -14,6 +14,7 @@
       $.each(timer_values, function (key, value) {
         var delivery_options = {
           autoplay: true,
+          touchThreshold: 1000,
           autoplaySpeed: value * 1000
         };
         if ($(window).width() < 1025) {

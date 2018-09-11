@@ -24,6 +24,8 @@ $medium-green: #3ab549;
 // Colors for which variables are not present in Zeplin but colors are used.
 $_black_two: #333;
 $_black_three: #353132;
+$_light_blue_one: #e0eaf2;
+$_light_blue_two: #e1eaf2;
 $_gray_two: #b3b3b3;
 $_gray_three: #f0f0f0;
 $_gray_four: #e8e8e8;
@@ -49,6 +51,8 @@ $secondary_link: $PB_deep_red;
 // Errors.
 $content_error_msg_bg: $PB_warning_red;
 $content_error_msg_text: $PB_white;
+$basket_header_oos_txt: $PB_white;
+$basket_header_oos_bg: $PB_warning_red;
 
 // Titles.
 $page_title: $_black_two;
@@ -360,6 +364,9 @@ $checkout_header_border-bottom: $PB_black_one;
 $checkout_header_border-top: $white;
 $checkout_delivery_shipping_row_border: $_gray_eleven;
 $checkout_login_btn_bg: $_black_two;
+$checkout_transaction_type_color: $_black_two;
+$checkout_method_choice_tab_title_active: $_black_two;
+$checkout_tab_active_border_mobile: $PB_deep_red;
 
 // Checkout home delivery.
 $checkout_default_address_border: $_black_two;
@@ -440,11 +447,20 @@ $checkout_payment_option_border: $_gray_eleven;
 $checkout_order_print_btn_border: $PB_black_one;
 $checkout_order_print_btn_text: $PB_black_one;
 $checkout_confirm_continue_shopping_border: $PB_black_one;
-$checkout_confirmation_detail_bg: $white-smoke;
+$checkout_confirmation_detail_bg: $white-two;
+$checkout_confirmation_detail_product_count: $white-smoke;
 $checkout_confirmation_detail_primary_text: $_gray_nine;
 $checkout_confirmation_detail_secondary_text: $PB_grey_one;
 $checkout_confirmation_detail_dark_text: $_black_two;
 $checkout_confirmation_detail_light_text: $_gray_fifteen;
+$checkout_confirm_order_summary_row: $_light_blue_one;
+$checkout_confirm_order_summary_row_text: $PB_confirmation_blue;
+$order_detail_order_details_row: $PB_info_blue;
+$order_detail_order_details_row_td_blend: $_light_blue_two;
+$checkout_order_details_label: $PB_confirmation_blue;
+$checkout_confirm_order_item_bg: $white-two;
+$checkout_confirm_order_item_bg_blend: $_gray_thirteen;
+$checkout_confirmation_detail_amount: $PB_black_one;
 
 // Section divider
 $section_divider_border: $_black_two;
@@ -452,7 +468,6 @@ $section_divider_text: $_black_two;
 $section_divider_bg: $white-two;
 
 // 404 & Maintenance Pages.
-// 404
 $maintenance_body_bg: $white-two;
 $maintenance_link: $white-two;
 $maintenance_link_border: $white-two;
@@ -469,6 +484,7 @@ $promo_panel_label: $white-two;
 $promo_panel_mobile_label: $white-two;
 $promo_panel_label_bg: rgba(0, 0, 0, 0.9);
 $promo_panel_label_bg_active: $PB_black_one;
+
 // Back to top.
 $btt_text: $PB_deep_red;
 
@@ -486,3 +502,11 @@ $order_print_order_details_row_light: $_gray_two;
 $order_print_order_details_total_label: $_gray_ten;
 $order_print_order_details_item_row_details: $PB_grey_two;
 $order_print_delivery_details_price_label: $_black_two;
+
+// Pace progress color
+$progress_loader: $PB_deep_red;
+
+// Department page
+$department_category_list_hover: $PB_deep_red;
+$department_category_accordion_title: $_black_two;
+$department_category_accordion_title_arrow: $PB_deep_red;

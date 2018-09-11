@@ -26,7 +26,7 @@ function alshaya_acm_update_dependencies() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Enable consumers module and configure client.
  */
@@ -64,7 +64,7 @@ function alshaya_acm_update_8009() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Add new role for sync user.
  */
@@ -84,7 +84,7 @@ function alshaya_acm_update_8008() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Delete all nodes of 'page' type bundle.
  */
@@ -109,7 +109,7 @@ function alshaya_acm_update_8005() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Set new config for interval in alshaya_acm.settings.
  */
@@ -118,7 +118,7 @@ function alshaya_acm_update_8004() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Update image styles.
  */
@@ -139,7 +139,7 @@ function alshaya_acm_update_8003() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Update debug config.
  */
@@ -150,7 +150,7 @@ function alshaya_acm_update_8002() {
 }
 
 /**
- * Implements hook_update_N().
+ * Implements hook_update().
  *
  * Install new config - alshaya_acm.settings.
  */

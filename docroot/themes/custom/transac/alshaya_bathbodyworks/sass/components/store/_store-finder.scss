@@ -196,7 +196,7 @@
 
     @include breakpoint($desktop) {
       padding-#{$left}: 1.5rem;
-      width: 15%;
+      width: 15% !important;
 
       &::before {
         display: none;
@@ -295,12 +295,14 @@
         width: 46%;
       }
 
-      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
-      .form-item-geolocation-geocoder-google-places-api {
-        width: 60% !important;
+      .block-store-finder-form__input__wrapper {
+        .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+        .form-item-geolocation-geocoder-google-places-api {
+          width: 60% !important;
 
-        html[lang=ar] & {
-          width: 62% !important;
+          html[lang=ar] & {
+            width: 62% !important;
+          }
         }
       }
     }
@@ -330,7 +332,7 @@
 
       @include breakpoint($desktop) {
         html[lang=ar] & {
-          width: 26.6%;
+          width: 26.6% !important;
           padding-top: 0.875rem;
           border-right: none;
         }
@@ -447,15 +449,17 @@
   }
 
   .store-finder--wrapper {
-    .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
-    .form-item-geolocation-geocoder-google-places-api {
-      @include breakpoint($desktop) {
-        width: 95%;
-        padding-#{$right}: 0;
-        padding-#{$left}: 0;
+    .block-store-finder-form__input__wrapper {
+      .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
+      .form-item-geolocation-geocoder-google-places-api {
+        @include breakpoint($desktop) {
+          width: 95% !important;
+          padding-#{$right}: 0;
+          padding-#{$left}: 0;
 
-        html[lang=ar] & {
-          width: 72%;
+          html[lang=ar] & {
+            width: 72% !important;
+          }
         }
       }
     }
@@ -510,15 +514,21 @@
 .nodetype--store .input--wrapper {
   position: absolute;
   #{$left}: 19%;
-  width: 57%;
+
+  @include breakpoint($desktop) {
+    width: 57% !important;
+  }
 
   html[lang=ar] & {
     right: 12%;
-    width: 64%;
+
+    @include breakpoint($desktop) {
+      width: 64% !important;
+    }
 
     @include breakpoint($only-tablet) {
       right: 14%;
-      width: 49%;
+      width: 49% !important;
     }
 
     @include breakpoint($only-mobile) {
@@ -536,7 +546,7 @@
 
   @include breakpoint($only-tablet) {
     #{$left}: 16%;
-    width: 47%;
+    width: 47% !important;
   }
 }
 

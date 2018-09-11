@@ -508,10 +508,6 @@
 
     .selected-store-content {
       border-bottom: 1px solid $selected_store_content_border;
-      padding-#{$left}: 1.375rem;
-      padding-#{$right}: 1.313rem;
-      padding-top: 1.438rem;
-      padding-bottom: 1.188rem;
       background: $selected_store_content_bg;
 
       @include breakpoint($only-mobile) {
@@ -579,6 +575,12 @@
 
           @include icon(map, before) {
             color: $checkout_cc_view_text;
+          }
+        }
+
+        .view-on-map.mobile-only {
+          @include breakpoint($only-mobile) {
+            border-#{$left}-width: 0;
           }
         }
       }

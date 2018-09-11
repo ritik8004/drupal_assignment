@@ -58,3 +58,9 @@ if [ -d $deployDir/docroot/modules/contrib/devel ]
 then
   rm -Rf $deployDir/docroot/modules/contrib/devel
 fi
+
+# Log the git diff in a file so it can be used later by cloud hooks.
+cd $deployDir
+git diff --name-only > $deployDir/git-diff.txt
+git add $deployDir/git-diff.txt
+cd -

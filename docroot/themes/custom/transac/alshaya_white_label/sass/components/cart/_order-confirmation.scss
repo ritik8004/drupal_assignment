@@ -4,6 +4,12 @@
       float: $left;
     }
 
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        padding-#{$left}: 0;
+      }
+    }
+
     .user-register-form {
       margin-top: 1.6rem;
     }
@@ -202,13 +208,8 @@
       margin: 0;
       display: table-cell;
       width: 50%;
-      word-spacing: 0.125rem;
       padding-#{$left}: 2.5rem;
       padding-top: 0.3125rem;
-    }
-
-    strong {
-      margin-#{$left}: 0.625rem;
     }
 
     @include icon(infomation, before) {

@@ -8,5 +8,7 @@ marker:
   label_position:
     x: 15
     y: 15
+    single_x: 15
+    single_y: 15
 store_list_label: 'List of all Stores'
 store_search_placeholder: 'e.g. Salmiya'

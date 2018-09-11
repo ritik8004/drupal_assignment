@@ -352,9 +352,11 @@
         }
       }
 
-      .form-item-configurables-size {
-        &::after {
-          content: none;
+      @include breakpoint($tablet) {
+        .form-item-configurables-size {
+          &::after {
+            content: none;
+          }
         }
       }
     }
