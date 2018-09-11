@@ -9,3 +9,4 @@ dependencies:
   - drupal:system
   - drupal:views
   - pathauto:pathauto
+  - drupal:address
