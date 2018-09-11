@@ -414,7 +414,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->fields('tfd', ['tid', 'name', 'description__value'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
-    $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid AND ttdcl.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
