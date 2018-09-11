@@ -15,20 +15,11 @@ use Drupal\search_api\Entity\Index;
  *
  * Adding promotion facet to PLP.
  */
-function alshaya_product_update_8019() {
+function alshaya_product_update_8029() {
   /** @var AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
 
   $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
-
-  // Execute all pending search_api tasks.
-  \Drupal::service('search_api.task_manager')->executeAllTasks();
-
-  // Flush all caches.
-  drupal_flush_all_caches();
-
-  $index = Index::load('product');
-  $index->save();
 
   /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
   $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
