@@ -61,6 +61,9 @@ alshaya_acm_product.settings:
         pdp_slider_items_number:
           type: integer
           label: 'Image item for slider'
+        pdp_slider_items_number_cs_us:
+          type: integer
+          label: 'Image item for slider in CS/US modal.'
 
     product_carousel_items_settings:
       type: mapping

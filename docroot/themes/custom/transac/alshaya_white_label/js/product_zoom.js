@@ -30,6 +30,27 @@
         ]
       };
 
+      var slickCSUSOptions = {
+        slidesToShow: getPDPSliderParameter('slidesToShowCSUS'),
+        vertical: getPDPSliderParameter('vertical'),
+        arrows: true,
+        focusOnSelect: false,
+        centerMode: getPDPSliderParameter('vertical'),
+        infinite: false,
+        touchThreshold: 1000,
+        responsive: [
+          {
+            breakpoint: 1025,
+            settings: {
+              slidesToShow: 3,
+              touchThreshold: 1000,
+              vertical: false,
+              centerMode: false
+            }
+          }
+        ]
+      };
+
       // Remove unwanted attributes in slider for users.
       $('.gallery-wrapper #cloud-zoom img').removeAttr('title');
       $('.gallery-wrapper #cloud-zoom img').removeAttr('alt');
@@ -71,10 +92,10 @@
         }
       }
 
-      var lightslider = $('#lightSlider', context);
-      var modallightslider = $('#drupal-modal #lightSlider', context);
+      var lightslider = $('.acq-content-product #lightSlider', context);
+      var modallightslider = $('.acq-content-product-modal #lightSlider', context);
       applyRtl(lightslider, slickOptions);
-      applyRtl(modallightslider, slickOptions);
+      applyRtl(modallightslider, slickCSUSOptions);
       // Slider - 3 For Mobile - Image Gallery.
       var slickMobileOptions = {
         slidesToShow: 1,
@@ -531,6 +552,11 @@
     else if (slick_slider_setting === 'slidesToShow') {
       var pdp_slider_items = drupalSettings.pdp_slider_items;
       return pdp_slider_items;
+    }
+
+    else if (slick_slider_setting === 'slidesToShowCSUS') {
+      var pdp_slider_items_cs_us = drupalSettings.pdp_slider_items_cs_us;
+      return pdp_slider_items_cs_us;
     }
   }
 })(jQuery, Drupal, drupalSettings);

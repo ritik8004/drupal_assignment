@@ -11,6 +11,23 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update display_settings config to have separate value for
+ * CS modal slidesToShow param.
+ */
+function alshaya_hm_update_8026() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_hm',
+    'override',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Clear product cache to reflect changes in image selection rules.
  * Part of release 10 Sep 2018.
  */
