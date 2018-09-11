@@ -686,7 +686,7 @@ class SkuManager {
               $promos[$promotion_node->id()] = [];
               $promos[$promotion_node->id()]['text'] = $promotion_text;
               $promos[$promotion_node->id()]['description'] = $description;
-              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getString();
+              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
               foreach ($free_gift_skus as $free_gift_sku) {
                 $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
               }
@@ -705,7 +705,7 @@ class SkuManager {
                 $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
               }
 
-              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
                 $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
               }
               break;
