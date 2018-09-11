@@ -40,6 +40,7 @@ $_gray_twelve: #f9f9f9;
 $_gray_thirteen: #efefef;
 $_gray_fourteen: #f3f3f3;
 $_gray_fifteen: #acacac;
+$_grey_sixteen: #696969;
 
 // Overrides for variables.
 // Global elements.
@@ -306,7 +307,7 @@ $plp_facet_filter_count: $_black_two;
 $plp_facet_filter_count_background: $PB_confirmation_blue;
 
 // Sharethis
-$sharethis_icon: $white;
+$sharethis_icon: $_grey_sixteen;
 
 // Product Detail Page.
 $pdp_sidebar_label: $_black_two;
