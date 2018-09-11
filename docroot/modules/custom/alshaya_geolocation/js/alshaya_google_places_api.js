@@ -68,15 +68,7 @@
       }
       catch (e) {
       }
-
-      places_autocomplete.coords = {};
-
-      if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
-        places_autocomplete.coords = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        };
-      }
+      places_autocomplete.coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(place);
 
       if ($.isArray(callbacks)) {
         callbacks.forEach(function (callback) {
@@ -145,11 +137,24 @@
     );
   };
 
+  // Get Geocoder object.
   Drupal.AlshayaPlacesAutocomplete.getGeocoder = function () {
     if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
       Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
     }
     return Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
+  };
+
+  // Get latitude and longitude from given object.
+  Drupal.AlshayaPlacesAutocomplete.getLatLong = function (place) {
+    var coords = {};
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+      coords = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+    }
+    return coords;
   };
 
   // Get formatted address from geocode.
