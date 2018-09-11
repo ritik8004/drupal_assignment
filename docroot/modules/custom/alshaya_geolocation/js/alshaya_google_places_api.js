@@ -147,12 +147,16 @@
     );
   };
 
-  // Get formatted address from geocode.
-  Drupal.click_collect.getFormattedAddress = function (coords, $target, type) {
+  Drupal.AlshayaPlacesAutocomplete.getGeocoder = function () {
     if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
       Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
     }
-    var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
+    return Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
+  };
+
+  // Get formatted address from geocode.
+  Drupal.click_collect.getFormattedAddress = function (coords, $target, type) {
+    var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
     var latlng = {lat: parseFloat(coords.lat), lng: parseFloat(coords.lng)};
     geocoder.geocode({location: latlng}, function (results, status) {
       if (status === 'OK') {
