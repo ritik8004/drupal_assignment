@@ -83,6 +83,7 @@ function drush_alshaya_acm_alshaya_switch_config() {
   // Update the conductor config.
   if (!empty($acm)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
+    // @codingStandardsIgnoreLine
     global $conductors;
 
     if (isset($conductors[$acm])) {
@@ -107,6 +108,7 @@ function drush_alshaya_acm_alshaya_switch_config() {
   // Update the magento config.
   if (!empty($mdc)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
+    // @codingStandardsIgnoreLine
     global $magentos;
 
     if (isset($magentos[$mdc])) {
