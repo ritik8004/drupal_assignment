@@ -71,13 +71,11 @@
 
       places_autocomplete.coords = {};
 
-      if (typeof place !== 'undefined') {
-        if (typeof place.geometry !== 'undefined') {
-          places_autocomplete.coords = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-          };
-        }
+      if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+        places_autocomplete.coords = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        };
       }
 
       if ($.isArray(callbacks)) {
