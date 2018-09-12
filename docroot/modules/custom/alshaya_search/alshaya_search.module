@@ -538,7 +538,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
       ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
-        (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
+        (in_array($result->getRawValue(), $context['active_filters'][$url_alias]))) && count($child_ids) > 0) {
       $result_get_params->set('no_url_l2', TRUE);
 
       // Get the last selected item from the list of active filters.
