@@ -379,7 +379,7 @@ function alshaya_acm_product_get_brand_logo($sku) {
         $file_data = $client->get($image_url);
       }
       catch (RequestException $e) {
-        watchdog_exception('alshaya_acm_product', $e->getMessage());
+        watchdog_exception('alshaya_acm_product', $e);
       }
 
       // Check to ensure empty file is not saved in SKU.

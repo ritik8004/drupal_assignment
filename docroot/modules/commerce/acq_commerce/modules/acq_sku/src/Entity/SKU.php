@@ -289,7 +289,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
       $file_data = $client->get($data['file']);
     }
     catch (RequestException $e) {
-      watchdog_exception('acq_commerce', $e->getMessage());
+      watchdog_exception('acq_commerce', $e);
     }
 
     // Check to ensure empty file is not saved in SKU.

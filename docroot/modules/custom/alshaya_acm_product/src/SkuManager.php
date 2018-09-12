@@ -900,7 +900,7 @@ class SkuManager {
       $file_data = $client->get($data[$file_key]);
     }
     catch (RequestException $e) {
-      watchdog_exception('alshaya_acm_product', $e->getMessage());
+      watchdog_exception('alshaya_acm_product', $e);
     }
 
     // Check to ensure empty file is not saved in SKU.
