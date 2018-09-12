@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "affe832ebcc00f7e73995fab6a2a0166",
+    "content-hash": "0a52c851356420307869043b28cb25a6",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -391,7 +391,7 @@
             "version": "v2.3.4",
             "source": {
                 "type": "git",
-                "url": "git@github.com:fengyuanchen/cropper.git",
+                "url": "https://github.com/fengyuanchen/cropper.git",
                 "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "dist": {
@@ -5096,7 +5096,8 @@
                     "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                     "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
                     "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
-                    "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch"
+                    "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
+                    "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
