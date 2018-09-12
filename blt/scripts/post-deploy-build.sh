@@ -62,7 +62,7 @@ fi
 # Delete patches directory which is not used on acquia git.
 # It can't be done via deploy-exclude-additions.txt given it is needed to
 # build the artifact.
-rm $deployDir/patches
+rm -Rf $deployDir/patches
 
 # Log the git diff in a file so it can be used later by cloud hooks.
 cd $deployDir
