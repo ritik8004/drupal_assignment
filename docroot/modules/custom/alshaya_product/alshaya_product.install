@@ -15,20 +15,31 @@ use Drupal\search_api\Entity\Index;
  *
  * Adding promotion facet to PLP.
  */
-function alshaya_product_update_8029() {
+function alshaya_product_update_8040() {
   /** @var AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
 
   $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
 
-  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $facet_manager */
-  $facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
+  $index = Index::load('product');
+  $index->save();
 
-  $facet_source_id = 'search_api:views_block__alshaya_product_list__block_1';
-  $filter_bar_id = 'facets_summary.facets_summary.filter_bar_plp';
-  $prefix = 'plp';
+  // Create facet & add facet block to PLP.
+  alshaya_config_install_configs(['facets.facet.plp_promotions'], 'alshaya_product');
+  alshaya_config_install_configs(['block.block.plppromotions'], 'alshaya_product', 'optional');
 
-  $facet_manager->createFacet('promotions', $facet_source_id, $filter_bar_id, $prefix, ['name' => 'Promotions']);
+  // Update PLP facet summary to render selected promotion facets.
+  $filter_bar = \Drupal::configFactory()->getEditable('facets_summary.facets_summary.filter_bar_plp');
+  $facets = $filter_bar->get('facets');
+  $facets['plp_promotions'] = [
+    'checked' => 1,
+    'label' => 'Promotions',
+    'separator' => ', ',
+    'show_count' => 1,
+    'weight' => 0,
+  ];
+  $filter_bar->set('facets', $facets);
+  $filter_bar->save();
 }
 
 /**
