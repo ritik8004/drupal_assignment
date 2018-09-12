@@ -89,45 +89,6 @@
         max-width: none;
       }
     }
-
-    .secure__checkout--block {
-      color: $secure_checkout_block;
-
-      .secure__checkout--label {
-        @include arabic-letter-spacing;
-
-        color: $secure_checkout_block_label;
-        font-family: $hnm-demibold;
-        letter-spacing: 0.5px;
-
-        @include breakpoint($only-mobile) {
-          font-size: 0.5625rem;
-          letter-spacing: 0.4px;
-        }
-      }
-    }
-
-    .icon-ic_login {
-      font-size: 1.313rem;
-      background: $login_icon_bg;
-      color: $login_icon;
-      padding: 0.125rem;
-      display: inline-block;
-      margin-#{$left}: 0.75rem;
-      height: 1.375rem;
-      width: 1.375rem;
-      vertical-align: middle;
-      border-radius: 50%;
-      text-align: center;
-      position: relative;
-
-      &::before {
-        font-weight: bold;
-        position: absolute;
-        top: 0;
-        #{$left}: 0;
-      }
-    }
   }
 
   .c-post-content .l-container {
