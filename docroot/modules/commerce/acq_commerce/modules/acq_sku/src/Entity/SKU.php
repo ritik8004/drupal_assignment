@@ -13,6 +13,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Defines the SKU entity.
@@ -283,10 +284,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $args = ['@file' => $data['file'], '@sku_id' => $this->id()];
 
     // Download the file contents.
-    $file_data = file_get_contents($data['file']);
+    $client = \Drupal::httpClient();
+    try {
+      $file_data = $client->get($data['file']);
+    }
+    catch (RequestException $e) {
+      watchdog_exception('acq_commerce', $e->getMessage());
+    }
 
-    // Check to ensure errors like 404, 403, etc. are catched and empty file
-    // not saved in SKU.
+    // Check to ensure empty file is not saved in SKU.
     if (empty($file_data)) {
       throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
     }
