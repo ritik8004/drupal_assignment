@@ -129,7 +129,7 @@ function hammerIt(elm) {
       }
 
       $('#product-image-gallery-container-mobile').once('js-event').each(function () {
-        var element = document.getElementById('product-image-gallery-container-mobile');
+        var element = $(this);
         var dialogsettings = {
           autoOpen: true,
           // Change dimensions of modal window as per theme needs.
