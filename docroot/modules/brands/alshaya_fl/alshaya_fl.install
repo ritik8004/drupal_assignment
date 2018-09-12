@@ -6,7 +6,7 @@
  */
 
 /**
- * Implements hook_install().0
+ * Implements hook_install()
  */
 function alshaya_fl_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_fl', 'inc', 'alshaya_fl.content');
