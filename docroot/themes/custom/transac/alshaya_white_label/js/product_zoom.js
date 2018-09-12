@@ -97,7 +97,7 @@
 
       // Modal view on image click in desktop and tablet.
       // Modal view for PDP Slider, when clicking on main image.
-      $('#product-image-gallery-container').once('desktop-js-event').each(function () {
+      $('.acq-content-product #product-image-gallery-container').once('desktop-js-event').each(function () {
         var element = $(this);
         var dialogsettings = {
           autoOpen: true,
