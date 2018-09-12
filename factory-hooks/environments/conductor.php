@@ -176,6 +176,12 @@ $conductors = [
     'hmac_secret' => 'NDBhYjQ3NjQtNDZmNy00',
     'api_version' => 'v2',
   ],
+  'pbkw_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'ceef8cc78b5b4097908e74298b408fc6',
+    'hmac_secret' => 'MjBjZWZmODYtMWNhOS00',
+    'api_version' => 'v2',
+  ],
   // Pottery Barn SA.
   'pbsa_test' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -195,6 +201,12 @@ $conductors = [
     'hmac_secret' => 'ZTdjNWY1ZTktYzMyMC00',
     'api_version' => 'v2',
   ],
+  'pbsa_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '2b0dca2d6ecc4b4caeb5c721cbdf3cf2',
+    'hmac_secret' => 'N2M3NTMzMDAtOWRjZC00',
+    'api_version' => 'v2',
+  ],
   // Pottery Barn AE.
   'pbae_test' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -212,6 +224,12 @@ $conductors = [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'f3e36947161c4cb2bbe1448a890eb45c',
     'hmac_secret' => 'NmFlNDgwY2YtNzFjYS00',
+    'api_version' => 'v2',
+  ],
+  'pbae_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '1a48fcdf8a824328b70c98c7d33021ac',
+    'hmac_secret' => 'NjhjMjRmNDEtNTJkMS00',
     'api_version' => 'v2',
   ],
   // BathBodyWorks KW.
