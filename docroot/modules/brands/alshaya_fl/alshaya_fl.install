@@ -5,31 +5,21 @@
  * Install, uninstall and update for alshaya_fl.
  */
 
-use Drupal\Core\Site\Settings;
-
 /**
- * Implements hook_install().
+ * Implements hook_install().0
  */
 function alshaya_fl_install() {
   \Drupal::moduleHandler()->loadInclude('alshaya_fl', 'inc', 'alshaya_fl.content');
 
-  // Enable and set alshaya_footlocker as default theme and set the site logo,
-  // favicon icon and email logo path.
-  _alshaya_master_initialize_brand_theme('alshaya_footlocker');
+  // Change region for main navigation block.
+  alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
+
+  // Create default content for the site.
+  alshaya_fl_create_default_content();
 
   // Translate store finder block's link title.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
     ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
-    ->save();
-
-  // Set store id - EN.
-  \Drupal::configFactory()->getEditable('acq_commerce.store')
-    ->set('store_id', Settings::get('store_id')['en'])
-    ->save();
-
-  // Translate store id in config.
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.store')
-    ->set('store_id', Settings::get('store_id')['ar'])
     ->save();
 
   // Set the default value for back to store list link.
@@ -37,11 +27,22 @@ function alshaya_fl_install() {
   $config->set('store_list_label', 'List of all footlocker Stores');
   $config->save();
 
-  // Setting all products buyable to be false by default.
-  \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
-    ->set('all_products_buyable', 0)
-    ->save();
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+  ];
 
-  // Create default content for footlocker.
-  alshaya_fl_create_default_content();
+  alshaya_i18n_save_translations($strings);
 }
