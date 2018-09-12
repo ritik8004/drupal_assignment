@@ -86,7 +86,6 @@
         }, function (results, status) {
           if (status == 'OK') {
             var coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(results[0]);
-            console.log(results[0]);
             if ($.isEmptyObject(coords) || results[0].address_components.length <= 1) {
               return false;
             }
