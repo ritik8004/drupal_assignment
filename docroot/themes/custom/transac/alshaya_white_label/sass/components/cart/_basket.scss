@@ -1045,6 +1045,7 @@ html[lang=ar] {
       @include breakpoint($only-mobile) {
         border: 1px solid $basket_img_border;
         background: $basket_img_bg;
+        overflow: hidden;
 
         img {
           border: 0;

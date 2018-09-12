@@ -1389,7 +1389,11 @@ class SkuManager {
     }
 
     if ($cache = $this->getProductCachedData($sku, 'combinations')) {
-      return $cache;
+      // @TODO: Condition to be removed in: CORE-5271.
+      // Do additional check for cached data.
+      if (isset($cache['by_sku'])) {
+        return $cache;
+      }
     }
 
     /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
@@ -1424,6 +1428,27 @@ class SkuManager {
         $combinations['by_sku'][$sku_code][$code] = $value;
         $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
+    }
+
+    // Don't store in cache and return empty array here if no valid
+    // SKU / combination found.
+    if (empty($combinations)) {
+      // Below code is only for debugging issues around cache having empty data
+      // even when there are children in stock.
+      // @TODO: To be removed in: CORE-5271.
+      // Done for: CORE-5200, CORE-5248.
+      $stock = alshaya_acm_get_stock_from_sku($sku);
+      if ($stock > 0) {
+        // Log message here to allow debugging further.
+        $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $sku->language()->getId(),
+          '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+          '@page' => $this->currentRequest->getRequestUri(),
+        ]));
+      }
+
+      return [];
     }
 
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());

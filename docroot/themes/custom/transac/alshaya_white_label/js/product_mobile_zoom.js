@@ -175,7 +175,7 @@ function hammerIt(elm) {
         // Open Gallery modal when we click on the zoom image.
         var mobileDialog = Drupal.dialog(element, dialogsettings);
 
-        $('#product-image-gallery-mobile .slick-slide').off().on('click', function () {
+        $('#product-image-gallery-mobile li').off().on('click', function () {
           if (!$(this).hasClass('mobilegallery__thumbnails__video')) {
             $('body').addClass('pdp-modal-overlay');
             mobileDialog.show();
