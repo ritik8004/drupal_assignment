@@ -85,7 +85,7 @@
             $pager.find('[rel=next]').click();
             $window.off(scrollEvent);
           }
-        }, 200));
+        }, 1));
       });
     },
     detach: function (context, settings, trigger) {
