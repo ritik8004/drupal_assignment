@@ -6,6 +6,7 @@
  */
 
 use Drupal\search_api\Entity\Index;
+use Drupal\views\ViewExecutable;
 
 /**
  * Wrapper function, removes a field from Index and trigger re-index.
@@ -26,6 +27,16 @@ function _alshaya_search_api_remove_field_from_indexes($field_code, $index) {
 
     // Re-indexing the content.
     $index->reindex();
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_search_api_views_pre_render(ViewExecutable $view) {
+  // Override the 'result summary' header for PLP and Search.
+  if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
+    $view->element['#attached']['library'][] = 'alshaya_search_api/facets_language_switcher';
   }
 }
 
