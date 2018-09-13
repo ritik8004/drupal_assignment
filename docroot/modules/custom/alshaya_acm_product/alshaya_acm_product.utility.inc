@@ -172,11 +172,13 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
 
   // If still image is not available, set default one.
   if (empty($image)) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+    $default_image_url = $skuImagesManager->getProductDefaultImageUrl();
+
+    if ($default_image_url) {
       $image = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => file_create_url($default_image->getFileUri()),
+          'src' => $default_image_url,
           'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'class' => [
@@ -188,33 +190,6 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   }
 
   return $image;
-}
-
-/**
- * Get the url of the image of SKU.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU entity object.
- *
- * @return string
- *   Url of the image.
- */
-function _alshaya_acm_get_product_display_image_url(SKU $sku) {
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
-  // Load the first image.
-  $media_image = $skuImagesManager->getFirstImage($sku);
-
-  // If we have image for the product.
-  if (!empty($media_image)) {
-    if ($media_image['file'] instanceof FileInterface) {
-      $uri = $media_image['file']->getFileUri();
-      return file_create_url($uri);
-    }
-  }
-
-  return '';
 }
 
 /**
