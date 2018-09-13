@@ -302,7 +302,7 @@ class SwatchesHelper {
       $file_data = $client->get($url);
     }
     catch (RequestException $e) {
-      watchdog_exception('alshaya_product_options', $e->getMessage());
+      watchdog_exception('alshaya_product_options', $e);
     }
 
     // Check to ensure empty file not saved in SKU.

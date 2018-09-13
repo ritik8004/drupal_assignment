@@ -29,3 +29,12 @@ services:
     arguments: ['@language_manager']
     tags:
       - { name: event_subscriber }
+
+  alshaya_search.ajax_response_subscriber:
+    class: Drupal\alshaya_search\EventSubscriber\AjaxResponseSubscriber
+    arguments:
+      - '@request_stack'
+      - '@config.factory'
+      - '@language_manager'
+    tags:
+      - { name: event_subscriber }

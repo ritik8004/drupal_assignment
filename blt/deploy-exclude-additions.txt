@@ -10,7 +10,6 @@
 /docroot/themes/custom/transac/alshaya_example_subtheme
 /docroot/themes/custom/README.md
 /phpcs.xml.dist
-/hooks/samples
 /hooks/dev
 /hooks/prod
 /hooks/test

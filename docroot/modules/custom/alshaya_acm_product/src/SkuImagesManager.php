@@ -371,6 +371,31 @@ class SkuImagesManager {
   }
 
   /**
+   * Get the url of the image of SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity object.
+   * @param bool $absolute
+   *   Flag to specify if absolute URL is required or relative.
+   *
+   * @return string
+   *   Url of the image.
+   */
+  public function getFirstImageUrl(SKUInterface $sku, bool $absolute = FALSE) : string {
+    // Load the first image.
+    $media_image = $this->getFirstImage($sku);
+
+    // If we have image for the product.
+    if (!empty($media_image) && $media_image['file'] instanceof FileInterface) {
+      $uri = $media_image['file']->getFileUri();
+      $url = file_create_url($uri);
+      return $absolute ? $url : file_url_transform_relative($url);
+    }
+
+    return '';
+  }
+
+  /**
    * Get SKU to use for gallery when no specific child is selected.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -520,36 +545,9 @@ class SkuImagesManager {
             '#theme' => 'alshaya_search_gallery',
             '#mainImage' => $search_main_image,
             '#thumbnails' => $thumbnails,
-            '#attached' => [
-              'drupalSettings' => [
-                'plp_slider' => $this->configFactory->get('alshaya_acm_product.display_settings')->get('plp_slider'),
-              ],
-              'library' => [
-                'alshaya_search/alshaya_search',
-              ],
-            ],
           ];
         }
 
-        // Finally use default image if still empty.
-        if (empty($gallery)) {
-          $default_image = $this->getProductDefaultImage();
-          if ($default_image) {
-            $gallery = [
-              '#theme' => 'alshaya_assets_gallery',
-              '#mainImage' => [
-                'url' => Url::fromUri(file_create_url($default_image->getFileUri())),
-                'class' => 'product-default-image',
-              ],
-              '#label' => $product_label,
-              '#attached' => [
-                'library' => [
-                  'alshaya_search/alshaya_search',
-                ],
-              ],
-            ];
-          }
-        }
         break;
 
       case 'modal':
@@ -592,7 +590,7 @@ class SkuImagesManager {
             'type' => 'image',
           ];
         }
-        foreach ($media['media_items']['vidoes'] ?? [] as $media_item) {
+        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
           // @TODO:
           // Receiving video_provider as NULL, should be set to youtube
           // or vimeo. Till then using $type as provider flag.
@@ -720,10 +718,10 @@ class SkuImagesManager {
   /**
    * Get the default image url for the product.
    *
-   * @return \Drupal\file\Entity\File|null|static
+   * @return \Drupal\file\Entity\File|null
    *   File object.
    */
-  protected function getProductDefaultImage() {
+  public function getProductDefaultImage() {
     static $product_default_image;
 
     // If default image available in static cache, then use it.
@@ -739,7 +737,7 @@ class SkuImagesManager {
     }
 
     // Get file id from config.
-    $default_image_fid = $this->config->get('alshaya_acm_product.settings')->get('product_default_image');
+    $default_image_fid = $this->configFactory->get('alshaya_acm_product.settings')->get('product_default_image');
     if (!empty($default_image_fid)) {
       $file = $this->fileStorage->load($default_image_fid);
       if ($file instanceof File) {
@@ -752,6 +750,26 @@ class SkuImagesManager {
     }
 
     return NULL;
+  }
+
+  /**
+   * Get the default image url for the product.
+   *
+   * @param bool $absolute
+   *   Flag to specify if absolute URL is required or relative.
+   *
+   * @return string
+   *   Default image url.
+   */
+  public function getProductDefaultImageUrl(bool $absolute = FALSE) : string {
+    $file = $this->getProductDefaultImage();
+
+    if ($file) {
+      $url = file_create_url($file->getFileUri());
+      return $absolute ? $url : file_url_transform_relative($url);
+    }
+
+    return '';
   }
 
 }
