@@ -7,6 +7,7 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
+use Drupal\node\Entity\Node;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -700,6 +701,20 @@ function alshaya_super_category_views_query_alter(ViewExecutable $view, QueryPlu
           $condition['value'] += 1;
         }
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_gtm_product_attributes_alter().
+ */
+function alshaya_super_category_gtm_product_attributes_alter(Node $node, array &$attributes) {
+  $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
+  // If super category feature is enabled and brand attribute is enabled.
+  if ($super_category_feature_enabled && !empty($attributes['gtm-brand'])) {
+    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+    if (!empty($super_category)) {
+      $attributes['gtm-brand'] = $super_category['label'];
     }
   }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21ae4e56ead3a7a701a7bc419fb8f78c",
+    "content-hash": "1864e8f97c12cbd46972f72a071b9454",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5096,7 +5096,8 @@
                     "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
                     "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
                     "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
-                    "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch"
+                    "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
+                    "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

@@ -83,12 +83,13 @@ function drush_alshaya_acm_alshaya_switch_config() {
   // Update the conductor config.
   if (!empty($acm)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/conductor.php';
-    $acms = alshaya_get_conductor_host_data();
+    // @codingStandardsIgnoreLine
+    global $conductors;
 
-    if (isset($acms[$acm])) {
+    if (isset($conductors[$acm])) {
       $config = $configFactory->getEditable('acq_commerce.conductor');
 
-      foreach ($acms[$acm] as $key => $value) {
+      foreach ($conductors[$acm] as $key => $value) {
         $config->set($key, $value);
 
         drush_print(dt('Configuring acq_commerce.conductor.@key to @value.', [
@@ -107,27 +108,28 @@ function drush_alshaya_acm_alshaya_switch_config() {
   // Update the magento config.
   if (!empty($mdc)) {
     include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
-    $mdcs = alshaya_get_magento_host_data();
+    // @codingStandardsIgnoreLine
+    global $magentos;
 
-    if (isset($mdcs[$mdc])) {
+    if (isset($magentos[$mdc])) {
       // Update the magento host.
       $config = $configFactory->getEditable('alshaya_api.settings');
-      $config->set('magento_host', $mdcs[$mdc]['url']);
-      foreach ($mdcs[$mdc]['magento_secrets'] ?? [] as $key => $value) {
+      $config->set('magento_host', $magentos[$mdc]['url']);
+      foreach ($magentos[$mdc]['magento_secrets'] ?? [] as $key => $value) {
         $config->set($key, $value);
       }
 
       $config->save();
 
       drush_print(dt('Configuring alshaya_api.settings.magento_host to @value.', [
-        '@value' => $mdcs[$mdc]['url'],
+        '@value' => $magentos[$mdc]['url'],
       ]));
 
       // Determine the langcode to use.
       $country_code = Unicode::strtolower(Settings::get('country_code'));
       $country_code = drush_get_option('country_code', $country_code);
 
-      if (!isset($mdcs[$mdc][$country_code])) {
+      if (!isset($magentos[$mdc][$country_code])) {
         drush_print(dt('Unknown "@country_code" country code for "@mdc" MDC. Using the current site\'s country code "@current_country_code".', [
           '@country_code' => $country_code,
           '@mdc' => $mdc,
@@ -153,7 +155,7 @@ function drush_alshaya_acm_alshaya_switch_config() {
           }
 
           // Use specific config if it exists, use default one otherwise.
-          $value = isset($mdcs[$mdc][$country_code][$key][$lang]) ? $mdcs[$mdc][$country_code][$key][$lang] : $mdcs['default'][$country_code][$key][$lang];
+          $value = isset($magentos[$mdc][$country_code][$key][$lang]) ? $magentos[$mdc][$country_code][$key][$lang] : $magentos['default'][$country_code][$key][$lang];
           $config->set($key, $value)->save();
 
           drush_print(dt('Configuring @name.@key to @value.', [

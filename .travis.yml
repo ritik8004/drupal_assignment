@@ -13,11 +13,11 @@ matrix:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_transac
     if: type = pull_request
-  #- php: 7.1
-  #  env:
-  #  - INSTALL_TYPE=install
-  #  - PROFILE=alshaya_non_transac
-  #  if: type = pull_request
+  - php: 7.1
+    env:
+    - INSTALL_TYPE=install
+    - PROFILE=alshaya_non_transac
+    if: type = pull_request
   #- php: 7.1
   #  env:
   #  - INSTALL_TYPE=update
