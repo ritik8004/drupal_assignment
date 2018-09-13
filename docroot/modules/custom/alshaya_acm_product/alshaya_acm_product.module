@@ -1562,14 +1562,14 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  * @param bool $load_parents
  *   (optional) False if already looping through all parents.
  *
- * @return array|\Drupal\Core\TypedData\TypedDataInterface
- *   Return array value or null.
+ * @return array
+ *   Return array value.
  *
  * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\TypedData\Exception\MissingDataException
  */
-function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, $load_parents = TRUE) {
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, bool $load_parents = TRUE) : array {
   $anchor = $taxonomy_term->get('field_size_guide_anchor');
   if (!empty($anchor) && !empty($anchor->first())) {
     return array_map(function ($string) {
@@ -1586,9 +1586,8 @@ function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term,
       }
     }
   }
-  else {
-    return [];
-  }
+
+  return [];
 }
 
 /**
