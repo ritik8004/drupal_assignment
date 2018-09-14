@@ -244,7 +244,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     foreach ($elements as $delta => $element) {
       // If main image is empty.
       if (empty($element['#gallery']['#mainImage'])) {
-        if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+        $default_image = $this->skuImagesManager->getProductDefaultImage();
+        if ($default_image) {
           $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';

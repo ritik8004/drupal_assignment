@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85d2e0e16c9b1066ed07033feb84e1a5",
+    "content-hash": "3b650ca0867e546bfabfa56dd90c6f8c",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9578,6 +9578,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
