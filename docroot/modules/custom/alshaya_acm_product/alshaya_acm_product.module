@@ -1585,10 +1585,12 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
 function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, bool $load_parents = TRUE) : array {
   $anchor = $taxonomy_term->get('field_size_guide_anchor');
   if (!empty($anchor) && !empty($anchor->first())) {
-    return array_map(function ($string) {
+    $query_string = [];
+    foreach (explode(',', $anchor->first()->getString()) as $string) {
       list($key, $value) = explode('=', trim($string));
-      return [trim($key) => trim($value)];
-    }, explode(',', $anchor->first()->getString()));
+      $query_string[trim($key)] = trim($value);
+    }
+    return $query_string;
   }
   elseif ($load_parents) {
     $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id());
