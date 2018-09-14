@@ -120,14 +120,4 @@ class ProductInfoRequestedEvent extends Event {
     return $this->valueModified;
   }
 
-  /**
-   * A Event description method for info.
-   *
-   * @return string
-   *
-   */
-  public function myEventDescription() {
-    return 'Dispatched when info is requested for an SKU using our service';
-  }
-
 }
