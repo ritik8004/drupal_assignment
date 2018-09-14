@@ -94,13 +94,15 @@ class SKUImagesResource extends ResourceBase {
    * @param array $request
    *   Array containing SKUs and language code.
    *
-   * @return \Drupal\rest\ResourceResponse
+   * @return \Drupal\rest\ModifiedResourceResponse
    *   The response containing requested data.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
    *   Thrown when no log entry was provided.
+   * @throws \Drupal\Core\Entity\EntityMalformedException
+   *   Entity Malformed Exception.
    */
-  public function post(array $request = []) {
+  public function post(array $request) {
     if (empty($request['skus']) || empty($request['langcode'])) {
       throw new BadRequestHttpException($this->t('Missing required parameters'));
     }
