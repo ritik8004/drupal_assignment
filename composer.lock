@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1864e8f97c12cbd46972f72a071b9454",
+    "content-hash": "85d2e0e16c9b1066ed07033feb84e1a5",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10336,7 +10336,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/views_ajax_get",
-                "reference": "772bb3b"
+                "reference": "3055c44"
             },
             "require": {
                 "drupal/core": "*"
@@ -10347,15 +10347,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1+1-dev",
-                    "datestamp": "1513006089",
+                    "version": "8.x-1.0-beta1+2-dev",
+                    "datestamp": "1536761580",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "2999051: Fix ajax request with POST method": "https://www.drupal.org/files/issues/2018-09-12/views_ajax_get-2999051-21.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -10373,7 +10370,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_ajax_get"
             },
-            "time": "2018-08-06T10:18:17+00:00"
+            "time": "2018-09-14T13:01:07+00:00"
         },
         {
             "name": "drupal/views_block_filter_block",
