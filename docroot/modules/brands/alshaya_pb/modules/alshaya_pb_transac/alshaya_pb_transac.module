@@ -171,7 +171,7 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
   $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
   $title = $productInfoHelper->getTitle($sku, 'basket');
   if ($title) {
-    $variables['name'] = $title;
+    isset($variables['name']['#title']) ? $variables['name']['#title'] = $title : $variables['name'] = $title;
   }
 }
 
