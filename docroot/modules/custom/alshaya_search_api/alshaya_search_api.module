@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\ViewExecutable;
 
@@ -37,6 +38,28 @@ function alshaya_search_api_views_pre_render(ViewExecutable $view) {
   // Override the 'result summary' header for PLP and Search.
   if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
     $view->element['#attached']['library'][] = 'alshaya_search_api/facets_language_switcher';
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter().
+ */
+function alshaya_search_api_language_switch_links_alter(array &$links, $type, Url $url) {
+  $query = \Drupal::request()->query->all();
+
+  // Alter block only if we have selected color query parameter on a PDP.
+  if (!empty($query)) {
+    /** @var \Drupal\alshaya_search_api\AlshayaSearchApiHelper $helper */
+    $helper = \Drupal::service('alshaya_search_api.helper');
+
+    // Remove the selected color parameter in the query string for all except
+    // current language.
+    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+    foreach ($links as $langcode => $link) {
+      if ($langcode != $current_langcode) {
+        $links[$langcode]['query'] = $helper->getParamsInOtherLanguage($langcode, $query);
+      }
+    }
   }
 }
 

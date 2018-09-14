@@ -65,18 +65,19 @@ class AlshayaSearchApiHelper {
       $code = str_replace('plp_', '', $data[0]);
       $code = str_replace('promo_', '', $code);
 
-      $terms = $this->termStorage->loadByProperties([
-        'vid' => ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY,
-        'name' => $data[1],
-        'field_sku_attribute_code' => $code,
-      ]);
+      $query = $this->termStorage->getQuery();
+      $query->condition('field_sku_attribute_code', $code);
+      $query->condition('vid', ProductOptionsManager::PRODUCT_OPTIONS_VOCABULARY);
+      $query->condition('name', $data[1]);
+      $tids = $query->execute();
 
-      if (empty($terms)) {
+      if (empty($tids)) {
         continue;
       }
 
-      /** @var \Drupal\taxonomy\TermInterface $term */
-      $term = reset($terms);
+      $tid = reset($tids);
+      $term = $this->termStorage->load($tid);
+
       if ($term->hasTranslation($langcode)) {
         $term = $term->getTranslation($langcode);
       }

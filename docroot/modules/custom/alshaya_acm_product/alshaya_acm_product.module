@@ -1644,32 +1644,6 @@ function alshaya_acm_product_alshaya_master_post_drupal_install() {
 }
 
 /**
- * Implements hook_language_switch_links_alter().
- */
-function alshaya_acm_product_language_switch_links_alter(array &$links, $type, Url $url) {
-  $selected_query = \Drupal::request()->query->get('selected');
-
-  /** @var \Drupal\Core\Routing\CurrentRouteMatch $current_route_matcher */
-  $current_route_matcher = \Drupal::service('current_route_match');
-
-  // Alter block only if we have selected color query parameter on a PDP.
-  if (($selected_query) &&
-    $current_route_matcher->getRouteName() == 'entity.node.canonical' &&
-    ($node = $current_route_matcher->getParameter('node')) &&
-    $node->getType() == 'acq_product') {
-
-    // Remove the selected color parameter in the query string for all except
-    // current language.
-    $current_langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-    foreach ($links as $langcode => $link) {
-      if ($langcode != $current_langcode && isset($links[$langcode]['query']['selected'])) {
-        unset($links[$langcode]['query']['selected']);
-      }
-    }
-  }
-}
-
-/**
  * Returns link for PDP modal content.
  *
  * @param string|mixed $link_title
