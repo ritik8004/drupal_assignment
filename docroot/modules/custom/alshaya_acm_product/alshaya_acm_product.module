@@ -1591,7 +1591,7 @@ function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term,
     }, explode(',', $anchor->first()->getString()));
   }
   elseif ($load_parents) {
-    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadAllParents($taxonomy_term->id());
     foreach ($parent_terms as $term) {
       $anchor = alshaya_acm_product_get_size_guide_anchor($term, FALSE);
       if (!empty($anchor)) {
