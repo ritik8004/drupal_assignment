@@ -1,0 +1,33 @@
+.c-footer__copy {
+  @include breakpoint($only-tablet) {
+    .field--name-body {
+      p {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: 1rem 1.25rem;
+    height: 4rem;
+  }
+
+  .field--name-body p {
+    @include breakpoint($tablet) {
+      font-size: 0.75rem;
+      text-align: $right;
+
+      .country-ae & {
+        text-align: center;
+      }
+    }
+  }
+
+  .c-footer-secondary & {
+    .country-ae & {
+      html[lang=ar] & {
+        padding: 1.875rem 0;
+      }
+    }
+  }
+}
