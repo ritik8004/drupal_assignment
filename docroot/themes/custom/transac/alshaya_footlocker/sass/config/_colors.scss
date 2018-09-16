@@ -19,7 +19,7 @@ $primary_btn_bg: $black;
 // Header.
 $header_bg: $white-two;
 $header_search_block_bg: $white-two;
-$header_border: transparent;
+$header_border: $white-three;
 $header_secondary_menu_link: $purplish-brown;
 $header_my_account_h3_title: $purplish-brown;
 $header_secondary_bg: $white;
@@ -37,6 +37,18 @@ $mm_l2_link: $purplish-brown;
 $mm_l1_link_hover: $purplish-brown;
 $mm_l3_link: $black;
 $mm_body_overlay: rgba(0, 0, 0, 0.6);
+$mm_bg: $white-two;
+$mm_l1_border: $white-three;
+$mm_l1_link_bg: $white-two;
+$mm_l2_link_hover: $black;
+$mm_l2_p: $white-two;
+$mm_l3_link_bg: $white-two;
+$mm_l3_link_hover: $black;
+$mm_highlight_label: $purplish-brown;
+$mm_p_a_text: $black;
+$mm_highlight_label: $black;
+$mm_highlight_title: $black;
+$mm_highlight_description: $warm-grey;
 
 //search block
 $primary_search_text: $warm-grey;

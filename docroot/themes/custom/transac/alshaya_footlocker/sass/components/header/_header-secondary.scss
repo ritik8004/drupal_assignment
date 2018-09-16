@@ -29,6 +29,7 @@ body {
     &::after {
       margin-top: -2.5rem;
       font-size: 2rem;
+      #{$right}: -0.625rem;
     }
   }
 
@@ -40,9 +41,20 @@ body {
     }
   }
 
-  .stores-finder,
-  .block-language-blocklanguage-interface .ar a {
+  .stores-finder {
     &::before {
+      display: none;
+    }
+  }
+
+  .block-language-blocklanguage-interface .en a {
+    @include icon(language, after) {
+      display: none;
+    }
+  }
+
+  .block-language-blocklanguage-interface .ar a {
+    @include icon(language) {
       display: none;
     }
   }
