@@ -28,7 +28,6 @@ drush/contrib
 docroot/themes/custom/*/node_modules
 docroot/themes/custom/*/css
 docroot/themes/custom/transac/*/css
-docroot/themes/custom/transac/*/node_modules
 docroot/themes/custom/non_transac/*/css
 docroot/themes/custom/amp/*/css
 docroot/themes/custom/*/styleguide
@@ -44,7 +43,6 @@ reports
 .DS_Store
 .AppleDouble
 .LSOverride
-*.json
 
 # Thumbnails
 ._*
