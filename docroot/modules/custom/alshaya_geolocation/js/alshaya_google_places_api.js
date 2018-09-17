@@ -51,9 +51,6 @@
     if (!$.isEmptyObject(restriction)) {
       location_autocomplete_instance.setComponentRestrictions(restriction);
     }
-    else if (typeof drupalSettings.alshaya_click_collect !== 'undefined' && typeof drupalSettings.alshaya_click_collect.country !== 'undefined') {
-      location_autocomplete_instance.setComponentRestrictions({country: [drupalSettings.alshaya_click_collect.country]});
-    }
 
     location_autocomplete_instance.addListener('place_changed', function () {
       // Get the place details from the autocomplete object.
@@ -68,17 +65,7 @@
       }
       catch (e) {
       }
-
-      places_autocomplete.coords = {};
-
-      if (typeof place !== 'undefined') {
-        if (typeof place.geometry !== 'undefined') {
-          places_autocomplete.coords = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-          };
-        }
-      }
+      places_autocomplete.coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(place);
 
       if ($.isArray(callbacks)) {
         callbacks.forEach(function (callback) {
@@ -90,10 +77,27 @@
     $(field).once('autocomplete-init').on('keyup', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
-        return false;
+        var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
+        geocoder.geocode({
+          'componentRestrictions': {
+            'locality': $(this).val(),
+            'country': restriction.country
+          }
+        }, function (results, status) {
+          if (status == 'OK') {
+            var coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(results[0]);
+            if ($.isEmptyObject(coords) || results[0].address_components.length <= 1) {
+              return false;
+            }
+            else if ($.isArray(callbacks)) {
+              callbacks.forEach(function (callback) {
+                callback.call(null, coords, field, restriction, $trigger);
+              });
+            }
+          }
+        });
       }
-
-      if ($(this).val().length > 0) {
+      else if ($(this).val().length > 0) {
         // Remove the no results found html, we will add again in timeout if no results.
         $('.pac-container').find('.pac-not-found').remove();
 
@@ -147,12 +151,29 @@
     );
   };
 
-  // Get formatted address from geocode.
-  Drupal.click_collect.getFormattedAddress = function (coords, $target, type) {
+  // Get Geocoder object.
+  Drupal.AlshayaPlacesAutocomplete.getGeocoder = function () {
     if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
       Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
     }
-    var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
+    return Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
+  };
+
+  // Get latitude and longitude from given object.
+  Drupal.AlshayaPlacesAutocomplete.getLatLong = function (place) {
+    var coords = {};
+    if (typeof place !== 'undefined' && typeof place.geometry !== 'undefined') {
+      coords = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+    }
+    return coords;
+  };
+
+  // Get formatted address from geocode.
+  Drupal.click_collect.getFormattedAddress = function (coords, $target, type) {
+    var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
     var latlng = {lat: parseFloat(coords.lat), lng: parseFloat(coords.lng)};
     geocoder.geocode({location: latlng}, function (results, status) {
       if (status === 'OK') {

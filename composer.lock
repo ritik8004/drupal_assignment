@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3afc7517de5b083655781b97cf28050f",
+    "content-hash": "c3ae674b3a7a0814704d5ce73918d3de",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10527,17 +10527,11 @@
         },
         {
             "name": "drupal/views_ajax_get",
-            "version": "1.0.0-beta1",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/views_ajax_get",
-                "reference": "8.x-1.0-beta1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_ajax_get-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "76ab20b00c7eefe0dca0f1dd4188cd077039f1b1"
+                "reference": "3055c44"
             },
             "require": {
                 "drupal/core": "*"
@@ -10548,11 +10542,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
-                    "datestamp": "1512125286",
+                    "version": "8.x-1.0-beta1+2-dev",
+                    "datestamp": "1536761580",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -10570,7 +10564,8 @@
             "homepage": "https://www.drupal.org/project/views_ajax_get",
             "support": {
                 "source": "http://cgit.drupalcode.org/views_ajax_get"
-            }
+            },
+            "time": "2018-09-14T13:01:07+00:00"
         },
         {
             "name": "drupal/views_block_filter_block",
@@ -18276,7 +18271,7 @@
         "drupal/role_delegation": 15,
         "drupal/media_entity_actions": 20,
         "drupal/scheduled_updates": 15,
-        "drupal/views_ajax_get": 10,
+        "drupal/views_ajax_get": 20,
         "drupal/stage_file_proxy": 15
     },
     "prefer-stable": true,
