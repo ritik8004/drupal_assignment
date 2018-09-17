@@ -342,10 +342,12 @@
     font-size: 0.75rem;
 
     .desc-wrapper {
+      h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
       .desc-label,
-      h1,
-      h2,
-      h3,
       h4,
       h5,
       h6 {
