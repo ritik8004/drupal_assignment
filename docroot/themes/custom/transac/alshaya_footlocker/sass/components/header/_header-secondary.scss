@@ -22,6 +22,11 @@ body {
       text-transform: uppercase;
       padding-top: 0.4375rem;
       font-size: 0.75rem;
+
+      &::after,
+      &::before {
+        display: none;
+      }
     }
   }
 
@@ -38,24 +43,6 @@ body {
       &::before {
         display: none;
       }
-    }
-  }
-
-  .stores-finder {
-    &::before {
-      display: none;
-    }
-  }
-
-  .block-language-blocklanguage-interface .en a {
-    @include icon(language, after) {
-      display: none;
-    }
-  }
-
-  .block-language-blocklanguage-interface .ar a {
-    @include icon(language) {
-      display: none;
     }
   }
 }
