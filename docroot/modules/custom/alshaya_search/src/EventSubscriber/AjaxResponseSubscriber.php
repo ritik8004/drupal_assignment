@@ -99,11 +99,12 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    $request = $this->requestStack->getCurrentRequest();
+
     if ($view->storage->id() === 'search') {
       $view_url = '/' . $view->getPath();
     }
     else {
-      $request = $this->requestStack->getCurrentRequest();
       $query_string = [];
       parse_str($request->getQueryString(), $query_string);
       $view_url_data = $query_string['view_path'];
@@ -113,6 +114,15 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     }
 
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
+
+    // Set items per page to current page * items per page.
+    $currentPage = intval($request->query->get('page'));
+    $query_params['show_on_load'] = ($currentPage + 1) * $view->getItemsPerPage();
+
+    $show_on_load = intval($request->query->get('show_on_load'));
+    if ($show_on_load > $view->getItemsPerPage()) {
+      $query_params['show_on_load'] = $query_params['show_on_load'] + ($show_on_load - $view->getItemsPerPage());
+    }
 
     $url = Url::fromUserInput($view_url, [
       'query' => $query_params,

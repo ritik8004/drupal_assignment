@@ -819,13 +819,38 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 }
 
 /**
+ * Wrapper function to get items per page on listing pages.
+ *
+ * @return int
+ *   Items per page.
+ */
+function _alshaya_acm_product_get_items_per_page_on_listing(): int {
+  $config = \Drupal::config('alshaya_acm_product.settings');
+  return intval($config->get('list_view_items_per_page'));
+}
+
+/**
  * Implements hook_views_pre_build().
  */
 function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
   // Alter number of items per page for PLP / Search pages.
   if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
-    $list_view_items_per_page = \Drupal::config('alshaya_acm_product.settings')->get('list_view_items_per_page');
-    $view->setItemsPerPage($list_view_items_per_page);
+    $per_page = _alshaya_acm_product_get_items_per_page_on_listing();
+
+    $request = \Drupal::request();
+    $show_on_load = intval($request->query->get('show_on_load'));
+
+    // If show on load for some reason is less then items we show by default
+    // per page, we ignore the parameter.
+    if ($show_on_load > $per_page) {
+      // We use the show on load only on page load.
+      if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
+        $per_page = $show_on_load;
+      }
+    }
+
+    // Set custom items per page in view object.
+    $view->setItemsPerPage($per_page);
   }
 }
 
@@ -839,7 +864,20 @@ function alshaya_acm_product_views_pre_render(ViewExecutable $view) {
 }
 
 /**
- * Implements hook_preprocess_views_infinite_scroll_pager().
+ * Implements hook_theme_registry_alter().
+ */
+function alshaya_acm_product_theme_registry_alter(array &$theme_registry) {
+  // Call alshaya_acm_product_preprocess_views_infinite_scroll_pager at the end
+  // to allow altering next page link.
+  if (isset($theme_registry['views_infinite_scroll_pager'])) {
+    $index = array_search('alshaya_acm_product_preprocess_views_infinite_scroll_pager', $theme_registry['views_infinite_scroll_pager']['preprocess functions']);
+    unset($theme_registry['views_infinite_scroll_pager']['preprocess functions'][$index]);
+    $theme_registry['views_infinite_scroll_pager']['preprocess functions'][] = 'alshaya_acm_product_preprocess_views_infinite_scroll_pager';
+  }
+}
+
+/**
+ * Implements template_preprocess_views_infinite_scroll_pager().
  */
 function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
   global $pager_page_array;
@@ -866,6 +904,25 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
 
       // Expose offset settings to JS.
       $vars['#attached']['drupalSettings']['views_infinite_scroll'] = ['auto_load_offset' => \Drupal::config('alshaya_acm_product.settings')->get('auto_load_trigger_offset')];
+    }
+
+    $request = \Drupal::request();
+
+    // We need to change next page number only for first page load requests.
+    if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
+      if (isset($vars['items'], $vars['items']['next'], $vars['items']['next']['href'])) {
+        $per_page_default = _alshaya_acm_product_get_items_per_page_on_listing();
+
+        /** @var \Drupal\views\ViewExecutable $view */
+        $view = $vars['view'];
+        $per_page = $view->getItemsPerPage();
+        if ($per_page !== $per_page_default) {
+          $next_page = $per_page / $per_page_default;
+          $query = $vars['items']['next']['href']->getOption('query');
+          $query['page'] = $next_page;
+          $vars['items']['next']['href']->setOption('query', $query);
+        }
+      }
     }
   }
 }
