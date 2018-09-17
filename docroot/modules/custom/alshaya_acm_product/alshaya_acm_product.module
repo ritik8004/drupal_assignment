@@ -843,6 +843,12 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // If show on load for some reason is less then items we show by default
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
+      if ($show_on_load % $per_page !== 0) {
+        $query = $request->query->get('show_on_load');
+        unset($query['show_on_load']);
+        unset($_GET['show_on_load']);
+        $request->query->set($query);
+      }
       // We use the show on load only on page load.
       if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
         $per_page = $show_on_load;
@@ -887,13 +893,36 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
     $product_list = $vars['view']->id() == 'alshaya_product_list' && in_array($vars['view']->current_display, ['block_1', 'block_2']);
     $page_auto_load = \Drupal::config('alshaya_acm_product.settings')->get('list_view_auto_page_load_count');
 
+    $request = \Drupal::request();
+
+    /** @var \Drupal\views\ViewExecutable $view */
+    $view = $vars['view'];
+
+    // We need to change next page number only for first page load requests.
+    if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
+      if (isset($vars['items'], $vars['items']['next'], $vars['items']['next']['href'])) {
+        $per_page_default = _alshaya_acm_product_get_items_per_page_on_listing();
+
+        $per_page = $view->getItemsPerPage();
+        if ($per_page !== $per_page_default) {
+          $next_page = $per_page / $per_page_default;
+          $query = $vars['items']['next']['href']->getOption('query');
+          unset($query['show_on_load']);
+          $query['page'] = $next_page;
+          $vars['items']['next']['href']->setOption('query', $query);
+        }
+      }
+    }
+
     // Load content automatically only if the auto load page count is > 0.
     if (($search_page || $product_list) && ($page_auto_load)) {
       $element = $vars['element'];
 
+      $next_page = $next_page ?? $pager_page_array[$element] + 1;
+
       // Change infinite scroll to load more button after x scrolls.
       $vars['options']['automatically_load_content'] = TRUE;
-      if (($pager_page_array[$element] + 1) % $page_auto_load == 0 && $pager_page_array[$element] !== 0) {
+      if ($next_page % $page_auto_load == 0) {
         $vars['options']['automatically_load_content'] = FALSE;
       }
 
@@ -906,24 +935,6 @@ function alshaya_acm_product_preprocess_views_infinite_scroll_pager(&$vars) {
       $vars['#attached']['drupalSettings']['views_infinite_scroll'] = ['auto_load_offset' => \Drupal::config('alshaya_acm_product.settings')->get('auto_load_trigger_offset')];
     }
 
-    $request = \Drupal::request();
-
-    // We need to change next page number only for first page load requests.
-    if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
-      if (isset($vars['items'], $vars['items']['next'], $vars['items']['next']['href'])) {
-        $per_page_default = _alshaya_acm_product_get_items_per_page_on_listing();
-
-        /** @var \Drupal\views\ViewExecutable $view */
-        $view = $vars['view'];
-        $per_page = $view->getItemsPerPage();
-        if ($per_page !== $per_page_default) {
-          $next_page = $per_page / $per_page_default;
-          $query = $vars['items']['next']['href']->getOption('query');
-          $query['page'] = $next_page;
-          $vars['items']['next']['href']->setOption('query', $query);
-        }
-      }
-    }
   }
 }
 

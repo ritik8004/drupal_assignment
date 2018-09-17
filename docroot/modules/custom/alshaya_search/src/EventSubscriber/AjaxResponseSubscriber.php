@@ -117,12 +117,7 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
 
     // Set items per page to current page * items per page.
     $currentPage = intval($request->query->get('page'));
-    $query_params['show_on_load'] = ($currentPage + 1) * $view->getItemsPerPage();
-
-    $show_on_load = intval($request->query->get('show_on_load'));
-    if ($show_on_load > $view->getItemsPerPage()) {
-      $query_params['show_on_load'] = $query_params['show_on_load'] + ($show_on_load - $view->getItemsPerPage());
-    }
+    $query_params['show_on_load'] = ($currentPage + 1) * _alshaya_acm_product_get_items_per_page_on_listing();
 
     $url = Url::fromUserInput($view_url, [
       'query' => $query_params,
