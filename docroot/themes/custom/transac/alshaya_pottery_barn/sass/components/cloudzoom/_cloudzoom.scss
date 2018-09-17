@@ -75,8 +75,18 @@
 
 #product-image-gallery-container {
   #product-image-gallery {
+    @include breakpoint($desktop) {
+      height: 31.5rem;
+    }
+
     .slick-arrow {
       background: none;
+    }
+
+    .slick-slide {
+      @include breakpoint($desktop) {
+        margin: 0.1875rem 0;
+      }
     }
 
     .slick-track {
@@ -87,7 +97,7 @@
 
       @include breakpoint($desktop) {
         transform: none !important;
-        height: 28.125rem;
+        height: 27.125rem;
         overflow: hidden;
         width: 100% !important;
       }
