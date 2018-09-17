@@ -61,6 +61,7 @@ $white-four-70: rgba(247, 247, 247, 0.7);
 $hnm-grey-light: #dee6f0;
 $hnm-grey-light-two: #d7e1ec;
 $hnm-grey-light-three: #e6e6e6;
+$_white-four: #f7f7f7;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -321,6 +322,7 @@ $fake_apply_btn: $white-five;
 $pdp_color_swatch_mobile_bg: $hnm-grey;
 $pdp_share_this_label_mobile: $hnm-black-two;
 $pdp_description_mobile: $hnm-black-two;
+$pdp_sizeguide_link: $grey7;
 
 // User my account
 $password_tooltip_list: $cerulean-two;
@@ -345,6 +347,8 @@ $basket_promo_wrapper: $info;
 $basket_promo_wrapper_link: $hnm-black-two;
 $basket_continue_shopping_btn: $hnm-black-two;
 $basket_continue_shopping_text: $hnm-black-two;
+$basket_header_oos_txt: $_white-four;
+$basket_header_oos_bg: $error;
 
 // Mini cart
 $mobile_continue_shopping_btn_text: $white-five;
@@ -532,3 +536,7 @@ $cart-free-gifts-label-background: $hnm-black-two;
 
 //Department page accordion
 $department_category_accordion_title_arrow: $hnm-black-two;
+$department_category_accordion_title: $hnm-black-two;
+
+// Pace progress color
+$progress_loader: $hnm-black-two;

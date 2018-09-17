@@ -1,5 +1,5 @@
 .c-content__slider {
-  .slick-slider {
+  .paragraph-banner.slick-slider {
     .slick-track,
     .slick-list {
       @include breakpoint($tablet) {
@@ -12,6 +12,11 @@
         #{$left}: 0 !important;
         #{$right}: 0;
       }
+    }
+
+    .field--type-image {
+      max-width: 120rem;
+      margin: 0 auto;
     }
   }
 }

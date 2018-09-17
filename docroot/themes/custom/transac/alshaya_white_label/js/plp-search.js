@@ -328,6 +328,17 @@
         $(this).find('input.facets-checkbox:checkbox:checked').each(function () {
           if (!$(this).closest('div.block-facets-ajax').hasClass('facet-active')) {
             $(this).closest('div.block-facets-ajax').addClass('facet-active');
+            $(this).closest('ul').siblings('.facets-soft-limit-link').show();
+            return false;
+          }
+        });
+
+        // Swatch facets (color) are link not checkbox.
+        $(this).find('ul li a').each(function () {
+          // If link has 'is-active' class, means this color facet is
+          // active/selected. Add active class at block level.
+          if ($(this).hasClass('is-active')) {
+            $(this).closest('div.block-facets-ajax').addClass('facet-active');
             return false;
           }
         });

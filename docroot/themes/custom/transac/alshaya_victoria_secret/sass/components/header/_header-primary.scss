@@ -51,6 +51,10 @@ header {
       #{$left}: -0.125rem;
       line-height: 20px;
 
+      html[lang=ar] & {
+        font-family: $vs-bold !important;
+      }
+
       @include breakpoint($upto-desktop) {
         width: 1.125rem;
         height: 1.125rem;
@@ -462,7 +466,7 @@ html[lang="en"] {
   .block-alshaya-main-menu {
     .menu--one__list-item {
       & > .menu__link-wrapper {
-        & > a.menu__link {
+        & > .menu__link {
           letter-spacing: 2.4px;
         }
       }

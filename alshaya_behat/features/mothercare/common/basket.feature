@@ -74,6 +74,7 @@ Feature: Test basket page
 #    And I wait for AJAX to finish
 #    Then I should see "Specified PRIVILEGES CLUB card numbers do not match."
 
+
   @arabic
   Scenario: As a Guest on arabic site
   I should be able to see the products added to basket
@@ -128,3 +129,10 @@ Feature: Test basket page
 #    And I fill in "privilege_card_number2" with "0-0013-5845"
 #    And I wait for AJAX to finish
 #    Then I should see "أرقام نادي الامتيازات التي أدخلتها غير متطابقة."
+
+    @product
+  Scenario: I am able to see product attributes on Basket page.
+    When I go to "/cart"
+    And I wait for the page to load
+    Then I should see "size:"
+    And I should see "Item code:"

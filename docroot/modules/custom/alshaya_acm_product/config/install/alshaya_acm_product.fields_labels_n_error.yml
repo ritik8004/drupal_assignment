@@ -1,0 +1,5 @@
+size:
+  en:
+    error: 'Please select a size.'
+  ar:
+    error: 'يرجى اختيار المقاس'

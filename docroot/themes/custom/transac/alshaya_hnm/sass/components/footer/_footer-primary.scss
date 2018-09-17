@@ -510,6 +510,7 @@
 
 .alshaya-newsletter-subscribe .form-item,
 .block-alshaya-newsletter .form-type-email {
+  label.error,
   label#edit-email-error {
     line-height: 1.36;
     display: inline-block;
@@ -518,10 +519,8 @@
     #{$right}: 0;
     top: 100%;
     color: $default_error;
-    padding: 0.3125rem 0;
     z-index: 9;
     font-size: 0.75rem;
-    margin-top: 0.1875rem;
     text-align: $left;
     background-color: $footer_bg;
 
@@ -577,14 +576,11 @@
   position: absolute;
   #{$left}: 0;
   top: 100%;
-  padding: 0.3125rem 0.5rem;
-
-  @include breakpoint($tablet) {
-    padding: 0.3125rem 0;
-  }
+  padding: 0 0.5rem;
 
   @include breakpoint($tablet) {
     width: 95.5%;
+    padding: 0;
   }
 }
 
@@ -597,10 +593,6 @@
       padding: 0.3125rem 0.875rem;
       margin-top: 0.1875rem;
       display: block;
-    }
-
-    .error {
-      margin-top: 0;
     }
   }
 
@@ -639,6 +631,10 @@
 
   @include breakpoint($only-tablet) {
     overflow: hidden;
+  }
+
+  @include breakpoint($only-mobile) {
+    float: none;
   }
 }
 

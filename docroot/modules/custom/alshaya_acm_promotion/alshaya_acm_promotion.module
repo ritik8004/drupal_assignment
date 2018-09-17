@@ -61,12 +61,17 @@ function alshaya_acm_promotion_acq_promotion_promotion_node_alter(Node $node, ar
 function alshaya_acm_promotion_acq_promotion_data_alter(&$promotion) {
   $promotion['free_gift_products'] = [];
 
+  // Conductor api version.
+  $middleware_version = \Drupal::config('acq_commerce.conductor')->get('api_version');
+  // @Todo: remove it when we using v2 for all.
+  $extension_key = $middleware_version == 'v2' ? 'extension' : 'extension_attributes';
+
   // Extract free gift skus & remove them from list of products to be processed
   // for this promotion.
   foreach ($promotion['products'] as $key => $product) {
-    if (!empty($product['extension_attributes'])
-      && !empty($product['extension_attributes']['ampromo_cart_sku'])
-      && ($product['extension_attributes']['ampromo_cart_sku'])) {
+    if (!empty($product[$extension_key])
+      && !empty($product[$extension_key]['ampromo_cart_sku'])
+      && ($product[$extension_key]['ampromo_cart_sku'])) {
       $promotion['free_gift_products'][] = $product['product_sku'];
       unset($promotion['products'][$key]);
     }
@@ -88,10 +93,12 @@ function alshaya_acm_promotion_acq_sku_base_fields_updated(array $fields, $op = 
     case 'add':
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
+          // We use add even when resetting. Remove facet if available.
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
       }
       break;
 

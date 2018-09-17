@@ -2,29 +2,36 @@
   <div class="highlights">
     {% for highlight_paragraph in data.highlight_paragraph %}
 
-      {#Render highlight image and other data.#}
-      {#Even if title is empty, we need to render the empty div to set the min height.#}
-      <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
-        <div class="title {{ title_class }}">
-        {#If its highlight, then only we render the title.#}
-        {% if highlight_paragraph.highlight_type == 'highlight' %}
-          {% if highlight_paragraph.title is not empty %}
-            {{ highlight_paragraph.title }}
-          {% endif %}
-        {% endif %}
+      {#For the text_link paragraph rendering.#}
+      {% if highlight_paragraph.paragraph_type == 'text_links' %}
+        {{ alshaya_main_menu('alshaya_main_menu_text_links', highlight_paragraph) }}
+      {% else %}
+        {#For other paragraphs.#}
+        {#Render highlight image and other data.#}
+        {#Even if title is empty, we need to render the empty div to set the min height.#}
+        <div class="highlighted {{ highlight_paragraph.highlight_type }}" gtm-type="gtm-highlights">
+          <div class="title {{ title_class }}">
+            {#If its highlight, then only we render the title.#}
+            {% if highlight_paragraph.highlight_type == 'highlight' %}
+              {% if highlight_paragraph.title is not empty %}
+                  {{ highlight_paragraph.title }}
+              {% endif %}
+            {% endif %}
+          </div>
+          <a href="{{ highlight_paragraph.image_link }}">
+            {{ highlight_paragraph.img }}
+            {% if highlight_paragraph.highlight_type == 'title_subtitle' %}
+              {% if highlight_paragraph.title %}
+                <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
+              {% endif %}
+              {% if highlight_paragraph.description %}
+                <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
+              {% endif %}
+            {% endif %}
+          </a>
         </div>
-        <a href="{{ highlight_paragraph.image_link }}">
-          {{ highlight_paragraph.img }}
-          {% if highlight_paragraph.highlight_type == 'title_subtitle' %}
-            {% if highlight_paragraph.title %}
-              <span class="hightlight__title">{{ highlight_paragraph.title }}</span>
-            {% endif %}
-            {% if highlight_paragraph.description %}
-              <span class="hightlight__description">{{ highlight_paragraph.description }}</span>
-            {% endif %}
-          {% endif %}
-        </a>
-      </div>
+
+      {% endif %}
 
     {% endfor %}
   </div>

@@ -1,0 +1,19 @@
+.alshaya_search_slider {
+  .slick-slider {
+    .slick-slide {
+      margin: 0;
+
+      img {
+        height: 4.5rem;
+        max-width: 5rem;
+      }
+
+      &:hover {
+        &::after {
+          left: 2px;
+          right: 2px;
+        }
+      }
+    }
+  }
+}

@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Utility function to return media files for a product.
@@ -89,26 +90,11 @@ function alshaya_acm_product_get_sku_image(array $media, $image_style = '', $rel
  */
 function alshaya_acm_product_get_sku_configurable_values($sku) {
   $configurableFieldValues = [];
-
   $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
-
   if ($sku_entity) {
-    $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
-    $configurableFields = array_filter($fields, function ($field) {
-      return (bool) $field['configurable'];
-    });
-
-    foreach ($configurableFields as $key => $field) {
-      $fieldKey = 'attr_' . $key;
-
-      if ($sku_entity->get($fieldKey)->getString()) {
-        $configurableFieldValues[$fieldKey] = [
-          'label' => $sku_entity->get($fieldKey)->getFieldDefinition()->getLabel(),
-          'value' => $sku_entity->get($fieldKey)->getString(),
-        ];
-      }
-    }
-
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $configurableFieldValues = $skuManager->getConfigurableValues($sku_entity);
   }
   return $configurableFieldValues;
 }
@@ -128,135 +114,6 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   return $skuManager->getParentSkuBySku($sku, $langcode);
-}
-
-/**
- * Helper function to get gallery and zoom for particular SKU.
- *
- * @param array $build
- *   Build array to add the gallery and zoom elements to.
- * @param \Drupal\acq_commerce\SKUInterface $sku_entity
- *   SKU Entity for which we want to display the media.
- * @param bool $check_parent_child
- *   Check parent or child skus.
- */
-function alshaya_acm_product_get_gallery(array &$build, SKUInterface $sku_entity, $check_parent_child = TRUE) {
-  \Drupal::moduleHandler()->loadInclude('alshaya_product_zoom', 'inc', 'alshaya_product_zoom.utility');
-
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
-  $media = $skuImagesManager->getAllMedia($sku_entity, $check_parent_child);
-  $main_image = $media['main'];
-  $thumbnails = $media['thumbs'];
-
-  // Fetch settings.
-  $settings = alshaya_product_zoom_cloudzoom_default_settings();
-  $thumbnail_style = $settings['thumb_style'];
-  $zoom_style = $settings['zoom_style'];
-  $slide_style = $settings['slide_style'];
-
-  // Create our thumbnails to be rendered for zoom.
-  foreach ($media['media_items']['images'] ?? [] as $media_item) {
-    $file_uri = $media_item['file']->getFileUri();
-
-    // Show original full image in the modal inside a draggable container.
-    $original_image = $media_item['file']->url();
-
-    $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
-    $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-    $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-    if (empty($main_image)) {
-      $main_image = [
-        'zoomurl' => $image_zoom,
-        'mediumurl' => $image_medium,
-        'label' => $media_item['label'],
-      ];
-    }
-
-    $thumbnails[] = [
-      'thumburl' => $image_small,
-      'mediumurl' => $image_medium,
-      'zoomurl' => $image_zoom,
-      'fullurl' => $original_image,
-      'label' => $media_item['label'],
-      'type' => 'image',
-    ];
-  }
-  foreach ($media['media_items']['vidoes'] ?? [] as $media_item) {
-    // @TODO:
-    // Receiving video_provider as NULL, should be set to youtube or vimeo.
-    // Till then using $type as provider flag.
-    $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-    $thumbnails[] = [
-      'thumburl' => $media_item['file'],
-      'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-      'video_title' => $media_item['video_title'],
-      'video_desc' => $media_item['video_description'],
-      'type' => $type,
-      // @TODO: should this be config?
-      'width' => 81,
-      // @TODO: should this be config?
-      'height' => 81,
-    ];
-  }
-
-  // If no main image, use default image.
-  if (empty($main_image) && $check_parent_child) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
-      $image_small = ImageStyle::load($thumbnail_style)->buildUrl($default_image->getFileUri());
-      $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
-      $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
-
-      $main_image = [
-        'zoomurl' => $image_zoom,
-        'mediumurl' => $image_medium,
-        'label' => $sku_entity->label(),
-      ];
-    }
-  }
-
-  if (!empty($main_image)) {
-    $pdp_gallery_pager_limit = \Drupal::config('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
-    $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
-
-    $build['gallery'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => ['gallery-wrapper'],
-      ],
-    ];
-
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $sku_identifier = strtolower(Html::cleanCssIdentifier($sku_entity->getSku()));
-
-    $labels = [
-      '#theme' => 'product_labels',
-      '#labels' => $skuManager->getLabels($sku_entity, 'pdp'),
-      '#sku' => $sku_identifier,
-      '#mainsku' => $sku_identifier,
-      '#type' => 'pdp',
-    ];
-
-    // Add PDP slider position class in template.
-    $pdp_image_slider_position = \Drupal::config('alshaya_acm_product.settings')->get('image_slider_position_pdp');
-
-    $build['gallery']['product_zoom'] = [
-      '#theme' => 'product_zoom',
-      '#mainImage' => $main_image,
-      '#thumbnails' => $thumbnails,
-      '#pager_flag' => $pager_flag,
-      '#properties' => alshaya_product_zoom_get_rel_cloudzoom($settings),
-      '#labels' => $labels,
-      '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
-      '#attached' => [
-        'library' => [
-          'alshaya_product_zoom/product.cloud_zoom',
-        ],
-      ],
-    ];
-  }
 }
 
 /**
@@ -315,11 +172,13 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
 
   // If still image is not available, set default one.
   if (empty($image)) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+    $default_image_url = $skuImagesManager->getProductDefaultImageUrl();
+
+    if ($default_image_url) {
       $image = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => file_create_url($default_image->getFileUri()),
+          'src' => $default_image_url,
           'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'class' => [
@@ -331,33 +190,6 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   }
 
   return $image;
-}
-
-/**
- * Get the url of the image of SKU.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU entity object.
- *
- * @return string
- *   Url of the image.
- */
-function _alshaya_acm_get_product_display_image_url(SKU $sku) {
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
-  // Load the first image.
-  $media_image = $skuImagesManager->getFirstImage($sku);
-
-  // If we have image for the product.
-  if (!empty($media_image)) {
-    if ($media_image['file'] instanceof FileInterface) {
-      $uri = $media_image['file']->getFileUri();
-      return file_create_url($uri);
-    }
-  }
-
-  return '';
 }
 
 /**
@@ -517,10 +349,15 @@ function alshaya_acm_product_get_brand_logo($sku) {
     }
     else {
       // Download the file contents.
-      $file_data = file_get_contents($image_url);
+      $client = \Drupal::httpClient();
+      try {
+        $file_data = $client->get($image_url);
+      }
+      catch (RequestException $e) {
+        watchdog_exception('alshaya_acm_product', $e);
+      }
 
-      // Check to ensure errors like 404, 403, etc. are catched and empty file
-      // not saved in SKU.
+      // Check to ensure empty file is not saved in SKU.
       if (empty($file_data)) {
         \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
       }

@@ -99,7 +99,7 @@ class ProductStockSyncResource extends ResourceBase {
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
-  public function post(array $stock = []) {
+  public function post(array $stock) {
     $lock = \Drupal::lock();
 
     $response = [

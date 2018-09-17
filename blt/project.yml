@@ -22,7 +22,7 @@ modules:
     enable: [dblog, devel, seckit, views_ui]
     uninstall: [acsf, acquia_connector, shield]
   ci:
-    enable: [alshaya_mc]
+    enable: {  }
     uninstall: [acquia_connector, shield]
   dev:
     enable: [acquia_connector, shield]
@@ -76,4 +76,4 @@ multisite:
   name:
     - g
 cm:
-  strategy: features
+  strategy: none

@@ -12,6 +12,15 @@
     }
   }
 
+  #edit-actions-top {
+    .checkout-top-button {
+      -webkit-font-smoothing: antialiased;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   #table-cart-items {
     table {
       font-family: $body_font;
@@ -25,7 +34,7 @@
         }
       }
 
-      tr {
+      tbody tr {
         background: $basket_tr;
 
         &:hover {
@@ -33,8 +42,79 @@
         }
 
         td {
+          &.name {
+            .image {
+              max-width: 8rem;
+
+              @include breakpoint($only-tablet) {
+                max-width: 7.125rem;
+              }
+
+              @include breakpoint($desktop) {
+                max-width: 8.5625rem;
+              }
+            }
+          }
+
+          &.quantity {
+            position: relative;
+
+            > .ajax-progress-throbber {
+              #{$left}: 58%;
+
+              @include breakpoint($only-tablet) {
+                .throbber {
+                  background-size: 1rem;
+                }
+              }
+
+              @include breakpoint($only-mobile) {
+                .throbber {
+                  background-size: 1.25rem;
+                }
+
+                #{$left}: 48%;
+                top: 1.8125rem;
+              }
+            }
+
+            div .ajax-progress-throbber {
+              #{$left}: 102%;
+
+              @include breakpoint($only-tablet) {
+                #{$left}: 86%;
+
+                .throbber {
+                  background-size: 1rem;
+                }
+              }
+
+              @include breakpoint($only-mobile) {
+                #{$left}: 22%;
+
+                .throbber {
+                  background-size: 1.25rem;
+                }
+              }
+            }
+          }
+
           a {
             font-weight: 600;
+
+            &.sku-promotion-link {
+              text-decoration: underline;
+            }
+          }
+
+          &.price {
+            .price--discount {
+              .discount-prefix {
+                @include breakpoint($tablet) {
+                  margin-right: 1.125rem;
+                }
+              }
+            }
           }
         }
 
@@ -103,5 +183,52 @@
       text-transform: uppercase;
       font-weight: 600;
     }
+  }
+
+  .promo-continue-shopping-wrapper {
+    #coupon-button.add {
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+  }
+}
+
+.block-basket-horizontal-recommendation {
+  h3 {
+    padding-#{$left}: 0;
+    font-size: 1.125rem;
+    font-weight: 300;
+
+    @include breakpoint($tablet) {
+      padding: 0 12%;
+      margin-bottom: 1.625rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding: 0 1.5rem;
+      margin-bottom: 1.625rem;
+    }
+  }
+
+  .view-product-slider {
+    padding: 0 0.75rem;
+
+    .owl-carousel {
+      .owl-item {
+        img {
+          max-width: 13.125rem;
+        }
+      }
+    }
+  }
+}
+
+#out-of-stock-message {
+  font-weight: normal;
+}
+
+.continue-shopping {
+  @include breakpoint($desktop) {
+    #{$right}: 24.25%;
   }
 }

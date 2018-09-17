@@ -42,7 +42,20 @@ class AlshayaSearchGranular extends SearchApiGranular {
       // Result contains quotes as it is stored as string.
       foreach ($this->results as $key => $result) {
         $filter = str_replace('"', '', $result['filter']);
-        $filters[$filter] = $key;
+
+        if ((float) $filter > 0) {
+          $filters[$filter] = $key;
+        }
+        else {
+          // Remove all the results with price exactly zero.
+          // This for sure should be considered as corrupt data but for
+          // configurable products that are OOS we will have price zero.
+          // Still, we really don't want to show them when filtering by price,
+          // do we?
+          // Besides, views currently don't show it at all creating mismatch
+          // in count in facets and count in results.
+          unset($this->results[$key]);
+        }
       }
 
       // Sort them by key, we have int now.

@@ -98,10 +98,6 @@
     &:nth-child(2) {
       @include breakpoint($tablet) {
         width: 30.8%;
-
-        &::after {
-          margin-#{$left}: 0.7rem;
-        }
       }
 
       @include breakpoint($desktop) {
@@ -202,6 +198,10 @@
         html[lang=ar] & {
           width: 75%;
         }
+      }
+
+      @include breakpoint($only-tablet) {
+        top: 1.125rem;
       }
     }
 
@@ -322,9 +322,7 @@
       margin-#{$left}: -0.125rem;
 
       .checkout-progress__step {
-        &:not(:first-child) {
-          line-height: 8.1;
-        }
+        line-height: 8.1;
       }
     }
 

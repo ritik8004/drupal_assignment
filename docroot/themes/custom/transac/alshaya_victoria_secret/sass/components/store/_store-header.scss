@@ -118,7 +118,6 @@
 
     html[lang="ar"] & {
       @include breakpoint($desktop) {
-        width: 41.6%;
         padding-top: 0;
         padding-bottom: 0;
       }
@@ -198,7 +197,6 @@
       }
 
       @include breakpoint($desktop) {
-        padding-#{$left}: 0;
         width: 81%;
 
         html[lang="ar"] & {

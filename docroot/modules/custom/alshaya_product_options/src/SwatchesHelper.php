@@ -11,6 +11,8 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\facets\FacetInterface;
 use Drupal\taxonomy\TermInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client;
 
 /**
  * Class SwatchesHelper.
@@ -89,6 +91,20 @@ class SwatchesHelper {
   protected $skuFieldsManager;
 
   /**
+   * Contain the sku base field array.
+   *
+   * @var array
+   */
+  protected $skuBaseFieldDefination = [];
+
+  /**
+   * GuzzleHttp\Client definition.
+   *
+   * @var GuzzleHttp\Client
+   */
+  protected $httpClient;
+
+  /**
    * SwatchesHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -103,13 +119,16 @@ class SwatchesHelper {
    *   The language manager.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \GuzzleHttp\Client $http_client
+   *   GuzzleHttp\Client object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LoggerChannelInterface $logger,
                               ProductOptionsManager $product_options_manager,
                               CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              Client $http_client) {
     $this->entityTypeManager = $entity_type_manager;
     $this->fileStorage = $this->entityTypeManager->getStorage('file');
     $this->logger = $logger;
@@ -117,6 +136,7 @@ class SwatchesHelper {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->httpClient = $http_client;
   }
 
   /**
@@ -277,10 +297,15 @@ class SwatchesHelper {
     $args = ['@file' => $url];
 
     // Download the file contents.
-    $file_data = file_get_contents($url);
+    $client = $this->httpClient;
+    try {
+      $file_data = $client->get($url);
+    }
+    catch (RequestException $e) {
+      watchdog_exception('alshaya_product_options', $e);
+    }
 
-    // Check to ensure errors like 404, 403, etc. are catched and empty file
-    // not saved in SKU.
+    // Check to ensure empty file not saved in SKU.
     if (empty($file_data)) {
       throw new \Exception(new FormattableMarkup('Failed to download file "@file".', $args));
     }
@@ -346,7 +371,7 @@ class SwatchesHelper {
 
           /** @var \Drupal\file\Entity\File $file */
           $file = $this->fileStorage->load($file_value['target_id']);
-          $data['swatch'] = file_create_url($file->getFileUri());
+          $data['swatch'] = file_url_transform_relative(file_create_url($file->getFileUri()));
         }
         break;
 
@@ -369,9 +394,19 @@ class SwatchesHelper {
    *   Swatch data or empty array.
    */
   public function getSwatchForFacet(FacetInterface $facet, $value) {
-    $fields = $this->skuFieldsManager->getFieldAdditions();
+    if (empty($this->skuBaseFieldDefination)) {
+      $this->skuBaseFieldDefination = $this->skuFieldsManager->getFieldAdditions();
+    }
+
     $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());
-    $attribute_code = $fields[$field_code]['source'] ?? $field_code;
+
+    // If field/facet is not swatchable, no need to process further.
+    if (isset($this->skuBaseFieldDefination[$field_code])
+      && empty($this->skuBaseFieldDefination[$field_code]['swatch'])) {
+      return [];
+    }
+
+    $attribute_code = $this->skuBaseFieldDefination[$field_code]['source'] ?? $field_code;
     return $this->getSwatch($attribute_code, $value);
   }
 

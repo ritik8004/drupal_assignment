@@ -13,6 +13,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 use Drupal\user\UserInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Defines the SKU entity.
@@ -189,7 +190,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
         $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
 
-        if ($media_item && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+        if ($media_item && !empty($media_item['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
           $this->swatchData = $media_item;
           break;
         }
@@ -283,10 +284,15 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $args = ['@file' => $data['file'], '@sku_id' => $this->id()];
 
     // Download the file contents.
-    $file_data = file_get_contents($data['file']);
+    $client = \Drupal::httpClient();
+    try {
+      $file_data = $client->get($data['file']);
+    }
+    catch (RequestException $e) {
+      watchdog_exception('acq_commerce', $e);
+    }
 
-    // Check to ensure errors like 404, 403, etc. are catched and empty file
-    // not saved in SKU.
+    // Check to ensure empty file is not saved in SKU.
     if (empty($file_data)) {
       throw new \Exception(new FormattableMarkup('Failed to download file "@file" for SKU id @sku_id.', $args));
     }
@@ -824,6 +830,18 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $swatch['file']->delete();
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
+
+    // Reset static cache after saving any SKU.
+    // This is done by default when using entity storage.
+    // We don't use entity storage and use custom code for static cache.
+    drupal_static_reset('loadFromSku');
   }
 
 }

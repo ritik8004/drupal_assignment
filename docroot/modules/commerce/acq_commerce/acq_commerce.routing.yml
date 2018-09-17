@@ -45,3 +45,12 @@ acq_commerce.test:
     _title: 'Test Connection'
   requirements:
     _permission: 'access commerce administration pages'
+
+acq_commerce.configuration.purge_queue:
+  path: '/admin/commerce/config/purge-queue'
+  defaults:
+    _form: '\Drupal\acq_commerce\Form\PurgeQueueForm'
+    _title: 'Purge Queue'
+    _description: 'Perform purging of site queue.'
+  requirements:
+    _permission: 'access commerce administration pages'

@@ -58,3 +58,14 @@ if [ -d $deployDir/docroot/modules/contrib/devel ]
 then
   rm -Rf $deployDir/docroot/modules/contrib/devel
 fi
+
+# Delete patches directory which is not used on acquia git.
+# It can't be done via deploy-exclude-additions.txt given it is needed to
+# build the artifact.
+rm -Rf $deployDir/patches
+
+# Log the git diff in a file so it can be used later by cloud hooks.
+cd $deployDir
+git diff --name-only > $deployDir/git-diff.txt
+git add $deployDir/git-diff.txt
+cd -

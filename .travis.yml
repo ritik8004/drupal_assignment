@@ -5,11 +5,31 @@ sudo: required
 language: php
 dist: trusty
 
-php:
-  - 7.1
-
 matrix:
   fast_finish: true
+  include:
+  - php: 7.1
+    env:
+      - INSTALL_TYPE=install
+      - PROFILE=alshaya_transac
+    if: type = pull_request
+  - php: 7.1
+    env:
+    - INSTALL_TYPE=install
+    - PROFILE=alshaya_non_transac
+    if: type = pull_request
+  #- php: 7.1
+  #  env:
+  #  - INSTALL_TYPE=update
+  #  - PROFILE=alshaya_transac
+  #  if: type = pull_request
+  #- php: 7.1
+  #  env:
+  #  - INSTALL_TYPE=update
+  #  - PROFILE=alshaya_non_transac
+  #  if: type = pull_request
+  - php: 7.1
+    if: type = push
 
 env:
   global:
@@ -29,24 +49,14 @@ cache:
   - "$HOME/.npm"
   - "$HOME/.nvm"
   - "vendor"
-  - "docroot/themes/custom/amp/alshaya_amp_hnm/node_modules"
-  - "docroot/themes/custom/amp/alshaya_amp_mothercare/node_modules"
-  - "docroot/themes/custom/amp/alshaya_amp_victoria_secret/node_modules"
-  - "docroot/themes/custom/amp/alshaya_amp_white_label/node_modules"
-  - "docroot/themes/custom/non_transac/bath_body_works/node_modules"
-  - "docroot/themes/custom/non_transac/bouchon_bakery/node_modules"
-  - "docroot/themes/custom/non_transac/debenhams/node_modules"
-  - "docroot/themes/custom/non_transac/victoria_secret/node_modules"
-  - "docroot/themes/custom/non_transac/whitelabel/node_modules"
-  - "docroot/themes/custom/non_transac/whitelabel_non_transac/node_modules"
-  - "docroot/themes/custom/transac/alshaya_bathbodyworks/node_modules"
-  - "docroot/themes/custom/transac/alshaya_example_subtheme/node_modules"
-  - "docroot/themes/custom/transac/alshaya_hnm/node_modules"
-  - "docroot/themes/custom/transac/alshaya_mothercare/node_modules"
-  - "docroot/themes/custom/transac/alshaya_pottery_barn/node_modules"
-  - "docroot/themes/custom/transac/alshaya_victoria_secret/node_modules"
-  - "docroot/themes/custom/transac/alshaya_white_label/node_modules"
-  - "docroot/themes/custom/transac/pottery_barn_non_trans/node_modules"
+  - "docroot/modules/contrib"
+  - "docroot/themes/contrib"
+  - "docroot/profiles/contrib"
+  - "docroot/core"
+  - "docroot/libraries"
+  - "docroot/themes/custom/amp/node_modules"
+  - "docroot/themes/custom/non_transac/node_modules"
+  - "docroot/themes/custom/transac/node_modules"
 
 addons:
   ssh_known_hosts:
@@ -74,6 +84,10 @@ install:
   - source $BLT_DIR/scripts/travis/setup_project
   - nvm install 6.10.0
   - nvm use 6.10.0
+  # Setup the themes here so the node_modules folders can be cached.
+  - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
+  # Frontend-setup.sh changed directory, hence we return to the original dir.
+  - cd ${BUILD_DIR}
 
 script:
 # Changing path to disable behat test on Travis.
@@ -97,7 +111,7 @@ deploy:
      script: "$BLT_DIR/scripts/travis/deploy_branch"
      skip_cleanup: true
      on:
-       branch: pwa
+       branch: travis
        php: 7.1
    - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_branch"

@@ -37,17 +37,30 @@
       // Create a new instance of ladda for the specified button
       $('.edit-add-to-cart').attr('data-style', 'zoom-in');
 
-      $('.edit-add-to-cart', context).on('click', function () {
-        // Start loading
-        spinner_start();
-      });
-
       $('.edit-add-to-cart', context).on('mousedown', function () {
-        // Start loading
-        spinner_start();
+        var that = this;
+        // Delay loader for 10ms, we use the same event as AJAX and
+        // we might have some client side validation error preventing
+        // ajax call.
+        setTimeout(function () {
+          if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
+            // Scroll to error.
+            scrollToErrorPDP();
+            return;
+          }
+
+          // Start loading
+          spinner_start();
+        }, 10);
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
+        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
+          // Scroll to error.
+          scrollToErrorPDP();
+          return;
+        }
+
         if (event.keyCode === 13 || event.keyCode === 32) {
           // Start loading
           spinner_start();
@@ -80,6 +93,58 @@
           $('#cart_notification').fadeOut();
         }, drupalSettings.addToCartNotificationTime * 1000);
       };
+
+      // On PDP scroll to first error label.
+      var scrollToErrorPDP = function() {
+        // Doing this for the JS conflict.
+        setTimeout(function(){
+          // First error label.
+          var first_error_label = $('form.ajax-submit-prevented label.error').first();
+          // If button is sticky (fix), just scroll.
+          var is_button_sticky = $('button.edit-add-to-cart').hasClass('fix-button');
+
+          // If error already visible, no need to scroll.
+          if (isInViewPort(first_error_label) && !is_button_sticky) {
+            return;
+          }
+
+          // Sticky header.
+          var stickyHeaderHeight = stickyHeaderHight();
+          // Scroll position.
+          var height_to_scroll = first_error_label.offset().top - stickyHeaderHeight - 25;
+          // Scroll to the error.
+          $('html, body').animate({
+            scrollTop: height_to_scroll
+          });
+        }, 500)
+      }
+
+      // Calculate the sticky header hight.
+      var stickyHeaderHight = function() {
+        var brandingMenuHight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() : 0;
+        var superCategoryHight = ($('#block-supercategorymenu').length > 0) ? $('#block-supercategorymenu').height() : 0;
+
+        // If mobile.
+        if ($(window).width() < 768) {
+          var mobileNavigationHight = ($('#block-mobilenavigation').length > 0) ? $('#block-mobilenavigation').height() : 0;
+          return Math.max(brandingMenuHight, mobileNavigationHight) + superCategoryHight;
+        }
+        else {
+          // Sticky header for desktop.
+          return parseInt(brandingMenuHight) + parseInt(superCategoryHight);
+        }
+
+      }
+
+      // Check if error element is visible.
+      var isInViewPort = function(element) {
+        var stickyHeader = stickyHeaderHight();
+        var elementTop = element.offset().top;
+        var elementBottom = elementTop + element.outerHeight();
+        var viewportTop = $(window).scrollTop() + stickyHeader;
+        var viewportBottom = viewportTop + $(window).height() + stickyHeader;
+        return elementBottom  > viewportTop && elementTop < viewportBottom;
+      }
 
       $.fn.cartGenericScroll = function (selector) {
         if ($(window).width() < 768 && $('body').find(selector).length !== 0) {

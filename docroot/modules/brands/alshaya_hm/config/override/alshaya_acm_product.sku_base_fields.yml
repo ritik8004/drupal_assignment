@@ -6,6 +6,7 @@ fields:
   color_label:
     label: 'Color label'
     type: 'string'
+    configurable: 1
 
   concept:
     label: 'Concept'
@@ -64,3 +65,4 @@ fields:
     label: 'Composition'
     description: 'Product Composition.'
     type: 'text_long'
+

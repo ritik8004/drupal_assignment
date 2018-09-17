@@ -10,6 +10,32 @@ use Drupal\field\Entity\FieldStorageConfig;
 /**
  * Implements hook_update_N().
  *
+ * Adding new field for video file upload in video media_type.
+ */
+function alshaya_media_update_8102() {
+  // Check if field exits, if not install config to create it. Added for
+  // CORE-4836 to handle missing media_video_embed_field.
+  if (!FieldStorageConfig::loadByName('media', 'field_media_video_embed_field')) {
+    alshaya_config_install_configs(['field.storage.media.field_media_video_embed_field'], 'lightning_media_video');
+  }
+
+  $lightning_media_video_configs = [
+    'media.type.video',
+    'field.field.media.video.field_media_video_embed_field',
+    'core.entity_form_display.media.video.default',
+  ];
+
+  alshaya_config_install_configs($lightning_media_video_configs, 'lightning_media_video');
+
+  $configs = [
+    'field.field.media.video.field_document',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_media');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install lightning_media_video module and remove unnecessary bundle of media.
  */
 function alshaya_media_update_8101() {

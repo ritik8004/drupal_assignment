@@ -8,6 +8,10 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Class SkuImagesManager.
@@ -45,6 +49,13 @@ class SkuImagesManager {
   protected $fileStorage;
 
   /**
+   * Cache Backend object for "cache.data".
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -55,15 +66,19 @@ class SkuImagesManager {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache backend object.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              CacheBackendInterface $cache) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->cache = $cache;
   }
 
   /**
@@ -86,6 +101,20 @@ class SkuImagesManager {
       $media_items = array_merge($media_items, $items);
     }
     return $media_items;
+  }
+
+  /**
+   * Wrapper function to check if particular SKU has images or not.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return bool
+   *   TRUE if SKU has images.
+   */
+  public function hasMediaImages(SKUInterface $sku) {
+    $media = $this->getAllMedia($sku, FALSE);
+    return !empty($media['images']);
   }
 
   /**
@@ -124,6 +153,19 @@ class SkuImagesManager {
     }
 
     $media = $sku->getMedia(TRUE, FALSE, $default_label);
+
+    // Remove thumbnails from media items.
+    // @TODO: This is added for CORE-5026 and will be reworked in CORE-5208.
+    foreach ($media ?? [] as $index => $media_item) {
+      if (!isset($media_item['media_type'])) {
+        continue;
+      }
+
+      if (isset($media_item['roles'])
+        && in_array('thumbnail', $media_item['roles'])) {
+        unset($media[$index]);
+      }
+    }
 
     $return = [
       'images' => [],
@@ -192,6 +234,20 @@ class SkuImagesManager {
     foreach ($thumbs as $thumb) {
       $url = $thumb['mediumurl']->toString();
       $return['images'][$url] = $url;
+    }
+
+    if ($sku->bundle() === 'simple' && !$check_parent_child) {
+      $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+      if ($config->get('show_parent_images_in_child')) {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku->getPluginInstance();
+        $parent = $plugin->getParentSku($sku);
+
+        if ($parent instanceof SKUInterface) {
+          $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
+          $return = array_merge_recursive($return, $parent_media);
+        }
+      }
     }
 
     $this->skuManager->setProductCachedData(
@@ -270,8 +326,9 @@ class SkuImagesManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          $media = $this->getAllMedia($child, FALSE);
-          if ($media['images'] || $media['videos']) {
+
+          if (($child instanceof SKUInterface) &&
+            ($this->hasMediaImages($child))) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
@@ -294,7 +351,16 @@ class SkuImagesManager {
    *   Media item array.
    */
   public function getFirstImage(SKUInterface $sku) {
-    $media = $this->getAllMedia($sku, TRUE);
+    $check_parent_child = TRUE;
+
+    try {
+      $sku = $this->getSkuForGallery($sku, $check_parent_child);
+    }
+    catch (\Exception $e) {
+      return [];
+    }
+
+    $media = $this->getAllMedia($sku, $check_parent_child);
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {
@@ -302,6 +368,122 @@ class SkuImagesManager {
     }
 
     return [];
+  }
+
+  /**
+   * Get the url of the image of SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity object.
+   * @param bool $absolute
+   *   Flag to specify if absolute URL is required or relative.
+   *
+   * @return string
+   *   Url of the image.
+   */
+  public function getFirstImageUrl(SKUInterface $sku, bool $absolute = FALSE) : string {
+    // Load the first image.
+    $media_image = $this->getFirstImage($sku);
+
+    // If we have image for the product.
+    if (!empty($media_image) && $media_image['file'] instanceof FileInterface) {
+      $uri = $media_image['file']->getFileUri();
+      $url = file_create_url($uri);
+      return $absolute ? $url : file_url_transform_relative($url);
+    }
+
+    return '';
+  }
+
+  /**
+   * Get SKU to use for gallery when no specific child is selected.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param bool $check_parent_child
+   *   Flag (by reference) to mention if parent/child should be checked later.
+   * @param string $case
+   *   Case to override config.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface
+   *   SKU to be used for gallery.
+   *
+   * @throws \Exception
+   */
+  public function getSkuForGallery(SKUInterface $sku, &$check_parent_child, string $case = '') {
+    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $configurable_use_parent_images = $config->get('configurable_use_parent_images');
+    $is_configurable = $sku->bundle() == 'configurable';
+
+    if (!empty($case) && $configurable_use_parent_images != 'never') {
+      $configurable_use_parent_images = $case;
+    }
+
+    switch ($configurable_use_parent_images) {
+      case 'never':
+        // Case were we will show default/empty gallery but never use
+        // from parent.
+        $check_parent_child = FALSE;
+
+        if ($is_configurable) {
+          $child = $this->getFirstChildWithMedia($sku);
+
+          // Try to get first valid in stock child.
+          if ($child instanceof SKU) {
+            $sku = $child;
+          }
+          else {
+            // Try to get first available child for OOS.
+            $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
+            if ($child instanceof SKU) {
+              $sku = $child;
+            }
+            else {
+              throw new \Exception('No valid child found.', 404);
+            }
+          }
+        }
+        break;
+
+      case 'fallback':
+        // Here we first check if images are there in child.
+        // If not only then we use image from parent.
+        if ($is_configurable) {
+          $check_parent_child = FALSE;
+          $child = $this->getFirstChildWithMedia($sku);
+          if ($child instanceof SKU) {
+            $sku = $child;
+          }
+
+          // Check if parent has image before fallbacking to OOS children.
+          if (!$this->hasMediaImages($sku)) {
+            // Try to get first available child for OOS.
+            $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
+            if ($child instanceof SKU) {
+              $sku = $child;
+            }
+          }
+        }
+        break;
+
+      case 'always':
+      default:
+        // Case were we will show image from parent first, if not available
+        // image from child, if still not - empty/default image.
+        if ($this->hasMediaImages($sku)) {
+          // Do nothing.
+        }
+        elseif ($is_configurable) {
+          $check_parent_child = FALSE;
+          $child = $this->getFirstChildWithMedia($sku);
+          if ($child instanceof SKU) {
+            $sku = $child;
+          }
+        }
+        break;
+    }
+
+    return $sku;
   }
 
   /**
@@ -313,14 +495,24 @@ class SkuImagesManager {
    *   Context - pdp/search/modal/teaser.
    * @param string $product_label
    *   Translated product label to use in alt/title.
+   * @param bool $check_parent_child
+   *   Flag to mention if parent/child should be checked later.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '') {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE) {
     $gallery = [];
 
-    $display_thumbnails = $this->configFactory->get('alshaya_acm_product.display_settings')->get('image_thumb_gallery');
+    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+    $display_thumbnails = $config->get('image_thumb_gallery');
+
+    try {
+      $sku = $this->getSkuForGallery($sku, $check_parent_child);
+    }
+    catch (\Exception $e) {
+      return [];
+    }
 
     switch ($context) {
       case 'search':
@@ -333,7 +525,7 @@ class SkuImagesManager {
         if (empty($gallery)) {
           $search_main_image = $thumbnails = [];
 
-          $media = $this->getAllMedia($sku, TRUE);
+          $media = $this->getAllMedia($sku, $check_parent_child);
 
           // Loop through all media items and prepare thumbnails array.
           foreach ($media['media_items']['images'] ?? [] as $media_item) {
@@ -353,44 +545,231 @@ class SkuImagesManager {
             '#theme' => 'alshaya_search_gallery',
             '#mainImage' => $search_main_image,
             '#thumbnails' => $thumbnails,
+          ];
+        }
+
+        break;
+
+      case 'modal':
+      case 'pdp':
+        $media = $this->getAllMedia($sku, $check_parent_child);
+        $main_image = $media['main'];
+        $thumbnails = $media['thumbs'];
+
+        // Fetch settings.
+        $settings = $this->getCloudZoomDefaultSettings();
+        $thumbnail_style = $settings['thumb_style'];
+        $zoom_style = $settings['zoom_style'];
+        $slide_style = $settings['slide_style'];
+
+        // Create our thumbnails to be rendered for zoom.
+        foreach ($media['media_items']['images'] ?? [] as $media_item) {
+          $file_uri = $media_item['file']->getFileUri();
+
+          // Show original full image in the modal inside a draggable container.
+          $original_image = $media_item['file']->url();
+
+          $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+          if (empty($main_image)) {
+            $main_image = [
+              'zoomurl' => $image_zoom,
+              'mediumurl' => $image_medium,
+              'label' => $media_item['label'],
+            ];
+          }
+
+          $thumbnails[] = [
+            'thumburl' => $image_small,
+            'mediumurl' => $image_medium,
+            'zoomurl' => $image_zoom,
+            'fullurl' => $original_image,
+            'label' => $media_item['label'],
+            'type' => 'image',
+          ];
+        }
+        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+          // @TODO:
+          // Receiving video_provider as NULL, should be set to youtube
+          // or vimeo. Till then using $type as provider flag.
+          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+          $thumbnails[] = [
+            'thumburl' => $media_item['file'],
+            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+            'video_title' => $media_item['video_title'],
+            'video_desc' => $media_item['video_description'],
+            'type' => $type,
+            // @TODO: should this be config?
+            'width' => 81,
+            // @TODO: should this be config?
+            'height' => 81,
+          ];
+        }
+
+        // If no main image, use default image.
+        if (empty($main_image) && $check_parent_child) {
+          if (!empty($default_image = $this->getProductDefaultImage())) {
+            $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
+            $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+
+            $main_image = [
+              'zoomurl' => $image_zoom,
+              'mediumurl' => $image_medium,
+              'label' => $sku->label(),
+            ];
+          }
+        }
+
+        if (!empty($main_image)) {
+          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+
+          $gallery = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['gallery-wrapper'],
+            ],
+          ];
+
+          $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+
+          $labels = [
+            '#theme' => 'product_labels',
+            '#labels' => $this->skuManager->getLabels($sku, 'pdp'),
+            '#sku' => $sku_identifier,
+            '#mainsku' => $sku_identifier,
+            '#type' => 'pdp',
+          ];
+
+          // Add PDP slider position class in template.
+          $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
+
+          $gallery['product_zoom'] = [
+            '#theme' => 'product_zoom',
+            '#mainImage' => $main_image,
+            '#thumbnails' => $thumbnails,
+            '#pager_flag' => $pager_flag,
+            '#properties' => $this->getRelCloudZoom($settings),
+            '#labels' => $labels,
+            '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
-              'drupalSettings' => [
-                'plp_slider' => $this->configFactory->get('alshaya_acm_product.display_settings')->get('plp_slider'),
-              ],
               'library' => [
-                'alshaya_search/alshaya_search',
+                'alshaya_product_zoom/product.cloud_zoom',
               ],
             ],
           ];
         }
-
-        // Finally use default image if still empty.
-        if (empty($gallery)) {
-          $default_image = _alshaya_acm_product_get_product_default_main_image();
-          if ($default_image) {
-            $gallery = [
-              '#theme' => 'alshaya_assets_gallery',
-              '#mainImage' => [
-                'url' => Url::fromUri(file_create_url($default_image->getFileUri())),
-                'class' => 'product-default-image',
-              ],
-              '#label' => $product_label,
-              '#attached' => [
-                'library' => [
-                  'alshaya_search/alshaya_search',
-                ],
-              ],
-            ];
-          }
-        }
-        break;
-
-      case 'pdp':
-        // @TODO: Copy alshaya_acm_product_get_gallery() here.
         break;
     }
 
     return $gallery;
+  }
+
+  /**
+   * Get default settings for CloudZoom library.
+   *
+   * @return array
+   *   Returns the default settings for CloudZoom library.
+   */
+  protected function getCloudZoomDefaultSettings() {
+    return [
+      'slide_style' => 'product_zoom_medium_606x504',
+      'zoom_style' => 'product_zoom_large_800x800',
+      'thumb_style' => '291x288',
+      'zoom_width' => 'auto',
+      'zoom_height' => 'auto',
+      'zoom_position' => 'right',
+      'adjust_x' => '0',
+      'adjust_y' => '0',
+      'tint' => '',
+      'tint_opacity' => '0.25',
+      'lens_opacity' => '0.85',
+      'soft_focus' => 'false',
+      'smooth_move' => '3',
+    ];
+  }
+
+  /**
+   * Get the rel attribute for Alshaya Product zoom.
+   *
+   * @param array $settings
+   *   Product CloudZoom settings.
+   *
+   * @return string
+   *   return the rel attribute.
+   */
+  protected function getRelCloudZoom(array $settings) {
+    $string = '';
+    $string .= "zoomWidth:'" . $settings['zoom_width'] . "'";
+    $string .= ",zoomHeight:'" . $settings['zoom_height'] . "'";
+    $string .= ",position:'" . $settings['zoom_position'] . "'";
+    $string .= ",adjustX:'" . $settings['adjust_x'] . "'";
+    $string .= ",adjustY:'" . $settings['adjust_y'] . "'";
+    $string .= ",tint:'" . $settings['tint'] . "'";
+    $string .= ",tintOpacity:'" . $settings['tint_opacity'] . "'";
+    $string .= ",lensOpacity:'" . $settings['lens_opacity'] . "'";
+    $string .= ",softFocus:" . $settings['soft_focus'];
+    $string .= ",smoothMove:'" . $settings['smooth_move'] . "'";
+    return $string;
+  }
+
+  /**
+   * Get the default image url for the product.
+   *
+   * @return \Drupal\file\Entity\File|null
+   *   File object.
+   */
+  public function getProductDefaultImage() {
+    static $product_default_image;
+
+    // If default image available in static cache, then use it.
+    if (!empty($product_default_image)) {
+      return $product_default_image;
+    }
+
+    // If cached version available.
+    if ($cached_default_product_image = $this->cache->get('product_default_image')) {
+      // Set in static cache.
+      $product_default_image = $cached_default_product_image->data;
+      return $product_default_image;
+    }
+
+    // Get file id from config.
+    $default_image_fid = $this->configFactory->get('alshaya_acm_product.settings')->get('product_default_image');
+    if (!empty($default_image_fid)) {
+      $file = $this->fileStorage->load($default_image_fid);
+      if ($file instanceof File) {
+        // Set the cache.
+        $this->cache->set('product_default_image', $file);
+        // Set the static cache.
+        $product_default_image = $file;
+        return $product_default_image;
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Get the default image url for the product.
+   *
+   * @param bool $absolute
+   *   Flag to specify if absolute URL is required or relative.
+   *
+   * @return string
+   *   Default image url.
+   */
+  public function getProductDefaultImageUrl(bool $absolute = FALSE) : string {
+    $file = $this->getProductDefaultImage();
+
+    if ($file) {
+      $url = file_create_url($file->getFileUri());
+      return $absolute ? $url : file_url_transform_relative($url);
+    }
+
+    return '';
   }
 
 }

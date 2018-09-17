@@ -5,6 +5,7 @@
  * Module file.
  */
 
+use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -56,6 +57,8 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     // Override the 'result summary' header.
     $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
     $view->header['result']->options['content'] = $format_plural;
+
+    $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
 
     // Add 'back to list' library to search/plp/promo page.
     if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
@@ -118,6 +121,12 @@ function alshaya_search_form_views_exposed_form_alter(&$form, FormStateInterface
         $form['#access'] = FALSE;
       }
       else {
+        $labels = _alshaya_search_get_config(TRUE);
+
+        array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
+          $value = !empty($labels[$key]) ? $labels[$key] : $value;
+        });
+
         foreach ($enabled_sorts as $key => $sort) {
           if (!$sort) {
             if (isset($form['sort_bef_combine']['#options']["$key ASC"])) {
@@ -335,9 +344,19 @@ function alshaya_search_keyword_language_redirect($form, FormStateInterface $for
 
 /**
  * Function to get SRP sort options config.
+ *
+ * @param bool $label
+ *   (Optional) True to get label else returns enabled options.
+ *
+ * @return array
+ *   Array of enabled options / label of options.
  */
-function _alshaya_search_get_config() {
-  return \Drupal::config('alshaya_search.settings')->get('sort_options');
+function _alshaya_search_get_config($label = FALSE) {
+  $position = \Drupal::config('alshaya_search.settings');
+  if ($label) {
+    return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue((array) $position->get('sort_options_labels'));
+  }
+  return $position->get('sort_options');
 }
 
 /**
@@ -403,6 +422,32 @@ function alshaya_search_module_implements_alter(&$implementations, $hook) {
  */
 function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
   $facet = $context['facet'];
+
+  // Result items in facet.
+  $facet_results = [];
+  foreach ($facet->getResults() as $result) {
+    $facet_results[] = $result->getRawValue();
+  }
+
+  // Active facet result items.
+  $facet_active_items = $facet->getActiveItems();
+
+  // If we have a facet value as active but that is not available in facet
+  // results, then remove/unset it.
+  foreach ($facet_active_items as $facet_active_item) {
+    if (!in_array($facet_active_item, $facet_results)) {
+      $facet_url_alias = $facet->getUrlAlias() . ':' . $facet_active_item;
+      // Key of the value in $filter_params array.
+      $key = array_search($facet_url_alias, $filter_params);
+      unset($filter_params[$key]);
+    }
+  }
+
+  // If not using hierarchy, then no need to process. Using this check because
+  // for the few facets, it always process.
+  if (!$facet->getUseHierarchy()) {
+    return;
+  }
 
   // If we processing the URL for an L1 item, remove all category
   // filters. Clicking on an L1 item when the active filter is something
@@ -495,7 +540,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
       ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
-        (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
+        (in_array($result->getRawValue(), $context['active_filters'][$url_alias]))) && count($child_ids) > 0) {
       $result_get_params->set('no_url_l2', TRUE);
 
       // Get the last selected item from the list of active filters.
@@ -565,10 +610,12 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
+          // We use add even when resetting. Remove facet if available.
+          $facet_manager->removeFacet($field_code, $filter_bar_id, $prefix);
           continue;
         }
 
-        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix);
+        $facet_manager->createFacet($field_code, $facet_source_id, $filter_bar_id, $prefix, ['name' => $field['label']]);
       }
       break;
 

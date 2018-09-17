@@ -1,0 +1,45 @@
+/* ------- 1. Brand Colors ------- */
+$purplish-brown: #353132;
+$white: #f2f2f2;
+$white-two: #fff;
+$medium-green: #39b54a;
+$red: #c00;
+$white-three: #dadada;
+$lipstick: #e81931;
+$white-four: #ebebeb;
+$tomato: #e6591b;
+$warm-grey: #777;
+$black: #333;
+$dark-red: #e2193a;
+$info-blue: #4285f4;
+
+//global for entire site
+$primary_btn_bg: $black;
+
+// Header.
+$header_bg: $white-two;
+$header_search_block_bg: $white-two;
+$header_border: transparent;
+$header_secondary_menu_link: $purplish-brown;
+$header_my_account_h3_title: $purplish-brown;
+$header_secondary_bg: $white;
+$header_c_menu_icon_color: $purplish-brown;
+$header_c_menu_icon_text: $purplish-brown;
+$header_toggle_sign_default: $white;
+$header_mobile_menu_close_bg: $black;
+$header_search_border_mobile: $black;
+$header_toggle_sign_active_tab: $black;
+$header_secondary_menu_link_mobile: $black;
+
+//mega menu
+$mm_l1_link_active_border: $purplish-brown;
+$mm_l2_link: $purplish-brown;
+$mm_l1_link_hover: $purplish-brown;
+$mm_l3_link: $black;
+$mm_body_overlay: rgba(0, 0, 0, 0.6);
+
+//search block
+$primary_search_text: $warm-grey;
+$header_c_menu_search_active_icon: $purplish-brown;
+$header_search_active_bg: transparent;
+$header_mobile_menu_arrow: $purplish-brown;

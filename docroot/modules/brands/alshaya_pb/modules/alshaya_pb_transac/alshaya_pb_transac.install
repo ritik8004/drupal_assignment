@@ -6,6 +6,50 @@
  */
 
 use Drupal\Core\Site\Settings;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new configurale fields fabric and frame.
+ *
+ * Added for release 21 Sep 2018.
+ */
+function alshaya_pb_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  $manager->updateConfigs(
+    ['acq_sku.configurable_form_settings'],
+    'acq_sku'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating block label display.
+ */
+function alshaya_pb_transac_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    [
+      'block.block.alshayanewslettersubscription',
+      'block.block.sociallinks',
+      'block.block.alshaya_help'
+    ],
+    'alshaya_pb_transac',
+    'override',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
 
 /**
  * Implements hook_install().
@@ -39,4 +83,30 @@ function alshaya_pb_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
   }
+
+  // Add string translations.
+  $strings = [
+    'our company' => [
+      'ar' => 'شركتنا',
+    ],
+    'Connect with us' => [
+      'ar' => 'اتصل بنا'
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'I would like to receive exclusive deals from Pottery Barn.' => [
+      'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
+    ],
+    '@group_name/@sku_name' => [
+      'ar' => '@sku_name/@group_name'
+    ]
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  // Re-save indexes to ensure config overrides are taken into consideration.
+  _alshaya_search_resave_indexes();
 }

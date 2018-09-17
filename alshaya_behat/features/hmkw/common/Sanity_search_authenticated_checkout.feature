@@ -32,9 +32,6 @@ Feature: to verify search functionality , basket and checkout
     When I follow "Load More"
     And I wait for AJAX to finish
     Then more items should get loaded
-    Then I should see "Size"
-    And I should see "Colour"
-    Then I should see "Price"
 
 
   Scenario: As an authenticated user

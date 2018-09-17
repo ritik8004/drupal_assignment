@@ -122,10 +122,8 @@ cloud_zoom_common:
   dependencies:
     - core/drupal.dialog
     - core/jquery.ui.draggable
-    - alshaya_product_zoom/cloud_zoom
     - alshaya_white_label/slick
     - alshaya_white_label/utils
-    - alshaya_product_zoom/lightslider
 
 cloud_zoom:
   version: 1.x
@@ -161,3 +159,7 @@ checkout_scroll:
 plp_hover:
   js:
     js/plp-hover.js: {}
+
+pace:
+  js:
+    /libraries/pace/pace.min.js: {}

@@ -379,7 +379,9 @@ class AlshayaGtmManager {
     }
 
     if (!in_array('brand', $gtm_disabled_vars)) {
-      $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: 'Mothercare Kuwait';
+      // Site name.
+      $gtm_brand = $this->configFactory->get('system.site')->get('name');
+      $attributes['gtm-brand'] = $sku->get('attr_product_brand')->getString() ?: $gtm_brand;
     }
 
     $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';

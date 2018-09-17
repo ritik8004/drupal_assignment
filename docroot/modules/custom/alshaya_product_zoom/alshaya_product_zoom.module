@@ -28,8 +28,12 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
  * Implements hook_preprocess_node().
  */
 function alshaya_product_zoom_preprocess_node(&$variables) {
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   // Add PDP slider position config to variable so it is available in themes.
-  $pdp_image_slider_position = \Drupal::config('alshaya_acm_product.settings')->get('image_slider_position_pdp');
+  $pdp_image_slider_position = '';
+  if (isset($variables['node']) && $variables['node']->bundle() === 'acq_product') {
+    $pdp_image_slider_position = $skuManager->getImageSliderPosition($variables['node']);
+  }
   $variables['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
   // Add PDP slider position config to drupalSettings so we can use it in JS.
   $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;

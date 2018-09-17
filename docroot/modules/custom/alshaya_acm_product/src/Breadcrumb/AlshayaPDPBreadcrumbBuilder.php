@@ -166,12 +166,12 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           // Add term to breadcrumb.
           $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
         }
-
-        // This breadcrumb builder is based on a route parameter, and hence it
-        // depends on the 'route' cache context.
-        $breadcrumb->addCacheContexts(['route']);
       }
     }
+
+    // This breadcrumb builder is based on a route parameter, and hence it
+    // depends on the 'route' cache context.
+    $breadcrumb->addCacheContexts(['route']);
 
     $request = $this->currentRequest;
     $url_object = $this->pathValidator->getUrlIfValid($request->getPathInfo());
@@ -225,7 +225,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * @return int
    *   Term id.
    */
-  protected function termTreeGroup(array $terms = []) {
+  public function termTreeGroup(array $terms = []) {
     if (!empty($terms)) {
       $root_group = $this->getRootGroup($terms[0]['target_id']);
       $root_group_terms = [];

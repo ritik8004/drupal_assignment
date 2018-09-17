@@ -44,6 +44,14 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+      #checking product attributes
+    And I wait 10 seconds
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @hd @knet
   Scenario: As a Guest,
@@ -79,6 +87,13 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @cc @knet
   Scenario: As a Guest
@@ -121,6 +136,13 @@ Feature: Test Checkout feature
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @knet
   Scenario: As a Guest
@@ -254,6 +276,13 @@ Feature: Test Checkout feature
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @cc @cs
   Scenario:  As a Guest
@@ -290,6 +319,13 @@ Feature: Test Checkout feature
     When I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
+        #checking product attributes
+    When I click on ".product--count td" element
+    And I wait for AJAX to finish
+    Then I should see "size:"
+    And I should see "Item code:"
+    And I should see "Quantity:"
+    And I should see "Color:"
 
   @hd
   Scenario: As a Guest user
