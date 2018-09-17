@@ -245,6 +245,49 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
   if ($form_id == 'user_pass') {
     array_unshift($form['#validate'], 'alshaya_acm_customer_user_pass_validate');
   }
+
+  // If 'reset password' screen from 'forget password'.
+  if ($form_id == 'user_pass_reset') {
+    $form['#validate'][] = 'alshaya_acm_customer_user_pass_reset_validate';
+  }
+}
+
+/**
+ * Custom validation handler for the 'user_pass_reset' form.
+ */
+function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateInterface &$form_state) {
+  // Email of the user.
+  $email = $form['user']['#value']->getEmail();
+  if (!empty($email)) {
+    try {
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $api_wrapper = \Drupal::service('acq_commerce.api');
+      // Get customer from MDC.
+      $customer = $api_wrapper->getCustomer($email);
+
+      if (isset($customer['addresses'])) {
+        /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+        $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+        // Load user object in Drupal.
+        $user = user_load_by_mail($email);
+        foreach ($customer['addresses'] as $address) {
+          // Todo: ApiWrapper::authenticateCustomer() returns the 'extension'
+          // Todo: as array while ApiWrapper::getCustomer() returns 'extension'
+          // Todo: as object and thus typecasting here.
+          if (!empty($address['extension']) && !is_array($address['extension'])) {
+            $address['extension'] = (array) $address['extension'];
+          }
+          // Update the user address in Drupal from MDC.
+          $address_book_manager->saveUserAddressFromApi($user, $address);
+        }
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('alshaya_acm_customer')->error('Error while resetting password for user:@email.', [
+        '@email' => $email,
+      ]);
+    }
+  }
 }
 
 /**
