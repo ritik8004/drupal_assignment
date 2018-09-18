@@ -1,20 +1,15 @@
 project:
-  machine_name: alshaya
   prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE)
   human_name: Alshaya
   profile:
     name: alshaya_transac
-  local:
-    protocol: http
-    hostname: 'local.${project.machine_name}.com'
+  local: {  }
 git:
   default_branch: develop
   remotes:
     - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
 drush:
   aliases:
-    remote: '${project.machine_name}.test'
-    local: self
     ci: self
   default_alias: '${drush.aliases.local}'
 modules:

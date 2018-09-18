@@ -11,7 +11,8 @@ $settings['memcache']['extension'] = 'Memcached';
 $settings['memcache']['stampede_protection'] = TRUE;
 
 if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
-  $hostname = $_SERVER['HTTP_HOST'];
+  // $hostname = $_SERVER['HTTP_HOST'];
+  $hostname = 'local.alshaya-hmkw.com';
   $hostname_parts = explode('.', $hostname);
 
   $settings['memcache']['key_prefix'] = str_replace('-', '', $hostname_parts[1]);
@@ -36,15 +37,15 @@ $settings['bootstrap_container_definition'] = [
       'factory' => 'Drupal\Core\Site\Settings::getInstance',
     ],
     'memcache.config' => [
-      'class' => 'Drupal\memcache\DrupalMemcacheConfig',
+      'class' => 'Drupal\memcache\MemcacheSettings',
       'arguments' => ['@settings'],
     ],
     'memcache.backend.cache.factory' => [
-      'class' => 'Drupal\memcache\DrupalMemcacheFactory',
-      'arguments' => ['@memcache.config']
+      'class' => 'Drupal\memcache\Driver\MemcacheDriverFactory',
+      'arguments' => ['@memcache.config'],
     ],
     'memcache.backend.cache.container' => [
-      'class' => 'Drupal\memcache\DrupalMemcacheFactory',
+      'class' => 'Drupal\memcache\Driver\MemcacheDriverFactory',
       'factory' => ['@memcache.backend.cache.factory', 'get'],
       'arguments' => ['container'],
     ],
@@ -58,7 +59,7 @@ $settings['bootstrap_container_definition'] = [
     ],
     'cache.container' => [
       'class' => 'Drupal\memcache\MemcacheBackend',
-      'arguments' => ['container', '@memcache.backend.cache.container', '@lock.container', '@memcache.config', '@cache_tags_provider.container'],
+      'arguments' => ['container', '@memcache.backend.cache.container', '@cache_tags_provider.container'],
     ],
   ],
 ];

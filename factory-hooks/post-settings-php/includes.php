@@ -17,10 +17,10 @@ use Symfony\Component\Yaml\Yaml;
 global $site_name;
 
 global $site_code;
-
+$_SERVER['HTTP_HOST'] = 'local.alshaya-hmkw.com';
 // If we are on local environment, the site name has not been detected yet.
 if (empty($site_name) && $settings['env'] == 'local') {
-  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/project.local.yml'));
+  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/blt.local.yml'));
 
   foreach ($data['sites'] as $site_code => $site_info) {
     $site_alias = 'local.alshaya-' . $site_code . '.com';
