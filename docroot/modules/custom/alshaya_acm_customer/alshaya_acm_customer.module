@@ -264,22 +264,21 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
       $api_wrapper = \Drupal::service('acq_commerce.api');
       // Get customer from MDC.
       $customer = $api_wrapper->getCustomer($email);
+      // User object.
+      $user = user_load_by_mail($email);
 
       if (isset($customer['addresses'])) {
-        /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
-        $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
-        // Load user object in Drupal.
-        $user = user_load_by_mail($email);
-        foreach ($customer['addresses'] as $address) {
+        foreach ($customer['addresses'] as $key => $address) {
           // Todo: ApiWrapper::authenticateCustomer() returns the 'extension'
           // Todo: as array while ApiWrapper::getCustomer() returns 'extension'
-          // Todo: as object and thus typecasting here.
+          // Todo: as object and thus we need to typecaste here.
           if (!empty($address['extension']) && !is_array($address['extension'])) {
-            $address['extension'] = (array) $address['extension'];
+            $customer['addresses'][$key]['extension'] = (array) $address['extension'];
           }
-          // Update the user address in Drupal from MDC.
-          $address_book_manager->saveUserAddressFromApi($user, $address);
         }
+
+        // Update the user info from MDC to Drupal.
+        alshaya_acm_customer_update_user_data($user, $customer);
       }
     }
     catch (\Exception $e) {
