@@ -606,7 +606,7 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
 
   switch ($op) {
     case 'add':
-      alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+      alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {
