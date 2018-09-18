@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search\EventSubscriber;
 
+use Drupal\alshaya_search_api\AlshayaSearchApiHelper;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -32,6 +33,13 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
   protected $backToListEnabled;
 
   /**
+   * Helper service.
+   *
+   * @var \Drupal\alshaya_search_api\AlshayaSearchApiHelper
+   */
+  protected $helper;
+
+  /**
    * Language Manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -46,14 +54,18 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Lanaguage Manager.
+   *   Language Manager.
+   * @param \Drupal\alshaya_search_api\AlshayaSearchApiHelper $helper
+   *   Helper service.
    */
   public function __construct(RequestStack $request_stack,
                               ConfigFactoryInterface $config_factory,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              AlshayaSearchApiHelper $helper) {
     $this->requestStack = $request_stack;
     $this->backToListEnabled = (bool) $config_factory->get('alshaya_acm_product.settings')->get('back_to_list');
     $this->languageManager = $language_manager;
+    $this->helper = $helper;
   }
 
   /**
@@ -87,11 +99,12 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    $request = $this->requestStack->getCurrentRequest();
+
     if ($view->storage->id() === 'search') {
       $view_url = '/' . $view->getPath();
     }
     else {
-      $request = $this->requestStack->getCurrentRequest();
       $query_string = [];
       parse_str($request->getQueryString(), $query_string);
       $view_url_data = $query_string['view_path'];
@@ -100,33 +113,17 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
       $view_url = reset($view_url_data);
     }
 
-    $query_params = $view->getExposedInput();
+    $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
 
-    // Cleanup query params.
-    unset($query_params['pager_query_method']);
+    // Set items per page to current page * items per page.
+    $currentPage = intval($request->query->get('page'));
+    $query_params['show_on_load'] = ($currentPage + 1) * _alshaya_acm_product_get_items_per_page_on_listing();
 
     $url = Url::fromUserInput($view_url, [
       'query' => $query_params,
     ])->toString(FALSE);
 
     $response->addCommand(new InvokeCommand(NULL, 'updateWindowLocation', [$url]));
-
-    // Update the link for language switcher.
-    foreach ($this->languageManager->getLanguages() as $language) {
-      if ($language->getId() === $this->languageManager->getCurrentLanguage()->getId()) {
-        continue;
-      }
-
-      // For Alshaya we know we will have only two languages.
-      // This code will need to be updated as soon as we start using third
-      // language.
-      $language_switcher_url = Url::fromUserInput('/' . $view->getPath(), [
-        'query' => $query_params,
-        'language' => $language,
-      ])->toString(FALSE);
-    }
-
-    $response->addCommand(new InvokeCommand(NULL, 'updateLanguageSwitcherLink', [$language_switcher_url]));
   }
 
   /**
