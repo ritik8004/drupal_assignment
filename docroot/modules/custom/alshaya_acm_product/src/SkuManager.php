@@ -895,9 +895,8 @@ class SkuManager {
     $args = ['@file' => $data[$file_key], '@sku_id' => $sku_entity->id()];
 
     // Download the file contents.
-    $client = $this->httpClient;
     try {
-      $file_data = $client->get($data[$file_key]);
+      $file_data = $this->httpClient->get($data[$file_key])->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_acm_product', $e);

@@ -297,9 +297,8 @@ class SwatchesHelper {
     $args = ['@file' => $url];
 
     // Download the file contents.
-    $client = $this->httpClient;
     try {
-      $file_data = $client->get($url);
+      $file_data = $this->httpClient->get($url)->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_product_options', $e);
