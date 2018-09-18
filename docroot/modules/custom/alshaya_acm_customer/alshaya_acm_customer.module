@@ -256,7 +256,6 @@ function alshaya_acm_customer_form_alter(&$form, FormStateInterface $form_state,
  * Custom validation handler for the 'user_pass_reset' form.
  */
 function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateInterface &$form_state) {
-  // Email of the user.
   $email = $form['user']['#value']->getEmail();
   if (!empty($email)) {
     try {
@@ -264,10 +263,9 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
       $api_wrapper = \Drupal::service('acq_commerce.api');
       // Get customer from MDC.
       $customer = $api_wrapper->getCustomer($email);
-      // User object.
       $user = user_load_by_mail($email);
 
-      if (isset($customer['addresses'])) {
+      if ($user && isset($customer['addresses'])) {
         foreach ($customer['addresses'] as $key => $address) {
           // Todo: ApiWrapper::authenticateCustomer() returns the 'extension'
           // Todo: as array while ApiWrapper::getCustomer() returns 'extension'
