@@ -38,7 +38,7 @@
         background: $basket_tr;
 
         &:hover {
-          background: $basket_tr;
+          background: $basket_tr_hover;
         }
 
         td {
@@ -230,5 +230,17 @@
 .continue-shopping {
   @include breakpoint($desktop) {
     #{$right}: 24.25%;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .path--cart {
+    .customer-cart-form {
+      .items {
+        .discount-value {
+          margin-left: 0.5rem;
+        }
+      }
+    }
   }
 }

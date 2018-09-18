@@ -22,6 +22,11 @@ body {
       text-transform: uppercase;
       padding-top: 0.4375rem;
       font-size: 0.75rem;
+
+      &::after,
+      &::before {
+        display: none;
+      }
     }
   }
 
@@ -29,6 +34,7 @@ body {
     &::after {
       margin-top: -2.5rem;
       font-size: 2rem;
+      #{$right}: -0.625rem;
     }
   }
 
@@ -37,13 +43,6 @@ body {
       &::before {
         display: none;
       }
-    }
-  }
-
-  .stores-finder,
-  .block-language-blocklanguage-interface .ar a {
-    &::before {
-      display: none;
     }
   }
 }

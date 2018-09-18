@@ -111,7 +111,6 @@ class ProductOptionsHelper {
     $sync_options = array_column($fields, 'source');
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-      $this->apiWrapper->updateStoreContext($langcode);
       foreach ($sync_options as $attribute_code) {
         $this->syncProductOption($attribute_code, $langcode);
       }
@@ -122,8 +121,6 @@ class ProductOptionsHelper {
     // And single option sync `drush sync-option` is only for testing.
     // On prod we do sync of all options only.
     $this->productOptionsManager->deleteUnavailableOptions($this->syncedOptions);
-
-    $this->apiWrapper->resetStoreContext();
     $this->logger->debug('Sync for all product attribute options finished.');
   }
 
@@ -136,6 +133,8 @@ class ProductOptionsHelper {
    *   Language code.
    */
   public function syncProductOption($attribute_code, $langcode) {
+    $this->apiWrapper->updateStoreContext($langcode);
+
     $this->logger->debug('Sync for product attribute options started of attribute @attribute_code in language @langcode.', [
       '@attribute_code' => $attribute_code,
       '@langcode' => $langcode,
@@ -193,6 +192,8 @@ class ProductOptionsHelper {
       '@attribute_code' => $attribute_code,
       '@langcode' => $langcode,
     ]);
+
+    $this->apiWrapper->resetStoreContext();
   }
 
 }

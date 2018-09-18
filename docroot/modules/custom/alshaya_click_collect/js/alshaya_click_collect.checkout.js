@@ -1,4 +1,4 @@
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   /* global google */
@@ -33,7 +33,7 @@
           Drupal.geolocation.loadGoogle(function () {
             var field = $('.store-location-input')[0];
             // Create autocomplete object for places.
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.checkoutClickCollect.storeListAll]);
+            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.checkoutClickCollect.storeListAll], {'country': settings.alshaya_click_collect.country.toLowerCase()});
           });
         });
       }
@@ -368,7 +368,7 @@
 
   // Make Ajax call to get stores list and render html.
   Drupal.checkoutClickCollect.storeListAll = function (coords, field, restriction, $trigger) {
-    if (typeof coords !== 'undefined') {
+    if (typeof coords !== 'undefined' && !$.isEmptyObject(coords)) {
       ascoords = coords;
 
       var cartId = drupalSettings.alshaya_click_collect.cart_id;
@@ -432,4 +432,4 @@
   };
 
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);

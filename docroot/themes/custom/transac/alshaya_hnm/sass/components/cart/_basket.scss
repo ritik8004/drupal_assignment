@@ -29,7 +29,6 @@
     .price-currency.prefix,
     .price-currency.suffix {
       font-family: $hnm-regular;
-      padding-top: 1px;
     }
 
     .dark {
@@ -230,7 +229,6 @@
   .price-currency {
     float: left !important;
     padding: inherit;
-    padding-top: 1px;
 
     html[lang=ar] & {
       padding: 0;
