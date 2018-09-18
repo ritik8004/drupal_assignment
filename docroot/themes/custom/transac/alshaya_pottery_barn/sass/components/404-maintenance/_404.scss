@@ -37,6 +37,7 @@
       .not-found__body__container {
         display: block;
         text-align: $left;
+        width: 17.125rem;
 
         @include breakpoint($only-mobile) {
           text-align: center;
