@@ -58,7 +58,7 @@ class AlshayaSearchApiHelper {
   public function getParamsInOtherLanguage(string $langcode, array $query_params): array {
     foreach ($query_params['f'] ?? [] as $key => $param) {
       $data = explode(':', $param);
-      if (!is_string($param[1])) {
+      if (!is_string($data[1])) {
         continue;
       }
 
