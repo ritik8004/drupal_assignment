@@ -265,7 +265,7 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
       $customer = $api_wrapper->getCustomer($email);
       $user = user_load_by_mail($email);
 
-      if ($user && isset($customer['addresses'])) {
+      if ($user && alshaya_acm_customer_is_customer($user) && isset($customer['addresses'])) {
         foreach ($customer['addresses'] as $key => $address) {
           // Todo: ApiWrapper::authenticateCustomer() returns the 'extension'
           // Todo: as array while ApiWrapper::getCustomer() returns 'extension'
