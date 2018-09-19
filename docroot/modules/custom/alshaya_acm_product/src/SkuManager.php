@@ -1450,6 +1450,11 @@ class SkuManager {
         continue;
       }
 
+      // Dot not display free gifts.
+      if ((float) $sku_entity->get('final_price')->getString() === '0.01') {
+        break;
+      }
+
       // Disable OOS combinations too.
       if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
         continue;
