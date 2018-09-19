@@ -346,6 +346,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['hp_product_carousel_items'] = $settings->get('product_carousel_items_settings.hp_product_carousel_items_number');
     // Number of items to show in a slider on PDP.
     $variables['#attached']['drupalSettings']['pdp_slider_items'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number');
+    $variables['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
