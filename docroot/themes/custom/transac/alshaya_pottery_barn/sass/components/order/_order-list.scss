@@ -11,3 +11,15 @@
     }
   }
 }
+
+.c-order-list {
+  .orders-list-pager-wrapper {
+    button {
+      color: $primary_brand_button;
+
+      @include breakpoint($only-tablet) {
+        width: 9rem;
+      }
+    }
+  }
+}
