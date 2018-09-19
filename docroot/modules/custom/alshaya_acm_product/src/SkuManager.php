@@ -44,6 +44,8 @@ class SkuManager {
 
   const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
 
+  const FREE_GIFT_PRICE = 0.01;
+
   /**
    * The database service.
    *
@@ -1450,6 +1452,11 @@ class SkuManager {
         continue;
       }
 
+      // Dot not display free gifts.
+      if ($this->isSkuFreeGift($sku_entity)) {
+        continue;
+      }
+
       // Disable OOS combinations too.
       if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
         continue;
@@ -2011,6 +2018,22 @@ class SkuManager {
       return $term->get('field_pdp_image_slider_position')
         ->getString();
     }
+  }
+
+  /**
+   * Helper function to check if sku is a free gift.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity to check.
+   *
+   * @return bool
+   *   TRUE if free gift, else FALSE.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function isSkuFreeGift(SKU $sku) {
+    $final_price = (float) $sku->get('final_price')->getString();
+    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
   }
 
 }
