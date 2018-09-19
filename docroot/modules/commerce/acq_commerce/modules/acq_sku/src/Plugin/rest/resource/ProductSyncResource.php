@@ -366,7 +366,7 @@ class ProductSyncResource extends ResourceBase {
           $this->logger->info('Updated SKU @sku for @langcode: @diff', [
             '@sku' => $sku->getSku(),
             '@langcode' => $langcode,
-            '@diff' => json_encode(self::getArrayDiff($skuData, $updatedSkuData)),
+            '@diff' => json_encode(self::getArrayDiff($updatedSkuData, $skuData)),
           ]);
         }
         else {
