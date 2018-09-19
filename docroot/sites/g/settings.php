@@ -210,4 +210,3 @@ if (function_exists('acsf_hooks_includes')) {
     include $post_hook;
   }
 }
-$settings['install_profile'] = 'alshaya_transac';
