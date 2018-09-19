@@ -62,6 +62,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
     return !empty($field['index']);
   });
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
   foreach ($items as $item_id => $item) {
@@ -116,7 +119,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             }
 
             // Additional check if it returns NULL.
-            if (empty($child_sku_entity)) {
+            if (empty($child_sku_entity) || $skuManager->isSkuFreeGift($child_sku_entity)) {
               continue;
             }
             else {
@@ -157,13 +160,10 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               $item->getField($key)->setValues(array_keys($values));
             }
           }
-
           $item->getField('final_price')->setValues([$min_final_price]);
         }
 
         elseif ($sku_entity->bundle() == 'simple') {
-          /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
           if ($skuManager->isSkuFreeGift($sku_entity)) {
             unset($items[$item_id]);
           }
