@@ -236,16 +236,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.searchSlider = {
     attach: function (context, settings) {
-      var slickOptions = {
-        slidesToShow: settings.plp_slider.item,
-        slidesToScroll: 1,
-        vertical: false,
-        arrows: true,
-        focusOnSelect: false,
-        infinite: false,
-        touchThreshold: 1000,
-      };
-
       function applyRtl(ocObject, options) {
         if (isRTL() && $(window).width() > 1025) {
           ocObject.attr('dir', 'rtl');
@@ -264,76 +254,88 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       }
 
-      // Convert the list to slider.
-      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
-        // Create the slider.
-        applyRtl($(this), slickOptions);
+      if (settings.plp_slider) {
+        var slickOptions = {
+          slidesToShow: settings.plp_slider.item,
+          slidesToScroll: 1,
+          vertical: false,
+          arrows: true,
+          focusOnSelect: false,
+          infinite: false,
+          touchThreshold: 1000,
+        };
 
-        // Handle click events in hover slider arrows without triggering click to PDP.
-        $(this).find('.slick-arrow').on('click', function(e) {
-          if (e.preventDefault) {
-            e.preventDefault();
-          }
-          else {
-            e.returnValue = false;
-          }
+        // Convert the list to slider.
+        $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
+          // Create the slider.
+          applyRtl($(this), slickOptions);
 
-          if(!$(this).hasClass('slick-disabled')) {
-            if ($(this).attr('class') === 'slick-prev') {
-              $(this).parent().slick('slickPrev');
+          // Handle click events in hover slider arrows without triggering click to PDP.
+          $(this).find('.slick-arrow').on('click', function(e) {
+            if (e.preventDefault) {
+              e.preventDefault();
             }
             else {
-              $(this).parent().slick('slickNext');
+              e.returnValue = false;
             }
-          }
-          return false;
-        });
-      });
 
-      // Change the image on Mouse hover.
-      // Adding a delay here to avoid flicker during scroll in between two slides.
-      // This also helps in smoothing the mouseout behaviour.
-      var delay = 500;
-      var setTimeoutConst;
-      $('.alshaya_search_slider .slick-slide', context).once('alshayaSearchSlider').hover(
-        function () {
-          // Clear timer when we enter a new thumbnail.
-          clearTimeout(setTimeoutConst);
-          $(this)
-            .closest('.alshaya_search_gallery')
-            .find('.alshaya_search_mainimage img')
-            .attr('src', $(this).find('img').attr('rel'));
-        },
-        function () {
-          // Store this as after delay the mouse is not on element, so this changes.
-          var el = $(this);
-          // Delay the resetting of main image post hover out.
-          setTimeoutConst = setTimeout(function() {
-            el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
-              el.parent().find('li:first-child').find('img').attr('rel')
-            );
-          }, delay);
-        }
-      );
-
-      // Preload slider images.
-      if ($(window).width() > 1024) {
-        // Iterate over each product tile.
-        $('.c-products__item').each(function () {
-          var slider = $(this).find('.alshaya_search_slider');
-          // Iterate over each slider thumbnail.
-          slider.find('.slick-slide').each(function () {
-            var imgURL = $(this).children('img').attr('rel');
-            // Preload image.
-            var img = new Image();
-            img.src = imgURL;
+            if(!$(this).hasClass('slick-disabled')) {
+              if ($(this).attr('class') === 'slick-prev') {
+                $(this).parent().slick('slickPrev');
+              }
+              else {
+                $(this).parent().slick('slickNext');
+              }
+            }
+            return false;
           });
         });
-      }
 
-      $.fn.alshayaAttachSearchSlider = function () {
-        Drupal.attachBehaviors(context);
-      };
+        // Change the image on Mouse hover.
+        // Adding a delay here to avoid flicker during scroll in between two slides.
+        // This also helps in smoothing the mouseout behaviour.
+        var delay = 500;
+        var setTimeoutConst;
+        $('.alshaya_search_slider .slick-slide', context).once('alshayaSearchSlider').hover(
+          function () {
+            // Clear timer when we enter a new thumbnail.
+            clearTimeout(setTimeoutConst);
+            $(this)
+              .closest('.alshaya_search_gallery')
+              .find('.alshaya_search_mainimage img')
+              .attr('src', $(this).find('img').attr('rel'));
+          },
+          function () {
+            // Store this as after delay the mouse is not on element, so this changes.
+            var el = $(this);
+            // Delay the resetting of main image post hover out.
+            setTimeoutConst = setTimeout(function() {
+              el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
+                el.parent().find('li:first-child').find('img').attr('rel')
+              );
+            }, delay);
+          }
+        );
+
+        // Preload slider images.
+        if ($(window).width() > 1024) {
+          // Iterate over each product tile.
+          $('.c-products__item').each(function () {
+            var slider = $(this).find('.alshaya_search_slider');
+            // Iterate over each slider thumbnail.
+            slider.find('.slick-slide').each(function () {
+              var imgURL = $(this).children('img').attr('rel');
+              // Preload image.
+              var img = new Image();
+              img.src = imgURL;
+            });
+          });
+        }
+
+        $.fn.alshayaAttachSearchSlider = function () {
+          Drupal.attachBehaviors(context);
+        };
+      }
     }
   };
 

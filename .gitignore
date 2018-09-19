@@ -142,3 +142,5 @@ factory-hooks/*/local.php
 alshaya_behat/bin
 alshaya_behat/vendor
 alshaya_behat/media
+
+scripts/integration/includes/global-api-settings.inc.sh

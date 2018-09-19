@@ -41,22 +41,24 @@
       var footerNewsletterSubmiClicked = false;
 
       // Set platformType.
-      var md = new MobileDetect(window.navigator.userAgent);
-      if (md.tablet() !== null) {
-        dataLayer.push({
-          platformType: 'tablet',
-        });
-      }
-      else if (md.mobile()) {
-        dataLayer.push({
-          platformType: 'mobile',
-        });
-      }
-      else {
-        dataLayer.push({
-          platformType: 'desktop',
-        });
-      }
+      $('body').once('page-load-gta').each(function() {
+        var md = new MobileDetect(window.navigator.userAgent);
+        if (md.tablet() !== null) {
+          dataLayer.push({
+            platformType: 'tablet',
+          });
+        }
+        else if (md.mobile()) {
+          dataLayer.push({
+            platformType: 'mobile',
+          });
+        }
+        else {
+          dataLayer.push({
+            platformType: 'desktop',
+          });
+        }
+      });
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -518,8 +520,17 @@
         });
       });
 
-      if ($(context).filter('article[data-vmode="modal"]').length === 1) {
-        var product = Drupal.alshaya_seo_gtm_get_product_values($(context).filter('article[data-vmode="modal"]'));
+      if ($(context).filter('article[data-vmode="modal"]').length === 1
+        || $(document).find('article[data-vmode="full"]').length === 1) {
+
+        if ($(document).find('article[data-vmode="full"]').length === 1) {
+          var productContext = $(document).find('article[data-vmode="full"]');
+        }
+        else {
+          var productContext = $(context).filter('article[data-vmode="modal"]');
+        }
+
+        var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
         product.variant = '';
 
         var data = {

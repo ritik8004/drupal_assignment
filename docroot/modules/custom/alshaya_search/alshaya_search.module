@@ -58,6 +58,8 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
     $view->header['result']->options['content'] = $format_plural;
 
+    $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
+
     // Add 'back to list' library to search/plp/promo page.
     if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
       $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
@@ -538,7 +540,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
       ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
-        (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
+        (in_array($result->getRawValue(), $context['active_filters'][$url_alias]))) && count($child_ids) > 0) {
       $result_get_params->set('no_url_l2', TRUE);
 
       // Get the last selected item from the list of active filters.
@@ -604,7 +606,7 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
 
   switch ($op) {
     case 'add':
-      alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+      alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {

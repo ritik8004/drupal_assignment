@@ -30,6 +30,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client;
 
 /**
  * Class SkuManager.
@@ -169,6 +171,13 @@ class SkuManager {
   protected $pdpBreadcrumbBuiler;
 
   /**
+   * GuzzleHttp\Client definition.
+   *
+   * @var GuzzleHttp\Client
+   */
+  protected $httpClient;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -203,6 +212,8 @@ class SkuManager {
    *   SKU Fields Manager.
    * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
    *   PDP Breadcrumb service.
+   * @param \GuzzleHttp\Client $http_client
+   *   GuzzleHttp\Client object.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -219,7 +230,8 @@ class SkuManager {
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache,
                               SKUFieldsManager $sku_fields_manager,
-                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
+                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
+                              Client $http_client) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -239,6 +251,7 @@ class SkuManager {
     $this->productCache = $product_cache;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
+    $this->httpClient = $http_client;
   }
 
   /**
@@ -882,10 +895,14 @@ class SkuManager {
     $args = ['@file' => $data[$file_key], '@sku_id' => $sku_entity->id()];
 
     // Download the file contents.
-    $file_data = file_get_contents($data[$file_key]);
+    try {
+      $file_data = $this->httpClient->get($data[$file_key])->getBody();
+    }
+    catch (RequestException $e) {
+      watchdog_exception('alshaya_acm_product', $e);
+    }
 
-    // Check to ensure errors like 404, 403, etc. are catched and empty file
-    // not saved in SKU.
+    // Check to ensure empty file is not saved in SKU.
     if (empty($file_data)) {
       throw new \Exception(new FormattableMarkup('Failed to download labels image file "@file" for SKU id @sku_id.', $args));
     }
@@ -1411,7 +1428,11 @@ class SkuManager {
     }
 
     if ($cache = $this->getProductCachedData($sku, 'combinations')) {
-      return $cache;
+      // @TODO: Condition to be removed in: CORE-5271.
+      // Do additional check for cached data.
+      if (isset($cache['by_sku'])) {
+        return $cache;
+      }
     }
 
     /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
@@ -1446,6 +1467,27 @@ class SkuManager {
         $combinations['by_sku'][$sku_code][$code] = $value;
         $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
+    }
+
+    // Don't store in cache and return empty array here if no valid
+    // SKU / combination found.
+    if (empty($combinations)) {
+      // Below code is only for debugging issues around cache having empty data
+      // even when there are children in stock.
+      // @TODO: To be removed in: CORE-5271.
+      // Done for: CORE-5200, CORE-5248.
+      $stock = alshaya_acm_get_stock_from_sku($sku);
+      if ($stock > 0) {
+        // Log message here to allow debugging further.
+        $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $sku->language()->getId(),
+          '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+          '@page' => $this->currentRequest->getRequestUri(),
+        ]));
+      }
+
+      return [];
     }
 
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
