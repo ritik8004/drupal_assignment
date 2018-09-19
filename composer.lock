@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15a3270e4a0373ec22806a93c27440a2",
+    "content-hash": "0257898f81c66a700000ea3c20c88e8b",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9062,17 +9062,17 @@
         },
         {
             "name": "drupal/pcb",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/pcb",
-                "reference": "8.x-1.0"
+                "reference": "8.x-1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "59ad652bbd6bb140d5bcfe42291ecc97ae14f248"
+                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "0050d163a66ede1ee8af66bd808004bc648ae15b"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -9083,15 +9083,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1534594084",
+                    "version": "8.x-1.1",
+                    "datestamp": "1537276080",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Make PermanentMemcacheBackendFactory compatible with dependency changes in Memcache alpha releases": "https://www.drupal.org/files/issues/2018-09-18/pcb-compatibility_with_memcache_alpha-3000468-2-8.x-1.0.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -19285,7 +19282,6 @@
         "drupal/datalayer": 10,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/views_block_filter_block": 10,
-        "drupal/pcb": 5,
         "drupal/acquia_purge": 10,
         "drupal/role_delegation": 15,
         "drupal/media_entity_actions": 20,
