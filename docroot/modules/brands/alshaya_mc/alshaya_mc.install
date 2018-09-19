@@ -6,24 +6,6 @@
  */
 
 use Drupal\Core\Site\Settings;
-use Drupal\alshaya_config\AlshayaConfigManager;
-
-/**
- * Implements hook_update_N().
- *
- * Update display_settings config to have separate value for
- * CS modal slidesToShow param.
- */
-function alshaya_mc_update_8314() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.settings'],
-    'alshaya_mc',
-    'override',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
 
 /**
  * Implements hook_update_N().
