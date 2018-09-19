@@ -5,10 +5,6 @@
     history.replaceState({'back_to_list': true}, document.title, data);
   };
 
-  $.fn.updateLanguageSwitcherLink = function (data) {
-    $('.ar a.language-link').attr('href', data);
-  };
-
   /**
    * Get the storage values.
    *

@@ -90,7 +90,7 @@ class LocalCommand extends BltTasks {
       $this->say('Save server config again to ensure local solr is used.');
       $this->taskDrush()
         ->drush('php-eval')
-        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search');")
+        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');")
         ->assume(TRUE)
         ->alias($info['local']['alias'])
         ->uri($info['local']['url'])
