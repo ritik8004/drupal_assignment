@@ -162,14 +162,14 @@
   Drupal.behaviors.facetSearchLoader = {
     attach: function (context, settings) {
       $(document).ajaxSend(function (event, jqxhr, settings) {
-        if (settings.url.includes('facets-block')) {
+        if (settings.url.indexOf('facets-block') > -1) {
           if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
             $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
           }
         }
       });
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if (settings.url.includes('facets-block')) {
+        if (settings.url.indexOf('facets-block') > -1) {
           $('div.ajax-progress-fullscreen').remove();
         }
       });

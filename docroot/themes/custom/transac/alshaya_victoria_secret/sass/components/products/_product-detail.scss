@@ -600,3 +600,15 @@ html[lang="ar"] {
     }
   }
 }
+
+@include breakpoint($tablet) {
+  article[gtm-sku-type="simple"] {
+    .acq-content-product {
+      .sku-base-form {
+        button[type="submit"] {
+          margin-top: 2.125rem !important;
+        }
+      }
+    }
+  }
+}

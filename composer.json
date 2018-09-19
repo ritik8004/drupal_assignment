@@ -87,7 +87,7 @@
         "ckeditor/font": "^4.9",
         "springimport/magento2-api-v1": "^1.0",
         "HubSpot/pace": "^1.0",
-        "drupal/views_ajax_get": "^1.0@beta"
+        "drupal/views_ajax_get": "1.x-dev#3055c44"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
