@@ -1,7 +1,0 @@
-name: 'Alshaya Mobile App'
-type: module
-core: 8.x
-description: 'Mobile application related code.'
-dependencies:
-  - drupal:rest
-package: Alshaya
