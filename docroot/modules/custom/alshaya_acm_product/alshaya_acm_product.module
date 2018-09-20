@@ -1590,17 +1590,15 @@ function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term)
     }
     return $query_string;
   }
-  else {
-    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
-    $term = reset($parent_terms);
-    if ($term instanceof TermInterface) {
-      $query_string = alshaya_acm_product_get_size_guide_anchor($term);
-      if (!empty($query_string)) {
-        return $query_string;
-      }
+  // Get size guide link from parent term.
+  $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+  $term = reset($parent_terms);
+  if ($term instanceof TermInterface) {
+    $query_string = alshaya_acm_product_get_size_guide_anchor($term);
+    if (!empty($query_string)) {
+      return $query_string;
     }
   }
-
   return $query_string;
 }
 
