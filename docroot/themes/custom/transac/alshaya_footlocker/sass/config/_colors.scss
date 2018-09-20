@@ -15,6 +15,15 @@ $info-blue: #4285f4;
 
 //global for entire site
 $primary_btn_bg: $black;
+$primary_btn_text: $white-two;
+$primary_border: $warm-grey;
+$primary_text: $black;
+
+// Form elements.
+$primary_input_label: $warm-grey;
+$primary_input_border: $warm-grey;
+$primary_input_inline_error: $red;
+$primary_form_link: $purplish-brown;
 
 // Header.
 $header_bg: $white-two;
@@ -79,3 +88,31 @@ $footer_border_top: $purplish-brown;
 //newsletter
 $newsletter_input_border: $white-three;
 $newsletter_submit_btn: $black;
+
+// Titles.
+$title: $black;
+
+//my-account
+$user_pwd_unmask: $black;
+$password_tooltip_list: $red;
+$user_field_link: $black;
+
+// User Form.
+$user_form_layout_divider_color: $warm-grey;
+$user_block_link: $purplish-brown;
+$user_sidebar_block_title: $purplish-brown;
+$default_msg_bg: $medium-green;
+
+// Accordion
+$accordion_border: $warm-grey;
+
+// Privilege card.
+$privilege_card_subtitle: $warm-grey;
+$privilege_card_form_label: $warm-grey;
+
+// Messages and Errors
+$content_error_msg_bg: $red;
+$default_msg_bg: $medium-green;
+
+// Pace progress color
+$progress_loader: $purplish-brown;

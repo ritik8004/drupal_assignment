@@ -158,29 +158,25 @@ class ProductStockSyncResource extends ResourceBase {
       } while (!$lock_acquired);
 
       /** @var \Drupal\acq_sku\Entity\SKU $sku */
-      if ($sku = SKU::loadFromSku($stock['sku'], $langcode)) {
-
-        //Work Around for the ACM V1 as quantity key is changed in ACM V2.
-        if (array_key_exists("qty", $stock)) {
-            $quantity_key = "qty";
-        }
-        else{
-          $quantity_key = "quantity";
-        }
+      if ($sku = SKU::loadFromSku($stock['sku'], $langcode, FALSE)) {
+        // Work Around for the ACM V1 as quantity key is changed in ACM V2.
+        $quantity_key = array_key_exists('qty', $stock) ? 'qty' : 'quantity';
 
         if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
           $stock[$quantity_key] = 0;
         }
 
         $quantity = isset($stock[$quantity_key]) ? $stock[$quantity_key] : 0;
+        $old = $sku->get('stock')->getString();
 
-        $this->logger->info('Updating stock for SKU @sku. New quantity: @quantity. Debug info @info.', [
+        $args = [
           '@sku' => $stock['sku'],
-          '@quantity' => $quantity,
-          '@info' => json_encode($stock),
-        ]);
+          '@old' => $old,
+          '@new' => $quantity,
+          '@debug' => json_encode($stock),
+        ];
 
-        if ($quantity != $sku->get('stock')->getString()) {
+        if ($quantity != $old) {
           $sku->get('stock')->setValue($quantity);
           $sku->save();
 
@@ -194,6 +190,11 @@ class ProductStockSyncResource extends ResourceBase {
           if ($parent instanceof SKU) {
             Cache::invalidateTags(['acq_sku:' . $parent->id()]);
           }
+
+          $this->logger->info('Updated stock for SKU @sku: old quantity @old / new quantity: @new. Debug info @debug.', $args);
+        }
+        else {
+          $this->logger->info('Ignored stock update for SKU @sku: old quantity @old / new quantity: @new. Debug info @debug.', $args);
         }
       }
 

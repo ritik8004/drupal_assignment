@@ -8,6 +8,7 @@
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
+  var currentListName = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -516,6 +517,7 @@
           var that = $(this);
           var position = $('.views-infinite-scroll-content-wrapper .c-products__item').index(that.closest('.c-products__item')) + 1;
 
+          currentListName = listName;
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
         });
       });
@@ -532,6 +534,10 @@
 
         var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
         product.variant = '';
+        if (currentListName != null && currentListName !== 'PDP-placeholder') {
+          product.list = currentListName;
+          currentListName = null;
+        }
 
         var data = {
           event: 'productDetailView',
@@ -564,6 +570,7 @@
             }
           }
 
+          currentListName = subListName;
           // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);

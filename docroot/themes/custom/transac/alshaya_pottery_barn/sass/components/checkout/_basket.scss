@@ -106,6 +106,17 @@
               text-decoration: underline;
             }
           }
+
+          &.price {
+            .price--discount {
+              .discount-value,
+              .discount-prefix {
+                @include breakpoint($only-tablet) {
+                  font-size: 0.625rem;
+                }
+              }
+            }
+          }
         }
 
         &:last-child {
