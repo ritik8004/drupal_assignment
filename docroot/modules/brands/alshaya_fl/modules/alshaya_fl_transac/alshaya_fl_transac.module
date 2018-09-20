@@ -50,14 +50,3 @@ function _alshaya_fl_get_product_description($sku_entity) {
 
   return $return;
 }
-
-/**
- * Implements hook_preprocess_block().
- */
-function alshaya_fl_transac_preprocess_block(&$variables) {
-  // Set alshaya-private-card image path.
-  $image_path = drupal_get_path('module', 'alshaya_fl_transac') . '/images/alshaya-priv-card.svg';
-  if ($variables['base_plugin_id'] == 'join_the_club') {
-    $variables['content']['image']['#uri'] = $image_path;
-  }
-}
