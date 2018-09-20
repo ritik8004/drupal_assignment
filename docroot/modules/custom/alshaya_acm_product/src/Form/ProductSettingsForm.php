@@ -92,6 +92,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('vat_text', $form_state->getValue('vat_text'));
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->set('back_to_list', $form_state->getValue('back_to_list'));
+    $config->set('pdp_layout', $form_state->getValue('pdp_layout'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -264,6 +265,17 @@ class ProductSettingsForm extends ConfigFormBase {
         'file_validate_extensions' => ['png gif jpg jpeg svg'],
       ],
       '#default_value' => !empty($config->get('product_default_image')) ? [$config->get('product_default_image')] : [],
+    ];
+
+    $form['pdp_layout'] = [
+      '#type' => 'select',
+      '#title' => $this->t('PDP layout'),
+      '#description' => $this->t('This will change the layout of the PDP page.'),
+      '#options' => [
+        'layout1' => $this->t('Layout 1'),
+        'layout2' => $this->t('Layout 2'),
+      ],
+      '#default_value' => $config->get('pdp_layout'),
     ];
 
     return $form;
