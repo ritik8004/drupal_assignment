@@ -1,9 +1,31 @@
 <?php
 namespace Drupal\acq_promotion\Commands;
 
+use Drupal\acq_promotion\AcqPromotionsManager;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 class AcqPromotionCommands extends DrushCommands {
+
+  /**
+   * Acq Promotions Manager.
+   *
+   * @var \Drupal\acq_promotion\AcqPromotionsManager
+   */
+  private $acqPromotionsManager;
+
+  /**
+   * AcqPromotionCommands constructor.
+   * @param \Drupal\acq_promotion\AcqPromotionsManager $acqPromotionsManager
+   *   Acq Promotion Manager.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
+   *   Logger Factory.
+   */
+  public function __construct(AcqPromotionsManager $acqPromotionsManager,
+                              LoggerChannelFactoryInterface $loggerChannelFactory) {
+    $this->acqPromotionsManager = $acqPromotionsManager;
+    $this->logger = $loggerChannelFactory->get('acq_promotion');
+  }
 
   /**
    * Run a full synchronization of all commerce promotion records.
@@ -20,20 +42,21 @@ class AcqPromotionCommands extends DrushCommands {
    *   Run a full synchronization of all available promotions.
    * @usage drush acspm --types=cart
    *   Run a full synchronization of all available cart promotions.
+   * @param array $options
    */
   public function syncProductOptions($options = ['types' => NULL]) {
     if ($types = $options['types']) {
-      \Drupal::logger('acq_promotion')->notice('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]);
+      $this->logger->notice('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]);
       $types = explode(',', $types);
       $types = array_map('trim', $types);
       \Drupal::service('acq_promotion.promotions_manager')->syncPromotions($types);
     }
     else {
-      \Drupal::logger('acq_promotion')->notice('Synchronizing all commerce promotions, this usually takes some time...');
-      \Drupal::service('acq_promotion.promotions_manager')->syncPromotions();
+      $this->logger->notice('Synchronizing all commerce promotions, this usually takes some time...');
+      $this->acqPromotionsManager->syncPromotions();
     }
 
-    \Drupal::logger('acq_promotion')->notice('Promotion sync completed.');
+    $this->logger->notice('Promotion sync completed.');
   }
 
 }
