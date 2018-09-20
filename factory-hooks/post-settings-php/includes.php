@@ -18,13 +18,26 @@ global $site_name;
 
 global $site_code;
 
+if (!empty($_SERVER['HTTP_HOST'])) {
+  $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
+  $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
+}
+else {
+  foreach ($argv as $arg) {
+    preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
+    if (!empty($matches)) {
+      $host_site_code = $matches[1];
+      break;
+    }
+  }
+}
+
 // If we are on local environment, the site name has not been detected yet.
 if (empty($site_name) && $settings['env'] == 'local') {
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/blt.local.yml'));
 
   foreach ($data['sites'] as $site_code => $site_info) {
-    $site_alias = 'local.alshaya-' . $site_code . '.com';
-    if ($_SERVER['HTTP_HOST'] == $site_alias) {
+    if ($host_site_code == $site_code) {
       $site_name = $site_code;
       break;
     }
