@@ -1,0 +1,81 @@
+.user-page {
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    label.form-required:not(.error),
+    .form-type-textfield label:not(.error),
+    .field--name-field-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number label:not(.error),
+    .form-item-privilege-card-number2 label:not(.error) {
+      font-size: 0.875rem;
+    }
+  }
+
+  .form-item input:focus ~ label:not(.error),
+  .form-item input:not(:focus):valid ~ label:not(.error),
+  .form-item input:active ~ label:not(.error),
+  .form-item input:not(:active):valid ~ label:not(.error),
+  .form-item input.error ~ label:not(.error) {
+    font-size: 0.875rem;
+  }
+
+  #block-jointheclub {
+    @include breakpoint($desktop) {
+      border-top: 0;
+    }
+
+    a {
+      font-weight: normal;
+    }
+  }
+
+  .c-sidebar-second,
+  #block-youllbeableto {
+    h3 {
+      font-family: $alshaya-thin;
+    }
+  }
+}
+
+#block-youllbeableto-checkout-confirm,
+#block-youllbeableto,
+.block-join-the-club {
+  font-size: 0.875rem;
+
+  span {
+    height: 1.1875rem;
+  }
+
+  span.icon {
+    &-offer {
+      background-image: url("../imgs/icons/ic-rewards.svg");
+    }
+
+    &-win {
+      background-image: url("../imgs/icons/ic-delivery.svg");
+    }
+
+    &-reward {
+      background-image: url("../imgs/icons/ic-unlock.svg");
+    }
+
+    &-heart {
+      background-image: url("../imgs/icons/ic-newsletter.svg");
+    }
+  }
+}
+
+.user-login-form {
+  & > a {
+    @include breakpoint($tablet) {
+      #{$left}: 10rem;
+    }
+
+    @include breakpoint($desktop) {
+      html[lang='ar'] & {
+        right: 10rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+//Error messages
+.messages {
+  @include breakpoint($mobile) {
+    margin: 0.875rem auto;
+
+    html[lang=ar] & {
+      margin: 0 auto;
+    }
+  }
+
+  &.messages--error > div {
+    padding-top: 0.5rem;
+
+    @include breakpoint($tablet) {
+      width: 94%;
+    }
+  }
+
+  &.messages--status,
+  &.messages--warning,
+  &.messages--error {
+    font-weight: normal;
+  }
+}
