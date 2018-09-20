@@ -1,0 +1,49 @@
+.select2-dropdown {
+  border-color: $primary_dropdown_option_border;
+}
+
+@mixin select4-style($select-width) {
+  @include select2-style($select-width);
+
+  .select2-selection {
+    height: 2.5rem;
+    padding: 0.4rem 0.2rem;
+  }
+
+  .select2-selection__arrow {
+    height: 2.5rem;
+    width: 2.5rem;
+
+    &::after {
+      line-height: 1.2;
+      height: 2.5rem;
+      width: 2.5rem;
+      font-size: 2.2rem;
+    }
+  }
+}
+
+@mixin select3-style($select-width) {
+  @include select-wrapper($select-width);
+
+  @include icon(chevrondown, after) {
+    line-height: 1.2;
+    color: $plp_facet_dropdown_icon;
+    font-size: 2.2rem;
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
+  text-transform: none;
+
+  select {
+    font-size: 0.875rem;
+    height: 2.5rem;
+    padding-#{$left}: 0.625rem;
+    color: $plp_tile_product_title;
+
+    html[lang=ar] & {
+      height: 2.5rem;
+    }
+  }
+}

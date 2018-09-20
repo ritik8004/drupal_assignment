@@ -16,6 +16,28 @@ $info-blue: #4285f4;
 //global for entire site
 $primary_btn_bg: $black;
 
+//Buttons.
+$primary_brand_button: $purplish-brown;
+$primary_brand_button_text: $purplish-brown;
+
+// Checkbox & Radio.
+$primary_checkbox_empty: $warm-grey;
+$primary_checkbox_filled: $black;
+$primary_radiobtn_label: $warm-grey;
+$primary_radiobtn_empty: $warm-grey;
+$primary_radiobtn_filled: $black;
+
+// Dropdown.
+$primary_dropdown_bg: $white-five;
+$primary_dropdown_arrow_bg: false;
+$primary_dropdown_arrow: $purplish-brown;
+$primary_dropdown_text: $purplish-brown;
+$primary_dropdown_border: $white-three;
+$primary_dropdown_option_hover: $white-three;
+$primary_dropdown_option_border: $white-three;
+$primary_dropdown_option_disbled: $greyish;
+$primary_dropdown_focus: $black;
+
 // Header.
 $header_bg: $white-two;
 $header_search_block_bg: $white-two;
@@ -68,6 +90,10 @@ $hp_slider_dots: $purplish-brown;
 $lang_switch: $black;
 
 // Accordion
+$accordion_border: $white-three;
+$accordion_title: $black;
+$accordion_sub_title: $warm-grey;
+$accordion_title_disabled: $white;
 $accordion_arrow: $black;
 
 //footer
@@ -79,3 +105,33 @@ $footer_border_top: $purplish-brown;
 //newsletter
 $newsletter_input_border: $white-three;
 $newsletter_submit_btn: $black;
+
+/* ------- 5. Components --------------- */
+// Titles.
+$page_title: $black;
+$block_title: $black;
+$title: $black;
+$sub_title: $black;
+$label_black: $black;
+$user_sidebar_block_title: $black;
+
+/* ------- 7. Pages ----- */
+// Product listing page and search page.
+$plp_search_count: $warm-grey;
+$plp_facet_item_label: $black;
+$plp_facet_dropdown_bg: $white-five;
+$plp_facet_dropdown_icon: $purplish-brown;
+$plp_facet_label_border_mobile: $white-three;
+$plp_facet_border: $warm-grey;
+$plp_promotion_description: $warm-grey;
+$plp_facet_filter_bg: $purplish-brown;
+$plp_facet_clear_border: $purplish-brown;
+$plp_facet_clear_border_mobile: $purplish-brown;
+$plp_facet_clear_text: $purplish-brown;
+$plp_facet_filter_count: $black;
+$plp_facet_filter_count_background: $purplish-brown;
+
+// PLP Product tile.
+$plp_tile_product_text: $black;
+$plp_tile_product_title: $black;
+$plp_tile_product_title_hover: $black;
