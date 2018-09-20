@@ -77,6 +77,12 @@
       }
     }
 
+    .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+      @include breakpoint($only-mobile) {
+        border-top: 1px solid $primary_border;
+      }
+    }
+
     .filter--mobile {
       @include breakpoint($tablet) {
         top: auto;
