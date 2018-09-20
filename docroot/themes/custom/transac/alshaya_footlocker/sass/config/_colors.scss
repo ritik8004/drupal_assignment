@@ -23,6 +23,7 @@ $primary_text: $black;
 $primary_input_label: $warm-grey;
 $primary_input_border: $warm-grey;
 $primary_input_inline_error: $red;
+$primary_form_link: $purplish-brown;
 
 // Header.
 $header_bg: $white-two;
@@ -103,3 +104,7 @@ $accordion_border: $warm-grey;
 // Privilege card.
 $privilege_card_subtitle: $warm-grey;
 $privilege_card_form_label: $warm-grey;
+
+// Messages and Errors
+$content_error_msg_bg: $red;
+$default_msg_bg: $medium-green;

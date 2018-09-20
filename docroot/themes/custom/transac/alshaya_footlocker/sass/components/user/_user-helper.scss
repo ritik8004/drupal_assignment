@@ -12,3 +12,18 @@
     }
   }
 }
+
+.c-user-login.user-page {
+  .user-login-form {
+    #edit-actions {
+      input {
+        font-size: 0.875rem;
+        font-family: $alshaya-thin;
+
+        @include breakpoint($tablet) {
+          min-width: 9.125rem;
+        }
+      }
+    }
+  }
+}

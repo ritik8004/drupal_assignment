@@ -65,3 +65,17 @@
     }
   }
 }
+
+.user-login-form {
+  & > a {
+    @include breakpoint($tablet) {
+      #{$left}: 10rem;
+    }
+
+    @include breakpoint($desktop) {
+      html[lang='ar'] & {
+        right: 10rem;
+      }
+    }
+  }
+}
