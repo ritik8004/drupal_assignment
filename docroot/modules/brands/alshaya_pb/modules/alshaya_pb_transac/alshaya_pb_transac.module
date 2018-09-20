@@ -37,20 +37,13 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       }
 
       if ($product_info = $sku_entity->get('attr_short_description')->getValue()) {
-        $description['label'] = [
-          '#markup' => t('Dimensions and Care'),
+        $build['dimensions_and_care'] = [
+          '#theme' => 'pdp_description_accordion',
+          '#title' => t('Dimensions and Care'),
+          '#text' => [
+            '#markup' => $product_info[0]['value'],
+          ],
         ];
-
-        $description['value'] = [
-          '#markup' => $product_info[0]['value'],
-        ];
-
-        $build['description'][] = $description;
-
-        // Take some characters from product info if nothing available in Copy.
-        if (!isset($build['short_desc'])) {
-          $productHelper->updateShortDescription($build, $product_info[0]['value']);
-        }
       }
     }
   }
