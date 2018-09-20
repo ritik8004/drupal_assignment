@@ -257,6 +257,42 @@ class SkuManager {
   }
 
   /**
+   * Get SKU object from id in current language.
+   *
+   * @param int $id
+   *   SKU Entity ID.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface|null
+   *   Loaded SKU object in current language.
+   */
+  public function loadSkuById(int $id) : ?SKUInterface {
+    if ($id <= 0) {
+      // Return null for 0 or negative values.
+      // 0 is possible, negative - not sure.
+      return NULL;
+    }
+
+    $skus = &drupal_static('loadSkuById', []);
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    if (isset($skus[$id], $skus[$id][$langcode])) {
+      return $skus[$id][$langcode];
+    }
+
+    $sku = SKU::load($id);
+    if ($sku instanceof SKUInterface) {
+      if ($sku->language()->getId() !== $langcode && $sku->hasTranslation($langcode)) {
+        $sku = $sku->getTranslation($langcode);
+      }
+
+      $skus[$id][$sku->language()->getId()] = $sku;
+      return $sku;
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get Image tag from media item array.
    *
    * @param array $media
@@ -1725,13 +1761,9 @@ class SkuManager {
 
     // Give preference to sku id passed via query params.
     if ($sku_id && $sku_id != $sku->id()) {
-      $first_child = SKU::load($sku_id);
+      $first_child = $this->loadSkuById($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
-        // We do it again to get current translation.
-        // We expect no performance impact as all the skus are already loaded
-        // multiple times in the request.
-        $first_child = SKU::loadFromSku($first_child->getSku());
         return $first_child;
       }
     }

@@ -67,6 +67,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
   $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   foreach ($items as $item_id => $item) {
     $object = $item->getOriginalObject()->getValue();
     $type = $object->getEntityType()->id();
@@ -105,7 +108,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
         if ($sku_entity->bundle() == 'configurable') {
           $data = [];
-          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
           $prices = $skuManager->getMinPrices($sku_entity);
           $min_final_price = $prices['final_price'];
           $child_sku_found = FALSE;
@@ -476,7 +479,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $selected_value = $selected_value != $sku_entity->id() ? $selected_value : NULL;
 
             if ($selected_value) {
-              $selected_sku = SKU::load($selected_value);
+              $selected_sku = $skuManager->loadSkuById((int) $selected_value);
 
               if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
                 $sku_for_gallery = $selected_sku;
@@ -1055,8 +1058,11 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // Load SKU entity.
-  $sku_entity = SKU::load($form['sku_id']['#value']);
+  $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
 
   if (empty($sku_entity)) {
     return;
@@ -1079,9 +1085,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
 
@@ -1371,10 +1374,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   // & hence need to be re-rendered in the AJAX callback.
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
 
-  $sku = SKU::load($form['sku_id']['#value']);
-
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $sku = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
 
   // Configurable product tree keyed with possible config tree, whose leaf items
   // contain the SKUs depending on the tree path traversed.
@@ -1579,10 +1582,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
           $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
         }
       }
-    }
-    // If no image found on simple SKUs, use parent SKUs image.
-    if (empty($build['gallery']['product_zoom'])) {
-      $build['gallery'] = $skuImagesManager->getGallery($sku, 'pdp');
     }
 
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */

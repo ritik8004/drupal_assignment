@@ -2,17 +2,44 @@
 
 namespace Drupal\alshaya_acm_product\Controller;
 
-use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class ProductController.
  */
 class ProductController extends ControllerBase {
+
+  /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('alshaya_acm_product.skumanager')
+    );
+  }
+
+  /**
+   * ProductController constructor.
+   *
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager.
+   */
+  public function __construct(SkuManager $sku_manager) {
+    $this->skuManager = $sku_manager;
+  }
 
   /**
    * Title callback for the modal.
@@ -41,22 +68,22 @@ class ProductController extends ControllerBase {
    * Title callback for the modal.
    */
   public function skumodalTitle($acq_sku) {
-    $acq_sku = SKU::load($acq_sku);
-    return $acq_sku->get('name')->getString();
+    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
+    return $sku->get('name')->getString();
   }
 
   /**
    * Page callback for the modal.
    */
   public function skumodalView($acq_sku, $js) {
-    $acq_sku = SKU::load($acq_sku);
+    $sku = $this->skuManager->loadSkuById((int) $acq_sku);
     if ($js === 'ajax') {
-      $view_builder = $this->entityTypeManager()->getViewBuilder($acq_sku->getEntityTypeId());
-      $build = $view_builder->view($acq_sku, 'modal');
+      $view_builder = $this->entityTypeManager()->getViewBuilder($sku->getEntityTypeId());
+      $build = $view_builder->view($sku, 'modal');
       return $build;
     }
 
-    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $acq_sku->id()])->toString());
+    $response = new RedirectResponse(Url::fromRoute('entity.acq_sku.canonical', ['acq_sku' => $sku->id()])->toString());
     $response->send();
     exit;
 
