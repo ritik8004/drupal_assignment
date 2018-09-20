@@ -372,7 +372,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           $updatedTerm = $this->getTranslatedTerm($term->id());
           $updatedTermData = $updatedTerm->toArray();
 
-          $this->logger->info('Update category @magento_id for @langcode: @diff.', [
+          $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
             '@langcode' => $langcode,
             '@magento_id' => $category['category_id'],
             '@diff' => DiffArray::diffAssocRecursive($updatedTermData, $existingTermData),
