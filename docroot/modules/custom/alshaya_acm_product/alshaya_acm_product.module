@@ -416,11 +416,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // when user clicked on swatch.
         $build['#cache']['contexts'][] = 'url';
 
-        if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
-          $build['#attributes']['class'][] = 'product-out-of-stock';
-        }
-        elseif (!$skuManager->skuAttributeCombinationAvailable($sku_entity)) {
-          // If there is no data in system for configurable attributes.
+        if (!alshaya_acm_get_stock_from_sku($sku_entity) || !$skuManager->skuAttributeCombinationAvailable($sku_entity)) {
           $build['#attributes']['class'][] = 'product-out-of-stock';
         }
 
