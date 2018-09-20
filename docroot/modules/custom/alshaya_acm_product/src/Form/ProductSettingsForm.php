@@ -270,10 +270,10 @@ class ProductSettingsForm extends ConfigFormBase {
     $form['pdp_layout'] = [
       '#type' => 'select',
       '#title' => $this->t('PDP layout'),
-      '#description' => $this->t('This will change the layout of the PDP page.'),
+      '#description' => $this->t('This will change the layout/appearence of the PDP page.'),
       '#options' => [
-        'layout1' => $this->t('Layout 1'),
-        'layout2' => $this->t('Layout 2'),
+        'default' => $this->t('Default layout'),
+        'magzine' => $this->t('Magzine layout'),
       ],
       '#default_value' => $config->get('pdp_layout'),
     ];
