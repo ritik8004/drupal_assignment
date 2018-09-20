@@ -408,7 +408,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * Wrapper function tog et translated term for tid.
+   * Wrapper function to get translated term for tid.
    *
    * @param mixed $tid
    *   Not sure about Drupal standards as of now, it can be int/string.
