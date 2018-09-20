@@ -1,0 +1,5 @@
+services:
+  acq_promotion.commands:
+    class: \Drupal\acq_promotion\Commands\AcqPromotionCommands
+    tags:
+      - { name: drush.command }
