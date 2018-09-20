@@ -9,6 +9,22 @@ use Drupal\Core\Site\Settings;
 use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Update settings config to have value for pdp_slider_items_number_cs_us.
+ */
+function alshaya_vs_transac_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_vs_transac',
+    'override',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
  * Implements hook_post_update_NAME().
  *
  * Re-save index to create/remove index tables.

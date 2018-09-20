@@ -163,10 +163,7 @@ function hammerIt(elm) {
               var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
               productGallery.slick('unslick');
               $('body').removeClass('pdp-modal-overlay');
-              var image = $('#product-image-gallery-mob').find('.mob-imagegallery__thumbnails__image img');
-              image.parent().siblings().each(function () {
-                $('#product-image-gallery-mob').find('img').css('transform', 'none');
-              });
+              $('#product-image-gallery-mob').find('img').css('transform', 'none');
             });
 
           }

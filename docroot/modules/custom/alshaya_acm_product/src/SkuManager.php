@@ -44,6 +44,8 @@ class SkuManager {
 
   const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
 
+  const FREE_GIFT_PRICE = 0.01;
+
   /**
    * The database service.
    *
@@ -252,6 +254,42 @@ class SkuManager {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->httpClient = $http_client;
+  }
+
+  /**
+   * Get SKU object from id in current language.
+   *
+   * @param int $id
+   *   SKU Entity ID.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface|null
+   *   Loaded SKU object in current language.
+   */
+  public function loadSkuById(int $id) : ?SKUInterface {
+    if ($id <= 0) {
+      // Return null for 0 or negative values.
+      // 0 is possible, negative - not sure.
+      return NULL;
+    }
+
+    $skus = &drupal_static('loadSkuById', []);
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    if (isset($skus[$id], $skus[$id][$langcode])) {
+      return $skus[$id][$langcode];
+    }
+
+    $sku = SKU::load($id);
+    if ($sku instanceof SKUInterface) {
+      if ($sku->language()->getId() !== $langcode && $sku->hasTranslation($langcode)) {
+        $sku = $sku->getTranslation($langcode);
+      }
+
+      $skus[$id][$sku->language()->getId()] = $sku;
+      return $sku;
+    }
+
+    return NULL;
   }
 
   /**
@@ -1450,6 +1488,11 @@ class SkuManager {
         continue;
       }
 
+      // Dot not display free gifts.
+      if ($this->isSkuFreeGift($sku_entity)) {
+        continue;
+      }
+
       // Disable OOS combinations too.
       if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
         continue;
@@ -1718,13 +1761,9 @@ class SkuManager {
 
     // Give preference to sku id passed via query params.
     if ($sku_id && $sku_id != $sku->id()) {
-      $first_child = SKU::load($sku_id);
+      $first_child = $this->loadSkuById($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
-        // We do it again to get current translation.
-        // We expect no performance impact as all the skus are already loaded
-        // multiple times in the request.
-        $first_child = SKU::loadFromSku($first_child->getSku());
         return $first_child;
       }
     }
@@ -2011,6 +2050,22 @@ class SkuManager {
       return $term->get('field_pdp_image_slider_position')
         ->getString();
     }
+  }
+
+  /**
+   * Helper function to check if sku is a free gift.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity to check.
+   *
+   * @return bool
+   *   TRUE if free gift, else FALSE.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function isSkuFreeGift(SKU $sku) {
+    $final_price = (float) $sku->get('final_price')->getString();
+    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
   }
 
 }
