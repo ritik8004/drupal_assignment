@@ -47,6 +47,10 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   echo "Change in install file detected, restoring database before executing updb."
   drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt
 
+  ## Temporary fix of current locale configuration settings until CORE-5300 goes live and be restaged
+  ## This can be removed afterwards
+  drush acsf-tools-ml cset locale.settings translation.use_source local
+
   ## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5.
   ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
   drush acsf-tools-ml cr
