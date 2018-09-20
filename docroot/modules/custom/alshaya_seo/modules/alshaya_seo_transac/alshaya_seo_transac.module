@@ -55,10 +55,6 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
     /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $alshayaGtmManager */
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
-    $listname = \Drupal::service('request_stack')->getCurrentRequest()->query->get('listname');
-    if ($listname) {
-      $product_node['gtm-list-name'] = $listname;
-    }
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
   }
 }

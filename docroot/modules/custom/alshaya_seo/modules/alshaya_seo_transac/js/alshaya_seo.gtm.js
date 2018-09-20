@@ -280,8 +280,6 @@
                 pdpListName = listName.replace('placeholder', 'RELATED');
               }
             }
-            var href = $(this).find('a.above-mobile-block').attr('href') + '?listname=' + pdpListName;
-            $(this).find('a.above-mobile-block').attr('href', href);
 
             impression.list = pdpListName;
             impression.position = count_pdp_items;
@@ -752,9 +750,6 @@
       productData.dimension5 = product.attr('gtm-dimension5');
     }
 
-    if (product.attr('gtm-list-name')) {
-      productData.list = product.attr('gtm-list-name');
-    }
     return productData;
   };
 
