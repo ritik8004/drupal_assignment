@@ -187,7 +187,7 @@ function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(
   if ($selected_sku instanceof SKUInterface) {
     /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
     $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $title = $productInfoHelper->getTitle($sku, 'pdp');
+    $title = $productInfoHelper->getTitle($selected_sku, 'pdp');
 
     if ($title) {
       // For modal and teaser it will be h2, for main product h1.

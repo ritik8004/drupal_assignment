@@ -35,6 +35,7 @@ services:
       - '@cache.alshaya_product'
       - '@acq_sku.fields_manager'
       - '@alshaya_acm_product.breadcrumb'
+      - '@http_client'
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:

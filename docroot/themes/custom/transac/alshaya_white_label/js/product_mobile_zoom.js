@@ -128,56 +128,57 @@ function hammerIt(elm) {
         }
       }
 
-      var element = document.getElementById('product-image-gallery-container-mobile');
-      var dialogsettings = {
-        autoOpen: true,
-        // Change dimensions of modal window as per theme needs.
-        width: 1024,
-        height: 768,
-        dialogClass: 'dialog-product-image-gallery-container-mobile',
-        open: function () {
-          var currentmobSlide = parseInt($('#product-image-gallery-mobile .slick-current').attr('data-slick-index'));
-          var slickModalOptions = {
-            slidesToShow: 1,
-            vertical: false,
-            dots: true,
-            arrows: false,
-            centerMode: false,
-            infinite: false,
-            focusOnSelect: true,
-            initialSlide: currentmobSlide,
-            touchThreshold: 1000
-          };
+      $('#product-image-gallery-container-mobile').once('js-event').each(function () {
+        var element = $(this);
+        var dialogsettings = {
+          autoOpen: true,
+          // Change dimensions of modal window as per theme needs.
+          width: 1024,
+          height: 768,
+          dialogClass: 'dialog-product-image-gallery-container-mobile',
+          open: function () {
+            var currentmobSlide = parseInt($('#product-image-gallery-mobile .slick-current').attr('data-slick-index'));
+            var slickModalOptions = {
+              slidesToShow: 1,
+              vertical: false,
+              dots: true,
+              arrows: false,
+              centerMode: false,
+              infinite: false,
+              focusOnSelect: true,
+              initialSlide: currentmobSlide,
+              touchThreshold: 1000
+            };
 
-          var gallery = $('#product-image-gallery-mob');
-          applyRtl(gallery, slickModalOptions);
+            var gallery = $('#product-image-gallery-mob');
+            applyRtl(gallery, slickModalOptions);
 
-          $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
-          var mImages = Array.prototype.slice.call(document.querySelectorAll('.mob-imagegallery__thumbnails__image img'));
-          mImages.forEach(function (ele) {
-            hammerIt(ele);
-          });
+            $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
+            var mImages = Array.prototype.slice.call(document.querySelectorAll('.mob-imagegallery__thumbnails__image img'));
+            mImages.forEach(function (ele) {
+              hammerIt(ele);
+            });
 
-          $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
-            var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
-            productGallery.slick('unslick');
-            $('body').removeClass('pdp-modal-overlay');
-            var image = $('#product-image-gallery-mob').find('.mob-imagegallery__thumbnails__image img');
-            image.parent().siblings().each(function () {
+            $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
+              var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
+              productGallery.slick('unslick');
+              $('body').removeClass('pdp-modal-overlay');
               $('#product-image-gallery-mob').find('img').css('transform', 'none');
             });
-          });
 
-        }
-      };
-      // Open Gallery modal when we click on the zoom image.
-      var mobileDialog = Drupal.dialog(element, dialogsettings);
-      $('#product-image-gallery-mobile .slick-slide').off().on('click', function () {
-        if (!$(this).hasClass('mobilegallery__thumbnails__video')) {
-          $('body').addClass('pdp-modal-overlay');
-          mobileDialog.show();
-          mobileDialog.showModal();
-        }
+          }
+        };
+
+        // Open Gallery modal when we click on the zoom image.
+        var mobileDialog = Drupal.dialog(element, dialogsettings);
+
+        $('#product-image-gallery-mobile li').off().on('click', function () {
+          if (!$(this).hasClass('mobilegallery__thumbnails__video')) {
+            $('body').addClass('pdp-modal-overlay');
+            mobileDialog.show();
+            mobileDialog.showModal();
+          }
+        });
       });
     }
   };

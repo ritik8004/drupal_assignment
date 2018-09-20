@@ -58,6 +58,8 @@ function alshaya_search_views_pre_render(ViewExecutable $view) {
     $format_plural = new PluralTranslatableMarkup($view->total_rows, '1 item', '@count items');
     $view->header['result']->options['content'] = $format_plural;
 
+    $view->element['#attached']['library'][] = 'alshaya_search/alshaya_search';
+
     // Add 'back to list' library to search/plp/promo page.
     if (\Drupal::config('alshaya_acm_product.settings')->get('back_to_list')) {
       $view->element['#attached']['library'][] = 'alshaya_search/back_to_list';
@@ -421,6 +423,26 @@ function alshaya_search_module_implements_alter(&$implementations, $hook) {
 function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
   $facet = $context['facet'];
 
+  // Result items in facet.
+  $facet_results = [];
+  foreach ($facet->getResults() as $result) {
+    $facet_results[] = $result->getRawValue();
+  }
+
+  // Active facet result items.
+  $facet_active_items = $facet->getActiveItems();
+
+  // If we have a facet value as active but that is not available in facet
+  // results, then remove/unset it.
+  foreach ($facet_active_items as $facet_active_item) {
+    if (!in_array($facet_active_item, $facet_results)) {
+      $facet_url_alias = $facet->getUrlAlias() . ':' . $facet_active_item;
+      // Key of the value in $filter_params array.
+      $key = array_search($facet_url_alias, $filter_params);
+      unset($filter_params[$key]);
+    }
+  }
+
   // If not using hierarchy, then no need to process. Using this check because
   // for the few facets, it always process.
   if (!$facet->getUseHierarchy()) {
@@ -518,7 +540,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     if ((count($parent_ids) == $parent_id_count) &&
       (!empty($context['active_filters'][$url_alias])) &&
       ((count(array_diff($child_ids, $context['active_filters'][$url_alias])) < count($child_ids)) ||
-        (in_array($result->getRawValue(), $context['active_filters'][$url_alias])))) {
+        (in_array($result->getRawValue(), $context['active_filters'][$url_alias]))) && count($child_ids) > 0) {
       $result_get_params->set('no_url_l2', TRUE);
 
       // Get the last selected item from the list of active filters.
@@ -584,7 +606,7 @@ function alshaya_search_acq_sku_base_fields_updated(array $fields, $op = 'add') 
 
   switch ($op) {
     case 'add':
-      alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search');
+      alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
 
       foreach ($fields as $field_code => $field) {
         if (empty($field['facet'])) {

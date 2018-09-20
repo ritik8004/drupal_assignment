@@ -36,8 +36,9 @@
       z-index: 3;
     }
 
-    #edit-message_counter {
-      @include u-visibility(none);
+    #edit-message_counter,
+    .text-count-wrapper {
+      display: none !important;
     }
   }
 

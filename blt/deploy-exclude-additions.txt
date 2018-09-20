@@ -5,3 +5,12 @@
 /docroot/update.php
 /docroot/modules/brands/*/data
 /factory-hooks/pre-sites-php/sites.php
+/docroot/themes/custom/*/package.json
+/docroot/themes/custom/*/package-lock.json
+/docroot/themes/custom/transac/alshaya_example_subtheme
+/docroot/themes/custom/README.md
+/phpcs.xml.dist
+/hooks/dev
+/hooks/prod
+/hooks/test
+/hooks/scripts

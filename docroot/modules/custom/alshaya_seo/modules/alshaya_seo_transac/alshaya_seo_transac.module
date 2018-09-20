@@ -75,6 +75,10 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
   $route_match = \Drupal::routeMatch();
   $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
   if ($route_match->getRouteName() == 'entity.node.canonical') {
     /* @var \Drupal\node\Entity\Node $node */
     $node = $route_match->getParameter('node');
@@ -89,11 +93,7 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
         }
 
         $product_title = "";
-
-        // Including the utility file.
-        \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-        $product_image = _alshaya_acm_get_product_display_image_url($sku_entity);
-
+        $product_image = $skuImagesManager->getFirstImageUrl($sku_entity, TRUE);
         $product_description = _alshaya_seo_get_node_meta_description();
         $final_price = "";
         $currency = $gtm_manager->getGtmCurrency();

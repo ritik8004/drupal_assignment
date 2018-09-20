@@ -34,13 +34,86 @@
         }
       }
 
-      tr {
+      tbody tr {
+        background: $basket_tr;
+
+        &:hover {
+          background: $basket_tr_hover;
+        }
+
         td {
+          &.name {
+            .image {
+              max-width: 8rem;
+
+              @include breakpoint($only-tablet) {
+                max-width: 7.125rem;
+              }
+
+              @include breakpoint($desktop) {
+                max-width: 8.5625rem;
+              }
+            }
+          }
+
+          &.quantity {
+            position: relative;
+
+            > .ajax-progress-throbber {
+              #{$left}: 58%;
+
+              @include breakpoint($only-tablet) {
+                .throbber {
+                  background-size: 1rem;
+                }
+              }
+
+              @include breakpoint($only-mobile) {
+                .throbber {
+                  background-size: 1.25rem;
+                }
+
+                #{$left}: 48%;
+                top: 1.8125rem;
+              }
+            }
+
+            div .ajax-progress-throbber {
+              #{$left}: 102%;
+
+              @include breakpoint($only-tablet) {
+                #{$left}: 86%;
+
+                .throbber {
+                  background-size: 1rem;
+                }
+              }
+
+              @include breakpoint($only-mobile) {
+                #{$left}: 22%;
+
+                .throbber {
+                  background-size: 1.25rem;
+                }
+              }
+            }
+          }
+
           a {
             font-weight: 600;
 
             &.sku-promotion-link {
               text-decoration: underline;
+            }
+          }
+
+          &.price {
+            .price--discount {
+              .discount-prefix {
+                @include breakpoint($tablet) {
+                  margin-right: 1.125rem;
+                }
+              }
             }
           }
         }
@@ -157,5 +230,17 @@
 .continue-shopping {
   @include breakpoint($desktop) {
     #{$right}: 24.25%;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .path--cart {
+    .customer-cart-form {
+      .items {
+        .discount-value {
+          margin-left: 0.5rem;
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,9 @@
+name: 'Alshaya Foot Locker (Transac)'
+type: module
+description: 'The dedicated module for transac Foot Locker brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_fl:alshaya_fl
+themes:
+  - alshaya_footlocker

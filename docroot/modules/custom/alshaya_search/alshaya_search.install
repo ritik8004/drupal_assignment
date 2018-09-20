@@ -11,6 +11,20 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
+ *
+ * Replace updated search settings with existing one.
+ */
+function alshaya_search_update_8021() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_search.settings'],
+      'alshaya_search',
+      'install'
+    );
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_search_update_8020() {
   \Drupal::service('alshaya_config.manager')
