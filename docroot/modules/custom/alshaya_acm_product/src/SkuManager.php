@@ -2091,6 +2091,7 @@ class SkuManager {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
       $product_tree = $plugin->deriveProductTree($sku);
+      $configurables = [];
       if (!empty($product_tree) && !empty($product_tree['configurables'])) {
         foreach ($product_tree['configurables'] as $configurable) {
           // If any configurable attribute showing on sku form has no
@@ -2099,6 +2100,36 @@ class SkuManager {
             $attributes_available = FALSE;
             break;
           }
+          else {
+            // Preparing configurable options.
+            foreach ($configurable['values'] as $value) {
+              $options[$value['value_id']] = $value['label'];
+            }
+            $configurables[$configurable['code']]['#options'] = $options;
+          }
+        }
+
+        // If already no value for any attribute available, no need to
+        // process further.
+        if (!$attributes_available) {
+          return $attributes_available;
+        }
+
+        // Disable/Unset if there any unavailable option for any combinations.
+        $this->disableUnavailableOptions($sku, $configurables, $product_tree);
+
+        // Prepare final configurable array to check.
+        $configurable_final_data = [];
+        foreach ($configurables as $configurable_key => $configurable) {
+          if (is_array($configurable) && !empty($configurable['#options'])) {
+            $configurable_final_data[$configurable_key] = $configurable;
+          }
+        }
+
+        // If no data available or attribute count not match with final set,
+        // it means OOS.
+        if (empty($configurable_final_data) || count($configurable_final_data) != count(array_keys($product_tree['configurables']))) {
+          $attributes_available = FALSE;
         }
       }
     }

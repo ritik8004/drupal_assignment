@@ -1126,17 +1126,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $empty_selected = [];
     $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $empty_selected);
 
-    // Prepare array of just the configurable options.
-    $configurables = [];
-    foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
-      if (is_array($configurable) && !empty($configurable['#options'])) {
-        $configurables[$configurable_key] = $configurable;
-      }
-    }
-
     // If there are no options to display, we show the product as not
     // available.
-    if (empty($configurables) || count($configurables) != count($configurable_codes) || $sku_manager->skuAttributeCombinationAvailable($sku_entity)) {
+    if (!$sku_manager->skuAttributeCombinationAvailable($sku_entity)) {
       $form = [
         '#theme' => 'empty_add_to_cart_form',
         '#text' => t('Out of stock'),
