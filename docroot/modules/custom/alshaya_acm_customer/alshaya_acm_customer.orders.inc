@@ -228,7 +228,8 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
   $shippingTerm = $checkoutOptionsManager->loadShippingMethod($shipping_method_code, $shipping_method_name);
 
-  $orderDetails['delivery_charge'] = alshaya_acm_price_format($order['shipping']['method']['amount']);
+  $shipping_amount = $order['shipping']['method']['amount_with_tax'] ?? $order['shipping']['method']['amount'];
+  $orderDetails['delivery_charge'] = alshaya_acm_price_format($shipping_amount);
 
   $orderDetails['delivery_method'] = $shippingTerm->getName();
 
