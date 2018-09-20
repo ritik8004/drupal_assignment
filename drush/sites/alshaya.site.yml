@@ -1,7 +1,7 @@
 local:
   host: local.alshaya-hmkw.com
   root: "/var/www/alshaya/docroot"
-  uri: http://local.alshaya-hmkw.com
+  uri: http://local.alshaya.com
   user: vagrant
   local: true
   ssh:
