@@ -7,7 +7,7 @@
   'use strict';
 
   Drupal.behaviors.plpListingHeight = {
-    attach: function (context) {
+    attach: function (context, settings) {
 
       /**
        * Calculate and add height for each product tile.
