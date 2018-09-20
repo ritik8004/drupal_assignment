@@ -63,8 +63,47 @@
 .path--cart,
 .nodetype--acq_product {
   .ui-dialog {
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 43rem) / 2) calc((100vw - 64.13rem) / 2);
+    }
+
+    @include breakpoint($desktop) {
+      padding: calc((100vh - 48.4375rem) / 2) calc((100vw - 64.13rem) / 2);
+    }
+
+    .cloudzoom__image {
+      .img-wrap {
+        @include breakpoint($tablet) {
+          height: 24.25rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 30rem;
+        }
+      }
+    }
+
     #drupal-modal {
       overflow-y: scroll;
+
+      @include breakpoint($tablet) {
+        height: 43rem !important;
+      }
+
+      @include breakpoint($desktop) {
+        height: 48.4375rem !important;
+      }
+
+      #lightSlider {
+        &.pager-yes {
+          .slick-slide {
+            @include breakpoint($only-tablet) {
+              width: 6.75rem !important;
+              margin: 0 0.25rem;
+            }
+          }
+        }
+      }
     }
   }
 }
