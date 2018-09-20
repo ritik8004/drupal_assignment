@@ -1,10 +1,82 @@
 <?php
 namespace Drupal\acq_sku\Commands;
 
+use Drupal\acq_commerce\Conductor\APIWrapperInterface;
+use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
+use Drupal\acq_commerce\I18nHelper;
+use Drupal\acq_sku\ConductorCategoryManager;
+use Drupal\acq_sku\Plugin\rest\resource\ProductSyncResource;
+use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
 class AcqSkuDrushCommands extends DrushCommands {
+
+  /**
+   * Api Wrapper service.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapperInterface
+   */
+  private $apiWrapper;
+
+  /**
+   * i18nHelper service.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nhelper;
+
+  /**
+   * Ingest Api Wrapper service.
+   *
+   * @var \Drupal\acq_commerce\Conductor\IngestAPIWrapper
+   */
+  private $ingestApiWrapper;
+
+  /**
+   * Conductor category manager service.
+   *
+   * @var \Drupal\acq_sku\ConductorCategoryManager
+   */
+  private $conductorCategoryManager;
+
+  /**
+   * Product options manager service.
+   *
+   * @var \Drupal\acq_sku\ProductOptionsManager
+   */
+  private $productOptionsManager;
+
+  /**
+   * AcqSkuDrushCommands constructor.
+   *
+   * @param APIWrapperInterface $apiWrapper
+   *   Commerce Api Wrapper.
+   * @param I18nHelper $i18nHelper
+   *  i18nHelper service.
+   * @param IngestAPIWrapper $ingestAPIWrapper
+   *   Ingest Api Wrapper service.
+   * @param ConductorCategoryManager $conductorCategoryManager
+   *   Conductor category manager service.
+   * @param ProductOptionsManager $productOptionsManager
+   *   Product Options Manager service.
+   * @param LoggerChannelFactoryInterface $loggerChannelFactory
+   *   Logger Channel Factory service.
+   */
+  public function __construct(APIWrapperInterface $apiWrapper,
+                              I18nHelper $i18nHelper,
+                              IngestAPIWrapper $ingestAPIWrapper,
+                              ConductorCategoryManager $conductorCategoryManager,
+                              ProductOptionsManager $productOptionsManager,
+                              LoggerChannelFactoryInterface $loggerChannelFactory) {
+    $this->apiWrapper = $apiWrapper;
+    $this->i18nhelper = $i18nHelper;
+    $this->ingestApiWrapper = $ingestAPIWrapper;
+    $this->conductorCategoryManager = $conductorCategoryManager;
+    $this->productOptionsManager = $productOptionsManager;
+    $this->logger = $loggerChannelFactory->get('acq_sku');
+  }
 
   /**
    * Run a full synchronization of all commerce product records.
@@ -37,7 +109,7 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function syncProducts($langcode, $page_size, $options = ['skus' => NULL, 'category_id' => NULL]) {
     $langcode = strtolower($langcode);
 
-    $store_id = \Drupal::service('acq_commerce.i18n_helper')->getStoreIdFromLangcode($langcode);
+    $store_id = $this->i18nhelper->getStoreIdFromLangcode($langcode);
 
     if (empty($store_id)) {
       $this->output->writeln(dt("Store id not found for provided language code."));
@@ -72,8 +144,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     }
 
     $this->output->writeln(dt('Requesting all commerce products for selected language code...'));
-    $container = \Drupal::getContainer();
-    $container->get('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
+    $this->ingestApiWrapper->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
     $this->output->writeln(dt('Done.'));
   }
 
@@ -91,8 +162,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
-    $container = \Drupal::getContainer();
-    $container->get('acq_sku.category_manager')->synchronizeTree('acq_product_category');
+    $this->conductorCategoryManager->synchronizeTree('acq_product_category');
     $this->output->writeln(dt('Done.'));
   }
 
@@ -107,9 +177,36 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncProductOptions() {
     \Drupal::logger('acq_sku')->notice('Synchronizing all commerce product options, please wait...');
-    $container = \Drupal::getContainer();
-    $container->get('acq_sku.product_options_manager')->synchronizeProductOptions();
+    $this->productOptionsManager->synchronizeProductOptions();
     \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
+  }
+
+  /**
+   * Run a partial synchronization of commerce product records synchronously for testing / dev.
+   *
+   * @command acq_sku:sync-products-test
+   *
+   * @param integer $count
+   *   Number of product records to sync.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @aliases acdsp,sync-commerce-products-test
+   *
+   * @usage drush acdsp
+   *   Run a partial synchronization of commerce product records synchronously for testing / dev.
+   */
+  public function syncProductsTest($count) {
+    $this->output->writeln(dt('Synchronizing @count commerce products for testing / dev...', ['@count' => $count]));
+
+    $container = \Drupal::getContainer();
+    foreach ($this->i18nhelper->getStoreLanguageMapping() as $langcode => $store_id) {
+      $this->apiWrapper->updateStoreContext($store_id);
+
+      $products = $this->apiWrapper->getProducts($count);
+      $product_sync_resource = ProductSyncResource::create($container, [], NULL, NULL);
+      $product_sync_resource->post($products);
+    }
   }
 
 }

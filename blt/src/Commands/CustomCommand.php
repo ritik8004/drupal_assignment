@@ -149,7 +149,6 @@ class CustomCommand extends BltTasks {
     $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
-      ->assume(TRUE)
       ->drush('alshaya-post-drupal-install')
       ->alias($drush_alias)
       ->option('brand_module', $brand)
@@ -169,7 +168,6 @@ class CustomCommand extends BltTasks {
     $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
-      ->assume(TRUE)
       ->alias($drush_alias)
       ->drush('sync-commerce-cats')
       ->drush('sync-options')
@@ -190,7 +188,6 @@ class CustomCommand extends BltTasks {
     $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
-      ->assume(TRUE)
       ->alias($drush_alias)
       ->drush('sync-stores')
       ->uri($uri)
@@ -209,7 +206,6 @@ class CustomCommand extends BltTasks {
     $drush_alias = $this->getConfigValue('drush.alias');
     $this->taskDrush()
       ->stopOnFail()
-      ->assume(TRUE)
       ->alias($drush_alias)
       ->drush('sync-commerce-promotions')
       ->uri($uri)
@@ -337,7 +333,6 @@ class CustomCommand extends BltTasks {
       ->option('account-pass', 'admin', '=')
       ->option('account-mail', $this->getConfigValue('drupal.account.mail'))
       ->option('locale', $this->getConfigValue('drupal.locale'))
-      ->assume(TRUE)
       ->printOutput(TRUE);
 
     $config_strategy = $this->getConfigValue('cm.strategy');
