@@ -49,7 +49,7 @@ class AcqPromotionCommands extends DrushCommands {
       $this->logger->notice('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]);
       $types = explode(',', $types);
       $types = array_map('trim', $types);
-      \Drupal::service('acq_promotion.promotions_manager')->syncPromotions($types);
+      $this->acqPromotionsManager->syncPromotions($types);
     }
     else {
       $this->logger->notice('Synchronizing all commerce promotions, this usually takes some time...');
