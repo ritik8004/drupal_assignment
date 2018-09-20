@@ -44,4 +44,10 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       margin: 0;
     }
   }
+
+  & > li.leaf-li {
+    & > label {
+      color: $plp_facet_item_label;
+    }
+  }
 }
