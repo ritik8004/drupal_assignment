@@ -22,6 +22,7 @@ cross_up_sell_items_settings:
   basket_carousel_items_size: 5
 pdp_slider_items_settings:
   pdp_slider_items_number: 5
+  pdp_slider_items_number_cs_us: 5
 product_carousel_items_settings:
   dp_product_carousel_items_number: 5
   hp_product_carousel_items_number: 6
