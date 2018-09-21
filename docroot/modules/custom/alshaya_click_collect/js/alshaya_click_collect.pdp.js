@@ -191,7 +191,7 @@
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
         console.log('hello');
-        Drupal.AlshayaPlacesAutocomplete.instantiateEnterEvent($(this), callbacks, restriction);
+        Drupal.AlshayaPlacesAutocomplete.handleEnterKeyPress($(this), callbacks, restriction);
       }
     });
   };
