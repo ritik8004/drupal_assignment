@@ -162,16 +162,32 @@
   Drupal.behaviors.facetSearchLoader = {
     attach: function (context, settings) {
       $(document).ajaxSend(function (event, jqxhr, settings) {
-        if (settings.url.includes('facets-block')) {
+        if (settings.url.indexOf('facets-block') > -1) {
           if ($('.page-standard > .ajax-progress-fullscreen').length === 0) {
             $('.page-standard').append('<div class="ajax-progress ajax-progress-fullscreen"></div>');
           }
         }
       });
       $(document).ajaxComplete(function (event, xhr, settings) {
-        if (settings.url.includes('facets-block')) {
+        if (settings.url.indexOf('facets-block') > -1) {
           $('div.ajax-progress-fullscreen').remove();
         }
+      });
+    }
+  };
+
+  // Add class to slug banner modal.
+  Drupal.behaviors.slugBannerModal = {
+    attach: function (context, settings) {
+      $(document).on('mousedown', '.slug-banner-modal-link.use-ajax', function () {
+        $(document).on('dialogopen', '.ui-dialog', function () {
+          $(this).addClass('slug-banner-modal');
+        });
+      });
+
+      // Remove the class when the modal is closed.
+      $(document).on('dialogclose', '.ui-dialog', function () {
+        $(this).removeClass('slug-banner-modal');
       });
     }
   };

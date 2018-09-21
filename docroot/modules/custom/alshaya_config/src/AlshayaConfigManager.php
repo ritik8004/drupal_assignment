@@ -5,6 +5,7 @@ namespace Drupal\alshaya_config;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Symfony\Component\Yaml\Yaml;
@@ -63,17 +64,28 @@ class AlshayaConfigManager {
   protected $entityTypeManager;
 
   /**
+   * Theme Manager service.
+   *
+   * @var \Drupal\Core\Theme\ThemeManagerInterface
+   */
+  protected $themeManager;
+
+  /**
    * Constructs a new AlshayaConfigManager object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config storage object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
+   *   Theme Manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ThemeManagerInterface $theme_manager) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
+    $this->themeManager = $theme_manager;
   }
 
   /**
@@ -101,6 +113,11 @@ class AlshayaConfigManager {
 
       $config = $this->configFactory->getEditable($config_id);
       $data = $this->getDataFromCode($config_id, $module_name, $path);
+
+      // If block config, replace the theme name with current active theme.
+      if (strpos($config_id, 'block.block.') === 0) {
+        $data['theme'] = $this->themeManager->getActiveTheme()->getName();
+      }
 
       // If field config.
       if (strpos($config_id, 'field.field.') === 0) {

@@ -25,6 +25,7 @@ global_styles:
     - core/jquery.cookie
     - mobile_number/element
     - alshaya_white_label/utils
+    - core/drupal.dialog.ajax
 
 ltr_styles:
   css:

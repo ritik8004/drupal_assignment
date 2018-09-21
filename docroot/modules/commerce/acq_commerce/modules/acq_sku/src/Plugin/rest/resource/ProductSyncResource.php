@@ -7,6 +7,8 @@ use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\Component\Utility\DiffArray;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -172,7 +174,7 @@ class ProductSyncResource extends ResourceBase {
     $failed = 0;
     $ignored = 0;
     $deleted = 0;
-    $ignored_skus = $updated_skus = $deleted_skus = $created_skus = [];
+    $ignored_skus = [];
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
@@ -243,7 +245,11 @@ class ProductSyncResource extends ResourceBase {
           }
         } while (!$lock_acquired);
 
+        $skuData = [];
+
         if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
+          $skuData = $sku->toArray();
+
           if ($product['status'] != 1) {
             try {
               /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
@@ -260,16 +266,20 @@ class ProductSyncResource extends ResourceBase {
 
             // Delete the SKU.
             $sku->delete();
-            $deleted_skus[] = $product['sku'];
+
             $deleted++;
 
             // Release the lock.
             $lock->release($lock_key);
 
+            $this->logger->info('Deleted SKU @sku for @langcode', [
+              '@sku' => $sku->getSku(),
+              '@langcode' => $langcode,
+            ]);
+
             continue;
           }
 
-          $updated_skus[] = $product['sku'];
           $updated++;
         }
         else {
@@ -290,7 +300,6 @@ class ProductSyncResource extends ResourceBase {
             'langcode' => $langcode,
           ]);
 
-          $created_skus[] = $product['sku'];
           $created++;
         }
 
@@ -347,6 +356,25 @@ class ProductSyncResource extends ResourceBase {
         \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product);
 
         $sku->save();
+
+        // $skuData will have value when it is updating.
+        if ($skuData) {
+          // Load SKU again to have exact same data structure.
+          $sku_entity = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE);
+          $updatedSkuData = $sku_entity->toArray();
+
+          $this->logger->info('Updated SKU @sku for @langcode: @diff', [
+            '@sku' => $sku->getSku(),
+            '@langcode' => $langcode,
+            '@diff' => json_encode(self::getArrayDiff($updatedSkuData, $skuData)),
+          ]);
+        }
+        else {
+          $this->logger->info('New SKU @sku for @langcode', [
+            '@sku' => $sku->getSku(),
+            '@langcode' => $langcode,
+          ]);
+        }
 
         if ($product['status'] == 1 && $product['visibility'] == 1) {
           $node = $plugin->getDisplayNode($sku, FALSE, TRUE);
@@ -429,21 +457,9 @@ class ProductSyncResource extends ResourceBase {
       'deleted' => $deleted,
     ];
 
-    // Log Product sync summary.
-    if (!empty($created_skus)) {
-      $this->logger->info('New SKUs: @created_skus', ['@created_skus' => implode(',', $created_skus)]);
-    }
-
-    if (!empty($updated_skus)) {
-      $this->logger->info('Updated SKUs: @updated_skus', ['@updated_skus' => implode(',', $updated_skus)]);
-    }
-
+    // Log Product sync summary for ignored ones.
     if (!empty($ignored_skus)) {
       $this->logger->info('Ignored SKUs: @ignored_skus', ['@ignored_skus' => implode(',', $ignored_skus)]);
-    }
-
-    if (!empty($deleted_skus)) {
-      $this->logger->info('Deleted: @deleted_skus.', ['@deleted_skus' => implode(',', $deleted_skus)]);
     }
 
     return (new ModifiedResourceResponse($response));
@@ -602,48 +618,38 @@ class ProductSyncResource extends ResourceBase {
       // Field key.
       $field_key = 'attr_' . $key;
 
+      // If attribute is not coming in response, then unset it.
+      if (!isset($values[$source])) {
+        if ($sku->{$field_key}->getValue()) {
+          $sku->{$field_key}->setValue(NULL);
+        }
+
+        continue;
+      }
+
+      $value = $values[$source];
+
       switch ($field['type']) {
         case 'attribute':
-          // If attribute is not coming in response, then unset it.
-          if (!isset($values[$source])) {
-            $sku->{$field_key}->set(0, NULL);
-          }
-          else {
-            $value = $values[$source];
-            $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
-            foreach ($value as $index => $val) {
-              if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
-                $sku->{$field_key}->set($index, $term->getName());
-              }
-              else {
-                $sku->{$field_key}->set($index, $val);
-              }
+          $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
+          foreach ($value as $index => $val) {
+            if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
+              $sku->{$field_key}->set($index, $term->getName());
+            }
+            else {
+              $sku->{$field_key}->set($index, $val);
             }
           }
           break;
 
         case 'string':
-          // If attribute is not coming in response, then unset it.
-          if (!isset($values[$source])) {
-            $sku->{$field_key}->setValue(NULL);
-          }
-          else {
-            $value = $values[$source];
-            $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
-            $sku->{$field_key}->setValue($value);
-          }
+          $value = $field['cardinality'] != 1 ? explode(',', $value) : $value;
+          $sku->{$field_key}->setValue($value);
           break;
 
         case 'text_long':
-          // If attribute is not coming in response, then unset it.
-          if (!isset($values[$source])) {
-            $sku->{$field_key}->setValue(NULL);
-          }
-          else {
-            $value = $values[$source];
-            $value = !empty($field['serialize']) ? serialize($value) : $value;
-            $sku->{$field_key}->setValue($value);
-          }
+          $value = !empty($field['serialize']) ? serialize($value) : $value;
+          $sku->{$field_key}->setValue($value);
           break;
       }
     }
@@ -708,6 +714,24 @@ class ProductSyncResource extends ResourceBase {
     }
 
     return serialize($media);
+  }
+
+  /**
+   * Helper function to get recursive array diff.
+   *
+   * @param array $array1
+   *   Array one.
+   * @param array $array2
+   *   Array two.
+   *
+   * @return array
+   *   Array containing difference of two arrays, empty array if no diff.
+   */
+  public static function getArrayDiff($array1, $array2): array {
+    // Cleanup in both arrays first.
+    unset($array1['changed']);
+    unset($array2['changed']);
+    return DiffArray::diffAssocRecursive($array1, $array2);
   }
 
 }

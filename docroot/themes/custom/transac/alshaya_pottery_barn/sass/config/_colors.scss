@@ -40,6 +40,7 @@ $_gray_twelve: #f9f9f9;
 $_gray_thirteen: #efefef;
 $_gray_fourteen: #f3f3f3;
 $_gray_fifteen: #acacac;
+$_grey_sixteen: #696969;
 
 // Overrides for variables.
 // Global elements.
@@ -109,6 +110,7 @@ $primary_tr_hover: $_gray_six;
 $basket_th_4th_child: $_gray_four;
 $basket_th_text: $PB_black_one;
 $basket_tr: $_gray_six;
+$basket_tr_hover: $_gray_five;
 $primary_td_bg_highlight: $_gray_five;
 $basket_content_link_color: $PB_confirmation_blue;
 $basket_tooltip_not_available: $white;
@@ -214,6 +216,7 @@ $mm_l3_link: $PB_grey_one;
 $mm_l3_link_hover: $PB_deep_red;
 $mm_highlight_label: $PB_deep_red;
 $mm_highlight_title: $PB_deep_red;
+$mm_l1_link_hover: $white-two;
 
 // Home page - slider.
 $gallery_arrows_bg: $PB_deep_red;
@@ -306,7 +309,7 @@ $plp_facet_filter_count: $_black_two;
 $plp_facet_filter_count_background: $PB_confirmation_blue;
 
 // Sharethis
-$sharethis_icon: $white;
+$sharethis_icon: $_grey_sixteen;
 
 // Product Detail Page.
 $pdp_sidebar_label: $_black_two;

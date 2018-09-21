@@ -98,16 +98,3 @@
     }
   }
 }
-
-.secure__checkout--block {
-  .icon-ic_login {
-    &::before {
-      content: " ";
-      display: block;
-      background: url(../imgs/icons/ic-secure-checkout.svg) no-repeat;
-      background-size: contain;
-      height: 100%;
-      width: 100%;
-    }
-  }
-}

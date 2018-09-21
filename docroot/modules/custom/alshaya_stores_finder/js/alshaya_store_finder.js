@@ -73,7 +73,7 @@
         });
       });
 
-      $('.view-stores-finder', context).find('a[data-glossary-view]').each(function(){
+      $('.view-stores-finder', context).find('a[data-glossary-view]').each(function () {
         $(this).once('glossary-view').on('click', function (e) {
           e.preventDefault();
 
@@ -114,16 +114,13 @@
       };
 
       function displayLocation(latitude, longitude) {
-        if (typeof Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder === 'undefined') {
-          Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder = new google.maps.Geocoder();
-        }
+        var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
 
         var componentRestrictions = {};
         if (typeof drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions !== 'undefined') {
           componentRestrictions = drupalSettings.geolocation.geocoder.googlePlacesAPI.restrictions;
         }
 
-        var geocoder = Drupal.geolocation.geocoder.googleGeocodingAPI.geocoder;
         var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
         var runscript = true;
         geocoder.geocode({location: latlng}, function (results, status) {
@@ -201,7 +198,7 @@
 
       // Avoid form submit on click of enter for stores finder's autocomplete
       // textfield.
-      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').on('keypress', function(event) {
+      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').on('keypress', function (event) {
         return event.keyCode != 13;
       });
 
@@ -272,9 +269,9 @@ function mapsApp(lat, lng) {
   if ((navigator.platform.indexOf('iPhone') !== -1)
     || (navigator.platform.indexOf('iPod') !== -1)
     || (navigator.platform.indexOf('iPad') !== -1)) {
-    window.open('maps://maps.google.com/maps?daddr=' + lat + ',' + lng + '&amp;ll=', '_self');
+    window.open('maps://maps.google.com/maps?saddr=Current%20Location&daddr=' + lat + ',' + lng, '_self');
   }
   else {
-    window.open('geo:' + lat + ',' + lng + '', '_self');
+    window.open('https://www.google.com/maps/dir/Current+Location/' + lat + ',' + lng + '', '_self');
   }
 }

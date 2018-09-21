@@ -2,6 +2,7 @@
  * @file
  * Override infinite scroll library.
  */
+
 (function ($, Drupal, debounce) {
   'use strict';
 
@@ -85,7 +86,7 @@
             $pager.find('[rel=next]').click();
             $window.off(scrollEvent);
           }
-        }, 200));
+        }, 1));
       });
     },
     detach: function (context, settings, trigger) {

@@ -38,7 +38,7 @@
         background: $basket_tr;
 
         &:hover {
-          background: $basket_tr;
+          background: $basket_tr_hover;
         }
 
         td {
@@ -110,8 +110,15 @@
           &.price {
             .price--discount {
               .discount-prefix {
-                @include breakpoint($tablet) {
+                @include breakpoint($desktop) {
                   margin-right: 1.125rem;
+                }
+              }
+
+              .discount-value,
+              .discount-prefix {
+                @include breakpoint($only-tablet) {
+                  font-size: 0.625rem;
                 }
               }
             }
@@ -230,5 +237,17 @@
 .continue-shopping {
   @include breakpoint($desktop) {
     #{$right}: 24.25%;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .path--cart {
+    .customer-cart-form {
+      .items {
+        .discount-value {
+          margin-left: 0.5rem;
+        }
+      }
+    }
   }
 }

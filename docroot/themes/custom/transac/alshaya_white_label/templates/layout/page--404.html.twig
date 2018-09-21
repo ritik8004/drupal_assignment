@@ -15,6 +15,12 @@
 <div class="fourzerofour">
   <!-- ______________________ MENU SECONDARY _______________________ -->
 {% block header_precontent %}
+  <!-- ______________________ Banner Top _______________________ -->
+  {% if page.banner_top %}
+    {{ page.banner_top }}
+  {% endif %}
+  <!-- /Banner Top -->
+
   <div class="header--wrapper">
     {% if page.menu_secondary %}
       <div class="c-menu-secondary">

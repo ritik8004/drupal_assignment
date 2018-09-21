@@ -120,67 +120,87 @@ class ProductStockSyncResource extends ResourceBase {
       fwrite($fps, '\n');
     }
 
-    if (!isset($stock['sku']) || !strlen($stock['sku'])) {
-      $this->logger->error('Invalid or empty product SKU.');
-      return (new ModifiedResourceResponse($response));
+    // Work with single and array:
+    if (array_key_exists("sku", $stock)) {
+      $stockArray = [$stock];
+    }
+    else {
+      $stockArray = $stock;
     }
 
-    $langcode = NULL;
-
-    if (isset($stock['store_id'])) {
-      $langcode = $this->i18nHelper->getLangcodeFromStoreId($stock['store_id']);
-
-      if (empty($langcode)) {
-        // It could be for a different store/website, don't do anything.
+    foreach ($stockArray as $stock) {
+      if (!isset($stock['sku']) || !strlen($stock['sku'])) {
+        $this->logger->error('Invalid or empty product SKU.');
         return (new ModifiedResourceResponse($response));
       }
-    }
 
-    $lock_key = 'synchronizeProduct' . $stock['sku'];
+      $langcode = NULL;
 
-    // Acquire lock to ensure parallel processes are executed one by one.
-    do {
-      $lock_acquired = $lock->acquire($lock_key);
+      if (isset($stock['store_id'])) {
+        $langcode = $this->i18nHelper->getLangcodeFromStoreId($stock['store_id']);
 
-      // Sleep for half a second before trying again.
-      if (!$lock_acquired) {
-        usleep(500000);
-      }
-    } while (!$lock_acquired);
-
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    if ($sku = SKU::loadFromSku($stock['sku'], $langcode)) {
-      if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
-        $stock['qty'] = 0;
-      }
-
-      $quantity = isset($stock['qty']) ? $stock['qty'] : 0;
-
-      $this->logger->info('Updating stock for SKU @sku. New quantity: @quantity. Debug info @info.', [
-        '@sku' => $stock['sku'],
-        '@quantity' => $quantity,
-        '@info' => json_encode($stock),
-      ]);
-
-      if ($quantity != $sku->get('stock')->getString()) {
-        $sku->get('stock')->setValue($quantity);
-        $sku->save();
-
-        // Clear product and forms related to sku.
-        Cache::invalidateTags(['acq_sku:' . $sku->id()]);
-
-        // Clear cache for parent SKU too.
-        /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Simple $plugin */
-        $plugin = $sku->getPluginInstance();
-        $parent = $plugin->getParentSku($sku);
-        if ($parent instanceof SKU) {
-          Cache::invalidateTags(['acq_sku:' . $parent->id()]);
+        if (empty($langcode)) {
+          // It could be for a different store/website, don't do anything.
+          return (new ModifiedResourceResponse($response));
         }
       }
-    }
 
-    // Release the lock.
-    $lock->release($lock_key);
+      $lock_key = 'synchronizeProduct' . $stock['sku'];
+
+      // Acquire lock to ensure parallel processes are executed one by one.
+      do {
+        $lock_acquired = $lock->acquire($lock_key);
+
+        // Sleep for half a second before trying again.
+        if (!$lock_acquired) {
+          usleep(500000);
+        }
+      } while (!$lock_acquired);
+
+      /** @var \Drupal\acq_sku\Entity\SKU $sku */
+      if ($sku = SKU::loadFromSku($stock['sku'], $langcode, FALSE)) {
+        // Work Around for the ACM V1 as quantity key is changed in ACM V2.
+        $quantity_key = array_key_exists('qty', $stock) ? 'qty' : 'quantity';
+
+        if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
+          $stock[$quantity_key] = 0;
+        }
+
+        $quantity = isset($stock[$quantity_key]) ? $stock[$quantity_key] : 0;
+        $old = $sku->get('stock')->getString();
+
+        $args = [
+          '@sku' => $stock['sku'],
+          '@old' => $old,
+          '@new' => $quantity,
+          '@debug' => json_encode($stock),
+        ];
+
+        if ($quantity != $old) {
+          $sku->get('stock')->setValue($quantity);
+          $sku->save();
+
+          // Clear product and forms related to sku.
+          Cache::invalidateTags(['acq_sku:' . $sku->id()]);
+
+          // Clear cache for parent SKU too.
+          /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Simple $plugin */
+          $plugin = $sku->getPluginInstance();
+          $parent = $plugin->getParentSku($sku);
+          if ($parent instanceof SKU) {
+            Cache::invalidateTags(['acq_sku:' . $parent->id()]);
+          }
+
+          $this->logger->info('Updated stock for SKU @sku: old quantity @old / new quantity: @new. Debug info @debug.', $args);
+        }
+        else {
+          $this->logger->info('Ignored stock update for SKU @sku: old quantity @old / new quantity: @new. Debug info @debug.', $args);
+        }
+      }
+
+      // Release the lock.
+      $lock->release($lock_key);
+    }
 
     if (isset($fps)) {
       fclose($fps);
