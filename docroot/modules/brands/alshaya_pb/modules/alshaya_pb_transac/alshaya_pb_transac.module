@@ -36,7 +36,8 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $productHelper->updateShortDescription($build, $body[0]['value']);
       }
 
-      if ($product_info = $sku_entity->get('attr_short_description')->getValue()) {
+      $product_info = $sku_entity->get('attr_short_description')->getValue();
+      if (!empty($product_info) && !empty($product_info[0]['value'])) {
         $build['dimensions_and_care'] = [
           '#theme' => 'pdp_description_accordion',
           '#title' => t('Dimensions and Care'),
