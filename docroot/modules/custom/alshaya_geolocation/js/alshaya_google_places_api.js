@@ -77,25 +77,7 @@
     $(field).once('autocomplete-init').on('keyup', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
-        var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
-        geocoder.geocode({
-          'componentRestrictions': {
-            'locality': $(this).val(),
-            'country': restriction.country
-          }
-        }, function (results, status) {
-          if (status == 'OK') {
-            var coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(results[0]);
-            if ($.isEmptyObject(coords) || results[0].address_components.length <= 1) {
-              return false;
-            }
-            else if ($.isArray(callbacks)) {
-              callbacks.forEach(function (callback) {
-                callback.call(null, coords, field, restriction, $trigger);
-              });
-            }
-          }
-        });
+        Drupal.AlshayaPlacesAutocomplete.instantiateEnterEvent($(this), callbacks, restriction, $trigger);
       }
       else if ($(this).val().length > 0) {
         // Remove the no results found html, we will add again in timeout if no results.
@@ -149,6 +131,28 @@
       (field),
       {types: ['geocode']}
     );
+  };
+
+  Drupal.AlshayaPlacesAutocomplete.instantiateEnterEvent = function (field, callbacks, restriction, $trigger) {
+    var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
+    geocoder.geocode({
+      'componentRestrictions': {
+        'locality': field.val(),
+        'country': restriction.country
+      }
+    }, function (results, status) {
+      if (status == 'OK') {
+        var coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(results[0]);
+        if ($.isEmptyObject(coords) || results[0].address_components.length <= 1) {
+          return false;
+        }
+        else if ($.isArray(callbacks)) {
+          callbacks.forEach(function (callback) {
+            callback.call(null, coords, field, restriction, $trigger);
+          });
+        }
+      }
+    });
   };
 
   // Get Geocoder object.

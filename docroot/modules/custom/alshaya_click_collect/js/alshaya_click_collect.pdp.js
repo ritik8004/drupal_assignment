@@ -57,18 +57,6 @@
         }
       });
 
-      // Hit the search store button on hitting enter when on textbox.
-      $('.click-collect-form').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) {
-          e.preventDefault();
-          if (!$.isEmptyObject(asCoords)) {
-            $('.click-collect-form').find('.search-stores-button').click();
-          }
-          return false;
-        }
-      });
-
       $('.click-collect-top-stores', context).once('bind-events').on('click', '.other-stores-link', function () {
         if ($(window).width() >= 768) {
           $('.click-collect-all-stores.inline-modal-wrapper').append('<div class="gradient-holder"></div>');
@@ -195,7 +183,17 @@
 
   Drupal.pdp.changeLocationAutocomplete = function () {
     var field = $('.click-collect-form').find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()});
+    var restriction = {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()};
+    var callbacks = [Drupal.pdp.storesDisplay];
+    new Drupal.AlshayaPlacesAutocomplete(field, callbacks, restriction);
+    // Hit the search store button on hitting enter when on textbox.
+    $('.click-collect-form').find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) {
+        console.log('hello');
+        Drupal.AlshayaPlacesAutocomplete.instantiateEnterEvent($(this), callbacks, restriction);
+      }
+    });
   };
 
   // Invoke display search store form if conditions matched.
@@ -264,7 +262,7 @@
             lastSku = sku;
             lastCoords = asCoords;
 
-            if (typeof $trigger === 'undefined') {
+            if (typeof $trigger === 'undefined' || $trigger == null) {
               $trigger = $('.click-collect-form');
             }
 
