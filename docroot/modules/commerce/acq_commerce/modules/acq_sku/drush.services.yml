@@ -1,6 +1,20 @@
 services:
   acq_sku.commands:
     class: \Drupal\acq_sku\Commands\AcqSkuDrushCommands
-    arguments: [ '@acq_commerce.api' , '@acq_commerce.i18n_helper', '@acq_commerce.ingest_api', '@acq_sku.category_manager', '@acq_sku.product_options_manager', '@logger.factory' ]
+    arguments:
+      - '@acq_commerce.api'
+      - '@acq_commerce.i18n_helper'
+      - '@acq_commerce.ingest_api'
+      - '@acq_sku.category_manager'
+      - '@acq_sku.product_options_manager'
+      - '@logger.factory'
+      - '@database'
+      - '@entity_type.manager'
+      - '@entity.query'
+      - '@entity.manager'
+      - '@language_manager'
+      - '@module_handler'
+      - '@cache.linked_skus'
+      - '@cache_tags.invalidator'
     tags:
       - { name: drush.command }
