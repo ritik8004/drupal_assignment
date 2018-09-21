@@ -1528,3 +1528,65 @@ html[lang=ar] {
     }
   }
 }
+
+.path--cart {
+  .customer-cart-form {
+    td.price,
+    .mobile-only {
+      .price--discount {
+        .discount-prefix {
+          html[lang=en] & {
+            display: inline-block;
+            width: 3rem;
+            margin: 0;
+
+            @include breakpoint($upto-desktop) {
+              width: 2.5rem;
+            }
+          }
+
+          html[lang=ar] & {
+            padding: 0;
+            text-align: right;
+            right: 0;
+            left: auto;
+          }
+        }
+
+        .discount-value {
+          padding: 0;
+          margin-#{$left}: -2px;
+
+          html[lang=ar] & {
+            padding-right: 0;
+            display: inline-block;
+            width: 3rem;
+            margin: 0;
+
+            @include breakpoint($only-tablet) {
+              padding-right: 0.56rem;
+            }
+          }
+        }
+      }
+
+      .price-currency {
+        display: inline-block;
+        width: 3rem;
+        padding: 0;
+
+        @include breakpoint($upto-desktop) {
+          width: 2.5rem;
+        }
+
+        html[lang=ar] & {
+          padding-right: 0.56rem;
+
+          @include breakpoint($upto-desktop) {
+            display: inline;
+          }
+        }
+      }
+    }
+  }
+}

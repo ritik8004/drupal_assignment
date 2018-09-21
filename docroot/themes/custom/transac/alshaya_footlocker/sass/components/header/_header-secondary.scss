@@ -1,6 +1,10 @@
 body {
   @include breakpoint($only-mobile) {
     margin-top: 3rem;
+
+    html[lang=ar] & {
+      margin-top: 3rem;
+    }
   }
 
   @include breakpoint($only-tablet) {
