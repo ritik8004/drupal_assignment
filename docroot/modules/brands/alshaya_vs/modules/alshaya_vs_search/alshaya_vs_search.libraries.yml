@@ -1,0 +1,5 @@
+size_facet_copy:
+  js:
+    js/size_facet_copy.js: {}
+  dependencies:
+    - core/jquery.once

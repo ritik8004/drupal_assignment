@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_vs_search
+    - ctools
+  theme:
+    - alshaya_victoria_secret
+id: shopbrasbysize
+theme: alshaya_victoria_secret
+region: highlighted
+weight: 0
+provider: null
+plugin: size_facet_block
+settings:
+  id: size_facet_block
+  label: 'SHOP BRAS BY SIZE'
+  provider: alshaya_vs_search
+  label_display: visible
+visibility:
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'
