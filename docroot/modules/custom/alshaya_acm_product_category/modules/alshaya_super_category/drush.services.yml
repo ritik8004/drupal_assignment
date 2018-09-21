@@ -1,0 +1,5 @@
+services:
+  alshaya_super_category.commands:
+    class: Drupal\alshaya_super_category\Commands\AlshyaSuperCategpryCommands
+    tags:
+      - { name: drush.command }
