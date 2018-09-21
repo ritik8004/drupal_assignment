@@ -311,6 +311,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         if (!empty($heading_link)) {
           $subheading_links = [];
           if (!empty($sub_heading_links = $paragraph->get('field_sub_link')->getValue())) {
+            // Filter/Remove empty items(uri).
+            $sub_heading_links = array_filter($sub_heading_links, 'array_filter');
             foreach ($sub_heading_links as $sublink) {
               $subheading_links[] = [
                 'subheading_link_uri' => $sublink['uri'],
