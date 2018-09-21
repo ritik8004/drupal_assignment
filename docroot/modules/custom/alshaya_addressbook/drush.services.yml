@@ -1,0 +1,6 @@
+services:
+  alshaya_addressbook.commands:
+    class: Drupal\alshaya_addressbook\Commands\AlshayaAddressBookCommands
+    arguments: [ '@logger.factory', '@alshaya_addressbook.manager' ]
+    tags:
+      - { name: drush.command }
