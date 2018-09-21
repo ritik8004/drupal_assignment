@@ -79,3 +79,15 @@
     }
   }
 }
+
+.alias--user-password {
+  .user-page {
+    .user-pass {
+      input[type=submit] {
+        @include breakpoint($tablet) {
+          width: auto;
+        }
+      }
+    }
+  }
+}
