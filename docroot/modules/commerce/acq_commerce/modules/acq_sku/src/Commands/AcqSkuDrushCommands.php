@@ -8,7 +8,6 @@ use Drupal\acq_sku\ConductorCategoryManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\rest\resource\ProductSyncResource;
 use Drupal\acq_sku\ProductOptionsManager;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Database\Connection;
@@ -245,7 +244,7 @@ class AcqSkuDrushCommands extends DrushCommands {
         '@language' => $langcode,
       ]);
 
-      if (!$this->io->confirm($confirm)) {
+      if (!$this->io()->confirm($confirm)) {
         throw new UserAbortException();
       }
     }
@@ -526,7 +525,7 @@ class AcqSkuDrushCommands extends DrushCommands {
 
   /**
    * Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).
-   * 
+   *
    * @throws \Drush\Exceptions\UserAbortException
    *
    * @command acq_sku:flush-synced-data
@@ -539,7 +538,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).
    */
   public function flushSyncedData() {
-    if (!$this->io->confirm(dt("Are you sure you want to clean commerce data?"))) {
+    if (!$this->io()->confirm(dt("Are you sure you want to clean commerce data?"))) {
       throw new UserAbortException();
     }
     $this->output->writeln(dt('Cleaning synced commerce data, please wait...'));
@@ -549,7 +548,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       'title' => t('Clean synced data'),
       'init_message' => t('Cleaning synced commerce data starting...'),
       'operations' => [
-        ['_acq_sku_clean_process', []],
+        ['\Drupal\acq_sku\Commands\AcqSkuDrushCommands::skuCleanProcess', []],
       ],
       'progress_message' => t('Processed @current out of @total.'),
       'error_message' => t('Synced data could not be cleaned because an error occurred.'),
@@ -642,7 +641,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @param mixed|array $context
    *   The batch current context.
    */
-  function _acq_sku_clean_process(&$context) {
+  public static function skuCleanProcess(&$context) {
     // Use the $context['sandbox'] at your convenience to store the
     // information needed to track progression between successive calls.
     if (empty($context['sandbox'])) {
@@ -650,7 +649,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       $context['sandbox']['results'] = [];
 
       // Get all acq_product entities.
-      $query = $this->queryFactory->get('node');
+      $query = \Drupal::entityQuery('node');
       $query->condition('type', 'acq_product');
       $product_entities = $query->execute();
       foreach ($product_entities as $entity_id) {
@@ -661,7 +660,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       }
 
       // Get all acq_sku entities.
-      $query = $this->queryFactory->get('acq_sku');
+      $query = \Drupal::entityQuery('acq_sku');
       $sku_entities = $query->execute();
       foreach ($sku_entities as $entity_id) {
         $context['sandbox']['results'][] = [
@@ -672,7 +671,7 @@ class AcqSkuDrushCommands extends DrushCommands {
 
       // Get all taxonomy_term entities.
       $categories = ['acq_product_category', 'sku_product_option'];
-      $query = $this->queryFactory->get('taxonomy_term');
+      $query = \Drupal::entityQuery('taxonomy_term');
       $query->condition('vid', $categories, 'IN');
       $cat_entities = $query->execute();
       foreach ($cat_entities as $entity_id) {
@@ -683,7 +682,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       }
 
       // Allow other modules to add data to be deleted when cleaning up.
-      $this->moduleHandler->alter('acq_sku_clean_synced_data', $context);
+      \Drupal::moduleHandler()->alter('acq_sku_clean_synced_data', $context);
 
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
@@ -712,12 +711,12 @@ class AcqSkuDrushCommands extends DrushCommands {
 
     foreach ($delete as $type => $entity_ids) {
       try {
-        $storage = $this->entityTypeManager->getStorage($type);
+        $storage = \Drupal::entityTypeManager()->getStorage($type);
         $entities = $storage->loadMultiple($entity_ids);
         $storage->delete($entities);
       }
       catch (\Exception $e) {
-        $this->logger->error($e->getMessage());
+        \Drupal::logger('acq_sku')->error($e->getMessage());
       }
     }
 
@@ -789,7 +788,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       return;
     }
 
-    if (!$this->io->confirm(dt('Are you sure you want to clean stock cache?'))) {
+    if (!$this->io()->confirm(dt('Are you sure you want to clean stock cache?'))) {
       throw new UserAbortException();
     }
 
@@ -836,7 +835,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       return;
     }
 
-    if (!$this->io->confirm(dt('Are you sure you want to clear linked SKUs cache for all SKUs?'))) {
+    if (!$this->io()->confirm(dt('Are you sure you want to clear linked SKUs cache for all SKUs?'))) {
       throw new UserAbortException();
     }
 
