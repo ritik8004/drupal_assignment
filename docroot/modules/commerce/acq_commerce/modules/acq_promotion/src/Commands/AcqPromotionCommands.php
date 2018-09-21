@@ -46,17 +46,17 @@ class AcqPromotionCommands extends DrushCommands {
    */
   public function syncProductOptions($options = ['types' => NULL]) {
     if ($types = $options['types']) {
-      $this->logger->notice('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]);
+      $this->logger->notice(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
       $types = explode(',', $types);
       $types = array_map('trim', $types);
       $this->acqPromotionsManager->syncPromotions($types);
     }
     else {
-      $this->logger->notice('Synchronizing all commerce promotions, this usually takes some time...');
+      $this->logger->notice(dt('Synchronizing all commerce promotions, this usually takes some time...'));
       $this->acqPromotionsManager->syncPromotions();
     }
 
-    $this->logger->notice('Promotion sync completed.');
+    $this->logger->notice(dt('Promotion sync completed.'));
   }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\acq_sku\Commands;
 
 use Drupal\acq_commerce\Conductor\APIWrapperInterface;
@@ -20,6 +21,9 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
+/**
+ * class AcqSkuDrushCommands
+ */
 class AcqSkuDrushCommands extends DrushCommands {
 
   /**
@@ -30,7 +34,7 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $apiWrapper;
 
   /**
-   * i18nHelper service.
+   * I18nHelper service.
    *
    * @var \Drupal\acq_commerce\I18nHelper
    */
@@ -93,6 +97,8 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $languageManager;
 
   /**
+   * Module Handler.
+   *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   private $moduleHandler;
@@ -121,17 +127,17 @@ class AcqSkuDrushCommands extends DrushCommands {
   /**
    * AcqSkuDrushCommands constructor.
    *
-   * @param APIWrapperInterface $apiWrapper
+   * @param \Drupal\acq_commerce\Conductor\APIWrapperInterface $apiWrapper
    *   Commerce Api Wrapper.
-   * @param I18nHelper $i18nHelper
-   *  i18nHelper service.
-   * @param IngestAPIWrapper $ingestAPIWrapper
+   * @param \Drupal\acq_commerce\I18nHelper $i18nHelper
+   *   i18nHelper service.
+   * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingestAPIWrapper
    *   Ingest Api Wrapper service.
-   * @param ConductorCategoryManager $conductorCategoryManager
+   * @param \Drupal\acq_sku\ConductorCategoryManager $conductorCategoryManager
    *   Conductor category manager service.
-   * @param ProductOptionsManager $productOptionsManager
+   * @param \Drupal\acq_sku\ProductOptionsManager $productOptionsManager
    *   Product Options Manager service.
-   * @param LoggerChannelFactoryInterface $loggerChannelFactory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $loggerChannelFactory
    *   Logger Channel Factory service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection object.
@@ -144,7 +150,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @param \Drupal\Core\Language\LanguageManagerInterface $langaugeManager
    *   Language Manager service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   Module Handler service
+   *   Module Handler service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $linkedSkuCache
    *   Cache Backend Service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $stockCache
@@ -282,9 +288,9 @@ class AcqSkuDrushCommands extends DrushCommands {
    * @aliases acspo,sync-commerce-product-options
    */
   public function syncProductOptions() {
-    \Drupal::logger('acq_sku')->notice('Synchronizing all commerce product options, please wait...');
+    $this->logger->notice(dt('Synchronizing all commerce product options, please wait...'));
     $this->productOptionsManager->synchronizeProductOptions();
-    \Drupal::logger('acq_sku')->notice('Product attribute sync completed.');
+    $this->logger->notice(dt('Product attribute sync completed.'));
   }
 
   /**
@@ -292,7 +298,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    *
    * @command acq_sku:sync-products-test
    *
-   * @param integer $count
+   * @param int $count
    *   Number of product records to sync.
    *
    * @validate-module-enabled acq_sku
@@ -634,7 +640,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->output->writeln('Done');
   }
 
-
   /**
    * Function to process entity delete operation.
    *
@@ -757,6 +762,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    * Flush the stock cache.
    *
    * @return void
+   *
    * @throws \Drush\Exceptions\UserAbortException
    *
    * @command acq_sku:flush-stock-cache
@@ -801,6 +807,7 @@ class AcqSkuDrushCommands extends DrushCommands {
    * Clear linked SKUs cache.
    *
    * @return void
+   *
    * @throws \Drush\Exceptions\UserAbortException
    *
    * @command acq_sku:clear-linked-skus-cache

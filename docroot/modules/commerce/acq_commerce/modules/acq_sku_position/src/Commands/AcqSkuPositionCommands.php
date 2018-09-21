@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\acq_sku_position\Commands;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
@@ -9,7 +10,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
 /**
- * Class AcqSkuPositionCommands
+ * Class AcqSkuPositionCommands.
  *
  * @package Drupal\acq_sku_position\Commands
  */
@@ -76,7 +77,6 @@ class AcqSkuPositionCommands extends DrushCommands {
     $this->moduleHandler = $moduleHandler;
   }
 
-
   /**
    * Drush command to sync sku product position based on category.
    *
@@ -91,9 +91,8 @@ class AcqSkuPositionCommands extends DrushCommands {
    *   Sync product position based on category, by default "position".
    * @usage drush aapps myargument
    *   Sync product position based on category, by "myargument".
-   *
    */
-  function syncPositions($position_type = 'position') {
+  public function syncPositions($position_type = 'position') {
     $this->logger->notice('Product position sync in progress...');
 
     // Get all product category terms.
@@ -113,28 +112,28 @@ class AcqSkuPositionCommands extends DrushCommands {
         }
       }
       catch (\Exception $e) {
-        $this->logger->error('Exception while fetching position for category @name (tid: @tid). The category probably does not exist in commerce backend', [
+        $this->logger->error(dt('Exception while fetching position for category @name (tid: @tid). The category probably does not exist in commerce backend', [
           '@name' => $term->name,
           '@tid' => $term->tid,
-        ]);
+        ]));
         continue;
       }
 
       // Skip sync if error is found in the response for a particular category.
       if (is_array($response) && isset($response['message'])) {
-        $this->logger->error('Error in position sync for @name (tid: @tid). Response: @message', [
+        $this->logger->error(dt('Error in position sync for @name (tid: @tid). Response: @message', [
           '@name' => $term->name,
           '@tid' => $term->tid,
           '@message' => $response['message'],
-        ]);
+        ]));
         continue;
       }
 
       // Start product position sync for this category.
-      $this->logger->notice('Product position sync for @name (tid: @tid) in progress...', [
-        '@name' => $term->name,
-        '@tid' => $term->tid,
-      ]);
+      $this->logger->notice(dt('Product position sync for !name (tid: !tid) in progress...', [
+        '!name' => $term->name,
+        '!tid' => $term->tid,
+      ]));
 
       // Delete existing records of position for this category.
       $this->connection->delete('acq_sku_position')
@@ -184,7 +183,7 @@ class AcqSkuPositionCommands extends DrushCommands {
     // Allow other modules to take action after position sync finished.
     $this->moduleHandler->invokeAll('acq_sku_position_sync_finished');
 
-    $this->logger->notice('Product position sync completed!');
+    $this->logger->notice(dt('Product position sync completed!'));
   }
 
 }
