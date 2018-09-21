@@ -1,10 +1,11 @@
 <?php
 
-namespace Drupal\alshaya_iamge_sitemap\Commands;
+namespace Drupal\alshaya_image_sitemap\Commands;
 
 use Drupal\alshaya_image_sitemap\AlshayaImageSitemapGenerator;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -13,7 +14,7 @@ use Drush\Commands\DrushCommands;
  * @package Drupal\alshaya_iamge_sitemap\Commands
  */
 class AlshayaImageSitemapCommands extends DrushCommands {
-
+  use StringTranslationTrait;
   /**
    * Alshaya image sitemap generator.
    *
@@ -64,10 +65,10 @@ class AlshayaImageSitemapCommands extends DrushCommands {
     $batch = [
       'operations' => [],
       'finished' => '\Drupal\alshaya_iamge_sitemap\Commands\AlshayaImageSitemapCommands::imageSitemapBatchFinishCallback',
-      'title' => t('Create Image Sitemap'),
-      'init_message' => t('Starting sitemap creation.....'),
-      'progress_message' => t('Completed @current step of @total.'),
-      'error_message' => t('Sitemap creation has encountered an error.'),
+      'title' => $this->t('Create Image Sitemap'),
+      'init_message' => $this->t('Starting sitemap creation.....'),
+      'progress_message' => $this->t('Completed @current step of @total.'),
+      'error_message' => $this->t('Sitemap creation has encountered an error.'),
     ];
 
     $nids = $this->alshayaImageSitemapGenerator->getNodes();
