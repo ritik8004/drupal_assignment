@@ -96,7 +96,6 @@ class AlshayaSeoCommands extends DrushCommands {
         // If any exception.
         $this->logger->error(dt('There was some problem in adding redirect for the url @url. Please check if redirect already exists or not.', ['@url' => $source_url]));
       }
-
     }
 
     $this->output->writeln('Done creating redirect rules');
