@@ -4,11 +4,13 @@ dependencies:
   config:
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_mobile_banner_image
     - field.field.paragraph.banner.field_promo_block_button
     - field.field.paragraph.banner.field_video
     - image.style.thumbnail
     - paragraphs.paragraphs_type.banner
   module:
+    - content_moderation
     - image
     - inline_entity_form
     - link
@@ -27,15 +29,23 @@ content:
     third_party_settings: {  }
     region: content
   field_link:
-    weight: 1
+    weight: 2
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
     region: content
+  field_mobile_banner_image:
+    type: image_image
+    weight: 1
+    settings:
+      preview_image_style: thumbnail
+      progress_indicator: throbber
+    region: content
+    third_party_settings: {  }
   field_promo_block_button:
-    weight: 12
+    weight: 5
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -48,7 +58,7 @@ content:
     region: content
   field_video:
     type: inline_entity_form_complex
-    weight: 11
+    weight: 4
     settings:
       form_mode: default
       label_singular: ''
