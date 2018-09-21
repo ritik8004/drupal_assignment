@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "Password Protected Area"
-AuthUserFile /mnt/gfs/home/alshaya/.htpasswd
-Require valid-user
