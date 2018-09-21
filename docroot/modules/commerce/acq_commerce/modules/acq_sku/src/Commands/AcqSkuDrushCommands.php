@@ -113,6 +113,13 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $cacheTagsInvalidator;
 
   /**
+   * Stock Cache Handler.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  private $stockCache;
+
+  /**
    * AcqSkuDrushCommands constructor.
    *
    * @param APIWrapperInterface $apiWrapper
@@ -141,6 +148,8 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Module Handler service
    * @param \Drupal\Core\Cache\CacheBackendInterface $linkedSkuCache
    *   Cache Backend Service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $stockCache
+   *   Stock Cache Handler.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
    *   Cache Tags invalidator.
    */
@@ -157,6 +166,7 @@ class AcqSkuDrushCommands extends DrushCommands {
                               LanguageManagerInterface $langaugeManager,
                               ModuleHandlerInterface $moduleHandler,
                               CacheBackendInterface $linkedSkuCache,
+                              CacheBackendInterface $stockCache,
                               CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
     $this->apiWrapper = $apiWrapper;
     $this->i18nhelper = $i18nHelper;
@@ -172,6 +182,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->moduleHandler = $moduleHandler;
     $this->linkedSkuCache = $linkedSkuCache;
     $this->cacheTagsInvalidator = $cacheTagsInvalidator;
+    $this->stockCache = $stockCache;
   }
 
   /**
@@ -515,6 +526,8 @@ class AcqSkuDrushCommands extends DrushCommands {
 
   /**
    * Flush all commerce data from the site (Products, SKUs, Product Categories and Product Options).
+   * 
+   * @throws \Drush\Exceptions\UserAbortException
    *
    * @command acq_sku:flush-synced-data
    *
@@ -718,8 +731,6 @@ class AcqSkuDrushCommands extends DrushCommands {
   /**
    * Get stock cache for particular SKU.
    *
-   * @throws \Drush\Exceptions\UserAbortException
-   *
    * @command acq_sku:get-stock-cache
    *
    * @param string $sku
@@ -736,17 +747,17 @@ class AcqSkuDrushCommands extends DrushCommands {
     if ($sku_entity = SKU::loadFromSku($sku)) {
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
       $plugin = $sku_entity->getPluginInstance();
-      drush_print($plugin->getProcessedStock($sku_entity));
+      $this->output->writeln($plugin->getProcessedStock($sku_entity));
     }
     else {
-      drush_print(dt('SKU not found.'));
+      $this->output->writeln(dt('SKU not found.'));
     }
   }
 
   /**
    * Flush the stock cache.
    *
-   * @return UserAbortException|void
+   * @return void
    * @throws \Drush\Exceptions\UserAbortException
    *
    * @command acq_sku:flush-stock-cache
@@ -770,7 +781,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       if ($sku_entity = SKU::loadFromSku($options['sku'])) {
         $sku_entity->clearStockCache();
 
-        drush_print(dt('Invalidated stock cache for @sku.', [
+        $this->output->writeln(dt('Invalidated stock cache for @sku.', [
           '@sku' => $options['sku'],
         ]));
       }
@@ -782,7 +793,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       throw new UserAbortException();
     }
 
-    \Drupal::service('cache.stock')->deleteAllPermanent();
+    $this->stockCache->deleteAllPermanent();
 
     $this->output->writeln(dt('Deleted all cache for stock.'));
   }
