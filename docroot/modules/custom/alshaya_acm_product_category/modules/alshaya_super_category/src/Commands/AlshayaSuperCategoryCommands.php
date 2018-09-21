@@ -103,7 +103,8 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
 
     $msg = dt('Are you sure you want to !action super category feature?', ['!action' => $action]);
 
-    // Check path alter status to display message and trigger bulk alias generate.
+    // Check path alter status to display message and trigger bulk alias
+    // generate.
     $path_alter = $config->get('product_path_alter', TRUE);
     if ($path_alter && 'enable' == $action) {
       $msg = dt('Are you sure you want to !action super category feature and do bulk update on product aliases', ['!action' => $action]);
@@ -159,8 +160,8 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
         'metatag.metatag_defaults.taxonomy_term__acq_product_category',
       ];
       if ($this->moduleHandler->moduleExists('alshaya_seo_transac')) {
-        // When super category feature is disabled, we just reset the tokens from
-        // the module config YML.
+        // When super category feature is disabled, we just reset the tokens
+        // from the module config YML.
         foreach ($meta_configs as $meta_config) {
           $config_data = $this->alshayaConfigManager->getDataFromCode($meta_config, 'alshaya_seo_transac', 'install');
           $this->configFactory->getEditable($meta_config)
