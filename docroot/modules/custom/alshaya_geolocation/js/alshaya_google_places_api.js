@@ -67,7 +67,7 @@
       }
       places_autocomplete.coords = Drupal.AlshayaPlacesAutocomplete.getLatLong(place);
 
-      if ($.isArray(callbacks)) {
+      if ($.isArray(callbacks) && !$.isEmptyObject(places_autocomplete.coords)) {
         callbacks.forEach(function (callback) {
           callback.call(this, places_autocomplete.coords, field, restriction, $trigger);
         });
@@ -146,7 +146,7 @@
         if ($.isEmptyObject(coords) || results[0].address_components.length <= 1) {
           return false;
         }
-        else if ($.isArray(callbacks)) {
+        else if ($.isArray(callbacks) && !$.isEmptyObject(coords)) {
           callbacks.forEach(function (callback) {
             callback.call(null, coords, field, restriction, $trigger);
           });
