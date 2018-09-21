@@ -42,7 +42,7 @@ class AlshayaStoreFinderCommands extends DrushCommands {
    * @aliases aass,sync-stores
    */
   public function syncStores() {
-    $this->logger->info('Synchronizing all stores, please wait...');
+    $this->logger->info(dt('Synchronizing all stores, please wait...'));
 
     $this->storesFinderManager->syncStores();
   }
