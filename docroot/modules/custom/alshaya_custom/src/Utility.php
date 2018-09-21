@@ -87,7 +87,7 @@ class Utility {
    *
    * @link: https://cgit.drupalcode.org/webform/tree/src/Element/WebformCreditCardNumber.php?id=4feb0fbbfd8024970d6dfe7a9aa519bfcbc6d776#n74
    */
-  public static function alshayaValidCreditCardNumber($number) {
+  public function alshayaValidCreditCardNumber($number) {
     // If number is not 15 or 16 digits return FALSE.
     if (!preg_match('/^\d{15,16}$/', $number)) {
       return FALSE;
