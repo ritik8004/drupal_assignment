@@ -301,7 +301,17 @@ function alshaya_white_label_preprocess_field__field_slider(&$variables) {
   $data = [];
   if (!empty($variables['items'])) {
     foreach ($variables['items'] as $item) {
-      $data[$item['content']['#paragraph']->getType()][] = $item['content'];
+      // Only for the 'banner' paragraph.
+      if ($item['content']['#paragraph']->getType() == 'banner') {
+        $data[$item['content']['#paragraph']->getType()][] = [
+          'field_banner' => _alshaya_white_label_get_image_url($item['content']['#paragraph']->get('field_banner')),
+          'field_mobile_banner_image' => _alshaya_white_label_get_image_url($item['content']['#paragraph']->get('field_mobile_banner_image')) ?: _alshaya_white_label_get_image_url($item['content']['#paragraph']->get('field_banner')),
+          'content' => $item['content'],
+        ];
+      }
+      else {
+        $data[$item['content']['#paragraph']->getType()][] = $item['content'];
+      }
     }
   }
 
