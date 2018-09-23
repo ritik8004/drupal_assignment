@@ -18,6 +18,8 @@ $primary_btn_bg: $black;
 $primary_btn_text: $white-two;
 $primary_border: $warm-grey;
 $primary_text: $black;
+$secondary_btn_bg: $dark-red;
+$secondary_border: $white-three;
 
 // Form elements.
 $primary_input_label: $warm-grey;
@@ -77,7 +79,9 @@ $hp_slider_dots: $purplish-brown;
 $lang_switch: $black;
 
 // Accordion
+$accordion_border: $white-three;
 $accordion_arrow: $black;
+$accordion_sub_title: $warm-grey;
 
 //footer
 $footer_title_h3: $black;
@@ -103,9 +107,6 @@ $user_block_link: $purplish-brown;
 $user_sidebar_block_title: $purplish-brown;
 $default_msg_bg: $medium-green;
 
-// Accordion
-$accordion_border: $warm-grey;
-
 // Privilege card.
 $privilege_card_subtitle: $warm-grey;
 $privilege_card_form_label: $warm-grey;
@@ -116,3 +117,9 @@ $default_msg_bg: $medium-green;
 
 // Pace progress color
 $progress_loader: $purplish-brown;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $purplish-brown;
+$pdp_cc_btn_bg: $primary_btn_bg;
+$pdp_sidebar_link: $purplish-brown;
+$pdp_desc_wrapper_border: $primary_border;
