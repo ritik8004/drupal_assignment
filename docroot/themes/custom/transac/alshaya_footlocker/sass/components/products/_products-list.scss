@@ -98,12 +98,6 @@
         text-transform: initial;
       }
 
-      @include breakpoint($upto-desktop) {
-        .form-type-select {
-          @include select3-style(9rem);
-        }
-      }
-
       .c-facet__blocks__wrapper--mobile {
         @include breakpoint($only-mobile) {
           .c-facet__blocks {
@@ -233,19 +227,11 @@
       transform: translate(0, -40%);
     }
 
-    .select2-container {
-      @include select4-style(10.3125rem);
-    }
-
     html[lang=ar] & {
       label {
         font-size: 0.875rem;
         line-height: 1.5;
         transform: translate(0, -40%);
-      }
-
-      .select2-container {
-        @include select4-style(10.3125rem);
       }
     }
   }
