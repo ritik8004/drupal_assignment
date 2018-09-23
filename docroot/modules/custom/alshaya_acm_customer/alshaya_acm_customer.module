@@ -275,6 +275,7 @@ function alshaya_acm_customer_user_pass_reset_validate(array &$form, FormStateIn
           }
         }
 
+        \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
         // Update the user info from MDC to Drupal.
         alshaya_acm_customer_update_user_data($user, $customer);
       }

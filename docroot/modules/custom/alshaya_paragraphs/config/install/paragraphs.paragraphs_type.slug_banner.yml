@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: slug_banner
+label: 'Slug Banner'
+icon_uuid: null
+description: ''
+behavior_plugins: {  }
