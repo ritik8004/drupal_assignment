@@ -12,6 +12,38 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Adding promotion filter to SRP.
+ */
+function alshaya_search_update_8022() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+
+  $alshayaConfigManager->updateConfigs(['search_api.index.acquia_search_index'], 'alshaya_search', 'install', AlshayaConfigManager::MODE_MERGE);
+
+  $index = Index::load('acquia_search_index');
+  $index->save();
+
+  // Create facet & add facet block to PLP.
+  alshaya_config_install_configs(['facets.facet.promotions'], 'alshaya_search', 'optional');
+  alshaya_config_install_configs(['block.block.promotions'], 'alshaya_search', 'optional');
+
+  // Update PLP facet summary to render selected promotion facets.
+  $filter_bar = \Drupal::configFactory()->getEditable('facets_summary.facets_summary.filter_bar');
+  $facets = $filter_bar->get('facets');
+  $facets['promotions'] = [
+    'checked' => 1,
+    'label' => 'Promotions',
+    'separator' => ', ',
+    'show_count' => 1,
+    'weight' => 0,
+  ];
+  $filter_bar->set('facets', $facets);
+  $filter_bar->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Replace updated search settings with existing one.
  */
 function alshaya_search_update_8021() {
