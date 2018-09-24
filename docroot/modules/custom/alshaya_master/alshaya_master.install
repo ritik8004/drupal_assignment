@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add new string translations.
+ */
+function alshaya_master_update_8016() {
+  $strings = [
+    "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
+      'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable seckit module with header configuration.
  */
 function alshaya_master_update_8015() {
@@ -1446,6 +1461,9 @@ function alshaya_master_install() {
     ],
     'Select your preferred pickup store' => [
       'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
+    ],
+    "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
+      'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
     ],
   ];
 
