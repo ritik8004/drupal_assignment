@@ -2,13 +2,13 @@
   .paragraph-banner.slick-slider {
     .slick-track,
     .slick-list {
-      @include breakpoint($tablet) {
+      @include breakpoint($mobile) {
         width: 100% !important;
       }
     }
 
     .slick-list {
-      @include breakpoint($tablet) {
+      @include breakpoint($mobile) {
         #{$left}: 0 !important;
         #{$right}: 0;
       }
