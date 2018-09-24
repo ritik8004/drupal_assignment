@@ -207,16 +207,12 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       // Add Class to leaf items on page load.
       Drupal.addLeafClassToPlpLeafItems();
 
+      // Add checkboxes here to ensure we have it before our dependent code.
+      // @see docroot/modules/contrib/facets/js/checkbox-widget.js
+      Drupal.facets.makeCheckboxes();
+
       // Hide other category filter options when one of the L1 items is selected.
       Drupal.alshayaSearchProcessCategoryFacets();
-
-      $('html').once('hide-facets-on-load').each(function () {
-        // Classes / elements used here are added in JS itself.
-        // To process it after markup is updated, we do it after 1ms.
-        setTimeout(function () {
-          Drupal.alshayaSearchProcessCategoryFacets();
-        }, 1);
-      });
     }
   };
 
@@ -233,7 +229,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.alshayaSearchProcessCategoryFacets = function () {
     if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
-      console.log(123);
       $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
         if ($(this).hasClass('facet-item--expanded') ||
           ($(this).children('input[checked="checked"]').length > 0)) {
