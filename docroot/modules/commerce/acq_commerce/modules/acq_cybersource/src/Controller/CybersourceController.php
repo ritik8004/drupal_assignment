@@ -142,7 +142,10 @@ class CybersourceController implements ContainerInjectionInterface {
 
     // We check if cc type is valid and is allowed.
     if (empty($cc_type) || !in_array($cc_type, $allowed_cc_types)) {
-      throw new \InvalidArgumentException(sprintf('Invalid credit cart type %s or type not allowed.', $type));
+      $errors = [];
+      $errors['acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]'] = t('Invalid Credit Card number or card type not supported.');
+      $response->setContent(json_encode(['errors' => $errors]));
+      return $response;
     }
 
     // Get the cart object.

@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Make entity_reference_revisions field translatable: false.
  */
-function alshaya_paragraphs_update_8119() {
+function alshaya_paragraphs_update_8120() {
   $configs = [
     'field.field.paragraph.1_row_1_col.field_promo_block',
     'field.field.paragraph.1_row_1_col_dept.field_promo_block',
@@ -34,6 +34,43 @@ function alshaya_paragraphs_update_8119() {
     'field.field.paragraph.promo_block.field_promo_block_button',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new paragraph type 'Slug Banner'.
+ */
+function alshaya_paragraphs_update_8119() {
+  $configs = [
+    'paragraphs.paragraphs_type.slug_banner',
+    'field.storage.paragraph.field_default_slug_text',
+    'field.storage.paragraph.field_default_slug_bkg_color',
+    'field.storage.paragraph.field_mobile_slug_text',
+    'field.storage.paragraph.field_mobile_slug_bkg_color',
+    'field.storage.paragraph.field_default_slug_font_color',
+    'field.storage.paragraph.field_mobile_slug_font_color',
+    'field.field.paragraph.slug_banner.field_default_slug_text',
+    'field.field.paragraph.slug_banner.field_default_slug_bkg_color',
+    'field.field.paragraph.slug_banner.field_mobile_slug_text',
+    'field.field.paragraph.slug_banner.field_mobile_slug_bkg_color',
+    'field.field.paragraph.slug_banner.field_default_slug_font_color',
+    'field.field.paragraph.slug_banner.field_mobile_slug_font_color',
+    'core.entity_form_display.paragraph.slug_banner.default',
+    'core.entity_view_display.paragraph.slug_banner.default',
+    'core.base_field_override.paragraph.slug_banner.created',
+    'core.base_field_override.paragraph.slug_banner.moderation_state',
+    'core.base_field_override.paragraph.slug_banner.status',
+    'core.base_field_override.paragraph.slug_banner.uid',
+    'language.content_settings.paragraph.slug_banner',
+  ];
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_paragraphs',
+    'install'
+  );
 }
 
 /**

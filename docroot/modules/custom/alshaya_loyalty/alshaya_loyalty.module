@@ -8,7 +8,6 @@
 use Drupal\block\Entity\Block;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Entity\User;
-use Drupal\webform\Element\WebformCreditCardNumber;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -304,7 +303,7 @@ function alshaya_loyalty_check_valid_apc_number(&$value) {
   }
 
   // Validate loyalty card number with Luhn formula.
-  return WebformCreditCardNumber::validCreditCardNumber($value);
+  return \Drupal::service('alshaya_custom.utility')->alshayaValidCreditCardNumber($value);
 }
 
 /**

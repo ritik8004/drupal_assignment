@@ -67,6 +67,9 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
   $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   foreach ($items as $item_id => $item) {
     $object = $item->getOriginalObject()->getValue();
     $type = $object->getEntityType()->id();
@@ -105,7 +108,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
         if ($sku_entity->bundle() == 'configurable') {
           $data = [];
-          $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
           $prices = $skuManager->getMinPrices($sku_entity);
           $min_final_price = $prices['final_price'];
           $child_sku_found = FALSE;
@@ -413,7 +416,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // when user clicked on swatch.
         $build['#cache']['contexts'][] = 'url';
 
-        if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+        if (!alshaya_acm_get_stock_from_sku($sku_entity) || !$skuManager->skuAttributeCombinationAvailable($sku_entity)) {
           $build['#attributes']['class'][] = 'product-out-of-stock';
         }
 
@@ -476,7 +479,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $selected_value = $selected_value != $sku_entity->id() ? $selected_value : NULL;
 
             if ($selected_value) {
-              $selected_sku = SKU::load($selected_value);
+              $selected_sku = $skuManager->loadSkuById((int) $selected_value);
 
               if ($selected_sku instanceof SKUInterface && alshaya_acm_get_stock_from_sku($selected_sku)) {
                 $sku_for_gallery = $selected_sku;
@@ -1055,8 +1058,11 @@ function alshaya_acm_product_form_customer_cart_form_alter(&$form, FormStateInte
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // Load SKU entity.
-  $sku_entity = SKU::load($form['sku_id']['#value']);
+  $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
 
   if (empty($sku_entity)) {
     return;
@@ -1079,9 +1085,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
-  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
 
@@ -1123,17 +1126,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     $empty_selected = [];
     $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $empty_selected);
 
-    // Prepare array of just the configurable options.
-    $configurables = [];
-    foreach ($form['ajax']['configurables'] as $configurable_key => $configurable) {
-      if (is_array($configurable) && !empty($configurable['#options'])) {
-        $configurables[$configurable_key] = $configurable;
-      }
-    }
-
     // If there are no options to display, we show the product as not
     // available.
-    if (empty($configurables) || count($configurables) != count($configurable_codes)) {
+    if (!$sku_manager->skuAttributeCombinationAvailable($sku_entity)) {
       $form = [
         '#theme' => 'empty_add_to_cart_form',
         '#text' => t('Out of stock'),
@@ -1371,10 +1366,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   // & hence need to be re-rendered in the AJAX callback.
   $dynamic_parts = call_user_func_array($form_state->prepareCallback('::configurableAjaxCallback'), [&$form, &$form_state]);
 
-  $sku = SKU::load($form['sku_id']['#value']);
-
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $sku = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
 
   // Configurable product tree keyed with possible config tree, whose leaf items
   // contain the SKUs depending on the tree path traversed.
@@ -1580,10 +1575,6 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         }
       }
     }
-    // If no image found on simple SKUs, use parent SKUs image.
-    if (empty($build['gallery']['product_zoom'])) {
-      $build['gallery'] = $skuImagesManager->getGallery($sku, 'pdp');
-    }
 
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
@@ -1641,7 +1632,7 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
-    $size_guide_anchor = alshaya_acm_product_get_size_guide_anchor($taxonomy_term);
+    $size_guide_anchor = ($taxonomy_term instanceof TermInterface) ? alshaya_acm_product_get_size_guide_anchor($taxonomy_term) : [];
     $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', $size_guide_anchor);
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
@@ -1655,8 +1646,6 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  *
  * @param \Drupal\taxonomy\TermInterface $taxonomy_term
  *   The taxonomy term object.
- * @param bool $load_parents
- *   (optional) False if already looping through all parents.
  *
  * @return array
  *   Return array value.
@@ -1665,25 +1654,26 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\TypedData\Exception\MissingDataException
  */
-function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, bool $load_parents = TRUE) : array {
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term) : array {
   $anchor = $taxonomy_term->get('field_size_guide_anchor');
+  $query_string = [];
   if (!empty($anchor) && !empty($anchor->first())) {
-    return array_map(function ($string) {
+    foreach (explode(',', $anchor->first()->getString()) as $string) {
       list($key, $value) = explode('=', trim($string));
-      return [trim($key) => trim($value)];
-    }, explode(',', $anchor->first()->getString()));
+      $query_string[trim($key)] = trim($value);
+    }
+    return $query_string;
   }
-  elseif ($load_parents) {
-    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
-    foreach ($parent_terms as $term) {
-      $anchor = alshaya_acm_product_get_size_guide_anchor($term, FALSE);
-      if (!empty($anchor)) {
-        return $anchor;
-      }
+  // Get size guide link from parent term.
+  $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+  $term = reset($parent_terms);
+  if ($term instanceof TermInterface) {
+    $query_string = alshaya_acm_product_get_size_guide_anchor($term);
+    if (!empty($query_string)) {
+      return $query_string;
     }
   }
-
-  return [];
+  return $query_string;
 }
 
 /**

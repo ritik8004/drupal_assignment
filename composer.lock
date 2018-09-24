@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "63ad544a123d1827c5bc2527742594d8",
+    "content-hash": "7ed3ac6f097e35bc945b3c7dda456cc5",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10360,6 +10360,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

@@ -5,6 +5,7 @@ dependencies:
     - block_content.type.paragraph_block
     - field.storage.block_content.field_paragraph_content
     - paragraphs.paragraphs_type.offers_bordered
+    - paragraphs.paragraphs_type.slug_banner
   module:
     - entity_reference_revisions
 id: block_content.paragraph_block.field_paragraph_content
@@ -23,6 +24,7 @@ settings:
     negate: 0
     target_bundles:
       offers_bordered: offers_bordered
+      slug_banner: slug_banner
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 20
@@ -99,4 +101,7 @@ settings:
       video:
         weight: 49
         enabled: false
+      slug_banner:
+        weight: 50
+        enabled: true
 field_type: entity_reference_revisions
