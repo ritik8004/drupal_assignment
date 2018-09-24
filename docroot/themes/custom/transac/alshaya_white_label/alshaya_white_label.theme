@@ -1056,10 +1056,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $advanced_page_slug_banner = $variables['paragraph'];
 
-    // Get the desktop and mobile slug text if available.
-    $desktop_slug_text = $advanced_page_slug_banner->get('field_default_slug_text')->value ?? NULL;
-    $mobile_slug_text = $advanced_page_slug_banner->get('field_mobile_slug_text')->value ?? $desktop_slug_text;
-
     // Get the desktop and mobile slug background color if available.
     $desktop_slug_bkg_color = $advanced_page_slug_banner->get('field_default_slug_bkg_color')->value ?? NULL;
     $mobile_slug_bkg_color = $advanced_page_slug_banner->get('field_mobile_slug_bkg_color')->value ?? $desktop_slug_bkg_color;
@@ -1067,11 +1063,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     // Get the desktop and mobile slug font color if available.
     $desktop_slug_font_color = $advanced_page_slug_banner->get('field_default_slug_font_color')->value ?? NULL;
     $mobile_slug_font_color = $advanced_page_slug_banner->get('field_mobile_slug_font_color')->value ?? $desktop_slug_font_color;
-
-    if (!empty($desktop_slug_text) || !empty($mobile_slug_text)) {
-      $variables['desktop_slug_text']['#markup'] = $desktop_slug_text;
-      $variables['mobile_slug_text']['#markup'] = $mobile_slug_text;
-    }
 
     if (!empty($desktop_slug_bkg_color) || !empty($mobile_slug_bkg_color)) {
       $variables['desktop_slug_bkg_color'] = $desktop_slug_bkg_color;
