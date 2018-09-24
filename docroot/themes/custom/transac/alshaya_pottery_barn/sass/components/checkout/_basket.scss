@@ -109,6 +109,12 @@
 
           &.price {
             .price--discount {
+              .discount-prefix {
+                @include breakpoint($desktop) {
+                  margin-right: 1.125rem;
+                }
+              }
+
               .discount-value,
               .discount-prefix {
                 @include breakpoint($only-tablet) {
