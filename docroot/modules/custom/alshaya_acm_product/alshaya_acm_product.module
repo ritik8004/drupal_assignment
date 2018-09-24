@@ -1632,7 +1632,7 @@ function alshaya_acm_product_block_access(Block $block, $operation, AccountInter
 function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
-    $size_guide_anchor = alshaya_acm_product_get_size_guide_anchor($taxonomy_term);
+    $size_guide_anchor = ($taxonomy_term instanceof TermInterface) ? alshaya_acm_product_get_size_guide_anchor($taxonomy_term) : [];
     $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', $size_guide_anchor);
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
@@ -1646,8 +1646,6 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  *
  * @param \Drupal\taxonomy\TermInterface $taxonomy_term
  *   The taxonomy term object.
- * @param bool $load_parents
- *   (optional) False if already looping through all parents.
  *
  * @return array
  *   Return array value.
@@ -1656,25 +1654,26 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\TypedData\Exception\MissingDataException
  */
-function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, bool $load_parents = TRUE) : array {
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term) : array {
   $anchor = $taxonomy_term->get('field_size_guide_anchor');
+  $query_string = [];
   if (!empty($anchor) && !empty($anchor->first())) {
-    return array_map(function ($string) {
+    foreach (explode(',', $anchor->first()->getString()) as $string) {
       list($key, $value) = explode('=', trim($string));
-      return [trim($key) => trim($value)];
-    }, explode(',', $anchor->first()->getString()));
+      $query_string[trim($key)] = trim($value);
+    }
+    return $query_string;
   }
-  elseif ($load_parents) {
-    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
-    foreach ($parent_terms as $term) {
-      $anchor = alshaya_acm_product_get_size_guide_anchor($term, FALSE);
-      if (!empty($anchor)) {
-        return $anchor;
-      }
+  // Get size guide link from parent term.
+  $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+  $term = reset($parent_terms);
+  if ($term instanceof TermInterface) {
+    $query_string = alshaya_acm_product_get_size_guide_anchor($term);
+    if (!empty($query_string)) {
+      return $query_string;
     }
   }
-
-  return [];
+  return $query_string;
 }
 
 /**
