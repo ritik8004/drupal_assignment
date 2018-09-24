@@ -1,0 +1,29 @@
+.c-user-register {
+  .c-content__region .user-form {
+    .field--name-field-subscribe-newsletter {
+      p {
+        font-size: 0.875rem;
+
+        a {
+          font-weight: normal;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.c-user-login.user-page {
+  .user-login-form {
+    #edit-actions {
+      input {
+        font-size: 0.875rem;
+        font-family: $alshaya-thin;
+
+        @include breakpoint($tablet) {
+          min-width: 9.125rem;
+        }
+      }
+    }
+  }
+}

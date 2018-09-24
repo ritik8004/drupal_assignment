@@ -1,4 +1,9 @@
-(function ($, Drupal) {
+/**
+ * @file
+ * JS related to click & collect on PDP.
+ */
+
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   /* global google */
@@ -9,11 +14,11 @@
   var lastCoords;
   // Selected coordinates.
   var ascoords;
-  // Store list
+  // Store list.
   var storeList;
   // Index to show in marker as label.
   var index;
-  // Map wrapper
+  // Map wrapper.
   var mapWrapper = $('#click-and-collect-map-view');
 
   // Geolocation map object.
@@ -33,7 +38,7 @@
           Drupal.geolocation.loadGoogle(function () {
             var field = $('.store-location-input')[0];
             // Create autocomplete object for places.
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.checkoutClickCollect.storeListAll]);
+            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.checkoutClickCollect.storeListAll], {'country': settings.alshaya_click_collect.country.toLowerCase()});
           });
         });
       }
@@ -277,7 +282,7 @@
     selectedOnMap.execute();
   };
 
-  // View selected store on map
+  // View selected store on map.
   Drupal.checkoutClickCollect.storeViewOnMapSelected = function (StoreObj, makerIndex) {
     // Create/Get map object.
     var map = Drupal.checkoutClickCollect.mapCreate();
@@ -337,7 +342,7 @@
     return geolocationMap;
   };
 
-  // push marker to add to map.
+  // Push marker to add to map.
   Drupal.checkoutClickCollect.mapPushMarker = function (param, extra) {
     index++;
     Drupal.checkoutClickCollect.mapCreateMarker(this, param.geolocationMap, index);
@@ -368,7 +373,7 @@
 
   // Make Ajax call to get stores list and render html.
   Drupal.checkoutClickCollect.storeListAll = function (coords, field, restriction, $trigger) {
-    if (typeof coords !== 'undefined') {
+    if (typeof coords !== 'undefined' && !$.isEmptyObject(coords)) {
       ascoords = coords;
 
       var cartId = drupalSettings.alshaya_click_collect.cart_id;
@@ -431,5 +436,4 @@
     }
   };
 
-
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);

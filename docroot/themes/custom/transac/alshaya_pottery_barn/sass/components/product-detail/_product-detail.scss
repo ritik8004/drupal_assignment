@@ -63,6 +63,11 @@
     .address {
       border-color: $pdp_sidebar_desc_overlay_section_border;
     }
+
+    .desc-wrapper {
+      border-top: none;
+      padding: 0;
+    }
   }
 
   .delivery-options-wrapper {
@@ -338,9 +343,11 @@
 
     .desc-wrapper {
       .desc-label,
-      h1,
-      h2,
-      h3,
+      h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
       h4,
       h5,
       h6 {
@@ -350,7 +357,10 @@
     }
   }
 
-  .desc-value,
+  .desc-value {
+    padding-top: 0;
+  }
+
   .text {
     padding-top: 0.9375rem;
   }

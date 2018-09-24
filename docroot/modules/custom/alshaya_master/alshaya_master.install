@@ -8,6 +8,23 @@
 use Drupal\Core\Config\FileStorage;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Enable seckit module with header configuration.
+ */
+function alshaya_master_update_8015() {
+  \Drupal::service('module_installer')->install(['seckit']);
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['seckit.settings.yml'],
+    'seckit',
+    'install'
+  );
+}
+
+/**
  * Implements hook_update().
  *
  * Update configuration file for progress loader.
@@ -1549,4 +1566,13 @@ function alshaya_master_install() {
     ->set('display_denied_message', FALSE)
     ->set('redirect_authenticated_users_to', '/user')
     ->save();
+
+  // Override seckit configuration.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['seckit.settings.yml'],
+    'seckit',
+    'install'
+  );
 }

@@ -10,6 +10,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Disabling downloading of translation for contrib modules.
+ */
+function alshaya_i18n_update_8003() {
+  \Drupal::configFactory()->getEditable('locale.settings')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Configure alshaya_i18n.locale_mappings for specific country.
  */
 function alshaya_i18n_update_8002() {

@@ -12,3 +12,107 @@ $warm-grey: #777;
 $black: #333;
 $dark-red: #e2193a;
 $info-blue: #4285f4;
+
+//global for entire site
+$primary_btn_bg: $black;
+$primary_btn_text: $white-two;
+$primary_border: $warm-grey;
+$primary_text: $black;
+
+// Form elements.
+$primary_input_label: $warm-grey;
+$primary_input_border: $warm-grey;
+$primary_input_inline_error: $red;
+$primary_form_link: $purplish-brown;
+
+// Header.
+$header_bg: $white-two;
+$header_search_block_bg: $white-two;
+$header_border: $white-three;
+$header_secondary_menu_link: $purplish-brown;
+$header_my_account_h3_title: $purplish-brown;
+$header_secondary_bg: $white;
+$header_c_menu_icon_color: $purplish-brown;
+$header_c_menu_icon_text: $purplish-brown;
+$header_toggle_sign_default: $white;
+$header_mobile_menu_close_bg: $black;
+$header_search_border_mobile: $black;
+$header_toggle_sign_active_tab: $black;
+$header_secondary_menu_link_mobile: $black;
+
+//mega menu
+$mm_l1_link_active_border: $purplish-brown;
+$mm_l2_link: $purplish-brown;
+$mm_l1_link_hover: $purplish-brown;
+$mm_l3_link: $black;
+$mm_body_overlay: rgba(0, 0, 0, 0.6);
+$mm_bg: $white-two;
+$mm_l1_border: $white-three;
+$mm_l1_link_bg: $white-two;
+$mm_l2_link_hover: $black;
+$mm_l2_p: $white-two;
+$mm_l3_link_bg: $white-two;
+$mm_l3_link_hover: $black;
+$mm_highlight_label: $purplish-brown;
+$mm_p_a_text: $black;
+$mm_highlight_label: $black;
+$mm_highlight_title: $black;
+$mm_highlight_description: $warm-grey;
+
+//search block
+$primary_search_text: $warm-grey;
+$header_c_menu_search_active_icon: $purplish-brown;
+$header_search_active_bg: transparent;
+$header_mobile_menu_arrow: $purplish-brown;
+
+// Delivery tabs.
+$delivery_menu_bg: $white;
+$deliverybanner_title: $purplish-brown;
+$deliverybanner_subtitle: $purplish-brown;
+
+//slider banner
+$hp_slider_dots: $purplish-brown;
+
+// Language Switcher
+$lang_switch: $black;
+
+// Accordion
+$accordion_arrow: $black;
+
+//footer
+$footer_title_h3: $black;
+$footer_link: $warm-grey;
+$footer_link_hover: $purplish-brown;
+$footer_border_top: $purplish-brown;
+
+//newsletter
+$newsletter_input_border: $white-three;
+$newsletter_submit_btn: $black;
+
+// Titles.
+$title: $black;
+
+//my-account
+$user_pwd_unmask: $black;
+$password_tooltip_list: $red;
+$user_field_link: $black;
+
+// User Form.
+$user_form_layout_divider_color: $warm-grey;
+$user_block_link: $purplish-brown;
+$user_sidebar_block_title: $purplish-brown;
+$default_msg_bg: $medium-green;
+
+// Accordion
+$accordion_border: $warm-grey;
+
+// Privilege card.
+$privilege_card_subtitle: $warm-grey;
+$privilege_card_form_label: $warm-grey;
+
+// Messages and Errors
+$content_error_msg_bg: $red;
+$default_msg_bg: $medium-green;
+
+// Pace progress color
+$progress_loader: $purplish-brown;

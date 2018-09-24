@@ -1,7 +1,11 @@
 {% extends '@alshaya_white_label/layout/page--plp.html.twig' %}
 {% block header_precontent %}
 <!-- ______________________ MENU SECONDARY _______________________ -->
-
+  <!-- ______________________ Banner Top _______________________ -->
+  {% if page.banner_top %}
+    {{ page.banner_top }}
+  {% endif %}
+  <!-- /Banner Top -->
 <div class="header--wrapper">
   {% if page.menu_secondary %}
     <div class="c-menu-secondary">
