@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * Adding new field 'Mobile Banner Image' for paragraph type 'banner'.
  */
-function alshaya_paragraphs_update_8119() {
+function alshaya_paragraphs_update_8120() {
   $configs = [
     'field.storage.paragraph.field_mobile_banner_image',
     'field.field.paragraph.banner.field_mobile_banner_image',
