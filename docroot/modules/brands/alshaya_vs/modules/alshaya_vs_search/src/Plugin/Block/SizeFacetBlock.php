@@ -54,16 +54,17 @@ class SizeFacetBlock extends BlockBase {
       '#markup' => '<div class="sfb-facets-container"></div>',
     ];
 
+    $size_guide = _alshaya_acm_product_get_size_guide_info(NULL);
+    if (isset($size_guide['link'])) {
+      $build['size_guide_link'] = [
+        '#markup' => $size_guide['link'],
+      ];
+    }
+
+
     $build['#attached']['library'][] = 'alshaya_vs_search/size_facet_copy';
 
     return $build;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheMaxAge() {
-    return 0;
   }
 
 }
