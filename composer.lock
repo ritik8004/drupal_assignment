@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d5c77f7b34502c63b776b73214138e6",
+    "content-hash": "63ad544a123d1827c5bc2527742594d8",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3963,6 +3963,7 @@
                     "Respect existing #multilingual property in content_translation_form_alter()": "https://www.drupal.org/files/issues/2018-05-28/respect-multilingual-2975762-2.patch",
                     "FieldItemList::equals is sufficient from the storage perspective but not for code checking for changes": "https://www.drupal.org/files/issues/2018-05-29/2826021-31.patch",
                     "Add hooks to act on a new revision being created": "https://www.drupal.org/files/issues/2018-05-28/revision-create-hooks-2975754-2.patch",
+                    "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-90.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356278-408--8.5.x-real.patch",
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",

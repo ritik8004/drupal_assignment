@@ -229,7 +229,8 @@
                 "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
                 "Respect existing #multilingual property in content_translation_form_alter()": "https://www.drupal.org/files/issues/2018-05-28/respect-multilingual-2975762-2.patch",
                 "FieldItemList::equals is sufficient from the storage perspective but not for code checking for changes": "https://www.drupal.org/files/issues/2018-05-29/2826021-31.patch",
-                "Add hooks to act on a new revision being created": "https://www.drupal.org/files/issues/2018-05-28/revision-create-hooks-2975754-2.patch"
+                "Add hooks to act on a new revision being created": "https://www.drupal.org/files/issues/2018-05-28/revision-create-hooks-2975754-2.patch",
+                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch"
             },
             "drupal/back_to_top": {
                 "Triggers only after page scroll, Initial page load shows the link": "https://www.drupal.org/files/issues/triggers_only_after-2880660-2.patch",
