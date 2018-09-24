@@ -44,6 +44,8 @@ class SkuManager {
 
   const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
 
+  const FREE_GIFT_PRICE = 0.01;
+
   /**
    * The database service.
    *
@@ -252,6 +254,42 @@ class SkuManager {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->httpClient = $http_client;
+  }
+
+  /**
+   * Get SKU object from id in current language.
+   *
+   * @param int $id
+   *   SKU Entity ID.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface|null
+   *   Loaded SKU object in current language.
+   */
+  public function loadSkuById(int $id) : ?SKUInterface {
+    if ($id <= 0) {
+      // Return null for 0 or negative values.
+      // 0 is possible, negative - not sure.
+      return NULL;
+    }
+
+    $skus = &drupal_static('loadSkuById', []);
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    if (isset($skus[$id], $skus[$id][$langcode])) {
+      return $skus[$id][$langcode];
+    }
+
+    $sku = SKU::load($id);
+    if ($sku instanceof SKUInterface) {
+      if ($sku->language()->getId() !== $langcode && $sku->hasTranslation($langcode)) {
+        $sku = $sku->getTranslation($langcode);
+      }
+
+      $skus[$id][$sku->language()->getId()] = $sku;
+      return $sku;
+    }
+
+    return NULL;
   }
 
   /**
@@ -895,9 +933,8 @@ class SkuManager {
     $args = ['@file' => $data[$file_key], '@sku_id' => $sku_entity->id()];
 
     // Download the file contents.
-    $client = $this->httpClient;
     try {
-      $file_data = $client->get($data[$file_key]);
+      $file_data = $this->httpClient->get($data[$file_key])->getBody();
     }
     catch (RequestException $e) {
       watchdog_exception('alshaya_acm_product', $e);
@@ -1451,6 +1488,11 @@ class SkuManager {
         continue;
       }
 
+      // Dot not display free gifts.
+      if ($this->isSkuFreeGift($sku_entity)) {
+        continue;
+      }
+
       // Disable OOS combinations too.
       if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
         continue;
@@ -1719,13 +1761,9 @@ class SkuManager {
 
     // Give preference to sku id passed via query params.
     if ($sku_id && $sku_id != $sku->id()) {
-      $first_child = SKU::load($sku_id);
+      $first_child = $this->loadSkuById($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
-        // We do it again to get current translation.
-        // We expect no performance impact as all the skus are already loaded
-        // multiple times in the request.
-        $first_child = SKU::loadFromSku($first_child->getSku());
         return $first_child;
       }
     }
@@ -2012,6 +2050,91 @@ class SkuManager {
       return $term->get('field_pdp_image_slider_position')
         ->getString();
     }
+  }
+
+  /**
+   * Helper function to check if sku is a free gift.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity to check.
+   *
+   * @return bool
+   *   TRUE if free gift, else FALSE.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function isSkuFreeGift(SKU $sku) {
+    $final_price = (float) $sku->get('final_price')->getString();
+    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
+  }
+
+  /**
+   * Check if SKU has data available for all configurable attributes.
+   *
+   * If SKU has configurable attributes (for sku form) but no data is
+   * available for any one configurable attribute, it means we cant show that
+   * sku with 'add to cart' form and we show OOS for that SKU. Even attribute
+   * combination value is disabled but there should be some value for that
+   * attribute in the system.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity to check.
+   *
+   * @return bool
+   *   True if SKU has data for all configurable attributes.
+   */
+  public function skuAttributeCombinationAvailable(SKU $sku) {
+    // This is only for configurable SKU. For simple sku, we don't have/show
+    // any configurable on sku form and thus we always return true.
+    $attributes_available = TRUE;
+    if ($sku->bundle() == 'configurable') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $product_tree = $plugin->deriveProductTree($sku);
+      $configurables = [];
+      if (!empty($product_tree) && !empty($product_tree['configurables'])) {
+        foreach ($product_tree['configurables'] as $configurable) {
+          // If any configurable attribute showing on sku form has no
+          // option/data/value available.
+          if (empty($configurable['values'])) {
+            $attributes_available = FALSE;
+            break;
+          }
+          else {
+            // Preparing configurable options.
+            foreach ($configurable['values'] as $value) {
+              $options[$value['value_id']] = $value['label'];
+            }
+            $configurables[$configurable['code']]['#options'] = $options;
+          }
+        }
+
+        // If already no value for any attribute available, no need to
+        // process further.
+        if (!$attributes_available) {
+          return $attributes_available;
+        }
+
+        // Disable/Unset if there any unavailable option for any combinations.
+        $this->disableUnavailableOptions($sku, $configurables, $product_tree);
+
+        // Prepare final configurable array to check.
+        $configurable_final_data = [];
+        foreach ($configurables as $configurable_key => $configurable) {
+          if (is_array($configurable) && !empty($configurable['#options'])) {
+            $configurable_final_data[$configurable_key] = $configurable;
+          }
+        }
+
+        // If no data available or attribute count not match with final set,
+        // it means OOS.
+        if (empty($configurable_final_data) || count($configurable_final_data) != count(array_keys($product_tree['configurables']))) {
+          $attributes_available = FALSE;
+        }
+      }
+    }
+
+    return $attributes_available;
   }
 
 }

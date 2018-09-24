@@ -1,0 +1,47 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.slug_banner.field_default_slug_bkg_color
+    - field.field.paragraph.slug_banner.field_default_slug_text
+    - field.field.paragraph.slug_banner.field_mobile_slug_bkg_color
+    - field.field.paragraph.slug_banner.field_mobile_slug_text
+    - paragraphs.paragraphs_type.slug_banner
+  module:
+    - text
+id: paragraph.slug_banner.default
+targetEntityType: paragraph
+bundle: slug_banner
+mode: default
+content:
+  field_default_slug_bkg_color:
+    weight: 4
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_default_slug_text:
+    weight: 0
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_mobile_slug_bkg_color:
+    weight: 5
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_mobile_slug_text:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+hidden: {  }

@@ -351,7 +351,7 @@ function alshaya_acm_product_get_brand_logo($sku) {
       // Download the file contents.
       $client = \Drupal::httpClient();
       try {
-        $file_data = $client->get($image_url);
+        $file_data = $client->get($image_url)->getBody();
       }
       catch (RequestException $e) {
         watchdog_exception('alshaya_acm_product', $e);

@@ -79,10 +79,20 @@ then
       # We build the theme if:
       # - We are outside Travis context.
       # - The theme has changed.
+      # - The parent theme has changed.
       # - We are merging but the theme (css) does not exist on deploy directory.
       build=0
       if ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]); then
         echo -en "Building $theme_dir because there is some change in this folder."
+        build=1
+      elif ([[ $theme_type_dir == "transac" && $(echo "$diff" | grep themes/custom/$theme_type_dir/alshaya_white_label) ]]); then
+        echo -en "Building $theme_dir because the parent theme (alshaya_white_label) has changed."
+        build=1
+      elif ([[ $theme_type_dir == "non_transac" && $(echo "$diff" | grep themes/custom/$theme_type_dir/whitelabel) ]]); then
+        echo -en "Building $theme_dir because the parent theme (whitelabel) has changed."
+        build=1
+      elif ([[ $theme_type_dir == "amp" && $(echo "$diff" | grep themes/custom/$theme_type_dir/alshaya_amp_white_label) ]]); then
+        echo -en "Building $theme_dir because the parent theme (alshaya_amp_white_label) has changed."
         build=1
       elif [ $isTravis == 0 ]; then
         echo -en "Building $theme_dir because we are outside Travis (or force build is requested)."
