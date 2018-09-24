@@ -109,7 +109,7 @@ class LocalCommand extends BltTasks {
     $this->say('Reset super admin account');
     $this->taskDrush()
       ->drush('sqlq')
-      ->arg("update users_field_data set mail = 'no-reply@acquia.com', name = 'admin' where uid = 1")
+      ->arg('update users_field_data set mail = "no-reply@acquia.com" where uid = 1')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
