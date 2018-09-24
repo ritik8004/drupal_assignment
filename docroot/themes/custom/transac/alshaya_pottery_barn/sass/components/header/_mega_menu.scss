@@ -103,10 +103,21 @@
 
 .has--three-levels {
   .menu--two__list {
-    .menu--two__list-item > .menu-two__link-wrapper a {
-      @include breakpoint($desktop) {
-        font-weight: bold;
-        text-transform: uppercase;
+    .menu--two__list-item > .menu-two__link-wrapper {
+      a,
+      div.menu-two__link {
+        @include breakpoint($desktop) {
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+      }
+
+      div.menu-two__link {
+        &:hover {
+          @include breakpoint($desktop) {
+            cursor: default;
+          }
+        }
       }
     }
   }
