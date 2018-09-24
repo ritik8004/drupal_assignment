@@ -10,7 +10,6 @@ dependencies:
     - image.style.thumbnail
     - paragraphs.paragraphs_type.banner
   module:
-    - content_moderation
     - image
     - inline_entity_form
     - link
