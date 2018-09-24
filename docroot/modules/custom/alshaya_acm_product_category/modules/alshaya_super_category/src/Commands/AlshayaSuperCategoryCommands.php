@@ -7,6 +7,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
@@ -16,6 +17,8 @@ use Drush\Exceptions\UserAbortException;
  * @package Drupal\alshaya_super_category\Commands
  */
 class AlshayaSuperCategoryCommands extends DrushCommands {
+
+  use StringTranslationTrait;
 
   /**
    * Config factory.
@@ -110,7 +113,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
       $msg = dt('Are you sure you want to !action super category feature and do bulk update on product aliases', ['!action' => $action]);
     }
 
-    if (!$this->io->confirm($msg)) {
+    if (!$this->io()->confirm($msg)) {
       throw new UserAbortException();
     }
 
@@ -192,7 +195,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
     }
 
     $config->set('product_path_alter', $status)->save();
-    _alshaya_super_category_product_alias_bulk_process();
+    $this->productAliasBulkProcess();
   }
 
   /**
@@ -203,16 +206,16 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
 
     // Set batch operation.
     $batch = [
-      'title' => t('Bulk updating product URL aliases'),
-      'init_message' => t('Product alias generating...'),
+      'title' => $this->t('Bulk updating product URL aliases'),
+      'init_message' => $this->t('Product alias generating...'),
       'operations' => [
         ['\Drupal\pathauto\Form\PathautoBulkUpdateForm::batchStart', []],
         ['\Drupal\pathauto\Form\PathautoBulkUpdateForm::batchProcess',
           ['canonical_entities:node', 'all'],
         ],
       ],
-      'progress_message' => t('Processed @current out of @total.'),
-      'error_message' => t('Synced data could not be cleaned because an error occurred.'),
+      'progress_message' => $this->t('Processed @current out of @total.'),
+      'error_message' => $this->t('Synced data could not be cleaned because an error occurred.'),
       // Drush doesn't support static method call for "finished".
       'finished' => '\Drupal\alshaya_super_category\Commands\AlshayaSuperCategoryCommands::productBulkAliasFinished',
     ];
