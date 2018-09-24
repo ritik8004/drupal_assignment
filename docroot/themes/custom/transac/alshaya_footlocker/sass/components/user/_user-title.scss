@@ -10,17 +10,19 @@
   top: -3.25rem;
 }
 
-.order-detail .block-page-title-block,
-.c-change-password .block-page-title-block,
-.c-communication-preferences .block-page-title-block,
-.c-user-edit .block-page-title-block,
-.c-order-list .block-page-title-block,
-.c-user--node .block-page-title-block,
-.c-address-book .block-page-title-block {
-  .back-link {
-    @include breakpoint($only-mobile) {
-      @include icon(arrowup, before) {
-        top: 0.125rem;
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book {
+  .block-page-title-block {
+    .back-link {
+      @include breakpoint($only-mobile) {
+        @include icon(arrowup, before) {
+          top: 0.125rem;
+        }
       }
     }
   }
