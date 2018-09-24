@@ -10,6 +10,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Make finish a swatch field.
+ */
+function alshaya_pb_transac_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new configurale fields fabric and frame.
  *
  * Added for release 21 Sep 2018.

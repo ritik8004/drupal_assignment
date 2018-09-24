@@ -5,6 +5,7 @@ show_parent_images_in_child: true
 swatches:
   pdp:
     - color
+    - finish
   plp:
     - color_lhn
 hide_not_required_option: true
