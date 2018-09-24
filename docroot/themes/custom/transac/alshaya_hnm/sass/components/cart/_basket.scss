@@ -315,15 +315,10 @@ html[lang=ar] {
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem !important;
-            padding-right: 0.9375rem;
           }
 
           @include breakpoint($only-mobile) {
             font-size: 0.625rem;
-          }
-
-          @include breakpoint($desktop) {
-            padding-right: 1.438rem;
           }
         }
 
@@ -354,4 +349,19 @@ html[lang=ar] {
 .alias--cart #table-cart-totals tr:nth-child(2) td:first-child span {
   font-size: 0.75rem;
   display: block;
+}
+
+html[lang=ar] {
+  .customer-cart-form {
+    .mobile-only,
+    .price {
+      .price-type__wrapper {
+        .price--discount {
+          .discount-prefix {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+  }
 }

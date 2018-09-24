@@ -1377,13 +1377,8 @@ td.price {
         @include breakpoint($tablet) {
           font-size: 0.875rem;
           position: relative;
-          left: 0.22rem;
           float: left;
           margin-right: 0;
-        }
-
-        @include breakpoint($desktop) {
-          left: 0.5rem;
         }
       }
     }
@@ -1508,12 +1503,6 @@ html[lang=ar] {
 
         @include breakpoint($tablet) {
           min-width: 33%;
-          padding-right: 0.625rem;
-        }
-
-        @include breakpoint($desktop) {
-          min-width: 33%;
-          padding-right: 1.25rem;
         }
       }
 
@@ -1523,6 +1512,22 @@ html[lang=ar] {
 
         @include breakpoint($desktop) {
           padding-right: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+html[lang=ar] {
+  .customer-cart-form {
+    .mobile-only,
+    .price {
+      .price-type__wrapper {
+        .price--discount {
+          .discount-prefix {
+            left: 0;
+            padding-right: 0;
+          }
         }
       }
     }
