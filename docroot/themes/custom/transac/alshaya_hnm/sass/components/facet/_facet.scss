@@ -193,6 +193,20 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       }
     }
   }
+
+  .item-list__checkbox {
+    @include breakpoint($desktop) {
+      max-height: 14.75rem;
+    }
+  }
+
+  .facets-soft-limit-link {
+    &.open {
+      @include breakpoint($desktop) {
+        margin: 0;
+      }
+    }
+  }
 }
 
 ul[data-drupal-facet-id="category"] {

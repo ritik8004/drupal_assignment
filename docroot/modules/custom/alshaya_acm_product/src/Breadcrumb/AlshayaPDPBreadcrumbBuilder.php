@@ -225,7 +225,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    * @return int
    *   Term id.
    */
-  protected function termTreeGroup(array $terms = []) {
+  public function termTreeGroup(array $terms = []) {
     if (!empty($terms)) {
       $root_group = $this->getRootGroup($terms[0]['target_id']);
       $root_group_terms = [];

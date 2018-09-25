@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, uninstall and update for alshaya_fl.
+ */
+
+/**
+ * Implements hook_install()
+ */
+function alshaya_fl_install() {
+  \Drupal::moduleHandler()->loadInclude('alshaya_fl', 'inc', 'alshaya_fl.content');
+
+  // Change region for main navigation block.
+  alshaya_block_move_blocks(['main_navigation' => 'header_primary']);
+
+  // Create default content for the site.
+  alshaya_fl_create_default_content();
+
+  // Translate store finder block's link title.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'block.block.alshayastoresfinder')
+    ->set('settings', ['link_title' => 'البحث عن محلاتنا'])
+    ->save();
+
+  // Set the default value for back to store list link.
+  $config = \Drupal::service('config.factory')->getEditable('alshaya_stores_finder.settings');
+  $config->set('store_list_label', 'List of all footlocker Stores');
+  $config->save();
+
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    'find your nearest store' => [
+      'ar' => 'اختر محلاً للتعرف على التفاصيل',
+    ],
+    'Discover' => [
+      'ar' => ' تعرفي إلينا ',
+    ],
+    'Customer care' => [
+      'ar' => ' خدمة الزبائن ',
+    ],
+    'Connect with us' => [
+      'ar' => ' تواصلي معنا ',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}

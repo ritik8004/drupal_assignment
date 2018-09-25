@@ -3,14 +3,16 @@ attribute_weights:
     option: 1
     subset_name: 2
     color: 3
-    material: 4
-    finish: 5
-    furniture_finish: 6
-    style: 7
-    product_type: 8
-    size: 9
-    height: 10
-    length: 11
+    fabric: 4
+    material: 5
+    finish: 6
+    furniture_finish: 7
+    style: 8
+    product_type: 9
+    size: 10
+    height: 11
+    length: 12
+    frame: 13
 show_quantity: TRUE
 sortable_options:
   - option
@@ -24,3 +26,5 @@ sortable_options:
   - product_type
   - height
   - length
+  - frame
+  - fabric

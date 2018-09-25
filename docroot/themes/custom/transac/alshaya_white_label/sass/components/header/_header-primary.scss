@@ -318,7 +318,7 @@ header {
     }
 
     .quantity {
-      font-size: 10px;
+      font-size: 0.625rem;
       position: absolute;
       background: $primary_minicart_quantity_bg;
       color: $primary_minicart_quantity_text;
@@ -332,7 +332,7 @@ header {
       display: flex;
       align-items: center;
       justify-content: center;
-      line-height: normal !important;
+      line-height: 1 !important;
     }
   }
 
@@ -508,17 +508,6 @@ header {
 
     a {
       padding: 0.9rem 0.875rem 0.664rem 0.625rem;
-    }
-
-    .store {
-      &:hover {
-        background-color: $header_c_menu_icon_color;
-        color: $header_c_menu_icon_text;
-
-        @include icon(mappin) {
-          color: $header_c_menu_icon_text;
-        }
-      }
     }
 
     .mobile--search {

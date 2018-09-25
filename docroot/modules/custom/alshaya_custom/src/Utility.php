@@ -70,4 +70,51 @@ class Utility {
     return NULL;
   }
 
+  /**
+   * Validation rule for credit card number.
+   *
+   * Luhn algorithm number checker - (c) 2005-2008 shaman - www.planzero.org
+   * This code has been released into the public domain, however please
+   * give credit to the original author where possible.
+   *
+   * @param string $number
+   *   A credit card number.
+   *
+   * @return bool
+   *   TRUE is credit card number is valid.
+   *
+   * @see: http://stackoverflow.com/questions/174730/what-is-the-best-way-to-validate-a-credit-card-in-php
+   *
+   * @link: https://cgit.drupalcode.org/webform/tree/src/Element/WebformCreditCardNumber.php?id=4feb0fbbfd8024970d6dfe7a9aa519bfcbc6d776#n74
+   */
+  public function alshayaValidCreditCardNumber($number) {
+    // If number is not 15 or 16 digits return FALSE.
+    if (!preg_match('/^\d{15,16}$/', $number)) {
+      return FALSE;
+    }
+
+    // Set the string length and parity.
+    $number_length = strlen($number);
+    $parity = $number_length % 2;
+
+    // Loop through each digit and do the maths.
+    $total = 0;
+    for ($i = 0; $i < $number_length; $i++) {
+      $digit = $number[$i];
+      // Multiply alternate digits by two.
+      if ($i % 2 == $parity) {
+        $digit *= 2;
+        // If the sum is two digits, add them together (in effect).
+        if ($digit > 9) {
+          $digit -= 9;
+        }
+      }
+      // Total up the digits.
+      $total += $digit;
+    }
+
+    // If the total mod 10 equals 0, the number is valid.
+    return ($total % 10 == 0) ? TRUE : FALSE;
+  }
+
 }

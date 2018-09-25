@@ -8,9 +8,11 @@
   </div>
   {% if promo_code is not empty %}
     <div class="free-gift-coupon-code">
-      {% trans %}
-      Use Code <span class="coupon-code">{{ promo_code }}</span> with this product
-      {% endtrans %}
+      {{ 'Use Code ' | t }}
+      {% for id, coupon in promo_code %}
+        <span class="coupon-code">{{ coupon.value }}</span>
+      {% endfor %}
+      {{ 'with this product' | t }}
     </div>
   {% endif %}
 </div>

@@ -57,6 +57,8 @@ class ProductOptionsHelper {
    */
   protected $logger;
 
+  protected $syncedOptions = [];
+
   /**
    * ProductOptionsHelper constructor.
    *
@@ -109,13 +111,16 @@ class ProductOptionsHelper {
     $sync_options = array_column($fields, 'source');
 
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-      $this->apiWrapper->updateStoreContext($langcode);
       foreach ($sync_options as $attribute_code) {
         $this->syncProductOption($attribute_code, $langcode);
       }
     }
 
-    $this->apiWrapper->resetStoreContext();
+    // We won't do this cleanup for single sync.
+    // All code here is only till the time we get it working through ACM.
+    // And single option sync `drush sync-option` is only for testing.
+    // On prod we do sync of all options only.
+    $this->productOptionsManager->deleteUnavailableOptions($this->syncedOptions);
     $this->logger->debug('Sync for all product attribute options finished.');
   }
 
@@ -128,6 +133,8 @@ class ProductOptionsHelper {
    *   Language code.
    */
   public function syncProductOption($attribute_code, $langcode) {
+    $this->apiWrapper->updateStoreContext($langcode);
+
     $this->logger->debug('Sync for product attribute options started of attribute @attribute_code in language @langcode.', [
       '@attribute_code' => $attribute_code,
       '@langcode' => $langcode,
@@ -172,6 +179,8 @@ class ProductOptionsHelper {
         continue;
       }
 
+      $this->syncedOptions[$attribute_code][$option['value']] = $option['value'];
+
       // Check if we have value for swatch and it is changed, we trigger
       // save only if value changed.
       if (isset($swatches[$option['value']])) {
@@ -183,6 +192,8 @@ class ProductOptionsHelper {
       '@attribute_code' => $attribute_code,
       '@langcode' => $langcode,
     ]);
+
+    $this->apiWrapper->resetStoreContext();
   }
 
 }

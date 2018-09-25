@@ -26,12 +26,6 @@ function alshaya_hm_images_drush_command() {
 
 
 function drush_alshaya_hm_images_report() {
-// product/listing without dam
-//  $faulty_image = 'eefda5660843594e82bf807be8edbe69';
-// product/miniature without dam
-//  $faulty_image = 'da83c2c002729efa800f77b2f22bf20a';
-// product/miniature with dam
-  $faulty_image = 'c6bcf0e84423a68fa8d32f14bfc2dc80';
   $faulty_size = 351;
 
   $checked_assets = [];
@@ -98,8 +92,6 @@ function drush_alshaya_hm_images_report() {
         $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
         curl_close($ch);
 
-//        $output = md5_file($file_path);
-//        if ($output == $faulty_image) {
         if ($size == $faulty_size) {
           fwrite($fp, $line++ . ' - Sku ' . $sku['id'] . ' / ' . $sku['sku'] . ' has invalid asset ' . $asset['Data']['AssetId'] . ' (' . urldecode($file_path) . ")\n");
         }

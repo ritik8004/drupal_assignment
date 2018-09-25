@@ -1,0 +1,22 @@
+
+.c-user-register .c-sidebar-second,
+.c-user-login .c-sidebar-second,
+.order-confirmation {
+  #block-jointheclub {
+    img {
+      @include breakpoint($desktop) {
+        width: 55%;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: 0;
+      padding-top: 0;
+    }
+  }
+}
