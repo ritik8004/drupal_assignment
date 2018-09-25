@@ -55,7 +55,6 @@ $header_bg: $white-two;
 $header_search_block_bg: $white-two;
 $header_border: $white-three;
 $header_secondary_menu_link: $purplish-brown;
-$header_my_account_h3_title: $purplish-brown;
 $header_secondary_bg: $white;
 $header_c_menu_icon_color: $purplish-brown;
 $header_c_menu_icon_text: $purplish-brown;
@@ -64,6 +63,25 @@ $header_mobile_menu_close_bg: $black;
 $header_search_border_mobile: $black;
 $header_toggle_sign_active_tab: $black;
 $header_secondary_menu_link_mobile: $black;
+
+// Header my account nav.
+$header_my_account_bg: $white;
+$header_my_account_link_hover: $purplish-brown;
+$header_my_account_icon: $purplish-brown;
+$header_my_account_h3_title: $purplish-brown;
+$my_account_nav: $black;
+$my_account_nav_active : $purplish-brown;
+$my_account_nav_hover: $purplish-brown;
+$my_account_mobile_nav_border: $white-three;
+
+// My Account Pages
+$user_order_help_bg: $info-blue;
+$user_order_help_text : $white;
+$user_account_wrapper_light: $black;
+$user_order_help_text_links: $user_order_help_text;
+$user_nav_mobile_link: $black;
+$user_nav_mobile_title2: $warm-grey;
+$password_tooltip_list: $red;
 
 //mega menu
 $mm_l1_link_active_border: $purplish-brown;
@@ -135,6 +153,9 @@ $default_msg_bg: $medium-green;
 // Privilege card.
 $privilege_card_subtitle: $warm-grey;
 $privilege_card_form_label: $warm-grey;
+
+// joinclubblock
+$joinclubblock_text: $black;
 
 // Messages and Errors
 $content_error_msg_bg: $red;
