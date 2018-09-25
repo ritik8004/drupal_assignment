@@ -1,0 +1,16 @@
+@include breakpoint($desktop) {
+  #product-image-gallery,
+  #lightSlider {
+    .slick-slide {
+      width: 6.5rem !important;
+      height: 7.75rem !important;
+    }
+  }
+
+  .cloudzoom {
+    .cloudzoom__thumbnails {
+      width: 6.5rem;
+      margin-#{$right}: 0;
+    }
+  }
+}

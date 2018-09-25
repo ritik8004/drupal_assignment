@@ -286,6 +286,9 @@
             },
             "drupal/seckit": {
                 "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
+            },
+            "drupal/views_ajax_get": {
+                "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
             }
         },
         "installer-paths": {

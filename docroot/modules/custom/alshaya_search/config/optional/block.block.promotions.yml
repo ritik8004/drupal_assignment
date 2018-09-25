@@ -1,26 +1,27 @@
 langcode: en
 status: true
 dependencies:
-  config: {  }
+  config:
+    - facets.facet.promotions
   module:
     - facets
     - system
   theme:
     - alshaya_white_label
-id: plppromotions
+id: promotions
 theme: alshaya_white_label
 region: sidebar_first
-weight: -20
+weight: 0
 provider: null
-plugin: 'facet_block:plp_promotions'
+plugin: 'facet_block:promotions'
 settings:
-  id: 'facet_block:plp_promotions'
+  id: 'facet_block:promotions'
   label: Promotions
   provider: facets
   label_display: visible
 visibility:
   request_path:
     id: request_path
-    pages: '/taxonomy/term/*'
+    pages: /search
     negate: false
     context_mapping: {  }
