@@ -785,8 +785,8 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
     foreach ($menus as $menu) {
       if (isset($default_tid)) {
         $selected_categories = array_filter($menu->link->getOptions()['categories']);
-        foreach ($selected_categories as $slected_category) {
-          if ($slected_category == $default_tid) {
+        foreach ($selected_categories as $selected_category) {
+          if ($selected_category == $default_tid) {
             $title = $menu->link->getTitle();
             $links[strtolower($title)] = $menu->link->getUrlObject()
               ->setAbsolute(TRUE)
