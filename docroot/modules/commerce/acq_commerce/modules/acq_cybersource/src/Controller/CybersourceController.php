@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  * Provides the checkout form page.
  */
 class CybersourceController implements ContainerInjectionInterface {
+
+  use StringTranslationTrait;
 
   const JS_API_ENDPOINT = '/silent/embedded/token/create';
 
@@ -143,7 +146,9 @@ class CybersourceController implements ContainerInjectionInterface {
     // We check if cc type is valid and is allowed.
     if (empty($cc_type) || !in_array($cc_type, $allowed_cc_types)) {
       $errors = [];
-      $errors['acm_payment_methods[payment_details_wrapper][payment_method_cybersource][payment_details][cc_number]'] = t('Invalid Credit Card number or card type not supported.');
+      $errors['global'] = $this->getGlobalErrorMarkup(
+        $this->t("We're sorry, the entered credit card is not supported. Please use a different credit card to proceed.")
+      );
       $response->setContent(json_encode(['errors' => $errors]));
       return $response;
     }
@@ -199,7 +204,10 @@ class CybersourceController implements ContainerInjectionInterface {
         '%card_type' => $cc_type,
       ]);
 
-      $response_data['errors']['global'] = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.'));
+      $response_data['errors']['global'] = $this->getGlobalErrorMarkup(
+        $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.')
+      );
+
       $response->setContent(json_encode($response_data));
     }
 
@@ -250,7 +258,12 @@ class CybersourceController implements ContainerInjectionInterface {
         '%info' => print_r($post_data, TRUE),
       ]);
       // @TODO: Need to check how it is handled in Magento.
-      $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', [], ['langcode' => $post_data['req_locale']]));
+      $error = $this->getGlobalErrorMarkup(
+        $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.',
+          [],
+          ['langcode' => $post_data['req_locale']]
+        )
+      );
       $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
     }
     else {
@@ -317,7 +330,12 @@ class CybersourceController implements ContainerInjectionInterface {
           '%response' => print_r($updated_cart, TRUE),
         ]);
 
-        $error = $this->getGlobalErrorMarkup(t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.', [], ['langcode' => $post_data['req_locale']]));
+        $error = $this->getGlobalErrorMarkup(
+          $this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.',
+            [],
+            ['langcode' => $post_data['req_locale']]
+          )
+        );
         $script = "window.parent.Drupal.cybersourceShowGlobalError('" . $error . "')";
       }
     }
