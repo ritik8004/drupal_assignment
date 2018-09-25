@@ -6,6 +6,7 @@ swatches:
   pdp:
     - color
     - finish
+    - fabric
   plp:
     - color_lhn
 hide_not_required_option: true
