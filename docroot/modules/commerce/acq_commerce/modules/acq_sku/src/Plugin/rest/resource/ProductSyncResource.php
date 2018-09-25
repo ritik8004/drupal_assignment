@@ -284,7 +284,7 @@ class ProductSyncResource extends ResourceBase {
         }
         else {
           if ($product['status'] != 1) {
-            $ignored_skus['disabled'][] = $product['sku'] . '(disabled)';
+            $ignored_skus[] = $product['sku'] . '(disabled)';
             $ignored++;
 
             // Release the lock.
