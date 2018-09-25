@@ -74,5 +74,4 @@ cm:
   strategy: none
 validate:
   twig:
-    functions:
-      - alshaya_main_menu
+    functions: [alshaya_main_menu]
