@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49da4f3a6ca50085e6e665ac7fce30da",
+    "content-hash": "c6f00870a67833a43ed33d638668d9a6",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -2787,17 +2787,17 @@
         },
         {
             "name": "drupal/acsf",
-            "version": "1.48.0",
+            "version": "2.48.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acsf",
-                "reference": "8.x-1.48"
+                "reference": "8.x-2.48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-1.48.zip",
-                "reference": "8.x-1.48",
-                "shasum": "b2f420294fe86a61baa70c0dc55dfd4ec2e49718"
+                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.48.zip",
+                "reference": "8.x-2.48",
+                "shasum": "ca5607111eb18ce70393df74fec074160c1fad24"
             },
             "require": {
                 "drupal/acsf_duplication": "*",
@@ -2814,10 +2814,10 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.48",
+                    "version": "8.x-2.48",
                     "datestamp": "1526468584",
                     "security-coverage": {
                         "status": "covered",
@@ -2873,7 +2873,7 @@
         },
         {
             "name": "drupal/acsf_duplication",
-            "version": "1.48.0",
+            "version": "2.48.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -2881,10 +2881,10 @@
             "type": "metapackage",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.48",
+                    "version": "8.x-2.48",
                     "datestamp": "1526468584",
                     "security-coverage": {
                         "status": "covered",
@@ -2934,7 +2934,7 @@
         },
         {
             "name": "drupal/acsf_theme",
-            "version": "1.48.0",
+            "version": "2.48.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/acsf_variables": "*",
@@ -2943,10 +2943,10 @@
             "type": "metapackage",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.48",
+                    "version": "8.x-2.48",
                     "datestamp": "1526468584",
                     "security-coverage": {
                         "status": "covered",
@@ -2996,7 +2996,7 @@
         },
         {
             "name": "drupal/acsf_variables",
-            "version": "1.48.0",
+            "version": "2.48.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -3004,10 +3004,10 @@
             "type": "metapackage",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.48",
+                    "version": "8.x-2.48",
                     "datestamp": "1526468584",
                     "security-coverage": {
                         "status": "covered",
