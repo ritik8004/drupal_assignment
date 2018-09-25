@@ -27,14 +27,50 @@ types:
             type: Image
           position:
             enum: [ top-right, top-left, bottom-left, bottom-right ]
-  Sku:
+  LightProduct:
     properties:
       id:
         type: integer
-        description: The Drupal internet entity ID.
+        description: The Drupal internal entity ID.
       sku:
         type: string
-        example: "H1234"
+      original_price:
+        type: number
+        format: float
+        example: 5.99
+      final_price:
+        type: number
+        format: float
+        example: 5.99
+      promo_label:
+        type: string
+        description: Pre-calculated discount or promo label.
+        example: "Save 10%"
+      product_id:
+        type: string
+        example: "M45678"
+      labels:
+        type: Label[]
+        description: An array of label entity.
+      media:
+        type: Image[]
+      assets?:
+        type: array
+        description: Attribute specific to H&M, contains a list of pre-calculated images for plp and pdp.
+        items:
+          type: object[]
+          description:
+          items:
+            properties:
+              url:
+                type: string
+                description: A LiquidPixel URL.
+              type:
+                enum: [ "product", "model" ]
+                description: The image type.
+  Sku:
+    type: LightProduct
+    properties:
       stock:
         type: integer
         example: 19
@@ -107,6 +143,10 @@ types:
       label:
         type: string
         example: "Buy 1 get 1 free"
+      type:
+        type: string
+        enum: [ "free_shipping_order", "fixed_percentage_discount_order", "fixed_amount_discount_order", "other" ]
+        description: A technical description of the promotion type. Only types of promotion with specific frontend behavior are identified.
       banner:
         type: boolean
         description: Determine if the promotion should be promoted on the basket page.
@@ -408,6 +448,35 @@ types:
           type: object
           properties:
             promotions: Promotion[]
+/promotion:
+  /{id}:
+      /product-list:
+        uriParameters:
+          id:
+            type: integer
+            description: ID of the category that needs to be fetched.
+            required: true
+        get:
+          description: Get the data to generate a PLP.
+          queryParameters:
+            f?:
+              type: string[]
+              description: A list of applied filters.
+              example: "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
+            sort?:
+              type: string
+              description: A sorting option to apply.
+              example: "sort=final_price DESC"
+          responses:
+            200:
+              body:
+                type: object
+                properties:
+                  facets:
+                    type: Facet[]
+                  products:
+                    type: LightProduct[]
+
 /category:
   /{id}:
     /product-list:
