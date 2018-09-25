@@ -53,22 +53,13 @@ function drush_alshaya_super_category_switch() {
   // Determine which default parent to use for main menu.
   $default_parent = drush_get_option('default_parent', 0);
 
+  /* @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   // Update alshaya_super_category.settings.
-  $config->set('status', $status);
-  if ($status) {
-    if (empty($default_parent)) {
-      $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
-      $default_parent = key($terms);
-    }
-    $config->set('default_category_tid', $default_parent);
-  }
-  $config->save(TRUE);
-
+  $super_category_feature->enableSuperCategory($status, $default_parent);
   // Load super category menu block and change status.
-  $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => 'supercategorymenu']);
-  $block = reset($blocks);
-  $block->setStatus($status);
-  $block->save();
+  $super_category_feature->changeSuperCategoryMenuBlockStatus($status);
+
   if ($path_alter) {
     _alshaya_super_category_product_alias_bulk_process();
   }
@@ -80,30 +71,7 @@ function drush_alshaya_super_category_switch() {
   ]);
 
   // Update the meta title.
-  if ($status) {
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__advanced_page')->save();
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_product')->save();
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.node__acq_promotion')->save();
-    \Drupal::configFactory()->getEditable('metatag.metatag_defaults.taxonomy_term__acq_product_category')->save();
-  }
-  else {
-    $meta_configs = [
-      'metatag.metatag_defaults.node__advanced_page',
-      'metatag.metatag_defaults.node__acq_product',
-      'metatag.metatag_defaults.node__acq_promotion',
-      'metatag.metatag_defaults.taxonomy_term__acq_product_category',
-    ];
-    if (\Drupal::moduleHandler()->moduleExists('alshaya_seo_transac')) {
-      $config_manager = \Drupal::service('alshaya_config.manager');
-      // When super category feature is disabled, we just reset the tokens from
-      // the module config YML.
-      foreach ($meta_configs as $meta_config) {
-        $config_data = $config_manager->getDataFromCode($meta_config, 'alshaya_seo_transac', 'install');
-        \Drupal::configFactory()->getEditable($meta_config)
-          ->set('tags.title', $config_data['tags']['title'])->save();
-      }
-    }
-  }
+  $super_category_feature->changeSuperCategoryMetaTitle($status);
 
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();
