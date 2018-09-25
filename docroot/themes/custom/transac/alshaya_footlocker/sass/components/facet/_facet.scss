@@ -1,0 +1,225 @@
+.c-facet {
+  ul {
+    @include breakpoint($desktop) {
+      padding-top: 0;
+    }
+
+    li {
+      padding: 0.625rem 0 0.6875rem;
+      margin-bottom: 0;
+
+      html[lang=ar] & {
+        padding: 0.75rem 0;
+      }
+    }
+
+    input[type="text"] {
+      padding: 0.75rem 0.5rem;
+      margin-bottom: 0;
+      max-height: 2.5rem;
+    }
+  }
+
+  label {
+    @include breakpoint($upto-desktop) {
+      top: 1px;
+    }
+
+    .facet-item__value {
+      margin-left: 0.625rem;
+    }
+
+    .facet-item__value,
+    .facet-item__count {
+      display: inline-block;
+    }
+  }
+}
+
+.c-facet__label {
+  text-transform: capitalize;
+
+  @include breakpoint($desktop) {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+}
+
+.block-facet-blockcategory,
+.block-facet-blockplp-category-facet {
+  @include breakpoint($desktop) {
+    .c-accordion__title {
+      border-bottom: 0;
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category],
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
+  &.js-facets-checkbox-links {
+    padding: 0;
+  }
+
+  .facet-item {
+    margin-bottom: 0;
+
+    &.facet-item--expanded {
+      & > label {
+        &::before {
+          top: 0.5rem !important;
+        }
+
+        .facet-item--active-trail & {
+          & > label {
+            padding-bottom: 0.625rem;
+            padding-#{$left}: 0.625rem;
+          }
+        }
+
+        .facet-item__value,
+        .facet-item__count,
+        span {
+          font-family: $alshaya-thin;
+        }
+      }
+
+      ul li {
+        > label {
+          &::before {
+            margin-top: -0.3125rem;
+          }
+        }
+
+        &:not(:last-child) {
+          margin-bottom: 0;
+        }
+
+        @include breakpoint($only-tablet) {
+          margin-#{$left}: 0;
+        }
+
+        &:first-child {
+          padding-top: 0;
+        }
+
+        &:last-child {
+          padding-bottom: 0;
+        }
+      }
+    }
+
+    label {
+      min-height: 0.875rem;
+      margin: 0;
+    }
+  }
+
+  & > li {
+    &.leaf-li {
+      & > label {
+        color: $plp_facet_item_label;
+      }
+    }
+
+    > input[type=checkbox]:checked ~ label span {
+      font-family: $alshaya-thin;
+    }
+  }
+
+  .facet-item--expanded {
+    > ul {
+      padding-top: 0.625rem !important;
+
+      li.facet-item--expanded {
+        ul {
+          margin-#{$left}: 0.625rem !important;
+        }
+      }
+
+      li:not(:last-child) {
+        margin-bottom: 0.625rem;
+      }
+    }
+  }
+
+  > .facet-item--expanded {
+    > label {
+      @include icon(chevronleft, before) {
+        #{$left}: -1.5rem;
+      }
+    }
+  }
+}
+
+ul[data-drupal-facet-id=category] {
+  &.js-facets-checkbox-links {
+    padding: 0 0.625rem;
+
+    .current-active-facet & {
+      padding: 0;
+    }
+  }
+
+  .facet-item--expanded {
+    & > ul {
+      margin-#{$left}: 0;
+    }
+
+    > input[type=checkbox]:checked ~ label span {
+      font-family: $alshaya-bold;
+    }
+  }
+
+  & > li {
+    &.facet-item--expanded {
+      & > label {
+        padding-bottom: 0.625rem;
+      }
+    }
+
+    &:not(.facet-item--expanded) > label > .facet-item__value {
+      margin-#{$left}: 0;
+    }
+  }
+}
+
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
+  .facet-item {
+    margin-bottom: 0;
+
+    &.leaf-li {
+      & > label {
+        .facet-item__value {
+          margin-#{$left}: 0.625rem;
+        }
+
+        &::before {
+          margin-top: -0.3125rem;
+        }
+      }
+    }
+
+    &.facet-item--expanded {
+      & > label {
+        padding-#{$left}: 0;
+        padding-bottom: 0;
+
+        &::before {
+          display: none;
+        }
+      }
+
+      ul > li > label .facet-item__value {
+        margin-#{$left}: 0.625rem;
+      }
+    }
+  }
+
+  & > li > label {
+    .facet-item__value {
+      margin-#{$left}: 0;
+    }
+  }
+}
