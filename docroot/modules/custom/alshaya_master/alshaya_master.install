@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add allowed classes for rich text.
+ */
+function alshaya_master_update_8017() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['filter.format.rich_text'],
+    'lightning_media',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new string translations.
  */
 function alshaya_master_update_8016() {
