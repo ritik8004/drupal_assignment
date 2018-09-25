@@ -1377,7 +1377,6 @@ td.price {
         @include breakpoint($tablet) {
           font-size: 0.875rem;
           position: relative;
-          float: left;
           margin-right: 0;
         }
       }
@@ -1456,12 +1455,7 @@ html[lang=ar] {
     td.price {
       .price-wrapper {
         .price-amount {
-          min-width: 33% !important;
           display: inline-block;
-
-          @include breakpoint($only-tablet) {
-            min-width: 46% !important;
-          }
         }
       }
 
@@ -1493,40 +1487,23 @@ html[lang=ar] {
   }
 }
 
-html[lang=ar] {
-  .customer-cart-form {
-    .price--discount {
-      .discount-prefix {
-        float: right !important;
-        min-width: 25%;
-        text-align: center;
+.customer-cart-form {
+  .mobile-only,
+  .price {
+    .price-type__wrapper {
+      .price--discount {
+        span {
+          #{$left}: 0;
+          padding: 0;
+          margin: 0;
+          min-width: auto;
 
-        @include breakpoint($tablet) {
-          min-width: 33%;
-        }
-      }
+          html[lang=ar] & {
+            float: $left;
+          }
 
-      .discount-value {
-        text-align: center;
-        padding-right: 1rem;
-
-        @include breakpoint($desktop) {
-          padding-right: 0.75rem;
-        }
-      }
-    }
-  }
-}
-
-html[lang=ar] {
-  .customer-cart-form {
-    .mobile-only,
-    .price {
-      .price-type__wrapper {
-        .price--discount {
-          .discount-prefix {
-            left: 0;
-            padding-right: 0;
+          &.discount-value {
+            margin-#{$left}: 0.0625rem;
           }
         }
       }

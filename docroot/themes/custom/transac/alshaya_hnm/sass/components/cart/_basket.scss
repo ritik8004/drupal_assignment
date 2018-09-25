@@ -307,11 +307,8 @@ html[lang=ar] {
     td.price {
       .price--discount {
         .discount-prefix {
-          float: right !important;
-          min-width: 33%;
           font-family: $hnm-regular;
           font-size: 0.75rem;
-          padding-right: 0.8125rem;
 
           @include breakpoint($only-tablet) {
             font-size: 0.75rem !important;
@@ -323,18 +320,12 @@ html[lang=ar] {
         }
 
         .discount-value {
-          float: right;
-          min-width: 47%;
-          padding-right: 0.75rem;
-
           @include breakpoint($only-tablet) {
             font-size: 0.75rem;
-            min-width: 51%;
           }
 
           @include breakpoint($only-mobile) {
             font-size: 0.625rem;
-            min-width: 35% !important;
           }
         }
       }
@@ -349,19 +340,4 @@ html[lang=ar] {
 .alias--cart #table-cart-totals tr:nth-child(2) td:first-child span {
   font-size: 0.75rem;
   display: block;
-}
-
-html[lang=ar] {
-  .customer-cart-form {
-    .mobile-only,
-    .price {
-      .price-type__wrapper {
-        .price--discount {
-          .discount-prefix {
-            padding-right: 0;
-          }
-        }
-      }
-    }
-  }
 }
