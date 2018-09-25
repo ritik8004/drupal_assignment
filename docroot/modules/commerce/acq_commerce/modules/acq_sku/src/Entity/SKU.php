@@ -229,15 +229,18 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if (!empty($data['fid'])) {
         $file = File::load($data['fid']);
         if (!($file instanceof FileInterface)) {
-          \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku"', [
-            '@fid' => $data['fid'],
-            '@sku' => $this->getSku(),
-          ]);
-
           unset($data['fid']);
 
           // Try to download again if download flag is set to true.
           if ($download) {
+            // Leave a message for developers to find out why this happened.
+            \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku" having language @langcode. Trace: @trace', [
+              '@fid' => $data['fid'],
+              '@sku' => $this->getSku(),
+              '@langcode' => $this->language()->getId(),
+              '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+            ]);
+
             return $this->processMediaItem($update_sku, $data, TRUE, $default_label);
           }
         }
