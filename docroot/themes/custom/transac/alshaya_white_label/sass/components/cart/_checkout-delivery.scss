@@ -140,6 +140,8 @@
           margin: 0;
           margin-#{$right}: 0.75em;
 
+          @include link-ripple();
+
           @include breakpoint($tablet) {
             margin-#{$right}: 0;
           }
