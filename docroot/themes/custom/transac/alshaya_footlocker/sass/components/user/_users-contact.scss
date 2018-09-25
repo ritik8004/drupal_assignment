@@ -1,0 +1,60 @@
+.c-user-edit {
+  .field--name-field-first-name,
+  .field--name-field-last-name {
+    max-width: calc(50% - 1rem);
+    padding-top: 1.975rem;
+  }
+
+  .mobile-number-field {
+    max-width: 100%;
+  }
+
+  #user-form {
+    #edit-field-mobile-number-wrapper {
+      clear: both;
+
+      .mobile-number-field {
+        margin-bottom: 0;
+
+        .prefix {
+          line-height: 1.563;
+        }
+      }
+
+      .form-type-tel {
+        margin-top: 0.5rem;
+        width: 100%;
+      }
+    }
+
+    #edit-account {
+      .form-item-mail {
+        margin-top: 3.75rem;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      #edit-submit {
+        min-width: 9.125rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      #edit-account {
+        margin-top: 1.975rem;
+
+        .form-item-mail {
+          margin-top: 2.625em;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      #edit-account {
+        .form-item-mail {
+          margin-top: 1.975rem;
+        }
+      }
+    }
+  }
+}
