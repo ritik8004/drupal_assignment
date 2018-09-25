@@ -375,7 +375,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
             '@langcode' => $langcode,
             '@magento_id' => $category['category_id'],
-            '@diff' => DiffArray::diffAssocRecursive($updatedTermData, $existingTermData),
+            '@diff' => json_encode(DiffArray::diffAssocRecursive($updatedTermData, $existingTermData)),
           ]);
         }
         else {
