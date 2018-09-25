@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6f00870a67833a43ed33d638668d9a6",
+    "content-hash": "988001fcc444c5bd4a2fef9230dc10bb",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -19,22 +19,42 @@
         },
         {
             "name": "acquia/acsf-tools",
-            "version": "8.1.3",
+            "version": "dev-9.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "ac48f8ee0591782ea793b5ada90c1cff0693da3d"
+                "reference": "027f55432e6de5a340ba2c4c273f6d0f588f15c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/ac48f8ee0591782ea793b5ada90c1cff0693da3d",
-                "reference": "ac48f8ee0591782ea793b5ada90c1cff0693da3d",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/027f55432e6de5a340ba2c4c273f6d0f588f15c4",
+                "reference": "027f55432e6de5a340ba2c4c273f6d0f588f15c4",
                 "shasum": ""
             },
             "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.6.0",
                 "symfony/yaml": "^3.0"
             },
             "type": "drupal-drush",
+            "extra": {
+                "installer-name": "acsf_tools",
+                "installer-paths": {
+                    "drush/Commands/{$name}": [
+                        "acquia/acsf-tools"
+                    ]
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drush\\Commands\\acsf_tools\\": "."
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0+"
@@ -53,7 +73,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-08-28T12:45:52+00:00"
+            "time": "2018-06-11T16:29:51+00:00"
         },
         {
             "name": "acquia/blt",
@@ -19277,32 +19297,33 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "acquia/acsf-tools": 20,
+        "drupal/acquia_purge": 10,
+        "drupal/back_to_top": 10,
+        "drupal/better_exposed_filters": 20,
+        "drupal/block_field": 15,
+        "drupal/captcha": 10,
+        "drupal/change_pwd_page": 10,
+        "drupal/datalayer": 10,
+        "drupal/default_content": 15,
+        "drupal/field_group": 10,
+        "drupal/google_tag": 20,
+        "drupal/media_entity_actions": 20,
         "drupal/menu_admin_per_menu": 5,
         "drupal/menu_link_attributes": 10,
-        "drupal/default_content": 15,
-        "drupal/captcha": 10,
-        "drupal/profile": 15,
-        "drupal/field_group": 10,
-        "drupal/back_to_top": 10,
-        "drupal/change_pwd_page": 10,
-        "drupal/mobile_number": 15,
-        "drupal/sharethis": 10,
         "drupal/mimemail": 20,
-        "drupal/block_field": 15,
-        "drupal/google_tag": 20,
-        "drupal/simple_sitemap": 20,
-        "drupal/redirect": 15,
-        "drupal/search_api_spellcheck": 20,
-        "drupal/better_exposed_filters": 20,
+        "drupal/mobile_number": 15,
+        "drupal/profile": 15,
         "drupal/r4032login": 20,
-        "drupal/datalayer": 10,
-        "drupal/search_api_solr_multilingual": 10,
-        "drupal/views_block_filter_block": 10,
-        "drupal/acquia_purge": 10,
+        "drupal/redirect": 15,
         "drupal/role_delegation": 15,
-        "drupal/media_entity_actions": 20,
         "drupal/scheduled_updates": 15,
+        "drupal/search_api_solr_multilingual": 10,
+        "drupal/search_api_spellcheck": 20,
+        "drupal/sharethis": 10,
+        "drupal/simple_sitemap": 20,
         "drupal/views_ajax_get": 20,
+        "drupal/views_block_filter_block": 10,
         "drupal/stage_file_proxy": 15,
         "sensiolabs-de/deprecation-detector": 20
     },
