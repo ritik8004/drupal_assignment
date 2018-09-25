@@ -728,6 +728,9 @@ function alshaya_white_label_preprocess_input(&$variables) {
  */
 function alshaya_white_label_theme_suggestions_input_alter(&$suggestions, array $variables) {
   $element = $variables['element'];
+
+  $suggestions[] = 'input__' . $element['#type'];
+
   if (isset($element['#attributes']['data-twig-suggestion'])) {
     if ($element['#attributes']['data-twig-suggestion'] == 'userregisterformpassword') {
       $suggestions[] = 'input__' . $element['#attributes']['data-twig-suggestion'];

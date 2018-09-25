@@ -241,7 +241,7 @@
         }
       }
 
-      $('input[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
         ccPaymentsClicked = true;
       });
 
@@ -442,7 +442,7 @@
       });
 
       /** Tracking Returning customers .**/
-      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
+      cartCheckoutLoginSelector.find('[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
         Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
       });
 
