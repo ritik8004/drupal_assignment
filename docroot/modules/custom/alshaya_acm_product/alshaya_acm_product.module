@@ -1646,6 +1646,8 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  *
  * @param \Drupal\taxonomy\TermInterface $taxonomy_term
  *   The taxonomy term object.
+ * @param array $query_string
+ *   (optional) Query string to use to append size guide.
  *
  * @return array
  *   Return array value.
@@ -1654,7 +1656,7 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\TypedData\Exception\MissingDataException
  */
-function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, array &$query_string = []) : array {
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, array $query_string = []) : array {
   $anchor = $taxonomy_term->get('field_size_guide_anchor');
   $query_string = !empty($query_string) ? $query_string : [];
   if (!empty($anchor) && !empty($anchor->first())) {
