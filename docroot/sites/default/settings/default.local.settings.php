@@ -10,23 +10,38 @@
  */
 
 $hostname = $_SERVER['HTTP_HOST'];
-$hostname_parts = explode('.', $hostname);
+
+$dir = dirname(DRUPAL_ROOT);
+
+if (!empty($_SERVER['HTTP_HOST'])) {
+  $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
+  $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
+}
+else {
+  foreach ($_SERVER['argv'] as $arg) {
+    preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
+    if (!empty($matches)) {
+      $host_site_code = $matches[1];
+      break;
+    }
+  }
+}
 
 $databases = array(
   'default' =>
-  array(
-    'default' =>
     array(
-      'database' => 'drupal_' . str_replace('-', '_', $hostname_parts[1]),
-      'username' => 'drupal',
-      'password' => 'drupal',
-      'host' => 'localhost',
-      'port' => '3306',
-      'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-      'driver' => 'mysql',
-      'prefix' => '',
+      'default' =>
+        array(
+          'database' => 'drupal_alshaya_' . str_replace('-', '_', $host_site_code),
+          'username' => 'drupal',
+          'password' => 'drupal',
+          'host' => 'localhost',
+          'port' => '3306',
+          'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+          'driver' => 'mysql',
+          'prefix' => '',
+        ),
     ),
-  ),
 );
 
 // Use development service parameters.
@@ -126,12 +141,12 @@ $config['system.file']['path']['temporary'] = '/tmp';
 /**
  * Private file path.
  */
-$settings['file_private_path'] = $dir . '/files-private/' . $hostname_parts[1];
+$settings['file_private_path'] = $dir . '/files-private/' . $host_site_code;
 
 /**
  * Public file path.
  */
-$settings['file_public_path'] = 'sites/g/files/' . $hostname_parts[1];
+$settings['file_public_path'] = 'sites/g/files/' . $host_site_code;
 
 /**
  * Trusted host configuration.

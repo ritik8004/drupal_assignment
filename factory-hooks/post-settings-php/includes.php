@@ -23,7 +23,7 @@ if (!empty($_SERVER['HTTP_HOST'])) {
   $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
 }
 else {
-  foreach ($argv as $arg) {
+  foreach ($_SERVER['argv'] as $arg) {
     preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
     if (!empty($matches)) {
       $host_site_code = $matches[1];
