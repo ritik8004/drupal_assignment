@@ -55,10 +55,8 @@ function drush_alshaya_super_category_switch() {
 
   /* @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
-  // Update alshaya_super_category.settings.
+  // Enable/Disable super category feature.
   $super_category_feature->enableSuperCategory($status, $default_parent);
-  // Load super category menu block and change status.
-  $super_category_feature->changeSuperCategoryMenuBlockStatus($status);
 
   if ($path_alter) {
     _alshaya_super_category_product_alias_bulk_process();
@@ -69,9 +67,6 @@ function drush_alshaya_super_category_switch() {
     $default_parent,
     $path_alter,
   ]);
-
-  // Update the meta title.
-  $super_category_feature->changeSuperCategoryMetaTitle($status);
 
   // Clear cache to rebuild menu blocks.
   drupal_flush_all_caches();

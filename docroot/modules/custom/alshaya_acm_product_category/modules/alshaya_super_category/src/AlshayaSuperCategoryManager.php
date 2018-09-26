@@ -91,6 +91,11 @@ class AlshayaSuperCategoryManager {
     }
 
     $config->save(TRUE);
+
+    // Enable/Disable the super category menu block.
+    $this->changeSuperCategoryMenuBlockStatus($enable);
+    // Update the meta tag title token.
+    $this->changeSuperCategoryMetaTitle($enable);
   }
 
   /**
