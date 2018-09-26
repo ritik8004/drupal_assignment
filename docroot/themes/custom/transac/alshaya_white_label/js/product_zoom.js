@@ -47,7 +47,7 @@
 
       // Modal view on image click in desktop and tablet.
       // Modal view for PDP Slider, when clicking on main image.
-      var element = $(zoomContainer);
+      var element = $(zoomContainer.find('#product-image-gallery-container'));
 
       // Open Gallery modal when we click on the zoom image.
       var myDialog = Drupal.dialog(element, dialogsettings);
@@ -290,9 +290,6 @@
       ocObject.slick(
           $.extend({}, options, {rtl: true})
       );
-      if (context !== document) {
-        ocObject.slick('resize');
-      }
     }
     else {
       // When Arabic and slider position is bottom, we need RTL support.
@@ -301,16 +298,14 @@
         ocObject.slick(
             $.extend({}, options, {rtl: true})
         );
-        if (context !== document) {
-          ocObject.slick('resize');
-        }
       }
       else {
         ocObject.slick(options);
-        if (context !== document) {
-          ocObject.slick('resize');
-        }
       }
+    }
+
+    if (context !== document) {
+      ocObject.slick('resize');
     }
   }
 
@@ -323,16 +318,20 @@
       currentSlide = $('#lightSlider .slick-current').attr('data-slick-index');
     }
 
-    var gallery = $('#block-content #product-image-gallery');
-    slickModalOptions['currentSlide'] = currentSlide;
-    applyRtl(gallery, slickModalOptions, {});
+    var gallery = $('#product-image-gallery');
+    slickModalOptions.currentSlide = currentSlide;
+    applyRtl(gallery, slickModalOptions, document);
 
     if (gallery.hasClass('pager-no')) {
       $('li[data-slick-index="' + currentSlide + '"]', gallery).addClass('slick-current', function () {
         $(this).siblings().removeClass('slick-current');
       });
     }
-    var defaultMainImage = $('li[data-slick-index="' + currentSlide + '"]', gallery);
+    else {
+      gallery.slick('slickGoTo', currentSlide);
+    }
+
+    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="' + currentSlide + '"]');
     var bigImgUrl = defaultMainImage.children('a').attr('href');
     $('#full-image-wrapper img').attr('src', bigImgUrl);
     $('#full-image-wrapper img').css('transform', 'scale(1)');
@@ -450,41 +449,11 @@
       });
 
       $('.slick-prev', gallery).on('click', function () {
-        img_scale = 1;
-        $('.zoomin').removeClass('disabled');
-        $('.zoomout').removeClass('disabled');
-
-        $('#full-image').css({
-          left: 0,
-          top: 0
-        });
-
-        var previndex = $(this).parent().slick('slickCurrentSlide');
-        $(this).parent().slick('slickGoTo', previndex);
-        var prevImage = $(this).parent().find('li[data-slick-index = "' + previndex + '"] a.imagegallery__thumbnails__image').attr('href');
-        $('#full-image-wrapper img').attr('src', prevImage);
-        $('#full-image-wrapper img').css('transform', 'scale(1)');
-        $('#full-image-wrapper iframe').remove();
-        $('#full-image-wrapper img').show();
+        gallery.find('li.slick-current').trigger('click');
       });
 
       $('.slick-next', gallery).on('click', function () {
-        img_scale = 1;
-        $('.zoomin').removeClass('disabled');
-        $('.zoomout').removeClass('disabled');
-
-        $('#full-image').css({
-          left: 0,
-          top: 0
-        });
-
-        var nextindex = $(this).parent().slick('slickCurrentSlide');
-        $(this).parent().slick('slickGoTo', nextindex);
-        var nextImage = $(this).parent().find('li[data-slick-index = "' + nextindex + '"] a.imagegallery__thumbnails__image').attr('href');
-        $('#full-image-wrapper img').attr('src', nextImage);
-        $('#full-image-wrapper img').css('transform', 'scale(1)');
-        $('#full-image-wrappert iframe').remove();
-        $('#full-image-wrapper img').show();
+        gallery.find('li.slick-current').trigger('click');
       });
 
       $('li a', gallery).on('click', function (e) {
@@ -555,7 +524,7 @@
 
   var slickModalOptions = {
     slidesToShow: getPDPSliderParameter('slidesToShow'),
-    vertical: getPDPSliderParameter('vertical'),
+    vertical: true,
     arrows: true,
     infinite: false,
     centerMode: true,
