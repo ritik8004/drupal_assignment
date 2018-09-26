@@ -20,8 +20,12 @@
   .block-page-title-block {
     .back-link {
       @include breakpoint($only-mobile) {
-        @include icon(arrowup, before) {
+        @include icon(chevronup, before) {
           top: 0.125rem;
+
+          html[lang=ar] & {
+            transform: rotate(-90deg);
+          }
         }
       }
     }

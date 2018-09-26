@@ -60,6 +60,7 @@ fields:
 
   article_warning:
     label: 'Article Warning'
+    type: 'string'
 
   composition:
     label: 'Composition'
