@@ -6,6 +6,14 @@
     root: /var/www/html/alshaya.01dev/docroot
     user: alshaya.01dev
     ssh: { options: '-p 22' }
+01dev2:
+    uri: hmkw.dev2-alshaya.acsitefactory.com
+    host: staging-2000.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01dev2/docroot
+    user: alshaya.01dev2
+    ssh: { options: '-p 22' }
 01dev3:
     uri: hmkw.dev3-alshaya.acsitefactory.com
     host: staging-2001.enterprise-g1.hosting.acquia.com

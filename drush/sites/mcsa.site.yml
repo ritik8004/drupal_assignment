@@ -1,3 +1,27 @@
+01dev:
+    uri: mcsa.dev-alshaya.acsitefactory.com
+    host: staging-1505.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01dev/docroot
+    user: alshaya.01dev
+    ssh: { options: '-p 22' }
+01dev2:
+    uri: mcsa.dev2-alshaya.acsitefactory.com
+    host: staging-2000.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01dev2/docroot
+    user: alshaya.01dev2
+    ssh: { options: '-p 22' }
+01dev3:
+    uri: mcsa.dev3-alshaya.acsitefactory.com
+    host: staging-2001.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01dev3/docroot
+    user: alshaya.01dev3
+    ssh: { options: '-p 22' }
 01live:
     uri: www.mothercare.com.sa
     host: web-1504.enterprise-g1.hosting.acquia.com
@@ -13,6 +37,14 @@
     paths: { dump-dir: /mnt/tmp }
     root: /var/www/html/alshaya.01pprod/docroot
     user: alshaya.01pprod
+    ssh: { options: '-p 22' }
+01qa2:
+    uri: mcsa.qa2-alshaya.acsitefactory.com
+    host: staging-2002.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01qa2/docroot
+    user: alshaya.01qa2
     ssh: { options: '-p 22' }
 01test:
     uri: mcsa.test-alshaya.acsitefactory.com
