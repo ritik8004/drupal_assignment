@@ -596,11 +596,11 @@ header {
           text-transform: uppercase;
           font-family: $hnm-demibold;
           letter-spacing: 1px;
+          color: $mm_l1_link;
         }
       }
 
-      &:hover,
-      &.active {
+      &:hover {
         .menu--one__link {
           &::after {
             content: '';
@@ -615,6 +615,19 @@ header {
 
       a {
         font-family: $hnm-regular;
+      }
+
+      .menu--one__link {
+        &.active {
+          &::after {
+            content: '';
+            height: 2px;
+            background: $mm_l1_link_active;
+            display: inherit;
+            width: 100%;
+            margin-top: 0.125rem;
+          }
+        }
       }
 
       &:hover {

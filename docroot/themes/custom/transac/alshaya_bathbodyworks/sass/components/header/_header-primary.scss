@@ -358,7 +358,7 @@ header .block-views-exposed-filter-blocksearch-page {
         @include arabic-letter-spacing;
 
         border-top: 2px solid transparent !important;
-        border-bottom: none;
+        border-bottom: none !important;
         margin-top: 0.3125rem;
         font-size: 0.875rem;
         text-transform: uppercase;
@@ -391,6 +391,9 @@ header .block-views-exposed-filter-blocksearch-page {
 
       .menu--one__link {
         &.active {
+          border-bottom: none;
+          color: $mm_l1_link;
+
           &::after {
             content: '';
             height: 3px;
