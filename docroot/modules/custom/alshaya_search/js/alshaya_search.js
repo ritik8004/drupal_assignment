@@ -173,19 +173,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       });
 
-      // Hide other category filter options when one of the L1 items is selected.
-      if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
-        $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
-          if ($(this).hasClass('facet-item--expanded') ||
-            ($(this).children('input[checked="checked"]').length > 0)) {
-            return;
-          }
-          else {
-            $(this).hide();
-          }
-        });
-      }
-
       // Append active-item class to L2 active items in facet category list on SRP.
       $('ul[data-drupal-facet-id="category"] > li > ul > li > a, ul[data-drupal-facet-id="promotion_category_facet"] > li > ul > li > a').each(function() {
         if ($(this).hasClass('is-active')) {
@@ -209,7 +196,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
               alshayaPlpSearchCategoryFacet.show();
               alshayaPlpSearchCategoryFacetTitle.removeClass('ui-state-active');
             }
-
             else {
               alshayaPlpSearchCategoryFacet.hide();
               alshayaPlpSearchCategoryFacetTitle.addClass('ui-state-active');
@@ -220,6 +206,13 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
       // Add Class to leaf items on page load.
       Drupal.addLeafClassToPlpLeafItems();
+
+      // Add checkboxes here to ensure we have it before our dependent code.
+      // @see docroot/modules/contrib/facets/js/checkbox-widget.js
+      Drupal.facets.makeCheckboxes();
+
+      // Hide other category filter options when one of the L1 items is selected.
+      Drupal.alshayaSearchProcessCategoryFacets();
     }
   };
 
@@ -230,6 +223,20 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       && $('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--expanded').length === 0) {
       $('ul[data-drupal-facet-id="plp_category_facet"] li').each(function () {
         $(this).addClass('leaf-li');
+      });
+    }
+  };
+
+  Drupal.alshayaSearchProcessCategoryFacets = function () {
+    if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
+      $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
+        if ($(this).hasClass('facet-item--expanded') ||
+          ($(this).children('input[checked="checked"]').length > 0)) {
+          return;
+        }
+        else {
+          $(this).hide();
+        }
       });
     }
   };

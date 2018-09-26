@@ -21,6 +21,8 @@ $primary_text: $black;
 $primary_link: $warm-grey;
 $primary_link-hover: $purplish-brown;
 $primary_link-active: $purplish-brown;
+$secondary_btn_bg: $dark-red;
+$secondary_border: $white-three;
 
 // Form elements.
 $primary_input_label: $warm-grey;
@@ -40,15 +42,17 @@ $primary_radiobtn_empty: $warm-grey;
 $primary_radiobtn_filled: $black;
 
 // Dropdown.
-$primary_dropdown_bg: $white-five;
+$primary_dropdown_bg: $white-two;
 $primary_dropdown_arrow_bg: false;
 $primary_dropdown_arrow: $purplish-brown;
 $primary_dropdown_text: $purplish-brown;
 $primary_dropdown_border: $white-three;
 $primary_dropdown_option_hover: $white-three;
 $primary_dropdown_option_border: $white-three;
-$primary_dropdown_option_disbled: $greyish;
 $primary_dropdown_focus: $black;
+
+// Modal
+$modal_close_bg: $purplish-brown;
 
 // Header.
 $header_bg: $white-two;
@@ -156,7 +160,7 @@ $user_sidebar_block_title: $black;
 // Product listing page and search page.
 $plp_search_count: $warm-grey;
 $plp_facet_item_label: $black;
-$plp_facet_dropdown_bg: $white-five;
+$plp_facet_dropdown_bg: $white-two;
 $plp_facet_dropdown_icon: $purplish-brown;
 $plp_facet_label_border_mobile: $white-three;
 $plp_facet_border: $warm-grey;
@@ -176,3 +180,9 @@ $category_facet_active_text: $black;
 $plp_tile_product_text: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_title_hover: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $purplish-brown;
+$pdp_cc_btn_bg: $primary_btn_bg;
+$pdp_sidebar_link: $purplish-brown;
+$pdp_desc_wrapper_border: $primary_border;
