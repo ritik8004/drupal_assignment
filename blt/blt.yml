@@ -75,3 +75,5 @@ cm:
 validate:
   twig:
     functions: [alshaya_main_menu]
+cloud:
+  appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
