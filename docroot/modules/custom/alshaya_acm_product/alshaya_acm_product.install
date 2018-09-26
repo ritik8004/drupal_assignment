@@ -25,7 +25,7 @@ function alshaya_acm_product_post_update_8030(&$sandbox) {
  *
  * Changing 'product_collection' sku attribute cardinality to unlimited.
  */
-function alshaya_acm_product_update_8031() {
+function alshaya_acm_product_update_8032() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   // Updating cardinality config for the attribute.
@@ -95,7 +95,7 @@ function alshaya_acm_product_update_8031() {
  *
  * Update settings config to have value for short_desc_text_summary.
  */
-function alshaya_acm_product_update_8030() {
+function alshaya_acm_product_update_8031() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
