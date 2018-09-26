@@ -99,8 +99,10 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     // Get product type.
     $type = $sku_entity->getType();
 
-    // Product Name.
-    $product_name = \Drupal::entityManager()->getTranslationFromContext($sku_entity)->get('name')->getString();
+    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+
+    $product_name = $productInfoHelper->getTitle($sku_entity, 'basket');
 
     // Quantity.
     $quantity = $form_state->getValue('quantity');
@@ -117,6 +119,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
     if ($type == 'configurable') {
       // If we have a child_sku available.
       $child_sku_entity = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
+      $product_name = $productInfoHelper->getTitle($child_sku_entity, 'basket');
       $image = alshaya_acm_get_product_display_image($child_sku_entity, '291x288', 'cart_notification');
     }
     else {
