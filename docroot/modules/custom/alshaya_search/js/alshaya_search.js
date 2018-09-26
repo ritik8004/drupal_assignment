@@ -65,6 +65,9 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
+      if ($('.block-facets-ajax').length === 0) {
+        return;
+      }
 
       $.fn.replaceFacets = function (data) {
         if (data.replaceWith === '') {
