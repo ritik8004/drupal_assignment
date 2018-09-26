@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - alshaya_mobile_app
+    - user
+    - simple_oauth
+id: delivery_methods
+plugin_id: delivery_methods
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2
