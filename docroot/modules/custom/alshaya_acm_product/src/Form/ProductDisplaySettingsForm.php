@@ -32,6 +32,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('image_thumb_gallery', $form_state->getValue('image_thumb_gallery'));
     $config->set('color_swatches', $form_state->getValue('color_swatches'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
+    $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -57,12 +58,24 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('color_swatches'),
     ];
 
-    $form['short_desc_characters'] = [
+    $form['short_desc'] = [
+      '#type' => 'details',
+      '#title' => $this->t('PDP short description settings'),
+      '#tree' => FALSE,
+      '#open' => TRUE,
+    ];
+
+    $form['short_desc']['short_desc_text_summary'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use text_summary to generate short description.'),
+      '#default_value' => $config->get('short_desc_text_summary'),
+    ];
+
+    $form['short_desc']['short_desc_characters'] = [
       '#type' => 'number',
       '#title' => $this->t('No. of characters that should be displayed as short decription on PDP page.'),
       '#default_value' => $config->get('short_desc_characters'),
     ];
-
     return $form;
   }
 
