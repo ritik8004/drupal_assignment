@@ -139,6 +139,7 @@
           float: $right;
           margin: 0;
           margin-#{$right}: 0.75em;
+          line-height: 1.5;
 
           @include link-ripple();
 
