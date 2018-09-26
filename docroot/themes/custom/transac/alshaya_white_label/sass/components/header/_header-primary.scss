@@ -894,6 +894,10 @@ header {
       display: inline-block;
       vertical-align: top;
 
+      &.title_subtitle {
+        max-width: 9.75rem;
+      }
+
       .title {
         margin-#{$left}: 0;
       }
