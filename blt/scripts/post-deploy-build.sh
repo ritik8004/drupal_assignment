@@ -65,6 +65,9 @@ fi
 rm -Rf $deployDir/patches
 
 # Remove the acsf tools .git file as written in drush/Commands/acsf_tools/README.md
+cd $deployDir
+git rm --cached drush/Commands/acsf_tools
+
 cd $deployDir/drush
 find 'Commands' -type d -name '.git' -exec rm -rf {} +
 
