@@ -311,7 +311,7 @@
 
   function _product_zoom_dialog_open() {
     var currentSlide;
-    if ($('#lightSlider').hasClass('pager-yes')) {
+    if ($('#lightSlider').hasClass('pager-yes') && getPDPSliderParameter('vertical')) {
       currentSlide = $('#lightSlider').slick('slickCurrentSlide');
     }
     else {
