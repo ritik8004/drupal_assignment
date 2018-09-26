@@ -21,6 +21,8 @@ $primary_text: $black;
 $primary_link: $warm-grey;
 $primary_link-hover: $purplish-brown;
 $primary_link-active: $purplish-brown;
+$secondary_btn_bg: $dark-red;
+$secondary_border: $white-three;
 
 // Form elements.
 $primary_input_label: $warm-grey;
@@ -178,3 +180,9 @@ $category_facet_active_text: $black;
 $plp_tile_product_text: $black;
 $plp_tile_product_title: $black;
 $plp_tile_product_title_hover: $black;
+
+// Product Add to cart form.
+$pdp_sidebar_label: $purplish-brown;
+$pdp_cc_btn_bg: $primary_btn_bg;
+$pdp_sidebar_link: $purplish-brown;
+$pdp_desc_wrapper_border: $primary_border;
