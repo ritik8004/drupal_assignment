@@ -297,7 +297,7 @@
   .field--name-field-last-name {
     @include breakpoint($desktop) {
       display: inline-block;
-      max-width: 10.7rem;
+      max-width: 10.8rem;
       width: calc(50% - 12px);
       float: $left;
     }
