@@ -1,3 +1,19 @@
+.acq-content-product-modal {
+  #lightSlider {
+    overflow: hidden;
+
+    .slick-list {
+      height: auto !important;
+    }
+  }
+
+  .pager-no {
+    .slick-arrow {
+      display: none !important;
+    }
+  }
+}
+
 .cloudzoom {
   @include clearfix;
 
