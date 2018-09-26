@@ -54,4 +54,4 @@ global $acsf_site_name;
 $acsf_site_name = explode('.', array_keys($domains)[0])[0];
 
 // Support cases like hmkw1 or mckw12.
-$acsf_site_name = preg_replace('/\d/', '', $site_name);
+$acsf_site_name = preg_replace('/\d/', '', $acsf_site_name);
