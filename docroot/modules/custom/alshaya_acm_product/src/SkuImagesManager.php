@@ -236,17 +236,15 @@ class SkuImagesManager {
       $return['images'][$url] = $url;
     }
 
-    if ($sku->bundle() === 'simple' && !$check_parent_child) {
-      $config = $this->configFactory->get('alshaya_acm_product.display_settings');
-      if ($config->get('show_parent_images_in_child')) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku->getPluginInstance();
-        $parent = $plugin->getParentSku($sku);
+    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+    if ($sku->bundle() === 'simple' && $config->get('show_parent_images_in_child')) {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
 
-        if ($parent instanceof SKUInterface) {
-          $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
-          $return = array_merge_recursive($return, $parent_media);
-        }
+      if ($parent instanceof SKUInterface) {
+        $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
+        $return = array_merge_recursive($return, $parent_media);
       }
     }
 
