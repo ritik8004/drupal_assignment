@@ -1,0 +1,24 @@
+01live:
+    uri: pbsa.alshaya.acsitefactory.com
+    host: web-1504.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01live/docroot
+    user: alshaya.01live
+    ssh: { options: '-p 22' }
+01test:
+    uri: pbsa.test-alshaya.acsitefactory.com
+    host: staging-1505.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01test/docroot
+    user: alshaya.01test
+    ssh: { options: '-p 22' }
+01uat:
+    uri: pbsa.uat-alshaya.acsitefactory.com
+    host: staging-1509.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01uat/docroot
+    user: alshaya.01uat
+    ssh: { options: '-p 22' }
