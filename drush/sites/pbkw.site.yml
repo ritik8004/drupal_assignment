@@ -1,0 +1,24 @@
+01dev3:
+    uri: pbkw.dev3-alshaya.acsitefactory.com
+    host: staging-2001.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01dev3/docroot
+    user: alshaya.01dev3
+    ssh: { options: '-p 22' }
+01live:
+    uri: pbkw.alshaya.acsitefactory.com
+    host: web-1504.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01live/docroot
+    user: alshaya.01live
+    ssh: { options: '-p 22' }
+01test:
+    uri: pbkw.test-alshaya.acsitefactory.com
+    host: staging-1505.enterprise-g1.hosting.acquia.com
+    options: {  }
+    paths: { dump-dir: /mnt/tmp }
+    root: /var/www/html/alshaya.01test/docroot
+    user: alshaya.01test
+    ssh: { options: '-p 22' }
