@@ -65,6 +65,8 @@
 
   label {
     font-size: 0;
+    display: flex;
+    align-items: center;
 
     .facet-item__value {
       margin-#{$left}: 1rem;

@@ -439,10 +439,10 @@
       &::before {
         margin-#{$left}: 0;
         position: relative;
-        top: 0.3rem;
+        top: 0.125rem;
 
         @include breakpoint($tablet) {
-          top: 0.54rem;
+          top: 0;
         }
       }
     }
