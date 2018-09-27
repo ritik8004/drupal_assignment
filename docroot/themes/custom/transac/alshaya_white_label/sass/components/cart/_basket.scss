@@ -523,7 +523,7 @@
     }
   }
 
-  &.alias--cart h1 {
+  &.alias--cart h1.c-page-title {
     @include breakpoint($tablet) {
       margin-bottom: 1.1rem;
     }

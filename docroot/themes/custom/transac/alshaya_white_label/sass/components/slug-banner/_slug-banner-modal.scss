@@ -1,3 +1,13 @@
+@mixin slug-modal-padding() {
+  @include breakpoint($tablet) {
+    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2) !important;
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2) !important;
+  }
+}
+
 .slug-banner-modal.ui-dialog {
   height: 100% !important;
   width: 100% !important;
@@ -7,12 +17,12 @@
   overflow: hidden;
   z-index: 1000;
 
-  @include breakpoint($tablet) {
-    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2);
-  }
+  @include slug-modal-padding();
 
-  @include breakpoint($desktop) {
-    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2);
+  .path--user & {
+    width: 100% !important;
+
+    @include slug-modal-padding();
   }
 
   #drupal-modal {
@@ -20,6 +30,12 @@
     padding: 1.5em;
     overflow: scroll;
     height: 100% !important;
+    max-height: 100% !important;
+
+    .path--user & {
+      height: 100% !important;
+      max-height: 100% !important;
+    }
   }
 
   .ui-dialog-titlebar {
