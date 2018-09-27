@@ -140,7 +140,7 @@
                 "version": "1.4.2",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                      "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
                     "type": "zip"
                 }
             }
@@ -181,6 +181,9 @@
         },
         "enable-patching": true,
         "patches": {
+            "acquia/acsf-tools": {
+                "Fixing bootstrap level for acsf tools commands to site level.": "https://github.com/acquia/acsf-tools/pull/31.patch"
+            },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
             },
