@@ -40,11 +40,6 @@
       #{$right}: -4.6875rem !important;
       #{$left}: inherit !important;
 
-      @include breakpoint($upto-tablet) {
-        #{$right}: -0.625rem !important;
-        #{$left}: inherit !important;
-      }
-
       @include breakpoint($only-tablet) {
         #{$right}: 0.125rem !important;
         #{$left}: inherit !important;
@@ -53,6 +48,11 @@
           top: 1rem;
           #{$right}: -0.3125rem !important;
         }
+      }
+
+      @include breakpoint($only-mobile) {
+        #{$right}: -0.625rem !important;
+        #{$left}: inherit !important;
       }
     }
   }
