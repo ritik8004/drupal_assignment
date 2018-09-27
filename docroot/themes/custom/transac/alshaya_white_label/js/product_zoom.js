@@ -21,129 +21,114 @@
         items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
       }
 
-      // Show mobile slider only on mobile resolution.
-      toggleProductImageGallery();
+      // Adding class if there is no slider.
+      if ($(window).width() < 1025) {
+        $('#lightSlider').once('pager-class').each(function () {
+          $(this).removeClass('pager-yes');
+          $(this).removeClass('pager-no');
 
-      var modalLightSlider = $('.acq-content-product-modal #lightSlider');
-
-      if (modalLightSlider.length > 0 && !modalLightSlider.hasClass('product-zoom-processed')) {
-        modalLightSlider.addClass('product-zoom-processed');
-        applyRtl(modalLightSlider, slickCSUSOptions, context);
+          if ($(this).find('.slick-track > li').length < 4) {
+            $(this).addClass('pager-no');
+          }
+          else {
+            $(this).addClass('pager-yes');
+          }
+        });
       }
 
       // Process main pdp gallery only once.
       var zoomContainer = $('.acq-content-product #product-zoom-container');
-      if (zoomContainer.length < 1 || zoomContainer.hasClass('product-zoom-processed')) {
-        return;
+      if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
+        zoomContainer.addClass('product-zoom-processed');
+
+        var lightSlider = $('.acq-content-product #lightSlider');
+        Drupal.productZoomApplyRtl(lightSlider, slickOptions, context);
+
+        var mobilegallery = $('#product-image-gallery-mobile', context);
+        Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
+
+        // Modal view on image click in desktop and tablet.
+        // Modal view for PDP Slider, when clicking on main image.
+        var element = $(zoomContainer.find('#product-image-gallery-container'));
+
+        // Open Gallery modal when we click on the zoom image.
+        var myDialog = Drupal.dialog(element, dialogsettings);
+        $('.acq-content-product .cloudzoom #cloud-zoom-wrap').off().on('click', function () {
+          $('body').addClass('pdp-modal-overlay');
+          myDialog.show();
+          myDialog.showModal();
+        });
+
+        // Videos inside main PDP slider.
+        // For Desktop slider, we add a iframe on click on the image.
+        $('li', lightSlider).once('bind-js').on('click', function (e) {
+          if ($(this).hasClass('cloudzoom__thumbnails__video')) {
+            var URL = $(this).attr('data-iframe');
+            $('.acq-content-product .cloudzoom__video_main iframe').remove();
+            appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
+            $('.acq-content-product #cloud-zoom-wrap').hide();
+            $(this).siblings('.slick-slide').removeClass('slick-current');
+            $(this).addClass('slick-current');
+          }
+        });
+
+        // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
+        $('li a.cloudzoom__thumbnails__image', lightSlider).once('bind-js-img').on('click', function () {
+          var playerIframe = $('.acq-content-product .cloudzoom__video_main iframe');
+          // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
+          if (playerIframe.length > 0) {
+            playerIframe.remove();
+            $('.acq-content-product #cloud-zoom-wrap').show();
+          }
+        });
+
+        $('li a', lightSlider).once('bind-js').off('click').on('click', function (e) {
+          e.preventDefault();
+          var index = $(this).parent().attr('data-slick-index');
+          if (lightSlider.slick('slickCurrentSlide') !== index) {
+            lightSlider.slick('slickGoTo', index);
+          }
+          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+          $(this).parent().addClass('slick-current');
+        });
       }
 
-      zoomContainer.addClass('product-zoom-processed');
+      var modalLightSlider = $('.acq-content-product-modal #lightSlider');
+      if (modalLightSlider.length > 0 && !modalLightSlider.hasClass('product-zoom-processed')) {
+        modalLightSlider.addClass('product-zoom-processed');
+        Drupal.productZoomApplyRtl(modalLightSlider, slickCSUSOptions, context);
 
-      var lightSlider = $('.acq-content-product #lightSlider');
-      applyRtl(lightSlider, slickOptions, context);
+        $('li a', modalLightSlider).once('bind-js-modal').off('click').on('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
 
-      var mobilegallery = $('#product-image-gallery-mobile', context);
-      applyRtl(mobilegallery, slickMobileOptions, context);
-
-      // Modal view on image click in desktop and tablet.
-      // Modal view for PDP Slider, when clicking on main image.
-      var element = $(zoomContainer.find('#product-image-gallery-container'));
-
-      // Open Gallery modal when we click on the zoom image.
-      var myDialog = Drupal.dialog(element, dialogsettings);
-      $('.acq-content-product .cloudzoom #cloud-zoom-wrap').off().on('click', function () {
-        $('body').addClass('pdp-modal-overlay');
-        myDialog.show();
-        myDialog.showModal();
-      });
-
-      // Adding class if there is no slider.
-      if ($(window).width() < 1025) {
-        if ($('#drupal-modal #lightSlider .slick-track > li').length < 4) {
-          $('#drupal-modal #lightSlider').addClass('pager-no');
-        }
-        else {
-          $('#drupal-modal #lightSlider').addClass('pager-yes');
-          $('#drupal-modal #lightSlider').removeClass('pager-no');
-        }
-
-        if ($('#product-zoom-container #lightSlider .slick-track > li').length < 4) {
-          $('#product-zoom-container #lightSlider').addClass('pager-no');
-        }
-        else {
-          $('#product-zoom-container #lightSlider').addClass('pager-yes');
-          $('#product-zoom-container #lightSlider').removeClass('pager-no');
-        }
-      }
-
-      // Videos inside main PDP slider.
-      // For Desktop slider, we add a iframe on click on the image.
-      $('.acq-content-product #lightSlider li', context).on('click', function (e) {
-        if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-          var URL = $(this).attr('data-iframe');
-          $('.acq-content-product .cloudzoom__video_main iframe').remove();
-          appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
-          $('.acq-content-product #cloud-zoom-wrap').hide();
-          $(this).siblings('.slick-slide').removeClass('slick-current');
-          $(this).addClass('slick-current');
-        }
-      });
-
-      // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
-      $('.acq-content-product #lightSlider li a.cloudzoom__thumbnails__image', context).on('click', function () {
-        var playerIframe = $('.acq-content-product .cloudzoom__video_main iframe');
-        // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
-        if (playerIframe.length > 0) {
-          playerIframe.remove();
-          $('.acq-content-product #cloud-zoom-wrap').show();
-        }
-      });
-
-      $('.acq-content-product #lightSlider li a').once().on('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var index = $(this).parent().attr('data-slick-index');
-        if ($('#lightSlider').slick('slickCurrentSlide') !== index) {
-          $('#lightSlider').slick('slickGoTo', index);
-        }
-        $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-        $(this).parent().addClass('slick-current');
-      });
-
-      $('.acq-content-product-modal #lightSlider li a').once().on('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var index = $(this).parent().attr('data-slick-index');
-        if ($('.acq-content-product-modal #lightSlider').slick('slickCurrentSlide') !== index) {
-          $('.acq-content-product-modal #lightSlider').slick('slickGoTo', index);
-        }
-        $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-        $(this).parent().addClass('slick-current');
-        var bigImage = $(this).attr('href');
-        // Put the big image in our main container.
-        $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
-        $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
-        $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
-        $('.acq-content-product-modal #cloud-zoom-wrap').show();
-      });
-
-      $('.acq-content-product-modal #lightSlider li').on('click', function () {
-        if ($(this).hasClass('cloudzoom__thumbnails__video')) {
-          var URL = $(this).attr('data-iframe');
+          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+          $(this).parent().addClass('slick-current');
+          var bigImage = $(this).attr('href');
+          // Put the big image in our main container.
+          $('.acq-content-product-modal #cloud-zoom-wrap img').attr('src', bigImage);
+          $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
-          appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
-          $('.acq-content-product-modal #cloud-zoom-wrap').hide();
-        }
-        // Stop the browser from loading the image in a new tab.
-        return false;
-      });
+          $('.acq-content-product-modal #cloud-zoom-wrap').show();
+        });
 
-      $('#lightSlider .slick-prev').on('click', function () {
-        triggerClickOnThumbGalleryImage($(this));
-      });
+        $('li', modalLightSlider).once('bind-js').on('click', function () {
+          if ($(this).hasClass('cloudzoom__thumbnails__video')) {
+            var URL = $(this).attr('data-iframe');
+            $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
+            appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
+            $('.acq-content-product-modal #cloud-zoom-wrap').hide();
+          }
+        });
+      }
 
-      $('#lightSlider .slick-next').on('click', function () {
-        triggerClickOnThumbGalleryImage($(this));
+      $('.slick-prev, .slick-next').each(function () {
+        $(this).once('bind-js').on('click', function () {
+          var slider = $(this).closest('#lightSlider');
+          setTimeout(function () {
+            slider.find('li.slick-current a').trigger('click');
+          }, 1);
+        });
       });
 
       // Stop video playback if slide is changed.
@@ -151,31 +136,19 @@
       pauseVideos($('#product-image-gallery-mob'), 'mob-imagegallery__thumbnails__video');
 
       // Preventing click on image.
-      $('.acq-content-product-modal #cloud-zoom-wrap a, .acq-content-product #cloud-zoom-wrap a').on('click', function (event) {
+      $('#cloud-zoom-wrap a').once('bind-js').on('click', function (event) {
         event.stopPropagation();
         event.preventDefault();
       });
+
+      // Show mobile slider only on mobile resolution.
+      toggleProductImageGallery();
     }
   };
 
   $(window).once('toggleProductImageGallery').on('resize', function (e) {
     toggleProductImageGallery();
   });
-
-  // Helper functions.
-  /**
-   * Trigger click on product thumb to change product zoom image.
-   *
-   * @param {object} $element
-   *   The clicked link to change gallery image (Next / Prev).
-   */
-  function triggerClickOnThumbGalleryImage($element) {
-    var upcomingindex = $element.parent().slick('slickCurrentSlide');
-    $element
-      .parent()
-      .find('li[data-slick-index = "' + upcomingindex + '"] > a.cloudzoom__thumbnails__image')
-      .trigger('click');
-  }
 
   /**
    * Use the beforeChange event of slick to pause videos when scrolling from video slides.
@@ -280,7 +253,7 @@
     }
   }
 
-  function applyRtl(ocObject, options, context) {
+  Drupal.productZoomApplyRtl = function (ocObject, options, context) {
     if (ocObject.length < 1) {
       return;
     }
@@ -307,20 +280,21 @@
     if (context !== document) {
       ocObject.slick('resize');
     }
-  }
+  };
 
   function _product_zoom_dialog_open() {
     var currentSlide;
-    if ($('#lightSlider').hasClass('pager-yes') && getPDPSliderParameter('vertical')) {
-      currentSlide = $('#lightSlider').slick('slickCurrentSlide');
+    var lightSlider = $('.acq-content-product #lightSlider');
+    if (lightSlider.hasClass('pager-yes') && getPDPSliderParameter('vertical')) {
+      currentSlide = lightSlider.slick('slickCurrentSlide');
     }
     else {
-      currentSlide = $('#lightSlider .slick-current').attr('data-slick-index');
+      currentSlide = $('.slick-current', lightSlider).attr('data-slick-index');
     }
 
     var gallery = $('#product-image-gallery');
     slickModalOptions.currentSlide = currentSlide;
-    applyRtl(gallery, slickModalOptions, document);
+    Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
 
     if (gallery.hasClass('pager-no')) {
       $('li[data-slick-index="' + currentSlide + '"]', gallery).addClass('slick-current', function () {
@@ -448,16 +422,10 @@
         return false;
       });
 
-      $('.slick-prev', gallery).on('click', function () {
-        gallery.find('li.slick-current').trigger('click');
-      });
-
-      $('.slick-next', gallery).on('click', function () {
-        gallery.find('li.slick-current').trigger('click');
-      });
-
       $('li a', gallery).on('click', function (e) {
         e.preventDefault();
+        e.stopPropagation();
+
         var index = $(this).parent().attr('data-slick-index');
         if (gallery.slick('slickCurrentSlide') !== index) {
           gallery.slick('slickGoTo', index);
