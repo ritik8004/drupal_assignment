@@ -309,6 +309,45 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 }
 
 /**
+ * Implements hook_page_attachments().
+ */
+function alshaya_seo_transac_page_attachments(array &$attachments) {
+  if (!_alshaya_seo_process_gtm()) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_seo_transac\AlshayaGtmManager $gtm_manager */
+  $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
+
+  try {
+    $current_route = $gtm_manager->getGtmContainer();
+    if ($current_route['route_name'] == 'acq_checkout.form' && in_array($current_route['route_params']['step'], ['confirmation'], TRUE)) {
+      $order = _alshaya_acm_checkout_get_last_order_from_session();
+      // We check if we have valid order id.
+      if (empty($order)) {
+        return;
+      }
+
+      $already_visited = (int) \Drupal::request()->cookies->get('Drupal_visitor_' . 'alshaya_gtm_confirmation_visited_' . $order['order_id']);
+      // Send order complete confirmation data only once.
+      if ($already_visited !== 1) {
+        $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
+        $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
+          'currencyCode' => $gtm_manager->getGtmCurrency(),
+          'purchase' => [
+            'actionField' => $attributes['actionField'],
+            'products' => $attributes['products'],
+          ],
+        ];
+      }
+    }
+  }
+  catch (Exception $e) {
+    \Drupal::logger('alshaya_seo')->error('Error while fetching GTM attributes: @message', ['@message' => $e->getMessage()]);
+  }
+}
+
+/**
  * Implements template_preprocess_alshaya_cart_product_name().
  */
 function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {
