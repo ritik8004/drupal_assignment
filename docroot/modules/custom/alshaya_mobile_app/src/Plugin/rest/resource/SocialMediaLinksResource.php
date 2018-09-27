@@ -4,6 +4,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\rest\ResourceResponse;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
 use Psr\Log\LoggerInterface;
@@ -16,11 +17,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "social_media_links",
  *   label = @Translation("Social media links"),
  *   uri_paths = {
- *     "canonical" = "/social-media-links",
+ *     "canonical" = "/rest/v1/social-media-links",
  *   }
  * )
  */
 class SocialMediaLinksResource extends ResourceBase {
+
+  /**
+   * Array of content for dependency.
+   *
+   * @var array
+   */
+  protected $content = [];
 
   /**
    * Menu name.
@@ -83,7 +91,7 @@ class SocialMediaLinksResource extends ResourceBase {
    *   The response containing social methods data.
    */
   public function get() {
-    $response = [];
+    $response_data = [];
     // Get all menu link tree elements.
     $menu_link_tree_elements = $this->menuLinkTree->load(self::MENU_NAME, new MenuTreeParameters());
     if (!empty($menu_link_tree_elements)) {
@@ -97,14 +105,37 @@ class SocialMediaLinksResource extends ResourceBase {
 
         // Get class of the menu item.
         $menu_class = $menu_link_content->getPluginDefinition()['options']['attributes']['class'];
-        $response[] = [
+        $response_data[] = [
           'media' => !empty($menu_class) ? str_replace(self::MENU_CLASS_PATTERN, '', $menu_class) : '',
           'url' => $menu_link_content->getUrlObject()->toString(),
         ];
+
+        // Adding to property for using later to attach cacheable dependency.
+        $this->content[] = $menu_link_content;
       }
+
+      $response = new ResourceResponse($response_data);
+      $this->addCacheableDependency($response);
+      return $response;
     }
 
-    return (new ModifiedResourceResponse($response));
+    // Sending modified response so response is not cached when no social media
+    // menu item available.
+    return (new ModifiedResourceResponse($response_data));
+  }
+
+  /**
+   * Adding content dependency to the response.
+   *
+   * @param \Drupal\rest\ResourceResponse $response
+   *   Response object.
+   */
+  protected function addCacheableDependency(ResourceResponse $response) {
+    if (!empty($this->content)) {
+      foreach ($this->content as $content) {
+        $response->addCacheableDependency($content);
+      }
+    }
   }
 
 }
