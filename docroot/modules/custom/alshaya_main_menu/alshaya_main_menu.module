@@ -72,6 +72,36 @@ function template_preprocess_alshaya_main_menu_level1(array &$variables) {
 }
 
 /**
+ * Implements hook_alshaya_main_menu_links_alter().
+ */
+function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
+  $max_depth = \Drupal::configFactory()->get('alshaya_main_menu.settings')->get('mobile_main_menu_max_depth');
+  if ($max_depth > 0) {
+    _alshaya_main_menu_process_max_depth($term_tree, $max_depth, 1);
+  }
+}
+
+/**
+ * Loop through each element recursively and add class for max_depth.
+ *
+ * @param array $data
+ *   The array to main menu tree.
+ * @param int $max_depth
+ *   The maximum depth to add class.
+ * @param int $current_depth
+ *   Current depth.
+ */
+function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth, int $current_depth) {
+  foreach ($data as &$item) {
+    $item['class'] = 'max-depth';
+    $current_depth++;
+    if (($current_depth <= $max_depth) && !empty($item['child'])) {
+      _alshaya_main_menu_process_max_depth($item['child'], $max_depth, $current_depth);
+    }
+  }
+}
+
+/**
  * Prepares href for anchor tag for given term data.
  */
 function _alshaya_main_menu_process_tag_attributes(array &$data) {
