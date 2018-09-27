@@ -140,7 +140,7 @@
                 "version": "1.4.2",
                 "type": "drupal-library",
                 "dist": {
-                      "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
                     "type": "zip"
                 }
             }
