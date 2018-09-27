@@ -176,4 +176,20 @@
     }
   };
 
+  // Add class to slug banner modal.
+  Drupal.behaviors.slugBannerModal = {
+    attach: function (context, settings) {
+      $(document).on('mousedown', '.slug-banner-modal-link.use-ajax', function () {
+        $(document).on('dialogopen', '.ui-dialog', function () {
+          $(this).addClass('slug-banner-modal');
+        });
+      });
+
+      // Remove the class when the modal is closed.
+      $(document).on('dialogclose', '.ui-dialog', function () {
+        $(this).removeClass('slug-banner-modal');
+      });
+    }
+  };
+
 })(jQuery, Drupal);

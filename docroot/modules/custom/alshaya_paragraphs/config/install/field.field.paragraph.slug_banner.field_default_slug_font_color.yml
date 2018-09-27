@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_default_slug_font_color
+    - paragraphs.paragraphs_type.slug_banner
+id: paragraph.slug_banner.field_default_slug_font_color
+field_name: field_default_slug_font_color
+entity_type: paragraph
+bundle: slug_banner
+label: 'Default slug font color'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

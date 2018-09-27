@@ -274,11 +274,6 @@
       color: $basket_td_pri_txt;
     }
 
-    .item-code {
-      font-family: $arial;
-      font-size: 0.875rem;
-    }
-
     .item--bundle {
       color: $basket_item_bundle;
       margin-top: 0.75rem;
@@ -1377,13 +1372,7 @@ td.price {
         @include breakpoint($tablet) {
           font-size: 0.875rem;
           position: relative;
-          left: 0.22rem;
-          float: left;
           margin-right: 0;
-        }
-
-        @include breakpoint($desktop) {
-          left: 0.5rem;
         }
       }
     }
@@ -1461,12 +1450,7 @@ html[lang=ar] {
     td.price {
       .price-wrapper {
         .price-amount {
-          min-width: 33% !important;
           display: inline-block;
-
-          @include breakpoint($only-tablet) {
-            min-width: 46% !important;
-          }
         }
       }
 
@@ -1498,92 +1482,23 @@ html[lang=ar] {
   }
 }
 
-html[lang=ar] {
-  .customer-cart-form {
-    .price--discount {
-      .discount-prefix {
-        float: right !important;
-        min-width: 25%;
-        text-align: center;
-
-        @include breakpoint($tablet) {
-          min-width: 33%;
-          padding-right: 0.625rem;
-        }
-
-        @include breakpoint($desktop) {
-          min-width: 33%;
-          padding-right: 1.25rem;
-        }
-      }
-
-      .discount-value {
-        text-align: center;
-        padding-right: 1rem;
-
-        @include breakpoint($desktop) {
-          padding-right: 0.75rem;
-        }
-      }
-    }
-  }
-}
-
-.path--cart {
-  .customer-cart-form {
-    td.price,
-    .mobile-only {
+.customer-cart-form {
+  .mobile-only,
+  .price {
+    .price-type__wrapper {
       .price--discount {
-        .discount-prefix {
-          html[lang=en] & {
-            display: inline-block;
-            width: 3rem;
-            margin: 0;
-
-            @include breakpoint($upto-desktop) {
-              width: 2.5rem;
-            }
-          }
-
-          html[lang=ar] & {
-            padding: 0;
-            text-align: right;
-            right: 0;
-            left: auto;
-          }
-        }
-
-        .discount-value {
+        span {
+          #{$left}: 0;
           padding: 0;
-          margin-#{$left}: -2px;
+          margin: 0;
+          min-width: auto;
 
           html[lang=ar] & {
-            padding-right: 0;
-            display: inline-block;
-            width: 3rem;
-            margin: 0;
-
-            @include breakpoint($only-tablet) {
-              padding-right: 0.56rem;
-            }
+            float: $left;
           }
-        }
-      }
 
-      .price-currency {
-        display: inline-block;
-        width: 3rem;
-        padding: 0;
-
-        @include breakpoint($upto-desktop) {
-          width: 2.5rem;
-        }
-
-        html[lang=ar] & {
-          padding-right: 0.56rem;
-
-          @include breakpoint($upto-desktop) {
-            display: inline;
+          &.discount-value {
+            margin-#{$left}: 0.0625rem;
           }
         }
       }

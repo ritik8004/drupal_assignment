@@ -320,7 +320,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       if (count($tids) > 0) {
         // Load and update the term entity.
         /** @var \Drupal\taxonomy\Entity\Term $term */
-        $term = $this->getTranslatedTerm(array_shift($tids));
+        $term = $this->getTranslatedTerm(array_shift($tids), $langcode);
         $existingTermData = $term->toArray();
 
         $term->get('field_commerce_id')->setValue($category['category_id']);
@@ -369,13 +369,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
         // $existingTermData will have value when it is updating.
         if ($existingTermData) {
-          $updatedTerm = $this->getTranslatedTerm($term->id());
+          $updatedTerm = $this->getTranslatedTerm($term->id(), $langcode);
           $updatedTermData = $updatedTerm->toArray();
 
           $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
             '@langcode' => $langcode,
             '@magento_id' => $category['category_id'],
-            '@diff' => DiffArray::diffAssocRecursive($updatedTermData, $existingTermData),
+            '@diff' => json_encode(DiffArray::diffAssocRecursive($updatedTermData, $existingTermData)),
           ]);
         }
         else {

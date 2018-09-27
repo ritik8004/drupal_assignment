@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class ProductController.
@@ -23,11 +24,20 @@ class ProductController extends ControllerBase {
   protected $skuManager;
 
   /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   *   The HTTP request object.
+   */
+  protected $request;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_acm_product.skumanager')
+      $container->get('alshaya_acm_product.skumanager'),
+      $container->get('request_stack')
     );
   }
 
@@ -36,9 +46,12 @@ class ProductController extends ControllerBase {
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   The request stack service.
    */
-  public function __construct(SkuManager $sku_manager) {
+  public function __construct(SkuManager $sku_manager, RequestStack $request_stack) {
     $this->skuManager = $sku_manager;
+    $this->request = $request_stack->getCurrentRequest();
   }
 
   /**
@@ -115,7 +128,7 @@ class ProductController extends ControllerBase {
       }
     }
 
-    $build = [
+    $build['modal_content'] = [
       '#type' => 'inline_template',
       '#template' => '<div class="modal-content">{{ modal_content }}</div>',
       '#context' => [
@@ -123,6 +136,11 @@ class ProductController extends ControllerBase {
       ],
     ];
 
+    if ($type == 'size-guide') {
+      $build['#attached']['drupalSettings']['size_guide'] = [
+        'params' => $this->request->query->all(),
+      ];
+    }
     return $build;
   }
 

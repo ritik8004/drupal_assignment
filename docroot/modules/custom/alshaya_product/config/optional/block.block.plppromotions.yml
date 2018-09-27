@@ -7,12 +7,6 @@ dependencies:
     - system
   theme:
     - alshaya_white_label
-    - alshaya_hnm
-    - alshaya_bathbodyworks
-    - alshaya_footlocker
-    - alshaya_mothercare
-    - alshaya_pottery_barn
-    - alshaya_victoria_secret
 id: plppromotions
 theme: alshaya_white_label
 region: sidebar_first

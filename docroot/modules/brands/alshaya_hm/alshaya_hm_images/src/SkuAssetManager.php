@@ -399,6 +399,19 @@ class SkuAssetManager {
               return $a_facing - $b_facing < 0 ? -1 : 1;
             }
 
+            // Finally sort by Number.
+            $a_number = isset($a['Data']['Angle']['Number'])
+              ? (float) $a['Data']['Angle']['Number']
+              : 0;
+
+            $b_number = isset($b['Data']['Angle']['Number'])
+              ? (float) $b['Data']['Angle']['Number']
+              : 0;
+
+            if ($a_number != $b_number) {
+              return $a_number - $b_number < 0 ? -1 : 1;
+            }
+
             return 0;
           });
           $grouped_assets[$key] = $asset;

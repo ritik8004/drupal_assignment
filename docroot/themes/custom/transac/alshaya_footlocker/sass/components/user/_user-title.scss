@@ -9,3 +9,25 @@
 .c-user-password h1 {
   top: -3.25rem;
 }
+
+.order-detail,
+.c-change-password,
+.c-communication-preferences,
+.c-user-edit,
+.c-order-list,
+.c-user--node,
+.c-address-book {
+  .block-page-title-block {
+    .back-link {
+      @include breakpoint($only-mobile) {
+        @include icon(chevronup, before) {
+          top: 0.125rem;
+
+          html[lang=ar] & {
+            transform: rotate(-90deg);
+          }
+        }
+      }
+    }
+  }
+}

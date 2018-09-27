@@ -96,7 +96,6 @@
       }
 
       @include breakpoint($desktop) {
-        transform: none !important;
         height: 27.125rem;
         overflow: hidden;
         width: 100% !important;

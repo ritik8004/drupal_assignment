@@ -5,6 +5,8 @@
  * Module file.
  */
 
+use Drupal\paragraphs\Entity\Paragraph;
+
 /**
  * Utility function to get the site level country code.
  *
@@ -39,4 +41,17 @@ function _alshaya_custom_get_site_level_country_code($reset = FALSE) {
 function _alshaya_custom_is_amp_route() {
   return \Drupal::moduleHandler()->moduleExists('amp')
   && \Drupal::service('router.amp_context')->isAmpRoute() ? TRUE : FALSE;
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function alshaya_custom_paragraph_presave(Paragraph $paragraph) {
+  // If mobile settings are not present use default settings for slug banner.
+  if ($paragraph->getType() == 'slug_banner') {
+    if (empty($paragraph->get('field_mobile_slug_text')->getString())) {
+      $default_slug_text = $paragraph->get('field_default_slug_text')->value;
+      $paragraph->get('field_mobile_slug_text')->setValue($default_slug_text);
+    }
+  }
 }
