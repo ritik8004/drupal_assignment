@@ -23,7 +23,9 @@ function alshaya_acm_product_post_update_8030(&$sandbox) {
 /**
  * Implements hook_update_N().
  *
- * Changing 'product_collection' sku attribute cardinality to unlimited.
+ * Change 'product_collection' sku attribute cardinality to unlimited.
+ * Add config for the PDP layout and Update settings config to have value
+ * for short_desc_text_summary.
  */
 function alshaya_acm_product_update_8030() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -88,30 +90,9 @@ function alshaya_acm_product_update_8030() {
     }
     $query->execute();
   }
-}
 
-/**
- * Implements hook_update_N().
- *
- * Update settings config to have value for short_desc_text_summary.
- */
-function alshaya_acm_product_update_8030() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.settings'],
-    'alshaya_acm_product',
-    'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Adding config for the PDP layout.
- */
-function alshaya_acm_product_update_8030() {
+  // Add config for the PDP layout and Update settings config to have
+  // value for short_desc_text_summary.
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
