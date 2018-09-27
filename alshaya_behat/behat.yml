@@ -44,10 +44,10 @@ mcqa:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/stronglax'
-              simpletitle: 'Stronglax'
-              simpletitlear: 'Mothercare Three Position Baby Carrier test - Black'
-              configurl: '/horse-photographic-t-shirt'
+              simpleurl: '/my-first-sleepsuits-3-pack?selected=156'
+              simpletitle: 'My First Sleepsuits - 3 Pack'
+              simpletitlear: 'لباس نوم My First - عبوة من 3 قطع'
+              configurl: '/horse-photographic-t-shirt?selected=256'
               configtitle: 'Horse Photographic T-Shirt'
               configtitlear: 'Horse Photographic تي- شيرت'
               configvariant: '18-24 Months'
@@ -74,6 +74,7 @@ mcuat:
       contexts:
         - FeatureContext:
             parameters:
+<<<<<<< HEAD
               simpleurl: '/baby-boys-socks-gift-box-test'
               simpletitle: 'Baby Boys Socks Gift Box test'
               simpletitlear: 'صندوق هدية جوارب للأولاد'
@@ -81,6 +82,15 @@ mcuat:
               configtitle: 'White Fish Print Shirt'
               configtitlear: 'قميص باللون الأبيض وطبعة سمكة'
               configvariant: '2-3 Years'
+=======
+             simpleurl: '/my-first-sleepsuits-3-pack?selected=156'
+             simpletitle: 'My First Sleepsuits - 3 Pack'
+             simpletitlear: 'لباس نوم My First - عبوة من 3 قطع'
+             configurl: '/horse-photographic-t-shirt?selected=256'
+             configtitle: 'Horse Photographic T-Shirt'
+             configtitlear: 'Horse Photographic تي- شيرت'
+             configvariant: '18-24 Months'
+>>>>>>> Behat.yml: changes done for UAT regression
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -192,7 +202,7 @@ hmuat:
               simpleurl: '/knitted-jumper'
               simpletitle: 'Knitted jumper'
               simpletitlear: 'Knitted jumper'
-              configurl: '/leaf-print-cushion-cover'
+              configurl: '/leaf-print-cushion-cover?selected=1066'
               configtitle: 'Leaf-print cushion cover'
               configtitlear: 'غطاء وسادة بطبعة ورقة شجر'
               configvariant: '50x50'
@@ -276,11 +286,12 @@ vsqa:
       contexts:
         - FeatureContext:
             parameters:
-              configurl: '/victoria-sport/flat-waist-cotton-yoga-legging'
-              configtitle: 'FLAT WAIST COTTON YOGA LEGGING'
-              configtitlear: 'Flat Waist Cotton Yoga Legging_AR'
-              configvariant_size: 'S'
-              config_variant_color: 'black'
+
+              configurl: '/victorias-secret/foldover-waist-yoga-legging?selected=1001'
+              configtitle: 'New Stylecode Foldover Waist Yoga Legging'
+              configtitlear: 'New Stylecode Foldover Waist Yoga Legging_AR'
+              configvariant_size: 'XS'
+              config_variant_color: 'black and white'
               config_variant_cup_size: 'DD'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
