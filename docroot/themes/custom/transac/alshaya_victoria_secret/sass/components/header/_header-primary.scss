@@ -189,6 +189,12 @@ header {
         margin-top: 0;
       }
 
+      &.has-bg-color {
+        .menu--one__link {
+          padding: 0.625rem;
+        }
+      }
+
       .menu--one__link.active {
         border-bottom: 2px solid $mm_l1_link_hover_border_to_fill_space;
       }
