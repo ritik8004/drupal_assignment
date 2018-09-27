@@ -1576,20 +1576,24 @@ html {
     li {
       &.menu--one__list-item {
         &:hover {
-          .menu--one__link {
-            border: none;
-            color: $mm_l1_link2;
-            border-top: 2px solid transparent;
+          @include breakpoint($desktop) {
+            .menu--one__link {
+              border: none;
+              color: $mm_l1_link2;
+              border-top: 2px solid transparent;
+            }
           }
         }
       }
     }
 
     &:hover {
-      li {
-        &.menu--one__list-item {
-          .menu--one__link {
-            border-bottom: none;
+      @include breakpoint($desktop) {
+        li {
+          &.menu--one__list-item {
+            .menu--one__link {
+              border-bottom: none;
+            }
           }
         }
       }
