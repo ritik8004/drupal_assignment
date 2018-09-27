@@ -362,7 +362,7 @@
       $('.zoomin').removeClass('disabled');
       $('.zoomout').removeClass('disabled');
 
-      $('.zoomin').on('click', function () {
+      $('.zoomin').once('bind-js').on('click', function () {
         if (img_scale < 1.75) {
           img_scale = img_scale + 0.25;
 
@@ -374,7 +374,7 @@
         }
 
       });
-      $('.zoomout').on('click', function () {
+      $('.zoomout').once('bind-js').on('click', function () {
         if (img_scale <= 1) {
           $(this).addClass('disabled');
           return;
@@ -387,7 +387,7 @@
       });
 
       // Swap the big image inside slider-2 when clicking on thumbnail.
-      $('li', gallery).on('click', function () {
+      $('li', gallery).once('bind-js').on('click', function () {
         img_scale = 1;
         $('.zoomin').removeClass('disabled');
         $('.zoomout').removeClass('disabled');
@@ -422,9 +422,8 @@
         return false;
       });
 
-      $('li a', gallery).on('click', function (e) {
+      $('li a', gallery).once('bind-js').on('click', function (e) {
         e.preventDefault();
-        e.stopPropagation();
 
         var index = $(this).parent().attr('data-slick-index');
         if (gallery.slick('slickCurrentSlide') !== index) {
