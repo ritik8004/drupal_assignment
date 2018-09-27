@@ -8,11 +8,23 @@
   z-index: 1000;
 
   @include breakpoint($tablet) {
-    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2);
+    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2) !important;
   }
 
   @include breakpoint($desktop) {
-    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2);
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2) !important;
+  }
+
+  .path--user & {
+    width: 100% !important;
+
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2) !important;
+    }
+
+    @include breakpoint($desktop) {
+      padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2) !important;
+    }
   }
 
   #drupal-modal {
@@ -20,6 +32,7 @@
     padding: 1.5em;
     overflow: scroll;
     height: 100% !important;
+    max-height: 100% !important;
   }
 
   .ui-dialog-titlebar {
