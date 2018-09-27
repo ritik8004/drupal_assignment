@@ -474,7 +474,7 @@
     vertical: getPDPSliderParameter('vertical'),
     arrows: true,
     focusOnSelect: false,
-    centerMode: true,
+    centerMode: getPDPSliderParameter('vertical'),
     infinite: false,
     touchThreshold: 1000,
     responsive: [
