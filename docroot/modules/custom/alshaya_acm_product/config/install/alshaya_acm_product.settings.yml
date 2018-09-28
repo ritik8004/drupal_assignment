@@ -27,3 +27,5 @@ product_carousel_items_settings:
   dp_product_carousel_items_number: 5
   hp_product_carousel_items_number: 6
 pdp_layout: 'default'
+pdp_layout_options:
+  default: 'Default'
