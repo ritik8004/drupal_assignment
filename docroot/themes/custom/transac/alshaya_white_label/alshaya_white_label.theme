@@ -434,7 +434,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
     case "views_exposed_form":
       // Adding Place holder on Search.
       if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = t('search item or keyword');
+        $form['keywords']['#attributes']['placeholder'] = \Drupal::config('alshaya_search.settings')->get('search_field_placeholder');
       }
       break;
 
