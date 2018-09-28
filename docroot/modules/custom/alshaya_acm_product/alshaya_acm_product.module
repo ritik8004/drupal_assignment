@@ -99,6 +99,13 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         }
         elseif (!alshaya_acm_product_is_buyable($sku_entity)) {
           $in_stock = 2;
+          // Get price and final price for the non-buyable SKU.
+          $sku_prices = $skuManager->getMinPrices($sku_entity);
+          // If no final price available for the SKU, then use initial price as
+          // the final price for the SKU (if initial price available).
+          if (empty($sku_prices['final_price']) && !empty($sku_prices['price'])) {
+            $item->getField('final_price')->setValues([$sku_prices['price']]);
+          }
         }
         elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
           $in_stock = 2;

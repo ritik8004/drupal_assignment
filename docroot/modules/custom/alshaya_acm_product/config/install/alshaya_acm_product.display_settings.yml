@@ -12,4 +12,5 @@ swatches:
   pdp: {  }
   plp: {  }
 short_desc_characters: 160
+short_desc_text_summary: true
 hide_not_required_option: false

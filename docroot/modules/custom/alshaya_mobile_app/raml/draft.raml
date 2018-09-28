@@ -1,0 +1,278 @@
+#%RAML 1.0
+title: Drupal APIs for mobile apps
+version: v1-dev
+protocols: [ HTTPS ]
+baseUri: https://local.alshaya-hmkw.com/{langcode}
+mediaType: application/json
+schemas:
+  GetSocialMedias: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "media": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [ "media", "url" ]
+      }
+    }
+  GetErrorMessages: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "machine_name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [ "machine_name", "message" ]
+      }
+    }
+  GetDeliveryMethods: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "order_description": {
+            "type": "string"
+          },
+          "cart_description": {
+            "type": "string"
+          },
+          "codes": {
+            "type": "object",
+            "properties": {
+              "method": {
+                "type": "string"
+              },
+              "carrier": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              }
+            },
+            "required": [ "method", "carrier", "code" ]
+          }
+        },
+        "required": [ "name", "order_description", "cart_description", "codes" ]
+      }
+    }
+  GetAutocomplete: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "HTML used by Drupal to display the suggestion in the list."
+          }
+        },
+        "required": [ "value", "label" ]
+      }
+    }
+  GetCategories: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "promo_banner": {
+            "type": "object",
+            "description": "Structure TBD"
+          },
+          "path": {
+            "type": "string"
+          },
+          "deeplink": {
+            "type": "string"
+          },
+          "include_in_menu": {
+            "type": "boolean"
+          },
+          "child": {
+            "type": "array",
+            "items": {
+              "schema": "GetCategories"
+            }
+          }
+        },
+        "required": [ "id", "name", "path", "deeplink", "include_in_menu" ]
+      }
+    }
+/search_api_autocomplete:
+  /search:
+    get:
+      description: Get a list of suggestion based on a given string.
+      queryParameters:
+        filter:
+          type: string
+          default: keywords
+        q:
+          type: string
+          description: The searched text.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetAutocomplete
+              example: |
+                [
+                  {
+                    "value": "dress",
+                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">s</span></div>\n"
+                  },
+                  {
+                    "value": "dresses",
+                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">ses</span></div>\n"
+                  },
+                  {
+                    "value": "dressing",
+                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">sing</span></div>\n"
+                  }
+                ]
+/rest:
+  /v1:
+    /category:
+      /all:
+        get:
+          description: "Get all the categories with their relevant information. It will return a hierarchical structure reflecting the category tree."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: GetCategories
+                  example: |
+                    [
+                      {
+                        "id": 1234,
+                        "name": "Ladies",
+                        "path": "/ladies",
+                        "deeplink": "/rest/v1/page/advanced/4567",
+                        "include_in_menu": true,
+                        "child":
+                        [
+                          {
+                            "id": 1567,
+                            "name": "Dresses",
+                            "path": "/dresses",
+                            "deeplink": "/rest/v1/category/1567/product-list",
+                            "include_in_menu": true
+                          },
+                          {
+                            "id": 1579,
+                            "name": "Shoes",
+                            "path": "/shoes",
+                            "deeplink": "/rest/v1/category/1579/product-list",
+                            "include_in_menu": true
+                          }
+                        ]
+                      },
+                      {
+                        "id": 1789,
+                        "name": "Men",
+                        "path": "/men",
+                        "deeplink": "/rest/v1/page/advanced/4578",
+                        "include_in_menu": true
+
+                      }
+                    ]
+    /social-medias:
+      get:
+        description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetSocialMedias
+                example: |
+                  [
+                    {
+                      "media": "facebook",
+                      "url": "https://www.facebook.com/hm"
+                    },
+                    {
+                      "media": "instagram",
+                      "url": "https://www.instagram.com/hm/"
+                    }
+                  ]
+    /error-messages:
+      get:
+        description: Get the error messages to be displayed on the frontend after validation.
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetErrorMessages
+                example: |
+                  [
+                    {
+                      "machine_name": "email_address_invalid",
+                      "message": "The email address you entered is invalid."
+                    },
+                    {
+                      "machine_name": "email_address_already_used",
+                      "message": "You already have an account. Please login!"
+                    }
+                  ]
+    /delivery-methods:
+      get:
+        description: Get the data related to delivery methods.
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetDeliveryMethods
+                example: |
+                  [
+                    {
+                      "name": "Alshaya Standard Delivery",
+                      "order_description": "Your order will be delivered at the following address",
+                      "cart_description": "Standard delivery in 1-2 days",
+                      "codes":
+                        {
+                          "method": "deliverymatrix",
+                          "carrier": "alshayadelivery",
+                          "code": "alshayadelivery_deliverymatrix"
+                        }
+                    },
+                    {
+                      "name": "Click and Collect",
+                      "order_description": "Your order will be available for pickup at the following store",
+                      "cart_description": "Click and Collect",
+                      "codes":
+                        {
+                          "method": "click_and_collect",
+                          "carrier": "click_and_collect",
+                          "code": "click_and_collect_click_and_collect"
+                        }
+                    }
+                  ]
