@@ -122,15 +122,6 @@
         });
       }
 
-      $('.slick-prev, .slick-next').each(function () {
-        $(this).once('bind-js').on('click', function () {
-          var slider = $(this).closest('#lightSlider');
-          setTimeout(function () {
-            slider.find('li.slick-current a').trigger('click');
-          }, 1);
-        });
-      });
-
       // Stop video playback if slide is changed.
       pauseVideos($('#product-image-gallery-mobile'), 'mobilegallery__thumbnails__video');
       pauseVideos($('#product-image-gallery-mob'), 'mob-imagegallery__thumbnails__video');
@@ -150,8 +141,17 @@
     toggleProductImageGallery();
   });
 
+  $(document).once('bind-slick-nav').on('click', '.slick-prev, .slick-next', function () {
+    var slider = $(this).closest('.slick-slider');
+
+    setTimeout(function () {
+      slider.find('li.slick-current a').trigger('click');
+    }, 1);
+  });
+
   /**
-   * Use the beforeChange event of slick to pause videos when scrolling from video slides.
+   * Use the beforeChange event of slick to pause videos when scrolling from
+   * video slides.
    *
    * @param {object} slickSelector
    *   Slick slider selcetor.
@@ -221,11 +221,11 @@
   }
 
   /**
-   * Get the vertical parameter for slick slider on the basis of the drupalsetting
-   * image_slider_position_pdp.
+   * Get the vertical parameter for slick slider on the basis of the
+   * drupalsetting image_slider_position_pdp.
    *
-   * Get the slidesToShow parameter for slick slider on the basis of the drupalsetting
-   * pdp_slider_items.
+   * Get the slidesToShow parameter for slick slider on the basis of the
+   * drupalsetting pdp_slider_items.
    *
    * @return {boolean} vertical
    *   The vertical paramerter for slick slider.
@@ -266,7 +266,7 @@
     }
     else {
       // When Arabic and slider position is bottom, we need RTL support.
-      if (isRTL() && getPDPSliderParameter('vertical') === false) {
+      if (isRTL() && options.vertical === false) {
         ocObject.attr('dir', 'rtl');
         ocObject.slick(
             $.extend({}, options, {rtl: true})
@@ -386,51 +386,49 @@
         }
       });
 
-      // Swap the big image inside slider-2 when clicking on thumbnail.
-      $('li', gallery).once('bind-js').on('click', function () {
-        img_scale = 1;
-        $('.zoomin').removeClass('disabled');
-        $('.zoomout').removeClass('disabled');
+      $('li a', gallery).each(function () {
+        $(this).once('bind-js').on('click', function (e) {
+          e.preventDefault();
 
-        // Make image draggable inside the window.
-        $('#full-image').css({
-          left: 0,
-          top: 0
+          var index = $(this).parent().attr('data-slick-index');
+          if (gallery.slick('slickCurrentSlide') !== index) {
+            gallery.slick('slickGoTo', index);
+          }
+          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
+          $(this).parent().addClass('slick-current');
+
+          var li = $(this).closest('li');
+          img_scale = 1;
+          $('.zoomin').removeClass('disabled');
+          $('.zoomout').removeClass('disabled');
+
+          // Make image draggable inside the window.
+          $('#full-image').css({
+            left: 0,
+            top: 0
+          });
+
+          // Video Handling for PDP Modal.
+          if ($(li).hasClass('youtube') || $(li).hasClass('vimeo')) {
+            var href = $(this).attr('data-iframe');
+            $('#full-image-wrapper').hide();
+            $('.cloudzoom__video_modal').show();
+            $('.cloudzoom__video_modal iframe').remove();
+            appendVideoIframe($('.cloudzoom__video_modal'), href);
+            // Hide zoom buttons when watching video.
+            $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').hide();
+          }
+          else {
+            var bigImage = $(this).attr('href');
+            // Put the big image in our main container.
+            $('#full-image-wrapper img').attr('src', bigImage);
+            $('#full-image-wrapper img').css('transform', 'scale(1)');
+            $('.cloudzoom__video_modal iframe').remove();
+            $('.cloudzoom__video_modal').hide();
+            $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').show();
+            $('#full-image-wrapper').show();
+          }
         });
-
-        // Video Handling for PDP Modal.
-        if ($(this).hasClass('youtube') || $(this).hasClass('vimeo')) {
-          var href = $(this).attr('data-iframe');
-          $('#full-image-wrapper').hide();
-          $('.cloudzoom__video_modal').show();
-          $('.cloudzoom__video_modal iframe').remove();
-          appendVideoIframe($('.cloudzoom__video_modal'), href);
-          // Hide zoom buttons when watching video.
-          $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').hide();
-        }
-        else {
-          var bigImage = $(this).children('a').attr('href');
-          // Put the big image in our main container.
-          $('#full-image-wrapper img').attr('src', bigImage);
-          $('#full-image-wrapper img').css('transform', 'scale(1)');
-          $('.cloudzoom__video_modal iframe').remove();
-          $('.cloudzoom__video_modal').hide();
-          $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').show();
-          $('#full-image-wrapper').show();
-        }
-        // Stop the browser from loading the image in a new tab.
-        return false;
-      });
-
-      $('li a', gallery).once('bind-js').on('click', function (e) {
-        e.preventDefault();
-
-        var index = $(this).parent().attr('data-slick-index');
-        if (gallery.slick('slickCurrentSlide') !== index) {
-          gallery.slick('slickGoTo', index);
-        }
-        $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-        $(this).parent().addClass('slick-current');
       });
     }
   }
