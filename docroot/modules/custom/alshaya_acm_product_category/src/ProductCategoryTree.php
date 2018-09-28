@@ -209,6 +209,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
+        'depth' => (int) $term->depth_level,
       ];
 
       if ($highlight_paragraph) {
@@ -413,7 +414,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'description__value'])
+    $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
