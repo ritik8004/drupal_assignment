@@ -71,6 +71,14 @@ types:
   Sku:
     type: LightProduct
     properties:
+  Sku:
+    properties:
+      id:
+        type: integer
+        description: The Drupal internet entity ID.
+      sku:
+        type: string
+        example: "H1234"
       stock:
         type: integer
         example: 19
@@ -598,3 +606,26 @@ types:
                 "stores":
                   [ "RA1-Q035-HEN", "RA2-M865-VIB" ]
               }
+/social_media_links:
+  get:
+    description: Get social media links.
+    responses:
+      200:
+        body:
+          type: object
+          properties:
+            options:
+              type: array
+              items:
+                properties:
+                  media:
+                    type: string
+                  url:
+                    type: string
+          #example:
+          #  {
+          #    [
+          #      "media": "facebook"
+          #      "url": "https://www.facebook.com/test-facebook-page"
+          #    ],
+          #  }
