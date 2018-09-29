@@ -1,0 +1,13 @@
+.max-depth {
+  .menu__in {
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
+  }
+
+  a.menu__link {
+    @include breakpoint($upto-desktop) {
+      pointer-events: auto;
+    }
+  }
+}
