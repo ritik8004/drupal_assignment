@@ -209,6 +209,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
+        // The actual depth of the term. For super category feature enabled,
+        // the depth may be wrong according to main menu. which can be
+        // processed when required.
+        //
+        // @see alshaya_main_menu_alshaya_main_menu_links_alter().
         'depth' => (int) $term->depth_level,
       ];
 
