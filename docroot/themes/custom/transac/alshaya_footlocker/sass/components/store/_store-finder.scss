@@ -48,6 +48,21 @@
 
   .list-view-link,
   .map-view-link {
+    line-height: 1.4;
+
+    html[lang=ar] & {
+      @include breakpoint($only-tablet) {
+        line-height: 1.6;
+      }
+    }
+
+    text-transform: uppercase;
+    padding: 0.6875rem;
+
+    html[lang=ar] & {
+      padding: 0.619rem 0 0;
+    }
+
     &:hover,
     &.active {
       border-width: 0.125rem;
@@ -118,14 +133,6 @@
     }
   }
 
-  .label--location {
-    display: block;
-
-    @include breakpoint($only-mobile) {
-      display: none;
-    }
-  }
-
   input {
     &[id^=edit-submit-stores-finder] {
       background: none;
@@ -153,25 +160,30 @@
   }
 
   .current-location {
-    &::before {
-      margin-#{$right}: 0;
-    }
-  }
+    line-height: 2.5;
 
-  .current-location {
     @include breakpoint($only-tablet) {
       &::before {
         #{$left}: 0.5rem;
         bottom: 0.6875rem;
       }
     }
-  }
-
-  .current-location {
-    line-height: 2.5;
 
     @include breakpoint($only-mobile) {
       line-height: 2;
+      margin-bottom: 0.5rem;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    &::before {
+      margin-#{$right}: 0;
+    }
+
+    @include breakpoint($desktop) {
+      html[lang=ar] & {
+        padding-top: 0.25rem;
+      }
     }
   }
 
@@ -197,10 +209,43 @@
         margin-top: -0.5625rem;
       }
     }
+
+    @include breakpoint($tablet) {
+      margin-right: 0.625rem;
+
+      html[lang=ar] & {
+        margin-right: 0;
+        margin-left: 0.625rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        margin-right: -0.5rem;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &::before {
+        margin-#{$right}: 0;
+        margin-#{$left}: 0;
+      }
+
+      html[lang=ar] & {
+        margin-right: 0;
+        margin-left: 0.625rem;
+      }
+    }
   }
 
   .label--location {
+    display: block;
     padding-#{$left}: 2rem;
+    width: 7.75rem;
+
+    @include breakpoint($only-mobile) {
+      display: none;
+    }
 
     &::before {
       html[lang=ar] & {
@@ -213,20 +258,16 @@
     }
 
     @include breakpoint($only-tablet) {
-      html[lang=en] & {
-        padding-#{$right}: 0;
-        padding-#{$left}: 0.5rem;
-        text-indent: 0;
-      }
+      padding-#{$right}: 0;
+      padding-#{$left}: 1rem;
+      text-indent: 0;
 
       html[lang=ar] & {
-        margin-#{$left}: 0.625rem;
-        padding-#{$right}: 0;
+        margin-right: 0.625rem;
+        padding-left: 0;
         width: 30%;
       }
     }
-
-    width: 7.75rem;
 
     @include breakpoint($desktop) {
       padding-#{$left}: 1.5rem;
@@ -241,24 +282,20 @@
       width: 100%;
       padding-#{$left}: 0;
     }
-  }
 
-  .list-view-link,
-  .map-view-link {
-    text-transform: uppercase;
-  }
-
-  .list-view-link,
-  .map-view-link {
-    padding: 0.6875rem;
-
-    html[lang=ar] & {
-      padding: 0.619rem 0 0;
+    .block-store-finder-form__form__label__wrapper {
+      float: $right;
     }
   }
 
   .map-view-link {
     margin-left: 0.75rem;
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        padding: 0.5rem 0 0;
+      }
+    }
 
     &::before {
       margin-#{$left}: -0.5rem;
@@ -274,10 +311,46 @@
         line-height: 0.4;
       }
     }
+  }
 
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        padding: 0.5rem 0 0;
+  .form--inline {
+    .current-location,
+    .cc-near-me {
+      @include breakpoint($only-tablet) {
+        line-height: 1.5;
+        padding-#{$left}: 2.5rem !important;
+      }
+
+      &::before {
+        background-image: url(#{$fl_theme_img_directory_path}/icons/my-location.svg);
+        background-size: 100%;
+        height: 1.9375rem;
+        width: 2rem;
+        margin-top: -0.25rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: 0.125rem;
+        }
+      }
+
+      &:hover {
+        line-height: 2.3;
+        padding: 0.125rem 0.4375rem;
+
+        html[lang=ar] & {
+          padding: 0.25rem 3.3125rem 0.25rem 0.25rem;
+          line-height: 2.4;
+
+          @include breakpoint($only-mobile) {
+            padding: 0.25rem 0;
+            line-height: 2;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          line-height: 2.8;
+          padding-#{$left}: 2.4375rem !important;
+        }
       }
     }
   }
@@ -329,14 +402,6 @@
     }
   }
 
-  @include breakpoint($only-mobile) {
-    .current-location {
-      margin-bottom: 0.5rem;
-      margin-top: 0.5rem;
-      text-transform: uppercase;
-    }
-  }
-
   @include breakpoint($only-tablet) {
     .store-finder--wrapper {
       width: 45%;
@@ -374,14 +439,8 @@
         padding-top: 0.5rem;
         text-indent: 0;
         padding-right: 0;
-      }
 
-      @include breakpoint($only-tablet) {
-        width: 37%;
-      }
-
-      @include breakpoint($desktop) {
-        html[lang=ar] & {
+        @include breakpoint($desktop) {
           width: 26.6% !important;
           padding-top: 0.875rem;
           border-right: none;
@@ -403,56 +462,18 @@
     .map-view-link,
     .list-view-link {
       border: 1px solid $store_finder_search_input_border;
-    }
+      height: 2.5rem;
 
-    .current-location,
-    .list-view-link,
-    .map-view-link {
       @include breakpoint($desktop) {
         width: 11%;
       }
-
-      height: 2.5rem;
     }
   }
 
   .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
   .form-item-geolocation-geocoder-google-places-api {
     @include breakpoint($tablet) {
-      margin: 0;
-    }
-
-    @include breakpoint($desktop) {
-      margin: 0;
-    }
-  }
-
-  .list-view-link {
-    @include breakpoint($tablet) {
-      margin-right: 0.625rem;
-
-      html[lang=ar] & {
-        margin-right: 0;
-        margin-left: 0.625rem;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      html[lang=ar] & {
-        margin-right: -0.5rem;
-      }
-    }
-
-    @include breakpoint($desktop) {
-      &::before {
-        margin-#{$right}: 0;
-        margin-#{$left}: 0;
-      }
-
-      html[lang=ar] & {
-        margin-right: 0;
-        margin-left: 0.625rem;
-      }
+      margin: 0 !important;
     }
   }
 
@@ -466,22 +487,6 @@
         margin-top: 0;
       }
     }
-
-    @include breakpoint($desktop) {
-      margin: 0;
-
-      html[lang=ar] & {
-        margin-top: 0;
-      }
-    }
-  }
-
-  .current-location {
-    @include breakpoint($desktop) {
-      html[lang=ar] & {
-        padding-top: 0.25rem;
-      }
-    }
   }
 
   .current-location,
@@ -491,14 +496,12 @@
     font-size: 0.875rem;
   }
 
-  @include breakpoint($desktop) {
-    .store-finder--wrapper {
+  .store-finder--wrapper {
+    @include breakpoint($desktop) {
       width: 66%;
       max-width: 100%;
     }
-  }
 
-  .store-finder--wrapper {
     .block-store-finder-form__input__wrapper {
       .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
       .form-item-geolocation-geocoder-google-places-api {
@@ -514,16 +517,59 @@
       }
     }
   }
-}
 
-.path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
-  @include breakpoint($desktop) {
-    #{$right}: 0;
+  .input--wrapper {
+    position: absolute;
+    #{$left}: 19%;
+
+    @include breakpoint($desktop) {
+      width: 57% !important;
+    }
+
+    @include breakpoint($only-mobile) {
+      #{$left}: 0;
+      width: 100%;
+      position: relative;
+    }
+
+    @include breakpoint($only-tablet) {
+      #{$left}: 16%;
+      width: 47% !important;
+    }
+
+    html[lang=ar] & {
+      right: 12%;
+
+      @include breakpoint($desktop) {
+        width: 64% !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        right: 14%;
+        width: 49% !important;
+      }
+
+      @include breakpoint($only-mobile) {
+        right: 0;
+        width: 100%;
+        position: relative;
+      }
+    }
   }
 }
 
-.path--store-finder .view-header {
-  margin-top: 0.5rem;
+.path--store-finder {
+  .store-finder--wrapper {
+    .input--wrapper [id^=edit-actions] {
+      @include breakpoint($desktop) {
+        #{$right}: 0;
+      }
+    }
+  }
+
+  .view-header {
+    margin-top: 0.5rem;
+  }
 }
 
 .individual--store .view-content {
@@ -557,113 +603,5 @@
   .hours--wrapper .hours--label,
   .hours--wrapper .open--hours {
     border-bottom: 1px solid $store_finder_glossary_border !important;
-  }
-}
-
-.path--store-finder .input--wrapper,
-.nodetype--store .input--wrapper {
-  position: absolute;
-  #{$left}: 19%;
-
-  @include breakpoint($desktop) {
-    width: 57% !important;
-  }
-
-  html[lang=ar] & {
-    right: 12%;
-
-    @include breakpoint($desktop) {
-      width: 64% !important;
-    }
-
-    @include breakpoint($only-tablet) {
-      right: 14%;
-      width: 49% !important;
-    }
-
-    @include breakpoint($only-mobile) {
-      right: 0;
-      width: 100%;
-      position: relative;
-    }
-  }
-
-  @include breakpoint($only-mobile) {
-    #{$left}: 0;
-    width: 100%;
-    position: relative;
-  }
-
-  @include breakpoint($only-tablet) {
-    #{$left}: 16%;
-    width: 47% !important;
-  }
-}
-
-.path--store-finder,
-.nodetype--store {
-  .form--inline {
-    .current-location,
-    .cc-near-me {
-      @include breakpoint($only-tablet) {
-        line-height: 1.5;
-      }
-    }
-
-    .current-location,
-    .cc-near-me {
-      @include breakpoint($only-tablet) {
-        padding-#{$left}: 2.5rem !important;
-      }
-
-      &::before {
-        background-image: url(#{$fl_theme_img_directory_path}/icons/my-location.svg);
-        background-size: 100%;
-        height: 1.9375rem;
-        width: 2rem;
-        margin-top: -0.25rem;
-
-        @include breakpoint($only-mobile) {
-          margin-top: 0.125rem;
-        }
-      }
-
-      &:hover {
-        line-height: 2.3;
-        padding: 0.125rem 0.4375rem;
-
-        html[lang=ar] & {
-          padding: 0.25rem 3.3125rem 0.25rem 0.25rem;
-          line-height: 2.4;
-
-          @include breakpoint($only-mobile) {
-            padding: 0.25rem 0;
-            line-height: 2;
-          }
-        }
-
-        @include breakpoint($only-tablet) {
-          line-height: 2.8;
-          padding-#{$left}: 2.4375rem !important;
-        }
-      }
-    }
-  }
-
-  .label--location {
-    .block-store-finder-form__form__label__wrapper {
-      float: $right;
-    }
-  }
-
-  .list-view-link,
-  .map-view-link {
-    line-height: 1.4;
-
-    html[lang=ar] & {
-      @include breakpoint($only-tablet) {
-        line-height: 1.6;
-      }
-    }
   }
 }
