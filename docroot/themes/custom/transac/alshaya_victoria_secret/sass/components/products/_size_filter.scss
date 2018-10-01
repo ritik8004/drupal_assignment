@@ -22,6 +22,19 @@
     &:last-child {
       border-#{$right}: 1px solid $bra_size_filter_box_border;
     }
+
+    @include breakpoint($desktop) {
+      &:hover {
+        background-color: $bra_size_active_filter_box_bg;
+        border-color: transparent;
+
+        span {
+          &.shop-by-size {
+            color: $bra_size_filter_box_bg;
+          }
+        }
+      }
+    }
   }
 
   .is-active {
@@ -29,13 +42,13 @@
     border-color: transparent;
 
     span {
-      &.shop-by-size-cup {
+      &.shop-by-size {
         color: $bra_size_filter_box_bg;
       }
     }
   }
 
-  .shop-by-size-cup {
+  .shop-by-size {
     display: block;
     text-align: center;
     letter-spacing: 0.44px;
@@ -58,7 +71,7 @@
 
 .sfb-facets-container {
   overflow: auto;
-  width: 82.75%;
+  width: 90.75%;
   max-width: 62.4375rem;
   position: relative;
   margin: 0 auto;
@@ -68,6 +81,39 @@
   -webkit-overflow-scrolling: touch;
   padding: 0.75rem 0 1.625rem;
   -ms-overflow-style: none;
+
+  .slick-list {
+    padding: 0 !important;
+    margin: 0 36px;
+
+    .slick-slide {
+      width: auto !important;
+    }
+  }
+
+  &.slick-slider {
+    .slick-arrow {
+      top: 25px;
+
+      &:hover {
+        &::before {
+          color: $bra_size_active_filter_box_bg;
+        }
+      }
+
+      &::before {
+        background: transparent;
+      }
+    }
+
+    .slick-next {
+      right: 0;
+    }
+
+    .slick-prev {
+      left: 0;
+    }
+  }
 
   &::-webkit-scrollbar {
     display: none;
@@ -167,6 +213,17 @@
           color: $bra_size_filter_box_bg;
         }
       }
+
+      @include breakpoint($desktop) {
+        &:hover {
+          background-color: $bra_size_active_filter_box_bg;
+          border-color: transparent;
+
+          .shop-by-size-alpha {
+            color: $bra_size_filter_box_bg;
+          }
+        }
+      }
     }
   }
 }
@@ -176,58 +233,6 @@
   font-size: 0.875rem;
   color: $smoky-white;
   letter-spacing: 0.44px;
-}
-
-@include breakpoint($desktop) {
-  .shop-by-size-paddle-nav {
-    max-width: 62.4375rem;
-    width: 82.75%;
-    position: absolute;
-    left: 50%;
-    bottom: 3.625rem;
-    display: flex;
-    align-items: center;
-    transform: translateX(-50%);
-  }
-
-  .paddle_next,
-  .paddle_prev {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    width: 2.1875rem;
-    height: 4.125rem;
-    cursor: pointer;
-
-    &.hidden {
-      display: none;
-    }
-
-    &:hover {
-      &::after {
-        color: $bra_size_active_filter_box_bg;
-      }
-    }
-  }
-
-  .paddle_next {
-    @include icon(chevronright, after) {
-      font-size: 2.125rem;
-      color: $bra_shop_by_size_title;
-    }
-
-    right: -2.3125rem;
-  }
-
-  .paddle_prev {
-    @include icon(chevronleft, after) {
-      font-size: 2.125rem;
-      color: $bra_shop_by_size_title;
-    }
-
-    left: -2.3125rem;
-  }
 }
 
 .super-category-pink {
