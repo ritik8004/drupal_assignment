@@ -10,6 +10,20 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update context for strings.
+ */
+function alshaya_master_update_8018() {
+  $strings = [
+    'Please select a payment option to continue.' => 'alshaya_error_message|empty_payment_option',
+    'Please agree to the Terms and Conditions.' => 'alshaya_error_message|agree_terms_and_condition',
+    'Your account has not been activated or is blocked.' => 'alshaya_error_message|account_already_exists',
+  ];
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add allowed classes for rich text.
  */
 function alshaya_master_update_8017() {
