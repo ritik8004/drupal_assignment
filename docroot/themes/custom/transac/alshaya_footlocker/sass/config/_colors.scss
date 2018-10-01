@@ -30,6 +30,9 @@ $primary_input_border: $warm-grey;
 $primary_input_inline_error: $red;
 $primary_form_link: $purplish-brown;
 
+// Form Items
+$formitem_label: $warm-grey;
+
 //Buttons.
 $primary_brand_button: $purplish-brown;
 $primary_brand_button_text: $purplish-brown;
@@ -253,3 +256,28 @@ $store_finder_search_results_store_address: $warm-grey;
 $store_finder_search_results_down_arrow: $purplish-brown;
 $store_finder_search_results_hour_icon_open: $purplish-brown;
 $store_finder_search_label: $black;
+
+// Checkout Global.
+$checkout_section_titles: $black;
+
+//checkout layout
+$checkout_delivery_options_border: $secondary_border;
+
+// Checkout Login
+$checkout_section_title_border: $primary_border;
+
+// Checkout Payment.
+$checkout_payment_form_border: $purplish-brown;
+$checkout_payment_method_title: $black;
+
+// Checkout tabs & form.
+$checkout_tab_default_title: $black;
+$checkout_tab_active_border: $purplish-brown;
+$delivery_tab_active_bg: $white;
+$checkout_tab_active_title: $purplish-brown;
+$checkout_tab_separator: $black;
+$secure_checkout_back_link: $purplish-brown;
+$checkout_form_actions_footer: $white;
+
+// Address book
+$address_book_change_link: $black;
