@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -138,7 +139,13 @@ class SkuImagesManager {
     $return = $this->skuManager->getProductCachedData($sku, $cache_key);
 
     if (is_array($return)) {
-      return $this->addFileObjects($return);
+      try {
+        return $this->addFileObjects($return);
+      }
+      catch (\Exception $e) {
+        // Do nothing and let code execution continue to get
+        // fresh gallery.
+      }
     }
 
     $plugin = $sku->getPluginInstance();
@@ -267,6 +274,9 @@ class SkuImagesManager {
    *
    * @return array
    *   Processed media array.
+   *
+   * @throws \Exception
+   *   When fails to load file from fid in cache.
    */
   private function addFileObjects(array $media) {
     if (empty($media['media_items']['images'])) {
@@ -276,6 +286,10 @@ class SkuImagesManager {
     foreach ($media['media_items']['images'] as &$item) {
       if (isset($item['fid'])) {
         $item['file'] = $this->fileStorage->load($item['fid']);
+
+        if (!($item['file'] instanceof FileInterface)) {
+          throw new \Exception('Failed to load file from fid in cache.');
+        }
       }
     }
 
@@ -326,7 +340,9 @@ class SkuImagesManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          if ($this->hasMediaImages($child)) {
+
+          if (($child instanceof SKUInterface) &&
+            ($this->hasMediaImages($child))) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
