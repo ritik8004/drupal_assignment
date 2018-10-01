@@ -71,16 +71,16 @@
 
 .sfb-facets-container {
   overflow: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
   width: 90.75%;
   max-width: 62.4375rem;
   position: relative;
   margin: 0 auto;
   font-size: 0;
-  overflow-x: scroll;
   white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
   padding: 0.75rem 0 1.625rem;
-  -ms-overflow-style: none;
 
   .slick-list {
     padding: 0 !important;

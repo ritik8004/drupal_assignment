@@ -1,7 +1,6 @@
 size_facet_copy:
   js:
     js/size_facet_copy.js: {}
-    js/size_slider.js: {}
   dependencies:
     - core/jquery.once
     - alshaya_white_label/slick
