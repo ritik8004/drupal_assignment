@@ -1,1184 +1,308 @@
-#%RAML 0.8
+#%RAML 1.0
 title: Drupal APIs for mobile apps
 version: v1-dev
 protocols: [ HTTPS ]
-baseUri: https://{domain}/{langcode}
-baseUriParameters:
-  domain:
-    type: string
-    description: "The domain to run the request against."
-  langcode:
-    type: string
-    enum: [ "en", "ar" ]
-    description: "The langcode to get localized results from the endpoints."
+baseUri: https://local.alshaya-hmkw.com/{langcode}
 mediaType: application/json
 schemas:
-  - GetSocialMedias: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "media": {
-              "type": "string"
-            },
-            "url": {
-              "type": "string"
-            }
-          },
-          "required": [ "media", "url" ]
-        }
-      }
-  - GetErrorMessages: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "machine_name": {
-              "type": "string"
-            },
-            "message": {
-              "type": "string"
-            }
-          },
-          "required": [ "machine_name", "message" ]
-        }
-      }
-  - GetDeliveryMethods: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string"
-            },
-            "order_description": {
-              "type": "string"
-            },
-            "cart_description": {
-              "type": "string"
-            },
-            "codes": {
-              "type": "object",
-              "properties": {
-                "method": {
-                  "type": "string"
-                },
-                "carrier": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "string"
-                }
-              },
-              "required": [ "method", "carrier", "code" ]
-            }
-          },
-          "required": [ "name", "order_description", "cart_description", "codes" ]
-        }
-      }
-  - GetAutocomplete: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "value": {
-              "type": "string"
-            },
-            "label": {
-              "type": "string",
-              "description": "HTML used by Drupal to display the suggestion in the list."
-            }
-          },
-          "required": [ "value", "label" ]
-        }
-      }
-  - GetCategories: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "name": {
-              "type": "string"
-            },
-            "promo_banner": {
-              "type": "object",
-              "properties": {
-                "url": {
-                  "type": "string"
-                },
-                "alt": {
-                  "type": "string"
-                }
-              }
-            },
-            "path": {
-              "type": "string"
-            },
-            "deeplink": {
-              "type": "string"
-            },
-            "include_in_menu": {
-              "type": "boolean"
-            },
-            "child": {
-              "type": "array",
-              "items": {
-                "schema": "GetCategories"
-              }
-            }
-          },
-          "required": [ "id", "name", "path", "deeplink", "include_in_menu" ]
-        }
-      }
-  - GetStores: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
-  - GetPageSimple: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
+  GetSocialMedias: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "deeplink": {
-            "type": "string"
-          },
-          "html": {
-            "type": "string"
-          },
-          "css": {
-            "type": "string"
-          },
-          "js": {
-            "type": "string"
-          }
-        }
-      }
-  - GetPageAdvanced: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "title": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "deeplink": {
-            "type": "string"
-          },
-          "blocks": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          }
-        }
-      }
-  - GetPromotions: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer"
-            },
-            "label": {
-              "type": "string"
-            },
-            "path": {
-              "type": "string",
-              "description": "The URL on Drupal site."
-            },
-            "deeplink": {
-              "type": "string",
-              "description": "The endpoint to invoke to build the promotion product list page."
-            },
-            "promote": {
-              "type": "boolean",
-              "description": "Determine if the promotion should be promoted on the basket page."
-            }
-          }
-        }
-      }
-  - GetPromotion: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "label": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string",
-            "description": "The URL on Drupal site."
-          },
-          "deeplink": {
-            "type": "string",
-            "description": "The endpoint to invoke to build the promotion product list page."
-          },
-          "banner": {
-            "type": "object",
-            "description": "Structure TBD"
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "sorting": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD. Must contain all the data to build the search result view mode."
-            }
-          }
-        }
-      }
-  - GetCategory: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "label": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string",
-            "description": "The URL on Drupal site."
-          },
-          "deeplink": {
-            "type": "string",
-            "description": "The endpoint to invoke to build the promotion product list page."
-          },
-          "banner": {
-            "type": "object",
-            "description": "Structure TBD"
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "sorting": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD. Must contain all the data to build the search result view mode."
-            }
-          }
-        }
-      }
-  - GetSearch: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "object",
-        "properties": {
-          "filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "sorting": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD. Must contain all the data to build the search result view mode."
-            }
-          }
-        }
-      }
-  - GetProduct: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema#",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "description": "SKU Entity id of Drupal."
-          },
-          "sku": {
-            "type": "string",
-            "description": "SKU - Unique value for products."
-          },
-          "bundle": {
-            "type": "string",
-            "enum": [ "simple", "configurable" ]
-          },
-          "title": {
-            "type": "string"
-          },
-          "original_price": {
-            "type": "number"
-          },
-          "final_price": {
-            "type": "number",
-            "description": "Final/discounted price, either from PIMS or catalogue price rule."
-          },
-          "stock": {
-            "type": "integer",
-            "description": "Stock of this SKU, will be 0 for configurables."
-          },
-          "categories": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "term": {
-                    "type": "integer"
-                  },
-                  "deeplink": {
-                    "type": "string"
-                  }
-                },
-                "required": [ "term" ]
-              }
-            ]
-          },
-          "linked": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
-                "properties": {
-                  "link_type": {
-                    "type": "string"
-                  },
-                  "skus": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "string"
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
-          },
           "media": {
-            "type": "array",
-            "description": "Images and videos for galleries.",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "context": {
-                    "type": "string",
-                    "description": "Detail/Listing/Teaser - place of displaying media items in this object."
-                  },
-                  "media": {
-                    "type": "object",
-                    "properties": {
-                      "images": {
-                        "type": "array",
-                        "items": [
-                          {
-                            "type": "string",
-                            "description": "Absolute image url."
-                          }
-                        ]
-                      },
-                      "videos": {
-                        "type": "array",
-                        "items": [
-                          {
-                            "type": "string",
-                            "description": "Video urls."
-                          }
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            ]
+            "type": "string"
           },
-          "labels": {
-            "type": "array",
-            "description": "Labels to be displayed in gallery.",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "context": {
-                    "type": "string",
-                    "description": "Detail/Listing - place of displaying labels in this object."
-                  },
-                  "labels": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "image": {
-                            "type": "string"
-                          },
-                          "position": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [ "media", "url" ]
+      }
+    }
+  GetErrorMessages: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "machine_name": {
+            "type": "string"
           },
-          "attributes": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "value": {
-                    "type": "string"
-                  },
-                  "key": {
-                    "type": "string"
-                  }
-                }
-              }
-            ]
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [ "machine_name", "message" ]
+      }
+    }
+  GetDeliveryMethods: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           },
-          "promotions": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "text": {
-                    "type": "string"
-                  },
-                  "deeplink": {
-                    "type": "string"
-                  }
-                },
-                "required": [ "text" ]
-              }
-            ]
+          "order_description": {
+            "type": "string"
           },
-          "swatch_data": {
+          "cart_description": {
+            "type": "string"
+          },
+          "codes": {
             "type": "object",
             "properties": {
-              "attribute_code": {
+              "method": {
                 "type": "string"
               },
-              "swatches": {
-                "type": "array",
-                "items": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "display_value": {
-                        "type": "string"
-                      },
-                      "display_label": {
-                        "type": "string"
-                      },
-                      "swatch_type": {
-                        "type": "string"
-                      },
-                      "value": {
-                        "type": "integer"
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "cart_combinations": {
-            "type": "object",
-            "properties": {
-              "by_sku": {
-                "type": "array",
-                "items": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "sku": {
-                        "type": "string"
-                      },
-                      "attributes": {
-                        "type": "array",
-                        "items": [
-                          {
-                            "type": "object",
-                            "properties": {
-                              "attribute_code": {
-                                "type": "string"
-                              },
-                              "value": {
-                                "type": "string"
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
+              "carrier": {
+                "type": "string"
               },
-              "attribute_sku": {
-                "type": "array",
-                "items": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "attribute_code": {
-                        "type": "string"
-                      },
-                      "values": {
-                        "type": "array",
-                        "items": [
-                          {
-                            "type": "object",
-                            "properties": {
-                              "value": {
-                                "type": "integer"
-                              },
-                              "skus": {
-                                "type": "array",
-                                "items": [
-                                  {
-                                    "type": "string"
-                                  }
-                                ]
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  }
-                ]
+              "code": {
+                "type": "string"
               }
-            }
-          },
-          "variants": {
-            "type": "array",
-            "items": [
-              {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "integer",
-                    "description": "SKU Entity id of Drupal."
-                  },
-                  "sku": {
-                    "type": "string",
-                    "description": "String - SKU, unique value for products."
-                  },
-                  "bundle": {
-                    "type": "string",
-                    "enum": [ "simple", "configurable" ]
-                  },
-                  "title": {
-                    "type": "string"
-                  },
-                  "original_price": {
-                    "type": "number"
-                  },
-                  "final_price": {
-                    "type": "number",
-                    "description": "Final/discounted price, either from PIMS or catalogue price rule."
-                  },
-                  "stock": {
-                    "type": "integer",
-                    "description": "Stock of this SKU, will be 0 for configurables."
-                  },
-                  "categories": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "term": {
-                            "type": "integer"
-                          },
-                          "deeplink": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [ "term" ]
-                      }
-                    ]
-                  },
-                  "linked": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "object",
-                        "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
-                        "properties": {
-                          "link_type": {
-                            "type": "string"
-                          },
-                          "skus": {
-                            "type": "array",
-                            "items": [
-                              {
-                                "type": "string"
-                              }
-                            ]
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "media": {
-                    "type": "array",
-                    "description": "Images and videos for galleries.",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "context": {
-                            "type": "string",
-                            "description": "Detail/Listing/Teaser - place of displaying media items in this object."
-                          },
-                          "media": {
-                            "type": "object",
-                            "properties": {
-                              "images": {
-                                "type": "array",
-                                "items": [
-                                  {
-                                    "type": "string",
-                                    "description": "Absolute image url."
-                                  }
-                                ]
-                              },
-                              "videos": {
-                                "type": "array",
-                                "items": [
-                                  {
-                                    "type": "string",
-                                    "description": "Video urls."
-                                  }
-                                ]
-                              }
-                            }
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "labels": {
-                    "type": "array",
-                    "description": "Labels to be displayed in gallery.",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "context": {
-                            "type": "string",
-                            "description": "Detail/Listing - place of displaying labels in this object."
-                          },
-                          "labels": {
-                            "type": "array",
-                            "items": [
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "image": {
-                                    "type": "string"
-                                  },
-                                  "position": {
-                                    "type": "string"
-                                  }
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "attributes": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "value": {
-                            "type": "string"
-                          },
-                          "key": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "promotions": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "text": {
-                            "type": "string"
-                          },
-                          "deeplink": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [ "text" ]
-                      }
-                    ]
-                  },
-                  "configurable_values": {
-                    "type": "array",
-                    "items": [
-                      {
-                        "type": "object",
-                        "properties": {
-                          "label": {
-                            "type": "string"
-                          },
-                          "value": {
-                            "type": "string"
-                          },
-                          "attribute_code": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    ]
-                  }
-                }
-              }
-            ]
+            },
+            "required": [ "method", "carrier", "code" ]
           }
-        }
+        },
+        "required": [ "name", "order_description", "cart_description", "codes" ]
       }
-/search_api_autocomplete/search:
-  get:
-    description: Get a list of suggestion based on a given string.
-    queryParameters:
-      filter:
-        type: string
-        default: keywords
-      q:
-        type: string
-        description: The searched text.
-    responses:
-      200:
-        body:
-          application/json:
-            schema: GetAutocomplete
-            example: |
-              [
-                {
-                  "value": "dress",
-                  "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">s</span></div>\n"
-                },
-                {
-                  "value": "dresses",
-                  "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">ses</span></div>\n"
-                },
-                {
-                  "value": "dressing",
-                  "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">sing</span></div>\n"
-                }
-              ]
-/rest/v1:
+    }
+  GetAutocomplete: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string",
+            "description": "HTML used by Drupal to display the suggestion in the list."
+          }
+        },
+        "required": [ "value", "label" ]
+      }
+    }
+  GetCategories: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "promo_banner": {
+            "type": "object",
+            "description": "Structure TBD"
+          },
+          "path": {
+            "type": "string"
+          },
+          "deeplink": {
+            "type": "string"
+          },
+          "include_in_menu": {
+            "type": "boolean"
+          },
+          "child": {
+            "type": "array",
+            "items": {
+              "schema": "GetCategories"
+            }
+          }
+        },
+        "required": [ "id", "name", "path", "deeplink", "include_in_menu" ]
+      }
+    }
+  GetStores: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+/search_api_autocomplete:
   /search:
     get:
-      description: "Get the data to build the search result page."
+      description: Get a list of suggestion based on a given string.
       queryParameters:
-        q?:
+        filter:
           type: string
-          description: "The searched keyword."
-          example: |
-            "dress"
-        f?:
+          default: keywords
+        q:
           type: string
-          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
-          example: |
-            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
-        sort?:
-          type: string
-          description: "A sorting option to apply."
-          example: |
-            "final_price DESC"
-        limit?:
-          type: string
-          description: "The offset to apply."
-          example: |
-            "10,20"
+          description: The searched text.
       responses:
         200:
           body:
             application/json:
-              schema: GetSearch
-              example: |
-                {
-                  "filters": [],
-                  "sorting": [],
-                  "products": []
-                }
-  /promotion/all:
-    get:
-      description: "Get all the promotions with their relevant information."
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetPromotions
+              schema: GetAutocomplete
               example: |
                 [
                   {
-                    "id": 1234,
-                    "name": "Buy 1 Get 1 Free",
-                    "path": "/promotions/buy-1-get-1-free",
-                    "deeplink": "/rest/v1/promotion/1234/product-list",
-                    "promote": true
+                    "value": "dress",
+                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">s</span></div>\n"
                   },
                   {
-                    "id": 4567,
-                    "name": "Body Care Minis for AED 19",
-                    "path": "/promotions/body-care-minis-for-aed-19",
-                    "deeplink": "/rest/v1/promotion/4567/product-list",
-                    "promote": false
+                    "value": "dresses",
+                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">ses</span></div>\n"
+                  },
+                  {
+                    "value": "dressing",
+                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">sing</span></div>\n"
                   }
                 ]
-  /promotion/{id}/product-list:
-    uriParameters:
-      id:
-        type: string
-        description: "The promotion ID to get the related products."
-    get:
-      description: "Get the data to build the promotion product list."
-      queryParameters:
-        f?:
-          type: string
-          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
-          example: |
-            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
-        sort?:
-          type: string
-          description: "A sorting option to apply."
-          example: |
-            "final_price DESC"
-        limit?:
-          type: string
-          description: "The offset to apply."
-          example: |
-            "10,20"
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetPromotion
-              example: |
-                {
-                  "id": 1234,
-                  "label": "Buy 1 Get 1 Free",
-                  "path": "/promotions/buy-1-get-1-free",
-                  "deeplink": "/rest/v1/promotion/1234/product-list",
-                  "banner": {
-                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
-                    "alt": "Buy 1 Get 1 Free"
-                  },
-                  "filters": [],
-                  "sorting": [],
-                  "products": []
-                }
-  /page/simple:
-    get:
-      description: "Get a simple page from its url."
-      queryParameters:
-        url:
-          type: string
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetPageSimple
-              example: |
-                {
-                  "id": 1234,
-                  "name": "FAQ",
-                  "path": "/faq",
-                  "deeplink": "/rest/v1/page/simple?url=faq",
-                  "html": "<h1>FAQs</h1><h3>What delivery options do you offer?</h3><p>We offer a Home Delivery option as well as a Click and collect service for selected stores. Times and cost for deliveries will vary depending on the location. For more information, please see our <a href='https://kw.hm.com/en/delivery-information'>delivery information</a> page.</p><h3>What time does H&amp;M customer care team operate, and how can I get in contact?</h3><p>You can contact our customer care team on the following number: 92000-2482. We are open from 10am to 10pm 7 days a week (including Public holidays). You can also <a href='https://kw.hm.com/en/contact'>contact us</a> using our quick form and our team will get back to you as soon as possible.&nbsp;</p>",
-                  "css": ".staticPage h1{ color: #000; font-size: 20px; padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; text-transform: uppercase;} .staticPage h3{ color: #333; font-size: 14px; padding-bottom: 5px; line-height: 24px; font-weight: 600;} .staticPage p, .staticPage ul{ color: #666; font-size: 13px; line-height: 24px; padding-bottom: 15px;}",
-                  "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}"
-                }
-  /page/advanced:
-    get:
-      "description": "Get an advanced page from its url."
-      queryParameters:
-        url:
-          type: string
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetPageAdvanced
-              example: |
-                {
-                  "id": 1234,
-                  "name": "Ladies",
-                  "path": "/ladies",
-                  "deeplink": "/rest/v1/page/advanced?url=ladies",
-                  "blocks": []
-                }
-  /store/search:
-    get:
-      description: "Search stores IDs by latitude/longitude."
-      queryParameters:
-        latitude:
-          type: number
-        longitude:
-          type: number
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetStores
-              example: |
-                [
-                  "RB2-1886-HEN",
-                  "RB2-1957-HEN",
-                  "RB2-1988-HEN"
-                ]
-  /category/all:
-    get:
-      description: "Get all the categories with their relevant information. It will return a hierarchical structure reflecting the category tree."
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetCategories
-              example: |
-                [
-                  {
-                    "id": 1234,
-                    "name": "Ladies",
-                    "path": "/ladies",
-                    "deeplink": "/rest/v1/page/advanced/4567",
-                    "include_in_menu": true,
-                    "promo_banner": {
-                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-09/black.png",
-                      "alt": "Alternative"
-                    },
-                    "child":
+/rest:
+  /v1:
+    /store:
+      /search:
+        get:
+          description: "Search stores IDs by latitude/longitude."
+          queryParameters:
+            latitude:
+              type: number
+              format: float
+            longitude:
+              type: number
+              format: float
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: GetStores
+                  example: |
+                    [
+                      "RB2-1886-HEN",
+                      "RB2-1957-HEN",
+                      "RB2-1988-HEN"
+                    ]
+    /category:
+      /all:
+        get:
+          description: "Get all the categories with their relevant information. It will return a hierarchical structure reflecting the category tree."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: GetCategories
+                  example: |
                     [
                       {
-                        "id": 1567,
-                        "name": "Dresses",
-                        "path": "/dresses",
-                        "deeplink": "/rest/v1/category/1567/product-list",
-                        "include_in_menu": true
+                        "id": 1234,
+                        "name": "Ladies",
+                        "path": "/ladies",
+                        "deeplink": "/rest/v1/page/advanced/4567",
+                        "include_in_menu": true,
+                        "child":
+                        [
+                          {
+                            "id": 1567,
+                            "name": "Dresses",
+                            "path": "/dresses",
+                            "deeplink": "/rest/v1/category/1567/product-list",
+                            "include_in_menu": true
+                          },
+                          {
+                            "id": 1579,
+                            "name": "Shoes",
+                            "path": "/shoes",
+                            "deeplink": "/rest/v1/category/1579/product-list",
+                            "include_in_menu": true
+                          }
+                        ]
                       },
                       {
-                        "id": 1579,
-                        "name": "Shoes",
-                        "path": "/shoes",
-                        "deeplink": "/rest/v1/category/1579/product-list",
+                        "id": 1789,
+                        "name": "Men",
+                        "path": "/men",
+                        "deeplink": "/rest/v1/page/advanced/4578",
                         "include_in_menu": true
+
                       }
                     ]
-                  },
-                  {
-                    "id": 1789,
-                    "name": "Men",
-                    "path": "/men",
-                    "deeplink": "/rest/v1/page/advanced/4578",
-                    "include_in_menu": true
-
-                  }
-                ]
-  /category/{id}/product-list:
-    uriParameters:
-      id:
-        type: string
-        description: "The category ID to get the related products."
-    get:
-      description: "Get the data to build the product list page."
-      queryParameters:
-        f?:
-          type: string
-          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
-          example: |
-            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
-        sort?:
-          type: string
-          description: "A sorting option to apply."
-          example: |
-            "final_price DESC"
-        limit?:
-          type: string
-          description: "The offset to apply."
-          example: |
-            "10,20"
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetCategory
-              example: |
-                {
-                  "id": 1234,
-                  "label": "Ladies",
-                  "path": "/ladies",
-                  "deeplink": "/rest/v1/category/1234/product-list",
-                  "banner": {
-                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
-                    "alt": "Ladies"
-                  },
-                  "filters": [],
-                  "sorting": [],
-                  "products": []
-                }
-  /social-media-links:
-    get:
-      description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetSocialMedias
-              example: |
-                [
-                  {
-                    "media": "facebook",
-                    "url": "https://www.facebook.com/hm"
-                  },
-                  {
-                    "media": "instagram",
-                    "url": "https://www.instagram.com/hm/"
-                  }
-                ]
-  /error-messages:
-    get:
-      description: Get the error messages to be displayed on the frontend after validation.
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetErrorMessages
-              example: |
-                [
-                  {
-                    "machine_name": "email_address_invalid",
-                    "message": "The email address you entered is invalid."
-                  },
-                  {
-                    "machine_name": "email_address_already_used",
-                    "message": "You already have an account. Please login!"
-                  }
-                ]
-  /delivery-methods:
-    get:
-      description: Get the data related to delivery methods.
-      responses:
-        200:
-          body:
-            application/json:
-              schema: GetDeliveryMethods
-              example: |
-                [
-                  {
-                    "name": "Alshaya Standard Delivery",
-                    "order_description": "Your order will be delivered at the following address",
-                    "cart_description": "Standard delivery in 1-2 days",
-                    "codes":
-                      {
-                        "method": "deliverymatrix",
-                        "carrier": "alshayadelivery",
-                        "code": "alshayadelivery_deliverymatrix"
-                      }
-                  },
-                  {
-                    "name": "Click and Collect",
-                    "order_description": "Your order will be available for pickup at the following store",
-                    "cart_description": "Click and Collect",
-                    "codes":
-                      {
-                        "method": "click_and_collect",
-                        "carrier": "click_and_collect",
-                        "code": "click_and_collect_click_and_collect"
-                      }
-                  }
-                ]
-  /product:
-    /{sku}:
+    /social-medias:
       get:
-        description: "Get product by SKU."
+        description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
         responses:
           200:
             body:
               application/json:
-                schema: GetProduct
+                schema: GetSocialMedias
+                example: |
+                  [
+                    {
+                      "media": "facebook",
+                      "url": "https://www.facebook.com/hm"
+                    },
+                    {
+                      "media": "instagram",
+                      "url": "https://www.instagram.com/hm/"
+                    }
+                  ]
+    /error-messages:
+      get:
+        description: Get the error messages to be displayed on the frontend after validation.
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetErrorMessages
+                example: |
+                  [
+                    {
+                      "machine_name": "email_address_invalid",
+                      "message": "The email address you entered is invalid."
+                    },
+                    {
+                      "machine_name": "email_address_already_used",
+                      "message": "You already have an account. Please login!"
+                    }
+                  ]
+    /delivery-methods:
+      get:
+        description: Get the data related to delivery methods.
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetDeliveryMethods
+                example: |
+                  [
+                    {
+                      "name": "Alshaya Standard Delivery",
+                      "order_description": "Your order will be delivered at the following address",
+                      "cart_description": "Standard delivery in 1-2 days",
+                      "codes":
+                        {
+                          "method": "deliverymatrix",
+                          "carrier": "alshayadelivery",
+                          "code": "alshayadelivery_deliverymatrix"
+                        }
+                    },
+                    {
+                      "name": "Click and Collect",
+                      "order_description": "Your order will be available for pickup at the following store",
+                      "cart_description": "Click and Collect",
+                      "codes":
+                        {
+                          "method": "click_and_collect",
+                          "carrier": "click_and_collect",
+                          "code": "click_and_collect_click_and_collect"
+                        }
+                    }
+                  ]
