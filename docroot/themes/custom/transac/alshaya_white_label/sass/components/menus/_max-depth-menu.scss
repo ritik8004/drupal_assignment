@@ -1,6 +1,7 @@
 .max-depth {
-  .menu__in {
-    @include breakpoint($upto-desktop) {
+  @include breakpoint($upto-desktop) {
+    .menu__in,
+    &::after {
       display: none;
     }
   }
