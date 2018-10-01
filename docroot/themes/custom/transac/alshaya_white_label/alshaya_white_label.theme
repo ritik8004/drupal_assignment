@@ -56,12 +56,13 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  $current_route = \Drupal::routeMatch();
+
   // Add body class for slug banner.
-  if (isset($variables['page']['banner_top'])) {
+  if (isset($variables['page']['banner_top']) && $current_route->getRouteName() != 'acq_checkout.form') {
     $variables['attributes']['class'][] = 'slug-banner-processed';
   }
 
-  $current_route = \Drupal::routeMatch();
   // If store finder glossary view.
   if ($current_route->getRouteName() == 'view.stores_finder.page_2') {
     $variables['attributes']['class'][] = 'store-finder-view';
