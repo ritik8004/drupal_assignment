@@ -1,3 +1,11 @@
+.acq-content-product-modal {
+  .pager-no {
+    .slick-arrow {
+      display: none !important;
+    }
+  }
+}
+
 .cloudzoom {
   @include clearfix;
 
