@@ -136,6 +136,34 @@ schemas:
         "type": "string"
       }
     }
+  GetPageSimple: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "deeplink": {
+          "type": "string"
+        },
+        "html": {
+          "type": "string"
+        },
+        "css": {
+          "type": "string"
+        },
+        "js": {
+          "type": "string"
+        }
+      }
+    }
 /search_api_autocomplete:
   /search:
     get:
@@ -169,6 +197,28 @@ schemas:
                 ]
 /rest:
   /v1:
+    /page:
+      /simple:
+        get:
+          description: "Get a simple page from its url."
+          queryParameters:
+            url:
+              type: string
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: GetPageSimple
+                  example: |
+                    {
+                      "id": 1234,
+                      "name": "FAQ",
+                      "path": "/faq",
+                      "deeplink": "/rest/v1/page/simple?url=faq",
+                      "html": "<h1>FAQs</h1><h3>What delivery options do you offer?</h3><p>We offer a Home Delivery option as well as a Click and collect service for selected stores. Times and cost for deliveries will vary depending on the location. For more information, please see our <a href='https://kw.hm.com/en/delivery-information'>delivery information</a> page.</p><h3>What time does H&amp;M customer care team operate, and how can I get in contact?</h3><p>You can contact our customer care team on the following number: 92000-2482. We are open from 10am to 10pm 7 days a week (including Public holidays). You can also <a href='https://kw.hm.com/en/contact'>contact us</a> using our quick form and our team will get back to you as soon as possible.&nbsp;</p>",
+                      "css": ".staticPage h1{ color: #000; font-size: 20px; padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; text-transform: uppercase;} .staticPage h3{ color: #333; font-size: 14px; padding-bottom: 5px; line-height: 24px; font-weight: 600;} .staticPage p, .staticPage ul{ color: #666; font-size: 13px; line-height: 24px; padding-bottom: 15px;}",
+                      "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}"
+                    }
     /store:
       /search:
         get:
