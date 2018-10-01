@@ -93,12 +93,16 @@ $smoke-light: #fafafa;
 $medium-green: #39b54a;
 $tomato: #e6591b;
 $alabaster: #fcfcfc;
+$smoky-white: #1f1f1f;
+$light-white: #fdf1f5;
+$dark-pink: #fc45b2;
 
 // Custom colors with no names in VS design.
 $_grey-51-6: rgba(51, 51, 51, 0.06);
 $_grey_one: #f8f8f8;
 $_grey_two: #f3f3f3;
 $_pink_one: #636363;
+$_grey_three: #e1e1e1;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1041,3 +1045,14 @@ $cart-free-gifts-label-background: $brilliant-rose;
 
 // Pace progress color
 $progress_loader: $brilliant-rose;
+
+// Bra size filters
+$bra_size_filter_box_bg: $white-five;
+$bra_size_filter_box_border: $_grey_three;
+$bra_size_active_filter_box_bg: $brilliant-rose;
+$bra_size_shop_by_cup_number: $smoky-white;
+$bra_size_shop_by_cup_size: $brownish-grey;
+$bra_shop_by_size: $light-white;
+$bra_shop_by_size_title: $mothercare-black;
+$pink_shop_by_bra_size_border: $dark-pink;
+$sport_bra_size_filter_box_bg: $white-smoke;

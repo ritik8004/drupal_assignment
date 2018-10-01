@@ -1,0 +1,273 @@
+.shop-by-size-band {
+  display: inline-block;
+  margin: 0 0.5rem;
+
+  &:first-child {
+    margin-#{$left}: 0;
+  }
+
+  &:last-child {
+    margin-#{$right}: 0;
+  }
+
+  > div {
+    display: inline-block;
+    width: 4rem;
+    padding: 0.8125rem 0;
+    background-color: $bra_size_filter_box_bg;
+    border: 1px solid $bra_size_filter_box_border;
+    border-#{$right}: none;
+    cursor: pointer;
+
+    &:last-child {
+      border-#{$right}: 1px solid $bra_size_filter_box_border;
+    }
+  }
+
+  .is-active {
+    background-color: $bra_size_active_filter_box_bg;
+    border-color: transparent;
+
+    span {
+      &.shop-by-size-cup {
+        color: $bra_size_filter_box_bg;
+      }
+    }
+  }
+
+  .shop-by-size-cup {
+    display: block;
+    text-align: center;
+    letter-spacing: 0.44px;
+
+    &:first-child {
+      font-family: $vs-regular;
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: $bra_size_shop_by_cup_number;
+    }
+
+    &:last-child {
+      font-family: $vs-regular;
+      font-size: 0.6875rem;
+      color: $bra_size_shop_by_cup_size;
+      font-weight: 500;
+    }
+  }
+}
+
+.sfb-facets-container {
+  overflow: auto;
+  width: 82.75%;
+  max-width: 62.4375rem;
+  position: relative;
+  margin: 0 auto;
+  font-size: 0;
+  overflow-x: scroll;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.75rem 0 1.625rem;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include breakpoint($only-mobile) {
+    width: calc(100% - 1.25rem);
+    margin: 0;
+    margin-#{$left}: 1.25rem;
+  }
+}
+
+#block-shopbrasbysize {
+  background: $bra_shop_by_size;
+  padding: 1.875rem 0 3rem;
+  position: relative;
+  margin-bottom: 0.75rem;
+
+  h3 {
+    font-family: $vs-bentonsanscomp-medium;
+    font-size: 2rem;
+    font-weight: 400;
+    color: $bra_shop_by_size_title;
+    letter-spacing: 1.16px;
+    text-align: center;
+    margin: 0;
+    padding-bottom: 1rem;
+  }
+
+  .sfb-band-cup {
+    font-family: $vs-regular;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    text-align: center;
+    color: $bra_size_shop_by_cup_size;
+    letter-spacing: 1.77px;
+    position: relative;
+  }
+
+  .size-guide-link {
+    float: none;
+    position: absolute;
+    top: auto;
+    #{$right}: 0;
+    #{$left}: 0;
+    margin: 0 auto;
+    width: 3.75rem;
+    padding: 0;
+    bottom: 1.875rem;
+
+    html[lang='ar'] & {
+      width: 5rem;
+    }
+  }
+}
+
+.sfb-letter {
+  text-align: center;
+  padding-bottom: 1rem;
+  display: inline-block;
+  width: 100%;
+  color: $bra_size_shop_by_cup_size;
+  font-size: 0.8125rem;
+  font-family: $vs_regular;
+  letter-spacing: 1.77px;
+
+  .sfb-facets-container {
+    padding-top: 0.75rem;
+  }
+
+  .shop-by-size-letter {
+    display: inline-block;
+
+    &:last-child {
+      > div {
+        border-#{$right}: 1px solid $bra_size_filter_box_border;
+      }
+    }
+
+    > div {
+      width: 3.8125rem;
+      height: 3.8125rem;
+      background: $bra_size_filter_box_bg;
+      border: 1px solid $bra_size_filter_box_border;
+      border-#{$right}: none;
+      cursor: pointer;
+      padding: 1.375rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &.is-active {
+        background-color: $bra_size_active_filter_box_bg;
+        border-color: transparent;
+
+        .shop-by-size-alpha {
+          color: $bra_size_filter_box_bg;
+        }
+      }
+    }
+  }
+}
+
+.shop-by-size-alpha {
+  font-family: $vs-regular;
+  font-size: 0.875rem;
+  color: $smoky-white;
+  letter-spacing: 0.44px;
+}
+
+@include breakpoint($desktop) {
+  .shop-by-size-paddle-nav {
+    max-width: 62.4375rem;
+    width: 82.75%;
+    position: absolute;
+    left: 50%;
+    bottom: 3.625rem;
+    display: flex;
+    align-items: center;
+    transform: translateX(-50%);
+  }
+
+  .paddle_next,
+  .paddle_prev {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 2.1875rem;
+    height: 4.125rem;
+    cursor: pointer;
+
+    &.hidden {
+      display: none;
+    }
+
+    &:hover {
+      &::after {
+        color: $bra_size_active_filter_box_bg;
+      }
+    }
+  }
+
+  .paddle_next {
+    @include icon(chevronright, after) {
+      font-size: 2.125rem;
+      color: $bra_shop_by_size_title;
+    }
+
+    right: -2.3125rem;
+  }
+
+  .paddle_prev {
+    @include icon(chevronleft, after) {
+      font-size: 2.125rem;
+      color: $bra_shop_by_size_title;
+    }
+
+    left: -2.3125rem;
+  }
+}
+
+.super-category-pink {
+  #block-shopbrasbysize {
+    background: $bra_size_filter_box_bg;
+    border: 0.25rem solid $pink_shop_by_bra_size_border;
+    box-sizing: border-box;
+
+    h3 {
+      font-family: $pink-pinksans;
+      font-size: 2.25rem;
+      color: $bra_shop_by_size_title;
+      letter-spacing: 3.6px;
+    }
+
+    .sfb-band-cup {
+      font-family: $vs-regular;
+      font-size: 0.6875rem;
+      color: $bra_shop_by_size_title;
+      letter-spacing: 1.1px;
+    }
+  }
+}
+
+.super-category-victoria-sport {
+  #block-shopbrasbysize {
+    background: $sport_bra_size_filter_box_bg;
+
+    h3 {
+      font-family: $vs-bentonsanscomp-medium;
+      font-size: 2.5rem;
+      color: $bra_shop_by_size_title;
+      letter-spacing: 2.8px;
+    }
+
+    .sfb-band-cup {
+      font-family: $vs-bentonsans-regular;
+      font-size: 0.8125rem;
+      color: $bra_shop_by_size_title;
+      letter-spacing: 1.77px;
+    }
+  }
+}
