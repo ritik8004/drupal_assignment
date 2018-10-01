@@ -372,7 +372,7 @@ body.alias--cart {
   }
 
   &.path--cart {
-    h1 {
+    h1.c-page-title {
       @include breakpoint($desktop) {
         margin-bottom: 1.6875rem;
       }
