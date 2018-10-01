@@ -4,6 +4,12 @@
 {% set attributes = attributes.addClass('c-plp', 'c-plp-only', 'l-two--sf') %}
 <div>
   {% block header_precontent %}
+    <!-- ______________________ Banner Top _______________________ -->
+    {% if page.banner_top %}
+      {{ page.banner_top }}
+    {% endif %}
+    <!-- /Banner Top -->
+
   <!-- ______________________ MENU SECONDARY _______________________ -->
 
   <div class="header--wrapper">

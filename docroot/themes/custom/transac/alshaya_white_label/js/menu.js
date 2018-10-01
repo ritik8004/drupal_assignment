@@ -188,8 +188,8 @@
       });
 
       /**
-      * Add active state to the menu.
-      */
+       * Add active state to the menu.
+       */
 
       if ($('.block-alshaya-main-menu').length) {
         var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
@@ -208,14 +208,13 @@
       }
 
       /**
-      * Make Header sticky on scroll.
-      */
+       * Make Header sticky on scroll.
+       */
 
       if ($('.branding__menu').length) {
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
         var topHeader = $('.header--wrapper');
-
         $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');
@@ -242,10 +241,10 @@
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
-          .toArray()
-          .reduce(function (first, second) {
-            return Math.max(first, second);
-          });
+              .toArray()
+              .reduce(function (first, second) {
+                return Math.max(first, second);
+              });
 
           menuLevel2.each(function () {
             $(this).height(maxHeight);

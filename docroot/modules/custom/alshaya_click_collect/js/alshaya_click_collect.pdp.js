@@ -3,7 +3,7 @@
  * Store Finder - PDP.
  */
 
-(function ($, Drupal) {
+(function ($, Drupal, drupalSettings) {
   'use strict';
 
   // Coordinates of the user's location.
@@ -31,7 +31,7 @@
           // First load the library from google.
           Drupal.geolocation.loadGoogle(function () {
             var field = $('.click-collect-form').find('input[name="location"]')[0];
-            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords]);
+            new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': settings.alshaya_click_collect.country.toLowerCase()});
           });
         });
       }
@@ -54,18 +54,6 @@
               Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
             }
           });
-        }
-      });
-
-      // Hit the search store button on hitting enter when on textbox.
-      $('.click-collect-form').once('prevent-enter').on('keypress', '.store-location-input', function (e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) {
-          e.preventDefault();
-          if (!$.isEmptyObject(asCoords)) {
-            $('.click-collect-form').find('.search-stores-button').click();
-          }
-          return false;
         }
       });
 
@@ -195,7 +183,17 @@
 
   Drupal.pdp.changeLocationAutocomplete = function () {
     var field = $('.click-collect-form').find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay]);
+    var restriction = {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()};
+    var callbacks = [Drupal.pdp.storesDisplay];
+    new Drupal.AlshayaPlacesAutocomplete(field, callbacks, restriction);
+    // Hit the search store button on hitting enter when on textbox.
+    $('.click-collect-form').find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
+      var keyCode = e.keyCode || e.which;
+      if (keyCode === 13) {
+        console.log('hello');
+        Drupal.AlshayaPlacesAutocomplete.handleEnterKeyPress($(this), callbacks, restriction);
+      }
+    });
   };
 
   // Invoke display search store form if conditions matched.
@@ -264,7 +262,7 @@
             lastSku = sku;
             lastCoords = asCoords;
 
-            if (typeof $trigger === 'undefined') {
+            if (typeof $trigger === 'undefined' || $trigger == null) {
               $trigger = $('.click-collect-form');
             }
 
@@ -307,13 +305,13 @@
   // Make autocomplete field in search form in the all stores.
   Drupal.pdp.allStoresAutocomplete = function () {
     var field = $('#all-stores-search-store').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   // Make change location field autocomplete in All stores modal.
   Drupal.pdp.allStoreschangeLocationAutocomplete = function () {
     var field = $('.click-collect-all-stores').find('input[name="store-location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.storesDisplay], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()}, $('.click-collect-all-stores').find('.store-finder-form-wrapper'));
   };
 
   /**
@@ -384,9 +382,9 @@
 
     // Bind the js again to main input.
     var field = $('.click-collect-form').find('input[name="location"]')[0];
-    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords]);
+    new Drupal.AlshayaPlacesAutocomplete(field, [Drupal.pdp.setStoreCoords], {'country': drupalSettings.alshaya_click_collect.country.toLowerCase()});
 
     $('.click-collect-form .store-finder-form-wrapper').show();
   };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);

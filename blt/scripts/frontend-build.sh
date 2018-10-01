@@ -5,59 +5,149 @@ set -e
 
 docrootDir="$1"
 
-transac=( "alshaya_white_label" "alshaya_hnm" "pottery_barn_non_trans" "alshaya_pottery_barn" "alshaya_victoria_secret" "alshaya_bathbodyworks" )
-non_transac=( "debenhams" "whitelabel" "whitelabel_non_transac" "victoria_secret" "bath_body_works" "bouchon_bakery" )
-amp=( "alshaya_amp_white_label" "alshaya_amp_hnm" "alshaya_amp_victoria_secret")
+isTravis=0
+isTravisPr=0
+isTravisMerge=0
+diff=""
 
-# This evaluates if we are inside of travis PR
-# This script is used by blt, hence firstly the test around the variable existing
-# Then the second part is set to true if PR is invoked from travis (otherwise it's deployment)
-if ([ -z "$TRAVIS_PULL_REQUEST" ]) || ([ $TRAVIS_PULL_REQUEST == "false" ])
-then
-  isTravisPr=0
-else
-  isTravisPr=1
-  git fetch origin $TRAVIS_BRANCH:$TRAVIS_BRANCH-frontend-check
+ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
+
+# Determine if we are on Travis.
+if [[ $TRAVIS && $TRAVIS == "true" ]]; then
+  isTravis=1
+
+  if [[ $TRAVIS_PULL_REQUEST && $TRAVIS_PULL_REQUEST == "false" ]]; then
+    isTravisMerge=1
+    log=$(git log -n 1)
+
+    # Extract commit IDs from git log.
+    re="Merge: ([abcdef0-9]{7,8}) ([abcdef0-9]{7,8})"
+
+    if [[ $log =~ $re ]]; then
+      # Get a list of updated files in this PR.
+      diff=$(git diff ${BASH_REMATCH[1]} ${BASH_REMATCH[2]} --name-only)
+    else
+      isTravis=0
+      echo "Not able to identify commit IDs to do the diff. Building all the themes."
+    fi
+
+    # If the PR title or merge contains "FORCE" we will build all themes.
+    if ([[ $(echo "$log" | grep "FORCE") ]])
+    then
+      isTravis=0
+    fi
+  else
+    isTravisPr=1
+    diff=$(git diff --name-only $TRAVIS_BRANCH-frontend-check)
+  fi
 fi
 
-# Only build any theme if we are outside of travis PR or no theme file was changed in PR
-if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep /themes/) ]])
+# We always build themes unless we are testing a simple push on Travis and there is no change in themes.
+if ([ $isTravis == 0 ]) || ([ $isTravisMerge == 1 ]) || ([[ $(echo "$diff" | grep /themes/) ]])
 then
-  for i in "${transac[@]}"
+  for dir in $(find $docrootDir/themes/custom -mindepth 1 -maxdepth 1 -type d)
   do
-    # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/transac/$i) ]])
-    then
-      echo -en "travis_fold:start:FE-Build-${i}\r"
-      cd $docrootDir/themes/custom/transac/$i
-      npm run build
-      echo -en "travis_fold:end:FE-Build-${i}\r"
-    fi
-  done
+    theme_type_dir=${dir##*/}
 
-  for i in "${non_transac[@]}"
-  do
-    # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/non_transac/$i) ]])
-    then
-      echo -en "travis_fold:start:FE-Build-${i}\r"
-      cd $docrootDir/themes/custom/non_transac/$i
-      npm run build
-      echo -en "travis_fold:end:FE-Build-${i}\r"
-    fi
-  done
+    for subdir in $(find $docrootDir/themes/custom/$theme_type_dir -mindepth 1 -maxdepth 1 -type d)
+    do
+      theme_dir=${subdir##*/}
 
-  for i in "${amp[@]}"
-  do
-    # Skip building particular theme if we are in PRs and the theme files were not changed
-    if ([ $isTravisPr == 0 ]) || ([[ $(git diff --name-only $TRAVIS_BRANCH-frontend-check |grep themes/custom/amp/$i) ]])
-    then
-      echo -en "travis_fold:start:FE-Build-${i}\r"
-      cd $docrootDir/themes/custom/amp/$i
-      npm run build
-      echo -en "travis_fold:end:FE-Build-${i}\r"
-    fi
+      echo -en "travis_fold:start:FE-$theme_dir-Build\r"
+
+      # Ignore some directories which are not themes (node_modules) or which
+      # don't need to be build (alshaya_example_subtheme or mothercare themes).
+      ignore=0
+      for ignoredDir in "${ignoredDirs[@]}"
+      do
+        if ([[ $(echo "$theme_dir" | grep $ignoredDir) ]])
+        then
+          ignore=1
+        fi
+      done
+
+      if [ ! -f $docrootDir/themes/custom/$theme_type_dir/$theme_dir/gulpfile.js ]; then
+        echo -en "$theme_dir seems to not be a valid theme. No gulpfile.js. Not building."
+        ignore=1
+      fi
+
+      if ([ $ignore == 1 ])
+      then
+        continue
+      fi
+
+      # We build the theme if:
+      # - We are outside Travis context.
+      # - The theme has changed.
+      # - The parent theme has changed.
+      # - We are merging but the theme (css) does not exist on deploy directory.
+      build=0
+      if ([[ $(echo "$diff" | grep themes/custom/$theme_type_dir/$theme_dir) ]]); then
+        echo -en "Building $theme_dir because there is some change in this folder."
+        build=1
+      elif ([[ $theme_type_dir == "transac" && $(echo "$diff" | grep themes/custom/$theme_type_dir/alshaya_white_label) ]]); then
+        echo -en "Building $theme_dir because the parent theme (alshaya_white_label) has changed."
+        build=1
+      elif ([[ $theme_type_dir == "non_transac" && $(echo "$diff" | grep themes/custom/$theme_type_dir/whitelabel) ]]); then
+        echo -en "Building $theme_dir because the parent theme (whitelabel) has changed."
+        build=1
+      elif ([[ $theme_type_dir == "amp" && $(echo "$diff" | grep themes/custom/$theme_type_dir/alshaya_amp_white_label) ]]); then
+        echo -en "Building $theme_dir because the parent theme (alshaya_amp_white_label) has changed."
+        build=1
+      elif [ $isTravis == 0 ]; then
+        echo -en "Building $theme_dir because we are outside Travis (or force build is requested)."
+        build=1
+      elif [ $isTravisMerge == 1 ]; then
+        if ([ $theme_type_dir == "non_transac" ])
+        then
+          if [[ $theme_dir == "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist" ]]
+          then
+            echo -en "Building $theme_dir because there is no dist folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components"
+            build=1
+          elif [[ $theme_dir != "whitelabel" && ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist" ]]
+          then
+            echo -en "Building $theme_dir because there is no dist folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir"
+            build=1
+          fi
+        elif ([ ! -d "$docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css" ])
+        then
+          echo -en "Building $theme_dir because there is no css folder in $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir"
+          build=1
+        fi
+      fi
+
+      if ([ $build == 1 ])
+      then
+        cd $docrootDir/themes/custom/$theme_type_dir/$theme_dir
+        npm run build
+      else
+        # If the theme has not changed are we are on a merge, we copy the css
+        # or dist folder from deploy (it contains the source from acquia git).
+        if ([ $isTravisMerge == 1 ])
+        then
+          if ([ $theme_type_dir == "non_transac" ])
+          then
+            if [[ $theme_dir == "whitelabel" ]]
+            then
+              cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/components/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/components/
+              echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied components/dist folder from deploy directory."
+            else
+              cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/dist $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
+              echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied dist folder from deploy directory."
+            fi
+          else
+            cp -r $docrootDir/../deploy/docroot/themes/custom/$theme_type_dir/$theme_dir/css $docrootDir/themes/custom/$theme_type_dir/$theme_dir/
+            echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme. We copied css folder from deploy directory."
+          fi
+        else
+          echo -en "No need to build $theme_dir theme. There is no change in $theme_dir theme."
+        fi
+      fi
+
+      echo -en "travis_fold:end:FE-$theme_dir-Build\r"
+    done
+
   done
 else
-  echo "No need to build frontend on PR. We are only building frontend if there are changed theme files."
+  echo -en "No need to build any theme. There is no frontend change at all."
 fi

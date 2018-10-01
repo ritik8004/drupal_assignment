@@ -166,6 +166,10 @@
         }
       }
 
+      &::after {
+        top: 1.313rem;
+      }
+
       &:nth-child(3) {
         width: 33%;
         margin-#{$right}: 0;

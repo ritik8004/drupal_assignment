@@ -195,6 +195,10 @@ apache_vhosts:
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
+  - servername: "local.alshaya-flsa.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
 mysql_databases:
   - name: drupal
     encoding: utf8mb4
@@ -265,6 +269,10 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_pbae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_flsa
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

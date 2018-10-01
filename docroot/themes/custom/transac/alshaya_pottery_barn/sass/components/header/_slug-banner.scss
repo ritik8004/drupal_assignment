@@ -1,0 +1,15 @@
+.slug-banner-processed {
+  @include breakpoint($only-tablet) {
+    &.header--fixed {
+      margin-top: 8.6875rem !important;
+    }
+
+    header {
+      .site-brand-home {
+        a {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}

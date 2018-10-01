@@ -213,7 +213,6 @@
       if ($('.branding__menu').length) {
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
-
         $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');

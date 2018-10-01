@@ -1,0 +1,55 @@
+.slug-banner-processed {
+  @include breakpoint($upto-desktop) {
+    &:not(.header--fixed) {
+      margin-top: 0 !important;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    &.header--fixed {
+      margin-top: 3.6875rem;
+    }
+
+    header {
+      .c-header__region {
+        margin: 0;
+        height: 3.5rem;
+        padding-top: 0.375rem;
+
+        html[lang=ar] & {
+          height: 3.5rem;
+        }
+      }
+
+      .site-brand-home a {
+        margin-top: 0.5rem;
+      }
+    }
+  }
+
+  @include breakpoint($only-tablet) {
+    &.header--fixed {
+      margin-top: 4.5rem !important;
+    }
+
+    header {
+      .c-header__region {
+        margin: 0;
+        height: 3.375rem;
+        padding-top: 0.625rem;
+      }
+
+      .site-brand-home a {
+        margin-top: 0.5rem;
+      }
+
+      .block-alshaya-search {
+        margin-top: 0.3125rem;
+      }
+
+      .block-cart-mini-block {
+        margin-top: 1.125rem;
+      }
+    }
+  }
+}

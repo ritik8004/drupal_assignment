@@ -5,7 +5,6 @@ core: '8.x'
 dependencies:
   - acsf:acsf
   - drupal:color
-  - features:features
   - pcb:pcb_memcache
   - drupal:syslog
 

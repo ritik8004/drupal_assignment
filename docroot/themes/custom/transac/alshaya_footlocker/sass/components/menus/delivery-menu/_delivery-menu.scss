@@ -1,0 +1,13 @@
+.c-delivery-menu__tab {
+  border: 0;
+  box-shadow: none;
+  background-color: $delivery_menu_bg;
+
+  .field--name-field-title {
+    text-transform: uppercase;
+  }
+
+  .field--name-field-sub-title {
+    font-size: 0.875rem;
+  }
+}

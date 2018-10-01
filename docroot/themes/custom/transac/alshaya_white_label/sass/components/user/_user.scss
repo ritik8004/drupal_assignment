@@ -491,7 +491,6 @@
     }
 
     @include breakpoint($desktop) {
-      #{$left}: 9em;
       bottom: 0.7em;
 
       html[lang='ar'] & {

@@ -106,6 +106,17 @@ field_settings:
       module:
         - acq_sku
         - node
+  promotions:
+    label: 'Promotions'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:field_acq_sku_promotions'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+        - field.storage.acq_sku.field_acq_sku_promotions
+      module:
+        - acq_sku
   field_category:
     label: Category
     datasource_id: 'entity:node'

@@ -63,6 +63,11 @@
     .address {
       border-color: $pdp_sidebar_desc_overlay_section_border;
     }
+
+    .desc-wrapper {
+      border-top: none;
+      padding: 0;
+    }
   }
 
   .delivery-options-wrapper {
@@ -307,7 +312,6 @@
                 background: url("../imgs/icons/disabled.png") no-repeat;
                 background-size: 100% 100%;
                 border: 1px solid $pdp_swatch_disabled;
-                height: 2.5rem;
 
                 &:hover {
                   &::after {
@@ -316,9 +320,52 @@
                 }
               }
             }
+
+            &.li-swatch-image {
+              &.disabled {
+                a,
+                span {
+                  height: 2.5rem;
+                }
+              }
+            }
           }
         }
       }
     }
   }
+}
+
+.short-description-wrapper,
+.description-wrapper {
+  .field__content {
+    font-size: 0.75rem;
+
+    .desc-wrapper {
+      .desc-label,
+      h3 {
+        font-size: 0.875rem;
+        font-weight: 600;
+      }
+
+      h4,
+      h5,
+      h6 {
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .desc-value {
+    padding-top: 0;
+  }
+
+  .text {
+    padding-top: 0.9375rem;
+  }
+}
+
+.gradient-holder {
+  background: linear-gradient(to bottom, rgba(235, 235, 235, 0), rgba(235, 235, 235, 0.93) 30%, $gradient-holder 97%);
 }

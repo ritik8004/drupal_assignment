@@ -632,6 +632,10 @@
   @include breakpoint($only-tablet) {
     overflow: hidden;
   }
+
+  @include breakpoint($only-mobile) {
+    float: none;
+  }
 }
 
 #alshaya-newsletter-subscribe {

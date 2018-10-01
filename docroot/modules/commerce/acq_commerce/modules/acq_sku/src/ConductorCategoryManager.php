@@ -4,10 +4,12 @@ namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\Component\Utility\DiffArray;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a service for category data to taxonomy synchronization.
@@ -312,25 +314,16 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $category['category_id']]);
       }
 
+      $existingTermData = [];
+
       // Always use the first term and continue.
       if (count($tids) > 0) {
-        $this->logger->info('Updating category term @name [@id]', [
-          '@name' => $category['name'],
-          '@id' => $category['category_id'],
-        ]);
-
         // Load and update the term entity.
         /** @var \Drupal\taxonomy\Entity\Term $term */
-        $term = $this->termStorage->load(array_shift($tids));
+        $term = $this->getTranslatedTerm(array_shift($tids), $langcode);
+        $existingTermData = $term->toArray();
 
-        if (!$term->hasTranslation($langcode)) {
-          $term = $term->addTranslation($langcode);
-          $term->get('field_commerce_id')->setValue($category['category_id']);
-        }
-        else {
-          $term = $term->getTranslation($langcode);
-        }
-
+        $term->get('field_commerce_id')->setValue($category['category_id']);
         $term->setName($category['name']);
         $term->parent = $parent_data;
         $term->weight->value = $position;
@@ -346,14 +339,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
 
         $this->results['updated']++;
-
       }
       else {
         // Create the term entity.
-        $this->logger->info('Creating category term @name [@id]',
-          ['@name' => $category['name'], '@id' => $category['category_id']]
-        );
-
         $term = $this->termStorage->create([
           'vid' => $this->vocabulary->id(),
           'name' => $category['name'],
@@ -378,11 +366,31 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
       try {
         $term->save();
+
+        // $existingTermData will have value when it is updating.
+        if ($existingTermData) {
+          $updatedTerm = $this->getTranslatedTerm($term->id(), $langcode);
+          $updatedTermData = $updatedTerm->toArray();
+
+          $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
+            '@langcode' => $langcode,
+            '@magento_id' => $category['category_id'],
+            '@diff' => json_encode(DiffArray::diffAssocRecursive($updatedTermData, $existingTermData)),
+          ]);
+        }
+        else {
+          $this->logger->info('New category @magento_id for @langcode saved.', [
+            '@langcode' => $langcode,
+            '@magento_id' => $category['category_id'],
+          ]);
+        }
       }
       catch (\Exception $e) {
-        $this->logger->warning('Failed saving category term @name [@id]',
-          ['@name' => $category['name'], '@id' => $category['category_id']]
-        );
+        $this->logger->warning('Failed saving category term @name [@magento_id] for @langcode',[
+          '@name' => $category['name'],
+          '@langcode' => $langcode,
+          '@magento_id' => $category['category_id']
+        ]);
 
         // Release the lock.
         $lock->release($lock_key);
@@ -397,6 +405,30 @@ class ConductorCategoryManager implements CategoryManagerInterface {
       $childCats = (isset($category['children'])) ? $category['children'] : [];
       $this->syncCategory($childCats, $term);
     }
+  }
+
+  /**
+   * Wrapper function to get translated term for tid.
+   *
+   * @param mixed $tid
+   *   Not sure about Drupal standards as of now, it can be int/string.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return \Drupal\taxonomy\TermInterface
+   *   Loaded, translated term.
+   */
+  private function getTranslatedTerm($tid, string $langcode): TermInterface {
+    $term = $this->termStorage->load($tid);
+
+    if (!$term->hasTranslation($langcode)) {
+      $term = $term->addTranslation($langcode);
+    }
+    else {
+      $term = $term->getTranslation($langcode);
+    }
+
+    return $term;
   }
 
 }
