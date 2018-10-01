@@ -23,6 +23,7 @@ $primary_link-hover: $purplish-brown;
 $primary_link-active: $purplish-brown;
 $secondary_btn_bg: $dark-red;
 $secondary_border: $white-three;
+$content_link_color: $black;
 
 // Form elements.
 $primary_input_label: $warm-grey;
@@ -253,3 +254,10 @@ $store_finder_search_results_store_address: $warm-grey;
 $store_finder_search_results_down_arrow: $purplish-brown;
 $store_finder_search_results_hour_icon_open: $purplish-brown;
 $store_finder_search_label: $black;
+
+// Checkout Global.
+$checkout_section_titles: $black;
+$checkout_login_guest_email_text: $purplish-brown;
+$checkout_login_guest_email_text_mobile: $purplish-brown;
+$checkout_login_footer_actions_bg: false;
+$checkout_login_btn_bg: $primary_btn_bg;

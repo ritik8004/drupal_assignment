@@ -1,0 +1,66 @@
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-login,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation {
+  .site-brand-home {
+    text-align: center;
+
+    @include breakpoint($desktop) {
+      padding-top: 1.875rem;
+      padding-bottom: 1.875rem;
+    }
+  }
+}
+
+.alias--cart-checkout-login {
+  .multistep-checkout {
+    fieldset {
+      legend {
+        span {
+          font-size: 1.125rem;
+          font-family: $alshaya-thin;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .checkout-guest-email-usage {
+      font-family: $alshaya-bold;
+    }
+
+    @include breakpoint($tablet) {
+      .checkout-guest-summary {
+        font-size: 0.875rem;
+      }
+
+      .form-submit {
+        min-width: 9.125rem;
+      }
+    }
+
+    .form-item {
+      @include breakpoint($desktop) {
+        max-width: 75%;
+      }
+    }
+
+    #edit-checkout-login {
+      .fieldset-wrapper {
+        @include breakpoint($tablet) {
+          font-size: 0.875rem;
+        }
+      }
+
+      .request-password-link {
+        @include breakpoint($tablet) {
+          #{$left}: 13rem;
+          bottom: 1.25rem;
+        }
+
+        @include breakpoint($desktop) {
+          #{$left}: 17rem;
+        }
+      }
+    }
+  }
+}
