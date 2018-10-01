@@ -248,6 +248,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['pdp_description_accordion'] = [
+    'variables' => [
+      'title' => NULL,
+      'text' => NULL,
+    ],
+  ];
+
   $items['sku_teaser'] = [
     'variables' => [
       'gallery' => NULL,
