@@ -99,6 +99,13 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         }
         elseif (!alshaya_acm_product_is_buyable($sku_entity)) {
           $in_stock = 2;
+          // Get price and final price for the non-buyable SKU.
+          $sku_prices = $skuManager->getMinPrices($sku_entity);
+          // If no final price available for the SKU, then use initial price as
+          // the final price for the SKU (if initial price available).
+          if (empty($sku_prices['final_price']) && !empty($sku_prices['price'])) {
+            $item->getField('final_price')->setValues([$sku_prices['price']]);
+          }
         }
         elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
           $in_stock = 2;
@@ -127,6 +134,12 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             }
             else {
               $child_sku_found = TRUE;
+            }
+
+            // If child SKU is OOS, then no need to index attributes of this
+            // child SKU.
+            if (!alshaya_acm_get_stock_from_sku($child_sku_entity)) {
+              continue;
             }
 
             // Loop through the indexable fields.
@@ -169,6 +182,20 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         elseif ($sku_entity->bundle() == 'simple') {
           if ($skuManager->isSkuFreeGift($sku_entity)) {
             unset($items[$item_id]);
+          }
+
+          // If SKU is OOS.
+          if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+            // Get indexed fields.
+            $fields = $items[$item_id]->getFields();
+            // Iterate over each indexed field.
+            foreach ($fields as $field_key => $field_val) {
+              // Only unset/remove of attribute fields or this will remove the
+              // SKU from the indexing on default listing (without any filter).
+              if (strpos($field_key, 'attr_') !== FALSE || $field_key == 'final_price') {
+                $items[$item_id]->setField($field_key, NULL);
+              }
+            }
           }
         }
       }
@@ -1633,7 +1660,7 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
   $config = \Drupal::config('alshaya_acm_product.pdp_modal_links');
   if ($config->get('size_guide_enabled')) {
     $size_guide_anchor = ($taxonomy_term instanceof TermInterface) ? alshaya_acm_product_get_size_guide_anchor($taxonomy_term) : [];
-    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', $size_guide_anchor);
+    $link_info = _alshaya_acm_product_get_modal_link(t('Size Guide'), 'size-guide', array_reverse($size_guide_anchor));
     $link_info['attributes'] = explode(',', $config->get('size_guide_attributes'));
     return $link_info;
   }
@@ -1646,6 +1673,8 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  *
  * @param \Drupal\taxonomy\TermInterface $taxonomy_term
  *   The taxonomy term object.
+ * @param array $query_string
+ *   (optional) Query string to use to append size guide.
  *
  * @return array
  *   Return array value.
@@ -1654,21 +1683,21 @@ function _alshaya_acm_product_get_size_guide_info($taxonomy_term) {
  * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  * @throws \Drupal\Core\TypedData\Exception\MissingDataException
  */
-function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term) : array {
+function alshaya_acm_product_get_size_guide_anchor(TermInterface $taxonomy_term, array $query_string = []) : array {
   $anchor = $taxonomy_term->get('field_size_guide_anchor');
-  $query_string = [];
+  $query_string = !empty($query_string) ? $query_string : [];
   if (!empty($anchor) && !empty($anchor->first())) {
     foreach (explode(',', $anchor->first()->getString()) as $string) {
       list($key, $value) = explode('=', trim($string));
       $query_string[trim($key)] = trim($value);
     }
-    return $query_string;
   }
+
   // Get size guide link from parent term.
   $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
   $term = reset($parent_terms);
   if ($term instanceof TermInterface) {
-    $query_string = alshaya_acm_product_get_size_guide_anchor($term);
+    $query_string = alshaya_acm_product_get_size_guide_anchor($term, $query_string);
     if (!empty($query_string)) {
       return $query_string;
     }

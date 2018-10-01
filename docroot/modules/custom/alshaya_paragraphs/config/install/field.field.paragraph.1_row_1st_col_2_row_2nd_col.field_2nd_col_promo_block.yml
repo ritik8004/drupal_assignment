@@ -15,7 +15,7 @@ bundle: 1_row_1st_col_2_row_2nd_col
 label: '2nd col promo block'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:

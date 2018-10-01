@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Class ProductHelper.
@@ -22,15 +23,22 @@ class ProductHelper {
   protected $shortDescMaxLength;
 
   /**
+   * Use text summary to generate short description.
+   *
+   * @var bool
+   */
+  protected $useTextSummary;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    */
   public function __construct(ConfigFactoryInterface $config_factory) {
-    $this->shortDescMaxLength = $config_factory
-      ->get('alshaya_acm_product.display_settings')
-      ->get('short_desc_characters');
+    $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
+    $this->shortDescMaxLength = $display_settings->get('short_desc_characters');
+    $this->useTextSummary = $display_settings->get('short_desc_text_summary');
   }
 
   /**
@@ -46,28 +54,44 @@ class ProductHelper {
       '#markup' => $this->t('Short Description'),
     ];
 
+    $desc = $this->createShortDescription($html);
     // It is very unlikely but description might be too short to process.
-    if (strlen($html) <= $this->shortDescMaxLength) {
+    if (!isset($desc['read_more'])) {
       $build['read_more_style']['value'] = [
         '#markup' => 'display:none;',
       ];
+    }
+    $short_desc['value'] = [
+      '#markup' => $html,
+    ];
 
-      $short_desc['value'] = [
-        '#markup' => $html,
+    $build['short_desc'] = $short_desc;
+  }
+
+  /**
+   * Create short description from given html.
+   */
+  public function createShortDescription($html, $limit = NULL) {
+    $return = [];
+    $limit = ($limit == NULL) ? $this->shortDescMaxLength : $limit;
+    $desc_stripped = strip_tags($html);
+    // It is very unlikely but description might be too short to process.
+    if (Unicode::strlen($html) <= $limit || Unicode::strlen($desc_stripped) <= $limit) {
+      $return = [
+        'html' => $html,
       ];
     }
     else {
-      $desc = text_summary($html, NULL, $this->shortDescMaxLength);
+      $desc = ($this->useTextSummary)
+        ? text_summary($html, NULL, $this->shortDescMaxLength)
+        : Unicode::truncate($desc_stripped, $limit, TRUE, FALSE);
 
-      // Remove html tags from short desc. We don't want to show empty tags.
-      $desc = strip_tags($desc);
-
-      $short_desc['value'] = [
-        '#markup' => $desc . '...',
+      $return = [
+        'html' => $desc . ' ...',
+        'read_more' => TRUE,
       ];
     }
-
-    $build['short_desc'] = $short_desc;
+    return $return;
   }
 
 }

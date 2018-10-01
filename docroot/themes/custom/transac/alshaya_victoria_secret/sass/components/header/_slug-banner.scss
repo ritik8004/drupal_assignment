@@ -1,6 +1,10 @@
 .slug-banner-processed {
   &:not(.header--fixed) {
     #c-menu-primary__region {
+      @include breakpoint($upto-desktop) {
+        position: relative;
+      }
+
       .block-alshaya-super-category-menu {
         @include breakpoint($upto-desktop) {
           position: relative;
@@ -22,6 +26,13 @@
       .block-cart-mini-block {
         @include breakpoint($upto-desktop) {
           position: absolute !important;
+          top: 0;
+        }
+
+        @include breakpoint($only-mobile) {
+          .cart-link {
+            height: 2.5625rem;
+          }
         }
       }
     }
@@ -44,6 +55,12 @@
 
     @include breakpoint($only-mobile) {
       margin-top: 4.25rem !important;
+    }
+  }
+
+  .branding__menu.navbar-fixed-top {
+    @include breakpoint($upto-desktop) {
+      position: static;
     }
   }
 }

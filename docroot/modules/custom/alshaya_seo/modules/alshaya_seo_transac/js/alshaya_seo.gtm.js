@@ -24,6 +24,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
+      var orderConfirmationPage = $('body[gtm-container="purchase confirmation page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
       var couponCode = $('form.customer-cart-form', context).find('input#edit-coupon').val();
@@ -508,6 +509,14 @@
           }
           Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
         }
+      }
+
+      // Push purchaseSuccess for Order confirmation page.
+      if (orderConfirmationPage.length !== 0 && settings.gtmOrderConfirmation) {
+        dataLayer.push({
+          event: 'purchaseSuccess',
+          ecommerce: settings.gtmOrderConfirmation
+        });
       }
 
       /** Product Click Handler .**/

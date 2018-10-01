@@ -11,6 +11,7 @@ global_styles:
     js/form.js: {}
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
+    js/footer-space-filler.js: {}
     js/banner_margin_override.js: {}
     vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
