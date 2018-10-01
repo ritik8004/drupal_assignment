@@ -136,6 +136,12 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               $child_sku_found = TRUE;
             }
 
+            // If child SKU is OOS, then no need to index attributes of this
+            // child SKU.
+            if (!alshaya_acm_get_stock_from_sku($child_sku_entity)) {
+              continue;
+            }
+
             // Loop through the indexable fields.
             foreach ($indexFields as $key => $field) {
               $field_key = 'attr_' . $key;
@@ -176,6 +182,20 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         elseif ($sku_entity->bundle() == 'simple') {
           if ($skuManager->isSkuFreeGift($sku_entity)) {
             unset($items[$item_id]);
+          }
+
+          // If SKU is OOS.
+          if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+            // Get indexed fields.
+            $fields = $items[$item_id]->getFields();
+            // Iterate over each indexed field.
+            foreach ($fields as $field_key => $field_val) {
+              // Only unset/remove of attribute fields or this will remove the
+              // SKU from the indexing on default listing (without any filter).
+              if (strpos($field_key, 'attr_') !== FALSE || $field_key == 'final_price') {
+                $items[$item_id]->setField($field_key, NULL);
+              }
+            }
           }
         }
       }
