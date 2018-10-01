@@ -1240,6 +1240,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     /** @var \Drupal\alshaya_acm_product\SkuFieldsHelper $skuFieldsHelper */
     $skuFieldsHelper = \Drupal::service('alshaya_acm_product.sku_fields_helper');
 
+    // We will display only one swatch attribute per product.
+    $swatch_processed = FALSE;
     foreach ($form['ajax']['configurables'] as $key => &$configurable) {
       if (!is_array($configurable)) {
         continue;
@@ -1274,7 +1276,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           $configurable['#required_error'] = $overridden_error;
         }
 
-        if (in_array($key, $swatches)) {
+        if (in_array($key, $swatches) && !$swatch_processed) {
+          $swatch_processed = TRUE;
           $configurable['#attributes']['class'][] = 'form-item-configurable-swatch';
 
           foreach ($configurable['#options'] as $value => $label) {
