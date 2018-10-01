@@ -25,16 +25,12 @@
           border-width: 1px;
           background-color: $delivery_tab_active_bg;
 
-          &::after {
-            display: none;
-          }
-        }
-      }
-
-      @include breakpoint($tablet) {
-        &.active--tab--head {
           h2 {
             font-family: $alshaya-bold;
+          }
+
+          &::after {
+            display: none;
           }
         }
       }
@@ -44,6 +40,19 @@
 
         @include breakpoint($only-tablet) {
           margin-#{$left}: 0;
+        }
+
+        &.active--tab--head {
+          @include breakpoint($only-tablet) {
+            #{$right}: -1px;
+            margin-#{$left}: -1px;
+          }
+
+          &::before {
+            @include breakpoint($tablet) {
+              display: none;
+            }
+          }
         }
       }
 
@@ -78,25 +87,6 @@
 
       @include breakpoint($only-tablet) {
         width: 47%;
-      }
-
-      @include breakpoint($tablet) {
-        &.tab-click-collect {
-          &.active--tab--head {
-            &::before {
-              display: none;
-            }
-          }
-        }
-      }
-
-      @include breakpoint($only-tablet) {
-        &.tab-click-collect {
-          &.active--tab--head {
-            #{$right}: -1px;
-            margin-#{$left}: -1px;
-          }
-        }
       }
 
       &.tab-home-delivery {
