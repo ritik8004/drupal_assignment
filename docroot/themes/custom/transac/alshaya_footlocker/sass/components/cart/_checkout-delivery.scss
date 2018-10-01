@@ -189,19 +189,6 @@
   }
 }
 
-.show-only-buttons {
-  @include breakpoint($only-mobile) {
-    .tab-click-collect,
-    .tab-home-delivery {
-      &.active--tab--head {
-        h2 {
-          color: $checkout_tab_default_title !important;
-        }
-      }
-    }
-  }
-}
-
 .alias--cart-checkout-delivery,
 .alias--cart-checkout-payment {
   .back-link {
