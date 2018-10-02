@@ -1,3 +1,4 @@
 permissions:
   - 'restful get delivery_methods'
+  - 'restful get alshaya_error_messages'
   - 'restful get social_media_links'
