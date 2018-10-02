@@ -79,8 +79,8 @@ function template_preprocess_alshaya_main_menu_level1(array &$variables) {
  */
 function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $max_depth = \Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_max_depth');
-  $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
   if ($max_depth > 0) {
+    $super_category_status = !empty($context['super_category']) ? $context['super_category'] : FALSE;
     _alshaya_main_menu_process_max_depth($term_tree, $max_depth, $super_category_status);
   }
 }

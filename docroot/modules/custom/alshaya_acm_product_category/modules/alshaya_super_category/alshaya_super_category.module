@@ -40,6 +40,29 @@ function alshaya_super_category_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ *
+ * Call the alshaya_super_category_alshaya_main_menu_links_alter at the top
+ * before any other module invokes.
+ */
+function alshaya_super_category_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'alshaya_main_menu_links_alter') {
+    unset($implementations['alshaya_super_category']);
+    $implementations = array_merge(['alshaya_super_category' => 'alshaya_main_menu_links_alter'], $implementations);
+  }
+}
+
+/**
+ * Implements hook_alshaya_main_menu_links_alter().
+ *
+ * Add super category status to context to use it with other implementation.
+ */
+function alshaya_super_category_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array &$context) {
+  $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
+  $context['super_category'] = $super_category_status;
+}
+
+/**
  * Implements hook_preprocess_block().
  */
 function alshaya_super_category_preprocess_block(&$variables) {
