@@ -163,6 +163,74 @@ schemas:
         }
       }
     }
+  GetPromotions: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "description": "The URL on Drupal site."
+          },
+          "deeplink": {
+            "type": "string",
+            "description": "The endpoint to invoke to build the promotion product list page."
+          },
+          "promote": {
+            "type": "boolean",
+            "description": "Determine if the promotion should be promoted on the basket page."
+          }
+        }
+      }
+    }
+  GetPromotion: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string",
+          "description": "The URL on Drupal site."
+        },
+        "deeplink": {
+          "type": "string",
+          "description": "The endpoint to invoke to build the promotion product list page."
+        },
+        "banner": {
+          "type": "object",
+          "description": "Structure TBD"
+        },
+        "filters": {
+          "type": "object",
+          "description": "Structure TBD."
+        },
+        "sorting": {
+          "type": "object",
+          "description": "Structure TBD."
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD. Must contain all the data to build the search result view mode."
+          }
+        }
+      }
+    }
 /search_api_autocomplete:
   /search:
     get:
@@ -196,6 +264,41 @@ schemas:
                 ]
 /rest:
   /v1:
+    /promotion:
+      /all:
+        get:
+          description: "Get all the promotions with their relevant information."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: GetPromotions
+                  example: |
+                    [
+                      {
+                        "id": 1234,
+                        "name": "Buy 1 Get 1 Free",
+                        "path": "/promotions/buy-1-get-1-free",
+                        "deeplink": "/rest/v1/promotion/1234/product-list",
+                        "promote": true
+                      },
+                      {
+                        "id": 4567,
+                        "name": "Body Care Minis for AED 19",
+                        "path": "/promotions/body-care-minis-for-aed-19",
+                        "deeplink": "/rest/v1/promotion/4567/product-list",
+                        "promote": false
+                      }
+                    ]
+      /{id}:
+        /product-list:
+          get:
+            description: "Get the data to build the promotion product list."
+            responses:
+              200:
+                body:
+                  application/json:
+
     /page:
       /simple:
         get:
