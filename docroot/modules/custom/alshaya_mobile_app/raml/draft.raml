@@ -106,8 +106,7 @@ schemas:
             "type": "string"
           },
           "promo_banner": {
-            "type": "object",
-            "description": "Structure TBD"
+            "type": "Image",
           },
           "path": {
             "type": "string"
@@ -258,6 +257,10 @@ schemas:
                         "path": "/ladies",
                         "deeplink": "/rest/v1/page/advanced/4567",
                         "include_in_menu": true,
+                        "promo_banner": {
+                          "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-09/black.png",
+                          "alt": "Alternative"
+                        }
                         "child":
                         [
                           {

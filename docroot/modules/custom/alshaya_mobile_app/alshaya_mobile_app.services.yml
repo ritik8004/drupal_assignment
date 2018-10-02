@@ -1,0 +1,4 @@
+services:
+  alshaya_mobile_app.utility:
+    class: Drupal\alshaya_mobile_app\Service\MobileAppUtility
+    arguments: ['@cache.data']
