@@ -62,11 +62,11 @@
   p {
     margin: 0;
     font-family: $alshaya-thin;
+  }
 
-    a {
-      text-decoration: underline;
-      color: inherit;
-    }
+  a {
+    text-decoration: underline;
+    color: inherit;
   }
 }
 
@@ -106,6 +106,14 @@
         position: fixed;
         top: 0;
       }
+    }
+  }
+}
+
+.slug-banner-modal {
+  .c-content__slider {
+    .c-slider-promo__item {
+      width: 100% !important;
     }
   }
 }

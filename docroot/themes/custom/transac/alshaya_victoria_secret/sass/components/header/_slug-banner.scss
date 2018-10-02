@@ -46,6 +46,14 @@
         margin-top: 2.6875rem;
       }
     }
+
+    &.mobile--overlay {
+      .branding__menu {
+        @include breakpoint($upto-desktop) {
+          z-index: auto;
+        }
+      }
+    }
   }
 
   &.header--fixed {
