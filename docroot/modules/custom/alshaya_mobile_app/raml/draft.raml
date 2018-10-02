@@ -163,6 +163,32 @@ schemas:
         }
       }
     }
+  GetPageAdvanced: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "title": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "deeplink": {
+          "type": "string"
+        },
+        "blocks": {
+          "type": "array",
+          "items:" {
+            "type": "object",
+            "description": "Structure TBD."
+          }
+        }
+      }
+    }
   GetPromotions: |
     {
       "$schema": "http://json-schema.org/draft-04/schema",
@@ -215,12 +241,92 @@ schemas:
           "description": "Structure TBD"
         },
         "filters": {
-          "type": "object",
-          "description": "Structure TBD."
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD."
+          }
         },
         "sorting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD."
+          }
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD. Must contain all the data to build the search result view mode."
+          }
+        }
+      }
+    }
+  GetCategory: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "label": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string",
+          "description": "The URL on Drupal site."
+        },
+        "deeplink": {
+          "type": "string",
+          "description": "The endpoint to invoke to build the promotion product list page."
+        },
+        "banner": {
           "type": "object",
-          "description": "Structure TBD."
+          "description": "Structure TBD"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD."
+          }
+        },
+        "sorting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD."
+          }
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD. Must contain all the data to build the search result view mode."
+          }
+        }
+      }
+    }
+  GetSearch: |
+    {
+      "$schema": "http://json-schema.org/draft-04/schema",
+      "type": "object",
+      "properties": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD."
+          }
+        },
+        "sorting": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Structure TBD."
+          }
         },
         "products": {
           "type": "array",
@@ -264,6 +370,44 @@ schemas:
                 ]
 /rest:
   /v1:
+    /search:
+      get:
+        description: "Get the data to build the search result page."
+        queryParameters:
+          q?:
+            type: string
+            description: "The searched keyword."
+            example: |
+              "dress"
+          f?:
+            type: string[]
+            description: "A list of applied filters."
+            example: |
+              [
+                "plp_size:M",
+                "skus_sku_reference_final_price:0"
+              ]
+          sort?:
+            type: string
+            description: "A sorting option to apply."
+            example: |
+              "final_price DESC"
+          limit?:
+            type: string
+            description: "The offset to apply."
+            example: |
+              "10,20"
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetSearch
+                example: |
+                  {
+                    "filters": [],
+                    "sorting": [],
+                    "products": []
+                  }
     /promotion:
       /all:
         get:
@@ -294,11 +438,44 @@ schemas:
         /product-list:
           get:
             description: "Get the data to build the promotion product list."
+            queryParameters:
+              f?:
+                type: string[]
+                description: "A list of applied filters."
+                example: |
+                  [
+                    "plp_size:M",
+                    "skus_sku_reference_final_price:0"
+                  ]
+              sort?:
+                type: string
+                description: "A sorting option to apply."
+                example: |
+                  "final_price DESC"
+              limit?:
+                type: string
+                description: "The offset to apply."
+                example: |
+                  "10,20"
             responses:
               200:
                 body:
                   application/json:
-
+                    schema: GetPromotion
+                    example: |
+                      {
+                        "id": 1234,
+                        "label": "Buy 1 Get 1 Free",
+                        "path": "/promotions/buy-1-get-1-free",
+                        "deeplink": "/rest/v1/promotion/1234/product-list",
+                        "banner": {
+                          "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                          "alt": "Buy 1 Get 1 Free"
+                        },
+                        "filters": [],
+                        "sorting": [],
+                        "products": []
+                      }
     /page:
       /simple:
         get:
@@ -320,6 +497,25 @@ schemas:
                       "html": "<h1>FAQs</h1><h3>What delivery options do you offer?</h3><p>We offer a Home Delivery option as well as a Click and collect service for selected stores. Times and cost for deliveries will vary depending on the location. For more information, please see our <a href='https://kw.hm.com/en/delivery-information'>delivery information</a> page.</p><h3>What time does H&amp;M customer care team operate, and how can I get in contact?</h3><p>You can contact our customer care team on the following number: 92000-2482. We are open from 10am to 10pm 7 days a week (including Public holidays). You can also <a href='https://kw.hm.com/en/contact'>contact us</a> using our quick form and our team will get back to you as soon as possible.&nbsp;</p>",
                       "css": ".staticPage h1{ color: #000; font-size: 20px; padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; text-transform: uppercase;} .staticPage h3{ color: #333; font-size: 14px; padding-bottom: 5px; line-height: 24px; font-weight: 600;} .staticPage p, .staticPage ul{ color: #666; font-size: 13px; line-height: 24px; padding-bottom: 15px;}",
                       "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}"
+                    }
+      /advanced:
+        get:
+          "description": "Get an advanced page from its url."
+          queryParameters:
+            url:
+              type: string
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: GetPageAdvanced
+                  example: |
+                    {
+                      "id": 1234,
+                      "name": "Ladies",
+                      "path": "/ladies",
+                      "deeplink": "/rest/v1/page/advanced?url=ladies",
+                      "blocks": []
                     }
     /store:
       /search:
@@ -391,6 +587,48 @@ schemas:
 
                       }
                     ]
+      /{id}:
+        /product-list:
+          get:
+            description: "Get the data to build the product list page."
+            queryParameters:
+              f?:
+                type: string[]
+                description: "A list of applied filters."
+                example: |
+                  [
+                    "plp_size:M",
+                    "skus_sku_reference_final_price:0"
+                  ]
+              sort?:
+                type: string
+                description: "A sorting option to apply."
+                example: |
+                  "final_price DESC"
+              limit?:
+                type: string
+                description: "The offset to apply."
+                example: |
+                  "10,20"
+            responses:
+              200:
+                body:
+                  application/json:
+                    schema: GetCategory
+                    example: |
+                      {
+                        "id": 1234,
+                        "label": "Ladies",
+                        "path": "/ladies",
+                        "deeplink": "/rest/v1/category/1234/product-list",
+                        "banner": {
+                          "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                          "alt": "Ladies"
+                        },
+                        "filters": [],
+                        "sorting": [],
+                        "products": []
+                      }
     /social-medias:
       get:
         description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
