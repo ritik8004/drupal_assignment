@@ -56,6 +56,17 @@
     }
   }
 
+  @include breakpoint($upto-desktop) {
+    &:not(.header--fixed) {
+      .c-header {
+        .block-views-exposed-filter-blocksearch-page {
+          top: 2.625rem;
+          position: absolute;
+        }
+      }
+    }
+  }
+
   &.header--fixed {
     @include breakpoint($only-tablet) {
       margin-top: 5.25rem !important;

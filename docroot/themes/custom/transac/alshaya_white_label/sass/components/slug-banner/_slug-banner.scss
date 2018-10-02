@@ -77,6 +77,19 @@
     }
   }
 
+  &:not(.header--fixed) {
+    .c-header {
+      .block-views-exposed-filter-blocksearch-page {
+        .ui-autocomplete {
+          @include breakpoint($only-mobile) {
+            position: absolute !important;
+            top: 3.1875rem !important;
+          }
+        }
+      }
+    }
+  }
+
   @include breakpoint($upto-desktop) {
     &:not(.header--fixed) {
       margin-top: 0;
