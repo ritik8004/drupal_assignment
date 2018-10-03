@@ -1,0 +1,39 @@
+.user-page.checkout-login {
+  @include breakpoint($desktop) {
+    h1 {
+      max-width: 65.3125rem;
+      margin: 0 auto;
+    }
+
+    .checkout-login-actions-wrapper {
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  .checkout-login-actions-wrapper {
+    a {
+      font-weight: normal;
+      font-size: 0.875rem;
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 0.5rem;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.alias--cart-checkout-login {
+  .tab-new-customer a {
+    @extend %btn;
+
+    span {
+      text-transform: uppercase;
+      font-family: $alshaya-thin;
+    }
+  }
+}
