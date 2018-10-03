@@ -21,21 +21,6 @@
         items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
       }
 
-      // Adding class if there is no slider.
-      if ($(window).width() < 1025) {
-        $('#lightSlider').once('pager-class').each(function () {
-          $(this).removeClass('pager-yes');
-          $(this).removeClass('pager-no');
-
-          if ($(this).find('.slick-track > li').length < 4) {
-            $(this).addClass('pager-no');
-          }
-          else {
-            $(this).addClass('pager-yes');
-          }
-        });
-      }
-
       // Process main pdp gallery only once.
       var zoomContainer = $('.acq-content-product #product-zoom-container');
       if (zoomContainer.length > 0 && !zoomContainer.hasClass('product-zoom-processed')) {
@@ -43,6 +28,8 @@
 
         var lightSlider = $('.acq-content-product #lightSlider');
         Drupal.productZoomApplyRtl(lightSlider, slickOptions, context);
+        // Adding class if there is no slider.
+        addPagerClass();
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
@@ -282,6 +269,9 @@
     }
   };
 
+  /**
+   * Zoom modal dialog.
+   */
   function _product_zoom_dialog_open() {
     var currentSlide;
     var lightSlider = $('.acq-content-product #lightSlider');
@@ -429,6 +419,25 @@
             $('#full-image-wrapper').show();
           }
         });
+      });
+    }
+  }
+
+  /**
+   * Add Pager class for tablets.
+   */
+  function addPagerClass() {
+    if ($(window).width() < 1025) {
+      $('#lightSlider').once('pager-class').each(function () {
+        $(this).removeClass('pager-yes');
+        $(this).removeClass('pager-no');
+
+        if ($(this).find('.slick-track > li').length < 4) {
+          $(this).addClass('pager-no');
+        }
+        else {
+          $(this).addClass('pager-yes');
+        }
       });
     }
   }

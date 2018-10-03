@@ -637,7 +637,13 @@ class SkuImagesManager {
         }
 
         if (!empty($main_image)) {
-          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+          if ($context == 'modal') {
+            $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
+          }
+          else {
+            $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_gallery_pager_limit');
+          }
+
           $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
           $gallery = [
