@@ -85,8 +85,14 @@
         background: $delivery_tab_active_bg;
       }
 
+      @include breakpoint($desktop) {
+        padding: 1.5rem 0;
+      }
+
       @include breakpoint($only-tablet) {
         width: 47%;
+        padding-top: 1.6875rem;
+        padding-bottom: 1.5625rem;
       }
 
       &.tab-home-delivery {
