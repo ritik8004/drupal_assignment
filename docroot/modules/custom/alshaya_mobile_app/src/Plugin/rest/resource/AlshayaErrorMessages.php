@@ -86,22 +86,6 @@ class AlshayaErrorMessages extends ResourceBase {
   }
 
   /**
-   * Get the data fields to look into based on current language.
-   *
-   * @return Drupal\locale\StringInterface[]
-   *   Return the array of StringInterface objects.
-   */
-  protected function getErrorStrings() {
-    $options = ['filters' => ['context' => self::CONTEXT_ERROR_MESSAGE]];
-    if ($this->languageManager->getCurrentLanguage()->getId() == $this->languageManager->getDefaultLanguage()->getId()) {
-      return $this->localeStorage->getStrings([], $options);
-    }
-    else {
-      return $this->localeStorage->getTranslations([], $options);
-    }
-  }
-
-  /**
    * Responds to GET requests.
    *
    * Returns available error messages.
@@ -111,13 +95,14 @@ class AlshayaErrorMessages extends ResourceBase {
    */
   public function get() {
     $response_data = [];
-    $error_messages = $this->getErrorStrings();
+    $options = ['filters' => ['context' => self::CONTEXT_ERROR_MESSAGE]];
+    $error_messages = $this->localeStorage->getTranslations(['language' => $this->languageManager->getCurrentLanguage()->getId()], $options);
     foreach ($error_messages as $string) {
       list(, $error_message_key) = explode(self::CONTEXT_KEY_SEPARATOR, $string->getValues(['context'])['context']);
       // Prepare response data.
       $response_data[] = [
         'machine_name' => $error_message_key,
-        'message' => $string->getString(),
+        'message' => !empty($string->getString()) ? $string->getString() : $string->getValues(['source'])['source'],
       ];
     }
 
