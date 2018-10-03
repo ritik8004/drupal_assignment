@@ -4,6 +4,9 @@ version: v1-dev
 protocols: [ HTTPS ]
 baseUri: https://{domain}/{langcode}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
 baseUriParameters:
   domain:
     type: string
@@ -12,8 +15,11 @@ baseUriParameters:
     type: string
     enum: [ "en", "ar" ]
     description: "The langcode to get localized results from the endpoints."
+<<<<<<< HEAD
 =======
 >>>>>>> cd2f52c36... Merge pull request #8273 from vbouchet31/mobile-api
+=======
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
 mediaType: application/json
 schemas:
   - GetSocialMedias: |
@@ -524,6 +530,9 @@ schemas:
         }
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
 /search_api_autocomplete/search:
   get:
     description: Get a list of suggestion based on a given string.
@@ -555,9 +564,12 @@ schemas:
                 }
               ]
 /rest/v1:
+<<<<<<< HEAD
 =======
 /search_api_autocomplete:
 >>>>>>> cd2f52c36... Merge pull request #8273 from vbouchet31/mobile-api
+=======
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
   /search:
     get:
       description: "Get the data to build the search result page."
@@ -582,6 +594,7 @@ schemas:
           description: "The offset to apply."
           example: |
             "10,20"
+<<<<<<< HEAD
       responses:
         200:
           body:
@@ -596,10 +609,29 @@ schemas:
   /promotion/all:
     get:
       description: "Get all the promotions with their relevant information."
+=======
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
       responses:
         200:
           body:
             application/json:
+<<<<<<< HEAD
+=======
+              schema: GetSearch
+              example: |
+                {
+                  "filters": [],
+                  "sorting": [],
+                  "products": []
+                }
+  /promotion/all:
+    get:
+      description: "Get all the promotions with their relevant information."
+      responses:
+        200:
+          body:
+            application/json:
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
               schema: GetPromotions
               example: |
                 [
@@ -619,6 +651,9 @@ schemas:
                   }
                 ]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
   /promotion/{id}/product-list:
     uriParameters:
       id:
@@ -680,6 +715,7 @@ schemas:
                   "deeplink": "/rest/v1/page/simple?url=faq",
                   "html": "<h1>FAQs</h1><h3>What delivery options do you offer?</h3><p>We offer a Home Delivery option as well as a Click and collect service for selected stores. Times and cost for deliveries will vary depending on the location. For more information, please see our <a href='https://kw.hm.com/en/delivery-information'>delivery information</a> page.</p><h3>What time does H&amp;M customer care team operate, and how can I get in contact?</h3><p>You can contact our customer care team on the following number: 92000-2482. We are open from 10am to 10pm 7 days a week (including Public holidays). You can also <a href='https://kw.hm.com/en/contact'>contact us</a> using our quick form and our team will get back to you as soon as possible.&nbsp;</p>",
                   "css": ".staticPage h1{ color: #000; font-size: 20px; padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; text-transform: uppercase;} .staticPage h3{ color: #333; font-size: 14px; padding-bottom: 5px; line-height: 24px; font-weight: 600;} .staticPage p, .staticPage ul{ color: #666; font-size: 13px; line-height: 24px; padding-bottom: 15px;}",
+<<<<<<< HEAD
                   "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}",
                   "images": [
 =======
@@ -715,76 +751,85 @@ schemas:
               application/json:
                 schema: GetSearch
                 example: |
+=======
+                  "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}"
+                }
+  /page/advanced:
+    get:
+      "description": "Get an advanced page from its url."
+      queryParameters:
+        url:
+          type: string
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetPageAdvanced
+              example: |
+                {
+                  "id": 1234,
+                  "name": "Ladies",
+                  "path": "/ladies",
+                  "deeplink": "/rest/v1/page/advanced?url=ladies",
+                  "blocks": []
+                }
+  /store/search:
+    get:
+      description: "Search stores IDs by latitude/longitude."
+      queryParameters:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetStores
+              example: |
+                [
+                  "RB2-1886-HEN",
+                  "RB2-1957-HEN",
+                  "RB2-1988-HEN"
+                ]
+  /category/all:
+    get:
+      description: "Get all the categories with their relevant information. It will return a hierarchical structure reflecting the category tree."
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetCategories
+              example: |
+                [
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
                   {
-                    "filters": [],
-                    "sorting": [],
-                    "products": []
-                  }
-    /promotion:
-      /all:
-        get:
-          description: "Get all the promotions with their relevant information."
-          responses:
-            200:
-              body:
-                application/json:
-                  schema: GetPromotions
-                  example: |
+                    "id": 1234,
+                    "name": "Ladies",
+                    "path": "/ladies",
+                    "deeplink": "/rest/v1/page/advanced/4567",
+                    "include_in_menu": true,
+                    "promo_banner": {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-09/black.png",
+                      "alt": "Alternative"
+                    },
+                    "child":
                     [
                       {
-                        "id": 1234,
-                        "name": "Buy 1 Get 1 Free",
-                        "path": "/promotions/buy-1-get-1-free",
-                        "deeplink": "/rest/v1/promotion/1234/product-list",
-                        "promote": true
+                        "id": 1567,
+                        "name": "Dresses",
+                        "path": "/dresses",
+                        "deeplink": "/rest/v1/category/1567/product-list",
+                        "include_in_menu": true
                       },
                       {
-                        "id": 4567,
-                        "name": "Body Care Minis for AED 19",
-                        "path": "/promotions/body-care-minis-for-aed-19",
-                        "deeplink": "/rest/v1/promotion/4567/product-list",
-                        "promote": false
+                        "id": 1579,
+                        "name": "Shoes",
+                        "path": "/shoes",
+                        "deeplink": "/rest/v1/category/1579/product-list",
+                        "include_in_menu": true
                       }
-                    ]
-      /{id}:
-        /product-list:
-          get:
-            description: "Get the data to build the promotion product list."
-            queryParameters:
-              f?:
-                type: string
-                description: "A list of applied filters. Please note it is defined as a string but is actually an array."
-                example: |
-                  "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
-              sort?:
-                type: string
-                description: "A sorting option to apply."
-                example: |
-                  "final_price DESC"
-              limit?:
-                type: string
-                description: "The offset to apply."
-                example: |
-                  "10,20"
-            responses:
-              200:
-                body:
-                  application/json:
-                    schema: GetPromotion
-                    example: |
-                      {
-                        "id": 1234,
-                        "label": "Buy 1 Get 1 Free",
-                        "path": "/promotions/buy-1-get-1-free",
-                        "deeplink": "/rest/v1/promotion/1234/product-list",
-                        "banner": {
-                          "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
-                          "alt": "Buy 1 Get 1 Free"
-                        },
-                        "filters": [],
-                        "sorting": [],
-                        "products": []
-                      }
+<<<<<<< HEAD
     /page:
       /simple:
         get:
@@ -1173,3 +1218,129 @@ schemas:
                     }
                   ]
 >>>>>>> cd2f52c36... Merge pull request #8273 from vbouchet31/mobile-api
+=======
+                    ]
+                  },
+                  {
+                    "id": 1789,
+                    "name": "Men",
+                    "path": "/men",
+                    "deeplink": "/rest/v1/page/advanced/4578",
+                    "include_in_menu": true
+
+                  }
+                ]
+  /category/{id}/product-list:
+    uriParameters:
+      id:
+        type: string
+        description: "The category ID to get the related products."
+    get:
+      description: "Get the data to build the product list page."
+      queryParameters:
+        f?:
+          type: string
+          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
+          example: |
+            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
+        sort?:
+          type: string
+          description: "A sorting option to apply."
+          example: |
+            "final_price DESC"
+        limit?:
+          type: string
+          description: "The offset to apply."
+          example: |
+            "10,20"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetCategory
+              example: |
+                {
+                  "id": 1234,
+                  "label": "Ladies",
+                  "path": "/ladies",
+                  "deeplink": "/rest/v1/category/1234/product-list",
+                  "banner": {
+                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                    "alt": "Ladies"
+                  },
+                  "filters": [],
+                  "sorting": [],
+                  "products": []
+                }
+  /social-media-links:
+    get:
+      description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetSocialMedias
+              example: |
+                [
+                  {
+                    "media": "facebook",
+                    "url": "https://www.facebook.com/hm"
+                  },
+                  {
+                    "media": "instagram",
+                    "url": "https://www.instagram.com/hm/"
+                  }
+                ]
+  /error-messages:
+    get:
+      description: Get the error messages to be displayed on the frontend after validation.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetErrorMessages
+              example: |
+                [
+                  {
+                    "machine_name": "email_address_invalid",
+                    "message": "The email address you entered is invalid."
+                  },
+                  {
+                    "machine_name": "email_address_already_used",
+                    "message": "You already have an account. Please login!"
+                  }
+                ]
+  /delivery-methods:
+    get:
+      description: Get the data related to delivery methods.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetDeliveryMethods
+              example: |
+                [
+                  {
+                    "name": "Alshaya Standard Delivery",
+                    "order_description": "Your order will be delivered at the following address",
+                    "cart_description": "Standard delivery in 1-2 days",
+                    "codes":
+                      {
+                        "method": "deliverymatrix",
+                        "carrier": "alshayadelivery",
+                        "code": "alshayadelivery_deliverymatrix"
+                      }
+                  },
+                  {
+                    "name": "Click and Collect",
+                    "order_description": "Your order will be available for pickup at the following store",
+                    "cart_description": "Click and Collect",
+                    "codes":
+                      {
+                        "method": "click_and_collect",
+                        "carrier": "click_and_collect",
+                        "code": "click_and_collect_click_and_collect"
+                      }
+                  }
+                ]
+>>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
