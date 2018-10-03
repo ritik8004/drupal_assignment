@@ -72,6 +72,8 @@
       }
 
       @include breakpoint($desktop) {
+        padding: 1.5rem 0;
+
         html[lang=ar] & {
           width: 47%;
         }
@@ -85,9 +87,9 @@
         background: $delivery_tab_active_bg;
       }
 
-      @include breakpoint($desktop) {
-        padding: 1.5rem 0;
-      }
+      // @include breakpoint($desktop) {
+      //   padding: 1.5rem 0;
+      // }
 
       @include breakpoint($only-tablet) {
         width: 47%;
