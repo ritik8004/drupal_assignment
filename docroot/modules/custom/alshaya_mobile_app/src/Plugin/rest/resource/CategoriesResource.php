@@ -35,13 +35,6 @@ class CategoriesResource extends ResourceBase {
   protected $termUrls = [];
 
   /**
-   * Array of node urls for department page dependencies.
-   *
-   * @var array
-   */
-  protected $nodeUrls = [];
-
-  /**
    * The language manager.
    *
    * @var \Drupal\Core\Language\LanguageManagerInterface
@@ -169,14 +162,11 @@ class CategoriesResource extends ResourceBase {
       // Check for department page for given term to generate deeplink.
       // @todo: Use depth to check for department page only for level 1 and level 2 (incase of supercategory).
       $deeplink = $this->mobileAppUtility->getDeepLink($term);
-      if (!empty($deeplink)) {
-        $this->nodeUrls[] = $deeplink;
-      }
       $record = [
         'id' => $term->tid,
         'name' => $term->name,
         'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => !empty($deeplink) ? $deeplink->getGeneratedUrl() : $term_url->getGeneratedUrl(),
+        'deeplink' => !empty($deeplink) ? $deeplink->getGeneratedUrl() : NULL,
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
@@ -241,12 +231,6 @@ class CategoriesResource extends ResourceBase {
   protected function addCacheableDependency(ResourceResponse $response) {
     if (!empty($this->termUrls)) {
       foreach ($this->termUrls as $urls) {
-        $response->addCacheableDependency($urls);
-      }
-    }
-
-    if (!empty($this->nodeUrls)) {
-      foreach ($this->nodeUrls as $urls) {
         $response->addCacheableDependency($urls);
       }
     }
