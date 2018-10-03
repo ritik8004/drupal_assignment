@@ -69,7 +69,7 @@
           }
         });
 
-        $('li a', lightSlider).once('bind-js').off('click').on('click', function (e) {
+        $('li a', lightSlider).once('bind-js').on('click', function (e) {
           e.preventDefault();
           var index = $(this).parent().attr('data-slick-index');
           if (lightSlider.slick('slickCurrentSlide') !== index) {
