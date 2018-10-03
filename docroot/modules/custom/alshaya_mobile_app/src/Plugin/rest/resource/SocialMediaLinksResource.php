@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "social_media_links",
  *   label = @Translation("Social media links"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/social_media_links",
+ *     "canonical" = "/rest/v1/social-media-links",
  *   }
  * )
  */
