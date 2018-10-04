@@ -1,4 +1,12 @@
 services:
   alshaya_mobile_app.utility:
     class: Drupal\alshaya_mobile_app\Service\MobileAppUtility
-    arguments: ['@cache.data']
+    arguments:
+      - '@cache.data'
+      - '@language_manager'
+      - '@request_stack'
+      - '@path.alias_manager'
+      - '@entity_type.manager'
+  alshaya_mobile_app.alshaya_search_api_query_execute:
+    class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
+    arguments: ['@request_stack', '@facets.manager', '@language_manager', '@plugin.manager.facets.query_type']
