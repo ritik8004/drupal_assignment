@@ -362,14 +362,6 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           'langcode' => $langcode,
         ]);
 
-        // We doing this because when the translation of term is created by
-        // addTranslation(), pathauto alias is not created for the translated
-        // version.
-        // @see https://www.drupal.org/project/pathauto/issues/2995829.
-        if ($this->modulehandler->moduleExists('pathauto')) {
-          $term->path->pathauto = 1;
-        }
-
         $this->results['created']++;
       }
 
@@ -442,6 +434,14 @@ class ConductorCategoryManager implements CategoryManagerInterface {
 
     if (!$term->hasTranslation($langcode)) {
       $term = $term->addTranslation($langcode);
+
+      // We doing this because when the translation of term is created by
+      // addTranslation(), pathauto alias is not created for the translated
+      // version.
+      // @see https://www.drupal.org/project/pathauto/issues/2995829.
+      if ($this->modulehandler->moduleExists('pathauto')) {
+        $term->path->pathauto = 1;
+      }
     }
     else {
       $term = $term->getTranslation($langcode);
