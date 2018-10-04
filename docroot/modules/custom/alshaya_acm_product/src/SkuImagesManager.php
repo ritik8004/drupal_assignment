@@ -4,10 +4,10 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
@@ -67,6 +67,8 @@ class SkuImagesManager {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend object.
    */
@@ -74,11 +76,13 @@ class SkuImagesManager {
                               ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               SkuManager $sku_manager,
+                              ProductInfoHelper $product_info_helper,
                               CacheBackendInterface $cache) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->productInfoHelper = $product_info_helper;
     $this->cache = $cache;
   }
 
@@ -114,8 +118,103 @@ class SkuImagesManager {
    *   TRUE if SKU has images.
    */
   public function hasMediaImages(SKUInterface $sku) {
-    $media = $this->getAllMedia($sku, FALSE);
-    return !empty($media['images']);
+    $static = &drupal_static(__FUNCTION__, []);
+
+    if (!isset($static[$sku->id()])) {
+      $media = $this->productInfoHelper->getMedia($sku, 'pdp');
+      $static[$sku->id()] = !empty($media['images']);
+    }
+
+    return $static[$sku->id()];
+  }
+
+  /**
+   * Get product media items.
+   *
+   * Applies image display rules - which SKU to use for which case.
+   *
+   * Uses new event dispatcher to all brands to modify media items to display.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context - pdp/search/modal/teaser.
+   * @param bool $check_parent_child
+   *   Check parent or child SKUs.
+   *
+   * @return array
+   *   Processed media items.
+   */
+  public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
+    $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
+    return $this->productInfoHelper->getMedia($skuForGallery, $context);
+  }
+
+  /**
+   * Get media items for particlar SKU.
+   *
+   * This is CORE implementation to get media items from media array in SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param null|string $default_label
+   *   Default label to use for alt/title.
+   *
+   * @return array
+   *   Media items array.
+   */
+  public function getSkuMediaItems(SKUInterface $sku, ?string $default_label = ''): array {
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
+    $plugin = $sku->getPluginInstance();
+
+    if (empty($default_label) && $sku->bundle() == 'simple') {
+      $parent = $plugin->getParentSku($sku);
+
+      // Check if there is parent SKU available, we use label from that.
+      if ($parent instanceof SKUInterface) {
+        $default_label = $parent->label();
+      }
+    }
+
+    $media = $sku->getMedia(TRUE, FALSE, $default_label);
+
+    // Remove thumbnails from media items.
+    // @TODO: This is added for CORE-5026 and will be reworked in CORE-5208.
+    foreach ($media ?? [] as $index => $media_item) {
+      if (!isset($media_item['media_type'])) {
+        continue;
+      }
+
+      if (isset($media_item['roles'])
+        && in_array('thumbnail', $media_item['roles'])) {
+        unset($media[$index]);
+      }
+    }
+
+    $return = [
+      'images' => [],
+      'videos' => [],
+      'media_items' => [],
+    ];
+
+    // Process CORE media files.
+    if (!empty($media)) {
+      foreach ($media as $media_item) {
+        if (!isset($media_item['media_type'])) {
+          continue;
+        }
+
+        if ($media_item['media_type'] == 'image') {
+          $url = $media_item['file']->url();
+          $return['images'][$url] = $url;
+        }
+        elseif ($media_item['media_type'] == 'external-video') {
+          $return['videos'][$media_item['video_url']] = $media_item['video_url'];
+        }
+      }
+    }
+
+    return $return;
   }
 
   /**
@@ -786,6 +885,50 @@ class SkuImagesManager {
     }
 
     return '';
+  }
+
+  /**
+   * Get Swatches Data for particular configurable sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Swatches data.
+   */
+  public function getSwatchData(SKUInterface $sku): array {
+    $swatches = [];
+    $swatch_attributes = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches')['pdp'];
+
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
+      // Process only for swatch attributes.
+      if (!in_array($attribute_code, $swatch_attributes)) {
+        continue;
+      }
+
+      $swatches['attribute_code'] = $attribute_code;
+
+      foreach ($attribute_data as $value => $child_sku_codes) {
+        foreach ($child_sku_codes as $child_sku_code) {
+          $child = SKU::loadFromSku($child_sku_code);
+          $data = $this->productInfoHelper->getValue($child, 'swatch', $attribute_code, '');
+          if (empty($data)) {
+            continue;
+          }
+
+          $data['value'] = $value;
+          $swatches['swatches'][$value] = $data;
+
+          break;
+        }
+      }
+
+      // We expect only swatch attribute for any single product.
+      break;
+    }
+
+    return $swatches;
   }
 
 }

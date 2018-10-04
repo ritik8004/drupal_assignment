@@ -171,12 +171,17 @@ class SkuAssetManager {
           ];
         }
 
-        $asset_urls[] = [
+        $asset_url = [
           'url' => Url::fromUri($base_url, $options),
           'sortAssetType' => $asset['sortAssetType'],
           'sortFacingType' => $asset['sortFacingType'],
-          'Data' => $asset['Data'],
+          'Data' => $asset['Data'] ?? [],
         ];
+
+        unset($options['query']['call']);
+        $asset_url['url_without_call'] = Url::fromUri($base_url, $options);
+
+        $asset_urls[] = $asset_url;
 
         if ($first_image_only) {
           return $asset_urls;
