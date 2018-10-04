@@ -127,6 +127,12 @@ class JoinClub extends BlockBase implements ContainerFactoryPluginInterface {
     // Default image.
     $image_path = drupal_get_path('module', 'alshaya_user') . '/images/alshaya-priv-card.png';
 
+    // Brand specific default image.
+    $brand_module = $this->configFactory->get('alshaya.installed_brand')->get('module');
+    if (file_exists(drupal_get_path('module', $brand_module) . '/images/alshaya-priv-card.svg')) {
+      $image_path = drupal_get_path('module', $brand_module) . '/images/alshaya-priv-card.svg';
+    }
+
     $join_club_content = $this->configFactory->get('alshaya_user.join_club');
     if ($image_fid = $join_club_content->get('join_club_image.fid')) {
       if ($image_file = $this->entityTypeManager->getStorage('file')->load($image_fid)) {

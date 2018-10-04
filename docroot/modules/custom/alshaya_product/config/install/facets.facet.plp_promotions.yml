@@ -36,6 +36,11 @@ processor_configs:
     weights:
       build: 5
     settings: {  }
+  clean_active_facets_processor:
+    processor_id: clean_active_facets_processor
+    weights:
+      build: 10
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

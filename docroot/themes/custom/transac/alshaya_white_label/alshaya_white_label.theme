@@ -56,12 +56,13 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  $current_route = \Drupal::routeMatch();
+
   // Add body class for slug banner.
-  if (isset($variables['page']['banner_top'])) {
+  if (isset($variables['page']['banner_top']) && $current_route->getRouteName() != 'acq_checkout.form') {
     $variables['attributes']['class'][] = 'slug-banner-processed';
   }
 
-  $current_route = \Drupal::routeMatch();
   // If store finder glossary view.
   if ($current_route->getRouteName() == 'view.stores_finder.page_2') {
     $variables['attributes']['class'][] = 'store-finder-view';
@@ -776,12 +777,31 @@ function alshaya_white_label_preprocess_mimemail_messages(&$variables) {
   $menu_tree = \Drupal::menuTree();
   // Build the typical default set of menu tree parameters.
   $parameters = $menu_tree->getCurrentRouteMenuTreeParameters('social-links');
+  $parameters->onlyEnabledLinks();
   $menus = $menu_tree->load('social-links', $parameters);
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $default_tid = alshaya_super_category_get_default_term();
+  }
 
   if (isset($menus)) {
     foreach ($menus as $menu) {
-      $title = $menu->link->getTitle();
-      $links[strtolower($title)] = $menu->link->getUrlObject()->setAbsolute(TRUE)->toString();
+      if (isset($default_tid)) {
+        $selected_categories = array_filter($menu->link->getOptions()['categories']);
+        foreach ($selected_categories as $selected_category) {
+          if ($selected_category == $default_tid) {
+            $title = $menu->link->getTitle();
+            $links[strtolower($title)] = $menu->link->getUrlObject()
+              ->setAbsolute(TRUE)
+              ->toString();
+          }
+        }
+      }
+      else {
+        $title = $menu->link->getTitle();
+        $links[strtolower($title)] = $menu->link->getUrlObject()
+          ->setAbsolute(TRUE)
+          ->toString();
+      }
     }
     if (isset($links)) {
       $variables['links'] = $links;
@@ -1070,10 +1090,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     /* @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
     $advanced_page_slug_banner = $variables['paragraph'];
 
-    // Get the desktop and mobile slug text if available.
-    $desktop_slug_text = $advanced_page_slug_banner->get('field_default_slug_text')->value ?? NULL;
-    $mobile_slug_text = $advanced_page_slug_banner->get('field_mobile_slug_text')->value ?? $desktop_slug_text;
-
     // Get the desktop and mobile slug background color if available.
     $desktop_slug_bkg_color = $advanced_page_slug_banner->get('field_default_slug_bkg_color')->value ?? NULL;
     $mobile_slug_bkg_color = $advanced_page_slug_banner->get('field_mobile_slug_bkg_color')->value ?? $desktop_slug_bkg_color;
@@ -1081,11 +1097,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
     // Get the desktop and mobile slug font color if available.
     $desktop_slug_font_color = $advanced_page_slug_banner->get('field_default_slug_font_color')->value ?? NULL;
     $mobile_slug_font_color = $advanced_page_slug_banner->get('field_mobile_slug_font_color')->value ?? $desktop_slug_font_color;
-
-    if (!empty($desktop_slug_text) || !empty($mobile_slug_text)) {
-      $variables['desktop_slug_text']['#markup'] = $desktop_slug_text;
-      $variables['mobile_slug_text']['#markup'] = $mobile_slug_text;
-    }
 
     if (!empty($desktop_slug_bkg_color) || !empty($mobile_slug_bkg_color)) {
       $variables['desktop_slug_bkg_color'] = $desktop_slug_bkg_color;

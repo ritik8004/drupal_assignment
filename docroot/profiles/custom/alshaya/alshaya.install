@@ -120,22 +120,6 @@ function alshaya_install() {
   $uri = "public://google_tag";
   file_prepare_directory($uri, FILE_CREATE_DIRECTORY);
 
-  // Set default country from settings.
-  \Drupal::configFactory()->getEditable('system.date')
-    ->set('country.default', Settings::get('country_code'))
-    ->save();
-
-  // Try to get timezone from country code.
-  $timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, Settings::get('country_code'));
-
-  // Use Kuwait by default, use first one from the result if found.
-  $timezone = empty($timezones) ? 'Asia/Kuwait' : reset($timezones);
-
-  // Set default timezone from settings.
-  \Drupal::configFactory()->getEditable('system.date')
-    ->set('timezone.default', $timezone)
-    ->save();
-
   // Remove all roles created by Lightning.
   $coreRoles = [
     'anonymous',

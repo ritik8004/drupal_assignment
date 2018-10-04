@@ -158,6 +158,9 @@ set classes = [
           <div class="gradient-holder"></div>
         </div>
 
+        {% block afterDescription %}
+        {% endblock %}
+
           {{ content.sharethis }}
 
           {% if content.home_delivery or content.click_and_collect %}

@@ -130,10 +130,6 @@
           @include breakpoint($only-mobile) {
             width: 53%;
 
-            .discount-value {
-              margin-#{$left}: 0.45rem;
-            }
-
             .price-type__wrapper {
               font-size: 0.875rem;
             }
@@ -143,12 +139,6 @@
 
       &.price {
         .price--discount {
-          .discount-prefix {
-            @include breakpoint($tablet) {
-              margin-#{$right}: 1.375rem;
-            }
-          }
-
           .discount-value {
             padding-#{$left}: 0;
           }
@@ -382,7 +372,7 @@ body.alias--cart {
   }
 
   &.path--cart {
-    h1 {
+    h1.c-page-title {
       @include breakpoint($desktop) {
         margin-bottom: 1.6875rem;
       }

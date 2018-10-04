@@ -2,6 +2,20 @@
   h3 {
     display: none;
   }
+
+  .slug-body {
+    h3 {
+      display: block;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
 }
 
 .desktop-slug-banner {
@@ -34,6 +48,10 @@
     margin-left: 0.5rem;
     margin-right: 0.5rem;
   }
+}
+
+.slug-body div.field__label {
+  display: none;
 }
 
 .desktop-slug-banner,

@@ -227,28 +227,13 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
     $short_desc['label'] = [
       '#markup' => t('Short Description'),
     ];
-
-    $short_desc_len = \Drupal::config('alshaya_acm_product.display_settings')->get('short_desc_characters');
-    $short_desc_html = text_summary($description_value, NULL, $short_desc_len);
-    // Remove html tags from short description.
-    $short_desc_html = strip_tags($short_desc_html);
-
-    // Description without html tags.
-    $full_description_without_tags = strip_tags($description_value);
-
-    // If after removing html tags, short description and description are not
-    // same, only then we shows ellipses.
-    if (Unicode::strlen($short_desc_html) !== Unicode::strlen($full_description_without_tags)) {
-      $short_desc['value'] = [
-        '#markup' => $short_desc_html . '...',
-      ];
-    }
-
-    // If short description is the same as description,
-    // do not show 'Read More' button.
-    if (Unicode::strlen($short_desc_html) === Unicode::strlen($full_description_without_tags)) {
-      $read_more_link = FALSE;
-    }
+    
+    // Get short description of given html.
+    $desc = \Drupal::service('alshaya_acm_product.helper')->createShortDescription($description_value);
+    $short_desc['value'] = [
+      '#markup' => $desc['html'],
+    ];
+    $read_more_link = isset($desc['read_more']);
   }
   else {
     $read_more_link = FALSE;
