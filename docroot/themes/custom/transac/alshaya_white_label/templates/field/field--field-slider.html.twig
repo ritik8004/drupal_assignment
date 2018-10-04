@@ -45,13 +45,7 @@
     {% if paragraph_type == 'banner' %}
       <div class="paragraph-{{ paragraph_type }}">
         {% for render_data in data %}
-          <div class="picture-tag c-slider-promo__item">
-            <picture>
-              <source media="(min-width: 768px)" srcset="{{ file_url(render_data.field_banner) }}">
-              <source media="(max-width: 767px)" srcset="{{ file_url(render_data.field_mobile_banner_image) }}">
-            </picture>
-          </div>
-          {{ render_data.content|without('field_banner', 'field_mobile_banner_image') }}
+          <div{{ attributes.addClass('c-slider-promo__item') }}>{{ render_data }}</div>
         {% endfor %}
       </div>
     {% else %}

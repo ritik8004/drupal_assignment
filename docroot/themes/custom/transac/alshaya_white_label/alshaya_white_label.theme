@@ -302,16 +302,7 @@ function alshaya_white_label_preprocess_field__field_slider(&$variables) {
   if (!empty($variables['items'])) {
     foreach ($variables['items'] as $item) {
       // Only for the 'banner' paragraph.
-      if ($item['content']['#paragraph']->getType() == 'banner') {
-        $data[$item['content']['#paragraph']->getType()][] = [
-          'field_banner' => _alshaya_white_label_get_image_url($item['content']['#paragraph']->get('field_banner')),
-          'field_mobile_banner_image' => _alshaya_white_label_get_image_url($item['content']['#paragraph']->get('field_mobile_banner_image')) ?: _alshaya_white_label_get_image_url($item['content']['#paragraph']->get('field_banner')),
-          'content' => $item['content'],
-        ];
-      }
-      else {
-        $data[$item['content']['#paragraph']->getType()][] = $item['content'];
-      }
+      $data[$item['content']['#paragraph']->getType()][] = $item['content'];
     }
   }
 
@@ -905,6 +896,19 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['style_tag'] = $style_data['style_tag'];
       $variables['selector_class'] = $style_data['selector_class'];
     }
+
+    if (!empty($default_image)) {
+      $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
+      $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
+      $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
+    }
+  }
+
+  if ($variables['elements']['#paragraph']->getType() == 'banner') {
+    // Get the desktop and mobile images for promo blocks if available.
+    $mobile_image = !empty($variables['elements']['field_mobile_banner_image']['#items']) ? $variables['elements']['field_mobile_banner_image']['#items'] : '';
+    $desktop_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
+    $default_image = !empty($desktop_image) ? $desktop_image : $mobile_image;
 
     if (!empty($default_image)) {
       $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
