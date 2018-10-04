@@ -37,14 +37,19 @@ class AlshayaSearchApiQueryExecute {
   /**
    * Page limit.
    *
-   * @Todo: use from views/config if possible.
+   * Default pager limit when not provided.
    */
-  const PAGER_LIMIT = 30;
+  const PAGER_DEFAULT_LIMIT = 12;
 
   /**
    * Filter key and value separator.
    */
   const SEPARATOR = ':';
+
+  /**
+   * Separator for the sort between field and sort order.
+   */
+  const SORT_SEPARATOR = ' ';
 
   /**
    * Facet source id.
@@ -163,12 +168,22 @@ class AlshayaSearchApiQueryExecute {
     $query_string_parameters = $this->currentRequest->query->all();
 
     // Query pagination.
-    $page_offset = $query_string_parameters[self::PAGER_KEY] ?: 0;
-    $query->range($page_offset, self::PAGER_LIMIT);
+    $page_offset = 0;
+    $page_limit = self::PAGER_DEFAULT_LIMIT;
+    // If pager info is available in query string.
+    if (!empty($query_string_parameters[self::PAGER_KEY])) {
+      // Get pager offset and limit info.
+      $pager = explode(',', $query_string_parameters[self::PAGER_KEY]);
+      $page_offset = $pager[0];
+      if (!empty($pager[1]) && is_int($pager[1])) {
+        $page_limit = $pager[1];
+      }
+    }
+    $query->range($page_offset, $page_limit);
 
     // Adding sort to the query.
     if (!empty($query_string_parameters[self::SORT_KEY])) {
-      $sort_option = explode(self::SEPARATOR, $query_string_parameters[self::SORT_KEY]);
+      $sort_option = explode(self::SORT_SEPARATOR, $query_string_parameters[self::SORT_KEY]);
       // If both key and value available for sorting.
       if (!empty($sort_option[0]) && !empty($sort_option[1])) {
         if (!in_array(strtoupper($sort_option[1]), ['ASC', 'DESC'])) {
@@ -402,6 +417,11 @@ class AlshayaSearchApiQueryExecute {
 
   /**
    * Process the price facet result data.
+   *
+   * Here we processing the price facet to get the response/result of facet
+   * same as we get on the FE. We getting facet value like 0.5, 5, 4.5 etc
+   * individually and we need to group them all together to make a range like
+   * we have on FE. Like '10 - 15' etc.
    *
    * @param array $price_facet_result
    *   Price facet result array.
