@@ -17,20 +17,29 @@ use Drupal\Views\ViewExecutable;
  * Implements hook_search_api_db_query_alter().
  */
 function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
-  if ($query->hasTag('views_alshaya_product_list')) {
+  if ($query->hasTag('views_alshaya_product_list') || $query->hasTag('category_product_list')) {
     $sorts =& $query->getSorts();
 
     // Get the default sort which is always the first config value.
     $default_sort = current(_alshaya_acm_product_position_get_config());
     // This to check if user has selected sort from drop down or the page load.
     $exposed_input = !empty($_POST['sort_bef_combine']) ? $_POST['sort_bef_combine'] : NULL;
+
+    // Get and set sort order from the views config.
+    $views_storage = Views::getView('alshaya_product_list')->storage;
+    $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
+
+    // For the rest endpoint.
+    // Tag added in CategoryProductListResource::prepareAndExecuteQuery().
+    if ($query->hasTag('category_product_list')) {
+      if (!isset($sorts[$default_sort])) {
+        $sorts[$default_sort] = $views_sort[$default_sort]['order'];;
+      }
+    }
     // If position(nid) is set as the default sort.
-    if ($default_sort != 'nid' && empty($exposed_input)) {
+    elseif ($default_sort != 'nid' && empty($exposed_input)) {
       // Removing the nid default sort as coming from views config.
       unset($sorts['nid']);
-      // Get and set sort order from the views config.
-      $views_storage = Views::getView('alshaya_product_list')->storage;
-      $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
 
       $sorts[$default_sort] = $views_sort[$default_sort]['order'];
       return;
@@ -49,9 +58,9 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     $conditions = $query->getConditionGroup()->getConditions();
     foreach ($conditions as $condition) {
       if ($condition) {
-        $query_conditions = $condition->getConditions();
-        if ($query_conditions[0]->getField() == 'tid') {
-          $tid = $query_conditions[0]->getValue();
+        $query_conditions = $query->hasTag('category_product_list') ? $condition : $condition->getConditions()[0];
+        if ($query_conditions->getField() == 'tid') {
+          $tid = $query_conditions->getValue();
           // First tid in the array is always the current tid.
           $tid = is_array($tid) ? $tid[0] : $tid;
           break;

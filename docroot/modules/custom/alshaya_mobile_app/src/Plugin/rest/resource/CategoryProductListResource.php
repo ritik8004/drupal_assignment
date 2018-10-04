@@ -4,15 +4,17 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
+use Drupal\Core\Url;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\search_api\Entity\Index;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\search_api\ParseMode\ParseModePluginManager;
 use Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CategoryProductListResource.
@@ -64,6 +66,27 @@ class CategoryProductListResource extends ResourceBase {
   protected $alshayaSearchApiQueryExecute;
 
   /**
+   * The mobile app utility service.
+   *
+   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   */
+  protected $mobileAppUtility;
+
+  /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * CategoryProductListResource constructor.
    *
    * @param array $configuration
@@ -82,12 +105,21 @@ class CategoryProductListResource extends ResourceBase {
    *   Parse mode plugin manager.
    * @param \Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute
    *   Alshaya search api query execute.
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   The mobile app utility service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity repository.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, EntityTypeManagerInterface $entity_type_manager, ParseModePluginManager $parse_mode_manager, AlshayaSearchApiQueryExecute $alshaya_search_api_query_execute, MobileAppUtility $mobile_app_utility, LanguageManagerInterface $language_manager, EntityRepositoryInterface $entity_repository) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityTypeManager = $entity_type_manager;
     $this->parseModeManager = $parse_mode_manager;
     $this->alshayaSearchApiQueryExecute = $alshaya_search_api_query_execute;
+    $this->mobileAppUtility = $mobile_app_utility;
+    $this->languageManager = $language_manager;
+    $this->entityRepository = $entity_repository;
   }
 
   /**
@@ -102,7 +134,10 @@ class CategoryProductListResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.search_api.parse_mode'),
-      $container->get('alshaya_mobile_app.alshaya_search_api_query_execute')
+      $container->get('alshaya_mobile_app.alshaya_search_api_query_execute'),
+      $container->get('alshaya_mobile_app.utility'),
+      $container->get('language_manager'),
+      $container->get('entity.repository')
     );
   }
 
@@ -128,23 +163,48 @@ class CategoryProductListResource extends ResourceBase {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($id);
       // If given term exists in system.
       if ($term instanceof TermInterface) {
+        $term = $this->entityRepository->getTranslationFromContext($term, $this->languageManager->getCurrentLanguage()->getId());
         // If term is department page.
         if (alshaya_advanced_page_is_department_page($term->id())) {
-          throw new BadRequestHttpException($this->t('This is a department page.'));
+          $this->mobileAppUtility->throwException();
         }
 
         // Get result set.
         $result_set = $this->prepareAndExecuteQuery($id);
         // Prepare response from result set.
-        $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+        $response_data = $this->addExtraTermData($term);
+        $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
         return (new ModifiedResourceResponse($response_data));
       }
 
-      throw new NotFoundHttpException($this->t('Category with ID @id was not found.', ['@category_id' => $id]));
+      $this->mobileAppUtility->throwException();
 
     }
 
-    throw new BadRequestHttpException($this->t('No category was provided.'));
+    $this->mobileAppUtility->throwException();
+  }
+
+  /**
+   * Get term data for response.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Term object.
+   *
+   * @return array
+   *   Data array.
+   */
+  protected function addExtraTermData(TermInterface $term) {
+    // Get term url.
+    $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
+    $banner_info = [];
+    return [
+      'id' => $term->id(),
+      'label' => $term->label(),
+      'path' => $term_url->getGeneratedUrl(),
+      'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+      'banner' => $banner_info,
+      'description' => $term->get('description')->getValue()[0]['value'],
+    ];
   }
 
   /**
@@ -170,6 +230,9 @@ class CategoryProductListResource extends ResourceBase {
     $terms = _alshaya_master_get_recursive_child_terms($tid);
     // Add condition for all child terms.
     $query->addCondition('tid', $terms, 'IN');
+
+    // Adding tag to query.
+    $query->addTag('category_product_list');
 
     // Prepare and execute query and pass result set.
     return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query);

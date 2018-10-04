@@ -278,12 +278,18 @@ class AlshayaSearchApiQueryExecute {
       }
       // Add the result item object to the facet.
       $facet->setResults($data);
+      // Adding active value to the facet from url query string. Doing this as
+      // we need the facet object in same state as on FE.
+      if (!empty($filter_data[$facet->getFieldIdentifier()])) {
+        $facet->setActiveItems($filter_data[$facet->getFieldIdentifier()]);
+      }
       // Execute facet build so that facet processor gets executed.
       $facet_build[$facet->id()] = $this->facetManager->build($facet);
     }
 
     return [
       'facet_build' => $facet_build,
+      'processed_facets' => $this->processedFacetsArray,
       'search_api_results' => $results,
     ];
   }
@@ -334,26 +340,38 @@ class AlshayaSearchApiQueryExecute {
    *   Facet data.
    */
   public function prepareFacetData(array $result_set) {
-    $facets_data = $result_set['facet_build'];
+    $facets_data = $result_set['processed_facets'];
     // Prepare facet data first.
     $facet_result = [];
-    foreach ($facets_data as $key => $facet_options) {
-      // If no option available for a facet, skip that.
-      if (empty($facet_options[0]['#items'])) {
+    foreach ($facets_data as $key => $facet) {
+      // If no result available for a facet, skip that.
+      $facet_results = $facet->getResults();
+      if (empty($facet_results)) {
         continue;
       }
 
       $facet_option_data = [];
-      foreach ($facet_options[0]['#items'] as $option) {
-        $facet_option_data[] = [
-          'key' => $option['#attributes']['data-drupal-facet-item-value'],
-          'label' => $option['#title']['#value'],
-          'count' => $option['#title']['#count'],
+      foreach ($facet_results as $index => $result) {
+        $facet_option_data[$index] = [
+          'key' => $result->getRawValue(),
+          'label' => $result->getDisplayValue(),
+          'count' => $result->getCount(),
         ];
+
+        // If children available, then add children to response.
+        if (!empty($children = $result->getChildren())) {
+          foreach ($children as $child) {
+            $facet_option_data[$index]['children'][] = [
+              'key' => $child->getRawValue(),
+              'label' => $child->getDisplayValue(),
+              'count' => $child->getCount(),
+            ];
+          }
+        }
       }
       $facet_result[] = [
         'key' => $key,
-        'label' => !empty($this->processedFacetsArray[$key]) ? $this->processedFacetsArray[$key]->getName() : '',
+        'label' => $facet->getName(),
         'options' => $facet_option_data,
       ];
     }
@@ -373,7 +391,11 @@ class AlshayaSearchApiQueryExecute {
   public function prepareProductData(array $result_set) {
     $product_data = [];
     foreach ($result_set['search_api_results']->getResultItems() as $item) {
-      $product_data[] = $item->getId();
+      // Parse the item id to fetch the node id. Normally item it in like
+      // format - 'entity:node/1234:en' and we need to get 1234.
+      $exploded_id = explode(':', $item->getId());
+      $nid = explode('/', $exploded_id[1])[1];
+      $product_data[] = $nid;
     }
 
     return $product_data;
