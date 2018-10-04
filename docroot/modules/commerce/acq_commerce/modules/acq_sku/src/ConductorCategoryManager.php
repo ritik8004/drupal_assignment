@@ -7,6 +7,7 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
 use Drupal\taxonomy\TermInterface;
@@ -68,6 +69,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $i18nHelper;
 
   /**
+   * Module Handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $modulehandler;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -82,8 +90,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   LoggerFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Module handler service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
@@ -91,6 +101,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->queryFactory = $query_factory;
     $this->logger = $logger_factory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
+    $this->modulehandler = $moduleHandler;
   }
 
   /**
@@ -350,6 +361,14 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           'weight' => $position,
           'langcode' => $langcode,
         ]);
+
+        // We doing this because when the translation of node is created by
+        // addTranslation(), pathauto alias is not created for the translated
+        // version.
+        // @see https://www.drupal.org/project/pathauto/issues/2995829.
+        if ($this->modulehandler->moduleExists('pathauto')) {
+          $term->path->pathauto = 1;
+        }
 
         $this->results['created']++;
       }
