@@ -14,16 +14,6 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_social_facebook module.
- */
-function alshaya_transac_update_8118() {
-  // Install alshaya_paragraphs_transac module.
-  \Drupal::service('module_installer')->install(['alshaya_social_facebook']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable views_ajax_get and configure search, promo, plp views to use GET.
  */
 function alshaya_transac_update_8117() {
@@ -379,7 +369,6 @@ function alshaya_transac_install() {
     'alshaya_promo_panel',
     'alshaya_search',
     'alshaya_seo_transac',
-    'alshaya_social_facebook',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
     'alshaya_super_category',
