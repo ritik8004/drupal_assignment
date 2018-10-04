@@ -19,6 +19,19 @@ function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityView
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_mc_get_product_description($sku_entity);
+
+      // If short description not available, check other consecutive fields.
+      if (empty($return['short_desc']['value']['#markup'])) {
+        foreach ($return['description'] as $short_description) {
+          // If value is available in next field, then
+          // use it and no need to process further.
+          if (!empty($short_description['value']['#markup'])) {
+            $return['short_desc'] = $short_description;
+            break;
+          }
+        }
+      }
+
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];
     }
