@@ -104,10 +104,14 @@ class SocialMediaLinksResource extends ResourceBase {
         }
 
         // Get class of the menu item.
-        $menu_class = $menu_link_content->getPluginDefinition()['options']['attributes']['class'];
+        $menu_class = '';
+        if (!empty($menu_link_content->getPluginDefinition()['options']['attributes'])
+          && !empty($menu_link_content->getPluginDefinition()['options']['attributes']['class'])) {
+          $menu_class = $menu_link_content->getPluginDefinition()['options']['attributes']['class'];
+        }
         $response_data[] = [
           'media' => !empty($menu_class) ? str_replace(self::MENU_CLASS_PATTERN, '', $menu_class) : '',
-          'url' => $menu_link_content->getUrlObject()->toString(),
+          'url' => $menu_link_content->getUrlObject()->toString(TRUE)->getGeneratedUrl(),
         ];
 
         // Adding to property for using later to attach cacheable dependency.
