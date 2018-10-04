@@ -46,6 +46,25 @@
         margin-top: 2.6875rem;
       }
     }
+
+    &.mobile--overlay {
+      .branding__menu {
+        @include breakpoint($upto-desktop) {
+          z-index: auto;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    &:not(.header--fixed) {
+      .c-header {
+        .block-views-exposed-filter-blocksearch-page {
+          top: 2.625rem;
+          position: absolute;
+        }
+      }
+    }
   }
 
   &.header--fixed {

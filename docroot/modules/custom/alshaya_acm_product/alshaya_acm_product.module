@@ -724,7 +724,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         try {
           $check_parent_child = TRUE;
           $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, 'pdp', '', $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, 'modal', '', $check_parent_child);
         }
         catch (\Exception $e) {
           // Do nothing.
