@@ -1,38 +1,12 @@
 .address-book-address .form-type-select {
   select.select2-select.form-select,
   .select2-selection {
-    border: 0;
-    border-bottom: 1px solid $primary_input_border;
-    padding-#{$left}: 0 !important;
-    color: $formitem_label;
-  }
+    border-color: $secondary_border;
 
-  .select2-selection {
     &__rendered {
-      padding-#{$left}: 0 !important;
-
       .select2-selection__placeholder {
         color: $formitem_label;
       }
-    }
-
-    &__arrow {
-      &::after {
-        font-size: 2.7rem;
-        top: -5%;
-        #{$left}: -4%;
-      }
-    }
-  }
-}
-
-.user-form,
-.address-book-address,
-.webform-submission-alshaya-contact-form,
-#selected-store-wrapper {
-  .mobile-number-field {
-    .mobile-input--wrapper {
-      border-bottom: 1px solid $primary_input_border;
     }
   }
 }
