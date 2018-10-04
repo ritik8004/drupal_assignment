@@ -16,11 +16,11 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\node\NodeInterface;
 
 /**
- * Provides a resource to get list of all simple pages.
+ * Provides a resource to get simple page node.
  *
  * @RestResource(
  *   id = "simple_page",
- *   label = @Translation("List all simple pages"),
+ *   label = @Translation("Simple Page"),
  *   uri_paths = {
  *     "canonical" = "/rest/v1/page/simple"
  *   }
