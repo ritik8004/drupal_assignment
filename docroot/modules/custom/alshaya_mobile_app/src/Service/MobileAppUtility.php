@@ -90,18 +90,18 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) String containing info about data incase of query object.
    *
-   * @return object|null
-   *   Return deeplink url object.
+   * @return string
+   *   Return deeplink url.
    */
   public function getDeepLink($object, $type = '') {
     if ($object instanceof TermInterface) {
-      $return = NULL;
+      $return = '';
     }
     elseif ($object instanceof NodeInterface) {
-      $return = NULL;
+      $return = '';
     }
     elseif ($type == 'term') {
-      $return = NULL;
+      $return = '';
     }
 
     return $return;
