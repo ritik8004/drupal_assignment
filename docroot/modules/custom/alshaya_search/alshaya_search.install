@@ -31,6 +31,11 @@ function alshaya_search_update_8023() {
     'schema',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
+
+  // Add translation.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
+    ->set('search_field_placeholder', 'بحث')
+    ->save();
 }
 
 /**
@@ -451,4 +456,17 @@ function alshaya_search_install() {
   // Allow anonymous and authenticated users to use autocomplete.
   user_role_grant_permissions(Role::ANONYMOUS_ID, ['use search_api_autocomplete for search']);
   user_role_grant_permissions(Role::AUTHENTICATED_ID, ['use search_api_autocomplete for search']);
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_search_update_dependencies() {
+  $dependencies['alshaya_mc'][8314] = [
+    'alshaya_search' => 8023,
+  ];
+  $dependencies['alshaya_pb_transac'][8003] = [
+    'alshaya_search' => 8023,
+  ];
+  return $dependencies;
 }

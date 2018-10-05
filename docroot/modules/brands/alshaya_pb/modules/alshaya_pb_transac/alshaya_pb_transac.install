@@ -10,6 +10,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Add config translation for placeholder text.
+ */
+function alshaya_pb_transac_update_8003() {
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
+    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز/كود منتج...)')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make finish a swatch field.
  */
 function alshaya_pb_transac_update_8003() {
