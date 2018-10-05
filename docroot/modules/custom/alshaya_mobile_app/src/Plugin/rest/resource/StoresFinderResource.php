@@ -3,8 +3,11 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\ModifiedResourceResponse;
+use Drupal\rest\ResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Render\RenderContext;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\views\Views;
 
 /**
@@ -57,10 +60,18 @@ class StoresFinderResource extends ResourceBase {
       ];
       // Set exposed form input values.
       $view->setExposedInput($input);
-      $view->execute();
+      $view_render_array = NULL;
+      $rendered_view = NULL;
+      \Drupal::service('renderer')->executeInRenderContext(new RenderContext(), function () use ($view, &$view_render_array, &$rendered_view) {
+        $view_render_array = $view->render();
+        $rendered_view = render($view_render_array);
+      });
       foreach ($view->result as $row) {
         $response_data[] = $row->_entity->get('field_store_locator_id')->getValue()[0]['value'];
       }
+      $response = new ResourceResponse($response_data);
+      $response->addCacheableDependency(CacheableMetadata::createFromRenderArray($view_render_array));
+      return $response;
     }
 
     return (new ModifiedResourceResponse($response_data));
