@@ -94,6 +94,8 @@ class MobileAppUtility {
    *   Return deeplink url.
    */
   public function getDeepLink($object, $type = '') {
+    $return = '';
+
     if ($object instanceof TermInterface) {
       $return = '';
     }

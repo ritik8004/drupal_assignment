@@ -535,8 +535,451 @@ schemas:
       }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> f35ae1930... Merge pull request #8274 from vbouchet31/mobile-api
+=======
+  - GetProduct: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "SKU Entity id of Drupal."
+          },
+          "sku": {
+            "type": "string",
+            "description": "SKU - Unique value for products."
+          },
+          "title": {
+            "type": "string"
+          },
+          "original_price": {
+            "type": "number"
+          },
+          "final_price": {
+            "type": "number",
+            "description": "Final/discounted price, either from PIMS or catalogue price rule."
+          },
+          "stock": {
+            "type": "integer",
+            "description": "Stock of this SKU, will be 0 for configurables."
+          },
+          "linked": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
+                "properties": {
+                  "link_type": {
+                    "type": "string"
+                  },
+                  "skus": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "media": {
+            "type": "array",
+            "description": "Images and videos for galleries.",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "context": {
+                    "type": "string",
+                    "description": "Detail/Listing/Teaser - place of displaying media items in this object."
+                  },
+                  "media": {
+                    "type": "object",
+                    "properties": {
+                      "images": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "url": {
+                                "type": "string"
+                              },
+                              "image_type": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "videos": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "string",
+                            "description": "Video urls."
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "labels": {
+            "type": "array",
+            "description": "Labels to be displayed in gallery.",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "context": {
+                    "type": "string",
+                    "description": "Detail/Listing - place of displaying labels in this object."
+                  },
+                  "labels": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "image": {
+                            "type": "string"
+                          },
+                          "position": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "attributes": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "promotions": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "deeplink": {
+                    "type": "string"
+                  }
+                },
+                "required": [ "text" ]
+              }
+            ]
+          },
+          "swatch_data": {
+            "type": "object",
+            "properties": {
+              "attribute_code": {
+                "type": "string"
+              },
+              "swatches": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "display_value": {
+                        "type": "string"
+                      },
+                      "display_label": {
+                        "type": "string"
+                      },
+                      "swatch_type": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "cart_combinations": {
+            "type": "object",
+            "properties": {
+              "by_sku": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "sku": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "attribute_code": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "attribute_sku": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "attribute_code": {
+                        "type": "string"
+                      },
+                      "values": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "integer"
+                              },
+                              "skus": {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "SKU Entity id of Drupal."
+                  },
+                  "sku": {
+                    "type": "string",
+                    "description": "String - SKU, unique value for products."
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "original_price": {
+                    "type": "number"
+                  },
+                  "final_price": {
+                    "type": "number",
+                    "description": "Final/discounted price, either from PIMS or catalogue price rule."
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "description": "Stock of this SKU, will be 0 for configurables."
+                  },
+                  "linked": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
+                        "properties": {
+                          "link_type": {
+                            "type": "string"
+                          },
+                          "skus": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "media": {
+                    "type": "array",
+                    "description": "Images and videos for galleries.",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "context": {
+                            "type": "string",
+                            "description": "Detail/Listing/Teaser - place of displaying media items in this object."
+                          },
+                          "media": {
+                            "type": "object",
+                            "properties": {
+                              "images": {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "object",
+                                    "properties": {
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "image_type": {
+                                        "type": "string"
+                                      }
+                                    }
+                                  }
+                                ]
+                              },
+                              "videos": {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "string",
+                                    "description": "Video urls."
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "labels": {
+                    "type": "array",
+                    "description": "Labels to be displayed in gallery.",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "context": {
+                            "type": "string",
+                            "description": "Detail/Listing - place of displaying labels in this object."
+                          },
+                          "labels": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "attributes": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string"
+                          },
+                          "key": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "promotions": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string"
+                          },
+                          "deeplink": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [ "text" ]
+                      }
+                    ]
+                  },
+                  "configurable_values": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "attribute_code": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+>>>>>>> 984bd554f... Merge pull request #8297 from nikunjkotecha/MAPP-89
 /search_api_autocomplete/search:
   get:
     description: Get a list of suggestion based on a given string.

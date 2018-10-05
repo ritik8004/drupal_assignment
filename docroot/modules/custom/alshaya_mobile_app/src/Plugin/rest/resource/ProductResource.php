@@ -11,7 +11,6 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
-use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
@@ -201,28 +200,12 @@ class ProductResource extends ResourceBase {
 
     $data['id'] = (int) $sku->id();
     $data['sku'] = $sku->getSku();
-    $data['bundle'] = $sku->bundle();
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
     $prices = $this->skuManager->getMinPrices($sku);
     $data['original_price'] = (float) $prices['price'];
     $data['final_price'] = (float) $prices['final_price'];
     $data['stock'] = (int) $sku->get('stock')->getString();
-
-    $data['categories'] = [];
-    $node = $this->skuManager->getDisplayNode($sku, FALSE);
-    if ($node instanceof NodeInterface) {
-      $terms = $node->get('field_category')->getValue();
-      foreach ($terms as $term_data) {
-        $term = $this->termStorage->load($term_data['target_id']);
-        $this->cache['tags'][] = 'taxonomy_term:' . $term->id();
-
-        $data['categories'][] = [
-          'term' => (int) $term->id(),
-          'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-        ];
-      }
-    }
 
     $linked_types = [
       LINKED_SKU_TYPE_RELATED,
@@ -259,13 +242,7 @@ class ProductResource extends ResourceBase {
       ];
     }
 
-    $skuData = $sku->toArray();
-
-    // Remove un-wanted description key.
-    $data['attributes'] = array_map(function ($row) {
-      unset($row['description']);
-      return $row;
-    }, $skuData['attributes']);
+    $data['attributes'] = $this->getAttributes($sku);
 
     $data['promotions'] = $this->getPromotions($sku);
     $promo_label = $this->skuManager->getDiscountedPriceMarkup($data['original_price'], $data['final_price']);
@@ -306,8 +283,18 @@ class ProductResource extends ResourceBase {
   private function getMedia(SKUInterface $sku, string $context): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $media = $this->skuImagesManager->getProductMedia($sku, $context);
+
+    if (!isset($media['images_with_type'])) {
+      $media['images_with_type'] = array_map(function ($image) {
+        return [
+          'url' => $image,
+          'image_type' => 'image',
+        ];
+      }, array_values($media['images']));
+    }
+
     return [
-      'images' => array_values($media['images']),
+      'images' => $media['images_with_type'],
       'videos' => array_values($media['videos']),
     ];
   }
@@ -438,7 +425,7 @@ class ProductResource extends ResourceBase {
    * @return array
    *   Promotions.
    */
-  private function getPromotions(SKUInterface $sku) {
+  private function getPromotions(SKUInterface $sku): array {
     $promotions = [];
     $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
     foreach ($promotions_data as $nid => $promotion) {
@@ -450,6 +437,61 @@ class ProductResource extends ResourceBase {
       ];
     }
     return $promotions;
+  }
+
+  /**
+   * Wrapper function get attributes.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Attributes.
+   */
+  private function getAttributes(SKUInterface $sku): array {
+    $skuData = $sku->toArray();
+
+    // @TODO: We should really think of returning what is required instead
+    // of removing stuff. Can be done later when we start developing and testing
+    // for all brands.
+    $unused_options = [
+      'options_container',
+      'required_options',
+      'has_options',
+      'product_activation_date',
+      'url_key',
+      'msrp_display_actual_price_type',
+      'product_state',
+      'tax_class_id',
+      'gift_message_available',
+      'gift_wrapping_available',
+      'is_returnable',
+      'special_from_date',
+      'special_to_date',
+      'custom_design_from',
+      'custom_design_to',
+      'ignore_price_update',
+      'image',
+      'small_image',
+      'thumbnail',
+      'swatch_image',
+      'meta_description',
+      'meta_keyword',
+      'meta_title',
+    ];
+
+    $attributes = array_map(function ($row) use ($unused_options) {
+      if (in_array($row['key'], $unused_options)) {
+        return NULL;
+      }
+
+      // Remove un-wanted description key.
+      unset($row['description']);
+
+      return $row;
+    }, $skuData['attributes']);
+
+    return array_filter($attributes);
   }
 
 }

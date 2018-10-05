@@ -83,6 +83,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $context = $event->getContext();
 
     $media = [];
+    $styled_images = [];
 
     switch ($context) {
       case 'pdp':
@@ -94,7 +95,12 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         );
 
         foreach ($pdp_images ?? [] as $image) {
-          $media[] = $image['url_without_call']->toString();
+          $url = $image['url_without_call']->toString();
+          $media[$url] = [
+            'url' => $url,
+            'image_type' => $image['sortAssetType'],
+          ];
+
           $styled_images[] = $image['url']->toString();
         }
 
@@ -110,11 +116,20 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
 
         if ($plp_main_image) {
-          $media[] = $plp_main_image['url_without_call']->toString();
+          $url = $plp_main_image['url_without_call']->toString();
+          $media[$url] = [
+            'url' => $url,
+            'image_type' => $plp_main_image['sortAssetType'],
+          ];
+
           $styled_images[] = $plp_main_image['url']->toString();
 
           if ($plp_hover_image) {
-            $media[] = $plp_hover_image['url_without_call']->toString();
+            $url = $plp_hover_image['url_without_call']->toString();
+            $media[$url] = [
+              'url' => $url,
+              'image_type' => $plp_hover_image['sortAssetType'],
+            ];
             $styled_images[] = $plp_hover_image['url']->toString();
           }
         }
@@ -130,14 +145,23 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
         if (!empty($teaser_assets)) {
           $image = reset($teaser_assets);
-          $media[] = $image['url_without_call']->toString();
+          $url = $image['url_without_call']->toString();
+          $media[$url] = [
+            'url' => $url,
+            'image_type' => $image['sortAssetType'],
+          ];
           $styled_images[] = $image['url']->toString();
         }
         break;
     }
 
     if (!empty($media)) {
-      $event->setValue(['images' => $media, 'videos' => [], 'styled_images' => []]);
+      $event->setValue([
+        'images' => array_keys($media),
+        'videos' => [],
+        'styled_images' => $styled_images,
+        'images_with_type' => array_values($media),
+      ]);
     }
   }
 
