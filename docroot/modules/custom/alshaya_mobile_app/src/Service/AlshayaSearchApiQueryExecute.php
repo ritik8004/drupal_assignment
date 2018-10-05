@@ -521,29 +521,30 @@ class AlshayaSearchApiQueryExecute {
    */
   public function prepareSortData(string $views_id) {
     // If PLP views.
+    $sort_data = [];
     if ($views_id == 'alshaya_product_list') {
+      // Get sort config.
       $sort_config = _alshaya_acm_product_position_get_config(TRUE);
-      foreach ($sort_config as $key => $label) {
-        if (empty($label)) {
-          unset($sort_config[$key]);
-        }
-      }
+      // Remove empty label items.
+      $sort_config = array_filter($sort_config);
 
       // Sorted sort data.
-      return _alshaya_acm_product_position_sorted_options($sort_config);
+      $sort_config = _alshaya_acm_product_position_sorted_options($sort_config);
+      foreach ($sort_config as $key => $label) {
+        $sort_data[] = [
+          'key' => $key,
+          'label' => $label,
+        ];
+      }
     }
     else {
+      // Get sort config.
       $sort_config = _alshaya_search_get_config(TRUE);
-      foreach ($sort_config as $key => $label) {
-        if (empty($label)) {
-          unset($sort_config[$key]);
-        }
-      }
-
-      return $sort_config;
+      // Remove empty label items.
+      $sort_data = array_filter($sort_config);
     }
 
-    return [];
+    return $sort_data;
   }
 
   /**
