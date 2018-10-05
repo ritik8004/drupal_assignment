@@ -62,7 +62,7 @@ class ProductHelper {
       ];
     }
     $short_desc['value'] = [
-      '#markup' => $html,
+      '#markup' => $desc['html'],
     ];
 
     $build['short_desc'] = $short_desc;
@@ -72,7 +72,6 @@ class ProductHelper {
    * Create short description from given html.
    */
   public function createShortDescription($html, $limit = NULL) {
-    $return = [];
     $limit = ($limit == NULL) ? $this->shortDescMaxLength : $limit;
     $desc_stripped = strip_tags($html);
     // It is very unlikely but description might be too short to process.
