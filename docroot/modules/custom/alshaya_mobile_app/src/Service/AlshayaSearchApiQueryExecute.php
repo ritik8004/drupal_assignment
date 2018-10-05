@@ -593,6 +593,8 @@ class AlshayaSearchApiQueryExecute {
       $range_value = $alshaya_search_granular->calculateResultFilter($price['key']);
       // Trim and remove html and newlines from the markup.
       $stripped_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($range_value['display'])));
+      // Remove extra spaces from text.
+      $stripped_value = preg_replace('/\s\s+/', ' ', $stripped_value);
       $price_facet_data[$stripped_value][] = [
         'key' => $range_value['raw'],
         'label' => $stripped_value,
