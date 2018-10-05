@@ -10,13 +10,13 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\locale\StringStorageInterface;
 
 /**
- * Provides a resource to get alshaya error messages.
+ * Provides a resource to get Alshaya error messages.
  *
  * @RestResource(
  *   id = "alshaya_error_messages",
- *   label = @Translation("Alshaya Error Messages"),
+ *   label = @Translation("Error messages"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/alshaya_error_messages"
+ *     "canonical" = "/rest/v1/error-messages"
  *   }
  * )
  */
