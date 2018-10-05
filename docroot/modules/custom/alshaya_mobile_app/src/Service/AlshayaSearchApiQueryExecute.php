@@ -424,12 +424,34 @@ class AlshayaSearchApiQueryExecute {
       }
       $facet_result[] = [
         'key' => $key,
-        'label' => $facet->getName(),
+        'label' => $this->getFacetBlockTitle($facet->id()),
         'options' => $facet_option_data,
       ];
     }
 
     return $facet_result;
+  }
+
+  /**
+   * Get facet block title from facet id.
+   *
+   * @param string $facet_id
+   *   Facet ID.
+   *
+   * @return string
+   *   Facet block title.
+   */
+  public function getFacetBlockTitle(string $facet_id) {
+    // Block id will be same as facet id with no underscore.
+    // Example - plp_category_facet => plpcategoryfacet.
+    $block_id = str_replace('_', '', $facet_id);
+    // Load facet block to get title.
+    $block = $this->entityTypeManager->getStorage('block')->load($block_id);
+    if ($block instanceof Block) {
+      return $block->label();
+    }
+
+    return '';
   }
 
   /**
