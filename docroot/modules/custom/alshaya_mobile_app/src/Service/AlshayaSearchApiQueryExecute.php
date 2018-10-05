@@ -5,6 +5,7 @@ namespace Drupal\alshaya_mobile_app\Service;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
+use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_acm_product\SkuManager;
