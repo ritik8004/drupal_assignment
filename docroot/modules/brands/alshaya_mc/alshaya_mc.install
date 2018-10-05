@@ -317,11 +317,11 @@ function alshaya_mc_install() {
  *  Install alshaya_amp module before saving configuration related to amp theme.
  */
 function alshaya_mc_update_dependencies() {
-  return [
-    'alshaya_mc' => [
-      '8310' => [
-        'alshaya' => '8004',
-      ],
-    ],
+  $dependencies['alshaya_mc'][8314] = [
+    'alshaya_search' => 8023,
   ];
+  $dependencies['alshaya_mc'][8310] = [
+    'alshaya' => 8004,
+  ];
+  return $dependencies;
 }
