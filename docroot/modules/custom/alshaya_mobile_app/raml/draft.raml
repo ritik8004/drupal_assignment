@@ -482,18 +482,61 @@ schemas:
             "type": "object",
             "description": "Structure TBD"
           },
+          "description": {
+            "type": "string"
+          },
           "filters": {
             "type": "array",
             "items": {
               "type": "object",
-              "description": "Structure TBD."
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The filter key to be used in query."
+                },
+                "label": {
+                  "type": "string",
+                  "description": "The filter label to be displayed as block title."
+                },
+                "options": {
+                  "type": "array",
+                  "description": "The filter options which can be selected.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string",
+                        "description": "The filter option key to be used in query."
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "The number of product matching the filter option."
+                      }
+                    },
+                    "required": [ "key", "label", "count" ]
+                  }
+                }
+              },
+              "required": [ "key", "label", "options" ]
             }
           },
           "sorting": {
             "type": "array",
             "items": {
               "type": "object",
-              "description": "Structure TBD."
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "The sorting option key to be used in query."
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [ "key", "label" ]
             }
           },
           "products": {
