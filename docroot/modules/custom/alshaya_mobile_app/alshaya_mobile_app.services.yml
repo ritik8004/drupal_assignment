@@ -7,6 +7,16 @@ services:
       - '@request_stack'
       - '@path.alias_manager'
       - '@entity_type.manager'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
-    arguments: ['@request_stack', '@facets.manager', '@language_manager', '@plugin.manager.facets.query_type']
+    arguments:
+          - '@request_stack'
+          - '@facets.manager'
+          - '@language_manager'
+          - '@plugin.manager.facets.query_type'
+          - '@alshaya_mobile_app.utility'
+          - '@entity.repository'
+          - '@alshaya_acm_product.skumanager'
+          - '@entity_type.manager'

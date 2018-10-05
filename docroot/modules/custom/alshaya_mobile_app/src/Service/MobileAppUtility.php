@@ -3,6 +3,9 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
 use Drupal\file\FileInterface;
@@ -57,6 +60,20 @@ class MobileAppUtility {
   protected $entityTypeManager;
 
   /**
+   * SKU manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
+   * SKU images manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -69,17 +86,25 @@ class MobileAppUtility {
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU manager.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU images manager.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
                               RequestStack $request_stack,
                               AliasManagerInterface $alias_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              SkuManager $sku_manager,
+                              SkuImagesManager $sku_images_manager) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->aliasManager = $alias_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->skuManager = $sku_manager;
+    $this->skuImagesManager = $sku_images_manager;
   }
 
   /**
@@ -198,10 +223,89 @@ class MobileAppUtility {
   /**
    * Helper function to throw an error.
    *
-   * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
   public function throwException() {
     throw new NotFoundHttpException($this->t("page not found"));
+  }
+
+  /**
+   * Wrapper function get promotions.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Promotions.
+   */
+  public function getPromotions(SKUInterface $sku) {
+    $promotions = [];
+    $promotions_data = $this->skuManager->getPromotionsFromSkuId($sku, '', ['cart'], 'full', FALSE);
+    foreach ($promotions_data as $nid => $promotion) {
+      $promotion_node = $this->entityTypeManager->getStorage('node')->load($nid);
+      $promotions[] = [
+        'text' => $promotion['text'],
+        'deeplink' => $this->getDeepLink($promotion_node, 'promotion'),
+      ];
+    }
+    return $promotions;
+  }
+
+  /**
+   * Wrapper function get labels and make the urls absolute.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Labels data.
+   */
+  public function getLabels(SKUInterface $sku, string $context): array {
+    $labels = $this->skuManager->getLabels($sku, $context);
+
+    if (empty($labels)) {
+      return [];
+    }
+
+    foreach ($labels as &$label) {
+      $doc = new \DOMDocument();
+      $doc->loadHTML((string) $label['image']);
+      $xpath = new \DOMXPath($doc);
+      $label['image'] = Url::fromUserInput($xpath->evaluate("string(//img/@src)"), ['absolute' => TRUE])->toString();
+    }
+
+    return $labels;
+  }
+
+  /**
+   * Wrapper function to get media items for an SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Media Items.
+   */
+  public function getMedia(SKUInterface $sku, string $context): array {
+    $media = $this->skuImagesManager->getProductMedia($sku, $context);
+
+    if (!isset($media['images_with_type'])) {
+      $media['images_with_type'] = array_map(function ($image) {
+        return [
+          'url' => $image,
+          'image_type' => 'image',
+        ];
+      }, array_values($media['images']));
+    }
+
+    return [
+      'images' => $media['images_with_type'],
+      'videos' => array_values($media['videos']),
+    ];
   }
 
 }

@@ -196,13 +196,12 @@ class CategoryProductListResource extends ResourceBase {
   protected function addExtraTermData(TermInterface $term) {
     // Get term url.
     $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
-    $banner_info = [];
     return [
       'id' => $term->id(),
       'label' => $term->label(),
       'path' => $term_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-      'banner' => $banner_info,
+      'banner' => $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
       'description' => $term->get('description')->getValue()[0]['value'],
     ];
   }

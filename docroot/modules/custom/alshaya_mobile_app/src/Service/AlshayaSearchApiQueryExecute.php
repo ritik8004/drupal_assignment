@@ -2,7 +2,12 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\facets\Result\Result;
@@ -115,6 +120,34 @@ class AlshayaSearchApiQueryExecute {
   protected $languageManager;
 
   /**
+   * The mobile app utility service.
+   *
+   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   */
+  protected $mobileAppUtility;
+
+  /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
+   * SKU manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -125,12 +158,31 @@ class AlshayaSearchApiQueryExecute {
    *   Language manager.
    * @param \Drupal\facets\QueryType\QueryTypePluginManager $query_type_manager
    *   Query type plugin manager.
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   Mobile app utility service.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity repository.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    */
-  public function __construct(RequestStack $requestStack, DefaultFacetManager $facet_manager, LanguageManagerInterface $language_manager, QueryTypePluginManager $query_type_manager) {
+  public function __construct(RequestStack $requestStack,
+                              DefaultFacetManager $facet_manager,
+                              LanguageManagerInterface $language_manager,
+                              QueryTypePluginManager $query_type_manager,
+                              MobileAppUtility $mobile_app_utility,
+                              EntityRepositoryInterface $entity_repository,
+                              SkuManager $sku_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->facetManager = $facet_manager;
     $this->languageManager = $language_manager;
     $this->queryTypePluginManager = $query_type_manager;
+    $this->mobileAppUtility = $mobile_app_utility;
+    $this->entityRepository = $entity_repository;
+    $this->skuManager = $sku_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -223,6 +275,7 @@ class AlshayaSearchApiQueryExecute {
             /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
             $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
               'facet' => $this->priceFacet,
+              'query' => $query,
             ]);
             // Get the price range by facet price value.
             $range = $alshaya_search_granular->calculateRange($price);
@@ -395,10 +448,66 @@ class AlshayaSearchApiQueryExecute {
       // format - 'entity:node/1234:en' and we need to get 1234.
       $exploded_id = explode(':', $item->getId());
       $nid = explode('/', $exploded_id[1])[1];
-      $product_data[] = $nid;
+      $product_data[] = $this->getLightProduct($nid, $exploded_id[2]);
     }
 
     return $product_data;
+  }
+
+  /**
+   * Get light product data.
+   *
+   * @param int $nid
+   *   Node id.
+   * @param string $langcode
+   *   Language of node.
+   *
+   * @return array
+   *   Product data.
+   */
+  public function getLightProduct(int $nid, string $langcode = 'en') {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    // If node exists in system.
+    if ($node instanceof Node) {
+      // Get translated node.
+      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+      // Get SKU attached with node.
+      $sku = $node->get('field_skus')->getString();
+      $sku_entity = SKU::loadFromSku($sku);
+      // If SKU exists in system.
+      if ($sku_entity instanceof SKU) {
+        // Get the prices.
+        $prices = $this->skuManager->getMinPrices($sku_entity);
+
+        // Get the promotion data.
+        $promotions = $this->mobileAppUtility->getPromotions($sku_entity);
+        // Get promo labels.
+        $promo_label = $this->skuManager->getDiscountedPriceMarkup($prices['price'], $prices['final_price']);
+        if ($promo_label) {
+          $promotions[] = [
+            'text' => $promo_label,
+          ];
+        }
+
+        // Get label for the SKU.
+        $labels = $this->mobileAppUtility->getLabels($sku_entity, 'plp');
+
+        // Get media (images/video) for the SKU.
+        $images = $this->mobileAppUtility->getMedia($sku_entity, 'search');
+
+        return [
+          'id' => $node->id(),
+          'title' => $node->getTitle(),
+          'original_price' => $prices['price'],
+          'final_price' => $prices['final_price'],
+          'promo' => $promotions,
+          'images' => $images,
+          'labels' => $labels,
+        ];
+      }
+    }
+
+    return [];
   }
 
   /**
