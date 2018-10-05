@@ -109,7 +109,7 @@ class LocalCommand extends BltTasks {
     $this->say('Reset super admin account');
     $this->taskDrush()
       ->drush('sqlq')
-      ->arg('update users_field_data set mail = "no-reply@acquia.com" where uid = 1')
+      ->arg('update users_field_data set mail = "no-reply@acquia.com", name="user1" where uid = 1')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
@@ -117,7 +117,7 @@ class LocalCommand extends BltTasks {
 
     $this->taskDrush()
       ->drush('user-password')
-      ->arg('admin')
+      ->arg('user1')
       ->option('password', 'admin')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
@@ -126,7 +126,7 @@ class LocalCommand extends BltTasks {
 
     $this->taskDrush()
       ->drush('uublk')
-      ->option('name', 'admin')
+      ->option('name', 'user1')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
