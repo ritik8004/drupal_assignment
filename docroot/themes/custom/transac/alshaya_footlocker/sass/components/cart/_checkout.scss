@@ -261,3 +261,27 @@
     }
   }
 }
+
+.empty-cart-message {
+  font-weight: normal;
+  margin-bottom: 1.25rem;
+
+  @include breakpoint ($only-mobile) {
+    margin-top: 3.8125rem;
+  }
+
+  @include breakpoint ($tablet) {
+    margin-top: 4.4375rem;
+  }
+}
+
+.empty-cart-wrapper {
+  #edit-continue-shopping-mobile,
+  .edit-continue-shopping-mobile,
+  #edit-continue-shopping {
+    @extend %button-wide;
+
+    max-width: 11.5rem;
+    font-weight: normal;
+  }
+}

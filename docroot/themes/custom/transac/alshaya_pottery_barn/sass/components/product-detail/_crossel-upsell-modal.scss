@@ -132,8 +132,6 @@
               }
 
               @include breakpoint($only-tablet) {
-                margin: 0.3125rem 1px !important;
-                width: 6.5625rem !important;
                 height: auto !important;
 
                 img {

@@ -23,6 +23,7 @@ $primary_link-hover: $purplish-brown;
 $primary_link-active: $purplish-brown;
 $secondary_btn_bg: $dark-red;
 $secondary_border: $white-three;
+$content_link_color: $black;
 
 // Form elements.
 $primary_input_label: $warm-grey;
@@ -222,6 +223,11 @@ $privilege_earn_txt: $black;
 $basket_continue_shopping_link: $black;
 $basket_continue_shopping_btn_border: false;
 $basket_totals_grand_subtitle: $warm-grey;
+$mobile_continue_shopping_btn_bg: $black;
+$mobile_continue_shopping_btn_border: $black;
+$desktop_continue_shopping_btn_text: $white-two;
+$desktop_continue_shopping_btn_bg: $black;
+$desktop_continue_shopping_btn_border: $black;
 
 // Store finder page.
 // Store finder header form.
@@ -284,3 +290,7 @@ $checkout_method_choice_tab_title_active: $purplish-brown;
 // Address book
 $address_book_change_link: $black;
 $checkout_cc_store_address_mobile_border: $primary_border;
+$checkout_login_guest_email_text: $purplish-brown;
+$checkout_login_guest_email_text_mobile: $purplish-brown;
+$checkout_login_footer_actions_bg: false;
+$checkout_login_btn_bg: $primary_btn_bg;

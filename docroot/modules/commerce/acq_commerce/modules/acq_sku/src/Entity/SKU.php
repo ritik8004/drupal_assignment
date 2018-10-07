@@ -269,6 +269,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
       return $media_item;
     }
+    else {
+      // Return whatever we have as is (videos).
+      return $media_item;
+    }
   }
 
   /**
