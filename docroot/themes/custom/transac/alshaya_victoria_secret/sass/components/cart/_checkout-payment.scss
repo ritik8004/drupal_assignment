@@ -90,11 +90,13 @@
   }
 }
 
-.cvv-help-text-wrapper {
-  position: static;
+.cvv-wrapper {
+  .cvv-help-text-wrapper {
+    position: static;
 
-  .mobile-tooltip-icon {
-    display: none;
+    .mobile-tooltip-icon {
+      display: none;
+    }
   }
 }
 
@@ -107,6 +109,14 @@
     margin-top: 1.25rem;
     margin-bottom: 1rem;
 
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        width: 100%;
+        top: -0.25rem;
+        #{$left}: 0;
+      }
+    }
+
     @include breakpoint($desktop) {
       position: absolute;
       #{$left}: 52%;
@@ -116,6 +126,16 @@
 
     &::before {
       border-radius: 0.25rem;
+    }
+  }
+
+  .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-cvv {
+    html[lang=ar] & {
+      width: 50%;
+
+      @include breakpoint($upto-desktop) {
+        width: 100%;
+      }
     }
   }
 

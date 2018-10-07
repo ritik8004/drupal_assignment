@@ -238,3 +238,12 @@ body {
     box-shadow: none;
   }
 }
+
+@include breakpoint($desktop) {
+  .block-alshaya-main-menu {
+    ul.menu--one__list {
+      display: flex !important;
+      justify-content: space-between;
+    }
+  }
+}

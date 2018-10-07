@@ -103,3 +103,12 @@
     }
   }
 }
+
+#lightSlider {
+  &.pager-no {
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 2em;
+      padding-#{$right}: 2rem;
+    }
+  }
+}
