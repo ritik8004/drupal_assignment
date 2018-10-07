@@ -207,6 +207,10 @@
 #payment_details_wrapper {
   padding: 0 1rem;
 
+  @include breakpoint($only-mobile) {
+    padding: 0;
+  }
+
   #payment_method_knet {
     border-top: 1px solid $checkout_payment_option_border;
   }
