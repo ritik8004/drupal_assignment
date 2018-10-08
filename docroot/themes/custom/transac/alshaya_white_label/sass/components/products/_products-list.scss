@@ -348,6 +348,14 @@
       font-family: $alshaya-thin;
     }
 
+    .promo-banner > .filter--mobile {
+      top: 213px !important;
+
+      @include breakpoint($only-tablet) {
+        top: 161px !important;
+      }
+    }
+
     .form-item-keywords {
       display: none;
     }
