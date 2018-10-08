@@ -9,3 +9,4 @@ permissions:
   - 'restful get category_product_list'
   - 'restful get product'
   - 'restful get stores_finder'
+  - 'restful get promotion_product_list'

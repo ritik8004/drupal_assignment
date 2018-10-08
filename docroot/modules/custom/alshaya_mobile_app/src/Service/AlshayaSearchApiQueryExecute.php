@@ -11,12 +11,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Entity\Index;
+use Drupal\views\Views;
 use Drupal\facets\Result\Result;
 use Drupal\facets\QueryType\QueryTypePluginManager;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class AlshayaSearchApiQueryExecute.
@@ -77,6 +77,20 @@ class AlshayaSearchApiQueryExecute {
    * @var string
    */
   protected $viewsId = 'alshaya_product_list';
+
+  /**
+   * Views display id.
+   *
+   * @var string
+   */
+  protected $viewsDisplayID = 'block_1';
+
+  /**
+   * Price facet key.
+   *
+   * @var string
+   */
+  protected $priceFacetKey = 'skus_sku_reference_final_price';
 
   /**
    * Processed facets array.
@@ -227,8 +241,8 @@ class AlshayaSearchApiQueryExecute {
     if (!empty($query_string_parameters[self::PAGER_KEY])) {
       // Get pager offset and limit info.
       $pager = explode(',', $query_string_parameters[self::PAGER_KEY]);
-      $page_offset = $pager[0];
-      if (!empty($pager[1]) && is_int($pager[1])) {
+      $page_offset = (int) $pager[0];
+      if (!empty($pager[1]) && is_int((int) $pager[1])) {
         $page_limit = $pager[1];
       }
     }
@@ -241,14 +255,22 @@ class AlshayaSearchApiQueryExecute {
       if (!empty($sort_option[0]) && !empty($sort_option[1])) {
         if (!in_array(strtoupper($sort_option[1]), ['ASC', 'DESC'])) {
           // If not a valid sort order.
-          throw new BadRequestHttpException($this->t('Invalid sort order.'));
+          $this->mobileAppUtility->throwException();
         }
 
         $query->sort($sort_option[0], $sort_option[1]);
       }
       else {
         // If either sort key or sort value not available.
-        throw new BadRequestHttpException($this->t('Invalid sort data.'));
+        $this->mobileAppUtility->throwException();
+      }
+    }
+    // If no sort available, use default one.
+    else {
+      // If promo list page.
+      if ($this->getViewsId() == 'alshaya_product_list' && $this->getViewsDisplayId() == 'block_2') {
+        $default_sort = $this->getPromoDefaultSort();
+        $query->sort($default_sort['key'], $default_sort['order']);
       }
     }
 
@@ -366,15 +388,14 @@ class AlshayaSearchApiQueryExecute {
 
     // Process the price facet for special handling.
     foreach ($facet_result as &$facet) {
-      // @Todo: Make it dynamic.
       // If price facet.
-      if ($facet['key'] == 'skus_sku_reference_final_price') {
-        $facet = $this->processPriceFacet($facet);
+      if ($facet['key'] == $this->getPriceFacetKey()) {
+        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$this->getPriceFacetKey()]);
       }
     }
 
     // Prepare sort data.
-    $sort_data = $this->prepareSortData($this->viewsId);
+    $sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
 
     // Prepare final result.
     return [
@@ -405,8 +426,9 @@ class AlshayaSearchApiQueryExecute {
       }
 
       $facet_option_data = [];
-      foreach ($facet_results as $index => $result) {
-        $facet_option_data[$index] = [
+      foreach ($facet_results as $result) {
+        // For storing intermediate temporary data.
+        $temp_data = [
           'key' => $result->getRawValue(),
           'label' => $result->getDisplayValue(),
           'count' => $result->getCount(),
@@ -415,13 +437,15 @@ class AlshayaSearchApiQueryExecute {
         // If children available, then add children to response.
         if (!empty($children = $result->getChildren())) {
           foreach ($children as $child) {
-            $facet_option_data[$index]['children'][] = [
+            $temp_data['children'][] = [
               'key' => $child->getRawValue(),
               'label' => $child->getDisplayValue(),
               'count' => $child->getCount(),
             ];
           }
         }
+
+        $facet_option_data[] = $temp_data;
       }
       $facet_result[] = [
         'key' => $key,
@@ -538,26 +562,35 @@ class AlshayaSearchApiQueryExecute {
    *
    * @param string $views_id
    *   Views machine id.
+   * @param string $display_id
+   *   Views display id.
    *
    * @return array
    *   Sort array.
    */
-  public function prepareSortData(string $views_id) {
+  public function prepareSortData(string $views_id, string $display_id) {
     // If PLP views.
     $sort_data = [];
+    // If plp/promo list page.
     if ($views_id == 'alshaya_product_list') {
-      // Get sort config.
-      $sort_config = _alshaya_acm_product_position_get_config(TRUE);
-      // Remove empty label items.
-      $sort_config = array_filter($sort_config);
+      // If promo list page.
+      if ($display_id == 'block_2') {
+        $sort_data = $this->getPromoSortOptions();
+      }
+      else {
+        // Get sort config.
+        $sort_config = _alshaya_acm_product_position_get_config(TRUE);
+        // Remove empty label items.
+        $sort_config = array_filter($sort_config);
 
-      // Sorted sort data.
-      $sort_config = _alshaya_acm_product_position_sorted_options($sort_config);
-      foreach ($sort_config as $key => $label) {
-        $sort_data[] = [
-          'key' => $key,
-          'label' => $label,
-        ];
+        // Sorted sort data.
+        $sort_config = _alshaya_acm_product_position_sorted_options($sort_config);
+        foreach ($sort_config as $key => $label) {
+          $sort_data[] = [
+            'key' => $key,
+            'label' => $label,
+          ];
+        }
       }
     }
     else {
@@ -588,36 +621,82 @@ class AlshayaSearchApiQueryExecute {
     /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
     $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
       'facet' => $this->priceFacet,
+      'results' => $price_facet_result,
     ]);
-    $price_facet_data = [];
-    foreach ($price_facet_result['options'] as $price) {
-      $range_value = $alshaya_search_granular->calculateResultFilter($price['key']);
+
+    // Get price facet build.
+    /* @var \Drupal\facets\Entity\Facet $price_facet_build */
+    $price_facet_build = $alshaya_search_granular->build();
+
+    $option_data = [];
+    foreach ($price_facet_build->getResults() as $result) {
       // Trim and remove html and newlines from the markup.
-      $stripped_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($range_value['display'])));
+      $display_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($result->getDisplayValue())));
       // Remove extra spaces from text.
-      $stripped_value = preg_replace('/\s\s+/', ' ', $stripped_value);
-      $price_facet_data[$stripped_value][] = [
-        'key' => $range_value['raw'],
-        'label' => $stripped_value,
+      $display_value = preg_replace('/\s\s+/', ' ', $display_value);
+      $option_data[] = [
+        'key' => $result->getRawValue(),
+        'label' => $display_value,
+        'count' => $result->getCount(),
       ];
     }
 
-    if (!empty($price_facet_data)) {
-      // Sort the result.
-      usort($price_facet_data, function ($a, $b) {
-        return $a[0]['key'] < $b[0]['key'] ? -1 : 1;
-      });
-      $price_facet_result['options'] = [];
-      foreach ($price_facet_data as $price_range) {
-        $price_facet_result['options'][] = [
-          'key' => $price_range[0]['key'],
-          'label' => $price_range[0]['label'],
-          'count' => count($price_range),
-        ];
+    $price_facet_result = [
+      'key' => $price_facet_build->id(),
+      'label' => $this->getFacetBlockTitle($price_facet_build->id()),
+      'options' => $option_data,
+    ];
+
+    return $price_facet_result;
+  }
+
+  /**
+   * Get the sort information of the promo list view.
+   *
+   * @return array
+   *   Sort options for promo list page.
+   */
+  public function getPromoSortOptions() {
+    $sort_data = [];
+    // Get and set sort order from the views config.
+    $views_storage = Views::getView($this->getViewsId())->storage;
+    $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
+    // Get enabled sort options from config.
+    $enabled_sorts = _alshaya_acm_product_position_get_config(TRUE);
+    foreach ($views_sort as $sort) {
+      if ($sort['exposed']) {
+        $key = $sort['field'] . ' ' . $sort['order'];
+        $reverse_order = $sort['order'] == 'ASC' ? 'DESC' : 'ASC';
+        $reverse_order_key = $sort['field'] . ' ' . $reverse_order;
+        $sort_data[$key] = $enabled_sorts[$key];
+        $sort_data[$reverse_order_key] = $enabled_sorts[$reverse_order_key];
       }
     }
 
-    return $price_facet_result;
+    return $sort_data;
+  }
+
+  /**
+   * Get default sort applied on promo list view.
+   *
+   * @return array
+   *   Default sort.
+   */
+  public function getPromoDefaultSort() {
+    $views_storage = Views::getView($this->getViewsId())->storage;
+    $views_sort = $views_storage->getDisplay('default')['display_options']['sorts'];
+    $default_sort = [];
+    foreach ($views_sort as $sort) {
+      if ($sort['exposed']) {
+        $default_sort = [
+          'key' => $sort['field'],
+          'order' => $sort['order'],
+        ];
+        break;
+      }
+    }
+
+    return $default_sort;
   }
 
   /**
@@ -689,6 +768,54 @@ class AlshayaSearchApiQueryExecute {
    */
   public function setViewsId(string $views_id) {
     $this->viewsId = $views_id;
+    return $this;
+  }
+
+  /**
+   * Get the views display id.
+   *
+   * @return string
+   *   Views display id.
+   */
+  public function getViewsDisplayId() {
+    return $this->viewsDisplayID;
+  }
+
+  /**
+   * Set the views display id.
+   *
+   * @param string $display_id
+   *   Views display id.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setViewsDisplayId(string $display_id) {
+    $this->viewsDisplayID = $display_id;
+    return $this;
+  }
+
+  /**
+   * Get price facet key.
+   *
+   * @return string
+   *   Price facet key.
+   */
+  public function getPriceFacetKey() {
+    return $this->priceFacetKey;
+  }
+
+  /**
+   * Set price facet key.
+   *
+   * @param string $price_facet_key
+   *   Price facet key.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setPriceFacetKey(string $price_facet_key) {
+    $this->priceFacetKey = $price_facet_key;
     return $this;
   }
 
