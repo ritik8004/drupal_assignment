@@ -507,7 +507,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           // are to be shown after selection of all children and there are more
           // then one configuration for this product.
           if ($display_settings->get('show_child_images_after_selecting') !== 'all'
-            || count($combinations['attribute_sku']) === 1) {
+            || (isset($combinations['attribute_sku']) && count($combinations['attribute_sku']) === 1)) {
 
             $selected_value = \Drupal::request()->query->get('selected');
             $selected_value = $selected_value != $sku_entity->id() ? $selected_value : NULL;

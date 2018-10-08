@@ -20,6 +20,10 @@ function alshaya_pb_transac_update_8003() {
     ['alshaya_acm_product.display_settings'],
     'alshaya_acm_product'
   );
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**
