@@ -25,13 +25,6 @@ function alshaya_search_update_8023() {
     AlshayaConfigManager::MODE_ADD_MISSING
   );
 
-  $alshayaConfigManager->updateConfigs(
-    ['alshaya_search.schema'],
-    'alshaya_search',
-    'schema',
-    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-  );
-
   // Add translation.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
     ->set('search_field_placeholder', 'بحث')
