@@ -68,7 +68,7 @@
   .continue--shopping--mobile a.expanded-table,
   #edit-confirmation-continue-shopping.expanded-table {
     @include breakpoint($only-tablet) {
-      margin-#{$right}: 3.55rem;
+      margin-#{$right}: 3.5rem;
       width: 9.5rem;
     }
   }
