@@ -26,6 +26,7 @@ function alshaya_social_theme() {
  */
 function alshaya_social_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (in_array($form_id, ['user_register_form', 'user_login_form'])) {
+    $form['#attributes']['class'][] = 'social-signup-form';
     $form['social_media_auth_links'] = [
       '#theme' => 'alshaya_social',
       '#social_networks' => \Drupal::configFactory()->get('social_auth.settings')->get('auth'),
