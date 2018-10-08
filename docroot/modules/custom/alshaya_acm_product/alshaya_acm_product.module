@@ -1796,10 +1796,21 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  // PDP layout options.
-  $pdp_layout_options = \Drupal::config('alshaya_acm_product.settings')->get('pdp_layout_options');
-  // Remove 'none' option.
   unset($form['field_pdp_layout']['widget']['#options']['_none']);
-  unset($form['field_pdp_layout']['widget']['#element_validate']);
-  $form['field_pdp_layout']['widget']['#options'] += $pdp_layout_options;
+}
+
+/**
+ * Implements allowed values callback.
+ */
+function alshaya_acm_product_pdp_layout_values() {
+  // PDP layout options.
+  $pdp_layout_options = [];
+  $pdp_layout_options['inherit_site_config'] = 'Inherit Site Config';
+  $config = \Drupal::config('alshaya_acm_product.settings');
+  // Prepare PDP layout select options.
+  foreach ($config->get('pdp_layout_options') as $option_key => $option_label) {
+    $pdp_layout_options[$option_key] = $option_label;
+  }
+  return $pdp_layout_options;
+
 }

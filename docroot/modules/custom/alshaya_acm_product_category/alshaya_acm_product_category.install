@@ -27,6 +27,12 @@ function alshaya_acm_product_category_update_8020() {
     'alshaya_acm_product_category',
     'install'
   );
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install'
+  );
 }
 
 /**

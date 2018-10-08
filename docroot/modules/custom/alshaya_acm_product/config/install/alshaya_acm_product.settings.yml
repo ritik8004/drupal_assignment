@@ -29,3 +29,4 @@ product_carousel_items_settings:
 pdp_layout: 'default'
 pdp_layout_options:
   default: 'Default'
+  magazine: 'Magazine'
