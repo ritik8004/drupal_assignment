@@ -12,6 +12,35 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add config for placeholder text.
+ */
+function alshaya_search_update_8023() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+
+  $alshayaConfigManager->updateConfigs(
+    ['alshaya_search.settings'],
+    'alshaya_search',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  $alshayaConfigManager->updateConfigs(
+    ['alshaya_search.schema'],
+    'alshaya_search',
+    'schema',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  // Add translation.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
+    ->set('search_field_placeholder', 'بحث')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding promotion filter to SRP.
  */
 function alshaya_search_update_8022() {
