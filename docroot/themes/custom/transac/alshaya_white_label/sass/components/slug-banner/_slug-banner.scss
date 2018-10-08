@@ -62,11 +62,11 @@
   p {
     margin: 0;
     font-family: $alshaya-thin;
+  }
 
-    a {
-      text-decoration: underline;
-      color: inherit;
-    }
+  a {
+    text-decoration: underline;
+    color: inherit;
   }
 }
 
@@ -74,6 +74,19 @@
   @include breakpoint($only-tablet) {
     &.header--fixed {
       margin-top: 9.75rem !important;
+    }
+  }
+
+  &:not(.header--fixed) {
+    .c-header {
+      .block-views-exposed-filter-blocksearch-page {
+        .ui-autocomplete {
+          @include breakpoint($only-mobile) {
+            position: absolute !important;
+            top: 3.1875rem !important;
+          }
+        }
+      }
     }
   }
 
@@ -106,6 +119,14 @@
         position: fixed;
         top: 0;
       }
+    }
+  }
+}
+
+.slug-banner-modal {
+  .c-content__slider {
+    .c-slider-promo__item {
+      width: 100% !important;
     }
   }
 }

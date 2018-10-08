@@ -1798,13 +1798,13 @@ class SkuManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   Parent SKU.
-   * @param string $attribute_code
-   *   Attribute code used for swatches.
+   * @param array $attribute_codes
+   *   Attribute codes used for swatches.
    *
    * @return array
    *   Swatches array.
    */
-  public function getSwatches(SKUInterface $sku, $attribute_code = 'color') {
+  public function getSwatches(SKUInterface $sku, array $attribute_codes = ['color']) {
     $swatches = $this->getProductCachedData($sku, 'swatches');
 
     // We may have nothing for an SKU, we should not keep processing for it.
@@ -1818,7 +1818,17 @@ class SkuManager {
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
-      $value = $child->get('attr_' . $attribute_code)->getString();
+      $value = NULL;
+
+      foreach ($attribute_codes as $attribute_code) {
+        $value = $child->get('attr_' . $attribute_code)->getString();
+
+        if (empty($value)) {
+          continue;
+        }
+
+        break;
+      }
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
