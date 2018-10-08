@@ -159,14 +159,11 @@ class CategoriesResource extends ResourceBase {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
 
-      // Check for department page for given term to generate deeplink.
-      // @todo: Use depth to check for department page only for level 1 and level 2 (incase of supercategory).
-      $deeplink = $this->mobileAppUtility->getDeepLink($term);
       $record = [
         'id' => $term->tid,
         'name' => $term->name,
         'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => !empty($deeplink) ? $deeplink->getGeneratedUrl() : NULL,
+        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
