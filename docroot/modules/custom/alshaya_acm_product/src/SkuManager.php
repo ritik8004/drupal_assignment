@@ -2147,4 +2147,43 @@ class SkuManager {
     return $attributes_available;
   }
 
+  /**
+   * Helper function to fetch pdp layout to be used for the sku or node.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity for which layout needs to be fetched.
+   * @param string $context
+   *   Context for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout to be used.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function getPdpLayout(EntityInterface $entity, $context = 'pdp') {
+    $pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    if ($entity instanceof SKUInterface) {
+      $entity = alshaya_acm_product_get_display_node($entity);
+    }
+    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+      if ($inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list)) {
+        $term = $this->termStorage->load($inner_term);
+        if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
+          $term_pdp_layout = $term->get('field_pdp_layout')->getString();
+          if ($term_pdp_layout != 'inherit') {
+            $pdp_layout = $term_pdp_layout;
+          }
+        }
+      }
+    }
+
+    switch ($pdp_layout) {
+      case 'default':
+        return $context;
+
+      case 'magazine':
+        return $context . '-' . $pdp_layout;
+    }
+  }
+
 }
