@@ -434,7 +434,7 @@ function alshaya_white_label_form_alter(&$form, FormStateInterface $form_state, 
     case "views_exposed_form":
       // Adding Place holder on Search.
       if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = t('search item or keyword');
+        $form['keywords']['#attributes']['placeholder'] = \Drupal::config('alshaya_search.settings')->get('search_field_placeholder');
       }
       break;
 
@@ -920,6 +920,20 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
       $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
       $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
+    }
+  }
+
+  // Only for the banner paragraph.
+  if ($variables['elements']['#paragraph']->getType() == 'banner') {
+    // Get the desktop and mobile images for Slider banner if available.
+    $mobile_banner_image = !empty($variables['elements']['field_mobile_banner_image']['#items']) ? $variables['elements']['field_mobile_banner_image']['#items'] : '';
+    $desktop_banner_image = !empty($variables['elements']['field_banner']['#items']) ? $variables['elements']['field_banner']['#items'] : '';
+    $banner_default_image = !empty($desktop_banner_image) ? $desktop_banner_image : $mobile_banner_image;
+
+    if (!empty($banner_default_image)) {
+      $variables['mobile_banner_image'] = !empty($mobile_banner_image) ? _alshaya_white_label_get_image_url($mobile_banner_image) : _alshaya_white_label_get_image_url($desktop_banner_image);
+      $variables['desktop_banner_image'] = !empty($desktop_banner_image) ? _alshaya_white_label_get_image_url($desktop_banner_image) : _alshaya_white_label_get_image_url($mobile_banner_image);
+      $variables['banner_default_image'] = _alshaya_white_label_get_image_url($banner_default_image);
     }
   }
   elseif ($variables['elements']['#paragraph']->getType() == 'promo_block_button') {

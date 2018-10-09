@@ -14,10 +14,6 @@
     overflow: hidden;
 
     .slick-list {
-      width: 47.5rem;
-      #{$left}: calc((100vw - 47.5rem) / 2);
-      min-height: 10.5rem;
-
       @include breakpoint($tablet) {
         width: 71.875rem;
         min-height: 15.875rem;
