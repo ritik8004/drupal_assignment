@@ -16,6 +16,7 @@ use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Utilty Class.
@@ -60,6 +61,13 @@ class MobileAppUtility {
   protected $entityTypeManager;
 
   /**
+   * The serializer.
+   *
+   * @var \Symfony\Component\Serializer\SerializerInterface
+   */
+  protected $serializer;
+
+  /**
    * SKU manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -86,6 +94,8 @@ class MobileAppUtility {
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Symfony\Component\Serializer\SerializerInterface $serializer
+   *   The serializer.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU manager.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
@@ -96,6 +106,7 @@ class MobileAppUtility {
                               RequestStack $request_stack,
                               AliasManagerInterface $alias_manager,
                               EntityTypeManagerInterface $entity_type_manager,
+                              SerializerInterface $serializer,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager) {
     $this->cache = $cache;
@@ -103,6 +114,7 @@ class MobileAppUtility {
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->aliasManager = $alias_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->serializer = $serializer;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
   }
@@ -227,6 +239,73 @@ class MobileAppUtility {
    */
   public function throwException() {
     throw new NotFoundHttpException($this->t("page not found"));
+  }
+
+  /**
+   * Get field data of given entity reference revisions field.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The field name.
+   *
+   * @return array
+   *   Return array with field data and cacheable objects.
+   */
+  public function getFieldData($entity, string $field): array {
+    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+    $field_output = [
+      'field_data' => [],
+      'cache' => [],
+    ];
+    $items = $this->serializer->normalize($entity->get($field), 'json', $context);
+    foreach ($items as $delta => $item) {
+      $field_output['field_data'][$delta] = [];
+      $field_output['field_data'][$delta] = $this->getNormalizedEntityReferenceData($item, $context, $field_output['field_data'][$delta], $field_output);
+    }
+    return $field_output;
+  }
+
+  /**
+   * The function to process normalized entity reference revision field data.
+   *
+   * @param array $item
+   *   Normalize array containing target_id and target_type.
+   * @param array $context
+   *   Context array to process normalize.
+   * @param array $data
+   *   The data array which is used to collect data and return.
+   * @param array $field_output
+   *   The array to collect cacheable objects.
+   *
+   * @return array
+   *   Return data array.
+   */
+  private function getNormalizedEntityReferenceData(array $item, array $context, array &$data, array &$field_output): array {
+    if (!empty($item['target_type'])) {
+      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+      $field_output['cache'][] = $entity;
+      $entity_normalized = $this->serializer->normalize($entity, 'json', $context);
+      $data[$entity->bundle()] = !isset($data[$entity->bundle()]) ? [] : $data[$entity->bundle()];
+      foreach ($entity_normalized as $field_name => $field_data) {
+        if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+          foreach ($field_data as $field_delta => $field_item) {
+            if (!empty($field_item['target_type'])) {
+              $data[$entity->bundle()][$field_name][$field_delta] = !empty($data[$entity->bundle()][$field_name][$field_delta]) ? $data[$entity->bundle()][$field_name][$field_delta] : [];
+              $data[$entity->bundle()][$field_name][$field_delta] = $this->getNormalizedEntityReferenceData($field_item, $context, $data[$entity->bundle()][$field_name][$field_delta], $field_output);
+            }
+            else {
+              $data[$entity->bundle()][$field_name][$field_delta] = $field_item;
+            }
+          }
+
+        }
+      }
+    }
+    else {
+      return $item;
+    }
+    return $data;
   }
 
   /**

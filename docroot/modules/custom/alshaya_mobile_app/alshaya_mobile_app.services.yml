@@ -7,6 +7,7 @@ services:
       - '@request_stack'
       - '@path.alias_manager'
       - '@entity_type.manager'
+      - '@serializer'
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
   alshaya_mobile_app.alshaya_search_api_query_execute:

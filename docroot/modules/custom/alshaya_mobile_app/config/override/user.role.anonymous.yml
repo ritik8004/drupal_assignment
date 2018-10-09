@@ -5,6 +5,7 @@ permissions:
   - 'restful get categories'
   - 'restful get promotions'
   - 'restful get simple_page'
+  - 'restful get advanced_page'
   - 'restful get category_product_list'
   - 'restful get product'
   - 'restful get stores_finder'
