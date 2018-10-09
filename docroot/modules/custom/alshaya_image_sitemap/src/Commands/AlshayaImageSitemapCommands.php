@@ -43,7 +43,7 @@ class AlshayaImageSitemapCommands extends DrushCommands {
                               ConfigFactoryInterface $configFactory,
                               LoggerChannelFactoryInterface $loggerChannelFactory) {
     $this->alshayaImageSitemapGenerator = $alshayaImageSitemapGenerator;
-    $this->configFactory = $configFactory;
+    $this->configFactory = $configFactory->get('alshaya_image_sitemap.settings');
     $this->logger = $loggerChannelFactory->get('alshaya_image_sitemap');
   }
 
@@ -64,7 +64,7 @@ class AlshayaImageSitemapCommands extends DrushCommands {
 
     $batch = [
       'operations' => [],
-      'finished' => '\Drupal\alshaya_iamge_sitemap\Commands\AlshayaImageSitemapCommands::imageSitemapBatchFinishCallback',
+      'finished' => '\Drupal\alshaya_image_sitemap\Commands\AlshayaImageSitemapCommands::imageSitemapBatchFinishCallback',
       'title' => $this->t('Create Image Sitemap'),
       'init_message' => $this->t('Starting sitemap creation.....'),
       'progress_message' => $this->t('Completed @current step of @total.'),
@@ -73,10 +73,11 @@ class AlshayaImageSitemapCommands extends DrushCommands {
 
     $nids = $this->alshayaImageSitemapGenerator->getNodes();
     $batch_size = $this->configFactory->get('image_sitemap_batch_chunk_size');
+
     $nid_chunks = array_chunk($nids, $batch_size);
     foreach ($nid_chunks as $nid_chunk) {
       $batch['operations'][] = [
-        '\Drupal\alshaya_iamge_sitemap\Commands\AlshayaImageSitemapCommands::imageSitemapBatchProcess',
+        '\Drupal\alshaya_image_sitemap\Commands\AlshayaImageSitemapCommands::imageSitemapBatchProcess',
         [$nid_chunk],
       ];
     }
@@ -113,10 +114,10 @@ class AlshayaImageSitemapCommands extends DrushCommands {
       \Drupal::service('alshaya_image_sitemap.generator')
         ->sitemapGenerateFinished();
       \Drupal::state()->set('alshaya_image_sitemap.last_generated', REQUEST_TIME);
-      \Drupal::logger('alshaya_image_sitemap')->success(dt('Image Sitemap Generated Successfully.'));
+      drush_print(dt('Image Sitemap Generated Successfully.'));
     }
     else {
-      \Drupal::logger('alshaya_image_sitemap')->error(dt('There was some error while importing redirects.'));
+      drush_print(dt('There was some error while importing redirects.'));
     }
   }
 
