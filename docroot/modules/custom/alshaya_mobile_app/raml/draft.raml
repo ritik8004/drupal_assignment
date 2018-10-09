@@ -183,18 +183,8 @@ schemas:
           "images": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "url": {
-                  "type": "string"
-                },
-                "alt": {
-                  "type": "string"
-                },
-                "title": {
-                  "type": "string"
-                }
-              }
+              "type": "string",
+              "description": "The path to the image."
             }
 =======
       }
@@ -426,8 +416,8 @@ schemas:
             "description": "The endpoint to invoke to build the promotion product list page."
           },
           "banner": {
-            "type": "object",
-            "description": "Structure TBD"
+            "type": "string",
+            "description": "The path to the banner image."
           },
           "description": {
             "type": "string"
@@ -604,15 +594,8 @@ schemas:
                         "type": "array",
                         "items": [
                           {
-                            "type": "object",
-                            "properties": {
-                              "url": {
-                                "type": "string"
-                              },
-                              "image_type": {
-                                "type": "string"
-                              }
-                            }
+                            "type": "string",
+                            "description": "The path to the image."
                           }
                         ]
                       },
@@ -868,15 +851,8 @@ schemas:
                                 "type": "array",
                                 "items": [
                                   {
-                                    "type": "object",
-                                    "properties": {
-                                      "url": {
-                                        "type": "string"
-                                      },
-                                      "image_type": {
-                                        "type": "string"
-                                      }
-                                    }
+                                    "type": "string",
+                                    "description": "The path to the image."
                                   }
                                 ]
                               },
@@ -1143,10 +1119,7 @@ schemas:
                   "label": "Buy 1 Get 1 Free",
                   "path": "/promotions/buy-1-get-1-free",
                   "deeplink": "/rest/v1/promotion/1234/product-list",
-                  "banner": {
-                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
-                    "alt": "Buy 1 Get 1 Free"
-                  },
+                  "banner": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
                   "total": 123,
                   "filters": [],
                   "sorting": [],
@@ -1174,6 +1147,7 @@ schemas:
 <<<<<<< HEAD
                   "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}",
                   "images": [
+<<<<<<< HEAD
 =======
 /rest:
   /v1:
@@ -1314,6 +1288,10 @@ schemas:
 <<<<<<< HEAD
                   ],
 =======
+=======
+                    "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-23082018-shine-on-en-m.jpg",
+                    "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-26082018-shine-on-en-d.jpg"
+>>>>>>> 3d7b27003... Merge pull request #8363 from vbouchet31/mobile-api
                   ]
 >>>>>>> 3533781bf... Merge pull request #8290 from vbouchet31/mobile-api
                 }
@@ -1494,10 +1472,7 @@ schemas:
                   "label": "Ladies",
                   "path": "/ladies",
                   "deeplink": "/rest/v1/category/1234/product-list",
-                  "banner": {
-                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
-                    "alt": "Ladies"
-                  },
+                  "banner": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
                   "total": 123,
                   "filters": [],
                   "sorting": [],

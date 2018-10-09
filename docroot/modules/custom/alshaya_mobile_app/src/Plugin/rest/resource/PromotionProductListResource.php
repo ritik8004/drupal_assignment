@@ -237,12 +237,14 @@ class PromotionProductListResource extends ResourceBase {
   protected function addExtraPromoData(NodeInterface $node) {
     // Get node url.
     $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
+
+    $banners = $this->mobileAppUtility->getImages($node, 'field_acq_promotion_banner');
     return [
       'id' => $node->id(),
       'label' => $node->getTitle(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
-      'banner' => $this->mobileAppUtility->getImages($node, 'field_acq_promotion_banner'),
+      'banner' => !empty($banners) ? $banners[0] : '',
       'description' => $node->get('field_acq_promotion_description')->getValue()[0]['value'],
     ];
   }

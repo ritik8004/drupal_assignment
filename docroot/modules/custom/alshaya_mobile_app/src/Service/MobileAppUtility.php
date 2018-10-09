@@ -221,9 +221,7 @@ class MobileAppUtility {
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
         if (($file = $entity->get($field_name)->get($key)->entity) && $file instanceof FileInterface) {
-          $images[] = [
-            'url' => file_create_url($file->getFileUri()),
-          ];
+          $images[] = file_create_url($file->getFileUri());
         }
       }
     }
