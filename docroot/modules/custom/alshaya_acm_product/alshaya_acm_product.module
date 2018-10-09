@@ -1803,14 +1803,9 @@ function alshaya_acm_product_form_taxonomy_term_acq_product_category_form_alter(
  * Implements allowed values callback.
  */
 function alshaya_acm_product_pdp_layout_values() {
-  // PDP layout options.
-  $pdp_layout_options = [];
-  $pdp_layout_options['inherit_site_config'] = 'Inherit Site Config';
+  $pdp_layout_options['inherit'] = 'Inherit Site Config';
   $config = \Drupal::config('alshaya_acm_product.settings');
   // Prepare PDP layout select options.
-  foreach ($config->get('pdp_layout_options') as $option_key => $option_label) {
-    $pdp_layout_options[$option_key] = $option_label;
-  }
+  $pdp_layout_options += $config->get('pdp_layout_options');
   return $pdp_layout_options;
-
 }

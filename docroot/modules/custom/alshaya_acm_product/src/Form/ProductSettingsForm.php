@@ -267,11 +267,9 @@ class ProductSettingsForm extends ConfigFormBase {
       '#default_value' => !empty($config->get('product_default_image')) ? [$config->get('product_default_image')] : [],
     ];
 
-    $pdp_layout_options = [];
     // Prepare PDP layout select options.
-    foreach ($config->get('pdp_layout_options') as $option_key => $option_label) {
-      $pdp_layout_options[$option_key] = $option_label;
-    }
+    $pdp_layout_options = alshaya_acm_product_pdp_layout_values();
+    unset($pdp_layout_options['inherit']);
     $form['pdp_layout'] = [
       '#type' => 'select',
       '#title' => $this->t('PDP layout'),
