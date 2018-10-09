@@ -480,9 +480,10 @@ class ProductResource extends ResourceBase {
       'meta_title',
     ];
 
-    $attributes = array_map(function ($row) use ($unused_options, $skuData) {
+    $attributes = [];
+    foreach ($skuData['attributes'] as $row) {
       if (in_array($row['key'], $unused_options)) {
-        return NULL;
+        continue;
       }
 
       // Can not use data from $skuData['attributes'] as it is key_value
@@ -494,11 +495,10 @@ class ProductResource extends ResourceBase {
       }
       // Remove un-wanted description key.
       unset($row['description']);
+      $attributes[] = $row;
+    };
 
-      return $row;
-    }, $skuData['attributes']);
-
-    return array_filter($attributes);
+    return $attributes;
   }
 
 }
