@@ -118,18 +118,21 @@ function alshaya_acm_product_category_child_terms($tid) {
 }
 
 /**
- * Implements hook_entity_presave().
+ * Implements hook_entity_update().
  */
-function alshaya_acm_product_taxonomy_term_presave(EntityInterface $entity) {
+function alshaya_acm_product_taxonomy_term_update(EntityInterface $entity) {
   /** @var \Drupal\taxonomy\Entity\Term $entity */
   if ($entity->getVocabularyId() == 'acq_product_category') {
     $pdp_layout = $entity->get('field_pdp_layout')->getString();
     $original_entity = $entity->original;
+    $tid = $entity->get('tid')->getString();
 
     // Check if the pdp layout has been changed,
     // if it has, update all children to have same pdp layout.
     if (($original_entity) && $original_entity->get('field_pdp_layout')->getString() != $pdp_layout) {
-      $child_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($entity->get('tid')->getString());
+      $child_terms = \Drupal::entityTypeManager()
+        ->getStorage('taxonomy_term')
+        ->loadTree('acq_product_category', $tid, 1, TRUE);
       foreach ($child_terms as $child_term) {
         $child_term->get('field_pdp_layout')->setValue($pdp_layout);
         $child_term->save();
