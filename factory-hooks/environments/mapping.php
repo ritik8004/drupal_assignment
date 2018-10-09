@@ -14,11 +14,9 @@
  * Get commerce third party settings for specific site + environment combination.
  */
 function alshaya_get_commerce_third_party_settings($site_code, $country_code, $env) {
-  $site = $site_code . $country_code;
-
   // From the given site and environment, get the magento and conductor
   // environments keys.
-  $env_keys = alshaya_get_env_keys($site, $env);
+  $env_keys = alshaya_get_env_keys($site_code, $country_code, $env);
 
   include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
   global $magentos;
@@ -50,7 +48,38 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
  * Get the Conductor and Magento names to use for this specific
  * site + environment combination.
  */
-function alshaya_get_env_keys($site, $env) {
+function alshaya_get_env_keys($site_code, $country_code, $env) {
+  $site = $site_code . $country_code;
+
+  // Default mapping is following:
+  // dev, dev2, dev3, test, qa2: QA/Test.
+  // uat: UAT.
+  // pprod/live: Prod.
+  // To override this default behavior, define the specific mapping in the
+  // $mapping array following this structure:
+  // '<site-code>' => [
+  //   '01<env>' => [
+  //     'magento' => '<magento-key>',
+  //     'conductor' => '<conductor-key>'
+  //   ]
+  // ]
+  // <site-code> is the ACSF site id (mckw, hmsa, bbwae, ...).
+  // <env> is the ACSF environment name (dev, dev2, qa, pprod, ...).
+  // <magento-key> is a MDC environment listed in magento.php.
+  // <conductor-key> is an ACM instance listed in conductor.php.
+
+  $default = [
+    '01dev' => 'qa',
+    '01dev2' => 'qa',
+    '01dev3' => 'qa',
+    '01test' => 'qa',
+    '01qa2' => 'qa',
+    '01uat' => 'uat',
+    '01pprod' => 'prod',
+    '01live' => 'prod',
+    'local' => 'qa',
+  ];
+
   $mapping = [
     // Mothercare Kuwait.
     'mckw' => [
@@ -312,9 +341,9 @@ function alshaya_get_env_keys($site, $env) {
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.
-  foreach ($mapping as $site_code => $envs) {
-    if (isset($mapping[$site_code]['01live'])) {
-      $mapping[$site_code]['01update'] = $mapping[$site_code]['01live'];
+  foreach ($mapping as $key => $value) {
+    if (isset($mapping[$key]['01live'])) {
+      $mapping[$key]['01update'] = $mapping[$key]['01live'];
     }
   }
 
@@ -332,6 +361,15 @@ function alshaya_get_env_keys($site, $env) {
   }
   elseif (isset($mapping['default']['default'])) {
     $map = $mapping['default']['default'];
+  }
+
+  // If MDC or Conductor mapping is not defined, use the default mapping
+  // pattern.
+  if (empty($map['magento'])) {
+    $map['magento'] = $site_code . '_' . $default[$env];
+  }
+  if (empty($map['conductor'])) {
+    $map['conductor'] = $site_code . $country_code . '_' . $default[$env];
   }
 
   return $map;
