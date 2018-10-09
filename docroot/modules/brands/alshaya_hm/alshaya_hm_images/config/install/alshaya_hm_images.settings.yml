@@ -38,7 +38,7 @@ dimensions:
 # Image Types:
 # Lookbook: Model's image
 # DescriptiveStillLife: Product's image
-# DescriptiveStillLife: Zoomed version of DescriptiveStillLife image
+# DescriptiveDetail: Zoomed version of DescriptiveStillLife image
 # MODEL_IMAGE, STILL_LIFE_FRONT_URL, DETAIL_IMAGE are mostly applicable only to
 # old season products(season 5) {is_old_format: TRUE}.
 weights:
