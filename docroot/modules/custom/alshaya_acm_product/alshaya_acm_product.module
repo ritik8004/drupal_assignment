@@ -184,8 +184,8 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             unset($items[$item_id]);
           }
 
-          // If SKU is OOS.
-          if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+          // If SKU is OOS and buyable.
+          if (!alshaya_acm_get_stock_from_sku($sku_entity) && alshaya_acm_product_is_buyable($sku_entity)) {
             // Get indexed fields.
             $fields = $items[$item_id]->getFields();
             // Iterate over each indexed field.
