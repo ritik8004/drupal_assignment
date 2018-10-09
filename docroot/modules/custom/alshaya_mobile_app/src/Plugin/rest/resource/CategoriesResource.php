@@ -160,7 +160,7 @@ class CategoriesResource extends ResourceBase {
       $this->termUrls[] = $term_url;
 
       $record = [
-        'id' => $term->tid,
+        'id' => (int) $term->tid,
         'name' => $term->name,
         'path' => $term_url->getGeneratedUrl(),
         'deeplink' => $this->mobileAppUtility->getDeepLink($term),
