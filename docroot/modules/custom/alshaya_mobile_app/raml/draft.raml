@@ -598,7 +598,11 @@ schemas:
                 "properties": {
                   "context": {
                     "type": "string",
-                    "description": "Detail/Listing/Teaser - place of displaying media items in this object."
+                    "enum": [
+                      "detail",
+                      "listing",
+                      "teaser"
+                    ]
                   },
                   "media": {
                     "type": "object",
@@ -643,7 +647,10 @@ schemas:
                 "properties": {
                   "context": {
                     "type": "string",
-                    "description": "Detail/Listing - place of displaying labels in this object."
+                    "enum": [
+                     "detail",
+                     "listing"
+                    ]
                   },
                   "labels": {
                     "type": "array",
@@ -855,7 +862,11 @@ schemas:
                         "properties": {
                           "context": {
                             "type": "string",
-                            "description": "Detail/Listing/Teaser - place of displaying media items in this object."
+                            "enum": [
+                              "detail",
+                              "listing",
+                              "teaser"
+                            ]
                           },
                           "media": {
                             "type": "object",
@@ -900,7 +911,10 @@ schemas:
                         "properties": {
                           "context": {
                             "type": "string",
-                            "description": "Detail/Listing - place of displaying labels in this object."
+                            "enum": [
+                              "detail",
+                              "listing"
+                            ]
                           },
                           "labels": {
                             "type": "array",
