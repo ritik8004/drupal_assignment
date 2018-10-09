@@ -84,6 +84,14 @@ header {
       background-position: 0;
     }
   }
+
+  #mini-cart-wrapper {
+    .cart-link-total {
+      @include breakpoint($only-tablet) {
+        display: none;
+      }
+    }
+  }
 }
 
 /*
@@ -149,6 +157,12 @@ header {
         html[lang=ar] & {
           margin-top: 0.25rem;
         }
+      }
+    }
+
+    .quantity {
+      @include breakpoint($only-mobile) {
+        bottom: -0.4375rem;
       }
     }
   }
