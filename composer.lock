@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cad5fde5593e7fe1f7fd987a3959629f",
+    "content-hash": "988001fcc444c5bd4a2fef9230dc10bb",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -48,9 +48,6 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
-                },
-                "patches_applied": {
-                    "Fixing bootstrap level for acsf tools commands to site level.": "https://github.com/acquia/acsf-tools/pull/31.patch"
                 }
             },
             "autoload": {
