@@ -480,11 +480,18 @@ class ProductResource extends ResourceBase {
       'meta_title',
     ];
 
-    $attributes = array_map(function ($row) use ($unused_options) {
+    $attributes = array_map(function ($row) use ($unused_options, $skuData) {
       if (in_array($row['key'], $unused_options)) {
         return NULL;
       }
 
+      // Can not use data from $skuData['attributes'] as it is key_value
+      // field type, and value is varchar field with limit of 255, Which strips
+      // the text beyond the limit for description, and some of fields have key
+      // stored instead of value, value is saved in it's separate table.
+      if (isset($skuData["attr_{$row['key']}"])) {
+        $row['value'] = $skuData["attr_{$row['key']}"][0]['value'];
+      }
       // Remove un-wanted description key.
       unset($row['description']);
 
