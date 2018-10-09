@@ -413,57 +413,7 @@ schemas:
           }
         }
       }
-  - GetPromotion: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "label": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string",
-            "description": "The URL on Drupal site."
-          },
-          "deeplink": {
-            "type": "string",
-            "description": "The endpoint to invoke to build the promotion product list page."
-          },
-          "banner": {
-            "type": "object",
-            "description": "Structure TBD"
-          },
-          "total": {
-            "type": "number",
-            "description": "The total number of products matching the criterias."
-          },
-          "filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "sorting": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD. Must contain all the data to build the search result view mode."
-            }
-          }
-        }
-      }
-  - GetCategory: |
+  - GetProductsList: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
         "type": "object",
@@ -1179,7 +1129,7 @@ schemas:
         200:
           body:
             application/json:
-              schema: GetPromotion
+              schema: GetProductsList
               example: |
                 {
                   "id": 1234,
@@ -1533,7 +1483,7 @@ schemas:
         200:
           body:
             application/json:
-              schema: GetCategory
+              schema: GetProductsList
               example: |
                 {
                   "id": 1234,
