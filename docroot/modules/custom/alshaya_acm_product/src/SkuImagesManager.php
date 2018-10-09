@@ -781,8 +781,8 @@ class SkuImagesManager {
           // Add PDP slider position class in template.
           $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
 
-          $gallery['product_zoom'] = [
-            '#theme' => 'product_zoom',
+          $gallery['alshaya_magazine'] = [
+            '#theme' => 'alshaya_magazine',
             '#mainImage' => $main_image,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,

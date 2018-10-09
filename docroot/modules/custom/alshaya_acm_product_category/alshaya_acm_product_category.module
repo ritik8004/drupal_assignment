@@ -8,6 +8,7 @@
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Implements hook_theme().
@@ -114,4 +115,25 @@ function alshaya_acm_product_category_child_terms($tid) {
     ];
   }
   return $data;
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function alshaya_acm_product_taxonomy_term_presave(EntityInterface $entity) {
+  /** @var \Drupal\taxonomy\Entity\Term $entity */
+  if ($entity->getVocabularyId() == 'acq_product_category') {
+    $pdp_layout = $entity->get('field_pdp_layout')->getString();
+    $original_entity = $entity->original;
+
+    // Check if the pdp layout has been changed,
+    // if it has, update all children to have same pdp layout.
+    if (($original_entity) && $original_entity->get('field_pdp_layout')->getString() != $pdp_layout) {
+      $child_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($entity->get('tid')->getString());
+      foreach ($child_terms as $child_term) {
+        $child_term->get('field_pdp_layout')->setValue($pdp_layout);
+        $child_term->save();
+      }
+    }
+  }
 }
