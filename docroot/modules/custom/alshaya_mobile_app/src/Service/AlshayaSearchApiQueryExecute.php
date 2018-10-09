@@ -107,6 +107,13 @@ class AlshayaSearchApiQueryExecute {
   protected $priceFacet = NULL;
 
   /**
+   * Total result count.
+   *
+   * @var int
+   */
+  protected $resultTotalCount = 0;
+
+  /**
    * Current request.
    *
    * @var \Symfony\Component\HttpFoundation\Request
@@ -228,8 +235,6 @@ class AlshayaSearchApiQueryExecute {
     $query->setLanguages([$this->languageManager->getCurrentLanguage()->getId()]);
     // Sort by the stock.
     $query->sort('stock', 'DESC');
-    // Status of node.
-    $query->addCondition('status', 1);
 
     // Get query string parameters..
     $query_string_parameters = $this->currentRequest->query->all();
@@ -271,6 +276,12 @@ class AlshayaSearchApiQueryExecute {
       if ($this->getViewsId() == 'alshaya_product_list' && $this->getViewsDisplayId() == 'block_2') {
         $default_sort = $this->getPromoDefaultSort();
         $query->sort($default_sort['key'], $default_sort['order']);
+      }
+      elseif ($this->getViewsId() == 'search' && $this->getViewsDisplayId() == 'page') {
+        // If search page, get default sort.
+        $default_sort = $this->getSearchPageSortOptions(TRUE);
+        $exploded_default_sort = explode(self::SORT_SEPARATOR, $default_sort);
+        $query->sort($exploded_default_sort[0], $exploded_default_sort[1]);
       }
     }
 
@@ -341,6 +352,9 @@ class AlshayaSearchApiQueryExecute {
     // Execute the search.
     $results = $query->execute();
 
+    // Set the result count.
+    $this->setResultTotalCount($results->getResultCount());
+
     // Fill facets with the result data.
     $facet_build = [];
     foreach ($facets as $facet) {
@@ -402,6 +416,7 @@ class AlshayaSearchApiQueryExecute {
       'filters' => $facet_result,
       'sort' => $sort_data,
       'products' => $product_data,
+      'total' => $this->getResultTotalCount(),
     ];
   }
 
@@ -419,6 +434,10 @@ class AlshayaSearchApiQueryExecute {
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
+      // If facet is not enabled, then skip it.
+      if (!$this->isFacetEnabled($facet->id())) {
+        continue;
+      }
       // If no result available for a facet, skip that.
       $facet_results = $facet->getResults();
       if (empty($facet_results)) {
@@ -477,6 +496,26 @@ class AlshayaSearchApiQueryExecute {
     }
 
     return '';
+  }
+
+  /**
+   * Checks if facet enabled or not on FE.
+   *
+   * @param string $facet_id
+   *   Facet ID.
+   *
+   * @return bool
+   *   True if facet enabled.
+   */
+  public function isFacetEnabled(string $facet_id) {
+    $block_id = str_replace('_', '', $facet_id);
+    // Load facet block to get title.
+    $block = $this->entityTypeManager->getStorage('block')->load($block_id);
+    if ($block instanceof Block) {
+      return $block->status();
+    }
+
+    return FALSE;
   }
 
   /**
@@ -594,10 +633,8 @@ class AlshayaSearchApiQueryExecute {
       }
     }
     else {
-      // Get sort config.
-      $sort_config = _alshaya_search_get_config(TRUE);
-      // Remove empty label items.
-      $sort_data = array_filter($sort_config);
+      // If search page.
+      $sort_data = $this->getSearchPageSortOptions();
     }
 
     return $sort_data;
@@ -629,7 +666,10 @@ class AlshayaSearchApiQueryExecute {
     $price_facet_build = $alshaya_search_granular->build();
 
     $option_data = [];
-    foreach ($price_facet_build->getResults() as $result) {
+    $results = $price_facet_build->getResults();
+    // Sort the price facet.
+    ksort($results);
+    foreach ($results as $result) {
       // Trim and remove html and newlines from the markup.
       $display_value = trim(str_replace(["\n", "\r"], ' ', strip_tags($result->getDisplayValue())));
       // Remove extra spaces from text.
@@ -651,6 +691,50 @@ class AlshayaSearchApiQueryExecute {
   }
 
   /**
+   * Get the sort information of the search page.
+   *
+   * If we pass the default sort option, then this will return the first value
+   * from the sorted sort options and that will be treated as default sort.
+   *
+   * @param bool $default_sort
+   *   If we need the default sort option.
+   *
+   * @return array
+   *   Sort options for search page page.
+   */
+  public function getSearchPageSortOptions(bool $default_sort = FALSE) {
+    $sort_data = [];
+    // Get sort config.
+    $sort_config = _alshaya_search_get_config();
+    $sort_config = ['search_api_relevance' => 'search_api_relevance'] + $sort_config;
+    // Get labels of sort config.
+    $sort_config_labels = _alshaya_search_get_config(TRUE);
+    // Remove empty label items.
+    $sort_config_labels = array_filter($sort_config_labels);
+    foreach ($sort_config as $key => $sort) {
+      if (isset($sort_config_labels[$key . ' ASC'])) {
+        $sort_data[] = [
+          'key' => $key . ' ASC',
+          'label' => $sort_config_labels[$key . ' ASC'],
+        ];
+      }
+      if (isset($sort_config_labels[$key . ' DESC'])) {
+        $sort_data[] = [
+          'key' => $key . ' DESC',
+          'label' => $sort_config_labels[$key . ' DESC'],
+        ];
+      }
+    }
+
+    // If we only need the default sort, return first value.
+    if ($default_sort) {
+      return $sort_data[0]['key'];
+    }
+
+    return $sort_data;
+  }
+
+  /**
    * Get the sort information of the promo list view.
    *
    * @return array
@@ -668,8 +752,14 @@ class AlshayaSearchApiQueryExecute {
         $key = $sort['field'] . ' ' . $sort['order'];
         $reverse_order = $sort['order'] == 'ASC' ? 'DESC' : 'ASC';
         $reverse_order_key = $sort['field'] . ' ' . $reverse_order;
-        $sort_data[$key] = $enabled_sorts[$key];
-        $sort_data[$reverse_order_key] = $enabled_sorts[$reverse_order_key];
+        $sort_data[] = [
+          'key' => $key,
+          'label' => $enabled_sorts[$key],
+        ];
+        $sort_data[] = [
+          'key' => $reverse_order_key,
+          'label' => $enabled_sorts[$reverse_order_key],
+        ];
       }
     }
 
@@ -816,6 +906,30 @@ class AlshayaSearchApiQueryExecute {
    */
   public function setPriceFacetKey(string $price_facet_key) {
     $this->priceFacetKey = $price_facet_key;
+    return $this;
+  }
+
+  /**
+   * Get the total item count of query.
+   *
+   * @return int
+   *   Total result items.
+   */
+  public function getResultTotalCount() {
+    return $this->resultTotalCount;
+  }
+
+  /**
+   * Set the total item count of query.
+   *
+   * @param int $count
+   *   Total result count.
+   *
+   * @return int
+   *   Current object.
+   */
+  public function setResultTotalCount(int $count) {
+    $this->resultTotalCount = $count;
     return $this;
   }
 
