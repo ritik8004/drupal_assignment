@@ -13,13 +13,8 @@ use Drupal\Core\Site\Settings;
  * Update field type for attr_color_lhn to attribute from string.
  */
 function alshaya_pb_transac_update_8005() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  $manager->updateConfigs(
-    ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_acm_product'
-  );
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('color_lhn', ['swatch' => 1]);
 }
 
 /**
