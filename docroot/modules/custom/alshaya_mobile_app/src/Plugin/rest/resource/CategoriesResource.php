@@ -167,12 +167,9 @@ class CategoriesResource extends ResourceBase {
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
-      if (is_object($file = $this->getPromoBanner($langcode, $term->tid))) {
+      if (is_object($file = $this->getBanner($langcode, $term->tid))) {
         $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
-        $record['promo_banner'] = [
-          'url' => file_create_url($image->getFileUri()),
-          'alt' => $file->field_promotion_banner_alt ? $file->field_promotion_banner_alt : '',
-        ];
+        $record['banner'] = file_create_url($image->getFileUri());
       }
 
       $record['child'] = $this->getAllCategories($langcode, $term->tid);
@@ -193,12 +190,11 @@ class CategoriesResource extends ResourceBase {
    * @return array
    *   Array of fiel.
    */
-  private function getPromoBanner($langcode, $tid) {
+  private function getBanner($langcode, $tid) {
     $query = $this->connection->select('taxonomy_term__field_promotion_banner', 'ttbc');
     $query->fields('ttbc', [
       'entity_id',
       'field_promotion_banner_target_id',
-      'field_promotion_banner_alt',
     ]);
     $query->condition('ttbc.entity_id', $tid);
     $query->condition('ttbc.langcode', $langcode);
