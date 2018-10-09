@@ -1597,6 +1597,20 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     }
 
     /**
+     * Scrolls an element into the viewport.
+     *
+     * @param string $selector
+     *   The element's CSS selector.
+     *
+     * @When I scroll to the :selector element
+     */
+    public function scrollToElement($selector)
+    {
+        $this->getSession()
+            ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+    }
+
+    /**
      * @Then /^I should see buttons for facebook, Twitter and Pinterest$/
      */
     public function iShouldSeeButtonsForFacebookTwitterAndPinterest() {

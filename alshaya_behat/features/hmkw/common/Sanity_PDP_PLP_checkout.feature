@@ -7,10 +7,11 @@ Feature: As a guest user I should be able to
     Given I am on "/ladies/new-arrivals/clothes"
     And I wait for the page to load
 
+
   Scenario: As a Guest user
   I should be able to verify the fields on
     PLP page
-    Then I should be able to see the header
+    #Then I should be able to see the header
     And I should see the title and count of items
     Then I should be able to see the footer
     When I select "Name A to Z" from the dropdown
@@ -34,11 +35,12 @@ Feature: As a guest user I should be able to
     Then I should see "Size"
 
 
+
   Scenario: As a Guest user I should be able to select product from
     PLP page and verify the fields on PDP page
     When I select a product from a product category
     And I wait for the page to load
-    Then I should be able to see the header
+    #Then I should be able to see the header
     Then I should be able to see the footer
     Then it should display title, price and item code
     And it should display color
@@ -94,6 +96,7 @@ Feature: As a guest user I should be able to
     Then I should not see "Please select the category you require"
     And I should see the link "Size Guide"
 
+
   Scenario: As a Guest user I should be able to select product from
   PLP page, add to basket select Home Delivery and see COD, Cybersource
   and KNET as payment methods
@@ -111,7 +114,8 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
-    And I should be able to see the header for checkout
+    And I should see "secure checkout"
+    #And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -161,7 +165,8 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
-    And I should be able to see the header for checkout
+    And I should see "secure checkout"
+    #And I should be able to see the header for checkout
     When I follow "Click & Collect"
     And I wait for the page to load
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field

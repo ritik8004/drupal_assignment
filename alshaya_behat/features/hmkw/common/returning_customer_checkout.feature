@@ -133,7 +133,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    Then I should see text matching "Thank you for shopping online with us, Test User"
     And I should see text matching "Your order number is "
         #checking product attributes
     When I click on ".product--count td" element
@@ -165,7 +165,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test Test"
+    Then I should see text matching "Thank you for shopping online with us, Test User"
     And I should see text matching "Your order number is "
         #checking product attributes
     When I click on ".product--count td" element

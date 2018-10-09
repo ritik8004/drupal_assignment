@@ -7,7 +7,8 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
-    And I go to "/en/cart"
+    And I wait 5 seconds
+    And I go to "/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -17,7 +18,8 @@ Feature: Test Checkout feature
   @cod @hd
   Scenario: As a Guest,
   I should be able to checkout using COD
-    And I should be able to see the header for checkout
+    #And I should be able to see the header for checkout
+    And I should see "secure checkout"
     And I should not see the link "create an account"
     And I should not see the link "Sign in"
     And I should not see the link "Find Store"
@@ -57,7 +59,8 @@ Feature: Test Checkout feature
   @hd @knet
   Scenario: As a Guest,
     I should be able to checkout using KNET
-    And I should be able to see the header for checkout
+    #And I should be able to see the header for checkout
+    And I should see "secure checkout"
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -101,7 +104,8 @@ Feature: Test Checkout feature
   Scenario: As a Guest
   I should be able to use click and collect option
   and pay by KNET
-    And I should be able to see the header for checkout
+    #And I should be able to see the header for checkout
+    And I should see "secure checkout"
     When I follow "click & collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -148,7 +152,8 @@ Feature: Test Checkout feature
   @knet @fail
   Scenario: As a Guest
     I should be displayed a valid message on cancelling a KNET transaction
-    And I should be able to see the header for checkout
+    #And I should be able to see the header for checkout
+    And I should see "secure checkout"
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -181,7 +186,7 @@ Feature: Test Checkout feature
     I should be able to view the number of results displayed
     Buttons to toggle between list and Map view
     and link to navigate to the basket
-    And I should be able to see the header for checkout
+    #And I should be able to see the header for checkout
     And I follow "click & collect"
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -199,13 +204,14 @@ Feature: Test Checkout feature
     on Click and Collect
     When I follow "click & collect"
     And I wait for the page to load
+    And I wait 2 seconds
     Then I should see the link "List view"
     And I should see the link "Map view"
     But the "List view" tab should be selected
 
   @cc
   Scenario: As a Guest
-    I should be able to see various options
+    I should be able to see various options`
     for each Store on click & collect
     When I follow "click & collect"
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -366,7 +372,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
     And I fill in an element having class ".paymentinput" with "00000011"
-    And I fill in "cardN" with "000000011"
+   # And I fill in "card" with "000000011"
     And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"

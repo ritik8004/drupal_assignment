@@ -6,14 +6,16 @@ Feature: As a customer
   Background:
     Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
     And I wait for the page to load
-    Then I should see the link "My account"
+    Then I should see the link "My Account"
     When I am on a sport product
     And I wait for the page to load
     And I remove promo panel
-    When I press "add to cart"
+    And I scroll to the ".selection" element
+    When I press "Add to Bag"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load
+    And I scroll to the "#secure-checkout-button" element
     When I press "checkout securely"
     And I wait for the page to load
 
@@ -33,6 +35,7 @@ Feature: As a customer
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
+    And I scroll to the "#edit-actions-next" element
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
@@ -56,6 +59,7 @@ Feature: As a customer
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
+    And I scroll to the "#edit-actions-next" element
     And I accept terms and conditions
     And I press "place order"
     And I wait 10 seconds
@@ -82,6 +86,7 @@ Feature: As a customer
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
+    And I scroll to the "#edit-actions-next" element
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load

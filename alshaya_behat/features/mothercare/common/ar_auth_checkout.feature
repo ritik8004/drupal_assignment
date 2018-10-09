@@ -10,6 +10,7 @@ Feature: As an authenticated user
     Given I am on a configurable product
     When I select a size for the product
     And I wait for AJAX to finish
+    Then I scroll to the ("[^"]+"|'[^']+'|\w+([.,]\w+)) element
     When I press "add to basket"
     And I wait for AJAX to finish
     When I go to "/cart"

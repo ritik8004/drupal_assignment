@@ -8,8 +8,10 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/en/cart"
+    And I wait 5 seconds
+    Then I go to "/cart"
     And I wait for the page to load
+    And I scroll to the "#secure-checkout-button" element
     When I press "checkout securely"
     And I wait for the page to load
     Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
@@ -130,7 +132,7 @@ Feature: Test various checkout scenarios as returning customer
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
-    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "111"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     And I accept terms and conditions
     And I press "place order"
@@ -144,6 +146,7 @@ Feature: Test various checkout scenarios as returning customer
 
 
   @cc @cs
+
   Scenario: As a returning customer
   I should be able to checkout using CC - Cybersource
     When I follow "click & collect"
@@ -158,7 +161,7 @@ Feature: Test various checkout scenarios as returning customer
     When I select a payment option "payment_method_title_cybersource"
     And I wait for AJAX to finish
     When I fill in an element having class ".cybersource-credit-card-input" with "4111111111111111"
-    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
+    When I fill in an element having class ".cybersource-credit-card-cvv-input" with "111"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "55004455"
     And I select "Kuwait City" from "edit-billing-address-address-billing-administrative-area"

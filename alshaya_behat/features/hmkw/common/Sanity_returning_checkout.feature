@@ -1,9 +1,10 @@
 @javascript
 Feature: To verify a returning customer is able to
-  able to checkout with HD and C&C
+  able to checkout with HD and C&C and then cancels it
+
 
   Scenario: As a returning customer
-  I should be able to place an order for HD - COD, KNET and Cybersource
+  I should be able to place an order for HD - COD, KNET and Cybersource but I cancel My order
     Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"
@@ -36,17 +37,17 @@ Feature: To verify a returning customer is able to
     When I accept terms and conditions
     When I select a payment option "payment_method_title_knet"
     And I wait for AJAX to finish
+    And I scroll to the "#edit-actions" element
     Then I should see "I confirm that I have read and accept the"
     And I accept terms and conditions
     And I wait for the page to load
-    Then I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
     And I press "CancelAction_id"
 
 
   Scenario: As a returning customer
-  I should be able to place an order for CC - KNET & Cybersource
+  I should not be able to place an order for CC - KNET & Cybersource but I cancel my order
     Given I am on a configurable product
     And I wait for the page to load
     When I press "Add to basket"

@@ -2,6 +2,7 @@
 Feature: To verify a returning customer is able to
   able to checkout with HD and C&C
 
+  @test
   Scenario: As a returning customer
   I should be able to place an order for HD - COD, KNET and Cybersource
     Given I am on a configurable product
@@ -39,10 +40,11 @@ Feature: To verify a returning customer is able to
     Then I should see "I confirm that I have read and accept the"
     And I accept terms and conditions
     And I wait for the page to load
-    Then I accept terms and conditions
+    #Then I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
     And I press "CancelAction_id"
+
 
 
   Scenario: As a returning customer
