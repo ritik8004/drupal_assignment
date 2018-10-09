@@ -12,7 +12,7 @@ use Drupal\Core\Site\Settings;
  *
  * Update field type for attr_color_lhn to attribute from string.
  */
-function alshaya_pb_transac_update_8004() {
+function alshaya_pb_transac_update_8005() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
@@ -20,6 +20,17 @@ function alshaya_pb_transac_update_8004() {
     ['alshaya_acm_product.sku_base_fields'],
     'alshaya_acm_product'
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config translation for placeholder text.
+ */
+function alshaya_pb_transac_update_8004() {
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
+    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز/كود منتج...)')
+    ->save();
 }
 
 /**
@@ -35,6 +46,10 @@ function alshaya_pb_transac_update_8003() {
     ['alshaya_acm_product.display_settings'],
     'alshaya_acm_product'
   );
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**
@@ -138,4 +153,14 @@ function alshaya_pb_transac_install() {
 
   // Re-save indexes to ensure config overrides are taken into consideration.
   _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_pb_transac_update_dependencies() {
+  $dependencies['alshaya_pb_transac'][8004] = [
+    'alshaya_search' => 8023,
+  ];
+  return $dependencies;
 }

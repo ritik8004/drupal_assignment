@@ -193,6 +193,7 @@ $plp_facet_clear_border_mobile: $purplish-brown;
 $plp_facet_clear_text: $purplish-brown;
 $plp_facet_filter_count: $black;
 $plp_facet_filter_count_background: $purplish-brown;
+$plp_tile_product_hover_border: $purplish-brown;
 
 // Facet
 $category_facet_active_icon: $black;
@@ -266,3 +267,7 @@ $checkout_login_guest_email_text: $purplish-brown;
 $checkout_login_guest_email_text_mobile: $purplish-brown;
 $checkout_login_footer_actions_bg: false;
 $checkout_login_btn_bg: $primary_btn_bg;
+
+// Checkout Payment.
+$checkout_payment_form_border: $purplish-brown;
+$checkout_payment_method_title: $black;
