@@ -11,7 +11,7 @@ use Drush\Commands\DrushCommands;
 /**
  * Class AlshayaImageSitemapCommands.
  *
- * @package Drupal\alshaya_iamge_sitemap\Commands
+ * @package Drupal\alshaya_image_sitemap\Commands
  */
 class AlshayaImageSitemapCommands extends DrushCommands {
   use StringTranslationTrait;
