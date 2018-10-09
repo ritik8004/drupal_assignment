@@ -80,8 +80,8 @@ function template_preprocess_alshaya_main_menu_level1(array &$variables) {
 function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $max_depth = \Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_max_depth');
   if ($max_depth > 0) {
-    $super_category_status = !empty($context['super_category']) ? $context['super_category'] : FALSE;
-    _alshaya_main_menu_process_max_depth($term_tree, $max_depth, $super_category_status);
+    $max_depth += $context['depth_offset'];
+    _alshaya_main_menu_process_max_depth($term_tree, $max_depth);
   }
 }
 
@@ -93,17 +93,16 @@ function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $par
  * @param int $max_depth
  *   The maximum depth to add class.
  */
-function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth, $super_category_status) {
+function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
   foreach ($data as &$item) {
     // We render the main menu items from second level terms, When super
     // category status is enabled. Deduct 1 from the actual depth to get the
     // currect term level for main menu items.
-    $term_depth = $super_category_status ? $item['depth'] - 1 : $item['depth'];
-    if ($max_depth == $term_depth) {
+    if ($item['depth'] == $max_depth) {
       $item['class'] = 'max-depth';
     }
     if (!empty($item['child'])) {
-      _alshaya_main_menu_process_max_depth($item['child'], $max_depth, $super_category_status);
+      _alshaya_main_menu_process_max_depth($item['child'], $max_depth);
     }
   }
 }

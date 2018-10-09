@@ -59,7 +59,7 @@ function alshaya_super_category_module_implements_alter(&$implementations, $hook
  */
 function alshaya_super_category_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array &$context) {
   $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
-  $context['super_category'] = $super_category_status;
+  $context['depth_offset'] = $super_category_status ? 1 : 0;
 }
 
 /**
