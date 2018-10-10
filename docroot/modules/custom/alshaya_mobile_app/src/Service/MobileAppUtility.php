@@ -17,6 +17,8 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
+use Drupal\Core\Render\RenderContext;
+use Drupal\Core\Render\RendererInterface;
 
 /**
  * Utilty Class.
@@ -82,6 +84,13 @@ class MobileAppUtility {
   protected $skuImagesManager;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -100,6 +109,8 @@ class MobileAppUtility {
    *   SKU manager.
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
    *   SKU images manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -108,7 +119,8 @@ class MobileAppUtility {
                               EntityTypeManagerInterface $entity_type_manager,
                               SerializerInterface $serializer,
                               SkuManager $sku_manager,
-                              SkuImagesManager $sku_images_manager) {
+                              SkuImagesManager $sku_images_manager,
+                              RendererInterface $renderer) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -117,6 +129,7 @@ class MobileAppUtility {
     $this->serializer = $serializer;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -240,6 +253,9 @@ class MobileAppUtility {
   /**
    * Get field data of given entity reference revisions field.
    *
+   * Note: Manual caching of entity requires when this method used, use
+   * 'cache' key to loop through to addCacheableDependency.
+   *
    * @param object $entity
    *   The entity object.
    * @param string $field
@@ -254,7 +270,20 @@ class MobileAppUtility {
       'field_data' => [],
       'cache' => [],
     ];
-    $items = $this->serializer->normalize($entity->get($field), 'json', $context);
+
+    // While using normalize, we can't able to catch bubbleable_metadata for
+    // entity's canonical link and some entity don't have canonical link
+    // ie. paragraph. In render method of renderer any early render that
+    // happens throws fatal error. To avoid this fatal error thrown by
+    // \Drupal\Core\Render\Renderer::render(), we have to handle it manually.
+    // that's why Manual caching of Paragraph entity requires when this
+    // method used.
+    // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
+    // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
+    $items = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $field, $context) {
+      return $this->serializer->normalize($entity->get($field), 'json', $context);
+    });
+
     foreach ($items as $delta => $item) {
       $field_output['field_data'][$delta] = [];
       $field_output['field_data'][$delta] = $this->getNormalizedEntityReferenceData($item, $context, $field_output['field_data'][$delta], $field_output);
@@ -281,7 +310,10 @@ class MobileAppUtility {
     if (!empty($item['target_type'])) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
       $field_output['cache'][] = $entity;
-      $entity_normalized = $this->serializer->normalize($entity, 'json', $context);
+      // @see self::getFieldData()
+      $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
+        return $this->serializer->normalize($entity, 'json', $context);
+      });
       $data[$entity->bundle()] = !isset($data[$entity->bundle()]) ? [] : $data[$entity->bundle()];
       foreach ($entity_normalized as $field_name => $field_data) {
         if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {

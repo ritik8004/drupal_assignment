@@ -10,6 +10,7 @@ services:
       - '@serializer'
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
+      - '@renderer'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
     arguments:

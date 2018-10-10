@@ -155,35 +155,33 @@ class AdvancedPageResource extends ResourceBase {
     // Get bubbleable metadata for CacheableDependency to avoid fatal error.
     $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 
-    $field_promo_blocks = $this->mobileAppUtility->getFieldData($node, 'field_promo_blocks');
-    $field_delivery_banner = $this->mobileAppUtility->getFieldData($node, 'field_delivery_banner');
-    $field_promo_banner_full_width = $this->mobileAppUtility->getFieldData($node, 'field_promo_banner_full_width');
-    $field_related_info = $this->mobileAppUtility->getFieldData($node, 'field_related_info');
-    $field_slider = $this->mobileAppUtility->getFieldData($node, 'field_slider');
-
     $response_data = [
       'id' => $node->id(),
       'name' => $node->label(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
       'body' => $node->get('body')->getString(),
-      'field_promo_blocks' => $field_promo_blocks['field_data'],
-      'field_delivery_banner' => $field_delivery_banner['field_data'],
-      'field_promo_banner_full_width' => $field_promo_banner_full_width['field_data'],
-      'field_related_info' => $field_related_info['field_data'],
-      'field_slider' => $field_slider['field_data'],
     ];
 
-    $cache_object = array_merge($field_promo_blocks['cache'],
-                                $field_delivery_banner['cache'],
-                                $field_promo_banner_full_width['cache'],
-                                $field_related_info['cache'],
-                                $field_slider['cache']);
+    $fields = [
+      'field_promo_blocks',
+      'field_delivery_banner',
+      'field_promo_banner_full_width',
+      'field_related_info',
+      'field_slider',
+    ];
+
+    $cache_objects = [];
+    foreach ($fields as $field) {
+      $field_data = $this->mobileAppUtility->getFieldData($node, $field);
+      $response_data[$field] = $field_data['field_data'];
+      $cache_objects = array_merge($cache_objects, $field_data['cache']);
+    }
 
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     $response->addCacheableDependency($node_url);
-    foreach ($cache_object as $cache) {
+    foreach ($cache_objects as $cache) {
       $response->addCacheableDependency($cache);
     }
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([

@@ -261,7 +261,9 @@
                 "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
             },
             "drupal/paragraphs": {
-                "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
+                "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch",
+                "Fix integration with content moderation in multi-lingual scenarios": "https://www.drupal.org/files/issues/2018-06-06/paragraphs-paragraphs-translatable-revision-2951436-71.patch",
+                "Paragraphs and Default Content": "https://www.drupal.org/files/issues/2018-10-10/2700723-16.patch"
             },
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
