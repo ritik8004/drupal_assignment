@@ -41,7 +41,7 @@
 
 <div class="get--directions">
   <div>
-    <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/{{ lat_lng.lat }},{{ lat_lng.lng }}" target='_blank'>
+    <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/{{ lat_lng.lat }},{{ lat_lng.lng }}" target='_blank' rel="nofollow">
       {{ "Get directions"|t }}
     </a>
     <a class="device__tablet" onclick="mapsApp({{ lat_lng.lat }}, {{ lat_lng.lng }})">

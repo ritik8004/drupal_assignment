@@ -13,6 +13,8 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       if ($('.view-id-search .view-empty').length !== 0) {
         $('#views-exposed-form-search-page .form-item-sort-bef-combine').hide();
         $('.c-sidebar-first__region .c-facet__blocks__wrapper .c-facet__label').remove();
+        // Hide count item on no result.
+        $('.search-count').hide();
       }
       // Do not allow search form submit on empty search text.
       $('form[data-bef-auto-submit-full-form]', context).submit(function (e) {
@@ -63,6 +65,9 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.behaviors.alshayaFacets = {
     attach: function (context, settings) {
+      if ($('.block-facets-ajax').length === 0) {
+        return;
+      }
 
       $.fn.replaceFacets = function (data) {
         if (data.replaceWith === '') {
@@ -171,19 +176,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       });
 
-      // Hide other category filter options when one of the L1 items is selected.
-      if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
-        $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
-          if ($(this).hasClass('facet-item--expanded') ||
-            ($(this).children('input[checked="checked"]').length > 0)) {
-            return;
-          }
-          else {
-            $(this).hide();
-          }
-        });
-      }
-
       // Append active-item class to L2 active items in facet category list on SRP.
       $('ul[data-drupal-facet-id="category"] > li > ul > li > a, ul[data-drupal-facet-id="promotion_category_facet"] > li > ul > li > a').each(function() {
         if ($(this).hasClass('is-active')) {
@@ -207,7 +199,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
               alshayaPlpSearchCategoryFacet.show();
               alshayaPlpSearchCategoryFacetTitle.removeClass('ui-state-active');
             }
-
             else {
               alshayaPlpSearchCategoryFacet.hide();
               alshayaPlpSearchCategoryFacetTitle.addClass('ui-state-active');
@@ -218,6 +209,13 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
       // Add Class to leaf items on page load.
       Drupal.addLeafClassToPlpLeafItems();
+
+      // Add checkboxes here to ensure we have it before our dependent code.
+      // @see docroot/modules/contrib/facets/js/checkbox-widget.js
+      Drupal.facets.makeCheckboxes();
+
+      // Hide other category filter options when one of the L1 items is selected.
+      Drupal.alshayaSearchProcessCategoryFacets();
     }
   };
 
@@ -232,66 +230,122 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     }
   };
 
-  Drupal.behaviors.searchSlider = {
-    attach: function (context, settings) {
-      // Convert the list to slider.
-      $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
-        if (isRTL()) {
-          $(this, context).lightSlider({
-            vertical: false,
-            item: settings.plp_slider.item,
-            rtl: true,
-            slideMargin: settings.plp_slider.margin,
-          });
+  Drupal.alshayaSearchProcessCategoryFacets = function () {
+    if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
+      $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
+        if ($(this).hasClass('facet-item--expanded') ||
+          ($(this).children('input[checked="checked"]').length > 0)) {
+          return;
         }
         else {
-          $(this, context).lightSlider({
-            vertical: false,
-            item: settings.plp_slider.item,
-            rtl: false,
-            slideMargin: settings.plp_slider.margin,
-          });
+          $(this).hide();
         }
       });
+    }
+  };
 
-      // Change the image on Mouse hover.
-      $('.alshaya_search_slider img', context).hover(
-        function () {
-          $(this)
-            .closest('.alshaya_search_gallery')
-            .find('.alshaya_search_mainimage img')
-            .attr('src', $(this).attr('rel'));
-        },
-        function () {
-          $(this)
-            .closest('.alshaya_search_gallery')
-            .find('.alshaya_search_mainimage img')
-            .attr('src', $(this)
-              .parent()
-              .parent()
-              .find('li:first-child img')
-              .attr('rel'));
+  Drupal.behaviors.searchSlider = {
+    attach: function (context, settings) {
+      function applyRtl(ocObject, options) {
+        if (isRTL() && $(window).width() > 1025) {
+          ocObject.attr('dir', 'rtl');
+          ocObject.slick(
+            $.extend({}, options, {rtl: true})
+          );
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
         }
-      );
-
-      // Preload slider images.
-      if ($(window).width() > 1024) {
-        // Iterate over each product tile.
-        $('.c-products__item').each(function () {
-          var slider = $(this).find('.alshaya_search_slider');
-          // Iterate over each slider thumbnail.
-          slider.find('.lslide').each(function () {
-            var imgURL = $(this).children('img').attr('rel');
-            // Preload image.
-            var img = new Image();
-            img.src = imgURL;
-          });
-        });
+        else {
+          ocObject.slick(options);
+          if (context !== document) {
+            ocObject.slick('resize');
+          }
+        }
       }
 
-      $.fn.alshayaAttachSearchSlider = function () {
-        Drupal.attachBehaviors(context);
-      };
+      if (settings.plp_slider) {
+        var slickOptions = {
+          slidesToShow: settings.plp_slider.item,
+          slidesToScroll: 1,
+          vertical: false,
+          arrows: true,
+          focusOnSelect: false,
+          infinite: false,
+          touchThreshold: 1000,
+        };
+
+        // Convert the list to slider.
+        $('.search-lightSlider', context).once('alshayaSearchSlider').each(function () {
+          // Create the slider.
+          applyRtl($(this), slickOptions);
+
+          // Handle click events in hover slider arrows without triggering click to PDP.
+          $(this).find('.slick-arrow').on('click', function(e) {
+            if (e.preventDefault) {
+              e.preventDefault();
+            }
+            else {
+              e.returnValue = false;
+            }
+
+            if(!$(this).hasClass('slick-disabled')) {
+              if ($(this).attr('class') === 'slick-prev') {
+                $(this).parent().slick('slickPrev');
+              }
+              else {
+                $(this).parent().slick('slickNext');
+              }
+            }
+            return false;
+          });
+        });
+
+        // Change the image on Mouse hover.
+        // Adding a delay here to avoid flicker during scroll in between two slides.
+        // This also helps in smoothing the mouseout behaviour.
+        var delay = 500;
+        var setTimeoutConst;
+        $('.alshaya_search_slider .slick-slide', context).once('alshayaSearchSlider').hover(
+          function () {
+            // Clear timer when we enter a new thumbnail.
+            clearTimeout(setTimeoutConst);
+            $(this)
+              .closest('.alshaya_search_gallery')
+              .find('.alshaya_search_mainimage img')
+              .attr('src', $(this).find('img').attr('rel'));
+          },
+          function () {
+            // Store this as after delay the mouse is not on element, so this changes.
+            var el = $(this);
+            // Delay the resetting of main image post hover out.
+            setTimeoutConst = setTimeout(function() {
+              el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
+                el.parent().find('li:first-child').find('img').attr('rel')
+              );
+            }, delay);
+          }
+        );
+
+        // Preload slider images.
+        if ($(window).width() > 1024) {
+          // Iterate over each product tile.
+          $('.c-products__item').each(function () {
+            var slider = $(this).find('.alshaya_search_slider');
+            // Iterate over each slider thumbnail.
+            slider.find('.slick-slide').each(function () {
+              var imgURL = $(this).children('img').attr('rel');
+              // Preload image.
+              var img = new Image();
+              img.src = imgURL;
+            });
+          });
+        }
+
+        $.fn.alshayaAttachSearchSlider = function () {
+          Drupal.attachBehaviors(context);
+        };
+      }
     }
   };
 

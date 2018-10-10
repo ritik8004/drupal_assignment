@@ -6,6 +6,44 @@
  * Contains install, update, uninstall hooks for alshaya_acm_product_position module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_acm_product_position_update_8002() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_acm_product_position.settings'],
+      'alshaya_acm_product_position',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    );
+
+  $sort_options_labels_ar = [
+    // Position.
+    ['label' => 'ما ننصح به'],
+    // nid DESC.
+    ['label' => ''],
+    // Name A to Z.
+    ['label' => 'الاسم من أ إلى ي'],
+    // Name Z to A.
+    ['label' => 'الاسم من ي إلى أ'],
+    // Price Low to High.
+    ['label' => 'السعر من الأدنى إلى الأعلى'],
+    // Price High to Low.
+    ['label' => 'السعر من الأعلى إلى الأدنى'],
+    // Created ASC.
+    ['label' => ''],
+    // New In.
+    ['label' => 'جديدنا'],
+  ];
+
+  $sort_options_labels = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_product_position.settings');
+  $sort_options_labels->set('sort_options_labels', $sort_options_labels_ar);
+  $sort_options_labels->save();
+}
+
 /**
  * Implements hook_update_N().
  */

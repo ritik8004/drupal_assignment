@@ -404,7 +404,13 @@
     color: $black;
   }
 
-  .desc-label {
+  .desc-label,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: $arial;
     font-weight: bold;
     color: $pdp_sidebar_label;
@@ -524,7 +530,13 @@
           }
         }
 
-        .desc-label {
+        .desc-label,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
           font-family: $arial;
           font-weight: bold;
           color: $pdp_sidebar_label;

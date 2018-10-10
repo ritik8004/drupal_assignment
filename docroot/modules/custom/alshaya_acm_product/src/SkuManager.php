@@ -27,6 +27,11 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client;
 
 /**
  * Class SkuManager.
@@ -38,6 +43,8 @@ class SkuManager {
   use StringTranslationTrait;
 
   const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
+
+  const FREE_GIFT_PRICE = 0.01;
 
   /**
    * The database service.
@@ -131,6 +138,13 @@ class SkuManager {
   protected $skuStorage;
 
   /**
+   * SKU storage object.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $termStorage;
+
+  /**
    * Request stock service object.
    *
    * @var null|\Symfony\Component\HttpFoundation\Request
@@ -150,6 +164,20 @@ class SkuManager {
    * @var \Drupal\acq_sku\SKUFieldsManager
    */
   protected $skuFieldsManager;
+
+  /**
+   * PDP Breadcrumb service.
+   *
+   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   */
+  protected $pdpBreadcrumbBuiler;
+
+  /**
+   * GuzzleHttp\Client definition.
+   *
+   * @var GuzzleHttp\Client
+   */
+  protected $httpClient;
 
   /**
    * SkuManager constructor.
@@ -184,6 +212,10 @@ class SkuManager {
    *   Cache Backend service for configurable price info.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
+   *   PDP Breadcrumb service.
+   * @param \GuzzleHttp\Client $http_client
+   *   GuzzleHttp\Client object.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -199,13 +231,16 @@ class SkuManager {
                               CacheBackendInterface $cache,
                               CacheBackendInterface $product_labels_cache,
                               CacheBackendInterface $product_cache,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
+                              Client $http_client) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
     $this->currentRequest = $request_stack->getCurrentRequest();
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->skuStorage = $entity_type_manager->getStorage('acq_sku');
+    $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
@@ -217,6 +252,44 @@ class SkuManager {
     $this->productLabelsCache = $product_labels_cache;
     $this->productCache = $product_cache;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
+    $this->httpClient = $http_client;
+  }
+
+  /**
+   * Get SKU object from id in current language.
+   *
+   * @param int $id
+   *   SKU Entity ID.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface|null
+   *   Loaded SKU object in current language.
+   */
+  public function loadSkuById(int $id) : ?SKUInterface {
+    if ($id <= 0) {
+      // Return null for 0 or negative values.
+      // 0 is possible, negative - not sure.
+      return NULL;
+    }
+
+    $skus = &drupal_static('loadSkuById', []);
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    if (isset($skus[$id], $skus[$id][$langcode])) {
+      return $skus[$id][$langcode];
+    }
+
+    $sku = SKU::load($id);
+    if ($sku instanceof SKUInterface) {
+      if ($sku->language()->getId() !== $langcode && $sku->hasTranslation($langcode)) {
+        $sku = $sku->getTranslation($langcode);
+      }
+
+      $skus[$id][$sku->language()->getId()] = $sku;
+      return $sku;
+    }
+
+    return NULL;
   }
 
   /**
@@ -664,7 +737,7 @@ class SkuManager {
               $promos[$promotion_node->id()] = [];
               $promos[$promotion_node->id()]['text'] = $promotion_text;
               $promos[$promotion_node->id()]['description'] = $description;
-              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getString();
+              $promos[$promotion_node->id()]['coupon_code'] = $promotion_node->get('field_coupon_code')->getValue();
               foreach ($free_gift_skus as $free_gift_sku) {
                 $promos[$promotion_node->id()]['skus'][] = $free_gift_sku;
               }
@@ -683,7 +756,7 @@ class SkuManager {
                 $promos[$promotion_node->id()]['skus'] = $free_gift_skus;
               }
 
-              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getString())) {
+              if (!empty($coupon_code = $promotion_node->get('field_coupon_code')->getValue())) {
                 $promos[$promotion_node->id()]['coupon_code'] = $coupon_code;
               }
               break;
@@ -860,10 +933,14 @@ class SkuManager {
     $args = ['@file' => $data[$file_key], '@sku_id' => $sku_entity->id()];
 
     // Download the file contents.
-    $file_data = file_get_contents($data[$file_key]);
+    try {
+      $file_data = $this->httpClient->get($data[$file_key])->getBody();
+    }
+    catch (RequestException $e) {
+      watchdog_exception('alshaya_acm_product', $e);
+    }
 
-    // Check to ensure errors like 404, 403, etc. are catched and empty file
-    // not saved in SKU.
+    // Check to ensure empty file is not saved in SKU.
     if (empty($file_data)) {
       throw new \Exception(new FormattableMarkup('Failed to download labels image file "@file" for SKU id @sku_id.', $args));
     }
@@ -1411,6 +1488,11 @@ class SkuManager {
         continue;
       }
 
+      // Dot not display free gifts.
+      if ($this->isSkuFreeGift($sku_entity)) {
+        continue;
+      }
+
       // Disable OOS combinations too.
       if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
         continue;
@@ -1679,13 +1761,9 @@ class SkuManager {
 
     // Give preference to sku id passed via query params.
     if ($sku_id && $sku_id != $sku->id()) {
-      $first_child = SKU::load($sku_id);
+      $first_child = $this->loadSkuById($sku_id);
 
       if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
-        // We do it again to get current translation.
-        // We expect no performance impact as all the skus are already loaded
-        // multiple times in the request.
-        $first_child = SKU::loadFromSku($first_child->getSku());
         return $first_child;
       }
     }
@@ -1902,7 +1980,6 @@ class SkuManager {
     if (!$this->isNotRequiredOptionsToBeRemoved()) {
       return;
     }
-
     $availableOptions = [];
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
@@ -1915,11 +1992,149 @@ class SkuManager {
         $availableOptions[$id] = $value;
       }
     }
-
     if ($notRequiredValue && empty($availableOptions)) {
       $configurable['#value'] = $notRequiredValue;
       $configurable['#access'] = FALSE;
     }
+  }
+
+  /**
+   * Helper function to fetch image slide position on pdp for the sku or node.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity for which image slider position needs to be fetched.
+   *
+   * @return string
+   *   Image slider position type for the sku.
+   */
+  public function getImageSliderPosition(EntityInterface $entity) {
+    $default_pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')
+      ->get('image_slider_position_pdp');
+    if ($entity instanceof SKUInterface) {
+      $entity = alshaya_acm_product_get_display_node($entity);
+    }
+    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+      $inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list);
+      if ($inner_term) {
+        $term = $this->termStorage->load($inner_term);
+        if ($term instanceof TermInterface) {
+          if ($pdp_image_slider_position = $this->getImagePositionFromTerm($term)) {
+            return $pdp_image_slider_position;
+          }
+        }
+        $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
+        foreach ($taxonomy_parents as $taxonomy_parent) {
+          if ($pdp_image_slider_position = $this->getImagePositionFromTerm($taxonomy_parent)) {
+            return $pdp_image_slider_position;
+          }
+        }
+      }
+      $pdp_image_slider_position = (!empty($pdp_image_slider_position)) ? $pdp_image_slider_position : $default_pdp_image_slider_position;
+      return $pdp_image_slider_position;
+    }
+  }
+
+  /**
+   * Helper function to fetch image slide position for term.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Taxonomy term for which image slider position needs to be fetched.
+   *
+   * @return string
+   *   Image slider position type for the term.
+   *
+   * @throws \InvalidArgumentException
+   */
+  protected function getImagePositionFromTerm(TermInterface $term) {
+    if ($term->get('field_pdp_image_slider_position')->first()) {
+      return $term->get('field_pdp_image_slider_position')
+        ->getString();
+    }
+  }
+
+  /**
+   * Helper function to check if sku is a free gift.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity to check.
+   *
+   * @return bool
+   *   TRUE if free gift, else FALSE.
+   *
+   * @throws \InvalidArgumentException
+   */
+  public function isSkuFreeGift(SKU $sku) {
+    $final_price = (float) $sku->get('final_price')->getString();
+    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
+  }
+
+  /**
+   * Check if SKU has data available for all configurable attributes.
+   *
+   * If SKU has configurable attributes (for sku form) but no data is
+   * available for any one configurable attribute, it means we cant show that
+   * sku with 'add to cart' form and we show OOS for that SKU. Even attribute
+   * combination value is disabled but there should be some value for that
+   * attribute in the system.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity to check.
+   *
+   * @return bool
+   *   True if SKU has data for all configurable attributes.
+   */
+  public function skuAttributeCombinationAvailable(SKU $sku) {
+    // This is only for configurable SKU. For simple sku, we don't have/show
+    // any configurable on sku form and thus we always return true.
+    $attributes_available = TRUE;
+    if ($sku->bundle() == 'configurable') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $product_tree = $plugin->deriveProductTree($sku);
+      $configurables = [];
+      if (!empty($product_tree) && !empty($product_tree['configurables'])) {
+        foreach ($product_tree['configurables'] as $configurable) {
+          // If any configurable attribute showing on sku form has no
+          // option/data/value available.
+          if (empty($configurable['values'])) {
+            $attributes_available = FALSE;
+            break;
+          }
+          else {
+            // Preparing configurable options.
+            foreach ($configurable['values'] as $value) {
+              $options[$value['value_id']] = $value['label'];
+            }
+            $configurables[$configurable['code']]['#options'] = $options;
+          }
+        }
+
+        // If already no value for any attribute available, no need to
+        // process further.
+        if (!$attributes_available) {
+          return $attributes_available;
+        }
+
+        // Disable/Unset if there any unavailable option for any combinations.
+        $this->disableUnavailableOptions($sku, $configurables, $product_tree);
+
+        // Prepare final configurable array to check.
+        $configurable_final_data = [];
+        foreach ($configurables as $configurable_key => $configurable) {
+          if (is_array($configurable) && !empty($configurable['#options'])) {
+            $configurable_final_data[$configurable_key] = $configurable;
+          }
+        }
+
+        // If no data available or attribute count not match with final set,
+        // it means OOS.
+        if (empty($configurable_final_data) || count($configurable_final_data) != count(array_keys($product_tree['configurables']))) {
+          $attributes_available = FALSE;
+        }
+      }
+    }
+
+    return $attributes_available;
   }
 
 }

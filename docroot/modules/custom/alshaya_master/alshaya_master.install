@@ -8,6 +8,53 @@
 use Drupal\Core\Config\FileStorage;
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add allowed classes for rich text.
+ */
+function alshaya_master_update_8017() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['filter.format.rich_text'],
+    'lightning_media',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new string translations.
+ */
+function alshaya_master_update_8016() {
+  $strings = [
+    "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
+      'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable seckit module with header configuration.
+ */
+function alshaya_master_update_8015() {
+  \Drupal::service('module_installer')->install(['seckit']);
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['seckit.settings.yml'],
+    'seckit',
+    'install'
+  );
+}
+
+/**
  * Implements hook_update().
  *
  * Update configuration file for progress loader.
@@ -1430,6 +1477,9 @@ function alshaya_master_install() {
     'Select your preferred pickup store' => [
       'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
     ],
+    "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
+      'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1549,4 +1599,13 @@ function alshaya_master_install() {
     ->set('display_denied_message', FALSE)
     ->set('redirect_authenticated_users_to', '/user')
     ->save();
+
+  // Override seckit configuration.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['seckit.settings.yml'],
+    'seckit',
+    'install'
+  );
 }

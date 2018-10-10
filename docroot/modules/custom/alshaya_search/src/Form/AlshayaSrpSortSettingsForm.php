@@ -44,7 +44,7 @@ class AlshayaSrpSortSettingsForm extends ConfigFormBase {
       '#type' => 'checkboxes',
       '#options' => [
         'created' => $this->t('New In'),
-        'name_1' => $this->t('Name'),
+        'title' => $this->t('Name'),
         'final_price' => $this->t('Price'),
       ],
       '#title' => $this->t('Sort options'),

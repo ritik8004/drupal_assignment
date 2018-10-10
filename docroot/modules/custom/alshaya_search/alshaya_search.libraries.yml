@@ -4,7 +4,7 @@ alshaya_search:
   dependencies:
     - core/jquery
     - core/drupalSettings
-    - alshaya_product_zoom/lightslider
+    - alshaya_white_label/slick
 
 disable_keyword_ajax:
   js:
