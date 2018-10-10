@@ -381,9 +381,10 @@ class AlshayaApiCommands extends DrushCommands {
    * @command alshaya_api:sanity-check-visibility
    *
    * @aliases aascv,alshaya-api-sanity-check-visibility
+   * @options display_nids Boolean flag to display list of nodes.
    */
-  public function sanityCheckVisibility(array $options = []) {
-    $verbose = $options['verbose'];
+  public function sanityCheckVisibility(array $options = ['display_nids' => FALSE]) {
+    $verbose = $options['display_nids'];
 
     $handle = $this->alshayaApiWrapper->getMerchandisingReport();
 
