@@ -49,9 +49,9 @@ class CustomCommand extends BltTasks {
     // Generate local.settings.php from file provided by blt.
     $blt_local_settings_file = $this->getConfigValue('blt.root') . '/settings/default.local.settings.php';
     $local_settings_file = "$default_multisite_dir/settings/local.settings.php";
-    // Generate local.drushrc.php.
-    $default_local_drush_file = "$default_multisite_dir/default.local.drushrc.php";
-    $local_drush_file = "$default_multisite_dir/local.drushrc.php";
+    // Generate local.drush.yml.
+    $default_local_drush_file = "$default_multisite_dir/default.local.drush.yml";
+    $local_drush_file = "$default_multisite_dir/local.drush.yml";
 
     // Array of from and destination file paths.
     $copy_map = [
@@ -92,15 +92,15 @@ class CustomCommand extends BltTasks {
     $multisites = $this->getConfigValue('multisite.name');
     $docroot = $this->getConfigValue('docroot');
 
-    // Proceed if settings and drushrc files exists/created in default site
+    // Proceed if settings and drush.yml files exists/created in default site
     // directory.
     if ($this->createDefaultSettingsFiles()) {
       // Location of Default site directory.
       $default_multisite_dir = $this->getConfigValue('docroot') . "/sites/default";
       // Location of default.local.settings.php.
       $default_local_settings_file = "$default_multisite_dir/settings/default.local.settings.php";
-      // Location of default.local.drushrc.php.
-      $default_local_drush_file = "$default_multisite_dir/default.local.drushrc.php";
+      // Location of default.local.drush.yml.
+      $default_local_drush_file = "$default_multisite_dir/default.local.drush.yml";
 
       foreach ($multisites as $multisite) {
         $multisite_dir = $docroot . '/sites/' . $multisite;
@@ -108,8 +108,8 @@ class CustomCommand extends BltTasks {
 
         // Local settings file for multisite.
         $project_local_settings_file = "$multisite_dir/settings/local.settings.php";
-        // Local drushrc file for multisite.
-        $project_local_drush_file = "$multisite_dir/local.drushrc.php";
+        // Local drush.yml file for multisite.
+        $project_local_drush_file = "$multisite_dir/local.drush.yml";
 
         // Array of from and destination file paths.
         $copy_map = [
