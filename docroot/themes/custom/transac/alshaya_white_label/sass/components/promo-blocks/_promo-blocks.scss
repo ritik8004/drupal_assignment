@@ -377,37 +377,21 @@
     &.position-bottom-left,
     &.position-center-left,
     &.position-top-left {
-      right: calc((100vw + 45%) / 2);
-      left: auto;
+      left: 1rem;
 
       @include breakpoint($tablet) {
-        right: calc((100vw + 35%) / 2);
-      }
-
-      @include breakpoint($desktop) {
-        right: calc((100vw + 53%) / 2);
-      }
-
-      @include breakpoint($desktop-large) {
-        right: 78%;
+        left: 3rem;
       }
     }
 
     &.position-bottom-right,
     &.position-center-right,
     &.position-top-right {
-      left: calc((100vw + 45%) / 2);
+      left: auto;
+      right: 1rem;
 
       @include breakpoint($tablet) {
-        left: calc((100vw + 35%) / 2);
-      }
-
-      @include breakpoint($desktop) {
-        left: calc((100vw + 53%) / 2);
-      }
-
-      @include breakpoint($desktop-large) {
-        left: 78%;
+        right: 3rem;
       }
     }
 
