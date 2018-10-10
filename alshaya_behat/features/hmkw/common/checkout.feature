@@ -5,7 +5,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    And I go to "/cart"
+    And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -144,7 +144,7 @@ Feature: Test Checkout feature
     And I should see "Quantity:"
     And I should see "Color:"
 
-  @knet @test
+  @knet
   Scenario: As a Guest
     I should be displayed a valid message on cancelling a KNET transaction
     And I should be able to see the header for checkout

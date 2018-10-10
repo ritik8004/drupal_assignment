@@ -11,7 +11,7 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -33,7 +33,7 @@ Feature: As an authenticated user
     And I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test User "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
        #checking product attributes on order confirmation
     When I click on ".product--count td" element
@@ -43,7 +43,7 @@ Feature: As an authenticated user
     And I should see "Quantity:"
     And I should see "Color:"
 
-  @hd @knet @test
+  @hd @knet
   Scenario: As an authenticated user
     I should be able to checkout using Home delivery
     and pay by KNET
@@ -70,7 +70,7 @@ Feature: As an authenticated user
       And I press "Confirm"
       And I wait 5 seconds
       And I wait for the page to load
-      Then I should see text matching "Thank you for shopping online with us, Test User "
+      Then I should see text matching "Thank you for shopping online with us, Test Test "
       And I should see text matching "Your order number is "
   #checking product attributes on order confirmation
     When I click on ".product--count td" element
@@ -102,7 +102,7 @@ Feature: As an authenticated user
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test User "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
     #checking product attributes on order confirmation
     When I click on ".product--count td" element
@@ -138,7 +138,7 @@ Feature: As an authenticated user
     And I press "Confirm"
     And I wait 5 seconds
     And I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test User "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
     #checking product attributes on order confirmation
     When I click on ".product--count td" element
@@ -170,7 +170,7 @@ Feature: As an authenticated user
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test User "
+    Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
     #checking product attributes on order confirmation
     When I click on ".product--count td" element

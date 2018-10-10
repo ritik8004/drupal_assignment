@@ -9,7 +9,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "Add to basket"
     And I wait for AJAX to finish
     And I wait 5 seconds
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     And I scroll to the "#secure-checkout-button" element
     When I press "checkout securely"

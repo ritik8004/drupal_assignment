@@ -6,7 +6,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -133,7 +133,7 @@ Feature: Test various checkout scenarios as returning customer
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test User"
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
         #checking product attributes
     When I click on ".product--count td" element
@@ -165,7 +165,7 @@ Feature: Test various checkout scenarios as returning customer
     When I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
-    Then I should see text matching "Thank you for shopping online with us, Test User"
+    Then I should see text matching "Thank you for shopping online with us, Test Test"
     And I should see text matching "Your order number is "
         #checking product attributes
     When I click on ".product--count td" element

@@ -9,7 +9,7 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -52,7 +52,7 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load

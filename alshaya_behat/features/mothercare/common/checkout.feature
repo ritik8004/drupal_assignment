@@ -8,14 +8,14 @@ Feature: Test Checkout feature
     When I press "Add to basket"
     And I wait for AJAX to finish
     And I wait 5 seconds
-    And I go to "/cart"
+    And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
 
-  @cod @hd @test1
+  @cod @hd
   Scenario: As a Guest,
   I should be able to checkout using COD
     And I should be able to see the header for checkout

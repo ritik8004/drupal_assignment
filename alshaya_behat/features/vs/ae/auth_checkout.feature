@@ -13,7 +13,7 @@ Feature: As a customer
     And I scroll to the ".selection" element
     When I press "Add to Bag"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     And I scroll to the "#secure-checkout-button" element
     When I press "checkout securely"

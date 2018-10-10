@@ -20,7 +20,7 @@ Feature: As a customer
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
 
-@test
+
   Scenario: As a customer
   I should be able to checkout using Home delivery
   and pay by Cash-on-delivery on Arabic site

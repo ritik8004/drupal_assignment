@@ -8,7 +8,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I press "Add to Bag"
     And I wait for AJAX to finish
-    And I go to "/cart"
+    And I go to "/en/cart"
     And I wait for the page to load
     And I remove promo panel
     And I scroll to the "#secure-checkout-button" element
@@ -17,7 +17,7 @@ Feature: Test Checkout feature
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
 
-    @test
+
   Scenario:  As a Guest,
   I should be able to checkout using COD
     When I follow "Home delivery"

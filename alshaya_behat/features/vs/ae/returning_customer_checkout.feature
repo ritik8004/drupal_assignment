@@ -9,7 +9,7 @@ Feature: Test various checkout scenarios as returning customer
     And I scroll to the ".selection" element
     When I press "Add to Bag"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     And I remove promo panel
     And I scroll to the "#secure-checkout-button" element
