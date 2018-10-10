@@ -245,30 +245,6 @@ class LocalCommand extends BltTasks {
   }
 
   /**
-   * Returns the temp directory path.
-   *
-   * Creates if required.
-   *
-   * @return string
-   *   Temp directory path.
-   */
-  private function tempDir() {
-    static $path;
-
-    if (!isset($path)) {
-      $path = realpath('..') . '/tmp';
-
-      if (!file_exists($path)) {
-        $this->say('Creating temp directory at: ' . $path);
-        $taskFilesystemStack = $this->taskFilesystemStack();
-        $taskFilesystemStack->mkdir($path);
-      }
-    }
-
-    return $path;
-  }
-
-  /**
    * Helper function to validate and prepare info required to sync.
    *
    * @param string $site
