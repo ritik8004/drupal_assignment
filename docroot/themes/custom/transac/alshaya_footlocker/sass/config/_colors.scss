@@ -31,6 +31,9 @@ $primary_input_border: $warm-grey;
 $primary_input_inline_error: $red;
 $primary_form_link: $purplish-brown;
 
+// Form Items
+$formitem_label: $warm-grey;
+
 //Buttons.
 $primary_brand_button: $purplish-brown;
 $primary_brand_button_text: $purplish-brown;
@@ -269,6 +272,31 @@ $store_finder_search_label: $black;
 
 // Checkout Global.
 $checkout_section_titles: $black;
+
+//checkout layout
+$checkout_delivery_options_border: $secondary_border;
+
+// Checkout Login
+$checkout_section_title_border: $primary_border;
+
+// Checkout Payment.
+$checkout_payment_form_border: $purplish-brown;
+$checkout_payment_method_title: $black;
+$checkout_transaction_type_color: $black;
+
+// Checkout tabs & form.
+$checkout_tab_default_title: $black;
+$checkout_tab_active_border: $purplish-brown;
+$delivery_tab_active_bg: $white;
+$checkout_tab_active_title: $purplish-brown;
+$checkout_tab_separator: $black;
+$secure_checkout_back_link: $purplish-brown;
+$checkout_form_actions_footer: $white;
+$checkout_method_choice_tab_title_active: $purplish-brown;
+
+// Address book
+$address_book_change_link: $black;
+$checkout_cc_store_address_mobile_border: $primary_border;
 $checkout_login_guest_email_text: $purplish-brown;
 $checkout_login_guest_email_text_mobile: $purplish-brown;
 $checkout_login_footer_actions_bg: false;
