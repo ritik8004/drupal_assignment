@@ -85,6 +85,14 @@
         margin-#{$right}: 0;
       }
     }
+
+    a {
+      &:hover {
+        .hightlight__description {
+          text-decoration: none;
+        }
+      }
+    }
   }
 }
 
