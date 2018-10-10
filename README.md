@@ -100,7 +100,7 @@ enable the appropriate theme, place the blocks in the theme's regions and
 install the specific configuration. See existing brand modules for example.
 * Add a new brand support:
   * Add DB and Alias in `box/config.yml`
-  * Add site in `blt/project.local.yml` with proper values (check existing sites for example)
+  * Add site in `blt/local.blt.yml` with proper values (check existing sites for example)
   * (For transact site) Add proper settings for the new site in 
     * factory-hooks/environments/magento.php
     * factory-hooks/environments/settings.php
