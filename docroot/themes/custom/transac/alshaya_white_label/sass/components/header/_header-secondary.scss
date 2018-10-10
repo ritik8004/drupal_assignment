@@ -424,4 +424,15 @@ body {
       }
     }
   }
+
+  .mobile--overlay {
+    .block-views-exposed-filter-blocksearch-page {
+      opacity: 0.4;
+
+      .form-item-keywords,
+      .form-actions {
+        opacity: 0.3;
+      }
+    }
+  }
 }
