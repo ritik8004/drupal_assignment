@@ -334,6 +334,21 @@ $checkout_cc_list_delivery_time_tablet: $warm-grey;
 $checkout_payment_form_border: $purplish-brown;
 $checkout_payment_method_title: $black;
 
+//order confirmation page
+$order_print_delivery_details_row: $white-two;
+$order_print_delivery_details_row_border: $purplish-brown;
+$order_print_order_details_row_label: $black;
+$order_print_product_count_row_border: $secondary_border;
+$order_print_delivery_subtotal_row_blend: $white-two;
+$order_print_total_row: $white;
+$order_print_order_details_row_bg_blend: rgba(218, 218, 218, 0.15);
+$order_detail_total_tr_row_price_td_tablet: rgba(242, 242, 242, 0.27);
+$order_print_order_details_row_bg: $white;
+$order_print_order_details_item_row_details: $warm-grey;
+$order_print_order_details_row_label: $black;
+$order_summary_product_img_border: $secondary_border;
+$order_detail_td_light_content: $warm-grey;
+
 //Checkout Confirmation
 $checkout_confirm_order_summary_row: $info-blue;
 $checkout_confirm_order_summary_row_text: $white-two;
