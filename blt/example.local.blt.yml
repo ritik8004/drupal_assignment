@@ -9,4 +9,86 @@
 #drush:
 #  aliases:
 #    local: local.mysite.dev
-example: value
+drush:
+  default_alias: alshaya.local
+  aliases:
+    local: alshaya.local
+behat:
+  launch-selenium: false
+  launch-phantomjs: true
+
+# This is all the sites which are currently installed (or will be installed
+# soon) on the factory.
+sites:
+  mckw:
+    module: alshaya_mc
+    type: alshaya_transac
+    country: kw
+  mcsa:
+    module: alshaya_mc
+    type: alshaya_transac
+    country: sa
+  mcae:
+    module: alshaya_mc
+    type: alshaya_transac
+    country: ae
+  hmkw:
+    module: alshaya_hm
+    type: alshaya_transac
+    country: kw
+  hmsa:
+    module: alshaya_hm
+    type: alshaya_transac
+    country: sa
+  hmae:
+    module: alshaya_hm
+    type: alshaya_transac
+    country: ae
+  bbwkw:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: kw
+  bbwsa:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: sa
+  bbwae:
+    module: alshaya_bbw
+    type: alshaya_transac
+    country: ae
+  vskw:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: kw
+  vsae:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: ae
+  vssa:
+    module: alshaya_vs
+    type: alshaya_transac
+    country: sa
+  bbme:
+    module: alshaya_bb
+    type: alshaya_non_transac
+  dhuae:
+    module: alshaya_d
+    type: alshaya_non_transac
+  pbkw:
+    module: alshaya_pb
+    type: alshaya_transac
+    country: kw
+  pbsa:
+    module: alshaya_pb
+    type: alshaya_transac
+    country: sa
+  pbae:
+    module: alshaya_pb
+    type: alshaya_transac
+    country: ae
+  flsa:
+    module: alshaya_fl
+    type: alshaya_transac
+    country: sa
+vm:
+  enable: true

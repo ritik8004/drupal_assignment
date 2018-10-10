@@ -222,17 +222,17 @@ class CustomCommand extends BltTasks {
     $sites = $this->getConfig()->get('sites');
     $list = implode(array_keys($sites), ", ");
     if ($site == NULL) {
-      $site = $this->ask("Enter site code to reinstall, ($list):");
+      $site = $this->ask("Enter site code to reinstall ($list):");
     }
     while (!array_key_exists($site, $sites)) {
       $this->yell('Invalid site code');
-      $site = $this->ask("Enter site code to reinstall, ($list):");
+      $site = $this->ask("Enter site code to reinstall ($list):");
     }
     if (array_key_exists('country', $sites[$site])) {
       $country_code = $sites[$site]['country'];
     }
     else {
-      $country_code = $this->ask("Enter country code for the site:, ($list):");
+      $country_code = $this->ask("Enter country code for the site ($list):");
     }
     $uri = "local.alshaya-$site.com";
     $profile_name = $sites[$site]['type'];

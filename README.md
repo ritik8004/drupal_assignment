@@ -58,6 +58,7 @@ fit the needs of the project.
 The principle is that the configuration of the VM is stored in the git
 repository so that each developer uses the same configuration which is as close
 as possible to the configuration of the Prod env.
+You typically run all the the drush and blt commands *from inside* of the VM.
 
 To prepare your local env:
 * Install Virtualbox and Vagrant.
@@ -70,9 +71,13 @@ To prepare your local env:
   * `composer install`
   * `composer blt-alias`
   * `blt vm`
-  * `blt refresh:local`
+  * `vagrant ssh` to ssh into your vm
+  * `blt refresh:local` (from inside of your vm)
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
-  * `drush @alshaya.local uli`
+  * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
+  * Login using the default credentials:﻿no-reply@acquia.com / admin
+  * Perform drush commands from inside of your vm, like drush status -l local.alshaya-mckw.com
+  * Login quickly using drush uli -l local.alshaya-mckw.com  (currently doesn't work properly)
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
