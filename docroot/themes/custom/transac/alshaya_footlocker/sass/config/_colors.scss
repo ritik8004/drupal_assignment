@@ -271,3 +271,24 @@ $checkout_login_btn_bg: $primary_btn_bg;
 // Checkout Payment.
 $checkout_payment_form_border: $purplish-brown;
 $checkout_payment_method_title: $black;
+
+//Checkout Confirmation
+$checkout_confirm_order_summary_row: $info-blue;
+$checkout_confirm_order_summary_row_text: $white-two;
+$checkout_order_print_btn_bg: $info-blue;
+$checkout_order_print_btn_border: $white-two;
+$checkout_order_print_btn_text: $white-two;
+$checkout_order_details_label: $black;
+$checkout_order_details_product_count_border: $secondary_border;
+$checkout_confirm_order_message: $warm-grey;
+$checkout_confirmation_detail_light_text: $warm-grey;
+$checkout_continue_shopping_btn_text: $purplish-brown;
+$checkout_section_title_border: $primary_border;
+
+// Order detail, recent orders, order list page.
+$order_detail_order_details_row: $white-three;
+$order_detail_order_details_row_td_blend: rgba(119, 119, 119, 0.15);
+$order_detail_table_bg: $white-two;
+$order_detail_delivery_details_row_text: false;
+$order_detail_warm_white: $white-three;
+$order_detail_total_tr_row_price_td: rgba(218, 218, 218, 0.19);
