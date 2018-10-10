@@ -420,6 +420,15 @@ class AlshayaSearchApiQueryExecute {
       }
     }
 
+    // Sort the facet data.
+    uasort($facet_result, [self::class, 'sort']);
+    // Re-arrange keys.
+    $facet_result = array_values($facet_result);
+    // Removing weight key as now no longer required.
+    foreach ($facet_result as &$fr) {
+      unset($fr['weight']);
+    }
+
     // Prepare sort data.
     $sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
 
@@ -430,6 +439,23 @@ class AlshayaSearchApiQueryExecute {
       'products' => $product_data,
       'total' => $this->getResultTotalCount(),
     ];
+  }
+
+  /**
+   * Helper callback for uasort() to sort facets by weight and label.
+   *
+   * It is copy/paste of ConfigEntityBase::sort() which is used by
+   * block/config system for sorting.
+   */
+  public static function sort(array $a, array $b) {
+    $a_weight = isset($a['weight']) ? $a['weight'] : 0;
+    $b_weight = isset($b['weight']) ? $b['weight'] : 0;
+    if ($a_weight == $b_weight) {
+      $a_label = $a['label'];
+      $b_label = $b['label'];
+      return strnatcasecmp($a_label, $b_label);
+    }
+    return ($a_weight < $b_weight) ? -1 : 1;
   }
 
   /**
@@ -446,8 +472,10 @@ class AlshayaSearchApiQueryExecute {
     // Prepare facet data first.
     $facet_result = [];
     foreach ($facets_data as $key => $facet) {
-      // If facet is not enabled, then skip it.
-      if (!$this->isFacetEnabled($facet->id())) {
+      // Get facet block.
+      $facet_block = $this->getFacetBlock($facet->id());
+      // If facet block not available or not enabled, then skip it.
+      if (empty($facet_block) || !$facet_block->status()) {
         continue;
       }
       // If no result available for a facet, skip that.
@@ -480,7 +508,8 @@ class AlshayaSearchApiQueryExecute {
       }
       $facet_result[] = [
         'key' => $key,
-        'label' => $this->getFacetBlockTitle($facet->id()),
+        'label' => $facet_block->label(),
+        'weight' => $facet_block->getWeight(),
         'options' => $facet_option_data,
       ];
     }
@@ -489,45 +518,25 @@ class AlshayaSearchApiQueryExecute {
   }
 
   /**
-   * Get facet block title from facet id.
+   * Get facet block from facet id.
    *
    * @param string $facet_id
    *   Facet ID.
    *
-   * @return string
-   *   Facet block title.
+   * @return null|\Drupal\block\Entity\Block
+   *   Facet block object.
    */
-  public function getFacetBlockTitle(string $facet_id) {
+  public function getFacetBlock(string $facet_id) {
     // Block id will be same as facet id with no underscore.
     // Example - plp_category_facet => plpcategoryfacet.
     $block_id = str_replace('_', '', $facet_id);
     // Load facet block to get title.
     $block = $this->entityTypeManager->getStorage('block')->load($block_id);
     if ($block instanceof Block) {
-      return $block->label();
+      return $block;
     }
 
-    return '';
-  }
-
-  /**
-   * Checks if facet enabled or not on FE.
-   *
-   * @param string $facet_id
-   *   Facet ID.
-   *
-   * @return bool
-   *   True if facet enabled.
-   */
-  public function isFacetEnabled(string $facet_id) {
-    $block_id = str_replace('_', '', $facet_id);
-    // Load facet block to get title.
-    $block = $this->entityTypeManager->getStorage('block')->load($block_id);
-    if ($block instanceof Block) {
-      return $block->status();
-    }
-
-    return FALSE;
+    return NULL;
   }
 
   /**
@@ -698,9 +707,11 @@ class AlshayaSearchApiQueryExecute {
       ];
     }
 
+    $facet_block = $this->getFacetBlock($price_facet_build->id());
     $price_facet_result = [
       'key' => $price_facet_build->id(),
-      'label' => $this->getFacetBlockTitle($price_facet_build->id()),
+      'label' => $facet_block ? $facet_block->label() : '',
+      'weight' => $facet_block->getWeight(),
       'options' => $option_data,
     ];
 
