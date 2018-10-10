@@ -602,7 +602,7 @@ class AlshayaSearchApiQueryExecute {
         // Get media (images/video) for the SKU.
         $images = $this->mobileAppUtility->getMedia($sku_entity, 'search');
 
-        return [
+        $data = [
           'id' => (int) $node->id(),
           'title' => $node->getTitle(),
           'original_price' => $prices['price'],
