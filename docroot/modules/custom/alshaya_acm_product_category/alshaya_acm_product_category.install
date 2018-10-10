@@ -12,6 +12,32 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Adding new field 'pdp_layout' for the product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8020() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'field.storage.taxonomy_term.field_pdp_layout',
+    'field.field.taxonomy_term.acq_product_category.field_pdp_layout',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new pdp image slider position field.
  */
 function alshaya_acm_product_category_update_8019() {

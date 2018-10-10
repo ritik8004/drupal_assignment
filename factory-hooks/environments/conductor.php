@@ -35,10 +35,16 @@ $conductors = [
     'hmac_id' => '676f2059d53d407791472c31783ae32c',
     'hmac_secret' => '-2Ok7ywndwcpsraYIIZ__w',
   ],
-  'mckw_prod' => [
+  'mckw_prod_v1' => [
     'url' => 'https://alshaya-mckw-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '3d136846d24040099a7eed6c1f4e80b9',
     'hmac_secret' => 'zUt1psyEWi5xO-glHlH_tw',
+  ],
+  'mckw_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '389c52cfe70d4f81954ea7d751040eef',
+    'hmac_secret' => 'OWQyY2NiODAtMmY2YS00',
+    'api_version' => 'v2',
   ],
   // Mothercare SA.
   'mcsa_dev' => [
@@ -68,10 +74,16 @@ $conductors = [
     'hmac_id' => '08bf3c91aeba4b18b78354b38e0ef566',
     'hmac_secret' => 'FY6YF9sOQzj2sTBS9hWFKA',
   ],
-  'mcsa_prod' => [
+  'mcsa_prod_v1' => [
     'url' => 'https://alshaya-mcksa-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'd6b5bf8e0ea74347aaeb10dd5548c827',
     'hmac_secret' => 'nSAHBiZvuTiiJa-HC9xdnw',
+  ],
+  'mcsa_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'da6d8048001a42dcae8fc9a38b2dd670',
+    'hmac_secret' => 'ZjkxNzlmNmEtZWMzNy00',
+    'api_version' => 'v2',
   ],
   // Mothercare UAE.
   'mcae_test' => [
@@ -91,10 +103,16 @@ $conductors = [
     'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
     'api_version' => 'v2',
   ],
-  'mcae_prod' => [
+  'mcae_prod_v1' => [
     'url' => 'https://alshaya-mcae-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'f755609b5006476e85acf942f54da3a0',
     'hmac_secret' => 'GOvi4TncWFS-kqU9H6p4vg',
+  ],
+  'mcae_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'e58405c6ba4149b7a483be491aa047f0',
+    'hmac_secret' => 'NDI1NTM0NWEtYjMxNS00',
+    'api_version' => 'v2',
   ],
   // H&M KW.
   'hmkw_dev' => [
