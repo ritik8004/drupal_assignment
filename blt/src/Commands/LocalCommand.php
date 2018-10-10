@@ -286,7 +286,8 @@ class LocalCommand extends BltTasks {
       return $static[$env][$site];
     }
 
-    $sites = $this->getConfig()->get('sites');
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $sites = $data['sites'];
 
     if (empty($site) || empty($sites[$site])) {
       $this->yell('Empty or invalid site code. You probably need some sleep :)', 40, 'red');
@@ -298,8 +299,8 @@ class LocalCommand extends BltTasks {
     $info['profile'] = $sites[$site]['type'];
 
     $info['local']['url'] = 'local.alshaya-' . $site . '.com';
-    $info['local']['alias'] = 'alshaya.local';
-    $info['remote']['alias'] = 'alshaya.01' . $env;
+    $info['local']['alias'] = 'self';
+    $info['remote']['alias'] = $site . '.01' . $env;
 
     // Get remote data to confirm site code is valid and we can get db role
     // and remote url.
@@ -316,7 +317,7 @@ class LocalCommand extends BltTasks {
       return 0;
     }
 
-    $info['archive'] = $this->tempDir() . "/alshaya_${site}_${env}.sql";
+    $info['archive'] = "/tmp/alshaya_${site}_${env}.sql";
 
     $static[$env][$site] = $info;
 

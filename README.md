@@ -134,6 +134,17 @@ Script usage:
 Be careful in using the mode download, it will take time as it does sql-dump
 using drush which can take too much of time.
 
+You also need to forward your private key to your vm, because all the commands
+above need to be run from inside of vm and they reach remote cloud instance.
+
+In order to perform the private key forwarding, do following:
+
+* Edit ​`~/.ssh/config` ​file on your host machine and add following two lines:
+  * Host 127.0.0.1
+  * ForwardAgent yes
+* `​ssh-add ~/.ssh/your_private_key​` (this adds your key to the ssh agent, the path to your private key your connecting to Acquia Cloud with - by default ​~/.ssh/id_rsa​)
+* `​ssh-add -L`​ (ensure your private key is listed between the keys displayed on ssh agent) 4. ​vagrant ssh​ (connects to you guest machine)
+
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
   * Create a directory, say 'alshaya_behat' [if not exist]
