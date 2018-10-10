@@ -115,6 +115,7 @@ $primary_search_text: $warm-grey;
 $header_c_menu_search_active_icon: $purplish-brown;
 $header_search_active_bg: transparent;
 $header_mobile_menu_arrow: $purplish-brown;
+$primary_search_border: $secondary_border;
 
 // Delivery tabs.
 $delivery_menu_bg: $white;
@@ -272,6 +273,34 @@ $checkout_login_guest_email_text: $purplish-brown;
 $checkout_login_guest_email_text_mobile: $purplish-brown;
 $checkout_login_footer_actions_bg: false;
 $checkout_login_btn_bg: $primary_btn_bg;
+
+// Checkout tabs & form.
+$checkout_tab_default_border: $secondary_border;
+
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $primary_border;
+
+// Checkout Click & collect.
+$checkout_cc_list_hours_label: $black;
+$checkout_cc_list_hours_label_icon: $purplish-brown;
+$checkout_cc_list_map_link_active: $purplish-brown;
+$checkout_cc_list_map_link_active_border: $purplish-brown;
+$checkout_cc_list_delivery_time: $warm-grey;
+$checkout_cc_store_address: $warm-grey;
+$checkout_cc_list_select_store_btn_txt: $purplish-brown;
+$checkout_cc_list_select_store_btn_border: $purplish-brown;
+$checkout_cc_list_map_link_default: $purplish-brown;
+$checkout_cc_list_map_link_border: $secondary_border;
+$checkout_cc_list_map_link_bg: $white;
+$checkout_cc_store_location_input_label_mobile_color: $black;
+$checkout_cc_selected_store_content_bg: $white-two;
+$checkout_cc_individual_store_hours_label_border: $secondary_border;
+$checkout_cc_map_hours_icon: $purplish-brown;
+$checkout_cc_tab_border: $secondary_border;
+$checkout_cc_store_location_input_label: $black;
+$checkout_cc_location_result_label: $warm-grey;
+$checkout_cc_location_result_value: $black;
+$checkout_cc_list_delivery_time_tablet: $warm-grey;
 
 // Checkout Payment.
 $checkout_payment_form_border: $purplish-brown;
