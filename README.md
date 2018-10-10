@@ -76,8 +76,8 @@ To prepare your local env:
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
   * Login using the default credentials:﻿no-reply@acquia.com / admin
-  * Perform drush commands from inside of your vm, like drush status -l local.alshaya-mckw.com
-  * Login quickly using drush uli -l local.alshaya-mckw.com  (currently doesn't work properly)
+  * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
+  * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
@@ -85,6 +85,11 @@ To prepare your local env:
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
+
+### Troubleshooting
+
+* `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
+  * The reason for this is in the existing configuration values that still exist in memcache. The workaround is that you either restart the vm using ​vagrant reload​ command, or you restart memcache service using sudo service memcached restart in your vm and restart `blt refresh:local` again
 
 ### Create a new site
 
