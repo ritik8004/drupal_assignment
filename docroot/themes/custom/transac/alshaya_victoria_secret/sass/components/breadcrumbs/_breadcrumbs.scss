@@ -9,7 +9,10 @@
     text-transform: none;
 
     &:last-of-type {
-      font-family: $vs-bold;
+      a {
+        font-family: $vs-bold;
+        font-weight: normal;
+      }
     }
 
     &::after {
