@@ -22,3 +22,4 @@ services:
           - '@entity.repository'
           - '@alshaya_acm_product.skumanager'
           - '@entity_type.manager'
+          - '@module_handler'
