@@ -74,9 +74,9 @@ mcuat:
       contexts:
         - FeatureContext:
             parameters:
-             simpleurl: '/my-first-sleepsuits-3-pack?selected=156'
-             simpletitle: 'My First Sleepsuits - 3 Pack'
-             simpletitlear: 'لباس نوم My First - عبوة من 3 قطع'
+             simpleurl: '/mothercare-farm-newborn-bibs-3-pack?selected=316'
+             simpletitle: 'Mothercare Farm Newborn Bibs - 3 Pack'
+             simpletitlear: 'صدريات Farm لحديثي الولادة من مذركير - عدد 3'
              configurl: '/horse-photographic-t-shirt?selected=256'
              configtitle: 'Horse Photographic T-Shirt'
              configtitlear: 'Horse Photographic تي- شيرت'
@@ -89,7 +89,7 @@ mcuat:
         output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mckw-uat.factory.alshaya.com/en'
+      base_url: 'https://mckw-uat.factory.alshaya.com/'
       files_path: "%paths.base%/features/mothercare/media"
 
 mcprod:

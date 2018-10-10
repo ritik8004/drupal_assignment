@@ -916,20 +916,18 @@ H&M has since it was founded in 1947 grown into one of the world\'s leading fash
     /**
      * @Given /^I should be able to see the header for checkout$/
      */
-    public function iShouldBeAbleToSeeTheHeaderForCheckout() {
+    public function iShouldBeAbleToSeeTheHeaderForCheckout()
+    {
         $page = $this->getSession()->getPage();
         $logo = $page->has('css', '.logo') and $page->hasLink('Home');
         if (!$logo) {
-            throw new Exception('Logo is not displayed on secure checkout page');
+            throw new \Exception('Logo is not displayed on secure checkout page');
         }
-        $text = $page->find('css', '.secure__checkout--label')->getText();
-        if ($text !== 'Secure Checkout') {
-            throw new Exception('Text Secure Checkout is not displayed');
+        $text = $page->find('css', '.c-page-title')->getText();
+        if ($text !== 'secure checkout') {
+            throw new \Exception('Text Secure Checkout is not displayed');
         }
-        $lock = $page->has('css', '.icon-ic_login');
-        if (!$lock) {
-            throw new Exception('Lock icon is not displayed secure checkout page');
-        }
+
     }
 
     /**

@@ -17,8 +17,7 @@ Feature: Test Checkout feature
   I should be able to checkout using COD
     When I follow "Home delivery"
     And I wait for the page to load
-    And I should see "secure checkout"
-    #And I should be able to see the header for checkout
+    And I should be able to see the header for checkout
     And I should not see the link "create an account"
     And I should not see the link "Sign in"
     And I should not see the link "Find Store"
@@ -100,7 +99,7 @@ Feature: Test Checkout feature
   Scenario: As a Guest
   I should be able to use click and collect option
   and pay by KNET
-    #And I should be able to see the header for checkout
+    And I should be able to see the header for checkout
     And I follow "Click & Collect"
     And I wait for AJAX to finish
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -145,10 +144,10 @@ Feature: Test Checkout feature
     And I should see "Quantity:"
     And I should see "Color:"
 
-  @knet
+  @knet @test
   Scenario: As a Guest
     I should be displayed a valid message on cancelling a KNET transaction
-    #And I should be able to see the header for checkout
+    And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -180,7 +179,7 @@ Feature: Test Checkout feature
     I should be able to view the number of results displayed
     Buttons to toggle between list and Map view
     and link to navigate to the basket
-    #And I should be able to see the header for checkout
+    And I should be able to see the header for checkout
     And I follow "Click & Collect"
     And I wait for AJAX to finish
     When I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
