@@ -4,6 +4,7 @@ namespace Acquia\Blt\Custom\Commands;
 
 use Acquia\Blt\Robo\BltTasks;
 use Robo\Contract\VerbosityThresholdInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Defines commands in the "custom" namespace.
@@ -47,7 +48,7 @@ class CustomCommand extends BltTasks {
     // Default site directory.
     $default_multisite_dir = $this->getConfigValue('docroot') . "/sites/default";
     // Generate local.settings.php from file provided by blt.
-    $blt_local_settings_file = $this->getConfigValue('blt.root') . '/settings/default.local.settings.php';
+    $default_local_settings_file = $default_multisite_dir . '/settings/default.local.settings.php';
     $local_settings_file = "$default_multisite_dir/settings/local.settings.php";
     // Generate local.drush.yml.
     $default_local_drush_file = "$default_multisite_dir/default.local.drush.yml";
@@ -55,7 +56,7 @@ class CustomCommand extends BltTasks {
 
     // Array of from and destination file paths.
     $copy_map = [
-      $blt_local_settings_file => $local_settings_file,
+      $default_local_settings_file => $local_settings_file,
       $default_local_drush_file => $local_drush_file,
     ];
 
@@ -219,7 +220,8 @@ class CustomCommand extends BltTasks {
    * @description Setup local dev environment.
    */
   public function refreshLocal($site = NULL) {
-    $sites = $this->getConfig()->get('sites');
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $sites = $data['sites'];
     $list = implode(array_keys($sites), ", ");
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall ($list):");
@@ -266,7 +268,8 @@ class CustomCommand extends BltTasks {
    * @description Reinstall local dev environment.
    */
   public function refreshLocalDrupal($site = NULL) {
-    $sites = $this->getConfig()->get('sites');
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $sites = $data['sites'];
     $list = implode(array_keys($sites), ", ");
     if ($site == NULL) {
       $site = $this->ask("Enter site code to reinstall, ($list):");
@@ -313,8 +316,6 @@ class CustomCommand extends BltTasks {
    * Installs Drupal and imports configuration.
    *
    * @command local:drupal:install
-   *
-   * @validateMySqlAvailable
    *
    * @return \Robo\Result
    *   The `drush site-install` command result.
