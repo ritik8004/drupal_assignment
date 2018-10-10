@@ -43,12 +43,12 @@
         }
       });
 
-      var $menuIn = $('.has-child .menu__link-wrapper', context);
+      var $menuIn = $('.has-child:not(".max-depth") .menu__link-wrapper', context);
       $menuIn.on('click', function () {
         $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
-      var $menuInFirst = $('.has-child > .menu__link-wrapper');
+      var $menuInFirst = $('.has-child:not(".max-depth") > .menu__link-wrapper');
       $menuInFirst.on('click', function () {
         $('.menu--one__list-item.has-child').addClass('not-active');
         $(this).parent().removeClass('not-active').addClass('active-menu');

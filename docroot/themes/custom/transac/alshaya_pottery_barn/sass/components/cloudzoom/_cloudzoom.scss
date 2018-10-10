@@ -1,5 +1,9 @@
 .cloudzoom {
   &.thumbnail-count-1 {
+    #cloud-zoom-big {
+      #{$left}: 103.8% !important;
+    }
+
     @include breakpoint($tablet) {
       .cloudzoom__thumbnails {
         display: none;
