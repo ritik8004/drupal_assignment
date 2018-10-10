@@ -668,8 +668,6 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
       }
   }
 
-
-
   /**
    * @Given /^I scroll to x "([^"]*)" y "([^"]*)" coordinates of page$/
    */
