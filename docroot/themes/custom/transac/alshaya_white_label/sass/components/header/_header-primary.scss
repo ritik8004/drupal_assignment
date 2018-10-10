@@ -15,7 +15,7 @@
       background-color: $mm_l1_link_bg;
 
       &::after {
-        background: url('../imgs/icons/icon-chevron-next--hover.svg') no-repeat !important;
+        background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next--hover.svg') no-repeat !important;
       }
 
       a,
