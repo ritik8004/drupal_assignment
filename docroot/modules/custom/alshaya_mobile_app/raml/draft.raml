@@ -484,7 +484,72 @@ schemas:
             "type": "array",
             "items": {
               "type": "object",
-              "description": "Structure TBD. Must contain all the data to build the search result view mode."
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "deeplink": {
+                  "type": "string"
+                },
+                "original_price": {
+                  "type": "number"
+                },
+                "final_price": {
+                  "type": "number",
+                  "description": "Final/discounted price, either from PIMS or catalogue price rule."
+                },
+                "medias": {
+                  "type": "object",
+                  "properties": {
+                    "images": {
+                      "type": "array",
+                      "items": {
+                        "url": {
+                          "type": "string",
+                          "description": "The LiquidPixel url to the image."
+                        },
+                        "image_type": {
+                          "type": "string",
+                          "description": "The image type to determine model vs product.",
+                          "enum": [ "image", "Lookbook", "Environmental", "CreativeDetail", "DescriptiveStillLife", "Pictogram", "DescriptiveDetail", "MODEL_IMAGE", "STILL_LIFE_FRONT_URL", "DETAIL_IMAGE" ]
+                        }
+                      }
+                    },
+                    "videos": {
+                      "type": "array",
+                      "items": {
+                        "description": "Structure TBD, not in use on H&M."
+                      }
+                    }
+                  }
+                },
+                "labels": {
+                  "type": "array",
+                  "items": {
+                    "description": "Structure TBD, not in use on H&M."
+                  }
+                },
+                "swatches": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "integer"
+                      },
+                      "color_code": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
