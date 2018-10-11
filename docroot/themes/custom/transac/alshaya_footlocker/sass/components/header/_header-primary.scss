@@ -173,6 +173,12 @@ header.c-header {
         width: 100%;
       }
     }
+
+    @include breakpoint($only-mobile) {
+      .block-system-branding-block {
+        width: 100%;
+      }
+    }
   }
 
   #mini-cart-wrapper {
