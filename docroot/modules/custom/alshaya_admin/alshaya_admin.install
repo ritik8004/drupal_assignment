@@ -10,6 +10,15 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Set adminimal_theme as admin theme.
+ */
+function alshaya_admin_update_8004() {
+  _alshaya_admin_initialize_admin_theme('adminimal_theme');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update hook to re-run missed steps from 8002.
  */
 function alshaya_admin_update_8003() {
@@ -109,6 +118,14 @@ function alshaya_admin_update_8001() {
     'views.view.content_needs_review',
   ];
   alshaya_config_install_configs($configs, 'alshaya_admin', 'install');
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_admin_install() {
+  // Set adminimal_theme as admin theme.
+  _alshaya_admin_initialize_admin_theme('adminimal_theme');
 }
 
 /**

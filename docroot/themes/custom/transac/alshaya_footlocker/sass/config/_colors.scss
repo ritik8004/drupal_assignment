@@ -31,6 +31,9 @@ $primary_input_border: $warm-grey;
 $primary_input_inline_error: $red;
 $primary_form_link: $purplish-brown;
 
+// Form Items
+$formitem_label: $warm-grey;
+
 //Buttons.
 $primary_brand_button: $purplish-brown;
 $primary_brand_button_text: $purplish-brown;
@@ -115,6 +118,7 @@ $primary_search_text: $warm-grey;
 $header_c_menu_search_active_icon: $purplish-brown;
 $header_search_active_bg: transparent;
 $header_mobile_menu_arrow: $purplish-brown;
+$primary_search_border: $secondary_border;
 
 // Delivery tabs.
 $delivery_menu_bg: $white;
@@ -177,6 +181,11 @@ $title: $black;
 $sub_title: $black;
 $label_black: $black;
 $user_sidebar_block_title: $black;
+
+// Breadcrumb
+$breadcrumb_link: $black;
+$breadcrumb_link_active: $black;
+$breadcrumb_link_hover: $black;
 
 /* ------- 7. Pages ----- */
 // Product listing page and search page.
@@ -263,11 +272,121 @@ $store_finder_search_label: $black;
 
 // Checkout Global.
 $checkout_section_titles: $black;
+
+//checkout layout
+$checkout_delivery_options_border: $secondary_border;
+
+// Checkout Login
+$checkout_section_title_border: $primary_border;
+
+// Checkout Payment.
+$checkout_payment_form_border: $purplish-brown;
+$checkout_payment_method_title: $black;
+$checkout_transaction_type_color: $black;
+
+// Checkout tabs & form.
+$checkout_tab_default_title: $black;
+$checkout_tab_active_border: $purplish-brown;
+$delivery_tab_active_bg: $white;
+$checkout_tab_active_title: $purplish-brown;
+$checkout_tab_separator: $black;
+$secure_checkout_back_link: $purplish-brown;
+$checkout_form_actions_footer: $white;
+$checkout_method_choice_tab_title_active: $purplish-brown;
+
+// Address book
+$address_book_change_link: $black;
+$checkout_cc_store_address_mobile_border: $primary_border;
 $checkout_login_guest_email_text: $purplish-brown;
 $checkout_login_guest_email_text_mobile: $purplish-brown;
 $checkout_login_footer_actions_bg: false;
 $checkout_login_btn_bg: $primary_btn_bg;
 
+// Checkout tabs & form.
+$checkout_tab_default_border: $secondary_border;
+
+// Checkout click and collect heading cnc form.
+$checkout_cc_cnc_form_title_border: $primary_border;
+
+// Checkout Click & collect.
+$checkout_cc_list_hours_label: $black;
+$checkout_cc_list_hours_label_icon: $purplish-brown;
+$checkout_cc_list_map_link_active: $purplish-brown;
+$checkout_cc_list_map_link_active_border: $purplish-brown;
+$checkout_cc_list_delivery_time: $warm-grey;
+$checkout_cc_store_address: $warm-grey;
+$checkout_cc_list_select_store_btn_txt: $purplish-brown;
+$checkout_cc_list_select_store_btn_border: $purplish-brown;
+$checkout_cc_list_map_link_default: $purplish-brown;
+$checkout_cc_list_map_link_border: $secondary_border;
+$checkout_cc_list_map_link_bg: $white;
+$checkout_cc_store_location_input_label_mobile_color: $black;
+$checkout_cc_selected_store_content_bg: $white-two;
+$checkout_cc_individual_store_hours_label_border: $secondary_border;
+$checkout_cc_map_hours_icon: $purplish-brown;
+$checkout_cc_tab_border: $secondary_border;
+$checkout_cc_store_location_input_label: $black;
+$checkout_cc_location_result_label: $warm-grey;
+$checkout_cc_location_result_value: $black;
+$checkout_cc_list_delivery_time_tablet: $warm-grey;
+
 // Checkout Payment.
 $checkout_payment_form_border: $purplish-brown;
 $checkout_payment_method_title: $black;
+
+// Counters.
+$primary_counter_bg: $dark-red;
+$secondary_counter_bg: $purplish-brown;
+
+// Checkout Progress.
+$checkout_seperator: $warm-grey;
+$checkout_current_counter_border: $dark-red;
+$checkout_counter_text: $purplish-brown;
+$checkout_progress_text: $warm-grey;
+
+//order confirmation page
+$order_print_delivery_details_row: $white-two;
+$order_print_delivery_details_row_border: $purplish-brown;
+$order_print_order_details_row_label: $black;
+$order_print_product_count_row_border: $secondary_border;
+$order_print_delivery_subtotal_row_blend: $white-two;
+$order_print_total_row: $white;
+$order_print_order_details_row_bg_blend: rgba(218, 218, 218, 0.15);
+$order_detail_total_tr_row_price_td_tablet: rgba(242, 242, 242, 0.27);
+$order_print_order_details_row_bg: $white;
+$order_print_order_details_item_row_details: $warm-grey;
+$order_print_order_details_row_label: $black;
+$order_summary_product_img_border: $secondary_border;
+$order_detail_td_light_content: $warm-grey;
+
+//Checkout Confirmation
+$checkout_confirm_order_summary_row: $info-blue;
+$checkout_confirm_order_summary_row_text: $white-two;
+$checkout_order_print_btn_bg: $info-blue;
+$checkout_order_print_btn_border: $white-two;
+$checkout_order_print_btn_text: $white-two;
+$checkout_order_details_label: $black;
+$checkout_order_details_product_count_border: $secondary_border;
+$checkout_confirm_order_message: $warm-grey;
+$checkout_confirmation_detail_light_text: $warm-grey;
+$checkout_continue_shopping_btn_text: $purplish-brown;
+$checkout_section_title_border: $primary_border;
+
+// Order detail, recent orders, order list page.
+$order_detail_order_details_row: $white-three;
+$order_detail_order_details_row_td_blend: rgba(119, 119, 119, 0.15);
+$order_detail_table_bg: $white-two;
+$order_detail_delivery_details_row_text: false;
+$order_detail_warm_white: $white-three;
+$order_detail_total_tr_row_price_td: rgba(218, 218, 218, 0.19);
+
+// Mini Cart Notification
+$primary_minicart_quantity_bg: $dark-red;
+$minicart_notification_border: $purplish-brown;
+$minicart_notification_text: $purplish-brown;
+$primary_minicart_text: $purplish-brown;
+$minicart_notification_product_title: $black;
+$minicart_notification_btn_bg: $black;
+$minicart_notification_shadow: $warm-grey;
+$minicart_notification_background: $white-two;
+$order_summary_product_img_border: $white-three;

@@ -10,6 +10,16 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update field type for attr_color_lhn to attribute from string.
+ */
+function alshaya_pb_transac_update_8005() {
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('color_lhn', ['swatch' => 1]);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config translation for placeholder text.
  */
 function alshaya_pb_transac_update_8004() {

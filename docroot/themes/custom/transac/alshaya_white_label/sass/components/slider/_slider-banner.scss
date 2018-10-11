@@ -14,11 +14,9 @@
     overflow: hidden;
 
     .slick-list {
-      @include breakpoint($tablet) {
-        width: 71.875rem;
-        min-height: 15.875rem;
-        #{$left}: calc((100vw - 71.875rem) / 2);
-      }
+      width: 100%;
+      max-width: 120rem;
+      margin: 0 auto;
 
       .ucbrowser & {
         @include breakpoint(orientation portrait) {
@@ -31,12 +29,6 @@
           right: auto;
           transform: translateX(50%);
         }
-      }
-
-      @include breakpoint($desktop) {
-        width: 120rem;
-        min-height: 26.5rem;
-        #{$left}: calc((100vw - 120rem) / 2);
       }
     }
   }
