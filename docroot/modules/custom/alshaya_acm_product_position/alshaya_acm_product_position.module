@@ -32,7 +32,8 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     // For the rest endpoint.
     // Tag added in CategoryProductListResource::prepareAndExecuteQuery().
     if ($query->hasTag('category_product_list')) {
-      if (!isset($sorts[$default_sort])) {
+      // We apply default sort only when no other sort is applied except stock.
+      if (!isset($sorts[$default_sort]) && count($sorts) == 1 && isset($sorts['stock'])) {
         $sorts[$default_sort] = $views_sort[$default_sort]['order'];;
       }
     }
