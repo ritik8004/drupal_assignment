@@ -605,6 +605,8 @@ class AlshayaSearchApiQueryExecute {
         $data = [
           'id' => (int) $node->id(),
           'title' => $node->getTitle(),
+          'sku' => $sku_entity->getSku(),
+          'deeplink' => $this->mobileAppUtility->getDeepLink($node),
           'original_price' => $prices['price'],
           'final_price' => $prices['final_price'],
           'promo' => $promotions,
