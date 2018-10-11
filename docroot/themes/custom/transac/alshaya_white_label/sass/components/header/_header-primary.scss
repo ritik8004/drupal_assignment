@@ -617,7 +617,10 @@ header {
       .menu--one__link {
         padding: 0.625rem;
         padding-bottom: 0.6rem;
-        display: block;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
         height: 2.75rem;
         border-bottom: 1px solid $mm_l1_border;
         border-top: 2px solid transparent;
