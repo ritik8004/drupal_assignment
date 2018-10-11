@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "855599247a7f76aba5157f341c9dda42",
+    "content-hash": "80700832ca708e25d68508db9a1b5612",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5031,6 +5031,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -8035,9 +8038,9 @@
                     }
                 },
                 "patches_applied": {
+
                     "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch",
-                    "Fix integration with content moderation in multi-lingual scenarios": "https://www.drupal.org/files/issues/2018-06-06/paragraphs-paragraphs-translatable-revision-2951436-71.patch",
-                    "Paragraphs and Default Content": "https://www.drupal.org/files/issues/2018-10-10/2700723-16.patch"
+                    "Fix integration with content moderation in multi-lingual scenarios": "https://www.drupal.org/files/issues/2018-06-06/paragraphs-paragraphs-translatable-revision-2951436-71.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
