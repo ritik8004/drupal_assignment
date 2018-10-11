@@ -889,4 +889,14 @@ header .region__header {
       line-height: 1.4;
     }
   }
+
+  .highlighted {
+    a {
+      &:hover {
+        .hightlight__description {
+          text-decoration: none;
+        }
+      }
+    }
+  }
 }
