@@ -284,9 +284,22 @@ class MobileAppUtility {
       return $this->serializer->normalize($entity->get($field), 'json', $context);
     });
 
-    foreach ($items as $delta => $item) {
-      $field_output['field_data'][$delta] = [];
-      $field_output['field_data'][$delta] = $this->getNormalizedEntityReferenceData($item, $context, $field_output['field_data'][$delta], $field_output);
+    $field_output = [];
+    foreach ($items as $item) {
+      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+      $field_output['cache'][] = $entity;
+      // @see self::getFieldData()
+      $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
+        return $this->serializer->normalize($entity, 'json', $context);
+      });
+
+      foreach ($entity_normalized as $field_name => $field_values) {
+        if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+          foreach ($field_values as $field_value) {
+            $field_output['blocks'][] = $this->getNormalizedEntityReferenceData($field_value, $context, $field_output);
+          }
+        }
+      }
     }
     return $field_output;
   }
@@ -298,15 +311,13 @@ class MobileAppUtility {
    *   Normalize array containing target_id and target_type.
    * @param array $context
    *   Context array to process normalize.
-   * @param array $data
-   *   The data array which is used to collect data and return.
    * @param array $field_output
    *   The array to collect cacheable objects.
    *
    * @return array
    *   Return data array.
    */
-  private function getNormalizedEntityReferenceData(array $item, array $context, array &$data, array &$field_output): array {
+  private function getNormalizedEntityReferenceData(array $item, array $context, array &$field_output): array {
     if (!empty($item['target_type'])) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
       $field_output['cache'][] = $entity;
@@ -314,24 +325,28 @@ class MobileAppUtility {
       $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
         return $this->serializer->normalize($entity, 'json', $context);
       });
-      $data[$entity->bundle()] = !isset($data[$entity->bundle()]) ? [] : $data[$entity->bundle()];
+      $data = [
+        'type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId(),
+      ];
+
       foreach ($entity_normalized as $field_name => $field_data) {
         if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+          $data[$field_name] = [];
+          $row = [];
           foreach ($field_data as $field_delta => $field_item) {
             if (!empty($field_item['target_type'])) {
-              $data[$entity->bundle()][$field_name][$field_delta] = !empty($data[$entity->bundle()][$field_name][$field_delta]) ? $data[$entity->bundle()][$field_name][$field_delta] : [];
-              $data[$entity->bundle()][$field_name][$field_delta] = $this->getNormalizedEntityReferenceData($field_item, $context, $data[$entity->bundle()][$field_name][$field_delta], $field_output);
+              $row[$field_delta] = $this->getNormalizedEntityReferenceData($field_item, $context, $field_output);
             }
             else {
-              $data[$entity->bundle()][$field_name][$field_delta] = $field_item;
+              $row[$field_delta] = $field_item;
             }
           }
-
+          $data[$field_name] = $row;
         }
       }
     }
     else {
-      return $item;
+      return array_merge(['type' => 'block'], $item);
     }
     return $data;
   }
