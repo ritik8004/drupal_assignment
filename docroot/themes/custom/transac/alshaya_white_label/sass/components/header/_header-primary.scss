@@ -914,6 +914,15 @@ header {
       .title {
         margin-#{$left}: 0;
       }
+
+      a {
+        &:hover {
+          .hightlight__description {
+            color: $highlights_subtitle_hover;
+            text-decoration: underline;
+          }
+        }
+      }
     }
 
     .title {
