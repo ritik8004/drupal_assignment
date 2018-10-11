@@ -1,11 +1,3 @@
-drush:
-  default_alias: alshaya.local
-  aliases:
-    local: alshaya.local
-behat:
-  launch-selenium: false
-  launch-phantomjs: true
-
 # This is all the sites which are currently installed (or will be installed
 # soon) on the factory.
 sites:
@@ -79,5 +71,3 @@ sites:
     module: alshaya_fl
     type: alshaya_transac
     country: sa
-vm:
-  enable: true

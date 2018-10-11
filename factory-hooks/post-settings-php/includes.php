@@ -35,7 +35,7 @@ if (empty($acsf_site_name) && $settings['env'] == 'local') {
     }
   }
 
-  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/blt.local.yml'));
+  $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/alshaya_local_sites.yml'));
 
   foreach ($data['sites'] as $acsf_site_code => $site_info) {
     if ($host_site_code == $acsf_site_code) {
@@ -44,7 +44,8 @@ if (empty($acsf_site_name) && $settings['env'] == 'local') {
     }
   }
 
-  if (empty($acsf_site_name)) {
+  // We don't want to interrupt script on default domain, otherwise drush command without --uri parameter would fail
+  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') ) {
     print 'Invalid domain';
     die();
   }

@@ -18,6 +18,7 @@ if (!empty($_SERVER['HTTP_HOST'])) {
   $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
 }
 else {
+  $host_site_code = 'default_local';
   foreach ($_SERVER['argv'] as $arg) {
     preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
     if (!empty($matches)) {
@@ -27,12 +28,15 @@ else {
   }
 }
 
+// We set "drupal" as a default database if no domain found. This assures it won't throw errors on empty --uri parameter
+$drupal_database = ( $host_site_code == 'default_local' ? 'drupal' : 'drupal_alshaya_' . str_replace('-', '_', $host_site_code) );
+
 $databases = array(
   'default' =>
     array(
       'default' =>
         array(
-          'database' => 'drupal_alshaya_' . str_replace('-', '_', $host_site_code),
+          'database' => $drupal_database,
           'username' => 'drupal',
           'password' => 'drupal',
           'host' => 'localhost',
