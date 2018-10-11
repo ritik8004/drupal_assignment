@@ -9,12 +9,14 @@ Feature: As a customer
     Given I am on a sport product
     And I wait for the page to load
     And I remove promo panel
-    When I press "add to cart"
+    And I scroll to the ".selection" element
+    When I press "Add to Bag"
     And I wait for AJAX to finish
     When I go to "/cart"
     And I wait for the page to load
     And I follow "عربية"
     And I wait for the page to load
+    And I scroll to the "#secure-checkout-button" element
     When I press "إتمام الشراء بأمان"
     And I wait for the page to load
 
@@ -22,18 +24,21 @@ Feature: As a customer
   Scenario: As a customer
   I should be able to checkout using Home delivery
   and pay by Cash-on-delivery on Arabic site
+    When I scroll to the ".address--options" element
     When I follow "خدمة التوصيل للمنزل"
     And I wait for the page to load
     When I select address for Arabic
     And I wait for the page to load
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
     And I wait for the page to load
+    And I scroll to the "#edit-actions-next" element
     When I press "تابع للدفع"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
-    When I accept terms and conditions
-    And I press "سجل الطلبية"
+    And I accep
+    And I scroll to the "#edit-actions-next" element
+    And I press "سجلي الطلبية"
     When I wait for the page to load
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     And I should see text matching "ستصلك رسالة تأكيد لطلبيتك بعد قليل على "

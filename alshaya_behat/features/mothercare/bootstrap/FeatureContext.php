@@ -871,26 +871,22 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
     }
   }
 
-  /**
-   * @Given /^I should be able to see the header for checkout$/
-   */
-  public function iShouldBeAbleToSeeTheHeaderForCheckout()
-  {
+/**
+ * @Given /^I should be able to see the header for checkout$/
+ */
+public function iShouldBeAbleToSeeTheHeaderForCheckout()
+{
     $page = $this->getSession()->getPage();
     $logo = $page->has('css', '.logo') and $page->hasLink('Home');
     if (!$logo) {
-      throw new \Exception('Logo is not displayed on secure checkout page');
+        throw new \Exception('Logo is not displayed on secure checkout page');
     }
-    $text = $page->find('css', '.secure__checkout--label')->getText();
+    $text = $page->find('css', '.c-page-title')->getText();
     if ($text !== 'secure checkout') {
-      throw new \Exception('Text Secure Checkout is not displayed');
+        throw new \Exception('Text Secure Checkout is not displayed');
     }
-    $lock = $page->has('css', '.icon-ic_login');
-    if (!$lock) {
-      throw new \Exception('Lock icon is not displayed secure checkout page');
-    }
-  }
 
+}
   /**
    * @Then /^I should see store name and location for all the listed stores$/
    */
