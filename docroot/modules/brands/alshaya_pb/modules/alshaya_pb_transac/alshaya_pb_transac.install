@@ -7,6 +7,37 @@
 
 use Drupal\Core\Site\Settings;
 
+
+/**
+* Implements hook_update_N().
+*
+* Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+*/
+function alshaya_pb_transac_update_8005() {
+  _alshaya_master_initialize_amp('alshaya_amp_pottery_barn');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update field type for attr_color_lhn to attribute from string.
+ */
+function alshaya_pb_transac_update_8005() {
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('color_lhn', ['swatch' => 1]);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config translation for placeholder text.
+ */
+function alshaya_pb_transac_update_8004() {
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
+    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز/كود منتج...)')
+    ->save();
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -20,6 +51,10 @@ function alshaya_pb_transac_update_8003() {
     ['alshaya_acm_product.display_settings'],
     'alshaya_acm_product'
   );
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**
@@ -98,6 +133,9 @@ function alshaya_pb_transac_install() {
     alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
   }
 
+  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+  _alshaya_master_initialize_amp('alshaya_amp_pottery_barn');
+
   // Add string translations.
   $strings = [
     'our company' => [
@@ -123,4 +161,14 @@ function alshaya_pb_transac_install() {
 
   // Re-save indexes to ensure config overrides are taken into consideration.
   _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function alshaya_pb_transac_update_dependencies() {
+  $dependencies['alshaya_pb_transac'][8004] = [
+    'alshaya_search' => 8023,
+  ];
+  return $dependencies;
 }

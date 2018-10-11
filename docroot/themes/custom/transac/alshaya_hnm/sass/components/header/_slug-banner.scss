@@ -8,6 +8,20 @@
   @include breakpoint($only-mobile) {
     &.header--fixed {
       margin-top: 3.6875rem;
+
+      .c-header {
+        .block-views-exposed-filter-blocksearch-page {
+          top: 3.625rem;
+        }
+      }
+    }
+
+    &:not(.header--fixed) {
+      .c-header {
+        .block-views-exposed-filter-blocksearch-page {
+          top: 3.625rem;
+        }
+      }
     }
 
     header {

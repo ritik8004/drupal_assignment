@@ -27,7 +27,7 @@ function alshaya_hnm_form_alter(&$form, FormStateInterface $form_state, $form_id
     case "views_exposed_form":
       // Adding Place holder on Search.
       if ($form['#id'] == 'views-exposed-form-search-page') {
-        $form['keywords']['#attributes']['placeholder'] = t('Search');
+        $form['keywords']['#attributes']['placeholder'] = \Drupal::config('alshaya_search.settings')->get('search_field_placeholder');
       }
       break;
   }

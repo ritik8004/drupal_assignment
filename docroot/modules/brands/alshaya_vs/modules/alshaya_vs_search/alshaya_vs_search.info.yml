@@ -1,0 +1,7 @@
+name: 'Alshaya Victoria Secret Search'
+type: module
+description: 'The Alshaya Victoria Secret Search Customisations.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_vs:alshaya_vs_transac

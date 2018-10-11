@@ -56,7 +56,8 @@
 
 // Size Guide modal popup theming
 .path--cart .ui-dialog,
-.nodetype--acq_product .ui-dialog {
+.nodetype--acq_product .ui-dialog,
+.sizeguide-modal-overlay .ui-dialog {
   height: 100% !important;
   width: 100% !important;
   top: 0 !important;
