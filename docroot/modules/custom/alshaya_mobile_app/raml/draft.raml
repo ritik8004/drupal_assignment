@@ -396,6 +396,172 @@ schemas:
           }
         }
       }
+  - Filter: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The filter key to be used in query. Please note that not all sorts are available on all product listing pages.",
+                        "enum": [ "plp_category_facet", "skus_sku_reference_final_price", "plp_product_collection", "plp_color",  "plp_concept", "plp_size", "category", "final_price", "product_collection", "color", "concept", "size" ]
+          },
+          "label": {
+            "type": "string",
+            "description": "The filter label to be displayed as block title."
+          },
+          "options": {
+            "type": "array",
+            "description": "The filter options which can be selected.",
+            "items": {
+              "schema": "FilterOption"
+            }
+          }
+        },
+        "required": [ "key", "label", "options" ]
+      }
+  - FilterOption: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The filter option key to be used in query."
+          },
+          "label": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "description": "The number of product matching the filter option."
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "schema": "FilterOption"
+            }
+          }
+        },
+        "required": [ "key", "label", "count" ]
+      }
+  - LightProduct: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "description": "Limited set of attributes to display a product in a list.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "deeplink": {
+            "type": "string"
+          },
+          "original_price": {
+            "type": "number"
+          },
+          "final_price": {
+            "type": "number",
+            "description": "Final/discounted price, either from PIMS or catalogue price rule."
+          },
+          "medias": {
+            "type": "object",
+            "properties": {
+              "images": {
+                "type": "array",
+                "items": {
+                  "url": {
+                    "type": "string",
+                    "description": "The LiquidPixel url to the image."
+                  },
+                  "image_type": {
+                    "type": "string",
+                    "description": "The image type to determine model vs product.",
+                    "enum": [ "image", "Lookbook", "Environmental", "CreativeDetail", "DescriptiveStillLife", "Pictogram", "DescriptiveDetail", "MODEL_IMAGE", "STILL_LIFE_FRONT_URL", "DETAIL_IMAGE" ]
+                  }
+                }
+              },
+              "videos": {
+                "type": "array",
+                "items": {
+                  "description": "Structure TBD, not in use on H&M."
+                }
+              }
+            }
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "description": "Structure TBD, not in use on H&M."
+            }
+          },
+          "swatches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "integer"
+                },
+                "color_code": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+  - Sort: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The sorting option key to be used in query. Please note that not all sorts are available on all product listing pages.",
+            "enum": [ "nid ASC", "name_1 ASC", "name_1 DESC", "final_price DESC", "final_price ASC", "created DESC", "search_api_relevance DESC", "title ASC", "title DESC" ]
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [ "key", "label" ]
+      }
+  - GetSearch: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "description": "The total number of products matching the criterias."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "schema": "Filter"
+            }
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "schema": "Sort"
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "schema": "LightProduct"
+            }
+          }
+        }
+      }
   - GetProductsList: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -429,155 +595,19 @@ schemas:
           "filters": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "key": {
-                  "type": "string",
-                  "description": "The filter key to be used in query."
-                },
-                "label": {
-                  "type": "string",
-                  "description": "The filter label to be displayed as block title."
-                },
-                "options": {
-                  "type": "array",
-                  "description": "The filter options which can be selected.",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "key": {
-                        "type": "string",
-                        "description": "The filter option key to be used in query."
-                      },
-                      "label": {
-                        "type": "string"
-                      },
-                      "count": {
-                        "type": "integer",
-                        "description": "The number of product matching the filter option."
-                      }
-                    },
-                    "required": [ "key", "label", "count" ]
-                  }
-                }
-              },
-              "required": [ "key", "label", "options" ]
+              "schema": "Filter"
             }
           },
-          "sorting": {
+          "sort": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "key": {
-                  "type": "string",
-                  "description": "The sorting option key to be used in query."
-                },
-                "label": {
-                  "type": "string"
-                }
-              },
-              "required": [ "key", "label" ]
+              "schema": "Sort"
             }
           },
           "products": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "sku": {
-                  "type": "string"
-                },
-                "deeplink": {
-                  "type": "string"
-                },
-                "original_price": {
-                  "type": "number"
-                },
-                "final_price": {
-                  "type": "number",
-                  "description": "Final/discounted price, either from PIMS or catalogue price rule."
-                },
-                "medias": {
-                  "type": "object",
-                  "properties": {
-                    "images": {
-                      "type": "array",
-                      "items": {
-                        "url": {
-                          "type": "string",
-                          "description": "The LiquidPixel url to the image."
-                        },
-                        "image_type": {
-                          "type": "string",
-                          "description": "The image type to determine model vs product.",
-                          "enum": [ "image", "Lookbook", "Environmental", "CreativeDetail", "DescriptiveStillLife", "Pictogram", "DescriptiveDetail", "MODEL_IMAGE", "STILL_LIFE_FRONT_URL", "DETAIL_IMAGE" ]
-                        }
-                      }
-                    },
-                    "videos": {
-                      "type": "array",
-                      "items": {
-                        "description": "Structure TBD, not in use on H&M."
-                      }
-                    }
-                  }
-                },
-                "labels": {
-                  "type": "array",
-                  "items": {
-                    "description": "Structure TBD, not in use on H&M."
-                  }
-                },
-                "swatches": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "key": {
-                        "type": "integer"
-                      },
-                      "color_code": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-  - GetSearch: |
-      {
-        "$schema": "http://json-schema.org/draft-04/schema",
-        "type": "object",
-        "properties": {
-          "filters": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "sorting": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD."
-            }
-          },
-          "products": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "description": "Structure TBD. Must contain all the data to build the search result view mode."
+              "schema": "LightProduct"
             }
           }
         }
