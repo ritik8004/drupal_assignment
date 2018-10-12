@@ -30,15 +30,15 @@
       });
 
       var scrollHeight = $('#shipping_methods_wrapper').offset().top;
+      // Scroll the checkout delivery page to 'Delivery option' section.
       if (localStorage.getItem('address_save_scroll') === 'Y') {
         $('html,body').animate({
           scrollTop: scrollHeight
         }, 'slow');
         localStorage.removeItem('address_save_scroll');
       }
-
-      // Scroll the checkout delivery page to 'Delivery to' section for mobile devices.
-      if ($(window).width() < 768) {
+      else {
+        // Scroll the checkout delivery page to 'Delivery to' section.
         if ($('.multistep-checkout').hasClass('show-form')) {
           if ($('#edit-member-delivery-home').length || $('#edit-guest-delivery-home').length) {
             $('html, body').animate({
