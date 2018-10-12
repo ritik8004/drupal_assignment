@@ -274,6 +274,23 @@ class AlshayaSearchApiQueryExecute {
           // If not a valid sort order.
           $this->mobileAppUtility->throwException();
         }
+        else {
+          // Get available sort options.
+          $available_sort_data = $this->prepareSortData($this->getViewsId(), $this->getViewsDisplayId());
+          $valid_key = FALSE;
+          foreach ($available_sort_data as $sort_data) {
+            // If found a match for sort key.
+            if (strtoupper($sort_data['key']) == strtoupper($query_string_parameters[self::SORT_KEY])) {
+              $valid_key = TRUE;
+              break;
+            }
+          }
+
+          // If not a valid sort key.
+          if (!$valid_key) {
+            $this->mobileAppUtility->throwException();
+          }
+        }
 
         $query->sort($sort_option[0], $sort_option[1]);
       }
@@ -308,6 +325,10 @@ class AlshayaSearchApiQueryExecute {
           // Storing facet data in array with key search api field machine name
           // to use it later for processing.
           $filter_data[$this->processedFacetsArray[$filter_option[0]]->getFieldIdentifier()][] = $filter_option[1];
+        }
+        else {
+          // If filter key provided is not valid (not available in facets).
+          $this->mobileAppUtility->throwException();
         }
       }
 
