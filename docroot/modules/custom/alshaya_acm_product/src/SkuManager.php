@@ -46,6 +46,8 @@ class SkuManager {
 
   const FREE_GIFT_PRICE = 0.01;
 
+  const PDP_LAYOUT_INHERIT_KEY = 'inherit';
+
   /**
    * The database service.
    *
@@ -2161,7 +2163,6 @@ class SkuManager {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function getPdpLayout(EntityInterface $entity, $context = 'pdp') {
-    $pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
     if ($entity instanceof SKUInterface) {
       $entity = alshaya_acm_product_get_display_node($entity);
     }
@@ -2169,14 +2170,38 @@ class SkuManager {
       if ($inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list)) {
         $term = $this->termStorage->load($inner_term);
         if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
-          $term_pdp_layout = $term->get('field_pdp_layout')->getString();
-          if ($term_pdp_layout != 'inherit') {
-            $pdp_layout = $term_pdp_layout;
+          $pdp_layout = $term->get('field_pdp_layout')->getString();
+          if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+            $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
+            foreach ($taxonomy_parents as $taxonomy_parent) {
+              $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
+              if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
+                return $this->getContextFromLayoutKey($context, $pdp_layout);
+              }
+            }
+          }
+          else {
+            return $this->getContextFromLayoutKey($context, $pdp_layout);
           }
         }
       }
     }
+    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+  }
 
+  /**
+   * Helper function to fetch pdp layout to be used for the sku or node.
+   *
+   * @param string $context
+   *   Context for which layout needs to be fetched.
+   * @param string $pdp_layout
+   *   Context for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout context to be used.
+   */
+  public function getContextFromLayoutKey($context, $pdp_layout) {
     switch ($pdp_layout) {
       case 'default':
         return $context;
