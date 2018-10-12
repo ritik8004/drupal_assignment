@@ -762,17 +762,38 @@ class AlshayaSearchApiQueryExecute {
     $sort_config_labels = _alshaya_search_get_config(TRUE);
     // Remove empty label items.
     $sort_config_labels = array_filter($sort_config_labels);
+
+    // Get BEF sort settings from views.
+    $views_storage = Views::getView($this->getViewsId())->storage;
+    $bef_sort_settings = $views_storage->getDisplay('default')['display_options']['exposed_form']['options']['bef']['sort']['advanced']['combine_rewrite'];
+    $lines = explode("\n", trim($bef_sort_settings));
+
     foreach ($sort_config as $key => $sort) {
-      if (isset($sort_config_labels[$key . ' ASC'])) {
+      $asc_key = 0;
+      $desc_key = 0;
+      foreach ($lines as $line_key => $line_val) {
+        if (strpos($line_val, $sort_config_labels[$key . ' ASC']) !== FALSE) {
+          $asc_key = $line_key;
+        }
+        if (strpos($line_val, $sort_config_labels[$key . ' DESC']) !== FALSE) {
+          $desc_key = $line_key;
+        }
+      }
+
+      // Prepare sort order.
+      $first_sort_order_key = $asc_key < $desc_key ? 'ASC' : 'DESC';
+      $second_sort_order_key = $first_sort_order_key == 'ASC' ? 'DESC' : 'ASC';
+
+      if (isset($sort_config_labels[$key . ' ' . $first_sort_order_key])) {
         $sort_data[] = [
-          'key' => $key . ' ASC',
-          'label' => $sort_config_labels[$key . ' ASC'],
+          'key' => $key . ' ' . $first_sort_order_key,
+          'label' => $sort_config_labels[$key . ' ' . $first_sort_order_key],
         ];
       }
-      if (isset($sort_config_labels[$key . ' DESC'])) {
+      if (isset($sort_config_labels[$key . ' ' . $second_sort_order_key])) {
         $sort_data[] = [
-          'key' => $key . ' DESC',
-          'label' => $sort_config_labels[$key . ' DESC'],
+          'key' => $key . ' ' . $second_sort_order_key,
+          'label' => $sort_config_labels[$key . ' ' . $second_sort_order_key],
         ];
       }
     }
