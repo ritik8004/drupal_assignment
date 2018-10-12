@@ -102,22 +102,6 @@
         event.stopPropagation();
       });
 
-      $('.menu--one__list-item.has-child').each(function () {
-        $('.menu--one__list-item.has-child').mouseenter(function () {
-          $('.menu--two__list li:first', this).addClass('first--child_open');
-        });
-      });
-
-      $('.menu--one__list-item.has-child').each(function () {
-        $('.menu--one__list-item.has-child').mouseleave(function () {
-          $('.menu--two__list li:first', this).removeClass('first--child_open');
-        });
-      });
-
-      $('.menu--two__list-item .menu-two__link-wrapper').hover(function () {
-        $('.menu--two__list-item').removeClass('first--child_open');
-      });
-
       // @TODO: Refactor to reduce complexity.
       $('.mobile--close').on('click', function (e) {
         $('.main--menu').removeClass('menu--active');
@@ -135,8 +119,10 @@
 
       $('.main--menu .has-child .menu--one__link, .main--menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
+        $('.menu--two__list li:first', this).addClass('first--child_open');
       }, function () {
         $('body').removeClass('overlay');
+        $('.menu--two__list li:first', this).removeClass('first--child_open');
       });
 
       // Close mobile menu when clicked outside the menu.
