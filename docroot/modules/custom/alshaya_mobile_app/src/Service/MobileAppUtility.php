@@ -28,6 +28,11 @@ class MobileAppUtility {
   use StringTranslationTrait;
 
   /**
+   * Prefix used for the endpoint.
+   */
+  const ENDPOINT_PREFIX = '/rest/v1/';
+
+  /**
    * Cache Backend service for alshaya.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -147,16 +152,31 @@ class MobileAppUtility {
     $return = '';
 
     if ($object instanceof TermInterface) {
-      $return = '';
+      switch ($object->bundle()) {
+        case 'acq_product_category':
+          $return = 'category/' . $object->id() . '/product-list';
+          break;
+      }
+    }
+    elseif (is_object($object) && !empty($object->tid)) {
+      // In case of categories resource, we not getting full object.
+      $return = 'category/' . $object->tid . '/product-list';
     }
     elseif ($object instanceof NodeInterface) {
-      $return = '';
-    }
-    elseif ($type == 'term') {
-      $return = '';
+      switch ($object->bundle()) {
+        case 'acq_product':
+          // Get SKU attached with node.
+          $sku = $object->get('field_skus')->getString();
+          $return = 'product/' . $sku;
+          break;
+
+        case 'acq_promotion':
+          $return = 'promotion/' . $object->id() . '/product-list';
+          break;
+      }
     }
 
-    return $return;
+    return self::ENDPOINT_PREFIX . $return;
   }
 
   /**
