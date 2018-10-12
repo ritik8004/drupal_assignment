@@ -138,6 +138,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_prod',
         'conductor' => 'hmsa_prod'
       ],
+      '01dev2' => [
+        'magento' => 'hm_prod',
+        'conductor' => 'hmsa_prod'
+      ],
     ],
     // H&M AE.
     'hmae' => [
