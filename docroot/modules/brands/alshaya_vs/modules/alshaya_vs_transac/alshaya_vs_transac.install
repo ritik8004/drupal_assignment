@@ -12,6 +12,7 @@ use Drupal\Core\Site\Settings;
  * Implements hook_update_N().
  *
  * Change images mode to fallback for VS.
+ * Enable the module alshaya_vs_search.
  */
 function alshaya_vs_transac_update_8003() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -22,6 +23,10 @@ function alshaya_vs_transac_update_8003() {
     'install',
     AlshayaConfigManager::MODE_RESAVE
   );
+
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_vs_search'))) {
+    \Drupal::service('module_installer')->install(['alshaya_vs_search']);
+  }
 }
 
 /**

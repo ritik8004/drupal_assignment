@@ -116,25 +116,6 @@ stickybutton:
   js:
     js/pdp-stickybutton.js: {}
 
-cloud_zoom_common:
-  version: 1.x
-  js:
-    vendor/js/hammer.min.js: {}
-    js/product_mobile_zoom.js: {}
-  dependencies:
-    - core/drupal.dialog
-    - core/jquery.ui.draggable
-    - alshaya_white_label/slick
-    - alshaya_white_label/utils
-
-cloud_zoom:
-  version: 1.x
-  js:
-    js/product_zoom.js: {}
-  dependencies:
-    - core/drupalSettings
-    - alshaya_white_label/cloud_zoom_common
-
 utils:
   js:
     js/utils.js: {}
