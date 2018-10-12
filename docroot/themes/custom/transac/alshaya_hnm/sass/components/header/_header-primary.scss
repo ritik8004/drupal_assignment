@@ -637,6 +637,7 @@ header {
           z-index: 1;
           border-top: none;
           transform: none;
+          transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
 
           &::after {
             content: '';
@@ -833,17 +834,27 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .overlay::before {
-    content: '';
-    position: fixed;
-    width: 100%;
-    height: 100;
-    top: 0;
-    #{$left}: 0;
-    bottom: 0;
-    #{$left}: 0;
-    background-color: rgba(0, 0, 0, 0.48);
-    z-index: 5;
+  body {
+    &::before {
+      content: '';
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      #{$left}: 0;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 0;
+      background-color: rgba(0, 0, 0, 0.48);
+      transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+    }
+
+    &.overlay {
+      &::before {
+        opacity: 1;
+        transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+      }
+    }
   }
 
   .menu--four__list {
