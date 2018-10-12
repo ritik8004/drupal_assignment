@@ -135,6 +135,31 @@ function alshaya_white_label_preprocess_page(&$variables) {
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
 
+      $field_name = 'field_plp_video_links';
+      if (!empty($field_name)) {
+        $variables['show_videos'] = 1;
+        $variables['#attached']['library'][] = 'alshaya_white_label/video-js';
+        $variables['#attached']['library'][] = 'alshaya_white_label/Youtube_videojs';
+        $variables['#attached']['library'][] = 'alshaya_white_label/Vimeo_videojs';
+        $video_list = $term->get($field_name);
+        foreach ($video_list as $key => $embedded_video) {
+          $url = $embedded_video->uri;
+          $provider = $embedded_video->title;
+          if ($provider == 'youtube') {
+            $variables['data_setup'][$key]['src'] = $url;
+            $variables['data_setup'][$key]['provider'] = 'youtube';
+          }
+          elseif ($provider == 'vimeo') {
+            $variables['data_setup'][$key]['src'] = $url;
+            $variables['data_setup'][$key]['provider'] = 'vimeo';
+          }
+          elseif ($provider == 'custom') {
+            $variables['data_setup'][$key]['video_source']['value'] = $url;
+            $variables['data_setup'][$key]['video_source']['type'] = "video/mp4";
+          }
+        }
+      }
+
       // Add term description in variables to be printed in page--plp.
       $description = $term->getDescription();
       if (isset($description)) {
@@ -154,37 +179,10 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $term_trans = \Drupal::service('entity.repository')
         ->getTranslationFromContext($term, $langcode);
       // Add term description in variables to be printed in page--department.
-      if ($term_trans) {
-        $description = $term_trans->getDescription();
-        if (isset($description)) {
-          $variables['category_term_name'] = $term_trans->getName();
-          $variables['category_term_description'] = $description;
-        }
-
-        $field_name = 'field_plp_video_links';
-        if (!empty($field_name)) {
-          $variables['show_videos'] = 1;
-          $variables['#attached']['library'][] = 'alshaya_white_label/video-js';
-          $variables['#attached']['library'][] = 'alshaya_white_label/Youtube_videojs';
-          $variables['#attached']['library'][] = 'alshaya_white_label/Vimeo_videojs';
-          $video_list = $term_trans->get($field_name);
-          foreach ($video_list as $key => $embedded_video) {
-            $url = $embedded_video->uri;
-            $provider = $embedded_video->title;
-            if ($provider == 'youtube') {
-              $variables['data_setup'][$key]['src'] = $url;
-              $variables['data_setup'][$key]['provider'] = 'youtube';
-            }
-            elseif ($provider == 'vimeo') {
-              $variables['data_setup'][$key]['src'] = $url;
-              $variables['data_setup'][$key]['provider'] = 'vimeo';
-            }
-            elseif ($provider == 'custom') {
-              $variables['data_setup'][$key]['video_source']['value'] = $url;
-              $variables['data_setup'][$key]['video_source']['type'] = "video/mp4";
-            }
-          }
-        }
+      $description = $term_trans->getDescription();
+      if (isset($description)) {
+        $variables['category_term_name'] = $term_trans->getName();
+        $variables['category_term_description'] = $description;
       }
     }
   }

@@ -66,32 +66,32 @@
   </div>
   {% endblock %}
 
-    {% if show_videos %}
-        {% set randomVideo = random(data_setup) %}
-        <!-- Video -->
-        <div class = "plp-video">
-            <video
-                    id="my-player"
-                    class="video-js"
-                    preload="auto"
-                    height="auto"
-                    width="100%"
-                    autoplay
-                    controls
-                    loop
-                    muted
-                    playsinline
-                    data-setup=
-                    {% if randomVideo.src %}
-                    '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
-                    {% endif %}
-            >
-                {% if randomVideo.video_source %}
-                    <source src = "{{ randomVideo.video_source.value }}" type = "{{ randomVideo.video_source.type }}" />
-                {% endif %}
-            </video>
-        </div>
-    {% endif %}
+  {% if show_videos %}
+    {% set randomVideo = random(data_setup) %}
+    <!-- Video -->
+    <div class = "plp-video">
+      <video
+        id="my-player"
+        class="video-js"
+        preload="auto"
+        height="auto"
+        width="100%"
+        autoplay
+        controls
+        loop
+        muted
+        playsinline
+        data-setup=
+        {% if randomVideo.src %}
+        '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
+        {% endif %}
+      >
+        {% if randomVideo.video_source %}
+          <source src = "{{ randomVideo.video_source.value }}" type = "{{ randomVideo.video_source.type }}" />
+        {% endif %}
+      </video>
+    </div>
+  {% endif %}
 
   <!-- ______________________ BREADCRUMB _______________________ -->
 
