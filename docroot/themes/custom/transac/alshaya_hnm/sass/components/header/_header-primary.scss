@@ -532,6 +532,7 @@ header {
         & > ul.menu--two__list {
           border-top: none;
           transform: none;
+          transition: all 0.25s ease-in 0s;
 
           &::after {
             content: '';
@@ -562,7 +563,7 @@ header {
         opacity: 0;
         visibility: hidden;
         overflow: hidden;
-        transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+        transition: all 0.25s ease-in 0s;
         transform: none;
         border-top: none;
         border-bottom: 4px solid $mm_l2_hover_border;
@@ -685,14 +686,15 @@ header {
       bottom: 0;
       #{$left}: 0;
       opacity: 0;
+      z-index: 1;
       background-color: rgba(0, 0, 0, 0.48);
-      transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+      transition: all 0.25s ease-in 0s;
     }
 
     &.overlay {
       &::before {
         opacity: 1;
-        transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+        transition: all 0.25s ease-in 0s;
       }
     }
   }
