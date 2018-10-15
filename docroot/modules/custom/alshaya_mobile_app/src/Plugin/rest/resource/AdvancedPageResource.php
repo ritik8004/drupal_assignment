@@ -172,8 +172,8 @@ class AdvancedPageResource extends ResourceBase {
     ];
 
     $cache_objects = [];
-    foreach ($fields as $field => $callback) {
-      $field_data = $this->mobileAppUtility->getFieldData($node, $field, $callback);
+    foreach ($fields as $field) {
+      $field_data = $this->mobileAppUtility->getFieldData($node, $field);
       $response_data[$field] = $field_data['blocks'];
     }
 
