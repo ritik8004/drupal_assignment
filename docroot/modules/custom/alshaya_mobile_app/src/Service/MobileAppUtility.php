@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Utilty Class.
@@ -94,6 +95,13 @@ class MobileAppUtility {
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
+
+  /**
+   * The array of objects to cache.
+   *
+   * @var array
+   */
+  protected $cachedEntities = [];
 
   /**
    * Utility constructor.
@@ -300,6 +308,43 @@ class MobileAppUtility {
   }
 
   /**
+   * Return array of cached entities.
+   *
+   * @return array
+   *   Return array of cached entities.
+   */
+  public function getCachedEntities() {
+    return $this->cachedEntities;
+  }
+
+  /**
+   * Normalized data for the given entity for given field.
+   *
+   * @param object $entity
+   *   The entity which needs to be normalized.
+   * @param string $field
+   *   (optional) The field of entity which requires to be normalized.
+   *
+   * @return array
+   *   Return the array of containing normalized data.
+   */
+  private function getNormalizedData($entity, $field = "") {
+    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+    // While using normalize, we can't able to catch bubbleable_metadata for
+    // entity's canonical link and some entity don't have canonical link
+    // ie. paragraph. In render method of renderer any early render that
+    // happens throws fatal error. To avoid this fatal error thrown by
+    // \Drupal\Core\Render\Renderer::render(), we have to handle it manually.
+    // that's why Manual caching of Paragraph entity requires when this
+    // method used.
+    // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
+    // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
+    return $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context, $field) {
+      return $this->serializer->normalize(!empty($field) ? $entity->get($field) : $entity, 'json', $context);
+    });
+  }
+
+  /**
    * Associative array containing paragraph type as key and callback function.
    *
    * Callback function is used to collect and order the field's data as we
@@ -329,41 +374,25 @@ class MobileAppUtility {
    *   Return array with field data and cacheable objects.
    */
   public function getFieldData($entity, string $field): array {
-    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
-    $field_output = [
-      'field_data' => [],
-      'cache' => [],
-    ];
+    // Get normalized Paragraph entity of given field.
+    $items = $this->getNormalizedData($entity, $field);
 
-    // While using normalize, we can't able to catch bubbleable_metadata for
-    // entity's canonical link and some entity don't have canonical link
-    // ie. paragraph. In render method of renderer any early render that
-    // happens throws fatal error. To avoid this fatal error thrown by
-    // \Drupal\Core\Render\Renderer::render(), we have to handle it manually.
-    // that's why Manual caching of Paragraph entity requires when this
-    // method used.
-    // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
-    // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
-    $items = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $field, $context) {
-      return $this->serializer->normalize($entity->get($field), 'json', $context);
-    });
-
-    $field_output = ['cache' => [], 'blocks' => []];
+    $field_output = [];
     foreach ($items as $item) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
-      $field_output['cache'][] = $entity;
+      $this->cachedEntities[] = $entity;
       // Prepare paragraph data based on given paragraph entity type.
-      $data = $this->prepareParagraphData($entity, $field_output);
+      $data = $this->prepareParagraphData($entity);
       // Collect items if the field has no recursive paragraphs.
       if ($field != 'field_promo_blocks') {
-        $field_output['blocks']['type'] = empty($field_output['blocks']['type']) ? $entity->bundle() : $field_output['blocks']['type'];
-        if (!isset($field_output['blocks']['items'])) {
-          $field_output['blocks']['items'] = [];
+        $field_output['type'] = empty($field_output['type']) ? $entity->bundle() : $field_output['type'];
+        if (!isset($field_output['items'])) {
+          $field_output['items'] = [];
         }
-        $field_output['blocks']['items'][] = $data;
+        $field_output['items'][] = $data;
       }
       else {
-        $field_output['blocks'] = !isset($field_output['blocks']) ? $data : array_merge($field_output['blocks'], $data);
+        $field_output = !isset($field_output) ? $data : array_merge($field_output, $data);
       }
     }
 
@@ -375,49 +404,87 @@ class MobileAppUtility {
    *
    * @param object $entity
    *   The paragraph entity object.
-   * @param array $field_output
-   *   The field output array to store cached data.
    *
    * @return array
    *   Return array of data.
    */
-  public function prepareParagraphData($entity, array &$field_output) {
-    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+  public function prepareParagraphData($entity) {
     // Call a callback function to prepare data if paragraph type is one of the
     // paragraph types listed in getParagraphCallbacks().
     if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
-      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity, $context]);
+      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
     }
     else {
-      // @see self::getFieldData()
-      $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
-        return $this->serializer->normalize($entity, 'json', $context);
-      });
+      // Get normalized Paragraph entity.
+      $entity_normalized = $this->getNormalizedData($entity);
 
       $data = [];
       foreach ($entity_normalized as $field_name => $field_values) {
         if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
           foreach ($field_values as $field_value) {
-            $data[] = $this->getNormalizedEntityReferenceData($field_value, $context, $field_output);
+            $data[] = $this->getRecursiveParagraphData($field_value);
           }
         }
       }
+      return $data;
     }
-    return $data;
+  }
+
+  /**
+   * The function to process normalized entity reference revision field data.
+   *
+   * @param array $item
+   *   Normalize array containing target_id and target_type.
+   *
+   * @return array
+   *   Return data array.
+   */
+  private function getRecursiveParagraphData(array $item): array {
+    if (!empty($item['target_type'])) {
+      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+      $this->cachedEntities[] = $entity;
+      if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
+        return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
+      }
+      else {
+        $data = [
+          'type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId(),
+        ];
+        // Get normalized Paragraph entity.
+        $entity_normalized = $this->getNormalizedData($entity);
+        foreach ($entity_normalized as $field_name => $field_data) {
+          if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+            $data[$field_name] = [];
+            $row = [];
+            foreach ($field_data as $field_delta => $field_item) {
+              if (!empty($field_item['target_type'])) {
+                $row[$field_delta] = $this->getRecursiveParagraphData($field_item);
+              }
+              else {
+                $row[$field_delta] = $field_item;
+              }
+            }
+            $data[$field_name] = $row;
+          }
+        }
+        return $data;
+      }
+    }
+    else {
+      return array_merge(['type' => 'block'], $item);
+    }
   }
 
   /**
    * Get '1_row_3_col_delivery_banner' paragraph type's data.
    *
-   * @param object $entity
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
    *   The paragraph entity object.
-   * @param array $context
-   *   Context array to process normalize.
    *
    * @return array
    *   The converted array with necessary fields.
    */
-  public function getDeliveryBanner($entity, array $context) {
+  public function getDeliveryBanner(ParagraphInterface $entity) {
     // Convert field link value.
     $url = $entity->get('field_link')->first()->getUrl();
     $url_string = $url->toString(TRUE);
@@ -432,49 +499,11 @@ class MobileAppUtility {
   }
 
   /**
-   * The function to process normalized entity reference revision field data.
    *
-   * @param array $item
-   *   Normalize array containing target_id and target_type.
-   * @param array $context
-   *   Context array to process normalize.
-   * @param array $field_output
-   *   The array to collect cacheable objects.
    *
    * @return array
-   *   Return data array.
    */
-  private function getNormalizedEntityReferenceData(array $item, array $context, array &$field_output): array {
-    if (!empty($item['target_type'])) {
-      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
-      $field_output['cache'][] = $entity;
-      // @see self::getFieldData()
-      $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
-        return $this->serializer->normalize($entity, 'json', $context);
-      });
-      $data = [
-        'type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId(),
-      ];
 
-      foreach ($entity_normalized as $field_name => $field_data) {
-        if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
-          $data[$field_name] = [];
-          $row = [];
-          foreach ($field_data as $field_delta => $field_item) {
-            if (!empty($field_item['target_type'])) {
-              $row[$field_delta] = $this->getNormalizedEntityReferenceData($field_item, $context, $field_output);
-            }
-            else {
-              $row[$field_delta] = $field_item;
-            }
-          }
-          $data[$field_name] = $row;
-        }
-      }
-    }
-    else {
-      return array_merge(['type' => 'block'], $item);
-    }
     return $data;
   }
 

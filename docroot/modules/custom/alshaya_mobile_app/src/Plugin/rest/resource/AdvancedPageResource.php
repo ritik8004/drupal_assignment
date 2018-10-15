@@ -171,17 +171,14 @@ class AdvancedPageResource extends ResourceBase {
       'field_slider',
     ];
 
-    $cache_objects = [];
     foreach ($fields as $field) {
-      $field_data = $this->mobileAppUtility->getFieldData($node, $field);
-      $response_data[$field] = $field_data['blocks'];
-      $cache_objects = array_merge($field_data['cache'], $cache_objects);
+      $response_data[$field] = $this->mobileAppUtility->getFieldData($node, $field);
     }
 
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     $response->addCacheableDependency($node_url);
-    foreach ($cache_objects as $cache) {
+    foreach ($this->mobileAppUtility->getCachedEntities() as $cache) {
       $response->addCacheableDependency($cache);
     }
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
