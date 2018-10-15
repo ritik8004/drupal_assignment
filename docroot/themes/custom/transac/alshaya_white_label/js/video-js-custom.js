@@ -8,24 +8,26 @@
   'use strict';
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
-      videojs('my-player').ready(function () {
+      videojs('plp-video-player').ready(function () {
 
         // Store the video object
-        var myPlayer = this, id = myPlayer.id();
+        var plpPlayer = this, id = plpPlayer.id();
 
-        myPlayer.play();
+        plpPlayer.play();
 
         // Set click functions.
-        $('.video-js').click(function () {
-          if (myPlayer.muted()) {
-            myPlayer.muted(false);
+        $('.video-js, .plp-mute-button').click(function () {
+          if (plpPlayer.muted()) {
+            plpPlayer.muted(false);
+            $('.plp-mute-button').removeClass('plp-video-muted');
           }
           else {
-            myPlayer.muted(true);
+            plpPlayer.muted(true);
+            $('.plp-mute-button').addClass('plp-video-muted');
           }
         });
 
       });
     }
   };
-})(jQuery);
+})(jQuery, Drupal);

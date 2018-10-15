@@ -145,7 +145,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
         // Videos on moschino PLP page.
         $field_name = 'field_plp_video_links';
-        if (!empty($term->get($field_name))) {
+        if (!empty($term->get($field_name)->first())) {
           $variables['show_videos'] = 1;
           $variables['#attached']['library'][] = 'alshaya_white_label/video-js';
           $variables['#attached']['library'][] = 'alshaya_white_label/Youtube_videojs';

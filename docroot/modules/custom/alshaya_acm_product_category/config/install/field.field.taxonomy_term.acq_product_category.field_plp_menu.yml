@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.storage.taxonomy_term.field_plp_menu
-    - paragraphs.paragraphs_type.item_of_category_campaign_menu
+    - paragraphs.paragraphs_type.text_links
     - taxonomy.vocabulary.acq_product_category
   module:
     - entity_reference_revisions
@@ -22,7 +22,7 @@ settings:
   handler_settings:
     negate: 0
     target_bundles:
-      item_of_category_campaign_menu: item_of_category_campaign_menu
+      text_links: text_links
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 31
@@ -73,8 +73,8 @@ settings:
         weight: 46
         enabled: false
       item_of_category_campaign_menu:
-        enabled: true
         weight: 47
+        enabled: false
       main_menu_highlight:
         weight: 48
         enabled: false
@@ -103,8 +103,8 @@ settings:
         weight: 56
         enabled: false
       text_links:
+        enabled: true
         weight: 57
-        enabled: false
       title_textarea:
         weight: 58
         enabled: false

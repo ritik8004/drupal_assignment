@@ -34,6 +34,15 @@ content:
     third_party_settings: {  }
     type: metatag_empty_formatter
     region: content
+  field_plp_menu:
+    type: entity_reference_revisions_entity_view
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
 hidden:
   description: true
   field_category_image: true

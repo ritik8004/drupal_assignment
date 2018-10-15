@@ -13,6 +13,20 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Adding new paragraph type 'Update the text link paragraph type.'.
+ */
+function alshaya_paragraphs_update_8120() {
+  \Drupal::service('module_installer')->install(['link_attributes']);
+  $configs = [
+    'core.entity_view_display.paragraph.text_links.default',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+  alshaya_config_install_configs(['core.entity_form_display.paragraph.text_links.default'], 'alshaya_paragraphs', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new paragraph type 'Slug Banner'.
  */
 function alshaya_paragraphs_update_8119() {

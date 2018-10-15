@@ -67,16 +67,13 @@
       <!-- Video -->
       <div class = "plp-video">
         <video
-                id="my-player"
+                id="plp-video-player"
                 class="video-js"
                 preload="auto"
-                height="auto"
                 width="100%"
                 autoplay
-                controls
                 loop
                 muted
-                playsinline
                 data-setup=
                 {% if randomVideo.src %}
                 '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
@@ -86,6 +83,7 @@
               <source src = "{{ randomVideo.video_source.value }}" type = "{{ randomVideo.video_source.type }}" />
             {% endif %}
         </video>
+        <div class="plp-mute-button"></div>
       </div>
     {% endif %}
 
