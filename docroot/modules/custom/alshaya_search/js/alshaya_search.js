@@ -232,7 +232,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.alshayaSearchProcessCategoryFacets = function () {
     if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
-      $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
+      $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function () {
         if ($(this).hasClass('facet-item--expanded') ||
           ($(this).children('input[checked="checked"]').length > 0)) {
           return;
