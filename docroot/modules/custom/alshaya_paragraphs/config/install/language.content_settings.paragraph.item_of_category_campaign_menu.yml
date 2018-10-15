@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.item_of_category_campaign_menu
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+    bundle_settings:
+      untranslatable_fields_hide: '0'
+id: paragraph.item_of_category_campaign_menu
+target_entity_type_id: paragraph
+target_bundle: item_of_category_campaign_menu
+default_langcode: site_default
+language_alterable: true

@@ -167,16 +167,16 @@ pace:
 
 Youtube_videojs:
   js:
-    js/Youtube.min.js: {}
+    vendor/js/Youtube.min.js: {}
 
 Vimeo_videojs:
   js:
-    js/videojs-vimeo.js: {}
+    vendor/js/videojs-vimeo.js: {}
 
 video-js:
   css:
     theme:
-      css/video-js.min.css: {}
+      vendor/css/video-js.min.css: {}
   js:
-    js/video.min.js: {}
+    vendor/js/video.min.js: {}
     js/video-js-custom.js: {}

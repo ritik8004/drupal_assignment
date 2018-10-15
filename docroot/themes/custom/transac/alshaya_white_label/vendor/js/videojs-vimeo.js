@@ -1,4 +1,3 @@
-/* eslint-disable */
 /**
  * videojs-vimeo
  * @version 3.0.0

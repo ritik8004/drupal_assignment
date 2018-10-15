@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+id: item_of_category_campaign_menu
+label: 'Item of category campaign menu'
+icon_uuid: null
+description: ''
+behavior_plugins: {  }

@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entity_browser.browser.image_browser
     - field.field.taxonomy_term.acq_product_category.field_category_image
     - field.field.taxonomy_term.acq_product_category.field_category_include_menu
     - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
@@ -13,19 +14,21 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
     - field.field.taxonomy_term.acq_product_category.field_meta_tags
     - field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
-    - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
+    - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
+    - field.field.taxonomy_term.acq_product_category.field_plp_menu
+    - field.field.taxonomy_term.acq_product_category.field_plp_style
     - field.field.taxonomy_term.acq_product_category.field_plp_upload_video
     - field.field.taxonomy_term.acq_product_category.field_plp_video_links
     - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
-    - field.field.taxonomy_term.acq_product_category.field_size_guide_anchor
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
     - taxonomy.vocabulary.acq_product_category
     - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
   module:
+    - entity_browser
     - field_group
     - file
     - image
@@ -75,6 +78,7 @@ third_party_settings:
         - name
         - langcode
         - field_commerce_status
+        - field_plp_style
         - description
         - field_pdp_image_slider_position
         - path
@@ -131,6 +135,7 @@ third_party_settings:
     group_plp_content:
       children:
         - group_promotion_
+        - group_right_side_menu
         - group_videos
       parent_name: group_taxonomy_fields
       weight: 4
@@ -217,6 +222,20 @@ third_party_settings:
         required_fields: true
       label: Videos
       region: content
+    group_right_side_menu:
+      children:
+        - field_plp_menu
+        - field_plp_menu_icon
+      parent_name: group_plp_content
+      weight: 20
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Right side menu'
+      region: content
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
 bundle: acq_product_category
@@ -224,7 +243,7 @@ mode: default
 content:
   description:
     type: text_textarea
-    weight: 4
+    weight: 5
     settings:
       placeholder: ''
       rows: 5
@@ -325,7 +344,7 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 9
+    weight: 10
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
@@ -349,6 +368,49 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_plp_menu_icon:
+    type: entity_browser_file
+    weight: 30
+    settings:
+      entity_browser: image_browser
+      field_widget_edit: true
+      field_widget_remove: true
+      view_mode: default
+      preview_image_style: thumbnail
+      open: true
+      selection_mode: selection_append
+    region: content
+    third_party_settings: {  }
+  field_plp_menu:
+    type: entity_reference_paragraphs
+    weight: 29
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_plp_paragraph:
+    type: entity_reference_paragraphs
+    weight: 28
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_plp_style:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_plp_upload_video:
     weight: 26
     settings:
@@ -461,7 +523,7 @@ content:
     third_party_settings: {  }
     region: content
   translation:
-    weight: 8
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }

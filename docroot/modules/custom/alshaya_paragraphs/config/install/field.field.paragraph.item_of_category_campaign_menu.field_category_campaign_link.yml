@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_category_campaign_link
+    - paragraphs.paragraphs_type.item_of_category_campaign_menu
+  module:
+    - link
+id: paragraph.item_of_category_campaign_menu.field_category_campaign_link
+field_name: field_category_campaign_link
+entity_type: paragraph
+bundle: item_of_category_campaign_menu
+label: Link
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 2
+field_type: link
