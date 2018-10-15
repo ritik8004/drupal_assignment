@@ -356,6 +356,8 @@ class MobileAppUtility {
   public static function getParagraphCallbacks() {
     return [
       '1_row_3_col_delivery_banner' => 'getDeliveryBanner',
+      'promo_block' => 'getPromoBlock',
+      'promo_block_button' => 'getPromoBlockButton',
     ];
   }
 
@@ -499,11 +501,57 @@ class MobileAppUtility {
   }
 
   /**
+   * Get 'promo_block' paragraph type's data.
    *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
    *
    * @return array
+   *   The converted array with necessary fields.
    */
+  public function getPromoBlock(ParagraphInterface $entity) {
+    // Convert field link value.
+    $url_item = $entity->get('field_link')->first()->getUrl();
+    $url = $url_item->toString(TRUE);
 
+    $items = $this->getNormalizedData($entity, 'field_promo_block_button');
+    $data = array_map(function ($item) {
+      return $this->getRecursiveParagraphData($item);
+    }, $items);
+
+    return [
+      'image' => $this->getImages($entity, 'field_promotion_image_mobile'),
+      'margin' => $entity->get('field_margin_mobile')->getString(),
+      'promo_block_button' => $data,
+      'seo_text' => $entity->get('field_promo_block_seo_text')->getString(),
+      'seo_title' => $entity->get('field_promo_block_seo_title')->getString(),
+      'url' => $url->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
+    ];
+  }
+
+  /**
+   * Get 'promo_block_button' paragraph type's data.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  public function getPromoBlockButton(ParagraphInterface $entity) {
+    // Convert field link value.
+    $url_item = $entity->get('field_button_link')->first()->getUrl();
+    $url = $url_item->toString(TRUE);
+
+    $data = [
+      'button_position' => $entity->get('field_button_position')->getString(),
+      'promo_text_1' => $entity->get('field_promo_text_1')->getString(),
+      'promo_text_2' => $entity->get('field_promo_text_2')->getString(),
+      'promo_theme' => $entity->get('field_promo_theme')->getString(),
+      'url' => $url->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
+    ];
     return $data;
   }
 
