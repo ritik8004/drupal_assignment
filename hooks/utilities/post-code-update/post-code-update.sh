@@ -65,6 +65,9 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   ## Temporary "manual steps" (part 2) that need to be performed when upgrading to Drupal 8.5.
   ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
   drush acsf-tools-ml entity-updates
+
+  # Temporary "manual steps". Enable the mobile-app module after restore.
+  drush8 acsf-tools-ml en alshaya_mobile_app -y
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."
