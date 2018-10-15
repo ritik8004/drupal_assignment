@@ -256,6 +256,25 @@ $magentos = [
       'store_id' => ['en' => 12, 'ar' => 15],
     ],
   ],
+  // Foot Locker.
+  'fl_qa' => [
+    'url' => 'https://integration-5ojmyuq-z2fi6fmoo7n4a.eu-3.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'f0er5posi7oc9e2p96195mb20e2hh05q',
+      'consumer_secret' => 'f0h2pwyren0ooppm6ix50705l5iouekj',
+      'access_token' => 'tkkes5bu2l9qn8y3hbaex7x6xbcsfvxr',
+      'access_token_secret' => 'p8e71whrsnx4pdim61wyush1qp5tvqqs',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 6],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 2, 'ar' => 3],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+  ],
   'default' => [
     'kw' => [
       'magento_lang_prefix' => [

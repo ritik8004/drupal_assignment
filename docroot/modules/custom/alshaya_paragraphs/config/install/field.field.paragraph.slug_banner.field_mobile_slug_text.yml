@@ -9,7 +9,7 @@ dependencies:
     - text
 third_party_settings:
   allowed_formats:
-    limited_options: limited_options
+    limited_options: '0'
     rich_text: rich_text
     full_text: '0'
     mail_text: '0'

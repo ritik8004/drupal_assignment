@@ -11,7 +11,7 @@ Feature: As an authenticated user
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load

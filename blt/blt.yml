@@ -1,15 +1,23 @@
 project:
-  prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE)
+  machine_name: alshaya
+  prefix: (MMCPA|ACR2|CORE|AAVS|BBWAE|MAPP)
   human_name: Alshaya
   profile:
     name: alshaya_transac
-  local: {  }
+  local:
+    protocol: http
+    hostname: 'local.${project.machine_name}.com'
 git:
   default_branch: develop
   remotes:
     - 'alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git'
+deploy:
+  tag_source: true
+  gitignore_file: '${repo.root}/blt/config/.gitignore'
 drush:
   aliases:
+    remote: '${project.machine_name}.test'
+    local: self
     ci: self
   default_alias: '${drush.aliases.local}'
 modules:
@@ -37,14 +45,14 @@ modules:
   pprod:
     enable: [acquia_connector, shield, dynamic_page_cache]
     uninstall: [views_ui]
-command-hooks:
+target-hooks:
   frontend-validate:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-validate.sh ${docroot}'
-  frontend-reqs:
+  frontend-setup:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-setup.sh ${docroot}'
-  frontend-assets:
+  frontend-build:
     dir: '${repo.root}/blt/scripts'
     command: 'bash frontend-build.sh ${docroot}'
   pre-config-import:
@@ -60,8 +68,6 @@ command-hooks:
     dir: '${docroot}'
     command: 'echo ''No post-deploy build configured.'''
 import: '${repo.root}/blt/setup.local.xml'
-deploy:
-  gitignore_file: '${repo.root}/blt/config/.gitignore'
 behat:
   paths:
     - '${repo.root}/tests/behat'

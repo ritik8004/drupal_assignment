@@ -12,6 +12,7 @@ services:
       - '@entity.query'
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
+      - '@module_handler'
 
   acq_sku.product_options_manager:
     class: Drupal\acq_sku\ProductOptionsManager

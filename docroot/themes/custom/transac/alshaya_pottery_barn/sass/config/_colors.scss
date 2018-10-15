@@ -14,6 +14,7 @@ $PB_confirmation_blue: #3680cb;
 $PB_blue_turquoise: #367fca;
 $PB_alshaya_priv: #ac8e54;
 $PB_info_blue: #e8eff5;
+$PB_message_green: #499900;
 $white: #ddd;
 $white-two: #fff;
 $white-smoke: #f3f3f3;
@@ -84,6 +85,10 @@ $primary_brand_button_text: $white-two;
 $secondary_brand_button_text: $white;
 $primary_brand_button: $_black_two;
 $secondary_submit_button_text: $PB_white;
+
+// Messages
+$default_msg_bg: $PB_message_green;
+$default_msg_text: $PB_white;
 
 // Dropdown.
 $primary_dropdown_bg: $PB_grey_four;
@@ -217,6 +222,7 @@ $mm_l3_link_hover: $PB_deep_red;
 $mm_highlight_label: $PB_deep_red;
 $mm_highlight_title: $PB_deep_red;
 $mm_l1_link_hover: $white-two;
+$highlights_subtitle_hover: $PB_deep_red;
 
 // Home page - slider.
 $gallery_arrows_bg: $PB_deep_red;

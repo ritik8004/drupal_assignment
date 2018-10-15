@@ -1,0 +1,10 @@
+<div class="pdp-description-accordion {{ title|clean_class }}">
+  <h3 class="c-accordion__title">
+    {% if title %}
+      {{ title }}
+    {% endif %}
+  </h3>
+  <div class="c-accordion_content">
+    {{ text }}
+  </div>
+</div>

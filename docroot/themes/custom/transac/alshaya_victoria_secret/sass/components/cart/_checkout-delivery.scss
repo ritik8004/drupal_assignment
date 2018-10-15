@@ -40,14 +40,6 @@
   main form {
     #edit-guest-delivery-home,
     #edit-member-delivery-home {
-      .fieldset-wrapper {
-        > .title {
-          @include breakpoint($only-mobile) {
-            margin: 0 0 1.0625rem !important;
-          }
-        }
-      }
-
       #shipping_methods_wrapper {
         @include breakpoint($only-mobile) {
           margin-top: 1.0625rem;

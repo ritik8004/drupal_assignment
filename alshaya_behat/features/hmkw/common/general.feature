@@ -24,6 +24,7 @@ Feature: Test generic features on the site
     Then I should be able to see the header in Arabic
     And I should be able to see the footer in Arabic
 
+
   Scenario: As a Guest user
   I should be able to subscribe with Mothercare
     Given I am on homepage

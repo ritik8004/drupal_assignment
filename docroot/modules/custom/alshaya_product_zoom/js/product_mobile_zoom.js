@@ -152,7 +152,10 @@ function hammerIt(elm) {
             $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
             var mImages = Array.prototype.slice.call(document.querySelectorAll('.mob-imagegallery__thumbnails__image img'));
             mImages.forEach(function (ele) {
-              hammerIt(ele);
+              if (!ele.classList.contains('hammer-processed')) {
+                ele.classList.add('hammer-processed');
+                hammerIt(ele);
+              }
             });
 
             $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {

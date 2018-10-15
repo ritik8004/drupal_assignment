@@ -5,6 +5,7 @@ dependencies:
     - core.entity_view_mode.paragraph.w1920
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_mobile_banner_image
     - field.field.paragraph.banner.field_promo_block_button
     - field.field.paragraph.banner.field_video
     - paragraphs.paragraphs_type.banner
@@ -28,7 +29,7 @@ content:
     type: responsive_image
     region: content
   field_link:
-    weight: 1
+    weight: 2
     label: hidden
     settings:
       trim_length: 80
@@ -39,9 +40,18 @@ content:
     third_party_settings: {  }
     type: link
     region: content
+  field_mobile_banner_image:
+    type: responsive_image
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      responsive_image_style: w1920
+      image_link: ''
+    third_party_settings: {  }
   field_promo_block_button:
     type: entity_reference_revisions_entity_view
-    weight: 2
+    weight: 3
     region: content
     label: above
     settings:

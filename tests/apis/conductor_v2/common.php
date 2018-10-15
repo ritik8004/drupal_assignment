@@ -45,30 +45,30 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
 
   $options = [];
 
-  if ($method == 'POST') {
-    $options['json'] = $data;
-    $result = $client->post($endpoint, $options);
-  }
-  elseif ($method == 'JSON') {
-    $options['json'] = $data;
-    $result = $client->post($endpoint, $options);
-  }
-  else {
-    if (is_array($data)) {
-      $options['query'] = $data;
+  try {
+    if ($method == 'POST') {
+      $options['json'] = $data;
+      $result = $client->post($endpoint, $options);
     }
+    elseif ($method == 'JSON') {
+      $options['json'] = $data;
+      $result = $client->post($endpoint, $options);
+    }
+    else {
+      if (is_array($data)) {
+        $options['query'] = $data;
+      }
 
-    // To allow hmac sign to be verified properly we need them in asc order.
-    ksort($options['query']);
+      // To allow hmac sign to be verified properly we need them in asc order.
+      ksort($options['query']);
 
-    try {
       $result = $client->get($endpoint, $options);
     }
-    catch (Exception $e) {
-      var_dump($options);
-      exit;
-    }
-
+  }
+  catch (Exception $e) {
+    echo $e->getMessage();
+    var_dump($options);
+    exit;
   }
 
   $data = json_decode($result->getBody());

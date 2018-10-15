@@ -72,7 +72,7 @@ foreach ($countries as $country_code => $country_name) {
       $site->id,
       'magento',
       $magento_data['alshaya_api.settings']['magento_host'] . '/' . $magento_data['magento_lang_prefix'][$lang_code] . '/rest/V1/',
-      $magento_data['magento_lang_prefix'][$lang_code],
+      $magento_data['store_id'][$lang_code],
       $magento_auth->id
     );
 
@@ -84,7 +84,7 @@ foreach ($countries as $country_code => $country_name) {
       'Drupal system details for ' . ucfirst(strtolower($brand_name)) . ' ' . strtoupper($country_code) . ' ' . ucfirst(strtolower($lang_name)) . ' - ' . ucfirst(strtolower($env)),
       $site->id,
       'drupal',
-      'https://' . $brand_code . $country_code . '-' . $env . '.factory.alshaya.com/' . $lang_code,
+      $env != 'live' ? 'https://' . $brand_code . $country_code . '-' . $env . '.factory.alshaya.com/' . $lang_code : 'https://' . $brand_code . $country_code . '.factory.alshaya.com/' . $lang_code,
       $magento_data['store_id'][$lang_code],
       $drupal_auth->id
     );

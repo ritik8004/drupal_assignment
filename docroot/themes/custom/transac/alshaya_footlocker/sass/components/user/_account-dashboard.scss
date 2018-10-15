@@ -1,0 +1,35 @@
+.account--dashboard {
+  .subtitle {
+    font-weight: normal;
+    font-family: $alshaya-thin;
+    text-transform: capitalize;
+
+    @include breakpoint($desktop) {
+      font-size: 1.125rem;
+    }
+  }
+
+  .label {
+    font-size: 0.75rem !important;
+  }
+
+  .joinclub {
+    @include breakpoint($desktop) {
+      width: 50%;
+    }
+
+    #block-jointheclub {
+      h3 {
+        font-family: $alshaya-thin;
+      }
+
+      p {
+        font-size: 0.875rem;
+      }
+
+      a {
+        font-weight: normal;
+      }
+    }
+  }
+}

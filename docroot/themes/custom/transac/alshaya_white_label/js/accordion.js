@@ -147,23 +147,34 @@
 
         moveContextualLink('.c-accordion');
 
-        // Accordion for delivery option section on PDP.
-        $('.delivery-options-wrapper').find('.c-accordion-delivery-options').each(function () {
-          $(this).once('accordion-init').accordion({
+        /**
+         * Function to create accordion.
+         *
+         * @param {object} element
+         *   The HTML element inside which we want to make accordion.
+         */
+        Drupal.convertIntoAccordion = function (element) {
+          element.once('accordion-init').accordion({
             heightStyle: 'content',
             collapsible: true,
             active: false
           });
+        };
+
+        // Accordion for delivery option section on PDP.
+        $('.delivery-options-wrapper').find('.c-accordion-delivery-options').each(function () {
+          Drupal.convertIntoAccordion($(this));
+        });
+
+        // Accordion for dimensions and care section on PDP.
+        $('.content--dimensions-and-care').find('.dimensions-and-care').each(function () {
+          Drupal.convertIntoAccordion($(this));
         });
 
         // Accordion for department page category for mobile.
         $('.paragraph--type--product-carousel-category').find('.c-accordion-delivery-options').each(function () {
           if ($(this).find('ul').length > 0) {
-            $(this).once('accordion-init').accordion({
-              heightStyle: 'content',
-              collapsible: true,
-              active: false
-            });
+            Drupal.convertIntoAccordion($(this));
           }
 
           else {
