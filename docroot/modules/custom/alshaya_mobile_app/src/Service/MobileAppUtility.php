@@ -180,6 +180,23 @@ class MobileAppUtility {
   }
 
   /**
+   * Get Deep link based on given object and field name.
+   *
+   * @param object $object
+   *   Object of node or term or paragraph.
+   * @param string $field
+   *   String containing field name.
+   *
+   * @return string
+   *   Return deeplink url.
+   */
+  public function getDeepLinkFromField($object, $field = '') {
+    $return = '';
+
+    return self::ENDPOINT_PREFIX . $return;
+  }
+
+  /**
    * Get the alias language.
    *
    * @param string $alias
@@ -271,6 +288,21 @@ class MobileAppUtility {
   }
 
   /**
+   * Associative array containing paragraph type as key and callback function.
+   *
+   * Callback function is used to collect and order the field's data as we
+   * want to send back as rest api response.
+   *
+   * @return array
+   *   An associative array of paragraph type and callback function name.
+   */
+  public static function getParagraphCallbacks() {
+    return [
+      '1_row_3_col_delivery_banner' => 'getDeliveryBanner',
+    ];
+  }
+
+  /**
    * Get field data of given entity reference revisions field.
    *
    * Note: Manual caching of entity requires when this method used, use
@@ -308,7 +340,9 @@ class MobileAppUtility {
     foreach ($items as $item) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
       $field_output['cache'][] = $entity;
+      // Prepare paragraph data based on given paragraph entity type.
       $data = $this->prepareParagraphData($entity, $field_output);
+      // Collect items if the field has no recursive paragraphs.
       if ($field != 'field_promo_blocks') {
         $field_output['blocks']['type'] = empty($field_output['blocks']['type']) ? $entity->bundle() : $field_output['blocks']['type'];
         if (!isset($field_output['blocks']['items'])) {
@@ -325,22 +359,7 @@ class MobileAppUtility {
   }
 
   /**
-   * Associative array containing paragraph type as key and callback function.
-   *
-   * Callback function is used to collect and order the field's data as we
-   * want to send back as rest api response.
-   *
-   * @return array
-   *   An associative array of paragraph type and callback function name.
-   */
-  public static function getParagraphCallbacks() {
-    return [
-      '1_row_3_col_delivery_banner' => 'getDeliveryBanner',
-    ];
-  }
-
-  /**
-   * Prepare paragraph data based given paragraph entity object.
+   * Prepare paragraph data based on given paragraph entity object.
    *
    * @param object $entity
    *   The paragraph entity object.
@@ -352,6 +371,8 @@ class MobileAppUtility {
    */
   public function prepareParagraphData($entity, array &$field_output) {
     $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+    // Call a callback function to prepare data if paragraph type is one of the
+    // paragraph types listed in getParagraphCallbacks().
     if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
       return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity, $context]);
     }
@@ -393,7 +414,7 @@ class MobileAppUtility {
       'title' => $entity->get('field_title')->getString(),
       'subtitle' => $entity->get('field_sub_title')->getString(),
       'url' => $url->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLink($entity, 'field_link'),
+      'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
     ];
     return $data;
   }
