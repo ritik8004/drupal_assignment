@@ -118,6 +118,8 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
           $prices = $skuManager->getMinPrices($sku_entity);
           $min_final_price = $prices['final_price'];
+          // Index final_price.
+          $item->getField('final_price')->setValues([$min_final_price]);
           $child_sku_found = FALSE;
           foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
             try {
@@ -176,7 +178,6 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               $item->getField($key)->setValues(array_keys($values));
             }
           }
-          $item->getField('final_price')->setValues([$min_final_price]);
         }
 
         elseif ($sku_entity->bundle() == 'simple') {
@@ -184,15 +185,15 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
             unset($items[$item_id]);
           }
 
-          // If SKU is OOS and buyable.
-          if (!alshaya_acm_get_stock_from_sku($sku_entity) && alshaya_acm_product_is_buyable($sku_entity)) {
+          // If SKU is OOS.
+          if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
             // Get indexed fields.
             $fields = $items[$item_id]->getFields();
             // Iterate over each indexed field.
             foreach ($fields as $field_key => $field_val) {
               // Only unset/remove of attribute fields or this will remove the
               // SKU from the indexing on default listing (without any filter).
-              if (strpos($field_key, 'attr_') !== FALSE || $field_key == 'final_price') {
+              if (strpos($field_key, 'attr_') !== FALSE) {
                 $items[$item_id]->setField($field_key, NULL);
               }
             }
