@@ -624,8 +624,8 @@ class SkuImagesManager {
           ];
         }
 
-        // If no main image, use default image.
-        if (empty($main_image) && $check_parent_child) {
+        // If no main image and no video, use default image.
+        if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
             $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
             $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
@@ -638,7 +638,8 @@ class SkuImagesManager {
           }
         }
 
-        if (!empty($main_image)) {
+        // If either of main image or video is available.
+        if (!empty($main_image) || !empty($media['media_items']['videos'])) {
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get($config_name);
 

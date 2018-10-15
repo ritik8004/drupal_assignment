@@ -31,6 +31,12 @@
         // Adding class if there is no slider.
         addPagerClass();
 
+        // If there is only one thumbnail and that is video.
+        if ($('li', lightSlider).length == 1 && $('li', lightSlider).hasClass('cloudzoom__thumbnails__video')) {
+          var video_url = $('li', lightSlider).attr('data-iframe');
+          appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), video_url);
+        }
+
         var mobilegallery = $('#product-image-gallery-mobile', context);
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
 
