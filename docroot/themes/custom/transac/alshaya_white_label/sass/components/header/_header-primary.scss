@@ -642,7 +642,7 @@ header {
           opacity: 1;
           z-index: 1;
           transform: translateY(-2rem);
-          transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+          transition: all 0.25s ease-in 0s;
         }
       }
 
@@ -679,7 +679,7 @@ header {
         width: 100%;
         transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+        transition: all 0.25s ease-in 0s;
         border-top: 3rem solid transparent;
       }
     }
@@ -863,14 +863,15 @@ header {
       bottom: 0;
       #{$left}: 0;
       opacity: 0;
+      z-index: 1;
       background-color: rgba(0, 0, 0, 0.48);
-      transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+      transition: all 0.25s ease-in 0s;
     }
 
     &.overlay {
       &::before {
         opacity: 1;
-        transition: all 0.25s ease-in 0s, z-index 0s linear 0.1s;
+        transition: all 0.25s ease-in 0s;
       }
     }
   }
