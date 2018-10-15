@@ -304,24 +304,98 @@ class MobileAppUtility {
       return $this->serializer->normalize($entity->get($field), 'json', $context);
     });
 
-    $field_output = [];
+    $field_output = ['cache' => [], 'blocks' => []];
     foreach ($items as $item) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
       $field_output['cache'][] = $entity;
+      $data = $this->prepareParagraphData($entity, $field_output);
+      if ($field != 'field_promo_blocks') {
+        $field_output['blocks']['type'] = empty($field_output['blocks']['type']) ? $entity->bundle() : $field_output['blocks']['type'];
+        if (!isset($field_output['blocks']['items'])) {
+          $field_output['blocks']['items'] = [];
+        }
+        $field_output['blocks']['items'][] = $data;
+      }
+      else {
+        $field_output['blocks'] = !isset($field_output['blocks']) ? $data : array_merge($field_output['blocks'], $data);
+      }
+    }
+
+    return $field_output;
+  }
+
+  /**
+   * Associative array containing paragraph type as key and callback function.
+   *
+   * Callback function is used to collect and order the field's data as we
+   * want to send back as rest api response.
+   *
+   * @return array
+   *   An associative array of paragraph type and callback function name.
+   */
+  public static function getParagraphCallbacks() {
+    return [
+      '1_row_3_col_delivery_banner' => 'getDeliveryBanner',
+    ];
+  }
+
+  /**
+   * Prepare paragraph data based given paragraph entity object.
+   *
+   * @param object $entity
+   *   The paragraph entity object.
+   * @param array $field_output
+   *   The field output array to store cached data.
+   *
+   * @return array
+   *   Return array of data.
+   */
+  public function prepareParagraphData($entity, array &$field_output) {
+    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+    if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
+      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity, $context]);
+    }
+    else {
       // @see self::getFieldData()
       $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
         return $this->serializer->normalize($entity, 'json', $context);
       });
 
+      $data = [];
       foreach ($entity_normalized as $field_name => $field_values) {
         if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
           foreach ($field_values as $field_value) {
-            $field_output['blocks'][] = $this->getNormalizedEntityReferenceData($field_value, $context, $field_output);
+            $data[] = $this->getNormalizedEntityReferenceData($field_value, $context, $field_output);
           }
         }
       }
     }
-    return $field_output;
+    return $data;
+  }
+
+  /**
+   * Get '1_row_3_col_delivery_banner' paragraph type's data.
+   *
+   * @param object $entity
+   *   The paragraph entity object.
+   * @param array $context
+   *   Context array to process normalize.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  public function getDeliveryBanner($entity, array $context) {
+    // Convert field link value.
+    $url_item = $entity->get('field_link')->first()->getUrl();
+    $url = $url_item->toString(TRUE);
+
+    $data = [
+      'title' => $entity->get('field_title')->getString(),
+      'subtitle' => $entity->get('field_sub_title')->getString(),
+      'url' => $url->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLink($entity, 'field_link'),
+    ];
+    return $data;
   }
 
   /**
