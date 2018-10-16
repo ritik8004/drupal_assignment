@@ -90,7 +90,7 @@ class LocalCommand extends BltTasks {
       $this->say('Save server config again to ensure local solr is used.');
       $this->taskDrush()
         ->drush('php-eval')
-        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search');")
+        ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');")
         ->assume(TRUE)
         ->alias($info['local']['alias'])
         ->uri($info['local']['url'])
@@ -109,7 +109,7 @@ class LocalCommand extends BltTasks {
     $this->say('Reset super admin account');
     $this->taskDrush()
       ->drush('sqlq')
-      ->arg("update users_field_data set mail = 'no-reply@acquia.com', name = 'admin' where uid = 1")
+      ->arg('update users_field_data set mail = "no-reply@acquia.com" where uid = 1')
       ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
@@ -259,7 +259,7 @@ class LocalCommand extends BltTasks {
       $path = realpath('..') . '/tmp';
 
       if (!file_exists($path)) {
-        $this->say('Creating temp director at: ' . $path);
+        $this->say('Creating temp directory at: ' . $path);
         $taskFilesystemStack = $this->taskFilesystemStack();
         $taskFilesystemStack->mkdir($path);
       }
@@ -316,7 +316,7 @@ class LocalCommand extends BltTasks {
       return 0;
     }
 
-    $info['archive'] = realpath('..') . "/tmp/alshaya_${site}_${env}.sql";
+    $info['archive'] = $this->tempDir() . "/alshaya_${site}_${env}.sql";
 
     $static[$env][$site] = $info;
 
@@ -333,30 +333,13 @@ class LocalCommand extends BltTasks {
    *   Server response.
    */
   private function getSitesData($remote_alias) {
-    // This file will allow execution for people without drush access to cloud.
-    $path = $this->tempDir() . '/sites-' . $remote_alias . '.data';
-
-    if (file_exists($path)) {
-      $message = file_get_contents($path);
-    }
-    else {
-      $task = $this->taskDrush()
-        ->drush('acsf-tools-list')
-        ->alias($remote_alias)
-        ->option('fields', 'name,domains')
-        ->printOutput(FALSE);
-
-      $result = $task->run();
-
-      $message = $result->getMessage();
-
-      file_put_contents($path, $message);
-    }
-
-    if (empty($message)) {
-      return [];
-    }
-
+    $task = $this->taskDrush()
+      ->drush('acsf-tools-list')
+      ->alias($remote_alias)
+      ->option('fields', 'name,domains')
+      ->printOutput(FALSE);
+    $result = $task->run();
+    $message = $result->getMessage();
     return explode(PHP_EOL, $message);
   }
 

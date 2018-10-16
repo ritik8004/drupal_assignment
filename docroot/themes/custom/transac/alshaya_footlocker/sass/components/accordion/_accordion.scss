@@ -1,0 +1,7 @@
+.c-accordion__title {
+  text-transform: uppercase;
+
+  &.ui-state-active {
+    border-bottom: 0;
+  }
+}

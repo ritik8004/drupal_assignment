@@ -4,7 +4,7 @@ Feature: Test Checkout feature
     Given I am on a sport product
     And I wait for AJAX to finish
     And I remove promo panel
-    When I press "add to cart"
+    When I press "add to bag"
     And I wait for AJAX to finish
     And I go to "/cart"
     And I wait for the page to load
@@ -22,7 +22,9 @@ Feature: Test Checkout feature
     And I should not see the link "Sign in"
     And I should not see the link "Find Store"
     And I should not see "عربية"
-    And I scroll to x "200" y "400" coordinates of page
+    #And I remove promo panel from delivery page
+    And I wait for AJAX to finish
+    And I scroll to x "200" y "700" coordinates of page
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
     When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
@@ -32,6 +34,7 @@ Feature: Test Checkout feature
     And I select "Abu Hail" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    And I scroll to x "200" y "700" coordinates of page
     And I press "deliver to this address"
     And I wait for AJAX to finish
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
@@ -41,6 +44,8 @@ Feature: Test Checkout feature
     When I select a payment option "payment_method_title_cashondelivery"
     And I wait for AJAX to finish
     And I accept terms and conditions
+    And I scroll to x "200" y "700" coordinates of page
+    And I wait for AJAX to finish
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
@@ -59,7 +64,7 @@ Feature: Test Checkout feature
     Then I should see the number of stores displayed
     And I should see the link "List view"
     And I should see the link "Map view"
-    And I should see the link "Back to basket"
+    And I should see the link "Back to bag"
 
   @cc
   Scenario: As a Guest
@@ -100,7 +105,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     And I scroll to x "200" y "1500" coordinates of page
     When I wait 5 seconds
-    When I follow "Back to basket"
+    When I follow "Back to bag"
     Then I should see the button "checkout securely"
     And the url should match "/cart"
 
@@ -165,12 +170,14 @@ Feature: Test Checkout feature
     When I select the first autocomplete option for "Dubai - United Arab Emirates" on the "edit-store-location" field
     And I wait for AJAX to finish
     When I wait 5 seconds
+    And I scroll to x "200" y "700" coordinates of page
     When I follow "select this store"
     And I wait for AJAX to finish
     When I fill in "edit-cc-firstname" with "Test"
     And I fill in "edit-cc-lastname" with "Test"
     When I enter a valid Email ID in field "edit-cc-email"
     And I fill in "edit-cc-mobile-number-mobile" with "555667756"
+    And I scroll to x "200" y "700" coordinates of page
     And I select an element having class ".cc-action"
     And I wait for AJAX to finish
     And I wait for AJAX to finish
@@ -181,10 +188,12 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-family-name" with "Test"
     And I fill in "edit-billing-address-address-billing-mobile-number-mobile" with "555667756"
     And I select "Dubai" from "edit-billing-address-address-billing-area-parent"
+    And I scroll to x "200" y "700" coordinates of page
     And I wait for AJAX to finish
     And I select "Abu Hail" from "edit-billing-address-address-billing-administrative-area"
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
+    And I scroll to x "200" y "1200" coordinates of page
     And I accept terms and conditions
     And I press "place order"
     And I wait 10 seconds

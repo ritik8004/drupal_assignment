@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_fl_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($entity->bundle() == 'acq_product') {
+    $sku = $entity->get('field_skus')->first()->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU && $view_mode == 'full') {
+      $return = _alshaya_fl_get_product_description($sku_entity);
+      $build['short_desc'] = $return['short_desc'];
+      $build['description'] = $return['description'];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_fl_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($view_mode == 'modal') {
+    $return = _alshaya_fl_get_product_description($sku_entity);
+    $build['short_desc'] = $return['short_desc'];
+    $build['description'] = $return['description'];
+  }
+}
+
+/**
+ * Get product description from SKU.
+ */
+function _alshaya_fl_get_product_description($sku_entity) {
+  if ($overview = $sku_entity->get('attr_description')->getValue()) {
+    $overview_desc['value'] = [
+      '#markup' => $overview[0]['value'],
+    ];
+    $return['short_desc'] = $overview_desc;
+    $return['description'][] = $overview_desc;
+  }
+
+  return $return;
+}

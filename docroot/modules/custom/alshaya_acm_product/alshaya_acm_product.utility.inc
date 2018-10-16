@@ -12,6 +12,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\file\FileInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Utility function to return media files for a product.
@@ -171,11 +172,13 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
 
   // If still image is not available, set default one.
   if (empty($image)) {
-    if (!empty($default_image = _alshaya_acm_product_get_product_default_main_image())) {
+    $default_image_url = $skuImagesManager->getProductDefaultImageUrl();
+
+    if ($default_image_url) {
       $image = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => file_create_url($default_image->getFileUri()),
+          'src' => $default_image_url,
           'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
           'class' => [
@@ -187,33 +190,6 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   }
 
   return $image;
-}
-
-/**
- * Get the url of the image of SKU.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU entity object.
- *
- * @return string
- *   Url of the image.
- */
-function _alshaya_acm_get_product_display_image_url(SKU $sku) {
-  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
-  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-
-  // Load the first image.
-  $media_image = $skuImagesManager->getFirstImage($sku);
-
-  // If we have image for the product.
-  if (!empty($media_image)) {
-    if ($media_image['file'] instanceof FileInterface) {
-      $uri = $media_image['file']->getFileUri();
-      return file_create_url($uri);
-    }
-  }
-
-  return '';
 }
 
 /**
@@ -373,10 +349,15 @@ function alshaya_acm_product_get_brand_logo($sku) {
     }
     else {
       // Download the file contents.
-      $file_data = file_get_contents($image_url);
+      $client = \Drupal::httpClient();
+      try {
+        $file_data = $client->get($image_url)->getBody();
+      }
+      catch (RequestException $e) {
+        watchdog_exception('alshaya_acm_product', $e);
+      }
 
-      // Check to ensure errors like 404, 403, etc. are catched and empty file
-      // not saved in SKU.
+      // Check to ensure empty file is not saved in SKU.
       if (empty($file_data)) {
         \Drupal::logger('alshaya_acm_product')->error('Failed to download brand logo of title "@title" for SKU id @sku_id.', $args);
       }

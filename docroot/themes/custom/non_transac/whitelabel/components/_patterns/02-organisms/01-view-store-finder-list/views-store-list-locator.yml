@@ -34,7 +34,7 @@ rows:
               </div>
               <div class="get--directions">
                 <div>
-                  <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/29.233919,47.8979498" target="_blank">
+                  <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/29.233919,47.8979498" target="_blank" rel="nofollow">
                     Get directions
                   </a>
                   <a class="device__tablet" onclick="mapsApp(29.233919, 47.8979498)">
@@ -80,7 +80,7 @@ rows:
               </div>
               <div class="get--directions">
                 <div>
-                  <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/29.233919,47.8979498" target="_blank">
+                  <a class="device__desktop" href="https://www.google.com/maps/dir/Current+Location/29.233919,47.8979498" target="_blank" rel="nofollow">
                     Get directions
                   </a>
                   <a class="device__tablet" onclick="mapsApp(29.233919, 47.8979498)">

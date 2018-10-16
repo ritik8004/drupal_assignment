@@ -1,11 +1,12 @@
 name: Alshaya White Label
 type: theme
-description: 'Base theme for Alshaya brands.'
+description: 'Transac base theme for Alshaya brands.'
 core: 8.x
 base theme: cog
 alshaya_theme_type: transac
 
 regions:
+  banner_top: 'Top Banner'
   menu_primary: 'Menu Primary'
   menu_secondary: 'Menu Secondary'
   header: Header

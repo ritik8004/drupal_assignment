@@ -1,0 +1,112 @@
+@mixin slug-modal-padding() {
+  @include breakpoint($tablet) {
+    padding: calc((100vh - 36rem) / 2) calc((100vw - 45rem) / 2) !important;
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 34.75rem) / 2) calc((100vw - 64.13rem) / 2) !important;
+  }
+}
+
+.slug-banner-modal.ui-dialog {
+  height: 100% !important;
+  width: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+  background: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 1000;
+
+  @include slug-modal-padding();
+
+  .path--user & {
+    width: 100% !important;
+
+    @include slug-modal-padding();
+  }
+
+  #drupal-modal {
+    background: $modal_bg;
+    padding: 1.5em;
+    overflow: scroll;
+    height: 100% !important;
+    max-height: 100% !important;
+
+    .path--user &,
+    .path--cart & {
+      height: 100% !important;
+      max-height: 100% !important;
+    }
+  }
+
+  .ui-dialog-titlebar {
+    padding: 0;
+    overflow: visible;
+
+    .ui-dialog-title {
+      @include u-visibility(none);
+    }
+
+    .ui-dialog-titlebar-close {
+      @include icon(close) {
+        font-size: 1.875rem;
+        position: absolute;
+        #{$right}: 0;
+        top: 0;
+      }
+
+      position: absolute;
+      #{$right}: 0;
+      #{$left}: auto;
+      top: 50%;
+      width: 1.875rem;
+      margin: 0;
+      height: 1.875rem;
+      border: none;
+      z-index: 9;
+      font-size: 0;
+      color: $modal_close_icon;
+      background-color: $modal_close_bg;
+      border-radius: 0;
+      outline: solid transparent;
+      text-indent: inherit;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+}
+
+.slug-banner-modal-link.use-ajax {
+  + .ajax-progress-throbber {
+    position: fixed !important;
+    width: 100% !important;
+    height: 100%;
+    top: 0 !important;
+    #{$left}: 0 !important;
+    background: $primary_full_page_overlay_bg;
+    z-index: 9999;
+    visibility: visible;
+
+    .message {
+      display: none;
+    }
+
+    .throbber {
+      bottom: 0;
+      #{$left}: 0;
+      margin: auto;
+      position: fixed;
+      #{$right}: 0;
+      top: 0;
+      z-index: 100;
+      background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
+      background-size: 5.5rem !important;
+      padding-#{$left}: 0.625rem;
+      padding-#{$right}: 0.625rem;
+      width: 100%;
+      height: auto;
+    }
+  }
+}

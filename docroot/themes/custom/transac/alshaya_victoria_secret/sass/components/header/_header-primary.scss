@@ -51,6 +51,10 @@ header {
       #{$left}: -0.125rem;
       line-height: 20px;
 
+      html[lang=ar] & {
+        font-family: $vs-bold !important;
+      }
+
       @include breakpoint($upto-desktop) {
         width: 1.125rem;
         height: 1.125rem;

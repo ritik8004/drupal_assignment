@@ -395,6 +395,9 @@ class AlshayaApiWrapper {
     $handle = $this->getMerchandisingReport();
 
     $mskus = [];
+    foreach ($types as $type) {
+      $mskus[$type] = [];
+    }
 
     // We have not been able to open the stream.
     if (!$handle) {
@@ -509,6 +512,9 @@ class AlshayaApiWrapper {
     ];
 
     $mskus = [];
+    foreach ($types as $type) {
+      $mskus[$type] = [];
+    }
 
     foreach ($types as $type) {
       $query['searchCriteria']['filterGroups'][1]['filters'][0]['value'] = $type;

@@ -41,8 +41,11 @@ function alshaya_vs_transac_alshaya_stores_finder_store_update_alter(&$node, arr
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function alshaya_vs_transac_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // Load SKU entity.
-  $sku_entity = SKU::load($form['sku_id']['#value']);
+  $sku_entity = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
 
   if (!($sku_entity instanceof SKUInterface)) {
     return;

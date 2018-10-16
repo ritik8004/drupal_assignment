@@ -305,23 +305,6 @@
   margin: 0.625rem 0;
 }
 
-.alshaya_search_slider {
-  .lslide img {
-    min-height: 3.7rem;
-  }
-
-  .lSSlideWrapper {
-    .lSAction {
-      & > a.lSPrev,
-      & > a.lSNext {
-        &::after {
-          font-size: 1.5rem;
-        }
-      }
-    }
-  }
-}
-
 @include breakpoint($only-mobile) {
   .filter--mobile {
     .c-facet__label {
