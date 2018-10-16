@@ -163,15 +163,7 @@ class AdvancedPageResource extends ResourceBase {
       'body' => $node->get('body')->getString(),
     ];
 
-    $fields = [
-      'field_promo_blocks',
-      'field_delivery_banner',
-      'field_promo_banner_full_width',
-      'field_related_info',
-      'field_slider',
-    ];
-
-    foreach ($fields as $field) {
+    foreach ($this->mobileAppUtility->getFieldsForEntityBundle('node', self::NODE_TYPE) as $field) {
       $response_data[$field] = $this->mobileAppUtility->getFieldData($node, $field);
     }
 

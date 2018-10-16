@@ -318,6 +318,80 @@ class MobileAppUtility {
   }
 
   /**
+   * Get fields required for given entity bundle.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param string $bundle
+   *   The bundle of entity.
+   *
+   * @return array
+   *   Return array of fields with label or just fields.
+   */
+  public static function getFieldsForEntityBundle(string $entity_type, string $bundle): array {
+    $fields = [];
+    if ($entity_type == 'node') {
+      switch ($bundle) {
+        case 'advanced_page':
+          $fields = [
+            'field_promo_blocks',
+            'field_delivery_banner',
+            'field_promo_banner_full_width',
+            'field_related_info',
+            'field_slider',
+          ];
+          break;
+      }
+    }
+    elseif ($entity_type == 'paragraph') {
+      switch ($bundle) {
+        case '1_row_3_col_delivery_banner':
+          $fields = [
+            'field_title' => ['label' => 'title'],
+            'field_sub_title' => ['label' => 'subtitle'],
+            'field_link' => ['label' => 'url', 'type' => 'url'],
+          ];
+          break;
+
+        case 'banner':
+          $fields = [
+            'field_mobile_banner_image' => ['label' => 'image'],
+            'field_link' => ['label' => 'url', 'type' => 'url'],
+            'field_promo_block_button' => ['label' => 'buttons', 'type' => 'paragraph'],
+            'field_video' => ['label' => 'video'],
+          ];
+          break;
+
+        case 'banner_full_width':
+          $fields = [
+            'field_banner' => ['label' => 'image'],
+          ];
+          break;
+
+        case 'promo_block':
+          $fields = [
+            'field_promotion_image_mobile' => ['label' => 'image'],
+            'field_link' => ['label' => 'url', 'type' => 'url'],
+            'field_promo_block_button' => ['label' => 'buttons', 'type' => 'paragraph'],
+            'field_margin_mobile' => ['label' => 'margin'],
+          ];
+          break;
+
+        case 'promo_block_button':
+          $fields = [
+            'field_button_position' => ['label' => 'position'],
+            'field_button_link' => ['label' => 'url', 'type' => 'url'],
+            'field_promo_text_1' => ['label' => 'text_1'],
+            'field_promo_text_2' => ['label' => 'text_2'],
+            'field_promo_theme' => ['label' => 'theme'],
+          ];
+          break;
+      }
+    }
+    return $fields;
+  }
+
+  /**
    * Normalized data for the given entity for given field.
    *
    * @param object $entity
@@ -353,7 +427,7 @@ class MobileAppUtility {
    * @return array
    *   An associative array of paragraph type and callback function name.
    */
-  public static function getParagraphCallbacks() {
+  public static function getParagraphCallback() {
     return [
       '1_row_3_col_delivery_banner' => 'getDeliveryBanner',
       'promo_block' => 'getPromoBlock',
@@ -384,7 +458,7 @@ class MobileAppUtility {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
       $this->cachedEntities[] = $entity;
       // Prepare paragraph data based on given paragraph entity type.
-      $data = $this->prepareParagraphData($entity);
+      $data = $this->collectParagraphResults($entity);
       // Collect items if the field has no recursive paragraphs.
       if ($field != 'field_promo_blocks') {
         $field_output['type'] = empty($field_output['type']) ? $entity->bundle() : $field_output['type'];
@@ -410,11 +484,11 @@ class MobileAppUtility {
    * @return array
    *   Return array of data.
    */
-  public function prepareParagraphData($entity) {
+  public function collectParagraphResults($entity) {
     // Call a callback function to prepare data if paragraph type is one of the
-    // paragraph types listed in getParagraphCallbacks().
-    if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
-      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
+    // paragraph types listed in getParagraphCallback().
+    if (($fields = $this->getFieldsForEntityBundle($entity->getEntityTypeId(), $entity->bundle())) && !empty($fields)) {
+      return call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
     }
 
     // Get normalized Paragraph entity.
@@ -450,8 +524,8 @@ class MobileAppUtility {
     // if exists.
     $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
     $this->cachedEntities[] = $entity;
-    if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
-      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
+    if (($fields = $this->getFieldsForEntityBundle($entity->getEntityTypeId(), $entity->bundle())) && !empty($fields)) {
+      return call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
     }
 
     // Collect each field's value, load paragraph content if it contains
@@ -474,78 +548,58 @@ class MobileAppUtility {
   }
 
   /**
-   * Get '1_row_3_col_delivery_banner' paragraph type's data.
+   * Prepare paragraph data.
    *
    * @param \Drupal\paragraphs\ParagraphInterface $entity
    *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
    *
    * @return array
    *   The converted array with necessary fields.
    */
-  public function getDeliveryBanner(ParagraphInterface $entity) {
-    // Convert field link value.
-    $url = $entity->get('field_link')->first()->getUrl();
-    $url_string = $url->toString(TRUE);
-
-    return [
-      'title' => $entity->get('field_title')->getString(),
-      'subtitle' => $entity->get('field_sub_title')->getString(),
-      'url' => $url_string->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromUrl($url),
-    ];
+  public function prepareParagraphData(ParagraphInterface $entity, array $fields) {
+    $data = [];
+    foreach ($fields as $field => $field_info) {
+      if (!empty($field_info['type'])) {
+        if ($field_info['type'] == 'url') {
+          $data = array_merge($data, $this->getFieldLink($entity, $field, $field_info['label']));
+        }
+        elseif ($field_info['type'] == 'paragraph') {
+          $items = $this->getNormalizedData($entity, $field);
+          $data[$field_info['label']] = array_map(function ($item) {
+            return $this->getRecursiveParagraphData($item);
+          }, $items);
+        }
+      }
+      else {
+        $data[$field_info['label']] = $entity->get($field)->getString();
+      }
+    }
+    return $data;
   }
 
   /**
-   * Get 'promo_block' paragraph type's data.
+   * Get the link parameters for link field type.
    *
-   * @param \Drupal\paragraphs\ParagraphInterface $entity
-   *   The paragraph entity object.
-   *
-   * @return array
-   *   The converted array with necessary fields.
-   */
-  public function getPromoBlock(ParagraphInterface $entity) {
-    // Convert field link value.
-    $url_item = $entity->get('field_link')->first()->getUrl();
-    $url = $url_item->toString(TRUE);
-
-    $items = $this->getNormalizedData($entity, 'field_promo_block_button');
-    $promo_block_button = array_map(function ($item) {
-      return $this->getRecursiveParagraphData($item);
-    }, $items);
-
-    return [
-      'image' => $this->getImages($entity, 'field_promotion_image_mobile'),
-      'margin' => $entity->get('field_margin_mobile')->getString(),
-      'promo_block_button' => $promo_block_button,
-      'seo_text' => $entity->get('field_promo_block_seo_text')->getString(),
-      'seo_title' => $entity->get('field_promo_block_seo_title')->getString(),
-      'url' => $url->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
-    ];
-  }
-
-  /**
-   * Get 'promo_block_button' paragraph type's data.
-   *
-   * @param \Drupal\paragraphs\ParagraphInterface $entity
-   *   The paragraph entity object.
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The link field name.
+   * @param string $label
+   *   The label to return with output.
    *
    * @return array
-   *   The converted array with necessary fields.
+   *   Return the associative array with url and deeplink.
    */
-  public function getPromoBlockButton(ParagraphInterface $entity) {
+  public function getFieldLink($entity, string $field, string $label) {
     // Convert field link value.
-    $url_item = $entity->get('field_button_link')->first()->getUrl();
+    $url_item = $entity->get($field)->first()->getUrl();
     $url = $url_item->toString(TRUE);
 
     return [
-      'button_position' => $entity->get('field_button_position')->getString(),
-      'promo_text_1' => $entity->get('field_promo_text_1')->getString(),
-      'promo_text_2' => $entity->get('field_promo_text_2')->getString(),
-      'promo_theme' => $entity->get('field_promo_theme')->getString(),
-      'url' => $url->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
+      $label => $url->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromField($entity, $field),
     ];
   }
 
