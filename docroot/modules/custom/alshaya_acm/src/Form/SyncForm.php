@@ -207,13 +207,14 @@ class SyncForm extends FormBase {
         drupal_set_message($this->t('Product options synchronization complete.'), 'status');
         break;
 
-      case 'Synchronize listed SKUs':
+      case $this->t('Synchronize listed SKUs'):
         $skus = array_map('trim', explode(',', $form_state->getValue('products_list_text')));
-
         foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
-          foreach (array_chunk($skus, 5) as $chunk) {
+          // @TODO: Make the chunk size more realistic. Only limitation is the
+          // length of the query sent to MDC.
+          foreach (array_chunk($skus, 6) as $chunk) {
             // @TODO: Make page size a config. It can be used in multiple places.
-            $this->ingestApi->productFullSync($store_id, $langcode, $chunk, 2);
+            $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '',2);
           }
         }
 
