@@ -111,6 +111,11 @@ class CartHelper {
    */
   public function getCleanCartToLog($cart) {
     $object = $cart instanceof Cart ? $cart->getCart() : $cart;
+
+    if (!is_object($object) || !isset($object->shipping)) {
+      return 'Failed loading cart object to log or shipping not available in cart object';
+    }
+
     $shipping = $this->getAddressArray($object->shipping);
 
     // Billing is not required for debugging.
