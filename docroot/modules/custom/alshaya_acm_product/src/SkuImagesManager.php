@@ -566,6 +566,8 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
+      case 'modal-magazine':
+      case 'pdp-magazine':
         $media = $this->getAllMedia($sku, $check_parent_child);
         $main_image = $media['main'];
         $thumbnails = $media['thumbs'];
@@ -678,6 +680,7 @@ class SkuImagesManager {
           ];
         }
         break;
+
     }
 
     return $gallery;
