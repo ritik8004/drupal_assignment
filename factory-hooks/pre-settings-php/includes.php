@@ -17,8 +17,34 @@ elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
 
+global $site_name;
+
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
+
+switch ($env) {
+  case 'local':
+    $settings['social_auth_facebook.settings']['app_id'] = '2140208022890023';
+    $settings['social_auth_facebook.settings']['app_secret'] = '7cde10657c1866f072c56283af920484';
+    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
+    break;
+
+  case 'test':
+  case 'uat':
+  case 'dev':
+  default:
+    $file_path = '/home/alshaya/settings/' . $env . '/';
+    $facebook_site_settings_file = $file_path . $site_name . '/facebook/settings.php';
+    $facebook_default_settings_file = $file_path . 'default/facebook/settings.php';
+    if (file_exists($facebook_site_settings_file)) {
+      require_once $facebook_site_settings_file;
+    }
+    elseif (file_exists($facebook_default_settings_file)) {
+      require_once $facebook_default_settings_file;
+    }
+    break;
+
+}
 
 // Configure your hash salt here.
 // TODO: Security.
