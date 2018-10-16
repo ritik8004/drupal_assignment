@@ -594,12 +594,12 @@ class MobileAppUtility {
    */
   public function getFieldLink($entity, string $field, string $label) {
     // Convert field link value.
-    $url_item = $entity->get($field)->first()->getUrl();
-    $url = $url_item->toString(TRUE);
+    $url = $entity->get($field)->first()->getUrl();
+    $url_string = $url->toString(TRUE);
 
     return [
-      $label => $url->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromField($entity, $field),
+      $label => $url_string->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
   }
 
