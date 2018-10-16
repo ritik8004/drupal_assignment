@@ -165,18 +165,15 @@ pace:
   js:
     /libraries/pace/pace.min.js: {}
 
-Youtube_videojs:
-  js:
-    vendor/js/Youtube.min.js: {}
-
-Vimeo_videojs:
-  js:
-    vendor/js/videojs-vimeo.js: {}
-
-video-js:
+plp-moschino-video-provider:
   css:
     theme:
       vendor/css/video-js.min.css: {}
   js:
+    vendor/js/Youtube.min.js: {}
+    vendor/js/videojs-vimeo.js: {}
     vendor/js/video.min.js: {}
-    js/video-js-custom.js: {}
+
+plp-moschino-common:
+  js:
+    js/plp-moschino-layout.js: {}
