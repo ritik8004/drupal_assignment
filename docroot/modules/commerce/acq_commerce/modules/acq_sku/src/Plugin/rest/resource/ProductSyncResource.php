@@ -428,6 +428,12 @@ class ProductSyncResource extends ResourceBase {
         $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
         $failed++;
       }
+      catch (\Throwable $e) {
+        // We consider this as failure as it failed for an unknown reason.
+        // (not taken care of above).
+        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
+        $failed++;
+      }
       finally {
         // Release the lock if acquired.
         if (!empty($lock_key) && !empty($lock_acquired)) {
