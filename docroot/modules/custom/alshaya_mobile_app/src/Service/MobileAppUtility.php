@@ -154,13 +154,27 @@ class MobileAppUtility {
     if ($object instanceof TermInterface) {
       switch ($object->bundle()) {
         case 'acq_product_category':
-          $return = 'category/' . $object->id() . '/product-list';
+          $department_node = alshaya_advanced_page_is_department_page($object->id());
+          // If department page node.
+          if ($department_node) {
+            $return = 'rest/v1/page/advanced?url=node/' . $department_node;
+          }
+          else {
+            $return = 'category/' . $object->id() . '/product-list';
+          }
           break;
       }
     }
     elseif (is_object($object) && !empty($object->tid)) {
       // In case of categories resource, we not getting full object.
-      $return = 'category/' . $object->tid . '/product-list';
+      // If category is department page node.
+      $department_node = alshaya_advanced_page_is_department_page($object->tid);
+      if ($department_node) {
+        $return = 'rest/v1/page/advanced?url=node/' . $department_node;
+      }
+      else {
+        $return = 'category/' . $object->tid . '/product-list';
+      }
     }
     elseif ($object instanceof NodeInterface) {
       switch ($object->bundle()) {
