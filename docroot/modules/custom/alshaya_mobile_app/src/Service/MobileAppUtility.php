@@ -416,20 +416,19 @@ class MobileAppUtility {
     if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
       return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
     }
-    else {
-      // Get normalized Paragraph entity.
-      $entity_normalized = $this->getNormalizedData($entity);
 
-      $data = [];
-      foreach ($entity_normalized as $field_name => $field_values) {
-        if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
-          foreach ($field_values as $field_value) {
-            $data[] = $this->getRecursiveParagraphData($field_value);
-          }
+    // Get normalized Paragraph entity.
+    $entity_normalized = $this->getNormalizedData($entity);
+
+    $data = [];
+    foreach ($entity_normalized as $field_name => $field_values) {
+      if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+        foreach ($field_values as $field_value) {
+          $data[] = $this->getRecursiveParagraphData($field_value);
         }
       }
-      return $data;
     }
+    return $data;
   }
 
   /**
@@ -442,39 +441,36 @@ class MobileAppUtility {
    *   Return data array.
    */
   private function getRecursiveParagraphData(array $item): array {
-    if (!empty($item['target_type'])) {
-      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
-      $this->cachedEntities[] = $entity;
-      if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
-        return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
-      }
-      else {
-        $data = [
-          'type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId(),
-        ];
-        // Get normalized Paragraph entity.
-        $entity_normalized = $this->getNormalizedData($entity);
-        foreach ($entity_normalized as $field_name => $field_data) {
-          if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
-            $data[$field_name] = [];
-            $row = [];
-            foreach ($field_data as $field_delta => $field_item) {
-              if (!empty($field_item['target_type'])) {
-                $row[$field_delta] = $this->getRecursiveParagraphData($field_item);
-              }
-              else {
-                $row[$field_delta] = $field_item;
-              }
-            }
-            $data[$field_name] = $row;
-          }
-        }
-        return $data;
-      }
-    }
-    else {
+    // If current item is not paragraph type return value as a block.
+    if (empty($item['target_type'])) {
       return array_merge(['type' => 'block'], $item);
     }
+
+    // Load the paragraph entity and process it through paragraph callbacks
+    // if exists.
+    $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+    $this->cachedEntities[] = $entity;
+    if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
+      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity]);
+    }
+
+    // Collect each field's value, load paragraph content if it contains
+    // another paragraph reference otherwise get the field's value as is.
+    $data = ['type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId()];
+    // Get normalized Paragraph entity.
+    $entity_normalized = $this->getNormalizedData($entity);
+    foreach ($entity_normalized as $field_name => $field_values) {
+      if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+        $row = [];
+        foreach ($field_values as $field_value) {
+          $row[] = empty($field_value['target_type'])
+            ? $field_value
+            : $this->getRecursiveParagraphData($field_value);
+        }
+        $data[$field_name] = $row;
+      }
+    }
+    return $data;
   }
 
   /**
@@ -491,13 +487,12 @@ class MobileAppUtility {
     $url = $entity->get('field_link')->first()->getUrl();
     $url_string = $url->toString(TRUE);
 
-    $data = [
+    return [
       'title' => $entity->get('field_title')->getString(),
       'subtitle' => $entity->get('field_sub_title')->getString(),
       'url' => $url_string->getGeneratedUrl(),
       'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
-    return $data;
   }
 
   /**
@@ -515,14 +510,14 @@ class MobileAppUtility {
     $url = $url_item->toString(TRUE);
 
     $items = $this->getNormalizedData($entity, 'field_promo_block_button');
-    $data = array_map(function ($item) {
+    $promo_block_button = array_map(function ($item) {
       return $this->getRecursiveParagraphData($item);
     }, $items);
 
     return [
       'image' => $this->getImages($entity, 'field_promotion_image_mobile'),
       'margin' => $entity->get('field_margin_mobile')->getString(),
-      'promo_block_button' => $data,
+      'promo_block_button' => $promo_block_button,
       'seo_text' => $entity->get('field_promo_block_seo_text')->getString(),
       'seo_title' => $entity->get('field_promo_block_seo_title')->getString(),
       'url' => $url->getGeneratedUrl(),
@@ -544,7 +539,7 @@ class MobileAppUtility {
     $url_item = $entity->get('field_button_link')->first()->getUrl();
     $url = $url_item->toString(TRUE);
 
-    $data = [
+    return [
       'button_position' => $entity->get('field_button_position')->getString(),
       'promo_text_1' => $entity->get('field_promo_text_1')->getString(),
       'promo_text_2' => $entity->get('field_promo_text_2')->getString(),
@@ -552,7 +547,6 @@ class MobileAppUtility {
       'url' => $url->getGeneratedUrl(),
       'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
     ];
-    return $data;
   }
 
   /**
