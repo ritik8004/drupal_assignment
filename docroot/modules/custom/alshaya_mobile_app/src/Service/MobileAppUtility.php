@@ -182,15 +182,13 @@ class MobileAppUtility {
   /**
    * Get Deep link based on given object and field name.
    *
-   * @param object $object
-   *   Object of node or term or paragraph.
-   * @param string $field
-   *   String containing field name.
+   * @param \Drupal\Core\Url $url
+   *   The url Object.
    *
    * @return string
    *   Return deeplink url.
    */
-  public function getDeepLinkFromField($object, $field = '') {
+  public function getDeepLinkFromUrl(Url $url) {
     $return = '';
 
     return self::ENDPOINT_PREFIX . $return;
@@ -407,14 +405,14 @@ class MobileAppUtility {
    */
   public function getDeliveryBanner($entity, array $context) {
     // Convert field link value.
-    $url_item = $entity->get('field_link')->first()->getUrl();
-    $url = $url_item->toString(TRUE);
+    $url = $entity->get('field_link')->first()->getUrl();
+    $url_string = $url->toString(TRUE);
 
     $data = [
       'title' => $entity->get('field_title')->getString(),
       'subtitle' => $entity->get('field_sub_title')->getString(),
-      'url' => $url->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromField($entity, 'field_link'),
+      'url' => $url_string->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
     return $data;
   }
