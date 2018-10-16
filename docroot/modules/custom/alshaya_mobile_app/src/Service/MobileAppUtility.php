@@ -180,7 +180,7 @@ class MobileAppUtility {
   }
 
   /**
-   * Get Deep link based on given object and field name.
+   * Get Deep link based on given url object.
    *
    * @param \Drupal\Core\Url $url
    *   The url Object.
