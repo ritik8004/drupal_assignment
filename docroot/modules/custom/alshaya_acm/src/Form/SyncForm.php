@@ -214,7 +214,7 @@ class SyncForm extends FormBase {
           // length of the query sent to MDC.
           foreach (array_chunk($skus, 6) as $chunk) {
             // @TODO: Make page size a config. It can be used in multiple places.
-            $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '',2);
+            $this->ingestApi->productFullSync($store_id, $langcode, implode(',', $chunk), '', 2);
           }
         }
 
