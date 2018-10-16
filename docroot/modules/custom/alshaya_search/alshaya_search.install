@@ -31,7 +31,7 @@ function alshaya_search_update_8024() {
   $index = Index::load('acquia_search_index');
   $index->save();
 
-  // Create facet & add facet block to PLP.
+  // Create facet & add facet block to SRP.
   alshaya_config_install_configs(['facets.facet.promotions'], 'alshaya_search', 'optional');
   alshaya_config_install_configs(['block.block.promotions'], 'alshaya_search', 'optional');
 
