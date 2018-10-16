@@ -419,11 +419,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     $sku_entity = array_shift($skus);
 
-    if (count($skus) == 0) {
-      // No translation found for this sku.
-      return NULL;
-    }
-
     if ($is_multilingual) {
       if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
