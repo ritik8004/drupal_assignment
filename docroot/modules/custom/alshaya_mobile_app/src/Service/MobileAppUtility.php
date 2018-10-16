@@ -525,7 +525,7 @@ class MobileAppUtility {
     $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
     $this->cachedEntities[] = $entity;
     if (($fields = $this->getFieldsForEntityBundle($entity->getEntityTypeId(), $entity->bundle())) && !empty($fields)) {
-      return call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
+      return array_merge(['type' => $entity->bundle()], call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]));
     }
 
     // Collect each field's value, load paragraph content if it contains
