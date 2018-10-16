@@ -1,0 +1,5 @@
+facets_language_switcher:
+  js:
+    js/facets-language-switcher.js: {}
+  dependencies:
+    - core/jquery

@@ -1,6 +1,0 @@
-bundle: alshaya
-excluded:
-  - block.block.alshaya_white_label_views_block__products_products_block
-  - block.block.cog_views_block__products_products_block
-  - block.block.views_block__products_products_block
-required: true

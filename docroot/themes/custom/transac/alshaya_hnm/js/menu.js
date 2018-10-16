@@ -27,7 +27,14 @@
       var $listItems = $('.menu__list-item');
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
-        var submenu = $(this).find('> .menu__list .menu--three__list-item');
+        var submenu;
+
+        if ($(window).width() <= 1024) {
+          submenu = $(this).find('> .menu__list .menu--three__list-item');
+        }
+        else {
+          submenu = $(this).find('> .menu__list .menu--two__list-item');
+        }
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
@@ -206,7 +213,6 @@
       if ($('.branding__menu').length) {
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
-
         $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');

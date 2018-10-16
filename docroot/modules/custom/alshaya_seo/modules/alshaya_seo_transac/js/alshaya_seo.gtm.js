@@ -8,6 +8,7 @@
 
   var mouseenterTime = 0;
   var gtm_execute_onetime_events = true;
+  var currentListName = null;
 
   Drupal.behaviors.seoGoogleTagManager = {
     attach: function (context, settings) {
@@ -41,22 +42,24 @@
       var footerNewsletterSubmiClicked = false;
 
       // Set platformType.
-      var md = new MobileDetect(window.navigator.userAgent);
-      if (md.tablet() !== null) {
-        dataLayer.push({
-          platformType: 'tablet',
-        });
-      }
-      else if (md.mobile()) {
-        dataLayer.push({
-          platformType: 'mobile',
-        });
-      }
-      else {
-        dataLayer.push({
-          platformType: 'desktop',
-        });
-      }
+      $('body').once('page-load-gta').each(function() {
+        var md = new MobileDetect(window.navigator.userAgent);
+        if (md.tablet() !== null) {
+          dataLayer.push({
+            platformType: 'tablet',
+          });
+        }
+        else if (md.mobile()) {
+          dataLayer.push({
+            platformType: 'mobile',
+          });
+        }
+        else {
+          dataLayer.push({
+            platformType: 'desktop',
+          });
+        }
+      });
 
       // List of Pages where we need to push out list of product being rendered to GTM.
       var impressionPages = [
@@ -514,13 +517,27 @@
           var that = $(this);
           var position = $('.views-infinite-scroll-content-wrapper .c-products__item').index(that.closest('.c-products__item')) + 1;
 
+          currentListName = listName;
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
         });
       });
 
-      if ($(context).filter('article[data-vmode="modal"]').length === 1) {
-        var product = Drupal.alshaya_seo_gtm_get_product_values($(context).filter('article[data-vmode="modal"]'));
+      if ($(context).filter('article[data-vmode="modal"]').length === 1
+        || $(document).find('article[data-vmode="full"]').length === 1) {
+
+        if ($(document).find('article[data-vmode="full"]').length === 1) {
+          var productContext = $(document).find('article[data-vmode="full"]');
+        }
+        else {
+          var productContext = $(context).filter('article[data-vmode="modal"]');
+        }
+
+        var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
         product.variant = '';
+        if (currentListName != null && currentListName !== 'PDP-placeholder') {
+          product.list = currentListName;
+          currentListName = null;
+        }
 
         var data = {
           event: 'productDetailView',
@@ -553,6 +570,7 @@
             }
           }
 
+          currentListName = subListName;
           // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);

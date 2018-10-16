@@ -155,6 +155,7 @@ $body_font: $hnm-regular;
 
 // Override font variables coming from MC, without this we get a 404 as font files are no longer present in H&M theme.
 $arial: $hnm-regular;
+$arial-nodir: $hnm-regular;
 $alshaya-bold: $hnm-bold;
 $alshaya-arabic-bold: $hnm-arabic-bold;
 $alshaya-thin: $hnm-regular;

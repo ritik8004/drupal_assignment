@@ -53,7 +53,7 @@ header {
 
     .price {
       .price-amount {
-        font-family: $hnm-demibold-nodir;
+        font-family: $hnm-demibold-nodir !important;
         margin: 0 0.25rem;
       }
     }
@@ -622,7 +622,6 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          border-bottom: 4px solid $mm_l2_hover_border;
           border-top: none;
           transform: none;
 
@@ -666,6 +665,7 @@ header {
         transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
         transform: none;
         border-top: none;
+        border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
 

@@ -1,0 +1,12 @@
+--- js/facets-views-ajax.js	(date 1536730147000)
++++ js/facets-views-ajax.js	(date 1536730147000)
+@@ -95,8 +95,7 @@
+     // Update View.
+     var views_ajax_settings = Drupal.views.instances['views_dom_id:' + current_dom_id].element_settings;
+     views_ajax_settings.submit = views_settings;
+-    views_ajax_settings.url += '?q=' + facetLink.attr('href');
+-
++    views_ajax_settings.url = Drupal.url('views/ajax') + '?q=' + facetLink.attr('href');
+ 
+     // Update facet blocks.
+     var facet_settings = {

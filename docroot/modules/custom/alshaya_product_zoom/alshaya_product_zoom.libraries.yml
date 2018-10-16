@@ -10,17 +10,6 @@ cloud_zoom:
     - core/drupal
     - core/jquery
 
-lightslider:
-  version: 1.x
-  css:
-    theme:
-      js/lightslider/src/css/lightslider.css: {}
-  js:
-    js/lightslider/src/js/lightslider.js: {}
-  dependencies:
-    - core/drupal
-    - core/jquery
-
 product.cloud_zoom:
   version: 1.x
   css:

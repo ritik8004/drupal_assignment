@@ -9,7 +9,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\Entity\Node;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
@@ -69,6 +69,16 @@ function alshaya_hm_images_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_hm_images_views_pre_render(ViewExecutable $view) {
+  // Override the 'result summary' header for PLP and Search.
+  if ($view->id() == 'search' || $view->id() == 'alshaya_product_list') {
+    $view->element['#attached']['library'][] = 'alshaya_hm_images/hm_images';
+  }
+}
+
+/**
  * Implements hook_alshaya_acm_product_gallery_alter().
  */
 function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $sku, $context = 'pdp') {
@@ -97,11 +107,6 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
       $gallery = [
         '#theme' => 'alshaya_assets_gallery',
         '#mainImage' => $plp_main_image,
-        '#attached' => [
-          'library' => [
-            'alshaya_hm_images/hm_images',
-          ],
-        ],
       ];
 
       // We don't get alt/title, we use product's title for that.

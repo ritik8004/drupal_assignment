@@ -51,6 +51,12 @@
         display: none;
       }
     }
+
+    @include breakpoint($desktop) {
+      height: 100%;
+      overflow: hidden;
+      padding-bottom: 2.5rem;
+    }
   }
 
   .text-links {
@@ -58,6 +64,12 @@
       padding-#{$left}: 0;
       padding-#{$right}: 2.5rem;
       margin-bottom: 1.25rem;
+      height: 100%;
+      overflow: hidden;
+
+      > li.menu__list-item {
+        padding-#{$left}: 0;
+      }
     }
 
     .contains-sublink a {

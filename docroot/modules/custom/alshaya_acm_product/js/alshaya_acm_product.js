@@ -16,8 +16,8 @@
         $('.field--name-field-skus #product-zoom-container').each(function () {
           if ($(this).closest('td.sell-sku').length === 0) {
             // Execute the attach function of alshaya_product_zoom again.
-            Drupal.behaviors.alshaya_product_zoom.attach($(this), settings);
             $(this).closest('.content__sidebar').siblings('.content__main').find('#product-zoom-container').replaceWith($(this));
+            Drupal.behaviors.alshaya_product_zoom.attach($(this), settings);
           }
           else {
             $(this).remove();

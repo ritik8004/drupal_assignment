@@ -4,6 +4,7 @@ namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
@@ -43,6 +44,13 @@ class ProductOptionsManager {
   private $i18nHelper;
 
   /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  private $connection;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -53,14 +61,17 @@ class ProductOptionsManager {
    *   LoggerFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database connection service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, I18nHelper $i18n_helper) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, APIWrapper $api_wrapper, LoggerChannelFactoryInterface $logger_factory, I18nHelper $i18n_helper, Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->apiWrapper = $api_wrapper;
     $this->logger = $logger_factory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
+    $this->connection = $connection;
   }
 
   /**
@@ -195,6 +206,8 @@ class ProductOptionsManager {
    * Synchronize all product options.
    */
   public function synchronizeProductOptions() {
+    $options_available = [];
+
     foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
       $this->apiWrapper->updateStoreContext($store_id);
       $option_sets = $this->apiWrapper->getProductOptions();
@@ -203,6 +216,57 @@ class ProductOptionsManager {
       foreach ($option_sets as $options) {
         foreach ($options['options'] as $key => $value) {
           $this->createProductOption($langcode, $key, $value, $options['attribute_id'], $options['attribute_code'], $weight++);
+          $options_available[$options['attribute_code']][$options['attribute_id']] = $options['attribute_id'];
+        }
+      }
+    }
+
+    $this->deleteUnavailableOptions($options_available);
+  }
+
+  /**
+   * Delete all the options that are no longer available in MDC.
+   *
+   * @param array $synced_options
+   *   Multi-dimensional array containing attribute codes as key and option ids
+   *   currently available on MDC.
+   */
+  public function deleteUnavailableOptions(array $synced_options) {
+    // Cleanup queries can be done only for one language.
+    $query = $this->connection->select('taxonomy_term__field_sku_attribute_code', 'ttfsac');
+    $query->addExpression('count(entity_id)', 'cnt');
+    $query->condition('field_sku_attribute_code_value', array_keys($synced_options), 'IN');
+    $result = $query->execute()->fetchAllKeyed(0, 0);
+    $options_in_db = reset($result);
+
+    $synced_option_ids = [];
+    foreach ($synced_options as $attribute_code => $options) {
+      $synced_option_ids = array_merge($synced_option_ids, $options);
+    }
+
+    // Do nothing if count of option ids synced and in DB match.
+    if (count($synced_option_ids) === $options_in_db) {
+      return;
+    }
+
+    $query = $this->termStorage->getQuery();
+    $query->condition('field_sku_option_id', $synced_option_ids, 'NOT IN');
+    $query->condition('field_sku_attribute_code', array_keys($synced_options), 'IN');
+    $query->condition('vid', self::PRODUCT_OPTIONS_VOCABULARY);
+    $tids = $query->execute();
+
+    if ($tids) {
+      foreach (array_chunk($tids, 50) as $ids) {
+        $this->termStorage->resetCache();
+
+        try {
+          $entities = $this->termStorage->loadMultiple($ids);
+          $this->termStorage->delete($entities);
+        }
+        catch (\Exception $e) {
+          $this->logger->error(t('Error occurred while deleting options not available in MDC. Error: @message', [
+            '@message' => $e->getMessage(),
+          ]));
         }
       }
     }

@@ -156,17 +156,17 @@ function hammerIt(elm) {
             $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
             var mImages = Array.prototype.slice.call(document.querySelectorAll('.mob-imagegallery__thumbnails__image img'));
             mImages.forEach(function (ele) {
-              hammerIt(ele);
+              if (!ele.classList.contains('hammer-processed')) {
+                ele.classList.add('hammer-processed');
+                hammerIt(ele);
+              }
             });
 
             $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
               var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
               productGallery.slick('unslick');
               $('body').removeClass('pdp-modal-overlay');
-              var image = $('#product-image-gallery-mob').find('.mob-imagegallery__thumbnails__image img');
-              image.parent().siblings().each(function () {
-                $('#product-image-gallery-mob').find('img').css('transform', 'none');
-              });
+              $('#product-image-gallery-mob').find('img').css('transform', 'none');
             });
 
           }

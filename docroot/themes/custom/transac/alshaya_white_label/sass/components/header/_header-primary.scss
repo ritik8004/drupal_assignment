@@ -318,7 +318,7 @@ header {
     }
 
     .quantity {
-      font-size: 10px;
+      font-size: 0.625rem;
       position: absolute;
       background: $primary_minicart_quantity_bg;
       color: $primary_minicart_quantity_text;
@@ -332,7 +332,7 @@ header {
       display: flex;
       align-items: center;
       justify-content: center;
-      line-height: normal !important;
+      line-height: 1 !important;
     }
   }
 
@@ -508,17 +508,6 @@ header {
 
     a {
       padding: 0.9rem 0.875rem 0.664rem 0.625rem;
-    }
-
-    .store {
-      &:hover {
-        background-color: $header_c_menu_icon_color;
-        color: $header_c_menu_icon_text;
-
-        @include icon(mappin) {
-          color: $header_c_menu_icon_text;
-        }
-      }
     }
 
     .mobile--search {
@@ -905,8 +894,21 @@ header {
       display: inline-block;
       vertical-align: top;
 
+      &.title_subtitle {
+        max-width: 9.75rem;
+      }
+
       .title {
         margin-#{$left}: 0;
+      }
+
+      a {
+        &:hover {
+          .hightlight__description {
+            color: $highlights_subtitle_hover;
+            text-decoration: underline;
+          }
+        }
       }
     }
 
@@ -934,7 +936,7 @@ header {
     }
 
     .hightlight__description {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       color: $mm_highlight_description;
       margin-top: 0.5rem;
       display: block;
