@@ -19,13 +19,6 @@ function alshaya_product_update_8020() {
   /** @var AlshayaConfigManager $alshayaConfigManager */
   $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
 
-  /** @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $alshayaFacetsManager */
-  $alshayaFacetsManager = \Drupal::service('alshaya_search_api.facets_manager');
-
-  // Delete old facets, blocks & entry from filter bar for old promo facets.
-  $alshayaFacetsManager->removeFacet('promotions', 'filter_bar_plp', 'plp');
-
-  // Create promotion facet for PLP.
   // Add promotion label to index.
   $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
 
@@ -35,20 +28,6 @@ function alshaya_product_update_8020() {
   // Create facet & add facet block to PLP.
   alshaya_config_install_configs(['facets.facet.plp_promotions'], 'alshaya_product');
   alshaya_config_install_configs(['block.block.plppromotions'], 'alshaya_product', 'optional');
-
-  // Update PLP facet summary to render selected promotion facets.
-  $filter_bar = \Drupal::configFactory()->getEditable('facets_summary.facets_summary.filter_bar_plp');
-  $facets = $filter_bar->get('facets');
-  $facets['plp_promotions'] = [
-    'checked' => 1,
-    'label' => 'Promotions',
-    'separator' => ', ',
-    'show_count' => 1,
-    'weight' => 0,
-  ];
-
-  $filter_bar->set('facets', $facets);
-  $filter_bar->save();
 }
 
 /**
