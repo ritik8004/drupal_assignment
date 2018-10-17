@@ -8,6 +8,7 @@
  */
 
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
+include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 
 $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
@@ -29,21 +30,23 @@ switch ($env) {
     $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
     break;
 
-  case 'test':
-  case 'uat':
-  case 'dev':
-  default:
+  case '01live':
     $file_path = '/home/alshaya/settings/' . $env . '/';
-    $facebook_site_settings_file = $file_path . $site_name . '/facebook/settings.php';
-    $facebook_default_settings_file = $file_path . 'default/facebook/settings.php';
+    $facebook_site_settings_file = $file_path . $site_name . '/facebook.php';
+    $facebook_default_settings_file = $file_path . 'default/facebook.php';
     if (file_exists($facebook_site_settings_file)) {
-      require_once $facebook_site_settings_file;
+      include_once $facebook_site_settings_file;
     }
     elseif (file_exists($facebook_default_settings_file)) {
-      require_once $facebook_default_settings_file;
+      include_once $facebook_default_settings_file;
     }
     break;
 
+  default:
+    $settings['social_auth_facebook.settings']['app_id'] = '452346355260372';
+    $settings['social_auth_facebook.settings']['app_secret'] = '466de9be713752a2f19eb566270013ab';
+    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
+    break;
 }
 
 // Configure your hash salt here.
