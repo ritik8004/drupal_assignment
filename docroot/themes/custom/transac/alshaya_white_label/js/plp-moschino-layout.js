@@ -39,11 +39,11 @@
       });
 
       // Show the sub menu on click of the sub menu btn.
-      $('.moschino-layout-submenu-icon .sub-menu-btn').on('click', function () {
+      $('.moschino-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
         $('.moschino-sub-menu-content').toggle();
       });
 
-      $('.moschino-sub-menu-content .close-btn').on('click', function () {
+      $('.moschino-sub-menu-content .close-btn', context).on('click', function () {
         $('.moschino-sub-menu-content').toggle();
       });
 
