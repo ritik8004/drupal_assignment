@@ -8,7 +8,6 @@
  */
 
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
-include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 
 $env = 'local';
 if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
@@ -17,8 +16,6 @@ if (isset($_ENV['AH_SITE_ENVIRONMENT'])) {
 elseif (getenv('TRAVIS')) {
   $env = 'travis';
 }
-
-global $site_name;
 
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
@@ -31,15 +28,7 @@ switch ($env) {
     break;
 
   case '01live':
-    $file_path = '/home/alshaya/settings/' . $env . '/';
-    $scan_dir = [$file_path . $site_name . '/', $file_path . 'default/'];
-    foreach ($scan_dir as $directory) {
-      foreach (scandir($directory) as $file) {
-        if ($file[0] !== '.' && preg_match('/\.php$/', $file)) {
-          include_once $directory . $file;
-        }
-      }
-    }
+    include_once '/home/alshaya/settings/01live/social_auth.php';
     break;
 
   default:
