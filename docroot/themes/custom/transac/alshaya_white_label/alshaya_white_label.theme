@@ -157,17 +157,13 @@ function alshaya_white_label_preprocess_page(&$variables) {
           foreach ($video_list as $key => $embedded_video) {
             $url = $embedded_video->uri;
             $provider = $embedded_video->title;
-            if ($provider == 'youtube') {
-              $variables['data_setup'][$key]['src'] = $url;
-              $variables['data_setup'][$key]['provider'] = 'youtube';
-            }
-            elseif ($provider == 'vimeo') {
-              $variables['data_setup'][$key]['src'] = $url;
-              $variables['data_setup'][$key]['provider'] = 'vimeo';
-            }
-            elseif ($provider == 'custom') {
+            if ($provider == 'custom') {
               $variables['data_setup'][$key]['video_source']['value'] = $url;
               $variables['data_setup'][$key]['video_source']['type'] = "video/mp4";
+            }
+            else {
+              $variables['data_setup'][$key]['src'] = $url;
+              $variables['data_setup'][$key]['provider'] = $provider;
             }
           }
         }

@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Adding new paragraph type 'Update the text link paragraph type.'.
+ * Update the text link paragraph type.
  */
 function alshaya_paragraphs_update_8120() {
   \Drupal::service('module_installer')->install(['link_attributes']);

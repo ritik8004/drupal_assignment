@@ -85,8 +85,8 @@ class HideFacetCondition extends ConditionPluginBase implements ContainerFactory
    * Provides a human readable summary of the condition's configuration.
    */
   public function summary() {
-    $status = $this->getContextValue('hideFacet') ? t('enabled') : t('disabled');
-    return t(
+    $status = $this->getContextValue('hideFacet') ? $this->t('enabled') : $this->t('disabled');
+    return $this->t(
       'The term has hide facet menu block @status.',
       ['@status' => $status]);
   }
