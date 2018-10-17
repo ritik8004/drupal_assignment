@@ -140,6 +140,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
       $plp_type = $term->get('field_plp_style')->value;
       if ($plp_type == 'moschino') {
+        $variables['moschino'] = 1;
         // Load common library for moschino.
         $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-common';
 

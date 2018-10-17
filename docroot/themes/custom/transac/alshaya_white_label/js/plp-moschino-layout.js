@@ -31,11 +31,14 @@
 
       // Accordion for submenu links.
       $('.field--name-field-plp-menu').find('.mos-menu-item').each(function () {
-        $(this).once('accordion-init').accordion({
-          heightStyle: 'content',
-          collapsible: true,
-          active: false
-        });
+        // Create accordion if the menu has sub links.
+        if ($(this).find('.mos-menu-sublink').length !== 0) {
+          $(this).once('accordion-init').accordion({
+            heightStyle: 'content',
+            collapsible: true,
+            active: false
+          });
+        }
       });
 
       // Show the sub menu on click of the sub menu btn.

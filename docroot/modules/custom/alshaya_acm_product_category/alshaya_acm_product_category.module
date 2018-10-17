@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
 
 /**
  * Implements hook_theme().
@@ -127,6 +128,19 @@ function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, Form
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
     if ($term instanceof TermInterface && $term->get('field_plp_style')->value == 'moschino') {
       $form['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access_alter().
+ */
+function alshaya_acm_product_category_entity_field_access_alter(array &$grants, array $context) {
+  if ($context['field_definition']->getname() === 'field_plp_menu' and $context['field_definition']->getTargetEntityTypeId() === 'taxonomy_term' and $context['operation'] === 'view') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_style')->value != 'moschino') {
+      // Do not show this field on pages that are not moschino.
+      $grants[':default'] = AccessResult::forbidden()->inheritCacheability($grants[':default'])->addCacheableDependency($context['items']->getEntity());
     }
   }
 }
