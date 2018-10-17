@@ -255,32 +255,23 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $node = alshaya_acm_product_get_display_node($item['sku']);
       $product_name = $item['name'];
 
-      if ($node instanceof NodeInterface) {
-        $sku_attributes = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+      // In case product node is corrupt, we use the name from cart object so
+      // Frontend wont break due to missing node title link.
+      $item['name'] = [
+        '#theme' => 'alshaya_cart_product_name',
+        '#sku_attributes' => NULL,
+        '#name' => $product_name,
+        '#image' => NULL,
+        '#total_price' => NULL,
+        '#item_code' => NULL,
+      ];
 
-        $item['name'] = [
-          '#theme' => 'alshaya_cart_product_name',
-          '#sku_attributes' => $sku_attributes,
-          '#name' => [
-            '#title' => $node->getTitle(),
-            '#type' => 'link',
-            '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
-          ],
-          '#image' => NULL,
-          '#total_price' => NULL,
-          '#item_code' => NULL,
-        ];
-      }
-      else {
-        // In case product node is corrupt, we use the name from cart object so
-        // Frontend wont break due to missing node title link.
-        $item['name'] = [
-          '#theme' => 'alshaya_cart_product_name',
-          '#sku_attributes' => NULL,
-          '#name' => $product_name,
-          '#image' => NULL,
-          '#total_price' => NULL,
-          '#item_code' => NULL,
+      if ($node instanceof NodeInterface) {
+        $item['name']['#sku_attributes'] = alshaya_acm_product_get_sku_configurable_values($item['sku']);
+        $item['name']['#name'] = [
+          '#title' => $node->getTitle(),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
         ];
       }
 
