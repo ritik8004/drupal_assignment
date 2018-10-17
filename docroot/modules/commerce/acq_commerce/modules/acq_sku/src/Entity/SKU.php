@@ -412,8 +412,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // If only one is available, we might be adding translation, leave it as is.
     if ($is_multilingual && !empty($skus) && count($skus) > 1) {
       // Get rid of undesired languages. Later first one is picked up.
-      foreach ($skus as $key => $sku) {
-        if ($sku->langcode->value != $langcode) {
+      foreach ($skus as $key => $skuEntity) {
+        if ($skuEntity->langcode->value != $langcode) {
           unset($skus[$key]);
         }
       }
