@@ -32,13 +32,13 @@ switch ($env) {
 
   case '01live':
     $file_path = '/home/alshaya/settings/' . $env . '/';
-    $facebook_site_settings_file = $file_path . $site_name . '/facebook.php';
-    $facebook_default_settings_file = $file_path . 'default/facebook.php';
-    if (file_exists($facebook_site_settings_file)) {
-      include_once $facebook_site_settings_file;
-    }
-    elseif (file_exists($facebook_default_settings_file)) {
-      include_once $facebook_default_settings_file;
+    $scan_dir = [$file_path . $site_name . '/', $file_path . 'default/'];
+    foreach ($scan_dir as $directory) {
+      foreach (scandir($directory) as $file) {
+        if ($file[0] !== '.' && preg_match('/\.php$/', $file)) {
+          include_once $directory . $file;
+        }
+      }
     }
     break;
 
