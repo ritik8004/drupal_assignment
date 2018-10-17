@@ -47,7 +47,7 @@
       left: 0;
       right: 0;
       background: $plp-sub-menu-background-overlay;
-      z-index: 7;
+      z-index: 999;
       padding-#{$left}: 3.0625rem;
       padding-top: 50%;
 
@@ -156,4 +156,8 @@
       @include fullPageLoader();
     }
   }
+}
+
+.plp-video {
+  width: 100% !important;
 }

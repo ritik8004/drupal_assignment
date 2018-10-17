@@ -66,24 +66,17 @@
         {% set randomVideo = random(data_setup) %}
       <!-- Video -->
       <div class = "plp-video">
-        <video
-                id="plp-video-player"
-                class="video-js"
-                preload="auto"
-                width="100%"
-                autoplay
-                loop
-                muted
-                data-setup=
-                {% if randomVideo.src %}
-                '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
-                {% endif %}
-        >
+        <video id="plp-video-player" class="video-js vjs-16-9 vjs-big-play-centered" preload="auto"
+          autoplay loop controls
+          data-setup=
+            {% if randomVideo.src %}
+            '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
+            {% endif %}
+          >
             {% if randomVideo.video_source %}
               <source src = "{{ randomVideo.video_source.value }}" type = "{{ randomVideo.video_source.type }}" />
             {% endif %}
         </video>
-        <div class="plp-mute-button"></div>
       </div>
     {% endif %}
 
