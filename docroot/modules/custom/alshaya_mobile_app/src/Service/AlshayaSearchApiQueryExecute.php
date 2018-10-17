@@ -13,7 +13,6 @@ use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\Views;
 use Drupal\facets\Result\Result;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\facets\QueryType\QueryTypePluginManager;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -171,13 +170,6 @@ class AlshayaSearchApiQueryExecute {
   protected $entityTypeManager;
 
   /**
-   * Module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -196,8 +188,6 @@ class AlshayaSearchApiQueryExecute {
    *   SKU manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module handler.
    */
   public function __construct(RequestStack $requestStack,
                               DefaultFacetManager $facet_manager,
@@ -206,8 +196,7 @@ class AlshayaSearchApiQueryExecute {
                               MobileAppUtility $mobile_app_utility,
                               EntityRepositoryInterface $entity_repository,
                               SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              ModuleHandlerInterface $module_handler) {
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->facetManager = $facet_manager;
     $this->languageManager = $language_manager;
@@ -216,7 +205,6 @@ class AlshayaSearchApiQueryExecute {
     $this->entityRepository = $entity_repository;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -604,42 +592,7 @@ class AlshayaSearchApiQueryExecute {
       $sku_entity = SKU::loadFromSku($sku);
       // If SKU exists in system.
       if ($sku_entity instanceof SKU) {
-        // Get the prices.
-        $prices = $this->skuManager->getMinPrices($sku_entity);
-
-        // Get the promotion data.
-        $promotions = $this->mobileAppUtility->getPromotions($sku_entity);
-        // Get promo labels.
-        $promo_label = $this->skuManager->getDiscountedPriceMarkup($prices['price'], $prices['final_price']);
-        if ($promo_label) {
-          $promotions[] = [
-            'text' => $promo_label,
-          ];
-        }
-
-        // Get label for the SKU.
-        $labels = $this->mobileAppUtility->getLabels($sku_entity, 'plp');
-
-        // Get media (images/video) for the SKU.
-        $images = $this->mobileAppUtility->getMedia($sku_entity, 'search');
-
-        $data = [
-          'id' => (int) $node->id(),
-          'title' => $node->getTitle(),
-          'sku' => $sku_entity->getSku(),
-          'deeplink' => $this->mobileAppUtility->getDeepLink($node),
-          'original_price' => $prices['price'],
-          'final_price' => $prices['final_price'],
-          'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku_entity),
-          'promo' => $promotions,
-          'medias' => $images,
-          'labels' => $labels,
-        ];
-
-        // Allow other modules to alter light product data.
-        $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku_entity, $data);
-
-        return $data;
+        return $this->mobileAppUtility->getLightProduct($sku_entity);
       }
     }
 

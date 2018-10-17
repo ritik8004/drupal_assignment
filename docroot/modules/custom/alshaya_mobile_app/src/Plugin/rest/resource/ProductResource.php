@@ -215,7 +215,7 @@ class ProductResource extends ResourceBase {
     foreach ($linked_types as $linked_type) {
       $data['linked'][] = [
         'link_type' => $linked_type,
-        'skus' => $this->skuManager->getLinkedSkus($sku, $linked_type),
+        'skus' => $this->getLinkedSkus($sku, $linked_type),
       ];
     }
 
@@ -499,6 +499,32 @@ class ProductResource extends ResourceBase {
     };
 
     return $attributes;
+  }
+
+  /**
+   * Wrapper function get fully loaded linked skus.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $linked_type
+   *   Linked type.
+   *
+   * @return array
+   *   Linked SKUs.
+   */
+  private function getLinkedSkus(SKUInterface $sku, string $linked_type) {
+    $return = [];
+    $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type);
+
+    foreach ($linkedSkus as $linkedSku) {
+      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
+
+      if ($linkedSkuEntity instanceof SKUInterface) {
+        $return[] = $this->mobileAppUtility->getLightProduct($linkedSkuEntity);
+      }
+    }
+
+    return $return;
   }
 
 }

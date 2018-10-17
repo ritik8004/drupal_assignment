@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
 use Drupal\file\FileInterface;
@@ -96,6 +97,13 @@ class MobileAppUtility {
   protected $renderer;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -116,6 +124,8 @@ class MobileAppUtility {
    *   SKU images manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -125,7 +135,8 @@ class MobileAppUtility {
                               SerializerInterface $serializer,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
-                              RendererInterface $renderer) {
+                              RendererInterface $renderer,
+                              ModuleHandlerInterface $module_handler) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -135,6 +146,7 @@ class MobileAppUtility {
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
     $this->renderer = $renderer;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -555,6 +567,55 @@ class MobileAppUtility {
       'images' => $media['images_with_type'],
       'videos' => array_values($media['videos']),
     ];
+  }
+
+  /**
+   * Get Light Product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Light Product.
+   */
+  public function getLightProduct(SKUInterface $sku): array {
+    // Get the prices.
+    $prices = $this->skuManager->getMinPrices($sku);
+
+    // Get the promotion data.
+    $promotions = $this->getPromotions($sku);
+
+    // Get promo labels.
+    $promo_label = $this->skuManager->getDiscountedPriceMarkup($prices['price'], $prices['final_price']);
+    if ($promo_label) {
+      $promotions[] = [
+        'text' => $promo_label,
+      ];
+    }
+
+    // Get label for the SKU.
+    $labels = $this->getLabels($sku, 'plp');
+
+    // Get media (images/video) for the SKU.
+    $images = $this->getMedia($sku, 'search');
+
+    $data = [
+      'id' => (int) $sku->id(),
+      'title' => $sku->label(),
+      'sku' => $sku->getSku(),
+      'deeplink' => $this->getDeepLink($sku),
+      'original_price' => $prices['price'],
+      'final_price' => $prices['final_price'],
+      'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku),
+      'promo' => $promotions,
+      'medias' => $images,
+      'labels' => $labels,
+    ];
+
+    // Allow other modules to alter light product data.
+    $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);
+
+    return $data;
   }
 
 }
