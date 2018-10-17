@@ -326,7 +326,34 @@ class MobileAppUtility {
    *   The bundle of entity.
    *
    * @return array
-   *   Return array of fields with label or just fields.
+   *   Return array of just fields or contains associative array with (label,
+   *   type, callback).
+   *   - label: Field label to return output with.
+   *   - type: Return output of a field with type and items.
+   *      i.e. {"type": "banner", "items": []}
+   *   - callback: Callback method to process field to get desired output.
+   *
+   *   Examples:
+   *
+   *   An array with just fields.
+   *
+   * @code
+   *   return [
+   *     'field_promo_blocks',
+   *     'field_delivery_banner',
+   *     'field_promo_banner_full_width',
+   *     'field_related_info',
+   *     'field_slider',
+   *   ];
+   *
+   * Array with label, type and callback.
+   *   return [
+   *     'field_title' => ['label' => 'title'],
+   *     'field_sub_title' => ['label' => 'subtitle'],
+   *     'field_link' => ['label' => 'url', 'type' => 'url'],
+   *     'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'paragraph'],
+   *   ];
+   * @endcode
    */
   public static function getFieldsForEntityBundle(string $entity_type, string $bundle): array {
     $fields = [];
