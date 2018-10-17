@@ -3,9 +3,6 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\Block;
 
 use Drupal\acq_cart\CartStorageInterface;
-use Drupal\acq_commerce\SKUInterface;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\address\Repository\CountryRepository;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_checkout\CheckoutHelper;
@@ -97,13 +94,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
   protected $requestStack;
 
   /**
-   * Product Info Helper.
-   *
-   * @var \Drupal\acq_sku\ProductInfoHelper
-   */
-  protected $productInfoHelper;
-
-  /**
    * Store Finder Utility service object.
    *
    * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
@@ -155,8 +145,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
    *   Module Handler service object.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
-   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
-   *   Product Info Helper.
    * @param mixed $store_finder_utility
    *   Store Finder Utility service object.
    */
@@ -174,7 +162,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
                               LanguageManagerInterface $language_manager,
                               ModuleHandlerInterface $module_handler,
                               RequestStack $request_stack,
-                              ProductInfoHelper $product_info_helper,
                               $store_finder_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
@@ -187,7 +174,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $this->pluginManager = $plugin_manager;
     $this->moduleHandler = $module_handler;
     $this->requestStack = $request_stack;
-    $this->productInfoHelper = $product_info_helper;
     $this->storesFinderUtility = $store_finder_utility;
     $this->languageManager = $language_manager;
   }
@@ -219,7 +205,6 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       $container->get('language_manager'),
       $moduleHandler,
       $container->get('request_stack'),
-      $container->get('acq_sku.product_info_helper'),
       $store_finder_utility
     );
   }
@@ -264,18 +249,10 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
     $cart_count = 0;
 
     foreach ($items as $item) {
-      $sku = SKU::loadFromSku($item['sku']);
-
-      if (!($sku instanceof SKUInterface)) {
-        continue;
-      }
-
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($sku, '291x288', 'checkout_summary');
+      $image = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'checkout_summary');
 
-      $node = alshaya_acm_product_get_display_node($sku);
-
-      $product_name = $this->productInfoHelper->getTitle($sku, 'basket');
+      $node = alshaya_acm_product_get_display_node($item['sku']);
 
       if ($node instanceof NodeInterface) {
         $sku_attributes = alshaya_acm_product_get_sku_configurable_values($item['sku']);
@@ -284,7 +261,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           '#theme' => 'alshaya_cart_product_name',
           '#sku_attributes' => $sku_attributes,
           '#name' => [
-            '#title' => $product_name,
+            '#title' => $node->getTitle(),
             '#type' => 'link',
             '#url' => Url::fromRoute('entity.node.canonical', ['node' => $node->id()]),
           ],
