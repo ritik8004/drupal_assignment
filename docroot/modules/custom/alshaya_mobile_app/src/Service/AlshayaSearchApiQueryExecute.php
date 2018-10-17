@@ -630,6 +630,7 @@ class AlshayaSearchApiQueryExecute {
           'deeplink' => $this->mobileAppUtility->getDeepLink($node),
           'original_price' => $prices['price'],
           'final_price' => $prices['final_price'],
+          'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku_entity),
           'promo' => $promotions,
           'medias' => $images,
           'labels' => $labels,
