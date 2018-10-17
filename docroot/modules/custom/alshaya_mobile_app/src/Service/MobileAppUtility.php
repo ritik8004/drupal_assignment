@@ -564,7 +564,9 @@ class MobileAppUtility {
         $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
       }
       else {
-        // Get normalized Paragraph entity.
+        // Get normalized Paragraph entity, as we don't need layout paragraph
+        // item. we are interested in paragraph types that are stored inside
+        // layout paragraph items.
         $entity_normalized = $this->getNormalizedData($entity);
 
         $data = [];
