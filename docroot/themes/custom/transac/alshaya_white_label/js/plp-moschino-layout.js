@@ -5,24 +5,22 @@
 
 (function ($, Drupal) {
   'use strict';
+
+  /* global videojs */
+
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
-      if ($('.plp-video').length > 1) {
-        $('#plp-video-player').ready(function () {
-          // Store the video object
-          var plpPlayer = $(this);
-          plpPlayer.play();
-          // Set click functions.
-          $('.video-js, .plp-mute-button').on('click', function () {
-            if (plpPlayer.muted()) {
-              plpPlayer.muted(false);
-              $('.plp-mute-button').removeClass('plp-video-muted');
-            }
-            else {
-              plpPlayer.muted(true);
-              $('.plp-mute-button').addClass('plp-video-muted');
-            }
-          });
+      if ($('.plp-video').length !== 0) {
+        // Store the video object
+        var plpPlayer = videojs('#plp-video-player');
+        // Set click functions.
+        $('.video-js').on('click', function () {
+          if (plpPlayer.muted()) {
+            plpPlayer.muted(false);
+          }
+          else {
+            plpPlayer.muted(true);
+          }
         });
       }
 

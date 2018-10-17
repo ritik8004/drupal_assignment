@@ -170,9 +170,9 @@ plp-moschino-video-provider:
     theme:
       vendor/css/video-js.min.css: {}
   js:
+    vendor/js/video.min.js: {}
     vendor/js/Youtube.min.js: {}
     vendor/js/videojs-vimeo.js: {}
-    vendor/js/video.min.js: {}
 
 plp-moschino-common:
   js:
