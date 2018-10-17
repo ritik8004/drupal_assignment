@@ -9,14 +9,11 @@
     attach: function (context, settings) {
       if ($('.plp-video').length > 1) {
         $('#plp-video-player').ready(function () {
-
           // Store the video object
           var plpPlayer = $(this);
-
           plpPlayer.play();
-
           // Set click functions.
-          $('.video-js, .plp-mute-button').click(function () {
+          $('.video-js, .plp-mute-button').on('click', function () {
             if (plpPlayer.muted()) {
               plpPlayer.muted(false);
               $('.plp-mute-button').removeClass('plp-video-muted');
@@ -48,6 +45,18 @@
 
       $('.moschino-sub-menu-content .close-btn').on('click', function () {
         $('.moschino-sub-menu-content').toggle();
+      });
+
+      // Add class if it is moschino modal.
+      $(document).on('mousedown', '.moschino-modal-link.use-ajax', function () {
+        $(document).on('dialogopen', '.ui-dialog', function () {
+          $(this).addClass('moschino-modal');
+        });
+      });
+
+      // Remove the class when the modal is closed.
+      $(document).on('dialogclose', '.ui-dialog', function () {
+        $(this).removeClass('moschino-modal');
       });
     }
   };
