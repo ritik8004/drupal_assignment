@@ -150,4 +150,10 @@
       }
     }
   }
+
+  .moschino-modal-link.use-ajax {
+    + .ajax-progress-throbber {
+      @include fullPageLoader();
+    }
+  }
 }
