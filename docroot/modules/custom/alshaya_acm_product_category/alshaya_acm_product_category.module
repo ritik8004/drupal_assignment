@@ -144,3 +144,57 @@ function alshaya_acm_product_category_entity_field_access_alter(array &$grants, 
     }
   }
 }
+
+/**
+ * Implements hook_taxonomy_term_presave().
+ */
+function alshaya_acm_product_category_taxonomy_term_presave($term) {
+  /** @var \Drupal\taxonomy\Entity\Term $entity */
+  if ($term->getVocabularyId() == 'acq_product_category') {
+    $videos = $term->get('field_plp_upload_video');
+    $original_videos = $term->original->get('field_plp_upload_video');
+
+    // If user has made changes to the uploaded video field,
+    // add links to the video links field.
+    if ($original_videos != $videos) {
+      $video_links = $term->get('field_plp_video_links');
+
+      // Remove all custom video links.
+      foreach ($video_links as $key => $video_link) {
+        if ($video_link->title == 'custom') {
+          $video_links->removeItem($key);
+        }
+      }
+
+      // Now add the uploaded videos to video links.
+      foreach ($videos as $video) {
+        $url = file_create_url($video->entity->url());
+        $title = 'custom';
+        $video_links->appendItem(["uri" => $url, "title" => $title]);
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_acm_product_category_field_widget_link_default_form_alter(&$element, FormStateInterface $form_state, $context) {
+  if (($context['items']->getName() == 'field_plp_video_links')) {
+
+    // Convert provider to select field.
+    $element['title']['#type'] = 'select';
+    $element['title']['#options'] = [
+      'youtube' => 'youtube',
+      'vimeo' => 'vimeo',
+      'custom' => 'custom',
+    ];
+
+    // If provider is custom, make field uneditable.
+    if ($element['title']['#default_value'] == 'custom') {
+      $element['title']['#disabled'] = TRUE;
+      $element['uri']['#disabled'] = TRUE;
+    }
+  }
+}
