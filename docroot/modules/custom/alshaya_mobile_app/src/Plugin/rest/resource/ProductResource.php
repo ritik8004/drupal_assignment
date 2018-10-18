@@ -215,7 +215,7 @@ class ProductResource extends ResourceBase {
     foreach ($linked_types as $linked_type) {
       $data['linked'][] = [
         'link_type' => $linked_type,
-        'skus' => $this->skuManager->getLinkedSkus($sku, $linked_type),
+        'skus' => $this->mobileAppUtility->getLinkedSkus($sku, $linked_type),
       ];
     }
 

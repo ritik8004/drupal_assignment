@@ -147,39 +147,24 @@ class SkuAssetManager {
         if (!empty($avoid_assets) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
           continue;
         }
+
         list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
 
-        // Prepare query options for image url.
-        if (isset($set['url'])) {
-          $url_parts = parse_url(urldecode($set['url']));
-          if (!empty($url_parts['query'])) {
-            parse_str($url_parts['query'], $query_options);
-            // Overwrite the product style coming from season 5 image url with
-            // the one based on context in which the image is being rendered.
-            $query_options['call'] = 'url[' . $image_location_identifier . ']';
-            $options = [
-              'query' => $query_options,
-            ];
-          }
-        }
-        else {
-          $options = [
-            'query' => [
-              'set' => implode(',', $set),
-              'call' => 'url[' . $image_location_identifier . ']',
-            ],
-          ];
-        }
+        $query_options = $this->getAssetQueryString($set, $image_location_identifier);
 
         $asset_url = [
-          'url' => Url::fromUri($base_url, $options),
+          'url' => Url::fromUri($base_url, ['query' => $query_options]),
           'sortAssetType' => $asset['sortAssetType'],
           'sortFacingType' => $asset['sortFacingType'],
           'Data' => $asset['Data'] ?? [],
         ];
 
-        unset($options['query']['call']);
-        $asset_url['url_without_call'] = Url::fromUri($base_url, $options);
+
+        // Prepare raw url without res and call.
+        unset($set['res']);
+        $raw_query_options = $this->getAssetQueryString($set, $image_location_identifier);
+        unset($raw_query_options['call']);
+        $asset_url['raw_url'] = Url::fromUri($base_url, ['query' => $raw_query_options]);
 
         $asset_urls[] = $asset_url;
 
@@ -207,6 +192,38 @@ class SkuAssetManager {
     }
 
     return $asset_variant_urls;
+  }
+
+  /**
+   * Prepare query string for assets.
+   *
+   * @param array $set
+   *   Set data.
+   * @param string $image_location_identifier
+   *   Image location identifier.
+   *
+   * @return array
+   *   Query string.
+   */
+  private function getAssetQueryString(array $set, string $image_location_identifier): array {
+    // Prepare query options for image url.
+    if (isset($set['url'])) {
+      $url_parts = parse_url(urldecode($set['url']));
+      if (!empty($url_parts['query'])) {
+        parse_str($url_parts['query'], $query_options);
+        // Overwrite the product style coming from season 5 image url with
+        // the one based on context in which the image is being rendered.
+        $query_options['call'] = 'url[' . $image_location_identifier . ']';
+      }
+    }
+    else {
+      $query_options = [
+        'set' => implode(',', $set),
+        'call' => 'url[' . $image_location_identifier . ']',
+      ];
+    }
+
+    return $query_options;
   }
 
   /**
