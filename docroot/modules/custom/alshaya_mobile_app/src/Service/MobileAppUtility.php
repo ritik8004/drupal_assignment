@@ -446,6 +446,21 @@ class MobileAppUtility {
             ],
           ];
           break;
+
+        case 'product_carousel_category':
+          $items = [
+            'callback' => 'getProductCarouselCategory',
+            'fields' => [
+              'field_category_carousel_title' => ['label' => 'title'],
+              'field_category_carousel_limit' => ['label' => 'limit'],
+              'field_use_as_accordion' => ['label' => 'accordion', 'type' => 'boolean'],
+              'field_view_all_text' => ['label' => 'view_all'],
+              'field_category_carousel' => [
+                'label' => '',
+              ],
+            ],
+          ];
+          break;
       }
     }
     return $items;
@@ -688,6 +703,74 @@ class MobileAppUtility {
         $data[$field_info['label']] = $entity->get($field)->getString();
       }
     }
+    return $data;
+  }
+
+  /**
+   * Prepare paragraph data based on given fields for given entity.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  protected function getProductCarouselCategory(ParagraphInterface $entity, array $fields) {
+    unset($fields['field_category_carousel']);
+    $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
+    // Fetch values from the paragraph.
+    $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
+    if ($data['accordion']) {
+      if (empty($data['title'])) {
+        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+        $data['title'] = $term->label();
+      }
+      $data['items'] = alshaya_acm_product_category_child_terms($category_id);
+    }
+    else {
+      // Prepare argument for the views.
+      $terms = _alshaya_master_get_recursive_child_terms($category_id);
+      $arguments = ['tid' => implode('+', $terms)];
+      $products = [];
+
+      // Get views result.
+      $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+
+      // If there are results.
+      if (!empty($results)) {
+        // Prepare argument for the views.
+        $product_in_carousel = $entity->get('field_category_carousel_limit')->getString();
+
+        // Slice number of results that we want for the carousel.
+        $results = array_slice($results, 0, $product_in_carousel);
+
+        // The stock mode.
+        // @codingStandardsIgnoreLine
+        $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+
+        foreach ($results as $result) {
+          /* @var \Drupal\node\Entity\Node $node*/
+          $node = $result->_object->getValue();
+          if ($node instanceof NodeInterface) {
+            // For stock push mode.
+            if ($stock_mode === 'push') {
+              // If product in stock for 'push' mode.
+              if (alshaya_acm_get_stock_from_product($node)) {
+                $products[] = $node->id();
+              }
+            }
+            else {
+              $products[] = $node->id();
+            }
+          }
+        }
+
+        $data['items'] = $products;
+      }
+    }
+
     return $data;
   }
 
