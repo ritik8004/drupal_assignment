@@ -494,20 +494,17 @@ class MobileAppUtility {
   }
 
   /**
-   * Get field data of given entity reference revisions field.
-   *
-   * Note: Manual caching of entity requires when this method used, use
-   * 'cache' key to loop through to addCacheableDependency.
+   * Get field data of given field.
    *
    * @param object $entity
    *   The entity object.
    * @param string $field
    *   The field name.
    * @param array $field_info
-   *   (optional) The field information with callback, label etc.
+   *   (optional) The field information with callback, label, type etc.
    *
    * @return array
-   *   Return array with field data and cacheable objects.
+   *   Return array with processed field data.
    */
   public function getFieldData($entity, string $field, array $field_info = []): array {
     $data = call_user_func_array(
