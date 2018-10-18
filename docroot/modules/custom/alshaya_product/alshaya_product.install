@@ -25,9 +25,8 @@ function alshaya_product_update_8020() {
   $index = Index::load('product');
   $index->save();
 
-  // Create facet & add facet block to PLP.
+  // Update promotion facet config to display promotion label.
   alshaya_config_install_configs(['facets.facet.plp_promotions'], 'alshaya_product');
-  alshaya_config_install_configs(['block.block.plppromotions'], 'alshaya_product', 'optional');
 }
 
 /**
