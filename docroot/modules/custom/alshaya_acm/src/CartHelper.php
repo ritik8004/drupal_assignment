@@ -103,25 +103,30 @@ class CartHelper {
   /**
    * Get clean cart to log.
    *
-   * @param \Drupal\acq_cart\Cart|object $cart
+   * @param \Drupal\acq_cart\Cart|object|array $cart
    *   Cart object to clean.
    *
    * @return string
    *   Cleaned cart data as JSON string.
    */
   public function getCleanCartToLog($cart) {
-    $object = $cart instanceof Cart ? $cart->getCart() : $cart;
-    $shipping = $this->getAddressArray($object->shipping);
+    $cartData = $cart instanceof Cart ? $cart->getCart() : $cart;
+
+    if (is_object($cartData)) {
+      $cartData = (array) $cartData;
+    }
+
+    $shipping = $this->getAddressArray($cartData['shipping']);
 
     // Billing is not required for debugging.
-    unset($object->billing);
+    unset($cartData['billing']);
 
     // We will remove all at root level.
     // We will leave fields in extension here.
-    unset($object->shipping);
-    $object->shipping['extension'] = $shipping['extension'];
+    unset($cartData['shipping']);
+    $cartData['shipping']['extension'] = $shipping['extension'];
 
-    return json_encode($object);
+    return json_encode($cartData);
   }
 
 }
