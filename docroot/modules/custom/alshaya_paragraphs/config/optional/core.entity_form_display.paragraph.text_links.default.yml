@@ -41,7 +41,7 @@ content:
         rel: true
         class: true
         accesskey: false
-        data-dialog-options: true
+        data-dialog-type: true
     third_party_settings: {  }
     type: link_attributes
     region: content
