@@ -7,12 +7,11 @@
 
 use Drupal\Core\Site\Settings;
 
-
 /**
-* Implements hook_update_N().
-*
-* Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
-*/
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+ */
 function alshaya_pb_transac_update_8006() {
   _alshaya_master_initialize_amp('alshaya_amp_pottery_barn');
 }
@@ -34,7 +33,7 @@ function alshaya_pb_transac_update_8005() {
  */
 function alshaya_pb_transac_update_8004() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
-    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز/كود منتج...)')
+    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز المنتج)')
     ->save();
 }
 
