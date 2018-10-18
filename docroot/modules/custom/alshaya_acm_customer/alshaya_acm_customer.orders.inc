@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Component\Utility\Unicode;
+use Drupal\node\NodeInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -173,12 +174,10 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
 
   // We will display the name of first order item.
   $item = reset($order['items']);
-  $sku = SKU::loadFromSku($item['sku']);
 
-  if ($sku instanceof SKUInterface) {
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $item['name'] = $productInfoHelper->getTitle($sku, 'basket');
+  $product_node = alshaya_acm_product_get_display_node($item['sku']);
+  if ($product_node instanceof NodeInterface) {
+    $item['name'] = $product_node->getTitle();
   }
 
   $orderRow['name'] = Unicode::truncate($item['name'], 25, FALSE, TRUE);
@@ -452,9 +451,10 @@ function alshaya_acm_customer_build_order_detail(array $order) {
       $products[] = $product;
     }
     else {
-      /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-      $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-      $item['name'] = $productInfoHelper->getTitle($sku, 'basket');
+      $product_node = alshaya_acm_product_get_display_node($sku);
+      if ($product_node instanceof NodeInterface) {
+        $product['name'] = $product_node->getTitle();
+      }
 
       // Check if we can find a parent SKU for this to get proper name.
       if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
