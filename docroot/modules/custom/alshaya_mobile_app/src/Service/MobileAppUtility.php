@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -616,6 +617,32 @@ class MobileAppUtility {
     $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);
 
     return $data;
+  }
+
+  /**
+   * Wrapper function get fully loaded linked skus.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $linked_type
+   *   Linked type.
+   *
+   * @return array
+   *   Linked SKUs.
+   */
+  public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
+    $return = [];
+    $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type);
+
+    foreach ($linkedSkus as $linkedSku) {
+      $linkedSkuEntity = SKU::loadFromSku($linkedSku);
+
+      if ($linkedSkuEntity instanceof SKUInterface) {
+        $return[] = $this->getLightProduct($linkedSkuEntity);
+      }
+    }
+
+    return $return;
   }
 
 }
