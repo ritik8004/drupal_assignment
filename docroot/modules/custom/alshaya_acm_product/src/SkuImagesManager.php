@@ -57,6 +57,13 @@ class SkuImagesManager {
   protected $cache;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler

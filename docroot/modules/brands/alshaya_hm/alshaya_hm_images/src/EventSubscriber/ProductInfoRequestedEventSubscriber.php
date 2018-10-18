@@ -95,7 +95,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         );
 
         foreach ($pdp_images ?? [] as $image) {
-          $url = $image['url_without_call']->toString();
+          $url = $image['raw_url']->toString();
           $media[$url] = [
             'url' => $url,
             'image_type' => $image['sortAssetType'],
@@ -116,7 +116,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
 
         if ($plp_main_image) {
-          $url = $plp_main_image['url_without_call']->toString();
+          $url = $plp_main_image['raw_url']->toString();
           $media[$url] = [
             'url' => $url,
             'image_type' => $plp_main_image['sortAssetType'],
@@ -125,7 +125,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
           $styled_images[] = $plp_main_image['url']->toString();
 
           if ($plp_hover_image) {
-            $url = $plp_hover_image['url_without_call']->toString();
+            $url = $plp_hover_image['raw_url']->toString();
             $media[$url] = [
               'url' => $url,
               'image_type' => $plp_hover_image['sortAssetType'],
@@ -145,7 +145,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
         if (!empty($teaser_assets)) {
           $image = reset($teaser_assets);
-          $url = $image['url_without_call']->toString();
+          $url = $image['raw_url']->toString();
           $media[$url] = [
             'url' => $url,
             'image_type' => $image['sortAssetType'],
@@ -188,7 +188,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     // If swatch type is not miniature_image or assets were missing from
     // sku, use rgb color code instead.
     $swatch = [
-      'display_value' => empty($assets) ? $sku->get('attr_rgb_color')->getString() : $assets[0]['url']->toString(),
+      'display_value' => empty($assets) ? $sku->get('attr_rgb_color')->getString() : $assets[0]['raw_url']->toString(),
       'display_label' => $sku->get('attr_color_label')->getString(),
       'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
     ];
