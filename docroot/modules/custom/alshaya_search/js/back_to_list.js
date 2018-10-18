@@ -65,6 +65,27 @@
     return elementTop >= viewportTop && elementBottom <= viewportBottom;
   }
 
+  // For RTL, we have some code to mess with page scroll.
+  // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
+  $(window).on('pageshow', function () {
+    setTimeout('Drupal.processBackToList()', 10);
+  });
+
+  Drupal.processBackToList = function () {
+    // On page load, apply filter/sort if any.
+    $('html').once('back-to-list').each(function () {
+      var storage_value = getStorageValues();
+      if (typeof storage_value !== 'undefined' && storage_value !== null) {
+        if (typeof storage_value.nid !== 'undefined') {
+          // Set timeout because of conflict.
+          setTimeout(function () {
+            scrollToProduct();
+          }, 1);
+        }
+      }
+    });
+  };
+
   Drupal.behaviors.backToList = {
     attach: function (context, settings) {
       // On product click, store the product position.
@@ -77,20 +98,7 @@
         // As local storage only supports string key/value pair.
         localStorage.setItem(window.location.href, JSON.stringify(storage_details));
       });
-
-      // On page load, apply filter/sort if any.
-      $('html').once('back-to-list').each(function () {
-        var storage_value = getStorageValues();
-        if (typeof storage_value !== 'undefined' && storage_value !== null) {
-          if (typeof storage_value.nid !== 'undefined') {
-            // Set timeout because of conflict.
-            setTimeout(function () {
-              scrollToProduct();
-            }, 1);
-          }
-        }
-      });
     }
-  }
+  };
 
 }(jQuery));

@@ -158,23 +158,20 @@
             });
           }
 
-          if ($(mobileFilterBarSelector).length) {
-            placeFilterCount();
-
-            var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
-            if (countFilters > 0) {
-              $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').addClass('active-filter-count').html(Drupal.t('Filter') + ' <span class="filter-count"> ' + countFilters + '</span>');
-            }
-          }
-          else {
+          if ($(mobileFilterBarSelector).length === 0) {
             // Clone the filter block from region content.
             var blockFilterBar = $(filterBarSelector).clone();
 
             // Place the cloned bar before other facets in the region content's sidebar first.
             $(blockFilterBar)
               .insertBefore('.region__content .c-facet__blocks .region__sidebar-first > div:first-child');
+          }
 
-            placeFilterCount();
+          placeFilterCount();
+
+          var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
+          if (countFilters > 0) {
+            $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').addClass('active-filter-count').html(Drupal.t('Filter') + ' <span class="filter-count"> ' + countFilters + '</span>');
           }
 
           // Hide the filter block in mobile.
@@ -187,8 +184,7 @@
       }
 
       /**
-       * Place the search count from view header in different locations based
-       * on resolution.
+       * Place the search count from view header in different locations based on resolution.
        */
       function placeSearchCount() {
         var viewHeader = null;

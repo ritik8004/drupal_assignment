@@ -1,0 +1,46 @@
+@include breakpoint($desktop) {
+  #product-image-gallery,
+  #lightSlider {
+    .slick-slide {
+      width: 6.5rem !important;
+      height: 7.75rem !important;
+    }
+  }
+
+  .cloudzoom {
+    .cloudzoom__thumbnails {
+      width: 6.5rem;
+      margin-#{$right}: 0;
+    }
+  }
+
+  .content__main {
+    .gallery-wrapper {
+      margin-#{$right}: 1.5rem;
+      margin-bottom: 3rem;
+    }
+  }
+}
+
+#lightSlider {
+  &.pager-no {
+    @include breakpoint($only-tablet) {
+      padding-#{$left}: 2em;
+      padding-#{$right}: 2rem;
+    }
+  }
+
+  .cloudzoom__thumbnails__video {
+    position: relative;
+
+    &::before {
+      #{$left}: 0;
+    }
+  }
+}
+
+.yt-vi-container {
+  &.cloudzoom__video_main {
+    margin: auto;
+  }
+}

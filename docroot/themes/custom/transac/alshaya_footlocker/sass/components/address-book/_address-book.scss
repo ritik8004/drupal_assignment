@@ -1,0 +1,12 @@
+.address-book-address .form-type-select {
+  select.select2-select.form-select,
+  .select2-selection {
+    border-color: $secondary_border;
+
+    &__rendered {
+      .select2-selection__placeholder {
+        color: $formitem_label;
+      }
+    }
+  }
+}

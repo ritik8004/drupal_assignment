@@ -284,7 +284,7 @@ class ProductSyncResource extends ResourceBase {
         }
         else {
           if ($product['status'] != 1) {
-            $ignored_skus['disabled'][] = $product['sku'] . '(disabled)';
+            $ignored_skus[] = $product['sku'] . '(disabled)';
             $ignored++;
 
             // Release the lock.
@@ -423,6 +423,12 @@ class ProductSyncResource extends ResourceBase {
         }
       }
       catch (\Exception $e) {
+        // We consider this as failure as it failed for an unknown reason.
+        // (not taken care of above).
+        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
+        $failed++;
+      }
+      catch (\Throwable $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
         $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';

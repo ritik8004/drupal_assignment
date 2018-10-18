@@ -167,12 +167,6 @@
     }
   }
 
-  @include breakpoint($desktop) {
-    .block-system-main-block {
-      margin-left: 0.5rem;
-    }
-  }
-
   .user-login-form {
     @include breakpoint($tablet) {
       position: relative;
@@ -321,7 +315,7 @@
     }
 
     @include breakpoint($desktop) {
-      padding: 1em 0.5rem;
+      padding: 1rem 0;
     }
   }
 
@@ -577,10 +571,6 @@
       margin-top: 2.7rem;
     }
 
-    .password--message {
-      max-width: 14.0625rem;
-    }
-
     .form-wrapper {
       margin-top: 1.7rem;
     }
@@ -715,12 +705,6 @@ main .user-register-form {
           margin-top: 0.5rem;
         }
       }
-    }
-  }
-
-  input {
-    html[lang=ar] & {
-      font-family: $arial-nodir;
     }
   }
 }

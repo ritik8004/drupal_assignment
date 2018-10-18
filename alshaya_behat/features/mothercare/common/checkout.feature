@@ -7,6 +7,7 @@ Feature: Test Checkout feature
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
+    And I wait 5 seconds
     And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
@@ -199,13 +200,14 @@ Feature: Test Checkout feature
     on Click and Collect
     When I follow "click & collect"
     And I wait for the page to load
+    And I wait 2 seconds
     Then I should see the link "List view"
     And I should see the link "Map view"
     But the "List view" tab should be selected
 
   @cc
   Scenario: As a Guest
-    I should be able to see various options
+    I should be able to see various options`
     for each Store on click & collect
     When I follow "click & collect"
     And I select the first autocomplete option for "Shuwaikh " on the "edit-store-location" field
@@ -366,7 +368,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     And I select "Knet Test Card [KNET1]" from dropdown ".paymentselect"
     And I fill in an element having class ".paymentinput" with "00000011"
-    And I fill in "cardN" with "000000011"
+   # And I fill in "card" with "000000011"
     And I select "1" from "Ecom_Payment_Card_ExpDate_Month"
     And I select "2020" from "Ecom_Payment_Card_ExpDate_Year"
     And I fill in "Ecom_Payment_Pin_id" with "1234"

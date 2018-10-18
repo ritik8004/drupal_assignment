@@ -27,7 +27,14 @@
       var $listItems = $('.menu__list-item');
       $listItems.each(function () {
         var linkWrapper = $(this).find('> .menu__link-wrapper');
-        var submenu = $(this).find('> .menu__list .menu--two__list-item');
+        var submenu;
+
+        if ($(window).width() <= 1024) {
+          submenu = $(this).find('> .menu__list .menu--three__list-item');
+        }
+        else {
+          submenu = $(this).find('> .menu__list .menu--two__list-item');
+        }
 
         if (submenu.length > 0) {
           $(this).addClass('has-child');
@@ -36,12 +43,12 @@
         }
       });
 
-      var $menuIn = $('.has-child .menu__link-wrapper', context);
+      var $menuIn = $('.has-child:not(".max-depth") .menu__link-wrapper', context);
       $menuIn.on('click', function () {
         $(this).next('.menu__in').next().toggleClass('menu__list--active');
       });
 
-      var $menuInFirst = $('.has-child > .menu__link-wrapper');
+      var $menuInFirst = $('.has-child:not(".max-depth") > .menu__link-wrapper');
       $menuInFirst.on('click', function () {
         $('.menu--one__list-item.has-child').addClass('not-active');
         $(this).parent().removeClass('not-active').addClass('active-menu');

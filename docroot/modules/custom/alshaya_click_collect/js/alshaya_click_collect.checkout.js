@@ -44,7 +44,7 @@
       }
 
       // Prevent submission of forms when pressing Enter key in a text input.
-      $('#store-finder-wrapper', context).once('prevent-enter').on('keypress', '.store-location-input', function (e) {
+      $('#store-finder-wrapper', context).once('trigger-enter').on('keypress', '.store-location-input', function (e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
           e.preventDefault();
@@ -85,7 +85,9 @@
       $('#store-finder-wrapper').once('initiate-stores').each(function () {
         $('input[data-drupal-selector="edit-actions-ccnext"]').hide();
         $('[data-drupal-selector="edit-actions-next"]').hide();
-        Drupal.checkoutClickCollect.storeListAll(ascoords);
+        if (typeof ascoords !== 'undefined' && !$.isEmptyObject(coords)) {
+          Drupal.checkoutClickCollect.storeListAll(ascoords);
+        }
       });
 
       // Toggle between store list view and map view.
@@ -200,7 +202,7 @@
       });
 
       // Load the store list if geoperm is true.
-      if (geoPerm && typeof ascoords !== 'undefined') {
+      if (geoPerm && typeof ascoords !== 'undefined' && !$.isEmptyObject(ascoords)) {
         Drupal.checkoutClickCollect.storeListAll(ascoords);
       }
 
@@ -227,7 +229,9 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
-    Drupal.checkoutClickCollect.storeListAll(ascoords);
+    if (typeof ascoords !== 'undefined' && !$.isEmptyObject(ascoords)) {
+      Drupal.checkoutClickCollect.storeListAll(ascoords);
+    }
   };
 
   // Error callback.

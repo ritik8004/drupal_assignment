@@ -1,0 +1,97 @@
+// Title wrapper
+.content {
+  &__title_wrapper {
+    h1 {
+      font-size: 1rem;
+      font-weight: normal;
+      margin-bottom: 0.625rem;
+    }
+
+    .price {
+      margin-bottom: 0.5rem;
+    }
+
+    .price-type__wrapper > .price {
+      margin-#{$right}: 0.1875rem;
+    }
+
+    .price--discount {
+      font-size: 1rem;
+      margin-top: 0;
+    }
+  }
+}
+
+.short-description-wrapper,
+.delivery-options-wrapper {
+  .field {
+    &__label {
+      font-size: 0.875rem;
+      font-weight: normal;
+    }
+
+    &__content {
+      font-size: 0.75rem;
+    }
+  }
+
+  .c-accordion__title {
+    text-transform: none;
+    line-height: 1.8;
+
+    .subtitle {
+      font-size: 0.75rem;
+      padding-bottom: 0.1875rem;
+    }
+  }
+
+  .read-more-description-link,
+  .read-more-description-link-gift {
+    font-weight: normal;
+  }
+}
+
+.delivery-options-wrapper {
+  .field {
+    &__label {
+      border-top: 1px solid $secondary_border;
+      padding-top: 0.9375rem;
+      margin-top: 0;
+    }
+  }
+}
+
+.field--name {
+  &-field-skus {
+    .sku-base-form {
+      button[type="submit"] {
+        @extend %button-wide;
+
+        background: $secondary_btn_bg;
+        float: $right;
+        width: 70%;
+        margin-#{$left}: 1.25rem;
+
+        @include breakpoint ($only-tablet) {
+          width: 64%;
+        }
+      }
+    }
+
+    .form-item-quantity {
+      label {
+        .basic-details-wrapper & {
+          color: $primary_input_label;
+        }
+      }
+    }
+  }
+}
+
+.click-collect-top-stores {
+  ul {
+    li {
+      border-color: $secondary_border;
+    }
+  }
+}

@@ -884,20 +884,27 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   }
 
   if (empty($name)) {
-    $name = [
-      '#title' => $sku_entity->get('name')->getString(),
-      '#type' => 'link',
-      '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
-        [
-          'acq_sku' => $sku_entity->id(),
-          'js' => 'nojs',
-        ]),
-      '#attributes' => [
-        'class' => ["use-ajax above-mobile-block"],
-        'data-dialog-type' => "modal",
-        'data-dialog-options' => '{"width":"auto"}',
-      ],
-    ];
+    if ($is_free_sku_item) {
+      $name = [
+        '#title' => $sku_entity->get('name')->getString(),
+        '#type' => 'link',
+        '#url' => Url::fromRoute('alshaya_acm_product.sku_modal',
+          [
+            'acq_sku' => $sku_entity->id(),
+            'js' => 'nojs',
+          ]),
+        '#attributes' => [
+          'class' => ["use-ajax above-mobile-block"],
+          'data-dialog-type' => "modal",
+          'data-dialog-options' => '{"width":"auto"}',
+        ],
+      ];
+    }
+    else {
+      $name = [
+        '#markup' => $sku_entity->get('name')->getString(),
+      ];
+    }
   }
 
   return [
@@ -910,7 +917,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     '#total_price' => $total_price,
     '#item_code' => $sku_entity->getSku(),
     '#free_gift_label' => !empty($free_gift_label) ? $free_gift_label : '',
-    '#is_free_gift_item' => $is_free_item,
+    '#is_free_gift_item' => $is_free_sku_item,
   ];
 }
 

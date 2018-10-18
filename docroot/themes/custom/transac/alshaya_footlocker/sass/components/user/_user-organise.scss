@@ -8,5 +8,15 @@
         width: 55%;
       }
     }
+
+    @include breakpoint($desktop) {
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    @include breakpoint($tablet) {
+      margin-top: 0;
+      padding-top: 0;
+    }
   }
 }

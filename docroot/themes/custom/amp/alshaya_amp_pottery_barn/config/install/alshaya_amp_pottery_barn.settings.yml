@@ -1,0 +1,6 @@
+logo:
+  path: 'themes/custom/transac/alshaya_pottery_barn/site-logo.svg'
+  use_default: false
+favicon:
+  path: 'themes/custom/transac/alshaya_pottery_barn/favicon.ico'
+  use_default: false
