@@ -586,7 +586,6 @@ class MobileAppUtility {
           }
         }
       }
-      // $data = $this->collectParagraphResults($entity);
       $field_output = !isset($field_output) ? $data : array_merge($field_output, $data);
     }
     return $field_output;
