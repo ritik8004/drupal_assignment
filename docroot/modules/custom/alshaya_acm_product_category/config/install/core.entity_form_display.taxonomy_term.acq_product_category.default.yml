@@ -16,7 +16,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
     - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
     - field.field.taxonomy_term.acq_product_category.field_plp_menu
-    - field.field.taxonomy_term.acq_product_category.field_plp_style
+    - field.field.taxonomy_term.acq_product_category.field_plp_layout
     - field.field.taxonomy_term.acq_product_category.field_plp_upload_video
     - field.field.taxonomy_term.acq_product_category.field_plp_video_links
     - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
@@ -78,7 +78,7 @@ third_party_settings:
         - name
         - langcode
         - field_commerce_status
-        - field_plp_style
+        - field_plp_layout
         - description
         - field_pdp_image_slider_position
         - path
@@ -405,7 +405,7 @@ content:
       default_paragraph_type: ''
     third_party_settings: {  }
     region: content
-  field_plp_style:
+  field_plp_layout:
     weight: 4
     settings: {  }
     third_party_settings: {  }

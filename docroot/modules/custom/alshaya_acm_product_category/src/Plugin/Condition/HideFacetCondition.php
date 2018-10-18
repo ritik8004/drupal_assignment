@@ -8,11 +8,11 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides the 'Hide facet condition' condition.
+ * Provides the 'Hide facet on Moschino condition' condition.
  *
  * @Condition(
- *   id = "hide_facet_condition",
- *   label = @Translation("Hide facet condition"),
+ *   id = "hide_facet_condition_moschino",
+ *   label = @Translation("Hide facet on Moschino condition"),
  *   context = {
  *     "taxonomy_term" = @ContextDefinition(
  *        "entity:taxonomy_term",
@@ -40,7 +40,7 @@ class HideFacetCondition extends ConditionPluginBase implements ContainerFactory
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['hideFacet'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t("Apply 'hide facet condition' condition on this block"),
+      '#title' => $this->t("Apply 'hide facet on moschino condition' condition on this block"),
       '#default_value' => $this->configuration['hideFacet'],
       '#description' => $this->t('If selected, this block will not be displayed on moschino plp pages.'),
     ];
@@ -84,7 +84,7 @@ class HideFacetCondition extends ConditionPluginBase implements ContainerFactory
     }
 
     $term = $this->getContextValue('taxonomy_term');
-    if ($term->hasField('field_plp_style') && $term->get('field_plp_style')->value == 'moschino') {
+    if ($term->hasField('field_plp_layout') && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_STYLE_MOSCHINO) {
       return FALSE;
     }
     return TRUE;

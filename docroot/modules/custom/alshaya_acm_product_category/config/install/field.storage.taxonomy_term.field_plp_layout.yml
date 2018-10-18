@@ -4,8 +4,8 @@ dependencies:
   module:
     - options
     - taxonomy
-id: taxonomy_term.field_plp_style
-field_name: field_plp_style
+id: taxonomy_term.field_plp_layout
+field_name: field_plp_layout
 entity_type: taxonomy_term
 type: list_string
 settings:

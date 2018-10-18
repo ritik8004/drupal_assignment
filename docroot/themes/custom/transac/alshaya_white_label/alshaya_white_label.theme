@@ -73,8 +73,8 @@ function alshaya_white_label_preprocess_html(&$variables) {
     $term = $current_route->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['attributes']['class'][] = 'plp-page-only';
-      if ($term->get('field_plp_style')->value == 'moschino') {
-        $variables['attributes']['class'][] = 'moschino-plp-layout';
+      if (!empty($term->get('field_plp_layout')->value)) {
+        $variables['attributes']['class'][] = $term->get('field_plp_layout')->value . '-plp-layout';
       }
     }
   }
@@ -138,7 +138,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
 
-      $plp_type = $term->get('field_plp_style')->value;
+      $plp_type = $term->get('field_plp_layout')->value;
       if ($plp_type == 'moschino') {
         $variables['moschino'] = 1;
         // Load common library for moschino.
@@ -148,22 +148,27 @@ function alshaya_white_label_preprocess_page(&$variables) {
         $variables['plp_icon'] = _alshaya_white_label_get_image_url($term->get('field_plp_menu_icon'));
 
         // Videos on moschino PLP page.
-        $field_name = 'field_plp_video_links';
-        if (!empty($term->get($field_name)->first())) {
+        if (!empty($term->get('field_plp_video_links')->first())) {
           $variables['show_videos'] = 1;
           $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-video-provider';
 
-          $video_list = $term->get($field_name);
-          foreach ($video_list as $key => $embedded_video) {
+          $video_list = $term->get('field_plp_video_links');
+          foreach ($video_list as $embedded_video) {
             $url = $embedded_video->uri;
             $provider = $embedded_video->title;
             if ($provider == 'custom') {
-              $variables['data_setup'][$key]['video_source']['value'] = $url;
-              $variables['data_setup'][$key]['video_source']['type'] = "video/mp4";
+              $variables['videos'][] = [
+                'video_source' => [
+                  'value' => $url,
+                  'type' => 'video/mp4',
+                ],
+              ];
             }
             else {
-              $variables['data_setup'][$key]['src'] = $url;
-              $variables['data_setup'][$key]['provider'] = $provider;
+              $variables['videos'][] = [
+                'src' => $url,
+                'provider' => $provider,
+              ];
             }
           }
         }
