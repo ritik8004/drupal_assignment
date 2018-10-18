@@ -295,13 +295,15 @@ class MobileAppUtility {
    *   The entity object.
    * @param string $field_name
    *   The field name from which it needs to create images array.
-   * @param array $field_info
-   *   (optional) The field information with callback, label etc.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
    *
    * @return array
    *   The array containing information of images.
    */
-  public function getImages($entity, $field_name, array $field_info = []) {
+  public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
     $images = [];
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
@@ -461,7 +463,10 @@ class MobileAppUtility {
   public function getEntityBundleProcessedData($entity) {
     $data = FALSE;
     if (($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle())) && !empty($bundle_info)) {
-      $data = call_user_func_array([$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'prepareParagraphData'], [$entity, $bundle_info['fields']]);
+      $data = call_user_func_array(
+        [$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'prepareParagraphData'],
+        [$entity, $bundle_info['fields']]
+      );
     }
     return $data;
   }
@@ -500,21 +505,26 @@ class MobileAppUtility {
    *   The entity object.
    * @param string $field
    *   The field name.
-   * @param array $field_info
-   *   (optional) The field information with callback, label, type etc.
+   * @param string $callback
+   *   (optional) Callback function, which processes the field data.
+   * @param string $label
+   *   (optional) The label of the field requires in response.
+   * @param string $type
+   *   (optional) The type of the field to return with response and optionally
+   *   process data according to given type.
    *
    * @return array
    *   Return array with processed field data.
    */
-  public function getFieldData($entity, string $field, array $field_info = []): array {
-    if (empty($field_info['callback'])) {
-      unset($field_info['callback']);
-      $data = array_merge($field_info, ['item' => $entity->get($field)->getString()]);
+  public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL): array {
+    if (empty($callback)) {
+      unset($callback);
+      $data = array_merge(['type' => $type], ['item' => $entity->get($field)->getString()]);
     }
     else {
       $data = call_user_func_array(
-        [$this, $field_info['callback']],
-        [$entity, $field, $field_info]
+        [$this, $callback],
+        [$entity, $field, $label, $type]
       );
     }
     return $data;
@@ -527,16 +537,18 @@ class MobileAppUtility {
    *   The entity object.
    * @param string $field
    *   The field name.
-   * @param array $field_info
-   *   The array of field info with callbacks and type.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
    *
    * @return array
    *   Return array of data.
    */
-  protected function getStraightParagraph($entity, string $field, array $field_info): array {
+  protected function getStraightParagraph($entity, string $field, $label = NULL, $type = NULL): array {
     // Get normalized Paragraph entity of given field.
     $items = $this->getNormalizedData($entity, $field);
-    $field_output = ['type' => $field_info['type'], 'items' => []];
+    $field_output = ['type' => $type, 'items' => []];
     foreach ($items as $item) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
       $this->cachedEntities[] = $entity;
@@ -556,13 +568,15 @@ class MobileAppUtility {
    *   The entity object.
    * @param string $field
    *   The field name.
-   * @param array $field_info
-   *   The array of field info with callbacks and type.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
    *
    * @return array
    *   Return array of data.
    */
-  protected function getRecursiveParagraphDataFromItems($entity, string $field, array $field_info = []) {
+  protected function getRecursiveParagraphDataFromItems($entity, string $field, $label = NULL, $type = NULL) {
     // Get normalized Paragraph entity of given field.
     $items = $this->getNormalizedData($entity, $field);
     $field_output = [];
@@ -652,8 +666,14 @@ class MobileAppUtility {
       if (!empty($field_info['callback'])) {
         $result = call_user_func_array(
           [$this, $field_info['callback']],
-          [$entity, $field, $field_info]
+          [
+            $entity,
+            $field,
+            !empty($field_info['label']) ? $field_info['label'] : NULL,
+            !empty($field_info['type']) ? $field_info['type'] : NULL,
+          ]
         );
+
         if ($field_info['callback'] == 'getFieldLink') {
           $data = array_merge($data, $result);
         }
@@ -678,19 +698,21 @@ class MobileAppUtility {
    *   The entity object.
    * @param string $field
    *   The link field name.
-   * @param array $field_info
-   *   Array with label to return with output.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
    *
    * @return array
    *   Return the associative array with url and deeplink.
    */
-  protected function getFieldLink($entity, string $field, array $field_info) {
+  protected function getFieldLink($entity, string $field, $label = 'url', $type = NULL) {
     // Convert field link value.
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
 
     return [
-      $field_info['label'] => $url_string->getGeneratedUrl(),
+      $label => $url_string->getGeneratedUrl(),
       'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
   }
