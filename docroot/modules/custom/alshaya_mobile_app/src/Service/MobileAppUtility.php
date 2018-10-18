@@ -383,7 +383,7 @@ class MobileAppUtility {
             'fields' => [
               'field_banner' => ['type' => 'banner', 'callback' => 'getStraightParagraph'],
               'field_slider' => ['type' => 'slider', 'callback' => 'getStraightParagraph'],
-              'body' => ['type' => 'body', 'callback' => 'getFieldString'],
+              'body' => ['type' => 'body'],
               'field_delivery_banner' => ['type' => 'delivery_banner', 'callback' => 'getStraightParagraph'],
               'field_promo_blocks' => ['callback' => 'getRecursiveParagraphDataFromItems'],
             ],
@@ -507,13 +507,15 @@ class MobileAppUtility {
    *   Return array with processed field data.
    */
   public function getFieldData($entity, string $field, array $field_info = []): array {
-    $data = call_user_func_array(
-      [$this, $field_info['callback']],
-      [$entity, $field, $field_info]
-    );
-    if ($field_info['callback'] == 'getFieldString') {
+    if (empty($field_info['callback'])) {
       unset($field_info['callback']);
-      return array_merge($field_info, ['item' => $entity->get($field)->getString()]);
+      $data = array_merge($field_info, ['item' => $entity->get($field)->getString()]);
+    }
+    else {
+      $data = call_user_func_array(
+        [$this, $field_info['callback']],
+        [$entity, $field, $field_info]
+      );
     }
     return $data;
   }
