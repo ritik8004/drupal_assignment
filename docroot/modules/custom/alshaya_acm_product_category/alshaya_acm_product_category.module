@@ -155,9 +155,10 @@ function alshaya_acm_product_category_field_widget_link_default_form_alter(&$ele
     // Convert provider to select field.
     $element['title']['#type'] = 'select';
     $element['title']['#options'] = [
-      'none' => '',
+      '_none' => '- None -',
       'youtube' => 'youtube',
       'vimeo' => 'vimeo',
+      'custom' => 'custom',
     ];
 
   }
