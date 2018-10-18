@@ -683,7 +683,7 @@ class MobileAppUtility {
    * @return array
    *   Return the associative array with url and deeplink.
    */
-  public function getFieldLink($entity, string $field, array $field_info) {
+  protected function getFieldLink($entity, string $field, array $field_info) {
     // Convert field link value.
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
