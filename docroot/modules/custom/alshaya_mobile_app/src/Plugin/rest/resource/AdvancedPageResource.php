@@ -163,25 +163,14 @@ class AdvancedPageResource extends ResourceBase {
       'body' => $node->get('body')->getString(),
     ];
 
-    $fields = [
-      'field_promo_blocks',
-      'field_delivery_banner',
-      'field_promo_banner_full_width',
-      'field_related_info',
-      'field_slider',
-    ];
-
-    $cache_objects = [];
-    foreach ($fields as $field) {
-      $field_data = $this->mobileAppUtility->getFieldData($node, $field);
-      $response_data[$field] = $field_data['blocks'];
-      $cache_objects = array_merge($field_data['cache'], $cache_objects);
+    foreach ($this->mobileAppUtility->getFieldsForEntityBundle('node', self::NODE_TYPE) as $field) {
+      $response_data[$field] = $this->mobileAppUtility->getFieldData($node, $field);
     }
 
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
     $response->addCacheableDependency($node_url);
-    foreach ($cache_objects as $cache) {
+    foreach ($this->mobileAppUtility->getCachedEntities() as $cache) {
       $response->addCacheableDependency($cache);
     }
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([

@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Utilty Class.
@@ -96,6 +97,13 @@ class MobileAppUtility {
    * @var \Drupal\Core\Render\RendererInterface
    */
   protected $renderer;
+
+  /**
+   * The array of objects to cache.
+   *
+   * @var array
+   */
+  protected $cachedEntities = [];
 
   /**
    * Module handler.
@@ -313,6 +321,144 @@ class MobileAppUtility {
   }
 
   /**
+   * Return array of cached entities.
+   *
+   * @return array
+   *   Return array of cached entities.
+   */
+  public function getCachedEntities() {
+    return $this->cachedEntities;
+  }
+
+  /**
+   * Get fields required for given entity bundle.
+   *
+   * @param string $entity_type
+   *   The entity type.
+   * @param string $bundle
+   *   The bundle of entity.
+   *
+   * @return array
+   *   Return array of just fields or contains associative array with (label,
+   *   type, callback).
+   *   - label: Field label to return output with.
+   *   - type: Return output of a field with type and items.
+   *      i.e. {"type": "banner", "items": []}
+   *   - callback: Callback method to process field to get desired output.
+   *
+   *   Examples:
+   *
+   *   An array with just fields.
+   *
+   * @code
+   *   return [
+   *     'field_promo_blocks',
+   *     'field_delivery_banner',
+   *     'field_promo_banner_full_width',
+   *     'field_related_info',
+   *     'field_slider',
+   *   ];
+   *
+   * Array with label, type and callback.
+   *   return [
+   *     'field_title' => ['label' => 'title'],
+   *     'field_sub_title' => ['label' => 'subtitle'],
+   *     'field_link' => ['label' => 'url', 'type' => 'url'],
+   *     'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'paragraph'],
+   *   ];
+   * @endcode
+   */
+  public static function getFieldsForEntityBundle(string $entity_type, string $bundle): array {
+    $fields = [];
+    if ($entity_type == 'node') {
+      switch ($bundle) {
+        case 'advanced_page':
+          $fields = [
+            'field_promo_blocks',
+            'field_delivery_banner',
+            'field_promo_banner_full_width',
+            'field_related_info',
+            'field_slider',
+          ];
+          break;
+      }
+    }
+    elseif ($entity_type == 'paragraph') {
+      switch ($bundle) {
+        case '1_row_3_col_delivery_banner':
+          $fields = [
+            'field_title' => ['label' => 'title'],
+            'field_sub_title' => ['label' => 'subtitle'],
+            'field_link' => ['label' => 'url', 'type' => 'url'],
+          ];
+          break;
+
+        case 'banner':
+          $fields = [
+            'field_mobile_banner_image' => ['label' => 'image'],
+            'field_link' => ['label' => 'url', 'type' => 'url'],
+            'field_promo_block_button' => ['label' => 'buttons', 'type' => 'paragraph'],
+            'field_video' => ['label' => 'video'],
+          ];
+          break;
+
+        case 'banner_full_width':
+          $fields = [
+            'field_banner' => ['label' => 'image'],
+          ];
+          break;
+
+        case 'promo_block':
+          $fields = [
+            'field_promotion_image_mobile' => ['label' => 'image'],
+            'field_link' => ['label' => 'url', 'type' => 'url'],
+            'field_promo_block_button' => ['label' => 'buttons', 'type' => 'paragraph'],
+            'field_margin_mobile' => ['label' => 'margin'],
+          ];
+          break;
+
+        case 'promo_block_button':
+          $fields = [
+            'field_button_position' => ['label' => 'position'],
+            'field_button_link' => ['label' => 'url', 'type' => 'url'],
+            'field_promo_text_1' => ['label' => 'text_1'],
+            'field_promo_text_2' => ['label' => 'text_2'],
+            'field_promo_theme' => ['label' => 'theme'],
+          ];
+          break;
+      }
+    }
+    return $fields;
+  }
+
+  /**
+   * Normalized data for the given entity for given field.
+   *
+   * @param object $entity
+   *   The entity which needs to be normalized.
+   * @param string $field
+   *   (optional) The field of entity which requires to be normalized.
+   *
+   * @return array
+   *   Return the array of containing normalized data.
+   */
+  private function getNormalizedData($entity, $field = "") {
+    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+    // While using normalize, we can't able to catch bubbleable_metadata for
+    // entity's canonical link and some entity don't have canonical link
+    // ie. paragraph. In render method of renderer any early render that
+    // happens throws fatal error. To avoid this fatal error thrown by
+    // \Drupal\Core\Render\Renderer::render(), we have to handle it manually.
+    // that's why Manual caching of Paragraph entity requires when this
+    // method used.
+    // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
+    // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
+    return $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context, $field) {
+      return $this->serializer->normalize(!empty($field) ? $entity->get($field) : $entity, 'json', $context);
+    });
+  }
+
+  /**
    * Associative array containing paragraph type as key and callback function.
    *
    * Callback function is used to collect and order the field's data as we
@@ -321,9 +467,11 @@ class MobileAppUtility {
    * @return array
    *   An associative array of paragraph type and callback function name.
    */
-  public static function getParagraphCallbacks() {
+  public static function getParagraphCallback() {
     return [
       '1_row_3_col_delivery_banner' => 'getDeliveryBanner',
+      'promo_block' => 'getPromoBlock',
+      'promo_block_button' => 'getPromoBlockButton',
     ];
   }
 
@@ -342,41 +490,25 @@ class MobileAppUtility {
    *   Return array with field data and cacheable objects.
    */
   public function getFieldData($entity, string $field): array {
-    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
-    $field_output = [
-      'field_data' => [],
-      'cache' => [],
-    ];
+    // Get normalized Paragraph entity of given field.
+    $items = $this->getNormalizedData($entity, $field);
 
-    // While using normalize, we can't able to catch bubbleable_metadata for
-    // entity's canonical link and some entity don't have canonical link
-    // ie. paragraph. In render method of renderer any early render that
-    // happens throws fatal error. To avoid this fatal error thrown by
-    // \Drupal\Core\Render\Renderer::render(), we have to handle it manually.
-    // that's why Manual caching of Paragraph entity requires when this
-    // method used.
-    // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
-    // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
-    $items = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $field, $context) {
-      return $this->serializer->normalize($entity->get($field), 'json', $context);
-    });
-
-    $field_output = ['cache' => [], 'blocks' => []];
+    $field_output = [];
     foreach ($items as $item) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
-      $field_output['cache'][] = $entity;
+      $this->cachedEntities[] = $entity;
       // Prepare paragraph data based on given paragraph entity type.
-      $data = $this->prepareParagraphData($entity, $field_output);
+      $data = $this->collectParagraphResults($entity);
       // Collect items if the field has no recursive paragraphs.
       if ($field != 'field_promo_blocks') {
-        $field_output['blocks']['type'] = empty($field_output['blocks']['type']) ? $entity->bundle() : $field_output['blocks']['type'];
-        if (!isset($field_output['blocks']['items'])) {
-          $field_output['blocks']['items'] = [];
+        $field_output['type'] = empty($field_output['type']) ? $entity->bundle() : $field_output['type'];
+        if (!isset($field_output['items'])) {
+          $field_output['items'] = [];
         }
-        $field_output['blocks']['items'][] = $data;
+        $field_output['items'][] = $data;
       }
       else {
-        $field_output['blocks'] = !isset($field_output['blocks']) ? $data : array_merge($field_output['blocks'], $data);
+        $field_output = !isset($field_output) ? $data : array_merge($field_output, $data);
       }
     }
 
@@ -388,59 +520,28 @@ class MobileAppUtility {
    *
    * @param object $entity
    *   The paragraph entity object.
-   * @param array $field_output
-   *   The field output array to store cached data.
    *
    * @return array
    *   Return array of data.
    */
-  public function prepareParagraphData($entity, array &$field_output) {
-    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
+  public function collectParagraphResults($entity) {
     // Call a callback function to prepare data if paragraph type is one of the
-    // paragraph types listed in getParagraphCallbacks().
-    if (array_key_exists($entity->bundle(), $this->getParagraphCallbacks())) {
-      return call_user_func_array([$this, $this->getParagraphCallbacks()[$entity->bundle()]], [$entity, $context]);
+    // paragraph types listed in getParagraphCallback().
+    if (($fields = $this->getFieldsForEntityBundle($entity->getEntityTypeId(), $entity->bundle())) && !empty($fields)) {
+      return call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
     }
-    else {
-      // @see self::getFieldData()
-      $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
-        return $this->serializer->normalize($entity, 'json', $context);
-      });
 
-      $data = [];
-      foreach ($entity_normalized as $field_name => $field_values) {
-        if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
-          foreach ($field_values as $field_value) {
-            $data[] = $this->getNormalizedEntityReferenceData($field_value, $context, $field_output);
-          }
+    // Get normalized Paragraph entity.
+    $entity_normalized = $this->getNormalizedData($entity);
+
+    $data = [];
+    foreach ($entity_normalized as $field_name => $field_values) {
+      if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+        foreach ($field_values as $field_value) {
+          $data[] = $this->getRecursiveParagraphData($field_value);
         }
       }
     }
-    return $data;
-  }
-
-  /**
-   * Get '1_row_3_col_delivery_banner' paragraph type's data.
-   *
-   * @param object $entity
-   *   The paragraph entity object.
-   * @param array $context
-   *   Context array to process normalize.
-   *
-   * @return array
-   *   The converted array with necessary fields.
-   */
-  public function getDeliveryBanner($entity, array $context) {
-    // Convert field link value.
-    $url = $entity->get('field_link')->first()->getUrl();
-    $url_string = $url->toString(TRUE);
-
-    $data = [
-      'title' => $entity->get('field_title')->getString(),
-      'subtitle' => $entity->get('field_sub_title')->getString(),
-      'url' => $url_string->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromUrl($url),
-    ];
     return $data;
   }
 
@@ -449,46 +550,97 @@ class MobileAppUtility {
    *
    * @param array $item
    *   Normalize array containing target_id and target_type.
-   * @param array $context
-   *   Context array to process normalize.
-   * @param array $field_output
-   *   The array to collect cacheable objects.
    *
    * @return array
    *   Return data array.
    */
-  private function getNormalizedEntityReferenceData(array $item, array $context, array &$field_output): array {
-    if (!empty($item['target_type'])) {
-      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
-      $field_output['cache'][] = $entity;
-      // @see self::getFieldData()
-      $entity_normalized = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context) {
-        return $this->serializer->normalize($entity, 'json', $context);
-      });
-      $data = [
-        'type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId(),
-      ];
-
-      foreach ($entity_normalized as $field_name => $field_data) {
-        if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
-          $data[$field_name] = [];
-          $row = [];
-          foreach ($field_data as $field_delta => $field_item) {
-            if (!empty($field_item['target_type'])) {
-              $row[$field_delta] = $this->getNormalizedEntityReferenceData($field_item, $context, $field_output);
-            }
-            else {
-              $row[$field_delta] = $field_item;
-            }
-          }
-          $data[$field_name] = $row;
-        }
-      }
-    }
-    else {
+  private function getRecursiveParagraphData(array $item): array {
+    // If current item is not paragraph type return value as a block.
+    if (empty($item['target_type'])) {
       return array_merge(['type' => 'block'], $item);
     }
+
+    // Load the paragraph entity and process it through paragraph callbacks
+    // if exists.
+    $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+    $this->cachedEntities[] = $entity;
+    if (($fields = $this->getFieldsForEntityBundle($entity->getEntityTypeId(), $entity->bundle())) && !empty($fields)) {
+      return array_merge(['type' => $entity->bundle()], call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]));
+    }
+
+    // Collect each field's value, load paragraph content if it contains
+    // another paragraph reference otherwise get the field's value as is.
+    $data = ['type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId()];
+    // Get normalized Paragraph entity.
+    $entity_normalized = $this->getNormalizedData($entity);
+    foreach ($entity_normalized as $field_name => $field_values) {
+      if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+        $row = [];
+        foreach ($field_values as $field_value) {
+          $row[] = empty($field_value['target_type'])
+            ? $field_value
+            : $this->getRecursiveParagraphData($field_value);
+        }
+        $data[$field_name] = $row;
+      }
+    }
     return $data;
+  }
+
+  /**
+   * Prepare paragraph data.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  public function prepareParagraphData(ParagraphInterface $entity, array $fields) {
+    $data = [];
+    foreach ($fields as $field => $field_info) {
+      if (!empty($field_info['type'])) {
+        if ($field_info['type'] == 'url') {
+          $data = array_merge($data, $this->getFieldLink($entity, $field, $field_info['label']));
+        }
+        elseif ($field_info['type'] == 'paragraph') {
+          $items = $this->getNormalizedData($entity, $field);
+          $data[$field_info['label']] = array_map(function ($item) {
+            return $this->getRecursiveParagraphData($item);
+          }, $items);
+        }
+      }
+      else {
+        $data[$field_info['label']] = $entity->get($field)->getString();
+      }
+    }
+    return $data;
+  }
+
+  /**
+   * Get the link parameters for link field type.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The link field name.
+   * @param string $label
+   *   The label to return with output.
+   *
+   * @return array
+   *   Return the associative array with url and deeplink.
+   */
+  public function getFieldLink($entity, string $field, string $label) {
+    // Convert field link value.
+    $url = $entity->get($field)->first()->getUrl();
+    $url_string = $url->toString(TRUE);
+
+    return [
+      $label => $url_string->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromUrl($url),
+    ];
   }
 
   /**
