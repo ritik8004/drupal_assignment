@@ -12,6 +12,34 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Adding new fields for moschino for the product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8020() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'field.storage.taxonomy_term.field_plp_menu',
+    'field.storage.taxonomy_term.field_plp_layout',
+    'field.storage.taxonomy_term.field_plp_menu_icon',
+    'field.field.taxonomy_term.acq_product_category.field_plp_layout',
+    'field.field.taxonomy_term.acq_product_category.field_plp_menu',
+    'field.field.taxonomy_term.acq_product_category.field_plp_menu_icon',
+    'field.storage.taxonomy_term.field_plp_video_links',
+    'field.field.taxonomy_term.acq_product_category.field_plp_video_links',
+    'field.storage.taxonomy_term.field_plp_upload_video',
+    'field.field.taxonomy_term.acq_product_category.field_plp_upload_video',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new pdp image slider position field.
  */
 function alshaya_acm_product_category_update_8019() {

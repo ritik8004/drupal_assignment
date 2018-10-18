@@ -8,6 +8,9 @@
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Implements hook_theme().
@@ -114,4 +117,85 @@ function alshaya_acm_product_category_child_terms($tid) {
     ];
   }
   return $data;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (($form['#id'] === 'views-exposed-form-alshaya-product-list-block-1') ||
+    ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-2')) {
+    // Disable sort options on moschino.
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_STYLE_MOSCHINO) {
+      $form['#access'] = FALSE;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access_alter().
+ */
+function alshaya_acm_product_category_entity_field_access_alter(array &$grants, array $context) {
+  if ($context['field_definition']->getname() === 'field_plp_menu' and $context['field_definition']->getTargetEntityTypeId() === 'taxonomy_term' and $context['operation'] === 'view') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value != ProductCategoryTree::PLP_STYLE_MOSCHINO) {
+      // Do not show this field on pages that are not moschino.
+      $grants[':default'] = AccessResult::forbidden()->inheritCacheability($grants[':default'])->addCacheableDependency($context['items']->getEntity());
+    }
+  }
+}
+
+/**
+ * Implements hook_taxonomy_term_presave().
+ */
+function alshaya_acm_product_category_taxonomy_term_presave($term) {
+  /** @var \Drupal\taxonomy\Entity\Term $entity */
+  if ($term->getVocabularyId() == 'acq_product_category') {
+    $videos = $term->get('field_plp_upload_video');
+    $original_videos = $term->original->get('field_plp_upload_video');
+
+    // If user has made changes to the uploaded video field,
+    // add links to the video links field.
+    if ($original_videos != $videos) {
+      $video_links = $term->get('field_plp_video_links');
+
+      // Remove all custom video links.
+      foreach ($video_links as $key => $video_link) {
+        if ($video_link->title == 'custom') {
+          $video_links->removeItem($key);
+        }
+      }
+
+      // Now add the uploaded videos to video links.
+      foreach ($videos as $video) {
+        $url = file_create_url($video->entity->url());
+        $title = 'custom';
+        $video_links->appendItem(["uri" => $url, "title" => $title]);
+      }
+    }
+
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_acm_product_category_field_widget_link_default_form_alter(&$element, FormStateInterface $form_state, $context) {
+  if (($context['items']->getName() == 'field_plp_video_links')) {
+
+    // Convert provider to select field.
+    $element['title']['#type'] = 'select';
+    $element['title']['#options'] = [
+      'youtube' => 'youtube',
+      'vimeo' => 'vimeo',
+      'custom' => 'custom',
+    ];
+
+    // If provider is custom, make field uneditable.
+    if ($element['title']['#default_value'] == 'custom') {
+      $element['title']['#disabled'] = TRUE;
+      $element['uri']['#disabled'] = TRUE;
+    }
+  }
 }

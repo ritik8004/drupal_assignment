@@ -1,0 +1,163 @@
+.moschino-plp-layout {
+  .c-content__region {
+    position: relative;
+
+    .moschino-layout-submenu-icon {
+      position: absolute;
+      #{$right}: 0;
+      top: -0.5rem;
+      display: inline-flex;
+      align-items: center;
+      z-index: 1;
+      cursor: pointer;
+
+      .plp-icon {
+        display: inline-block;
+        max-width: 5.3125rem;
+        max-height: 3.8125rem;
+      }
+
+      .sub-menu-btn {
+        display: inline-block;
+        background: url(#{$base_theme_img_directory_path}/icons/moschino-sub-menu.svg) no-repeat center center;
+        width: 2.3125rem;
+        height: 2.3125rem;
+        margin-#{$left}: 1.5rem;
+      }
+    }
+
+    .c-accordion__title.ui-state-active {
+      .field--name-field-heading-link {
+        a {
+          opacity: 1;
+        }
+      }
+    }
+
+    .c-accordion__content {
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+
+    .moschino-sub-menu-content {
+      display: none;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: $plp-sub-menu-background-overlay;
+      z-index: 999;
+      padding-#{$left}: 3.0625rem;
+      padding-top: 50%;
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 8.0625rem;
+        padding-top: 10rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 6.0625rem;
+        padding-top: 7rem;
+      }
+
+      .c-accordion,
+      .c-accordion__title {
+        border: none;
+      }
+
+      .c-accordion__title {
+        height: auto;
+        line-height: normal;
+
+        &::after {
+          display: none;
+        }
+      }
+
+      .field--name-field-heading-link {
+        a {
+          font-size: 5.75rem;
+          color: $plp-sub-menu-heading-link;
+          text-decoration: none;
+          cursor: pointer;
+          display: inline-block;
+          transform-origin: right center;
+          transition: opacity 0.3s ease-out;
+          opacity: 0.65;
+          text-transform: uppercase;
+          font-family: $moschino-font;
+
+          @include breakpoint($only-mobile) {
+            font-size: 2.8125rem;
+          }
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+      .field--name-field-sub-link {
+        a {
+          color: $plp-sub-menu-child-link;
+          font-size: 2.125rem;
+          transform-origin: right center;
+          transition: opacity 0.3s ease-out;
+          opacity: 0.65;
+          cursor: pointer;
+          text-transform: uppercase;
+          font-family: $moschino-font;
+
+          @include breakpoint($only-mobile) {
+            font-size: 1.1875rem;
+          }
+
+          &:hover {
+            opacity: 1 !important;
+          }
+        }
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 1.25rem;
+        #{$left}: 1.25rem;
+        cursor: pointer;
+
+        @include icon('close') {
+          font-size: 2.1875rem;
+          background: $plp-sub-menu-cls-btn-bg;
+          border-radius: 50%;
+          color: $plp-sub-menu-cls-btn-txt;
+          padding: 0.3125rem;
+        }
+      }
+    }
+  }
+
+  .region__content {
+    .filter--mobile {
+      .c-facet__blocks__wrapper--mobile {
+        @include breakpoint($only-mobile) {
+          float: none;
+          width: calc(100% - 2.1875rem) !important;
+        }
+
+        @include breakpoint($only-tablet) {
+          #{$right}: 10rem;
+        }
+      }
+    }
+  }
+
+  .moschino-modal-link.use-ajax {
+    + .ajax-progress-throbber {
+      @include fullPageLoader();
+    }
+  }
+}
+
+.plp-video {
+  width: 100% !important;
+}
