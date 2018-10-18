@@ -18,7 +18,7 @@
  * @param array $data
  *   Light product data that needs to be altered.
  *
- * @see \Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute::getLightProduct()
+ * @see \Drupal\alshaya_mobile_app\Service\MobileAppUtility::getLightProduct()
  */
 function hook_alshaya_mobile_app_light_product_data_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$data) {
   $test_data = [];

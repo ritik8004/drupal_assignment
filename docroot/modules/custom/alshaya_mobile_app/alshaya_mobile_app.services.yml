@@ -12,14 +12,15 @@ services:
       - '@alshaya_acm_product.sku_images_manager'
       - '@renderer'
       - '@module_handler'
+      - '@alshaya_acm_product_category.product_category_tree'
   alshaya_mobile_app.alshaya_search_api_query_execute:
     class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
     arguments:
-          - '@request_stack'
-          - '@facets.manager'
-          - '@language_manager'
-          - '@plugin.manager.facets.query_type'
-          - '@alshaya_mobile_app.utility'
-          - '@entity.repository'
-          - '@alshaya_acm_product.skumanager'
-          - '@entity_type.manager'
+      - '@request_stack'
+      - '@facets.manager'
+      - '@language_manager'
+      - '@plugin.manager.facets.query_type'
+      - '@alshaya_mobile_app.utility'
+      - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'

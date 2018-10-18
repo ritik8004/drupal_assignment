@@ -22,6 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 
 /**
  * Utilty Class.
@@ -113,6 +114,13 @@ class MobileAppUtility {
   protected $moduleHandler;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface
+   */
+  protected $productCategoryTree;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -135,6 +143,8 @@ class MobileAppUtility {
    *   The renderer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
+   *   Product category tree.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
@@ -145,7 +155,8 @@ class MobileAppUtility {
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
                               RendererInterface $renderer,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              ProductCategoryTreeInterface $product_category_tree) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -156,6 +167,7 @@ class MobileAppUtility {
     $this->skuImagesManager = $sku_images_manager;
     $this->renderer = $renderer;
     $this->moduleHandler = $module_handler;
+    $this->productCategoryTree = $product_category_tree;
   }
 
   /**
@@ -722,12 +734,25 @@ class MobileAppUtility {
     $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
+
+    // Generate view all link with text.
+    $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]);
+    $url_string = $url->toString(TRUE);
+
+    $data['view_all'] = [
+      'text' => $data['view_all'],
+      'url' => $url_string->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromUrl($url),
+    ];
+
+    // Get list of categories when category set to display as accordion else
+    // Get list of products of configured category.
     if ($data['accordion']) {
       if (empty($data['title'])) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
         $data['title'] = $term->label();
       }
-      $data['items'] = alshaya_acm_product_category_child_terms($category_id);
+      $data['items'] = $this->categoryChildTerms($category_id);
     }
     else {
       // Prepare argument for the views.
@@ -736,10 +761,13 @@ class MobileAppUtility {
       $products = [];
 
       // Get views result.
-      $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+      $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
+        return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+      });
 
       // If there are results.
       if (!empty($results)) {
+        $langcode = $this->languageManager->getCurrentLanguage()->getId();
         // Prepare argument for the views.
         $product_in_carousel = $entity->get('field_category_carousel_limit')->getString();
 
@@ -758,11 +786,11 @@ class MobileAppUtility {
             if ($stock_mode === 'push') {
               // If product in stock for 'push' mode.
               if (alshaya_acm_get_stock_from_product($node)) {
-                $products[] = $node->id();
+                $products[] = $this->getLightProductFromNid($node->id(), $langcode);
               }
             }
             else {
-              $products[] = $node->id();
+              $products[] = $this->getLightProductFromNid($node->id(), $langcode);
             }
           }
         }
@@ -770,7 +798,41 @@ class MobileAppUtility {
         $data['items'] = $products;
       }
     }
+    return $data;
+  }
 
+  /**
+   * Function to get all the child terms of given term.
+   *
+   * Created duplicate method of existing function to avoid fatal
+   * error of early rendering and create deeplink for each term.
+   *
+   * @param int $tid
+   *   The term id.
+   *
+   * @return array
+   *   Return array with term data.
+   *
+   * @see alshaya_acm_product_category_child_terms()
+   */
+  private function categoryChildTerms($tid) {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $terms = $this->productCategoryTree->allChildTerms($langcode, $tid, FALSE, TRUE);
+
+    $data = [];
+    foreach ($terms as $term) {
+      $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
+      $data[] = [
+        'label' => $term->name,
+        'description'  => [
+          '#markup' => $term->description__value,
+        ],
+        'id' => $term->tid,
+        'url' => $url->getGeneratedUrl(),
+        'deeplink' => $this->getDeeplink($term),
+        'active_class' => '',
+      ];
+    }
     return $data;
   }
 
@@ -877,6 +939,35 @@ class MobileAppUtility {
       'images' => $media['images_with_type'],
       'videos' => array_values($media['videos']),
     ];
+  }
+
+  /**
+   * Get light product data using give nid.
+   *
+   * @param int $nid
+   *   Node id.
+   * @param string $langcode
+   *   Language of node.
+   *
+   * @return array
+   *   Product data.
+   */
+  public function getLightProductFromNid(int $nid, string $langcode = 'en') {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    // If node exists in system.
+    if ($node instanceof Node) {
+      // Get translated node.
+      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+      // Get SKU attached with node.
+      $sku = $node->get('field_skus')->getString();
+      $sku_entity = SKU::loadFromSku($sku);
+      // If SKU exists in system.
+      if ($sku_entity instanceof SKU) {
+        return $this->mobileAppUtility->getLightProduct($sku_entity);
+      }
+    }
+
+    return [];
   }
 
   /**
