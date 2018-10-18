@@ -69,6 +69,13 @@ class AdvancedPageResource extends ResourceBase {
   protected $mobileAppUtility;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface
+   */
+  protected $productCategoryTree;
+
+  /**
    * The request stack service.
    *
    * @var \Symfony\Component\HttpFoundation\RequestStack
