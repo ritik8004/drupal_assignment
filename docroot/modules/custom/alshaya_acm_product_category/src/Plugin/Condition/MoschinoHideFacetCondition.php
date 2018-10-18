@@ -6,6 +6,7 @@ use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Provides the 'Hide facet on Moschino condition' condition.
@@ -21,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   }
  * )
  */
-class HideFacetCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
+class MoschinoHideFacetCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
