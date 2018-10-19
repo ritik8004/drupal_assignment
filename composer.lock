@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8c05849e2bef090fff1808922c16d0e",
+    "content-hash": "44941ae263dba6a5465d98e5643efa02",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10533,7 +10533,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Allow date token in filename.": "https://www.drupal.org/files/issues/2018-07-30/vde-2972220-2.patch"
+                    "Allow date token in filename.": "https://www.drupal.org/files/issues/2018-07-30/vde-2972220-2.patch",
+                    "Add batch support.": "https://www.drupal.org/files/issues/2018-09-24/2789531-149.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

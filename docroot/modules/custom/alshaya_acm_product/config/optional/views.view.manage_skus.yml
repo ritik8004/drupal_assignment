@@ -3,13 +3,10 @@ dependencies:
     - user.role.administrator
     - user.role.webmaster
   module:
-    - acq_sku
     - csv_serialization
     - rest
     - serialization
-    - user
     - views_data_export
-id: manage_skus
 display:
   data_export_1:
     display_plugin: data_export
@@ -26,6 +23,7 @@ display:
         title: false
         fields: false
         access: false
+        sorts: false
       fields:
         name:
           id: name
@@ -630,8 +628,6 @@ display:
           entity_type: acq_sku
           entity_field: sku
           plugin_id: standard
-      defaults:
-        sorts: false
       access:
         type: role
         options:
@@ -671,6 +667,10 @@ display:
         type: none
         options:
           offset: 0
+      automatic_download: true
+      redirect_path: ''
+      export_method: batch
+      export_batch_size: 500
     cache_metadata:
       max-age: -1
       contexts:
@@ -695,6 +695,7 @@ display:
         title: false
         fields: false
         access: false
+        sorts: false
       fields:
         name:
           id: name
@@ -1299,8 +1300,6 @@ display:
           entity_type: acq_sku
           entity_field: sku
           plugin_id: standard
-      defaults:
-        sorts: false
       access:
         type: role
         options:
