@@ -9,7 +9,6 @@
       display: inline-flex;
       align-items: center;
       z-index: 1;
-      cursor: pointer;
 
       .plp-icon {
         display: inline-block;
@@ -22,8 +21,9 @@
         background: url(#{$base_theme_img_directory_path}/icons/moschino-sub-menu.svg) no-repeat center center;
         width: 2.3125rem;
         height: 2.3125rem;
+        cursor: pointer;
         margin-#{$left}: 1.5rem;
-        transition: all 0.55s ease-in-out;
+        transition: transform 0.55s ease-in-out;
 
         @include breakpoint($desktop) {
           &:hover {
@@ -138,6 +138,7 @@
 
         @include breakpoint($desktop) {
           #{$left}: 31rem;
+          top: 4rem;
         }
       }
 
@@ -157,12 +158,16 @@
       }
 
       > .field--name-field-plp-menu {
-        transform: translateX(-24rem) scale(1.2);
-        transition: transform 0.55s ease-in-out;
+        position: relative;
 
-        @include breakpoint($tablet) {
-          float: $left;
-          clear: both;
+        a {
+          transform: translateX(-24rem) scale(1.2);
+          transition: transform 0.55s ease-in-out;
+
+          @include breakpoint($tablet) {
+            float: $left;
+            clear: both;
+          }
         }
       }
 
@@ -170,7 +175,7 @@
         opacity: 1;
         visibility: visible;
 
-        > .field--name-field-plp-menu {
+        > .field--name-field-plp-menu a {
           transform: translateX(0) scale(1);
         }
       }
