@@ -149,6 +149,11 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
         // Videos on moschino PLP page.
         if (!empty($term->get('field_plp_video_links')->first())) {
+          $enable_autoplay = \Drupal::config('alshaya_master.plp_settings')->get('enable_autoplay');
+          $variables['#attached']['drupalSettings']['autoplay'] = $enable_autoplay;
+          if ($enable_autoplay == 1) {
+            $variables['autoplay'] = 'autoplay playsinline muted';
+          }
           $variables['show_videos'] = 1;
           $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-video-provider';
 

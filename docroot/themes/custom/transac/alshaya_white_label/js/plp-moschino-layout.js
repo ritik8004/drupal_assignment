@@ -13,6 +13,13 @@
       if ($('.moschino-plp-layout .plp-video').length !== 0) {
         // Store the video object
         var plpPlayer = videojs('#plp-video-player');
+
+        // If autoplay does not work by default, play the video programatically.
+        var autoplay = drupalSettings.autoplay;
+        if (typeof autoplay !== 'undefined' && autoplay === 1) {
+          setTimeout(function(){ plpPlayer.play(); }, 3000);
+        }
+
         // Set click functions.
         $('.video-js').on('click', function () {
           if (plpPlayer.muted()) {
