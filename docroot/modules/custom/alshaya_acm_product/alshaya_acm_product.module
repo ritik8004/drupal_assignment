@@ -1784,3 +1784,48 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
 
   return [];
 }
+
+/**
+ * Filter out nodes with stock from given views result.
+ *
+ * @param array $results
+ *   The views result.
+ * @param int $result_limit
+ *   (optional) The limit of result.
+ * @param int $stock_check_limit
+ *   (optional) The limit of products to check for stock.
+ *
+ * @return array
+ *   Return in-stock nodes.
+ */
+function alshaya_acm_product_filter_out_of_stock_products(array $results, $result_limit = NULL, $stock_check_limit = 50) {
+  // Return If there are no results.
+  if (empty($results)) {
+    return [];
+  }
+  // The stock mode.
+  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  // Count of products checked for stock.
+  $products_count = 0;
+  $data = [];
+  foreach ($results as $result) {
+    /* @var \Drupal\node\Entity\Node $node*/
+    $node = $result->_object->getValue();
+    if ($node instanceof NodeInterface) {
+      // For stock push mode.
+      if ($stock_mode === 'push' && $products_count <= $stock_check_limit) {
+        // If product in stock for 'push' mode.
+        if (alshaya_acm_get_stock_from_product($node)) {
+          $data[] = $node;
+        }
+        $products_count++;
+      }
+      else {
+        $data[] = $node;
+      }
+    }
+  }
+
+  // Slice number of results that we want.
+  return empty($result_limit) ? $data : array_slice($data, 0, $result_limit);
+}

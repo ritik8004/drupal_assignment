@@ -12,7 +12,6 @@ use Drupal\Core\Field\FieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -1002,34 +1001,14 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           // Get views result.
           $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
 
+          // Prepare argument for the views.
+          $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
+          $nodes = alshaya_acm_product_filter_out_of_stock_products($results, $product_in_carousel);
           // If there are results.
-          if (!empty($results)) {
-            // Prepare argument for the views.
-            $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
-
-            // Slice number of results that we want for the carousel.
-            $results = array_slice($results, 0, $product_in_carousel);
-
-            // The stock mode.
-            $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-
-            $data = [];
-            foreach ($results as $result) {
-              /* @var \Drupal\node\Entity\Node $node*/
-              $node = $result->_object->getValue();
-              if ($node instanceof NodeInterface) {
-                // For stock push mode.
-                if ($stock_mode === 'push') {
-                  // If product in stock for 'push' mode.
-                  if (alshaya_acm_get_stock_from_product($node)) {
-                    $data[] = $node->id();
-                  }
-                }
-                else {
-                  $data[] = $node->id();
-                }
-              }
-            }
+          if (!empty($nodes)) {
+            $data = array_map(function ($node) {
+              return $node->id();
+            }, $nodes);
 
             // Make carousel title link.
             $carousel_title = [

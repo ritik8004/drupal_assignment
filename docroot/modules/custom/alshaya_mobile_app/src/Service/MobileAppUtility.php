@@ -758,44 +758,21 @@ class MobileAppUtility {
       // Prepare argument for the views.
       $terms = _alshaya_master_get_recursive_child_terms($category_id);
       $arguments = ['tid' => implode('+', $terms)];
-      $products = [];
 
       // Get views result.
       $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
         return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
       });
 
+      // Prepare argument for the views.
+      $product_in_carousel = $entity->get('field_category_carousel_limit')->getString();
+      $nodes = alshaya_acm_product_filter_out_of_stock_products($results, $product_in_carousel);
       // If there are results.
-      if (!empty($results)) {
+      if (!empty($nodes)) {
         $langcode = $this->languageManager->getCurrentLanguage()->getId();
-        // Prepare argument for the views.
-        $product_in_carousel = $entity->get('field_category_carousel_limit')->getString();
-
-        // Slice number of results that we want for the carousel.
-        $results = array_slice($results, 0, $product_in_carousel);
-
-        // The stock mode.
-        // @codingStandardsIgnoreLine
-        $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-
-        foreach ($results as $result) {
-          /* @var \Drupal\node\Entity\Node $node*/
-          $node = $result->_object->getValue();
-          if ($node instanceof NodeInterface) {
-            // For stock push mode.
-            if ($stock_mode === 'push') {
-              // If product in stock for 'push' mode.
-              if (alshaya_acm_get_stock_from_product($node)) {
-                $products[] = $this->getLightProductFromNid($node->id(), $langcode);
-              }
-            }
-            else {
-              $products[] = $this->getLightProductFromNid($node->id(), $langcode);
-            }
-          }
-        }
-
-        $data['items'] = $products;
+        $data['items'] = array_map(function ($node) use ($langcode) {
+          return $this->getLightProductFromNid($node->id(), $langcode);
+        }, $nodes);
       }
     }
     return $data;
