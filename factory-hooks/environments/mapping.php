@@ -157,6 +157,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_prod',
         'conductor' => 'hmae_prod'
       ],
+      '01dev2' => [
+        'magento' => 'hm_uat',
+        'conductor' => 'hmae_uat'
+      ],
     ],
     // BathBodyWorks KW.
     'bbwkw' => [
