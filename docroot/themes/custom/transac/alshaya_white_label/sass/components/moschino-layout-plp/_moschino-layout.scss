@@ -135,6 +135,10 @@
           #{$left}: 20rem;
           width: 100%;
         }
+
+        @include breakpoint($desktop) {
+          #{$left}: 31rem;
+        }
       }
 
       .close-btn {
