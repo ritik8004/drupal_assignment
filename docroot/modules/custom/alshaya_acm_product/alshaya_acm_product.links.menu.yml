@@ -27,3 +27,9 @@ alshaya_acm_product.product_display_settings:
   description: 'Configuration form to manage display custom fields for product view.'
   route_name: alshaya_acm_product.product_display_settings
   parent: alshaya_master.alshaya_admin
+alshaya_acm_product.sku_export:
+  title: 'Export SKU Data'
+  url: internal:/admin/commerce/export-skus
+  parent: 'acq_commerce.admin_commerce'
+  description: 'Export SKU Data.'
+  weight: 11
