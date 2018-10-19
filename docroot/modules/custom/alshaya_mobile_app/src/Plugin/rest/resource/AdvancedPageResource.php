@@ -160,12 +160,20 @@ class AdvancedPageResource extends ResourceBase {
       'name' => $node->label(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
-      'body' => $node->get('body')->getString(),
     ];
 
-    foreach ($this->mobileAppUtility->getFieldsForEntityBundle('node', self::NODE_TYPE) as $field) {
-      $response_data[$field] = $this->mobileAppUtility->getFieldData($node, $field);
+    $blocks = [];
+    foreach ($this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'] as $field => $field_info) {
+      $current_blocks = $this->mobileAppUtility->getFieldData($node, $field, $field_info['callback'], $field_info['label'], $field_info['type']);
+      if (!empty($current_blocks['type'])) {
+        $blocks[] = $current_blocks;
+      }
+      else {
+        $blocks = array_merge($blocks, $current_blocks);
+      }
     }
+
+    $response_data['blocks'] = $blocks;
 
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
