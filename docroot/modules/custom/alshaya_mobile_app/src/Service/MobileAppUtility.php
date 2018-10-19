@@ -353,8 +353,8 @@ class MobileAppUtility {
    * @param bool $mobile_only
    *   (optional) True to mobile only links.
    *
-   * @return \Drupal\taxonomy\TermInterface[]
-   *   The array containing Term objects.
+   * @return array
+   *   The array containing terms related data.
    */
   protected function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
     $data = [];
@@ -388,6 +388,26 @@ class MobileAppUtility {
       $data[] = $record;
     }
     return $data;
+  }
+
+  /**
+   * Get the boolean field value.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The link field name.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
+   *
+   * @return array
+   *   Return the associative array with url and deeplink.
+   */
+  protected function getFieldBoolean($entity, string $field, $label = '', $type = NULL) {
+    $value = $entity->get($field)->first()->getValue()['value'];
+    return empty($label) ? $value : [$label => $value];
   }
 
   /**

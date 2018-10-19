@@ -184,6 +184,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             'field_banner' => ['label' => 'image', 'callback' => 'getImages'],
           ],
         ],
+        'block_reference' => [
+          'callback' => 'getBlockReferenceData',
+          'fields' => [
+            'field_block_reference' => ['label' => 'block', 'callback' => 'getFieldBlockReference'],
+          ],
+        ],
         'product_carousel_category' => [
           'callback' => 'getProductCarouselCategory',
           'fields' => [
@@ -269,10 +275,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   (optional) The type of the field to return with response and optionally
    *   process data according to given type.
    *
-   * @return array
-   *   Return array with processed field data.
+   * @return array|string
+   *   Return array with processed field data and string when callback is empty.
    */
-  public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL): array {
+  public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL) {
     if (empty($callback)) {
       $data = array_merge(['type' => $type], ['item' => $entity->get($field)->getString()]);
     }
@@ -428,14 +434,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $data = [];
     foreach ($fields as $field => $field_info) {
       if (!empty($field_info['callback'])) {
-        $result = call_user_func_array(
-          [$this, $field_info['callback']],
-          [
-            $entity,
-            $field,
-            !empty($field_info['label']) ? $field_info['label'] : NULL,
-            !empty($field_info['type']) ? $field_info['type'] : NULL,
-          ]
+        $result = $this->getFieldData(
+          $entity,
+          $field,
+          $field_info['callback'],
+          !empty($field_info['label']) ? $field_info['label'] : NULL,
+          !empty($field_info['type']) ? $field_info['type'] : NULL
         );
         // Merge result with data as getFieldLink contains keyed array
         // with link and deeplink.
@@ -446,14 +450,67 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           $data[$field_info['label']] = $result;
         }
       }
-      elseif ($field_info['type'] == 'boolean') {
-        $data[$field_info['label']] = (bool) $entity->get($field)->first()->getValue()['value'];
-      }
       else {
         $data[$field_info['label']] = $entity->get($field)->getString();
       }
     }
     return $data;
+  }
+
+  /**
+   * Prepare paragraph data based on given fields for given entity.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  protected function getBlockReferenceData(ParagraphInterface $entity, array $fields) {
+    unset($fields['field_category_carousel']);
+    $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
+    return [array_merge(['type' => 'block'], $data['block'])];
+  }
+
+  /**
+   * Prepare block reference data based on given fields for given entity.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The field name.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
+   *
+   * @return array
+   *   Return array of data.
+   */
+  protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
+    // Get normalized Paragraph entity of given field.
+    $items = $entity->get($field)->getValue();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $results = array_map(function ($item) use ($langcode) {
+      list($entity_type, $uuid) = explode(':', $item['plugin_id']);
+      $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
+      $block = reset($block);
+      if ($block->hasTranslation($langcode)) {
+        $block = $block->getTranslation($langcode);
+      }
+      $data = [];
+      if ($item['settings']['label_display']) {
+        $data['label'] = $item['settings']['label'];
+      }
+      $data = $data + [
+        'body' => $block->get('body')->getString(),
+        'image' => $this->getImages($block, 'field_image'),
+      ];
+      return $data;
+    }, $items);
+    return $results[0];
   }
 
   /**
