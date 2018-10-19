@@ -155,11 +155,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       'node' => [
         'advanced_page' => [
           'fields' => [
-            'field_banner' => ['type' => 'banner', 'callback' => 'getStraightParagraph'],
-            'field_slider' => ['type' => 'slider', 'callback' => 'getStraightParagraph'],
+            'field_banner' => ['type' => 'banner', 'callback' => 'getFieldParagraphItems'],
+            'field_slider' => ['type' => 'slider', 'callback' => 'getFieldParagraphItems'],
             'body' => ['type' => 'body'],
-            'field_delivery_banner' => ['type' => 'delivery_banner', 'callback' => 'getStraightParagraph'],
-            'field_promo_blocks' => ['callback' => 'getRecursiveParagraphDataFromItems'],
+            'field_delivery_banner' => ['type' => 'delivery_banner', 'callback' => 'getFieldParagraphItems'],
+            'field_promo_blocks' => ['callback' => 'getFieldRecursiveParagraphItems'],
           ],
         ],
       ],
@@ -175,7 +175,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           'fields' => [
             'field_mobile_banner_image' => ['label' => 'image', 'callback' => 'getImages'],
             'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getRecursiveParagraphDataFromItems'],
+            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getFieldRecursiveParagraphItems'],
             'field_video' => ['label' => 'video'],
           ],
         ],
@@ -185,13 +185,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           ],
         ],
         'block_reference' => [
-          'callback' => 'getBlockReferenceData',
+          'callback' => 'paragraphBlockReference',
           'fields' => [
             'field_block_reference' => ['label' => 'block', 'callback' => 'getFieldBlockReference'],
           ],
         ],
         'product_carousel_category' => [
-          'callback' => 'getProductCarouselCategory',
+          'callback' => 'paragraphProductCarouselCategory',
           'fields' => [
             'field_category_carousel_title' => ['label' => 'title'],
             'field_category_carousel_limit' => ['label' => 'limit'],
@@ -206,7 +206,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           'fields' => [
             'field_promotion_image_mobile' => ['label' => 'image', 'callback' => 'getImages'],
             'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getRecursiveParagraphDataFromItems'],
+            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getFieldRecursiveParagraphItems'],
             'field_margin_mobile' => ['label' => 'margin'],
           ],
         ],
@@ -248,12 +248,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array|bool
    *   Return array of result or false if no callback found.
    */
-  public function getEntityBundleProcessedData($entity) {
+  public function processEntityBundleData($entity) {
     $data = FALSE;
     $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
-        [$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'prepareParagraphData'],
+        [$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'paragraphPrepareData'],
         [$entity, $bundle_info['fields']]
       );
     }
@@ -306,7 +306,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   Return array of data.
    */
-  protected function getStraightParagraph($entity, string $field, $label = NULL, $type = NULL): array {
+  protected function getFieldParagraphItems($entity, string $field, $label = NULL, $type = NULL): array {
     // Get normalized Paragraph entity of given field.
     $entities = $entity->get($field)->referencedEntities();
     $field_output = ['type' => $type, 'items' => []];
@@ -315,7 +315,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       $this->cachedEntities[] = $entity;
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
-      if ($result = $this->getEntityBundleProcessedData($entity)) {
+      if ($result = $this->processEntityBundleData($entity)) {
         $field_output['items'][] = $result;
       }
     }
@@ -337,7 +337,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   Return array of data.
    */
-  protected function getRecursiveParagraphDataFromItems($entity, string $field, $label = NULL, $type = NULL) {
+  protected function getFieldRecursiveParagraphItems($entity, string $field, $label = NULL, $type = NULL) {
     // Get normalized Paragraph entity of given field.
     $entities = $entity->get($field)->referencedEntities();
     $field_output = [];
@@ -378,7 +378,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
     $this->cachedEntities[] = $entity;
     // Process data for given entity if callback exists.
-    if ($result = $this->getEntityBundleProcessedData($entity)) {
+    if ($result = $this->processEntityBundleData($entity)) {
       return array_merge(['type' => $entity->bundle()], $result);
     }
 
@@ -430,7 +430,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   The converted array with necessary fields.
    */
-  protected function prepareParagraphData(ParagraphInterface $entity, array $fields) {
+  protected function paragraphPrepareData(ParagraphInterface $entity, array $fields) {
     $data = [];
     foreach ($fields as $field => $field_info) {
       if (!empty($field_info['callback'])) {
@@ -468,49 +468,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   The converted array with necessary fields.
    */
-  protected function getBlockReferenceData(ParagraphInterface $entity, array $fields) {
+  protected function paragraphBlockReference(ParagraphInterface $entity, array $fields) {
     unset($fields['field_category_carousel']);
-    $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
+    $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
     return [array_merge(['type' => 'block'], $data['block'])];
-  }
-
-  /**
-   * Prepare block reference data based on given fields for given entity.
-   *
-   * @param object $entity
-   *   The entity object.
-   * @param string $field
-   *   The field name.
-   * @param string $label
-   *   (optional) The label.
-   * @param string $type
-   *   (optional) The type of the field.
-   *
-   * @return array
-   *   Return array of data.
-   */
-  protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
-    // Get normalized Paragraph entity of given field.
-    $items = $entity->get($field)->getValue();
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $results = array_map(function ($item) use ($langcode) {
-      list($entity_type, $uuid) = explode(':', $item['plugin_id']);
-      $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
-      $block = reset($block);
-      if ($block->hasTranslation($langcode)) {
-        $block = $block->getTranslation($langcode);
-      }
-      $data = [];
-      if ($item['settings']['label_display']) {
-        $data['label'] = $item['settings']['label'];
-      }
-      $data = $data + [
-        'body' => $block->get('body')->getString(),
-        'image' => $this->getImages($block, 'field_image'),
-      ];
-      return $data;
-    }, $items);
-    return $results[0];
   }
 
   /**
@@ -524,9 +485,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @return array
    *   The converted array with necessary fields.
    */
-  protected function getProductCarouselCategory(ParagraphInterface $entity, array $fields) {
+  protected function paragraphProductCarouselCategory(ParagraphInterface $entity, array $fields) {
     unset($fields['field_category_carousel']);
-    $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
+    $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
 
@@ -580,6 +541,47 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       }
     }
     return $data;
+  }
+
+  /**
+   * Prepare block reference data based on given fields for given entity.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The field name.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
+   *
+   * @return array
+   *   Return array of data.
+   */
+  protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
+    // Get normalized Paragraph entity of given field.
+    $items = $entity->get($field)->getValue();
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+
+    $results = array_map(function ($item) use ($langcode) {
+      list($entity_type, $uuid) = explode(':', $item['plugin_id']);
+      $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
+      $block = reset($block);
+      if ($block->hasTranslation($langcode)) {
+        $block = $block->getTranslation($langcode);
+      }
+      $data = [];
+      if ($item['settings']['label_display']) {
+        $data['label'] = $item['settings']['label'];
+      }
+      $data = $data + [
+        'body' => $block->get('body')->getString(),
+        'image' => $this->getImages($block, 'field_image'),
+      ];
+      return $data;
+    }, $items);
+    // Return only first result as Block reference has delta limit to 1.
+    return $results[0];
   }
 
 }
