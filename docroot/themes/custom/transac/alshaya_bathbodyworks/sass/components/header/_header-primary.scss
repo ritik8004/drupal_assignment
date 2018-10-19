@@ -357,6 +357,7 @@ header .block-views-exposed-filter-blocksearch-page {
       a.menu--one__link {
         @include arabic-letter-spacing;
 
+        display: block;
         border-top: 2px solid transparent !important;
         border-bottom: none !important;
         margin-top: 0.3125rem;
@@ -887,6 +888,16 @@ header .region__header {
   .hightlight__description {
     html[lang="ar"] & {
       line-height: 1.4;
+    }
+  }
+
+  .highlighted {
+    a {
+      &:hover {
+        .hightlight__description {
+          text-decoration: none;
+        }
+      }
     }
   }
 }

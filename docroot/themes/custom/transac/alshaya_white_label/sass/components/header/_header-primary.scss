@@ -15,7 +15,7 @@
       background-color: $mm_l1_link_bg;
 
       &::after {
-        background: url('../imgs/icons/icon-chevron-next--hover.svg') no-repeat !important;
+        background: url('#{$base_theme_img_directory_path}/icons/icon-chevron-next--hover.svg') no-repeat !important;
       }
 
       a,
@@ -617,7 +617,10 @@ header {
       .menu--one__link {
         padding: 0.625rem;
         padding-bottom: 0.6rem;
-        display: block;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
         height: 2.75rem;
         border-bottom: 1px solid $mm_l1_border;
         border-top: 2px solid transparent;
@@ -837,6 +840,11 @@ header {
         padding: 1rem 0;
         padding-bottom: 0.9375rem;
         padding-#{$right}: 1.4rem;
+
+        &.has-bg-color {
+          padding-#{$right}: 0.625rem;
+          padding-#{$left}: 0.625rem;
+        }
       }
     }
   }
@@ -908,6 +916,15 @@ header {
 
       .title {
         margin-#{$left}: 0;
+      }
+
+      a {
+        &:hover {
+          .hightlight__description {
+            color: $highlights_subtitle_hover;
+            text-decoration: underline;
+          }
+        }
       }
     }
 

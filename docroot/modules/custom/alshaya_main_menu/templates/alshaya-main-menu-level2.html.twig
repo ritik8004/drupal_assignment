@@ -2,10 +2,10 @@
     <div class="menu__links__wrapper">
         <span class="back--link"><span class="menu__back"></span> <span>{{ data.label }}</span></span>
         {% for key, level2 in data.child %}
-          <li class="menu__list-item menu--two__list-item">
+          <li class="menu__list-item menu--two__list-item {{ level2.class }}">
             {#Show the term tree only when term image is not available.#}
             <div class="menu__link-wrapper menu-two__link-wrapper">
-                <{{ level2.tag }} class="menu__link menu-two__link {{data.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
+                <{{ level2.tag }} class="menu__link menu-two__link  {{ level2.class }} {{data.sub_nav_class}}" {{ level2.tag_attr }}>{{ level2.label }}</{{ level2.tag }}>
                 {% if level2.description|render is not empty %}
                     <p>{{ level2.description }}</p>
                 {% endif %}
@@ -15,9 +15,9 @@
                     <div class="level-three__wrapper">
                         <span class="back--link"><span class="menu__back"></span> <span>{{ level2.label }}</span></span>
                         {% for key3, level3 in level2.child %}
-                            <li class="menu__list-item menu--three__list-item">
+                            <li class="menu__list-item menu--three__list-item {{ level3.class }}">
                                 <div class="menu__link-wrapper menu-two__link-wrapper">
-                                    <{{ level3.tag }} class="menu__link menu--three__link {{ data.sub_nav_class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
+                                    <{{ level3.tag }} class="menu__link menu--three__link {{ level3.class }} {{ data.sub_nav_class }}" {{ level3.tag_attr }}>{{ level3.label }}</{{ level3.tag }}>
                                 </div>
                                 {% if level3.child is not empty %}
                                     {{ alshaya_main_menu('alshaya_main_menu_level4', level3.child) }}

@@ -7,6 +7,26 @@
 
 use Drupal\Core\Site\Settings;
 
+
+/**
+* Implements hook_update_N().
+*
+* Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+*/
+function alshaya_pb_transac_update_8006() {
+  _alshaya_master_initialize_amp('alshaya_amp_pottery_barn');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update field type for attr_color_lhn to attribute from string.
+ */
+function alshaya_pb_transac_update_8005() {
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->updateFieldMetaInfo('color_lhn', ['swatch' => 1]);
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -112,6 +132,9 @@ function alshaya_pb_transac_install() {
   if (\Drupal::moduleHandler()->moduleExists('alshaya_stores_finder')) {
     alshaya_stores_finder_set_default_marker_icon('alshaya_pb_transac');
   }
+
+  // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
+  _alshaya_master_initialize_amp('alshaya_amp_pottery_barn');
 
   // Add string translations.
   $strings = [

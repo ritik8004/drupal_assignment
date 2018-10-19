@@ -64,3 +64,24 @@
     }
   }
 }
+
+.block-checkout-summary-block {
+  .delivery-type,
+  .address {
+    border-top: 1px solid $checkout_order_summary_title_border;
+    border-bottom: 1px solid $checkout_order_summary_title_border;
+    padding: 1rem 0;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
+    a {
+      font-weight: normal;
+    }
+  }
+
+  .delivery-type {
+    border: 0;
+  }
+}

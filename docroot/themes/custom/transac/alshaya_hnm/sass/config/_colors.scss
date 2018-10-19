@@ -62,6 +62,7 @@ $hnm-grey-light: #dee6f0;
 $hnm-grey-light-two: #d7e1ec;
 $hnm-grey-light-three: #e6e6e6;
 $_white-four: #f7f7f7;
+$_grey_11: #f2f2f2;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -285,6 +286,7 @@ $header_toggle_sign_default: $hnm-grey;
 $header_toggle_sign_active_tab: $hnm-black-two;
 $header_toggle_sign_active_tab_bg: $white-five;
 $header_branding_shadow: $white;
+$highlights_subtitle_hover: $link-hover;
 
 // PLP
 $plp_swatch_more_link: $hnm-black-two;
@@ -375,7 +377,7 @@ $order_detail_table_head: $grey9;
 $order_detail_th_color: $hnm-black-two;
 $order_detail_tr_color: $hnm-black-two;
 $order_detail_tr_quantity: $hnm-black-two;
-$order_detail_total_tr_row_price_td: $scarlet;
+$order_detail_total_tr_row_price_td: $_grey_11;
 $order_detail_total_tr_row_price_td_bg: $white-five;
 $order_details_table_total_bg: $whisper-light;
 $order_details_table_total_price: $hnm-black-two;

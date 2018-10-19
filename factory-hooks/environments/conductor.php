@@ -20,10 +20,16 @@ $conductors = [
     'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
     'api_version' => 'v2',
   ],
-  'mckw_prod' => [
+  'mckw_prod_v1' => [
     'url' => 'https://alshaya-mckw-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '3d136846d24040099a7eed6c1f4e80b9',
     'hmac_secret' => 'zUt1psyEWi5xO-glHlH_tw',
+  ],
+  'mckw_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '389c52cfe70d4f81954ea7d751040eef',
+    'hmac_secret' => 'OWQyY2NiODAtMmY2YS00',
+    'api_version' => 'v2',
   ],
   // Mothercare SA.
   'mcsa_qa' => [
@@ -38,10 +44,16 @@ $conductors = [
     'hmac_secret' => 'Zjk5ZjhkYzgtYmRmZC00',
     'api_version' => 'v2',
   ],
-  'mcsa_prod' => [
+  'mcsa_prod_v1' => [
     'url' => 'https://alshaya-mcksa-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'd6b5bf8e0ea74347aaeb10dd5548c827',
     'hmac_secret' => 'nSAHBiZvuTiiJa-HC9xdnw',
+  ],
+  'mcsa_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'da6d8048001a42dcae8fc9a38b2dd670',
+    'hmac_secret' => 'ZjkxNzlmNmEtZWMzNy00',
+    'api_version' => 'v2',
   ],
   // Mothercare UAE.
   'mcae_qa' => [
@@ -56,10 +68,16 @@ $conductors = [
     'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
     'api_version' => 'v2',
   ],
-  'mcae_prod' => [
+  'mcae_prod_v1' => [
     'url' => 'https://alshaya-mcae-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'f755609b5006476e85acf942f54da3a0',
     'hmac_secret' => 'GOvi4TncWFS-kqU9H6p4vg',
+  ],
+  'mcae_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'e58405c6ba4149b7a483be491aa047f0',
+    'hmac_secret' => 'NDI1NTM0NWEtYjMxNS00',
+    'api_version' => 'v2',
   ],
   // H&M KW.
   'hmkw_qa' => [
@@ -291,6 +309,27 @@ $conductors = [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'e70b2650aef74d06bb31c163870c212b',
     'hmac_secret' => 'OGRkMjY3MGYtNDExZS00',
+    'api_version' => 'v2',
+  ],
+  // FootLocker KW.
+  'flkw_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
+    'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
+    'api_version' => 'v2',
+  ],
+  // FootLocker SA.
+  'flsa_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '31a27139b98448379c08c90bee5e866e',
+    'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',
+    'api_version' => 'v2',
+  ],
+  // FootLocker AE.
+  'flae_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '61f09f6fe1474ce68cc8057f97188d2f',
+    'hmac_secret' => 'MjU3YzZiOGEtNmI1Yi00',
     'api_version' => 'v2',
   ],
 ];
