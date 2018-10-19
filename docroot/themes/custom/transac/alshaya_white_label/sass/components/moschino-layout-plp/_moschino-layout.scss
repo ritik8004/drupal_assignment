@@ -23,6 +23,13 @@
         width: 2.3125rem;
         height: 2.3125rem;
         margin-#{$left}: 1.5rem;
+        transition: all 0.55s ease-in-out;
+
+        @include breakpoint($desktop) {
+          &:hover {
+            transform: rotate(360deg) scale(1.3);
+          }
+        }
       }
     }
 
@@ -40,16 +47,19 @@
     }
 
     .moschino-sub-menu-content {
-      display: none;
       position: fixed;
       top: 0;
       bottom: 0;
-      left: 0;
-      right: 0;
+      #{$left}: 0;
+      #{$right}: 0;
       background: $plp-sub-menu-background-overlay;
       z-index: 999;
       padding-#{$left}: 3.0625rem;
       padding-top: 50%;
+      // Hide for now, so we can animate on opacity.
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 
       @include breakpoint($desktop) {
         padding-#{$left}: 8.0625rem;
@@ -119,6 +129,14 @@
         }
       }
 
+      .mos-menu-sublink {
+        @include breakpoint($tablet) {
+          position: absolute;
+          #{$left}: 20rem;
+          width: 100%;
+        }
+      }
+
       .close-btn {
         position: absolute;
         top: 1.25rem;
@@ -131,6 +149,25 @@
           border-radius: 50%;
           color: $plp-sub-menu-cls-btn-txt;
           padding: 0.3125rem;
+        }
+      }
+
+      > .field--name-field-plp-menu {
+        transform: translateX(-24rem) scale(1.2);
+        transition: transform 0.55s ease-in-out;
+
+        @include breakpoint($tablet) {
+          float: $left;
+          clear: both;
+        }
+      }
+
+      &.visible {
+        opacity: 1;
+        visibility: visible;
+
+        > .field--name-field-plp-menu {
+          transform: translateX(0) scale(1);
         }
       }
     }
