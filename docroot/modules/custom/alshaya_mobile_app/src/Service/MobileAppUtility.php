@@ -765,9 +765,15 @@ class MobileAppUtility {
       $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
         return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
       });
+      // Create an array of nodes.
+      $nodes = array_map(function ($result) {
+        if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
+          return $node;
+        }
+      }, $results);
 
       $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
-      $nodes = alshaya_acm_product_filter_out_of_stock_products($results, $carousel_product_limit);
+      $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $carousel_product_limit);
 
       if (!empty($nodes)) {
         $langcode = $this->languageManager->getCurrentLanguage()->getId();

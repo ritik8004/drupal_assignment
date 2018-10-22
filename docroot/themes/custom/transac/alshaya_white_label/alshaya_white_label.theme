@@ -13,6 +13,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_html().
@@ -992,7 +993,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           ];
         }
         else {
-          // Prepare argument for the views.
           $terms = _alshaya_master_get_recursive_child_terms($category_id);
           $arguments = [
             'tid' => implode('+', $terms),
@@ -1000,11 +1000,15 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
           // Get views result.
           $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+          $nodes = array_map(function ($result) {
+            if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
+              return $node;
+            }
+          }, $results);
 
-          // Prepare argument for the views.
-          $product_in_carousel = $paragraph->get('field_category_carousel_limit')->getString();
-          $nodes = alshaya_acm_product_filter_out_of_stock_products($results, $product_in_carousel);
-          // If there are results.
+          $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
+          $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $product_in_carousel);
+
           if (!empty($nodes)) {
             $data = array_map(function ($node) {
               return $node->id();
