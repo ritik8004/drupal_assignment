@@ -1,4 +1,12 @@
 .moschino-plp-layout {
+  .c-sidebar-first__region {
+    .c-facet__label {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+
   .c-content__region {
     position: relative;
 
@@ -189,10 +197,6 @@
           float: none;
           width: calc(100% - 2.1875rem) !important;
         }
-
-        @include breakpoint($only-tablet) {
-          #{$right}: 10rem;
-        }
       }
     }
   }
@@ -202,8 +206,8 @@
       @include fullPageLoader();
     }
   }
-}
 
-.plp-video {
-  width: 100% !important;
+  .plp-video {
+    width: 100% !important;
+  }
 }

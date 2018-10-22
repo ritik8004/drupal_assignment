@@ -10,7 +10,7 @@
 
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
-      if ($('.plp-video').length !== 0) {
+      if ($('.moschino-plp-layout .plp-video').length !== 0) {
         // Store the video object
         var plpPlayer = videojs('#plp-video-player');
         // Set click functions.
@@ -25,7 +25,7 @@
       }
 
       // Accordion for submenu links.
-      $('.field--name-field-plp-menu').find('.mos-menu-item').each(function () {
+      $('.moschino-plp-layout .field--name-field-plp-menu').find('.mos-menu-item').each(function () {
         // Create accordion if the menu has sub links.
         if ($(this).find('.mos-menu-sublink').length !== 0) {
           $(this).once('accordion-init').accordion({
@@ -37,11 +37,11 @@
       });
 
       // Show the sub menu on click of the sub menu btn.
-      $('.moschino-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
+      $('.moschino-plp-layout .moschino-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
         $('.moschino-sub-menu-content').toggleClass('visible');
       });
 
-      $('.moschino-sub-menu-content .close-btn', context).on('click', function () {
+      $('.moschino-plp-layout .moschino-sub-menu-content .close-btn', context).on('click', function () {
         $('.moschino-sub-menu-content').toggleClass('visible');
       });
 
