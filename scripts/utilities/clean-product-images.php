@@ -8,7 +8,7 @@
  * Use this script using drush php-script. Should be executed from
  * docroot folder.
  *
- * E.g. `drush @alshaya.local -l local.alshaya-mckw.com php-script ../scripts/clean-product-images.php`
+ * E.g. `drush -l local.alshaya-mckw.com php-script ../scripts/clean-product-images.php`
  */
 
 $db = \Drupal::database();

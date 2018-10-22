@@ -15,7 +15,7 @@ fi
 site_code="$2"
 
 # Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+cd `drush8 sa | grep root | cut -d"'" -f4`
 
 # Check the given site_code exists.
 exist=false
