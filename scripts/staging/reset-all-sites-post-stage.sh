@@ -12,7 +12,7 @@ then
 fi
 
 # Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+cd `drush8 sa | grep root | cut -d"'" -f4`
 
 # Get the list of all site names of the factory.
 sites=$(drush8 acsf-tools-list --fields)

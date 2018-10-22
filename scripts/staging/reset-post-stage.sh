@@ -23,7 +23,7 @@ fi
 env=${target_env:2}
 
 # Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+cd `drush8 sa | grep root | cut -d"'" -f4`
 
 echo "Starting post stage reset process on $sites."
 
@@ -31,7 +31,7 @@ echo "Starting post stage reset process on $sites."
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site before doing anything."
-  drush8 @alshaya.$target_env sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
+  drush8 sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
 done
 
 ###### CLEAR + SYNC.
@@ -44,9 +44,9 @@ do
   if [ $profile = "alshaya_transac" ]
   then
     echo "Cleaning and syncing commerce data on $site."
-    ./../scripts/staging/sub/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/clean-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/sync-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
   fi
 
 done
@@ -55,5 +55,5 @@ done
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site after process."
-  drush8 @alshaya.$target_env sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
+  drush8 sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
 done
