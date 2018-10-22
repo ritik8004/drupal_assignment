@@ -372,6 +372,8 @@
     }
 
     .dark {
+      color: $order_summary_product_title;
+
       a {
         color: $order_summary_product_title;
       }
