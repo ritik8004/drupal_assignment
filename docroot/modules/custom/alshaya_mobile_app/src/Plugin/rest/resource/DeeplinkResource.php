@@ -117,27 +117,43 @@ class DeeplinkResource extends ResourceBase {
   public function get() {
     // Path alias.
     $alias = $this->requestStack->query->get('url');
-    // Get the internal path of given alias and get route parameters.
-    $internal_path = $this->aliasManager->getPathByAlias('/' . $alias, $this->mobileAppUtility->getAliasLang($alias));
-    // Get the parameters, to get node id from internal path.
-    $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
 
-    if (isset($params['taxonomy_term'])) {
-      if ($nid = alshaya_advanced_page_is_department_page($params['taxonomy_term'])) {
-        $url = 'rest/v1/page/advanced?url=' . ltrim($this->aliasManager->getAliasByPath('/node/' . $nid, $this->mobileAppUtility->getAliasLang($alias)), '/');
-      }
-      else {
-        $url = "/rest/v1/category/{$params['taxonomy_term']}/product-list";
-      }
+    if (strpos($alias, 'search') !== FALSE) {
+      $all = $this->requestStack->query->all();
+      $parse = parse_url($alias);
+      list($key, $value) = explode('=', $parse['query']);
+      $all = array_merge($all, [$key => $value]);
+      unset($all['url']);
+      unset($all['_format']);
+      $internal_url = Url::fromUri("internal:/rest/v1/{$parse['path']}", ['query' => $all])->toString(TRUE);
+      $url = $internal_url->getGeneratedUrl();
     }
-    if (isset($params['node'])) {
-      $node = $this->mobileAppUtility->getNodeFromAlias($alias);
-      if ($node->bundle() == 'acq_product') {
-        $sku = $node->get('field_skus')->first()->getValue();
-        $url = !empty($sku['value']) ? "/rest/v1/product/{$sku['value']}" : '';
+    else {
+      // Get the internal path of given alias and get route parameters.
+      $internal_path = $this->aliasManager->getPathByAlias('/' . $alias, $this->mobileAppUtility->getAliasLang($alias));
+      // Get the parameters, to get node id from internal path.
+      $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
+
+      if (isset($params['taxonomy_term'])) {
+        if ($nid = alshaya_advanced_page_is_department_page($params['taxonomy_term'])) {
+          $url = 'rest/v1/page/advanced?url=' . ltrim($this->aliasManager->getAliasByPath('/node/' . $nid, $this->mobileAppUtility->getAliasLang($alias)), '/');
+        }
+        else {
+          $url = "/rest/v1/category/{$params['taxonomy_term']}/product-list";
+        }
       }
-      elseif ($node->bundle() == 'acq_promotion') {
-        $url = "/rest/v1/promotion/{$node->id()}/product-list";
+      if (isset($params['node'])) {
+        $node = $this->mobileAppUtility->getNodeFromAlias($alias);
+        if ($node->bundle() == 'acq_product') {
+          $sku = $node->get('field_skus')->first()->getValue();
+          $url = !empty($sku['value']) ? "/rest/v1/product/{$sku['value']}" : '';
+        }
+        elseif ($node->bundle() == 'acq_promotion') {
+          $url = "/rest/v1/promotion/{$node->id()}/product-list";
+        }
+        elseif ($node->bundle() == 'static_html') {
+          $url = 'rest/v1/page/simple?url=' . ltrim($this->aliasManager->getAliasByPath('/node/' . $nid, $this->mobileAppUtility->getAliasLang($alias)), '/');
+        }
       }
     }
 
