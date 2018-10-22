@@ -17,7 +17,7 @@
         // If autoplay does not work by default, play the video programatically.
         var autoplay = drupalSettings.autoplay;
         if (typeof autoplay !== 'undefined' && autoplay === 1) {
-          setTimeout(function(){ plpPlayer.play(); }, 3000);
+          setTimeout(function () { plpPlayer.play(); }, 3000);
         }
 
         // Set click functions.

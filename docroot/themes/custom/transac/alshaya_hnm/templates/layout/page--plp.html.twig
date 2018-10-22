@@ -67,7 +67,7 @@
       <!-- Video -->
       <div class = "plp-video">
         <video id="plp-video-player" class="video-js vjs-16-9 vjs-big-play-centered" preload="auto"
-          {% if autoplay %} {{ autoplay }} {% endif %} loop controls
+          {% if autoplay_attributes %} {{ autoplay_attributes }} {% endif %} loop controls
           data-setup=
             {% if randomVideo.src %}
             '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'

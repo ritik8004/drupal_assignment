@@ -152,26 +152,5 @@ function alshaya_acm_product_category_entity_field_access_alter(array &$grants, 
 function alshaya_acm_product_category_field_widget_link_default_form_alter(&$element, FormStateInterface $form_state, $context) {
   if (($context['items']->getName() == 'field_plp_video_links')) {
     $element['uri']['#description'] = t('Please enter the link of the video. It could be a youtube/vimeo video or a custom video that you have uploaded to the site. To upload a video, use the Upload Video field below and then add the link here.');
-
-    // Convert provider to select field.
-    $element['title']['#type'] = 'select';
-    $element['title']['#options'] = [
-      '' => '- None -',
-      'youtube' => 'Youtube',
-      'vimeo' => 'Vimeo',
-      'custom' => 'Custom',
-    ];
-    $element['title']['#description'] = t('Please select the provider for your video. For a video that you have uploaded, the provider should be custom.');
-  }
-}
-
-/**
- * Implements hook_link_attributes_plugin_alter().
- */
-function alshaya_acm_product_category_link_attributes_plugin_alter(array &$definitions) {
-  // Alter only if our state flag is set.
-  if (\Drupal::state()->get('link_attributes_test_alterinfo.hook_link_attributes_plugin_alter')) {
-    $definitions['class']['description'] = t('Add a class to the link. To open the link in a modal, add classes - <b>use-ajax moschino-modal-link</b>');
-
   }
 }

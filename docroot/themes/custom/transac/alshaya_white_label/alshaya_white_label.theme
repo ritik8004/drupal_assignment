@@ -152,7 +152,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
           $enable_autoplay = \Drupal::config('alshaya_master.plp_settings')->get('enable_autoplay');
           $variables['#attached']['drupalSettings']['autoplay'] = $enable_autoplay;
           if ($enable_autoplay == 1) {
-            $variables['autoplay'] = 'autoplay playsinline muted';
+            $variables['autoplay_attributes'] = 'autoplay playsinline muted';
           }
           $variables['show_videos'] = 1;
           $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-video-provider';
@@ -160,7 +160,16 @@ function alshaya_white_label_preprocess_page(&$variables) {
           $video_list = $term->get('field_plp_video_links');
           foreach ($video_list as $embedded_video) {
             $url = $embedded_video->uri;
-            $provider = $embedded_video->title;
+            $provider_host = parse_url($url)['host'];
+            $provider = 'custom';
+
+            if (strpos($provider_host, 'vimeo') !== FALSE) {
+              $provider = 'vimeo';
+            }
+            elseif (strpos($provider_host, 'youtube') !== FALSE || strpos($provider_host, 'youtu') !== FALSE) {
+              $provider = 'youtube';
+            }
+
             if ($provider == 'custom') {
               $variables['videos'][] = [
                 'video_source' => [
