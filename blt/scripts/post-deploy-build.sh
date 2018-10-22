@@ -66,6 +66,7 @@ rm -Rf $deployDir/patches
 
 # Remove the acsf tools .git file as written in drush/Commands/acsf_tools/README.md
 cd $deployDir
+git add drush/Commands/acsf_tools
 git rm -rf --cached drush/Commands/acsf_tools
 
 cd $deployDir/drush
