@@ -232,7 +232,7 @@ class MobileAppUtility {
    * @return string
    *   Return the string of language code.
    */
-  private function getAliasLang($alias) {
+  public function getAliasLang($alias) {
     $alias_lang = NULL;
     if ($this->currentLanguage == 'ar' && !preg_match("/\p{Arabic}/u", $alias)) {
       $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
@@ -269,12 +269,13 @@ class MobileAppUtility {
     $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
 
     if (!empty($params['node']) && $node = $this->entityTypeManager->getStorage('node')->load($params['node'])) {
-      if ($node instanceof NodeInterface && $node->bundle() == $bundle) {
-        if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()) {
-          if ($node->hasTranslation($this->currentLanguage)) {
-            $node = $node->getTranslation($this->currentLanguage);
-          }
+      if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()) {
+        if ($node->hasTranslation($this->currentLanguage)) {
+          $node = $node->getTranslation($this->currentLanguage);
         }
+      }
+
+      if ($node instanceof NodeInterface && (empty($bundle) || $node->bundle() == $bundle)) {
         return $node;
       }
     }
