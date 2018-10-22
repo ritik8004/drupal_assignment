@@ -465,6 +465,19 @@ schemas:
           }
         }
       }
+  - KnetInitRequest: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "state_key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
   - GetProduct: |
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -1263,3 +1276,26 @@ schemas:
             body:
               application/json:
                 schema: GetProduct
+  /knet:
+    /init:
+      /{cart_id}:
+        get:
+          description: "K-Net init request and get URL."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: KnetInitRequest
+                  example: |
+                    {"state_key":"f1c1b706d29cf7a5c07b9de09b47bb4a","url":"https:\/\/www.knetpaytest.com.kw:443\/CGW302\/hppaction?formAction=com.aciworldwide.commerce.gateway.payment.action.HostedPaymentPageAction\u0026\u0026PaymentID=5385266411682950"}
+    /finalize:
+      /{state_key}:
+        get:
+          description: "K-Net get final status and data of transaction."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: KnetFinalizeRequest
+                  example: |
+
