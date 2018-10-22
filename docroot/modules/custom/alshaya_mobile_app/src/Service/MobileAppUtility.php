@@ -755,19 +755,20 @@ class MobileAppUtility {
       $data['items'] = $this->categoryChildTerms($category_id);
     }
     else {
-      // Prepare argument for the views.
+      // Get selected category's child so it can be passed as views argument.
       $terms = _alshaya_master_get_recursive_child_terms($category_id);
       $arguments = ['tid' => implode('+', $terms)];
 
-      // Get views result.
+      // Invoke views display in executeInRenderContext to avoid cached
+      // metadata leak issue.
+      // @See https://www.drupal.org/project/drupal/issues/2450993
       $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
         return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
       });
 
-      // Prepare argument for the views.
-      $product_in_carousel = $entity->get('field_category_carousel_limit')->getString();
-      $nodes = alshaya_acm_product_filter_out_of_stock_products($results, $product_in_carousel);
-      // If there are results.
+      $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
+      $nodes = alshaya_acm_product_filter_out_of_stock_products($results, $carousel_product_limit);
+
       if (!empty($nodes)) {
         $langcode = $this->languageManager->getCurrentLanguage()->getId();
         $data['items'] = array_map(function ($node) use ($langcode) {
@@ -931,14 +932,14 @@ class MobileAppUtility {
    */
   public function getLightProductFromNid(int $nid, string $langcode = 'en') {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
-    // If node exists in system.
+
     if ($node instanceof Node) {
       // Get translated node.
       $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
       // Get SKU attached with node.
       $sku = $node->get('field_skus')->getString();
       $sku_entity = SKU::loadFromSku($sku);
-      // If SKU exists in system.
+
       if ($sku_entity instanceof SKU) {
         return $this->mobileAppUtility->getLightProduct($sku_entity);
       }
