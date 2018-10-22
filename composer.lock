@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "269ee9a214815b9add460d42a360af48",
+    "content-hash": "a9da4a18fdaa3219528236bc78ce0b33",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9319,6 +9319,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
