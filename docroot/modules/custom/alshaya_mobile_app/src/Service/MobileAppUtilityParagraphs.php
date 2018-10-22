@@ -153,93 +153,71 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @endcode
    */
   public static function getEntityBundleInfo(string $entity_type, string $bundle): array {
-    $items = [];
-    if ($entity_type == 'node') {
-      switch ($bundle) {
-        case 'advanced_page':
-          $items = [
-            'fields' => [
-              'field_banner' => ['type' => 'banner', 'callback' => 'getStraightParagraph'],
-              'field_slider' => ['type' => 'slider', 'callback' => 'getStraightParagraph'],
-              'body' => ['type' => 'body'],
-              'field_delivery_banner' => ['type' => 'delivery_banner', 'callback' => 'getStraightParagraph'],
-              'field_promo_blocks' => ['callback' => 'getRecursiveParagraphDataFromItems'],
+    $items = [
+      'node' => [
+        'advanced_page' => [
+          'fields' => [
+            'field_banner' => ['type' => 'banner', 'callback' => 'getStraightParagraph'],
+            'field_slider' => ['type' => 'slider', 'callback' => 'getStraightParagraph'],
+            'body' => ['type' => 'body'],
+            'field_delivery_banner' => ['type' => 'delivery_banner', 'callback' => 'getStraightParagraph'],
+            'field_promo_blocks' => ['callback' => 'getRecursiveParagraphDataFromItems'],
+          ],
+        ],
+      ],
+      'paragraph' => [
+        '1_row_3_col_delivery_banner' => [
+          'fields' => [
+            'field_title' => ['label' => 'title'],
+            'field_sub_title' => ['label' => 'subtitle'],
+            'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
+          ],
+        ],
+        'banner' => [
+          'fields' => [
+            'field_mobile_banner_image' => ['label' => 'image', 'callback' => 'getImages'],
+            'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
+            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getRecursiveParagraphDataFromItems'],
+            'field_video' => ['label' => 'video'],
+          ],
+        ],
+        'banner_full_width' => [
+          'fields' => [
+            'field_banner' => ['label' => 'image', 'callback' => 'getImages'],
+          ],
+        ],
+        'product_carousel_category' => [
+          'callback' => 'getProductCarouselCategory',
+          'fields' => [
+            'field_category_carousel_title' => ['label' => 'title'],
+            'field_category_carousel_limit' => ['label' => 'limit'],
+            'field_use_as_accordion' => ['label' => 'accordion', 'type' => 'boolean'],
+            'field_view_all_text' => ['label' => 'view_all'],
+            'field_category_carousel' => [
+              'label' => '',
             ],
-          ];
-          break;
-      }
-    }
-    elseif ($entity_type == 'paragraph') {
-      switch ($bundle) {
-        case '1_row_3_col_delivery_banner':
-          $items = [
-            'fields' => [
-              'field_title' => ['label' => 'title'],
-              'field_sub_title' => ['label' => 'subtitle'],
-              'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-            ],
-          ];
-          break;
-
-        case 'banner':
-          $items = [
-            'fields' => [
-              'field_mobile_banner_image' => ['label' => 'image', 'callback' => 'getImages'],
-              'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-              'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getRecursiveParagraphDataFromItems'],
-              'field_video' => ['label' => 'video'],
-            ],
-          ];
-          break;
-
-        case 'banner_full_width':
-          $items = [
-            'fields' => [
-              'field_banner' => ['label' => 'image', 'callback' => 'getImages'],
-            ],
-          ];
-          break;
-
-        case 'promo_block':
-          $items = [
-            'fields' => [
-              'field_promotion_image_mobile' => ['label' => 'image', 'callback' => 'getImages'],
-              'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-              'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getRecursiveParagraphDataFromItems'],
-              'field_margin_mobile' => ['label' => 'margin'],
-            ],
-          ];
-          break;
-
-        case 'promo_block_button':
-          $items = [
-            'fields' => [
-              'field_button_position' => ['label' => 'position'],
-              'field_button_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-              'field_promo_text_1' => ['label' => 'text_1'],
-              'field_promo_text_2' => ['label' => 'text_2'],
-              'field_promo_theme' => ['label' => 'theme'],
-            ],
-          ];
-          break;
-
-        case 'product_carousel_category':
-          $items = [
-            'callback' => 'getProductCarouselCategory',
-            'fields' => [
-              'field_category_carousel_title' => ['label' => 'title'],
-              'field_category_carousel_limit' => ['label' => 'limit'],
-              'field_use_as_accordion' => ['label' => 'accordion', 'type' => 'boolean'],
-              'field_view_all_text' => ['label' => 'view_all'],
-              'field_category_carousel' => [
-                'label' => '',
-              ],
-            ],
-          ];
-          break;
-      }
-    }
-    return $items;
+          ],
+        ],
+        'promo_block' => [
+          'fields' => [
+            'field_promotion_image_mobile' => ['label' => 'image', 'callback' => 'getImages'],
+            'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
+            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getRecursiveParagraphDataFromItems'],
+            'field_margin_mobile' => ['label' => 'margin'],
+          ],
+        ],
+        'promo_block_button' => [
+          'fields' => [
+            'field_button_position' => ['label' => 'position'],
+            'field_button_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
+            'field_promo_text_1' => ['label' => 'text_1'],
+            'field_promo_text_2' => ['label' => 'text_2'],
+            'field_promo_theme' => ['label' => 'theme'],
+          ],
+        ],
+      ],
+    ];
+    return !empty($items[$entity_type][$bundle]) ? $items[$entity_type][$bundle] : [];
   }
 
   /**
