@@ -1812,7 +1812,8 @@ function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $sto
     if ($stock_check_limit <= 0) {
       break;
     }
-
+    // In case stock_mode is not "push", we always select the product
+    // assuming it has stock.
     if (($stock_mode == 'push' && alshaya_acm_get_stock_from_product($node)) || $stock_mode !== 'push') {
       $data[] = $node;
       $stock_check_limit--;
