@@ -837,7 +837,7 @@ class MobileAppUtility {
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
-      if (is_object($file = $this->getBanner($langcode, $term->tid))) {
+      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))) {
         $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
         $record['banner'] = file_create_url($image->getFileUri());
       }
@@ -849,29 +849,6 @@ class MobileAppUtility {
       $data[] = $record;
     }
     return $data;
-  }
-
-  /**
-   * Gets the image from 'field_promotion_banner' field.
-   *
-   * @param string $langcode
-   *   Language code.
-   * @param int $tid
-   *   Taxonomy term id.
-   *
-   * @return array
-   *   Array of fiel.
-   */
-  private function getBanner($langcode, $tid) {
-    $query = $this->connection->select('taxonomy_term__field_promotion_banner', 'ttbc');
-    $query->fields('ttbc', [
-      'entity_id',
-      'field_promotion_banner_target_id',
-    ]);
-    $query->condition('ttbc.entity_id', $tid);
-    $query->condition('ttbc.langcode', $langcode);
-    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
-    return $query->execute()->fetchObject();
   }
 
   /**
