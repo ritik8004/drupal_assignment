@@ -70,7 +70,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-  * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
    *   Entity repository.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU manager.
@@ -217,7 +217,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         ],
       ],
     ];
-    return !empty($items[$entity_type][$bundle]) ? $items[$entity_type][$bundle] : [];
+    return $items[$entity_type][$bundle] ?: [];
   }
 
   /**
@@ -231,7 +231,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function getEntityBundleProcessedData($entity) {
     $data = FALSE;
-    if (($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle())) && !empty($bundle_info)) {
+    if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
         [$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'prepareParagraphData'],
         [$entity, $bundle_info['fields']]
@@ -252,7 +252,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return the array of containing normalized data.
    */
   private function getNormalizedData($entity, $field = "") {
-    $context = ['langcode' => $this->languageManager->getDefaultLanguage()->getId()];
     // While using normalize, we can't able to catch bubbleable_metadata for
     // entity's canonical link and some entity don't have canonical link
     // ie. paragraph. In render method of renderer any early render that
@@ -262,6 +261,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     // method used.
     // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
     // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
+    $context = ['langcode' => $this->currentLanguage];
     return $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context, $field) {
       return $this->serializer->normalize(!empty($field) ? $entity->get($field) : $entity, 'json', $context);
     });
@@ -287,7 +287,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL): array {
     if (empty($callback)) {
-      unset($callback);
       $data = array_merge(['type' => $type], ['item' => $entity->get($field)->getString()]);
     }
     else {
@@ -320,6 +319,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $field_output = ['type' => $type, 'items' => []];
     foreach ($items as $item) {
       $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+      $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
       $this->cachedEntities[] = $entity;
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
@@ -327,7 +327,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $field_output['items'][] = $result;
       }
     }
-    return empty($field_output['items']) ? [] : $field_output;
+    return !empty($field_output['items']) ? $field_output : [];
   }
 
   /**
@@ -442,7 +442,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             !empty($field_info['type']) ? $field_info['type'] : NULL,
           ]
         );
-
+        // Merge result with data as getFieldLink contains keyed array
+        // with link and deeplink.
         if ($field_info['callback'] == 'getFieldLink') {
           $data = array_merge($data, $result);
         }
@@ -487,18 +488,17 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
 
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
     if ($data['accordion']) {
       if (empty($data['title'])) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
-        if ($term instanceof TermInterface && $term->hasTranslation($langcode)) {
-          $term = $term->getTranslation($langcode);
+        if ($term instanceof TermInterface && $term->hasTranslation($this->currentLanguage)) {
+          $term = $term->getTranslation($this->currentLanguage);
         }
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->categoryChildTerms($category_id, $langcode);
+      $data['items'] = $this->categoryChildTerms($category_id, $this->currentLanguage);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -522,8 +522,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $carousel_product_limit);
 
       if (!empty($nodes)) {
-        $data['items'] = array_map(function ($node) use ($langcode) {
-          return $this->getLightProductFromNid($node->id(), $langcode);
+        $data['items'] = array_map(function ($node) {
+          return $this->getLightProductFromNid($node->id(), $this->currentLanguage);
         }, $nodes);
       }
     }

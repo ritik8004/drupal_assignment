@@ -101,6 +101,13 @@ class MobileAppUtility {
   protected $moduleHandler;
 
   /**
+   * The current language.
+   *
+   * @var string
+   */
+  protected $currentLanguage;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -144,6 +151,7 @@ class MobileAppUtility {
     $this->skuImagesManager = $sku_images_manager;
     $this->moduleHandler = $module_handler;
     $this->productCategoryTree = $product_category_tree;
+    $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
   }
 
   /**
@@ -228,10 +236,10 @@ class MobileAppUtility {
    */
   private function getAliasLang($alias) {
     $alias_lang = NULL;
-    if ($this->languageManager->getCurrentLanguage()->getId() == 'ar' && !preg_match("/\p{Arabic}/u", $alias)) {
+    if ($this->currentLanguage == 'ar' && !preg_match("/\p{Arabic}/u", $alias)) {
       $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
     }
-    elseif ($this->languageManager->getCurrentLanguage()->getId() == 'en' && preg_match("/\p{Arabic}/u", $alias)) {
+    elseif ($this->currentLanguage == 'en' && preg_match("/\p{Arabic}/u", $alias)) {
       // Get the correct language, based on user input.
       $languages = $this->languageManager->getLanguages();
       if (count($languages) > 1 && array_key_exists('ar', $languages)) {
@@ -264,10 +272,9 @@ class MobileAppUtility {
 
     if (!empty($params['node']) && $node = $this->entityTypeManager->getStorage('node')->load($params['node'])) {
       if ($node instanceof NodeInterface && $node->bundle() == $bundle) {
-        $langcode = $this->languageManager->getCurrentLanguage()->getId();
-        if ($langcode !== $this->languageManager->getDefaultLanguage()->getId()) {
-          if ($node->hasTranslation($langcode)) {
-            $node = $node->getTranslation($langcode);
+        if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()) {
+          if ($node->hasTranslation($this->currentLanguage)) {
+            $node = $node->getTranslation($this->currentLanguage);
           }
         }
         return $node;
