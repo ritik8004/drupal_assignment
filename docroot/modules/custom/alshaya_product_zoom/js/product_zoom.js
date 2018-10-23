@@ -35,6 +35,8 @@
         if ($('li', lightSlider).length == 1 && $('li', lightSlider).hasClass('cloudzoom__thumbnails__video')) {
           var video_url = $('li', lightSlider).attr('data-iframe');
           appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), video_url);
+          // Hiding the main image container to correct position of video iframe.
+          $('.acq-content-product #cloud-zoom-wrap').hide();
         }
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
