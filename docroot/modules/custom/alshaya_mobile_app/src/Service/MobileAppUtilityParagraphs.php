@@ -497,7 +497,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         }
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->categoryChildTerms($category_id, $this->currentLanguage);
+      $data['items'] = $this->getAllCategories($category_id, $this->currentLanguage);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
