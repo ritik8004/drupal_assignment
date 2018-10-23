@@ -56,6 +56,11 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
+  // Add class for enabling hover effect on PDP.
+  if (\Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches_hover')) {
+    $variables['attributes']['class'][] = 'color-swatches-hover';
+  }
+
   $current_route = \Drupal::routeMatch();
 
   // Add body class for slug banner.

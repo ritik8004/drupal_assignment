@@ -3,6 +3,7 @@ configurable_use_parent_images: 'always'
 show_child_images_after_selecting: 'one'
 show_parent_images_in_child: false
 color_swatches: false
+color_swatches_hover: false
 show_configurable_boxes_after: 767
 plp_slider:
   item: 4
