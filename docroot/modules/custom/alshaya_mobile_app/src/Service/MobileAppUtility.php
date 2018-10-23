@@ -360,7 +360,7 @@ class MobileAppUtility {
   protected function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
     $data = [];
     if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      $langcode = $this->currentLanguage;
     }
 
     $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
