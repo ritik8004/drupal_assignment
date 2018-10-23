@@ -14,8 +14,8 @@ fi
 
 site_code="$2"
 
-# Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa | grep root | cut -d"'" -f4`
+# Move to proper directory to get access to drush9 acsf-tools commands.
+cd /var/www/html/alshaya$target_env/docroot
 
 # Check the given site_code exists.
 exist=false
@@ -27,7 +27,7 @@ do
     exist=true
   fi
 
-done <<< "$(drush8 acsf-tools-list --fields)"
+done <<< "$(drush acsf-tools-list --fields)"
 
 # If the given site_code is valid, launch the reset.
 if [ $exist ]
