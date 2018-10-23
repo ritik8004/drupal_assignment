@@ -24,6 +24,7 @@ use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Utilty Class.
@@ -769,7 +770,7 @@ class MobileAppUtility {
         }
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->categoryChildTerms($category_id, $langcode);
+      $data['items'] = $this->getAllCategories($langcode, $category_id, FALSE, TRUE);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -802,37 +803,75 @@ class MobileAppUtility {
   }
 
   /**
-   * Function to get all the child terms of given term.
+   * Return the term objects.
    *
-   * Created duplicate method of existing function to avoid fatal
-   * error of early rendering and create deeplink for each term.
-   *
-   * @param int $tid
-   *   The term id.
    * @param string $langcode
-   *   The language code.
+   *   (optional) The language code.
+   * @param int $parent
+   *   (optional) The parent term id.
+   * @param bool $child
+   *   (optional) True to return child false otherwise.
+   * @param bool $mobile_only
+   *   (optional) True to mobile only links.
    *
-   * @return array
-   *   Return array with term data.
-   *
-   * @see alshaya_acm_product_category_child_terms()
+   * @return \Drupal\taxonomy\TermInterface[]
+   *   The array containing Term objects.
    */
-  protected function categoryChildTerms($tid, string $langcode): array {
-    $terms = $this->productCategoryTree->allChildTerms($langcode, $tid, FALSE, TRUE);
-
+  protected function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
     $data = [];
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
     foreach ($terms as $term) {
-      $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
-      $data[] = [
-        'label' => $term->name,
+      $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
+      $this->termUrls[] = $term_url;
+
+      $record = [
+        'id' => (int) $term->tid,
+        'name' => $term->name,
         'description'  => $term->description__value,
-        'id' => $term->tid,
-        'url' => $url->getGeneratedUrl(),
-        'deeplink' => $this->getDeeplink($term),
-        'active_class' => '',
+        'path' => $term_url->getGeneratedUrl(),
+        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+        'include_in_menu' => (bool) $term->include_in_menu,
       ];
+
+      if (is_object($file = $this->getBanner($langcode, $term->tid))) {
+        $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
+        $record['banner'] = file_create_url($image->getFileUri());
+      }
+
+      if ($child) {
+        $record['child'] = $this->getAllCategories($langcode, $term->tid);
+      }
+
+      $data[] = $record;
     }
     return $data;
+  }
+
+  /**
+   * Gets the image from 'field_promotion_banner' field.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param int $tid
+   *   Taxonomy term id.
+   *
+   * @return array
+   *   Array of fiel.
+   */
+  private function getBanner($langcode, $tid) {
+    $query = $this->connection->select('taxonomy_term__field_promotion_banner', 'ttbc');
+    $query->fields('ttbc', [
+      'entity_id',
+      'field_promotion_banner_target_id',
+    ]);
+    $query->condition('ttbc.entity_id', $tid);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    return $query->execute()->fetchObject();
   }
 
   /**
