@@ -21,6 +21,7 @@ services:
       - '@alshaya_mobile_app.utility.paragraphs.inner'
       - '@serializer'
       - '@renderer'
+      - '@entity_field.manager'
       - '@cache.data'
       - '@language_manager'
       - '@request_stack'

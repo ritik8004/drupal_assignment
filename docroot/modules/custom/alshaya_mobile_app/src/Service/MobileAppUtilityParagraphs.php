@@ -17,6 +17,7 @@ use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -29,6 +30,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @var array
    */
   protected $cachedEntities = [];
+
+  /**
+   * The paragraph Base Fields.
+   *
+   * @var string
+   */
+  protected $paragraphBaseFields = [];
 
   /**
    * The mobile app utility service.
@@ -52,6 +60,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected $renderer;
 
   /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
@@ -60,6 +75,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The serializer.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend instance to use.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
@@ -84,6 +101,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   public function __construct(MobileAppUtility $mobile_app_utility,
                               SerializerInterface $serializer,
                               RendererInterface $renderer,
+                              EntityFieldManagerInterface $entity_field_manager,
                               CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
                               RequestStack $request_stack,
@@ -94,10 +112,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
                               SkuImagesManager $sku_images_manager,
                               ModuleHandlerInterface $module_handler,
                               ProductCategoryTreeInterface $product_category_tree) {
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree);
+    $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
     $this->renderer = $renderer;
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree);
+    $this->paragraphBaseFields = $this->entityFieldManager->getBaseFieldDefinitions('paragraph');
   }
 
   /**
@@ -199,6 +219,21 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   }
 
   /**
+   * Get additional fields.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   *
+   * @return array
+   *   Array of all created fields.
+   */
+  protected function getConfiguredFields(ParagraphInterface $entity):array {
+    $all_fields = $this->entityFieldManager->getFieldDefinitions($entity->getEntityTypeId(), $entity->bundle());
+    $config_fields = array_diff(array_keys($all_fields), array_keys($this->paragraphBaseFields));
+    return $config_fields;
+  }
+
+  /**
    * Get processed data for given entity.
    *
    * @param object $entity
@@ -209,6 +244,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function getEntityBundleProcessedData($entity) {
     $data = FALSE;
+    $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
         [$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'prepareParagraphData'],
@@ -216,33 +252,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       );
     }
     return $data;
-  }
-
-  /**
-   * Normalized data for the given entity for given field.
-   *
-   * @param object $entity
-   *   The entity which needs to be normalized.
-   * @param string $field
-   *   (optional) The field of entity which requires to be normalized.
-   *
-   * @return array
-   *   Return the array of containing normalized data.
-   */
-  private function getNormalizedData($entity, $field = "") {
-    // While using normalize, we can't able to catch bubbleable_metadata for
-    // entity's canonical link and some entity don't have canonical link
-    // ie. paragraph. In render method of renderer any early render that
-    // happens throws fatal error. To avoid this fatal error thrown by
-    // \Drupal\Core\Render\Renderer::render(), we have to handle it manually.
-    // that's why Manual caching of Paragraph entity requires when this
-    // method used.
-    // @see Drupal\Core\Render\RendererInterface::executeInRenderContext
-    // @see Drupal\serialization\Normalizer\EntityReferenceFieldItemNormalizer::normalize
-    $context = ['langcode' => $this->currentLanguage];
-    return $this->renderer->executeInRenderContext(new RenderContext(), function () use ($entity, $context, $field) {
-      return $this->serializer->normalize(!empty($field) ? $entity->get($field) : $entity, 'json', $context);
-    });
   }
 
   /**
@@ -280,7 +289,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * Function to get paragraph items.
    *
    * @param object $entity
-   *   The entity object.
+   *   The paragraph entity or node entity object.
    * @param string $field
    *   The field name.
    * @param string $label
@@ -293,10 +302,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function getStraightParagraph($entity, string $field, $label = NULL, $type = NULL): array {
     // Get normalized Paragraph entity of given field.
-    $items = $this->getNormalizedData($entity, $field);
+    $entities = $entity->get($field)->referencedEntities();
     $field_output = ['type' => $type, 'items' => []];
-    foreach ($items as $item) {
-      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+    foreach ($entities as $entity) {
       $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
       $this->cachedEntities[] = $entity;
       // Call a callback function to prepare data if paragraph type is one of
@@ -312,7 +320,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * Function to get inside paragraphs and avoid layout paragraph items.
    *
    * @param object $entity
-   *   The entity object.
+   *   The paragraph entity or node entity object.
    * @param string $field
    *   The field name.
    * @param string $label
@@ -325,23 +333,23 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function getRecursiveParagraphDataFromItems($entity, string $field, $label = NULL, $type = NULL) {
     // Get normalized Paragraph entity of given field.
-    $items = $this->getNormalizedData($entity, $field);
+    $entities = $entity->get($field)->referencedEntities();
     $field_output = [];
-    foreach ($items as $item) {
-      $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
-      $this->cachedEntities[] = $entity;
+    foreach ($entities as $entity) {
+      $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
       if (!$data = $this->getEntityBundleProcessedData($entity)) {
+        $data = [];
         // Get normalized Paragraph entity, as we don't need layout paragraph
         // item. we are interested in paragraph types that are stored inside
         // layout paragraph items.
-        $entity_normalized = $this->getNormalizedData($entity);
-        $data = [];
-        foreach ($entity_normalized as $field_name => $field_values) {
-          if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
+        $paragraph_fields = $this->getConfiguredFields($entity);
+        foreach ($paragraph_fields as $field_name) {
+          if (empty($data = $this->processParagraphReferenceField($entity, $field_name))) {
+            $field_values = $entity->get($field_name)->getValue();
             foreach ($field_values as $field_value) {
-              $data[] = $this->getRecursiveParagraphData($field_value);
+              $data[] = array_merge(['type' => 'block'], $field_value);
             }
           }
         }
@@ -354,23 +362,15 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   /**
    * The function to process normalized entity reference revision field data.
    *
-   * @param array $item
+   * @param object $entity
    *   Normalize array containing target_id and target_type.
    *
    * @return array
    *   Return data array.
    */
-  protected function getRecursiveParagraphData(array $item): array {
-    // If current item is not paragraph type return value as a block.
-    if (empty($item['target_type'])) {
-      return array_merge(['type' => 'block'], $item);
-    }
-
-    // Load the paragraph entity and process it through paragraph callbacks
-    // if exists.
-    $entity = $this->entityTypeManager->getStorage($item['target_type'])->load($item['target_id']);
+  protected function getRecursiveParagraphData($entity): array {
+    $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
     $this->cachedEntities[] = $entity;
-
     // Process data for given entity if callback exists.
     if ($result = $this->getEntityBundleProcessedData($entity)) {
       return array_merge(['type' => $entity->bundle()], $result);
@@ -380,16 +380,34 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     // another paragraph reference otherwise get the field's value as is.
     $data = ['type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId()];
     // Get normalized Paragraph entity.
-    $entity_normalized = $this->getNormalizedData($entity);
-    foreach ($entity_normalized as $field_name => $field_values) {
-      if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
-        $row = [];
-        foreach ($field_values as $field_value) {
-          $row[] = empty($field_value['target_type'])
-            ? $field_value
-            : $this->getRecursiveParagraphData($field_value);
-        }
-        $data[$field_name] = $row;
+    $paragraph_fields = $this->getConfiguredFields($entity);
+    foreach ($paragraph_fields as $field_name) {
+      if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
+        $row = $entity->get($field_name)->getValue();
+      }
+      $data[$field_name] = $row;
+    }
+    return $data;
+  }
+
+  /**
+   * Process paragraph entity reference revision field.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param string $field_name
+   *   The entity reference revision field name.
+   *
+   * @return array
+   *   Return array of processed paragraph data.
+   */
+  protected function processParagraphReferenceField(ParagraphInterface $entity, string $field_name): array {
+    $data = [];
+    $field_type = $entity->get($field_name)->getFieldDefinition()->getType();
+    if ($field_type == "entity_reference_revisions" || $field_type == "entity_reference") {
+      $children = $entity->get($field_name)->referencedEntities();
+      foreach ($children as $child) {
+        $data[] = $this->getRecursiveParagraphData($child);
       }
     }
     return $data;
