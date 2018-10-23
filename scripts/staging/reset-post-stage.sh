@@ -22,8 +22,8 @@ fi
 # Get the environment without the "01" prefix.
 env=${target_env:2}
 
-# Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa | grep root | cut -d"'" -f4`
+# Move to proper directory to get access to drush9 acsf-tools commands.
+cd /var/www/html/alshaya$target_env/docroot
 
 echo "Starting post stage reset process on $sites."
 
@@ -31,14 +31,14 @@ echo "Starting post stage reset process on $sites."
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site before doing anything."
-  drush8 sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
+  drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
 done
 
 ###### CLEAR + SYNC.
 echo "$sites" | while IFS= read -r site
 do
   # Get the installed profile on the given site.
-  profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
+  profile="$(drush -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
 
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
@@ -55,5 +55,5 @@ done
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site after process."
-  drush8 sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
+  drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
 done
