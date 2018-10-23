@@ -635,8 +635,6 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          border-top: none;
-          transform: none;
           transition: all 0.25s ease-in 0s;
 
           &::after {
@@ -677,8 +675,6 @@ header {
         visibility: hidden;
         overflow: hidden;
         transition: all 0.25s ease-in 0s;
-        transform: none;
-        border-top: none;
         border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
@@ -834,30 +830,6 @@ header {
 }
 
 @include breakpoint($desktop) {
-  body {
-    &::before {
-      content: '';
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      #{$left}: 0;
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 0;
-      z-index: 1;
-      background-color: rgba(0, 0, 0, 0.48);
-      transition: all 0.25s ease-in 0s;
-    }
-
-    &.overlay {
-      &::before {
-        opacity: 1;
-        transition: all 0.25s ease-in 0s;
-      }
-    }
-  }
-
   .menu--four__list {
     display: block !important;
     padding-#{$left}: 0;
@@ -1113,7 +1085,6 @@ header {
   .menu--three__list,
   .menu--four__list {
     will-change: $left;
-    // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
     #{$left}: -100%;
     transition: $left 0.5s ease-in-out;
     position: absolute;
@@ -1454,19 +1425,16 @@ html[lang=ar] {
     top: 0;
     width: 100%;
     height: 100%;
-    // transition: transform 0.5s ease-in-out;
     -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     -moz-transform: translateZ(0);
     #{$left}: -100%;
-    // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: $left;
     z-index: 9;
   }
 
   .menu--active,
   .menu__list--active {
-    // transform: translate(0, 0) !important;
     #{$left}: 0;
   }
 }
