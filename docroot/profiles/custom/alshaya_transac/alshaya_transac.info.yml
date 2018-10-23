@@ -7,7 +7,6 @@ dependencies:
   - drupal:color
   - pcb:pcb_memcache
   - drupal:syslog
-  - drupal:views_data_export
 
 themes:
   - alshaya_white_label
