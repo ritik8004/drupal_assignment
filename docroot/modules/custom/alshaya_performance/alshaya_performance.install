@@ -8,15 +8,6 @@
 /**
  * Implements hook_update_N().
  *
- * Enable logs_http module.
- */
-function alshaya_performance_update_8002() {
-  \Drupal::service('module_installer')->install(['logs_http']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add performance settings.
  */
 function alshaya_performance_update_8001() {
