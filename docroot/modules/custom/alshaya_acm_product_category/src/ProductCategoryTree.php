@@ -476,6 +476,29 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
+   * Gets the image from 'field_promotion_banner' field.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getBanner($tid, $langcode) {
+    $query = $this->connection->select('taxonomy_term__field_promotion_banner', 'ttbc');
+    $query->fields('ttbc', [
+      'entity_id',
+      'field_promotion_banner_target_id',
+    ]);
+    $query->condition('ttbc.entity_id', $tid);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    return $query->execute()->fetchObject();
+  }
+
+  /**
    * Fetch a flat list of all child tids for a given term.
    *
    * @param \Drupal\taxonomy\TermInterface $term

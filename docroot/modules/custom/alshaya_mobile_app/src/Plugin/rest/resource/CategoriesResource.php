@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
@@ -138,78 +137,13 @@ class CategoriesResource extends ResourceBase {
   }
 
   /**
-   * Return the term objects.
-   *
-   * @param int $langcode
-   *   (optional) The language code.
-   * @param int $parent
-   *   (optional) The parent term id.
-   *
-   * @return \Drupal\taxonomy\TermInterface[]
-   *   The array containing Term objects.
-   */
-  private function getAllCategories($langcode, $parent = 0) {
-    $data = [];
-    if (empty($langcode)) {
-      $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    }
-
-    $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE);
-    foreach ($terms as $term) {
-      $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
-      $this->termUrls[] = $term_url;
-
-      $record = [
-        'id' => (int) $term->tid,
-        'name' => $term->name,
-        'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-        'include_in_menu' => (bool) $term->include_in_menu,
-      ];
-
-      if (is_object($file = $this->getBanner($langcode, $term->tid))) {
-        $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
-        $record['banner'] = file_create_url($image->getFileUri());
-      }
-
-      $record['child'] = $this->getAllCategories($langcode, $term->tid);
-
-      $data[] = $record;
-    }
-    return $data;
-  }
-
-  /**
-   * Gets the image from 'field_promotion_banner' field.
-   *
-   * @param string $langcode
-   *   Language code.
-   * @param int $tid
-   *   Taxonomy term id.
-   *
-   * @return array
-   *   Array of fiel.
-   */
-  private function getBanner($langcode, $tid) {
-    $query = $this->connection->select('taxonomy_term__field_promotion_banner', 'ttbc');
-    $query->fields('ttbc', [
-      'entity_id',
-      'field_promotion_banner_target_id',
-    ]);
-    $query->condition('ttbc.entity_id', $tid);
-    $query->condition('ttbc.langcode', $langcode);
-    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
-    return $query->execute()->fetchObject();
-  }
-
-  /**
    * Responds to GET requests.
    *
    * @return \Drupal\rest\ResourceResponse
    *   The response containing list of categories.
    */
   public function get() {
-    $response_data = $this->getAllCategories($this->languageManager->getCurrentLanguage()->getId());
+    $response_data = $this->mobileAppUtility->getAllCategories($this->languageManager->getCurrentLanguage()->getId());
     $response = new ResourceResponse($response_data);
     $this->addCacheableDependency($response);
     return $response;

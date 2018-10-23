@@ -2,9 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\node\Entity\Node;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -564,39 +562,10 @@ class AlshayaSearchApiQueryExecute {
       // format - 'entity:node/1234:en' and we need to get 1234.
       $exploded_id = explode(':', $item->getId());
       $nid = explode('/', $exploded_id[1])[1];
-      $product_data[] = $this->getLightProduct($nid, $exploded_id[2]);
+      $product_data[] = $this->mobileAppUtility->getLightProductFromNid($nid, $exploded_id[2]);
     }
 
     return $product_data;
-  }
-
-  /**
-   * Get light product data.
-   *
-   * @param int $nid
-   *   Node id.
-   * @param string $langcode
-   *   Language of node.
-   *
-   * @return array
-   *   Product data.
-   */
-  public function getLightProduct(int $nid, string $langcode = 'en') {
-    $node = $this->entityTypeManager->getStorage('node')->load($nid);
-    // If node exists in system.
-    if ($node instanceof Node) {
-      // Get translated node.
-      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-      // Get SKU attached with node.
-      $sku = $node->get('field_skus')->getString();
-      $sku_entity = SKU::loadFromSku($sku);
-      // If SKU exists in system.
-      if ($sku_entity instanceof SKU) {
-        return $this->mobileAppUtility->getLightProduct($sku_entity);
-      }
-    }
-
-    return [];
   }
 
   /**

@@ -17,11 +17,14 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Utilty Class.
@@ -71,6 +74,13 @@ class MobileAppUtility {
   protected $entityTypeManager;
 
   /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
+
+  /**
    * The serializer.
    *
    * @var \Symfony\Component\Serializer\SerializerInterface
@@ -113,6 +123,13 @@ class MobileAppUtility {
   protected $moduleHandler;
 
   /**
+   * Product category tree.
+   *
+   * @var \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface
+   */
+  protected $productCategoryTree;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -125,6 +142,8 @@ class MobileAppUtility {
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity repository.
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   The serializer.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -135,27 +154,33 @@ class MobileAppUtility {
    *   The renderer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
+   *   Product category tree.
    */
   public function __construct(CacheBackendInterface $cache,
                               LanguageManagerInterface $language_manager,
                               RequestStack $request_stack,
                               AliasManagerInterface $alias_manager,
                               EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
                               SerializerInterface $serializer,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
                               RendererInterface $renderer,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              ProductCategoryTreeInterface $product_category_tree) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->aliasManager = $alias_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityRepository = $entity_repository;
     $this->serializer = $serializer;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
     $this->renderer = $renderer;
     $this->moduleHandler = $module_handler;
+    $this->productCategoryTree = $product_category_tree;
   }
 
   /**
@@ -446,6 +471,21 @@ class MobileAppUtility {
             ],
           ];
           break;
+
+        case 'product_carousel_category':
+          $items = [
+            'callback' => 'getProductCarouselCategory',
+            'fields' => [
+              'field_category_carousel_title' => ['label' => 'title'],
+              'field_category_carousel_limit' => ['label' => 'limit'],
+              'field_use_as_accordion' => ['label' => 'accordion', 'type' => 'boolean'],
+              'field_view_all_text' => ['label' => 'view_all'],
+              'field_category_carousel' => [
+                'label' => '',
+              ],
+            ],
+          ];
+          break;
       }
     }
     return $items;
@@ -692,6 +732,126 @@ class MobileAppUtility {
   }
 
   /**
+   * Prepare paragraph data based on given fields for given entity.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  protected function getProductCarouselCategory(ParagraphInterface $entity, array $fields) {
+    unset($fields['field_category_carousel']);
+    $data = call_user_func_array([$this, 'prepareParagraphData'], [$entity, $fields]);
+    // Fetch values from the paragraph.
+    $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
+
+    // Generate view all link with text.
+    $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]);
+    $url_string = $url->toString(TRUE);
+
+    $data['view_all'] = [
+      'text' => $data['view_all'],
+      'url' => $url_string->getGeneratedUrl(),
+      'deeplink' => $this->getDeepLinkFromUrl($url),
+    ];
+
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $data['items'] = [];
+    // Get list of categories when category set to display as accordion else
+    // Get list of products of configured category.
+    if ($data['accordion']) {
+      if (empty($data['title'])) {
+        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+        if ($term instanceof TermInterface && $term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
+        $data['title'] = $term->label();
+      }
+      $data['items'] = $this->getAllCategories($langcode, $category_id, FALSE, TRUE);
+    }
+    else {
+      // Get selected category's child so it can be passed as views argument.
+      $terms = _alshaya_master_get_recursive_child_terms($category_id);
+      $arguments = ['tid' => implode('+', $terms)];
+
+      // Invoke views display in executeInRenderContext to avoid cached
+      // metadata leak issue.
+      // @See https://www.drupal.org/project/drupal/issues/2450993
+      $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
+        return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+      });
+      // Create an array of nodes from the views result object.
+      $nodes = array_map(function ($result) {
+        if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
+          return $node;
+        }
+      }, $results);
+
+      $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
+      $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $carousel_product_limit);
+
+      if (!empty($nodes)) {
+        $data['items'] = array_map(function ($node) use ($langcode) {
+          return $this->getLightProductFromNid($node->id(), $langcode);
+        }, $nodes);
+      }
+    }
+    return $data;
+  }
+
+  /**
+   * Return the term objects.
+   *
+   * @param string $langcode
+   *   (optional) The language code.
+   * @param int $parent
+   *   (optional) The parent term id.
+   * @param bool $child
+   *   (optional) True to return child false otherwise.
+   * @param bool $mobile_only
+   *   (optional) True to mobile only links.
+   *
+   * @return \Drupal\taxonomy\TermInterface[]
+   *   The array containing Term objects.
+   */
+  protected function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
+    $data = [];
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
+    foreach ($terms as $term) {
+      $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
+      $this->termUrls[] = $term_url;
+
+      $record = [
+        'id' => (int) $term->tid,
+        'name' => $term->name,
+        'description'  => $term->description__value,
+        'path' => $term_url->getGeneratedUrl(),
+        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+        'include_in_menu' => (bool) $term->include_in_menu,
+      ];
+
+      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))) {
+        $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
+        $record['banner'] = file_create_url($image->getFileUri());
+      }
+
+      if ($child) {
+        $record['child'] = $this->getAllCategories($langcode, $term->tid);
+      }
+
+      $data[] = $record;
+    }
+    return $data;
+  }
+
+  /**
    * Get the link parameters for link field type.
    *
    * @param object $entity
@@ -794,6 +954,35 @@ class MobileAppUtility {
       'images' => $media['images_with_type'],
       'videos' => array_values($media['videos']),
     ];
+  }
+
+  /**
+   * Get light product data using give nid.
+   *
+   * @param int $nid
+   *   Node id.
+   * @param string $langcode
+   *   Language of node.
+   *
+   * @return array
+   *   Product data.
+   */
+  public function getLightProductFromNid(int $nid, string $langcode = 'en') {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+
+    if (!$node instanceof Node) {
+      return [];
+    }
+    // Get translated node.
+    $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+    // Get SKU attached with node.
+    $sku = $node->get('field_skus')->getString();
+    $sku_entity = SKU::loadFromSku($sku);
+
+    if ($sku_entity instanceof SKU) {
+      return $this->getLightProduct($sku_entity);
+    }
+    return [];
   }
 
   /**
