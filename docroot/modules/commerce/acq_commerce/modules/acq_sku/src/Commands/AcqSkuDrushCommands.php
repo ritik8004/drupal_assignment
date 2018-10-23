@@ -653,14 +653,14 @@ class AcqSkuDrushCommands extends DrushCommands {
     // information needed to track progression between successive calls.
     if (empty($context['sandbox'])) {
       // Get all the entities that need to be deleted.
-      $context['sandbox']['entity_list'] = [];
+      $context['sandbox']['results'] = [];
 
       // Get all acq_product entities.
       $query = \Drupal::entityQuery('node');
       $query->condition('type', 'acq_product');
       $product_entities = $query->execute();
       foreach ($product_entities as $entity_id) {
-        $context['sandbox']['entity_list'][] = [
+        $context['sandbox']['results'][] = [
           'type' => 'node',
           'entity_id' => $entity_id,
         ];
@@ -670,7 +670,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       $query = \Drupal::entityQuery('acq_sku');
       $sku_entities = $query->execute();
       foreach ($sku_entities as $entity_id) {
-        $context['sandbox']['entity_list'][] = [
+        $context['sandbox']['results'][] = [
           'type' => 'acq_sku',
           'entity_id' => $entity_id,
         ];
@@ -682,7 +682,7 @@ class AcqSkuDrushCommands extends DrushCommands {
       $query->condition('vid', $categories, 'IN');
       $cat_entities = $query->execute();
       foreach ($cat_entities as $entity_id) {
-        $context['sandbox']['entity_list'][] = [
+        $context['sandbox']['results'][] = [
           'type' => 'taxonomy_term',
           'entity_id' => $entity_id,
         ];
@@ -693,12 +693,12 @@ class AcqSkuDrushCommands extends DrushCommands {
 
       $context['sandbox']['progress'] = 0;
       $context['sandbox']['current_id'] = 0;
-      $context['sandbox']['max'] = count($context['sandbox']['entity_list']);
+      $context['sandbox']['max'] = count($context['sandbox']['results']);
     }
 
     $results = [];
-    if (isset($context['sandbox']['entity_list']) && !empty($context['sandbox']['entity_list'])) {
-      $results = $context['sandbox']['entity_list'];
+    if (isset($context['sandbox']['results']) && !empty($context['sandbox']['results'])) {
+      $results = $context['sandbox']['results'];
     }
 
     $results = array_slice($results, isset($context['sandbox']['current']) ? $context['sandbox']['current'] : 0, self::DELETE_BATCH_COUNT);
