@@ -1796,7 +1796,7 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
  * @return array
  *   Return in-stock nodes.
  */
-function alshaya_acm_product_filter_out_of_stock_products(array $nodes, $stock_check_limit = 50) {
+function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $stock_check_limit = 50): array {
   $data = [];
   if (empty($nodes)) {
     return $data;

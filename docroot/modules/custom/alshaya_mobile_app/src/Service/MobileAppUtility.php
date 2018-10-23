@@ -17,6 +17,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Serializer\SerializerInterface;
 use Drupal\Core\Render\RenderContext;
@@ -70,6 +71,13 @@ class MobileAppUtility {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
+
+  /**
+   * Entity repository.
+   *
+   * @var \Drupal\Core\Entity\EntityRepositoryInterface
+   */
+  protected $entityRepository;
 
   /**
    * The serializer.
@@ -133,6 +141,8 @@ class MobileAppUtility {
    *   The path alias manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   Entity repository.
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   The serializer.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -151,6 +161,7 @@ class MobileAppUtility {
                               RequestStack $request_stack,
                               AliasManagerInterface $alias_manager,
                               EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
                               SerializerInterface $serializer,
                               SkuManager $sku_manager,
                               SkuImagesManager $sku_images_manager,
@@ -162,6 +173,7 @@ class MobileAppUtility {
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->aliasManager = $alias_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityRepository = $entity_repository;
     $this->serializer = $serializer;
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -745,6 +757,7 @@ class MobileAppUtility {
       'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
 
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
     if ($data['accordion']) {
@@ -752,7 +765,7 @@ class MobileAppUtility {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->categoryChildTerms($category_id);
+      $data['items'] = $this->categoryChildTerms($category_id, $langcode);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -776,7 +789,6 @@ class MobileAppUtility {
       $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $carousel_product_limit);
 
       if (!empty($nodes)) {
-        $langcode = $this->languageManager->getCurrentLanguage()->getId();
         $data['items'] = array_map(function ($node) use ($langcode) {
           return $this->getLightProductFromNid($node->id(), $langcode);
         }, $nodes);
@@ -793,14 +805,15 @@ class MobileAppUtility {
    *
    * @param int $tid
    *   The term id.
+   * @param string $langcode
+   *   The language code.
    *
    * @return array
    *   Return array with term data.
    *
    * @see alshaya_acm_product_category_child_terms()
    */
-  private function categoryChildTerms($tid) {
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+  protected function categoryChildTerms($tid, string $langcode): array {
     $terms = $this->productCategoryTree->allChildTerms($langcode, $tid, FALSE, TRUE);
 
     $data = [];
@@ -808,9 +821,7 @@ class MobileAppUtility {
       $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $data[] = [
         'label' => $term->name,
-        'description'  => [
-          '#markup' => $term->description__value,
-        ],
+        'description'  => $term->description__value,
         'id' => $term->tid,
         'url' => $url->getGeneratedUrl(),
         'deeplink' => $this->getDeeplink($term),
@@ -939,18 +950,18 @@ class MobileAppUtility {
   public function getLightProductFromNid(int $nid, string $langcode = 'en') {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
-    if ($node instanceof Node) {
-      // Get translated node.
-      $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-      // Get SKU attached with node.
-      $sku = $node->get('field_skus')->getString();
-      $sku_entity = SKU::loadFromSku($sku);
-
-      if ($sku_entity instanceof SKU) {
-        return $this->mobileAppUtility->getLightProduct($sku_entity);
-      }
+    if (!$node instanceof Node) {
+      return [];
     }
+    // Get translated node.
+    $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+    // Get SKU attached with node.
+    $sku = $node->get('field_skus')->getString();
+    $sku_entity = SKU::loadFromSku($sku);
 
+    if ($sku_entity instanceof SKU) {
+      return $this->getLightProduct($sku_entity);
+    }
     return [];
   }
 
