@@ -763,6 +763,9 @@ class MobileAppUtility {
     if ($data['accordion']) {
       if (empty($data['title'])) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
+        if ($term instanceof TermInterface && $term->hasTranslation($langcode)) {
+          $term = $term->getTranslation($langcode);
+        }
         $data['title'] = $term->label();
       }
       $data['items'] = $this->categoryChildTerms($category_id, $langcode);
