@@ -359,7 +359,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         // item. we are interested in paragraph types that are stored inside
         // layout paragraph items.
         $entity_normalized = $this->getNormalizedData($entity);
-
         $data = [];
         foreach ($entity_normalized as $field_name => $field_values) {
           if (strpos($field_name, 'field_') !== FALSE && strpos($field_name, 'parent_field_') === FALSE) {
