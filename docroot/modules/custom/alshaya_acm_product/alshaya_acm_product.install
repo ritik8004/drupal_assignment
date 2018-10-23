@@ -12,24 +12,6 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Enable views data export modules.
- * Override view to add extra display for export.
- */
-function alshaya_acm_product_update_8030() {
-  \Drupal::service('module_installer')->install(['views_data_export']);
-
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['views.view.manage_skus'],
-    'acq_sku',
-    'install'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Update settings config to have value for pdp_slider_items_number_cs_us.
  */
 function alshaya_acm_product_update_8029() {
