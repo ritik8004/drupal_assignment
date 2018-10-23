@@ -51,20 +51,12 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   ## This can be removed afterwards
   drush acsf-tools-ml cset locale.settings translation.use_source local
 
-  ## Temporary "manual steps" that need to be performed when upgrading to Drupal 8.5.
-  ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
-  drush acsf-tools-ml cr
-  drush acsf-tools-ml sqlq "DELETE FROM key_value WHERE collection='system.schema' AND name='lightning_scheduled_updates';"
-
   ## Apply the database updates to all sites.
   echo "Executing updb."
   drush8 acsf-tools-ml updb 2> /tmp/drush_updb_$target_env.log
   output=$(cat /tmp/drush_updb_$target_env.log | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
   echo $output
 
-  ## Temporary "manual steps" (part 2) that need to be performed when upgrading to Drupal 8.5.
-  ## This can be removed when Drupal 8.5 will be released live and updated db with Drupal 8.5 will be staged to this environment.
-  drush acsf-tools-ml entity-updates
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."

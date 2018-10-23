@@ -5,6 +5,7 @@ dependencies:
     - field.storage.node.field_skus
     - field.storage.node.body
     - field.storage.node.field_category
+    - field.storage.node.field_acq_promotion_label
     - search_api.server.acquia_search_server
   module:
     - acq_sku
@@ -149,17 +150,19 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
-  promotions:
-    label: Promotions
-    datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:field_acq_sku_promotions'
-    type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-        - field.storage.acq_sku.field_acq_sku_promotions
-      module:
-        - acq_sku
+  field_acq_promotion_label:
+      label: 'Promotions'
+      datasource_id: 'entity:node'
+      property_path: 'field_skus:entity:field_acq_sku_promotions:entity:field_acq_promotion_label'
+      type: string
+      dependencies:
+        config:
+          - field.storage.node.field_skus
+          - field.storage.acq_sku.field_acq_sku_promotions
+          - field.storage.node.field_acq_promotion_label
+        module:
+          - acq_sku
+          - node
 datasource_settings:
   'entity:node':
     bundles:

@@ -2,7 +2,7 @@
   .imagegallery__wrapper {
     #product-image-gallery {
       @include breakpoint($desktop) {
-        width: 6.5rem;
+        width: 6.5rem !important;
         margin-#{$right}: 0;
         margin-#{$left}: 0;
       }

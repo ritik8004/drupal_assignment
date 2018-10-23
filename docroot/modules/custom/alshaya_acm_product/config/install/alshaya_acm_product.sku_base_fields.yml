@@ -63,6 +63,7 @@ fields:
   product_collection:
     label: 'Collection'
     description: 'Part of description.'
+    cardinality: -1
     facet: 1
 
   product_brand:

@@ -5,7 +5,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    And I go to "/cart"
+    And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -385,6 +385,7 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     When I follow "Map view"
     Then the "Map view" tab should be selected
+    And I scroll to the "#store-finder-wrapper" element
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(3) > div > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div:nth-child(2) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"

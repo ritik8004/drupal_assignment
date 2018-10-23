@@ -11,6 +11,23 @@ use Drupal\paragraphs\Entity\Paragraph;
 /**
  * Implements hook_update_N().
  *
+ * Make entity_reference_revisions field translatable: false.
+ */
+function alshaya_advanced_page_update_8005() {
+  $configs = [
+    'field.field.node.advanced_page.field_banner',
+    'field.field.node.advanced_page.field_delivery_banner',
+    'field.field.node.advanced_page.field_promo_banner_full_width',
+    'field.field.node.advanced_page.field_promo_blocks',
+    'field.field.node.advanced_page.field_related_info',
+    'field.field.node.advanced_page.field_slider',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_advanced_page');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Merging department page CT into advanced page CT.
  */
 function alshaya_advanced_page_update_8004() {
