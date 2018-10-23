@@ -292,8 +292,7 @@
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
             },
             "drupal/views_data_export": {
-                "Allow date token in filename.": "https://www.drupal.org/files/issues/2018-07-30/vde-2972220-2.patch",
-                "Add batch support.": "https://www.drupal.org/files/issues/2018-09-24/2789531-149.patch"
+                "Allow date token in filename.": "https://www.drupal.org/files/issues/2018-07-30/vde-2972220-2.patch"
             }
         },
         "installer-paths": {
