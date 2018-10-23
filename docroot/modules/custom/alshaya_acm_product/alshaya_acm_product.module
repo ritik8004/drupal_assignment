@@ -1803,9 +1803,8 @@ function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $sto
   }
 
   $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-  foreach ($nodes as $result) {
+  foreach ($nodes as $node) {
     /* @var \Drupal\node\Entity\Node $node*/
-    $node = $result->_object->getValue();
     if (!$node instanceof NodeInterface) {
       continue;
     }
@@ -1814,17 +1813,10 @@ function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $sto
       break;
     }
 
-    if ($stock_mode == 'push') {
-      if (alshaya_acm_get_stock_from_product($node)) {
-        $data[] = $node;
-        $stock_check_limit--;
-      }
-    }
-    else {
+    if (($stock_mode == 'push' && alshaya_acm_get_stock_from_product($node)) || $stock_mode !== 'push') {
       $data[] = $node;
       $stock_check_limit--;
     }
   }
-
   return $data;
 }

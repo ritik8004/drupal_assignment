@@ -758,6 +758,7 @@ class MobileAppUtility {
     ];
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $data['items'] = [];
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
     if ($data['accordion']) {
@@ -781,7 +782,7 @@ class MobileAppUtility {
       $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
         return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
       });
-      // Create an array of nodes.
+      // Create an array of nodes from the views result object.
       $nodes = array_map(function ($result) {
         if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
           return $node;
