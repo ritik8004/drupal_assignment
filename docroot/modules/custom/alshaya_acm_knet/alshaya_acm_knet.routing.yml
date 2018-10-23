@@ -58,7 +58,7 @@ alshaya_acm_knet.failed:
 
 
 alshaya_acm_knet.mobile_complete:
-  path: '/knet/mobile-app-complete'
+  path: '/knet/mobile-app-complete/{state_key}'
   defaults:
     _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::mobileComplete'
     _title: 'Final'

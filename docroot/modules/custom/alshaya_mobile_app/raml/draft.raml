@@ -478,6 +478,49 @@ schemas:
           }
         }
       }
+  - KnetFinalizeRequest: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          },
+          "post_date": {
+            "type": "string"
+          },
+          "transaction_id": {
+            "type": "string"
+          },
+          "auth_code": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "tracking_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          },
+          "quote_id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
   - GetProduct: |
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -1298,4 +1341,4 @@ schemas:
                 application/json:
                   schema: KnetFinalizeRequest
                   example: |
-
+                    {"payment_id":"5339950131882960","result":"CAPTURED","post_date":"1024","transaction_id":"1571958141882960","auth_code":"188519","ref":"829618580773","tracking_id":"HMKWHDE0000812","user_id":"0","customer_id":"158","quote_id":"2871","amount":2.5,"status":"success"}

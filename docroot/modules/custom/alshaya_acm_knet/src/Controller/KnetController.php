@@ -466,6 +466,7 @@ class KnetController extends ControllerBase {
    * Empty controller for mobile to get controller back.
    */
   public function mobileFinal() {
+    exit;
   }
 
 }

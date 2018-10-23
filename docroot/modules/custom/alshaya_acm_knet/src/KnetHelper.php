@@ -134,6 +134,16 @@ class KnetHelper {
                              $order_id,
                              $amount,
                              string $context = 'drupal'): array {
+    // We store the cart id as cart id here and change it to quote id in
+    // response so no one can directly use the state key from URL in error
+    // and use it for success page.
+    $state_data = [
+      'cart_id' => $cart_id,
+      'order_id' => $order_id,
+    ];
+
+    // This is just to have the key unique for state data.
+    $state_key = md5(json_encode($state_data));
 
     $knetSettings = $this->configFactory->get('alshaya_acm_knet.settings');
 
@@ -157,7 +167,7 @@ class KnetHelper {
       $error_url = Url::fromRoute('alshaya_acm_knet.error', ['quote_id' => $cart_id], $url_options)->toString();
     }
     else {
-      $error_url = Url::fromRoute('alshaya_acm_knet.mobile_error', ['quote_id' => $cart_id], $url_options)->toString();
+      $error_url = Url::fromRoute('alshaya_acm_knet.mobile_error', ['state_key' => $state_key], $url_options)->toString();
     }
 
     $pipe->setResponseUrl($response_url);
@@ -169,16 +179,6 @@ class KnetHelper {
     $pipe->setUdf2($customer_id);
     $pipe->setUdf3($cart_id);
 
-    // We store the cart id as cart id here and change it to quote id in
-    // response so no one can directly use the state key from URL in error
-    // and use it for success page.
-    $state_data = [
-      'cart_id' => $cart_id,
-      'order_id' => $order_id,
-    ];
-
-    // This is just to have the key unique for state data.
-    $state_key = md5(json_encode($state_data));
     $pipe->setUdf4($state_key);
 
     $udf5_prefix = $knetSettings->get('knet_udf5_prefix');
