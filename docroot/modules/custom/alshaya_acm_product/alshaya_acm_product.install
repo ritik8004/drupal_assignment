@@ -13,7 +13,7 @@ use Drupal\node\Entity\Node;
  * Implements hook_update_N().
  *
  * Enable views data export modules.
- * Override SKU listing view to add extra display for csv export.
+ * Override view to add extra display for export.
  */
 function alshaya_acm_product_update_8030() {
   \Drupal::service('module_installer')->install(['views_data_export']);
