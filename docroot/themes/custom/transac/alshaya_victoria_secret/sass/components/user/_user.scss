@@ -100,6 +100,25 @@
   }
 }
 
+.c-user-register {
+  .form-type-checkbox {
+    .option::before {
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 0.625rem;
+        #{$left}: 0;
+      }
+    }
+  }
+}
+
+.c-user-login {
+  h1 {
+    @include breakpoint($only-mobile) {
+      top: -4.7rem;
+    }
+  }
+}
+
 .c-user-register .c-sidebar-second,
 .c-user-login .c-sidebar-second,
 .order-confirmation {
@@ -150,8 +169,10 @@
     .change-pwd-form {
       .field--name-field-subscribe-newsletter {
         label {
-          padding-#{$left}: 2.125rem;
-          text-indent: -2.8rem;
+          @include breakpoint($tablet) {
+            padding-#{$left}: 2.125rem;
+            text-indent: -2.8rem;
+          }
         }
 
         p {
