@@ -373,12 +373,12 @@ $conductors = [
     'hmac_secret' => 'ZmU2ZTE0MTUtNGY4MC00',
     'api_version' => 'v2',
   ],
-  'vsae_prod' => [
+  'vsae_prod_v1' => [
     'url' => 'https://alshaya-vsae-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '0272644d5be84efb9dd246478367e947',
     'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
   ],
-  'vsae_prod_v2' => [
+  'vsae_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'e70b2650aef74d06bb31c163870c212b',
     'hmac_secret' => 'OGRkMjY3MGYtNDExZS00',
