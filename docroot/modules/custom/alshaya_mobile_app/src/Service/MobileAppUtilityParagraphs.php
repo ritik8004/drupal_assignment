@@ -18,6 +18,8 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -317,7 +319,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function processEntityBundleData($entity) {
     $data = FALSE;
-    $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
+    $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
+    $this->cachedEntities[] = $entity;
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
         [
@@ -383,8 +386,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $entities = $entity->get($field)->referencedEntities();
     $field_output = ['type' => $type, 'items' => []];
     foreach ($entities as $entity) {
-      $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
-      $this->cachedEntities[] = $entity;
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
       if ($result = $this->processEntityBundleData($entity)) {
@@ -414,7 +415,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $entities = $entity->get($field)->referencedEntities();
     $field_output = [];
     foreach ($entities as $entity) {
-      $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
       if (!$data = $this->processEntityBundleData($entity)) {
@@ -422,6 +422,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         // Get normalized Paragraph entity, as we don't need layout paragraph
         // item. we are interested in paragraph types that are stored inside
         // layout paragraph items.
+        $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
         $paragraph_fields = $this->getConfiguredFields($entity);
         foreach ($paragraph_fields as $field_name) {
           if (empty($data = $this->processParagraphReferenceField($entity, $field_name))) {
@@ -447,7 +448,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return data array.
    */
   protected function getRecursiveParagraphData($entity): array {
-    $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
+    $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
     $this->cachedEntities[] = $entity;
     // Process data for given entity if callback exists.
     if ($result = $this->processEntityBundleData($entity)) {
@@ -546,7 +547,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   The converted array with necessary fields.
    */
   protected function paragraphBlockReference(ParagraphInterface $entity, array $fields) {
-    unset($fields['field_category_carousel']);
     $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
     return [array_merge(['type' => 'block'], $data['block'])];
   }
@@ -585,11 +585,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     if ($data['accordion']) {
       if (empty($data['title'])) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
-        if ($term instanceof TermInterface
-            && $term->hasTranslation($this->currentLanguage)
-        ) {
-          $term = $term->getTranslation($this->currentLanguage);
-        }
+        $term = $this->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
       $data['items'] = $this->getAllCategories($category_id, $this->currentLanguage);
@@ -645,15 +641,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
     // Get normalized Paragraph entity of given field.
     $items = $entity->get($field)->getValue();
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
-    $results = array_map(function ($item) use ($langcode) {
+    $results = array_map(function ($item) {
       list($entity_type, $uuid) = explode(':', $item['plugin_id']);
       $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
       $block = reset($block);
-      if ($block->hasTranslation($langcode)) {
-        $block = $block->getTranslation($langcode);
-      }
+      $block = $this->getEntityTranslation($block, $this->currentLanguage);
       $data = [];
       if ($item['settings']['label_display']) {
         $data['label'] = $item['settings']['label'];
