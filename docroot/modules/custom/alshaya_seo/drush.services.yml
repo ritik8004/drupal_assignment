@@ -1,0 +1,6 @@
+services:
+  alshaya_seo.commands:
+    class: Drupal\alshaya_seo\Commands\AlshayaSeoCommands
+    arguments: [ '@entity_type.manager', '@redirect.repository', '@logger.factory' ]
+    tags:
+      - { name: drush.command}

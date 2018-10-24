@@ -11,11 +11,11 @@ then
   exit
 fi
 
-# Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+# Move to proper directory to get access to drush9 acsf-tools commands.
+cd /var/www/html/alshaya$target_env/docroot
 
 # Get the list of all site names of the factory.
-sites=$(drush8 acsf-tools-list --fields)
+sites=$(drush acsf-tools-list --fields)
 
 echo "Deleting all existing pre-stage database dump for all sites."
 rm -rf ~/backup/$target_env/pre-stage/*

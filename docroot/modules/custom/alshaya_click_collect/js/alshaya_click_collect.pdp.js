@@ -65,7 +65,7 @@
             $('.c-pdp .description-wrapper').toggleClass('desc-open');
           }
           $('.click-collect-all-stores').toggleClass('desc-open', function () {
-            // Scroll
+            // Scroll.
             $('html,body').animate({
               scrollTop: 0
             }, 'slow');

@@ -58,6 +58,7 @@ fit the needs of the project.
 The principle is that the configuration of the VM is stored in the git
 repository so that each developer uses the same configuration which is as close
 as possible to the configuration of the Prod env.
+You typically run all the the drush and blt commands *from inside* of the VM.
 
 To prepare your local env:
 * Install Virtualbox and Vagrant.
@@ -70,9 +71,13 @@ To prepare your local env:
   * `composer install`
   * `composer blt-alias`
   * `blt vm`
-  * `blt refresh:local`
+  * `vagrant ssh` to ssh into your vm
+  * `blt refresh:local` (from inside of your vm)
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
-  * `drush @alshaya.local uli`
+  * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
+  * Login using the default credentials:﻿no-reply@acquia.com / admin
+  * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
+  * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
 * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
@@ -80,6 +85,11 @@ To prepare your local env:
 
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
+
+### Troubleshooting
+
+* `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
+  * The reason for this is in the existing configuration values that still exist in memcache. The workaround is that you either restart the vm using ​vagrant reload​ command, or you restart memcache service using sudo service memcached restart in your vm and restart `blt refresh:local` again
 
 ### Create a new site
 
@@ -95,7 +105,7 @@ enable the appropriate theme, place the blocks in the theme's regions and
 install the specific configuration. See existing brand modules for example.
 * Add a new brand support:
   * Add DB and Alias in `box/config.yml`
-  * Add site in `blt/project.local.yml` with proper values (check existing sites for example)
+  * Add site in `blt/alshaya_local_sites.yml` with proper values (check existing sites for example)
   * (For transact site) Add proper settings for the new site in 
     * factory-hooks/environments/magento.php
     * factory-hooks/environments/settings.php
@@ -123,6 +133,17 @@ Script usage:
 
 Be careful in using the mode download, it will take time as it does sql-dump
 using drush which can take too much of time.
+
+You also need to forward your private key to your vm, because all the commands
+above need to be run from inside of vm and they reach remote cloud instance.
+
+In order to perform the private key forwarding, do following:
+
+* Edit ​`~/.ssh/config` ​file on your host machine and add following two lines:
+  * Host 127.0.0.1
+  * ForwardAgent yes
+* `​ssh-add ~/.ssh/your_private_key​` (this adds your key to the ssh agent, the path to your private key your connecting to Acquia Cloud with - by default ​~/.ssh/id_rsa​)
+* `​ssh-add -L`​ (ensure your private key is listed between the keys displayed on ssh agent) 4. ​vagrant ssh​ (connects to you guest machine)
 
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:

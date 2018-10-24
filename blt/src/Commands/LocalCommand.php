@@ -46,7 +46,6 @@ class LocalCommand extends BltTasks {
       ->drush('sql-drop')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
-      ->assume(TRUE)
       ->run();
 
     $this->say('Importing database from remote');
@@ -67,7 +66,6 @@ class LocalCommand extends BltTasks {
     $this->say('Disable cloud modules');
     $this->taskDrush()
       ->drush('pmu purge alshaya_search_acquia_search acquia_search acquia_connector shield')
-      ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -80,7 +78,6 @@ class LocalCommand extends BltTasks {
     $this->say('Enable local only modules');
     $this->taskDrush()
       ->drush('en ' . $modules_to_enable)
-      ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -91,7 +88,6 @@ class LocalCommand extends BltTasks {
       $this->taskDrush()
         ->drush('php-eval')
         ->arg("alshaya_config_install_configs(['search_api.server.acquia_search_server'], 'alshaya_search', 'optional');")
-        ->assume(TRUE)
         ->alias($info['local']['alias'])
         ->uri($info['local']['url'])
         ->run();
@@ -100,7 +96,6 @@ class LocalCommand extends BltTasks {
       $this->taskDrush()
         ->drush('search-api-clear')
         ->arg('acquia_search_index')
-        ->assume(TRUE)
         ->alias($info['local']['alias'])
         ->uri($info['local']['url'])
         ->run();
@@ -109,25 +104,22 @@ class LocalCommand extends BltTasks {
     $this->say('Reset super admin account');
     $this->taskDrush()
       ->drush('sqlq')
-      ->arg('update users_field_data set mail = "no-reply@acquia.com", name="user1" where uid = 1')
-      ->assume(TRUE)
+      ->arg('update users_field_data set name = "admin", mail = "no-reply@acquia.com" where uid = 1')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
     $this->taskDrush()
       ->drush('user-password')
-      ->arg('user1')
-      ->option('password', 'admin')
-      ->assume(TRUE)
+      ->arg('admin')
+      ->arg('admin')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
 
     $this->taskDrush()
-      ->drush('uublk')
-      ->option('name', 'user1')
-      ->assume(TRUE)
+      ->drush('user-unblock')
+      ->arg('admin')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -138,7 +130,6 @@ class LocalCommand extends BltTasks {
       ->arg('stage_file_proxy.settings')
       ->arg('origin')
       ->arg($info['origin'])
-      ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -148,7 +139,6 @@ class LocalCommand extends BltTasks {
       ->arg('stage_file_proxy.settings')
       ->arg('origin_dir')
       ->arg($info['origin_dir'])
-      ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -158,7 +148,6 @@ class LocalCommand extends BltTasks {
       ->arg('stage_file_proxy.settings')
       ->arg('verify')
       ->arg(0)
-      ->assume(TRUE)
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -256,7 +245,7 @@ class LocalCommand extends BltTasks {
     static $path;
 
     if (!isset($path)) {
-      $path = realpath('..') . '/tmp';
+      $path = '/tmp';
 
       if (!file_exists($path)) {
         $this->say('Creating temp directory at: ' . $path);
@@ -286,7 +275,8 @@ class LocalCommand extends BltTasks {
       return $static[$env][$site];
     }
 
-    $sites = $this->getConfig()->get('sites');
+    $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
+    $sites = $data['sites'];
 
     if (empty($site) || empty($sites[$site])) {
       $this->yell('Empty or invalid site code. You probably need some sleep :)', 40, 'red');
@@ -298,8 +288,8 @@ class LocalCommand extends BltTasks {
     $info['profile'] = $sites[$site]['type'];
 
     $info['local']['url'] = 'local.alshaya-' . $site . '.com';
-    $info['local']['alias'] = 'alshaya.local';
-    $info['remote']['alias'] = 'alshaya.01' . $env;
+    $info['local']['alias'] = 'self';
+    $info['remote']['alias'] = $site . '.01' . $env;
 
     // Get remote data to confirm site code is valid and we can get db role
     // and remote url.

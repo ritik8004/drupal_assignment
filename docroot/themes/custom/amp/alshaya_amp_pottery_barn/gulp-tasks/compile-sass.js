@@ -11,7 +11,7 @@ module.exports = function (gulp, plugins, options) {
       options.sass.files
     ])
       .pipe(plugins.plumber({
-        errorHandler: function(e) {
+        errorHandler: function (e) {
           console.log(e.messageFormatted);
           this.emit('end');
         }
@@ -34,7 +34,7 @@ module.exports = function (gulp, plugins, options) {
       options.sass.files
     ])
       .pipe(plugins.plumber({
-        errorHandler: function(e) {
+        errorHandler: function (e) {
           console.log(e.messageFormatted);
           this.emit('end');
         }

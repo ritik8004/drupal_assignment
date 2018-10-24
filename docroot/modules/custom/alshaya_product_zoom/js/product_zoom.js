@@ -137,8 +137,7 @@
   });
 
   /**
-   * Use the beforeChange event of slick to pause videos when scrolling from
-   * video slides.
+   * Use the beforeChange event of slick to pause videos when scrolling from video slides.
    *
    * @param {object} slickSelector
    *   Slick slider selcetor.
@@ -208,8 +207,7 @@
   }
 
   /**
-   * Get the vertical parameter for slick slider on the basis of the
-   * drupalsetting image_slider_position_pdp.
+   * Get the vertical parameter for slick slider on the basis of the drupalsetting image_slider_position_pdp.
    *
    * Get the slidesToShow parameter for slick slider on the basis of the
    * drupalsetting pdp_slider_items.

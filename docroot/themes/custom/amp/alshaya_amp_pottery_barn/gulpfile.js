@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 // -------------------------------------
 //
 //   Gulpfile
@@ -5,30 +9,27 @@
 // -------------------------------------
 //
 // Available tasks:
-//   `gulp`
-//   `gulp build`
-//   `gulp build:dev`
-//   `gulp clean`
-//   `gulp clean:css`
-//   `gulp clean:styleguide`
-//   `gulp compile:sass`
-//   `gulp compile:styleguide`
-//   `gulp lint:js`
-//   `gulp lint:css`
-//   `gulp minify:css`
-//   `gulp serve`
-//   `gulp test:css`
-//   `gulp watch`
-//   `gulp watch:js`
-//   `gulp watch:sass`
-//   `gulp watch:styleguide`
-//
+// `gulp`
+// `gulp build`
+// `gulp build:dev`
+// `gulp clean`
+// `gulp clean:css`
+// `gulp clean:styleguide`
+// `gulp compile:sass`
+// `gulp compile:styleguide`
+// `gulp lint:js`
+// `gulp lint:css`
+// `gulp minify:css`
+// `gulp serve`
+// `gulp test:css`
+// `gulp watch`
+// `gulp watch:js`
+// `gulp watch:sass`
+// `gulp watch:styleguide`
 // -------------------------------------
-
 // -------------------------------------
-//   Modules
+// Modules.
 // -------------------------------------
-//
 // gulp              : The streaming build system
 // gulp-autoprefixer : Prefix CSS
 // gulp-concat       : Concatenate files
@@ -51,9 +52,8 @@
 // kss               : Living Style Guide Generator
 // run-sequence      : Run a series of dependent Gulp tasks in order
 // -------------------------------------
-
 // -------------------------------------
-//   Front-End Dependencies
+// Front-End Dependencies.
 // -------------------------------------
 // breakpoint-sass       : Really Simple Media Queries with Sass
 // kss                   : A methodology for documenting CSS and building style guides
@@ -61,8 +61,7 @@
 // node-sass-import-once : Custom importer for node-sass that only allows a file to be imported once
 // susy                  : Sass power-tools for web layout
 // typey                 : A complete framework for working with typography in sass
-// -------------------------------------
-
+// -------------------------------------.
 var gulp = require('gulp');
 // Setting pattern this way allows non gulp- plugins to be loaded as well.
 var plugins = require('gulp-load-plugins')({
@@ -92,23 +91,21 @@ var paths = {
 // These are passed to each task.
 var options = {
 
-  // ----- CSS ----- //
-
+  // CSS.
   css: {
     files: paths.styles.destination + '**/*.css',
     file: paths.styles.destination + '/styles.css',
     destination: paths.styles.destination
   },
 
-  // ----- Sass ----- //
-
+  // Sass.
   sass: {
     files: paths.styles.source + '**/*.scss',
     file: paths.styles.source + '*.scss',
     destination: paths.styles.destination
   },
 
-  // ----- Images ----- //
+  // Images.
   images: {
     files: paths.images + '**/*.{png,gif,jpg,svg}',
     destination: paths.images
@@ -116,7 +113,7 @@ var options = {
 
 };
 
-// Tasks
+// Tasks.
 require('./gulp-tasks/build')(gulp, plugins, options);
 require('./gulp-tasks/clean')(gulp, plugins, options);
 require('./gulp-tasks/clean-css')(gulp, plugins, options);
