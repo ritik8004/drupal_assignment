@@ -459,6 +459,11 @@ header {
 }
 
 .main--menu {
+  @include breakpoint($desktop) {
+    display: block !important;
+    position: relative;
+  }
+
   @include breakpoint($upto-desktop) {
     ul {
       padding: 0;
@@ -469,9 +474,13 @@ header {
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     ul.menu--one__list {
-      display: block !important;
-      text-align: center;
-      font-size: 0;
+      display: table !important;
+      width: auto;
+      margin: 0 auto;
+
+      .menu-backdrop {
+        border-bottom: 4px solid $mm_l2_hover_border;
+      }
     }
 
     li.menu--one__list-item {
@@ -530,11 +539,6 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          visibility: visible;
-          opacity: 1;
-          z-index: 1;
-          transition: all 0.25s ease-in 0s;
-
           &::after {
             content: '';
             height: 1px;
@@ -548,23 +552,8 @@ header {
         }
       }
 
-      .menu__link {
-        font-size: 0.75rem;
-        color: $mm_l1_link;
-        text-decoration: none;
-      }
-
-      ul ul {
-        display: none;
-      }
-
       ul.menu--two__list {
-        position: absolute;
-        display: block;
-        opacity: 0;
-        visibility: hidden;
         overflow: hidden;
-        transition: all 0.25s ease-in 0s;
         border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
