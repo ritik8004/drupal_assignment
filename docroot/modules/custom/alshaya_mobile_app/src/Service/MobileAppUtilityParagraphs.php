@@ -240,7 +240,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             ],
             'field_use_as_accordion' => [
               'label' => 'accordion',
-              'type' => 'boolean',
+              'callback' => 'getFieldBoolean',
             ],
             'field_view_all_text' => [
               'label' => 'view_all',
