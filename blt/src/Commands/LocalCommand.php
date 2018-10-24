@@ -323,8 +323,10 @@ class LocalCommand extends BltTasks {
    *   Server response.
    */
   private function getSitesData($remote_alias) {
-    $task = $this->taskDrush()
-      ->drush('acsf-tools-list')
+    $task = $this->taskDrush();
+    $task->interactive(FALSE);
+
+    $task->drush('acsf-tools-list')
       ->alias($remote_alias)
       ->option('fields', 'name,domains')
       ->printOutput(FALSE);
