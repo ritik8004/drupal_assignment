@@ -1536,8 +1536,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     // Update cross-sell region with products.
-    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')
-      && $form_state->getUserInput()['sku_view_mode'] == 'full') {
+    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
         '#section_title' => t('Customers also bought'),
