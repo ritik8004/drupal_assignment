@@ -131,30 +131,8 @@ class DeeplinkResource extends ResourceBase {
     else {
       // Get the internal path of given alias and get route parameters.
       $internal_path = $this->aliasManager->getPathByAlias('/' . $alias, $this->mobileAppUtility->getAliasLang($alias));
-      // Get the parameters, to get node id from internal path.
-      $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
-
-      if (isset($params['taxonomy_term'])) {
-        if ($nid = alshaya_advanced_page_is_department_page($params['taxonomy_term'])) {
-          $url = 'rest/v1/page/advanced?url=' . ltrim($this->aliasManager->getAliasByPath('/node/' . $nid, $this->mobileAppUtility->getAliasLang($alias)), '/');
-        }
-        else {
-          $url = "/rest/v1/category/{$params['taxonomy_term']}/product-list";
-        }
-      }
-      if (isset($params['node'])) {
-        $node = $this->mobileAppUtility->getNodeFromAlias($alias);
-        if ($node->bundle() == 'acq_product') {
-          $sku = $node->get('field_skus')->first()->getValue();
-          $url = !empty($sku['value']) ? "/rest/v1/product/{$sku['value']}" : '';
-        }
-        elseif ($node->bundle() == 'acq_promotion') {
-          $url = "/rest/v1/promotion/{$node->id()}/product-list";
-        }
-        elseif ($node->bundle() == 'static_html') {
-          $url = 'rest/v1/page/simple?url=' . ltrim($this->aliasManager->getAliasByPath('/node/' . $nid, $this->mobileAppUtility->getAliasLang($alias)), '/');
-        }
-      }
+      $url_obj = Url::fromUri("internal:" . $internal_path);
+      $url = $this->mobileAppUtility->getDeepLinkFromUrl($url_obj);
     }
 
     return new ModifiedResourceResponse(['deeplink' => $url]);
