@@ -345,7 +345,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
-      if (!$data = $this->getEntityBundleProcessedData($entity)) {
+      if (!$data = $this->processEntityBundleData($entity)) {
         $data = [];
         // Get normalized Paragraph entity, as we don't need layout paragraph
         // item. we are interested in paragraph types that are stored inside
@@ -434,15 +434,16 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $data = [];
     foreach ($fields as $field => $field_info) {
       if (!empty($field_info['callback'])) {
-        $result = $this->getFieldData(
-          $entity,
-          $field,
-          $field_info['callback'],
-          !empty($field_info['label']) ? $field_info['label'] : NULL,
-          !empty($field_info['type']) ? $field_info['type'] : NULL
+        $result = call_user_func_array(
+          [$this, $field_info['callback']],
+          [
+            $entity,
+            $field,
+            !empty($field_info['label']) ? $field_info['label'] : NULL,
+            !empty($field_info['type']) ? $field_info['type'] : NULL,
+          ]
         );
-        // Merge result with data as getFieldLink contains keyed array
-        // with link and deeplink.
+
         if ($field_info['callback'] == 'getFieldLink') {
           $data = array_merge($data, $result);
         }
