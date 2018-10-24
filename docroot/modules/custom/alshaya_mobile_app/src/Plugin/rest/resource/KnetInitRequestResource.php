@@ -70,7 +70,8 @@ class KnetInitRequestResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('alshaya_acm_knet.helper')
+      $container->get('alshaya_acm_knet.helper'),
+      $container->get('alshaya_mobile_app.utility')
     );
   }
 
