@@ -324,7 +324,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           $this,
           !empty($bundle_info['callback'])
           ? $bundle_info['callback']
-          : 'prepareParagraphData',
+          : 'paragraphPrepareData',
         ],
         [$entity, $bundle_info['fields']]
       );
