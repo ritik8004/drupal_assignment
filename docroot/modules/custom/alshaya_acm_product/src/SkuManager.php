@@ -1365,10 +1365,10 @@ class SkuManager {
 
         // No stock check for related items in pull mode.
         if ($stock_mode == 'pull') {
-          $related[] = $node->id();
+          $related[$sku] = $node->id();
         }
         elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
-          $related[] = $node->id();
+          $related[$sku] = $node->id();
         }
       }
       catch (\Exception $e) {

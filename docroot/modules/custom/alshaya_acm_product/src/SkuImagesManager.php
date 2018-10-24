@@ -153,8 +153,15 @@ class SkuImagesManager {
    *   Processed media items.
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
-    $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
-    return $this->productInfoHelper->getMedia($skuForGallery, $context);
+    try {
+      $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
+      return $this->productInfoHelper->getMedia($skuForGallery, $context);
+    }
+    catch (\Exception $e) {
+      // For configurable products with no children, we may not have any
+      // child to get media items from.
+      return [];
+    }
   }
 
   /**
