@@ -455,6 +455,11 @@ class MobileAppUtility {
   public function getMedia(SKUInterface $sku, string $context): array {
     $media = $this->skuImagesManager->getProductMedia($sku, $context);
 
+    // Keep schema consistent.
+    if (empty($media)) {
+      return ['images' => [], 'videos' => []];
+    }
+
     if (!isset($media['images_with_type'])) {
       $media['images_with_type'] = array_map(function ($image) {
         return [
@@ -562,13 +567,11 @@ class MobileAppUtility {
   public function getLinkedSkus(SKUInterface $sku, string $linked_type) {
     $return = [];
     $linkedSkus = $this->skuManager->getLinkedSkus($sku, $linked_type);
+    $linkedSkus = $this->skuManager->filterRelatedSkus($linkedSkus);
 
-    foreach ($linkedSkus as $linkedSku) {
+    foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-
-      if ($linkedSkuEntity instanceof SKUInterface) {
-        $return[] = $this->getLightProduct($linkedSkuEntity);
-      }
+      $return[] = $this->getLightProduct($linkedSkuEntity);
     }
 
     return $return;
