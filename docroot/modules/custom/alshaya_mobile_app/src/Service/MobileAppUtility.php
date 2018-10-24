@@ -127,16 +127,18 @@ class MobileAppUtility {
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
    *   Product category tree.
    */
-  public function __construct(CacheBackendInterface $cache,
-                              LanguageManagerInterface $language_manager,
-                              RequestStack $request_stack,
-                              AliasManagerInterface $alias_manager,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              EntityRepositoryInterface $entity_repository,
-                              SkuManager $sku_manager,
-                              SkuImagesManager $sku_images_manager,
-                              ModuleHandlerInterface $module_handler,
-                              ProductCategoryTreeInterface $product_category_tree) {
+  public function __construct(
+    CacheBackendInterface $cache,
+    LanguageManagerInterface $language_manager,
+    RequestStack $request_stack,
+    AliasManagerInterface $alias_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository,
+    SkuManager $sku_manager,
+    SkuImagesManager $sku_images_manager,
+    ModuleHandlerInterface $module_handler,
+    ProductCategoryTreeInterface $product_category_tree
+  ) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -291,8 +293,9 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) The type of the field.
    *
-   * @return array
-   *   The array containing information of images.
+   * @return array|string
+   *   The array containing information of images if image cardinality
+   *   is greater then 1, otherwise return the first image string.
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
     $images = [];
@@ -303,7 +306,12 @@ class MobileAppUtility {
         }
       }
     }
-    return $images;
+    // Check cardinality of given field.
+    if ($entity->get($field_name)->getFieldDefinition()->getFieldStorageDefinition()->isMultiple()) {
+      return $images;
+    }
+
+    return !empty($images) ? $images[0] : '';
   }
 
   /**
@@ -353,8 +361,8 @@ class MobileAppUtility {
    * @param bool $mobile_only
    *   (optional) True to mobile only links.
    *
-   * @return \Drupal\taxonomy\TermInterface[]
-   *   The array containing Term objects.
+   * @return array
+   *   The array containing terms related data.
    */
   protected function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
     $data = [];
@@ -388,6 +396,26 @@ class MobileAppUtility {
       $data[] = $record;
     }
     return $data;
+  }
+
+  /**
+   * Get the boolean field value.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $field
+   *   The link field name.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
+   *
+   * @return array
+   *   Return the associative array with url and deeplink.
+   */
+  protected function getFieldBoolean($entity, string $field, $label = '', $type = NULL) {
+    $value = $entity->get($field)->first()->getValue()['value'];
+    return empty($label) ? $value : [$label => $value];
   }
 
   /**
