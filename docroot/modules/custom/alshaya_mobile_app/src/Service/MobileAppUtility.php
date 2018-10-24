@@ -20,7 +20,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
-use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Utilty Class.
@@ -489,7 +488,7 @@ class MobileAppUtility {
   public function getLightProductFromNid(int $nid, string $langcode = 'en') {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
 
-    if (!$node instanceof Node) {
+    if (!$node instanceof NodeInterface) {
       return [];
     }
     // Get translated node.
