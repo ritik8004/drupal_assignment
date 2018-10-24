@@ -84,6 +84,14 @@ class ProductReportController extends ControllerBase {
    * Controller to download Product Report.
    */
   public function downloadReport() {
+    $path = file_create_url($this->fileSystem->realpath("temporary://"));
+    $site_name = $this->config('system.site')->get('name');
+    $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
+    $filename = 'product-report-' . $site_name . '-' . $time_format . '.csv';
+
+    $fp = fopen($path . '/' . $filename, 'w');
+    fwrite($fp, 'SKU, Type, Language, Product ID, Stock, Price, Final Price, Special Price' . "\n");
+
     $select = $this->database->select('acq_sku_field_data');
     $select->fields('acq_sku_field_data', [
       'sku',
@@ -96,16 +104,9 @@ class ProductReportController extends ControllerBase {
       'final_price',
     ]);
     $select->orderBy('sku', 'ASC');
-    $skus = $select->execute()->fetchAll(\PDO::FETCH_ASSOC);
+    $result = $select->execute();
 
-    $path = file_create_url($this->fileSystem->realpath("temporary://"));
-    $site_name = $this->config('system.site')->get('name');
-    $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
-    $filename = 'product-report-' . $site_name . '-' . $time_format . '.csv';
-
-    $fp = fopen($path . '/' . $filename, 'w');
-    fwrite($fp, 'SKU, Type, Language, Product ID, Stock, Price, Final Price, Special Price' . "\n");
-    foreach ($skus as $sku) {
+    while (($sku = $result->fetchAssoc()) !== FALSE) {
       fwrite($fp, $sku['sku'] . ',' . $sku['type'] . ',' . $sku['langcode'] . ',' . $sku['product_id'] . ',' . $sku['stock'] . ',' . $sku['price'] . ',' . $sku['final_price'] . ',' . $sku['special_price'] . "\n");
     }
 
