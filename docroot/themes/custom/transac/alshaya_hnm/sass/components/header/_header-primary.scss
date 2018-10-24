@@ -531,6 +531,7 @@ header {
 .main--menu {
   @include breakpoint($desktop) {
     display: block !important;
+    position: relative;
   }
 
   @include breakpoint($upto-desktop) {
@@ -562,22 +563,17 @@ header {
     }
 
     ul.menu--one__list {
-      display: block !important;
-      text-align: center;
-      width: 100%;
-      margin: 0;
-      font-size: 0;
-      background: $mm_bg;
-      padding: 0 calc((100% - 1284px) / 2);
+      display: table !important;
+      width: auto;
+      margin: 0 auto;
+
+      .menu-backdrop {
+        border-bottom: 4px solid $mm_l2_hover_border;
+      }
     }
 
     li.menu--one__list-item {
       display: inline-block;
-      vertical-align: top;
-      list-style: none;
-      text-align: center;
-      text-transform: lowercase;
-      height: 2.6875rem;
 
       .menu__link-wrapper {
         .menu--one__link {
@@ -632,11 +628,6 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          visibility: visible;
-          opacity: 1;
-          z-index: 1;
-          transition: all 0.25s ease-in 0s;
-
           &::after {
             content: '';
             height: 1px;
@@ -650,31 +641,8 @@ header {
         }
       }
 
-      .menu__link {
-        font-size: 0.75rem;
-        color: $mm_l1_link;
-        text-decoration: none;
-      }
-
-      ul ul {
-        display: none;
-      }
-
       ul.menu--two__list {
-        max-width: 80.25rem;
-        left: 0;
-        right: 0;
-        margin: auto;
-        top: 100%;
-        #{$left}: 0;
-        width: 100%;
-        z-index: -1;
-        position: absolute;
-        display: block;
-        opacity: 0;
-        visibility: hidden;
         overflow: hidden;
-        transition: all 0.25s ease-in 0s;
         border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
@@ -698,18 +666,7 @@ header {
   }
 
   .menu--two__list {
-    position: absolute;
-    width: 100%;
-    text-align: $left;
-    top: 2.5625rem;
-    #{$left}: 0;
-    #{$left}: 0;
     background: $mm_l2_bg;
-    z-index: 10;
-    padding-top: 0.5625rem;
-    padding-#{$left}: 0;
-    padding-#{$right}: calc((100% - 1284px) / 2);
-    min-height: 22.125rem;
 
     a {
       color: $mm_l2_link;

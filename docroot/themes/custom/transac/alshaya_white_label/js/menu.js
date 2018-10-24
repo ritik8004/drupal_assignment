@@ -219,6 +219,7 @@
       // Set menu level2 height on desktop and tablet.
       var windowWidth = $(window).width();
       var menuLevel2 = $('.menu--two__list');
+      var menuBackdrop = $('.menu-backdrop');
 
       function setMenuHeight() {
         if (menuLevel2.length > 0 && windowWidth > 767) {
@@ -230,6 +231,7 @@
                 return Math.max(first, second);
               });
 
+          menuBackdrop.height(maxHeight);
           menuLevel2.each(function () {
             $(this).height(maxHeight);
           });
