@@ -382,7 +382,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of data.
    */
   protected function getFieldParagraphItems($entity, string $field, $label = NULL, $type = NULL): array {
-    // Get normalized Paragraph entity of given field.
+    // Load entities associated with entity reference revision field.
     $entities = $entity->get($field)->referencedEntities();
     $field_output = ['type' => $type, 'items' => []];
     foreach ($entities as $entity) {
@@ -411,7 +411,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of data.
    */
   protected function getFieldRecursiveParagraphItems($entity, string $field, $label = NULL, $type = NULL) {
-    // Get normalized Paragraph entity of given field.
+    // Load entities associated with entity reference revision field.
     $entities = $entity->get($field)->referencedEntities();
     $field_output = [];
     foreach ($entities as $entity) {
@@ -419,12 +419,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       // the paragraph types listed in getEntityBundleInfo().
       if (!$data = $this->processEntityBundleData($entity)) {
         $data = [];
-        // Get normalized Paragraph entity, as we don't need layout paragraph
-        // item. we are interested in paragraph types that are stored inside
-        // layout paragraph items.
+        // Get configured fields of entity, we don't require base fields.
         $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
         $paragraph_fields = $this->getConfiguredFields($entity);
         foreach ($paragraph_fields as $field_name) {
+          // We are interested in paragraph types that are stored inside
+          // layout paragraph items.
           if (empty($data = $this->processParagraphReferenceField($entity, $field_name))) {
             $field_values = $entity->get($field_name)->getValue();
             foreach ($field_values as $field_value) {
@@ -439,10 +439,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   }
 
   /**
-   * The function to process normalized entity reference revision field data.
+   * The function to process paragraph entity fields data.
    *
    * @param object $entity
-   *   Normalize array containing target_id and target_type.
+   *   The entity object.
    *
    * @return array
    *   Return data array.
@@ -462,7 +462,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       ? $entity->bundle()
       : $entity->getEntityTypeId(),
     ];
-    // Get normalized Paragraph entity.
+    // Get configured fields of entity, we don't require base fields.
     $paragraph_fields = $this->getConfiguredFields($entity);
     foreach ($paragraph_fields as $field_name) {
       if (empty($row = $this->processParagraphReferenceField($entity, $field_name))) {
@@ -639,7 +639,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of data.
    */
   protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
-    // Get normalized Paragraph entity of given field.
     $items = $entity->get($field)->getValue();
 
     $results = array_map(function ($item) {
