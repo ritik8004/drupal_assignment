@@ -99,7 +99,7 @@ alshaya_acm_product.product_display_settings:
     _permission: 'administer alshaya config'
 
 alshaya_acm_product.product_sku_export:
-  path: '/admin/config/alshaya/sku-export-data'
+  path: '/admin/commerce/sku-export-data'
   defaults:
     _controller: '\Drupal\alshaya_acm_product\Controller\ProductReportController::downloadReport'
     _title: ''
