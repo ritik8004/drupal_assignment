@@ -468,6 +468,11 @@ class ProductSyncResource extends ResourceBase {
       $this->logger->info('Ignored SKUs: @ignored_skus', ['@ignored_skus' => implode(',', $ignored_skus)]);
     }
 
+    // Log Product sync summary for failed ones.
+    if (!empty($failed_skus)) {
+      $this->logger->error('Failed SKUs: @failed_skus', ['@failed_skus' => implode(',', $failed_skus)]);
+    }
+
     return (new ModifiedResourceResponse($response));
   }
 
