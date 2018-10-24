@@ -86,6 +86,7 @@ $special-price: #b70025;
 $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
+$_moschino-menu-link: #b7b8b7;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1010,8 +1011,10 @@ $progress_loader: $marine-blue;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
-$plp-sub-menu-child-link: $white-five;
-$plp-sub-menu-heading-link: $white-five;
+$plp-sub-menu-child-link: $_moschino-menu-link;
+$plp-sub-menu-heading-link: $_moschino-menu-link;
+$plp-sub-menu-child-link-active: $white-five;
+$plp-sub-menu-heading-link-active: $white-five;
 $plp-sub-menu-cls-btn-txt: $mothercare-black;
 $plp-sub-menu-cls-btn-bg: $white-five;
 $plp-machino-modal-content-bg: $white-five;

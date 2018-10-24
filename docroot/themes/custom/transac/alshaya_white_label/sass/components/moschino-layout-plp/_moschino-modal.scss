@@ -29,6 +29,7 @@
 
       @include breakpoint($only-mobile) {
         background-size: 3rem;
+        font-size: 1.25rem;
       }
     }
 
