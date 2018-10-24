@@ -85,7 +85,8 @@ class ProductReportController extends ControllerBase {
    */
   public function downloadReport() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
-    $site_name = $this->config('system.site')->get('name');
+    // @codingStandardsIgnoreLine
+    global $site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
     $filename = 'product-report-' . $site_name . '-' . $time_format . '.csv';
 
