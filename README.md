@@ -145,6 +145,12 @@ In order to perform the private key forwarding, do following:
 * `​ssh-add ~/.ssh/your_private_key​` (this adds your key to the ssh agent, the path to your private key your connecting to Acquia Cloud with - by default ​~/.ssh/id_rsa​)
 * `​ssh-add -L`​ (ensure your private key is listed between the keys displayed on ssh agent) 4. ​vagrant ssh​ (connects to you guest machine)
 
+### Drush aliases
+
+* On your local environment, you don't need to use any drush alias to access the sites. The proper format is `drush -l local.alshaya-<site>.com` from inside of the vm.
+* Acquia cloud sites are reachable from inside of vm (assuming your private key is properly forwarded, see previous paragraph) with `drush @<site>.01<env>` format. For example: `drush @hmkw.01dev3 status` will display status of hmkw site on dev3 environment.
+* On Acquia Cloud, the sites are only reachable via drush without the alias from inside of the environment you are in (cross-environment connections are not supported via drush, however a direct ssh/scp connection can be used if needed). Therefore we are not using drush aliases in that case and use format `drush -l <site>.<env>-alshaya.acsitefactory.com` from the application's `docroot` folder to reach that site.
+
 ### Local setup of Behat:
 * Start Behat installation on your local by following the steps below:
   * Create a directory, say 'alshaya_behat' [if not exist]
