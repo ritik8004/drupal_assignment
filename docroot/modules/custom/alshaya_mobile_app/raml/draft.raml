@@ -465,6 +465,62 @@ schemas:
           }
         }
       }
+  - KnetInitRequest: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "state_key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+  - KnetFinalizeRequest: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          },
+          "post_date": {
+            "type": "string"
+          },
+          "transaction_id": {
+            "type": "string"
+          },
+          "auth_code": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "tracking_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          },
+          "quote_id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
   - GetProduct: |
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -1263,3 +1319,26 @@ schemas:
             body:
               application/json:
                 schema: GetProduct
+  /knet:
+    /init:
+      /{cart_id}:
+        get:
+          description: "K-Net init request and get URL."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: KnetInitRequest
+                  example: |
+                    {"state_key":"f1c1b706d29cf7a5c07b9de09b47bb4a","url":"https:\/\/www.knetpaytest.com.kw:443\/CGW302\/hppaction?formAction=com.aciworldwide.commerce.gateway.payment.action.HostedPaymentPageAction\u0026\u0026PaymentID=5385266411682950"}
+    /finalize:
+      /{state_key}:
+        get:
+          description: "K-Net get final status and data of transaction."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: KnetFinalizeRequest
+                  example: |
+                    {"payment_id":"5339950131882960","result":"CAPTURED","post_date":"1024","transaction_id":"1571958141882960","auth_code":"188519","ref":"829618580773","tracking_id":"HMKWHDE0000812","user_id":"0","customer_id":"158","quote_id":"2871","amount":2.5,"status":"success"}
