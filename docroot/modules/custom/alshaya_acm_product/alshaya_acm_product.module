@@ -862,10 +862,8 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
       if ($show_on_load % $per_page !== 0) {
-        $query = $request->query->get('show_on_load');
-        unset($query['show_on_load']);
         unset($_GET['show_on_load']);
-        $request->query->set($query);
+        $request->query->set('show_on_load', NULL);
       }
       // We use the show on load only on page load.
       if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
