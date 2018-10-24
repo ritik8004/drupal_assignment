@@ -3,14 +3,14 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\alshaya_acm_knet\KnetHelper;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Provides a resource to init k-net request and get url.
+ * Provides a resource to get final status and data of transaction.
  *
  * @RestResource(
  *   id = "knet_finalize_request",
@@ -30,7 +30,14 @@ class KnetFinalizeRequestResource extends ResourceBase {
   private $knetHelper;
 
   /**
-   * DeliveryMethodResource constructor.
+   * The mobile app utility service.
+   *
+   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   */
+  private $mobileAppUtility;
+
+  /**
+   * KnetFinalizeRequestResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -44,10 +51,13 @@ class KnetFinalizeRequestResource extends ResourceBase {
    *   Logger channel.
    * @param \Drupal\alshaya_acm_knet\KnetHelper $knet_helper
    *   K-Net Helper.
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   The mobile app utility service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, KnetHelper $knet_helper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, KnetHelper $knet_helper, MobileAppUtility $mobile_app_utility) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->knetHelper = $knet_helper;
+    $this->mobileAppUtility = $mobile_app_utility;
   }
 
   /**
@@ -67,7 +77,7 @@ class KnetFinalizeRequestResource extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * Initialise k-net request and return state_key and url.
+   * K-Net get final status and data of transaction.
    *
    * @param string $state_key
    *   State Key.
@@ -77,7 +87,7 @@ class KnetFinalizeRequestResource extends ResourceBase {
    */
   public function get(string $state_key) {
     if (empty($state_key)) {
-      throw new NotFoundHttpException();
+      $this->mobileAppUtility->throwException();
     }
 
     try {
