@@ -72,13 +72,15 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `vagrant ssh` to ssh into your vm
+  * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
+  * `blt local:reset-settings-file` to reset local settings file.
   * `blt refresh:local` (from inside of your vm)
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
   * Login using the default credentials:﻿no-reply@acquia.com / admin
   * Perform drush commands from inside of your vm, like `drush status -l local.alshaya-mckw.com`
   * Login quickly using `drush uli -l local.alshaya-mckw.com`  (note: currently doesn't work properly)
-* Access site through Varnish in local
+  * Access site through Varnish in local
   * Comment out the code forcing SSL redirection in `docroot/.htaccess`
   * Access the site on port 81
   * To do any change in VCL do it in `conf/varnish-4.vcl`, do `vagrant ssh` and run `sh box/scripts/configure-varnish.sh`
