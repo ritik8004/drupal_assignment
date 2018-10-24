@@ -172,6 +172,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             ],
             'field_delivery_banner' => [
               'type' => 'delivery_banner',
+              'label' => 'items',
               'callback' => 'getFieldParagraphItems',
             ],
             'field_promo_blocks' => [
@@ -384,15 +385,20 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected function getFieldParagraphItems($entity, string $field, $label = NULL, $type = NULL): array {
     // Load entities associated with entity reference revision field.
     $entities = $entity->get($field)->referencedEntities();
-    $field_output = ['type' => $type, 'items' => []];
+    $field_output = ['type' => $type];
     foreach ($entities as $entity) {
       // Call a callback function to prepare data if paragraph type is one of
       // the paragraph types listed in getEntityBundleInfo().
       if ($result = $this->processEntityBundleData($entity)) {
-        $field_output['items'][] = $result;
+        if ($label) {
+          $field_output[$label][] = $result;
+        }
+        else {
+          $field_output = array_merge($field_output, $result);
+        }
       }
     }
-    return !empty($field_output['items']) ? $field_output : [];
+    return !empty($field_output) ? $field_output : [];
   }
 
   /**

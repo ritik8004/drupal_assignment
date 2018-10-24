@@ -293,8 +293,9 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) The type of the field.
    *
-   * @return array
-   *   The array containing information of images.
+   * @return array|string
+   *   The array containing information of images if image cardinality
+   *   is greater then 1, otherwise return the first image string.
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
     $images = [];
@@ -305,7 +306,12 @@ class MobileAppUtility {
         }
       }
     }
-    return $images;
+    // Check cardinality of given field.
+    if ($entity->get($field_name)->getFieldDefinition()->getFieldStorageDefinition()->isMultiple()) {
+      return $images;
+    }
+
+    return !empty($images) ? $images[0] : '';
   }
 
   /**
