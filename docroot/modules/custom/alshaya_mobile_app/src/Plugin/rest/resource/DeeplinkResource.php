@@ -75,15 +75,17 @@ class DeeplinkResource extends ResourceBase {
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
    */
-  public function __construct(array $configuration,
-                              $plugin_id,
-                              $plugin_definition,
-                              array $serializer_formats,
-                              LoggerInterface $logger,
-                              LanguageManagerInterface $language_manager,
-                              AliasManagerInterface $alias_manager,
-                              MobileAppUtility $mobile_app_utility,
-                              RequestStack $request_stack) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    LanguageManagerInterface $language_manager,
+    AliasManagerInterface $alias_manager,
+    MobileAppUtility $mobile_app_utility,
+    RequestStack $request_stack
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
@@ -115,22 +117,30 @@ class DeeplinkResource extends ResourceBase {
    *   The response returns the deeplink.
    */
   public function get() {
-    // Path alias.
     $alias = $this->requestStack->query->get('url');
 
     if (strpos($alias, 'search') !== FALSE) {
-      $all = $this->requestStack->query->all();
+      $query_string_array = $this->requestStack->query->all();
+      // Search url may have url like,
+      // rest/v1/deeplink?url=search?keywords=dress&f[0]=category
+      // %3A10711&sort_bef_combine=search_api_relevance DESC&show_on_load=12
+      // So, the $alias contains query string like search?keywords=dress
+      // Which further needs to be parsed and "keywords" needs to be added
+      // back to query string array to generate complete search deep link.
       $parse = parse_url($alias);
       list($key, $value) = explode('=', $parse['query']);
-      $all = array_merge($all, [$key => $value]);
-      unset($all['url']);
-      unset($all['_format']);
-      $internal_url = Url::fromUri("internal:/rest/v1/{$parse['path']}", ['query' => $all])->toString(TRUE);
+      $query_string_array = array_merge($query_string_array, [$key => $value]);
+      unset($query_string_array['url']);
+      unset($query_string_array['_format']);
+      $internal_url = Url::fromUri("internal:/rest/v1/{$parse['path']}", ['query' => $query_string_array])->toString(TRUE);
       $url = $internal_url->getGeneratedUrl();
     }
     else {
-      // Get the internal path of given alias and get route parameters.
-      $internal_path = $this->aliasManager->getPathByAlias('/' . $alias, $this->mobileAppUtility->getAliasLang($alias));
+      // Get the internal path of given alias and get route object.
+      $internal_path = $this->aliasManager->getPathByAlias(
+        '/' . $alias,
+        $this->languageManager->getCurrentLanguage()->getId()
+      );
       $url_obj = Url::fromUri("internal:" . $internal_path);
       $url = $this->mobileAppUtility->getDeepLinkFromUrl($url_obj);
     }

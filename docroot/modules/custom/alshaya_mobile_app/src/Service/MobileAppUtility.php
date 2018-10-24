@@ -266,7 +266,7 @@ class MobileAppUtility {
    * @return string
    *   Return the string of language code.
    */
-  public function getAliasLang($alias) {
+  protected function getAliasLang($alias) {
     $alias_lang = NULL;
     if ($this->currentLanguage == 'ar' && !preg_match("/\p{Arabic}/u", $alias)) {
       $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
