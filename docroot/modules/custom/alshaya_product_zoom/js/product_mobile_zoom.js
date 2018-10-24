@@ -48,13 +48,24 @@
               infinite: false,
               focusOnSelect: true,
               initialSlide: currentmobSlide,
-              touchThreshold: 1000
+              touchThreshold: 5
             };
 
             var gallery = $('#product-image-gallery-mob');
             applyRtl(gallery, slickModalOptions);
 
             $('.mob-imagegallery__wrapper .subtext').show().delay(5000).fadeOut();
+
+            gallery.on('swipe', function (event, slick) {
+              var image = '.mob-imagegallery__thumbnails__image[data-slick-index="' + slick.currentSlide + '"] img';
+              if (!($(image).attr('data-scale') === 1 || $(image).attr('data-translate-x') === 0 || $(image).attr('data-translate-y') === 0)) {
+                $(image).attr('data-scale', 1);
+                $(image).attr('data-translate-x', 0);
+                $(image).attr('data-translate-y', 0);
+                $(image).css('transform', 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1)');
+                $(image).parent().removeClass('active');
+              }
+            });
 
             $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
               var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
