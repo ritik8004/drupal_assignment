@@ -127,16 +127,18 @@ class MobileAppUtility {
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
    *   Product category tree.
    */
-  public function __construct(CacheBackendInterface $cache,
-                              LanguageManagerInterface $language_manager,
-                              RequestStack $request_stack,
-                              AliasManagerInterface $alias_manager,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              EntityRepositoryInterface $entity_repository,
-                              SkuManager $sku_manager,
-                              SkuImagesManager $sku_images_manager,
-                              ModuleHandlerInterface $module_handler,
-                              ProductCategoryTreeInterface $product_category_tree) {
+  public function __construct(
+    CacheBackendInterface $cache,
+    LanguageManagerInterface $language_manager,
+    RequestStack $request_stack,
+    AliasManagerInterface $alias_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository,
+    SkuManager $sku_manager,
+    SkuImagesManager $sku_images_manager,
+    ModuleHandlerInterface $module_handler,
+    ProductCategoryTreeInterface $product_category_tree
+  ) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();

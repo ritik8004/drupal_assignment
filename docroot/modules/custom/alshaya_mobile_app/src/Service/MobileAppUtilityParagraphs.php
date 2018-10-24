@@ -98,20 +98,22 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
    *   Product category tree.
    */
-  public function __construct(MobileAppUtility $mobile_app_utility,
-                              SerializerInterface $serializer,
-                              RendererInterface $renderer,
-                              EntityFieldManagerInterface $entity_field_manager,
-                              CacheBackendInterface $cache,
-                              LanguageManagerInterface $language_manager,
-                              RequestStack $request_stack,
-                              AliasManagerInterface $alias_manager,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              EntityRepositoryInterface $entity_repository,
-                              SkuManager $sku_manager,
-                              SkuImagesManager $sku_images_manager,
-                              ModuleHandlerInterface $module_handler,
-                              ProductCategoryTreeInterface $product_category_tree) {
+  public function __construct(
+    MobileAppUtility $mobile_app_utility,
+    SerializerInterface $serializer,
+    RendererInterface $renderer,
+    EntityFieldManagerInterface $entity_field_manager,
+    CacheBackendInterface $cache,
+    LanguageManagerInterface $language_manager,
+    RequestStack $request_stack,
+    AliasManagerInterface $alias_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityRepositoryInterface $entity_repository,
+    SkuManager $sku_manager,
+    SkuImagesManager $sku_images_manager,
+    ModuleHandlerInterface $module_handler,
+    ProductCategoryTreeInterface $product_category_tree
+  ) {
     parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
@@ -155,33 +157,67 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       'node' => [
         'advanced_page' => [
           'fields' => [
-            'field_banner' => ['type' => 'banner', 'callback' => 'getFieldParagraphItems'],
-            'field_slider' => ['type' => 'slider', 'callback' => 'getFieldParagraphItems'],
-            'body' => ['type' => 'body'],
-            'field_delivery_banner' => ['type' => 'delivery_banner', 'callback' => 'getFieldParagraphItems'],
-            'field_promo_blocks' => ['callback' => 'getFieldRecursiveParagraphItems'],
+            'field_banner' => [
+              'type' => 'banner',
+              'callback' => 'getFieldParagraphItems',
+            ],
+            'field_slider' => [
+              'type' => 'slider',
+              'callback' => 'getFieldParagraphItems',
+            ],
+            'body' => [
+              'type' => 'body',
+            ],
+            'field_delivery_banner' => [
+              'type' => 'delivery_banner',
+              'callback' => 'getFieldParagraphItems',
+            ],
+            'field_promo_blocks' => [
+              'callback' => 'getFieldRecursiveParagraphItems',
+            ],
           ],
         ],
       ],
       'paragraph' => [
         '1_row_3_col_delivery_banner' => [
           'fields' => [
-            'field_title' => ['label' => 'title'],
-            'field_sub_title' => ['label' => 'subtitle'],
-            'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
+            'field_title' => [
+              'label' => 'title',
+            ],
+            'field_sub_title' => [
+              'label' => 'subtitle',
+            ],
+            'field_link' => [
+              'label' => 'url',
+              'callback' => 'getFieldLink',
+            ],
           ],
         ],
         'banner' => [
           'fields' => [
-            'field_mobile_banner_image' => ['label' => 'image', 'callback' => 'getImages'],
-            'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getFieldRecursiveParagraphItems'],
-            'field_video' => ['label' => 'video'],
+            'field_mobile_banner_image' => [
+              'label' => 'image',
+              'callback' => 'getImages',
+            ],
+            'field_link' => [
+              'label' => 'url',
+              'callback' => 'getFieldLink',
+            ],
+            'field_promo_block_button' => [
+              'label' => 'buttons',
+              'callback' => 'getFieldRecursiveParagraphItems',
+            ],
+            'field_video' => [
+              'label' => 'video',
+            ],
           ],
         ],
         'banner_full_width' => [
           'fields' => [
-            'field_banner' => ['label' => 'image', 'callback' => 'getImages'],
+            'field_banner' => [
+              'label' => 'image',
+              'callback' => 'getImages',
+            ],
           ],
         ],
         'block_reference' => [
@@ -193,10 +229,19 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         'product_carousel_category' => [
           'callback' => 'paragraphProductCarouselCategory',
           'fields' => [
-            'field_category_carousel_title' => ['label' => 'title'],
-            'field_category_carousel_limit' => ['label' => 'limit'],
-            'field_use_as_accordion' => ['label' => 'accordion', 'type' => 'boolean'],
-            'field_view_all_text' => ['label' => 'view_all'],
+            'field_category_carousel_title' => [
+              'label' => 'title',
+            ],
+            'field_category_carousel_limit' => [
+              'label' => 'limit',
+            ],
+            'field_use_as_accordion' => [
+              'label' => 'accordion',
+              'type' => 'boolean',
+            ],
+            'field_view_all_text' => [
+              'label' => 'view_all',
+            ],
             'field_category_carousel' => [
               'label' => '',
             ],
@@ -204,19 +249,41 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         ],
         'promo_block' => [
           'fields' => [
-            'field_promotion_image_mobile' => ['label' => 'image', 'callback' => 'getImages'],
-            'field_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-            'field_promo_block_button' => ['label' => 'buttons', 'callback' => 'getFieldRecursiveParagraphItems'],
-            'field_margin_mobile' => ['label' => 'margin'],
+            'field_promotion_image_mobile' => [
+              'label' => 'image',
+              'callback' => 'getImages',
+            ],
+            'field_link' => [
+              'label' => 'url',
+              'callback' => 'getFieldLink',
+            ],
+            'field_promo_block_button' => [
+              'label' => 'buttons',
+              'callback' => 'getFieldRecursiveParagraphItems',
+            ],
+            'field_margin_mobile' => [
+              'label' => 'margin',
+            ],
           ],
         ],
         'promo_block_button' => [
           'fields' => [
-            'field_button_position' => ['label' => 'position'],
-            'field_button_link' => ['label' => 'url', 'callback' => 'getFieldLink'],
-            'field_promo_text_1' => ['label' => 'text_1'],
-            'field_promo_text_2' => ['label' => 'text_2'],
-            'field_promo_theme' => ['label' => 'theme'],
+            'field_button_position' => [
+              'label' => 'position',
+            ],
+            'field_button_link' => [
+              'label' => 'url',
+              'callback' => 'getFieldLink',
+            ],
+            'field_promo_text_1' => [
+              'label' => 'text_1',
+            ],
+            'field_promo_text_2' => [
+              'label' => 'text_2',
+            ],
+            'field_promo_theme' => [
+              'label' => 'theme',
+            ],
           ],
         ],
       ],
@@ -253,7 +320,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $entity = $this->entityRepository->getTranslationFromContext($entity, $this->currentLanguage);
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
-        [$this, !empty($bundle_info['callback']) ? $bundle_info['callback'] : 'paragraphPrepareData'],
+        [
+          $this,
+          !empty($bundle_info['callback'])
+          ? $bundle_info['callback']
+          : 'prepareParagraphData',
+        ],
         [$entity, $bundle_info['fields']]
       );
     }
@@ -384,7 +456,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
 
     // Collect each field's value, load paragraph content if it contains
     // another paragraph reference otherwise get the field's value as is.
-    $data = ['type' => ($entity->getEntityTypeId() == 'paragraph') ? $entity->bundle() : $entity->getEntityTypeId()];
+    $data = [
+      'type' => ($entity->getEntityTypeId() == 'paragraph')
+      ? $entity->bundle()
+      : $entity->getEntityTypeId(),
+    ];
     // Get normalized Paragraph entity.
     $paragraph_fields = $this->getConfiguredFields($entity);
     foreach ($paragraph_fields as $field_name) {
@@ -493,7 +569,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
 
     // Generate view all link with text.
-    $url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $category_id]);
+    $url = Url::fromRoute('entity.taxonomy_term.canonical', [
+      'taxonomy_term' => $category_id,
+    ]);
     $url_string = $url->toString(TRUE);
 
     $data['view_all'] = [
@@ -507,7 +585,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     if ($data['accordion']) {
       if (empty($data['title'])) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($category_id);
-        if ($term instanceof TermInterface && $term->hasTranslation($this->currentLanguage)) {
+        if ($term instanceof TermInterface
+            && $term->hasTranslation($this->currentLanguage)
+        ) {
           $term = $term->getTranslation($this->currentLanguage);
         }
         $data['title'] = $term->label();
@@ -522,9 +602,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       // Invoke views display in executeInRenderContext to avoid cached
       // metadata leak issue.
       // @See https://www.drupal.org/project/drupal/issues/2450993
-      $results = $this->renderer->executeInRenderContext(new RenderContext(), function () use ($arguments) {
-        return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
-      });
+      $results = $this->renderer->executeInRenderContext(
+        new RenderContext(),
+        function () use ($arguments) {
+          return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+        }
+      );
       // Create an array of nodes.
       $nodes = array_map(function ($result) {
         if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
@@ -583,6 +666,28 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Get translation of given entity for given langcode.
+   *
+   * @param object $entity
+   *   The entity object.
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return object
+   *   Return entity object with translation if exists otherwise as is.
+   */
+  protected function getEntityTranslation($entity, $langcode) {
+    if (($entity instanceof ContentEntityInterface
+      || $entity instanceof ConfigEntityInterface)
+      && $entity->language()->getId() != $langcode
+      && $entity->hasTranslation($langcode)
+    ) {
+      $entity = $entity->getTranslation($langcode);
+    }
+    return $entity;
   }
 
 }
