@@ -617,7 +617,7 @@ class MobileAppUtility {
    * @return object
    *   Return entity object with translation if exists otherwise as is.
    */
-  protected function getEntityTranslation($entity, $langcode) {
+  public function getEntityTranslation($entity, $langcode) {
     if (($entity instanceof ContentEntityInterface
       || $entity instanceof ConfigEntityInterface)
       && $entity->language()->getId() != $langcode
