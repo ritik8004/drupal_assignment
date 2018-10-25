@@ -258,7 +258,7 @@ class MobileAppUtility {
     if (isset($params['taxonomy_term'])) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
     }
-    if (isset($params['node'])) {
+    elseif (isset($params['node'])) {
       $entity = $this->entityTypeManager->getStorage('node')->load($params['node']);
     }
     return $entity instanceof ContentEntityInterface ? $this->getDeepLink($entity) : '';
@@ -310,13 +310,17 @@ class MobileAppUtility {
     $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
 
     if (!empty($params['node']) && $node = $this->entityTypeManager->getStorage('node')->load($params['node'])) {
-      if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()) {
-        if ($node->hasTranslation($this->currentLanguage)) {
-          $node = $node->getTranslation($this->currentLanguage);
-        }
+      if (!$node instanceof NodeInterface) {
+        return FALSE;
       }
 
-      if ($node instanceof NodeInterface && (empty($bundle) || $node->bundle() == $bundle)) {
+      if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()
+        && $node->hasTranslation($this->currentLanguage)
+      ) {
+        $node = $node->getTranslation($this->currentLanguage);
+      }
+
+      if (empty($bundle) || $node->bundle() == $bundle) {
         return $node;
       }
     }
