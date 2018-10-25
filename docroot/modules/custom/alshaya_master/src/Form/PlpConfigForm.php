@@ -53,7 +53,7 @@ class PlpConfigForm extends ConfigFormBase {
     ];
 
     // PLP styles.
-    $plp_style_list = $config->get('all_plp_styles');
+    $plp_style_list = $config->get('all_plp_layouts');
     $form['plp_hide_facet_styles']['facet_plp_styles'] = [
       '#type' => 'select',
       '#default_value' => $config->get('facet_plp_styles'),
