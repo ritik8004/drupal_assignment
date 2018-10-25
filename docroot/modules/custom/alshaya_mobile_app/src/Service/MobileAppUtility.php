@@ -299,6 +299,10 @@ class MobileAppUtility {
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
     $images = [];
+    if (!$entity->hasField($field_name)) {
+      return $images;
+    }
+
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
         if (($file = $entity->get($field_name)->get($key)->entity) && $file instanceof FileInterface) {
@@ -339,6 +343,9 @@ class MobileAppUtility {
    *   Return the associative array with url and deeplink.
    */
   protected function getFieldLink($entity, string $field, $label = 'url', $type = NULL) {
+    if (!$entity->hasField($field)) {
+      return [];
+    }
     // Convert field link value.
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
@@ -414,6 +421,9 @@ class MobileAppUtility {
    *   Return the associative array with url and deeplink.
    */
   protected function getFieldBoolean($entity, string $field, $label = '', $type = NULL) {
+    if (!$entity->hasField($field)) {
+      return empty($label) ? '' : [];
+    }
     $value = $entity->get($field)->first()->getValue()['value'];
     return empty($label) ? $value : [$label => $value];
   }
