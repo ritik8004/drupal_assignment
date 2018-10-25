@@ -64,6 +64,14 @@ fi
 # build the artifact.
 rm -Rf $deployDir/patches
 
+# Remove the acsf tools .git file as written in drush/Commands/acsf_tools/README.md
+cd $deployDir
+git add drush/Commands/acsf_tools
+git rm -rf --cached drush/Commands/acsf_tools
+
+cd $deployDir/drush
+find 'Commands' -type d -name '.git' -exec rm -rf {} +
+
 # Log the git diff in a file so it can be used later by cloud hooks.
 cd $deployDir
 git diff --name-only > $deployDir/git-diff.txt
