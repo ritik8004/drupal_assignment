@@ -384,7 +384,9 @@ class MobileAppUtility {
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
-      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))) {
+      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))
+        && !empty($file->field_promotion_banner_target_id)
+      ) {
         $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
         $record['banner'] = file_create_url($image->getFileUri());
       }
