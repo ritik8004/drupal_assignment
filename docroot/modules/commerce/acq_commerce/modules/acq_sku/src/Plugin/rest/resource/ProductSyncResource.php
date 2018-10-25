@@ -2,13 +2,13 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
+use Differ\ArrayDiff;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Component\Utility\DiffArray;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -366,7 +366,7 @@ class ProductSyncResource extends ResourceBase {
           $this->logger->info('Updated SKU @sku for @langcode: @diff', [
             '@sku' => $sku->getSku(),
             '@langcode' => $langcode,
-            '@diff' => json_encode(self::getArrayDiff($updatedSkuData, $skuData)),
+            '@diff' => self::getArrayDiff($skuData, $updatedSkuData),
           ]);
         }
         else {
@@ -735,14 +735,16 @@ class ProductSyncResource extends ResourceBase {
    * @param array $array2
    *   Array two.
    *
-   * @return array
-   *   Array containing difference of two arrays, empty array if no diff.
+   * @return string
+   *   JSON string of array containing diff of two arrays.
    */
-  public static function getArrayDiff($array1, $array2): array {
+  public static function getArrayDiff($array1, $array2): string {
     // Cleanup in both arrays first.
     unset($array1['changed']);
     unset($array2['changed']);
-    return DiffArray::diffAssocRecursive($array1, $array2);
+
+    $differ = new ArrayDiff();
+    return json_encode($differ->diff($array1, $array2));
   }
 
 }
