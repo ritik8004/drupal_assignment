@@ -14,6 +14,8 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
+use Detection\MobileDetect;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Implements hook_preprocess_html().
@@ -139,7 +141,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
 
       $plp_type = $term->get('field_plp_layout')->value;
-      if ($plp_type == 'moschino') {
+      if ($plp_type == ProductCategoryTree::PLP_LAYOUT_MOSCHINO) {
         $variables['moschino'] = 1;
         // Load common library for moschino.
         $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-common';
@@ -149,13 +151,35 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
         // Videos on moschino PLP page.
         if (!empty($term->get('field_plp_video_links')->first())) {
+          $enable_autoplay = \Drupal::config('alshaya_master.plp_settings')->get('enable_autoplay');
+          $variables['#attached']['drupalSettings']['autoplay'] = $enable_autoplay;
+          if ($enable_autoplay == 1) {
+            $variables['autoplay_attributes'] = 'autoplay playsinline muted';
+          }
           $variables['show_videos'] = 1;
           $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-video-provider';
 
           $video_list = $term->get('field_plp_video_links');
+
+          $mobile_detect = new MobileDetect();
+
+          // On mobile devices, get mobile videos, if available.
+          if ($mobile_detect->isMobile() && !empty($term->get('field_mobile_plp_video_links')->first())) {
+            $video_list = $term->get('field_mobile_plp_video_links');
+          }
+
           foreach ($video_list as $embedded_video) {
-            $url = $embedded_video->uri;
-            $provider = $embedded_video->title;
+            $url = URL::fromUri($embedded_video->uri)->toString();
+            $provider_host = parse_url($url)['host'] ?? NULL;
+            $provider = 'custom';
+
+            if (strpos($provider_host, 'vimeo') !== FALSE) {
+              $provider = 'vimeo';
+            }
+            elseif (strpos($provider_host, 'youtube') !== FALSE || strpos($provider_host, 'youtu') !== FALSE) {
+              $provider = 'youtube';
+            }
+
             if ($provider == 'custom') {
               $variables['videos'][] = [
                 'video_source' => [

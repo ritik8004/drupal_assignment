@@ -67,35 +67,36 @@
   {% endblock %}
 
   {% if show_videos %}
-    {% set randomVideo = random(data_setup) %}
+    {% set randomVideo = random(videos) %}
     <!-- Video -->
     <div class = "plp-video">
-        <video id="plp-video-player" class="video-js vjs-16-9 vjs-big-play-centered" preload="auto"
-          autoplay loop controls
-          data-setup=
-            {% if randomVideo.src %}
-            '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
-            {% endif %}
-          >
-            {% if randomVideo.video_source %}
-              <source src = "{{ randomVideo.video_source.value }}" type = "{{ randomVideo.video_source.type }}" />
-            {% endif %}
-        </video>
-      </div>
-  {% endif %}
+      <video id="plp-video-player" class="video-js vjs-16-9 vjs-big-play-centered" preload="auto"
+        {% if autoplay_attributes %} {{ autoplay_attributes }} {% endif %} loop controls
+             data-setup=
+             {% if randomVideo.src %}
+             '{"techOrder":["{{ randomVideo.provider }}"], "sources": [{ "type": "video/{{ randomVideo.provider }}", "src": "{{ randomVideo.src }}"}] }'
+        {% endif %}
+      >
+        {% if randomVideo.video_source %}
+          <source src = "{{ randomVideo.video_source.value }}" type = "{{ randomVideo.video_source.type }}" />
+        {% endif %}
+      </video>
+    </div>
+    <!-- /video -->
+  {% else %}
+    <!-- ______________________ BREADCRUMB _______________________ -->
 
-  <!-- ______________________ BREADCRUMB _______________________ -->
-
-  {% if page.breadcrumb %}
-    <div class="c-breadcrumb">
-      <div class="l-container">
-        <div class="c-breadcrumb__region">
-          {{ page.breadcrumb }}
+    {% if page.breadcrumb %}
+      <div class="c-breadcrumb">
+        <div class="l-container">
+          <div class="c-breadcrumb__region">
+            {{ page.breadcrumb }}
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
+    <!-- /breadcrumb -->
   {% endif %}
-  <!-- /breadcrumb -->
 
   <!-- ______________________ HERO CONTENT _______________________ -->
 

@@ -20,9 +20,11 @@ function alshaya_acm_product_category_update_8020() {
     'field.storage.taxonomy_term.field_plp_menu',
     'field.storage.taxonomy_term.field_plp_layout',
     'field.storage.taxonomy_term.field_plp_menu_icon',
+    'field.storage.taxonomy_term.field_mobile_plp_video_links',
     'field.field.taxonomy_term.acq_product_category.field_plp_layout',
     'field.field.taxonomy_term.acq_product_category.field_plp_menu',
     'field.field.taxonomy_term.acq_product_category.field_plp_menu_icon',
+    'field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links',
     'field.storage.taxonomy_term.field_plp_video_links',
     'field.field.taxonomy_term.acq_product_category.field_plp_video_links',
     'field.storage.taxonomy_term.field_plp_upload_video',
@@ -35,6 +37,21 @@ function alshaya_acm_product_category_update_8020() {
     'alshaya_acm_product_category',
     'install'
   );
+
+  $block_configs = [
+    'block.block.plppromotions',
+    'block.block.plpsize',
+    'block.block.plpproductbrand',
+    'block.block.plpproductcollection',
+    'block.block.plpcolor',
+    'block.block.skusskureferencefinalprice',
+  ];
+
+  foreach ($block_configs as $block) {
+    // Re-save config for the overrides to take effect.
+    \Drupal::configFactory()->getEditable($block)
+      ->save();
+  }
 }
 
 /**
@@ -43,6 +60,8 @@ function alshaya_acm_product_category_update_8020() {
  * Add new pdp image slider position field.
  */
 function alshaya_acm_product_category_update_8019() {
+  \Drupal::service('module_installer')->install(['link_attributes']);
+
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
     'field.storage.taxonomy_term.field_pdp_image_slider_position',

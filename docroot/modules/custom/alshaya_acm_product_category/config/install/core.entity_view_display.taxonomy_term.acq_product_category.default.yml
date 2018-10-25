@@ -63,3 +63,4 @@ hidden:
   field_term_font_color: true
   langcode: true
   field_pdp_image_slider_position: true
+  field_mobile_plp_video_links: true
