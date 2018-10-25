@@ -354,6 +354,14 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Number of items to show in a slider on PDP.
     $variables['#attached']['drupalSettings']['pdp_slider_items'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number');
     $variables['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
+    // Number of items to show in a colour swatches on PDP.
+    $variables['#attached']['drupalSettings']['colour_swatch_items_mob'] = $settings->get('pdp_colour_swatch_items_settings.pdp_colour_swatch_items_0');
+    $variables['#attached']['drupalSettings']['colour_swatch_items_tab'] = $settings->get('pdp_colour_swatch_items_settings.pdp_colour_swatch_items_768');
+    $variables['#attached']['drupalSettings']['colour_swatch_items_desk'] = $settings->get('pdp_colour_swatch_items_settings.pdp_colour_swatch_items_1025');
+    // Number of items to show in a Product swatches on PDP.
+    $variables['#attached']['drupalSettings']['product_swatch_items_mob'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_0');
+    $variables['#attached']['drupalSettings']['product_swatch_items_tab'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_768');
+    $variables['#attached']['drupalSettings']['product_swatch_items_desk'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_1025');
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();

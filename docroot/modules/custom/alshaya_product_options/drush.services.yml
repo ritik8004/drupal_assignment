@@ -1,0 +1,6 @@
+services:
+  alshaya_product_options.commands:
+    class: Drupal\alshaya_product_options\Commands\AlshayaProductOptionsCommands
+    arguments: [ '@alshaya_product_options.helper', '@language_manager' ]
+    tags:
+      - { name: drush.command }

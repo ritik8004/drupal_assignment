@@ -37,20 +37,17 @@ function hammerIt(elm) {
       // No zoom applied, so add zoom, this case happens when 1st attempt.
       if (currentTransform === 'none') {
         transform =
-          'translate3d(0, 0, 0) ' +
-          'scale3d(2, 2, 1) ';
+          'translate3d(0, 0, 0) scale3d(2, 2, 1)';
       }
       // Transform exists so zoom active, in this case reset.
       else if (currentTransform !== 'matrix(1, 0, 0, 1, 0, 0)' && currentTransform !== 'matrix(0.999, 0, 0, 0.999, 0, 0)') {
         transform =
-          'translate3d(0, 0, 0) ' +
-          'scale3d(1, 1, 1) ';
+          'translate3d(0, 0, 0) scale3d(1, 1, 1)';
       }
       // Apply zoom on double tap.
       else {
         transform =
-          'translate3d(0, 0, 0) ' +
-          'scale3d(2, 2, 1) ';
+          'translate3d(0, 0, 0) scale3d(2, 2, 1)';
       }
 
       el.style.webkitTransform = transform;
@@ -58,7 +55,7 @@ function hammerIt(elm) {
       return;
     }
 
-    // Pan
+    // Pan.
     if (scale !== 1) {
       posX = last_posX + ev.deltaX;
       posY = last_posY + ev.deltaY;
@@ -78,7 +75,7 @@ function hammerIt(elm) {
       }
     }
 
-    // Pinch
+    // Pinch.
     if (ev.type === 'pinch') {
       scale = Math.max(.999, Math.min(last_scale * (ev.scale), 4));
     }
@@ -86,7 +83,7 @@ function hammerIt(elm) {
       last_scale = scale;
     }
 
-    // Panend
+    // Panend.
     if (ev.type === 'panend') {
       last_posX = posX < max_pos_x ? posX : max_pos_x;
       last_posY = posY < max_pos_y ? posY : max_pos_y;
@@ -94,8 +91,7 @@ function hammerIt(elm) {
 
     if (scale !== 1) {
       transform =
-          'translate3d(' + posX + 'px,' + posY + 'px, 0) ' +
-          'scale3d(' + scale + ', ' + scale + ', 1)';
+          'translate3d(' + posX + 'px,' + posY + 'px, 0) scale3d(' + scale + ', ' + scale + ', 1)';
     }
 
     if (transform) {
@@ -114,7 +110,7 @@ function hammerIt(elm) {
         if (isRTL() && $(window).width() < 1025) {
           ocObject.attr('dir', 'rtl');
           ocObject.slick(
-              $.extend({}, options, {rtl: true})
+            $.extend({}, options, {rtl: true})
           );
           if (context !== document) {
             ocObject.slick('resize');
