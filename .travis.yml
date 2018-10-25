@@ -132,12 +132,6 @@ deploy:
        branch: master
        php: 7.1
    - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: csv-export
-       php: 7.1
-   - provider: script
      script: "$BLT_DIR/scripts/travis/deploy_tag"
      skip_cleanup: true
      on:
