@@ -20,6 +20,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Utilty Class.
@@ -185,9 +186,8 @@ class MobileAppUtility {
       switch ($object->bundle()) {
         case 'acq_product_category':
           $department_node = alshaya_advanced_page_is_department_page($object->id());
-          // If department page node.
           if ($department_node) {
-            $return = 'rest/v1/page/advanced?url=node/' . $department_node;
+            $return = $this->pageDeepLink($department_node, 'advanced');
           }
           else {
             $return = 'category/' . $object->id() . '/product-list';
@@ -200,7 +200,7 @@ class MobileAppUtility {
       // If category is department page node.
       $department_node = alshaya_advanced_page_is_department_page($object->tid);
       if ($department_node) {
-        $return = 'rest/v1/page/advanced?url=node/' . $department_node;
+        $return = $this->pageDeepLink($department_node, 'advanced');
       }
       else {
         $return = 'category/' . $object->tid . '/product-list';
@@ -209,7 +209,6 @@ class MobileAppUtility {
     elseif ($object instanceof NodeInterface) {
       switch ($object->bundle()) {
         case 'acq_product':
-          // Get SKU attached with node.
           $sku = $object->get('field_skus')->getString();
           $return = 'product/' . $sku;
           break;
@@ -217,10 +216,43 @@ class MobileAppUtility {
         case 'acq_promotion':
           $return = 'promotion/' . $object->id() . '/product-list';
           break;
+
+        case 'static_html':
+          $return = $this->pageDeepLink($object->id(), 'simple');
+          break;
+
+        case 'advanced_page':
+          $return = $this->pageDeepLink($object->id(), 'advanced');
+          break;
       }
+    }
+    elseif ($object instanceof SKUInterface) {
+      $return = 'product/' . $object->getSku();
     }
 
     return self::ENDPOINT_PREFIX . $return;
+  }
+
+  /**
+   * Return simple page or advanced page deeplink.
+   *
+   * @param int $nid
+   *   The node id.
+   * @param string $type
+   *   (optional) The type of page default is advanced. (simple or advanced)
+   *
+   * @return string
+   *   Return string of deeplink.
+   */
+  protected function pageDeepLink($nid, $type = 'advanced') {
+    return "page/{$type}?url=" .
+    ltrim(
+      $this->aliasManager->getAliasByPath(
+        '/node/' . $nid,
+        $this->currentLanguage
+      ),
+      '/'
+    );
   }
 
   /**
@@ -233,9 +265,18 @@ class MobileAppUtility {
    *   Return deeplink url.
    */
   public function getDeepLinkFromUrl(Url $url) {
-    $return = '';
+    $params = $url->getRouteParameters();
+    if (empty($params)) {
+      return '';
+    }
 
-    return self::ENDPOINT_PREFIX . $return;
+    if (isset($params['taxonomy_term'])) {
+      $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
+    }
+    elseif (isset($params['node'])) {
+      $entity = $this->entityTypeManager->getStorage('node')->load($params['node']);
+    }
+    return $entity instanceof ContentEntityInterface ? $this->getDeepLink($entity) : '';
   }
 
   /**
@@ -247,7 +288,7 @@ class MobileAppUtility {
    * @return string
    *   Return the string of language code.
    */
-  private function getAliasLang($alias) {
+  protected function getAliasLang($alias) {
     $alias_lang = NULL;
     if ($this->currentLanguage == 'ar' && !preg_match("/\p{Arabic}/u", $alias)) {
       $alias_lang = $this->languageManager->getDefaultLanguage()->getId();
@@ -284,12 +325,17 @@ class MobileAppUtility {
     $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
 
     if (!empty($params['node']) && $node = $this->entityTypeManager->getStorage('node')->load($params['node'])) {
-      if ($node instanceof NodeInterface && $node->bundle() == $bundle) {
-        if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()) {
-          if ($node->hasTranslation($this->currentLanguage)) {
-            $node = $node->getTranslation($this->currentLanguage);
-          }
-        }
+      if (!$node instanceof NodeInterface) {
+        return FALSE;
+      }
+
+      if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()
+        && $node->hasTranslation($this->currentLanguage)
+      ) {
+        $node = $node->getTranslation($this->currentLanguage);
+      }
+
+      if (empty($bundle) || $node->bundle() == $bundle) {
         return $node;
       }
     }

@@ -13,3 +13,4 @@ permissions:
   - 'restful get search_page_product_list'
   - 'restful get knet_init_request'
   - 'restful get knet_finalize_request'
+  - 'restful get deeplink'
