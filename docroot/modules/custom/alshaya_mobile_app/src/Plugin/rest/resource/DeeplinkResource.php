@@ -118,6 +118,9 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
+    if (empty($alias)) {
+      return $this->mobileAppUtility->throwException();
+    }
 
     if (strpos($alias, 'search') !== FALSE) {
       $query_string_array = $this->requestStack->query->all();
