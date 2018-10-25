@@ -5,13 +5,21 @@
  * Contains install, update, uninstall hooks for alshaya_performance module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
 /**
  * Implements hook_update_N().
  *
- * Enable logs_http module.
+ * Add loggly_allowed_routes in alshaya_performance.settings config.
  */
 function alshaya_performance_update_8002() {
-  \Drupal::service('module_installer')->install(['logs_http']);
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_performance.settings'],
+      'alshaya_performance',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    );
 }
 
 /**
