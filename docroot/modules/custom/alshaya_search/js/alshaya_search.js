@@ -122,7 +122,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
 
       // Only execute if views is not empty.
-      if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
+      if ($('.views-infinite-scroll-content-wrapper').length !== 0 && $('#block-skusskureferencefinalprice').length !== 0) {
         // Change the title of facet when open.
         var priceCurrency = settings.alshaya_search_price_currency;
         var $finalPriceBlock = $('#block-skusskureferencefinalprice');

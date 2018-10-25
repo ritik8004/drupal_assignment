@@ -227,21 +227,26 @@
       }
 
       function processSoftLiniks(element) {
-        var softLink = element.find('a.facets-soft-limit-link');
-        var blockPlugin = element.attr('data-block-plugin-id');
-        var facet_id = blockPlugin.replace('facet_block:', '');
-        var softLimitSettings = settings.facets.softLimit;
-        var softItemsLimit = softLimitSettings[facet_id] - 1;
-        if (!isNaN(parseInt(softItemsLimit))) {
-          // Facets module would hide all instances of list items in the
-          // second instance of the facet block. This is to support same
-          // facet block twice on a page.
-          element.find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
-          element.find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
-          softLink.insertAfter(element.find('ul'));
+        try {
+          var softLink = element.find('a.facets-soft-limit-link');
+          var blockPlugin = element.attr('data-block-plugin-id');
+          var facet_id = blockPlugin.replace('facet_block:', '');
+          var softLimitSettings = settings.facets.softLimit;
+
+          var softItemsLimit = softLimitSettings[facet_id] - 1;
+          if (!isNaN(parseInt(softItemsLimit))) {
+            // Facets module would hide all instances of list items in the
+            // second instance of the facet block. This is to support same
+            // facet block twice on a page.
+            element.find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
+            element.find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
+            softLink.insertAfter(element.find('ul'));
+          }
+        }
+        catch (e) {
+          // Do nothing.
         }
       }
-
       if (context === document) {
         if ($('.c-facet__blocks__wrapper').length) {
           var facetBlockWrapper = $('.c-facet__blocks__wrapper')
@@ -372,12 +377,12 @@
         closeFilterView();
       });
 
-      // Process facet checbox softlimits on page load.
+      // Process facet checkbox softlimits on page load.
       $('.block-facet--checkbox, .block-facet--range-checkbox', context).each(function () {
         processSoftLiniks($(this));
       });
 
-      // Process facet checbox softlimits while rebuilding facets post AJAX.
+      // Process facet checkbox softlimits while rebuilding facets post AJAX.
       if ($(context).hasClass('block-facet--checkbox')) {
         processSoftLiniks($(context));
       }

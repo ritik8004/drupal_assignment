@@ -14,7 +14,6 @@ use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
-use Detection\MobileDetect;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
@@ -151,6 +150,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
         // Videos on moschino PLP page.
         if (!empty($term->get('field_plp_video_links')->first())) {
+          $desktopVideos = [];
           $enable_autoplay = \Drupal::config('alshaya_master.plp_settings')->get('enable_autoplay');
           $variables['#attached']['drupalSettings']['autoplay'] = $enable_autoplay;
           if ($enable_autoplay == 1) {
@@ -160,41 +160,24 @@ function alshaya_white_label_preprocess_page(&$variables) {
           $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-video-provider';
 
           $video_list = $term->get('field_plp_video_links');
-
-          $mobile_detect = new MobileDetect();
-
-          // On mobile devices, get mobile videos, if available.
-          if ($mobile_detect->isMobile() && !empty($term->get('field_mobile_plp_video_links')->first())) {
-            $video_list = $term->get('field_mobile_plp_video_links');
-          }
-
           foreach ($video_list as $embedded_video) {
             $url = URL::fromUri($embedded_video->uri)->toString();
-            $provider_host = parse_url($url)['host'] ?? NULL;
-            $provider = 'custom';
+            $desktopVideos[] = _alshaya_white_label_get_video_attributes($url);
+          }
 
-            if (strpos($provider_host, 'vimeo') !== FALSE) {
-              $provider = 'vimeo';
-            }
-            elseif (strpos($provider_host, 'youtube') !== FALSE || strpos($provider_host, 'youtu') !== FALSE) {
-              $provider = 'youtube';
-            }
-
-            if ($provider == 'custom') {
-              $variables['videos'][] = [
-                'video_source' => [
-                  'value' => $url,
-                  'type' => 'video/mp4',
-                ],
-              ];
-            }
-            else {
-              $variables['videos'][] = [
-                'src' => $url,
-                'provider' => $provider,
-              ];
+          if (!empty($term->get('field_mobile_plp_video_links')->first())) {
+            $mobile_video_list = $term->get('field_mobile_plp_video_links');
+            foreach ($mobile_video_list as $embedded_video) {
+              $url = URL::fromUri($embedded_video->uri)->toString();
+              $mobileVideos[] = _alshaya_white_label_get_video_attributes($url);
             }
           }
+
+          // If mobile videos are not set, use desktop videos on mobile.
+          $mobileVideos = isset($mobileVideos) ? $mobileVideos : $desktopVideos;
+
+          $variables['#attached']['drupalSettings']['desktopVideos'] = $desktopVideos;
+          $variables['#attached']['drupalSettings']['mobileVideos'] = $mobileVideos;
         }
       }
 
@@ -480,8 +463,7 @@ function alshaya_white_label_form_node_form_alter(&$form, FormStateInterface $fo
           'container-inline',
         ],
       ],
-      '#markup'             => '<h4 class="label inline">' . t('Author') . '</h4> ' . $node->getOwner()
-        ->getUsername(),
+      '#markup'             => '<h4 class="label inline">' . t('Author') . '</h4> ' . $node->getOwner()->getUsername(),
     ],
   ];
   $form['revision_information']['#type'] = 'container';
@@ -1006,7 +988,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
         $is_accordion = FALSE;
         if ($paragraph->hasField('field_use_as_accordion')
-            && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
+          && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
           $is_accordion = $accordion[0]['value'];
         }
 
@@ -1170,7 +1152,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
  */
 function _alshaya_white_label_get_image_url(FileFieldItemList $file_item_list) {
   if ((!empty($file_item_list)) &&
-  (!empty($images = $file_item_list->referencedEntities()))) {
+    (!empty($images = $file_item_list->referencedEntities()))) {
     foreach ($images as $image) {
       return $image->getFileUri();
     }
@@ -1266,4 +1248,31 @@ function _alshaya_white_label_get_media_query($resolution) {
       return $media_query;
     }
   }
+}
+
+/**
+ * Helper function to get video attributes.
+ *
+ * @param string $video_url
+ *   The url of the video.
+ *
+ * @return array
+ *   The array containing video attributes
+ */
+function _alshaya_white_label_get_video_attributes($video_url) {
+  $provider_host = parse_url($video_url)['host'] ?? NULL;
+  $type = 'mp4';
+
+  if (strpos($provider_host, 'vimeo') !== FALSE) {
+    $type = 'vimeo';
+  }
+  elseif (strpos($provider_host, 'youtube') !== FALSE || strpos($provider_host, 'youtu') !== FALSE) {
+    $type = 'youtube';
+  }
+  $videoAttributes = [
+    'src' => $video_url,
+    'type' => $type,
+  ];
+
+  return $videoAttributes;
 }
