@@ -74,7 +74,10 @@ class MoschinoHideFacetCondition extends ConditionPluginBase implements Containe
   }
 
   /**
-   * Evaluates the condition and returns TRUE or FALSE accordingly.
+   * Condition return FALSE if PLP layout is moschino.
+   *
+   * This condition is used for PLP to hide the related facet block
+   * when Moschino layout is used.
    *
    * @return bool
    *   TRUE if the condition has been met, FALSE otherwise.
@@ -85,7 +88,7 @@ class MoschinoHideFacetCondition extends ConditionPluginBase implements Containe
     }
 
     $term = $this->getContextValue('taxonomy_term');
-    if ($term->hasField('field_plp_layout') && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_STYLE_MOSCHINO) {
+    if ($term->hasField('field_plp_layout') && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_LAYOUT_MOSCHINO) {
       return FALSE;
     }
     return TRUE;

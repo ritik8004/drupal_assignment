@@ -60,6 +60,8 @@ function alshaya_acm_product_category_update_8020() {
  * Add new pdp image slider position field.
  */
 function alshaya_acm_product_category_update_8019() {
+  \Drupal::service('module_installer')->install(['link_attributes']);
+
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
     'field.storage.taxonomy_term.field_pdp_image_slider_position',
