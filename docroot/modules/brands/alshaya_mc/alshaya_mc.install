@@ -14,7 +14,7 @@ use Drupal\Core\Site\Settings;
  */
 function alshaya_mc_update_8314() {
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
-    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز/كود منتج...)')
+    ->set('search_field_placeholder', 'البحث (كلمة مفتاحية، رمز المنتج)')
     ->save();
 }
 
