@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d6c4c1e2de099af20cb0e639020cff3e",
+    "content-hash": "6d29f65040edcd8f80d036028fe19536",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -6635,6 +6635,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Allows to alter an event and allow to stop sending it as well": "https://patch-diff.githubusercontent.com/raw/Gizra/logs_http/pull/20.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
