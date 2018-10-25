@@ -18,8 +18,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Config\Entity\ConfigEntityInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -664,28 +662,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
-  }
-
-  /**
-   * Get translation of given entity for given langcode.
-   *
-   * @param object $entity
-   *   The entity object.
-   * @param string $langcode
-   *   The language code.
-   *
-   * @return object
-   *   Return entity object with translation if exists otherwise as is.
-   */
-  protected function getEntityTranslation($entity, $langcode) {
-    if (($entity instanceof ContentEntityInterface
-      || $entity instanceof ConfigEntityInterface)
-      && $entity->language()->getId() != $langcode
-      && $entity->hasTranslation($langcode)
-    ) {
-      $entity = $entity->getTranslation($langcode);
-    }
-    return $entity;
   }
 
 }
