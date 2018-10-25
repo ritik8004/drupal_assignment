@@ -211,6 +211,9 @@ class MobileAppUtility {
           break;
       }
     }
+    elseif ($object instanceof SKUInterface) {
+      $return = 'product/' . $object->getSku();
+    }
 
     return self::ENDPOINT_PREFIX . $return;
   }
