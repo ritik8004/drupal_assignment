@@ -72,8 +72,6 @@ To prepare your local env:
   * `composer blt-alias`
   * `blt vm`
   * `vagrant ssh` to ssh into your vm
-  * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
-  * `blt local:reset-settings-file` to reset local settings file.
   * `blt refresh:local` (from inside of your vm)
   * Enter the site code you want to setup the site for (this can be avoided by adding the site code in blt params like `blt refresh:local mckw`)
   * Access the site in your web browser, e.g.﻿http://local.alshaya-mckw.com/en/user
@@ -92,6 +90,9 @@ Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt 
 
 * `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
   * The reason for this is in the existing configuration values that still exist in memcache. The workaround is that you either restart the vm using ​vagrant reload​ command, or you restart memcache service using sudo service memcached restart in your vm and restart `blt refresh:local` again
+* In case, updates done to default settings.php don't reflect in sites/g/settings/local.settigns.php:
+    * `rm -rf docroot/sites/g/settings/local.settings.php` to make sure refresh local or local reset settings updates the file with new settings.
+    * `blt local:reset-settings-file` to reset local settings file.
 
 ### Create a new site
 
