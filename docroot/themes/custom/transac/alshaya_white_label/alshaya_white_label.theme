@@ -56,11 +56,6 @@ function alshaya_white_label_preprocess_html(&$variables) {
     }
   }
 
-  // Add class for enabling hover effect on PDP.
-  if (\Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches_hover')) {
-    $variables['attributes']['class'][] = 'color-swatches-hover';
-  }
-
   $current_route = \Drupal::routeMatch();
 
   // Add body class for slug banner.
@@ -367,6 +362,8 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['product_swatch_items_mob'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_0');
     $variables['#attached']['drupalSettings']['product_swatch_items_tab'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_768');
     $variables['#attached']['drupalSettings']['product_swatch_items_desk'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_1025');
+    $variables['#attached']['drupalSettings']['color_swatches_hover'] = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches_hover');
+
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
