@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5fa8961880c31b8e918453a17d242d5",
+    "content-hash": "54e6ffcc79e1d052755534440784f02d",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -410,7 +410,7 @@
             "version": "v5.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/enyo/dropzone.git",
+                "url": "git@github.com:enyo/dropzone.git",
                 "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9"
             },
             "dist": {
@@ -476,6 +476,48 @@
                 "html"
             ],
             "time": "2018-03-15T21:23:44+00:00"
+        },
+        {
+            "name": "charliekassel/array-diff",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliekassel/array-diff.git",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "psr-4": {
+                    "Differ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charlie Kassel",
+                    "email": "ck@charliekassel.com"
+                }
+            ],
+            "description": "Find the difference between two array's",
+            "time": "2018-02-19T14:48:47+00:00"
         },
         {
             "name": "ckeditor/font",
@@ -5081,7 +5123,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.5",
-                    "datestamp": "1527241084",
+                    "datestamp": "1539588781",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
