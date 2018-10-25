@@ -364,7 +364,7 @@ class MobileAppUtility {
    * @return array
    *   The array containing terms related data.
    */
-  protected function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
+  public function getAllCategories(string $langcode = '', $parent = 0, $child = TRUE, $mobile_only = FALSE) {
     $data = [];
     if (empty($langcode)) {
       $langcode = $this->currentLanguage;
