@@ -34,6 +34,13 @@ class MobileAppUtility {
   const ENDPOINT_PREFIX = '/rest/v1/';
 
   /**
+   * Array of term urls for dependencies.
+   *
+   * @var array
+   */
+  protected $termUrls = [];
+
+  /**
    * Cache Backend service for alshaya.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -104,6 +111,13 @@ class MobileAppUtility {
   protected $currentLanguage;
 
   /**
+   * File storage object.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -149,6 +163,7 @@ class MobileAppUtility {
     $this->skuImagesManager = $sku_images_manager;
     $this->moduleHandler = $module_handler;
     $this->productCategoryTree = $product_category_tree;
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
   }
 
@@ -384,7 +399,9 @@ class MobileAppUtility {
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
-      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))) {
+      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))
+        && !empty($file->field_promotion_banner_target_id)
+      ) {
         $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
         $record['banner'] = file_create_url($image->getFileUri());
       }
@@ -396,6 +413,16 @@ class MobileAppUtility {
       $data[] = $record;
     }
     return $data;
+  }
+
+  /**
+   * Return term urls to cache.
+   *
+   * @return array
+   *   Return Term urls array.
+   */
+  public function cachedTermUrls() {
+    return $this->termUrls;
   }
 
   /**
