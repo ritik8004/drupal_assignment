@@ -248,6 +248,10 @@ class MobileAppUtility {
    */
   public function getDeepLinkFromUrl(Url $url) {
     $params = $url->getRouteParameters();
+    if (empty($params)) {
+      return '';
+    }
+
     if (isset($params['taxonomy_term'])) {
       $entity = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
     }
