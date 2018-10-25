@@ -226,8 +226,6 @@
 
     table[id^=edit-totals] tr[data-drupal-selector="edit-totals-discount"] {
       td {
-        color: $order_detail_total_tr_row_price_td;
-
         &:nth-child(2) {
           background: $white-five;
           padding-top: 0.5em !important;

@@ -215,7 +215,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           '#stock_placeholder' => $stock_placeholder,
           '#cache' => [
             'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
-            'contexts' => ['url'],
+            'contexts' => ['route'],
           ],
         ];
 
