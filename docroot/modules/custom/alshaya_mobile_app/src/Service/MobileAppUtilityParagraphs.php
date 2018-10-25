@@ -502,10 +502,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of processed paragraph data.
    */
   protected function processParagraphReferenceField(ParagraphInterface $entity, string $field_name): array {
-    $data = [];
     if (!$entity->hasField($field_name)) {
-      return $data;
+      return [];
     }
+
+    $data = [];
     $field_type = $entity->get($field_name)->getFieldDefinition()->getType();
     if ($field_type == "entity_reference_revisions" || $field_type == "entity_reference") {
       $children = $entity->get($field_name)->referencedEntities();

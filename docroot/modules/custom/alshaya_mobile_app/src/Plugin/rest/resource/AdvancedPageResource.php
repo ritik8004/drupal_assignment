@@ -11,6 +11,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
@@ -131,10 +132,12 @@ class AdvancedPageResource extends ResourceBase {
     $term_id = alshaya_advanced_page_get_department_category($node->id());
     if ($term_id) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id);
-      $blocks[] = [
-        'type' => 'block',
-        'body' => $term->getDescription(),
-      ];
+      if ($term instanceof TermInterface) {
+        $blocks[] = [
+          'type' => 'block',
+          'body' => $term->getDescription(),
+        ];
+      }
     }
 
     foreach ($this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'] as $field => $field_info) {

@@ -298,11 +298,11 @@ class MobileAppUtility {
    *   is greater then 1, otherwise return the first image string.
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
-    $images = [];
     if (!$entity->hasField($field_name)) {
-      return $images;
+      return [];
     }
 
+    $images = [];
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
         if (($file = $entity->get($field_name)->get($key)->entity) && $file instanceof FileInterface) {
