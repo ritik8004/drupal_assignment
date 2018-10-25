@@ -1,0 +1,6 @@
+services:
+  alshaya_image_sitemap.commands:
+    class: Drupal\alshaya_image_sitemap\Commands\AlshayaImageSitemapCommands
+    arguments: [ '@alshaya_image_sitemap.generator', '@config.factory', '@logger.factory' ]
+    tags:
+      - { name: drush.command }

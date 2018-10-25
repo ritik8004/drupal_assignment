@@ -1,0 +1,6 @@
+services:
+  alshaya_promo_panel.commands:
+    class: Drupal\alshaya_promo_panel\Commands\AlshayaPromoPanelCommands
+    arguments: [ '@entity_type.manager', '@config.factory' ]
+    tags:
+    - { name: drush.command }

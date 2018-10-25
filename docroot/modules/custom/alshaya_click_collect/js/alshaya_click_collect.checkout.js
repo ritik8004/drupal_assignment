@@ -1,3 +1,8 @@
+/**
+ * @file
+ * JS related to click & collect on PDP.
+ */
+
 (function ($, Drupal, drupalSettings) {
   'use strict';
 
@@ -9,11 +14,11 @@
   var lastCoords;
   // Selected coordinates.
   var ascoords;
-  // Store list
+  // Store list.
   var storeList;
   // Index to show in marker as label.
   var index;
-  // Map wrapper
+  // Map wrapper.
   var mapWrapper = $('#click-and-collect-map-view');
 
   // Geolocation map object.
@@ -281,7 +286,7 @@
     selectedOnMap.execute();
   };
 
-  // View selected store on map
+  // View selected store on map.
   Drupal.checkoutClickCollect.storeViewOnMapSelected = function (StoreObj, makerIndex) {
     // Create/Get map object.
     var map = Drupal.checkoutClickCollect.mapCreate();
@@ -341,7 +346,7 @@
     return geolocationMap;
   };
 
-  // push marker to add to map.
+  // Push marker to add to map.
   Drupal.checkoutClickCollect.mapPushMarker = function (param, extra) {
     index++;
     Drupal.checkoutClickCollect.mapCreateMarker(this, param.geolocationMap, index);
@@ -434,6 +439,5 @@
       $('#click-and-collect-list-view').html('');
     }
   };
-
 
 })(jQuery, Drupal, drupalSettings);

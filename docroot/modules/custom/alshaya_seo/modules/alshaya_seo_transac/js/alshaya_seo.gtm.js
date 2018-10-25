@@ -43,7 +43,7 @@
       var footerNewsletterSubmiClicked = false;
 
       // Set platformType.
-      $('body').once('page-load-gta').each(function() {
+      $('body').once('page-load-gta').each(function () {
         var md = new MobileDetect(window.navigator.userAgent);
         if (md.tablet() !== null) {
           dataLayer.push({
@@ -199,7 +199,9 @@
         $.removeCookie('Drupal.visitor.alshaya_gtm_create_user_pc', {path: '/'});
       });
 
-      /** Track coupon code application. **/
+      /**
+       * Track coupon code application.
+       */
       if (couponCode) {
         var cart = $.cookie('Drupal.visitor.acq_cart_id');
         var appliedCoupon = $.cookie('coupon_applied');
@@ -226,7 +228,9 @@
         $.removeCookie('coupon_applied');
       }
 
-      /** Track store finder clicks. **/
+      /**
+       * Track store finder clicks.
+       */
       if (isStoreFinderPage && gtm_execute_onetime_events) {
         var searchTextBox = storeFinderFormSelector.find('input[data-drupal-selector="edit-geolocation-geocoder-google-places-api"]');
         var keyword = searchTextBox.val();
@@ -254,7 +258,9 @@
         }
       }
 
-      /** Impressions tracking on listing pages with Products. **/
+      /**
+       * Impressions tracking on listing pages with Products.
+       */
       if ((gtmPageType === 'product detail page') || (gtmPageType === 'cart page')) {
         var count_pdp_items = 1;
         if (!drupalSettings.hasOwnProperty('impressions_position')) {
@@ -316,7 +322,9 @@
         }
       }
 
-      /** Newsletter tracking GTM .**/
+      /**
+       * Newsletter tracking GTM.
+       */
       $('footer .edit-newsletter').click(function () {
         footerNewsletterSubmiClicked = true;
       });
@@ -340,7 +348,9 @@
         }
       });
 
-      /** Quantity update in cart. **/
+      /**
+       * Quantity update in cart.
+       */
       // Trigger removeFromCart & addToCart events based on the quantity update on cart page.
       $('select[gtm-type="gtm-quantity"]').on('select2:open', function () {
         originalCartQty = $(this).val();
@@ -399,7 +409,9 @@
         }
       });
 
-      /** Remove Product from cart .**/
+      /**
+       * Remove Product from cart.
+       */
       // Add click handler to fire 'removeFromCart' event to GTM.
       removeCartSelector.once('js-event').each(function () {
         // Get selector holding details around the product.
@@ -437,17 +449,23 @@
         });
       });
 
-      /** Tracking New customers .**/
+      /**
+       * Tracking New customers.
+       */
       cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
         Drupal.alshaya_seo_gtm_push_customer_type('checkout as guest');
       });
 
-      /** Tracking Returning customers .**/
+      /**
+       * Tracking Returning customers.
+       */
       cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
         Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
       });
 
-      /** Tracking Home Delivery .**/
+      /**
+       * Tracking Home Delivery.
+       */
       if ((cartCheckoutDeliverySelector.length !== 0) &&
         (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
@@ -472,7 +490,9 @@
         });
       });
 
-      /** GTM virtual page tracking for click & collect journey. **/
+      /**
+       * GTM virtual page tracking for click & collect journey.
+       */
       if (isCCPage) {
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
@@ -498,7 +518,9 @@
         });
       }
 
-      /** Tracking selected payment option .**/
+      /**
+       * Tracking selected payment option.
+       */
       // Fire this only if on checkout Payment option page & Ajax response brings in cart-checkout-payment div.
       if ((cartCheckoutPaymentSelector.length !== 0) && ($('fieldset[gtm-type="cart-checkout-payment"]', context).length > 0)) {
         var preselectedMethod = $('[gtm-type="cart-checkout-payment"] input:checked');
@@ -519,7 +541,9 @@
         });
       }
 
-      /** Product Click Handler .**/
+      /**
+       * Product Click Handler.
+       */
       // Add click link handler to fire 'productClick' event to GTM.
       productLinkSelector.each(function () {
         $(this).once('js-event').on('click', function (e) {
@@ -561,7 +585,9 @@
         dataLayer.push(data);
       }
 
-      /** Product click handler for Modals. **/
+      /**
+       * Product click handler for Modals.
+       */
       // Add click link handler to fire 'productClick' event to GTM.
       $('a[href*="product-quick-view"]').each(function () {
         $(this).once('js-event').on('click', function (e) {
@@ -580,12 +606,10 @@
           }
 
           currentListName = subListName;
-          // position = $('.view-product-slider .owl-item').index(that.closest('.owl-item')) + 1;
           position = drupalSettings.impressions_position[that.attr('data-nid') + '-' + subListName];
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, subListName, position);
         });
       });
-
 
       var highlightsPosition = 1;
       topNavLevelOneSelector.once('set-positions').find('.highlights [gtm-type="gtm-highlights"]').each(function () {
@@ -593,7 +617,9 @@
         highlightsPosition++;
       });
 
-      /** Tracking internal promotion impressions. **/
+      /**
+       * Tracking internal promotion impressions.
+       */
       // Tracking menu level promotions.
       topNavLevelOneSelector.each(function () {
         $(this).once('js-event').mouseenter(function () {
@@ -686,7 +712,9 @@
         });
       }
 
-      /** Tracking clicks on fitler & sort options. **/
+      /**
+       * Tracking clicks on fitler & sort options.
+       */
       if (listName === 'PLP' || listName === 'Search Results Page') {
         var section = listName;
         if (listName === 'PLP') {
@@ -859,7 +887,7 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if(gtmPageType === 'home page') {
+      else if (gtmPageType === 'home page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
         if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
@@ -1024,6 +1052,7 @@
    * Helper function to translate non-site default lang shipping method label.
    *
    * @param selectedMethodLabel
+   *
    * @returns {*}
    */
   Drupal.alshaya_seo_translate_shipping_method = function (selectedMethodLabel) {
@@ -1041,9 +1070,10 @@
   /**
    * Helper function to fetch value for a query string.
    *
-	 * @param variable
-	 * @returns {string}
-	 */
+   * @param variable
+   *
+   * @returns {string}
+   */
   Drupal.getQueryVariable = function (variable) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
