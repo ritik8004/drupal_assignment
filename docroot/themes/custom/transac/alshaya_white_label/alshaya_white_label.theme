@@ -337,6 +337,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
   }
   elseif ($variables['node']->bundle() === 'acq_product') {
     $settings = \Drupal::config('alshaya_acm_product.settings');
+    $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
 
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
@@ -362,7 +363,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['product_swatch_items_mob'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_0');
     $variables['#attached']['drupalSettings']['product_swatch_items_tab'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_768');
     $variables['#attached']['drupalSettings']['product_swatch_items_desk'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_1025');
-    $variables['#attached']['drupalSettings']['color_swatches_hover'] = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches_hover');
+    $variables['#attached']['drupalSettings']['color_swatches_hover'] = $product_display_settings->get('color_swatches_hover');
 
   }
   elseif ($variables['node']->bundle() === 'store') {
