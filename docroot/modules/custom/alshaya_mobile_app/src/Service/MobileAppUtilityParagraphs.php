@@ -369,6 +369,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         [$entity, $field, $label, $type]
       );
     }
+    // Return empty array, if $data contains only 'type' key.
     return count($data) > 1 ? $data : [];
   }
 
@@ -541,7 +542,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             !empty($field_info['type']) ? $field_info['type'] : NULL,
           ]
         );
-
+        // When result comes with label, merge it with the array,
+        // as we don't have to create element.
         if ($field_info['callback'] == 'getFieldLink' || isset($result[$field_info['label']])) {
           $data = array_merge($data, $result);
         }

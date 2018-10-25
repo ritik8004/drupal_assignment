@@ -417,8 +417,9 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) The type of the field.
    *
-   * @return array
-   *   Return the associative array with url and deeplink.
+   * @return array|string
+   *   Return the associative array with label if label variable is not
+   *   empty else return only value.
    */
   protected function getFieldBoolean($entity, string $field, $label = '', $type = NULL) {
     if (!$entity->hasField($field)) {
