@@ -263,6 +263,24 @@ function alshaya_advanced_page_is_department_page($tid) {
 }
 
 /**
+ * Check given node is department page.
+ *
+ * Check for given node, department category term exists. If department
+ * term exists then return that department page node id or return false.
+ *
+ * @param int $nid
+ *   The node id.
+ *
+ * @return int|bool
+ *   Department page term id or false.
+ */
+function alshaya_advanced_page_get_department_category($nid) {
+  $department_terms = alshaya_advanced_page_get_pages();
+  $department_nodes = array_flip($department_terms);
+  return $department_nodes[$nid] ?: FALSE;
+}
+
+/**
  * Callback for converting one content type to another.
  */
 function _alshaya_advanced_page_convert_base_tables($to_type, $nids, $base_tables) {

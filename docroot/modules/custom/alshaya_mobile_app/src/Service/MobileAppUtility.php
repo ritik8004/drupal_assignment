@@ -424,7 +424,7 @@ class MobileAppUtility {
     if (!$entity->hasField($field)) {
       return empty($label) ? '' : [];
     }
-    $value = $entity->get($field)->first()->getValue()['value'];
+    $value = (bool) $entity->get($field)->first()->getValue()['value'];
     return empty($label) ? $value : [$label => $value];
   }
 

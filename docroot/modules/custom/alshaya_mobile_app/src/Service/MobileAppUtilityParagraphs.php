@@ -541,7 +541,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           ]
         );
 
-        if ($field_info['callback'] == 'getFieldLink') {
+        if ($field_info['callback'] == 'getFieldLink' || isset($result[$field_info['label']])) {
           $data = array_merge($data, $result);
         }
         else {
