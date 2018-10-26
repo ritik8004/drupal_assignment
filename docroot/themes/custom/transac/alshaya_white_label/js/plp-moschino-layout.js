@@ -7,12 +7,25 @@
   'use strict';
 
   /* global videojs */
+  /* global MobileDetect */
 
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
       if ($('.moschino-plp-layout .plp-video').length !== 0) {
         // Store the video object
         var plpPlayer = videojs('#plp-video-player');
+        var md = new MobileDetect(window.navigator.userAgent);
+
+        if (md.mobile() || md.tablet()) {
+          var mobileVideos = drupalSettings.mobileVideos;
+          var mobVideo = mobileVideos[Math.floor(Math.random() * mobileVideos.length)];
+          plpPlayer.src({type: 'video/' + mobVideo['type'], src: mobVideo['src']});
+        }
+        else {
+          var desktopVideos = drupalSettings.desktopVideos;
+          var deskVideo = desktopVideos[Math.floor(Math.random() * desktopVideos.length)];
+          plpPlayer.src({type: 'video/' + deskVideo['type'], src: deskVideo['src']});
+        }
 
         // If autoplay does not work by default, play the video programatically.
         var autoplay = drupalSettings.autoplay;
