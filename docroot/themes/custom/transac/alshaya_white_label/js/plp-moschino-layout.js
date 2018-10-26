@@ -66,15 +66,9 @@
           var startAnimationCounter = 500;
           $('.moschino-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
             $(this).css('transition-duration', startAnimationCounter + 'ms');
-            // $(this).delay(200).addClass('visible');
             $(this).css('transform', 'translateX(0)');
             startAnimationCounter = startAnimationCounter + 50;
           });
-          // l2LinksWrapper.children('.field--name-field-sub-link').each(function () {
-          //   $(this).css('transition-duration', startAnimationCounter + 'ms');
-          //   $(this).addClass('visible');
-          //   startAnimationCounter = startAnimationCounter + 50;
-          // });
         });
       }
 
