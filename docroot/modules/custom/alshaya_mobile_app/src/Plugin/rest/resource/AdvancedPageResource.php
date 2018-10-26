@@ -132,7 +132,7 @@ class AdvancedPageResource extends ResourceBase {
 
     if ($node->get('field_use_as_department_page')->value == 1) {
       $term = $node->get('field_product_category')->referencedEntities()[0];
-      if ($term instanceof TermInterface) {
+      if ($term instanceof TermInterface && !empty($term->getDescription())) {
         $blocks[] = [
           'type' => 'block',
           'body' => $term->getDescription(),
