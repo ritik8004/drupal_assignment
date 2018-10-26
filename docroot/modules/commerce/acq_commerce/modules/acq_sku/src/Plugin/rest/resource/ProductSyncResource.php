@@ -455,7 +455,7 @@ class ProductSyncResource extends ResourceBase {
     }
 
     $response = [
-      'success' => !$failed && ($created || $updated || $ignored || $deleted),
+      'success' => TRUE,
       'created' => $created,
       'updated' => $updated,
       'failed' => $failed,
