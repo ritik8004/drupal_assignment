@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b078c0e4d905970cb1c61974b1103917",
+    "content-hash": "640cfec9658b56a640e63eece4f8ca0a",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9217,11 +9217,17 @@
         },
         {
             "name": "drupal/pcb",
-            "version": "dev-1.x",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/pcb",
-                "reference": "e7920e1846355880260215e38f47fa6e78e66a93"
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "c8e4e0c2ef0e9b6476eddd026e388677aca49d79"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -9233,11 +9239,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1+1-dev",
-                    "datestamp": "1537796880",
+                    "version": "8.x-1.2",
+                    "datestamp": "1540538580",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "drush": {
@@ -9267,8 +9273,7 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/pcb",
                 "issues": "https://drupal.org/project/issues/pcb"
-            },
-            "time": "2018-09-25T06:36:49+00:00"
+            }
         },
         {
             "name": "drupal/profile",
@@ -19455,7 +19460,6 @@
         "drupal/menu_link_attributes": 10,
         "drupal/mimemail": 20,
         "drupal/mobile_number": 15,
-        "drupal/pcb": 20,
         "drupal/profile": 15,
         "drupal/r4032login": 20,
         "drupal/redirect": 15,
