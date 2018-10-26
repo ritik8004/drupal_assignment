@@ -20,6 +20,7 @@
       {% for item in items %}
         <div{{ item.attributes.addClass(classes, 'field__item') }}>{{ item.content }}</div>
       {% endfor %}
+      <div class="l2-links-wrapper"></div>
     </div>
   {% else %}
     {% for item in items %}

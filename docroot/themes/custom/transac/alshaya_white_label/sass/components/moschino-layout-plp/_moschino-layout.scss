@@ -44,7 +44,9 @@
     .c-accordion__title.ui-state-active {
       .field--name-field-heading-link {
         a {
-          opacity: 1;
+          @include breakpoint($upto-desktop) {
+            color: $plp-sub-menu-heading-link-active;
+          }
         }
       }
     }
@@ -62,8 +64,8 @@
       #{$right}: 0;
       background: $plp-sub-menu-background-overlay;
       z-index: 999;
-      padding-#{$left}: 3.0625rem;
-      padding-top: 50%;
+      padding-#{$left}: 1.4375rem;
+      padding-top: 74%;
       // Hide for now, so we can animate on opacity.
       visibility: hidden;
       opacity: 0;
@@ -71,12 +73,24 @@
 
       @include breakpoint($desktop) {
         padding-#{$left}: 8.0625rem;
-        padding-top: 10rem;
+        padding-top: 17.4rem;
       }
 
       @include breakpoint($only-tablet) {
         padding-#{$left}: 6.0625rem;
-        padding-top: 7rem;
+        padding-top: 10rem;
+      }
+
+      > .field--name-field-plp-menu {
+        &.active-menu {
+          .field--name-field-heading-link {
+            a {
+              @include breakpoint($desktop) {
+                color: $plp-sub-menu-heading-link-active;
+              }
+            }
+          }
+        }
       }
 
       .c-accordion,
@@ -90,6 +104,7 @@
 
         @include breakpoint($desktop) {
           min-width: 25rem;
+          line-height: 1;
         }
 
         &::after {
@@ -141,11 +156,27 @@
 
       .mos-menu-sublink {
         @include breakpoint($desktop) {
-          position: absolute;
-          #{$left}: 100%;
-          width: 100%;
-          display: inline-block;
-          top: 4rem;
+          display: none !important;
+        }
+      }
+
+      .l2-links-wrapper {
+        position: absolute;
+        top: 37%;
+        #{$left}: 52%;
+        width: 100%;
+        transform-origin: $right center;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+
+        > .field--name-field-sub-link .field--name-field-sub-link {
+          @include breakpoint($desktop) {
+            transform: translateX(-150px);
+            transform-origin: $right center;
+            transition: transform 0.6s ease-out, opacity transform 0.6s ease-out;
+          }
         }
       }
 
@@ -167,17 +198,22 @@
       > .field--name-field-plp-menu {
         position: relative;
 
+        @include breakpoint($only-mobile) {
+          line-height: 1.1;
+        }
+
         @include breakpoint($desktop) {
           float: $left;
           clear: both;
         }
 
         .mos-menu-heading {
-          transform: translateX(-24rem) scale(1.2);
-          transition: transform 0.55s ease-in-out;
+          transform: translateX(-24rem) scale(1.9);
+          transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+          transform-origin: $right center;
 
           html[lang=ar] & {
-            transform: translateX(24rem) scale(1.2);
+            transform: translateX(24rem) scale(1.9);
           }
         }
 
@@ -196,10 +232,10 @@
         visibility: visible;
 
         > .field--name-field-plp-menu .mos-menu-heading {
-          transform: translateX(0) scale(1);
+          transform: none;
 
           html[lang=ar] & {
-            transform: translateX(0) scale(1);
+            transform: none;
           }
         }
       }
