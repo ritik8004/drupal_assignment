@@ -56,7 +56,7 @@
       "drupal/mobile_number": "^1.0@alpha",
       "drupal/paragraphs": "^1.1",
       "drupal/password_policy": "^3.0",
-      "drupal/pcb": "^1.0",
+      "drupal/pcb": "1.x-dev",
       "drupal/profile": "^1.0@alpha",
       "drupal/r4032login": "1.x-dev",
       "drupal/recaptcha": "^2.3",
