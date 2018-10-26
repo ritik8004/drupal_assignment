@@ -15,9 +15,4 @@ if (!isset($_ENV['AH_SITE_ENVIRONMENT'])) {
   foreach ($data['sites'] as $site_code => $site_info) {
     $sites['local.alshaya-' . $site_code . '.com'] = 'g';
   }
-
-  global $site_name;
-  $hostname = $_SERVER['HTTP_HOST'];
-  $hostname_parts = explode('.', $hostname);
-  $site_name = str_replace('alshaya-', '', $hostname_parts[1]);
 }
