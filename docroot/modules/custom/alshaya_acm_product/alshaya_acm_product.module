@@ -188,7 +188,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               // SKU from the indexing on default listing (without any filter).
               if (strpos($field_key, 'attr_') !== FALSE && isset($items[$item_id])) {
                 try {
-                  $items[$item_id]->setField($field_key, NULL);
+                  $items[$item_id]->getField($field_key)->setValues([]);
                 }
                 catch (\Throwable $e) {
                   // Do nothing, just log.
@@ -217,7 +217,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               // Only unset/remove of attribute fields or this will remove the
               // SKU from the indexing on default listing (without any filter).
               if (strpos($field_key, 'attr_') !== FALSE) {
-                $items[$item_id]->setField($field_key, NULL);
+                $items[$item_id]->getField($field_key)->setValues([]);
               }
             }
           }
