@@ -442,15 +442,17 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         foreach ($paragraph_fields as $field_name) {
           // We are interested in paragraph types that are stored inside
           // layout paragraph items.
-          if (empty($data = $this->processParagraphReferenceField($entity, $field_name))) {
-            $field_values = $entity->get($field_name)->getValue();
-            foreach ($field_values as $field_value) {
-              $data[] = array_merge(['type' => 'block'], $field_value);
-            }
+          if (!empty($paragraph_data = $this->processParagraphReferenceField($entity, $field_name))) {
+            $data = array_merge($paragraph_data, $data);
+            continue;
+          }
+          $field_values = $entity->get($field_name)->getValue();
+          foreach ($field_values as $field_value) {
+            $data[] = array_merge(['type' => 'block'], $field_value);
           }
         }
       }
-      $field_output = !isset($field_output) ? $data : array_merge($field_output, $data);
+      $field_output = array_merge($field_output, $data);
     }
     return $field_output;
   }
@@ -541,6 +543,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             !empty($field_info['type']) ? $field_info['type'] : NULL,
           ]
         );
+
+        if (empty($result)) {
+          continue;
+        }
         // When result comes with label, merge it with the array,
         // as we don't have to create element.
         if ($field_info['callback'] == 'getFieldLink' || isset($result[$field_info['label']])) {
@@ -550,7 +556,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
           $data[$field_info['label']] = $result;
         }
       }
-      elseif ($entity->hasField($field)) {
+      elseif ($entity->hasField($field) && !empty($entity->get($field)->getString())) {
         $data[$field_info['label']] = $entity->get($field)->getString();
       }
     }
