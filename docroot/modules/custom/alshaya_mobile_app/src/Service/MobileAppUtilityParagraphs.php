@@ -18,6 +18,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
