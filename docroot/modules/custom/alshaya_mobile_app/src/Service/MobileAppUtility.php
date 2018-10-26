@@ -408,6 +408,10 @@ class MobileAppUtility {
     if (!$entity->hasField($field)) {
       return [];
     }
+
+    if (empty($entity->get($field)->first())) {
+      return [];
+    }
     // Convert field link value.
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
