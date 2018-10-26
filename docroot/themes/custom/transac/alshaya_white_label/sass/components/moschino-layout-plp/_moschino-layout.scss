@@ -44,7 +44,9 @@
     .c-accordion__title.ui-state-active {
       .field--name-field-heading-link {
         a {
-          opacity: 1;
+          @include breakpoint($upto-desktop) {
+            color: $plp-sub-menu-heading-link-active;
+          }
         }
       }
     }
@@ -77,6 +79,18 @@
       @include breakpoint($only-tablet) {
         padding-#{$left}: 6.0625rem;
         padding-top: 7rem;
+      }
+
+      > .field--name-field-plp-menu {
+        &.active-menu {
+          .field--name-field-heading-link {
+            a {
+              @include breakpoint($desktop) {
+                color: $plp-sub-menu-heading-link-active;
+              }
+            }
+          }
+        }
       }
 
       .c-accordion,
@@ -141,11 +155,33 @@
 
       .mos-menu-sublink {
         @include breakpoint($desktop) {
-          position: absolute;
-          #{$left}: 100%;
-          width: 100%;
-          display: inline-block;
-          top: 4rem;
+          display: none !important;
+        }
+      }
+
+      .l2-links-wrapper {
+        position: absolute;
+        top: 25%;
+        #{$left}: 57%;
+        width: 100%;
+        transform-origin: $right center;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+
+        > .field--name-field-sub-link .field--name-field-sub-link {
+          @include breakpoint($desktop) {
+            transform: translateX(-150px);
+            transform-origin: $right center;
+            transition: transform 0.6s ease-out, opacity transform 0.6s ease-out;
+            // opacity: 0;
+
+            // &.visible {
+            //   transform: translateX(0);
+            //   opacity: 1;
+            // }
+          }
         }
       }
 
@@ -173,11 +209,12 @@
         }
 
         .mos-menu-heading {
-          transform: translateX(-24rem) scale(1.2);
-          transition: transform 0.55s ease-in-out;
+          transform: translateX(-24rem) scale(1.9);
+          transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+          transform-origin: $right center;
 
           html[lang=ar] & {
-            transform: translateX(24rem) scale(1.2);
+            transform: translateX(24rem) scale(1.9);
           }
         }
 
