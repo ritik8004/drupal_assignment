@@ -122,7 +122,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       }
 
       // Only execute if views is not empty.
-      if ($('.views-infinite-scroll-content-wrapper').length !== 0 && $('#block-skusskureferencefinalprice').length !== 0) {
+      if ($('.views-infinite-scroll-content-wrapper').length !== 0) {
         // Change the title of facet when open.
         var priceCurrency = settings.alshaya_search_price_currency;
         var $finalPriceBlock = $('#block-skusskureferencefinalprice');
@@ -148,16 +148,20 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             }
           });
         }
+        try {
+          // Price facets to respect Soft Limit.
+          var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
+          var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+          $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
 
-        // Price facets to respect Soft Limit.
-        var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
-        var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
-        $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
-
-        // Price facets to respect Soft Limit.
-        var facetNameSearch = finalPriceBlockSearch.find('ul').attr('data-drupal-facet-id');
-        var zeroBasedLimitSearch = settings.facets.softLimit[facetNameSearch] - 1;
-        finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
+          // Price facets to respect Soft Limit.
+          var facetNameSearch = finalPriceBlockSearch.find('ul').attr('data-drupal-facet-id');
+          var zeroBasedLimitSearch = settings.facets.softLimit[facetNameSearch] - 1;
+          finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
+        }
+        catch (e) {
+          // Do nothing.
+        }
       }
 
       $('.ui-autocomplete').on("touchend",function (e) {
@@ -177,7 +181,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Append active-item class to L2 active items in facet category list on SRP.
-      $('ul[data-drupal-facet-id="category"] > li > ul > li > a, ul[data-drupal-facet-id="promotion_category_facet"] > li > ul > li > a').each(function() {
+      $('ul[data-drupal-facet-id="category"] > li > ul > li > a, ul[data-drupal-facet-id="promotion_category_facet"] > li > ul > li > a').each(function () {
         if ($(this).hasClass('is-active')) {
           $(this).parent('li').addClass('active-item');
         }
@@ -219,7 +223,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
     }
   };
 
-  Drupal.addLeafClassToPlpLeafItems = function() {
+  Drupal.addLeafClassToPlpLeafItems = function () {
     // On PLP page, we assuming that if there is no expanded and collapsed class available,
     // it means we at the leaf nodes level and thus we adding class to show for the checkboxes.
     if ($('ul[data-drupal-facet-id="plp_category_facet"] .facet-item--collapsed').length === 0
@@ -232,7 +236,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
 
   Drupal.alshayaSearchProcessCategoryFacets = function () {
     if ($('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').find('input[checked="checked"]').length > 0) {
-      $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function() {
+      $('ul[data-drupal-facet-id="category"], ul[data-drupal-facet-id="promotion_category_facet"]').children('li').each(function () {
         if ($(this).hasClass('facet-item--expanded') ||
           ($(this).children('input[checked="checked"]').length > 0)) {
           return;
@@ -281,7 +285,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
           applyRtl($(this), slickOptions);
 
           // Handle click events in hover slider arrows without triggering click to PDP.
-          $(this).find('.slick-arrow').on('click', function(e) {
+          $(this).find('.slick-arrow').on('click', function (e) {
             if (e.preventDefault) {
               e.preventDefault();
             }
@@ -289,7 +293,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
               e.returnValue = false;
             }
 
-            if(!$(this).hasClass('slick-disabled')) {
+            if (!$(this).hasClass('slick-disabled')) {
               if ($(this).attr('class') === 'slick-prev') {
                 $(this).parent().slick('slickPrev');
               }
@@ -319,7 +323,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             // Store this as after delay the mouse is not on element, so this changes.
             var el = $(this);
             // Delay the resetting of main image post hover out.
-            setTimeoutConst = setTimeout(function() {
+            setTimeoutConst = setTimeout(function () {
               el.parents('.alshaya_search_gallery').find('.alshaya_search_mainimage img').attr('src',
                 el.parent().find('li:first-child').find('img').attr('rel')
               );
@@ -388,10 +392,9 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   };
 
   /**
-   * Helper function to convert full-screen loader to throbber for infinite
-   * scroll.
+   * Helper function to convert full-screen loader to throbber for infinite scroll.
    */
-  Drupal.changeProgressBarToThrobber = function(context) {
+  Drupal.changeProgressBarToThrobber = function (context) {
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {
       if ((ajax_instance) && (ajax_instance.hasOwnProperty('element')) &&
         ($(ajax_instance.element, context).hasClass('c-products-list') ||
@@ -417,7 +420,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
       });
 
       // Update on Ajax complete to take care of AJAX instance updates.
-      if (context !== document){
+      if (context !== document) {
         Drupal.changeProgressBarToThrobber(context);
       }
     }
