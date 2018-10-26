@@ -64,14 +64,7 @@
 
           // Handle animation on sublinks.
           // This 2ms delay helps to not make the animation too immidiate.
-          setTimeout(function () {
-            var startAnimationCounter = 400;
-            $('.moschino-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
-              $(this).css('transition-duration', startAnimationCounter + 'ms');
-              $(this).addClass('animate');
-              startAnimationCounter = startAnimationCounter + 70;
-            });
-          }, 2);
+          l2sublinksAnimate();
         });
       }
 
@@ -107,6 +100,20 @@
       $(document).on('dialogclose', '.ui-dialog', function () {
         $(this).removeClass('moschino-modal');
       });
+
+      /**
+       * Animate the child links.
+       */
+      function l2sublinksAnimate() {
+        setTimeout(function () {
+          var startAnimationCounter = 400;
+          $('.moschino-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
+            $(this).css('transition-duration', startAnimationCounter + 'ms');
+            $(this).addClass('animate');
+            startAnimationCounter = startAnimationCounter + 70;
+          });
+        }, 2);
+      }
     }
   };
 })(jQuery, Drupal);
