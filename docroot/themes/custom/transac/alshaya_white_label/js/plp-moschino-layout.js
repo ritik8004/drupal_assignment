@@ -63,12 +63,15 @@
           l2LinksWrapper.html(subLinks).addClass('visible');
 
           // Handle animation on sublinks.
-          var startAnimationCounter = 500;
-          $('.moschino-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
-            $(this).css('transition-duration', startAnimationCounter + 'ms');
-            $(this).css('transform', 'translateX(0)');
-            startAnimationCounter = startAnimationCounter + 50;
-          });
+          // This 2ms delay helps to not make the animation too immidiate.
+          setTimeout(function () {
+            var startAnimationCounter = 400;
+            $('.moschino-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
+              $(this).css('transition-duration', startAnimationCounter + 'ms');
+              $(this).addClass('animate');
+              startAnimationCounter = startAnimationCounter + 70;
+            });
+          }, 2);
         });
       }
 
