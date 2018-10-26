@@ -360,6 +360,10 @@ class MobileAppUtility {
    *   is greater then 1, otherwise return the first image string.
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
+    if (!$entity->hasField($field_name)) {
+      return [];
+    }
+
     $images = [];
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
@@ -401,6 +405,9 @@ class MobileAppUtility {
    *   Return the associative array with url and deeplink.
    */
   protected function getFieldLink($entity, string $field, $label = 'url', $type = NULL) {
+    if (!$entity->hasField($field)) {
+      return [];
+    }
     // Convert field link value.
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
@@ -484,11 +491,15 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) The type of the field.
    *
-   * @return array
-   *   Return the associative array with url and deeplink.
+   * @return array|string
+   *   Return the associative array with label if label variable is not
+   *   empty else return only value.
    */
   protected function getFieldBoolean($entity, string $field, $label = '', $type = NULL) {
-    $value = $entity->get($field)->first()->getValue()['value'];
+    if (!$entity->hasField($field)) {
+      return empty($label) ? '' : [];
+    }
+    $value = (bool) $entity->get($field)->first()->getValue()['value'];
     return empty($label) ? $value : [$label => $value];
   }
 

@@ -354,7 +354,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL) {
     if (empty($callback)) {
-      $data = array_merge(['type' => $type], ['item' => $entity->get($field)->getString()]);
+      if (!empty($entity->get($field)->first())) {
+        $data = array_merge(
+          ['type' => $type],
+          ['item' => $entity->get($field)->first()->getValue()['value']]
+        );
+      }
     }
     else {
       $data = call_user_func_array(
@@ -362,7 +367,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         [$entity, $field, $label, $type]
       );
     }
-    return $data;
+    // Return empty array, if $data contains only 'type' key.
+    return count($data) > 1 ? $data : [];
   }
 
   /**
@@ -381,6 +387,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of data.
    */
   protected function getFieldParagraphItems($entity, string $field, $label = NULL, $type = NULL): array {
+    if (!$entity->hasField($field)) {
+      return [];
+    }
     // Load entities associated with entity reference revision field.
     $entities = $entity->get($field)->referencedEntities();
     $field_output = ['type' => $type];
@@ -415,6 +424,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of data.
    */
   protected function getFieldRecursiveParagraphItems($entity, string $field, $label = NULL, $type = NULL) {
+    if (!$entity->hasField($field)) {
+      return [];
+    }
     // Load entities associated with entity reference revision field.
     $entities = $entity->get($field)->referencedEntities();
     $field_output = [];
@@ -489,6 +501,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Return array of processed paragraph data.
    */
   protected function processParagraphReferenceField(ParagraphInterface $entity, string $field_name): array {
+    if (!$entity->hasField($field_name)) {
+      return [];
+    }
+
     $data = [];
     $field_type = $entity->get($field_name)->getFieldDefinition()->getType();
     if ($field_type == "entity_reference_revisions" || $field_type == "entity_reference") {
@@ -524,15 +540,16 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
             !empty($field_info['type']) ? $field_info['type'] : NULL,
           ]
         );
-
-        if ($field_info['callback'] == 'getFieldLink') {
+        // When result comes with label, merge it with the array,
+        // as we don't have to create element.
+        if ($field_info['callback'] == 'getFieldLink' || isset($result[$field_info['label']])) {
           $data = array_merge($data, $result);
         }
         else {
           $data[$field_info['label']] = $result;
         }
       }
-      else {
+      elseif ($entity->hasField($field)) {
         $data[$field_info['label']] = $entity->get($field)->getString();
       }
     }
@@ -655,7 +672,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $data['label'] = $item['settings']['label'];
       }
       $data = $data + [
-        'body' => $block->get('body')->getString(),
+        'body' => !empty($block->get('body')->first())
+        ? $block->get('body')->first()->getValue()['value']
+        : '',
         'image' => $this->getImages($block, 'field_image'),
       ];
       return $data;

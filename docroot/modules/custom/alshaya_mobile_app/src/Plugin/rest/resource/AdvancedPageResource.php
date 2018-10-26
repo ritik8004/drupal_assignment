@@ -11,6 +11,8 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
  * Provides a resource to node data of advanced page.
@@ -45,6 +47,13 @@ class AdvancedPageResource extends ResourceBase {
   protected $requestStack;
 
   /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -61,6 +70,8 @@ class AdvancedPageResource extends ResourceBase {
    *   The mobile app utility service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -68,10 +79,12 @@ class AdvancedPageResource extends ResourceBase {
                               array $serializer_formats,
                               LoggerInterface $logger,
                               MobileAppUtility $mobile_app_utility,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -85,7 +98,8 @@ class AdvancedPageResource extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('alshaya_mobile_app.utility'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -115,6 +129,17 @@ class AdvancedPageResource extends ResourceBase {
     ];
 
     $blocks = [];
+
+    if ($node->get('field_use_as_department_page')->value == 1) {
+      $term = $node->get('field_product_category')->referencedEntities()[0];
+      if ($term instanceof TermInterface) {
+        $blocks[] = [
+          'type' => 'block',
+          'body' => $term->getDescription(),
+        ];
+      }
+    }
+
     foreach ($this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'] as $field => $field_info) {
       $current_blocks = $this->mobileAppUtility->getFieldData($node, $field, $field_info['callback'], $field_info['label'], $field_info['type']);
       if (!empty($current_blocks['type'])) {
