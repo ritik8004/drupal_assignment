@@ -130,14 +130,14 @@ class AdvancedPageResource extends ResourceBase {
 
     $blocks = [];
 
-    if (($term_id = alshaya_advanced_page_get_department_category($node->id()))
-      && ($term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term_id))
-      && $term instanceof TermInterface
-    ) {
-      $blocks[] = [
-        'type' => 'block',
-        'body' => $term->getDescription(),
-      ];
+    if ($node->get('field_use_as_department_page')->value == 1) {
+      $term = $node->get('field_product_category')->referencedEntities()[0];
+      if ($term instanceof TermInterface) {
+        $blocks[] = [
+          'type' => 'block',
+          'body' => $term->getDescription(),
+        ];
+      }
     }
 
     foreach ($this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'] as $field => $field_info) {
