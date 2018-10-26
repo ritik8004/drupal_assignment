@@ -64,8 +64,8 @@
       #{$right}: 0;
       background: $plp-sub-menu-background-overlay;
       z-index: 999;
-      padding-#{$left}: 3.0625rem;
-      padding-top: 50%;
+      padding-#{$left}: 1.4375rem;
+      padding-top: 74%;
       // Hide for now, so we can animate on opacity.
       visibility: hidden;
       opacity: 0;
@@ -73,12 +73,12 @@
 
       @include breakpoint($desktop) {
         padding-#{$left}: 8.0625rem;
-        padding-top: 10rem;
+        padding-top: 17.4rem;
       }
 
       @include breakpoint($only-tablet) {
         padding-#{$left}: 6.0625rem;
-        padding-top: 7rem;
+        padding-top: 10rem;
       }
 
       > .field--name-field-plp-menu {
@@ -104,6 +104,7 @@
 
         @include breakpoint($desktop) {
           min-width: 25rem;
+          line-height: 1;
         }
 
         &::after {
@@ -161,8 +162,8 @@
 
       .l2-links-wrapper {
         position: absolute;
-        top: 25%;
-        #{$left}: 57%;
+        top: 37%;
+        #{$left}: 52%;
         width: 100%;
         transform-origin: $right center;
 
@@ -203,6 +204,10 @@
       > .field--name-field-plp-menu {
         position: relative;
 
+        @include breakpoint($only-mobile) {
+          line-height: 1.1;
+        }
+
         @include breakpoint($desktop) {
           float: $left;
           clear: both;
@@ -233,10 +238,10 @@
         visibility: visible;
 
         > .field--name-field-plp-menu .mos-menu-heading {
-          transform: translateX(0) scale(1);
+          transform: none;
 
           html[lang=ar] & {
-            transform: translateX(0) scale(1);
+            transform: none;
           }
         }
       }
