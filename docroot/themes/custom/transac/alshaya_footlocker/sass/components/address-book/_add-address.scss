@@ -9,6 +9,10 @@
       .form-submit {
         @extend %btn;
       }
+
+      .cancel-button {
+        color: $primary_form_link;
+      }
     }
   }
 }
