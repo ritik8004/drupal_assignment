@@ -109,6 +109,7 @@ install the specific configuration. See existing brand modules for example.
 * Add a new brand support:
   * Add DB and Alias in `box/config.yml`
   * Add site in `blt/alshaya_local_sites.yml` with proper values (check existing sites for example)
+  * Add drush aliases to the site into `drush/sites` folder with proper values (check existing sites for example)
   * (For transact site) Add proper settings for the new site in 
     * factory-hooks/environments/magento.php
     * factory-hooks/environments/settings.php
