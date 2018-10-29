@@ -620,6 +620,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       ];
     }
 
+    if (isset($data['limit'])) {
+      $data['limit'] = (int) $data['limit'];
+    }
+
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
     if ($data['accordion']) {
