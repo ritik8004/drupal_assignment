@@ -317,30 +317,42 @@ class MobileAppUtility {
    */
   public function getNodeFromAlias($alias, $bundle = '') {
     // Get the internal path of given alias and get route parameters.
-    $internal_path = $this->aliasManager->getPathByAlias('/' . $alias, $this->getAliasLang($alias));
-    // Throw page not found error if internal path doesn't contain node path.
-    if (strpos($internal_path, 'node') === FALSE) {
-      return FALSE;
-    }
+    $internal_path = $this->aliasManager->getPathByAlias(
+      '/' . $alias,
+      $this->getAliasLang($alias)
+    );
+
     // Get the parameters, to get node id from internal path.
     $params = Url::fromUri("internal:" . $internal_path)->getRouteParameters();
+    if (empty($params)) {
+      return FALSE;
+    };
 
-    if (!empty($params['node']) && $node = $this->entityTypeManager->getStorage('node')->load($params['node'])) {
-      if (!$node instanceof NodeInterface) {
-        return FALSE;
-      }
+    if (!empty($params['taxonomy_term'])) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
 
-      if ($this->currentLanguage !== $this->languageManager->getDefaultLanguage()->getId()
-        && $node->hasTranslation($this->currentLanguage)
-      ) {
-        $node = $node->getTranslation($this->currentLanguage);
-      }
-
-      if (empty($bundle) || $node->bundle() == $bundle) {
-        return $node;
+      if ($term instanceof TermInterface && $term->bundle() == 'acq_product_category') {
+        $department_nid = alshaya_advanced_page_is_department_page($term->id());
+        if (!$department_nid) {
+          return FALSE;
+        }
+        $node = $this->entityTypeManager->getStorage('node')->load($department_nid);
       }
     }
-    return FALSE;
+
+    if (!empty($params['node'])) {
+      $node = $this->entityTypeManager->getStorage('node')->load($params['node']);
+    }
+
+    if (!isset($node) || !$node instanceof NodeInterface) {
+      return FALSE;
+    }
+
+    if (!empty($bundle) && $node->bundle() !== $bundle) {
+      return FALSE;
+    }
+
+    return $this->getEntityTranslation($node, $this->currentLanguage);
   }
 
   /**

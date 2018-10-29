@@ -122,7 +122,7 @@ class AdvancedPageResource extends ResourceBase {
     $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 
     $response_data = [
-      'id' => $node->id(),
+      'id' => (int) $node->id(),
       'name' => $node->label(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
