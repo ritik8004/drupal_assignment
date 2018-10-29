@@ -2076,8 +2076,9 @@ class SkuManager {
    * @throws \InvalidArgumentException
    */
   public function isSkuFreeGift(SKU $sku) {
+    $price = (float) $sku->get('price')->getString();
     $final_price = (float) $sku->get('final_price')->getString();
-    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
+    return ($price == self::FREE_GIFT_PRICE) || ($final_price == self::FREE_GIFT_PRICE);
   }
 
   /**
