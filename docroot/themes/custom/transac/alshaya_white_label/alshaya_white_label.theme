@@ -58,6 +58,17 @@ function alshaya_white_label_preprocess_html(&$variables) {
 
   $current_route = \Drupal::routeMatch();
 
+  // Add class for products that have magazine layout.
+  if ($current_route->getRouteName() == 'entity.node.canonical' && Drupal::request()->attributes->get('node')->bundle() == 'acq_product') {
+    $node = Drupal::request()->attributes->get('node');
+    if ($node instanceof NodeInterface) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+      $variables['attributes']['class'][] = $pdp_layout;
+    }
+  }
+
   // Add body class for slug banner.
   if (isset($variables['page']['banner_top']) && $current_route->getRouteName() != 'acq_checkout.form') {
     $variables['attributes']['class'][] = 'slug-banner-processed';
