@@ -73,14 +73,16 @@ class AdvancedPageResource extends ResourceBase {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(array $configuration,
-                              $plugin_id,
-                              $plugin_definition,
-                              array $serializer_formats,
-                              LoggerInterface $logger,
-                              MobileAppUtility $mobile_app_utility,
-                              RequestStack $request_stack,
-                              EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    MobileAppUtility $mobile_app_utility,
+    RequestStack $request_stack,
+    EntityTypeManagerInterface $entity_type_manager
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
