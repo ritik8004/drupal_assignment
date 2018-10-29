@@ -171,7 +171,7 @@ class ProductStockController extends ControllerBase {
    */
   public function selectConfigurableOption(EntityInterface $entity) {
     self::$response = new AjaxResponse();
-    $html = $this->fetchAddCartForm($entity, 'full');
+    $html = $this->fetchAddCartForm($entity);
 
     $commands = self::$response->getCommands();
     if (empty($commands)) {
@@ -193,7 +193,7 @@ class ProductStockController extends ControllerBase {
    */
   public function addToCartSubmit(EntityInterface $entity) {
     self::$response = new AjaxResponse();
-    $html = $this->fetchAddCartForm($entity, 'full');
+    $html = $this->fetchAddCartForm($entity);
 
     $commands = self::$response->getCommands();
     if (empty($commands)) {
@@ -209,24 +209,15 @@ class ProductStockController extends ControllerBase {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   Sku Entity for which we building the form.
-   * @param string $view_mode
-   *   View mode of the SKU entity for which the form is being pulled up.
    *
    * @return mixed
    *   Add to cart form for the sku.
    */
-  protected function fetchAddCartForm(SKU $sku_entity, $view_mode) {
+  protected function fetchAddCartForm(SKU $sku_entity) {
     $plugin = $sku_entity->getPluginInstance();
 
     $form['add_to_cart'] = $this->skuFormBuilder->getForm($plugin, $sku_entity);
     $form['add_to_cart']['#weight'] = 50;
-    $form['add_to_cart']['sku_view_mode'] = [
-      '#type' => 'hidden',
-      '#value' => $view_mode,
-      '#attributes' => [
-        'name' => 'sku_view_mode',
-      ],
-    ];
 
     return $form;
   }

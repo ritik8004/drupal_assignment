@@ -19,7 +19,7 @@ product.cloud_zoom:
 cloud_zoom_common:
   version: 1.x
   js:
-    js/hammerit/hammer.min.js: {}
+    js/doubletap/directive.js: {}
     js/product_mobile_zoom.js: {}
   dependencies:
     - core/drupal.dialog

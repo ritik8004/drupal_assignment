@@ -45,6 +45,11 @@ function alshaya_super_category_theme($existing, $type, $theme, $path) {
  * before any other module invokes.
  */
 function alshaya_super_category_module_implements_alter(&$implementations, $hook) {
+  $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
+  if (!$super_category_status) {
+    unset($implementations['alshaya_super_category']);
+    return;
+  }
   if ($hook == 'alshaya_main_menu_links_alter') {
     unset($implementations['alshaya_super_category']);
     $implementations = array_merge(['alshaya_super_category' => 'alshaya_main_menu_links_alter'], $implementations);

@@ -174,6 +174,29 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               $item->getField($key)->setValues(array_keys($values));
             }
           }
+
+          // It means there is no data indexed for child sku. Thus we need to
+          // skip the indexing of parent sku attributes as well.
+          if (empty($data)) {
+            // Iterate over each indexed field.
+            foreach ($itemFields as $field_key => $field_val) {
+              // Only unset/remove of attribute fields or this will remove the
+              // SKU from the indexing on default listing (without any filter).
+              if (strpos($field_key, 'attr_') !== FALSE && isset($items[$item_id])) {
+                try {
+                  $items[$item_id]->getField($field_key)->setValues([]);
+                }
+                catch (\Throwable $e) {
+                  // Do nothing, just log.
+                  \Drupal::logger('alshaya_acm_product')->error('Indexing failed for the index: @index field:@field_key item:@item_id', [
+                    '@index' => $index->id(),
+                    '@field_key' => $field_key,
+                    '@item_id' => $item_id,
+                  ]);
+                }
+              }
+            }
+          }
         }
 
         elseif ($sku_entity->bundle() == 'simple') {
@@ -190,7 +213,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               // Only unset/remove of attribute fields or this will remove the
               // SKU from the indexing on default listing (without any filter).
               if (strpos($field_key, 'attr_') !== FALSE) {
-                $items[$item_id]->setField($field_key, NULL);
+                $items[$item_id]->getField($field_key)->setValues([]);
               }
             }
           }
@@ -895,10 +918,8 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
       if ($show_on_load % $per_page !== 0) {
-        $query = $request->query->get('show_on_load');
-        unset($query['show_on_load']);
         unset($_GET['show_on_load']);
-        $request->query->set($query);
+        $request->query->set('show_on_load', NULL);
       }
       // We use the show on load only on page load.
       if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
@@ -1325,7 +1346,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
           if ($quantity > 0) {
             // Set the dropdown quantity options only for selected option.
-            if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
+            if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $attribute_parts[1]) {
               $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
             }
           }
@@ -1536,8 +1557,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     // Update cross-sell region with products.
-    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')
-      && $form_state->getUserInput()['sku_view_mode'] == 'full') {
+    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
         '#section_title' => t('Customers also bought'),

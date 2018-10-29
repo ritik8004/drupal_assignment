@@ -336,6 +336,11 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['label'] = NULL;
   }
   elseif ($variables['node']->bundle() === 'acq_product') {
+    $product_display_settings = \Drupal::config('alshaya_acm_product.display_settings');
+    // Add class for enabling hover effect on PDP.
+    if ($product_display_settings->get('color_swatches_hover')) {
+      $variables['attributes']['class'][] = 'color-swatches-hover';
+    }
     $settings = \Drupal::config('alshaya_acm_product.settings');
 
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
@@ -354,6 +359,16 @@ function alshaya_white_label_preprocess_node(&$variables) {
     // Number of items to show in a slider on PDP.
     $variables['#attached']['drupalSettings']['pdp_slider_items'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number');
     $variables['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
+    // Number of items to show in a colour swatches on PDP.
+    $variables['#attached']['drupalSettings']['colour_swatch_items_mob'] = $settings->get('pdp_colour_swatch_items_settings.pdp_colour_swatch_items_0');
+    $variables['#attached']['drupalSettings']['colour_swatch_items_tab'] = $settings->get('pdp_colour_swatch_items_settings.pdp_colour_swatch_items_768');
+    $variables['#attached']['drupalSettings']['colour_swatch_items_desk'] = $settings->get('pdp_colour_swatch_items_settings.pdp_colour_swatch_items_1025');
+    // Number of items to show in a Product swatches on PDP.
+    $variables['#attached']['drupalSettings']['product_swatch_items_mob'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_0');
+    $variables['#attached']['drupalSettings']['product_swatch_items_tab'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_768');
+    $variables['#attached']['drupalSettings']['product_swatch_items_desk'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_1025');
+    $variables['#attached']['drupalSettings']['color_swatches_hover'] = $product_display_settings->get('color_swatches_hover');
+
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
@@ -955,6 +970,11 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         // Fetch values from the paragraph.
         $category_id = $category->getValue()[0]['target_id'] ?? NULL;
 
+        // If category is null/empty, no need to process further.
+        if (!$category_id) {
+          return;
+        }
+
         $is_accordion = FALSE;
         if ($paragraph->hasField('field_use_as_accordion')
             && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
@@ -969,8 +989,13 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
         $section_title = $paragraph->get('field_category_carousel_title')->getString();
 
         if ($is_accordion) {
+          $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($category_id);
+          // If given category not available.
+          if (!$term instanceof TermInterface) {
+            return;
+          }
+
           if (empty($section_title)) {
-            $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($category_id);
             $section_title = $term->label();
           }
 

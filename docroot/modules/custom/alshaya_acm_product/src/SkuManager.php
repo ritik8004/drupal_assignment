@@ -2102,8 +2102,9 @@ class SkuManager {
    * @throws \InvalidArgumentException
    */
   public function isSkuFreeGift(SKU $sku) {
+    $price = (float) $sku->get('price')->getString();
     $final_price = (float) $sku->get('final_price')->getString();
-    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
+    return ($price == self::FREE_GIFT_PRICE) || ($final_price == self::FREE_GIFT_PRICE);
   }
 
   /**
@@ -2138,16 +2139,18 @@ class SkuManager {
         return FALSE;
       }
 
-      // Use the count of first attribute as base for matching with others.
-      $count = count(reset($combinations['attribute_sku']));
-
       foreach ($combinations['attribute_sku'] as $values) {
         // If we have no values for particular attribute, we show it as OOS.
         if (count($values) === 0) {
           $static[$sku->id()] = FALSE;
           return FALSE;
         }
+      }
 
+      // Use the count of first sku as base for matching with others.
+      $count = count(reset($combinations['by_sku']));
+
+      foreach ($combinations['by_sku'] as $values) {
         // If we have mis-match in count of values, we show it as OOS.
         if (count($values) !== $count) {
           $static[$sku->id()] = FALSE;
