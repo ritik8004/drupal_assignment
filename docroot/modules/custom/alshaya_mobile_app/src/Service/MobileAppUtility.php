@@ -331,16 +331,14 @@ class MobileAppUtility {
     if (!empty($params['taxonomy_term'])) {
       $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($params['taxonomy_term']);
 
-      if ($term instanceof TermInterface && $term->bundle() == 'acq_product_category') {
-        $department_nid = alshaya_advanced_page_is_department_page($term->id());
-        if (!$department_nid) {
-          return FALSE;
-        }
+      if ($term instanceof TermInterface
+        && $term->bundle() == 'acq_product_category'
+        && $department_nid = alshaya_advanced_page_is_department_page($term->id())
+      ) {
         $node = $this->entityTypeManager->getStorage('node')->load($department_nid);
       }
     }
-
-    if (!empty($params['node'])) {
+    elseif (!empty($params['node'])) {
       $node = $this->entityTypeManager->getStorage('node')->load($params['node']);
     }
 
