@@ -114,10 +114,10 @@ jQuery.fn.select2Option = function (options) {
     var showMoreHtml = $('<div class="show-more-color">View more colours</div>');
     var showLessHtml = $('<div class="show-less-color">View less colours</div>');
 
-    if ($('.show-more-color').length == 0) {
+    if ($('.show-more-color').length === 0) {
       showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
     }
-    if ($('.show-less-color').length == 0) {
+    if ($('.show-less-color').length === 0) {
       showLessHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
     }
 
@@ -143,7 +143,7 @@ jQuery.fn.select2Option = function (options) {
 
         Drupal.alshaya_hm_images_update_selected_label();
       });
-    };
+    }
   });
 };
 

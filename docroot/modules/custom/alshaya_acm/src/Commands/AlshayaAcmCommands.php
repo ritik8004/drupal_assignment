@@ -105,7 +105,7 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Imports commerce products from the local files.
+   * Switch some config to connect Drupal to specific ACM and MDC.
    *
    * @param array $options
    *   Options supported with drush command.

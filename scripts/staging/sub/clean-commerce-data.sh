@@ -25,3 +25,6 @@ drush --uri=$uri search-api-clear
 
 echo "Reset purge queue"
 drush --uri=$uri p-queue-empty
+
+echo "Delete all active sessions so we can have fresh carts after resetting data"
+drush --uri=$uri sqlq "DELETE FROM sessions;"

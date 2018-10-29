@@ -96,7 +96,7 @@
       $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').hide();
       $('.show-more-color').show();
     }
-  }
+  };
 
   Drupal.behaviors.configurableAttributeBoxes = {
     attach: function (context, settings) {

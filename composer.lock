@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9da4a18fdaa3219528236bc78ce0b33",
+    "content-hash": "640cfec9658b56a640e63eece4f8ca0a",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -897,7 +897,7 @@
             "version": "v5.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/enyo/dropzone.git",
+                "url": "git@github.com:enyo/dropzone.git",
                 "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9"
             },
             "dist": {
@@ -963,6 +963,48 @@
                 "html"
             ],
             "time": "2018-03-15T21:23:44+00:00"
+        },
+        {
+            "name": "charliekassel/array-diff",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliekassel/array-diff.git",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "psr-4": {
+                    "Differ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charlie Kassel",
+                    "email": "ck@charliekassel.com"
+                }
+            ],
+            "description": "Find the difference between two array's",
+            "time": "2018-02-19T14:48:47+00:00"
         },
         {
             "name": "chi-teck/drupal-code-generator",
@@ -9175,20 +9217,21 @@
         },
         {
             "name": "drupal/pcb",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/pcb",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "0050d163a66ede1ee8af66bd808004bc648ae15b"
+                "url": "https://ftp.drupal.org/files/projects/pcb-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "c8e4e0c2ef0e9b6476eddd026e388677aca49d79"
             },
             "require": {
-                "drupal/core": "~8.0"
+                "drupal/core": "~8.0",
+                "php": ">=7.0.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -9196,12 +9239,22 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1537276080",
+                    "version": "8.x-1.2",
+                    "datestamp": "1540538580",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\pcb\\": "src/"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
