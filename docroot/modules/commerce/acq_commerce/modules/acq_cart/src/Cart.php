@@ -193,7 +193,7 @@ class Cart implements CartInterface {
       // Get Plugin instance from SKU entity.
       $plugin = $sku->getPluginInstance();
 
-      $item['name'] = $plugin->cartName($sku, $item);
+      $item['name'] = $plugin->cartName($sku, $item, TRUE);
     }
 
     return $items;
