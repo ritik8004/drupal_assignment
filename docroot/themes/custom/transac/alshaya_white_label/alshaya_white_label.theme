@@ -65,7 +65,9 @@ function alshaya_white_label_preprocess_html(&$variables) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-      $variables['attributes']['class'][] = $pdp_layout;
+      if ($pdp_layout == 'pdp-magazine') {
+        $variables['attributes']['class'][] = 'magazine-layout';
+      }
     }
   }
 
