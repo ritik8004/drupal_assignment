@@ -12,7 +12,7 @@
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
       if ($('.moschino-plp-layout .plp-video').length !== 0) {
-        // Store the video object
+        // Store the video object.
         var plpPlayer = videojs('#plp-video-player');
         var md = new MobileDetect(window.navigator.userAgent);
 
@@ -44,6 +44,7 @@
         });
       }
 
+      var mos_menu_item_height = 0;
       // Accordion for submenu links, but this is only for tablets and below.
       $('.moschino-plp-layout .field--name-field-plp-menu').find('.mos-menu-item').each(function () {
         // Create accordion if the menu has sub links.
@@ -54,6 +55,8 @@
             active: false
           });
         }
+
+        mos_menu_item_height = mos_menu_item_height + $(this).height();
       });
 
       // For Desktop, we show sublins in a different markup.
@@ -79,6 +82,10 @@
           // This 2ms delay helps to not make the animation too immidiate.
           l2sublinksAnimate();
         });
+
+        // Making div vertically in center.
+        var padding_value = ($(window).height() - mos_menu_item_height) / 2;
+        $('.field__items.moschino-sub-menu-content').css({'padding-top': padding_value, 'padding-bottom': padding_value});
       }
 
       var startAnimationCounter = 500;
