@@ -143,7 +143,13 @@ class AdvancedPageResource extends ResourceBase {
     }
 
     foreach ($this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'] as $field => $field_info) {
-      $current_blocks = $this->mobileAppUtility->getFieldData($node, $field, $field_info['callback'], $field_info['label'], $field_info['type']);
+      $current_blocks = $this->mobileAppUtility->getFieldData(
+        $node,
+        $field,
+        $field_info['callback'],
+        $field_info['label'],
+        $field_info['type']
+      );
       if (!empty($current_blocks['type'])) {
         $blocks[] = $current_blocks;
       }

@@ -154,143 +154,153 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   - callback: Callback method to process field to get desired output.
    */
   public static function getEntityBundleInfo(string $entity_type, string $bundle): array {
-    $items = [
-      'node' => [
-        'advanced_page' => [
-          'fields' => [
-            'field_banner' => [
-              'type' => 'banner',
-              'callback' => 'getFieldParagraphItems',
-            ],
-            'field_slider' => [
-              'type' => 'slider',
-              'callback' => 'getFieldParagraphItems',
-            ],
-            'body' => [
-              'type' => 'body',
-            ],
-            'field_delivery_banner' => [
-              'type' => 'delivery_banner',
-              'label' => 'items',
-              'callback' => 'getFieldParagraphItems',
-            ],
-            'field_promo_blocks' => [
-              'callback' => 'getFieldRecursiveParagraphItems',
-            ],
-          ],
-        ],
-      ],
-      'paragraph' => [
-        '1_row_3_col_delivery_banner' => [
-          'fields' => [
-            'field_title' => [
-              'label' => 'title',
-            ],
-            'field_sub_title' => [
-              'label' => 'subtitle',
-            ],
-            'field_link' => [
-              'label' => 'url',
-              'callback' => 'getFieldLink',
+    $items = &drupal_static(__METHOD__, []);
+    if (empty($items)) {
+      $default_values = [
+        'callback' => NULL,
+        'label' => NULL,
+        'type' => NULL,
+      ];
+
+      $items = [
+        'node' => [
+          'advanced_page' => [
+            'fields' => [
+              'field_banner' => [
+                'callback' => 'getFieldParagraphItems',
+                'type' => 'banner',
+              ] + $default_values,
+              'field_slider' => [
+                'callback' => 'getFieldParagraphItems',
+                'type' => 'slider',
+              ] + $default_values,
+              'body' => [
+                'type' => 'body',
+              ] + $default_values,
+              'field_delivery_banner' => [
+                'callback' => 'getFieldParagraphItems',
+                'label' => 'items',
+                'type' => 'delivery_banner',
+              ] + $default_values,
+              'field_promo_blocks' => [
+                'callback' => 'getFieldRecursiveParagraphItems',
+              ] + $default_values,
             ],
           ],
         ],
-        'banner' => [
-          'fields' => [
-            'field_mobile_banner_image' => [
-              'label' => 'image',
-              'callback' => 'getImages',
+        'paragraph' => [
+          '1_row_3_col_delivery_banner' => [
+            'fields' => [
+              'field_title' => [
+                'label' => 'title',
+              ] + $default_values,
+              'field_sub_title' => [
+                'label' => 'subtitle',
+              ] + $default_values,
+              'field_link' => [
+                'callback' => 'getFieldLink',
+                'label' => 'url',
+              ] + $default_values,
             ],
-            'field_link' => [
-              'label' => 'url',
-              'callback' => 'getFieldLink',
+          ],
+          'banner' => [
+            'fields' => [
+              'field_mobile_banner_image' => [
+                'callback' => 'getImages',
+                'label' => 'image',
+              ] + $default_values,
+              'field_link' => [
+                'callback' => 'getFieldLink',
+                'label' => 'url',
+              ] + $default_values,
+              'field_promo_block_button' => [
+                'callback' => 'getFieldRecursiveParagraphItems',
+                'label' => 'buttons',
+              ] + $default_values,
+              'field_video' => [
+                'label' => 'video',
+              ] + $default_values,
             ],
-            'field_promo_block_button' => [
-              'label' => 'buttons',
-              'callback' => 'getFieldRecursiveParagraphItems',
+          ],
+          'banner_full_width' => [
+            'fields' => [
+              'field_banner' => [
+                'callback' => 'getImages',
+                'label' => 'image',
+              ] + $default_values,
             ],
-            'field_video' => [
-              'label' => 'video',
+          ],
+          'block_reference' => [
+            'callback' => 'paragraphBlockReference',
+            'fields' => [
+              'field_block_reference' => [
+                'callback' => 'getFieldBlockReference',
+                'label' => 'block',
+              ] + $default_values,
+            ],
+          ],
+          'product_carousel_category' => [
+            'callback' => 'paragraphProductCarouselCategory',
+            'fields' => [
+              'field_category_carousel_title' => [
+                'label' => 'title',
+              ] + $default_values,
+              'field_category_carousel_limit' => [
+                'label' => 'limit',
+              ] + $default_values,
+              'field_use_as_accordion' => [
+                'callback' => 'getFieldBoolean',
+                'label' => 'accordion',
+              ],
+              'field_view_all_text' => [
+                'label' => 'view_all',
+              ] + $default_values,
+              'field_category_carousel' => $default_values,
+            ],
+          ],
+          'promo_block' => [
+            'fields' => [
+              'field_promotion_image_mobile' => [
+                'callback' => 'getImages',
+                'label' => 'image',
+              ] + $default_values,
+              'field_link' => [
+                'callback' => 'getFieldLink',
+                'label' => 'url',
+              ] + $default_values,
+              'field_promo_block_button' => [
+                'callback' => 'getFieldRecursiveParagraphItems',
+                'label' => 'buttons',
+              ] + $default_values,
+              'field_margin_mobile' => [
+                'label' => 'margin',
+              ] + $default_values,
+            ],
+          ],
+          'promo_block_button' => [
+            'fields' => [
+              'field_button_position' => [
+                'label' => 'position',
+              ] + $default_values,
+              'field_button_link' => [
+                'callback' => 'getFieldLink',
+                'label' => 'url',
+              ] + $default_values,
+              'field_promo_text_1' => [
+                'label' => 'text_1',
+              ] + $default_values,
+              'field_promo_text_2' => [
+                'label' => 'text_2',
+              ] + $default_values,
+              'field_promo_theme' => [
+                'label' => 'theme',
+              ] + $default_values,
             ],
           ],
         ],
-        'banner_full_width' => [
-          'fields' => [
-            'field_banner' => [
-              'label' => 'image',
-              'callback' => 'getImages',
-            ],
-          ],
-        ],
-        'block_reference' => [
-          'callback' => 'paragraphBlockReference',
-          'fields' => [
-            'field_block_reference' => ['label' => 'block', 'callback' => 'getFieldBlockReference'],
-          ],
-        ],
-        'product_carousel_category' => [
-          'callback' => 'paragraphProductCarouselCategory',
-          'fields' => [
-            'field_category_carousel_title' => [
-              'label' => 'title',
-            ],
-            'field_category_carousel_limit' => [
-              'label' => 'limit',
-            ],
-            'field_use_as_accordion' => [
-              'label' => 'accordion',
-              'callback' => 'getFieldBoolean',
-            ],
-            'field_view_all_text' => [
-              'label' => 'view_all',
-            ],
-            'field_category_carousel' => [
-              'label' => '',
-            ],
-          ],
-        ],
-        'promo_block' => [
-          'fields' => [
-            'field_promotion_image_mobile' => [
-              'label' => 'image',
-              'callback' => 'getImages',
-            ],
-            'field_link' => [
-              'label' => 'url',
-              'callback' => 'getFieldLink',
-            ],
-            'field_promo_block_button' => [
-              'label' => 'buttons',
-              'callback' => 'getFieldRecursiveParagraphItems',
-            ],
-            'field_margin_mobile' => [
-              'label' => 'margin',
-            ],
-          ],
-        ],
-        'promo_block_button' => [
-          'fields' => [
-            'field_button_position' => [
-              'label' => 'position',
-            ],
-            'field_button_link' => [
-              'label' => 'url',
-              'callback' => 'getFieldLink',
-            ],
-            'field_promo_text_1' => [
-              'label' => 'text_1',
-            ],
-            'field_promo_text_2' => [
-              'label' => 'text_2',
-            ],
-            'field_promo_theme' => [
-              'label' => 'theme',
-            ],
-          ],
-        ],
-      ],
-    ];
-    return $items[$entity_type][$bundle] ?: [];
+      ];
+    }
+    return isset($items[$entity_type][$bundle]) ? $items[$entity_type][$bundle] : [];
   }
 
   /**
@@ -596,17 +606,19 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
 
-    // Generate view all link with text.
-    $url = Url::fromRoute('entity.taxonomy_term.canonical', [
-      'taxonomy_term' => $category_id,
-    ]);
-    $url_string = $url->toString(TRUE);
+    // Generate view all link when text is not empty.
+    if (!empty($data['view_all'])) {
+      $url = Url::fromRoute('entity.taxonomy_term.canonical', [
+        'taxonomy_term' => $category_id,
+      ]);
+      $url_string = $url->toString(TRUE);
 
-    $data['view_all'] = [
-      'text' => $data['view_all'],
-      'url' => $url_string->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromUrl($url),
-    ];
+      $data['view_all'] = [
+        'text' => $data['view_all'],
+        'url' => $url_string->getGeneratedUrl(),
+        'deeplink' => $this->getDeepLinkFromUrl($url),
+      ];
+    }
 
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
