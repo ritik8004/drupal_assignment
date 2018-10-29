@@ -9,6 +9,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Render\RenderContext;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\views\Views;
+use Drupal\Core\Render\RendererInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class StoresFinderResource.
@@ -24,6 +26,41 @@ use Drupal\views\Views;
 class StoresFinderResource extends ResourceBase {
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * SimplePageResource constructor.
+   *
+   * @param array $configuration
+   *   Configuration array.
+   * @param string $plugin_id
+   *   Plugin id.
+   * @param mixed $plugin_definition
+   *   Plugin definition.
+   * @param array $serializer_formats
+   *   Serializer formats.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger channel.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    RendererInterface $renderer
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
+    $this->renderer = $renderer;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
@@ -32,7 +69,8 @@ class StoresFinderResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_mobile_app')
+      $container->get('logger.factory')->get('alshaya_mobile_app'),
+      $container->get('renderer')
     );
   }
 
@@ -62,7 +100,7 @@ class StoresFinderResource extends ResourceBase {
       $view->setExposedInput($input);
       $view_render_array = NULL;
       $rendered_view = NULL;
-      \Drupal::service('renderer')->executeInRenderContext(new RenderContext(), function () use ($view, &$view_render_array, &$rendered_view) {
+      $this->renderer->executeInRenderContext(new RenderContext(), function () use ($view, &$view_render_array, &$rendered_view) {
         $view_render_array = $view->render();
         $rendered_view = render($view_render_array);
       });
