@@ -13,3 +13,5 @@ drush:
       - /usr/share/drush/commands
     alias-path:
       - ./sites
+  php:
+    minimum-version: 7.1.0

@@ -1,3 +1,14 @@
+local:
+    host: 127.0.0.1
+    root: '/var/www/alshaya/docroot'
+    uri: 'http://local.alshaya-pbnontransacsa.com'
+vm:
+    host: local.alshaya-hmkw.com
+    root: '/var/www/alshaya/docroot'
+    uri: 'http://local.alshaya-pbnontransacsa.com'
+    user: vagrant
+    ssh:
+        options: '-o PasswordAuthentication=no -i "~/.vagrant.d/insecure_private_key"'
 01dev:
     uri: pbnontransacsa.dev-alshaya.acsitefactory.com
     host: staging-1505.enterprise-g1.hosting.acquia.com
