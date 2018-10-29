@@ -1,13 +1,13 @@
 # Ignore configuration files that may contain sensitive information.
 local.settings.php
-local.drushrc.php
-local.aliases.drushrc.php
+local.drush.yml
+local.site.yml
 local.services.yml
 tests/behat/local.yml
 box/local.config.yml
 box/alshaya_acm*
 *.local
-project.local.yml
+local.blt.yml
 
 # Ignore drupal core.
 docroot/core
@@ -22,7 +22,7 @@ docroot/modules/contrib
 docroot/themes/contrib
 docroot/profiles/contrib
 docroot/libraries
-drush/contrib
+drush/Commands
 
 # Ignore custom theme build artifacts
 docroot/themes/custom/*/node_modules
@@ -34,6 +34,7 @@ docroot/themes/custom/*/styleguide
 docroot/themes/custom/non_transac/*/styleguide
 
 # Ignore build artifacts
+deployment_identifier
 /deploy
 bin/*
 tmp
@@ -100,6 +101,7 @@ tramp
 
 # User-specific stuff:
 .idea/
+.vscode/
 
 #XHProf
 xhprof_*
@@ -130,14 +132,17 @@ nbproject/*
 # PHPStorm
 atlassian-ide-plugin.xml
 
-# Drupal console
-console
+#NPM
+npm-debug.log
 
-# Allow developers to add installation steps in local.
-install-site-dev.sh
+# Drush 9 Checksums
+drush/sites/.checksums
 
 # Allow developers to override config in local.
 factory-hooks/*/local.php
+
+# Deprecation detector rules
+.rules
 
 alshaya_behat/bin
 alshaya_behat/vendor

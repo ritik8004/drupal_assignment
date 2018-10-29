@@ -7,6 +7,7 @@ Feature: As a guest user I should be able to
     Given I am on "/ladies/new-arrivals/clothes"
     And I wait for the page to load
 
+
   Scenario: As a Guest user
   I should be able to verify the fields on
     PLP page
@@ -32,6 +33,7 @@ Feature: As a guest user I should be able to
     Then I should see "Colour"
     And I should see "Price"
     Then I should see "Size"
+
 
 
   Scenario: As a Guest user I should be able to select product from
@@ -94,6 +96,7 @@ Feature: As a guest user I should be able to
     Then I should not see "Please select the category you require"
     And I should see the link "Size Guide"
 
+
   Scenario: As a Guest user I should be able to select product from
   PLP page, add to basket select Home Delivery and see COD, Cybersource
   and KNET as payment methods
@@ -105,12 +108,13 @@ Feature: As a guest user I should be able to
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
+    And I should see "secure checkout"
     And I should be able to see the header for checkout
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
     And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
@@ -155,12 +159,13 @@ Feature: As a guest user I should be able to
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
+    And I should see "secure checkout"
     And I should be able to see the header for checkout
     When I follow "Click & Collect"
     And I wait for the page to load

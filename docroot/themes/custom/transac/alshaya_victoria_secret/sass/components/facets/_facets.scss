@@ -31,11 +31,7 @@
 
   input[type=checkbox] ~ label::before {
     @include breakpoint($only-mobile) {
-      top: 0.175rem;
-
-      html[lang=ar] & {
-        top: 0.125rem;
-      }
+      top: 0;
     }
 
     @include breakpoint($tablet) {
@@ -135,14 +131,6 @@ ul[data-drupal-facet-id=promotion_category_facet] {
           margin-#{$left}: 1.5rem;
         }
       }
-    }
-  }
-}
-
-.facet-item {
-  .facet-item__value {
-    html[lang=ar] & {
-      display: inline-flex;
     }
   }
 }

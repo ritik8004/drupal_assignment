@@ -4,6 +4,7 @@ dependencies:
   config:
     - field.field.paragraph.banner.field_banner
     - field.field.paragraph.banner.field_link
+    - field.field.paragraph.banner.field_mobile_banner_image
     - field.field.paragraph.banner.field_promo_block_button
     - field.field.paragraph.banner.field_video
     - paragraphs.paragraphs_type.banner
@@ -37,6 +38,15 @@ content:
       target: '0'
     third_party_settings: {  }
     type: link
+    region: content
+  field_mobile_banner_image:
+    weight: 4
+    label: hidden
+    settings:
+      responsive_image_style: w1284
+      image_link: ''
+    third_party_settings: {  }
+    type: responsive_image
     region: content
   field_promo_block_button:
     weight: 3

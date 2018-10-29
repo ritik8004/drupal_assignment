@@ -1,6 +1,4 @@
-{{ attach_library('alshaya_hnm/sizeguide') }}
-{{ attach_library('alshaya_white_label/cloud_zoom') }}
-{{ attach_library('alshaya_product_zoom/cloud_zoom') }}
+{{ attach_library('alshaya_white_label/attribute') }}
 
 {%
 set classes = [
@@ -141,9 +139,6 @@ set classes = [
           {{ content.item_code }}
         </div>
 
-          <div class="sharethis-label mobile-only">{{ 'Share'|t }}</div>
-          {{ content.sharethis }}
-
           {% if content.home_delivery or content.click_and_collect %}
             <div class="delivery-options-wrapper">
               <div class="product-out-of-stock-layer"></div>
@@ -157,6 +152,9 @@ set classes = [
               </div>
             </div>
           {% endif %}
+
+          <div class="sharethis-label mobile-only">{{ 'Share'|t }}</div>
+          {{ content.sharethis }}
       </div>
 
 

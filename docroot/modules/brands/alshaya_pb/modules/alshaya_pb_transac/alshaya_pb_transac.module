@@ -24,6 +24,18 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
+      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+      $variant = $sku_manager->getSelectedVariant($sku_entity);
+
+      if ($variant instanceof SKUInterface) {
+        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+        $build['title'] = [
+          '#markup' => $productInfoHelper->getTitle($variant, 'pdp'),
+        ];
+      }
+
       $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
@@ -36,21 +48,15 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $productHelper->updateShortDescription($build, $body[0]['value']);
       }
 
-      if ($product_info = $sku_entity->get('attr_short_description')->getValue()) {
-        $description['label'] = [
-          '#markup' => t('Dimensions and Care'),
+      $product_info = $sku_entity->get('attr_short_description')->getValue();
+      if (!empty($product_info) && !empty($product_info[0]['value'])) {
+        $build['dimensions_and_care'] = [
+          '#theme' => 'pdp_description_accordion',
+          '#title' => t('Dimensions and Care'),
+          '#text' => [
+            '#markup' => $product_info[0]['value'],
+          ],
         ];
-
-        $description['value'] = [
-          '#markup' => $product_info[0]['value'],
-        ];
-
-        $build['description'][] = $description;
-
-        // Take some characters from product info if nothing available in Copy.
-        if (!isset($build['short_desc'])) {
-          $productHelper->updateShortDescription($build, $product_info[0]['value']);
-        }
       }
     }
   }
@@ -61,96 +67,18 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
  */
 function alshaya_pb_transac_acq_sku_view(array &$build, EntityInterface $sku_entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($view_mode == 'modal') {
-    $return = _alshaya_pb_transac_get_product_description($sku_entity);
-    $build['short_desc'] = $return['short_desc'];
-    $build['description'] = $return['description'];
-  }
-}
+    /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
+    $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
-/**
- * Get product description from SKU.
- */
-function _alshaya_pb_transac_get_product_description($sku_entity) {
-  $return = [];
-  // Prepare the at_glance variable.
-  $at_glance['label'] = [
-    '#markup' => t('At a glance'),
-  ];
-  $at_glance['value'] = [
-    '#markup' => $sku_entity->get('attr_at_glance')->getString(),
-  ];
-
-  // Prepare the description variable.
-  $description_value = '';
-  $description['label'] = [
-    '#markup' => t('Features and benefits'),
-  ];
-
-  if ($body = $sku_entity->get('attr_description')->getValue()) {
-    $description_value = $body[0]['value'];
-  }
-
-  if ($bullet_points = $sku_entity->get('attr_bullet_points')
-    ->getString()) {
-    $description_value .= '<div class="bullet-points-wrapper">';
-    $description_value .= $bullet_points;
-    $description_value .= '</div>';
-  }
-
-  $description['value'] = [
-    '#markup' => $description_value,
-  ];
-
-  // If specifications are enabled, prepare the specification variable.
-  if (\Drupal::config('alshaya_acm.settings')
-    ->get('pdp_show_specifications')) {
-    $specifications['label'] = [
-      '#markup' => t('Specifications'),
-    ];
-
-    $specifications['value'] = [
-      "#theme" => 'item_list',
-      '#items' => [],
-    ];
-
-    if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
-      $specifications['value']['#items'][] = t('Style Code: @value', [
-        '@value' => $attr_style_code,
-      ]);
-    }
-
-    if ($attr_color = $sku_entity->get('attr_color')->getString()) {
-      $specifications['value']['#items'][] = t('Color: @value', [
-        '@value' => $attr_color,
-      ]);
-    }
-
-    if ($attr_season = $sku_entity->get('attr_season')->getString()) {
-      $specifications['value']['#items'][] = t('Season: @value', [
-        '@value' => $attr_season,
-      ]);
-    }
-
-    if ($attr_brand = $sku_entity->get('attr_product_brand')
-      ->getString()) {
-      $specifications['value']['#items'][] = t('Product brand: @value', [
-        '@value' => $attr_brand,
-      ]);
+    $body = $sku_entity->get('attr_description')->getValue();
+    if ($body) {
+      $description['value'] = [
+        '#markup' => $body[0]['value'],
+      ];
+      $build['description'][] = $description;
+      $productHelper->updateShortDescription($build, $body[0]['value']);
     }
   }
-
-  // Add all variables to $build in the sequence in
-  // which they should be displayed.
-  // $build['short_desc'] contains the description that should be
-  // displayed before 'Read More'.
-  $return['short_desc'] = $at_glance;
-  $return['description'][] = $at_glance;
-  $return['description'][] = $description;
-  if (!empty($specifications)) {
-    $return['description'][] = $specifications;
-  }
-
-  return $return;
 }
 
 /**
@@ -236,7 +164,7 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
       // Get swatches for this product from media.
-      $swatches = $sku_manager->getSwatches($sku);
+      $swatches = $sku_manager->getSwatches($sku, $settings->get('swatches')['pdp']);
       if ($swatches) {
         // Show only first 'X' swatches as defined in configuration.
         $swatch_plp_limit = $settings->get('swatch_plp_limit');

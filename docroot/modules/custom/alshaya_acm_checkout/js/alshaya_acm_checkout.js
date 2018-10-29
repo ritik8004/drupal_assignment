@@ -1,3 +1,7 @@
+/**
+ * @file
+ */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -21,6 +25,11 @@
       $('#payment_details_wrapper').once('bind-events').each(function () {
         $('.payment-plugin-wrapper-div', $(this)).on('click', function () {
           var selected_option = $(this).data('value');
+          // Check if this payment method is already active, if yes return.
+          // We don't want to remove payment_details in this case else active payment form is lost.
+          if ($(this).hasClass('plugin-selected')) {
+            return false;
+          }
           // Remove additional payment fields.
           $('#payment_details').remove();
           $('[data-drupal-selector="edit-acm-payment-methods-payment-options"]').find('input[value="' + selected_option + '"]').trigger('click');

@@ -1,3 +1,8 @@
+/**
+ * @file
+ * JS around updating language switcher link query.
+ */
+
 (function ($) {
   'use strict';
 

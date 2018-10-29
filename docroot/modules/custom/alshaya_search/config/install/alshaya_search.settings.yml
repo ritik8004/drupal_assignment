@@ -3,6 +3,7 @@ sort_options:
   title: title
   final_price: final_price
 use_brand_specific_core: true
+search_field_placeholder: 'search'
 sort_options_labels:
   -
     value: 'search_api_relevance ASC'

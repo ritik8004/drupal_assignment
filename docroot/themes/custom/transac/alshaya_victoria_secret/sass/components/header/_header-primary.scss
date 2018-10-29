@@ -182,11 +182,18 @@ header {
       .menu--one__link {
         border-bottom: none;
         font-size: 0.875rem;
+        display: block;
         text-transform: uppercase;
         padding: 0.625rem 0;
         margin: 0 1.5rem;
         height: 2.5rem;
         margin-top: 0;
+      }
+
+      &.has-bg-color {
+        .menu--one__link {
+          padding: 0.625rem;
+        }
       }
 
       .menu--one__link.active {

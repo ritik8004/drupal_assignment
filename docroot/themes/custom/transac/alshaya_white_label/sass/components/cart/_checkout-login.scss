@@ -290,13 +290,21 @@
       @include breakpoint($tablet) {
         position: absolute;
         bottom: 1.5em;
-        #{$left}: 15em;
+        #{$left}: 11rem;
         width: auto;
         font-size: 0.75rem;
+
+        html[lang=ar] & {
+          #{$left}: 13rem;
+        }
       }
 
       @include breakpoint($desktop) {
-        #{$left}: 20em;
+        #{$left}: 15rem;
+
+        html[lang=ar] & {
+          #{$left}: 17rem;
+        }
       }
     }
 

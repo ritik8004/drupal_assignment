@@ -12,6 +12,135 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * To show the color swatches hover & active effects
+ * on PDP.
+ */
+function alshaya_acm_product_update_8033() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Set the number of items to show in a product/colour
+ * Swatch on PDP.
+ */
+function alshaya_acm_product_update_8032() {
+  // Set default number of swatches items need to show on PDP..
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
+ * Implements hook_post_update_NAME().
+ *
+ * Re-save index to create required tables.
+ */
+function alshaya_acm_product_post_update_8030(&$sandbox) {
+  // This is required because with deleting and re-adding the attribute,
+  // also deletes/removes the attribute info from search api.
+  _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change 'product_collection' sku attribute cardinality to unlimited.
+ * Add config for the PDP layout and Update settings config to have value
+ * for short_desc_text_summary.
+ */
+function alshaya_acm_product_update_8030() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Updating cardinality config for the attribute.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  // Fetch and store existing attribute data in temporary variable.
+  $source_column = 'attr_product_collection';
+  $connection = \Drupal::database();
+  $query = $connection->select('acq_sku_field_data', 'ac');
+  $query->fields('ac', ['id', 'type', 'langcode', $source_column]);
+  $query->isNotNull('ac.' . $source_column);
+  $result = $query->execute()->fetchAll();
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  // First remove the field. This is required or drupal won't allow the change
+  // in storage of the field. This is also required because with cardinality
+  // change, drupal stores data in new table 'acq_sku__attr_product_collection'
+  // while earlier it stores the data in same 'acq_sku_field_data' table.
+  $sku_fields_manager->removeField('product_collection');
+  // Then re-add the field.
+  $sku_fields_manager->addFields();
+
+  // If data is available in temporary variable, then re-store it in new table.
+  if (!empty($result)) {
+    $data = [];
+    $destination_table = 'acq_sku__' . $source_column;
+    $destination_column = $source_column . '_value';
+
+    // Prepare data array.
+    foreach ($result as $rs) {
+      $data[] = [
+        'bundle' => $rs->type,
+        'deleted' => 0,
+        'entity_id' => $rs->id,
+        'revision_id' => $rs->id,
+        'langcode' => $rs->langcode,
+        'delta' => 0,
+        $destination_column => $rs->{$source_column},
+      ];
+    }
+
+    // Insert data in new destination attribute table.
+    $query = $connection->insert($destination_table)->fields([
+      'bundle',
+      'deleted',
+      'entity_id',
+      'revision_id',
+      'langcode',
+      'delta',
+      $destination_column,
+    ]);
+    foreach ($data as $record) {
+      $query->values($record);
+    }
+    $query->execute();
+  }
+
+  // Add config for the PDP layout and Update settings config to have
+  // value for short_desc_text_summary.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update settings config to have value for pdp_slider_items_number_cs_us.
  */
 function alshaya_acm_product_update_8029() {

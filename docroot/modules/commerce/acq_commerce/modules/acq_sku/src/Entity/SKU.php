@@ -135,15 +135,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        $media_item = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
-
-        if ($media_item &&
-          isset($media_item['roles'])
-          && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+        if (isset($data['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
           continue;
         }
 
-        $this->mediaData[] = $media_item;
+        $this->mediaData[] = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
       }
 
       if ($update_sku) {
@@ -188,9 +184,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
+        if (empty($data['roles']) || !in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
+          continue;
+        }
+
         $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
 
-        if ($media_item && !empty($media_item['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+        if ($media_item) {
           $this->swatchData = $media_item;
           break;
         }
@@ -229,9 +229,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if (!empty($data['fid'])) {
         $file = File::load($data['fid']);
         if (!($file instanceof FileInterface)) {
-          \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku"', [
+          // Leave a message for developers to find out why this happened.
+          \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku" having language @langcode. Trace: @trace', [
             '@fid' => $data['fid'],
             '@sku' => $this->getSku(),
+            '@langcode' => $this->language()->getId(),
+            '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
           ]);
 
           unset($data['fid']);
@@ -264,6 +267,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $media_item['label'] = $default_label ?: $this->label();
       }
 
+      return $media_item;
+    }
+    else {
+      // Return whatever we have as is (videos).
       return $media_item;
     }
   }
@@ -400,13 +407,21 @@ class SKU extends ContentEntityBase implements SKUInterface {
       return NULL;
     }
 
+    // Get the first entity to use from result.
+    $sku_entity = reset($skus);
+
+    // Sanity check.
+    if (!($sku_entity instanceof SKUInterface)) {
+      return NULL;
+    }
+
     // Remove all skus in other languages if there are more than one available
     // We need to have multiple languages enabled to clean db result.
     // If only one is available, we might be adding translation, leave it as is.
     if ($is_multilingual && !empty($skus) && count($skus) > 1) {
       // Get rid of undesired languages. Later first one is picked up.
-      foreach ($skus as $key => $sku) {
-        if ($sku->langcode->value != $langcode) {
+      foreach ($skus as $key => $skuEntity) {
+        if ($skuEntity->langcode->value != $langcode) {
           unset($skus[$key]);
         }
       }
@@ -417,11 +432,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
-    $sku_entity = array_shift($skus);
-
     if ($is_multilingual) {
       if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
+
+        // Set value in static variable.
+        // We set in static cache only for proper case, when returning different
+        // language or creating translation we can avoid static cache.
+        $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
       }
       elseif ($create_translation) {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
@@ -431,9 +449,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
-
-    // Set value in static variable.
-    $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
+    else {
+      // Set value in static variable directly if not a multi-lingual site.
+      $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
+    }
 
     return $sku_entity;
   }

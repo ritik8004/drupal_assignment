@@ -6,6 +6,7 @@
 %btn {
   font-family: $alshaya-thin !important;
   text-transform: uppercase !important;
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
+  min-height: 2.5rem;
   line-height: inherit;
 }
