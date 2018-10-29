@@ -146,9 +146,9 @@ class AdvancedPageResource extends ResourceBase {
       $current_blocks = $this->mobileAppUtility->getFieldData(
         $node,
         $field,
-        isset($field_info['callback']) ? $field_info['callback'] : '',
-        isset($field_info['label']) ? $field_info['label'] : '',
-        isset($field_info['type']) ? $field_info['type'] : ''
+        $field_info['callback'],
+        $field_info['label'],
+        $field_info['type']
       );
       if (!empty($current_blocks['type'])) {
         $blocks[] = $current_blocks;
