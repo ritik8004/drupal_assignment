@@ -290,7 +290,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         ],
       ],
     ];
-    return $items[$entity_type][$bundle] ?: [];
+    return isset($items[$entity_type][$bundle]) ? $items[$entity_type][$bundle] : [];
   }
 
   /**
@@ -596,17 +596,19 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     // Fetch values from the paragraph.
     $category_id = $entity->get('field_category_carousel')->getValue()[0]['target_id'] ?? NULL;
 
-    // Generate view all link with text.
-    $url = Url::fromRoute('entity.taxonomy_term.canonical', [
-      'taxonomy_term' => $category_id,
-    ]);
-    $url_string = $url->toString(TRUE);
+    // Generate view all link when text is not empty.
+    if (!empty($data['view_all'])) {
+      $url = Url::fromRoute('entity.taxonomy_term.canonical', [
+        'taxonomy_term' => $category_id,
+      ]);
+      $url_string = $url->toString(TRUE);
 
-    $data['view_all'] = [
-      'text' => $data['view_all'],
-      'url' => $url_string->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromUrl($url),
-    ];
+      $data['view_all'] = [
+        'text' => $data['view_all'],
+        'url' => $url_string->getGeneratedUrl(),
+        'deeplink' => $this->getDeepLinkFromUrl($url),
+      ];
+    }
 
     // Get list of categories when category set to display as accordion else
     // Get list of products of configured category.
