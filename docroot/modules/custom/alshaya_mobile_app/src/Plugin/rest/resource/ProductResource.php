@@ -16,6 +16,7 @@ use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a resource to get delivery methods data.
@@ -80,6 +81,13 @@ class ProductResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
    * Store cache tags and contexts to be added in response.
    *
    * @var array
@@ -109,6 +117,8 @@ class ProductResource extends ResourceBase {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -119,7 +129,8 @@ class ProductResource extends ResourceBase {
                               SkuImagesManager $sku_images_manager,
                               ProductInfoHelper $product_info_helper,
                               EntityTypeManagerInterface $entity_type_manager,
-                              MobileAppUtility $mobile_app_utility) {
+                              MobileAppUtility $mobile_app_utility,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -127,6 +138,7 @@ class ProductResource extends ResourceBase {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->mobileAppUtility = $mobile_app_utility;
+    $this->moduleHandler = $module_handler;
     $this->cache = [
       'tags' => [],
       'contexts' => [],
@@ -147,7 +159,8 @@ class ProductResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('acq_sku.product_info_helper'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('alshaya_mobile_app.utility'),
+      $container->get('module_handler')
     );
   }
 
@@ -380,6 +393,7 @@ class ProductResource extends ResourceBase {
    */
   private function getConfigurableCombinations(SKUInterface $sku): array {
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    $attribute_labels = $this->getAllAttributesLabel($sku);
 
     unset($combinations['by_attribute']);
 
@@ -402,10 +416,16 @@ class ProductResource extends ResourceBase {
       ];
 
       foreach ($attribute_data as $value => $skus) {
-        $combinations['attribute_sku'][$attribute_code]['values'][] = [
+        $attr_value = [
           'value' => $value,
           'skus' => $skus,
         ];
+
+        if ($attribute_code == 'size') {
+          $attr_value['label'] = $attribute_labels[$attribute_code][$value];
+        }
+
+        $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
       }
     }
 
@@ -414,6 +434,29 @@ class ProductResource extends ResourceBase {
     }
 
     return $combinations;
+  }
+
+  /**
+   * Get all attributes with label.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Multidimentional array of attributes with attributes key and label.
+   */
+  private function getAllAttributesLabel(SKUInterface $sku) {
+    $configurables = unserialize($sku->field_configurable_attributes->getString());
+
+    $options = [];
+    foreach ($configurables as $configurable) {
+      $options[$configurable['code']] = [];
+      foreach ($configurable['values'] as $value) {
+        $options[$configurable['code']][$value['value_id']] = $value['label'];
+      }
+    }
+    $this->moduleHandler->alter('alshaya_mobile_app_sku_all_attributes', $sku, $options);
+    return $options;
   }
 
   /**
