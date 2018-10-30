@@ -690,17 +690,14 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
       $block = reset($block);
       $block = $this->getEntityTranslation($block, $this->currentLanguage);
-      $data = [];
-      if ($item['settings']['label_display']) {
-        $data['label'] = $item['settings']['label'];
-      }
-      $data = $data + [
+      return [
+        'label' => $item['settings']['label'],
+        'label_display' => (bool) $item['settings']['label_display'],
         'body' => !empty($block->get('body')->first())
         ? $block->get('body')->first()->getValue()['value']
         : '',
         'image' => $this->getImages($block, 'field_image'),
       ];
-      return $data;
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
