@@ -379,7 +379,9 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       );
     }
     // Return empty array, if $data contains only 'type' key.
-    return count($data) > 1 ? $data : [];
+    return !empty($data['type'])
+    ? count($data) > 1 ? $data : []
+    : $data;
   }
 
   /**
