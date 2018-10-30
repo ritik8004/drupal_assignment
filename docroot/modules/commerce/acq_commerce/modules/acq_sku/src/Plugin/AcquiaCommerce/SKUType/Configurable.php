@@ -537,7 +537,7 @@ class Configurable extends SKUPluginBase {
 
     // If the cart name has already been constructed and is rendered as a link,
     // use the title directly.
-    if (isset($cart['name']['#title'])) {
+    if (!empty($cart['name']['#title'])) {
       $cartName = $cart['name']['#title'];
     }
     else {
