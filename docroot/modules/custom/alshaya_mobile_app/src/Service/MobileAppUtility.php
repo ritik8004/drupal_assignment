@@ -268,7 +268,7 @@ class MobileAppUtility {
   public function getDeepLinkFromUrl(Url $url) {
     if (!$url->isRouted()) {
       return self::ENDPOINT_PREFIX
-        . '/deeplink?url='
+        . 'deeplink?url='
         . $url->toString(TRUE)->getGeneratedUrl();
     }
 
