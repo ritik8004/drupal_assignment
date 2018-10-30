@@ -14,5 +14,8 @@ drush  --uri=$uri pm:enable -y dblog views_ui features_ui restui
 echo "Disabling shield."
 drush --uri=$uri pm-uninstall -y shield
 
+echo "Disabling logs_http."
+drush --uri=$uri pm-uninstall -y logs_http
+
 echo "Disabling all search api indexes."
 drush --uri=$uri search-api-disable-all

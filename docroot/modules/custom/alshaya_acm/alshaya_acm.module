@@ -810,26 +810,28 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     }
   }
 
-  if ($parent_sku) {
-    /* @var \Drupal\node\Entity\Node $parent_node */
-    $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
-    if ($parent_node) {
-      $name = [
-        '#title' => $parent_node->getTitle(),
-        '#type' => 'link',
-        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
-      ];
+  if (!$is_free_sku_item) {
+    if ($parent_sku) {
+      /* @var \Drupal\node\Entity\Node $parent_node */
+      $parent_node = alshaya_acm_product_get_display_node($parent_sku->getSKU());
+      if ($parent_node) {
+        $name = [
+          '#title' => $parent_node->getTitle(),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $parent_node->id()]),
+        ];
+      }
     }
-  }
-  else {
-    /* @var \Drupal\node\Entity\Node $product_node */
-    $product_node = alshaya_acm_product_get_display_node($sku_entity);
-    if ($product_node) {
-      $name = [
-        '#title' => $product_node->getTitle(),
-        '#type' => 'link',
-        '#url' => Url::fromRoute('entity.node.canonical', ['node' => $product_node->id()]),
-      ];
+    else {
+      /* @var \Drupal\node\Entity\Node $product_node */
+      $product_node = alshaya_acm_product_get_display_node($sku_entity);
+      if ($product_node) {
+        $name = [
+          '#title' => $product_node->getTitle(),
+          '#type' => 'link',
+          '#url' => Url::fromRoute('entity.node.canonical', ['node' => $product_node->id()]),
+        ];
+      }
     }
   }
 
@@ -879,7 +881,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
 
   // If line item's price is 0, its a free item & set the label for it.
   if ($is_free_sku_item &&
-    !empty($total_price['#final_price']) && $total_price['#final_price'] == 0) {
+    isset($total_price['#final_price']) && $total_price['#final_price'] == 0) {
     $free_gift_label['#markup'] = t('Free Gift with Purchase');
   }
 
