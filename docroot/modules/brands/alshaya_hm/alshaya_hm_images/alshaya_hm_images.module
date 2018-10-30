@@ -356,7 +356,3 @@ function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku,
     ];
   }
 }
-
-function alshaya_hm_images_alshaya_mobile_app_sku_all_attributes_alter(SKU $sku, array &$options) {
-
-}
