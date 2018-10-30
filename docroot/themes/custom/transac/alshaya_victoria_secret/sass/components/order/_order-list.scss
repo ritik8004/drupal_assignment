@@ -202,3 +202,52 @@
     }
   }
 }
+
+html[lang=ar] {
+  .recent__orders--list {
+    td.order-transaction {
+      .light,
+      .dark {
+        @include breakpoint($tablet) {
+          margin-bottom: 0.625rem;
+        }
+      }
+    }
+
+    td.toggle--icon {
+      .light {
+        @include breakpoint($tablet) {
+          margin-bottom: 0.625rem;
+        }
+      }
+    }
+  }
+
+  .c-order-list {
+    .order-items {
+      .first-second {
+        .first {
+          .order-label {
+            @include breakpoint($tablet) {
+              margin-bottom: 0.625rem;
+            }
+          }
+
+          .date {
+            @include breakpoint($tablet) {
+              margin-top: 0.625rem;
+            }
+          }
+        }
+      }
+
+      .fourth {
+        .totale-label {
+          @include breakpoint($tablet) {
+            margin-bottom: 0.625rem;
+          }
+        }
+      }
+    }
+  }
+}
