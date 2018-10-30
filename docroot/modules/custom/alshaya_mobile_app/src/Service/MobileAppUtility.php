@@ -266,6 +266,12 @@ class MobileAppUtility {
    *   Return deeplink url.
    */
   public function getDeepLinkFromUrl(Url $url) {
+    if (!$url->isRouted()) {
+      return self::ENDPOINT_PREFIX
+        . '/deeplink?url='
+        . $url->toString(TRUE)->getGeneratedUrl();
+    }
+
     $params = $url->getRouteParameters();
     if (empty($params)) {
       return '';
