@@ -229,13 +229,13 @@ html[lang=ar] {
         .first {
           .order-label {
             @include breakpoint($tablet) {
-              margin-bottom: 0.625rem;
+              margin-bottom: 0.625rem !important;
             }
           }
 
           .date {
             @include breakpoint($tablet) {
-              margin-top: 0.625rem;
+              margin-top: 0.625rem !important;
             }
           }
         }
@@ -244,7 +244,7 @@ html[lang=ar] {
       .fourth {
         .totale-label {
           @include breakpoint($tablet) {
-            margin-bottom: 0.625rem;
+            margin-bottom: 0.625rem !important;
           }
         }
       }
