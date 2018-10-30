@@ -15,6 +15,8 @@ if [ ${target_env:0:2} != "01" ]; then
   target_env="01$target_env"
 fi
 
+env=${target_env:2}
+
 # Load the ACSF API credentials.
 FILE=$HOME/acsf_api_settings
 if [ -f $FILE ]; then
