@@ -16,7 +16,8 @@ use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a resource to get delivery methods data.
@@ -81,11 +82,11 @@ class ProductResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
-   * Module handler.
+   * Production Options Manager service object.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   * @var \Drupal\acq_sku\ProductOptionsManager
    */
-  private $moduleHandler;
+  protected $productOptionsManager;
 
   /**
    * Store cache tags and contexts to be added in response.
@@ -117,8 +118,8 @@ class ProductResource extends ResourceBase {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   Module handler.
+   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Production Options Manager service object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -130,7 +131,7 @@ class ProductResource extends ResourceBase {
                               ProductInfoHelper $product_info_helper,
                               EntityTypeManagerInterface $entity_type_manager,
                               MobileAppUtility $mobile_app_utility,
-                              ModuleHandlerInterface $module_handler) {
+                              ProductOptionsManager $product_options_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -138,7 +139,7 @@ class ProductResource extends ResourceBase {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->mobileAppUtility = $mobile_app_utility;
-    $this->moduleHandler = $module_handler;
+    $this->productOptionsManager = $product_options_manager;
     $this->cache = [
       'tags' => [],
       'contexts' => [],
@@ -160,7 +161,8 @@ class ProductResource extends ResourceBase {
       $container->get('acq_sku.product_info_helper'),
       $container->get('entity_type.manager'),
       $container->get('alshaya_mobile_app.utility'),
-      $container->get('module_handler')
+      $container->get('acq_sku.product_options_manager'),
+      $container->get('language_manager')
     );
   }
 
@@ -393,7 +395,6 @@ class ProductResource extends ResourceBase {
    */
   private function getConfigurableCombinations(SKUInterface $sku): array {
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
-    $attribute_labels = $this->getAllAttributesLabel($sku);
 
     unset($combinations['by_attribute']);
 
@@ -421,8 +422,15 @@ class ProductResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size') {
-          $attr_value['label'] = $attribute_labels[$attribute_code][$value];
+        if ($attribute_code == 'size'
+          && ($term = $this->productOptionsManager->loadProductOptionByOptionId(
+            $attribute_code,
+            $value,
+            $this->mobileAppUtility->currentLanguage()
+          ))
+          && $term instanceof TermInterface
+        ) {
+          $attr_value['label'] = $term->label();
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
@@ -434,29 +442,6 @@ class ProductResource extends ResourceBase {
     }
 
     return $combinations;
-  }
-
-  /**
-   * Get all attributes with label.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   *
-   * @return array
-   *   Multidimentional array of attributes with attributes key and label.
-   */
-  private function getAllAttributesLabel(SKUInterface $sku) {
-    $configurables = unserialize($sku->field_configurable_attributes->getString());
-
-    $options = [];
-    foreach ($configurables as $configurable) {
-      $options[$configurable['code']] = [];
-      foreach ($configurable['values'] as $value) {
-        $options[$configurable['code']][$value['value_id']] = $value['label'];
-      }
-    }
-    $this->moduleHandler->alter('alshaya_mobile_app_sku_all_attributes', $sku, $options);
-    return $options;
   }
 
   /**

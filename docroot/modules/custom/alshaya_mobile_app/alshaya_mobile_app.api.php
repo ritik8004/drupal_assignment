@@ -24,17 +24,3 @@ function hook_alshaya_mobile_app_light_product_data_alter(\Drupal\acq_sku\Entity
   $test_data = [];
   $data['test'] = $test_data;
 }
-
-/**
- * Alter attributes options label.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku
- *   SKU object.
- * @param array $options
- *   The attributes options array.
- *
- * @see \Drupal\alshaya_mobile_app\Plugin\rest\resource\ProductResource::getAllAttributesLabel()
- */
-function hook_alshaya_mobile_app_sku_all_attributes_alter(\Drupal\acq_sku\Entity\SKU $sku, array &$options) {
-
-}
