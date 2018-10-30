@@ -11423,7 +11423,7 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1+2-dev",
+                    "version": "8.x-1.0-rc1+1-dev",
                     "datestamp": "1536761580",
                     "security-coverage": {
                         "status": "not-covered",
