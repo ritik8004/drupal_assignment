@@ -5,8 +5,87 @@
  * Install, update and uninstall hooks for the Lightning Extender subprofile.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 use Drupal\node\Entity\NodeType;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update all paragraph fields to have skip_translation_check set to true.
+ */
+function alshaya_update_8010() {
+  $moduleHandler = \Drupal::moduleHandler();
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  if ($moduleHandler->moduleExists('alshaya_acm_product_category')) {
+    $configs = [];
+    $configs[] = 'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight';
+
+    $manager->updateConfigs(
+      $configs,
+      'alshaya_acm_product_category',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING
+    );
+  }
+
+  if ($moduleHandler->moduleExists('alshaya_advanced_page')) {
+    $configs = [];
+    $configs[] = 'field.field.node.advanced_page.field_banner';
+    $configs[] = 'field.field.node.advanced_page.field_delivery_banner';
+    $configs[] = 'field.field.node.advanced_page.field_promo_banner_full_width';
+    $configs[] = 'field.field.node.advanced_page.field_promo_blocks';
+    $configs[] = 'field.field.node.advanced_page.field_related_info';
+    $configs[] = 'field.field.node.advanced_page.field_slider';
+
+    $manager->updateConfigs(
+      $configs,
+      'alshaya_advanced_page',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING
+    );
+  }
+
+  if ($moduleHandler->moduleExists('alshaya_paragraph_block')) {
+    $configs = [];
+    $configs[] = 'field.field.block_content.paragraph_block.field_paragraph_content';
+
+    $manager->updateConfigs(
+      $configs,
+      'alshaya_paragraph_block',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING
+    );
+  }
+
+  if ($moduleHandler->moduleExists('alshaya_paragraphs')) {
+    $configs = [];
+    $configs[] = 'field.field.paragraph.1_row_1_col.field_promo_block';
+    $configs[] = 'field.field.paragraph.1_row_1_col_dept.field_promo_block';
+    $configs[] = 'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_1st_col_promo_block';
+    $configs[] = 'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_2nd_col_promo_block';
+    $configs[] = 'field.field.paragraph.1_row_2_col.field_1_row_2_col';
+    $configs[] = 'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_1';
+    $configs[] = 'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2';
+    $configs[] = 'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1';
+    $configs[] = 'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2';
+    $configs[] = 'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col';
+    $configs[] = 'field.field.paragraph.1_row_3_col.field_1_row_promo_block';
+    $configs[] = 'field.field.paragraph.1_row_3_col_dept.field_1_row_promo_block';
+    $configs[] = 'field.field.paragraph.1_row_3_col_text.field_promo_block';
+    $configs[] = 'field.field.paragraph.banner.field_promo_block_button';
+    $configs[] = 'field.field.paragraph.promo_block.field_promo_block_button';
+
+    $manager->updateConfigs(
+      $configs,
+      'alshaya_paragraphs',
+      'install',
+      AlshayaConfigManager::MODE_ADD_MISSING
+    );
+  }
+}
 
 /**
  * Implements hook_update_N().
