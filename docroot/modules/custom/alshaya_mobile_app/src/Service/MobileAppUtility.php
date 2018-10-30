@@ -170,6 +170,16 @@ class MobileAppUtility {
   }
 
   /**
+   * Return the current language id.
+   *
+   * @return string
+   *   Return the current language id.
+   */
+  public function currentLanguage() {
+    return $this->currentLanguage;
+  }
+
+  /**
    * Get Deep link based on give object.
    *
    * @param object $object

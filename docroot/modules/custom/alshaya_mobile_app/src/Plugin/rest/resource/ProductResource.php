@@ -16,6 +16,8 @@ use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a resource to get delivery methods data.
@@ -80,6 +82,13 @@ class ProductResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
+   * Production Options Manager service object.
+   *
+   * @var \Drupal\acq_sku\ProductOptionsManager
+   */
+  protected $productOptionsManager;
+
+  /**
    * Store cache tags and contexts to be added in response.
    *
    * @var array
@@ -109,6 +118,8 @@ class ProductResource extends ResourceBase {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
+   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
+   *   Production Options Manager service object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -119,7 +130,8 @@ class ProductResource extends ResourceBase {
                               SkuImagesManager $sku_images_manager,
                               ProductInfoHelper $product_info_helper,
                               EntityTypeManagerInterface $entity_type_manager,
-                              MobileAppUtility $mobile_app_utility) {
+                              MobileAppUtility $mobile_app_utility,
+                              ProductOptionsManager $product_options_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -127,6 +139,7 @@ class ProductResource extends ResourceBase {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->mobileAppUtility = $mobile_app_utility;
+    $this->productOptionsManager = $product_options_manager;
     $this->cache = [
       'tags' => [],
       'contexts' => [],
@@ -147,7 +160,9 @@ class ProductResource extends ResourceBase {
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('acq_sku.product_info_helper'),
       $container->get('entity_type.manager'),
-      $container->get('alshaya_mobile_app.utility')
+      $container->get('alshaya_mobile_app.utility'),
+      $container->get('acq_sku.product_options_manager'),
+      $container->get('language_manager')
     );
   }
 
@@ -402,10 +417,23 @@ class ProductResource extends ResourceBase {
       ];
 
       foreach ($attribute_data as $value => $skus) {
-        $combinations['attribute_sku'][$attribute_code]['values'][] = [
+        $attr_value = [
           'value' => $value,
           'skus' => $skus,
         ];
+
+        if ($attribute_code == 'size'
+          && ($term = $this->productOptionsManager->loadProductOptionByOptionId(
+            $attribute_code,
+            $value,
+            $this->mobileAppUtility->currentLanguage()
+          ))
+          && $term instanceof TermInterface
+        ) {
+          $attr_value['label'] = $term->label();
+        }
+
+        $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
       }
     }
 
