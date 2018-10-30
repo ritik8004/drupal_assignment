@@ -190,13 +190,16 @@ schemas:
           "type": "object",
           "properties": {
             "type": {
-              "type": "string"  // block, carousel, ...
+              "type": "string",
+              "enum": [ "block", "body", "promo_block", "product_carousel_category" ]
             },
-            "body": {
-              "type": "string" // The content of the block body
+            "item": {
+              "description": "Contains advanced page node body."
+              "type": "string"
             },
             "title": {
-              "type": "string" // The block title
+              "description": "Part of product_carousel_category paragraph type."
+              "type": "string"
             }
             "image": {
               "type": "string"
@@ -208,21 +211,26 @@ schemas:
               "type": "string"
             }
             "margin": {
+              "description": "Part of promo_block paragraph type."
               "type": "string"
             }
             "limit": {
+              "description": "Part of product_carousel_category paragraph type."
               "type": "integer"
             },
             "accordion": {
+              "description": "Part of product_carousel_category paragraph type."
               "type": "boolean"
             },
             "products": {
+              "description": "Part of product_carousel_category paragraph type, when accordion set to 'false' and the key is 'items'."
               "type": "array",
               "items": {
                 "schema": "LightProduct"
               }
             },
             "categories": {
+              "description": "Part of product_carousel_category paragraph type, when accordion set to 'true' and the key is 'items'."
               "type": "array",
               "items": {
                 "schema": "GetCategories"
