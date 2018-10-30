@@ -391,7 +391,7 @@ class ProductResource extends ResourceBase {
       foreach ($attributes as $attribute_code => $value) {
         $combinations['by_sku'][$child_sku]['attributes'][] = [
           'attribute_code' => $attribute_code,
-          'value' => $value,
+          'value' => (int) $value,
         ];
       }
     }
