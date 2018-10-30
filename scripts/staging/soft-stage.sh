@@ -1,8 +1,11 @@
 #!/bin/bash
 #
-# This script stage given sites from production to given environment.
+# This script soft stage given sites from production to given environment
+# and execute post-stage operation on these.
 #
 # soft-stage.sh "mckw,mcsa;hmkw,hmae;pbae;vsae,vskw;bbwae" "01dev3"
+#
+# @TODO: Make it possible to run from local.
 
 sites=$1
 target_env="$2"
@@ -31,7 +34,7 @@ else
 fi
 
 # Move to proper directory to get access to drush9 acsf-tools commands.
-cd /var/www/html/alshaya$target_env/docroot
+cd /var/www/html/alshaya/$target_env/docroot
 
 # Get list of sites to stage.
 # Format: "vsae;mckw,mcae,mcsa;hmkw;pbae".
@@ -42,7 +45,12 @@ do
   ids=""
   for current_site in $(echo $current_sites | tr "," "\n")
   do
-    id=$(php ../scripts/staging/get-site-id-from-name.php "$current_site")
+    res=$(curl -s "https://www.alshaya.acsitefactory.com/api/v1/sites?limit=500" \
+      -u ${username}:${api_key})
+
+    # Finding the site id from its name require to browse a JSON which is
+    # complex in patch. Invoking php script for this is simpler.
+    id=$(php ../scripts/staging/sub-php/get-site-id-from-name.php "$res" "$current_site")
 
     if [ $id != 0 ]; then
       ids="$ids,$id"
