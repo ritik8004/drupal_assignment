@@ -34,7 +34,7 @@ else
 fi
 
 # Move to proper directory to get access to drush9 acsf-tools commands.
-cd /var/www/html/alshaya/$target_env/docroot
+cd /var/www/html/alshaya$target_env/docroot
 
 # Get list of sites to stage.
 # Format: "vsae;mckw,mcae,mcsa;hmkw;pbae".
