@@ -90,7 +90,7 @@ do
   # Check if the staging operation started properly.
   re='^[0-9]+$'
   if ! [[ $task_id =~ $re ]]; then
-    echo "Staging operation for $current_sites failed to start with following message: $res." >&2
+    echo "Staging operation for $current_sites failed to start with following message: $res."
     continue
   fi
 
@@ -100,8 +100,9 @@ do
     res=$(curl -s "https://www.alshaya.acsitefactory.com/api/v1/wip/task/${task_id}/status" \
     -u ${username}:${api_key})
 
-    # Break the loop only the task is not "Waiting" anymore.
-    if ! [[ $(echo $res | grep "\"status_string\":\"Waiting\"") ]]; then
+    # Break the loop only the task is not "Waiting" or "Not Started" anymore.
+    if ! [[ $(echo $res | grep -E "\"status_string\":\"Waiting\"|\"status_string\":\"Not Started\"") ]]; then
+      echo "Staging operation for $current_sites is completed."
       break
     fi
 
@@ -119,7 +120,7 @@ do
 
   # @TODO Looks like there is many possible status. Which ones should be considered as failure?
   if ! [[ $(echo $res | grep "\"status_string\":\"Completed\"") ]]; then
-    echo "Staging operation for $current_sites failed with following message: $res." >&2
+    echo "Staging operation for $current_sites failed with following message: $res."
     curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Staging operation of $current_sites on $target_env failed with following message: $res.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     continue
   fi
