@@ -67,7 +67,7 @@ The 2 scripts described (`reset-all-sites-post-stage.sh` and
 `reset-individual-site-post-stage.sh`) are simply wrapper scripts both using
 `reset-post-stage.sh`. They are only building and validating the list of sites
 to be reset. The `reset-post-stage.sh` script itself is a wrapper calling
-multiple sub-scripts stored in `scripts/staging/sub/`.
+multiple sub-scripts stored in `scripts/staging/sub-sh/`.
 
 ## Expected workflow:
 

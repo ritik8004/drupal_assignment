@@ -44,9 +44,9 @@ do
   if [ $profile = "alshaya_transac" ]
   then
     echo "Cleaning and syncing commerce data on $site."
-    ./../scripts/staging/sub/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
   fi
 
 done
