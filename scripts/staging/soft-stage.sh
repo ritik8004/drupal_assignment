@@ -45,6 +45,8 @@ cd /var/www/html/alshaya$target_env/docroot
 for current_sites in $(echo $sites | tr ";" "\n")
 do
   ids=""
+  valid_sites=""
+
   for current_site in $(echo $current_sites | tr "," "\n")
   do
     res=$(curl -s "https://www.alshaya.acsitefactory.com/api/v1/sites?limit=500" \
@@ -79,6 +81,8 @@ do
     -X POST -H "Content-Type: application/json" \
     -d "{\"to_env\": \"${env}\", \"sites\": [ ${ids} ], \"wipe_target_environment\": false, \"synchronize_all_users\": false, \"detailed_status\": false}" \
     -u ${username}:${api_key})
+
+   echo $res
 
   # Get the task_id from the JSON response.
   task_id=$(echo $(echo $res | grep -Eo '"task_id":[0-9]{1,10}') | grep -Eo '[0-9]{1,10}')
