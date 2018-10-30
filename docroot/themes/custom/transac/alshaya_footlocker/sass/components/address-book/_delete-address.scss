@@ -1,0 +1,42 @@
+.path--user {
+  .ui-dialog {
+    width: 30.4375rem !important;
+    padding: 1rem;
+
+    @include breakpoint($only-mobile) {
+      width: 100% !important;
+    }
+
+    .ui-dialog-buttonpane .ui-dialog-buttonset {
+      button {
+        text-transform: uppercase;
+        font-weight: normal;
+        font-size: 0.875rem;
+
+        html[lang='ar'] & {
+          padding: 0 1.6rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+
+          &.dialog-cancel {
+            margin-top: 1.5rem;
+          }
+        }
+      }
+    }
+
+    .ui-dialog-titlebar-close {
+      color: $address_pp_delete_closebtn_cross;
+    }
+
+    .ui-dialog-titlebar {
+      position: initial;
+    }
+  }
+
+  .dialog-cancel {
+    color: $primary_text;
+  }
+}
