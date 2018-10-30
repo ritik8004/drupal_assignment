@@ -11,6 +11,7 @@ use Drupal\Core\Url;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Path\AliasManagerInterface;
+use Drupal\Component\Utility\UrlHelper;
 
 /**
  * Provides a resource to get deeplink.
@@ -118,7 +119,7 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    if (empty($alias)) {
+    if (empty($alias) || UrlHelper::isExternal($alias)) {
       return $this->mobileAppUtility->throwException();
     }
 
@@ -145,6 +146,9 @@ class DeeplinkResource extends ResourceBase {
         $this->languageManager->getCurrentLanguage()->getId()
       );
       $url_obj = Url::fromUri("internal:" . $internal_path);
+      if (!$url_obj->isRouted()) {
+        return $this->mobileAppUtility->throwException();
+      }
       $url = $this->mobileAppUtility->getDeepLinkFromUrl($url_obj);
     }
 

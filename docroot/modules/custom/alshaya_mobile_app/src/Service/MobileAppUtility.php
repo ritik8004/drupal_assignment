@@ -267,7 +267,9 @@ class MobileAppUtility {
    */
   public function getDeepLinkFromUrl(Url $url) {
     if (!$url->isRouted()) {
-      return self::ENDPOINT_PREFIX
+      return $url->isExternal()
+      ? FALSE
+      : self::ENDPOINT_PREFIX
         . 'deeplink?url='
         . $url->toString(TRUE)->getGeneratedUrl();
     }
@@ -432,10 +434,14 @@ class MobileAppUtility {
     $url = $entity->get($field)->first()->getUrl();
     $url_string = $url->toString(TRUE);
 
-    return [
+    $return = [
       $label => $url_string->getGeneratedUrl(),
-      'deeplink' => $this->getDeepLinkFromUrl($url),
     ];
+
+    if ($deeplink = $this->getDeepLinkFromUrl($url)) {
+      $return['deeplink'] = $deeplink;
+    }
+    return $return;
   }
 
   /**
