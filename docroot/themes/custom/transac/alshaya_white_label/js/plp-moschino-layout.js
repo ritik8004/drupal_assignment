@@ -63,9 +63,16 @@
       var padding_value = ($(window).height() - mos_menu_item_height) / 2;
       $('.field__items.moschino-sub-menu-content').css({'padding-top': padding_value, 'padding-bottom': padding_value});
 
+      // For desktop making the L2 wrapper for L2 links start after 1st L1 item.
+      var l1LinksSelector = $('.moschino-sub-menu-content > .field--name-field-plp-menu');
+      var l2LinksWrapper = $('.moschino-plp-layout .moschino-sub-menu-content .l2-links-wrapper');
+      if (!l2LinksWrapper.hasClass('top-processed')) {
+        l2LinksWrapper.css('top', l1LinksSelector.first().offset().top + l1LinksSelector.outerHeight());
+        l2LinksWrapper.addClass('top-processed');
+      }
+
       // For Desktop, we show sublins in a different markup.
       if ($(window).width() > 1024) {
-        var l2LinksWrapper = $('.moschino-plp-layout .moschino-sub-menu-content .l2-links-wrapper');
         $('.moschino-plp-layout .mos-menu-heading').once().on('click', function () {
           // Clicking on same link again.
           if ($(this).parent().parent().hasClass('active-menu')) {
@@ -86,10 +93,6 @@
           // This 2ms delay helps to not make the animation too immidiate.
           l2sublinksAnimate();
         });
-
-        // For desktop making the L2 wrapper for L2 links start after 1st L1 item.
-        var l1LinksSelector = $('.moschino-sub-menu-content > .field--name-field-plp-menu');
-        l2LinksWrapper.css('top', l1LinksSelector.first().offset().top + l1LinksSelector.outerHeight());
       }
 
       var startAnimationCounter = 500;
