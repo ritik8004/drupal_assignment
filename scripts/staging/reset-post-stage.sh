@@ -34,6 +34,15 @@ do
   drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
 done
 
+# Run updb. In case of soft-stage, it is required to be sure next steps don't
+# fail due to invalid code/database. In case of hard-stage, it does not have
+# any impact given code is same as on prod environment.
+echo "$sites" | while IFS= read -r site
+do
+  echo "Running database update on $site."
+  drush sql-dump -l $site.$env-alshaya.acsitefactory.com updb -y
+done
+
 ###### CLEAR + SYNC.
 echo "$sites" | while IFS= read -r site
 do
@@ -44,9 +53,9 @@ do
   if [ $profile = "alshaya_transac" ]
   then
     echo "Cleaning and syncing commerce data on $site."
-    ./../scripts/staging/sub/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
   fi
 
 done

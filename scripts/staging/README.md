@@ -67,7 +67,7 @@ The 2 scripts described (`reset-all-sites-post-stage.sh` and
 `reset-individual-site-post-stage.sh`) are simply wrapper scripts both using
 `reset-post-stage.sh`. They are only building and validating the list of sites
 to be reset. The `reset-post-stage.sh` script itself is a wrapper calling
-multiple sub-scripts stored in `scripts/staging/sub/`.
+multiple sub-scripts stored in `scripts/staging/sub-sh/`.
 
 ## Expected workflow:
 
@@ -81,7 +81,7 @@ script. Ideally, use [`screen`](https://www.gnu.org/software/screen/manual/scree
 so the process is not stopped in case ssh connection is lost.
 * Finally, deploy the new code using "Code and databases" option.
 
-#### Soft stage
+#### Soft stage - Manual
 * From [production factory UI](https://www.alshaya.acsitefactory.com/admin/gardens/staging/deploy),
 select the target environment, select the sites to be staged and submit the
 form.
@@ -91,3 +91,9 @@ staged sites.
 * Launch the `reset-individual-site-post-stage.sh` script for each staged site.
 Ideally, use [`screen`](https://www.gnu.org/software/screen/manual/screen.html#Invoking-Screen)
 so the process is not stopped in case ssh connection is lost.
+
+#### Soft stage - Script
+* Connect to the target environment via ssh.
+* Launch the `soft-stage.sh` script. Ideally, use [`screen`](https://www.gnu.org/software/screen/manual/screen.html#Invoking-Screen)
+so the process is not stopped in case ssh connection is lost.
+`./../script/soft-stage.sh "vsae;mckw,mcae;hmae;bbwsa" "01dev"` for example.
