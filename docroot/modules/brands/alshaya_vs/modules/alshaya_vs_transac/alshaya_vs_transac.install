@@ -5,7 +5,29 @@
  * Install, uninstall, update function for alshaya_vs_transac.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Change images mode to fallback for VS.
+ * Enable the module alshaya_vs_search.
+ */
+function alshaya_vs_transac_update_8003() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
+  );
+
+  if (!(\Drupal::moduleHandler()->moduleExists('alshaya_vs_search'))) {
+    \Drupal::service('module_installer')->install(['alshaya_vs_search']);
+  }
+}
 
 /**
  * Implements hook_post_update_NAME().
@@ -131,12 +153,7 @@ function alshaya_vs_transac_install() {
   // subscriber written for config save, which will always override the value
   // from the config placed in override folder and that will not allow drush
   // command, for super category feature, to execute properly.
-  $config = \Drupal::configFactory()->getEditable('alshaya_super_category.settings');
-  $config->set('status', TRUE);
-  $config->save(TRUE);
-
-  $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => 'supercategorymenu']);
-  $block = reset($blocks);
-  $block->setStatus(TRUE);
-  $block->save();
+  /* @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
+  $super_category_feature->enableSuperCategory();
 }

@@ -135,15 +135,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        $media_item = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
-
-        if ($media_item &&
-          isset($media_item['roles'])
-          && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+        if (isset($data['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
           continue;
         }
 
-        $this->mediaData[] = $media_item;
+        $this->mediaData[] = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
       }
 
       if ($update_sku) {
@@ -188,9 +184,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
+        if (empty($data['roles']) || !in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
+          continue;
+        }
+
         $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
 
-        if ($media_item && !empty($media_item['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $media_item['roles'])) {
+        if ($media_item) {
           $this->swatchData = $media_item;
           break;
         }
@@ -229,9 +229,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
       if (!empty($data['fid'])) {
         $file = File::load($data['fid']);
         if (!($file instanceof FileInterface)) {
-          \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku"', [
+          // Leave a message for developers to find out why this happened.
+          \Drupal::logger('acq_sku')->error('Empty file object for fid @fid on sku "@sku" having language @langcode. Trace: @trace', [
             '@fid' => $data['fid'],
             '@sku' => $this->getSku(),
+            '@langcode' => $this->language()->getId(),
+            '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
           ]);
 
           unset($data['fid']);
@@ -264,6 +267,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $media_item['label'] = $default_label ?: $this->label();
       }
 
+      return $media_item;
+    }
+    else {
+      // Return whatever we have as is (videos).
       return $media_item;
     }
   }

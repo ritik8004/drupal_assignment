@@ -8,13 +8,14 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Implements hook_update_N().
  *
  * Adding new fields for moschino for the product category vocabulary.
  */
-function alshaya_acm_product_category_update_8020() {
+function alshaya_acm_product_category_update_8021() {
   $manager = \Drupal::service('alshaya_config.manager');
   $configs = [
     'field.storage.taxonomy_term.field_plp_menu',
@@ -51,6 +52,44 @@ function alshaya_acm_product_category_update_8020() {
     // Re-save config for the overrides to take effect.
     \Drupal::configFactory()->getEditable($block)
       ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new field 'pdp_layout' for the product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8020() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'field.storage.taxonomy_term.field_pdp_layout',
+    'field.field.taxonomy_term.acq_product_category.field_pdp_layout',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install'
+  );
+
+  // Updating all taxonomy terms to have 'inherit site config' by default.
+  $query = \Drupal::entityQuery('taxonomy_term');
+  $query->condition('vid', 'acq_product_category');
+  $tids = $query->execute();
+  foreach ($tids as $tid) {
+    $term = Term::load($tid);
+    if (!empty($term)) {
+      $term->field_pdp_layout->setValue(SkuManager::PDP_LAYOUT_INHERIT_KEY);
+      $term->save();
+    }
   }
 }
 

@@ -46,6 +46,8 @@ class SkuManager {
 
   const FREE_GIFT_PRICE = 0.01;
 
+  const PDP_LAYOUT_INHERIT_KEY = 'inherit';
+
   /**
    * The database service.
    *
@@ -1798,13 +1800,13 @@ class SkuManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   Parent SKU.
-   * @param string $attribute_code
-   *   Attribute code used for swatches.
+   * @param array $attribute_codes
+   *   Attribute codes used for swatches.
    *
    * @return array
    *   Swatches array.
    */
-  public function getSwatches(SKUInterface $sku, $attribute_code = 'color') {
+  public function getSwatches(SKUInterface $sku, array $attribute_codes = ['color']) {
     $swatches = $this->getProductCachedData($sku, 'swatches');
 
     // We may have nothing for an SKU, we should not keep processing for it.
@@ -1818,7 +1820,17 @@ class SkuManager {
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
-      $value = $child->get('attr_' . $attribute_code)->getString();
+      $value = NULL;
+
+      foreach ($attribute_codes as $attribute_code) {
+        $value = $child->get('attr_' . $attribute_code)->getString();
+
+        if (empty($value)) {
+          continue;
+        }
+
+        break;
+      }
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
@@ -2064,8 +2076,9 @@ class SkuManager {
    * @throws \InvalidArgumentException
    */
   public function isSkuFreeGift(SKU $sku) {
+    $price = (float) $sku->get('price')->getString();
     $final_price = (float) $sku->get('final_price')->getString();
-    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
+    return ($price == self::FREE_GIFT_PRICE) || ($final_price == self::FREE_GIFT_PRICE);
   }
 
   /**
@@ -2135,6 +2148,68 @@ class SkuManager {
     }
 
     return $attributes_available;
+  }
+
+  /**
+   * Helper function to fetch pdp layout to be used for the sku or node.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity for which layout needs to be fetched.
+   * @param string $context
+   *   Context for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout to be used.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function getPdpLayout(EntityInterface $entity, $context = 'pdp') {
+    if ($entity instanceof SKUInterface) {
+      $entity = alshaya_acm_product_get_display_node($entity);
+    }
+    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+      if ($inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list)) {
+        $term = $this->termStorage->load($inner_term);
+        if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
+          $pdp_layout = $term->get('field_pdp_layout')->getString();
+          if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+            $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
+            foreach ($taxonomy_parents as $taxonomy_parent) {
+              $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
+              if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
+                return $this->getContextFromLayoutKey($context, $pdp_layout);
+              }
+            }
+          }
+          else {
+            return $this->getContextFromLayoutKey($context, $pdp_layout);
+          }
+        }
+      }
+    }
+    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+  }
+
+  /**
+   * Helper function to fetch pdp layout to be used for the sku or node.
+   *
+   * @param string $context
+   *   Context for which layout needs to be fetched.
+   * @param string $pdp_layout
+   *   Context for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout context to be used.
+   */
+  public function getContextFromLayoutKey($context, $pdp_layout) {
+    switch ($pdp_layout) {
+      case 'default':
+        return $context;
+
+      case 'magazine':
+        return $context . '-' . $pdp_layout;
+    }
   }
 
 }

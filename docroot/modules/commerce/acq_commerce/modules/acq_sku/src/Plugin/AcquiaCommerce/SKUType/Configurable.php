@@ -476,7 +476,7 @@ class Configurable extends SKUPluginBase {
         $attributes[$key] = $value;
       }
 
-      foreach ($tree['combinations']['by_sku'] as $sku => $sku_attributes) {
+      foreach ($tree['combinations']['by_sku'] ?? [] as $sku => $sku_attributes) {
         if (count(array_intersect_assoc($sku_attributes, $attributes)) === count($sku_attributes)) {
           return $tree['products'][$sku];
         }
@@ -535,12 +535,19 @@ class Configurable extends SKUPluginBase {
       }
     }
 
-    // Create name from label parts.
-    $cartName = sprintf(
-      '%s (%s)',
-      $cart['name'],
-      implode(', ', $label_parts)
-    );
+    // If the cart name has already been constructed and is rendered as a link,
+    // use the title directly.
+    if (!empty($cart['name']['#title'])) {
+      $cartName = $cart['name']['#title'];
+    }
+    else {
+      // Create name from label parts.
+      $cartName = sprintf(
+        '%s (%s)',
+        $cart['name'],
+        implode(', ', $label_parts)
+      );
+    }
 
     if (!$asString) {
       $display_node = $this->getDisplayNode($parent_sku);

@@ -7,7 +7,7 @@ dependencies:
     - alshaya_white_label
 id: supercategorymenu
 theme: alshaya_white_label
-region: header_primary
+region: menu_primary
 weight: 0
 provider: null
 plugin: alshaya_super_category_menu

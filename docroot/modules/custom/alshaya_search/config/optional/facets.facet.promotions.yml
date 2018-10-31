@@ -17,7 +17,7 @@ url_alias: promotions
 weight: 0
 min_count: 1
 show_only_one_result: false
-field_identifier: promotions
+field_identifier: field_acq_promotion_label
 facet_source_id: 'search_api:views_page__search__page'
 widget:
   type: checkbox
@@ -38,10 +38,10 @@ processor_configs:
       sort: 50
     settings:
       sort: ASC
-  translate_entity:
-    processor_id: translate_entity
+  clean_active_facets_processor:
+    processor_id: clean_active_facets_processor
     weights:
-      build: 5
+      build: 10
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler

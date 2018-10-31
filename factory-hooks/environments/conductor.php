@@ -384,6 +384,27 @@ $conductors = [
     'hmac_secret' => 'OGRkMjY3MGYtNDExZS00',
     'api_version' => 'v2',
   ],
+  // FootLocker KW.
+  'flkw_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
+    'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
+    'api_version' => 'v2',
+  ],
+  // FootLocker SA.
+  'flsa_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '31a27139b98448379c08c90bee5e866e',
+    'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',
+    'api_version' => 'v2',
+  ],
+  // FootLocker AE.
+  'flae_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '61f09f6fe1474ce68cc8057f97188d2f',
+    'hmac_secret' => 'MjU3YzZiOGEtNmI1Yi00',
+    'api_version' => 'v2',
+  ],
 ];
 
 $conductor_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/conductor.php';
