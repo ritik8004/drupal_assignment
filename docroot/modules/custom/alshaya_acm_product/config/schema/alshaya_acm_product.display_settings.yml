@@ -18,3 +18,9 @@ alshaya_acm_product.display_settings:
         margin:
           type: integer
           label: 'Margin between images in slider'
+    short_desc_characters:
+      type: integer
+      label: 'No. of characters that should be displayed as short decription on PDP page.'
+    short_desc_text_summary:
+      type: boolean
+      label: 'Use text_summary to generate short description.'

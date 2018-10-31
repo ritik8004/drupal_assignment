@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d29f65040edcd8f80d036028fe19536",
+    "content-hash": "26ca252aa389ff602cf753b23a07c82f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -476,6 +476,48 @@
                 "html"
             ],
             "time": "2018-03-15T21:23:44+00:00"
+        },
+        {
+            "name": "charliekassel/array-diff",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliekassel/array-diff.git",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "psr-4": {
+                    "Differ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charlie Kassel",
+                    "email": "ck@charliekassel.com"
+                }
+            ],
+            "description": "Find the difference between two array's",
+            "time": "2018-02-19T14:48:47+00:00"
         },
         {
             "name": "ckeditor/font",
@@ -2547,6 +2589,57 @@
             }
         },
         {
+            "name": "drupal/adminimal_theme",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/adminimal_theme",
+                "reference": "8.x-1.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/adminimal_theme-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "bb9f280bcdbd7e4d384a925c685a2aa1feed8419"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-theme",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.3",
+                    "datestamp": "1480507083",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "ANDiTKO",
+                    "homepage": "https://www.drupal.org/user/1428124"
+                },
+                {
+                    "name": "realityloop",
+                    "homepage": "https://www.drupal.org/user/139189"
+                }
+            ],
+            "description": "Drupal administration theme with modern minimalist design.",
+            "homepage": "https://www.drupal.org/project/adminimal_theme",
+            "support": {
+                "source": "http://cgit.drupalcode.org/adminimal_theme"
+            }
+        },
+        {
             "name": "drupal/allowed_formats",
             "version": "1.1.0",
             "source": {
@@ -3960,6 +4053,10 @@
                     "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                     "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch",
                     "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
+                    "Respect existing #multilingual property in content_translation_form_alter()": "https://www.drupal.org/files/issues/2018-05-28/respect-multilingual-2975762-2.patch",
+                    "FieldItemList::equals is sufficient from the storage perspective but not for code checking for changes": "https://www.drupal.org/files/issues/2018-05-29/2826021-31.patch",
+                    "Add hooks to act on a new revision being created": "https://www.drupal.org/files/issues/2018-05-28/revision-create-hooks-2975754-2.patch",
+                    "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-90.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356278-408--8.5.x-real.patch",
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
@@ -8087,14 +8184,14 @@
                 },
                 "drupal": {
                     "version": "8.x-1.3",
-                    "datestamp": "1527502684",
+                    "datestamp": "1540628880",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
+                    "Fix integration with content moderation in multi-lingual scenarios": "https://www.drupal.org/files/issues/2018-06-06/paragraphs-paragraphs-translatable-revision-2951436-71.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -10409,8 +10506,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1+2-dev",
-                    "datestamp": "1536761580",
+                    "version": "8.x-1.0-rc1+1-dev",
+                    "datestamp": "1537865580",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -10703,7 +10800,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-rc18",
-                    "datestamp": "1533682980",
+                    "datestamp": "1536257580",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."

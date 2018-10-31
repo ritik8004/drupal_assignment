@@ -282,20 +282,29 @@
     position: absolute;
     top: 44%;
     #{$left}: 24%;
+    font-size: 0.625rem;
 
     @include breakpoint($only-mobile) {
       display: none;
     }
 
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        width: 45%;
+        top: -1.95rem;
+        #{$left}: 54%;
+      }
+    }
+
     @include breakpoint($tablet) {
-      width: 49%;
-      top: 33.7%;
+      width: 55%;
+      top: -0.5rem;
       #{$left}: 49%;
     }
 
     @include breakpoint($desktop) {
       width: 40%;
-      top: 38%;
+      top: -0.5rem;
       #{$left}: 25%;
     }
 
@@ -406,114 +415,118 @@
   }
 }
 
-.cvv-help-text-wrapper {
-  @include breakpoint($only-mobile) {
-    display: block;
-    position: absolute;
-    top: 7.4rem;
-    #{$left}: 11.5rem;
+.cvv-wrapper {
+  position: relative;
 
-    html[lang=ar] & {
-      #{$left}: 14rem;
-    }
-  }
-
-  .mobile-tooltip-icon {
-    display: none;
-
+  .cvv-help-text-wrapper {
     @include breakpoint($only-mobile) {
       display: block;
-      position: relative;
+      position: absolute;
+      top: 0;
+      #{$left}: 11.5rem;
+
+      html[lang=ar] & {
+        #{$left}: 14rem;
+      }
     }
 
-    .tooltip-icon {
-      display: block;
-      width: 1.5rem;
-      height: 1.5rem;
-      cursor: pointer;
-      color: $tooltip_icon;
+    .mobile-tooltip-icon {
+      display: none;
 
-      @include icon(infomation, after) {
-        margin-#{$left}: 0.3rem;
-        display: inline-block;
-        vertical-align: middle;
-        font-weight: bold;
-        font-size: 1rem;
+      @include breakpoint($only-mobile) {
+        display: block;
+        position: relative;
       }
 
-      &:hover {
-        + span.tooltip-content {
-          display: block;
+      .tooltip-icon {
+        display: block;
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+        color: $tooltip_icon;
+
+        @include icon(infomation, after) {
+          margin-#{$left}: 0.3rem;
+          display: inline-block;
+          vertical-align: middle;
+          font-weight: bold;
+          font-size: 1rem;
+        }
+
+        &:hover {
+          + span.tooltip-content {
+            display: block;
+          }
         }
       }
-    }
 
-    span.tooltip-content {
-      display: none;
-      font-size: 0.625rem;
-      position: absolute;
-      z-index: 1;
-      padding: 0.5rem;
-      padding-#{$left}: 3.875rem;
-      top: 1.5rem;
-      #{$left}: -7.3rem;
-      color: $tooltip_text;
-      background-color: $tooltip_bg;
-      border: 1px solid $tooltip_border;
-      border-radius: 2px;
-      width: 13.81rem;
-
-      &::before {
-        border-color: $tooltip_border_opacity_0;
-        border-bottom-color: $tooltip_border;
-        border-width: 0.375rem;
-        border-bottom-width: 0.5rem;
-        margin-#{$left}: -0.375rem;
-        bottom: 100%;
-        border-style: solid;
-        content: " ";
-        height: 0;
-        width: 0;
+      span.tooltip-content {
+        display: none;
+        font-size: 0.625rem;
         position: absolute;
-        pointer-events: none;
-        #{$right}: 5.25rem;
-
-        @extend %tooltip-before;
-      }
-
-      &::after {
-        border-color: $tooltip_bg_opacity_0;
-        border-bottom-color: $tooltip_border_2;
-        border-width: 0.3125rem;
-        border-bottom-width: 0.375rem;
-        margin-#{$left}: -0.3125rem;
-        bottom: 100%;
-        border-style: solid;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-        #{$right}: 5.33rem;
-
-        @extend %tooltip-after;
-      }
-
-      p {
-        margin: 0;
+        z-index: 4;
+        padding: 0.5rem;
+        padding-#{$left}: 3.875rem;
+        top: 1.5rem;
+        #{$left}: -7.3rem;
+        color: $tooltip_text;
+        background-color: $tooltip_bg;
+        border: 1px solid $tooltip_border;
+        border-radius: 2px;
+        width: 13.81rem;
 
         &::before {
-          content: "";
-          height: 2rem;
-          width: 3rem;
-          background: $checkout_payment_CVV_tooltip_image_bg url(../imgs/cards/back-card.png) no-repeat;
-          background-size: 100%;
-          margin-#{$right}: 0.5rem;
+          border-color: $tooltip_border_opacity_0;
+          border-bottom-color: $tooltip_border;
+          border-width: 0.375rem;
+          border-bottom-width: 0.5rem;
+          margin-#{$left}: -0.375rem;
+          bottom: 100%;
+          border-style: solid;
+          content: " ";
+          height: 0;
+          width: 0;
           position: absolute;
-          #{$left}: 0;
-          top: 0;
-          margin-#{$left}: 0.5rem;
-          margin-top: 0.5rem;
+          pointer-events: none;
+          #{$right}: 5.25rem;
+
+          @extend %tooltip-before;
+        }
+
+        &::after {
+          border-color: $tooltip_bg_opacity_0;
+          border-bottom-color: $tooltip_border_2;
+          border-width: 0.3125rem;
+          border-bottom-width: 0.375rem;
+          margin-#{$left}: -0.3125rem;
+          bottom: 100%;
+          border-style: solid;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          #{$right}: 5.33rem;
+
+          @extend %tooltip-after;
+        }
+
+        p {
+          margin: 0;
+
+          &::before {
+            content: "";
+            height: 2rem;
+            width: 3rem;
+            background: $checkout_payment_CVV_tooltip_image_bg url(../imgs/cards/back-card.png) no-repeat;
+            background-size: 100%;
+            margin-#{$right}: 0.5rem;
+            position: absolute;
+            #{$left}: 0;
+            top: 0;
+            margin-#{$left}: 0.5rem;
+            margin-top: 0.5rem;
+          }
         }
       }
     }
