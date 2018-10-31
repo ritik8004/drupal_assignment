@@ -200,7 +200,7 @@ class CategoryProductListResource extends ResourceBase {
     $banners = $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile');
 
     return [
-      'id' => $term->id(),
+      'id' => (int) $term->id(),
       'label' => $term->label(),
       'path' => $term_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
