@@ -228,7 +228,8 @@
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
-                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch"
+                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch",
+                "Installation profiles do not support project:module format for dependencies": "https://www.drupal.org/files/issues/2018-10-02/2855026-55.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",

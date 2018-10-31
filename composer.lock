@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66eabb8ec99f14ad457a3d08f2ca3a4d",
+    "content-hash": "87dd524d6b5cedf8d48b046fbe2395ed",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -4765,6 +4765,7 @@
                     "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                     "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
                     "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch",
+                    "Installation profiles do not support project:module format for dependencies": "https://www.drupal.org/files/issues/2018-10-02/2855026-55.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-10-17/2815221-reroll-8.6.1.patch",
