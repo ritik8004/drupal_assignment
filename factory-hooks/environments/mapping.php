@@ -303,6 +303,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Foot Locker KW.
     'flkw' => [
+      '01uat' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flkw_uat',
+      ],
       'default' => [
         'magento' => 'fl_qa',
         'conductor' => 'flkw_test',
@@ -310,6 +314,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Foot Locker SA.
     'flsa' => [
+      '01uat' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flsa_uat',
+      ],
       'default' => [
         'magento' => 'fl_qa',
         'conductor' => 'flsa_test',
@@ -317,6 +325,10 @@ function alshaya_get_env_keys($site, $env) {
     ],
     // Foot Locker AE.
     'flae' => [
+      '01uat' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flae_uat',
+      ],
       'default' => [
         'magento' => 'fl_qa',
         'conductor' => 'flae_test',
