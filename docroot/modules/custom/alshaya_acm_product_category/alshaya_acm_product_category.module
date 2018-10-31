@@ -125,10 +125,10 @@ function alshaya_acm_product_category_child_terms($tid) {
 function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   if (($form['#id'] === 'views-exposed-form-alshaya-product-list-block-1') ||
     ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-2')) {
-    // Disable sort options on moschino.
+    // Hide sort options on moschino.
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
     if ($term instanceof TermInterface && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_LAYOUT_MOSCHINO) {
-      $form['#access'] = FALSE;
+      $form['sort_bef_combine']['#type'] = 'hidden';
     }
   }
 }
