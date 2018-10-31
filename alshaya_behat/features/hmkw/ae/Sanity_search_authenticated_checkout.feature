@@ -40,7 +40,7 @@ Feature: to verify search functionality , basket and checkout
   Scenario: As an authenticated user
   I should be able to search product, add product to basket
   and verify the fields on basket
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
@@ -86,7 +86,7 @@ Feature: to verify search functionality , basket and checkout
   I should be able to search for a product
   and add it to the cart, select Home Delivery and see COD, KNET and Cybersource
   Payment methods
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
@@ -126,7 +126,7 @@ Feature: to verify search functionality , basket and checkout
   I should be able to search for a product
   and add it to the cart, select Click & Collect  and Cybersource
   Payment methods
-    Given I am logged in as an authenticated user "trupti@axelerant.com" with password "password@1"
+    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "sweatshirt"
     And I press "Search"
@@ -171,7 +171,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "trupti@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
     And I fill in "edit-checkout-login-pass" with "password@1"
     When I press "sign in"
     And I wait for the page to load
@@ -207,7 +207,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "trupti@axelerant.com"
+    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
     And I fill in "edit-checkout-login-pass" with "password@1"
     When I press "sign in"
     And I wait for the page to load
