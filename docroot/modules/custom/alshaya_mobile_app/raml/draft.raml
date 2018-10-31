@@ -194,25 +194,25 @@ schemas:
               "enum": [ "block", "body", "promo_block", "product_carousel_category" ]
             },
             "item": {
-              "description": "Contains advanced page node body."
+              "description": "Contains advanced page node body.",
               "type": "string"
             },
             "body": {
-              "description": "Contains body of block."
+              "description": "Contains body of block.",
               "type": "string"
             },
             "label": {
-              "description": "Contains label of block."
+              "description": "Contains label of block.",
               "type": "string"
             },
             "label_display": {
-              "description": "Contains label display settings to dispaly label or not."
+              "description": "Contains label display settings to dispaly label or not.",
               "type": "boolean"
             },
             "title": {
-              "description": "Part of product_carousel_category type."
+              "description": "Part of product_carousel_category type.",
               "type": "string"
-            }
+            },
             "image": {
               "type": "string"
             },
@@ -221,33 +221,33 @@ schemas:
             },
             "deeplink": {
               "type": "string"
-            }
+            },
             "margin": {
-              "description": "Part of promo_block type."
+              "description": "Part of promo_block type.",
               "type": "string"
-            }
+            },
             "limit": {
-              "description": "Part of product_carousel_category type."
+              "description": "Part of product_carousel_category type.",
               "type": "integer"
             },
             "accordion": {
-              "description": "Part of product_carousel_category type."
+              "description": "Part of product_carousel_category type.",
               "type": "boolean"
             },
             "products": {
-              "description": "Part of product_carousel_category type, when accordion set to 'false' and the key is 'items'."
+              "description": "Part of product_carousel_category type, when accordion set to 'false' and the key is 'items'.",
               "type": "array",
               "items": {
                 "schema": "LightProduct"
               }
             },
             "categories": {
-              "description": "Part of product_carousel_category paragraph type, when accordion set to 'true' and the key is 'items'."
+              "description": "Part of product_carousel_category paragraph type, when accordion set to 'true' and the key is 'items'.",
               "type": "array",
               "items": {
                 "schema": "GetCategories"
               }
-            },
+            }
           },
           "required": [ "type" ]
         }
