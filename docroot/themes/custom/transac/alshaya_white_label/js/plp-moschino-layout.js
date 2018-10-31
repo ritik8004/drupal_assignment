@@ -72,8 +72,8 @@
       }
 
       // For Desktop, we show sublins in a different markup.
-      if ($(window).width() > 1024) {
-        $('.moschino-plp-layout .mos-menu-heading').once().on('click', function () {
+      $('.moschino-plp-layout .mos-menu-heading').once().on('click', function (event) {
+        if ($(window).width() > 1024) {
           // Clicking on same link again.
           if ($(this).parent().parent().hasClass('active-menu')) {
             $(this).parent().parent().removeClass('active-menu');
@@ -92,8 +92,16 @@
           // Handle animation on sublinks.
           // This 2ms delay helps to not make the animation too immidiate.
           l2sublinksAnimate();
-        });
-      }
+        }
+        else {
+          // In tablet and mobile we ensure only accordion panel is open at one
+          // time. Because each panel is a separate accordion due to markup
+          // limitations, we are doing housekeeping separately.
+          $(this).parent().parent().siblings('.field--name-field-plp-menu').each(function () {
+            closeOpenAccordion($(this));
+          });
+        }
+      });
 
       var startAnimationCounter = 500;
       // Adding different transition durations for each heading links.
@@ -114,6 +122,11 @@
         l2LinksWrapper.empty();
         l2LinksWrapper.removeClass('visible');
         $('.moschino-sub-menu-content > .field--name-field-plp-menu').removeClass('active-menu');
+
+        // Clean up accordion panels.
+        $('.moschino-sub-menu-content > .field--name-field-plp-menu').each(function () {
+          closeOpenAccordion($(this));
+        });
       });
 
       // Add class if it is moschino modal.
@@ -140,6 +153,22 @@
             startAnimationCounter = startAnimationCounter + 70;
           });
         }, 2);
+      }
+
+      /**
+       * Helper function to close accordions.
+       *
+       * @param {*} element
+       * field--name-field-plp-menu parent HTML element which contains
+       * accordion children element to close.
+       */
+      function closeOpenAccordion(element) {
+        if (element.children('.mos-menu-item').hasClass('c-accordion')) {
+          if (element.find('.mos-menu-heading').hasClass('ui-state-active')) {
+            // Close the panel.
+            element.children('.mos-menu-item').accordion('option', 'active', false);
+          }
+        }
       }
     }
   };

@@ -1,5 +1,9 @@
 {% block paragraph %}
-  <div class="mos-menu-item c-accordion">
+  {% if content.field_sub_link|render %}
+    <div class="mos-menu-item c-accordion">
+  {% else %}
+    <div class="mos-menu-item">
+  {% endif %}
     {% block content %}
       {% if content.field_sub_link|render %}
         <div class="mos-menu-heading c-accordion__title">
