@@ -384,6 +384,9 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
       // Clear cached data for configurable products.
       $skuManager->clearProductCachedData($parent);
 
+      // Reset the sku static cache.
+      drupal_static_reset('loadFromSku');
+
       // @TODO: Make this smart in CORE-3443.
       Cache::invalidateTags($parent->getCacheTagsToInvalidate());
     }
