@@ -27,3 +27,46 @@
     }
   }
 }
+
+.c-user--node {
+  .c-sidebar-first {
+    .my-account-nav {
+      a {
+        font-size: 0.875rem;
+
+        @include breakpoint($only-mobile) {
+          border-bottom: 1px solid $my_account_mobile_nav_border;
+        }
+      }
+    }
+  }
+
+  &.l-two--sf {
+    aside.c-sidebar-first {
+      .my-account-mobile-title1 {
+        @include breakpoint($only-mobile) {
+          font-weight: normal;
+          font-family: $alshaya-thin;
+          text-transform: capitalize;
+          margin-top: 0.75rem;
+        }
+      }
+
+      .my-account-mobile-title2 {
+        @include breakpoint($only-mobile) {
+          opacity: 1;
+        }
+      }
+
+      li {
+        &.my-account {
+          + li a {
+            @include breakpoint($only-mobile) {
+              border-top: 1px solid $my_account_mobile_nav_border;
+            }
+          }
+        }
+      }
+    }
+  }
+}

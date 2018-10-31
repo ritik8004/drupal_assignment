@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the alshaya_mobile_app module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_mobile_app_install() {
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+}

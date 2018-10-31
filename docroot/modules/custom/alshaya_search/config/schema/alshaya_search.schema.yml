@@ -8,6 +8,9 @@ alshaya_search.settings:
     use_brand_specific_core:
       type: boolean
       label: 'Use brand specific core'
+    search_field_placeholder:
+      type: label
+      label: 'Search field placeholder'
     sort_options_labels:
       type: sequence
       label: 'Sort options values'

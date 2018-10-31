@@ -16,10 +16,37 @@ body {
   }
 }
 
+.c-my-account-nav {
+  @include breakpoint($only-tablet) {
+    width: 20rem !important;
+  }
+
+  @include breakpoint($upto-desktop) {
+    li::after {
+      font-size: 2rem;
+      margin-top: -1.5625rem;
+    }
+  }
+
+  h3 {
+    text-transform: uppercase;
+  }
+}
+
 .c-menu-secondary {
+  @include breakpoint($only-tablet) {
+    width: 20rem;
+  }
+
   a {
     @include breakpoint($upto-desktop) {
       font-size: 0.875rem;
+      line-height: 1.2;
+      text-transform: capitalize;
+
+      html[lang=ar] & {
+        padding-right: 0;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -38,7 +65,7 @@ body {
     &::after {
       margin-top: -2.5rem;
       font-size: 2rem;
-      #{$right}: -0.625rem;
+      width: 1.875rem;
     }
   }
 
@@ -58,5 +85,15 @@ body {
 
   @include breakpoint($only-mobile) {
     height: 3rem;
+  }
+}
+
+.menu--three__list-item {
+  a.menu--three__link {
+    @include breakpoint($upto-desktop) {
+      &::after {
+        font-size: 2rem;
+      }
+    }
   }
 }

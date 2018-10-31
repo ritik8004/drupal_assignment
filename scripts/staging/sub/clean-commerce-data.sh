@@ -33,3 +33,6 @@ drush8 @$site.$target_env --uri=$uri search-api-clear
 
 echo "Reset purge queue"
 drush8 @$site.$target_env --uri=$uri p-queue-empty
+
+echo "Delete all active sessions so we can have fresh carts after resetting data"
+drush8 @$site.$target_env --uri=$uri sqlq "DELETE FROM sessions;"
