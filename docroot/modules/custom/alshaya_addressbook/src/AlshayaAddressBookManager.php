@@ -939,6 +939,14 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         unset($magento_form[$index]);
       }
 
+      // Array keys based on sort_order.
+      uasort($magento_form, function ($a, $b) {
+        if ($a['sort_order'] == $b['sort_order']) {
+          return 0;
+        }
+        return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
+      });
+
       $this->cache->set($cid, $magento_form);
     }
     catch (\Exception $e) {
@@ -1134,17 +1142,26 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    * @param array $address
    *   Address array.
    */
-  public function getAddressWithPrefix(array $address) {
+  public function decorateAddressDispaly(array $address) {
     $prefix_settings = $this->configFactory->get('alshaya_addressbook.settings')->get('prefix_settings');
     $mapping = $this->getMagentoFieldMappings();
     $form_fields = $this->getMagentoFormFields();
+    // Rearrange mapping array according to $form_fields.
+    $mapping = array_merge(array_flip(array_keys($form_fields)), array_flip($mapping));
 
     // Reverse the string for rtl language.
     $language = $this->languageManager->getCurrentLanguage();
     $component_string = $language->getDirection() == LanguageInterface::DIRECTION_RTL ? ":value :prefix" : ":prefix :value";
 
     $prefix_field = $prefix_settings['key'];
+    $remove_keys = [];
     foreach ($address as $key => &$value) {
+      // Check if the _display keys are present with values.
+      if (strpos($key, '_display') !== TRUE && isset($address[$key . '_display'])) {
+        $value = $address[$key . '_display'];
+        $remove_keys[] = $key . '_display';
+      }
+
       if (!isset($mapping[$key]) || in_array($key, $prefix_settings['except'])) {
         continue;
       }
@@ -1157,7 +1174,10 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         ]);
       }
     }
-
+    // Remove keys from array.
+    $address = array_diff_key($address, array_flip($remove_keys));
+    // Rearrange address fields based on mapping array.
+    $address = array_merge(array_flip($mapping), $address);
     return $address;
   }
 

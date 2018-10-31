@@ -8,6 +8,7 @@
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Implements hook_update_N().
@@ -33,6 +34,18 @@ function alshaya_acm_product_category_update_8020() {
     'alshaya_acm_product',
     'install'
   );
+
+  // Updating all taxonomy terms to have 'inherit site config' by default.
+  $query = \Drupal::entityQuery('taxonomy_term');
+  $query->condition('vid', 'acq_product_category');
+  $tids = $query->execute();
+  foreach ($tids as $tid) {
+    $term = Term::load($tid);
+    if (!empty($term)) {
+      $term->field_pdp_layout->setValue(SkuManager::PDP_LAYOUT_INHERIT_KEY);
+      $term->save();
+    }
+  }
 }
 
 /**

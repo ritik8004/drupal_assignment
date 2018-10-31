@@ -301,11 +301,37 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'vsae_test',
       ],
     ],
-    // Footlocker SA.
-    'flsa' => [
+    // Foot Locker KW.
+    'flkw' => [
+      '01uat' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flkw_uat',
+      ],
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mcsa_test',
+        'magento' => 'fl_qa',
+        'conductor' => 'flkw_test',
+      ],
+    ],
+    // Foot Locker SA.
+    'flsa' => [
+      '01uat' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flsa_uat',
+      ],
+      'default' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flsa_test',
+      ],
+    ],
+    // Foot Locker AE.
+    'flae' => [
+      '01uat' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flae_uat',
+      ],
+      'default' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flae_test',
       ],
     ],
   ];

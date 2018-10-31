@@ -46,6 +46,8 @@ class SkuManager {
 
   const FREE_GIFT_PRICE = 0.01;
 
+  const PDP_LAYOUT_INHERIT_KEY = 'inherit';
+
   /**
    * The database service.
    *
@@ -1960,11 +1962,37 @@ class SkuManager {
    *   TRUE if we need to process and hide not required options.
    */
   public function isNotRequiredOptionsToBeRemoved() {
-    $hide_not_required_option = $this->configFactory
-      ->get('alshaya_acm_product.display_settings')
-      ->get('hide_not_required_option');
+    $static = &drupal_static('isNotRequiredOptionsToBeRemoved', NULL);
 
-    return (bool) $hide_not_required_option;
+    if ($static === NULL) {
+      $hide_not_required_option = $this->configFactory
+        ->get('alshaya_acm_product.display_settings')
+        ->get('hide_not_required_option');
+
+      $static = (bool) $hide_not_required_option;
+    }
+
+    return $static;
+  }
+
+  /**
+   * Show images from child only after all options are selected or not.
+   *
+   * @return bool
+   *   TRUE if we need to show from child only after all options are selected.
+   */
+  public function showImagesFromChildrenAfterAllOptionsSelected(): bool {
+    $static = &drupal_static('showImagesFromChildrenAfterAllOptionsSelected', NULL);
+
+    if ($static === NULL) {
+      $value = $this->configFactory
+        ->get('alshaya_acm_product.display_settings')
+        ->get('show_child_images_after_selecting');
+
+      $static = (bool) $value === 'all';
+    }
+
+    return $static;
   }
 
   /**
@@ -2074,8 +2102,9 @@ class SkuManager {
    * @throws \InvalidArgumentException
    */
   public function isSkuFreeGift(SKU $sku) {
+    $price = (float) $sku->get('price')->getString();
     $final_price = (float) $sku->get('final_price')->getString();
-    return ($final_price == self::FREE_GIFT_PRICE) ? TRUE : FALSE;
+    return ($price == self::FREE_GIFT_PRICE) || ($final_price == self::FREE_GIFT_PRICE);
   }
 
   /**
@@ -2087,64 +2116,193 @@ class SkuManager {
    * combination value is disabled but there should be some value for that
    * attribute in the system.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
+   * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU entity to check.
    *
    * @return bool
    *   True if SKU has data for all configurable attributes.
    */
-  public function skuAttributeCombinationAvailable(SKU $sku) {
+  public function skuAttributeCombinationsValid(SKUInterface $sku): bool {
+    $static = &drupal_static('skuAttributeCombinationsValid', []);
+
+    if (isset($static[$sku->id()])) {
+      return $static[$sku->id()];
+    }
+
     // This is only for configurable SKU. For simple sku, we don't have/show
     // any configurable on sku form and thus we always return true.
-    $attributes_available = TRUE;
     if ($sku->bundle() == 'configurable') {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $sku->getPluginInstance();
-      $product_tree = $plugin->deriveProductTree($sku);
-      $configurables = [];
-      if (!empty($product_tree) && !empty($product_tree['configurables'])) {
-        foreach ($product_tree['configurables'] as $configurable) {
-          // If any configurable attribute showing on sku form has no
-          // option/data/value available.
-          if (empty($configurable['values'])) {
-            $attributes_available = FALSE;
-            break;
-          }
-          else {
-            // Preparing configurable options.
-            foreach ($configurable['values'] as $value) {
-              $options[$value['value_id']] = $value['label'];
-            }
-            $configurables[$configurable['code']]['#options'] = $options;
-          }
+      $combinations = $this->getConfigurableCombinations($sku);
+
+      if (empty($combinations)) {
+        $static[$sku->id()] = FALSE;
+        return FALSE;
+      }
+
+      foreach ($combinations['attribute_sku'] as $values) {
+        // If we have no values for particular attribute, we show it as OOS.
+        if (count($values) === 0) {
+          $static[$sku->id()] = FALSE;
+          return FALSE;
         }
+      }
 
-        // If already no value for any attribute available, no need to
-        // process further.
-        if (!$attributes_available) {
-          return $attributes_available;
-        }
+      // Use the count of first sku as base for matching with others.
+      $count = count(reset($combinations['by_sku']));
 
-        // Disable/Unset if there any unavailable option for any combinations.
-        $this->disableUnavailableOptions($sku, $configurables, $product_tree);
-
-        // Prepare final configurable array to check.
-        $configurable_final_data = [];
-        foreach ($configurables as $configurable_key => $configurable) {
-          if (is_array($configurable) && !empty($configurable['#options'])) {
-            $configurable_final_data[$configurable_key] = $configurable;
-          }
-        }
-
-        // If no data available or attribute count not match with final set,
-        // it means OOS.
-        if (empty($configurable_final_data) || count($configurable_final_data) != count(array_keys($product_tree['configurables']))) {
-          $attributes_available = FALSE;
+      foreach ($combinations['by_sku'] as $values) {
+        // If we have mis-match in count of values, we show it as OOS.
+        if (count($values) !== $count) {
+          $static[$sku->id()] = FALSE;
+          return FALSE;
         }
       }
     }
 
-    return $attributes_available;
+    $static[$sku->id()] = TRUE;
+    return TRUE;
+  }
+
+  /**
+   * Check if product is in stock or not.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return bool
+   *   TRUE if product is in stock.
+   */
+  public function isProductInStock(SKUInterface $sku): bool {
+    if ($sku->bundle() == 'configurable') {
+      return $this->skuAttributeCombinationsValid($sku);
+    }
+
+    return (bool) alshaya_acm_get_stock_from_sku($sku);
+  }
+
+  /**
+   * Get selected variant for a product on page load.
+   *
+   * To be used mainly to get child if only one child is available.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return \Drupal\acq_commerce\SKUInterface|null
+   *   NULL if not able to find a single variant to use.
+   */
+  public function getSelectedVariant(SKUInterface $sku): ?SKUInterface {
+    // We need to find variant only for configurable ones.
+    if ($sku->bundle() != 'configurable') {
+      return $sku;
+    }
+
+    // No variant selection if product is OOS.
+    if (!$this->isProductInStock($sku)) {
+      return $sku;
+    }
+
+    $static = &drupal_static('getSelectedVariant', []);
+
+    if (isset($static[$sku->id()])) {
+      return $static[$sku->id()];
+    }
+
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    // If there is only one child, we select that by default.
+    if (count($combinations['by_sku']) === 1) {
+      $child_skus = array_keys($combinations['by_sku']);
+      $child_sku = reset($child_skus);
+      $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+      $this->currentRequest->query->set('selected', $child->id());
+      $static[$sku->id()] = $child;
+      return $child;
+    }
+
+    // If there is only one attribute option or config says select one
+    // child if only one attribute is selected, process further.
+    if (!$this->showImagesFromChildrenAfterAllOptionsSelected() || (count($combinations['attribute_sku']) === 1)) {
+      // Select first child based on value provided in query params.
+      $sku_id = (int) $this->currentRequest->query->get('selected');
+
+      if ($sku_id && $sku_id != $sku->id()) {
+        $selected_sku = $this->loadSkuById($sku_id);
+
+        if ($selected_sku instanceof SKUInterface && $this->isProductInStock($selected_sku)) {
+          $static[$sku->id()] = $selected_sku;
+          return $selected_sku;
+        }
+        else {
+          // Set it to NULL to indicate code below that we didn't change.
+          $this->currentRequest->query->set('selected', NULL);
+        }
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
+   * Helper function to fetch pdp layout to be used for the sku or node.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity for which layout needs to be fetched.
+   * @param string $context
+   *   Context for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout to be used.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function getPdpLayout(EntityInterface $entity, $context = 'pdp') {
+    if ($entity instanceof SKUInterface) {
+      $entity = alshaya_acm_product_get_display_node($entity);
+    }
+    if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
+      if ($inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list)) {
+        $term = $this->termStorage->load($inner_term);
+        if ($term instanceof TermInterface && $term->get('field_pdp_layout')->first()) {
+          $pdp_layout = $term->get('field_pdp_layout')->getString();
+          if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+            $taxonomy_parents = $this->termStorage->loadAllParents($inner_term);
+            foreach ($taxonomy_parents as $taxonomy_parent) {
+              $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
+              if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
+                return $this->getContextFromLayoutKey($context, $pdp_layout);
+              }
+            }
+          }
+          else {
+            return $this->getContextFromLayoutKey($context, $pdp_layout);
+          }
+        }
+      }
+    }
+    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+  }
+
+  /**
+   * Helper function to fetch pdp layout to be used for the sku or node.
+   *
+   * @param string $context
+   *   Context for which layout needs to be fetched.
+   * @param string $pdp_layout
+   *   Context for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout context to be used.
+   */
+  public function getContextFromLayoutKey($context, $pdp_layout) {
+    switch ($pdp_layout) {
+      case 'default':
+        return $context;
+
+      case 'magazine':
+        return $context . '-' . $pdp_layout;
+    }
   }
 
 }

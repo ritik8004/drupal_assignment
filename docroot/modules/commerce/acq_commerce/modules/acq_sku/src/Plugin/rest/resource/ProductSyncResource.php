@@ -2,13 +2,13 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
+use Differ\ArrayDiff;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Component\Utility\DiffArray;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -366,7 +366,7 @@ class ProductSyncResource extends ResourceBase {
           $this->logger->info('Updated SKU @sku for @langcode: @diff', [
             '@sku' => $sku->getSku(),
             '@langcode' => $langcode,
-            '@diff' => json_encode(self::getArrayDiff($updatedSkuData, $skuData)),
+            '@diff' => self::getArrayDiff($skuData, $updatedSkuData),
           ]);
         }
         else {
@@ -428,6 +428,12 @@ class ProductSyncResource extends ResourceBase {
         $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
         $failed++;
       }
+      catch (\Throwable $e) {
+        // We consider this as failure as it failed for an unknown reason.
+        // (not taken care of above).
+        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
+        $failed++;
+      }
       finally {
         // Release the lock if acquired.
         if (!empty($lock_key) && !empty($lock_acquired)) {
@@ -449,7 +455,7 @@ class ProductSyncResource extends ResourceBase {
     }
 
     $response = [
-      'success' => !$failed && ($created || $updated || $ignored || $deleted),
+      'success' => TRUE,
       'created' => $created,
       'updated' => $updated,
       'failed' => $failed,
@@ -460,6 +466,11 @@ class ProductSyncResource extends ResourceBase {
     // Log Product sync summary for ignored ones.
     if (!empty($ignored_skus)) {
       $this->logger->info('Ignored SKUs: @ignored_skus', ['@ignored_skus' => implode(',', $ignored_skus)]);
+    }
+
+    // Log Product sync summary for failed ones.
+    if (!empty($failed_skus)) {
+      $this->logger->error('Failed SKUs: @failed_skus', ['@failed_skus' => implode(',', $failed_skus)]);
     }
 
     return (new ModifiedResourceResponse($response));
@@ -724,14 +735,16 @@ class ProductSyncResource extends ResourceBase {
    * @param array $array2
    *   Array two.
    *
-   * @return array
-   *   Array containing difference of two arrays, empty array if no diff.
+   * @return string
+   *   JSON string of array containing diff of two arrays.
    */
-  public static function getArrayDiff($array1, $array2): array {
+  public static function getArrayDiff($array1, $array2): string {
     // Cleanup in both arrays first.
     unset($array1['changed']);
     unset($array2['changed']);
-    return DiffArray::diffAssocRecursive($array1, $array2);
+
+    $differ = new ArrayDiff();
+    return json_encode($differ->diff($array1, $array2));
   }
 
 }

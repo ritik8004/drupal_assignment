@@ -75,3 +75,30 @@ alshaya_acm_product.settings:
         hp_product_carousel_items_number:
           type: integer
           label: 'product item on Home page'
+
+    pdp_colour_swatch_items_settings:
+      type: mapping
+      label: 'colour swatch settings'
+      mapping:
+        pdp_colour_swatch_items_0:
+          type: integer
+          label: 'Mobile view'
+        pdp_colour_swatch_items_768:
+          type: integer
+          label: 'Tablet view'
+        pdp_colour_swatch_items_1025:
+          type: integer
+          label: 'Desktop view'
+    pdp_product_swatch_items_settings:
+      type: mapping
+      label: 'product swatch settings'
+      mapping:
+        pdp_product_swatch_items_0:
+          type: integer
+          label: 'Mobile view'
+        pdp_product_swatch_items_768:
+          type: integer
+          label: 'Tablet view'
+        pdp_product_swatch_items_1025:
+          type: integer
+          label: 'Desktop view'

@@ -31,6 +31,14 @@
         // Adding class if there is no slider.
         addPagerClass();
 
+        // If there is only one thumbnail and that is video.
+        if ($('li', lightSlider).length == 1 && $('li', lightSlider).hasClass('cloudzoom__thumbnails__video')) {
+          var video_url = $('li', lightSlider).attr('data-iframe');
+          appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), video_url);
+          // Hiding the main image container to correct position of video iframe.
+          $('.acq-content-product #cloud-zoom-wrap').hide();
+        }
+
         var mobilegallery = $('#product-image-gallery-mobile', context);
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
 
@@ -137,8 +145,7 @@
   });
 
   /**
-   * Use the beforeChange event of slick to pause videos when scrolling from
-   * video slides.
+   * Use the beforeChange event of slick to pause videos when scrolling from video slides.
    *
    * @param {object} slickSelector
    *   Slick slider selcetor.
@@ -208,8 +215,7 @@
   }
 
   /**
-   * Get the vertical parameter for slick slider on the basis of the
-   * drupalsetting image_slider_position_pdp.
+   * Get the vertical parameter for slick slider on the basis of the drupalsetting image_slider_position_pdp.
    *
    * Get the slidesToShow parameter for slick slider on the basis of the
    * drupalsetting pdp_slider_items.

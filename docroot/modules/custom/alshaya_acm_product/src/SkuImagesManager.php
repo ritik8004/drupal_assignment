@@ -243,17 +243,15 @@ class SkuImagesManager {
       $return['images'][$url] = $url;
     }
 
-    if ($sku->bundle() === 'simple' && !$check_parent_child) {
-      $config = $this->configFactory->get('alshaya_acm_product.display_settings');
-      if ($config->get('show_parent_images_in_child')) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku->getPluginInstance();
-        $parent = $plugin->getParentSku($sku);
+    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
+    if ($sku->bundle() === 'simple' && $config->get('show_parent_images_in_child')) {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
 
-        if ($parent instanceof SKUInterface) {
-          $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
-          $return = array_merge_recursive($return, $parent_media);
-        }
+      if ($parent instanceof SKUInterface) {
+        $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
+        $return = array_merge_recursive($return, $parent_media);
       }
     }
 
@@ -566,6 +564,8 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
+      case 'modal-magazine':
+      case 'pdp-magazine':
         $media = $this->getAllMedia($sku, $check_parent_child);
         $main_image = $media['main'];
         $thumbnails = $media['thumbs'];
@@ -622,8 +622,8 @@ class SkuImagesManager {
           ];
         }
 
-        // If no main image, use default image.
-        if (empty($main_image) && $check_parent_child) {
+        // If no main image and no video, use default image.
+        if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
             $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
             $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
@@ -636,7 +636,8 @@ class SkuImagesManager {
           }
         }
 
-        if (!empty($main_image)) {
+        // If either of main image or video is available.
+        if (!empty($main_image) || !empty($media['media_items']['videos'])) {
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get($config_name);
 
@@ -678,6 +679,7 @@ class SkuImagesManager {
           ];
         }
         break;
+
     }
 
     return $gallery;

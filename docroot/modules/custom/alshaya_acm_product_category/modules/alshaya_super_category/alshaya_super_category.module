@@ -7,7 +7,6 @@
 
 use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
-use Drupal\node\Entity\Node;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -46,6 +45,11 @@ function alshaya_super_category_theme($existing, $type, $theme, $path) {
  * before any other module invokes.
  */
 function alshaya_super_category_module_implements_alter(&$implementations, $hook) {
+  $super_category_status = \Drupal::config('alshaya_super_category.settings')->get('status');
+  if (!$super_category_status) {
+    unset($implementations['alshaya_super_category']);
+    return;
+  }
   if ($hook == 'alshaya_main_menu_links_alter') {
     unset($implementations['alshaya_super_category']);
     $implementations = array_merge(['alshaya_super_category' => 'alshaya_main_menu_links_alter'], $implementations);
@@ -715,9 +719,8 @@ function alshaya_super_category_alshaya_config_save_alter(array &$data, $config_
  * Implements hook_views_query_alter().
  */
 function alshaya_super_category_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
-  // Super category status.
   $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
-  // If super category feature is enabled.
+
   if ($super_category_feature_enabled
     && $view->id() == 'product_category_level_2_3'
     && $view->current_display == 'block_2') {
@@ -736,8 +739,9 @@ function alshaya_super_category_views_query_alter(ViewExecutable $view, QueryPlu
 /**
  * Implements hook_gtm_product_attributes_alter().
  */
-function alshaya_super_category_gtm_product_attributes_alter(Node $node, array &$attributes) {
+function alshaya_super_category_gtm_product_attributes_alter($product, array &$attributes) {
   $super_category_feature_enabled = \Drupal::config('alshaya_super_category.settings')->get('status');
+
   // If super category feature is enabled and brand attribute is enabled.
   if ($super_category_feature_enabled && !empty($attributes['gtm-brand'])) {
     $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();

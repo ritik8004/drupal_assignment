@@ -1,3 +1,8 @@
+/**
+ * @file
+ * JS for integration google palces API.
+ */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -99,7 +104,7 @@
               if ($(this).css("width") == '0px') {
                 $(this).remove();
               }
-              else if (i+1 >= total) {
+              else if (i + 1 >= total) {
                 $(this).find('.pac-item').remove();
               }
             });
@@ -201,7 +206,7 @@
       }
     }
     catch (e) {
-      // Empty
+      // Empty.
     }
   };
 

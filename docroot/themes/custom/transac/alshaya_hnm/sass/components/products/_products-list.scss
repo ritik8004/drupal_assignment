@@ -25,7 +25,7 @@
                 background: $plp_facet_label;
                 display: inline;
                 vertical-align: top;
-                line-height: 0.9375rem;
+                line-height: 1;
                 text-transform: capitalize;
               }
 
@@ -462,7 +462,7 @@
     input[type=checkbox] ~ label {
       &::before {
         @include breakpoint($tablet) {
-          top: 0.6rem;
+          top: 0.125rem;
         }
       }
     }
