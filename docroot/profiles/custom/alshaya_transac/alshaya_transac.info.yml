@@ -13,5 +13,4 @@ themes:
   - bartik
   - seven
 
-base profile:
-  name: alshaya
+base profile: alshaya
