@@ -151,7 +151,7 @@
           font-family: $moschino-font;
 
           @include breakpoint($only-mobile) {
-            font-size: 1.1875rem;
+            font-size: 1.25rem;
           }
 
           &:hover {
