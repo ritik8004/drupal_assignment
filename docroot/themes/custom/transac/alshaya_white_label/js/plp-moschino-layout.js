@@ -95,8 +95,8 @@
         }
         else {
           // In tablet and mobile we ensure only accordion panel is open at one
-          // time. This needs slight tweaking as each panel is a separate
-          // accordion due to markup limitations.
+          // time. Because each panel is a separate accordion due to markup
+          // limitations, we are doing housekeeping separately.
           $(this).parent().parent().siblings('.field--name-field-plp-menu').each(function () {
             closeOpenAccordion($(this));
           });
