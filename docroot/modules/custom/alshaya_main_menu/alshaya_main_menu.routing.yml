@@ -1,0 +1,7 @@
+alshaya_main_menu.main_menu:
+  path: 'admin/config/alshaya/alshaya_main_menu'
+  defaults:
+    _form: '\Drupal\alshaya_main_menu\Form\AlshayaMainMenuConfigForm'
+    _title: 'Main menu Settings'
+  requirements:
+    _permission: 'administer site configuration'

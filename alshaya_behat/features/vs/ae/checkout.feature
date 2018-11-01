@@ -4,15 +4,19 @@ Feature: Test Checkout feature
     Given I am on a sport product
     And I wait for AJAX to finish
     And I remove promo panel
-    When I press "add to bag"
+    And I scroll to the ".selection" element
     And I wait for AJAX to finish
-    And I go to "/cart"
+    When I press "Add to Bag"
+    And I wait for AJAX to finish
+    And I go to "/en/cart"
     And I wait for the page to load
     And I remove promo panel
+    And I scroll to the "#secure-checkout-button" element
     And I press "checkout securely"
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
+
 
   Scenario:  As a Guest,
   I should be able to checkout using COD
@@ -34,7 +38,7 @@ Feature: Test Checkout feature
     And I select "Abu Hail" from "edit-guest-delivery-home-address-shipping-administrative-area"
     And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
     And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
-    And I scroll to x "200" y "700" coordinates of page
+    Then I scroll to the "#edit-actions" element
     And I press "deliver to this address"
     And I wait for AJAX to finish
     When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
@@ -42,10 +46,9 @@ Feature: Test Checkout feature
     And I press "proceed to payment"
     And I wait for the page to load
     When I select a payment option "payment_method_title_cashondelivery"
-    And I wait for AJAX to finish
+    And I wait 10 seconds
     And I accept terms and conditions
-    And I scroll to x "200" y "700" coordinates of page
-    And I wait for AJAX to finish
+    And I scroll to the "#edit-actions" element
     And I press "place order"
     And I wait for the page to load
     Then I should see text matching "Thank you for shopping online with us, Test Test "
@@ -64,6 +67,7 @@ Feature: Test Checkout feature
     Then I should see the number of stores displayed
     And I should see the link "List view"
     And I should see the link "Map view"
+    And I scroll to the "#edit-actions" element
     And I should see the link "Back to bag"
 
   @cc
@@ -155,6 +159,7 @@ Feature: Test Checkout feature
     When I fill in an element having class ".cybersource-credit-card-cvv-input" with "123"
     When I select "2020" from dropdown ".cybersource-credit-card-exp-year-select"
     When I accept terms and conditions
+    And I scroll to the "#edit-actions" element
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
@@ -195,6 +200,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I scroll to x "200" y "1200" coordinates of page
     And I accept terms and conditions
+    And I scroll to the "#edit-actions" element
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
@@ -225,6 +231,7 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     When I follow "Map view"
     Then the "Map view" tab should be selected
+    And I scroll to the "#store-finder-wrapper" element
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div:nth-child(1) > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-actions > a"
@@ -249,6 +256,7 @@ Feature: Test Checkout feature
     And I fill in "edit-billing-address-address-billing-address-line1" with "Street B"
     And I fill in "edit-billing-address-address-billing-dependent-locality" with "Building C"
     And I accept terms and conditions
+    And I scroll to the "#edit-actions" element
     And I press "place order"
     And I wait 10 seconds
     When I wait for the page to load
@@ -265,12 +273,14 @@ Feature: Test Checkout feature
     And I wait 10 seconds
     When I follow "Map view"
     Then the "Map view" tab should be selected
+    And I scroll to the "#store-finder-wrapper" element
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(3) > div:nth-child(1) > img"
     When I wait 2 seconds
     When I click the label for "#click-and-collect-map-view > div.geolocation-common-map-container > div > div > div:nth-child(1) > div:nth-child(3) > div > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > div > div.store-open-hours > div > div.hours--label"
     And I wait 2 seconds
     Then I should see "Monday"
     And I should see "Sunday"
-    When I follow "Back to basket"
+    And I scroll to the "#edit-actions" element
+    When I follow "Back to bag"
     Then I should see the button "checkout securely"
     And the url should match "/cart"

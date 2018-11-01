@@ -105,17 +105,17 @@ class SkuImagesManager {
   }
 
   /**
-   * Wrapper function to check if particular SKU has images or not.
+   * Wrapper function to check if particular SKU has media(image/video) or not.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
    *
    * @return bool
-   *   TRUE if SKU has images.
+   *   TRUE if SKU has media(images/videos).
    */
-  public function hasMediaImages(SKUInterface $sku) {
+  public function hasMedia(SKUInterface $sku) {
     $media = $this->getAllMedia($sku, FALSE);
-    return !empty($media['images']);
+    return !empty($media['images']) || !empty($media['videos']);
   }
 
   /**
@@ -342,7 +342,7 @@ class SkuImagesManager {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
 
           if (($child instanceof SKUInterface) &&
-            ($this->hasMediaImages($child))) {
+            ($this->hasMedia($child))) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
@@ -470,7 +470,7 @@ class SkuImagesManager {
           }
 
           // Check if parent has image before fallbacking to OOS children.
-          if (!$this->hasMediaImages($sku)) {
+          if (!$this->hasMedia($sku)) {
             // Try to get first available child for OOS.
             $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
             if ($child instanceof SKU) {
@@ -484,7 +484,7 @@ class SkuImagesManager {
       default:
         // Case were we will show image from parent first, if not available
         // image from child, if still not - empty/default image.
-        if ($this->hasMediaImages($sku)) {
+        if ($this->hasMedia($sku)) {
           // Do nothing.
         }
         elseif ($is_configurable) {
@@ -566,6 +566,8 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
+      case 'modal-magazine':
+      case 'pdp-magazine':
         $media = $this->getAllMedia($sku, $check_parent_child);
         $main_image = $media['main'];
         $thumbnails = $media['thumbs'];
@@ -678,6 +680,7 @@ class SkuImagesManager {
           ];
         }
         break;
+
     }
 
     return $gallery;

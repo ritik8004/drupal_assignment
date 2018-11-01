@@ -1,0 +1,6 @@
+alshaya_main_menu.main_menu:
+  title: 'Main menu Settings'
+  parent: alshaya_master.alshaya_admin
+  description: 'Administer the main menu configuration.'
+  route_name: alshaya_main_menu.main_menu
+  weight: 1

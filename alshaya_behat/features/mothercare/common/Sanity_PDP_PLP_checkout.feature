@@ -4,7 +4,7 @@ Feature: As a guest user I should be able to
   Select a product from PLP and proceed to checkout
 
   Background:
-    Given I am on "/baby-clothing/baby-newborn-18-months/bodysuits"
+    Given I am on "/gift-ideas/gift-by-occasion/babyshower-gifts"
     And I wait for the page to load
 
   Scenario: As a Guest user
@@ -97,6 +97,7 @@ Feature: As a guest user I should be able to
     Then I should not see "Please select the category you require"
     And I should see the link "Size Guide"
 
+
   Scenario: As a Guest user I should be able to select product from
   PLP page, add to basket select Home Delivery and see COD, Cybersource
   and KNET as payment methods
@@ -106,7 +107,8 @@ Feature: As a guest user I should be able to
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    And I wait 10 seconds
+    When I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
@@ -154,12 +156,14 @@ Feature: As a guest user I should be able to
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    And I wait 10 seconds
+    When I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
     And I wait for the page to load
     When I follow "edit-checkout-guest-checkout-as-guest"
     And I wait for the page to load
+    And I should see "secure checkout"
     And I should be able to see the header for checkout
     When I follow "click & collect"
     And I wait for the page to load
