@@ -13,7 +13,8 @@ bundle: banner
 label: 'Mobile Banner Image'
 description: ''
 required: false
-translatable: true
+translatable: false
+skip_translation_check: true
 default_value: {  }
 default_value_callback: ''
 settings:

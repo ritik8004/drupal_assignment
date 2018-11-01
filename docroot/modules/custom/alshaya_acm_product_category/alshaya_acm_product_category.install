@@ -13,6 +13,26 @@ use Drupal\alshaya_acm_product\SkuManager;
 /**
  * Implements hook_update_N().
  *
+ * Update all paragraph fields to have skip_translation_check set to true.
+ */
+function alshaya_acm_product_category_update_8022() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $configs = [];
+  $configs[] = 'field.field.taxonomy_term.acq_product_category.field_main_menu_highlight';
+
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable link attributes module.
  * Adding new fields for moschino for the product category vocabulary.
  */
