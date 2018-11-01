@@ -82,8 +82,6 @@ do
     -d "{\"to_env\": \"${env}\", \"sites\": [ ${ids} ], \"wipe_target_environment\": false, \"synchronize_all_users\": false, \"detailed_status\": false}" \
     -u ${username}:${api_key})
 
-   echo $res
-
   # Get the task_id from the JSON response.
   task_id=$(echo $(echo $res | grep -Eo '"task_id":[0-9]{1,10}') | grep -Eo '[0-9]{1,10}')
 
@@ -100,8 +98,8 @@ do
     res=$(curl -s "https://www.alshaya.acsitefactory.com/api/v1/wip/task/${task_id}/status" \
     -u ${username}:${api_key})
 
-    # Break the loop only the task is not "Waiting" or "Not Started" anymore.
-    if ! [[ $(echo $res | grep -E "\"status_string\":\"Waiting\"|\"status_string\":\"Not Started\"") ]]; then
+    # Break the loop only the task is not "Waiting", "Not Started", "In Progress" anymore.
+    if ! [[ $(echo $res | grep -E "\"status_string\":\"Waiting\"|\"status_string\":\"Not Started\"|\"status_string\":\"In Progress\"") ]]; then
       echo "Staging operation for $current_sites is completed."
       break
     fi
