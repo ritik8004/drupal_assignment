@@ -369,6 +369,15 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['product_swatch_items_desk'] = $settings->get('pdp_product_swatch_items_settings.pdp_product_swatch_items_1025');
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = $product_display_settings->get('color_swatches_hover');
 
+    if ($variables['view_mode'] == 'full') {
+      if ($settings->get('pdp_layout') == 'magazine') {
+        $variables['#attached']['library'][] = 'alshaya_white_label/magazine_select2Option';
+      }
+
+      else {
+        $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+      }
+    }
   }
   elseif ($variables['node']->bundle() === 'store') {
     $current_route = \Drupal::routeMatch();
