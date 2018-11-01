@@ -48,6 +48,7 @@ function alshaya_acm_product_category_update_8021() {
     'block.block.plpproductcollection',
     'block.block.plpcolor',
     'block.block.skusskureferencefinalprice',
+    'block.block.plpconcept',
   ];
 
   foreach ($block_configs as $block) {
