@@ -18,9 +18,9 @@ use Symfony\Component\Yaml\Yaml;
 function alshaya_paragraphs_update_8122() {
   $configs = [
     'core.entity_view_display.paragraph.text_links.default',
+    'core.entity_form_display.paragraph.text_links.default',
   ];
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');
-  alshaya_config_install_configs(['core.entity_form_display.paragraph.text_links.default'], 'alshaya_paragraphs', 'install');
 }
 
 /**
