@@ -107,7 +107,12 @@ class CategorySyncResource extends ResourceBase {
       $categories
     );
 
-    $response['success'] = (bool) (($response['created'] > 0) || ($response['updated'] > 0));
+    $response['success'] = (bool) ((count($response['created']) > 0) || (count($response['updated']) > 0));
+
+    $this->logger->info('New categories created: @new_cat  Old Cat: @old_cat', [
+      '@new_cat' => json_encode($response['created']),
+      '@old_cat' => json_encode($response['updated']),
+    ]);
 
     return (new ModifiedResourceResponse($response));
   }
