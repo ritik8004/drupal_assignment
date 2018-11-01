@@ -20,6 +20,7 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
 
 /**
  * Class ClickCollectController.
@@ -439,6 +440,24 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new StoreDisplayFillCommand($settings));
     $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
 
+    return $response;
+  }
+
+  /**
+   * Display dialog when location access is blocked from brwoser.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Return Ajax response with commands.
+   */
+  public function locationAccessBlockWaringModal() {
+    $response = new AjaxResponse();
+    $response->addCommand(
+      new OpenModalDialogCommand(
+        $this->t('Location access denied'),
+        $this->t('This page does not have location permission. Please allow location permission to see near by stores.'),
+        ['height' => 200, 'width' => 500]
+      )
+    );
     return $response;
   }
 

@@ -238,6 +238,13 @@
   Drupal.checkoutClickCollect.locationError = function (error) {
     // Do nothing, we already have the search form displayed by default.
     geoPerm = false;
+    Drupal.ajax({
+      url: Drupal.url('location-access-blocked-warning'),
+      element: $('#store-finder-wrapper').get(0),
+      base: false,
+      progress: {type: 'throbber'},
+      submit: {js: true}
+    }).execute();
   };
 
   // Render html for Selected store.

@@ -135,6 +135,13 @@
   // Error callback.
   Drupal.pdp.LocationError = function (error) {
     geoPerm = false;
+    Drupal.ajax({
+      url: Drupal.url('location-access-blocked-warning'),
+      element: $('#store-finder-wrapper').get(0),
+      base: false,
+      progress: {type: 'throbber'},
+      submit: {js: true}
+    }).execute();
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
