@@ -276,7 +276,10 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
-    $this->conductorCategoryManager->synchronizeTree('acq_product_category');
+    $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
+    $dispatcher = \Drupal::service('event_dispatcher');
+    $event = new \Drupal\acq_sku\Events\AcqSkuSyncCatEvent($response);
+    $dispatcher->dispatch(\Drupal\acq_sku\AcqSkuEvents::CAT_SYNC, $event);
     $this->output->writeln(dt('Done.'));
   }
 

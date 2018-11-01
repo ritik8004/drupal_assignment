@@ -46,3 +46,9 @@ services:
       - { name: cache.bin }
     factory: cache_factory:get
     arguments: [alshaya_api]
+
+  alshaya_acm.cat_sync_clean_event:
+      class: Drupal\alshaya_acm\EventSubscriber\AlshayaCatSyncCleanEventSubscriber
+      arguments: ['@logger.factory', '@entity_type.manager', '@database']
+      tags:
+        - { name: 'event_subscriber' }
