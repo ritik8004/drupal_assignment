@@ -178,7 +178,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     And I press "CancelAction_id"
 
- 
+
   Scenario: As a returning customer
   I should be able to place an order for HD - COD, KNET and Cybersource
     Given I am on a configurable product

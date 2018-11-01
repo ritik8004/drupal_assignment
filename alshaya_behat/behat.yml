@@ -18,7 +18,7 @@ default:
         capabilities:
           chrome:
             switches:
-            #   - "--headless"
+               - "--headless"
                - "--disable-gpu"
                - "--window-size=1920,1080"
                - "--no-sandbox"
