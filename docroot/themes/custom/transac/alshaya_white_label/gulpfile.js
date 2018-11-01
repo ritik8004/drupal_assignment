@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Gulp file to call all the gulp related task.
+ */
+
 // -------------------------------------
 //
 //   Gulpfile
@@ -83,7 +88,12 @@ var path = require('path');
 var paths = {
   styles: {
     source: 'sass/',
-    destination: 'css/'
+    directionalSource: 'sass/brand-feature-components/**/*.scss',
+    directionalDestination: 'css/brand-feature-components/',
+    destination: 'css/',
+    variables: {
+      $dir: 'rtl'
+    }
   },
   scripts: 'js/',
   images: 'img/',
@@ -106,6 +116,9 @@ var options = {
   sass: {
     files: paths.styles.source + '**/*.scss',
     file: paths.styles.source + '*.scss',
+    directionalSource: paths.styles.directionalSource,
+    directionalDestination: paths.styles.directionalDestination,
+    variables: paths.styles.variables,
     destination: paths.styles.destination
   },
 
