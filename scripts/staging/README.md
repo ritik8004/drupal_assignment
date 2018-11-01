@@ -81,7 +81,7 @@ script. Ideally, use [`screen`](https://www.gnu.org/software/screen/manual/scree
 so the process is not stopped in case ssh connection is lost.
 * Finally, deploy the new code using "Code and databases" option.
 
-#### Soft stage
+#### Soft stage - Manual
 * From [production factory UI](https://www.alshaya.acsitefactory.com/admin/gardens/staging/deploy),
 select the target environment, select the sites to be staged and submit the
 form.
@@ -91,3 +91,9 @@ staged sites.
 * Launch the `reset-individual-site-post-stage.sh` script for each staged site.
 Ideally, use [`screen`](https://www.gnu.org/software/screen/manual/screen.html#Invoking-Screen)
 so the process is not stopped in case ssh connection is lost.
+
+#### Soft stage - Script
+* Connect to the target environment via ssh.
+* Launch the `soft-stage.sh` script. Ideally, use [`screen`](https://www.gnu.org/software/screen/manual/screen.html#Invoking-Screen)
+so the process is not stopped in case ssh connection is lost.
+`./../script/soft-stage.sh "vsae;mckw,mcae;hmae;bbwsa" "01dev"` for example.
