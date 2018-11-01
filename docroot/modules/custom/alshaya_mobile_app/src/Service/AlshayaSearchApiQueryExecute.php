@@ -91,6 +91,15 @@ class AlshayaSearchApiQueryExecute {
   protected $priceFacetKey = 'skus_sku_reference_final_price';
 
   /**
+   * Make key integer for facets defined in this array.
+   *
+   * @var array
+   */
+  protected $intKeyFacets = [
+    'plp_category_facet',
+  ];
+
+  /**
    * Processed facets array.
    *
    * @var array
@@ -491,11 +500,12 @@ class AlshayaSearchApiQueryExecute {
         continue;
       }
 
+      $convert_int = in_array($facet->id(), $this->intKeyFacets);
       $facet_option_data = [];
       foreach ($facet_results as $result) {
         // For storing intermediate temporary data.
         $temp_data = [
-          'key' => $result->getRawValue(),
+          'key' => $convert_int ? (int) $result->getRawValue() : $result->getRawValue(),
           'label' => $result->getDisplayValue(),
           'count' => $result->getCount(),
         ];
@@ -504,7 +514,7 @@ class AlshayaSearchApiQueryExecute {
         if (!empty($children = $result->getChildren())) {
           foreach ($children as $child) {
             $temp_data['children'][] = [
-              'key' => $child->getRawValue(),
+              'key' => $convert_int ? (int) $child->getRawValue() : $child->getRawValue(),
               'label' => $child->getDisplayValue(),
               'count' => $child->getCount(),
             ];
