@@ -59,7 +59,7 @@ function alshaya_white_label_preprocess_html(&$variables) {
   $current_route = \Drupal::routeMatch();
 
   // Add class for products that have magazine layout.
-  if ($current_route->getRouteName() == 'entity.node.canonical' && Drupal::request()->attributes->get('node')->bundle() == 'acq_product') {
+  if ($current_route->getRouteName() == 'entity.node.canonical' && $current_route->getParameter('node')->bundle() == 'acq_product') {
     $node = Drupal::request()->attributes->get('node');
     if ($node instanceof NodeInterface) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
