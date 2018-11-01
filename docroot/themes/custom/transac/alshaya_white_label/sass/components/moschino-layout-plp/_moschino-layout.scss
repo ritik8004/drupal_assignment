@@ -245,6 +245,10 @@
             padding-#{$right}: 7.8125rem;
             margin: 0;
           }
+
+          @include breakpoint($upto-desktop) {
+            margin: 0;
+          }
         }
       }
 
