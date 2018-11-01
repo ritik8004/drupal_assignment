@@ -97,6 +97,8 @@ class AlshayaSearchApiQueryExecute {
    */
   protected $intKeyFacets = [
     'plp_category_facet',
+    'promotion_category_facet',
+    'category',
   ];
 
   /**
