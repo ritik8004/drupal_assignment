@@ -277,9 +277,14 @@ class AcqSkuDrushCommands extends DrushCommands {
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
-    $dispatcher = \Drupal::service('event_dispatcher');
-    $event = new \Drupal\acq_sku\Events\AcqSkuSyncCatEvent($response);
-    $dispatcher->dispatch(\Drupal\acq_sku\AcqSkuEvents::CAT_SYNC_COMPLETE, $event);
+
+    // Confirmation to delete old categories.
+    if ($this->io()->confirm(dt('Are you sure you want to clean old categories'), FALSE)) {
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $event = new \Drupal\acq_sku\Events\AcqSkuSyncCatEvent($response);
+      $dispatcher->dispatch(\Drupal\acq_sku\AcqSkuEvents::CAT_SYNC_COMPLETE, $event);
+    }
+
     $this->output->writeln(dt('Done.'));
   }
 
