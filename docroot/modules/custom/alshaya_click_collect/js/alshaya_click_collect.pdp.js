@@ -45,7 +45,7 @@
         }
         else {
           // Get the permission track the user location.
-          Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
           $('#pdp-stores-container').on('click', function () {
             // Try again if we were not able to get location on page load.
@@ -133,25 +133,15 @@
   };
 
   // Error callback.
-  Drupal.pdp.LocationError = function (error) {
+  Drupal.click_collect.LocationAccessError = function (drupalSettings) {
     geoPerm = false;
-    Drupal.ajax({
-      url: Drupal.url('location-access-blocked-warning'),
-      element: $('#store-finder-wrapper').get(0),
-      base: false,
-      progress: {type: 'throbber'},
-      submit: {js: true}
-    }).execute();
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
 
   // Success callback.
-  Drupal.pdp.LocationSuccess = function (position) {
-    asCoords = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
+  Drupal.click_collect.LocationAccessSuccess = function (coords) {
+    asCoords = coords;
     geoPerm = true;
     Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
   };
