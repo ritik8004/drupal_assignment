@@ -54,7 +54,7 @@ module.exports = function (gulp, plugins, options) {
       .pipe(gulp.dest(options.sass.destination));
   });
 
-  gulp.task('compile:ltr-style', function () {
+  gulp.task('compile:module-component-libraries-ltr', function () {
     return gulp.src([
       options.sass.directionalSource
     ])
@@ -82,7 +82,7 @@ module.exports = function (gulp, plugins, options) {
       .pipe(gulp.dest(options.sass.directionalDestination));
   });
 
-  gulp.task('compile:rtl-style', function () {
+  gulp.task('compile:module-component-libraries-rtl', function () {
     return gulp.src([
       options.sass.directionalSource
     ])

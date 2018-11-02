@@ -15,9 +15,9 @@ module.exports = function (gulp, plugins, options) {
   });
 
   gulp.task('build', [
-    'compile:rtl-style',
-    'compile:ltr-style'
-    // 'compile:styleguide'
+    'compile:module-component-libraries-rtl',
+    'compile:module-component-libraries-ltr'
+    // 'compile:brand feature component'
   ], function (cb) {
     // Run linting last, otherwise its output gets lost.
     plugins.runSequence(['lint:js-with-fail', 'lint:css-with-fail'], cb);
