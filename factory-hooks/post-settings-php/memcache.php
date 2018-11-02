@@ -86,10 +86,8 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     $settings['memcache']['stampede_protection'] = TRUE;
 
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
-      $hostname = $_SERVER['HTTP_HOST'];
-      $hostname_parts = explode('.', $hostname);
-
-      $settings['memcache']['key_prefix'] = str_replace('-', '', $hostname_parts[1]);
+      global $host_site_code;
+      $settings['memcache']['key_prefix'] = $host_site_code;
     }
   }
 }
