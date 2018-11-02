@@ -14,18 +14,12 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Correcting the block positions for promotion description and banner blocks.
+ * Correcting the block positions for promotion banner blocks.
  */
 function alshaya_transac_update_8118() {
-  // Reinstall block configs for promotion page banner block and
-  // Promotion page description block.
+  // Place the block in highlighted region.
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['block.block.views_block__alshaya_promotion_description_block_1'],
-    'alshaya_transac',
-    'optional'
-  );
 
   $manager->updateConfigs(
     ['block.block.views_block__promotion_banner_block_1'],
