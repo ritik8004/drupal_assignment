@@ -223,20 +223,20 @@ class AlshayaApiCommands extends DrushCommands {
             if (!empty($mskus[$type][$key])) {
               $output = '';
               // If stock in drupal not matches with what in magento.
-              if ($dskus[$type][$language->getId()][$key]['stock'] != $mskus[$type][$key]['qty']) {
-                $output .= 'Drupal stock:' . $dskus[$type][$language->getId()][$key]['stock'] . ' | ';
+              if ($data['stock'] != $mskus[$type][$key]['qty']) {
+                $output .= 'Drupal stock:' . $data['stock'] . ' | ';
                 $output .= 'MDC stock:' . $mskus[$type][$key]['qty'];
               }
 
               // If price in drupal not matches with what in magento.
-              if ($dskus[$type][$language->getId()][$key]['price'] != $mskus[$type][$key]['price']) {
-                $output .= 'Drupal price:' . $dskus[$type][$language->getId()][$key]['price'] . ' | ';
+              if ($data['price'] != $mskus[$type][$key]['price']) {
+                $output .= 'Drupal price:' . $data['price'] . ' | ';
                 $output .= 'MDC price:' . $mskus[$type][$key]['price'];
               }
 
               // If special price in drupal not matches with what in magento.
-              if ($dskus[$type][$language->getId()][$key]['special_price'] != $mskus[$type][$key]['special_price']) {
-                $output = 'Drupal spl price:' . $dskus[$type][$language->getId()][$key]['special_price'] . ' | ';
+              if ($data['special_price'] != $mskus[$type][$key]['special_price']) {
+                $output .= 'Drupal spl price:' . $data['special_price'] . ' | ';
                 $output .= 'MDC spl price:' . $mskus[$type][$key]['special_price'];
               }
 
