@@ -15,7 +15,7 @@ bundle: 1_row_2_col
 label: '1 row 2 col'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
