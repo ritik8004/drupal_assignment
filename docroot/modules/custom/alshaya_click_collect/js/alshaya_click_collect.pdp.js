@@ -51,7 +51,7 @@
             // Try again if we were not able to get location on page load.
             if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
               $('#pdp-stores-container').data('second-try', 'done');
-              Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+              Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
             }
           });
         }
