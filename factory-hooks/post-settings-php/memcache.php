@@ -85,9 +85,6 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
 
-    // Move locks to memcache.
-    $settings['container_yamls'][] = DRUPAL_ROOT . '/../vendor/acquia/blt/settings/memcache.yml';
-
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       $hostname = $_SERVER['HTTP_HOST'];
       $hostname_parts = explode('.', $hostname);
