@@ -86,7 +86,7 @@ class AlshayaCatSyncCompleteEventSubscriber implements EventSubscriberInterface 
     $result = $query->execute()->fetchAll();
 
     // Filter terms which are not in sync response.
-    $result = array_filter($result, function ($val) use($data) {
+    $result = array_filter($result, function ($val) use ($data) {
       return !in_array($val->field_commerce_id_value, $data);
     });
 
