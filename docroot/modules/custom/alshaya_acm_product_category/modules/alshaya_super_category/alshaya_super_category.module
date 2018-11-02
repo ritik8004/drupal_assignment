@@ -532,13 +532,16 @@ function alshaya_super_category_facets_query_string_alter(ParameterBag $result_g
 /**
  * Helper function to use fallback tid, when term is not set.
  *
+ * @param string $langcode
+ *   (optional) The language code.
+ *
  * @return int
  *   return term id.
  */
-function alshaya_super_category_get_default_term() {
+function alshaya_super_category_get_default_term($langcode = NULL) {
   $tid = \Drupal::configFactory()->get('alshaya_super_category.settings')->get('default_category_tid');
   if (empty($tid)) {
-    $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms();
+    $terms = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryRootTerms($langcode);
     $tid = key($terms);
   }
   return $tid;
