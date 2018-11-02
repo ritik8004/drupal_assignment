@@ -6,22 +6,6 @@
  */
 
 use Drupal\Core\Site\Settings;
-use Drupal\alshaya_config\AlshayaConfigManager;
-
-/**
- * Implements hook_update_N().
- *
- * Correct block weight for promo description block.
- */
-function alshaya_mc_update_8315() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['block.block.views_block__alshaya_promotion_description_block_1'],
-    'alshaya_transac',
-    'optional'
-  );
-}
 
 /**
  * Implements hook_update_N().

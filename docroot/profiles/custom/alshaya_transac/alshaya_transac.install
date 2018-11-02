@@ -21,8 +21,17 @@ function alshaya_transac_update_8118() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
+  // Place block in correct region for all sites.
   $manager->updateConfigs(
     ['block.block.views_block__promotion_banner_block_1'],
+    'alshaya_transac',
+    'optional'
+  );
+
+  // Fix weight for blocks in all sites, respective override file
+  // added in each brand.
+  $manager->updateConfigs(
+    ['block.block.views_block__alshaya_promotion_description_block_1'],
     'alshaya_transac',
     'optional'
   );
