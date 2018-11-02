@@ -169,7 +169,7 @@ class AlshayaApiCommands extends DrushCommands {
         $this->output->writeln(dt("@type SKUs (@count) from Magento:\n@skus", [
           '@type' => $type,
           '@count' => count($mskus[$type]),
-          '!skus' => "'" . implode("','", $mskus[$type]) . "'",
+          '@skus' => "'" . implode("','", array_keys($mskus[$type])) . "'",
         ]));
       }
     }
@@ -188,7 +188,7 @@ class AlshayaApiCommands extends DrushCommands {
             '@type' => $type,
             '@language' => $language->getName(),
             '@count' => count($dskus[$type][$language->getId()]),
-            '!skus' => "'" . implode("','", $dskus[$type][$language->getId()]) . "'",
+            '@skus' => "'" . implode("','", array_keys($dskus[$type][$language->getId()])) . "'",
           ]));
         }
       }
@@ -202,17 +202,60 @@ class AlshayaApiCommands extends DrushCommands {
     foreach ($types as $type) {
       $missing[$type]['all'] = [];
       $to_be_deleted[$type]['all'] = [];
+      $stock_price_mismatch[$type] = [];
 
       foreach ($languages as $language) {
         // The ones which are missing in Drupal.
-        $missing[$type][$language->getId()] = array_diff($mskus[$type], $dskus[$type][$language->getId()]);
+        $missing[$type][$language->getId()] = array_diff(array_keys($mskus[$type]), array_keys($dskus[$type][$language->getId()]));
         $mall = array_merge($missing[$type]['all'], $missing[$type][$language->getId()]);
         $missing[$type]['all'] = $mall;
 
         // The ones which are only in Drupal and should be removed.
-        $to_be_deleted[$type][$language->getId()] = array_diff($dskus[$type][$language->getId()], $mskus[$type]);
+        $to_be_deleted[$type][$language->getId()] = array_diff(array_keys($dskus[$type][$language->getId()]), array_keys($mskus[$type]));
         $tall = array_merge($to_be_deleted[$type]['all'], $to_be_deleted[$type][$language->getId()]);
         $to_be_deleted[$type]['all'] = $tall;
+
+        // Stock and price check only for simple SKUs with merchandiser report
+        // as api doesn't provide the data/info required.
+        if ($type == 'simple' && $msource == 'report') {
+          // The ones which have different stock/price in Drupal and Magento.
+          foreach ($dskus[$type][$language->getId()] as $key => $data) {
+            if (!empty($mskus[$type][$key])) {
+              $output = '';
+              // If stock in drupal not matches with what in magento.
+              if ($dskus[$type][$language->getId()][$key]['stock'] != $mskus[$type][$key]['qty']) {
+                $output .= 'Drupal stock:' . $dskus[$type][$language->getId()][$key]['stock'] . ' | ';
+                $output .= 'MDC stock:' . $mskus[$type][$key]['qty'];
+              }
+
+              // If price in drupal not matches with what in magento.
+              if ($dskus[$type][$language->getId()][$key]['price'] != $mskus[$type][$key]['price']) {
+                $output .= 'Drupal price:' . $dskus[$type][$language->getId()][$key]['price'] . ' | ';
+                $output .= 'MDC price:' . $mskus[$type][$key]['price'];
+              }
+
+              // If special price in drupal not matches with what in magento.
+              if ($dskus[$type][$language->getId()][$key]['special_price'] != $mskus[$type][$key]['special_price']) {
+                $output = 'Drupal spl price:' . $dskus[$type][$language->getId()][$key]['special_price'] . ' | ';
+                $output .= 'MDC spl price:' . $mskus[$type][$key]['special_price'];
+              }
+
+              if (!empty($output)) {
+                $stock_price_mismatch[$type][$language->getId()][$key] = "SKU:" . $key . " | " . $output;
+              }
+            }
+          }
+
+          // Output the details of stock/price mismatch.
+          if (!empty($stock_price_mismatch[$type][$language->getId()])) {
+            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different stock/price than magento:\n !output", [
+              '@count' => count($stock_price_mismatch[$type][$language->getId()]),
+              '@language' => $language->getName(),
+              '@type' => $type,
+              '!output' => implode("\n", $stock_price_mismatch[$type][$language->getId()]),
+            ]));
+          }
+        }
 
         if (!empty($missing[$type][$language->getId()])) {
           $this->output->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced:\n!skus", [

@@ -412,6 +412,9 @@ class AlshayaApiWrapper {
       'status' => FALSE,
       'visibility' => FALSE,
       'type' => FALSE,
+      'price' => FALSE,
+      'special_price' => FALSE,
+      'web_qty' => FALSE,
     ];
 
     if ($data = fgetcsv($handle, 1000, ',')) {
@@ -452,7 +455,12 @@ class AlshayaApiWrapper {
           continue;
         }
 
-        $mskus[$type][] = $data[$indexes['partnum']];
+        $mskus[$type][$data[$indexes['partnum']]] = [
+          'sku' => $data[$indexes['partnum']],
+          'price' => $data[$indexes['price']],
+          'special_price' => $data[$indexes['special_price']],
+          'qty' => $data[$indexes['web_qty']],
+        ];
       }
     }
     fclose($handle);
@@ -551,7 +559,14 @@ class AlshayaApiWrapper {
         }
       }
 
-      $mskus[$type] = $skus;
+      foreach ($skus as $sku) {
+        $mskus[$type][$sku] = [
+          'sku' => $sku,
+          'price' => 0,
+          'special_price' => 0,
+          'qty' => 0,
+        ];
+      }
     }
 
     return $mskus;

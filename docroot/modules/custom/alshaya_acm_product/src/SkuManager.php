@@ -1038,11 +1038,11 @@ class SkuManager {
    */
   public function getSkus($langcode, $type) {
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', ['sku'])
+      ->fields('asfd', ['sku', 'price', 'special_price', 'final_price', 'stock'])
       ->condition('type', $type, '=')
       ->condition('langcode', $langcode, '=');
 
-    return array_keys($query->execute()->fetchAllKeyed(0, 0));
+    return $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
   }
 
   /**
