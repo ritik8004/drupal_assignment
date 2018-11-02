@@ -153,4 +153,4 @@ magazine_select2Option:
     js/magazine_attribute.js: {}
   css:
     theme:
-      css/brand-feature-components/magazine-layout/colour-swatches.ltr.css: {}
+      css/conditional-sass/magazine-layout/colour-swatches.ltr.css: {}

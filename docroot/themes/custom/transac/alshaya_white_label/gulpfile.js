@@ -88,8 +88,8 @@ var path = require('path');
 var paths = {
   styles: {
     source: 'sass/',
-    directionalSource: 'sass/brand-feature-components/**/*.scss',
-    directionalDestination: 'css/brand-feature-components/',
+    directionalSource: 'conditional-sass/**/*.scss',
+    directionalDestination: 'css/conditional-sass/',
     destination: 'css/',
     variables: {
       $dir: 'rtl'
