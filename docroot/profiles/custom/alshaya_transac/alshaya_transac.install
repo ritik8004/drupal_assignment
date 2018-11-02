@@ -24,13 +24,13 @@ function alshaya_transac_update_8118() {
   $manager->updateConfigs(
     ['block.block.views_block__alshaya_promotion_description_block_1'],
     'alshaya_transac',
-    'optional',
+    'optional'
   );
 
   $manager->updateConfigs(
     ['block.block.views_block__promotion_banner_block_1'],
     'alshaya_transac',
-    'optional',
+    'optional'
   );
 }
 

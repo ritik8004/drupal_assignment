@@ -138,7 +138,7 @@
       }
 
       @include breakpoint($tablet) {
-        top: 1rem;
+        top: 0.25rem;
 
         html[lang=ar] & {
           top: 0.75rem;
@@ -346,14 +346,6 @@
       padding-bottom: 9px;
       border-bottom: 1px solid $plp_facet_border;
       font-family: $alshaya-thin;
-    }
-
-    .promo-banner > .filter--mobile {
-      top: 213px !important;
-
-      @include breakpoint($only-tablet) {
-        top: 161px !important;
-      }
     }
 
     .form-item-keywords {
