@@ -48,7 +48,7 @@ services:
     arguments: [alshaya_api]
 
   alshaya_acm.cat_sync_clean_event:
-      class: Drupal\alshaya_acm\EventSubscriber\AlshayaCatSyncCleanEventSubscriber
+      class: Drupal\alshaya_acm\EventSubscriber\AlshayaCatSyncCompleteEventSubscriber
       arguments: ['@logger.factory', '@entity_type.manager', '@database']
       tags:
         - { name: 'event_subscriber' }

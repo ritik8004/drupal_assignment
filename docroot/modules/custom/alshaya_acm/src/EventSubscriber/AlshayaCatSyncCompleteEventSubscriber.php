@@ -11,11 +11,16 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Class AlshayaCatSyncCleanEventSubscriber.
+ * Class AlshayaCatSyncCompleteEventSubscriber.
  *
  * @package Drupal\alshaya_acm\EventSubscriber
  */
-class AlshayaCatSyncCleanEventSubscriber implements EventSubscriberInterface {
+class AlshayaCatSyncCompleteEventSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Product category vocabulary id.
+   */
+  const VOCAB_ID = 'acq_product_category';
 
   /**
    * Logger channel.
@@ -58,7 +63,7 @@ class AlshayaCatSyncCleanEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[AcqSkuEvents::CAT_SYNC][] = ['catSyncClean', 1];
+    $events[AcqSkuEvents::CAT_SYNC_COMPLETE][] = ['catSyncComplete', 1];
     return $events;
   }
 
@@ -68,29 +73,42 @@ class AlshayaCatSyncCleanEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\acq_sku\Events\AcqSkuSyncCatEvent $event
    *   Event object.
    */
-  public function catSyncClean(AcqSkuSyncCatEvent $event) {
+  public function catSyncComplete(AcqSkuSyncCatEvent $event) {
     $data = $event->getResponseData();
     $data = array_unique(array_merge($data['created'], $data['updated']));
-    // Get the category term ids by commerce ids.
-    $query = $this->connection->select('taxonomy_term__field_commerce_id', 'tcid');
-    $query->fields('tcid', ['entity_id']);
-    $query->condition('tcid.field_commerce_id_value', $data, 'NOT IN');
+
+    // Get all category terms with commerce id.
+    $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
+    $query->fields('ttd', ['tid']);
+    $query->leftJoin('taxonomy_term__field_commerce_id', 'tcid', 'ttd.tid=tcid.entity_id');
+    $query->fields('tcid', ['field_commerce_id_value']);
+    $query->condition('ttd.vid', self::VOCAB_ID);
     $result = $query->execute()->fetchAll();
+
+    // Filter terms which are not in sync response.
+    $result = array_filter($result, function ($val) use($data) {
+      return !in_array($val->field_commerce_id_value, $data);
+    });
+
     // If there are any extra terms in drupal.
     if (!empty($result)) {
       foreach ($result as $rs) {
         // If department page node exists, don't delete it.
-        if (!empty($dpt_nid = alshaya_advanced_page_is_department_page($rs->entity_id))) {
+        if (!empty($dpt_nid = alshaya_advanced_page_is_department_page($rs->tid))) {
           $this->logger->info('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
-            '@tid' => $rs->entity_id,
+            '@tid' => $rs->tid,
             '@nid' => $dpt_nid,
           ]);
         }
         else {
-          $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($rs->entity_id);
+          $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($rs->tid);
           if ($term instanceof TermInterface) {
             // Delete the term.
             $term->delete();
+            $this->logger->info('Term: @term_name commerce_id:@commerce_id is deleted as extra term in drupal.', [
+              '@term_name' => $term->label(),
+              '@commerce_id' => $rs->field_commerce_id_value,
+            ]);
           }
         }
       }

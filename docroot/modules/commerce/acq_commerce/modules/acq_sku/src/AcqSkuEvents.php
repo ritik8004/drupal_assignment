@@ -13,5 +13,5 @@ final class AcqSkuEvents {
    *
    * @Event("Drupal\acq_sku\Events\AcqSkuSyncCatEvent")
    */
-  const CAT_SYNC = 'acq_sku.cat_sync';
+  const CAT_SYNC_COMPLETE = 'acq_sku.cat_sync_complete';
 }

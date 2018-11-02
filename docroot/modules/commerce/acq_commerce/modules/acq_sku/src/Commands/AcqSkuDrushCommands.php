@@ -279,7 +279,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
     $dispatcher = \Drupal::service('event_dispatcher');
     $event = new \Drupal\acq_sku\Events\AcqSkuSyncCatEvent($response);
-    $dispatcher->dispatch(\Drupal\acq_sku\AcqSkuEvents::CAT_SYNC, $event);
+    $dispatcher->dispatch(\Drupal\acq_sku\AcqSkuEvents::CAT_SYNC_COMPLETE, $event);
     $this->output->writeln(dt('Done.'));
   }
 
