@@ -48,3 +48,29 @@ $settings['country_code'] = strtoupper($country_code);
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env']));
+
+// Allow overriding settings and config to set secret info directly from
+// an include file on server.
+$file_override_includes = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/includes.php';
+if (file_exists($file_override_includes)) {
+  include_once $file_override_includes;
+
+  if (function_exists('alshaya_override_includes')) {
+    alshaya_override_includes($config, $settings, $acsf_site_code, $country_code, $settings['env']);
+  }
+}
+
+/**
+ * Example content of the includes file.
+ *
+ * <?php
+ *
+ * function alshaya_override_includes(&$config, &$settings, $site_code, $country_code, $env) {
+ *   switch ($country_code) {
+ *     case 'pb':
+ *       $config['alshaya_api.settings']['consumer_key'] = 'secret consumer key';
+ *       break;
+ *   }
+ * }
+ *
+ */

@@ -314,8 +314,3 @@ $magentos = [
     ],
   ],
 ];
-
-$magento_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/magento.php';
-if (file_exists($magento_settings_file)) {
-  require_once $magento_settings_file;
-}
