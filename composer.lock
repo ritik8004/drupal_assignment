@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01db757bd41031e815524d39a525f7fb",
+    "content-hash": "2d7334393838cee8d187bb61396d2f10",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3443,6 +3443,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11284,6 +11287,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

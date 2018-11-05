@@ -291,6 +291,12 @@
             },
             "drupal/purge": {
               "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
+            },
+            "drupal/taxonomy_access_fix": {
+              "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
+            },
+            "drupal/autologout": {
+                "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
             }
         },
         "installer-paths": {

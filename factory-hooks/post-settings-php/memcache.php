@@ -85,6 +85,11 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
 
+    // Fix for PHP 7.1, see https://backlog.acquia.com/browse/PF-1118.
+    $settings['memcache']['options'] = [
+      Memcached::OPT_COMPRESSION => TRUE,
+    ];
+
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
