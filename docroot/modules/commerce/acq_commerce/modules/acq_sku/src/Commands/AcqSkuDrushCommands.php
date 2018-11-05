@@ -277,7 +277,6 @@ class AcqSkuDrushCommands extends DrushCommands {
    */
   public function syncCategories() {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
-    //$this->pp();return;
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
 
     // Get all category terms with commerce id.
@@ -316,23 +315,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     }
 
     $this->output->writeln(dt('Done.'));
-  }
-
-
-  public function pp() {
-    $pp1 = [
-      'name' => 'test term1',
-      'vid' => 'acq_product_category',
-      'langcode' => 'en',
-    ];
-    $pp2 = [
-      'name' => 'test term2',
-      'vid' => 'acq_product_category',
-      'langcode' => 'en',
-    ];
-
-    $tt1 = \Drupal\taxonomy\Entity\Term::create($pp1);$tt1->save();
-    $tt2 = \Drupal\taxonomy\Entity\Term::create($pp2);$tt2->save();
   }
 
   /**
