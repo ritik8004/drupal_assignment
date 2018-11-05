@@ -61,7 +61,11 @@
 
       // Making L1 links vertically in center in all breakpoints.
       var padding_value = ($(window).height() - mos_menu_item_height) / 2;
-      $('.field__items.moschino-sub-menu-content').css({'padding-top': padding_value, 'padding-bottom': padding_value});
+      var subMenuContent = $('.field__items.moschino-sub-menu-content');
+      if (!subMenuContent.hasClass('padding-processed')) {
+        subMenuContent.css({'padding-top': padding_value, 'padding-bottom': padding_value});
+        subMenuContent.addClass('padding-processed');
+      }
 
       // For desktop making the L2 wrapper for L2 links start after 1st L1 item.
       var l1LinksSelector = $('.moschino-sub-menu-content > .field--name-field-plp-menu');

@@ -267,6 +267,10 @@
         opacity: 1;
         visibility: visible;
 
+        @include breakpoint($upto-desktop) {
+          overflow-y: auto;
+        }
+
         > .field--name-field-plp-menu .mos-menu-heading {
           transform: none;
 
