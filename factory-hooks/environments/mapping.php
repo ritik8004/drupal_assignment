@@ -309,11 +309,25 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'vsae_test',
       ],
     ],
-    // Footlocker SA.
+    // Foot Locker KW.
+    'flkw' => [
+      'default' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flkw_test',
+      ],
+    ],
+    // Foot Locker SA.
     'flsa' => [
       'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mcsa_test',
+        'magento' => 'fl_qa',
+        'conductor' => 'flsa_test',
+      ],
+    ],
+    // Foot Locker AE.
+    'flae' => [
+      'default' => [
+        'magento' => 'fl_qa',
+        'conductor' => 'flae_test',
       ],
     ],
   ];

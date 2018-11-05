@@ -2,9 +2,9 @@
 
 namespace Drupal\acq_sku;
 
+use Differ\ArrayDiff;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
-use Drupal\Component\Utility\DiffArray;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -383,10 +383,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           $updatedTerm = $this->getTranslatedTerm($term->id(), $langcode);
           $updatedTermData = $updatedTerm->toArray();
 
+          $differ = new ArrayDiff();
+          $diff = $differ->diff($existingTermData, $updatedTermData);
+
           $this->logger->info('Updated category @magento_id for @langcode: @diff.', [
             '@langcode' => $langcode,
             '@magento_id' => $category['category_id'],
-            '@diff' => json_encode(DiffArray::diffAssocRecursive($updatedTermData, $existingTermData)),
+            '@diff' => json_encode($diff),
           ]);
         }
         else {

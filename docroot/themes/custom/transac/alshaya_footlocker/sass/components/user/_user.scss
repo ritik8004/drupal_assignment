@@ -91,3 +91,13 @@
     }
   }
 }
+
+.path--user {
+  .c-order-help {
+    .field--name-body p {
+      @include breakpoint($desktop) {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}

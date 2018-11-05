@@ -108,7 +108,8 @@ function alshaya_acm_checkout_form_multistep_checkout_alter(&$form, FormStateInt
 
     if (isset($cc_form['payment_details'], $cc_form['payment_details']['cc_cvv'])) {
       $cc_cvv_help = t('This code is a three or four digit number printed on the front or back of the credit card');
-      $cc_form['payment_details']['cc_cvv']['#suffix'] = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div>';
+      $cc_form['payment_details']['cc_cvv']['#prefix'] = '<div class="cvv-wrapper">';
+      $cc_form['payment_details']['cc_cvv']['#suffix'] = '<div class="cvv-help-text-wrapper"><div class="mobile-tooltip-icon"><span class="tooltip-icon"></span><span class="tooltip-content"><p>' . $cc_cvv_help . '</p></span></div><div class="cc_cvv_help_text">' . $cc_cvv_help . '</div></div></div>';
     }
   }
 }

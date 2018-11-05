@@ -423,26 +423,6 @@ function alshaya_search_module_implements_alter(&$implementations, $hook) {
 function alshaya_search_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
   $facet = $context['facet'];
 
-  // Result items in facet.
-  $facet_results = [];
-  foreach ($facet->getResults() as $result) {
-    $facet_results[] = $result->getRawValue();
-  }
-
-  // Active facet result items.
-  $facet_active_items = $facet->getActiveItems();
-
-  // If we have a facet value as active but that is not available in facet
-  // results, then remove/unset it.
-  foreach ($facet_active_items as $facet_active_item) {
-    if (!in_array($facet_active_item, $facet_results)) {
-      $facet_url_alias = $facet->getUrlAlias() . ':' . $facet_active_item;
-      // Key of the value in $filter_params array.
-      $key = array_search($facet_url_alias, $filter_params);
-      unset($filter_params[$key]);
-    }
-  }
-
   // If not using hierarchy, then no need to process. Using this check because
   // for the few facets, it always process.
   if (!$facet->getUseHierarchy()) {

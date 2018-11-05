@@ -49,7 +49,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     Then I should see the button "checkout securely"
     And I should see "Basket ("
@@ -95,7 +95,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -143,7 +143,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for AJAX to finish
     When I press "add to basket"
     And I wait for AJAX to finish
-    When I go to "/cart"
+    When I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -182,7 +182,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for AJAX to finish
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -224,7 +224,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load

@@ -6,7 +6,7 @@ Feature: Test various checkout scenarios as returning customer
     And I wait for the page to load
     When I press "add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
