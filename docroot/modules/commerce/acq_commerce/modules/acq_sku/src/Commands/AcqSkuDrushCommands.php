@@ -299,7 +299,10 @@ class AcqSkuDrushCommands extends DrushCommands {
       if ($this->io()->confirm(dt('Are you sure you want to clean old categories @cat', [
         '@cat' => json_encode(array_column($result, 'name')),
       ]), FALSE)) {
+
+        // Allow other modules to skipping the deleting of terms.
         $this->moduleHandler->alter('acq_sku_cat_sync_complete_clean', $result);
+
         foreach ($result as $tid => $rs) {
           $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
           if ($term instanceof TermInterface) {
