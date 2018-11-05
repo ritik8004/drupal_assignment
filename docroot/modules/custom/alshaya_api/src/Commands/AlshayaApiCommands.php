@@ -172,6 +172,11 @@ class AlshayaApiCommands extends DrushCommands {
           '@skus' => "'" . implode("','", array_keys($mskus[$type])) . "'",
         ]));
       }
+
+      // Notify in debug mode.
+      if ($msource == 'api') {
+        $this->logger->notice(dt('With source=api, stock and price will not be validated for skus.'));
+      }
     }
 
     $this->output->writeln(dt("\nGetting @types SKUs from Drupal, please wait...", [

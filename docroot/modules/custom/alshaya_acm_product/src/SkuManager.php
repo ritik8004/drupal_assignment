@@ -1038,7 +1038,7 @@ class SkuManager {
    */
   public function getSkus($langcode, $type) {
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', ['sku', 'price', 'special_price', 'final_price', 'stock'])
+      ->fields('asfd', ['sku', 'price', 'special_price', 'stock'])
       ->condition('type', $type, '=')
       ->condition('langcode', $langcode, '=');
 
