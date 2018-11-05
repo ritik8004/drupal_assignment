@@ -153,4 +153,8 @@ magazine_select2Option:
     js/magazine_attribute.js: {}
   css:
     theme:
-      css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+      /themes/custom/transac/alshaya_white_label/css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+
+magazine_socialSharepopup:
+  js:
+    js/socialshare_popup.js: {}
