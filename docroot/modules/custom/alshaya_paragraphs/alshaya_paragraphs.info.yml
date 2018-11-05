@@ -30,4 +30,5 @@ dependencies:
   - jquery_minicolors:jquery_minicolors
   - ckeditor_font:ckeditor_font
   - allowed_formats:allowed_formats
+  - drupal:link_attributes
 package: Alshaya
