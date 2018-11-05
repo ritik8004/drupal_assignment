@@ -229,11 +229,7 @@
                 "Fixing extra div insert on ajax requests": "https://www.drupal.org/files/issues/736066-296.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch",
-                "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
-                "Respect existing #multilingual property in content_translation_form_alter()": "https://www.drupal.org/files/issues/2018-05-28/respect-multilingual-2975762-2.patch",
-                "FieldItemList::equals is sufficient from the storage perspective but not for code checking for changes": "https://www.drupal.org/files/issues/2018-05-29/2826021-31.patch",
-                "Add hooks to act on a new revision being created": "https://www.drupal.org/files/issues/2018-05-28/revision-create-hooks-2975754-2.patch",
-                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch"
+                "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -263,7 +259,7 @@
                 "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
             },
             "drupal/paragraphs": {
-                "Fix integration with content moderation in multi-lingual scenarios": "https://www.drupal.org/files/issues/2018-06-06/paragraphs-paragraphs-translatable-revision-2951436-71.patch"
+                "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
             },
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
@@ -297,6 +293,9 @@
             },
             "drupal/taxonomy_access_fix": {
               "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
+            },
+            "drupal/autologout": {
+                "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
             }
         },
         "installer-paths": {

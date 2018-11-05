@@ -251,7 +251,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
 
     if (empty($term)) {
       $parent_terms = $this->getCategoryTreeCached(0, $langcode);
-      $tid = alshaya_super_category_get_default_term();
+      $tid = alshaya_super_category_get_default_term($langcode);
       return isset($parent_terms[$tid]) ? $parent_terms[$tid] : NULL;
     }
     return $term;

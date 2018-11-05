@@ -983,8 +983,8 @@ $webform_contact_legend: $black;
 
 // Order detail, recent orders, order list page.
 $order_product_title_elipsis_bg: $whisper-dark;
-$order_recent_orders_product_title_elipsis_bg: $whisper-dark;
-$order_recent_orders_product_title_elipsis_bg_hover: $whisper-dark;
+$order_recent_orders_product_title_elipsis_bg: $vanilla;
+$order_recent_orders_product_title_elipsis_bg_hover: $white-four;
 $order_detail_table_bg: $vanilla;
 $order_detail_td_light_content: $ash-triplet;
 $order_detail_td_dark_content: $black;
@@ -1057,3 +1057,5 @@ $bra_shop_by_size: $light-white;
 $bra_shop_by_size_title: $mothercare-black;
 $pink_shop_by_bra_size_border: $dark-pink;
 $sport_bra_size_filter_box_bg: $white-smoke;
+$bra_size_filter_sizeguide: $grey-ash;
+$bra_size_filter_slider_arrow_color: $mothercare-black;

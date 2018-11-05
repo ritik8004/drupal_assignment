@@ -60,6 +60,36 @@
             platformType: 'desktop',
           });
         }
+
+        if ($(context).filter('article[data-vmode="modal"]').length === 1
+            || $(document).find('article[data-vmode="full"]').length === 1) {
+
+          if ($(document).find('article[data-vmode="full"]').length === 1) {
+            var productContext = $(document).find('article[data-vmode="full"]');
+          }
+          else {
+            var productContext = $(context).filter('article[data-vmode="modal"]');
+          }
+
+          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+          product.variant = '';
+          if (currentListName != null && currentListName !== 'PDP-placeholder') {
+            product.list = currentListName;
+            currentListName = null;
+          }
+
+          var data = {
+            event: 'productDetailView',
+            ecommerce: {
+              currencyCode: currencyCode,
+              detail: {
+                products: [product]
+              }
+            }
+          };
+
+          dataLayer.push(data);
+        }
       });
 
       // List of Pages where we need to push out list of product being rendered to GTM.
@@ -554,36 +584,6 @@
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
         });
       });
-
-      if ($(context).filter('article[data-vmode="modal"]').length === 1
-        || $(document).find('article[data-vmode="full"]').length === 1) {
-
-        if ($(document).find('article[data-vmode="full"]').length === 1) {
-          var productContext = $(document).find('article[data-vmode="full"]');
-        }
-        else {
-          var productContext = $(context).filter('article[data-vmode="modal"]');
-        }
-
-        var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-        product.variant = '';
-        if (currentListName != null && currentListName !== 'PDP-placeholder') {
-          product.list = currentListName;
-          currentListName = null;
-        }
-
-        var data = {
-          event: 'productDetailView',
-          ecommerce: {
-            currencyCode: currencyCode,
-            detail: {
-              products: [product]
-            }
-          }
-        };
-
-        dataLayer.push(data);
-      }
 
       /**
        * Product click handler for Modals.
