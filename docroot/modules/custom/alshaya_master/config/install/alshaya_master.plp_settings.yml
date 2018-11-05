@@ -1,0 +1,6 @@
+enable_autoplay: 0
+all_plp_layouts:
+  default: 'Default'
+  moschino: 'Moschino'
+facet_plp_styles:
+  moschino: moschino
