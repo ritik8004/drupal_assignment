@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66e3f31cdd47ca91d96f9a581488d97e",
+    "content-hash": "04674d6410f64712d0b44ebb9beb9c2f",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -4639,10 +4639,6 @@
                     "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                     "Missing contexts prevent caching of block access": "https://www.drupal.org/files/issues/2018-04-25/issue-2521956--fix-cacheability-of-missing-contexts-46.patch",
                     "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
-                    "Respect existing #multilingual property in content_translation_form_alter()": "https://www.drupal.org/files/issues/2018-05-28/respect-multilingual-2975762-2.patch",
-                    "FieldItemList::equals is sufficient from the storage perspective but not for code checking for changes": "https://www.drupal.org/files/issues/2018-05-29/2826021-31.patch",
-                    "Add hooks to act on a new revision being created": "https://www.drupal.org/files/issues/2018-05-28/revision-create-hooks-2975754-2.patch",
-                    "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch",
                     "Clear Twig caches on deploys": "https://www.drupal.org/files/issues/2752961-130.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356278-408--8.5.x-real.patch",
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
@@ -9088,14 +9084,14 @@
                 },
                 "drupal": {
                     "version": "8.x-1.3",
-                    "datestamp": "1527502684",
+                    "datestamp": "1541009695",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "Fix integration with content moderation in multi-lingual scenarios": "https://www.drupal.org/files/issues/2018-06-06/paragraphs-paragraphs-translatable-revision-2951436-71.patch"
+                    "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/meta_support-2461695-224.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",

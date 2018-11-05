@@ -20,20 +20,7 @@ global $acsf_site_code;
 
 // If we are on local environment, the site name has not been detected yet.
 if (empty($acsf_site_name) && $settings['env'] == 'local') {
-  // Get site code from site uri.
-  if (!empty($_SERVER['HTTP_HOST'])) {
-    $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-    $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
-  }
-  else {
-    foreach ($_SERVER['argv'] as $arg) {
-      preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
-      if (!empty($matches)) {
-        $host_site_code = $matches[1];
-        break;
-      }
-    }
-  }
+  global $host_site_code;
 
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/alshaya_local_sites.yml'));
 
