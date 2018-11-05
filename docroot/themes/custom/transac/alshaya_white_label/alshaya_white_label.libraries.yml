@@ -146,3 +146,16 @@ plp_hover:
 pace:
   js:
     /libraries/pace/pace.min.js: {}
+
+plp-moschino-video-provider:
+  css:
+    theme:
+      vendor/css/video-js.min.css: {}
+  js:
+    vendor/js/video.min.js: {}
+    vendor/js/Youtube.min.js: {}
+    vendor/js/videojs-vimeo.js: {}
+
+plp-moschino-common:
+  js:
+    js/plp-moschino-layout.js: {}
