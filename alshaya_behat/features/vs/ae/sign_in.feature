@@ -8,8 +8,8 @@ Feature: Test Sign in and Forgot password features
     #When I close the popup
     And I wait for the page to load
     And I go to "/user/login"
-    When I fill in "edit-name" with "trupti@axelerant.com"
-    And I fill in "edit-pass" with "password@1"
+    When I fill in "edit-name" with "karnika.jain@qed42.com"
+    And I fill in "edit-pass" with "Kjain@91"
     And I press "sign in"
     Then I should see the link "My account"
     And I should see the link "Sign out"
@@ -20,8 +20,8 @@ Feature: Test Sign in and Forgot password features
   I should be able to sign in after providing valid credentials
     Given I go to "/user/login"
     And I follow "عربية"
-    When I fill in "edit-name" with "trupti@axelerant.com"
-    And I fill in "edit-pass" with "password@1"
+    When I fill in "edit-name" with "karnika.jain@qed42.com"
+    And I fill in "edit-pass" with "Kjain@91"
     And I press "تسجيل الدخول"
     Then I should see the link "حسابي"
     And I should see the link "تسجيل الخروج"
@@ -86,7 +86,7 @@ Feature: Test Sign in and Forgot password features
     And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "trupti@axelerant.com"
+    When I fill in "edit-name" with "karnika.jain@qed42.com"
     And I press "إرسال"
     Then I should see "تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني"
     And the url should match "/user/login"

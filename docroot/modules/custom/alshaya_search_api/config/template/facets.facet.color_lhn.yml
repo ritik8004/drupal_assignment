@@ -31,6 +31,11 @@ processor_configs:
       sort: -10
     settings:
       sort: ASC
+  clean_active_facets_processor:
+    processor_id: clean_active_facets_processor
+    weights:
+      build: 10
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

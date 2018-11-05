@@ -8,7 +8,7 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
@@ -39,10 +39,10 @@ Feature: To verify a returning customer is able to
     Then I should see "I confirm that I have read and accept the"
     And I accept terms and conditions
     And I wait for the page to load
-    Then I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
     And I press "CancelAction_id"
+
 
 
   Scenario: As a returning customer
@@ -51,7 +51,7 @@ Feature: To verify a returning customer is able to
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
-    Then I go to "/cart"
+    Then I go to "/en/cart"
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load

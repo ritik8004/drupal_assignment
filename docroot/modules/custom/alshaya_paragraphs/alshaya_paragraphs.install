@@ -13,6 +13,76 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Make entity_reference_revisions field translatable: true. Reverting 8120.
+ */
+function alshaya_paragraphs_update_8122() {
+  $configs = [
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+    'field.field.paragraph.1_row_1_col_dept.field_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_1st_col_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_2nd_col_promo_block',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_dept.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_text.field_promo_block',
+    'field.field.paragraph.banner.field_promo_block_button',
+    'field.field.paragraph.promo_block.field_promo_block_button',
+    'field.field.paragraph.banner.field_mobile_banner_image',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new field 'Mobile Banner Image' for paragraph type 'banner'.
+ */
+function alshaya_paragraphs_update_8121() {
+  $configs = [
+    'field.storage.paragraph.field_mobile_banner_image',
+    'field.field.paragraph.banner.field_mobile_banner_image',
+    'core.entity_form_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.default',
+    'core.entity_view_display.paragraph.banner.w1026',
+    'core.entity_view_display.paragraph.banner.w1920',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make entity_reference_revisions field translatable: false.
+ */
+function alshaya_paragraphs_update_8120() {
+  $configs = [
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+    'field.field.paragraph.1_row_1_col_dept.field_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_1st_col_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_2nd_col_promo_block',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_dept.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_text.field_promo_block',
+    'field.field.paragraph.banner.field_promo_block_button',
+    'field.field.paragraph.promo_block.field_promo_block_button',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new paragraph type 'Slug Banner'.
  */
 function alshaya_paragraphs_update_8119() {

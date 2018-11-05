@@ -125,20 +125,18 @@
 
   .cc_cvv_help_text {
     color: $checkout_payment_help;
-    #{$left}: 24%;
+    font-size: 0.75rem;
+    width: 52%;
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        #{$left}: 56%;
+      }
+    }
 
     &::before {
       background: $checkout_payment_method_border url(../imgs/cards/back-card.png) no-repeat;
       background-size: 100%;
-    }
-
-    @include breakpoint($tablet) {
-      #{$left}: 49%;
-    }
-
-    @include breakpoint($desktop) {
-      top: 43%;
-      #{$left}: 25%;
     }
   }
 }
@@ -176,26 +174,20 @@
   }
 }
 
-.cvv-help-text-wrapper {
-  .mobile-tooltip-icon {
-    .tooltip-icon {
-      color: $tooltip_text;
+.cvv-wrapper {
+  .cvv-help-text-wrapper {
+    .mobile-tooltip-icon {
+      .tooltip-icon {
+        color: $tooltip_text;
 
-      @include icon(info, after) {
-        font-size: 1.25rem;
+        @include icon(info, after) {
+          font-size: 1.25rem;
+        }
       }
-    }
 
-    span.tooltip-content {
-      top: 1.84rem;
-      #{$left}: -7.2rem;
-      color: $tooltip_text;
-      background-color: $tooltip_border;
-      border: 1px solid $tooltip_border_2;
-
-      &::before {
-        border-color: rgba(0, 132, 204, 0);
-        border-bottom-color: $tooltip_border_2;
+      span.tooltip-content {
+        top: 1.84rem;
+        #{$left}: -7.2rem;
       }
     }
   }

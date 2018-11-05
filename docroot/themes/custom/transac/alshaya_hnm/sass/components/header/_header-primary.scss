@@ -596,11 +596,11 @@ header {
           text-transform: uppercase;
           font-family: $hnm-demibold;
           letter-spacing: 1px;
+          color: $mm_l1_link;
         }
       }
 
-      &:hover,
-      &.active {
+      &:hover {
         .menu--one__link {
           &::after {
             content: '';
@@ -615,6 +615,19 @@ header {
 
       a {
         font-family: $hnm-regular;
+      }
+
+      .menu--one__link {
+        &.active {
+          &::after {
+            content: '';
+            height: 2px;
+            background: $mm_l1_link_active;
+            display: inherit;
+            width: 100%;
+            margin-top: 0.125rem;
+          }
+        }
       }
 
       &:hover {
@@ -1563,20 +1576,24 @@ html {
     li {
       &.menu--one__list-item {
         &:hover {
-          .menu--one__link {
-            border: none;
-            color: $mm_l1_link2;
-            border-top: 2px solid transparent;
+          @include breakpoint($desktop) {
+            .menu--one__link {
+              border: none;
+              color: $mm_l1_link2;
+              border-top: 2px solid transparent;
+            }
           }
         }
       }
     }
 
     &:hover {
-      li {
-        &.menu--one__list-item {
-          .menu--one__link {
-            border-bottom: none;
+      @include breakpoint($desktop) {
+        li {
+          &.menu--one__list-item {
+            .menu--one__link {
+              border-bottom: none;
+            }
           }
         }
       }

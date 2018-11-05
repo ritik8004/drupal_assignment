@@ -209,6 +209,12 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
+        // The actual depth of the term. For super category feature enabled,
+        // the depth may be wrong according to main menu. which can be
+        // processed when required.
+        //
+        // @see alshaya_main_menu_alshaya_main_menu_links_alter().
+        'depth' => (int) $term->depth_level,
       ];
 
       if ($highlight_paragraph) {
@@ -413,7 +419,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function allChildTerms($langcode, $parent_tid, $exclude_not_in_menu = TRUE, $mobile_only = FALSE, $vid = NULL) {
     $vid = empty($vid) ? self::VOCABULARY_ID : $vid;
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['tid', 'name', 'description__value'])
+    $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');

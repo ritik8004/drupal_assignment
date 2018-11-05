@@ -22,5 +22,8 @@ drush8 @$site.$target_env --uri=$uri en -y dblog views_ui features_ui restui
 echo "Disabling shield."
 drush8 @$site.$target_env --uri=$uri pm-uninstall -y shield
 
+echo "Disabling logs_http."
+drush8 @$site.$target_env --uri=$uri pm-uninstall -y logs_http
+
 echo "Disabling all search api indexes."
 drush8 @$site.$target_env --uri=$uri search-api-disable-all
