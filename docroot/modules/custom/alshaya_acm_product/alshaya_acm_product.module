@@ -1398,6 +1398,12 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
+  else {
+    $form = [
+      '#theme' => 'empty_add_to_cart_form',
+      '#text' => t('Out of stock'),
+    ];
+  }
 
   // Form state cache is not needed for this form since, we are regenerating the
   // add to cart form on every change on the form & the form state cache doesn't

@@ -14,7 +14,7 @@ mode: default
 content:
   field_heading_link:
     weight: 0
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
@@ -26,7 +26,7 @@ content:
     region: content
   field_sub_link:
     weight: 1
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
