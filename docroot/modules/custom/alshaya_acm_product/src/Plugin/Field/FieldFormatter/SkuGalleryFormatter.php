@@ -130,7 +130,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $context = 'search';
     $skus = [];
-    $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
 
     $promotion_page_nid = NULL;
 
@@ -168,15 +167,14 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         try {
           $check_parent_child = TRUE;
           $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child);
-          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, $check_parent_child);
+          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, FALSE);
           $product_url .= '?selected=' . $sku_for_gallery->id();
         }
         catch (\Exception $e) {
           $sku_gallery = [];
         }
 
-        $promotion_types = ['cart'];
-        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, 'default', $promotion_types);
+        $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
 
         $promotion_cache_tags = [];
         foreach ($promotions as $key => $promotion) {
@@ -192,13 +190,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $stock_placeholder = NULL;
 
         if (alshaya_acm_product_is_buyable($sku)) {
-          if ($stock_mode == 'pull') {
-            $stock_placeholder = [
-              '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
-            ];
-          }
-          // In push mode we check stock on page load only.
-          elseif (!alshaya_acm_get_stock_from_sku($sku)) {
+          if (!alshaya_acm_get_stock_from_sku($sku)) {
             $stock_placeholder = [
               '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
             ];

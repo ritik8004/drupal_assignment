@@ -690,6 +690,27 @@ class SkuManager {
   }
 
   /**
+   * Get Promotions data for provided SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Array of promotions data.
+   */
+  public function getPromotionsForSearchViewFromSkuId(SKUInterface $sku): array {
+    $cache_key = 'promotions_for_search_view';
+    $promos = $this->getProductCachedData($sku, $cache_key);
+
+    if (!is_array($promos)) {
+      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
+      $this->setProductCachedData($sku, $cache_key, $promos);
+    }
+
+    return $promos ?? [];
+  }
+
+  /**
    * Get Promotion node object(s) related to provided SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku

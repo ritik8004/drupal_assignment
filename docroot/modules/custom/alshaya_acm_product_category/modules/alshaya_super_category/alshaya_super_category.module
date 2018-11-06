@@ -521,9 +521,15 @@ function alshaya_super_category_form_views_exposed_form_alter(&$form, FormStateI
  * Implements hook_facets_query_string_alter().
  */
 function alshaya_super_category_facets_query_string_alter(ParameterBag $result_get_params, array &$filter_params, array &$context) {
+  static $status;
+
+  if (!isset($status)) {
+    $status = (bool) \Drupal::config('alshaya_super_category.settings')->get('status');
+  }
+
   // For super category, L2 becomes L1 (as L1 are super categories), so we need
   // to adjust the parents for the category facet.
-  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+  if ($status) {
     $context['facet_count'] = 1;
     $context['parent_id_count'] = 1;
   }
