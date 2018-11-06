@@ -39,3 +39,4 @@ base profile:
     - shortcut
     - views_ui
     - lightning_scheduler
+    - moderation_sidebar
