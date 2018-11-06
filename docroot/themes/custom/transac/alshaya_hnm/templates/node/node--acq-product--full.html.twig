@@ -75,14 +75,16 @@ set classes = [
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
         </div>
-        <div class="modal-share-this">
-          <span class="share-icon"></span>
-          <div class="sharethis-container">
-            <span class="close-icon"></span>
-            <div class="sharethis-label">{{ 'Share'|t }}</div>
-            {{ content.sharethis }}
+        {% if  pdp_layout == 'magazine' %}
+          <div class="modal-share-this">
+            <span class="share-icon"></span>
+            <div class="sharethis-container">
+              <span class="close-icon"></span>
+              <div class="sharethis-label">{{ 'Share'|t }}</div>
+              {{ content.sharethis }}
+            </div>
           </div>
-        </div>
+        {% endif %}
 
         <div class="short-description-wrapper">
           <div class="content--short-description">
@@ -159,8 +161,10 @@ set classes = [
             </div>
           {% endif %}
 
-          <div class="sharethis-label mobile-only">{{ 'Share'|t }}</div>
-          {{ content.sharethis }}
+          {% if  pdp_layout == 'default' %}
+            <div class="sharethis-label mobile-only">{{ 'Share'|t }}</div>
+            {{ content.sharethis }}
+          {% endif %}
       </div>
 
 

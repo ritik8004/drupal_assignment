@@ -83,6 +83,17 @@ set classes = [
           {{ content.field_skus }}
         </div>
 
+        {% if  pdp_layout == 'magazine' %}
+          <div class="modal-share-this">
+            <span class="share-icon"></span>
+            <div class="sharethis-container">
+              <span class="close-icon"></span>
+              <div class="sharethis-label">{{ 'Share'|t }}</div>
+              {{ content.sharethis }}
+            </div>
+          </div>
+        {% endif %}
+
         <div class="short-description-wrapper">
           <div class="content--short-description">
             <h2 class="field__label">{{ 'Product Description'|t }}</h2>
@@ -171,7 +182,9 @@ set classes = [
             </div>
           {% endif %}
 
-          {{ content.sharethis }}
+          {% if  pdp_layout == 'default' %}
+            {{ content.sharethis }}
+          {% endif %}
 
       </div>
 

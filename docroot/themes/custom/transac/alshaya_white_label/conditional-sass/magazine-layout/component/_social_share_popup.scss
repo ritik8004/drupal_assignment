@@ -89,7 +89,7 @@ body {
       position: fixed;
       top: 0;
       width: auto;
-      padding: 2rem 1.25rem 1.25rem;
+      padding: 2rem 1.25rem 1.625rem;
       z-index: 9;
       opacity: 3;
       background-color: $sharethis-popup-bg;
@@ -100,10 +100,24 @@ body {
       margin-bottom: 0;
 
       > span {
-        display: block;
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+        color: $sharethis-social-displaytext-color;
+        text-transform: capitalize;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &:first-child {
+          margin-top: 1.25rem;
+        }
 
         &::before {
           color: $sharethis-icon-bg;
+          margin-#{$right}: 0.875rem;
         }
       }
     }
