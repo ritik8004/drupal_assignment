@@ -9,7 +9,6 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -61,13 +60,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $configFactory;
 
   /**
-   * Entity Type Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -92,8 +84,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   SKU Images Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Sku Manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -105,14 +95,12 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
                               SkuImagesManager $skuImagesManager,
-                              ConfigFactoryInterface $config_factory,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              ConfigFactoryInterface $config_factory) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $config_factory;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -265,10 +253,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       }
     }
 
-    // Reset node and sku static cache now and release memory.
-    drupal_static_reset('loadFromSku');
-    $this->entityTypeManager->getStorage('node')->resetCache();
-
     return $elements;
   }
 
@@ -299,8 +283,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('current_route_match'),
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('config.factory'),
-      $container->get('entity_type.manager')
+      $container->get('config.factory')
     );
   }
 
