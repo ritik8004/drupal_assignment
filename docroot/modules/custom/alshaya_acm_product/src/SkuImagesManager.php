@@ -124,15 +124,9 @@ class SkuImagesManager {
    * @return bool
    *   TRUE if SKU has media(images/videos).
    */
-  public function hasMediaImages(SKUInterface $sku) {
-    $static = &drupal_static(__FUNCTION__, []);
-
-    if (!isset($static[$sku->id()])) {
-      $media = $this->productInfoHelper->getMedia($sku, 'pdp');
-      $static[$sku->id()] = !empty($media['images']);
-    }
-
-    return $static[$sku->id()];
+  public function hasMedia(SKUInterface $sku) {
+    $media = $this->getAllMedia($sku, FALSE);
+    return !empty($media['images']) || !empty($media['videos']);
   }
 
   /**
