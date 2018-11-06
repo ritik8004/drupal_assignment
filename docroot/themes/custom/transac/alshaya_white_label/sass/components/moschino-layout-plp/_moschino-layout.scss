@@ -67,20 +67,28 @@
       background: $plp-sub-menu-background-overlay;
       z-index: 999;
       padding-#{$left}: 1.4375rem;
-      padding-top: 74%;
       // Hide for now, so we can animate on opacity.
       visibility: hidden;
       opacity: 0;
       transition: visibility 0s, opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
 
       @include breakpoint($desktop) {
+        padding-top: 74%;
         padding-#{$left}: 8.0625rem;
         height: 100%;
       }
 
       @include breakpoint($only-tablet) {
         padding-#{$left}: 6.0625rem;
-        padding-top: 10rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        padding-bottom: 0 !important;
+        padding-top: 0 !important;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
       }
 
       > .field--name-field-plp-menu {

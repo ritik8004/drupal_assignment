@@ -59,7 +59,7 @@
         mos_menu_item_height = mos_menu_item_height + $(this).height();
       });
 
-      // Making L1 links vertically in center in all breakpoints.
+      // Making L1 links vertically in center in all breakpoints on load.
       var padding_value = ($(window).height() - mos_menu_item_height) / 2;
       var subMenuContent = $('.field__items.moschino-sub-menu-content');
       if (!subMenuContent.hasClass('padding-processed')) {
