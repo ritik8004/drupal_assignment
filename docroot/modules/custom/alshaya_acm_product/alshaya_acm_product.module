@@ -1418,6 +1418,11 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       '#text' => t('Out of stock'),
     ];
   }
+
+  // Form state cache is not needed for this form since, we are regenerating the
+  // add to cart form on every change on the form & the form state cache doesn't
+  // get re-used. Instead, keeps flooding key_value_expire table.
+  $form_state->disableCache();
 }
 
 /**
