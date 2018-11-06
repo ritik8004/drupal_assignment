@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa270708d44f542d46a0c25e2d15a1dc",
+    "content-hash": "4c497b807d5bebc9fc7f6915df848477",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9331,6 +9331,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -20007,6 +20010,11 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webflo/drupal-core-require-dev.git",
+                "reference": "3fa727e875f73906f7e9325619b540f7012876ee"
+            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",
