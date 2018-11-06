@@ -154,3 +154,16 @@ magazine_select2Option:
   css:
     theme:
       css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+
+plp-moschino-video-provider:
+  css:
+    theme:
+      vendor/css/video-js.min.css: {}
+  js:
+    vendor/js/video.min.js: {}
+    vendor/js/Youtube.min.js: {}
+    vendor/js/videojs-vimeo.js: {}
+
+plp-moschino-common:
+  js:
+    js/plp-moschino-layout.js: {}
