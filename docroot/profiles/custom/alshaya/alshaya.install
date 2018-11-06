@@ -11,6 +11,17 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall lightning_scheduler module.
+ */
+function alshaya_update_8010() {
+  if (\Drupal::moduleHandler()->moduleExists('lightning_media_audio')) {
+    \Drupal::service('module_installer')->uninstall(['lightning_media_audio']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall features_ui and features module.
  */
 function alshaya_update_8009() {
