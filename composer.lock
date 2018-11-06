@@ -5056,7 +5056,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -7870,7 +7870,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -7925,7 +7925,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha1",
-                    "datestamp": "1506671645",
+                    "datestamp": "1537264380",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -11845,16 +11845,16 @@
             ],
             "authors": [
                 {
-                    "name": "Yogesh Pawar",
-                    "homepage": "https://www.drupal.org/user/2922907"
-                },
-                {
                     "name": "iamEAP",
                     "homepage": "https://www.drupal.org/user/1467594"
                 },
                 {
                     "name": "sumitmadan",
                     "homepage": "https://www.drupal.org/user/1538790"
+                },
+                {
+                    "name": "yogeshmpawar",
+                    "homepage": "https://www.drupal.org/user/2922907"
                 }
             ],
             "description": "Provides blocks for Views exposed filters on View blocks.",

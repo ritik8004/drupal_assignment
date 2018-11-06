@@ -255,9 +255,9 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
   protected function getRootGroup($tid) {
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $this->connection->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
+      $query = $this->connection->select('taxonomy_term__parent', 'tth');
+      $query->fields('tth', ['parent_target_id']);
+      $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
         return $tid;
