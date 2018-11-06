@@ -559,13 +559,15 @@ class AlshayaApiWrapper {
         }
       }
 
-      foreach ($skus as $sku) {
-        $mskus[$type][$sku] = [
-          'sku' => $sku,
-          'price' => 0,
-          'special_price' => 0,
-          'qty' => 0,
-        ];
+      if (!empty($skus)) {
+        foreach ($skus as $sku) {
+          $mskus[$type][$sku] = [
+            'sku' => $sku,
+            'price' => 0,
+            'special_price' => 0,
+            'qty' => 0,
+          ];
+        }
       }
     }
 
