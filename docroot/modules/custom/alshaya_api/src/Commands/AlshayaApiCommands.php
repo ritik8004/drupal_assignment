@@ -203,6 +203,7 @@ class AlshayaApiCommands extends DrushCommands {
 
     $missing = [];
     $to_be_deleted = [];
+    $stock_price_mismatch_sync = [];
 
     foreach ($types as $type) {
       $missing[$type]['all'] = [];
@@ -231,18 +232,21 @@ class AlshayaApiCommands extends DrushCommands {
               if ($data['stock'] != $mskus[$type][$key]['qty']) {
                 $output .= 'Drupal stock:' . $data['stock'] . ' | ';
                 $output .= 'MDC stock:' . $mskus[$type][$key]['qty'];
+                $stock_price_mismatch_sync[$type][] = $key;
               }
 
               // If price in drupal not matches with what in magento.
               if ($data['price'] != $mskus[$type][$key]['price']) {
                 $output .= 'Drupal price:' . $data['price'] . ' | ';
                 $output .= 'MDC price:' . $mskus[$type][$key]['price'];
+                $stock_price_mismatch_sync[$type][] = $key;
               }
 
               // If special price in drupal not matches with what in magento.
               if ($data['special_price'] != $mskus[$type][$key]['special_price']) {
                 $output .= 'Drupal spl price:' . $data['special_price'] . ' | ';
                 $output .= 'MDC spl price:' . $mskus[$type][$key]['special_price'];
+                $stock_price_mismatch_sync[$type][] = $key;
               }
 
               if (!empty($output)) {
@@ -295,11 +299,46 @@ class AlshayaApiCommands extends DrushCommands {
 
       $missing[$type]['all'] = array_unique($missing[$type]['all']);
       $to_be_deleted[$type]['all'] = array_unique($to_be_deleted[$type]['all']);
+      $stock_price_mismatch_sync[$type] = !empty($stock_price_mismatch_sync[$type]) ? array_unique($stock_price_mismatch_sync[$type]) : [];
     }
 
     $this->output->writeln(dt("\n#### SYNCHRONIZATION ####"));
 
     $chunk_size = 100;
+
+    // Sync store/price mis-match skus only for the merch report.
+    if ($msource == 'report') {
+      // Sync stock/price mis-match skus.
+      foreach ($types as $type) {
+
+        // Stock/Price mis-match sku sync only for simple skus.
+        if ($type != 'simple') {
+          continue;
+        }
+
+        if (!empty($stock_price_mismatch_sync[$type]) && $this->io()->confirm(dt('Do you want to sync the @count @type stock/price mismatch SKUs?', [
+          '@count' => count($stock_price_mismatch_sync[$type]),
+          '@type' => $type,
+        ]))) {
+          foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+            // We split the list of SKUs in small chunk to avoid any issue. This
+            // is only to send the request to Conductor.
+            foreach (array_chunk(str_replace("'", '', $stock_price_mismatch_sync[$type]), $chunk_size) as $chunk) {
+              // @TODO: Make page size a config. It can be used in multiple places.
+              // @TODO: It seems there is nothing being logged when fullSync is
+              // launched.
+              $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+            }
+
+            $this->output->writeln(dt('Sync launched for the @count @language @type  stock/price mis-match SKUs.', [
+              '@count' => count($stock_price_mismatch_sync[$type]),
+              '@language' => $languages[$langcode]->getName(),
+              '@type' => $type,
+            ]));
+          }
+        }
+      }
+    }
 
     // Retrieve missing SKUs.
     foreach ($types as $type) {
