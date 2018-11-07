@@ -211,9 +211,9 @@ function drush_alshaya_api_sanity_check_sku_diff() {
       }
 
       if (!empty($stock_price_mismatch_sync[$type]) && drush_confirm(dt('Do you want to sync the @count @type stock/price mismatch SKUs?', [
-          '@count' => count($stock_price_mismatch_sync[$type]),
-          '@type' => $type,
-        ]))) {
+        '@count' => count($stock_price_mismatch_sync[$type]),
+        '@type' => $type,
+      ]))) {
         foreach (\Drupal::service('acq_commerce.i18n_helper')->getStoreLanguageMapping() as $langcode => $store_id) {
           // We split the list of SKUs in small chunk to avoid any issue. This
           // is only to send the request to Conductor.
@@ -233,7 +233,6 @@ function drush_alshaya_api_sanity_check_sku_diff() {
       }
     }
   }
-
 
   // Retrieve missing SKUs.
   foreach ($types as $type) {
