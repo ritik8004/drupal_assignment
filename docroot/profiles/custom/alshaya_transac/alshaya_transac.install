@@ -14,15 +14,6 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Install alshaya_product_options module.
- */
-function alshaya_transac_update_8118() {
-  \Drupal::service('module_installer')->install(['alshaya_mobile_app']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Enable views_ajax_get and configure search, promo, plp views to use GET.
  */
 function alshaya_transac_update_8117() {
@@ -386,7 +377,6 @@ function alshaya_transac_install() {
     'alshaya_static_html',
     'alshaya_product_options',
     'alshaya_image_sitemap',
-    'alshaya_mobile_app',
   ];
 
   global $_alshaya_modules_installed;
