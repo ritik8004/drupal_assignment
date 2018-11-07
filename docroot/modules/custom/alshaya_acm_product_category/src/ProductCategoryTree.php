@@ -423,6 +423,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
+    $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
     $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
@@ -480,6 +481,29 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->condition('ttbc.langcode', $langcode);
     $query->condition('ttbc.bundle', $vid);
     return $query->execute()->fetchAllKeyed();
+  }
+
+  /**
+   * Gets the image from 'field_promotion_banner' field.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getBanner($tid, $langcode) {
+    $query = $this->connection->select('taxonomy_term__field_promotion_banner', 'ttbc');
+    $query->fields('ttbc', [
+      'entity_id',
+      'field_promotion_banner_target_id',
+    ]);
+    $query->condition('ttbc.entity_id', $tid);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    return $query->execute()->fetchObject();
   }
 
   /**

@@ -57,6 +57,10 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   output=$(cat /tmp/drush_updb_$target_env.log | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
   echo $output
 
+  # Temporary "manual steps". Enable the mobile-app module after restore.
+  drush8 acsf-tools-ml en alshaya_mobile_app -y
+  drush8 acsf-tools-ml alshaya-reset-config
+  drush8 acsf-tools-ml cset acq_commerce.conductor api_version "v1" -y
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."
