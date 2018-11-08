@@ -459,7 +459,7 @@ class AlshayaApiWrapper {
           'sku' => $data[$indexes['partnum']],
           'price' => $data[$indexes['price']],
           'special_price' => $data[$indexes['special_price']],
-          'qty' => $data[$indexes['web_qty']],
+          'qty' => (int) $data[$indexes['web_qty']],
         ];
       }
     }
