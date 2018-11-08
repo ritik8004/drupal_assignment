@@ -158,6 +158,12 @@ function drush_alshaya_api_sanity_check_sku_diff() {
             '!output' => $verbose ? implode("\n", $stock_price_mismatch[$type][$language->getId()]) : '',
           ]));
         }
+        else {
+          drush_print(dt("\nNo stock/price mismatch for @language @type's in Drupal.", [
+            '@language' => $language->getName(),
+            '@type' => $type,
+          ]));
+        }
       }
 
       if (!empty($missing[$type][$language->getId()])) {

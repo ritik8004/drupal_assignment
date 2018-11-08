@@ -264,6 +264,12 @@ class AlshayaApiCommands extends DrushCommands {
               '!output' => $verbose ? implode("\n", $stock_price_mismatch[$type][$language->getId()]) : '',
             ]));
           }
+          else {
+            $this->output->writeln(dt("\nNo stock/price mismatch for @language @type's in Drupal.", [
+              '@language' => $language->getName(),
+              '@type' => $type,
+            ]));
+          }
         }
 
         if (!empty($missing[$type][$language->getId()])) {
