@@ -151,11 +151,11 @@ function drush_alshaya_api_sanity_check_sku_diff() {
 
         // Output the details of stock/price mismatch.
         if (!empty($stock_price_mismatch[$type][$language->getId()])) {
-          drush_print(dt("\n@count @language @type's SKUs in drupal have different stock/price than magento:\n !output", [
+          drush_print(dt("\n@count @language @type's SKUs in drupal have different stock/price than magento:\n!output", [
             '@count' => count($stock_price_mismatch[$type][$language->getId()]),
             '@language' => $language->getName(),
             '@type' => $type,
-            '!output' => implode("\n", $stock_price_mismatch[$type][$language->getId()]),
+            '!output' => $verbose ? implode("\n", $stock_price_mismatch[$type][$language->getId()]) : '',
           ]));
         }
       }
@@ -224,7 +224,7 @@ function drush_alshaya_api_sanity_check_sku_diff() {
             \Drupal::service('acq_commerce.ingest_api')->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
           }
 
-          drush_print(dt('Sync launched for the @count @language @type  stock/price mis-match SKUs.', [
+          drush_print(dt('Sync launched for the @count @language @type SKUs with stock/price mismatch.', [
             '@count' => count($stock_price_mismatch_sync[$type]),
             '@language' => $languages[$langcode]->getName(),
             '@type' => $type,
