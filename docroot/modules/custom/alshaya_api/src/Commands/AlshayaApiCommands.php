@@ -257,11 +257,11 @@ class AlshayaApiCommands extends DrushCommands {
 
           // Output the details of stock/price mismatch.
           if (!empty($stock_price_mismatch[$type][$language->getId()])) {
-            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different stock/price than magento:\n !output", [
+            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different stock/price than magento:\n!output", [
               '@count' => count($stock_price_mismatch[$type][$language->getId()]),
               '@language' => $language->getName(),
               '@type' => $type,
-              '!output' => implode("\n", $stock_price_mismatch[$type][$language->getId()]),
+              '!output' => $verbose ? implode("\n", $stock_price_mismatch[$type][$language->getId()]) : '',
             ]));
           }
         }
@@ -330,7 +330,7 @@ class AlshayaApiCommands extends DrushCommands {
               $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
             }
 
-            $this->output->writeln(dt('Sync launched for the @count @language @type  stock/price mis-match SKUs.', [
+            $this->output->writeln(dt('Sync launched for the @count @language @type SKUs with stock/price mismatch.', [
               '@count' => count($stock_price_mismatch_sync[$type]),
               '@language' => $languages[$langcode]->getName(),
               '@type' => $type,
