@@ -459,7 +459,7 @@ class AlshayaApiWrapper {
           'sku' => $data[$indexes['partnum']],
           'price' => $data[$indexes['price']],
           'special_price' => $data[$indexes['special_price']],
-          'qty' => $data[$indexes['web_qty']],
+          'qty' => (int) $data[$indexes['web_qty']],
         ];
       }
     }
@@ -744,6 +744,27 @@ class AlshayaApiWrapper {
     }
 
     return $url;
+  }
+
+  /**
+   * Get selected payment method for a cart.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   *
+   * @return string
+   *   Selected payment method code.
+   */
+  public function getCartPaymentMethod(int $cart_id) {
+    $endpoint = 'carts/' . $cart_id . '/selected-payment-method';
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return '';
+    }
+
+    $response = json_decode($response, TRUE);
+    return $response['method'] ?? '';
   }
 
 }

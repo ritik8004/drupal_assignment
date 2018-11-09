@@ -12,3 +12,9 @@ services:
     class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  alshaya_hm_images.product_info_requested_event:
+    class: Drupal\alshaya_hm_images\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_hm_images.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }
