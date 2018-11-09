@@ -10,3 +10,4 @@ themes:
 dependencies:
   - alshaya_hm:alshaya_hm_images
   - alshaya_hm:alshaya_hm_redirect
+  - alshaya_hm:alshaya_mobile_app

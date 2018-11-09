@@ -1850,6 +1850,43 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
 }
 
 /**
+ * Filter nodes with stock from given array of nodes.
+ *
+ * @param array $nodes
+ *   The list of nodes array.
+ * @param int $stock_check_limit
+ *   (optional) The limit of products to return as a result.
+ *
+ * @return array
+ *   Return in-stock nodes.
+ */
+function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $stock_check_limit = 50): array {
+  $data = [];
+  if (empty($nodes)) {
+    return $data;
+  }
+
+  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  foreach ($nodes as $node) {
+    /* @var \Drupal\node\Entity\Node $node */
+    if (!$node instanceof NodeInterface) {
+      continue;
+    }
+
+    if ($stock_check_limit <= 0) {
+      break;
+    }
+    // In case stock_mode is not "push", we always select the product
+    // assuming it has stock.
+    if (($stock_mode == 'push' && alshaya_acm_get_stock_from_product($node)) || $stock_mode !== 'push') {
+      $data[] = $node;
+      $stock_check_limit--;
+    }
+  }
+  return $data;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
