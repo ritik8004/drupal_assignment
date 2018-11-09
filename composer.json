@@ -213,7 +213,8 @@
                 "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
                 "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
                 "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
-                "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch"
+                "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
+                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -241,6 +242,9 @@
             },
             "drupal/simple_sitemap": {
                 "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
+            },
+            "drupal/paragraphs": {
+              "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
             },
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa270708d44f542d46a0c25e2d15a1dc",
+    "content-hash": "12e58fc54c1869bace70c903739885be",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5056,7 +5056,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -6036,7 +6036,8 @@
                     "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
                     "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
                     "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
-                    "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch"
+                    "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
+                    "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7870,7 +7871,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -7925,7 +7926,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha1",
-                    "datestamp": "1506671645",
+                    "datestamp": "1537264380",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -9331,6 +9332,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11845,16 +11849,16 @@
             ],
             "authors": [
                 {
-                    "name": "Yogesh Pawar",
-                    "homepage": "https://www.drupal.org/user/2922907"
-                },
-                {
                     "name": "iamEAP",
                     "homepage": "https://www.drupal.org/user/1467594"
                 },
                 {
                     "name": "sumitmadan",
                     "homepage": "https://www.drupal.org/user/1538790"
+                },
+                {
+                    "name": "yogeshmpawar",
+                    "homepage": "https://www.drupal.org/user/2922907"
                 }
             ],
             "description": "Provides blocks for Views exposed filters on View blocks.",
@@ -20007,6 +20011,11 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webflo/drupal-core-require-dev.git",
+                "reference": "3fa727e875f73906f7e9325619b540f7012876ee"
+            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",
