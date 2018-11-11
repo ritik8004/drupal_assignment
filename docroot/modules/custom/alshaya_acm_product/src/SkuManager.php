@@ -20,6 +20,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
@@ -182,6 +183,13 @@ class SkuManager {
   protected $httpClient;
 
   /**
+   * Renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -218,6 +226,8 @@ class SkuManager {
    *   PDP Breadcrumb service.
    * @param \GuzzleHttp\Client $http_client
    *   GuzzleHttp\Client object.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer service.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -235,7 +245,8 @@ class SkuManager {
                               CacheBackendInterface $product_cache,
                               SKUFieldsManager $sku_fields_manager,
                               AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
-                              Client $http_client) {
+                              Client $http_client,
+                              RendererInterface $renderer) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -256,6 +267,7 @@ class SkuManager {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->httpClient = $http_client;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -366,9 +378,8 @@ class SkuManager {
         ];
 
         // Get discount if discounted price available.
-        $discount = round((($price - $final_price) * 100) / $price);
         $build['discount'] = [
-          '#markup' => $this->t('Save @discount%', ['@discount' => $discount]),
+          '#markup' => $this->getDiscountedPriceMarkup($price, $final_price),
         ];
       }
     }
@@ -378,6 +389,30 @@ class SkuManager {
         '#price' => $final_price,
       ];
     }
+  }
+
+  /**
+   * Get Discounted Price markup.
+   *
+   * @param float|string $price
+   *   Price value.
+   * @param float|string $final_price
+   *   Final price value.
+   *
+   * @return string
+   *   Price markup.
+   */
+  public function getDiscountedPriceMarkup($price, $final_price):string {
+    $price = (float) $price;
+    $final_price = (float) $final_price;
+
+    $discount = $price - $final_price;
+    if ($price < 0.1 || $final_price < 0.1 || $discount < 0.1) {
+      return '';
+    }
+
+    $discount = round(($discount * 100) / $price);
+    return (string) $this->t('Save @discount%', ['@discount' => $discount]);
   }
 
   /**
@@ -665,6 +700,8 @@ class SkuManager {
    *   Type of promotion to filter on.
    * @param string $product_view_mode
    *   Product view mode for which promotion is being rendered.
+   * @param bool $check_parent
+   *   Flag to specify if we should check parent sku or not.
    *
    * @return array|\Drupal\Core\Entity\EntityInterface[]
    *   blank array, if no promotions found, else Array of promotion entities.
@@ -672,7 +709,8 @@ class SkuManager {
   public function getPromotionsFromSkuId(SKU $sku,
                                          string $view_mode,
                                          array $types = ['cart', 'category'],
-                                         $product_view_mode = NULL) {
+                                         $product_view_mode = NULL,
+                                         $check_parent = TRUE) {
 
     $langcode = $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
 
@@ -775,7 +813,7 @@ class SkuManager {
     // This is done here to reduce processing in Magento, current process
     // (indexer) in Magento is already heavy and requires enhancement, so
     // it is done in Drupal to avoid more performance issues Magento.
-    if (empty($promos)) {
+    if (empty($promos) && $check_parent) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
         return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
       }
@@ -866,7 +904,7 @@ class SkuManager {
           '#alt' => $data[$text_key],
         ];
 
-        $row['image'] = render($image);
+        $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
 
         $static_labels_cache[$sku][$type][] = $row;
@@ -1038,11 +1076,11 @@ class SkuManager {
    */
   public function getSkus($langcode, $type) {
     $query = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', ['sku'])
+      ->fields('asfd', ['sku', 'price', 'special_price', 'stock'])
       ->condition('type', $type, '=')
       ->condition('langcode', $langcode, '=');
 
-    return array_keys($query->execute()->fetchAllKeyed(0, 0));
+    return $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
   }
 
   /**
@@ -1171,19 +1209,18 @@ class SkuManager {
    *
    * @param mixed $sku
    *   SKU name or full sku object.
-   * @param string $langcode
-   *   Language code.
+   * @param bool $check_parent
+   *   Flag to check for parent sku or not (for configurable products).
    *
    * @return object
    *   Loaded node object.
    */
-  public function getDisplayNode($sku, $langcode = '') {
-    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku, $langcode);
+  public function getDisplayNode($sku, $check_parent = TRUE) {
+    $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
 
     if (empty($sku_entity)) {
-      $this->logger->warning('SKU entity not found for @sku with langcode: @langcode. (@function)', [
+      $this->logger->warning('SKU entity not found for @sku. (@function)', [
         '@sku' => $sku,
-        '@langcode' => $langcode,
         '@function' => 'SkuManager::getDisplayNode()',
       ]);
 
@@ -1193,12 +1230,14 @@ class SkuManager {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
-    $node = $plugin->getDisplayNode($sku_entity);
+    $node = $plugin->getDisplayNode($sku_entity, $check_parent);
 
     if (!($node instanceof NodeInterface)) {
-      $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-        '@sku' => $sku_entity->getSku(),
-      ]);
+      if ($check_parent) {
+        $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
+          '@sku' => $sku_entity->getSku(),
+        ]);
+      }
 
       return NULL;
     }
@@ -1328,10 +1367,10 @@ class SkuManager {
 
         // No stock check for related items in pull mode.
         if ($stock_mode == 'pull') {
-          $related[] = $node->id();
+          $related[$sku] = $node->id();
         }
         elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
-          $related[] = $node->id();
+          $related[$sku] = $node->id();
         }
       }
       catch (\Exception $e) {
@@ -1923,7 +1962,7 @@ class SkuManager {
    * @return array
    *   Array of configurable field values.
    */
-  public function getConfigurableValues(SKUInterface $sku) {
+  public function getConfigurableValues(SKUInterface $sku): array {
     $configurableFieldValues = [];
 
     $fields = $this->skuFieldsManager->getFieldAdditions();
@@ -1944,7 +1983,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
-          'label' => $sku->get($fieldKey)
+          'label' => (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
@@ -2049,8 +2088,9 @@ class SkuManager {
     $default_pdp_image_slider_position = $this->configFactory->get('alshaya_acm_product.settings')
       ->get('image_slider_position_pdp');
     if ($entity instanceof SKUInterface) {
-      $entity = alshaya_acm_product_get_display_node($entity);
+      $entity = $this->getDisplayNode($entity);
     }
+
     if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
       $inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list);
       if ($inner_term) {

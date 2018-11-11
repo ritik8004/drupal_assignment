@@ -86,6 +86,7 @@ $special-price: #b70025;
 $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
+$_moschino-menu-link: #b7b8b7;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -99,6 +100,7 @@ $primary_link-hover: $marine-blue-two;
 $primary_link-active: $marine-blue-two;
 $primary_border: $white;
 $content_link_color: $cerulean-two;
+$primary_ripple_color: rgba(255, 255, 255, 0.5);
 
 // Form elements.
 $primary_form_selector_border: $black;
@@ -1008,3 +1010,18 @@ $cart-free-gifts-label-background: $marine-blue;
 
 // Pace progress color
 $progress_loader: $marine-blue;
+
+// PDP Magazine layput
+$colour-swatches-show-list-button: $mothercare-black;
+
+// PLP Maschino layout.
+$plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
+$plp-sub-menu-child-link: $_moschino-menu-link;
+$plp-sub-menu-heading-link: $_moschino-menu-link;
+$plp-sub-menu-child-link-active: $white-five;
+$plp-sub-menu-heading-link-active: $white-five;
+$plp-sub-menu-cls-btn-txt: $mothercare-black;
+$plp-sub-menu-cls-btn-bg: $white-five;
+$plp-machino-modal-content-bg: $white-five;
+$plp-machino-modal-content: $black;
+$plp-machino-modal-content-title: $mothercare-black;

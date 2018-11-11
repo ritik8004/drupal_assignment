@@ -1,0 +1,23 @@
+{% block paragraph %}
+  {% if content.field_sub_link|render %}
+    <div class="mos-menu-item c-accordion">
+  {% else %}
+    <div class="mos-menu-item">
+  {% endif %}
+    {% block content %}
+      {% if content.field_sub_link|render %}
+        <div class="mos-menu-heading c-accordion__title">
+          {{ content.field_heading_link }}
+        </div>
+      {% else %}
+          <div class="mos-menu-heading">
+            {{ content.field_heading_link }} </div>
+      {% endif %}
+      {% if content.field_sub_link|render %}
+      <div class="mos-menu-sublink c-accordion__content">
+        {{ content.field_sub_link }}
+      </div>
+    {% endif %}
+    {% endblock %}
+  </div>
+{% endblock paragraph %}

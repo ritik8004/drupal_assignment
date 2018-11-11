@@ -148,16 +148,20 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
             }
           });
         }
+        try {
+          // Price facets to respect Soft Limit.
+          var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
+          var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
+          $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
 
-        // Price facets to respect Soft Limit.
-        var facetName = $finalPriceBlock.find('ul').attr('data-drupal-facet-id');
-        var zeroBasedLimit = settings.facets.softLimit[facetName] - 1;
-        $finalPriceBlock.find('li:gt(' + zeroBasedLimit + ')').hide();
-
-        // Price facets to respect Soft Limit.
-        var facetNameSearch = finalPriceBlockSearch.find('ul').attr('data-drupal-facet-id');
-        var zeroBasedLimitSearch = settings.facets.softLimit[facetNameSearch] - 1;
-        finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
+          // Price facets to respect Soft Limit.
+          var facetNameSearch = finalPriceBlockSearch.find('ul').attr('data-drupal-facet-id');
+          var zeroBasedLimitSearch = settings.facets.softLimit[facetNameSearch] - 1;
+          finalPriceBlockSearch.find('li:gt(' + zeroBasedLimitSearch + ')').hide();
+        }
+        catch (e) {
+          // Do nothing.
+        }
       }
 
       $('.ui-autocomplete').on("touchend",function (e) {
@@ -388,7 +392,7 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
   };
 
   /**
-   * Convert full-screen loader to throbber for infinite scroll.
+   * Helper function to convert full-screen loader to throbber for infinite scroll.
    */
   Drupal.changeProgressBarToThrobber = function (context) {
     Drupal.ajax.instances.forEach(function (ajax_instance, key) {

@@ -15,8 +15,8 @@ matrix:
     if: type = pull_request
   - php: 7.1
     env:
-    - INSTALL_TYPE=install
-    - PROFILE=alshaya_non_transac
+      - INSTALL_TYPE=install
+      - PROFILE=alshaya_non_transac
     if: type = pull_request
   #- php: 7.1
   #  env:
@@ -90,62 +90,50 @@ install:
   - cd ${BUILD_DIR}
 
 script:
-# Changing path to disable behat test on Travis.
-# - source $BLT_DIR/scripts/travis/run_tests
+  # Changing path to disable behat test on Travis.
+  # - source $BLT_DIR/scripts/travis/run_tests
   - source ${BUILD_DIR}/blt/scripts/run_tests
 
 deploy:
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: develop
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: acm-v2-ps
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: CORE-5280
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: travis
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: mobile-api
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: qa
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: uat
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: master
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_tag"
-     skip_cleanup: true
-     on:
-       tags: true
-       php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: develop
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: CORE-5280
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: travis
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: qa
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: uat
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: master
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_tag"
+    skip_cleanup: true
+    on:
+      tags: true
+      php: 7.1

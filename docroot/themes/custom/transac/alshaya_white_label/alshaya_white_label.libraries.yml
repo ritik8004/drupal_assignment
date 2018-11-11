@@ -146,3 +146,24 @@ plp_hover:
 pace:
   js:
     /libraries/pace/pace.min.js: {}
+
+magazine_select2Option:
+  js:
+    js/magazine_select2Option.js: {}
+    js/magazine_attribute.js: {}
+  css:
+    theme:
+      css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+
+plp-moschino-video-provider:
+  css:
+    theme:
+      vendor/css/video-js.min.css: {}
+  js:
+    vendor/js/video.min.js: {}
+    vendor/js/Youtube.min.js: {}
+    vendor/js/videojs-vimeo.js: {}
+
+plp-moschino-common:
+  js:
+    js/plp-moschino-layout.js: {}
