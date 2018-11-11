@@ -154,6 +154,13 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmae_prod'
       ],
     ],
+    // H&M EG.
+    'hmeg' => [
+      'default' => [
+        'magento' => 'hm_qa',
+        'conductor' => 'hmeg_test',
+      ],
+    ],
     // BathBodyWorks KW.
     'bbwkw' => [
       'default' => [

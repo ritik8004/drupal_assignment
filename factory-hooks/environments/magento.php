@@ -75,6 +75,9 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 6, 'ar' => 5],
     ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
   ],
   'hm_uat' => [
     'url' => 'https://hm-uat.store.alshaya.com',
@@ -310,6 +313,12 @@ $magentos = [
       'magento_lang_prefix' => [
         'en' => 'are_en',
         'ar' => 'are_ar',
+      ],
+    ],
+    'eg' => [
+      'magento_lang_prefix' => [
+        'en' => 'egy_en',
+        'ar' => 'egy_ar',
       ],
     ],
   ],
