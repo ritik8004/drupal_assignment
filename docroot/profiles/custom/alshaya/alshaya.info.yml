@@ -25,10 +25,11 @@ themes:
 
 base profile: lightning
 
-exclude:
+excluded_dependencies:
   - dblog
   - help
   - history
+  - lightning_media_slideshow
   - lightning_landing_page
   - lightning_layout
   - lightning_media_instagram
