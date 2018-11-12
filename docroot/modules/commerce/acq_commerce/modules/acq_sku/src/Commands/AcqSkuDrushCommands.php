@@ -301,17 +301,13 @@ class AcqSkuDrushCommands extends DrushCommands {
       ]), FALSE)) {
 
         // Allow other modules to skipping the deleting of terms.
-        $this->moduleHandler->alter('acq_sku_cat_sync_complete_clean', $result);
+        $this->moduleHandler->alter('acq_sku_sync_categories_delete', $result);
 
         foreach ($result as $tid => $rs) {
           $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
           if ($term instanceof TermInterface) {
             // Delete the term.
             $term->delete();
-            $this->logger->notice(dt('Term: @term_name commerce_id:@commerce_id is deleted as extra term in drupal.', [
-              '@term_name' => $rs['name'],
-              '@commerce_id' => $rs['field_commerce_id_value'],
-            ]));
           }
         }
       }

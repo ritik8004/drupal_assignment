@@ -101,7 +101,7 @@ function hook_acq_sku_clean_synced_data_alter(&$context) {
  * @param array $result
  *
  */
-function hook_acq_sku_cat_sync_complete_clean_alter(array &$result) {
+function hook_acq_sku_sync_categories_delete_alter(array &$result) {
 
 }
 

@@ -17,9 +17,9 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Database;
 
 /**
- * Implements hook_acq_sku_cat_sync_complete_clean_alter().
+ * Implements hook_acq_sku_sync_categories_delete_alter().
  */
-function alshaya_advanced_page_acq_sku_cat_sync_complete_clean_alter(array &$result) {
+function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$result) {
   if (!empty($result)) {
     foreach ($result as $tid => $rs) {
       // If department page node exists for the given term, don't delete it.
