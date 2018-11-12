@@ -1077,7 +1077,6 @@ html[lang=ar] {
     #table-cart-items {
       tr {
         td {
-
           @include breakpoint($tablet) {
             padding: 1.9rem 0.7rem;
           }
