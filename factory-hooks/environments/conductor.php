@@ -168,12 +168,6 @@ $conductors = [
     'hmac_secret' => 'MWYxYTA0NmItMjM1Yy00',
     'api_version' => 'v2',
   ],
-  'hmae_mapp' => [
-    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => '57331ba72f7a45a1823e38c69d0aab44',
-    'hmac_secret' => 'YjMyYzdkMjMtMzk3Mi00',
-    'api_version' => 'v2',
-  ],
   // H&M EG.
   'hmeg_test' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
