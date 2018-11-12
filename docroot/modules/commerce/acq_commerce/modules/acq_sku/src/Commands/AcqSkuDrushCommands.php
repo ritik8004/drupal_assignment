@@ -279,38 +279,44 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
 
-    // Get all category terms with commerce id.
-    $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
-    $query->fields('ttd', ['tid', 'name']);
-    $query->leftJoin('taxonomy_term__field_commerce_id', 'tcid', 'ttd.tid=tcid.entity_id');
-    $query->fields('tcid', ['field_commerce_id_value']);
-    $query->condition('ttd.vid', 'acq_product_category');
-    $result = $query->execute()->fetchAllAssoc('tid', \PDO::FETCH_ASSOC);
+    // If there is any term update/create, only then trigger delete.
+    if (!empty($response['created']) || !empty($response['updated'])) {
+      // Get all category terms with commerce id.
+      $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
+      $query->fields('ttd', ['tid', 'name']);
+      $query->leftJoin('taxonomy_term__field_commerce_id', 'tcid', 'ttd.tid=tcid.entity_id');
+      $query->fields('tcid', ['field_commerce_id_value']);
+      $query->condition('ttd.vid', 'acq_product_category');
+      $result = $query->execute()->fetchAllAssoc('tid', \PDO::FETCH_ASSOC);
 
-    $affected_terms = array_unique(array_merge($response['created'], $response['updated']));
-    // Filter terms which are not in sync response.
-    $result = array_filter($result, function ($val) use ($affected_terms) {
-      return !in_array($val['field_commerce_id_value'], $affected_terms);
-    });
+      $affected_terms = array_unique(array_merge($response['created'], $response['updated']));
+      // Filter terms which are not in sync response.
+      $result = array_filter($result, function ($val) use ($affected_terms) {
+        return !in_array($val['field_commerce_id_value'], $affected_terms);
+      });
 
-    // If there are categories to delete.
-    if (!empty($result)) {
-      // Confirmation to delete old categories.
-      if ($this->io()->confirm(dt('Are you sure you want to clean old categories @cat', [
-        '@cat' => json_encode(array_column($result, 'name')),
-      ]), FALSE)) {
+      // If there are categories to delete.
+      if (!empty($result)) {
+        // Confirmation to delete old categories.
+        if ($this->io()->confirm(dt('Are you sure you want to clean old categories @cat', [
+          '@cat' => json_encode(array_column($result, 'name')),
+        ]), FALSE)) {
 
-        // Allow other modules to skipping the deleting of terms.
-        $this->moduleHandler->alter('acq_sku_sync_categories_delete', $result);
+          // Allow other modules to skipping the deleting of terms.
+          $this->moduleHandler->alter('acq_sku_sync_categories_delete', $result);
 
-        foreach ($result as $tid => $rs) {
-          $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
-          if ($term instanceof TermInterface) {
-            // Delete the term.
-            $term->delete();
+          foreach ($result as $tid => $rs) {
+            $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+            if ($term instanceof TermInterface) {
+              // Delete the term.
+              $term->delete();
+            }
           }
         }
       }
+    }
+    else {
+      $this->logger->notice(dt('Not cleaning(deleting) old terms as there is no term update/create.'));
     }
 
     $this->output->writeln(dt('Done.'));
