@@ -175,15 +175,15 @@ function alshaya_white_label_preprocess_page(&$variables) {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
 
       $plp_type = $term->get('field_plp_layout')->value;
-      if ($plp_type == ProductCategoryTree::PLP_LAYOUT_MOSCHINO) {
-        $variables['moschino'] = 1;
-        // Load common library for moschino.
-        $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-common';
+      if ($plp_type == ProductCategoryTree::PLP_LAYOUT_1) {
+        $variables['campaign-plp-style-1'] = 1;
+        // Load common library for campaign-plp-style-1.
+        $variables['#attached']['library'][] = 'alshaya_white_label/campaign-plp-style-1-common';
 
         // Render incon image.
         $variables['plp_icon'] = _alshaya_white_label_get_image_url($term->get('field_plp_menu_icon'));
 
-        // Videos on moschino PLP page.
+        // Videos on campaign-plp-style-1 PLP page.
         if (!empty($term->get('field_plp_video_links')->first())) {
           $desktopVideos = [];
           $enable_autoplay = \Drupal::config('alshaya_master.plp_settings')->get('enable_autoplay');
@@ -192,7 +192,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
             $variables['autoplay_attributes'] = 'autoplay playsinline muted';
           }
           $variables['show_videos'] = 1;
-          $variables['#attached']['library'][] = 'alshaya_white_label/plp-moschino-video-provider';
+          $variables['#attached']['library'][] = 'alshaya_white_label/campaign-plp-style-1-video-provider';
 
           $video_list = $term->get('field_plp_video_links');
           foreach ($video_list as $embedded_video) {

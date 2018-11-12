@@ -14,8 +14,8 @@ settings:
       value: default
       label: Default
     -
-      value: moschino
-      label: 'Moschino PLP'
+      value: campaign-plp-style-1
+      label: 'Campaign PLP style 1'
   allowed_values_function: ''
 module: options
 locked: false
