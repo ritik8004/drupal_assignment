@@ -279,7 +279,8 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->output->writeln(dt('Synchronizing all commerce categories, please wait...'));
     $response = $this->conductorCategoryManager->synchronizeTree('acq_product_category');
 
-    // If there is any term update/create, only then trigger delete.
+    // We trigger delete only if there is any term update/create.
+    // So if API does not return anything, we don't delete all the categories.
     if (!empty($response['created']) || !empty($response['updated'])) {
       // Get all category terms with commerce id.
       $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
