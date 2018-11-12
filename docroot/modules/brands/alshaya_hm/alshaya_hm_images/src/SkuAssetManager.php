@@ -322,7 +322,7 @@ class SkuAssetManager {
       case 'teaser':
       case 'swatch':
         $sku = !($sku instanceof SKU) ? SKU::loadFromSku($sku) : $sku;
-        $product_node = alshaya_acm_product_get_display_node($sku);
+        $product_node = $this->skuManager->getDisplayNode($sku);
         if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
           // Use the first term found with an override for
           // location identifier.
@@ -525,7 +525,7 @@ class SkuAssetManager {
    */
   public function getSkuSwatchType(SKU $sku) {
     $swatch_type = self::LP_SWATCH_DEFAULT;
-    $product_node = alshaya_acm_product_get_display_node($sku);
+    $product_node = $this->skuManager->getDisplayNode($sku);
 
     if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
       if (!empty($terms)) {
