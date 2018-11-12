@@ -11,7 +11,7 @@
 
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
-      if ($('.campaign-plp-style-1-layout .plp-video').length !== 0) {
+      if ($('.campaign-plp-style-1-plp-layout .plp-video').length !== 0) {
         // Store the video object.
         var plpPlayer = videojs('#plp-video-player');
         var md = new MobileDetect(window.navigator.userAgent);
@@ -46,7 +46,7 @@
 
       var mos_menu_item_height = 0;
       // Accordion for submenu links, but this is only for tablets and below.
-      $('.campaign-plp-style-1-layout .field--name-field-plp-menu').find('.mos-menu-item').each(function () {
+      $('.campaign-plp-style-1-plp-layout .field--name-field-plp-menu').find('.mos-menu-item').each(function () {
         // Create accordion if the menu has sub links.
         if ($(this).find('.mos-menu-sublink').length !== 0) {
           $(this).once('accordion-init').accordion({
@@ -109,13 +109,13 @@
 
       var startAnimationCounter = 500;
       // Adding different transition durations for each heading links.
-      $('.campaign-plp-style-1-layout .mos-menu-heading').each(function () {
+      $('.campaign-plp-style-1-plp-layout .mos-menu-heading').each(function () {
         $(this).css('transition-duration', startAnimationCounter + 'ms');
         startAnimationCounter = startAnimationCounter + 50;
       });
 
       // Show the sub menu on click of the sub menu btn.
-      $('.campaign-plp-style-1-layout .campaign-plp-style-1-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
+      $('.campaign-plp-style-1-plp-layout .campaign-plp-style-1-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
         $('.campaign-plp-style-1-sub-menu-content').toggleClass('visible');
       });
 
@@ -151,7 +151,7 @@
       function l2sublinksAnimate() {
         setTimeout(function () {
           var startAnimationCounter = 400;
-          $('.campaign-plp-style-1-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
+          $('.campaign-plp-style-1-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
             $(this).css('transition-duration', startAnimationCounter + 'ms');
             $(this).addClass('animate');
             startAnimationCounter = startAnimationCounter + 70;
