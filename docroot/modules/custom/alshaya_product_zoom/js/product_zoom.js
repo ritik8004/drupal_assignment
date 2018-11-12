@@ -88,6 +88,14 @@
         });
       }
 
+      // Add mobile slick options for cart page free gifts.
+      var freeGiftsZoomContainer = $('.acq-content-product-modal #product-zoom-container');
+      if ($(window).width() < 768 && freeGiftsZoomContainer.length > 0 && !freeGiftsZoomContainer.hasClass('free-gifts-product-zoom-processed')) {
+        freeGiftsZoomContainer.addClass('free-gifts-product-zoom-processed');
+        var mobilegallery = $('#product-image-gallery-mobile', context);
+        Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
+      }
+
       var modalLightSlider = $('.acq-content-product-modal #lightSlider');
       if (modalLightSlider.length > 0 && !modalLightSlider.hasClass('product-zoom-processed')) {
         modalLightSlider.addClass('product-zoom-processed');
