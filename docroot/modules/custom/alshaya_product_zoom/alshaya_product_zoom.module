@@ -21,14 +21,6 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'product_zoom',
     ],
-  ];
-}
-
-/**
- * Implements hook_theme().
- */
-function alshaya_magazine_theme($existing, $type, $theme, $path) {
-  return [
     'alshaya_magazine' => [
       'variables' => [
         'mainImage' => '',
