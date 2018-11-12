@@ -9,11 +9,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Provides the 'Hide facet on Moschino condition' condition.
+ * Provides the 'Hide facet on PLP' condition.
  *
  * @Condition(
- *   id = "hide_facet_condition_moschino",
- *   label = @Translation("Hide facet on Moschino condition"),
+ *   id = "hide_facet_condition_plp",
+ *   label = @Translation("Hide facet on PLP condition"),
  *   context = {
  *     "taxonomy_term" = @ContextDefinition(
  *        "entity:taxonomy_term",
@@ -22,7 +22,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  *   }
  * )
  */
-class MoschinoHideFacetCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
+class PLPHideFacetCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}

@@ -154,3 +154,27 @@ function alshaya_acm_product_category_field_widget_link_default_form_alter(&$ele
     $element['uri']['#description'] = t('Please enter the link of the video. It could be a youtube/vimeo video or a custom video that you have uploaded to the site. To upload a video, use the Upload Video field below and then add the link here.');
   }
 }
+
+/**
+ * Implements allowed values callback for PLP layout.
+ */
+function alshaya_acm_product_category_plp_layout_values() {
+  $config = \Drupal::config('alshaya_master.plp_settings');
+  // Prepare PDP layout select options.
+  $plp_layout_options = [];
+  $plp_layout_options += $config->get('all_plp_layouts');
+  return $plp_layout_options;
+}
+
+/**
+ * Implements hook_link_attributes_plugin_alter().
+ */
+function alshaya_acm_product_category_link_attributes_plugin_alter(array &$definitions) {
+  $definitions['class']['description'] = t('Select how the link should be displayed.');
+  $definitions['class']['type'] = 'select';
+  $definitions['class']['options'] = [
+    '' => 'None',
+    'campaign-plp-style-1-modal-link use-ajax' => 'Campaign PLP Style 1 Modal',
+  ];
+  $definitions['class']['default_value'] = '';
+}
