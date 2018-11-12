@@ -145,7 +145,6 @@ function alshaya_paragraphs_update_8119() {
     'core.entity_form_display.paragraph.slug_banner.default',
     'core.entity_view_display.paragraph.slug_banner.default',
     'core.base_field_override.paragraph.slug_banner.created',
-    'core.base_field_override.paragraph.slug_banner.moderation_state',
     'core.base_field_override.paragraph.slug_banner.status',
     'core.base_field_override.paragraph.slug_banner.uid',
     'language.content_settings.paragraph.slug_banner',
