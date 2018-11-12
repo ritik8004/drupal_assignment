@@ -130,6 +130,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $context = 'search';
     $skus = [];
+    $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
 
     $promotion_page_nid = NULL;
 
@@ -190,7 +191,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $stock_placeholder = NULL;
 
         if (alshaya_acm_product_is_buyable($sku)) {
-          if (!alshaya_acm_get_stock_from_sku($sku)) {
+          if ($stock_mode == 'pull') {
+            $stock_placeholder = [
+              '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
+            ];
+          }
+          // In push mode we check stock on page load only.
+          elseif (!alshaya_acm_get_stock_from_sku($sku)) {
             $stock_placeholder = [
               '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
             ];
