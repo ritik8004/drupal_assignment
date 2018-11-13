@@ -33,5 +33,9 @@ function _alshaya_get_currency_code($country_code, $lang_code) {
   $currency['ae']['en'] = 'AED';
   $currency['ae']['ar'] = '.ر.إ';
 
+  // Egypt.
+  $currency['eg']['en'] = 'GBP';
+  $currency['eg']['ar'] = 'جنيه';
+
   return $currency[$country_code][$lang_code];
 }
