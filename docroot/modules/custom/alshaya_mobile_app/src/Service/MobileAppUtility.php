@@ -178,7 +178,7 @@ class MobileAppUtility {
     $this->productCategoryTree = $product_category_tree;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
-    $this->currencyConfig = $this->config_factory->get('acq_commerce.currency');
+    $this->currencyConfig = $config_factory->get('acq_commerce.currency');
   }
 
   /**
