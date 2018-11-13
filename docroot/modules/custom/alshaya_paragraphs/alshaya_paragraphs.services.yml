@@ -1,0 +1,12 @@
+services:
+  logger.channel.alshaya_paragraphs:
+    parent: logger.channel_base
+    arguments: ['alshaya_paragraphs']
+
+  alshaya_paragraphs.migrate_utility:
+    class: Drupal\alshaya_paragraphs\Helper\MigrateSymmetricToAsymmetric
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@database'
+      - '@logger.channel.alshaya_paragraphs'
