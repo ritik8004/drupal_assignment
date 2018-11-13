@@ -225,7 +225,7 @@ XDebug debugger is enabled by default. In order to debug your code from browser,
 PHP_IDE_CONFIG="serverName=local.alshaya-mckw.com" XDEBUG_CONFIG="remote_host=10.0.2.2" vendor/drush/drush/drush -l local.alshaya-mckw.com status
 
 Specific notes for debugging drush commands:
-* Use full path to drush in vendor folder (vendor/drush/drush/drush) instead of drush command itsels (it runs launcher which is typically outside of codebase)
+* Use full path to drush in vendor folder (vendor/drush/drush/drush) instead of drush command itself (it runs launcher which is typically outside of codebase)
 * You will eventually need to fix path mappings for the commands like drush and point them to your Alshaya codebase in vendor folder
 * Do NOT use drush aliases like @mckw.local for debugging, use always the -l parameter instead (see above for a valid example)
 
