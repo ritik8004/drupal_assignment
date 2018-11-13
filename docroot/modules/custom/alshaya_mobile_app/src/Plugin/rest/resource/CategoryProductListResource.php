@@ -202,7 +202,9 @@ class CategoryProductListResource extends ResourceBase {
       'path' => $term_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
       'banner' => $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
-      'description' => $term->get('description')->getValue()[0]['value'],
+      'description' => ($desc = $term->get('description')->getValue()) && !empty($desc[0]['value'])
+      ? $desc[0]['value']
+      : '',
       'total' => 0,
     ];
   }
