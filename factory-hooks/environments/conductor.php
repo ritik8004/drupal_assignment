@@ -175,6 +175,13 @@ $conductors = [
     'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
     'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
   ],
+  // H&M EG.
+  'hmeg_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '34780fdeb07441048af8fb931a75f788',
+    'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
+    'api_version' => 'v2',
+  ],
   // Pottery Barn KW.
   'pbkw_test' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
