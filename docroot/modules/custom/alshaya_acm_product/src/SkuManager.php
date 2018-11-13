@@ -2298,7 +2298,7 @@ class SkuManager {
    */
   public function getPdpLayout(EntityInterface $entity, $context = 'pdp') {
     if ($entity instanceof SKUInterface) {
-      $entity = alshaya_acm_product_get_display_node($entity);
+      $entity = $this->getDisplayNode($entity);
     }
     if (($entity instanceof NodeInterface) && $entity->bundle() === 'acq_product' && ($term_list = $entity->get('field_category')->getValue())) {
       if ($inner_term = $this->pdpBreadcrumbBuiler->termTreeGroup($term_list)) {
