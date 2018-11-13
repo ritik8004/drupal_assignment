@@ -219,7 +219,7 @@ XDebug debugger is enabled by default. In order to debug your code from browser,
 * wait until machine is successfully re-provisioned
 * make sure your PhpStorm is listening to php debug connections
 * vagrant ssh to your guest
-* cd /var/www/nesi8/docroot (your document root on guest)
+* cd /var/www/alshaya/docroot (your document root on guest)
 * Prefix PHP_IDE_CONFIG="serverName=<server_name>" XDEBUG_CONFIG="remote_host=10.0.2.2" before the command you wish to debug e.g.:
 
 PHP_IDE_CONFIG="serverName=local.alshaya-mckw.com" XDEBUG_CONFIG="remote_host=10.0.2.2" vendor/drush/drush/drush -l local.alshaya-mckw.com status
