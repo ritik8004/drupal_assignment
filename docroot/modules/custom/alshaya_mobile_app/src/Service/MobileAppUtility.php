@@ -495,7 +495,7 @@ class MobileAppUtility {
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
-        'description'  => $term->description__value,
+        'description'  => !empty($term->description__value) ? $term->description__value : '',
         'path' => $term_url->getGeneratedUrl(),
         'deeplink' => $this->mobileAppUtility->getDeepLink($term),
         'include_in_menu' => (bool) $term->include_in_menu,
