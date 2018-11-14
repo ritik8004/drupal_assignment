@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Utilty Class.
@@ -120,6 +121,13 @@ class MobileAppUtility {
   protected $fileStorage;
 
   /**
+   * The acq_commerce.currency config object.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  protected $currencyConfig;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -142,6 +150,8 @@ class MobileAppUtility {
    *   Module handler.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
    *   Product category tree.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
   public function __construct(
     CacheBackendInterface $cache,
@@ -153,7 +163,8 @@ class MobileAppUtility {
     SkuManager $sku_manager,
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
-    ProductCategoryTreeInterface $product_category_tree
+    ProductCategoryTreeInterface $product_category_tree,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
@@ -167,6 +178,7 @@ class MobileAppUtility {
     $this->productCategoryTree = $product_category_tree;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
+    $this->currencyConfig = $this->config_factory->get('acq_commerce.currency');
   }
 
   /**
@@ -687,8 +699,8 @@ class MobileAppUtility {
       'title' => $sku->label(),
       'sku' => $sku->getSku(),
       'deeplink' => $this->getDeepLink($sku),
-      'original_price' => $prices['price'],
-      'final_price' => $prices['final_price'],
+      'original_price' => $this->formatPriceDisplay($prices['price']),
+      'final_price' => $this->formatPriceDisplay($prices['final_price']),
       'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku),
       'promo' => $promotions,
       'medias' => $images,
@@ -745,6 +757,19 @@ class MobileAppUtility {
       $entity = $entity->getTranslation($langcode);
     }
     return $entity;
+  }
+
+  /**
+   * Return formatted price.
+   *
+   * @param float $price
+   *   The price.
+   *
+   * @return float
+   *   Return float price upto configured decimal points.
+   */
+  public function formatPriceDisplay(float $price): float {
+    return number_format($price, $this->currencyConfig->get('decimal_points'));
   }
 
 }
