@@ -181,6 +181,14 @@ Remote aliases are divided into two groups:
 
 All site aliases are defined in `drush/sites` folder.
 
+### Local setup of Behat:
+* Start Behat installation on your local by following the steps below:
+  * Create a directory, say 'alshaya_behat' [if not exist]
+  -  * Clone alshaya git repo
+  -  * cd alshaya_behat
+  -  * composer install
+  -  * npm install --prefix bin chromedriver
+
 ### Behat execution Process
 
 ### Prerequisites for behat.yml before running the scripts
