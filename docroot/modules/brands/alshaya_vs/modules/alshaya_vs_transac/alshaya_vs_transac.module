@@ -216,13 +216,14 @@ function alshaya_vs_transac_acq_sku_view(array &$build, EntityInterface $sku_ent
 /**
  * Get product description from SKU.
  */
-function _alshaya_vs_transac_get_product_description($sku_entity) {
+function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
   $return = [];
   $description_value = '';
   $short_desc = [];
-  $read_more_link = TRUE;
+  $read_more_link = FALSE;
 
-  if ($body = $sku_entity->get('attr_description')->getValue()) {
+  $body = $sku_entity->get('attr_description')->getValue();
+  if (is_array($body) && !empty($body[0]['value'])) {
     $description_value = $body[0]['value'];
     $short_desc['label'] = [
       '#markup' => t('Short Description'),
@@ -236,7 +237,16 @@ function _alshaya_vs_transac_get_product_description($sku_entity) {
     $read_more_link = isset($desc['read_more']);
   }
   else {
-    $read_more_link = FALSE;
+    // Try once with parent if available.
+    if ($sku_entity->bundle() == 'simple') {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku_entity->getPluginInstance();
+      $parent = $plugin->getParentSku($sku_entity);
+
+      if ($parent instanceof SKUInterface) {
+        return _alshaya_vs_transac_get_product_description($parent);
+      }
+    }
   }
 
   $description['value'] = [
