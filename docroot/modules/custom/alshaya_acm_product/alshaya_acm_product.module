@@ -545,7 +545,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, 'pdp');
           $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child);
         }
-
+        
         $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 

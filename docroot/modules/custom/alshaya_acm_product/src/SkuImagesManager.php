@@ -898,7 +898,7 @@ class SkuImagesManager {
             '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
               'library' => [
-                'alshaya_product_zoom/product.cloud_zoom',
+                'alshaya_product_zoom/magazine_gallery',
               ],
             ],
           ];
