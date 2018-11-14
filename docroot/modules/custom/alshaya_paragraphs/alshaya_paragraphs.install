@@ -32,7 +32,6 @@ function alshaya_paragraphs_update_8124() {
     'field.field.paragraph.1_row_3_col_text.field_promo_block',
     'field.field.paragraph.banner.field_promo_block_button',
     'field.field.paragraph.promo_block.field_promo_block_button',
-    'field.field.paragraph.banner.field_mobile_banner_image',
   ];
 
   alshaya_config_install_configs($configs, 'alshaya_paragraphs');

@@ -3,12 +3,20 @@
 namespace Drupal\alshaya_paragraphs\Commands;
 
 use Drupal\alshaya_paragraphs\Helper\MigrateSymmetricToAsymmetric;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;
 
 /**
  * AlshayaParagraphsCommands class.
  */
 class AlshayaParagraphsCommands extends DrushCommands {
+
+  /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * Migration Utility.
@@ -20,10 +28,14 @@ class AlshayaParagraphsCommands extends DrushCommands {
   /**
    * AlshayaParagraphsCommands constructor.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    * @param \Drupal\alshaya_paragraphs\Helper\MigrateSymmetricToAsymmetric $migrate_utility
    *   Migration utility.
    */
-  public function __construct(MigrateSymmetricToAsymmetric $migrate_utility) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              MigrateSymmetricToAsymmetric $migrate_utility) {
+    $this->entityTypeManager = $entity_type_manager;
     $this->migrateUtility = $migrate_utility;
   }
 
@@ -37,38 +49,12 @@ class AlshayaParagraphsCommands extends DrushCommands {
    * @aliases migrate-paragraphs
    */
   public function migrateParagraphs() {
-    $fields = [
-      'node' => [
-        'field_banner',
-        'field_delivery_banner',
-        'field_promo_banner_full_width',
-        'field_promo_blocks',
-        'field_related_info',
-        'field_slider',
-      ],
-      'taxonomy_term' => [
-        'field_main_menu_highlight',
-      ],
-      'block_content' => [
-        'field_paragraph_content',
-      ],
-      'paragraph' => [
-        'field_1_row_2_col_1',
-        'field_1_row_2_col_2',
-        'field_1_row_2_col',
-        'field_1_row_promo_block',
-        'field_1st_col_promo_block',
-        'field_2nd_col_promo_block',
-        'field_mobile_banner_image',
-        'field_promo_block_button',
-        'field_promo_block',
-      ],
-    ];
+    $nodes = $this->entityTypeManager->getStorage('node')->loadByProperties([
+      'type' => 'advanced_page',
+    ]);
 
-    foreach ($fields as $entity_type => $entity_fields) {
-      foreach ($entity_fields as $entity_field) {
-        $this->migrateUtility->migrateContent($entity_type, $entity_field);
-      }
+    foreach ($nodes as $node) {
+      $this->migrateUtility->migrateEntity($node);
     }
   }
 
