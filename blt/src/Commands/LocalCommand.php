@@ -245,7 +245,7 @@ class LocalCommand extends BltTasks {
     static $path;
 
     if (!isset($path)) {
-      $path = '/tmp';
+      $path = '/var/www/alshaya/files-private/cloud-dumps';
 
       if (!file_exists($path)) {
         $this->say('Creating temp directory at: ' . $path);
