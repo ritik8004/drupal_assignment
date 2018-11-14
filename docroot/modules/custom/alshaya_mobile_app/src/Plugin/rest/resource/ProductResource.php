@@ -218,8 +218,8 @@ class ProductResource extends ResourceBase {
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
     $prices = $this->skuManager->getMinPrices($sku);
-    $data['original_price'] = (float) $prices['price'];
-    $data['final_price'] = (float) $prices['final_price'];
+    $data['original_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['price']);
+    $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
     $data['stock'] = (int) $sku->get('stock')->getString();
 
     $linked_types = [

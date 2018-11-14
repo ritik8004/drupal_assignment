@@ -431,8 +431,3 @@ $conductors = [
     'api_version' => 'v2',
   ],
 ];
-
-$conductor_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/conductor.php';
-if (file_exists($conductor_settings_file)) {
-  require_once $conductor_settings_file;
-}

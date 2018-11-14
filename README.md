@@ -195,3 +195,38 @@ All site aliases are defined in `drush/sites` folder.
   * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
   * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
   * In order to share the reports, compress the html directory immediately after every run.
+
+### Debugging with xdebug
+
+A recommended IDE for debugging is PhpStorm. However, if you use another IDE, you should be able to apply the guidelines below with some tweaks.
+
+#### Browser-based debugging
+
+XDebug debugger is enabled by default. In order to debug your code from browser, do following:
+* In Google Chrome browser, install “Xdebug helper” extension
+* In PhpStorm, select from menu “Run/Start listening for PHP debug connections”
+* Set breakpoint somewhere in the code
+* Refresh the page
+* Debugger should stop at the breakpoint you set
+
+#### CLI Debugging
+
+**CLI debugging is disabled by default.** The reason is significant performance degradation of all php scripts (incl. composer, drush, blt...) inside of vm when xdebug is enabled. However, CLI debugging is important, especially for debugging behat tests or unit tests. To enable CLI debugging, do following:
+
+* Make sure you firstly invoked debugger from browser at least once.
+* In File/Preferences of phpStorm, section Languages & Frameworks / PHP / Servers, write down server name the debugger invoked in previous step (e.g. "local.alshaya-mckw.com")
+* Change variable php_xdebug_cli_disable to "no" in box/config.yml and run vagrant provision. 
+* wait until machine is successfully re-provisioned
+* make sure your PhpStorm is listening to php debug connections
+* vagrant ssh to your guest
+* cd /var/www/alshaya/docroot (your document root on guest)
+* Prefix PHP_IDE_CONFIG="serverName=<server_name>" XDEBUG_CONFIG="remote_host=10.0.2.2" before the command you wish to debug e.g.:
+
+PHP_IDE_CONFIG="serverName=local.alshaya-mckw.com" XDEBUG_CONFIG="remote_host=10.0.2.2" vendor/drush/drush/drush -l local.alshaya-mckw.com status
+
+Specific notes for debugging drush commands:
+* Use full path to drush in vendor folder (vendor/drush/drush/drush) instead of drush command itself (it runs launcher which is typically outside of codebase)
+* You will eventually need to fix path mappings for the commands like drush and point them to your Alshaya codebase in vendor folder
+* Do NOT use drush aliases like @mckw.local for debugging, use always the -l parameter instead (see above for a valid example)
+
+After finishing CLI debuging it's recommended to disable xdebug back again, to increase performance. To debug CLI commands like Drush, Drupal console or PhpUnit, follow these steps:
