@@ -33,7 +33,6 @@
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
           $(this).addClass('clicked');
-          console.log(e);
           desktopDialog.show();
           desktopDialog.showModal();
         });
