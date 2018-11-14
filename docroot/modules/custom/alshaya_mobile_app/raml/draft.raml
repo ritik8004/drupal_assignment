@@ -1502,6 +1502,143 @@ schemas:
             body:
               application/json:
                 schema: GetProduct
+                example: |
+                  {
+                    "id": 301,
+                    "sku": "0189691",
+                    "title": "Sweatshirt",
+                    "original_price": "5.90",
+                    "final_price": "5.90",
+                    "stock": 0,
+                    "linked": [
+                      {
+                        "link_type": "related",
+                        "skus": [],
+                      },
+                      {
+                        "link_type": "upsell",
+                        "skus": [],
+                      },
+                      {
+                        "link_type": "crosssell",
+                        "skus": [
+                          {
+                            "id": 66,
+                            "title": "Suit trousers Slim fit_test",
+                            "sku": "0391750",
+                            "deeplink": "/rest/v1/product/0391750",
+                            "original_price": "8.00",
+                            "final_price": "8.00",
+                            "in_stock": true,
+                            "promo": [],
+                            "medias": {
+                              "images": [],
+                              "videos": []
+                            },
+                            "labels": [],
+                            "swatches": [
+                              {
+                                "key": 356,
+                                "color_code": "#494C4F"
+                              }
+                            ]
+                          },
+                        ]
+                      }
+                    ],
+                    "media": [
+                      {
+                        "context": "detail",
+                        "media": {
+                          "images": [
+                            {
+                              "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/c4/59/c45947c35dd906682817ca8f9615a9f3e6f8178b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B2%5D",
+                              "image_type": "DescriptiveStillLife"
+                            }
+                          ],
+                          "videos": []
+                        }
+                      },
+                      {
+                        "context": "listing",
+                        "media": {
+                          "images": [
+                            {
+                              "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/c4/59/c45947c35dd906682817ca8f9615a9f3e6f8178b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B2%5D",
+                              "image_type": "DescriptiveStillLife"
+                            }
+                          ],
+                          "videos": []
+                        }
+                      },
+                      {
+                        "context": "teaser",
+                        "media": {
+                          "images": [
+                            {
+                              "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/c4/59/c45947c35dd906682817ca8f9615a9f3e6f8178b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B2%5D",
+                              "image_type": "DescriptiveStillLife"
+                            }
+                          ],
+                          "videos": []
+                        }
+                      }
+                    ],
+                    "labels":[],
+                    "attributes":[
+                      {
+                        "value": "Long-sleeved top in sweatshirt fabric with ribbing at the cuffs and hem.",
+                        "key": "description"
+                      },
+                      {
+                        "value": "CAROLINA SWEATER (1)",
+                        "key": "short_description"
+                      },
+                      {
+                        "value": "DIVIDED",
+                        "key": "concept"
+                      },
+                      {
+                        "value": "machinewash40",
+                        "key": "washing_instructions"
+                      },
+                      {
+                        "value": "HEN-YG-D-D15-1643",
+                        "key": "aims_department"
+                      },
+                      {
+                        "value": "HEN",
+                        "key": "product_brand"
+                      },
+                      {
+                        "value": "1",
+                        "key": "ship_to_store"
+                      },
+                      {
+                        "value": "1",
+                        "key": "reserve_and_collect"
+                      },
+                      {
+                        "value": "1",
+                        "key": "is_buyable"
+                      }
+                    ],
+                    "promotions":[],
+                    "configurable_values":[],
+                    "swatch_data": {
+                      "attribute_code": "article_castor_id",
+                      "swatches": [
+                        {
+                          "display_value": "#A5A5A5",
+                          "display_label": "Grey marl",
+                          "swatch_type": "RGB",
+                          "value": 1052
+                        }
+                      ]
+                    },
+                    "cart_combinations": {},
+                    "variants": []
+                  }
   /knet:
     /init:
       /{cart_id}:
