@@ -181,20 +181,39 @@ Remote aliases are divided into two groups:
 
 All site aliases are defined in `drush/sites` folder.
 
-### Local setup of Behat:
-* Start Behat installation on your local by following the steps below:
-  * Create a directory, say 'alshaya_behat' [if not exist]
-  -  * Clone alshaya git repo
-  -  * cd alshaya_behat
-  -  * composer install
-  -  * npm install --prefix bin chromedriver
-  -  * (In a separate terminal window) java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
-  -  * bin/behat features/hmkw/manual/basket.feature --profile=(hmuat,hmqa,mckwqa,mckwuat)
+### Behat execution Process
+
+### Prerequisites for behat.yml before running the scripts
+* Ensure the base url is correct for the profile you are using.
+* Ensure the config product url is valid and is in stock.
+
+Scripts location:
+QA/UAT: sitename/common folder has all scripts that can be executed on QA/UAT envs.
+Production: Scripts starting from Sanity_** are the only ones that should be executed on production.
+
+Execution:
+
+* Navigate to alshaya_behat folder in terminal window
+* Initialise selenium by executing below command
+* (In a separate terminal window) java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
+* (In a separate terminal window) navigate to alshaya_behat folder
+* bin/behat features/mothercare/common/checkout.feature --profile=mcuat
+* The above command will run the checkout.feature script for MC and the profile used should be according to environment.
+* Another way to run: Use tags e.g
+bin/behat --@tagname --profile=mcuat
+
+
     
 ### How to interpret the Behat reports:
   * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
   * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
   * In order to share the reports, compress the html directory immediately after every run.
+
+### Test Results analysis:
+* If any scenarios fail, try re-running the script once to discard any network issues.
+* If they still fail, check the scenarios if they are failing due to data issue (some text assertions changed on the site)
+* Check by running the scenario manually if it passes
+* Check by running the scenario individually to see if it passes (use tags)
 
 ### Debugging with xdebug
 
