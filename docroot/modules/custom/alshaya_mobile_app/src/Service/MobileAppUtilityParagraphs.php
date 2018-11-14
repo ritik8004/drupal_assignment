@@ -720,7 +720,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function convertRelativeUrlsToAbsolute(string $string): string {
     global $base_url;
-    return preg_replace('#(href|src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }
