@@ -26,6 +26,27 @@ function alshaya_acm_update_dependencies() {
 }
 
 /**
+ * Implements hook_update_N().
+ *
+ * Correct price info in local.
+ */
+function alshaya_acm_update_8010() {
+  $db = \Drupal::database();
+
+  $query = $db->query('select en.sku FROM (SELECT sku, price, special_price, final_price FROM acq_sku_field_data WHERE langcode = "en") AS en LEFT JOIN (SELECT sku, price, special_price, final_price FROM acq_sku_field_data WHERE langcode = "ar") AS ar ON en.sku = ar.sku WHERE en.price <> ar.price OR en.special_price <> ar.special_price OR en.final_price <> ar.final_price');
+  $result = $query->fetchAllAssoc('sku');
+
+  foreach ($result as $row) {
+    $sku = SKU::loadFromSku($row->sku, 'en');
+    $translation = $sku->getTranslation('ar');
+    $translation->price = $sku->price;
+    $translation->special_price = $sku->special_price;
+    $translation->final_price = $sku->final_price;
+    $translation->save();
+  }
+}
+
+/**
  * Implements hook_update().
  *
  * Enable consumers module and configure client.
