@@ -313,12 +313,12 @@ $conductors = [
     'hmac_secret' => 'ZjM3YzY3NWMtYTU3MC00',
     'api_version' => 'v2',
   ],
-  'bbwae_prod' => [
+  'bbwae_prod_v1' => [
     'url' => 'https://alshaya-bbwae-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '0272644d5be84efb9dd246478367e947',
     'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
   ],
-  'bbwae_prod_v2' => [
+  'bbwae_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '84d4fe2e1c144f22a78f855a32acbcd9',
     'hmac_secret' => 'NzJmMDMyN2ItMzRhMC00',
@@ -431,8 +431,3 @@ $conductors = [
     'api_version' => 'v2',
   ],
 ];
-
-$conductor_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/conductor.php';
-if (file_exists($conductor_settings_file)) {
-  require_once $conductor_settings_file;
-}
