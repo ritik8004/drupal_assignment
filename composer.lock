@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acac583bb8567f8c2008b8d16d87171b",
+    "content-hash": "865f8d7a0d8bd0927fa1b96dea96a90e",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -23,12 +23,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "b35c657b87b30c76ee24b5968ed48ef20392ac14"
+                "reference": "ab2b1511d8e3a32e7d546cf71b25a18a45f06d33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/b35c657b87b30c76ee24b5968ed48ef20392ac14",
-                "reference": "b35c657b87b30c76ee24b5968ed48ef20392ac14",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/ab2b1511d8e3a32e7d546cf71b25a18a45f06d33",
+                "reference": "ab2b1511d8e3a32e7d546cf71b25a18a45f06d33",
                 "shasum": ""
             },
             "require": {
@@ -48,9 +48,6 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
-                },
-                "patches_applied": {
-                    "Fixing acsf restore & dump commands for drush 9.": "https://patch-diff.githubusercontent.com/raw/acquia/acsf-tools/pull/34.patch"
                 }
             },
             "autoload": {
@@ -76,7 +73,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-11-09T16:24:40+00:00"
+            "time": "2018-11-15T11:44:57+00:00"
         },
         {
             "name": "acquia/blt",
