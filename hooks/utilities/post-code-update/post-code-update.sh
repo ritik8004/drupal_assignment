@@ -45,7 +45,7 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
 
   ## Restore database dumps before applying database updates.
   echo "Change in install file detected, restoring database before executing updb."
-  drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip --no-prompt
+  drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip -y
 
   ## Apply the database updates to all sites.
   echo "Executing updb."
