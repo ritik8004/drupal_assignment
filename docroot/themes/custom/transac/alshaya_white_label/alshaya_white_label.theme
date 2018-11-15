@@ -681,12 +681,8 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
       }
     }
   }
-
-<<<<<<< HEAD
+  
   if ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full' ) {
-=======
-  if ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
->>>>>>> f9ba1a6407c532c29e444f85240e32530613cf87
     if ($settings->get('pdp_layout') == 'magazine') {
       $suggestions[] = 'node__acq_product__full_magazine';
     }
