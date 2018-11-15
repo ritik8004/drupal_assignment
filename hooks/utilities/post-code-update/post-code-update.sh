@@ -56,7 +56,6 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   drush8 acsf-tools-ml updb 2> /tmp/drush_updb_$target_env.log
   output=$(cat /tmp/drush_updb_$target_env.log | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
   echo $output
-
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."

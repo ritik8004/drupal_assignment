@@ -746,4 +746,25 @@ class AlshayaApiWrapper {
     return $url;
   }
 
+  /**
+   * Get selected payment method for a cart.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   *
+   * @return string
+   *   Selected payment method code.
+   */
+  public function getCartPaymentMethod(int $cart_id) {
+    $endpoint = 'carts/' . $cart_id . '/selected-payment-method';
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return '';
+    }
+
+    $response = json_decode($response, TRUE);
+    return $response['method'] ?? '';
+  }
+
 }

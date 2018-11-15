@@ -36,11 +36,42 @@ alshaya_acm_knet.error:
   options:
     _maintenance_access: TRUE
 
+alshaya_acm_knet.mobile_error:
+  path: '/knet/mobile-app-error/{state_key}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::mobileError'
+    _title: 'Error'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
 alshaya_acm_knet.failed:
   path: '/knet/failed/{state_key}'
   defaults:
     _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::failed'
     _title: 'Failed'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
+
+alshaya_acm_knet.mobile_complete:
+  path: '/knet/mobile-app-complete/{state_key}'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::mobileComplete'
+    _title: 'Final'
+  requirements:
+    _permission: 'access content'
+  options:
+    _maintenance_access: TRUE
+
+alshaya_acm_knet.mobile_final:
+  path: '/knet/mobile-app-final'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_knet\Controller\KnetController::mobileFinal'
+    _title: 'Final'
   requirements:
     _permission: 'access content'
   options:
