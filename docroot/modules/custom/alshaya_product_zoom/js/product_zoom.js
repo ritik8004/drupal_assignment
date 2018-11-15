@@ -140,7 +140,15 @@
     var slider = $(this).closest('.slick-slider');
 
     setTimeout(function () {
-      slider.find('li.slick-current a').trigger('click');
+      var currentSlide = slider.find('li.slick-current');
+      // If the new slide is video thubnail,
+      // we trigger click on slide to render video.
+      if (currentSlide.hasClass('cloudzoom__thumbnails__video')) {
+        currentSlide.trigger('click');
+      }
+      else {
+        slider.find('li.slick-current a').trigger('click');
+      }
     }, 1);
   });
 
