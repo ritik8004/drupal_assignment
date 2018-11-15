@@ -178,7 +178,7 @@ class MobileAppUtility {
     $this->productCategoryTree = $product_category_tree;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
-    $this->currencyConfig = $this->config_factory->get('acq_commerce.currency');
+    $this->currencyConfig = $config_factory->get('acq_commerce.currency');
   }
 
   /**
@@ -495,7 +495,7 @@ class MobileAppUtility {
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
-        'description'  => $term->description__value,
+        'description'  => !empty($term->description__value) ? $term->description__value : '',
         'path' => $term_url->getGeneratedUrl(),
         'deeplink' => $this->mobileAppUtility->getDeepLink($term),
         'include_in_menu' => (bool) $term->include_in_menu,
