@@ -145,3 +145,10 @@ function _alshaya_mc_get_product_description($sku_entity) {
 
   return $return;
 }
+
+/**
+ * Implements hook_acq_sku_magazine_product_description_alter().
+ */
+function alshaya_mc_acq_sku_magazine_product_description_alter($sku, $prod_description) {
+  $prod_description = _alshaya_mc_get_product_description($sku);
+}

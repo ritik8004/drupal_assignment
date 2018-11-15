@@ -23,12 +23,11 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
     ],
     'alshaya_magazine' => [
       'variables' => [
-        'mainImage' => '',
+        'description' => '',
         'thumbnails' => '',
         'pager_flag' => '',
         'properties' => '',
         'labels' => '',
-        'image_slider_position_pdp' => '',
       ],
       'template' => 'alshaya_magazine',
     ],

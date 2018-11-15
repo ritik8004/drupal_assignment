@@ -787,8 +787,18 @@ class SkuImagesManager {
 
       case 'modal-magazine':
       case 'pdp-magazine':
+        // We will use below variable for alter hooks.
+        $prod_description = [];
+        if ($body = $sku->get('attr_description')->getValue()) {
+          $prod_description['description'] = [
+            '#markup' => $body[0]['value'],
+          ];
+        }
+
+        // Alter description Since this could be different for each brand.
+        $this->moduleHandler->alter('acq_sku_magazine_product_description', $sku, $prod_description);
+
         $media = $this->getAllMedia($sku, $check_parent_child);
-        $main_image = $media['main'];
         $thumbnails = $media['thumbs'];
 
         // Fetch settings.
@@ -808,14 +818,6 @@ class SkuImagesManager {
             ->buildUrl($file_uri);
           $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
           $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-          if (empty($main_image)) {
-            $main_image = [
-              'zoomurl' => $image_zoom,
-              'mediumurl' => $image_medium,
-              'label' => $media_item['label'],
-            ];
-          }
 
           $thumbnails[] = [
             'thumburl' => $image_small,
@@ -844,24 +846,8 @@ class SkuImagesManager {
           ];
         }
 
-        // If no main image and no video, use default image.
-        if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
-          if (!empty($default_image = $this->getProductDefaultImage())) {
-            $image_zoom = ImageStyle::load($zoom_style)
-              ->buildUrl($default_image->getFileUri());
-            $image_medium = ImageStyle::load($slide_style)
-              ->buildUrl($default_image->getFileUri());
-
-            $main_image = [
-              'zoomurl' => $image_zoom,
-              'mediumurl' => $image_medium,
-              'label' => $sku->label(),
-            ];
-          }
-        }
-
-        // If either of main image or video is available.
-        if (!empty($main_image) || !empty($media['media_items']['videos'])) {
+        // If thumbnails available.
+        if (!empty($thumbnails)) {
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
@@ -885,17 +871,13 @@ class SkuImagesManager {
             '#type' => 'pdp',
           ];
 
-          // Add PDP slider position class in template.
-          $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
-
           $gallery['alshaya_magazine'] = [
             '#theme' => 'alshaya_magazine',
-            '#mainImage' => $main_image,
+            '#description' => $prod_description['description'],
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
             '#properties' => $this->getRelCloudZoom($settings),
             '#labels' => $labels,
-            '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
               'library' => [
                 'alshaya_product_zoom/magazine_gallery',
