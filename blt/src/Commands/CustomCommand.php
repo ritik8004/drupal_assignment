@@ -239,13 +239,11 @@ class CustomCommand extends BltTasks {
     $uri = "local.alshaya-$site.com";
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
-    $this->invokeCommand('local:reset-local-settings');
+
     $this->invokeCommand('local:drupal:install', [
       'uri' => $uri,
       'profile' => $profile_name,
     ]);
-
-    $this->invokeCommand('local:reset-settings-file');
 
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
@@ -290,13 +288,11 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('setup:composer:install');
     $this->invokeCommand('frontend:build');
-    $this->invokeCommand('local:reset-local-settings');
+
     $this->invokeCommand('local:drupal:install', [
       'uri' => $uri,
       'profile' => $profile_name,
     ]);
-    $this->invokeCommand('setup:toggle-modules');
-    $this->invokeCommand('local:reset-settings-file');
 
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
@@ -321,6 +317,22 @@ class CustomCommand extends BltTasks {
    *   The `drush site-install` command result.
    */
   public function localDrupalInstall($uri, $profile) {
+    // Drop existing DB before installing again, any failed install
+    // may have left some tables.
+    $drush_alias = $this->getConfigValue('drush.alias');
+    $this->taskDrush()
+      ->stopOnFail()
+      ->alias($drush_alias)
+      ->drush('sql-drop')
+      ->verbose(TRUE)
+      ->uri($uri)
+      ->run();
+
+    $this->invokeCommand('local:reset-local-settings');
+
+    // Restart memcache to avoid issues because of old configs.
+    $this->_exec('sudo service memcached restart');
+
     /** @var \Acquia\Blt\Robo\Tasks\DrushTask $task */
     $task = $this->taskDrush()
       ->drush("site-install")
@@ -347,6 +359,11 @@ class CustomCommand extends BltTasks {
     if ($result->wasSuccessful()) {
       $this->getConfig()->set('state.drupal.installed', TRUE);
     }
+
+    $this->invokeCommand('local:reset-settings-file');
+
+    // Avoid file not writable issues after Drupal install.
+    $this->_exec('chmod -R 777 /var/www/alshaya/docroot/sites/g/files');
 
     return $result;
   }

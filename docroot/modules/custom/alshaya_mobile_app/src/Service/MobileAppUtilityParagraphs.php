@@ -19,6 +19,7 @@ use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -98,6 +99,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Module handler.
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
    *   Product category tree.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -113,9 +116,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     SkuManager $sku_manager,
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
-    ProductCategoryTreeInterface $product_category_tree
+    ProductCategoryTreeInterface $product_category_tree,
+    ConfigFactoryInterface $config_factory
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
@@ -368,7 +372,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       if (!empty($entity->get($field)->first())) {
         $data = array_merge(
           ['type' => $type],
-          ['item' => $entity->get($field)->first()->getValue()['value']]
+          ['item' => $this->convertRelativeUrlsToAbsolute($entity->get($field)->first()->getValue()['value'])]
         );
       }
     }
@@ -634,7 +638,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $term = $this->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->getAllCategories($category_id, $this->currentLanguage, FALSE, TRUE);
+      $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -696,13 +700,27 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         'label' => $item['settings']['label'],
         'label_display' => (bool) $item['settings']['label_display'],
         'body' => !empty($block->get('body')->first())
-        ? $block->get('body')->first()->getValue()['value']
+        ? $this->convertRelativeUrlsToAbsolute($block->get('body')->first()->getValue()['value'])
         : '',
         'image' => $this->getImages($block, 'field_image'),
       ];
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Convert relative url img tag in string with absolute url.
+   *
+   * @param string $string
+   *   The string containing html tags.
+   *
+   * @return string
+   *   Return the complete url string with domain.
+   */
+  protected function convertRelativeUrlsToAbsolute(string $string): string {
+    global $base_url;
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }
