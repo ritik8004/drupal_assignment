@@ -176,7 +176,7 @@ function alshaya_white_label_preprocess_page(&$variables) {
 
       $plp_type = $term->get('field_plp_layout')->value;
       if ($plp_type == ProductCategoryTree::PLP_LAYOUT_1) {
-        $variables['campaign-plp-style-1'] = 1;
+        $variables['plp_layout'] = ProductCategoryTree::PLP_LAYOUT_1;
         // Load common library for campaign-plp-style-1.
         $variables['#attached']['library'][] = 'alshaya_white_label/campaign-plp-style-1-common';
 

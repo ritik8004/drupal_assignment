@@ -9,6 +9,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Implements hook_update_N().
@@ -19,7 +20,7 @@ function alshaya_acm_product_category_update_8024() {
   // Update values of existing taxonomy terms.
   \Drupal::database()->update('taxonomy_term__field_plp_layout')
     ->fields([
-      'field_plp_layout_value' => 'campaign-plp-style-1',
+      'field_plp_layout_value' => ProductCategoryTree::PLP_LAYOUT_1,
     ])
     ->condition('field_plp_layout_value', 'moschino')
     ->execute();
