@@ -1,386 +1,386 @@
 {
-    "name": "acquia/blt-project",
-    "description": "Project template for Drupal 8 sites built with BLT.",
-    "type": "project",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "HubSpot/pace": "^1.0",
-        "acquia/acsf-tools": "dev-9.x-dev",
-        "acquia/blt": "^9.0.0",
-        "acquia/http-hmac-php": "~3.2",
-        "acquia/lightning": "^3.0.0",
-        "charliekassel/array-diff": "^0.0.2",
-        "ckeditor/font": "^4.9",
-        "claviska/jquery-minicolors": "^2.2",
-        "drupal/acquia_connector": "^1.9.0",
-        "drupal/acquia_purge": "^1.0@beta",
-        "drupal/acsf": "^2.47.0",
-        "drupal/address": "^1.0-rc4",
-        "drupal/adminimal_theme": "^1.3",
-        "drupal/allowed_formats": "^1.1",
-        "drupal/amp": "^1.0",
-        "drupal/amptheme": "^1.0",
-        "drupal/autologout": "^1.0",
-        "drupal/back_to_top": "^1.0@beta",
-        "drupal/better_exposed_filters": "3.x-dev",
-        "drupal/block_content_machine_name": "^1.5",
-        "drupal/block_field": "^1.0@alpha",
-        "drupal/captcha": "^1.0@beta",
-        "drupal/change_pwd_page": "^1.0@beta",
-        "drupal/ckeditor_font": "^1.0",
-        "drupal/clientside_validation": "^1.0-rc4",
-        "drupal/components": "^1.0",
-        "drupal/datalayer": "^1.0@beta",
-        "drupal/default_content": "^1.0@alpha",
-        "drupal/email_registration": "^1.0",
-        "drupal/facets": "1.0-alpha11",
-        "drupal/field_group": "^3.0@beta",
-        "drupal/form_options_attributes": "^1.0",
-        "drupal/geolocation": "^1.10",
-        "drupal/google_tag": "1.x-dev",
-        "drupal/imagemagick": "^2.3",
-        "drupal/jquery_minicolors": "^1.2",
-        "drupal/jsonapi": "^1.18",
-        "drupal/kashmir": "^1.1",
-        "drupal/key_value_field": "^1.0-beta1",
-        "drupal/logs_http": "^1.0",
-        "drupal/mailsystem": "^4.1",
-        "drupal/media_entity": "^1.8",
-        "drupal/media_entity_actions": "1.x-dev",
-        "drupal/menu_admin_per_menu": "^1.0@RC",
-        "drupal/menu_link_attributes": "^1.0@beta",
-        "drupal/menu_link_modal": "^1.3",
-        "drupal/metatag": "^1.5",
-        "drupal/migrate_plus": "^2.0",
-        "drupal/migrate_source_csv": "^2.0",
-        "drupal/migrate_tools": "^2.0",
-        "drupal/mimemail": "1.x-dev",
-        "drupal/mobile_number": "^1.0@alpha",
-        "drupal/paragraphs": "^1.1",
-        "drupal/password_policy": "^3.0",
-        "drupal/pcb": "^1.0",
-        "drupal/profile": "^1.0@alpha",
-        "drupal/r4032login": "1.x-dev",
-        "drupal/recaptcha": "^2.3",
-        "drupal/redirect": "^1.0@alpha",
-        "drupal/restrict_role_login_by_ip": "^1.0",
-        "drupal/restui": "^1.13",
-        "drupal/robotstxt": "^1.1",
-        "drupal/role_delegation": "^1.0@alpha",
-        "drupal/scheduled_updates": "^1.0@alpha",
-        "drupal/search_api_autocomplete": "^1.0",
-        "drupal/search_api_solr": "^1.0-rc3",
-        "drupal/search_api_solr_multilingual": "^1.0@beta",
-        "drupal/search_api_spellcheck": "dev-8.x-1.x",
-        "drupal/sharethis": "^2.0@beta",
-        "drupal/simple_oauth": "^3.0",
-        "drupal/simple_sitemap": "2.x-dev",
-        "drupal/taxonomy_access_fix": "^2.1",
-        "drupal/taxonomy_term_depth": "^2.0",
-        "drupal/twig_tweak": "^1.8",
-        "drupal/user_registrationpassword": "^1.0",
-        "drupal/video_embed_field": "2.0.0-alpha2",
-        "drupal/views_ajax_get": "1.x-dev#3055c44",
-        "drupal/views_block_filter_block": "^1.0@beta",
-        "drupal/views_field_view": "1.0-beta2",
-        "drupal/viewsreference": "^1.0",
-        "drupal/webform": "^5.0.0-rc1",
-        "drush/drush": "^9.0.0",
-        "hgoebl/mobile-detect": "^1.4.2",
-        "jqueryvalidate/jqueryvalidate": "~1.0",
-        "mobiledetect/mobiledetectlib": "^2.8",
-        "springimport/magento2-api-v1": "^1.0",
-        "drupal/link_attributes": "^1.5"
+  "name": "acquia/blt-project",
+  "description": "Project template for Drupal 8 sites built with BLT.",
+  "type": "project",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "HubSpot/pace": "^1.0",
+    "acquia/acsf-tools": "dev-9.x-dev",
+    "acquia/blt": "^9.0.0",
+    "acquia/http-hmac-php": "~3.2",
+    "acquia/lightning": "^3.0.0",
+    "charliekassel/array-diff": "^0.0.2",
+    "ckeditor/font": "^4.9",
+    "claviska/jquery-minicolors": "^2.2",
+    "drupal/acquia_connector": "^1.9.0",
+    "drupal/acquia_purge": "^1.0@beta",
+    "drupal/acsf": "^2.47.0",
+    "drupal/address": "^1.0-rc4",
+    "drupal/adminimal_theme": "^1.3",
+    "drupal/allowed_formats": "^1.1",
+    "drupal/amp": "^1.0",
+    "drupal/amptheme": "^1.0",
+    "drupal/autologout": "^1.0",
+    "drupal/back_to_top": "^1.0@beta",
+    "drupal/better_exposed_filters": "3.x-dev",
+    "drupal/block_content_machine_name": "^1.5",
+    "drupal/block_field": "^1.0@alpha",
+    "drupal/captcha": "^1.0@beta",
+    "drupal/change_pwd_page": "^1.0@beta",
+    "drupal/ckeditor_font": "^1.0",
+    "drupal/clientside_validation": "^1.0-rc4",
+    "drupal/components": "^1.0",
+    "drupal/datalayer": "^1.0@beta",
+    "drupal/default_content": "^1.0@alpha",
+    "drupal/email_registration": "^1.0",
+    "drupal/facets": "1.0-alpha11",
+    "drupal/field_group": "^3.0@beta",
+    "drupal/form_options_attributes": "^1.0",
+    "drupal/geolocation": "^1.10",
+    "drupal/google_tag": "1.x-dev",
+    "drupal/imagemagick": "^2.3",
+    "drupal/jquery_minicolors": "^1.2",
+    "drupal/jsonapi": "^1.18",
+    "drupal/kashmir": "^1.1",
+    "drupal/key_value_field": "^1.0-beta1",
+    "drupal/logs_http": "^1.0",
+    "drupal/mailsystem": "^4.1",
+    "drupal/media_entity": "^1.8",
+    "drupal/media_entity_actions": "1.x-dev",
+    "drupal/menu_admin_per_menu": "^1.0@RC",
+    "drupal/menu_link_attributes": "^1.0@beta",
+    "drupal/menu_link_modal": "^1.3",
+    "drupal/metatag": "^1.5",
+    "drupal/migrate_plus": "^2.0",
+    "drupal/migrate_source_csv": "^2.0",
+    "drupal/migrate_tools": "^2.0",
+    "drupal/mimemail": "1.x-dev",
+    "drupal/mobile_number": "^1.0@alpha",
+    "drupal/paragraphs": "^1.1",
+    "drupal/password_policy": "^3.0",
+    "drupal/pcb": "^1.0",
+    "drupal/profile": "^1.0@alpha",
+    "drupal/r4032login": "1.x-dev",
+    "drupal/recaptcha": "^2.3",
+    "drupal/redirect": "^1.0@alpha",
+    "drupal/restrict_role_login_by_ip": "^1.0",
+    "drupal/restui": "^1.13",
+    "drupal/robotstxt": "^1.1",
+    "drupal/role_delegation": "^1.0@alpha",
+    "drupal/scheduled_updates": "^1.0@alpha",
+    "drupal/search_api_autocomplete": "^1.0",
+    "drupal/search_api_solr": "^1.0-rc3",
+    "drupal/search_api_solr_multilingual": "^1.0@beta",
+    "drupal/search_api_spellcheck": "dev-8.x-1.x",
+    "drupal/sharethis": "^2.0@beta",
+    "drupal/simple_oauth": "^3.0",
+    "drupal/simple_sitemap": "2.x-dev",
+    "drupal/taxonomy_access_fix": "^2.1",
+    "drupal/taxonomy_term_depth": "^2.0",
+    "drupal/twig_tweak": "^1.8",
+    "drupal/user_registrationpassword": "^1.0",
+    "drupal/video_embed_field": "2.0.0-alpha2",
+    "drupal/views_ajax_get": "1.x-dev#3055c44",
+    "drupal/views_block_filter_block": "^1.0@beta",
+    "drupal/views_field_view": "1.0-beta2",
+    "drupal/viewsreference": "^1.0",
+    "drupal/webform": "^5.0.0-rc1",
+    "drush/drush": "^9.0.0",
+    "hgoebl/mobile-detect": "^1.4.2",
+    "jqueryvalidate/jqueryvalidate": "~1.0",
+    "mobiledetect/mobiledetectlib": "^2.8",
+    "springimport/magento2-api-v1": "^1.0",
+    "drupal/link_attributes": "^1.5"
+  },
+  "require-dev": {
+    "drupal/devel": "^1.0.0-alpha1",
+    "jakoch/phantomjs-installer": "^2.1.1-p07",
+    "drupal/stage_file_proxy": "^1.0@alpha",
+    "geerlingguy/drupal-vm": "^4.9",
+    "drupal/console": "^1.8"
+  },
+  "repositories": {
+    "drupal": {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
     },
-    "require-dev": {
-        "drupal/devel": "^1.0.0-alpha1",
-        "jakoch/phantomjs-installer": "^2.1.1-p07",
-        "drupal/stage_file_proxy": "^1.0@alpha",
-        "geerlingguy/drupal-vm": "^4.9",
-        "drupal/console": "^1.8"
-    },
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
-        },
-        "jqueryvalidate": {
-            "type": "package",
-            "package": {
-                "name": "jqueryvalidate/jqueryvalidate",
-                "version": "1.17.0",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        "jquery-minicolors": {
-            "type": "package",
-            "package": {
-                "name": "claviska/jquery-minicolors",
-                "version": "2.2.6",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        "nuvoleweb": {
-            "type": "git",
-            "url": "https://github.com/nuvoleweb/search_api_spellcheck.git"
-        },
-        "asset-packagist": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "mobile-detect": {
-            "type": "package",
-            "package": {
-                "name": "hgoebl/mobile-detect",
-                "version": "1.4.2",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        "ckeditor_font": {
-            "type": "package",
-            "package": {
-                "name": "ckeditor/font",
-                "version": "4.9.2",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
-                    "type": "zip"
-                }
-            }
-        },
-        "pace": {
-            "type": "package",
-            "package": {
-                "name": "HubSpot/pace",
-                "version": "1.0.0",
-                "type": "drupal-library",
-                "dist": {
-                    "url": "https://github.com/HubSpot/pace/archive/master.zip",
-                    "type": "zip"
-                }
-            }
+    "jqueryvalidate": {
+      "type": "package",
+      "package": {
+        "name": "jqueryvalidate/jqueryvalidate",
+        "version": "1.17.0",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
+          "type": "zip"
         }
+      }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Drupal\\Tests\\PHPUnit\\": "tests/phpunit/src/"
+    "jquery-minicolors": {
+      "type": "package",
+      "package": {
+        "name": "claviska/jquery-minicolors",
+        "version": "2.2.6",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
+          "type": "zip"
         }
+      }
     },
-    "extra": {
-        "blt": {
-            "update": true
-        },
-        "enable-patching": true,
-        "patches": {
-            "drupal/webform": {
-                "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
-            },
-            "drupal/search_api_solr": {
-                "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
-            },
-            "drupal/search_api_solr_multilingual": {
-                "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
-                "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
-                "Disable field type check on Acquia Search": "patches/search_api_solr_multilingual--disable-field-type-check.patch"
-            },
-            "drupal/search_api_spellcheck": {
-                "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
-            },
-            "drupal/acquia_connector": {
-                "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
-                "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch",
-                "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
-            },
-            "drupal/search_api": {
-                "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
-            },
-            "drupal/facets": {
-                "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
-                "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
-                "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
-                "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
-                "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
-                "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
-                "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
-                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch"
-            },
-            "drupal/better_exposed_filter": {
-                "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
-            },
-            "drupal/core": {
-                "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
-                "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
-                "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2018-03-14/views-render_caching_ajax_requests-2500313-44-85x.patch",
-                "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
-                "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
-                "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
-                "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
-                "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
-                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch"
-            },
-            "drupal/mobile_number": {
-                "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
-                "Fix more notices": "patches/mobile_number/2978729-custom.patch",
-                "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
-            },
-            "drupal/redirect": {
-                "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
-            },
-            "drupal/simple_sitemap": {
-                "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
-            },
-            "drupal/paragraphs": {
-              "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
-            },
-            "drupal/password_policy": {
-                "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
-                "Cron expire date format and timezone is incorrect, leads to infinite password resets.": "https://www.drupal.org/files/issues/cron_expire_date_format-2860671-7.patch",
-                "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2933746-3.patch",
-                "Remove 'bypass password policies' permission": "https://www.drupal.org/files/issues/password_policy-2862906-2.patch"
-            },
-            "drupal/change_pwd_page": {
-                "Integration with password_policy": "https://www.drupal.org/files/issues/2933747-4.patch"
-            },
-            "drupal/sharethis": {
-                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch",
-                "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
-            },
-            "drupal/recaptcha": {
-                "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
-            },
-            "drupal/wbm2cm": {
-                "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
-            },
-            "drupal/media_entity": {
-                "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
-            },
-            "drupal/views_infinite_scroll": {
-                "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
-            },
-            "drupal/clientside_validation": {
-                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
-            },
-            "drupal/restrict_role_login_by_ip": {
-                "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
-            },
-            "drupal/user_registrationpassword": {
-                "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
-            },
-            "drupal/seckit": {
-                "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
-            },
-            "drupal/logs_http": {
-                "Allows to alter an event and allow to stop sending it as well": "https://patch-diff.githubusercontent.com/raw/Gizra/logs_http/pull/20.patch"
-            },
-            "drupal/views_ajax_get": {
-                "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
-            },
-            "drupal/purge": {
-                "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
-            },
-            "drupal/taxonomy_access_fix": {
-                "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
-            },
-            "drupal/autologout": {
-                "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
-            },
-            "drupal/entity_reference_revisions": {
-                "Embed Paragraph Content in Normalized Parent Entities (REST)" :"https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
-            }
-        },
-        "installer-paths": {
-            "docroot/core": [
-                "type:drupal-core"
-            ],
-            "docroot/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "docroot/modules/custom/{$name}": [
-                "type:drupal-custom-module"
-            ],
-            "docroot/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "docroot/profiles/custom/{$name}": [
-                "type:drupal-custom-profile"
-            ],
-            "docroot/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ],
-            "docroot/themes/custom/{$name}": [
-                "type:drupal-custom-theme"
-            ],
-            "docroot/libraries/{$name}": [
-                "type:drupal-library",
-                "type:bower-asset",
-                "type:npm-asset"
-            ],
-            "drush/Commands/{$name}": [
-                "type:drupal-drush"
-            ]
-        },
-        "merge-plugin": {
-            "require": [
-                "blt/composer.required.json",
-                "blt/composer.suggested.json"
-            ],
-            "include": [
-                "blt/composer.overrides.json"
-            ],
-            "merge-extra": true,
-            "merge-extra-deep": true,
-            "merge-scripts": true,
-            "replace": false,
-            "ignore-duplicates": true
-        },
-        "installer-types": [
-            "bower-asset",
-            "npm-asset",
-            "bower-asset",
-            "npm-asset"
-        ]
+    "nuvoleweb": {
+      "type": "git",
+      "url": "https://github.com/nuvoleweb/search_api_spellcheck.git"
     },
-    "scripts": {
-        "blt-alias": "blt install-alias -Dcreate_alias=true",
-        "post-drupal-scaffold-cmd": [
-            "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
-        ],
-        "nuke": [
-            "rm -rf vendor composer.lock",
-            "@composer clearcache",
-            "@composer install"
-        ],
-        "install-phantomjs": [
-            "rm -rf vendor/bin/phantomjs",
-            "PhantomInstaller\\Installer::installPhantomJS"
-        ]
+    "asset-packagist": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
     },
-    "config": {
-        "platform": {
-            "php": "7.1"
-        },
-        "sort-packages": true
+    "mobile-detect": {
+      "type": "package",
+      "package": {
+        "name": "hgoebl/mobile-detect",
+        "version": "1.4.2",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
+          "type": "zip"
+        }
+      }
+    },
+    "ckeditor_font": {
+      "type": "package",
+      "package": {
+        "name": "ckeditor/font",
+        "version": "4.9.2",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
+          "type": "zip"
+        }
+      }
+    },
+    "pace": {
+      "type": "package",
+      "package": {
+        "name": "HubSpot/pace",
+        "version": "1.0.0",
+        "type": "drupal-library",
+        "dist": {
+          "url": "https://github.com/HubSpot/pace/archive/master.zip",
+          "type": "zip"
+        }
+      }
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Drupal\\Tests\\PHPUnit\\": "tests/phpunit/src/"
+    }
+  },
+  "extra": {
+    "blt": {
+      "update": true
+    },
+    "enable-patching": true,
+    "patches": {
+      "drupal/webform": {
+        "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
+      },
+      "drupal/search_api_solr": {
+        "PHP Fatal error: Call to a member function getBoost()": "https://www.drupal.org/files/issues/search_api_solr--search-field-not-in-index--2812861--14.patch"
+      },
+      "drupal/search_api_solr_multilingual": {
+        "Add Arabic support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-arabic-support--2883911--2.patch",
+        "Add spellcheck per language support": "https://www.drupal.org/files/issues/search_api_solr_multilingual--add-spellcheck-per-language-support--2735625--5.patch",
+        "Disable field type check on Acquia Search": "patches/search_api_solr_multilingual--disable-field-type-check.patch"
+      },
+      "drupal/search_api_spellcheck": {
+        "Warning when no spelling suggestions": "patches/search_api_spellcheck--no-suggestions-warning.patch"
+      },
+      "drupal/acquia_connector": {
+        "List of possible cores should include .default as well": "https://www.drupal.org/files/issues/2871721-5.patch",
+        "Set index writable again after conditions are met": "https://www.drupal.org/files/issues/2922201-9.patch",
+        "Provide a way to alter list possible cores": "https://www.drupal.org/files/issues/2018-06-25/2981513-add_alter_hook_for_possible_core_ids-2.patch"
+      },
+      "drupal/search_api": {
+        "search_api_db addExpression() doesn't work with facets": "https://www.drupal.org/files/issues/2912616-2.patch"
+      },
+      "drupal/facets": {
+        "Fatal error on first facet being empty": "patches/facets/custom-2877004-2877322.patch",
+        "Ajaxifying facet filters": "https://www.drupal.org/files/issues/2018-04-17/facets-views-ajax-2826449-8.x-alpha11-146.patch",
+        "Soft limits ajax once issue": "patches/facets/soft-limit-patch-to-work-with-custom-js.patch",
+        "Fix ajax facets breaking sort": "patches/facets/fix-ajax-facets-breaking-sort.patch",
+        "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
+        "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
+        "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
+        "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch"
+      },
+      "drupal/better_exposed_filter": {
+        "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
+      },
+      "drupal/core": {
+        "No active language in language switcher for URL with query string": "https://www.drupal.org/files/issues/active-language-links-2775651-22.patch",
+        "Disable error messages on top - IFE": "https://www.drupal.org/files/issues/2880011-13.patch",
+        "Add views render caching on views ajax requests.": "https://www.drupal.org/files/issues/2018-03-14/views-render_caching_ajax_requests-2500313-44-85x.patch",
+        "Allow AJAX to use GET requests": "https://www.drupal.org/files/issues/ajax-956186-65_2x_1.patch",
+        "Support for multiple exposed forms with same id on a page": "https://www.drupal.org/files/issues/drupal-views-multiple-exposed-2876197-13.patch",
+        "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
+        "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
+        "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
+        "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch"
+      },
+      "drupal/mobile_number": {
+        "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
+        "Fix more notices": "patches/mobile_number/2978729-custom.patch",
+        "Fix issue with leading zero": "https://www.drupal.org/files/issues/mobile_number_wrong_number_display-2942394-2.patch"
+      },
+      "drupal/redirect": {
+        "Wildcard support for query parameter redirects": "https://www.drupal.org/files/issues/redirect-query-wildcard-2885889-8.x-alpha5-2.patch"
+      },
+      "drupal/simple_sitemap": {
+        "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
+      },
+      "drupal/paragraphs": {
+        "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
+      },
+      "drupal/password_policy": {
+        "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
+        "Cron expire date format and timezone is incorrect, leads to infinite password resets.": "https://www.drupal.org/files/issues/cron_expire_date_format-2860671-7.patch",
+        "Integration with change_pwd_page": "https://www.drupal.org/files/issues/2933746-3.patch",
+        "Remove 'bypass password policies' permission": "https://www.drupal.org/files/issues/password_policy-2862906-2.patch"
+      },
+      "drupal/change_pwd_page": {
+        "Integration with password_policy": "https://www.drupal.org/files/issues/2933747-4.patch"
+      },
+      "drupal/sharethis": {
+        "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch",
+        "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
+      },
+      "drupal/recaptcha": {
+        "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
+      },
+      "drupal/wbm2cm": {
+        "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
+      },
+      "drupal/media_entity": {
+        "Add media_entity_copy_icons": "patches/media_entity/media_entity-media_entity_copy_icons.patch"
+      },
+      "drupal/views_infinite_scroll": {
+        "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
+      },
+      "drupal/clientside_validation": {
+        "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
+      },
+      "drupal/restrict_role_login_by_ip": {
+        "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
+      },
+      "drupal/user_registrationpassword": {
+        "Use Messenger instead of LegacyMessenger": "https://www.drupal.org/files/issues/2018-09-05/user_registrationpassword-use_drupal_8_5_x_messenger-2997557-3.patch"
+      },
+      "drupal/seckit": {
+        "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
+      },
+      "drupal/logs_http": {
+        "Allows to alter an event and allow to stop sending it as well": "https://patch-diff.githubusercontent.com/raw/Gizra/logs_http/pull/20.patch"
+      },
+      "drupal/views_ajax_get": {
+        "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
+      },
+      "drupal/purge": {
+        "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
+      },
+      "drupal/taxonomy_access_fix": {
+        "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
+      },
+      "drupal/autologout": {
+        "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
+      },
+      "drupal/entity_reference_revisions": {
+        "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
+      }
+    },
+    "installer-paths": {
+      "docroot/core": [
+        "type:drupal-core"
+      ],
+      "docroot/modules/contrib/{$name}": [
+        "type:drupal-module"
+      ],
+      "docroot/modules/custom/{$name}": [
+        "type:drupal-custom-module"
+      ],
+      "docroot/profiles/contrib/{$name}": [
+        "type:drupal-profile"
+      ],
+      "docroot/profiles/custom/{$name}": [
+        "type:drupal-custom-profile"
+      ],
+      "docroot/themes/contrib/{$name}": [
+        "type:drupal-theme"
+      ],
+      "docroot/themes/custom/{$name}": [
+        "type:drupal-custom-theme"
+      ],
+      "docroot/libraries/{$name}": [
+        "type:drupal-library",
+        "type:bower-asset",
+        "type:npm-asset"
+      ],
+      "drush/Commands/{$name}": [
+        "type:drupal-drush"
+      ]
+    },
+    "merge-plugin": {
+      "require": [
+        "blt/composer.required.json",
+        "blt/composer.suggested.json"
+      ],
+      "include": [
+        "blt/composer.overrides.json"
+      ],
+      "merge-extra": true,
+      "merge-extra-deep": true,
+      "merge-scripts": true,
+      "replace": false,
+      "ignore-duplicates": true
+    },
+    "installer-types": [
+      "bower-asset",
+      "npm-asset",
+      "bower-asset",
+      "npm-asset"
+    ]
+  },
+  "scripts": {
+    "blt-alias": "blt install-alias -Dcreate_alias=true",
+    "post-drupal-scaffold-cmd": [
+      "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-remove-trailing-slash.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-ssl-exception.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-robots-dev.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-force-www.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
+      "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
+    ],
+    "nuke": [
+      "rm -rf vendor composer.lock",
+      "@composer clearcache",
+      "@composer install"
+    ],
+    "install-phantomjs": [
+      "rm -rf vendor/bin/phantomjs",
+      "PhantomInstaller\\Installer::installPhantomJS"
+    ]
+  },
+  "config": {
+    "platform": {
+      "php": "7.1"
+    },
+    "sort-packages": true
+  }
 }
