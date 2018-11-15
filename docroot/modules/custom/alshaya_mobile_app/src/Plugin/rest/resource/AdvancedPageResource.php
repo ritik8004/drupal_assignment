@@ -162,6 +162,9 @@ class AdvancedPageResource extends ResourceBase {
 
     $response = new ResourceResponse($response_data);
     $response->addCacheableDependency($node);
+    foreach ($this->mobileAppUtility->getCacheableEntities() as $cacheable_entity) {
+      $response->addCacheableDependency($cacheable_entity);
+    }
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
