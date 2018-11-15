@@ -638,7 +638,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $term = $this->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->getAllCategories($category_id, $this->currentLanguage, FALSE, TRUE);
+      $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -720,7 +720,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function convertRelativeUrlsToAbsolute(string $string): string {
     global $base_url;
-    return preg_replace('#(href|src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }
