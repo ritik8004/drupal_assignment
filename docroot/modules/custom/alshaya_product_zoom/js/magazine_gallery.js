@@ -52,7 +52,7 @@
   function _magazine_dialog_open() {
     var gallery = $('#product-image-gallery');
     var currentSlide = $('.pdp-image.clicked').attr('data-image-index');
-    // slickModalOptions.initialSlide = currentSlide;
+    slickModalOptions.initialSlide = currentSlide;
     Drupal.productZoomApplyRtl(gallery, slickModalOptions, document);
 
     if (gallery.hasClass('pager-no')) {
