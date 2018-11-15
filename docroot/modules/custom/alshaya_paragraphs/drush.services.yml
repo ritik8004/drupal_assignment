@@ -1,8 +1,0 @@
-services:
-  alshaya_paragraphs.commands:
-    class: \Drupal\alshaya_paragraphs\Commands\AlshayaParagraphsCommands
-    arguments:
-      - '@entity_type.manager'
-      - '@alshaya_paragraphs.migrate_utility'
-    tags:
-      - { name: drush.command }

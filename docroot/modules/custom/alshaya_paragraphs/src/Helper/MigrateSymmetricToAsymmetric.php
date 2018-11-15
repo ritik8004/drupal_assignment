@@ -44,7 +44,7 @@ class MigrateSymmetricToAsymmetric {
    */
   protected $paragraphStorage;
 
-  protected $fields = [
+  public static $fields = [
     'paragraph' => [
       'field_1_row_2_col_1',
       'field_1_row_2_col_2',
@@ -111,7 +111,7 @@ class MigrateSymmetricToAsymmetric {
    */
   public function migrateEntity(EntityInterface $entity) {
     /** @var \Drupal\node\NodeInterface $entity */
-    $fields = $this->fields[$entity->getEntityTypeId()];
+    $fields = self::$fields[$entity->getEntityTypeId()];
 
     // Hard coded languages here, if we ever get three languages anything
     // below won't work.
@@ -140,31 +140,20 @@ class MigrateSymmetricToAsymmetric {
       if ($default->hasField($field)) {
         $translatedValues = $translation->get($field)->getValue();
         foreach ($default->get($field)->getValue() as $index => $value) {
-          $this->paragraphStorage->resetCache();
-          $paragraph = $this->paragraphStorage->loadRevision($value['target_revision_id']);
-          $translatedParagraph = $this->paragraphStorage->loadRevision($translatedValues[$index]['target_revision_id']);
+          $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
+          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
 
-          if (!($translatedParagraph instanceof Paragraph)) {
+          if (empty($translatedParagraph)) {
             continue;
           }
 
-          if ($translatedParagraph->hasTranslation($translationLangcode)) {
-            $translatedParagraph = $translatedParagraph->getTranslation($translationLangcode);
-          }
-
-          $this->migrateParagraph($paragraph, $translatedParagraph, $translationLangcode);
-
-          $this->paragraphStorage->resetCache();
-          $translatedParagraph = $this->paragraphStorage->loadRevision($translatedValues[$index]['target_revision_id']);
-
-          if ($translatedParagraph->hasTranslation($translationLangcode)) {
-            $translatedParagraph = $translatedParagraph->getTranslation($translationLangcode);
-          }
+          $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
 
           if ($paragraph->hasTranslation($translationLangcode)) {
             $paragraph->removeTranslation($translationLangcode);
           }
 
+          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
           $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
           $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
           $newTranslatedParagraph->save();
@@ -180,38 +169,29 @@ class MigrateSymmetricToAsymmetric {
    *   Original paragraph.
    * @param \Drupal\paragraphs\Entity\Paragraph $translation
    *   Translated paragraph in old way.
+   * @param string $defaultLangcode
+   *   Default translation language code.
    * @param string $translationLangcode
    *   Target translation language code.
    */
-  private function migrateParagraph(Paragraph $original, Paragraph $translation, string $translationLangcode) {
+  private function migrateParagraph(Paragraph $original, Paragraph $translation, string $defaultLangcode, string $translationLangcode) {
     /** @var \Drupal\node\NodeInterface $entity */
-    $fields = $this->fields[$original->getEntityTypeId()];
+    $fields = self::$fields[$original->getEntityTypeId()];
 
     foreach ($fields as $field) {
       if ($original->hasField($field)) {
         $translatedValues = $translation->get($field)->getValue();
         foreach ($original->get($field)->getValue() as $index => $value) {
-          $this->paragraphStorage->resetCache();
-          $paragraph = $this->paragraphStorage->loadRevision($value['target_revision_id']);
-          $translatedParagraph = $this->paragraphStorage->loadRevision($translatedValues[$index]['target_revision_id']);
+          $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
+          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
 
-          if ($translatedParagraph->hasTranslation($translationLangcode)) {
-            $translatedParagraph = $translatedParagraph->getTranslation($translationLangcode);
-          }
-
-          $this->migrateParagraph($paragraph, $translatedParagraph, $translationLangcode);
-
-          $this->paragraphStorage->resetCache();
-          $translatedParagraph = $this->paragraphStorage->loadRevision($translatedValues[$index]['target_revision_id']);
-
-          if ($translatedParagraph->hasTranslation($translationLangcode)) {
-            $translatedParagraph = $translatedParagraph->getTranslation($translationLangcode);
-          }
+          $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
 
           if ($paragraph->hasTranslation($translationLangcode)) {
             $paragraph->removeTranslation($translationLangcode);
           }
 
+          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
           $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
           $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
           $newTranslatedParagraph->save();
@@ -446,6 +426,31 @@ class MigrateSymmetricToAsymmetric {
     }
 
     return $translatedValues;
+  }
+
+  /**
+   * Get fresh paragraph entity translated in requested language.
+   *
+   * @param mixed $revision_id
+   *   Revision id.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return \Drupal\paragraphs\Entity\Paragraph|null
+   *   Paragraph entity translated in requested language if found.
+   */
+  private function getParagraph($revision_id, string $langcode): ?Paragraph {
+    $this->paragraphStorage->resetCache();
+    $paragraph = $this->paragraphStorage->loadRevision($revision_id);
+    if (!($paragraph instanceof Paragraph)) {
+      return NULL;
+    }
+
+    if ($paragraph->hasTranslation($langcode)) {
+      $paragraph = $paragraph->getTranslation($langcode);
+    }
+
+    return $paragraph;
   }
 
 }
