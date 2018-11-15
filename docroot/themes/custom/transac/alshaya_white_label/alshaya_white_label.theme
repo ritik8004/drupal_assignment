@@ -682,7 +682,7 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
     }
   }
 
-  if ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full' ) {
+  if ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
     if ($settings->get('pdp_layout') == 'magazine') {
       $suggestions[] = 'node__acq_product__full_magazine';
     }
