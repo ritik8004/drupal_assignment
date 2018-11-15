@@ -15,6 +15,7 @@ use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Database;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Implements hook_form_alter().
@@ -90,11 +91,11 @@ function alshaya_advanced_page_node_presave(EntityInterface $entity) {
     // Deleting/Clearing cache on advanced page node save as this will not
     // happen very often.
     \Drupal::cache('data')->delete('advanced_page:terms:nodes');
-  }
 
-  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 0) {
-    unset($entity->field_show_left_menu);
-    unset($entity->field_product_category);
+    if ($entity->get('field_use_as_department_page')->value == 0) {
+      unset($entity->field_show_left_menu);
+      unset($entity->field_product_category);
+    }
   }
 }
 
@@ -325,4 +326,35 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
 
   // No opinion.
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function alshaya_advanced_page_node_insert(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ */
+function alshaya_advanced_page_node_update(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page'
+    && ($node->get('field_use_as_department_page')->value == 1
+      || $node->original->get('field_use_as_department_page')->value == 1)
+  ) {
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
+ */
+function alshaya_advanced_page_node_delete(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    Cache::invalidateTags([ProductCategoryTree::CACHE_TAG]);
+    \Drupal::cache('data')->delete('advanced_page:terms:nodes');
+  }
 }

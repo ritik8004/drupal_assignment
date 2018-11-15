@@ -497,7 +497,7 @@ class MobileAppUtility {
         'name' => $term->name,
         'description'  => !empty($term->description__value) ? $term->description__value : '',
         'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+        'deeplink' => $this->getDeepLink($term),
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
