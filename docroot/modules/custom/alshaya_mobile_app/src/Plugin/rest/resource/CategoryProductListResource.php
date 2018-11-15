@@ -174,6 +174,7 @@ class CategoryProductListResource extends ResourceBase {
         // Prepare response from result set.
         $response_data = $this->addExtraTermData($term);
         $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+        $response_data['total'] = $this->alshayaSearchApiQueryExecute->getResultTotalCount();
         return (new ModifiedResourceResponse($response_data));
       }
 
@@ -194,18 +195,17 @@ class CategoryProductListResource extends ResourceBase {
    *   Data array.
    */
   protected function addExtraTermData(TermInterface $term) {
-    // Get term url.
     $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()])->toString(TRUE);
-
-    $banners = $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile');
-
     return [
       'id' => (int) $term->id(),
       'label' => $term->label(),
       'path' => $term_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($term),
-      'banner' => !empty($banners) ? $banners[0] : '',
-      'description' => $term->get('description')->getValue()[0]['value'],
+      'banner' => $this->mobileAppUtility->getImages($term, 'field_promotion_banner_mobile'),
+      'description' => ($desc = $term->get('description')->getValue()) && !empty($desc[0]['value'])
+      ? $desc[0]['value']
+      : '',
+      'total' => 0,
     ];
   }
 

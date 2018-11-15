@@ -372,7 +372,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       if (!empty($entity->get($field)->first())) {
         $data = array_merge(
           ['type' => $type],
-          ['item' => $entity->get($field)->first()->getValue()['value']]
+          ['item' => $this->convertRelativeUrlsToAbsolute($entity->get($field)->first()->getValue()['value'])]
         );
       }
     }
@@ -638,7 +638,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $term = $this->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->getAllCategories($category_id, $this->currentLanguage, FALSE, TRUE);
+      $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -700,13 +700,27 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         'label' => $item['settings']['label'],
         'label_display' => (bool) $item['settings']['label_display'],
         'body' => !empty($block->get('body')->first())
-        ? $block->get('body')->first()->getValue()['value']
+        ? $this->convertRelativeUrlsToAbsolute($block->get('body')->first()->getValue()['value'])
         : '',
         'image' => $this->getImages($block, 'field_image'),
       ];
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Convert relative url img tag in string with absolute url.
+   *
+   * @param string $string
+   *   The string containing html tags.
+   *
+   * @return string
+   *   Return the complete url string with domain.
+   */
+  protected function convertRelativeUrlsToAbsolute(string $string): string {
+    global $base_url;
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }
