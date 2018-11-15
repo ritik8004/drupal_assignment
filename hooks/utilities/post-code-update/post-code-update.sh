@@ -27,7 +27,7 @@ else
   echo "$HOME/slack_settings does not exist. Slack won't be notified."
 fi
 
-cd `drush8 sa @$site.$target_env | grep root | cut -d"'" -f4`
+cd `drush sa @$site.$target_env | grep root | cut -d"'" -f4`
 
 nothingstr="no update performed"
 errorstr="error"
@@ -45,17 +45,17 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
 
   ## Restore database dumps before applying database updates.
   echo "Change in install file detected, restoring database before executing updb."
-  drush8 acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip -y
+  drush acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip -y
 
   ## Apply the database updates to all sites.
   echo "Executing updb."
-  drush8 acsf-tools-ml updb 2> /tmp/drush_updb_$target_env.log
+  drush acsf-tools-ml updb 2> /tmp/drush_updb_$target_env.log
   output=$(cat /tmp/drush_updb_$target_env.log | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
   echo $output
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."
-  drush8 acsf-tools-ml cr
+  drush acsf-tools-ml cr
 
   ## Set the output variable which is used to update the Slack channel.
   output=$nothingstr
@@ -64,7 +64,7 @@ fi
 echo -e "\n"
 
 ## Clear varnish caches for all sites of the factory.
-domains=$(drush8 acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
+domains=$(drush acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
 
 echo "$domains" | while IFS= read -r line
 do
