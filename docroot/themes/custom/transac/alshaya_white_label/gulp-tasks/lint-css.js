@@ -34,4 +34,33 @@ module.exports = function (gulp, plugins, options) {
         ]
       }))
   });
+
+  // Lint module-component-libraries scss files.
+  gulp.task('lint:module-component-libraries-css', function () {
+    return gulp.src(options.sass.directionalSource)
+      .pipe(plugins.plumber())
+      .pipe(plugins.gulpStylelint({
+        reporters: [
+          {
+            formatter: 'string',
+            console: true
+          }
+        ]
+      }))
+      .pipe(plugins.plumber.stop());
+  });
+
+  // Lint module-component-libraries scss files and throw an error for a CI to catch.
+  gulp.task('lint:module-component-libraries-css-with-fail', function () {
+    return gulp.src(options.sass.directionalSource)
+      .pipe(plugins.gulpStylelint({
+        reporters: [
+          {
+            formatter: 'string',
+            console: true,
+            failAfterError: true
+          }
+        ]
+      }))
+  });
 };

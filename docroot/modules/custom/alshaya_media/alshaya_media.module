@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Alshaya media module file.
+ */
+
+/**
+ * Implements hook_alshaya_master_post_drupal_install().
+ *
+ * Remove media.type.video_file config (as it's currently
+ * redundant to custom implementation in alshaya_media module).
+ */
+function alshaya_media_alshaya_master_post_drupal_install() {
+  \Drupal::configFactory()->getEditable('media.type.video_file')->delete();
+}

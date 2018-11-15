@@ -355,6 +355,18 @@ html[lang=ar] {
   }
 }
 
+@include breakpoint($upto-desktop) {
+  .c-user-edit.user-page {
+    .user-form {
+      .field--type-mobile-number {
+        position: relative;
+        top: 1.3rem;
+        clear: both;
+      }
+    }
+  }
+}
+
 html[lang=ar] {
   .c-user-edit.user-page .mobile-number-field {
     width: 100%;

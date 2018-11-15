@@ -20,20 +20,7 @@ global $acsf_site_code;
 
 // If we are on local environment, the site name has not been detected yet.
 if (empty($acsf_site_name) && $settings['env'] == 'local') {
-  // Get site code from site uri.
-  if (!empty($_SERVER['HTTP_HOST'])) {
-    $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-    $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
-  }
-  else {
-    foreach ($_SERVER['argv'] as $arg) {
-      preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
-      if (!empty($matches)) {
-        $host_site_code = $matches[1];
-        break;
-      }
-    }
-  }
+  global $host_site_code;
 
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/alshaya_local_sites.yml'));
 
@@ -61,3 +48,17 @@ $settings['country_code'] = strtoupper($country_code);
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env']));
+
+// Allow overriding settings and config to set secret info directly from
+// include files on server which can be per brand or brand country combination.
+$settings_path = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings-';
+
+$brand_country_file = $settings_path . $acsf_site_code . $country_code . '.php';
+if (file_exists($brand_country_file)) {
+  include_once $brand_country_file;
+}
+
+$brand_file = $settings_path . $acsf_site_code . '.php';
+if (file_exists($brand_file)) {
+  include_once $brand_file;
+}

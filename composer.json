@@ -90,7 +90,8 @@
         "hgoebl/mobile-detect": "^1.4.2",
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
-        "springimport/magento2-api-v1": "^1.0"
+        "springimport/magento2-api-v1": "^1.0",
+        "drupal/link_attributes": "^1.5"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
@@ -228,9 +229,7 @@
                 "2766509 - Graceful cache fallbacks": "https://www.drupal.org/files/issues/drupal-graceful-cache-error-2766509-38.patch",
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
-                "2986560 - UnroutedUrlAssembler sorts Query params in buildExternalUrl()": "https://www.drupal.org/files/issues/2018-08-27/2986560-7.drupal.UnroutedUrlAssembler-sorts-Query-params-in-buildExternalUrl.patch",
-                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch",
-                "Installation profiles do not support project:module format for dependencies": "https://www.drupal.org/files/issues/2018-10-02/2855026-55.patch"
+                "Unable to save a translation if the path alias changes": "https://www.drupal.org/files/issues/2018-05-02/empty-alias-check-2930599.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -290,19 +289,48 @@
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
             },
             "drupal/purge": {
-              "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
+                "Port purge_drush commands to Drush 9": "https://www.drupal.org/files/issues/2921309-17-port-purge-drush-9.patch"
+            },
+            "drupal/taxonomy_access_fix": {
+                "Admin vocabulary list routes visible": "https://www.drupal.org/files/issues/2018-08-17/incorrect_list_perms-2993452-0.patch"
+            },
+            "drupal/autologout": {
+                "Translate configuration": "https://www.drupal.org/files/issues/2018-08-20/2843675-8-autologout-translate-config.patch"
+            },
+            "drupal/entity_reference_revisions": {
+                "Embed Paragraph Content in Normalized Parent Entities (REST)" :"https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             }
         },
         "installer-paths": {
-            "docroot/core": ["type:drupal-core"],
-            "docroot/modules/contrib/{$name}": ["type:drupal-module"],
-            "docroot/modules/custom/{$name}": ["type:drupal-custom-module"],
-            "docroot/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "docroot/profiles/custom/{$name}": ["type:drupal-custom-profile"],
-            "docroot/themes/contrib/{$name}": ["type:drupal-theme"],
-            "docroot/themes/custom/{$name}": ["type:drupal-custom-theme"],
-            "docroot/libraries/{$name}": ["type:drupal-library", "type:bower-asset", "type:npm-asset"],
-            "drush/Commands/{$name}": ["type:drupal-drush"]
+            "docroot/core": [
+                "type:drupal-core"
+            ],
+            "docroot/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "docroot/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "docroot/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "docroot/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "docroot/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "docroot/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
+            ],
+            "drush/Commands/{$name}": [
+                "type:drupal-drush"
+            ]
         },
         "merge-plugin": {
             "require": [
@@ -315,7 +343,8 @@
             "merge-extra": true,
             "merge-extra-deep": true,
             "merge-scripts": true,
-            "replace": true
+            "replace": false,
+            "ignore-duplicates": true
         },
         "installer-types": [
             "bower-asset",

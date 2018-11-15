@@ -384,6 +384,9 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
       // Clear cached data for configurable products.
       $skuManager->clearProductCachedData($parent);
 
+      // Reset the sku static cache.
+      drupal_static_reset('loadFromSku');
+
       // @TODO: Make this smart in CORE-3443.
       Cache::invalidateTags($parent->getCacheTagsToInvalidate());
     }
@@ -1395,6 +1398,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
+  else {
+    $form = [
+      '#theme' => 'empty_add_to_cart_form',
+      '#text' => t('Out of stock'),
+    ];
+  }
+
+  // Form state cache is not needed for this form since, we are regenerating the
+  // add to cart form on every change on the form & the form state cache doesn't
+  // get re-used. Instead, keeps flooding key_value_expire table.
+  $form_state->disableCache();
 }
 
 /**
@@ -1833,6 +1847,43 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
   }
 
   return [];
+}
+
+/**
+ * Filter nodes with stock from given array of nodes.
+ *
+ * @param array $nodes
+ *   The list of nodes array.
+ * @param int $stock_check_limit
+ *   (optional) The limit of products to return as a result.
+ *
+ * @return array
+ *   Return in-stock nodes.
+ */
+function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $stock_check_limit = 50): array {
+  $data = [];
+  if (empty($nodes)) {
+    return $data;
+  }
+
+  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  foreach ($nodes as $node) {
+    /* @var \Drupal\node\Entity\Node $node */
+    if (!$node instanceof NodeInterface) {
+      continue;
+    }
+
+    if ($stock_check_limit <= 0) {
+      break;
+    }
+    // In case stock_mode is not "push", we always select the product
+    // assuming it has stock.
+    if (($stock_mode == 'push' && alshaya_acm_get_stock_from_product($node)) || $stock_mode !== 'push') {
+      $data[] = $node;
+      $stock_check_limit--;
+    }
+  }
+  return $data;
 }
 
 /**
