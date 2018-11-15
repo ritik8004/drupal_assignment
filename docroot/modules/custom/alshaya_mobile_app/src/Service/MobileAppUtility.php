@@ -19,6 +19,7 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
@@ -42,6 +43,13 @@ class MobileAppUtility {
    * @var array
    */
   protected $termUrls = [];
+
+  /**
+   * Array of cacheable terms tag.
+   *
+   * @var array
+   */
+  protected $cacheableTermsTag = [];
 
   /**
    * Cache Backend service for alshaya.
@@ -487,10 +495,12 @@ class MobileAppUtility {
       $langcode = $this->currentLanguage;
     }
 
+    $this->cacheableTermsTag[] = 'node:taxonomy_term.accordion';
     $terms = $this->productCategoryTree->allChildTerms($langcode, $parent, FALSE, $mobile_only);
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
+      $this->cacheableTermsTag[] = "taxonomy_term:{$term->tid}";
 
       $record = [
         'id' => (int) $term->tid,
@@ -525,6 +535,16 @@ class MobileAppUtility {
    */
   public function cachedTermUrls() {
     return $this->termUrls;
+  }
+
+  /**
+   * Return cacheable terms tags.
+   *
+   * @return array
+   *   Return tags of taxonomy_terms.
+   */
+  public function cacheableTermsTags() {
+    return $this->cacheableTermsTag;
   }
 
   /**
