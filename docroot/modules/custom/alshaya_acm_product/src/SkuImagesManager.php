@@ -616,11 +616,13 @@ class SkuImagesManager {
    *   Translated product label to use in alt/title.
    * @param bool $check_parent_child
    *   Flag to mention if parent/child should be checked later.
+   * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
+   *   First sku entity.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE) {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE, SKUInterface $original_sku_entity = NULL) {
     $gallery = [];
 
     $config = $this->configFactory->get('alshaya_acm_product.display_settings');
@@ -688,7 +690,8 @@ class SkuImagesManager {
           // Show original full image in the modal inside a draggable container.
           $original_image = $media_item['file']->url();
 
-          $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+          $image_small = ImageStyle::load($thumbnail_style)
+            ->buildUrl($file_uri);
           $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
           $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
@@ -730,8 +733,10 @@ class SkuImagesManager {
         // If no main image and no video, use default image.
         if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
-            $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
-            $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+            $image_zoom = ImageStyle::load($zoom_style)
+              ->buildUrl($default_image->getFileUri());
+            $image_medium = ImageStyle::load($slide_style)
+              ->buildUrl($default_image->getFileUri());
 
             $main_image = [
               'zoomurl' => $image_zoom,
@@ -744,7 +749,8 @@ class SkuImagesManager {
         // If either of main image or video is available.
         if (!empty($main_image) || !empty($media['media_items']['videos'])) {
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
-          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get($config_name);
+          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
+            ->get($config_name);
 
           $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
@@ -789,14 +795,17 @@ class SkuImagesManager {
       case 'pdp-magazine':
         // We will use below variable for alter hooks.
         $prod_description = [];
-        if ($body = $sku->get('attr_description')->getValue()) {
+        if ($original_sku_entity == NULL) {
+          $original_sku_entity = $sku;
+        }
+        if ($body = $original_sku_entity->get('attr_description')->getValue()) {
           $prod_description['description'] = [
             '#markup' => $body[0]['value'],
           ];
         }
 
         // Alter description Since this could be different for each brand.
-        $this->moduleHandler->alter('acq_sku_magazine_product_description', $sku, $prod_description);
+        $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
 
         $media = $this->getAllMedia($sku, $check_parent_child);
         $thumbnails = $media['thumbs'];
