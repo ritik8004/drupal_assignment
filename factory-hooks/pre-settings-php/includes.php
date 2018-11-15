@@ -61,6 +61,9 @@ $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b65
 $settings['alshaya_magento_soauth_client_uuid'] = '4cacd535-3b24-434e-9d32-d6e843f7b91a';
 $settings['alshaya_magento_soauth_client_secret'] = 'AlShAyA';
 
+$settings['alshaya_mobile_app_soauth_client_uuid'] = 'ac73dcc7-6918-4e14-8b48-86b5cd17f4d2';
+$settings['alshaya_mobile_app_soauth_client_secret'] = 'AlShAyA';
+
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;
 

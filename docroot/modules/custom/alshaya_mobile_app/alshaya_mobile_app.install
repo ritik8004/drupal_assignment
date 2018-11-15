@@ -5,9 +5,20 @@
  * Install, update and uninstall functions for the alshaya_mobile_app module.
  */
 
+ use Drupal\consumers\Entity\Consumer;
+use Drupal\Core\Site\Settings;
+
 /**
  * Implements hook_install().
  */
 function alshaya_mobile_app_install() {
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+
+  // Add Simple Oauth - Consumer client.
+  $client = Consumer::create([]);
+  $client->set('label', 'Alshaya Mobile App Consumer');
+  $client->set('secret', Settings::get('alshaya_mobile_app_soauth_client_secret'));
+  $client->set('roles', ['mobile_app_consumer']);
+  $client->set('uuid', Settings::get('alshaya_mobile_app_soauth_client_uuid'));
+  $client->save();
 }
