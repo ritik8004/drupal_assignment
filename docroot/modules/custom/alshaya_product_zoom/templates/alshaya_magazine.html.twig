@@ -12,7 +12,9 @@
           </div>
         {% else %}
           <figure class="pdp-image pdp-image-{{ loop.index0 }}" data-image-index={{ loop.index0 }}>
-            <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+            <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
+              <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+            </a>
           </figure>
         {% endif %}
       {% endfor %}

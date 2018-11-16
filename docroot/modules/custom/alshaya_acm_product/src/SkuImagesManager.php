@@ -889,6 +889,8 @@ class SkuImagesManager {
             '#labels' => $labels,
             '#attached' => [
               'library' => [
+                'alshaya_product_zoom/cloud_zoom',
+                'alshaya_product_zoom/product.cloud_zoom',
                 'alshaya_product_zoom/magazine_gallery',
               ],
             ],

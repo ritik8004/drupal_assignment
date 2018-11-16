@@ -11,7 +11,6 @@
     margin-#{$right}: 2rem;
   }
 
-
   figure {
     margin: 0;
 
@@ -21,27 +20,52 @@
   }
 
   .pdp-image {
-    &:nth-child(3n){
+    &:nth-child(3n) {
       grid-column: 2 / -1;
 
-      @include breakpoint($tablet){
+      @include breakpoint($tablet) {
         grid-column: span 1;
       }
     }
 
-    &:nth-child(3n+1){
+    &:nth-child(3n+1) {
       grid-column: span 2;
 
-      @include breakpoint($tablet){
+      @include breakpoint($tablet) {
         grid-column: span 1;
       }
     }
 
-    &:nth-child(3n+2){
+    &:nth-child(3n+2) {
       grid-column: span 1;
 
-      @include breakpoint($tablet){
+      @include breakpoint($tablet) {
         grid-column: span 1;
+      }
+    }
+
+    &:nth-child(2n) {
+      #cloud-zoom-big {
+        left: calc(100% + 2rem) !important;
+      }
+    }
+
+    &:nth-child(2n+1) {
+      #cloud-zoom-big {
+        left: calc(200% + 3rem) !important;
+      }
+    }
+
+    #wrap {
+      z-index: 1 !important;
+
+      #cloud-zoom-big {
+        width: 19.88rem;
+        top: 0 !important;
+
+        .cloud-zoom-title {
+          display: none;
+        }
       }
     }
   }

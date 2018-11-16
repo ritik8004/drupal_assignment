@@ -10,7 +10,8 @@
   Drupal.behaviors.magazine_gallery = {
     attach: function (context, settings) {
 
-      // var currentSlide;
+      var desktop_sidebar_width = $('.content__sidebar').width();
+      $('#cloud-zoom-big').css('width', desktop_sidebar_width + 'px');
 
       var desktopElement = $('#product-image-gallery-container');
       var mobileElement = $('#product-image-gallery-container-mobile');
@@ -29,6 +30,11 @@
         });
       }
       else {
+        var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
+        if (items.length) {
+          items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
+        }
+
         $('.pdp-image').off().on('click', function (e) {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
