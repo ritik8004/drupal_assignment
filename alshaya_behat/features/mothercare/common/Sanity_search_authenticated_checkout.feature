@@ -3,10 +3,11 @@ Feature: to verify search functionality , basket and checkout
 
   Scenario: As a Guest user
   I should be able to search, verify filter,footer, header and sort on results page
-    Given I am on "/en"
+    Given I am on the homepage
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
+    And I follow "English"
     Then I should be able to see the header
     And I should be able to see the footer
     When I fill in "edit-keywords" with "randomtext"
