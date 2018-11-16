@@ -444,7 +444,7 @@ class ClickCollectController extends ControllerBase {
   }
 
   /**
-   * Display dialog when location access is blocked from brwoser.
+   * Display dialog when location access is blocked from browser.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Return Ajax response with commands.
