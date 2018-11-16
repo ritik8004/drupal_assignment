@@ -111,7 +111,7 @@ class CategoriesResource extends ResourceBase {
 
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => [ProductCategoryTree::CACHE_TAG],
+        'tags' => [ProductCategoryTree::CACHE_TAG, 'node:advanced_page:deeplink'],
       ],
     ]));
   }
