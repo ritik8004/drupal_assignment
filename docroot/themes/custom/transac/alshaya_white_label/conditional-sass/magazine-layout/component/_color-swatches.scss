@@ -1,15 +1,19 @@
 .magazine-layout {
   .content__main {
-    width: 67.6%;
-
-    @include breakpoint($only-tablet) {
+    @include breakpoint($tablet) {
       width: 63%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 67.6%;
     }
   }
 
   .content__title_wrapper,
   .content__sidebar {
-    width: 32.4%;
+    @include breakpoint($tablet) {
+      width: 32.4%;
+    }
   }
 
   .form-item-configurables-article-castor-id {
@@ -44,7 +48,9 @@
         li,
         span {
           a:not([data-swatch-type=RGB]) {
-            width: 2.9375rem;
+            @include breakpoint($tablet) {
+              width: 2.9375rem;
+            }
           }
         }
       }
