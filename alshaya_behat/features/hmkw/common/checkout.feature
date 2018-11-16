@@ -5,6 +5,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
+    And I wait 10 seconds
     And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
@@ -436,7 +437,7 @@ Feature: Test Checkout feature
     Then I should see the button "checkout securely"
     And the url should match "/cart"
 
-  @t&c
+  @tc
   Scenario:  As a Guest,
   I should see the error message when terms and condition unchecked
     When I follow "Home delivery"
