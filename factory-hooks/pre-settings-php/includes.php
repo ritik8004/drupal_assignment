@@ -23,6 +23,13 @@ elseif (getenv('TRAVIS')) {
 $settings['env'] = $env;
 
 if ($settings['env'] === 'local') {
+  // For Drush and other CLI commands increase the memory limit to 512 MB.
+  // We do this only for local env, for cloud envs it is already done.
+  // This is as suggested in https://support.acquia.com/hc/en-us/articles/360004542293-Conditionally-increasing-memory-limits
+  if (PHP_SAPI === 'cli') {
+    ini_set('memory_limit', '512M');
+  }
+
   global $host_site_code;
 
   // Get site code from site uri.
@@ -39,6 +46,10 @@ if ($settings['env'] === 'local') {
       }
     }
   }
+
+  // Set private files directory for local, it is not set in
+  // '/../vendor/acquia/blt/settings/filesystem.settings.php' file.
+  $settings['file_private_path'] = '/var/www/alshaya/files-private/' . $host_site_code;
 }
 
 switch ($env) {

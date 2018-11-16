@@ -77,10 +77,10 @@ solr_version: "4.5.1"
 
 # XDebug configuration.
 # Change this value to 1 in order to enable xdebug by default.
-php_xdebug_default_enable: 0
+php_xdebug_default_enable: 1
 php_xdebug_coverage_enable: 0
-# Change this value to 1 in order to enable xdebug on the cli.
-php_xdebug_cli_enable: 0
+# Change this value to "no" to enable xdebug on the cli.
+php_xdebug_cli_disable: yes
 php_xdebug_remote_enable: 1
 php_xdebug_remote_connect_back: 1
 # Use PHPSTORM for PHPStorm, sublime.xdebug for Sublime Text.
@@ -148,6 +148,10 @@ apache_vhosts:
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
   - servername: "local.alshaya-hmae.com"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
+
+  - servername: "local.alshaya-hmeg.com"
     documentroot: "{{ drupal_core_path }}"
     extra_parameters: "{{ apache_vhost_php_fpm_parameters }}"
 
@@ -221,6 +225,10 @@ mysql_databases:
     collation: utf8mb4_general_ci
 
   - name: drupal_alshaya_hmae
+    encoding: utf8mb4
+    collation: utf8mb4_general_ci
+
+  - name: drupal_alshaya_hmeg
     encoding: utf8mb4
     collation: utf8mb4_general_ci
 

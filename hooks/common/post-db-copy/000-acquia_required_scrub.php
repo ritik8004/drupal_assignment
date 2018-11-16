@@ -59,7 +59,7 @@ shell_exec(sprintf('mkdir -p %s', escapeshellarg($cache_directory)));
 
 // Execute the scrub.
 $command = sprintf(
-  'CACHE_PREFIX=%s \drush8 -r %s -l %s -y acsf-site-scrub',
+  'CACHE_PREFIX=%s \drush -r %s -l %s -y acsf-site-scrub',
   escapeshellarg($cache_directory),
   escapeshellarg($docroot),
   escapeshellarg($new_domain)

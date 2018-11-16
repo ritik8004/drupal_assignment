@@ -276,7 +276,7 @@
         }
       }
 
-      $('input[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
         ccPaymentsClicked = true;
       });
 

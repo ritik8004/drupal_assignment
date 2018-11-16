@@ -1,0 +1,6 @@
+data-dialog-type:
+  title: Data dialog type
+  type: select
+  options:
+    _none: None
+    modal: Modal
