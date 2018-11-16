@@ -49,7 +49,10 @@ switch ($env) {
     break;
 
   case '01live':
-    include_once '/home/alshaya/settings/01live/social_auth.php';
+    $social_auth_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/01live/social_auth.php';
+    if (file_exists($social_auth_settings_file)) {
+      include_once $social_auth_settings_file;
+    }
     break;
 
   default:
