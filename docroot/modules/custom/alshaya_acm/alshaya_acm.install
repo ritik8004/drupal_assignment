@@ -33,7 +33,7 @@ function alshaya_acm_update_dependencies() {
 function alshaya_acm_update_8010() {
   $db = \Drupal::database();
 
-  $query = $db->query('select en.sku FROM (SELECT sku, price, special_price, final_price FROM acq_sku_field_data WHERE langcode = "en") AS en LEFT JOIN (SELECT sku, price, special_price, final_price FROM acq_sku_field_data WHERE langcode = "ar") AS ar ON en.sku = ar.sku WHERE en.price <> ar.price OR en.special_price <> ar.special_price OR en.final_price <> ar.final_price');
+  $query = $db->query('select distinct(en.sku) from acq_sku_field_data en inner join acq_sku_field_data ar on en.sku = ar.sku where en.price != ar.price OR en.final_price != ar.final_price');
   $result = $query->fetchAllAssoc('sku');
 
   foreach ($result as $row) {
