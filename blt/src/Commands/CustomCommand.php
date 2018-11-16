@@ -363,7 +363,8 @@ class CustomCommand extends BltTasks {
     $this->invokeCommand('local:reset-settings-file');
 
     // Avoid file not writable issues after Drupal install.
-    $this->_exec('chmod -R 777 /var/www/alshaya/docroot/sites/g/files');
+    $this->_exec('sudo chmod -R 777 /var/www/alshaya/docroot/sites/g/files');
+    $this->_exec('sudo chmod -R 777 /var/www/alshaya/files-private');
 
     return $result;
   }
