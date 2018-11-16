@@ -14,6 +14,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Make price, final_price and special_price non-translatable.
+ */
+function acq_sku_update_8016() {
+  \Drupal::entityDefinitionUpdateManager()->applyUpdates();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove join index on acq_sku__attributes
  */
 function acq_sku_update_8015() {
