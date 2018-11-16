@@ -1,6 +1,6 @@
 visibility:
-  hide_facet_condition_moschino:
-    id: hide_facet_condition_moschino
+  hide_facet_condition_plp:
+    id: hide_facet_condition_plp
     hideFacet: 1
     negate: false
     context_mapping:

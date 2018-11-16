@@ -200,7 +200,7 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
   transition-property: none !important;
 }
 
-// Mixin for adding a full page spinner. Used on Slug modal links and moschino static modal links.
+// Mixin for adding a full page spinner. Used on Slug modal links and campaign-plp-style-1 static modal links.
 // Can be used anywhere when you need a full screen loader.
 @mixin fullPageLoader() {
   position: fixed !important;
