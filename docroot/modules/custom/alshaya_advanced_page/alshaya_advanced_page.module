@@ -332,7 +332,8 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
  */
 function alshaya_advanced_page_node_insert(EntityInterface $node) {
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
-    Cache::invalidateTags(['node:advanced_page:deeplink']);
+    $term = $node->get('field_product_category')->entity;
+    Cache::invalidateTags(['term:' . $term->id()]);
   }
 }
 
@@ -344,7 +345,12 @@ function alshaya_advanced_page_node_update(EntityInterface $node) {
     && ($node->get('field_use_as_department_page')->value == 1
       || $node->original->get('field_use_as_department_page')->value == 1)
   ) {
-    Cache::invalidateTags(['node:advanced_page:deeplink']);
+    $term = ($node->get('field_use_as_department_page')->value != 1
+    && $node->original->get('field_use_as_department_page')->value == 1)
+    ? $node->original->get('field_product_category')->entity
+    : $node->get('field_product_category')->entity;
+
+    Cache::invalidateTags(['term:' . $term->id()]);
   }
 }
 
@@ -353,7 +359,8 @@ function alshaya_advanced_page_node_update(EntityInterface $node) {
  */
 function alshaya_advanced_page_node_delete(EntityInterface $node) {
   if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
-    Cache::invalidateTags(['node:advanced_page:deeplink']);
+    $term = $node->get('field_product_category')->entity;
+    Cache::invalidateTags(['term:' . $term->id()]);
     \Drupal::cache('data')->delete('advanced_page:terms:nodes');
   }
 }
