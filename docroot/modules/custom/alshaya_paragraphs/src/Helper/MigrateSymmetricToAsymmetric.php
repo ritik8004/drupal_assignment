@@ -207,6 +207,7 @@ class MigrateSymmetricToAsymmetric {
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
           $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
           $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
+          unset($newTranslatedParagraph->original);
 
           try {
             $newTranslatedParagraph->save();
@@ -441,6 +442,10 @@ class MigrateSymmetricToAsymmetric {
       'parent_type',
       'parent_field_name',
       'status',
+      'revision_default',
+      'uid',
+      'revision_uid',
+      'created',
     ];
 
     foreach ($fields_to_remove as $field_to_remove) {
