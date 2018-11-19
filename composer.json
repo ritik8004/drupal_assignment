@@ -301,6 +301,9 @@
             },
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)" :"https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
+            },
+            "drupal/simple_oauth": {
+                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_3014656_2.patch"
             }
         },
         "installer-paths": {
