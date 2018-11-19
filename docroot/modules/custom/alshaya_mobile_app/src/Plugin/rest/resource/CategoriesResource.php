@@ -111,7 +111,7 @@ class CategoriesResource extends ResourceBase {
 
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => array_merge($this->mobileAppUtility->cachedTermTags(), [ProductCategoryTree::CACHE_TAG]),
+        'tags' => array_merge($this->mobileAppUtility->cacheableTermTags(), [ProductCategoryTree::CACHE_TAG]),
       ],
     ]));
   }
