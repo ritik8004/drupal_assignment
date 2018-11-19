@@ -305,6 +305,6 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
 /**
  * Implements hook_acq_sku_magazine_product_description_alter().
  */
-function alshaya_hm_acq_sku_magazine_product_description_alter($sku, &$prod_description) {
+function alshaya_hm_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
   $prod_description = _alshaya_hm_get_product_description($sku);
 }

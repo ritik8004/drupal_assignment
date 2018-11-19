@@ -13,6 +13,7 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\file\Entity\File;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Class SkuImagesManager.
@@ -795,7 +796,7 @@ class SkuImagesManager {
       case 'pdp-magazine':
         // We will use below variable for alter hooks.
         $prod_description = [];
-        if ($original_sku_entity == NULL) {
+        if (!isset($original_sku_entity)) {
           $original_sku_entity = $sku;
         }
         if ($body = $original_sku_entity->get('attr_description')->getValue()) {
@@ -870,7 +871,7 @@ class SkuImagesManager {
             ],
           ];
 
-          $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
+          $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
           $labels = [
             '#theme' => 'product_labels',
