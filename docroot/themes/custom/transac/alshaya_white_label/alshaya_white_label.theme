@@ -670,13 +670,21 @@ function alshaya_white_label_page_attachments_alter(array &$attachments) {
  * Implements hook_theme_suggestions_node_alter().
  */
 function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  $node = $variables['elements']['#node'];
+
   // Check if the current node is front page.
   if (\Drupal::service('path.matcher')->isFrontPage()) {
-    $node = $variables['elements']['#node'];
     if ($node instanceof Node) {
       if ($node->getType() == 'advanced_page') {
         $suggestions[] = 'node__advanced_page_front';
       }
+    }
+  }
+
+  if ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
+    $settings = \Drupal::config('alshaya_acm_product.settings');
+    if ($settings->get('pdp_layout') == 'magazine') {
+      $suggestions[] = 'node__acq_product__full_magazine';
     }
   }
 }
