@@ -137,13 +137,13 @@ class MigrateSymmetricToAsymmetric {
     $translation = $entities[$translationLangcode];
 
     foreach ($fields as $field) {
-      if ($default->hasField($field)) {
+      if ($default->hasField($field) && $translation->hasField($field)) {
         $translatedValues = $translation->get($field)->getValue();
         foreach ($default->get($field)->getValue() as $index => $value) {
           $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
 
-          if (empty($translatedParagraph)) {
+          if (empty($paragraph) || empty($translatedParagraph)) {
             continue;
           }
 
@@ -156,7 +156,16 @@ class MigrateSymmetricToAsymmetric {
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
           $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
           $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
-          $newTranslatedParagraph->save();
+
+          try {
+            $newTranslatedParagraph->save();
+          }
+          catch (\Exception $e) {
+            $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
+              '@row' => json_encode($newTranslatedValues),
+              '@message' => $e->getMessage(),
+            ]);
+          }
         }
       }
     }
@@ -179,11 +188,15 @@ class MigrateSymmetricToAsymmetric {
     $fields = self::$fields[$original->getEntityTypeId()];
 
     foreach ($fields as $field) {
-      if ($original->hasField($field)) {
+      if ($original->hasField($field) && $translation->hasField($field)) {
         $translatedValues = $translation->get($field)->getValue();
         foreach ($original->get($field)->getValue() as $index => $value) {
           $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+
+          if (empty($paragraph) || empty($translatedParagraph)) {
+            continue;
+          }
 
           $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
 
@@ -194,7 +207,16 @@ class MigrateSymmetricToAsymmetric {
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
           $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
           $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
-          $newTranslatedParagraph->save();
+
+          try {
+            $newTranslatedParagraph->save();
+          }
+          catch (\Exception $e) {
+            $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
+              '@row' => json_encode($newTranslatedValues),
+              '@message' => $e->getMessage(),
+            ]);
+          }
         }
       }
     }

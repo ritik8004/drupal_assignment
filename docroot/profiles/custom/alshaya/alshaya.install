@@ -9,11 +9,35 @@ use Drupal\Core\Site\Settings;
 use Drupal\node\Entity\NodeType;
 
 /**
- * Implements hook_post_update_NAME().
+ * Implements hook_update_N().
  *
  * Migrate paragraphs content from asymmetric to symmetric translations.
  */
-function alshaya111_post_update_8011() {
+function alshaya_update_8010() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // First make normal fields inside paragraphs translatable.
+  $configs = [
+    'field.field.paragraph.product_carousel_category.field_category_carousel_title',
+    'field.field.paragraph.product_carousel_category.field_view_all_text',
+  ];
+
+  $manager->updateConfigs($configs, 'alshaya_paragraphs_transac', 'optional');
+
+  $configs = [
+    'field.field.paragraph.delivery_usp_block.field_usp_text',
+    'field.field.paragraph.delivery_usp_block.field_usp_text_background',
+    'field.field.paragraph.promo_block.field_margin_d_t',
+    'field.field.paragraph.promo_block.field_margin_mobile',
+    'field.field.paragraph.promo_block.field_promo_block_seo_text',
+    'field.field.paragraph.promo_block.field_promo_block_seo_title',
+    'field.field.paragraph.promo_block.field_promotion_image_mobile',
+    'field.field.paragraph.section_divider.field_section_divider_text',
+  ];
+
+  $manager->updateConfigs($configs, 'alshaya_paragraphs');
+
   // Do migration now.
   /** @var \Drupal\alshaya_paragraphs\Helper\MigrateSymmetricToAsymmetric $migrateUtility */
   $migrateUtility = \Drupal::service('alshaya_paragraphs.migrate_utility');
@@ -24,11 +48,11 @@ function alshaya111_post_update_8011() {
 
   foreach ($nodes as $node) {
     $migrateUtility->migrateEntity($node);
+
+    // Some contents are missed or improperly updated on first go. We do it
+    // again to ensure everything is proper after migration.
     $migrateUtility->migrateEntity($node);
   }
-
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
 
   // Make paragraph fields non-translatable now.
   $configs = [
@@ -68,37 +92,6 @@ function alshaya111_post_update_8011() {
   foreach ($configs as $module => $fields) {
     $manager->updateConfigs($fields, $module);
   }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Migrate paragraphs content from asymmetric to symmetric translations.
- */
-function alshaya_update_8011() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  // First make normal fields inside paragraphs translatable.
-  $configs = [
-    'field.field.paragraph.product_carousel_category.field_category_carousel_title',
-    'field.field.paragraph.product_carousel_category.field_view_all_text',
-  ];
-
-  $manager->updateConfigs($configs, 'alshaya_paragraphs_transac', 'optional');
-
-  $configs = [
-    'field.field.paragraph.delivery_usp_block.field_usp_text',
-    'field.field.paragraph.delivery_usp_block.field_usp_text_background',
-    'field.field.paragraph.promo_block.field_margin_d_t',
-    'field.field.paragraph.promo_block.field_margin_mobile',
-    'field.field.paragraph.promo_block.field_promo_block_seo_text',
-    'field.field.paragraph.promo_block.field_promo_block_seo_title',
-    'field.field.paragraph.promo_block.field_promotion_image_mobile',
-    'field.field.paragraph.section_divider.field_section_divider_text',
-  ];
-
-  $manager->updateConfigs($configs, 'alshaya_paragraphs');
 }
 
 /**
