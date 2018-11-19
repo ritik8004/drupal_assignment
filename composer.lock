@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "878a4cf7b79a925dbc4cdb4ba5278f5b",
+    "content-hash": "865f8d7a0d8bd0927fa1b96dea96a90e",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -23,12 +23,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "f3ce899d7b38642eceb50e622971663516cecd66"
+                "reference": "ddf8fbf74af2b44f95871173ce865693f7aa503c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/f3ce899d7b38642eceb50e622971663516cecd66",
-                "reference": "f3ce899d7b38642eceb50e622971663516cecd66",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/ddf8fbf74af2b44f95871173ce865693f7aa503c",
+                "reference": "ddf8fbf74af2b44f95871173ce865693f7aa503c",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-11-16T09:06:39+00:00"
+            "time": "2018-11-19T07:38:44+00:00"
         },
         {
             "name": "acquia/blt",

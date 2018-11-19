@@ -185,9 +185,6 @@
         },
         "enable-patching": true,
         "patches": {
-            "acquia/acsf_tools": {
-                "Filtering out drush global options whcich are set by default during drush invoke process.": "https://github.com/acquia/acsf-tools/pull/36.patch"
-            },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
             },
