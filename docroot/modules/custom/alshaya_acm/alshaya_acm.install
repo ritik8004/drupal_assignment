@@ -5,6 +5,7 @@
  * Contains install, update, uninstall hooks for alshaya_acm module.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
@@ -38,11 +39,13 @@ function alshaya_acm_update_8010() {
 
   foreach ($result as $row) {
     $sku = SKU::loadFromSku($row->sku, 'en');
-    $translation = $sku->getTranslation('ar');
-    $translation->price = $sku->price;
-    $translation->special_price = $sku->special_price;
-    $translation->final_price = $sku->final_price;
-    $translation->save();
+    if ($sku instanceof SKU && $sku->hasTranslation('ar')) {
+      $translation = $sku->getTranslation('ar');
+      $translation->price = $sku->price;
+      $translation->special_price = $sku->special_price;
+      $translation->final_price = $sku->final_price;
+      $translation->save();
+    }
   }
 }
 
