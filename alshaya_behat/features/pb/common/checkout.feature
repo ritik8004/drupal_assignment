@@ -61,7 +61,7 @@ Feature: Test Checkout feature
     Then I should see text matching "Thank you for shopping online with us, Test Test "
     And I should see text matching "Your order number is "
 
-  @t&c
+  @tc
   Scenario: As a Guest,
   I should see the error message when terms and condition unchecked
     And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"

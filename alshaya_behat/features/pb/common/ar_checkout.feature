@@ -51,7 +51,7 @@ Feature: Test various checkout scenarios for Arabic site
     Then I should see text matching "شكراً لتسوقكم معنا عبر الموقع، Test Test"
     Then I should see "رقم طلبيتك هو"
 
-  @t&c
+  @tc
   Scenario: As a Guest on Arabic site
   I should see the error message when terms and condition unchecked
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"

@@ -161,7 +161,7 @@ Feature: Test various checkout scenarios for Arabic site
     Then I should see the button "إتمام الشراء بأمان"
     And the url should match "/ar/cart"
 
-  @t&c
+  @tc
   Scenario: As a Guest on Arabic site
   I should see the error message when terms and condition unchecked
     When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"

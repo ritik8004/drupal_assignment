@@ -2254,10 +2254,11 @@ class SkuManager {
     if (count($combinations['by_sku']) === 1) {
       $child_skus = array_keys($combinations['by_sku']);
       $child_sku = reset($child_skus);
-      $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-      $this->currentRequest->query->set('selected', $child->id());
-      $static[$sku->id()] = $child;
-      return $child;
+      if ($child = SKU::loadFromSku($child_sku, $sku->language()->getId())) {
+        $this->currentRequest->query->set('selected', $child->id());
+        $static[$sku->id()] = $child;
+        return $child;
+      }
     }
 
     // If there is only one attribute option or config says select one
