@@ -285,7 +285,7 @@ Feature: Test Checkout feature
     Then I should see the button "checkout securely"
     And the url should match "/cart"
 
-  @t&c
+  @tc
   Scenario:  As a Guest,
   I should see the error message when terms and condition unchecked
     When I follow "Home delivery"
