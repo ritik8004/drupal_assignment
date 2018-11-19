@@ -245,7 +245,9 @@ class PromotionProductListResource extends ResourceBase {
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
       'banner' => !empty($banners) ? $banners[0] : '',
-      'description' => $node->get('field_acq_promotion_description')->getValue()[0]['value'],
+      'description' => ($desc = $node->get('field_acq_promotion_description')->getValue())
+      ? $desc[0]['value']
+      : '',
     ];
   }
 

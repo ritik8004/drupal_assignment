@@ -31,7 +31,9 @@
         li,
         span {
           a:not([data-swatch-type=RGB]) {
-            width: 2.9375rem;
+            @include breakpoint($tablet) {
+              width: 2.9375rem;
+            }
           }
         }
       }
