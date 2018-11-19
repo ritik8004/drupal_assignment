@@ -122,6 +122,10 @@
           font-weight: bold;
           text-transform: uppercase;
         }
+
+        @include breakpoint($upto-desktop) {
+          text-transform: capitalize;
+        }
       }
 
       div.menu-two__link {
@@ -138,6 +142,18 @@
     @include breakpoint($desktop) {
       &:hover {
         text-decoration: underline;
+      }
+    }
+  }
+
+  .menu--three__list {
+    .level-three__wrapper {
+      .menu--three__list-item {
+        a {
+          @include breakpoint($upto-desktop) {
+            text-transform: capitalize;
+          }
+        }
       }
     }
   }
