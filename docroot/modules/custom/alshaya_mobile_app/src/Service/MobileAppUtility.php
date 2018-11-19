@@ -765,11 +765,11 @@ class MobileAppUtility {
    * @param float $price
    *   The price.
    *
-   * @return float
-   *   Return float price upto configured decimal points.
+   * @return string
+   *   Return string price upto configured decimal points.
    */
-  public function formatPriceDisplay(float $price): float {
-    return number_format($price, $this->currencyConfig->get('decimal_points'));
+  public function formatPriceDisplay(float $price): string {
+    return (string) number_format($price, $this->currencyConfig->get('decimal_points'));
   }
 
 }
