@@ -11,7 +11,7 @@
 
   Drupal.behaviors.alshayaPLPVideos = {
     attach: function (context, settings) {
-      if ($('.moschino-plp-layout .plp-video').length !== 0) {
+      if ($('.campaign-plp-style-1-plp-layout .plp-video').length !== 0) {
         // Store the video object.
         var plpPlayer = videojs('#plp-video-player');
         var md = new MobileDetect(window.navigator.userAgent);
@@ -46,7 +46,7 @@
 
       var mos_menu_item_height = 0;
       // Accordion for submenu links, but this is only for tablets and below.
-      $('.moschino-plp-layout .field--name-field-plp-menu').find('.mos-menu-item').each(function () {
+      $('.campaign-plp-style-1-plp-layout .field--name-field-plp-menu').find('.mos-menu-item').each(function () {
         // Create accordion if the menu has sub links.
         if ($(this).find('.mos-menu-sublink').length !== 0) {
           $(this).once('accordion-init').accordion({
@@ -61,22 +61,22 @@
 
       // Making L1 links vertically in center in all breakpoints on load.
       var padding_value = ($(window).height() - mos_menu_item_height) / 2;
-      var subMenuContent = $('.field__items.moschino-sub-menu-content');
+      var subMenuContent = $('.field__items.campaign-plp-style-1-sub-menu-content');
       if (!subMenuContent.hasClass('padding-processed')) {
         subMenuContent.css({'padding-top': padding_value, 'padding-bottom': padding_value});
         subMenuContent.addClass('padding-processed');
       }
 
       // For desktop making the L2 wrapper for L2 links start after 1st L1 item.
-      var l1LinksSelector = $('.moschino-sub-menu-content > .field--name-field-plp-menu');
-      var l2LinksWrapper = $('.moschino-plp-layout .moschino-sub-menu-content .l2-links-wrapper');
+      var l1LinksSelector = $('.campaign-plp-style-1-sub-menu-content > .field--name-field-plp-menu');
+      var l2LinksWrapper = $('.campaign-plp-style-1-plp-layout .campaign-plp-style-1-sub-menu-content .l2-links-wrapper');
       if (!l2LinksWrapper.hasClass('top-processed')) {
         l2LinksWrapper.css('top', l1LinksSelector.first().offset().top + l1LinksSelector.outerHeight());
         l2LinksWrapper.addClass('top-processed');
       }
 
       // For Desktop, we show sublins in a different markup.
-      $('.moschino-plp-layout .mos-menu-heading').once().on('click', function (event) {
+      $('.campaign-plp-style-1-plp-layout .mos-menu-heading').once().on('click', function (event) {
         if ($(window).width() > 1024) {
           // Clicking on same link again.
           if ($(this).parent().parent().hasClass('active-menu')) {
@@ -109,40 +109,40 @@
 
       var startAnimationCounter = 500;
       // Adding different transition durations for each heading links.
-      $('.moschino-plp-layout .mos-menu-heading').each(function () {
+      $('.campaign-plp-style-1-plp-layout .mos-menu-heading').each(function () {
         $(this).css('transition-duration', startAnimationCounter + 'ms');
         startAnimationCounter = startAnimationCounter + 50;
       });
 
       // Show the sub menu on click of the sub menu btn.
-      $('.moschino-plp-layout .moschino-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
-        $('.moschino-sub-menu-content').toggleClass('visible');
+      $('.campaign-plp-style-1-plp-layout .campaign-plp-style-1-layout-submenu-icon .sub-menu-btn', context).on('click', function () {
+        $('.campaign-plp-style-1-sub-menu-content').toggleClass('visible');
       });
 
-      $('.moschino-plp-layout .moschino-sub-menu-content .close-btn', context).on('click', function () {
-        $('.moschino-sub-menu-content').toggleClass('visible');
+      $('.campaign-plp-style-1-plp-layout .campaign-plp-style-1-sub-menu-content .close-btn', context).on('click', function () {
+        $('.campaign-plp-style-1-sub-menu-content').toggleClass('visible');
         // Clean up links.
-        var l2LinksWrapper = $('.moschino-plp-layout .moschino-sub-menu-content .l2-links-wrapper');
+        var l2LinksWrapper = $('.campaign-plp-style-1-plp-layout .campaign-plp-style-1-sub-menu-content .l2-links-wrapper');
         l2LinksWrapper.empty();
         l2LinksWrapper.removeClass('visible');
-        $('.moschino-sub-menu-content > .field--name-field-plp-menu').removeClass('active-menu');
+        $('.campaign-plp-style-1-sub-menu-content > .field--name-field-plp-menu').removeClass('active-menu');
 
         // Clean up accordion panels.
-        $('.moschino-sub-menu-content > .field--name-field-plp-menu').each(function () {
+        $('.campaign-plp-style-1-sub-menu-content > .field--name-field-plp-menu').each(function () {
           closeOpenAccordion($(this));
         });
       });
 
-      // Add class if it is moschino modal.
-      $(document).on('mousedown', '.moschino-modal-link.use-ajax', function () {
+      // Add class if it is campaign-plp-style-1 modal.
+      $(document).on('mousedown', '.campaign-plp-style-1-modal-link.use-ajax', function () {
         $(document).on('dialogopen', '.ui-dialog', function () {
-          $(this).addClass('moschino-modal');
+          $(this).addClass('campaign-plp-style-1-modal');
         });
       });
 
       // Remove the class when the modal is closed.
       $(document).on('dialogclose', '.ui-dialog', function () {
-        $(this).removeClass('moschino-modal');
+        $(this).removeClass('campaign-plp-style-1-modal');
       });
 
       /**
@@ -151,7 +151,7 @@
       function l2sublinksAnimate() {
         setTimeout(function () {
           var startAnimationCounter = 400;
-          $('.moschino-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
+          $('.campaign-plp-style-1-plp-layout .l2-links-wrapper > .field--name-field-sub-link .field--name-field-sub-link').each(function () {
             $(this).css('transition-duration', startAnimationCounter + 'ms');
             $(this).addClass('animate');
             startAnimationCounter = startAnimationCounter + 70;

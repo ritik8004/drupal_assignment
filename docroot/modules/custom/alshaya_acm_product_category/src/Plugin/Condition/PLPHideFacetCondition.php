@@ -9,11 +9,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
- * Provides the 'Hide facet on Moschino condition' condition.
+ * Provides the 'Hide facet on PLP' condition.
  *
  * @Condition(
- *   id = "hide_facet_condition_moschino",
- *   label = @Translation("Hide facet on Moschino condition"),
+ *   id = "hide_facet_condition_plp",
+ *   label = @Translation("Hide facet on PLP condition"),
  *   context = {
  *     "taxonomy_term" = @ContextDefinition(
  *        "entity:taxonomy_term",
@@ -22,7 +22,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  *   }
  * )
  */
-class MoschinoHideFacetCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
+class PLPHideFacetCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
    * {@inheritdoc}
@@ -41,9 +41,9 @@ class MoschinoHideFacetCondition extends ConditionPluginBase implements Containe
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form['hideFacet'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t("Apply 'hide facet on moschino condition' condition on this block"),
+      '#title' => $this->t("Apply 'hide facet on PLP styles condition' on this block"),
       '#default_value' => $this->configuration['hideFacet'],
-      '#description' => $this->t('If selected, this block will not be displayed on moschino plp pages.'),
+      '#description' => $this->t('If selected, this block will not be displayed on campaign-plp-style-1 plp pages.'),
     ];
     return parent::buildConfigurationForm($form, $form_state);
   }
@@ -74,10 +74,10 @@ class MoschinoHideFacetCondition extends ConditionPluginBase implements Containe
   }
 
   /**
-   * Condition return FALSE if PLP layout is moschino.
+   * Condition return FALSE if PLP layout is campaign-plp-style-1.
    *
    * This condition is used for PLP to hide the related facet block
-   * when Moschino layout is used.
+   * when campaign-plp-style-1 layout is used.
    *
    * @return bool
    *   TRUE if the condition has been met, FALSE otherwise.
@@ -88,7 +88,7 @@ class MoschinoHideFacetCondition extends ConditionPluginBase implements Containe
     }
 
     $term = $this->getContextValue('taxonomy_term');
-    if ($term->hasField('field_plp_layout') && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_LAYOUT_MOSCHINO) {
+    if ($term->hasField('field_plp_layout') && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_LAYOUT_1) {
       return FALSE;
     }
     return TRUE;
