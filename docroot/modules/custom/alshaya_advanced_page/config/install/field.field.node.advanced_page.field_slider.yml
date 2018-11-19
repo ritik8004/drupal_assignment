@@ -15,7 +15,8 @@ bundle: advanced_page
 label: 'Slider/Deliver USP'
 description: ''
 required: false
-translatable: true
+translatable: false
+skip_translation_check: true
 default_value: {  }
 default_value_callback: ''
 settings:
