@@ -287,6 +287,6 @@ function alshaya_vs_transac_alshaya_stores_finder_marker_label_position_alter(ar
 /**
  * Implements hook_acq_sku_magazine_product_description_alter().
  */
-function alshaya_vs_transac_acq_sku_magazine_product_description_alter($sku, $prod_description) {
+function alshaya_vs_transac_acq_sku_magazine_product_description_alter($sku, &$prod_description) {
   $prod_description = _alshaya_vs_transac_get_product_description($sku);
 }

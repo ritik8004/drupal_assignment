@@ -617,7 +617,7 @@ class SkuImagesManager {
    * @param bool $check_parent_child
    *   Flag to mention if parent/child should be checked later.
    * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
-   *   First sku entity.
+   *   Th default sku for the product.
    *
    * @return array
    *   Gallery.
