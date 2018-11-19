@@ -132,14 +132,23 @@ class MigrateSymmetricToAsymmetric {
       return;
     }
 
+    /** @var \Drupal\node\NodeInterface $default */
     $default = $entities[$defaultLangcode];
     $translationLangcode = $defaultLangcode === 'en' ? 'ar' : 'en';
     $translation = $entities[$translationLangcode];
 
     foreach ($fields as $field) {
       if ($default->hasField($field) && $translation->hasField($field)) {
+        $defaultValues = $default->get($field)->getValue();
         $translatedValues = $translation->get($field)->getValue();
-        foreach ($default->get($field)->getValue() as $index => $value) {
+
+        if (count($defaultValues) !== count($translatedValues)) {
+          $this->logger->error('Content structure do not match for node id: @id', [
+            '@id' => $default->id(),
+          ]);
+        }
+
+        foreach ($defaultValues as $index => $value) {
           $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
 
@@ -189,8 +198,16 @@ class MigrateSymmetricToAsymmetric {
 
     foreach ($fields as $field) {
       if ($original->hasField($field) && $translation->hasField($field)) {
+        $defaultValues = $original->get($field)->getValue();
         $translatedValues = $translation->get($field)->getValue();
-        foreach ($original->get($field)->getValue() as $index => $value) {
+
+        if (count($defaultValues) !== count($translatedValues)) {
+          $this->logger->error('Content structure do not match for paragraph id: @id', [
+            '@id' => $original->id(),
+          ]);
+        }
+
+        foreach ($defaultValues as $index => $value) {
           $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
           $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
 
