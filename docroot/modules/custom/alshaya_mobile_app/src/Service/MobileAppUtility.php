@@ -772,4 +772,18 @@ class MobileAppUtility {
     return (string) number_format($price, $this->currencyConfig->get('decimal_points'));
   }
 
+  /**
+   * Convert relative url img tag in string with absolute url.
+   *
+   * @param string $string
+   *   The string containing html tags.
+   *
+   * @return string
+   *   Return the complete url string with domain.
+   */
+  public function convertRelativeUrlsToAbsolute(string $string): string {
+    global $base_url;
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
+  }
+
 }
