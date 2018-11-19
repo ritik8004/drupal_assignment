@@ -39,7 +39,7 @@ function alshaya_acm_update_8010() {
 
   foreach ($result as $row) {
     $sku = SKU::loadFromSku($row->sku, 'en');
-    if ($sku->hasTranslation('ar')) {
+    if ($sku instanceof SKU && $sku->hasTranslation('ar')) {
       $translation = $sku->getTranslation('ar');
       $translation->price = $sku->price;
       $translation->special_price = $sku->special_price;
