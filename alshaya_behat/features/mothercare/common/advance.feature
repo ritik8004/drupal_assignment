@@ -2,7 +2,7 @@
 Feature: Advanced Page test
   As an admin and webmaster I must be able to add an advance page
   and see the published page as the site visitor.
-@test
+
   Scenario Outline: Creating Advanced Page
     Given I am on "/user/login"
     And I fill in "name" with "<email>"
@@ -103,8 +103,6 @@ Feature: Advanced Page test
     And I press "op"
     And I wait 10 seconds
 
-
-
     Examples:
       |email|pwd|
       |user3+admin@example.com|AlShAyAU1admin|
@@ -163,8 +161,6 @@ Feature: Advanced Page test
     And I wait 20 seconds
 
 
-
-
   @deptcategory  @leftmenu
   Scenario Outline: As a user I am able to check the left menu is enabled or not
     Given I am on "<link>"
@@ -179,7 +175,6 @@ Feature: Advanced Page test
      # |/kids|Baby Girl 4-24 months|.c-sidebar-first|/kids/baby-girl-4-24-months|
       #mckw
       |/toys|Rattles & Teethers|.c-category-list__item|/toys/shop-by-department|
-
 
 
   @deptcategory
@@ -234,8 +229,6 @@ Feature: Advanced Page test
     Then I select "Published" from "moderation_state[0][state]"
     And I press "op"
     And I wait 20 seconds
-
-
 
 
   @deptcategory  @leftmenu

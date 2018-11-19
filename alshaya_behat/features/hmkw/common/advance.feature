@@ -3,7 +3,6 @@ Feature: Advanced Page test
   As an admin and webmaster I must be able to add an advance page
   and see the published page as the site visitor.
 
-
   Scenario Outline: Creating Advanced Page
     Given I am on "/user/login"
     And I fill in "name" with "<email>"
@@ -104,8 +103,6 @@ Feature: Advanced Page test
     And I press "op"
     And I wait 10 seconds
 
-
-
     Examples:
       |email|pwd|
       |user3+admin@example.com|AlShAyAU1admin|
@@ -163,7 +160,6 @@ Feature: Advanced Page test
     Then I select "Published" from "moderation_state[0][state]"
     And I press "op"
     And I wait 20 seconds
-
 
 
   @deptcategory @leftmenu
