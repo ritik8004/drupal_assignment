@@ -38,5 +38,22 @@
         }
       }
     }
+
+    &.swatch-toggle {
+      .select2Option {
+        .select-buttons {
+          @include breakpoint($only-mobile) {
+            display: flex !important;
+            display: block;
+          }
+
+          li {
+            @include breakpoint($only-mobile) {
+              display: inline-flex;
+            }
+          }
+        }
+      }
+    }
   }
 }

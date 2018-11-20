@@ -25,29 +25,7 @@
     $('.form-item-configurable-swatch').addClass('visually-hidden');
 
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
-    if ($('.form-item-configurables-article-castor-id .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
-      $('.form-item-configurables-article-castor-id').addClass('product-swatch');
-    }
-    else {
-      $('.form-item-configurables-article-castor-id').addClass('colour-swatch');
-    }
     Drupal.magazine_swatches_count();
-
-    $('.show-more-color').on('click', function (e) {
-      $('.form-item-configurables-article-castor-id .select-buttons li').each(function () {
-        if ($(this).hide()) {
-          $(this).show();
-        }
-      });
-      $(this).hide();
-      $('.show-less-color').show();
-    });
-
-    $('.show-less-color').on('click', function (e) {
-      Drupal.magazine_swatches_count();
-      $(this).hide();
-      $('.show-more-color').show();
-    });
   };
 
   /**
@@ -70,17 +48,27 @@
     });
   };
 
+  /**
+   * implementation of view more/less colour for swatches.
+   */
   Drupal.magazine_swatches_count = function () {
+    if ($('.form-item-configurables-article-castor-id .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
+      $('.form-item-configurables-article-castor-id').addClass('product-swatch');
+    }
+    else {
+      $('.form-item-configurables-article-castor-id').addClass('colour-swatch');
+    }
+
     var colour_swatches = drupalSettings.colour_swatch_items_mob;
     var product_swatches = drupalSettings.product_swatch_items_mob;
     var swatch_items_to_show = 0;
 
-    if ($(window).width() > 767) {
+    if ($(window).width() > 767 && $(window).width() < 1025) {
       colour_swatches = drupalSettings.colour_swatch_items_tab;
       product_swatches = drupalSettings.product_swatch_items_tab;
     }
 
-    if ($(window).width() > 1024) {
+    else if ($(window).width() > 1024) {
       colour_swatches = drupalSettings.colour_swatch_items_desk;
       product_swatches = drupalSettings.product_swatch_items_desk;
     }
@@ -93,9 +81,22 @@
     }
 
     if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show) {
-      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').hide();
+      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
       $('.show-more-color').show();
     }
+
+    $('.show-more-color').on('click', function (e) {
+      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      $(this).hide();
+      $('.show-less-color').show();
+    });
+
+    $('.show-less-color').on('click', function (e) {
+      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      $(this).hide();
+      $('.show-more-color').show();
+    });
   };
 
   Drupal.behaviors.configurableAttributeBoxes = {
