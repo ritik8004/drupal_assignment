@@ -56,6 +56,12 @@ function alshaya_update_8010() {
     $migrateUtility->migrateEntity($node);
   }
 
+  $block_ids = \Drupal::database()->query('SELECT distinct(entity_id) FROM block_content__field_paragraph_content')->fetchAll();
+  foreach ($block_ids as $block_id) {
+    $block = \Drupal::entityTypeManager()->getStorage('block_content')->load($block_id->entity_id);
+    $migrateUtility->migrateEntity($block);
+  }
+
   // Make paragraph fields non-translatable now.
   $configs = [
     'alshaya_acm_product_category' => [
