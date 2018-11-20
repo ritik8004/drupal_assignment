@@ -170,6 +170,11 @@ class AdvancedPageResource extends ResourceBase {
         'contexts' => [
           'url.query_args:url',
         ],
+        'tags' => [
+          'node:taxonomy_term.accordion',
+          'node_view',
+          'paragraph_view',
+        ],
       ],
     ]));
 
