@@ -744,6 +744,11 @@ class SkuImagesManager {
               'mediumurl' => $image_medium,
               'label' => $sku->label(),
             ];
+
+            $thumbnails[] = [
+              'fullurl' => $default_image->url(),
+              'label' => $sku->label(),
+            ];
           }
         }
 
