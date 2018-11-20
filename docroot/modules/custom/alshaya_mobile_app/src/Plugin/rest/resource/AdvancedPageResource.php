@@ -167,13 +167,11 @@ class AdvancedPageResource extends ResourceBase {
         'contexts' => [
           'url.query_args:url',
         ],
-        'tags' => array_merge(
-          $this->mobileAppUtility->cacheableTermsTags(),
-          [
-            'node_view',
-            'paragraph_view',
-          ]
-        ),
+        'tags' => [
+          'node:taxonomy_term.accordion',
+          'node_view',
+          'paragraph_view',
+        ],
       ],
     ]));
 
