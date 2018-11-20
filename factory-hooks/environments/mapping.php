@@ -80,22 +80,8 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     'local' => 'qa',
   ];
 
-  $mapping = [
-    // BathBodyWorks AE.
-    'bbwae' => [
-      '01live' => [
-        'magento' => 'bbw_prod',
-        'conductor' => 'bbwae_prod_v1',
-      ],
-    ],
-    // Victoria Secret AE.
-    'vsae' => [
-      '01live' => [
-        'magento' => 'vs_prod',
-        'conductor' => 'vsae_prod_v1',
-      ],
-    ],
-  ];
+  // Fill this variable to override the default mapping.
+  $mapping = [];
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.

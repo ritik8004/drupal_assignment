@@ -1,0 +1,7 @@
+visibility:
+  hide_facet_condition_plp:
+    id: hide_facet_condition_plp
+    hideFacet: 1
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'

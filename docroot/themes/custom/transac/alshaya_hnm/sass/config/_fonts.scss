@@ -161,6 +161,24 @@ $alshaya-arabic-bold: $hnm-arabic-bold;
 $alshaya-thin: $hnm-regular;
 $alshaya-arabic-thin: $hnm-arabic-regular;
 
+// Campaign-plp-style-1 font family.
+@font-face {
+  font-family: 'Sunrise';
+  src: url("../fonts/Sunrise.eot");
+  src:
+    url("../fonts/Sunrise.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Sunrise.otf") format("opentype"),
+    url("../fonts/Sunrise.svg") format("svg"),
+    url("../fonts/Sunrise.ttf") format("truetype"),
+    url("../fonts/Sunrise.woff") format("woff"),
+    url("../fonts/Sunrise.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+$campaign-plp-style-1-font: 'Sunrise', 'GESSTwoMedium-Medium';
+$campaign-plp-style-1-arabic-font: 'Sunrise', 'GESSTwoMedium-Medium';
+
 // Icon Fonts
 $icons: (
   arrowup: "\e93b",

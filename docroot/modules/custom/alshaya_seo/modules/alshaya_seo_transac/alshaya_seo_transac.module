@@ -194,6 +194,15 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             case 'delivery':
               if (!empty($data_layer['deliveryArea'])) {
                 $step = 3;
+                $page_type = 'checkout sub-delivery page';
+              }
+              else {
+                // For logged in users, we show delivery methods only when
+                // click on 'Deliver this address' and thus will always be
+                // step 2.
+                if (\Drupal::currentUser()->isAuthenticated()) {
+                  $step = 2;
+                }
               }
               $step = !empty($step) ? $step : 2;
               break;

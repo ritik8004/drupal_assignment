@@ -290,7 +290,13 @@ class Configurable extends SKUPluginBase {
       }
     }
     else {
-      drupal_set_message(t('The current selection does not appear to be valid.'));
+      $message = t('The current selection does not appear to be valid.');
+      drupal_set_message($message);
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $exception = new \Exception($message);
+      $event = new AddToCartErrorEvent($exception);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
     }
   }
 
@@ -476,7 +482,7 @@ class Configurable extends SKUPluginBase {
         $attributes[$key] = $value;
       }
 
-      foreach ($tree['combinations']['by_sku'] as $sku => $sku_attributes) {
+      foreach ($tree['combinations']['by_sku'] ?? [] as $sku => $sku_attributes) {
         if (count(array_intersect_assoc($sku_attributes, $attributes)) === count($sku_attributes)) {
           return $tree['products'][$sku];
         }
@@ -535,12 +541,19 @@ class Configurable extends SKUPluginBase {
       }
     }
 
-    // Create name from label parts.
-    $cartName = sprintf(
-      '%s (%s)',
-      $cart['name'],
-      implode(', ', $label_parts)
-    );
+    // If the cart name has already been constructed and is rendered as a link,
+    // use the title directly.
+    if (!empty($cart['name']['#title'])) {
+      $cartName = $cart['name']['#title'];
+    }
+    else {
+      // Create name from label parts.
+      $cartName = sprintf(
+        '%s (%s)',
+        $cart['name'],
+        implode(', ', $label_parts)
+      );
+    }
 
     if (!$asString) {
       $display_node = $this->getDisplayNode($parent_sku);

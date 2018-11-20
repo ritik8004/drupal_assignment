@@ -174,6 +174,29 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               $item->getField($key)->setValues(array_keys($values));
             }
           }
+
+          // It means there is no data indexed for child sku. Thus we need to
+          // skip the indexing of parent sku attributes as well.
+          if (empty($data)) {
+            // Iterate over each indexed field.
+            foreach ($itemFields as $field_key => $field_val) {
+              // Only unset/remove of attribute fields or this will remove the
+              // SKU from the indexing on default listing (without any filter).
+              if (strpos($field_key, 'attr_') !== FALSE && isset($items[$item_id])) {
+                try {
+                  $items[$item_id]->getField($field_key)->setValues([]);
+                }
+                catch (\Throwable $e) {
+                  // Do nothing, just log.
+                  \Drupal::logger('alshaya_acm_product')->error('Indexing failed for the index: @index field:@field_key item:@item_id', [
+                    '@index' => $index->id(),
+                    '@field_key' => $field_key,
+                    '@item_id' => $item_id,
+                  ]);
+                }
+              }
+            }
+          }
         }
 
         elseif ($sku_entity->bundle() == 'simple') {
@@ -190,7 +213,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
               // Only unset/remove of attribute fields or this will remove the
               // SKU from the indexing on default listing (without any filter).
               if (strpos($field_key, 'attr_') !== FALSE) {
-                $items[$item_id]->setField($field_key, NULL);
+                $items[$item_id]->getField($field_key)->setValues([]);
               }
             }
           }
@@ -361,6 +384,9 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
       // Clear cached data for configurable products.
       $skuManager->clearProductCachedData($parent);
 
+      // Reset the sku static cache.
+      drupal_static_reset('loadFromSku');
+
       // @TODO: Make this smart in CORE-3443.
       Cache::invalidateTags($parent->getCacheTagsToInvalidate());
     }
@@ -517,14 +543,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if ($sku_for_gallery instanceof SKUInterface) {
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, 'pdp');
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child, $sku_entity);
         }
 
-        // Attach libraries.
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
+        $build['price_block'] = $skuManager->getPriceBlock($sku_for_gallery);
 
-        $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
@@ -706,7 +729,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $check_parent_child = TRUE;
           $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child, $sku_entity);
         }
         catch (\Exception $e) {
           // Do nothing.
@@ -895,10 +918,8 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
     // per page, we ignore the parameter.
     if ($show_on_load > $per_page) {
       if ($show_on_load % $per_page !== 0) {
-        $query = $request->query->get('show_on_load');
-        unset($query['show_on_load']);
         unset($_GET['show_on_load']);
-        $request->query->set($query);
+        $request->query->set('show_on_load', NULL);
       }
       // We use the show on load only on page load.
       if (strpos($request->getQueryString(), '_wrapper_format=') === FALSE) {
@@ -1325,7 +1346,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
           if ($quantity > 0) {
             // Set the dropdown quantity options only for selected option.
-            if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $key) {
+            if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $attribute_parts[1]) {
               $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
             }
           }
@@ -1374,6 +1395,17 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
+  else {
+    $form = [
+      '#theme' => 'empty_add_to_cart_form',
+      '#text' => t('Out of stock'),
+    ];
+  }
+
+  // Form state cache is not needed for this form since, we are regenerating the
+  // add to cart form on every change on the form & the form state cache doesn't
+  // get re-used. Instead, keeps flooding key_value_expire table.
+  $form_state->disableCache();
 }
 
 /**
@@ -1536,8 +1568,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     }
 
     // Update cross-sell region with products.
-    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')
-      && $form_state->getUserInput()['sku_view_mode'] == 'full') {
+    if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
       $cross_sell_markup = [
         '#theme' => 'products_horizontal_slider',
         '#section_title' => t('Customers also bought'),
@@ -1598,7 +1629,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       if ($first_child instanceof SKU) {
         $pdp_layout = $skuManager->getPdpLayout($first_child, 'pdp');
-        $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout);
+        $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, $sku);
 
         if (!empty($build['gallery'])) {
           $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];
@@ -1813,6 +1844,43 @@ function _alshaya_acm_product_get_delivery_link(SKU $sku) {
   }
 
   return [];
+}
+
+/**
+ * Filter nodes with stock from given array of nodes.
+ *
+ * @param array $nodes
+ *   The list of nodes array.
+ * @param int $stock_check_limit
+ *   (optional) The limit of products to return as a result.
+ *
+ * @return array
+ *   Return in-stock nodes.
+ */
+function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $stock_check_limit = 50): array {
+  $data = [];
+  if (empty($nodes)) {
+    return $data;
+  }
+
+  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  foreach ($nodes as $node) {
+    /* @var \Drupal\node\Entity\Node $node */
+    if (!$node instanceof NodeInterface) {
+      continue;
+    }
+
+    if ($stock_check_limit <= 0) {
+      break;
+    }
+    // In case stock_mode is not "push", we always select the product
+    // assuming it has stock.
+    if (($stock_mode == 'push' && alshaya_acm_get_stock_from_product($node)) || $stock_mode !== 'push') {
+      $data[] = $node;
+      $stock_check_limit--;
+    }
+  }
+  return $data;
 }
 
 /**

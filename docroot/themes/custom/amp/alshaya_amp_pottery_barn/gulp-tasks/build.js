@@ -8,7 +8,6 @@ module.exports = function (gulp, plugins, options) {
 
   gulp.task('build', [
     'compile:sass',
-    // 'compile:styleguide'
   ], function (cb) {
   // Run linting last, otherwise its output gets lost.
     plugins.runSequence(['lint:css-with-fail'], cb);
@@ -16,8 +15,8 @@ module.exports = function (gulp, plugins, options) {
 
   gulp.task('build:dev', [
     'compile:sass',
-    // 'compile:styleguide'
-  ], function (cb) {cd
+  ], function (cb) {
+    cd;
     // Run linting last, otherwise its output gets lost.
     plugins.runSequence(['lint:css'], cb);
   });

@@ -1,3 +1,8 @@
+/**
+ * @file
+ * JS for Back to PLP.
+ */
+
 (function ($) {
   'use strict';
 
@@ -45,6 +50,7 @@
    * Check if element is fully visible in viewport or not.
    *
    * @param element
+   *
    * @returns {boolean}
    */
   function isElementInViewPort(element) {
@@ -67,12 +73,12 @@
 
   Drupal.processBackToList = function () {
     // On page load, apply filter/sort if any.
-    $('html').once('back-to-list').each(function() {
+    $('html').once('back-to-list').each(function () {
       var storage_value = getStorageValues();
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         if (typeof storage_value.nid !== 'undefined') {
           // Set timeout because of conflict.
-          setTimeout(function(){
+          setTimeout(function () {
             scrollToProduct();
           }, 1);
         }

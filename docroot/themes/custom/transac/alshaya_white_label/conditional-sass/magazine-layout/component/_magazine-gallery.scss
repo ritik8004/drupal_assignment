@@ -1,0 +1,88 @@
+.magazine__gallery--container {
+  display: grid;
+  grid-template:
+    "a a" auto
+    "c c" auto
+    "b d" auto
+    "e e" auto /
+    1fr 1fr;
+  grid-gap: 1rem;
+  grid-auto-rows: minmax(200px, auto);
+  align-items: start;
+
+  @include breakpoint($tablet) {
+    grid-template:
+      "a b" auto
+      "c c" auto
+      "d e" auto /
+      1fr 1fr;
+    margin-#{$right}: 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    margin-#{$right}: 2rem;
+  }
+
+  figure {
+    margin: 0;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .magazine-product-description {
+    grid-area: c;
+    text-align: center;
+    font-size: 0.75rem;
+
+    ul {
+      li {
+        list-style: none;
+      }
+    }
+  }
+
+  .pdp-image {
+    &:nth-child(4n +1) {
+      grid-area: a;
+    }
+
+    &:nth-child(4n+2) {
+      grid-area: b;
+    }
+
+    &:nth-child(4n+3) {
+      grid-area: d;
+    }
+
+    &:nth-child(4n) {
+      grid-column: e;
+    }
+
+    &:nth-child(2n) {
+      #cloud-zoom-big {
+        left: calc(100% + 2rem) !important;
+      }
+    }
+
+    &:nth-child(2n+1) {
+      #cloud-zoom-big {
+        left: calc(200% + 3rem) !important;
+      }
+    }
+
+    #wrap {
+      z-index: 1 !important;
+
+      #cloud-zoom-big {
+        width: 19.88rem;
+        top: 0 !important;
+
+        .cloud-zoom-title {
+          display: none;
+        }
+      }
+    }
+  }
+}

@@ -48,16 +48,6 @@
       html[lang=ar] & {
         position: relative;
         display: inline-block;
-        text-overflow: inherit;
-
-        &::after {
-          content: "...";
-          background: $order_product_title_elipsis_bg;
-          position: absolute;
-          left: 0;
-          padding-right: 1px;
-          width: 0.75rem;
-        }
       }
     }
 
@@ -705,16 +695,6 @@
       html[lang=ar] & {
         position: relative;
         display: inline-block;
-        text-overflow: inherit;
-
-        &::after {
-          content: "...";
-          background: $order_recent_orders_product_title_elipsis_bg;
-          position: absolute;
-          left: 0;
-          padding-right: 1px;
-          width: 0.75rem;
-        }
       }
     }
 

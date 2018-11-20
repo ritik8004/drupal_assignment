@@ -4,15 +4,16 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
-use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\file\Entity\File;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Class SkuImagesManager.
@@ -57,6 +58,13 @@ class SkuImagesManager {
   protected $cache;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -67,6 +75,8 @@ class SkuImagesManager {
    *   Entity Type Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend object.
    */
@@ -74,11 +84,13 @@ class SkuImagesManager {
                               ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               SkuManager $sku_manager,
+                              ProductInfoHelper $product_info_helper,
                               CacheBackendInterface $cache) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->productInfoHelper = $product_info_helper;
     $this->cache = $cache;
   }
 
@@ -116,6 +128,102 @@ class SkuImagesManager {
   public function hasMedia(SKUInterface $sku) {
     $media = $this->getAllMedia($sku, FALSE);
     return !empty($media['images']) || !empty($media['videos']);
+  }
+
+  /**
+   * Get product media items.
+   *
+   * Applies image display rules - which SKU to use for which case.
+   *
+   * Uses new event dispatcher to all brands to modify media items to display.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context - pdp/search/modal/teaser.
+   * @param bool $check_parent_child
+   *   Check parent or child SKUs.
+   *
+   * @return array
+   *   Processed media items.
+   */
+  public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
+    try {
+      $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
+      return $this->productInfoHelper->getMedia($skuForGallery, $context);
+    }
+    catch (\Exception $e) {
+      // For configurable products with no children, we may not have any
+      // child to get media items from.
+      return [];
+    }
+  }
+
+  /**
+   * Get media items for particlar SKU.
+   *
+   * This is CORE implementation to get media items from media array in SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param null|string $default_label
+   *   Default label to use for alt/title.
+   *
+   * @return array
+   *   Media items array.
+   */
+  public function getSkuMediaItems(SKUInterface $sku, ?string $default_label = ''): array {
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
+    $plugin = $sku->getPluginInstance();
+
+    if (empty($default_label) && $sku->bundle() == 'simple') {
+      $parent = $plugin->getParentSku($sku);
+
+      // Check if there is parent SKU available, we use label from that.
+      if ($parent instanceof SKUInterface) {
+        $default_label = $parent->label();
+      }
+    }
+
+    $media = $sku->getMedia(TRUE, FALSE, $default_label);
+
+    // Remove thumbnails from media items.
+    // @TODO: This is added for CORE-5026 and will be reworked in CORE-5208.
+    foreach ($media ?? [] as $index => $media_item) {
+      if (!isset($media_item['media_type'])) {
+        continue;
+      }
+
+      if (isset($media_item['roles'])
+        && in_array('thumbnail', $media_item['roles'])) {
+        unset($media[$index]);
+      }
+    }
+
+    $return = [
+      'images' => [],
+      'videos' => [],
+      'media_items' => [],
+    ];
+
+    // Process CORE media files.
+    if (!empty($media)) {
+      foreach ($media as $media_item) {
+        if (!isset($media_item['media_type'])) {
+          continue;
+        }
+
+        if ($media_item['media_type'] == 'image') {
+          $url = $media_item['file']->url();
+          $return['images'][$url] = $url;
+        }
+        elseif ($media_item['media_type'] == 'external-video') {
+          $return['videos'][$media_item['video_url']] = $media_item['video_url'];
+        }
+      }
+    }
+
+    return $return;
   }
 
   /**
@@ -509,11 +617,13 @@ class SkuImagesManager {
    *   Translated product label to use in alt/title.
    * @param bool $check_parent_child
    *   Flag to mention if parent/child should be checked later.
+   * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
+   *   Th default sku for the product.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE) {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE, SKUInterface $original_sku_entity = NULL) {
     $gallery = [];
 
     $config = $this->configFactory->get('alshaya_acm_product.display_settings');
@@ -564,8 +674,6 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
-      case 'modal-magazine':
-      case 'pdp-magazine':
         $media = $this->getAllMedia($sku, $check_parent_child);
         $main_image = $media['main'];
         $thumbnails = $media['thumbs'];
@@ -583,7 +691,8 @@ class SkuImagesManager {
           // Show original full image in the modal inside a draggable container.
           $original_image = $media_item['file']->url();
 
-          $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
+          $image_small = ImageStyle::load($thumbnail_style)
+            ->buildUrl($file_uri);
           $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
           $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
@@ -622,11 +731,13 @@ class SkuImagesManager {
           ];
         }
 
-        // If no main image, use default image.
-        if (empty($main_image) && $check_parent_child) {
+        // If no main image and no video, use default image.
+        if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
-            $image_zoom = ImageStyle::load($zoom_style)->buildUrl($default_image->getFileUri());
-            $image_medium = ImageStyle::load($slide_style)->buildUrl($default_image->getFileUri());
+            $image_zoom = ImageStyle::load($zoom_style)
+              ->buildUrl($default_image->getFileUri());
+            $image_medium = ImageStyle::load($slide_style)
+              ->buildUrl($default_image->getFileUri());
 
             $main_image = [
               'zoomurl' => $image_zoom,
@@ -636,9 +747,11 @@ class SkuImagesManager {
           }
         }
 
-        if (!empty($main_image)) {
+        // If either of main image or video is available.
+        if (!empty($main_image) || !empty($media['media_items']['videos'])) {
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
-          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')->get($config_name);
+          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
+            ->get($config_name);
 
           $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
 
@@ -672,6 +785,8 @@ class SkuImagesManager {
             '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
               'library' => [
+                'alshaya_product_zoom/cloud_zoom',
+                'alshaya_product_zoom/cloud_zoom_pdp_gallery',
                 'alshaya_product_zoom/product.cloud_zoom',
               ],
             ],
@@ -679,6 +794,112 @@ class SkuImagesManager {
         }
         break;
 
+      case 'modal-magazine':
+      case 'pdp-magazine':
+        // We will use below variable for alter hooks.
+        $prod_description = [];
+        if (!isset($original_sku_entity)) {
+          $original_sku_entity = $sku;
+        }
+        if ($body = $original_sku_entity->get('attr_description')->getValue()) {
+          $prod_description['description'] = [
+            '#markup' => $body[0]['value'],
+          ];
+        }
+
+        // Alter description Since this could be different for each brand.
+        $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
+
+        $media = $this->getAllMedia($sku, $check_parent_child);
+        $thumbnails = $media['thumbs'];
+
+        // Fetch settings.
+        $settings = $this->getCloudZoomDefaultSettings();
+        $thumbnail_style = $settings['thumb_style'];
+        $zoom_style = $settings['zoom_style'];
+        $slide_style = $settings['slide_style'];
+
+        // Create our thumbnails to be rendered for zoom.
+        foreach ($media['media_items']['images'] ?? [] as $media_item) {
+          $file_uri = $media_item['file']->getFileUri();
+
+          // Show original full image in the modal inside a draggable container.
+          $original_image = $media_item['file']->url();
+
+          $image_small = ImageStyle::load($thumbnail_style)
+            ->buildUrl($file_uri);
+          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+          $thumbnails[] = [
+            'thumburl' => $image_small,
+            'mediumurl' => $image_medium,
+            'zoomurl' => $image_zoom,
+            'fullurl' => $original_image,
+            'label' => $media_item['label'],
+            'type' => 'image',
+          ];
+        }
+        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+          // @TODO:
+          // Receiving video_provider as NULL, should be set to youtube
+          // or vimeo. Till then using $type as provider flag.
+          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+          $thumbnails[] = [
+            'thumburl' => $media_item['file'],
+            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+            'video_title' => $media_item['video_title'],
+            'video_desc' => $media_item['video_description'],
+            'type' => $type,
+            // @TODO: should this be config?
+            'width' => 81,
+            // @TODO: should this be config?
+            'height' => 81,
+          ];
+        }
+
+        // If thumbnails available.
+        if (!empty($thumbnails)) {
+          $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
+          $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
+            ->get($config_name);
+
+          $pager_flag = count($thumbnails) > $pdp_gallery_pager_limit ? 'pager-yes' : 'pager-no';
+
+          $gallery = [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['gallery-wrapper'],
+            ],
+          ];
+
+          $sku_identifier = Unicode::strtolower(Html::cleanCssIdentifier($sku->getSku()));
+
+          $labels = [
+            '#theme' => 'product_labels',
+            '#labels' => $this->skuManager->getLabels($sku, 'pdp'),
+            '#sku' => $sku_identifier,
+            '#mainsku' => $sku_identifier,
+            '#type' => 'pdp',
+          ];
+
+          $gallery['alshaya_magazine'] = [
+            '#theme' => 'alshaya_magazine',
+            '#description' => $prod_description['description'],
+            '#thumbnails' => $thumbnails,
+            '#pager_flag' => $pager_flag,
+            '#properties' => $this->getRelCloudZoom($settings),
+            '#labels' => $labels,
+            '#attached' => [
+              'library' => [
+                'alshaya_product_zoom/cloud_zoom',
+                'alshaya_product_zoom/product.cloud_zoom',
+                'alshaya_product_zoom/magazine_gallery',
+              ],
+            ],
+          ];
+        }
+        break;
     }
 
     return $gallery;
@@ -787,6 +1008,50 @@ class SkuImagesManager {
     }
 
     return '';
+  }
+
+  /**
+   * Get Swatches Data for particular configurable sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Swatches data.
+   */
+  public function getSwatchData(SKUInterface $sku): array {
+    $swatches = [];
+    $swatch_attributes = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches')['pdp'];
+
+    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
+      // Process only for swatch attributes.
+      if (!in_array($attribute_code, $swatch_attributes)) {
+        continue;
+      }
+
+      $swatches['attribute_code'] = $attribute_code;
+
+      foreach ($attribute_data as $value => $child_sku_codes) {
+        foreach ($child_sku_codes as $child_sku_code) {
+          $child = SKU::loadFromSku($child_sku_code);
+          $data = $this->productInfoHelper->getValue($child, 'swatch', $attribute_code, '');
+          if (empty($data)) {
+            continue;
+          }
+
+          $data['value'] = $value;
+          $swatches['swatches'][$value] = $data;
+
+          break;
+        }
+      }
+
+      // We expect only swatch attribute for any single product.
+      break;
+    }
+
+    return $swatches;
   }
 
 }

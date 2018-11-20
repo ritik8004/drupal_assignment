@@ -100,7 +100,7 @@ if (file_exists('/var/www/site-php')) {
     $trusted_host = str_replace('*', '.+', $str) . "\$";
     $settings['trusted_host_patterns'] = array($trusted_host);
   }
-  elseif (!isset($_SERVER['SERVER_SOFTWARE']) && (PHP_SAPI === 'cli' || (is_numeric($_SERVER['argc']) && $_SERVER['argc'] > 0))) {
+  elseif (PHP_SAPI === 'cli') {
     throw new Exception('No database connection file was found for DB {$role}.');
   }
   else {
@@ -197,9 +197,15 @@ if (isset($config_directories['vcs'])) {
   // directory is removed for now.
   // @see https://backlog.acquia.com/browse/CL-11815
   // @see https://github.com/drush-ops/drush/pull/1711
-  if (function_exists('drush_get_command')) {
-    $command = drush_get_command();
-    if (!empty($command['command']) && $command['command'] === 'site-install') {
+  if (class_exists('\Drush\Drush') && \Drush\Drush::hasContainer()) {
+    try {
+      $executed_command = \Drush\Drush::input()->getArgument('command');
+    }
+    catch (InvalidArgumentException $e) {
+      $executed_command = FALSE;
+    }
+
+    if ($executed_command === 'site-install') {
       unset($config_directories['vcs']);
     }
   }

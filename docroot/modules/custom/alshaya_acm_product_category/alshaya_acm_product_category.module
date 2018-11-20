@@ -8,6 +8,9 @@
 use Drupal\Core\Url;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Implements hook_theme().
@@ -114,4 +117,64 @@ function alshaya_acm_product_category_child_terms($tid) {
     ];
   }
   return $data;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (($form['#id'] === 'views-exposed-form-alshaya-product-list-block-1') ||
+    ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-2')) {
+    // Hide sort options on campaign-plp-style-1.
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_LAYOUT_1) {
+      $form['sort_bef_combine']['#type'] = 'hidden';
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access_alter().
+ */
+function alshaya_acm_product_category_entity_field_access_alter(array &$grants, array $context) {
+  if ($context['operation'] === 'view' && $context['field_definition']->getTargetEntityTypeId() === 'taxonomy_term' && $context['field_definition']->getname() === 'field_plp_menu') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value != ProductCategoryTree::PLP_LAYOUT_1) {
+      // Do not show this field on pages that are not campaign-plp-style-1.
+      $grants[':default'] = AccessResult::forbidden()->inheritCacheability($grants[':default'])->addCacheableDependency($context['items']->getEntity());
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_acm_product_category_field_widget_link_default_form_alter(&$element, FormStateInterface $form_state, $context) {
+  if (($context['items']->getName() == 'field_plp_video_links')) {
+    $element['uri']['#description'] = t('Please enter the link of the video. It could be a youtube/vimeo video or a custom video that you have uploaded to the site. To upload a video, use the Upload Video field below and then add the link here.');
+  }
+}
+
+/**
+ * Implements allowed values callback for PLP layout.
+ */
+function alshaya_acm_product_category_plp_layout_values() {
+  $config = \Drupal::config('alshaya_master.plp_settings');
+  // Prepare PDP layout select options.
+  $plp_layout_options = [];
+  $plp_layout_options += $config->get('all_plp_layouts');
+  return $plp_layout_options;
+}
+
+/**
+ * Implements hook_link_attributes_plugin_alter().
+ */
+function alshaya_acm_product_category_link_attributes_plugin_alter(array &$definitions) {
+  $definitions['class']['description'] = t('Select how the link should be displayed.');
+  $definitions['class']['type'] = 'select';
+  $definitions['class']['options'] = [
+    '' => 'None',
+    'campaign-plp-style-1-modal-link use-ajax' => 'Campaign PLP Style 1 Modal',
+  ];
+  $definitions['class']['default_value'] = '';
 }
