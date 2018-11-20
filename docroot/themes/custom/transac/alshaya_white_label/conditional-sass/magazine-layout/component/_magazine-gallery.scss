@@ -1,9 +1,21 @@
 .magazine__gallery--container {
   display: grid;
-  grid-template: repeat(2, auto) / repeat(2, 1fr);
+  grid-template:
+    "a a" auto
+    "c c" auto
+    "b d" auto
+    "e e" auto /
+    1fr 1fr;
   grid-gap: 1rem;
+  grid-auto-rows: minmax(200px, auto);
+  align-items: start;
 
   @include breakpoint($tablet) {
+    grid-template:
+      "a b" auto
+      "c c" auto
+      "d e" auto /
+      1fr 1fr;
     margin-#{$right}: 1rem;
   }
 
@@ -19,29 +31,33 @@
     }
   }
 
+  .magazine-product-description {
+    grid-area: c;
+    text-align: center;
+    font-size: 0.75rem;
+
+    ul {
+      li {
+        list-style: none;
+      }
+    }
+  }
+
   .pdp-image {
-    &:nth-child(3n) {
-      grid-column: 2 / -1;
-
-      @include breakpoint($tablet) {
-        grid-column: span 1;
-      }
+    &:nth-child(4n +1) {
+      grid-area: a;
     }
 
-    &:nth-child(3n+1) {
-      grid-column: span 2;
-
-      @include breakpoint($tablet) {
-        grid-column: span 1;
-      }
+    &:nth-child(4n+2) {
+      grid-area: b;
     }
 
-    &:nth-child(3n+2) {
-      grid-column: span 1;
+    &:nth-child(4n+3) {
+      grid-area: d;
+    }
 
-      @include breakpoint($tablet) {
-        grid-column: span 1;
-      }
+    &:nth-child(4n) {
+      grid-column: e;
     }
 
     &:nth-child(2n) {
