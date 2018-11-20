@@ -99,8 +99,9 @@ function alshaya_acm_customer_create_drupal_user(array $customer) {
     \Drupal::logger('alshaya_acm_customer')->error('Trying to re-create the account with the email:@email', [
       '@email' => $customer['email'],
     ]);
-    return NULL;
   }
+
+  return NULL;
 
 }
 
