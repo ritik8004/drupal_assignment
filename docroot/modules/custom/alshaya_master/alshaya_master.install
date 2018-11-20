@@ -17,7 +17,8 @@ function alshaya_master_update_8020() {
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['seckit.settings'],
-    'alshaya_master'
+    'seckit',
+    'install'
   );
 }
 
