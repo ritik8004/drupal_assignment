@@ -149,32 +149,36 @@ class MigrateSymmetricToAsymmetric {
           ]);
         }
 
-        foreach ($defaultValues as $index => $value) {
-          $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+        $entities = [];
+        $this->prepareBundleEntities($entities, $defaultValues, $defaultLangcode);
+        $this->prepareBundleEntities($entities, $translatedValues, $translationLangcode);
 
-          if (empty($paragraph) || empty($translatedParagraph)) {
-            continue;
-          }
+        foreach ($entities as $bundleEntities) {
+          foreach ($bundleEntities[$defaultLangcode] ?? [] as $index => $paragraph) {
+            $translatedParagraph = $bundleEntities[$translationLangcode][$index] ?? NULL;
+            if (empty($translatedParagraph)) {
+              continue;
+            }
 
-          $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
+            $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
 
-          if ($paragraph->hasTranslation($translationLangcode)) {
-            $paragraph->removeTranslation($translationLangcode);
-          }
+            if ($paragraph->hasTranslation($translationLangcode)) {
+              $paragraph->removeTranslation($translationLangcode);
+            }
 
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
-          $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
-          $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
+            $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+            $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
+            $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
 
-          try {
-            $newTranslatedParagraph->save();
-          }
-          catch (\Exception $e) {
-            $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
-              '@row' => json_encode($newTranslatedValues),
-              '@message' => $e->getMessage(),
-            ]);
+            try {
+              $newTranslatedParagraph->save();
+            }
+            catch (\Exception $e) {
+              $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
+                '@row' => json_encode($newTranslatedValues),
+                '@message' => $e->getMessage(),
+              ]);
+            }
           }
         }
       }
@@ -209,33 +213,37 @@ class MigrateSymmetricToAsymmetric {
           ]);
         }
 
-        foreach ($defaultValues as $index => $value) {
-          $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+        $entities = [];
+        $this->prepareBundleEntities($entities, $defaultValues, $defaultLangcode);
+        $this->prepareBundleEntities($entities, $translatedValues, $translationLangcode);
 
-          if (empty($paragraph) || empty($translatedParagraph)) {
-            continue;
-          }
+        foreach ($entities as $bundleEntities) {
+          foreach ($bundleEntities[$defaultLangcode] ?? [] as $index => $paragraph) {
+            $translatedParagraph = $bundleEntities[$translationLangcode][$index] ?? NULL;
+            if (empty($translatedParagraph)) {
+              continue;
+            }
 
-          $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
+            $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
 
-          if ($paragraph->hasTranslation($translationLangcode)) {
-            $paragraph->removeTranslation($translationLangcode);
-          }
+            if ($paragraph->hasTranslation($translationLangcode)) {
+              $paragraph->removeTranslation($translationLangcode);
+            }
 
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
-          $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
-          $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
-          unset($newTranslatedParagraph->original);
+            $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+            $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
+            $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
+            unset($newTranslatedParagraph->original);
 
-          try {
-            $newTranslatedParagraph->save();
-          }
-          catch (\Exception $e) {
-            $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
-              '@row' => json_encode($newTranslatedValues),
-              '@message' => $e->getMessage(),
-            ]);
+            try {
+              $newTranslatedParagraph->save();
+            }
+            catch (\Exception $e) {
+              $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
+                '@row' => json_encode($newTranslatedValues),
+                '@message' => $e->getMessage(),
+              ]);
+            }
           }
         }
       }
@@ -497,6 +505,30 @@ class MigrateSymmetricToAsymmetric {
     }
 
     return $paragraph;
+  }
+
+  /**
+   * Prepare entities array grouped by bundle.
+   *
+   * @param array $entities
+   *   Entities array - reference.
+   * @param array $values
+   *   Values to add to entities array.
+   * @param string $langcode
+   *   Language code.
+   */
+  private function prepareBundleEntities(array &$entities, array $values, string $langcode) {
+    foreach ($values as $value) {
+      $paragraph = $this->getParagraph($value['target_revision_id'], $langcode);
+
+      if (!empty($paragraph)) {
+        $bundle = $paragraph->bundle() == '1_row_1_col_dept'
+          ? '1_row_1_col'
+          : $paragraph->bundle();
+
+        $entities[$bundle][$langcode][] = $paragraph;
+      }
+    }
   }
 
 }
