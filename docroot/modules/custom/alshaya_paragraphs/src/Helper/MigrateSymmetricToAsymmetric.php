@@ -143,8 +143,9 @@ class MigrateSymmetricToAsymmetric {
         $translatedValues = $translation->get($field)->getValue();
 
         if (count($defaultValues) !== count($translatedValues)) {
-          $this->logger->error('Content structure do not match for node id: @id', [
+          $this->logger->error('Content structure do not match for @type id: @id', [
             '@id' => $default->id(),
+            '@type' => $default->getEntityTypeId(),
           ]);
         }
 
@@ -202,8 +203,9 @@ class MigrateSymmetricToAsymmetric {
         $translatedValues = $translation->get($field)->getValue();
 
         if (count($defaultValues) !== count($translatedValues)) {
-          $this->logger->error('Content structure do not match for paragraph id: @id', [
+          $this->logger->error('Content structure do not match for @type id: @id', [
             '@id' => $original->id(),
+            '@type' => $original->getEntityTypeId(),
           ]);
         }
 
