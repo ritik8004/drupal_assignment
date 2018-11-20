@@ -150,10 +150,24 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
     $query->condition('child_sku.field_configured_skus_value', $sku->getSku());
 
-    $parent_sku = $query->execute()->fetchField();
+    $parent_skus = array_values($query->execute()->fetchAllAssoc('sku'));
 
-    if (empty($parent_sku)) {
+    if (empty($parent_skus)) {
       return NULL;
+    }
+
+    $parent_sku = reset($parent_skus);
+
+    if (count($parent_skus) > 1) {
+      \Drupal::service('unique_logs.logger')->log(
+        'warning',
+        'acq_sku',
+        'Multiple parents found for SKU: @sku, parents: @parents',
+        [
+          '@parents' => implode(',', $parent_skus),
+          '@sku' => $sku->getSku(),
+        ]
+      );
     }
 
     return SKU::loadFromSku($parent_sku, $sku->language()->getId());

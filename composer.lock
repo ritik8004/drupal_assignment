@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bd4dc4a37cea1d18886e96ec4a7bdcc1",
+    "content-hash": "8172341d2132169d87a92c5872b8298b",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -5574,7 +5574,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta4",
-                    "datestamp": "1539272580",
+                    "datestamp": "1528452184",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -6704,7 +6704,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.7",
-                    "datestamp": "1542033780",
+                    "datestamp": "1516021086",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -10026,7 +10026,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.15",
-                    "datestamp": "1541330284",
+                    "datestamp": "1496919842",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11554,6 +11554,50 @@
                 "source": "http://cgit.drupalcode.org/twig_tweak",
                 "issues": "https://www.drupal.org/project/issues/twig_tweak"
             }
+        },
+        {
+            "name": "drupal/unique_logs",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/unique_logs",
+                "reference": "ffec380012c5fc59d645782161f3208c529279b1"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1542708480",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikunj Kotecha (nikunjkotecha)",
+                    "homepage": "https://www.drupal.org/u/nikunjkotecha",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Provides a way to log messages only once per request.",
+            "homepage": "https://drupal.org/project/unique_logs",
+            "support": {
+                "source": "https://cgit.drupalcode.org/unique_logs",
+                "issues": "https://drupal.org/project/issues/unique_logs"
+            },
+            "time": "2018-11-20T10:09:12+00:00"
         },
         {
             "name": "drupal/user_registrationpassword",
@@ -19830,6 +19874,7 @@
         "drupal/search_api_spellcheck": 20,
         "drupal/sharethis": 10,
         "drupal/simple_sitemap": 20,
+        "drupal/unique_logs": 20,
         "drupal/views_ajax_get": 20,
         "drupal/views_block_filter_block": 10,
         "drupal/stage_file_proxy": 15,
