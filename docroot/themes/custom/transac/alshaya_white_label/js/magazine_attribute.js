@@ -74,26 +74,42 @@
     }
 
     if ($('.configurable-swatch.product-swatch').length > 0) {
-      swatch_items_to_show = product_swatches;
+      swatch_items_to_show = product_swatches + 1;
     }
     else {
-      swatch_items_to_show = colour_swatches;
+      swatch_items_to_show = colour_swatches + 1;
     }
 
     if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show) {
-      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-      $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+      if ($(window).width() > 767) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+      }
+      $('.form-item-configurables-article-castor-id').addClass('swatch-effect');
       $('.show-more-color').show();
+    }
+    else {
+      $('.form-item-configurables-article-castor-id').addClass('simple-swatch-effect');
     }
 
     $('.show-more-color').on('click', function (e) {
-      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      if ($(window).width() > 767) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      }
+      else {
+        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+      }
       $(this).hide();
       $('.show-less-color').show();
     });
 
     $('.show-less-color').on('click', function (e) {
-      $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      if ($(window).width() > 767) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+      }
+      else {
+        $('.form-item-configurables-article-castor-id').removeClass('swatch-toggle');
+      }
       $(this).hide();
       $('.show-more-color').show();
     });
