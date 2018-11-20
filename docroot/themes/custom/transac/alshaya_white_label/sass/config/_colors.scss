@@ -28,6 +28,7 @@ $cherry: #c60c30;
 $dark-sand: #ac8e54;
 $peacock-blue: #0060aa;
 $windows-blue: #3680cb;
+$dark-blue: #4267b2;
 $very-light-blue: #d9efff;
 $marine-blue: #003773;
 $grey-shade: #c1c1c1;
@@ -86,7 +87,7 @@ $special-price: #b70025;
 $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
-$_moschino-menu-link: #b7b8b7;
+$_campaign-plp-style-1-menu-link: #b7b8b7;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1011,13 +1012,18 @@ $cart-free-gifts-label-background: $marine-blue;
 // Pace progress color
 $progress_loader: $marine-blue;
 
+// Social Auth
+$social-network-text: $white-five;
+$social-auth-facebook-bg: $dark-blue;
+$social-sign-in-option-text: $black;
+
 // PDP Magazine layput
 $colour-swatches-show-list-button: $mothercare-black;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
-$plp-sub-menu-child-link: $_moschino-menu-link;
-$plp-sub-menu-heading-link: $_moschino-menu-link;
+$plp-sub-menu-child-link: $_campaign-plp-style-1-menu-link;
+$plp-sub-menu-heading-link: $_campaign-plp-style-1-menu-link;
 $plp-sub-menu-child-link-active: $white-five;
 $plp-sub-menu-heading-link-active: $white-five;
 $plp-sub-menu-cls-btn-txt: $mothercare-black;

@@ -91,7 +91,8 @@
         "jqueryvalidate/jqueryvalidate": "~1.0",
         "mobiledetect/mobiledetectlib": "^2.8",
         "springimport/magento2-api-v1": "^1.0",
-        "drupal/link_attributes": "^1.5"
+        "drupal/link_attributes": "^1.5",
+        "drupal/social_auth_facebook": "^1.0"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
@@ -299,6 +300,9 @@
             },
             "drupal/entity_reference_revisions": {
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
+            },
+            "drupal/simple_oauth": {
+                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
             }
         },
         "installer-paths": {
@@ -354,7 +358,7 @@
         ]
     },
     "scripts": {
-        "blt-alias": "blt install-alias -Dcreate_alias=true",
+        "blt-alias": "blt blt:init:shell-alias -y --ansi",
         "post-drupal-scaffold-cmd": [
             "cd docroot && patch -p1 <../patches/htaccess-ssl.patch",
             "cd docroot && patch -p1 <../patches/htaccess-acsf.patch",
