@@ -5,6 +5,7 @@ Feature: Test Checkout feature
     And I wait for the page to load
     When I press "Add to basket"
     And I wait for AJAX to finish
+    And I wait 10 seconds
     And I go to "/en/cart"
     And I wait for the page to load
     And I press "checkout securely"
@@ -435,3 +436,30 @@ Feature: Test Checkout feature
     When I follow "Back to basket"
     Then I should see the button "checkout securely"
     And the url should match "/cart"
+
+  @tc
+  Scenario:  As a Guest,
+  I should see the error message when terms and condition unchecked
+    When I follow "Home delivery"
+    And I wait for the page to load
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55667733"
+    And I select "Kuwait City" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "Block A"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    When I fill in "edit-guest-delivery-home-address-shipping-address-line2" with "2"
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+  # By default terms and condition is unchecked.
+    And I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Please agree to the Privacy Policy and Terms & Conditions of purchase."

@@ -271,3 +271,26 @@ Feature: Test various checkout scenarios for Arabic site
     When I follow "العودة إلى حقيبة التسوق"
     Then I should see the button "إتمام الشراء بأمان"
     And the url should match "/ar/cart"
+
+  @tc
+  Scenario: As a Guest on Arabic site
+  I should see the error message when terms and condition unchecked
+    When I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "55004455"
+    When I select "العباسية" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-locality" with "كتلة A"
+    When I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "الشارع ب"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "بناء C"
+    When I fill in "edit-guest-delivery-home-address-shipping-address-line2" with "2"
+    And I press "توصيل إلى هذا العنوان"
+    And I wait for AJAX to finish
+    When I press "تابع للدفع"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait for AJAX to finish
+ # By default terms and condition is unchecked.
+    When I press "سجل الطلبية"
+    And I wait for the page to load
+    Then I should see text matching "يرجى الموافقة على سياسة الخصوصية و شروط وأحكام الشراء"
