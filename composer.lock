@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "61bcbbbfcfec2d1659c45dcb2225be70",
+    "content-hash": "5f158a6baa2dd7e1e9026d2754bd8b5c",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10084,11 +10084,14 @@
                 },
                 "drupal": {
                     "version": "8.x-3.8",
-                    "datestamp": "1525410485",
+                    "datestamp": "1536790380",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Limit token delete on cron run": "https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
