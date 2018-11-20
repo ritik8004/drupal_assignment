@@ -31,7 +31,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *
    * @var array
    */
-  protected $cachedEntities = [];
+  protected $cacheableEntities = [];
 
   /**
    * The paragraph Base Fields.
@@ -128,13 +128,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   }
 
   /**
-   * Return array of cached entities.
+   * Return array of cacheable entities.
    *
    * @return array
-   *   Return array of cached entities.
+   *   Return array of cacheable entities.
    */
-  public function getCachedEntities() {
-    return $this->cachedEntities;
+  public function getCacheableEntities() {
+    return $this->cacheableEntities;
   }
 
   /**
@@ -334,7 +334,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   public function processEntityBundleData($entity) {
     $data = FALSE;
     $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
-    $this->cachedEntities[] = $entity;
+    $this->cacheableEntities[] = $entity;
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
         [
@@ -484,7 +484,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function getRecursiveParagraphData($entity): array {
     $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
-    $this->cachedEntities[] = $entity;
+    $this->cacheableEntities[] = $entity;
     // Process data for given entity if callback exists.
     if ($result = $this->processEntityBundleData($entity)) {
       return array_merge(['type' => $entity->bundle()], $result);
@@ -638,7 +638,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         $term = $this->getEntityTranslation($term, $this->currentLanguage);
         $data['title'] = $term->label();
       }
-      $data['items'] = $this->getAllCategories($category_id, $this->currentLanguage, FALSE, TRUE);
+      $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
     }
     else {
       // Get selected category's child so it can be passed as views argument.
@@ -707,20 +707,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
-  }
-
-  /**
-   * Convert relative url img tag in string with absolute url.
-   *
-   * @param string $string
-   *   The string containing html tags.
-   *
-   * @return string
-   *   Return the complete url string with domain.
-   */
-  protected function convertRelativeUrlsToAbsolute(string $string): string {
-    global $base_url;
-    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }
