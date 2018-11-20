@@ -53,8 +53,8 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
  * @param array $customer
  *   Customer data recieved from Magento.
  *
- * @return \Drupal\user\Entity\User
- *   User object.
+ * @return \Drupal\user\Entity\User|null
+ *   User object or null.
  */
 function alshaya_acm_customer_create_drupal_user(array $customer) {
   $lock = \Drupal::lock();
@@ -99,6 +99,7 @@ function alshaya_acm_customer_create_drupal_user(array $customer) {
     \Drupal::logger('alshaya_acm_customer')->error('Trying to re-create the account with the email:@email', [
       '@email' => $customer['email'],
     ]);
+    return NULL;
   }
 
 }
