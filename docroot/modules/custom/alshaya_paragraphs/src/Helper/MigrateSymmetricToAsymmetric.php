@@ -148,6 +148,7 @@ class MigrateSymmetricToAsymmetric {
 
         foreach ($entities as $bundleEntities) {
           foreach ($bundleEntities[$defaultLangcode] ?? [] as $index => $paragraph) {
+            /** @var \Drupal\paragraphs\Entity\Paragraph $translatedParagraph */
             $translatedParagraph = $bundleEntities[$translationLangcode][$index] ?? NULL;
             if (empty($translatedParagraph)) {
               continue;
@@ -159,7 +160,7 @@ class MigrateSymmetricToAsymmetric {
               $paragraph->removeTranslation($translationLangcode);
             }
 
-            $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+            $translatedParagraph = $this->getParagraph($translatedParagraph->getRevisionId(), $translationLangcode);
             $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
             $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
             unset($newTranslatedParagraph->original);
