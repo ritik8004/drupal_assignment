@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_paragraphs\Helper;
 
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -22,20 +20,6 @@ class MigrateSymmetricToAsymmetric {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
-  /**
-   * Field Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
-   */
-  protected $fieldManager;
-
-  /**
-   * Database Connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $db;
 
   /**
    * Paragraph Storage.
@@ -84,20 +68,12 @@ class MigrateSymmetricToAsymmetric {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity Type Manager.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $field_manager
-   *   Field Manager.
-   * @param \Drupal\Core\Database\Connection $db
-   *   Database connection.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
-                              EntityFieldManagerInterface $field_manager,
-                              Connection $db,
                               LoggerChannelInterface $logger) {
     $this->entityTypeManager = $entity_type_manager;
-    $this->fieldManager = $field_manager;
-    $this->db = $db;
     $this->logger = $logger;
 
     $this->paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
@@ -111,8 +87,6 @@ class MigrateSymmetricToAsymmetric {
    */
   public function migrateEntity(EntityInterface $entity) {
     /** @var \Drupal\node\NodeInterface $entity */
-    $fields = self::$fields[$entity->getEntityTypeId()];
-
     // Hard coded languages here, if we ever get three languages anything
     // below won't work.
     foreach (['en', 'ar'] as $langcode) {
@@ -137,63 +111,22 @@ class MigrateSymmetricToAsymmetric {
     $translationLangcode = $defaultLangcode === 'en' ? 'ar' : 'en';
     $translation = $entities[$translationLangcode];
 
-    foreach ($fields as $field) {
-      if ($default->hasField($field) && $translation->hasField($field)) {
-        $defaultValues = $default->get($field)->getValue();
-        $translatedValues = $translation->get($field)->getValue();
-
-        if (count($defaultValues) !== count($translatedValues)) {
-          $this->logger->error('Content structure do not match for @type id: @id', [
-            '@id' => $default->id(),
-            '@type' => $default->getEntityTypeId(),
-          ]);
-        }
-
-        foreach ($defaultValues as $index => $value) {
-          $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
-
-          if (empty($paragraph) || empty($translatedParagraph)) {
-            continue;
-          }
-
-          $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
-
-          if ($paragraph->hasTranslation($translationLangcode)) {
-            $paragraph->removeTranslation($translationLangcode);
-          }
-
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
-          $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
-          $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
-
-          try {
-            $newTranslatedParagraph->save();
-          }
-          catch (\Exception $e) {
-            $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
-              '@row' => json_encode($newTranslatedValues),
-              '@message' => $e->getMessage(),
-            ]);
-          }
-        }
-      }
-    }
+    $this->migrateContent($default, $translation, $defaultLangcode, $translationLangcode);
   }
 
   /**
-   * Helper recursive function to migrate child paragraphs.
+   * Helper recursive function to migrate child entities.
    *
-   * @param \Drupal\paragraphs\Entity\Paragraph $original
-   *   Original paragraph.
-   * @param \Drupal\paragraphs\Entity\Paragraph $translation
-   *   Translated paragraph in old way.
+   * @param \Drupal\Core\Entity\EntityInterface $original
+   *   Entity's default translation.
+   * @param \Drupal\Core\Entity\EntityInterface $translation
+   *   Entity's translation.
    * @param string $defaultLangcode
    *   Default translation language code.
    * @param string $translationLangcode
    *   Target translation language code.
    */
-  private function migrateParagraph(Paragraph $original, Paragraph $translation, string $defaultLangcode, string $translationLangcode) {
+  private function migrateContent(EntityInterface $original, EntityInterface $translation, string $defaultLangcode, string $translationLangcode) {
     /** @var \Drupal\node\NodeInterface $entity */
     $fields = self::$fields[$original->getEntityTypeId()];
 
@@ -209,227 +142,41 @@ class MigrateSymmetricToAsymmetric {
           ]);
         }
 
-        foreach ($defaultValues as $index => $value) {
-          $paragraph = $this->getParagraph($value['target_revision_id'], $defaultLangcode);
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+        $entities = [];
+        $this->prepareBundleEntities($entities, $defaultValues, $defaultLangcode);
+        $this->prepareBundleEntities($entities, $translatedValues, $translationLangcode);
 
-          if (empty($paragraph) || empty($translatedParagraph)) {
-            continue;
-          }
+        foreach ($entities as $bundleEntities) {
+          foreach ($bundleEntities[$defaultLangcode] ?? [] as $index => $paragraph) {
+            $translatedParagraph = $bundleEntities[$translationLangcode][$index] ?? NULL;
+            if (empty($translatedParagraph)) {
+              continue;
+            }
 
-          $this->migrateParagraph($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
+            $this->migrateContent($paragraph, $translatedParagraph, $defaultLangcode, $translationLangcode);
 
-          if ($paragraph->hasTranslation($translationLangcode)) {
-            $paragraph->removeTranslation($translationLangcode);
-          }
+            if ($paragraph->hasTranslation($translationLangcode)) {
+              $paragraph->removeTranslation($translationLangcode);
+            }
 
-          $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
-          $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
-          $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
-          unset($newTranslatedParagraph->original);
+            $translatedParagraph = $this->getParagraph($translatedValues[$index]['target_revision_id'], $translationLangcode);
+            $newTranslatedValues = $this->getTranslatedValues($translatedParagraph);
+            $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
+            unset($newTranslatedParagraph->original);
 
-          try {
-            $newTranslatedParagraph->save();
-          }
-          catch (\Exception $e) {
-            $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
-              '@row' => json_encode($newTranslatedValues),
-              '@message' => $e->getMessage(),
-            ]);
+            try {
+              $newTranslatedParagraph->save();
+            }
+            catch (\Exception $e) {
+              $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
+                '@row' => json_encode($newTranslatedValues),
+                '@message' => $e->getMessage(),
+              ]);
+            }
           }
         }
       }
     }
-  }
-
-  /**
-   * Migrate paragraphs content to follow new method of translation.
-   *
-   * @param string $entity_type
-   *   Entity type.
-   * @param string $field_name
-   *   Field name.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  public function migrateContent(string $entity_type, string $field_name) {
-    $mainTable = $entity_type . '__' . $field_name;
-
-    $this->logger->info('Migrating content for main table of field @field of type @type', [
-      '@field' => $field_name,
-      '@type' => $entity_type,
-    ]);
-
-    $data = $this->getData($mainTable);
-
-    foreach ($data as $row) {
-      $this->processRow($row, $mainTable, $field_name);
-    }
-  }
-
-  /**
-   * Get data for particular field from DB.
-   *
-   * @param string $table
-   *   Get data from table.
-   *
-   * @return array
-   *   Grouped data array.
-   */
-  private function getData(string $table): array {
-    try {
-      $query = $this->db->select($table);
-      $query->fields($table);
-      $result = $query->execute()->fetchAll();
-
-      $rows = [];
-
-      foreach ($result as $row) {
-        $row = (array) $row;
-
-        $key = implode(':', [
-          $row['entity_id'],
-          $row['revision_id'],
-          $row['delta'],
-        ]);
-
-        $rows[$key][$row['langcode']] = $row;
-      }
-
-      return $rows;
-    }
-    catch (\Exception $e) {
-      $this->logger->warning('Error occurred while getting data from @table. Message: @message', [
-        '@table' => $table,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    return [];
-  }
-
-  /**
-   * Process a particular paragraph field content.
-   *
-   * @param array $row
-   *   Array containing content of particular paragraph field in all languages.
-   * @param string $table
-   *   Table name.
-   * @param string $field
-   *   Field name.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  private function processRow(array $row, string $table, string $field) {
-    $this->paragraphStorage->resetCache();
-
-    // Do not process if there is content for only one language.
-    if (count($row) === 1) {
-      $this->logger->warning('Not processing row with single translation. Row: @row', [
-        '@row' => json_encode($row),
-      ]);
-      return;
-    }
-
-    // We know we will have only two languages so hard-coded here.
-    $en = $row['en'];
-    $ar = $row['ar'];
-
-    $revision_field = $field . '_target_revision_id';
-    $target_field = $field . '_target_id';
-
-    /** @var \Drupal\paragraphs\Entity\Paragraph $paragraph */
-    $paragraph = $this->paragraphStorage->loadRevision($en[$revision_field]);
-
-    if (!($paragraph instanceof Paragraph)) {
-      $this->logger->warning('Not processing as not able to load main paragraph itself. Row: @row', [
-        '@row' => json_encode($row),
-      ]);
-
-      return;
-    }
-
-    if ($en[$revision_field] === $ar[$revision_field] && $en[$target_field] === $ar[$target_field]) {
-      $this->logger->info('Not processing as translations already same. Row: @row', [
-        '@row' => json_encode($row),
-      ]);
-
-      return;
-    }
-
-    if ($paragraph->isDefaultTranslation()) {
-      $default = $en;
-      $translation = $ar;
-    }
-    else {
-      $paragraph = $this->paragraphStorage->loadRevision($ar[$revision_field]);
-
-      if (!($paragraph instanceof Paragraph)) {
-        $this->logger->warning('Not processing as not able to load main paragraph itself. Row: @row', [
-          '@row' => json_encode($row),
-        ]);
-
-        return;
-      }
-
-      $default = $ar;
-      $translation = $en;
-    }
-
-    /** @var \Drupal\paragraphs\Entity\Paragraph $translatedParagraph */
-    $translatedParagraph = $this->paragraphStorage->loadRevision($translation[$revision_field]);
-
-    if (!($translatedParagraph instanceof Paragraph)) {
-      $this->logger->warning('Not processing as not able to load data for translation. Row: @row', [
-        '@row' => json_encode($row),
-      ]);
-
-      return;
-    }
-
-    if ($translatedParagraph->hasTranslation($translation['langcode'])) {
-      $translatedParagraph = $translatedParagraph->getTranslation($translation['langcode']);
-    }
-
-    $translatedValues = $this->getTranslatedValues($translatedParagraph);
-
-    // Remove translation if already available.
-    if ($paragraph->hasTranslation($translation['langcode'])) {
-      $paragraph->removeTranslation($translation['langcode']);
-    }
-
-    $newTranslatedParagraph = $paragraph->addTranslation($translation['langcode'], $translatedValues);
-    try {
-      $newTranslatedParagraph->save();
-    }
-    catch (\Exception $e) {
-      $this->logger->warning('Error occurred while saving new translation for row: @row. Message: @message', [
-        '@row' => json_encode($row),
-        '@message' => $e->getMessage(),
-      ]);
-
-      return;
-    }
-
-    $query = $this->db->update($table);
-    $query->condition('entity_id', $translation['entity_id']);
-    $query->condition('revision_id', $translation['revision_id']);
-    $query->condition('delta', $translation['delta']);
-
-    $fields = [
-      $revision_field => $default[$revision_field],
-      $target_field => $default[$target_field],
-    ];
-
-    $query->fields($fields);
-    $query->execute();
-
-    // Delete the old translated paragraph.
-    $translatedParagraph->delete();
-
-    $this->logger->info('Migrated data for row: @row.', [
-      '@row' => json_encode($row),
-    ]);
   }
 
   /**
@@ -497,6 +244,30 @@ class MigrateSymmetricToAsymmetric {
     }
 
     return $paragraph;
+  }
+
+  /**
+   * Prepare entities array grouped by bundle.
+   *
+   * @param array $entities
+   *   Entities array - reference.
+   * @param array $values
+   *   Values to add to entities array.
+   * @param string $langcode
+   *   Language code.
+   */
+  private function prepareBundleEntities(array &$entities, array $values, string $langcode) {
+    foreach ($values as $value) {
+      $paragraph = $this->getParagraph($value['target_revision_id'], $langcode);
+
+      if (!empty($paragraph)) {
+        $bundle = $paragraph->bundle() == '1_row_1_col_dept'
+          ? '1_row_1_col'
+          : $paragraph->bundle();
+
+        $entities[$bundle][$langcode][] = $paragraph;
+      }
+    }
   }
 
 }
