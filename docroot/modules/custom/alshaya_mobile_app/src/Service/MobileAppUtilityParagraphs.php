@@ -709,18 +709,4 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     return $results[0];
   }
 
-  /**
-   * Convert relative url img tag in string with absolute url.
-   *
-   * @param string $string
-   *   The string containing html tags.
-   *
-   * @return string
-   *   Return the complete url string with domain.
-   */
-  protected function convertRelativeUrlsToAbsolute(string $string): string {
-    global $base_url;
-    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
-  }
-
 }
