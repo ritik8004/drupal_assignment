@@ -45,22 +45,18 @@
   }
 
   .st_whatsapp_custom {
-    @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-whatsapp-share.svg', 1.6875rem, 1.6875rem);
-
-    &:hover {
-      @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-whatsapp-sharehover.svg', 1.6875rem, 1.6875rem);
-    }
-
-    @include breakpoint($tablet) {
-      display: none;
+    &::before {
+      width: 1.6875rem;
+      height: 1.6875rem;
+      margin-top: 0.9375rem;
     }
   }
 
   .st_email_custom {
-    @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-email-share.svg', 1.6875rem, 1.6875rem);
-
-    &:hover {
-      @include pdp_icon_img('#{$bbw_theme_img_directory_path}/social-icons/pdp/ic-email-sharehover.svg', 1.6875rem, 1.6875rem);
+    &::before {
+      width: 1.6875rem;
+      height: 1.6875rem;
+      margin-top: 0.9375rem;
     }
   }
 }
