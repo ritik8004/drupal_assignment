@@ -44,6 +44,13 @@ class MobileAppUtility {
   protected $termUrls = [];
 
   /**
+   * Array of term tags.
+   *
+   * @var array
+   */
+  protected $termTags = [];
+
+  /**
    * Cache Backend service for alshaya.
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
@@ -491,13 +498,14 @@ class MobileAppUtility {
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
+      $this->termTags[] = "term:{$term->tid}";
 
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
         'description'  => !empty($term->description__value) ? $term->description__value : '',
         'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+        'deeplink' => $this->getDeepLink($term),
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
@@ -518,12 +526,22 @@ class MobileAppUtility {
   }
 
   /**
+   * Return term tags to cache.
+   *
+   * @return array
+   *   Return Term urls array.
+   */
+  public function cacheableTermTags() {
+    return $this->termTags;
+  }
+
+  /**
    * Return term urls to cache.
    *
    * @return array
    *   Return Term urls array.
    */
-  public function cachedTermUrls() {
+  public function cacheableTermUrls() {
     return $this->termUrls;
   }
 
@@ -765,11 +783,25 @@ class MobileAppUtility {
    * @param float $price
    *   The price.
    *
-   * @return float
-   *   Return float price upto configured decimal points.
+   * @return string
+   *   Return string price upto configured decimal points.
    */
-  public function formatPriceDisplay(float $price): float {
-    return number_format($price, $this->currencyConfig->get('decimal_points'));
+  public function formatPriceDisplay(float $price): string {
+    return (string) number_format($price, $this->currencyConfig->get('decimal_points'));
+  }
+
+  /**
+   * Convert relative url img tag in string with absolute url.
+   *
+   * @param string $string
+   *   The string containing html tags.
+   *
+   * @return string
+   *   Return the complete url string with domain.
+   */
+  public function convertRelativeUrlsToAbsolute(string $string): string {
+    global $base_url;
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }

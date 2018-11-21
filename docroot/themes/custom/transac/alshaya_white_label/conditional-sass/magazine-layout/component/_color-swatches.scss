@@ -1,22 +1,9 @@
 .magazine-layout {
-  .content__main {
-    @include breakpoint($tablet) {
-      width: 63%;
-    }
-
-    @include breakpoint($desktop) {
-      width: 67.6%;
-    }
-  }
-
-  .content__title_wrapper,
-  .content__sidebar {
-    @include breakpoint($tablet) {
-      width: 32.4%;
-    }
-  }
-
   .form-item-configurables-article-castor-id {
+    @include breakpoint($only-mobile) {
+      background: transparent !important;
+    }
+
     .select2Option {
       .show-less-color,
       .show-more-color,
@@ -26,6 +13,11 @@
         line-height: 1.33;
         letter-spacing: 0.6px;
         color: $colour-swatches-show-list-button;
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          text-align: center;
+        }
       }
 
       .selected-text {
@@ -37,19 +29,76 @@
       .show-more-color {
         margin-top: 0.3125rem;
         margin-bottom: 1.125rem;
+        text-decoration: underline;
         cursor: pointer;
       }
 
       .list-title {
         margin-bottom: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 1.625rem;
+        }
+
+        span {
+          &:first-child {
+            display: none;
+          }
+        }
       }
 
       .select-buttons {
+        @include breakpoint($only-mobile) {
+          text-align: center;
+        }
+
         li,
         span {
           a:not([data-swatch-type=RGB]) {
+            width: 4.5rem;
+            margin: 0 0 0.5rem;
+            margin-#{$right}: 0.5rem;
+
             @include breakpoint($tablet) {
               width: 2.9375rem;
+            }
+          }
+        }
+      }
+    }
+
+    &.swatch-toggle {
+      .select2Option {
+        .select-buttons {
+          @include breakpoint($only-mobile) {
+            display: flex !important;
+            margin: 0 1rem;
+          }
+
+          li {
+            @include breakpoint($only-mobile) {
+              display: inline-flex;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &.simple-swatch-effect {
+        .select2Option {
+          .select-buttons {
+            background-color: $colour-swatches-simple-effect-bg;
+            margin-left: -0.5rem;
+            padding-left: 0.5rem !important;
+
+            li,
+            span {
+              @include breakpoint($only-mobile) {
+                a:not([data-swatch-type=RGB]) {
+                  margin-bottom: 0;
+                }
+              }
             }
           }
         }
