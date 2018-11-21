@@ -103,15 +103,15 @@ class CategoriesResource extends ResourceBase {
    *   Response object.
    */
   protected function addCacheableDependency(ResourceResponse $response) {
-    if (!empty($this->mobileAppUtility->cachedTermUrls())) {
-      foreach ($this->mobileAppUtility->cachedTermUrls() as $urls) {
+    if (!empty($this->mobileAppUtility->cacheableTermUrls())) {
+      foreach ($this->mobileAppUtility->cacheableTermUrls() as $urls) {
         $response->addCacheableDependency($urls);
       }
     }
 
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
-        'tags' => [ProductCategoryTree::CACHE_TAG],
+        'tags' => array_merge($this->mobileAppUtility->cacheableTermTags(), [ProductCategoryTree::CACHE_TAG]),
       ],
     ]));
   }
