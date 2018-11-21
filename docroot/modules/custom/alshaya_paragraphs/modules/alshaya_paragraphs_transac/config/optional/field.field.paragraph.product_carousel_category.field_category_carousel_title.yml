@@ -11,7 +11,7 @@ bundle: product_carousel_category
 label: Title
 description: 'Add title for carousel. For accordion, If the title is empty, the category label will be used as title.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }
