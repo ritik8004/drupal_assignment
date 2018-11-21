@@ -1,0 +1,139 @@
+diff --git a/core/lib/Drupal/Core/Entity/EntityChangesDetectionTrait.php b/core/lib/Drupal/Core/Entity/EntityChangesDetectionTrait.php
+index cde4d834ce..da991bed70 100644
+--- a/core/lib/Drupal/Core/Entity/EntityChangesDetectionTrait.php
++++ b/core/lib/Drupal/Core/Entity/EntityChangesDetectionTrait.php
+@@ -32,7 +32,7 @@ protected function getFieldsToSkipFromTranslationChangesCheck(ContentEntityInter
+ 
+     // Computed fields should be skipped by the check for translation changes.
+     foreach (array_diff_key($entity->getFieldDefinitions(), array_flip($fields)) as $field_name => $field_definition) {
+-      if ($field_definition->isComputed()) {
++      if ($field_definition->isComputed() || $field_definition->skipTranslationCheck()) {
+         $fields[] = $field_name;
+       }
+     }
+diff --git a/core/lib/Drupal/Core/Field/BaseFieldDefinition.php b/core/lib/Drupal/Core/Field/BaseFieldDefinition.php
+index 0947bb1324..180db4b764 100644
+--- a/core/lib/Drupal/Core/Field/BaseFieldDefinition.php
++++ b/core/lib/Drupal/Core/Field/BaseFieldDefinition.php
+@@ -229,6 +229,21 @@ public function setTranslatable($translatable) {
+     return $this;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function skipTranslationCheck() {
++    return !empty($this->definition['skip_translation_check']);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setSkipTranslationCheck($skip) {
++    $this->definition['skip_translation_check'] = (bool) $skip;
++    return $this;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/core/lib/Drupal/Core/Field/FieldConfigBase.php b/core/lib/Drupal/Core/Field/FieldConfigBase.php
+index 0d58b65614..541d67e038 100644
+--- a/core/lib/Drupal/Core/Field/FieldConfigBase.php
++++ b/core/lib/Drupal/Core/Field/FieldConfigBase.php
+@@ -338,6 +338,21 @@ public function setTranslatable($translatable) {
+     return $this;
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function skipTranslationCheck() {
++    return !empty($this->skip_translation_check);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setSkipTranslationCheck($skip) {
++    $this->skip_translation_check = (bool) $skip;
++    return $this;
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/core/lib/Drupal/Core/Field/FieldConfigInterface.php b/core/lib/Drupal/Core/Field/FieldConfigInterface.php
+index d8b055a9eb..41d8bc9b88 100644
+--- a/core/lib/Drupal/Core/Field/FieldConfigInterface.php
++++ b/core/lib/Drupal/Core/Field/FieldConfigInterface.php
+@@ -49,6 +49,24 @@ public function setDescription($description);
+    */
+   public function setTranslatable($translatable);
+ 
++  /**
++   * Returns whether the field should be skipped for translation check.
++   *
++   * @return bool
++   *   TRUE if the field should be skipped for translation check.
++   */
++  public function skipTranslationCheck();
++
++  /**
++   * Sets whether translation check should be checked for this field or not.
++   *
++   * @param bool $skip
++   *   Whether translation check should be skipped for this field or not.
++   *
++   * @return $this
++   */
++  public function setSkipTranslationCheck($skip);
++
+   /**
+    * Sets field settings.
+    *
+diff --git a/core/modules/content_translation/content_translation.module b/core/modules/content_translation/content_translation.module
+index 0ab227b789..e8ce250fd8 100644
+--- a/core/modules/content_translation/content_translation.module
++++ b/core/modules/content_translation/content_translation.module
+@@ -414,6 +414,14 @@ function content_translation_form_field_config_edit_form_alter(array &$form, For
+     '#access' => $field->getFieldStorageDefinition()->isTranslatable(),
+   ];
+ 
++  $form['skip_translation_check'] = [
++    '#type' => 'checkbox',
++    '#title' => t('Skip this field for translation check'),
++    '#default_value' => $field->skipTranslationCheck(),
++    '#weight' => -1,
++    '#disabled' => !$bundle_is_translatable && $field->isTranslatable(),
++  ];
++
+   // Provide helpful pointers for administrators.
+   if (\Drupal::currentUser()->hasPermission('administer content translation') &&  !$bundle_is_translatable) {
+     $toggle_url = \Drupal::url('language.content_settings_page', [], [
+diff --git a/core/modules/field/config/schema/field.schema.yml b/core/modules/field/config/schema/field.schema.yml
+index ca182c42ab..2974ea41fe 100644
+--- a/core/modules/field/config/schema/field.schema.yml
++++ b/core/modules/field/config/schema/field.schema.yml
+@@ -38,6 +38,9 @@ field.storage.*.*:
+     translatable:
+       type: boolean
+       label: 'Translatable'
++    skip_translation_check:
++      type: boolean
++      label: 'Skip this field for translation check'
+     indexes:
+       type: sequence
+       label: 'Indexes'
+diff --git a/core/modules/field/src/Entity/FieldConfig.php b/core/modules/field/src/Entity/FieldConfig.php
+index 69be43c2b0..329d720870 100644
+--- a/core/modules/field/src/Entity/FieldConfig.php
++++ b/core/modules/field/src/Entity/FieldConfig.php
+@@ -40,6 +40,7 @@
+  *     "description",
+  *     "required",
+  *     "translatable",
++ *     "skip_translation_check",
+  *     "default_value",
+  *     "default_value_callback",
+  *     "settings",
