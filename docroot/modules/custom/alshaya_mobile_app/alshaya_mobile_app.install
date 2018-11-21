@@ -5,8 +5,29 @@
  * Install, update and uninstall functions for the alshaya_mobile_app module.
  */
 
- use Drupal\consumers\Entity\Consumer;
+use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_mobile_app_update_8001() {
+  \Drupal::service('module_installer')->install(['webform_rest']);
+
+  _alshaya_mobile_app_create_user();
+  _alshaya_mobile_app_create_consumer();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'rest.resource.webform_rest_submit',
+        'user.role.mobile_app_consumer',
+      ],
+      'alshaya_mobile_app'
+    );
+}
 
 /**
  * Implements hook_install().
