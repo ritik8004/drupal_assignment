@@ -39,6 +39,10 @@ $settings['alshaya_magento_user_username'] = 'alshaya_magento';
 $settings['alshaya_magento_user_email'] = 'noreply-magento@alshaya.com';
 $settings['alshaya_magento_user_password'] = 'AlShAyA_MaGeNtO';
 
+$settings['alshaya_mobile_app_user_username'] = 'alshaya_mobile_app';
+$settings['alshaya_mobile_app_user_email'] = 'noreply-mobile-app@alshaya.com';
+$settings['alshaya_mobile_app_user_password'] = 'AlShAyA_MoBiLe';
+
 // Simple Oauth.
 // TODO: Security.
 $soauth_key_dir = '';
