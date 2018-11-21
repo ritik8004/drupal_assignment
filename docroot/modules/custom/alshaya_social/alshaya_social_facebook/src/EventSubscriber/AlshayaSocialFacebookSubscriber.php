@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_social_facebook;
+namespace Drupal\alshaya_social_facebook\EventSubscriber;
 
 use Drupal\social_api\Plugin\NetworkManager;
 use Drupal\social_auth\Event\SocialAuthEvents;
