@@ -100,3 +100,4 @@ $alshaya-thin: if-ltr($alshaya-thin, $alshaya-arabic-thin);
 $alshaya-arabic-thin: if-ltr($alshaya-arabic-thin, $alshaya-thin);
 $after: if-ltr("after", "before");
 $before: if-ltr("before", "after");
+$campaign-plp-style-1-font: if-ltr($campaign-plp-style-1-font, $campaign-plp-style-1-arabic-font);

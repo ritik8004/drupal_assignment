@@ -10,6 +10,53 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - View more/less colours.
+ */
+function alshaya_master_update_8020() {
+  $strings = [
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update context for strings.
+ */
+function alshaya_master_update_8019() {
+  $strings = [
+    'Please select a payment option to continue.' => 'alshaya_error_message|empty_payment_option',
+    'Please agree to the Terms and Conditions.' => 'alshaya_error_message|agree_terms_and_condition',
+    'Your account has not been activated or is blocked.' => 'alshaya_error_message|account_already_exists',
+  ];
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add default PLP settings.
+ */
+function alshaya_master_update_8018() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_master.plp_settings'],
+    'alshaya_master',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add allowed classes for rich text.
  */
 function alshaya_master_update_8017() {
@@ -1479,6 +1526,12 @@ function alshaya_master_install() {
     ],
     "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
       'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
+    ],
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
     ],
   ];
 

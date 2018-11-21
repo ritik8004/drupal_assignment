@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_plp_layout
+field_name: field_plp_layout
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values: {  }
+  allowed_values_function: 'alshaya_acm_product_category_plp_layout_values'
+settings:
+  allowed_values:
+    -
+      value: default
+      label: Default
+    -
+      value: campaign-plp-style-1
+      label: 'Campaign PLP style 1'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

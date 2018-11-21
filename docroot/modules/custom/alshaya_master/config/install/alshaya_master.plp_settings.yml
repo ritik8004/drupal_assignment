@@ -1,0 +1,6 @@
+enable_autoplay: 0
+all_plp_layouts:
+  default: 'Default'
+  campaign-plp-style-1: 'Campaign PLP style 1'
+facet_plp_styles:
+  campaign-plp-style-1: Campaign PLP style 1

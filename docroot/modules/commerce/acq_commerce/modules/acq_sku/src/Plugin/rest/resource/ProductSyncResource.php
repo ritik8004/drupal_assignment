@@ -739,10 +739,6 @@ class ProductSyncResource extends ResourceBase {
    *   JSON string of array containing diff of two arrays.
    */
   public static function getArrayDiff($array1, $array2): string {
-    // Cleanup in both arrays first.
-    unset($array1['changed']);
-    unset($array2['changed']);
-
     $differ = new ArrayDiff();
     return json_encode($differ->diff($array1, $array2));
   }

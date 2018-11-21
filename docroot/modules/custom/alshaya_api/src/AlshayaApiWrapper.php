@@ -412,6 +412,9 @@ class AlshayaApiWrapper {
       'status' => FALSE,
       'visibility' => FALSE,
       'type' => FALSE,
+      'price' => FALSE,
+      'special_price' => FALSE,
+      'web_qty' => FALSE,
     ];
 
     if ($data = fgetcsv($handle, 1000, ',')) {
@@ -452,7 +455,12 @@ class AlshayaApiWrapper {
           continue;
         }
 
-        $mskus[$type][] = $data[$indexes['partnum']];
+        $mskus[$type][$data[$indexes['partnum']]] = [
+          'sku' => $data[$indexes['partnum']],
+          'price' => $data[$indexes['price']],
+          'special_price' => $data[$indexes['special_price']],
+          'qty' => (int) $data[$indexes['web_qty']],
+        ];
       }
     }
     fclose($handle);
@@ -551,7 +559,16 @@ class AlshayaApiWrapper {
         }
       }
 
-      $mskus[$type] = $skus;
+      if (!empty($skus)) {
+        foreach ($skus as $sku) {
+          $mskus[$type][$sku] = [
+            'sku' => $sku,
+            'price' => 0,
+            'special_price' => 0,
+            'qty' => 0,
+          ];
+        }
+      }
     }
 
     return $mskus;
@@ -727,6 +744,27 @@ class AlshayaApiWrapper {
     }
 
     return $url;
+  }
+
+  /**
+   * Get selected payment method for a cart.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   *
+   * @return string
+   *   Selected payment method code.
+   */
+  public function getCartPaymentMethod(int $cart_id) {
+    $endpoint = 'carts/' . $cart_id . '/selected-payment-method';
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return '';
+    }
+
+    $response = json_decode($response, TRUE);
+    return $response['method'] ?? '';
   }
 
 }

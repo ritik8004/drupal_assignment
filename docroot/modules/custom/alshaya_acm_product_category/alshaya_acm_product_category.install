@@ -9,6 +9,106 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Replace all occurrences of moschino in code.
+ */
+function alshaya_acm_product_category_update_8024() {
+  // Update values of existing taxonomy terms.
+  \Drupal::database()->update('taxonomy_term__field_plp_layout')
+    ->fields([
+      'field_plp_layout_value' => ProductCategoryTree::PLP_LAYOUT_1,
+    ])
+    ->condition('field_plp_layout_value', 'moschino')
+    ->execute();
+
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // Update value in config.
+  $manager->updateConfigs(
+    ['alshaya_master.plp_settings'],
+    'alshaya_master',
+    'install'
+  );
+
+  // Update value of taxonomy field.
+  $configs = [
+    'field.storage.taxonomy_term.field_plp_layout',
+    'field.field.taxonomy_term.acq_product_category.field_plp_layout',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  // Remove old plugin from blocks.
+  $block_configs = [
+    'block.block.plppromotions',
+    'block.block.plpsize',
+    'block.block.plpproductbrand',
+    'block.block.plpproductcollection',
+    'block.block.plpcolor',
+    'block.block.skusskureferencefinalprice',
+    'block.block.plpconcept',
+  ];
+
+  foreach ($block_configs as $block) {
+    \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable link attributes module.
+ * Adding new fields for moschino for the product category vocabulary.
+ */
+function alshaya_acm_product_category_update_8021() {
+  \Drupal::service('module_installer')->install(['link_attributes']);
+  $manager = \Drupal::service('alshaya_config.manager');
+  $configs = [
+    'field.storage.taxonomy_term.field_plp_menu',
+    'field.storage.taxonomy_term.field_plp_layout',
+    'field.storage.taxonomy_term.field_plp_menu_icon',
+    'field.storage.taxonomy_term.field_mobile_plp_video_links',
+    'field.field.taxonomy_term.acq_product_category.field_plp_layout',
+    'field.field.taxonomy_term.acq_product_category.field_plp_menu',
+    'field.field.taxonomy_term.acq_product_category.field_plp_menu_icon',
+    'field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links',
+    'field.storage.taxonomy_term.field_plp_video_links',
+    'field.field.taxonomy_term.acq_product_category.field_plp_video_links',
+    'field.storage.taxonomy_term.field_plp_upload_video',
+    'field.field.taxonomy_term.acq_product_category.field_plp_upload_video',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  $block_configs = [
+    'block.block.plppromotions',
+    'block.block.plpsize',
+    'block.block.plpproductbrand',
+    'block.block.plpproductcollection',
+    'block.block.plpcolor',
+    'block.block.skusskureferencefinalprice',
+    'block.block.plpconcept',
+  ];
+
+  foreach ($block_configs as $block) {
+    // Re-save config for the overrides to take effect.
+    \Drupal::configFactory()->getEditable($block)
+      ->save();
+  }
+}
 
 /**
  * Implements hook_update_N().

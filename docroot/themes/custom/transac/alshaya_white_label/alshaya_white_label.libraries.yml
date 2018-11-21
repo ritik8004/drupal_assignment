@@ -153,7 +153,20 @@ magazine_select2Option:
     js/magazine_attribute.js: {}
   css:
     theme:
-      /themes/custom/transac/alshaya_white_label/css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+      css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+
+campaign-plp-style-1-video-provider:
+  css:
+    theme:
+      vendor/css/video-js.min.css: {}
+  js:
+    vendor/js/video.min.js: {}
+    vendor/js/Youtube.min.js: {}
+    vendor/js/videojs-vimeo.js: {}
+
+campaign-plp-style-1-common:
+  js:
+    js/campaign-plp-style-1-layout.js: {}
 
 magazine_socialSharepopup:
   js:
