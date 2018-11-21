@@ -127,6 +127,11 @@ class MigrateSymmetricToAsymmetric {
    *   Target translation language code.
    */
   private function migrateContent(EntityInterface $original, EntityInterface $translation, string $defaultLangcode, string $translationLangcode) {
+    $this->logger->info('Migrating content for @type @id', [
+      '@id' => $original->id(),
+      '@type' => $original->getEntityTypeId(),
+    ]);
+
     /** @var \Drupal\node\NodeInterface $entity */
     $fields = self::$fields[$original->getEntityTypeId()];
 
@@ -165,11 +170,15 @@ class MigrateSymmetricToAsymmetric {
             $newTranslatedParagraph = $paragraph->addTranslation($translationLangcode, $newTranslatedValues);
             unset($newTranslatedParagraph->original);
 
+            $this->logger->info('New Translated value: @value', [
+              '@value' => json_encode($newTranslatedValues),
+            ]);
+
             try {
               $newTranslatedParagraph->save();
             }
             catch (\Exception $e) {
-              $this->logger->warning('Error occurred while saving new translation for paragraph: @row. Message: @message', [
+              $this->logger->error('Error occurred while saving new translation for paragraph: @row. Message: @message', [
                 '@row' => json_encode($newTranslatedValues),
                 '@message' => $e->getMessage(),
               ]);
