@@ -91,7 +91,8 @@
         "drupal/adminimal_theme": "^1.3",
         "charliekassel/array-diff": "^0.0.2",
         "drupal/logs_http": "^1.0",
-        "drupal/link_attributes": "^1.5"
+        "drupal/link_attributes": "^1.5",
+        "drupal/webform_rest": "^2.0"
     },
     "require-dev": {
         "drupal/devel": "^1.0.0-alpha1",
