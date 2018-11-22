@@ -163,12 +163,13 @@
           display: table-cell !important;
         }
       }
-    }
 
-    .discount-row,
-    .surcharge-row {
-      td {
-        padding: 0.625rem 1rem;
+      td.above-mobile {
+        &.blend {
+          @include breakpoint($only-tablet) {
+            vertical-align: top;
+          }
+        }
       }
     }
 
@@ -187,6 +188,28 @@
 
         @include breakpoint($desktop) {
           top: -0.3125rem;
+        }
+      }
+    }
+
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row,
+    .discount-row,
+    .surcharge-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 0.625rem 0.5rem;
+        }
+      }
+    }
+
+    tr.order-item-row,
+    tr.order-details-row,
+    tr.order-summary-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 1.375rem 0.5rem 3.438rem !important;
         }
       }
     }

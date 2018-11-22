@@ -623,6 +623,24 @@
         }
       }
     }
+
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row,
+    .discount-row,
+    .surcharge-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 0.625rem 0.9375rem;
+        }
+      }
+    }
+
+    .total-row {
+      td:nth-child(3) > div {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
