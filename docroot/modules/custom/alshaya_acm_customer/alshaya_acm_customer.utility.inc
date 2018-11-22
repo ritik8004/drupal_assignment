@@ -53,30 +53,56 @@ function alshaya_acm_customer_update_customer_data($mail, $password = NULL) {
  * @param array $customer
  *   Customer data recieved from Magento.
  *
- * @return \Drupal\user\Entity\User
- *   User object.
+ * @return \Drupal\user\Entity\User|null
+ *   User object or null.
  */
 function alshaya_acm_customer_create_drupal_user(array $customer) {
-  /** @var \Drupal\user\Entity\User $user */
-  $user = \Drupal::entityTypeManager()->getStorage('user')->create([]);
-  $user->enforceIsNew();
+  $lock = \Drupal::lock();
+  $lock_key = 'alshaya_acm_customer_create_drupal_user_' . $customer['email'];
+  // Lock the process for concurrent requests, to avoid creating multiple
+  // accounts with same email-id.
+  if ($lock->acquire($lock_key)) {
+    try {
+      /** @var \Drupal\user\Entity\User $user */
+      $user = \Drupal::entityTypeManager()->getStorage('user')->create([]);
+      $user->enforceIsNew();
 
-  // Activate the user by default.
-  $user->activate();
+      // Activate the user by default.
+      $user->activate();
 
-  // Set the email.
-  $user->setEmail($customer['email']);
+      // Set the email.
+      $user->setEmail($customer['email']);
 
-  // For Alshaya we know we are using email_registration module.
-  $user->setUsername('email_registration_' . user_password());
+      // For Alshaya we know we are using email_registration module.
+      $user->setUsername('email_registration_' . user_password());
 
-  // Set a password entered by user for login.
-  $user->setPassword(user_password(25));
+      // Set a password entered by user for login.
+      $user->setPassword(user_password(25));
 
-  // Update the data in Drupal to match the values in Magento.
-  alshaya_acm_customer_update_user_data($user, $customer);
+      // Update the data in Drupal to match the values in Magento.
+      alshaya_acm_customer_update_user_data($user, $customer);
 
-  return $user;
+      // Release the lock.
+      $lock->release($lock_key);
+
+      return $user;
+    }
+    catch (\Exception $e) {
+      // Release the lock.
+      $lock->release($lock_key);
+      \Drupal::logger('alshaya_acm_customer')->error('Error occurred during creating user @message', [
+        '@message' => $e->getMessage(),
+      ]);
+    }
+  }
+  else {
+    \Drupal::logger('alshaya_acm_customer')->error('Trying to re-create the account with the email:@email', [
+      '@email' => $customer['email'],
+    ]);
+  }
+
+  return NULL;
+
 }
 
 /**
