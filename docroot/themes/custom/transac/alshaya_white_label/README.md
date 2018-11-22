@@ -113,6 +113,29 @@ sass/
 * **state/** modules will adjust when in a particular state, in regards to targeting how changes happen on contextual alterations for regions or similar  
 * **style-guide-only/** contains homepage.md which provides the content for the Overview section of the styleguide, and kss-only.scss which generates a css file for styling needed by a component for display in the style guide, but not loaded into the actual theme  
 
+### Feature specific approach
+
+we have created a separate folder named as conditional-sass inside which we will create a separate folder as per requested feature. we have added a gulp task for making a separate css file and defining a separate library for each feature. we will attach the same library by checking the condition if feature is enabled.
+
+### How feature related sass is ging to work in each subtheme
+
+while working on one of the feature magazine layout we noticed that conditional-sass which is defined inside the alshaya_whitelabel theme not getting updated with brand colour and fonts so we came up with this approach where we need to make same directory structure inside enabled brand theme and will inherit the whitelabel scss inside from conditional-sass directory and override the library accordingly!!
+
+### Note related to Feature specific approach
+this will require one time copying all the defined feature scss component inside from conditional-sass and pasting it to the newly added brand theme (or we can do it as a part of alshaya_example_subtheme)
+
+### Conditional feature Sass Structure
+
+Setup of the Sass files for the specific feature.
+
+```
+conditional-sass/example-feature
+  |-- example-feature.scss
+  |-- component/
+```
+* **example-feature.scss**  This file will be different for different feature.
+* **component/** these module files are the component parts of our design.
+
 ### Gulp 
 
 The Gulp installation and tasks are setup to work on install, but are still intended to be easily updated based on project needs. The tasks are declared in `gulpfile.js` and broken out within the `gulp-tasks/` subfolder. You can list the available Gulp tasks with `gulp --tasks`. The most common gulp task is `gulp watch` when developing locally, which covers Sass compiling, JS linting, and building dynamic styleguides.  
