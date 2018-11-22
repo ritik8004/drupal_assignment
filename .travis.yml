@@ -105,7 +105,7 @@ deploy:
     script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
     on:
-      branch: CORE-5247-drupal-86
+      branch: CORE-5247-drupal86
       php: 7.1
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_branch"
