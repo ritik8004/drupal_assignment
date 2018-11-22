@@ -381,6 +381,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Found SKU
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
+    if (empty($sku)) {
+      return NULL;
+    }
+
     $skus_static_cache = &drupal_static(__FUNCTION__, []);
 
     $is_multilingual = \Drupal::languageManager()->isMultilingual();
