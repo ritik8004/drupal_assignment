@@ -106,14 +106,17 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     }
     else {
       $query_string = [];
-      $view_url = '';
       parse_str($request->getQueryString(), $query_string);
-      if (!empty($query_string['view_path'])) {
-        $view_url_data = $query_string['view_path'];
-        $view_url_data = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId(), '', $view_url_data);
-        $view_url_data = explode('?', $view_url_data);
-        $view_url = reset($view_url_data);
+
+      // Query string must have view_path.
+      if (empty($query_string['view_path'])) {
+        return;
       }
+
+      $view_url_data = $query_string['view_path'];
+      $view_url_data = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId(), '', $view_url_data);
+      $view_url_data = explode('?', $view_url_data);
+      $view_url = reset($view_url_data);
     }
 
     $query_params = $this->helper->getCleanQueryParams($view->getExposedInput());
