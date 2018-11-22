@@ -1,0 +1,28 @@
+.magazine-layout {
+  .content__title_wrapper {
+    @include breakpoint($only-mobile) {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: auto auto;
+
+      .price-block,
+      .promotions,
+      .content--item-code,
+      .basic-details-wrapper,
+      h1 {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+  .basic-details-wrapper {
+    @include breakpoint($only-mobile) {
+      .sku-base-form {
+        display: grid;
+
+        #configurable_ajax {
+          display: none;
+        }
+      }
+    }
+  }
+}

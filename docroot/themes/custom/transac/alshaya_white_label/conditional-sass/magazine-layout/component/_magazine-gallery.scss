@@ -46,9 +46,13 @@
     grid-row: 2 / 3;
     text-align: center;
     font-size: 0.75rem;
-    width: 60%;
-    margin: 0 auto;
-    padding: 1rem 0;
+    padding: 0;
+
+    @include breakpoint($tablet) {
+      width: 60%;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
 
     .magazine-read-more-link {
       font-family: $arial;
@@ -80,6 +84,20 @@
         font-weight: bold;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .product-swatch {
+        margin-bottom: 1.5rem;
+
+        .list-title {
+          text-transform: uppercase;
+        }
+
+        label {
+          display: none;
+        }
       }
     }
   }
