@@ -382,6 +382,12 @@ class SKU extends ContentEntityBase implements SKUInterface {
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
     if (empty($sku)) {
+      // Simply log for debugging later on why this function is called
+      // with empty sku.
+      \Drupal::logger('acq_sku')->error('SKU::loadFromSku invoked with empty sku string: @trace.', [
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
+
       return NULL;
     }
 
