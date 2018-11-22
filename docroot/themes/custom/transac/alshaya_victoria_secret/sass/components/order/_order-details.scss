@@ -27,25 +27,12 @@
     position: static;
   }
 
-  .sub-total-row,
-  .delivery-charge-row,
-  .total-row,
-  .discount-row {
-    td {
-      padding: 0.625rem 1rem;
-    }
-  }
-
   .total-row {
     &.vat-container {
       td.warm--white {
         font-family: $vs-regular;
       }
     }
-  }
-
-  .sub-total-row td {
-    padding-top: 1.125rem;
   }
 
   .order-transaction > .dark {
@@ -114,10 +101,6 @@
 
   .sub-total-row {
     border-top: 1px solid $order_detail_order_sub_total_border;
-
-    td {
-      padding-top: 1.125rem;
-    }
   }
 
   .order-item-row {
