@@ -19,8 +19,7 @@ bundle: department_page
 label: 'Promo Blocks'
 description: ''
 required: false
-translatable: false
-skip_translation_check: true
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
