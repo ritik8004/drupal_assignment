@@ -11,6 +11,5 @@ dependencies:
   - drupal:node
   - drupal:path
   - pcb:pcb
-  - unique_logs:unique_logs
   - drupal:rest
   - drupal:taxonomy
