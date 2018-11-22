@@ -1,181 +1,41 @@
-{%
-set classes = [
-  'node',
-  'node--type-' ~ node.bundle|clean_class,
-  view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
-]
-%}
+{% extends '@alshaya_white_label/node/node--acq-product--full.html.twig' %}
 
-  <article{{ attributes }} {{ gtm_attributes }}>
-  <div class="acq-content-product">
-    <div class="content__main {{ image_slider_position_pdp }}">
-      {% if content.gallery is not null %}
-        {{ content.gallery }}
-      {% else %}
-        <div id="product-zoom-container"></div>
-      {% endif %}
-
-      <div class="horizontal-crossell above-mobile-block">
-        {{ content.cross_sell }}
-      </div>
-
-      {% if content.up_sell %}
-        <div class="horizontal-upell above-mobile-block">
-          {{ content.up_sell }}
-        </div>
-      {% endif %}
-
-      {% if content.related %}
-        <div class="horizontal-related above-mobile-block">
-          {{ content.related }}
-        </div>
-      {% endif %}
-
-    </div>
-
-    <div class="content__title_wrapper">
-      {% if content.brand_logo %}
-        <div class="brand-logo-wrapper">
-          {{ content.brand_logo }}
-        </div>
-      {% endif %}
-
-      <h1>{{ label }}</h1>
-
-      <div class="price-block {{ content.price_block_identifier }}">
-        {{ content.price_block }}
-      </div>
-
-      {% if content.promotions %}
-        <div class="promotions">
-          {{ content.promotions }}
-        </div>
-      {% endif %}
-
-      <div class="content--item-code">
-        <span class="field__label">{{ 'Item Code'|t }}:</span>
-        {{ content.item_code }}
-      </div>
-
-      {% if content.delivery_link is not empty %}
-        <div class="delivery">
-          {{ content.delivery_link }}
-        </div>
-      {% endif %}
-
-      {% if content.free_gift_promotions %}
-        <div class="free-gift-promotions">
-            {{ content.free_gift_promotions }}
-        </div>
-      {% endif %}
-    </div>
-
-    <div class="content__sidebar">
-      <div class="mobile-content-wrapper">
-        <div class="basic-details-wrapper">
-          {{ content.field_skus }}
-        </div>
-
-        <div class="short-description-wrapper">
-          <div class="content--short-description">
-            <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-            <div class="field__content-wrapper">
-              <div class="field__content">
-                {% set descCount = 0 %}
-                {% for desc in content.description  %}
-                  {% if desc.value|render %}
-                    <div class="desc-wrapper">
-                      {% set descCount = descCount + 1 %}
-                      {% if desc.label|render %}
-                        <div class="desc-label">
-                          {{ desc.label }}
-                        </div>
-                      {% endif %}
-
-                      <div class="desc-value">
-                        {{ desc.value }}
-                      </div>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-              {% if descCount > 1 %}
-                <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-
-        <div class="description-wrapper">
-          <div class="content--description">
-            <span class="close"></span>
-            <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-            <div class="field__content">
-              {% for desc in content.description  %}
-                {% if desc.value|render %}
-                  <div class="desc-wrapper">
-                    {% if desc.label|render %}
-                      <div class="desc-label">
-                        {{ desc.label }}
-                      </div>
-                    {% endif %}
-
-                    <div class="desc-value">
-                      {{ desc.value }}
-                    </div>
+{% block shortDescBlock %}
+  <div class="short-description-wrapper">
+    <div class="content--short-description">
+      <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+      <div class="field__content-wrapper">
+        <div class="field__content">
+          {% set descCount = 0 %}
+          {% for desc in content.description  %}
+            {% if desc.value|render %}
+              <div class="desc-wrapper">
+                {% set descCount = descCount + 1 %}
+                {% if desc.label|render %}
+                  <div class="desc-label">
+                    {{ desc.label }}
                   </div>
                 {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-          <div class="gradient-holder"></div>
-        </div>
 
-        <div class="content--item-code mobile-only">
-          <span class="field__label">{{ 'Item Code'|t }}:</span>
-          {{ content.item_code }}
-        </div>
-
-          {% if content.home_delivery or content.click_and_collect %}
-            <div class="delivery-options-wrapper">
-              <div class="product-out-of-stock-layer"></div>
-              <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
-              <div class="field__content">
-                {{ content.home_delivery }}
-
-                {% if content.click_and_collect %}
-                  {{ content.click_and_collect }}
-                {% endif %}
+                <div class="desc-value">
+                  {{ desc.value }}
+                </div>
               </div>
-            </div>
-          {% endif %}
-
-          <div class="sharethis-label mobile-only">{{ 'Share'|t }}</div>
-          {{ content.sharethis }}
-      </div>
-
-
-      {% if content.up_sell or content.related or content.cross_sell%}
-        <div class="mobile-related-wrapper">
-          <div class="horizontal-crossell mobile-only-block">
-						{{ content.cross_sell }}
-          </div>
-
-          {% if content.up_sell %}
-            <div class="horizontal-upell mobile-only-block">
-                {{ content.up_sell }}
-            </div>
-          {% endif %}
-
-          {% if content.related %}
-            <div class="horizontal-upell mobile-only-block">
-                {{ content.related }}
-            </div>
-          {% endif %}
+            {% endif %}
+          {% endfor %}
         </div>
-      {% endif %}
-
+        {% if descCount > 1 %}
+          <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+          <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+        {% endif %}
+      </div>
     </div>
   </div>
-</article>
+{% endblock %}
+
+{% block afterDescription %}
+  <div class="content--item-code mobile-only">
+    <span class="field__label">{{ 'Item Code'|t }}:</span>
+    {{ content.item_code }}
+  </div>
+{% endblock %}

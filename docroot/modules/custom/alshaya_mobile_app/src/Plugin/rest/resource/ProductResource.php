@@ -275,6 +275,9 @@ class ProductResource extends ResourceBase {
 
       foreach ($data['cart_combinations']['by_sku'] ?? [] as $values) {
         $child = SKU::loadFromSku($values['sku']);
+        if (!$child instanceof SKUInterface) {
+          continue;
+        }
         $variant = $this->getSkuData($child);
         $variant['configurable_values'] = $this->getConfigurableValues($child);
         $data['variants'][] = $variant;

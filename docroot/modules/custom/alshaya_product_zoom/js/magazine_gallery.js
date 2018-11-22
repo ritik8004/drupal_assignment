@@ -261,7 +261,7 @@
   };
 
   var slickModalOptions = {
-    slidesToShow: 5,
+    slidesToShow: 3,
     vertical: true,
     arrows: true,
     infinite: false,
