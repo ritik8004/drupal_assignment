@@ -50,6 +50,7 @@ class MigrateSymmetricToAsymmetric {
     ],
     'taxonomy_term' => [
       'field_main_menu_highlight',
+      'field_plp_menu',
     ],
     'block_content' => [
       'field_paragraph_content',
