@@ -15,6 +15,7 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Implements hook_css_alter().
@@ -452,7 +453,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = $product_display_settings->get('color_swatches_hover');
 
     if ($variables['view_mode'] == 'full') {
-      if ($settings->get('pdp_layout') == 'magazine') {
+      if ('pdp-' . $settings->get('pdp_layout') == SkuManager::PDP_LAYOUT_MAGAZINE) {
         $variables['#attached']['library'][] = 'alshaya_white_label/magazine_select2Option';
         $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
       }
