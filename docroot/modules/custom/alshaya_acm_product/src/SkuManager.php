@@ -33,6 +33,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class SkuManager.
@@ -2351,33 +2352,35 @@ class SkuManager {
   /**
    * Helper function to fetch pdp layout for a particular Term ID.
    *
-   * @param int $inner_term_id
+   * @param int $tid
    *   Term ID for which layout needs to be fetched.
    *
    * @return string
    *   PDP layout to be used.
    */
-  public function getPdpLayoutFromTermId($inner_term_id) {
-    $term = $this->termStorage->load($inner_term_id);
-    $context = 'pdp';
-    if ($term->get('field_pdp_layout')->first()) {
-      $pdp_layout = $term->get('field_pdp_layout')->getString();
-      if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
-        $taxonomy_parents = $this->termStorage->loadAllParents($inner_term_id);
-        foreach ($taxonomy_parents as $taxonomy_parent) {
-          $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
-          if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
-            return $this->getContextFromLayoutKey($context, $pdp_layout);
+  public function getPdpLayoutFromTermId($tid) {
+    $term = $this->termStorage->load($tid);
+    if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
+      $context = 'pdp';
+      if ($term->get('field_pdp_layout')->first()) {
+        $pdp_layout = $term->get('field_pdp_layout')->getString();
+        if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+          foreach ($this->termStorage->loadAllParents($tid) as $taxonomy_parent) {
+            $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
+            if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
+              return $this->getContextFromLayoutKey($context, $pdp_layout);
+            }
           }
         }
+        else {
+          return $this->getContextFromLayoutKey($context, $pdp_layout);
+        }
       }
-      else {
-        return $this->getContextFromLayoutKey($context, $pdp_layout);
-      }
-    }
 
-    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
-    return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+      $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')
+        ->get('pdp_layout');
+      return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+    }
   }
 
 }

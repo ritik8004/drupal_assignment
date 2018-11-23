@@ -109,9 +109,10 @@ function alshaya_product_sharethis_render_alter(&$attributes, $data_options, &$s
   // Add title to sharethis span.
   if (isset($attributes['displayText'])) {
     $attributes['title'] = ucfirst($attributes['displayText']);
+
     /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    $inner_term_id = $product_category_tree->getProductInnermostCategoryFromRoute();
+    $inner_term_id = $product_category_tree->getProductInnermostCategoryIdFromRoute();
     if (!empty($inner_term_id)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
