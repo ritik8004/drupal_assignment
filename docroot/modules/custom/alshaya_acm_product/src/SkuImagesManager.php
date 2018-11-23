@@ -65,6 +65,13 @@ class SkuImagesManager {
   protected $productInfoHelper;
 
   /**
+   * Product display settings (alshaya_acm_product.display_settings).
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $productDisplaySettings;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -92,6 +99,8 @@ class SkuImagesManager {
     $this->skuManager = $sku_manager;
     $this->productInfoHelper = $product_info_helper;
     $this->cache = $cache;
+
+    $this->productDisplaySettings = $this->configFactory->get('alshaya_acm_product.display_settings');
   }
 
   /**
@@ -351,15 +360,18 @@ class SkuImagesManager {
       $return['images'][$url] = $url;
     }
 
-    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
-    if ($sku->bundle() === 'simple' && $config->get('show_parent_images_in_child')) {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $sku->getPluginInstance();
-      $parent = $plugin->getParentSku($sku);
+    // For simple children we need to add images from parent
+    // if configured to do so.
+    if ($sku->bundle() === 'simple' && !$check_parent_child) {
+      if ($this->productDisplaySettings->get('show_parent_images_in_child')) {
+        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+        $plugin = $sku->getPluginInstance();
+        $parent = $plugin->getParentSku($sku);
 
-      if ($parent instanceof SKUInterface) {
-        $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
-        $return = array_merge_recursive($return, $parent_media);
+        if ($parent instanceof SKUInterface) {
+          $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
+          $return = array_merge_recursive($return, $parent_media);
+        }
       }
     }
 
@@ -531,13 +543,30 @@ class SkuImagesManager {
    * @throws \Exception
    */
   public function getSkuForGallery(SKUInterface $sku, &$check_parent_child, string $case = '') {
-    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
-    $configurable_use_parent_images = $config->get('configurable_use_parent_images');
+    $configurable_use_parent_images = $this->productDisplaySettings->get('configurable_use_parent_images');
     $is_configurable = $sku->bundle() == 'configurable';
 
     if (!empty($case) && $configurable_use_parent_images != 'never') {
       $configurable_use_parent_images = $case;
     }
+
+    $cache_key = implode(':', [
+      'key' => 'sku_for_gallery',
+      'flag' => (int) $check_parent_child,
+      'case' => $case,
+    ]);
+
+    $cache = $this->skuManager->getProductCachedData($sku, $cache_key);
+
+    if (is_array($cache)) {
+      $child = SKU::loadFromSku($cache['sku']);
+      if ($child instanceof SKUInterface) {
+        $check_parent_child = $cache['check_parent_child'];
+        return $child;
+      }
+    }
+
+    $skuForGallery = $sku;
 
     switch ($configurable_use_parent_images) {
       case 'never':
@@ -550,13 +579,13 @@ class SkuImagesManager {
 
           // Try to get first valid in stock child.
           if ($child instanceof SKU) {
-            $sku = $child;
+            $skuForGallery = $child;
           }
           else {
             // Try to get first available child for OOS.
             $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
             if ($child instanceof SKU) {
-              $sku = $child;
+              $skuForGallery = $child;
             }
             else {
               throw new \Exception('No valid child found.', 404);
@@ -572,7 +601,7 @@ class SkuImagesManager {
           $check_parent_child = FALSE;
           $child = $this->getFirstChildWithMedia($sku);
           if ($child instanceof SKU) {
-            $sku = $child;
+            $skuForGallery = $child;
           }
 
           // Check if parent has image before fallbacking to OOS children.
@@ -580,7 +609,7 @@ class SkuImagesManager {
             // Try to get first available child for OOS.
             $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
             if ($child instanceof SKU) {
-              $sku = $child;
+              $skuForGallery = $child;
             }
           }
         }
@@ -597,13 +626,20 @@ class SkuImagesManager {
           $check_parent_child = FALSE;
           $child = $this->getFirstChildWithMedia($sku);
           if ($child instanceof SKU) {
-            $sku = $child;
+            $skuForGallery = $child;
           }
         }
         break;
     }
 
-    return $sku;
+    $cache = [
+      'check_parent_child' => $check_parent_child,
+      'sku' => $skuForGallery->getSku(),
+    ];
+
+    $this->skuManager->setProductCachedData($sku, $cache_key, $cache);
+
+    return $skuForGallery;
   }
 
   /**
@@ -626,11 +662,12 @@ class SkuImagesManager {
   public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE, SKUInterface $original_sku_entity = NULL) {
     $gallery = [];
 
-    $config = $this->configFactory->get('alshaya_acm_product.display_settings');
-    $display_thumbnails = $config->get('image_thumb_gallery');
+    $display_thumbnails = $this->productDisplaySettings->get('image_thumb_gallery');
 
     try {
-      $sku = $this->getSkuForGallery($sku, $check_parent_child);
+      if ($check_parent_child) {
+        $sku = $this->getSkuForGallery($sku, $check_parent_child);
+      }
     }
     catch (\Exception $e) {
       return [];
