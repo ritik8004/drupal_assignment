@@ -11,7 +11,7 @@ bundle: product_carousel_category
 label: 'Use as Accordion'
 description: 'Check this if you want to display this paragraph item as accordion.'
 required: false
-translatable: false
+translatable: true
 default_value:
   -
     value: 0
