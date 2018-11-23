@@ -13,7 +13,7 @@ bundle: delivery_usp_block
 label: 'Arrow Color'
 description: ''
 required: true
-translatable: true
+translatable: false
 default_value:
   -
     value: black

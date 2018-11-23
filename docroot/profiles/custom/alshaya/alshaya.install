@@ -11,55 +11,6 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
- * Migrate paragraphs content from asymmetric to symmetric translations.
- */
-function alshaya_update_8012() {
-  /* @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager */
-  $config_manager = \Drupal::service('alshaya_config.manager');
-
-  // First update config of normal fields which are inside paragraph.
-  $configs = [
-    'field.field.paragraph.product_carousel_category.field_category_carousel',
-    'field.field.paragraph.product_carousel_category.field_category_carousel_limit',
-    'field.field.paragraph.product_carousel_category.field_use_as_accordion',
-  ];
-  $config_manager->updateConfigs($configs, 'alshaya_paragraphs_transac', 'optional');
-
-  // First update config of normal fields which are inside paragraph.
-  $configs = [
-    'field.field.paragraph.delivery_usp_block.field_arrow_color',
-    'field.field.paragraph.delivery_usp_block.field_usp_text_font_color',
-    'field.field.paragraph.delivery_usp_block.field_usp_timer',
-    'field.field.paragraph.slug_banner.field_mobile_slug_bkg_color',
-  ];
-  $config_manager->updateConfigs($configs, 'alshaya_paragraphs', 'install');
-
-  // Do migration now.
-  /** @var \Drupal\alshaya_paragraphs\Helper\MigrateSymmetricToAsymmetric $migrateUtility */
-  $migrateUtility = \Drupal::service('alshaya_paragraphs.migrate_utility');
-
-  // Load all advanced page nodes.
-  $entities = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
-    'type' => 'advanced_page',
-  ]);
-  foreach ($entities as $entity) {
-    $migrateUtility->migrateEntity($entity);
-
-    // Some contents are missed or improperly updated on first go. We do it
-    // again to ensure everything is proper after migration.
-    $migrateUtility->migrateEntity($entity);
-  }
-
-  $block_ids = \Drupal::database()->query('SELECT distinct(entity_id) FROM block_content__field_paragraph_content')->fetchAll();
-  foreach ($block_ids as $block_id) {
-    $block = \Drupal::entityTypeManager()->getStorage('block_content')->load($block_id->entity_id);
-    $migrateUtility->migrateEntity($block);
-  }
-}
-
-/**
- * Implements hook_update_N().
- *
  * Uninstall lightning_scheduler module.
  */
 function alshaya_update_8011() {

@@ -17,22 +17,6 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  * Making 'field_plp_menu' paragraph field non-translatable.
  */
 function alshaya_acm_product_category_update_8025() {
-  // Do migration now.
-  /** @var \Drupal\alshaya_paragraphs\Helper\MigrateSymmetricToAsymmetric $migrateUtility */
-  $migrateUtility = \Drupal::service('alshaya_paragraphs.migrate_utility');
-
-  // Load all product category terms.
-  $entities = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
-    'vid' => 'acq_product_category',
-  ]);
-  foreach ($entities as $entity) {
-    $migrateUtility->migrateEntity($entity);
-
-    // Some contents are missed or improperly updated on first go. We do it
-    // again to ensure everything is proper after migration.
-    $migrateUtility->migrateEntity($entity);
-  }
-
   /* @var \Drupal\alshaya_config\AlshayaConfigManager $config_manager */
   $config_manager = \Drupal::service('alshaya_config.manager');
   $configs = [
