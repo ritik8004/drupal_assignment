@@ -13,6 +13,25 @@ baseUriParameters:
     description: "The langcode to get localized results from the endpoints."
 mediaType: application/json
 schemas:
+  - GetOauthToken: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      }
   - GetSocialMedias: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -1662,3 +1681,53 @@ schemas:
                   schema: KnetFinalizeRequest
                   example: |
                     {"payment_id":"5339950131882960","result":"CAPTURED","post_date":"1024","transaction_id":"1571958141882960","auth_code":"188519","ref":"829618580773","tracking_id":"HMKWHDE0000812","user_id":"0","customer_id":"158","quote_id":"2871","amount":2.5,"status":"success"}
+/oauth/token:
+  description: "Get the token for mobile app consumer."
+  post:
+    description: |
+      Get bearer token for given user.
+      Use the "multipart-form/data" to submit data to get token
+    body:
+      multipart/formdata:
+        formParameters:
+          grant_type:
+            description: "The token grant type."
+            required: true
+            type: string
+            enum: [ "password", "code", "referesh_token" ]
+          client_id:
+            description: "The client uuid."
+            required: true
+            type: string
+            example: |
+              "ac73dcc7-6918-4e14-8b48-86b5cd17f4d2"
+          client_secret:
+            description: "The client password."
+            required: true
+            type: string
+            example: |
+              "anyRandomString"
+          username:
+            description: "The username for which we need to generate token."
+            required: true
+            type: string
+            example: |
+              "my_username"
+          password:
+            description: "The password of the user for which we need to generate token."
+            required: true
+            type: string
+            example: |
+              "password"
+    responses:
+      200:
+        body:
+          application/json:
+            schema: GetOauthToken
+            example: |
+              {
+                "token_type": "Bearer",
+                "expires_in": 300,
+                "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjEzMDU4YzE5ZWNjZGJiMTliZGMyZTRkNWM1OGNhMWYwM2Y3NTY0Njk3MTM4MjM1MDYzODZjYTMxMWI0ZjU2YzMzNTZkODZhZDAyZDhhOTg3In0.eyJhdWQiOiJhYzczZGNjNy02OTE4LTRlMTQtOGI0OC04NmI1Y2QxN2Y0ZDIiLCJqdGkiOiIxMzA1OGMxOWVjY2RiYjE5YmRjMmU0ZDVjNThjYTFmMDNmNzU2NDY5NzEzODIzNTA2Mzg2Y2EzMTFiNGY1NmMzMzU2ZDg2YWQwMmQ4YTk4NyIsImlhdCI6MTU0Mjk2NzM4MiwibmJmIjoxNTQyOTY3MzgyLCJleHAiOjE1NDI5OTczODIsInN1YiI6IjUzNzM5Iiwic2NvcGVzIjpbImF1dGhlbnRpY2F0ZWQiLCJtb2JpbGVfYXBwX2NvbnN1bWVyIl19.FxdexdbanLuhuAR_Wf",
+                "refresh_token": "def502007eca0d3f91a3b6597f010e5f8ae1503ccf586de59cd3a4fe5f6d095d4e8e03fa619333887bc340269d47f53a1b2b7c1350c0cc40bd21ad4380640e71bbe1657bcb611dc26c2d9100339f29692396393e606ff721e4f2e1526e"
+              }
