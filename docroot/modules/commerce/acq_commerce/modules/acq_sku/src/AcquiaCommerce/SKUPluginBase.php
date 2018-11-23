@@ -154,6 +154,9 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       return $static[$langcode][$sku_string];
     }
 
+    // Initialise with empty value.
+    $static[$langcode][$sku_string] = NULL;
+
     $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
@@ -165,8 +168,6 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       return NULL;
     }
 
-    $parent_sku = reset($parent_skus);
-
     if (count($parent_skus) > 1) {
       \Drupal::logger('acq_sku')->warning(
         'Multiple parents found for SKU: @sku, parents: @parents',
@@ -177,7 +178,17 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       );
     }
 
-    $static[$langcode][$sku_string] = SKU::loadFromSku($parent_sku, $langcode);
+    foreach ($parent_skus as $parent_sku) {
+      $parent = SKU::loadFromSku($parent_sku, $langcode);
+      if ($parent instanceof SKU) {
+        $node = $this->getDisplayNode($parent, FALSE, FALSE);
+
+        if ($node instanceof Node) {
+          $static[$langcode][$sku_string] = $parent;
+          break;
+        }
+      }
+    }
 
     return $static[$langcode][$sku_string];
   }
