@@ -246,9 +246,6 @@
             "drupal/simple_sitemap": {
                 "MMCPA-2433": "patches/simple_sitemap/simple_sitemap_MMCPA-2433.patch"
             },
-            "drupal/paragraphs": {
-                "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
-            },
             "drupal/password_policy": {
                 "Code logic will never reset password expiry - update": "https://www.drupal.org/files/issues/2867089-9.patch",
                 "Cron expire date format and timezone is incorrect, leads to infinite password resets.": "https://www.drupal.org/files/issues/cron_expire_date_format-2860671-7.patch",

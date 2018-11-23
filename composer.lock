@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1dceff798a3ecf987af196c37a271bda",
+    "content-hash": "43affe068e82db11a761248785ceeeee",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -9396,9 +9396,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "Support translatable paragraph entity reference revision field": "https://www.drupal.org/files/issues/2018-11-01/2461695-261.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
