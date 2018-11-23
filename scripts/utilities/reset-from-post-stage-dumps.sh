@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# ./reset-form-post-stage-dumps.sh "alshaya" "01dev"
+#
 
 subscription="$1"
 target_env="$2"

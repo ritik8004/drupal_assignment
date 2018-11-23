@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# ./clear-varnish.sh "alshaya" "01dev"
+#
 
 subscription="$1"
 target_env="$2"
