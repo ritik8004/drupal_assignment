@@ -13,6 +13,7 @@
 # post-code-update only runs if your site is using a Git repository. It does
 # not support SVN.
 
+subscription="$1"
 target_env="$2"
 
 # Get the environment without the "01" prefix.
@@ -29,7 +30,7 @@ else
   echo "$HOME/slack_settings does not exist. Slack won't be notified."
 fi
 
-cd `drush sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+cd `drush sa @$subscription.$target_env | grep root | cut -d"'" -f4`
 
 errorstr="error"
 
@@ -62,7 +63,7 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
     else
       gunzip -k ~/backup/$target_env/post-stage/$site.sql.gz
       drush -l $site.$env-alshaya.acsitefactory.com sql-drop -y
-      drush -l $site.$env-alshaya.acsitefactory.com sql-connect < ~/backup/$target_env/post-stage/$site.sql
+      `drush -l $site.$env-alshaya.acsitefactory.com sql-connect` < ~/backup/$target_env/post-stage/$site.sql
       rm ~/backup/$target_env/post-stage/$site.sql
     fi
 
