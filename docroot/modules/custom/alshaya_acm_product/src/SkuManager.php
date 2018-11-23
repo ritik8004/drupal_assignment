@@ -2360,8 +2360,8 @@ class SkuManager {
    */
   public function getPdpLayoutFromTermId($tid) {
     $term = $this->termStorage->load($tid);
+    $context = 'pdp';
     if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
-      $context = 'pdp';
       if ($term->get('field_pdp_layout')->first()) {
         $pdp_layout = $term->get('field_pdp_layout')->getString();
         if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
