@@ -1,21 +1,31 @@
 .magazine__gallery--container {
   display: grid;
-  grid-template:
-    "a a" auto
-    "c c" auto
-    "b d" auto
-    "e e" auto /
-    1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   grid-gap: 1rem;
-  grid-auto-rows: minmax(200px, auto);
-  align-items: start;
+
+  .ie & {
+    display: block;
+
+    .pdp-image {
+      &:nth-child(2n +1) {
+        width: 48%;
+        float: $right;
+      }
+
+      &:nth-child(2n) {
+        width: 48%;
+        float: $left;
+      }
+    }
+
+    .magazine-product-description {
+      width: 100%;
+      clear: both;
+    }
+  }
 
   @include breakpoint($tablet) {
-    grid-template:
-      "a b" auto
-      "c c" auto
-      "d e" auto /
-      1fr 1fr;
     margin-#{$right}: 1rem;
   }
 
@@ -32,34 +42,49 @@
   }
 
   .magazine-product-description {
-    grid-area: c;
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
     text-align: center;
     font-size: 0.75rem;
+    width: 60%;
+    margin: 0 auto;
+    padding: 1rem 0;
+
+    .magazine-read-more-link {
+      font-family: $arial;
+      font-size: 0.875rem;
+      font-weight: bold;
+      line-height: 1.83;
+      color: $pdp_sidebar_link;
+      cursor: pointer;
+    }
 
     ul {
+      padding-#{$left}: 0;
+      margin: 0;
+
       li {
         list-style: none;
+      }
+    }
+
+    .composition,
+    .care-instructions,
+    .warning,
+    .concept {
+      &-wrapper {
+        padding: 0.5rem 5%;
+      }
+
+      &-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
     }
   }
 
   .pdp-image {
-    &:nth-child(4n +1) {
-      grid-area: a;
-    }
-
-    &:nth-child(4n+2) {
-      grid-area: b;
-    }
-
-    &:nth-child(4n+3) {
-      grid-area: d;
-    }
-
-    &:nth-child(4n) {
-      grid-column: e;
-    }
-
     &:nth-child(2n) {
       #cloud-zoom-big {
         left: calc(100% + 2rem) !important;
@@ -69,6 +94,30 @@
     &:nth-child(2n+1) {
       #cloud-zoom-big {
         left: calc(200% + 3rem) !important;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      &:nth-child(2n) {
+        grid-column: 2 / -1;
+      }
+
+      &:nth-child(2n+1) {
+        grid-column: 1 / 2;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &:nth-child(3n+1) {
+        grid-column: 1 / -1;
+      }
+
+      &:nth-child(3n+2) {
+        grid-column: 1 / 2;
+      }
+
+      &:nth-child(3n) {
+        grid-column: 2 / -1;
       }
     }
 

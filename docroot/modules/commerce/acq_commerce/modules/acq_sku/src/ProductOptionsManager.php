@@ -221,7 +221,9 @@ class ProductOptionsManager {
       }
     }
 
-    $this->deleteUnavailableOptions($options_available);
+    if ($options_available) {
+      $this->deleteUnavailableOptions($options_available);
+    }
   }
 
   /**
