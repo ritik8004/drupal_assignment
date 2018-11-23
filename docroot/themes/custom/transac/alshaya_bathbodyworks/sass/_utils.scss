@@ -54,7 +54,6 @@
   &:hover::#{$position} {
     @if $styles {
       background: url($imgpath) $repeat;
-      opacity: 0.8;
 
       @include pdp_icon_img_styles($height, $width);
     }
