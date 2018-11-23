@@ -316,6 +316,11 @@ class ACMPaymentMethods extends CheckoutPaneBase implements CheckoutPaneInterfac
     // Set the payment method id in session as it is not available in cart.
     $session = \Drupal::request()->getSession();
     $session->set('selected_payment_method', $plugin->getId());
+
+    \Drupal::logger('alshaya_acm_checkout')->info('Payment method @method selected for cart id: @cart_id', [
+      '@method' => $plugin->getId(),
+      '@cart_id' => $this->getCart()->id(),
+    ]);
   }
 
   /**
