@@ -282,8 +282,9 @@ class KnetController extends ControllerBase {
         $this->apiWrapper->placeOrder($cart->id());
 
         // Add success message in logs.
-        $this->logger->info('Placed order. Cart: @cart.', [
+        $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
           '@cart' => $this->cartHelper->getCleanCartToLog($cart),
+          '@method' => 'knet',
         ]);
       }
       else {
