@@ -607,9 +607,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    * @return int|null
    *   Return the taxonomy term ID if found else NULL.
    */
-  public function getProductInnermostCategoryFromRoute() {
+  public function getProductInnermostCategoryIdFromRoute() {
     $route_name = $this->routeMatch->getRouteName();
-    $term_id = NULL;
+    $tid = NULL;
 
     if ($route_name == 'entity.node.canonical') {
       $node = $this->routeMatch->getParameter('node');
@@ -619,11 +619,11 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       }
 
       if (count($terms) > 0) {
-        $term_id = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
+        $tid = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
       }
     }
 
-    return $term_id;
+    return $tid;
   }
 
 }
