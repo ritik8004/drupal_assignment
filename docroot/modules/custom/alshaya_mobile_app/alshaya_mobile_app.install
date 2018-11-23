@@ -13,7 +13,9 @@ use Drupal\user\Entity\User;
  * Implements hook_update_N().
  */
 function alshaya_mobile_app_update_8001() {
-  \Drupal::service('module_installer')->install(['webform_rest']);
+  if (\Drupal::moduleHandler()->moduleExists('webform_rest')) {
+    \Drupal::service('module_installer')->install(['webform_rest']);
+  }
 
   _alshaya_mobile_app_create_user();
   _alshaya_mobile_app_create_consumer();
@@ -79,10 +81,11 @@ function _alshaya_mobile_app_create_consumer() {
   }
 
   // Add Simple Oauth - Consumer client.
-  $client = Consumer::create([]);
-  $client->set('label', 'Alshaya Mobile App Consumer');
-  $client->set('secret', Settings::get('alshaya_mobile_app_soauth_client_secret'));
-  $client->set('roles', ['mobile_app_consumer']);
-  $client->set('uuid', Settings::get('alshaya_mobile_app_soauth_client_uuid'));
+  $client = Consumer::create([
+    'uuid' => Settings::get('alshaya_mobile_app_soauth_client_uuid'),
+    'label' => 'Alshaya Mobile App Consumer',
+    'secret' => Settings::get('alshaya_mobile_app_soauth_client_secret'),
+    'roles' => ['mobile_app_consumer'],
+  ]);
   $client->save();
 }
