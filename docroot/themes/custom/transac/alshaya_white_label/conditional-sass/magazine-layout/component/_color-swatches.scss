@@ -105,4 +105,24 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    .select2Option {
+      display: block;
+    }
+  }
+
+  .basic-details-wrapper {
+    .field--name-field-skus {
+      .form-item-configurables-size {
+        label {
+          display: none;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
 }
