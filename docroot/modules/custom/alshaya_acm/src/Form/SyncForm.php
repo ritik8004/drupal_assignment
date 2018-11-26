@@ -231,27 +231,26 @@ class SyncForm extends FormBase {
         // If there is any term update/create during category sync.
         if (!empty($response['created']) || !empty($response['updated'])) {
           // Get orphan terms.
-          $all_orphan_terms = $orphan_terms = $this->productCategoriesManager->getOrphanCategories($response);
+          $all_orphan_terms = $to_be_delete_orphans_terms = $this->productCategoriesManager->getOrphanCategories($response);
           // If there is any orphan term.
-          if (!empty($orphan_terms)) {
+          if (!empty($to_be_delete_orphans_terms)) {
             // Allow other modules to skipping the deleting of terms.
-            $this->moduleHandler->alter('acq_sku_sync_categories_delete', $orphan_terms);
+            $this->moduleHandler->alter('acq_sku_sync_categories_delete', $to_be_delete_orphans_terms);
 
             // If there are orphans which we not deleting (due to alter hook).
-            if (count($all_orphan_terms) != count($orphan_terms)) {
+            if (count($all_orphan_terms) != count($to_be_delete_orphans_terms)) {
               // Get orphans which are not deleted.
-              $orphan_diff = array_diff($all_orphan_terms, $orphan_terms);
+              $orphan_diff = array_diff($all_orphan_terms, $to_be_delete_orphans_terms);
               $not_deleted_orphans = array_map(function ($orphan) {
                 return $orphan['name'];
               }, $orphan_diff);
             }
 
-            foreach ($orphan_terms as $tid => $rs) {
+            foreach (array_keys($to_be_delete_orphans_terms) as $tid) {
               $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
               if ($term instanceof TermInterface) {
-                // Delete the term.
+                $deleted_orphans[] = $term->getName();
                 $term->delete();
-                $deleted_orphans[] = $rs['name'];
               }
             }
           }
@@ -261,7 +260,6 @@ class SyncForm extends FormBase {
 
         // If any term deleted.
         if (!empty($deleted_orphans)) {
-          // Add message for the deleted terms.
           $this->messenger()->addMessage($this->t('Orphan terms @deleted_terms deleted successfully.', [
             '@deleted_terms' => implode(', ', $deleted_orphans),
           ]));
@@ -269,7 +267,6 @@ class SyncForm extends FormBase {
 
         // If any orphan term not deleted.
         if (!empty($not_deleted_orphans)) {
-          // Add message for the not deleted orphan terms.
           $this->messenger()->addMessage($this->t('Orphan terms @not_deleted_terms not deleted.', [
             '@not_deleted_terms' => implode(', ', $not_deleted_orphans),
           ]));
