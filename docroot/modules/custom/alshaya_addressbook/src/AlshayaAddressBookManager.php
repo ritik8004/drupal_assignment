@@ -87,7 +87,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   protected $configFactory;
 
   /**
-   * Cache Backend object for "cache.data".
+   * Cache Backend object for "cache.addressbook".
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
@@ -134,7 +134,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend object for "cache.data".
+   *   Cache Backend object for "cache.addressbook".
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
