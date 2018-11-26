@@ -36,6 +36,7 @@
       }
     }
   }
+
   .basic-details-wrapper {
     @include breakpoint($only-mobile) {
       .field--name-field-skus .field__item {
