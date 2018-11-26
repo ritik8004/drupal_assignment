@@ -4,7 +4,7 @@
   }
 
   ol {
-    font-size: 0.625rem;
+    font-size: 0.75rem;
     padding: 0.5rem 1.5rem;
   }
 
@@ -14,6 +14,12 @@
 
     &::after {
       padding: 0 0.1875rem;
+    }
+
+    &:last-of-type {
+      a {
+        font-weight: 600;
+      }
     }
   }
 }

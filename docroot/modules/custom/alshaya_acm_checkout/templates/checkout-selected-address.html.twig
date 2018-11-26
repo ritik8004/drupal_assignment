@@ -34,11 +34,45 @@
     {% if delivery_address is not empty %}
       <div class="address--delivery">
         <div class="address--label">{{ 'Delivery address' | t }}</div>
-        {% for item in delivery_address|without('organization', 'family_name', 'given_name', 'mobile_number', 'country_code') %}
-          {% if item is not empty %}
-            <div class="address--content">{{ item }}</div>
+        {% if delivery_address.address_line2 is not empty %}
+          <div class="address--content">{{ delivery_address.address_line2 }}</div>
+        {% endif %}
+        {% if delivery_address.dependent_locality is not empty %}
+          <div class="address--content">{{ delivery_address.dependent_locality }}</div>
+        {% endif %}
+        {% if delivery_address.address_line1 is not empty %}
+          <div class="address--content">{{ delivery_address.address_line1 }}</div>
+        {% endif %}
+        {% if delivery_address.administrative_area is not empty %}
+          {% if delivery_address.administrative_area_display is not empty %}
+            <div class="address--content">{{ delivery_address.administrative_area_display }}</div>
+          {% else %}
+            <div class="address--content">{{ delivery_address.administrative_area }}</div>
           {% endif %}
-        {% endfor %}
+        {% endif %}
+        {% if delivery_address.area_parent is not empty %}
+          {% if delivery_address.area_parent_display is not empty %}
+            <div class="address--content">{{ delivery_address.area_parent_display }}</div>
+          {% else %}
+            <div class="address--content">{{ delivery_address.area_parent }}</div>
+          {% endif %}
+        {% endif %}
+        {% if delivery_address.locality is not empty %}
+          {% if delivery_address.locality_display is not empty %}
+            <div class="address--content">{{ delivery_address.locality_display }}</div>
+          {% else %}
+            <div class="address--content">{{ delivery_address.locality }}</div>
+          {% endif %}
+        {% endif %}
+        {% if delivery_address.sorting_code is not empty %}
+          <div class="address--content">{{ delivery_address.sorting_code }}</div>
+        {% endif %}
+        {% if delivery_address.country is not empty %}
+          <div class="address--content">{{ delivery_address.country }}</div>
+        {% endif %}
+        {% if delivery_address.postal_code is not empty %}
+          <div class="address--content">{{ delivery_address.postal_code }}</div>
+        {% endif %}
       </div>
     {% endif %}
   </div>
