@@ -23,3 +23,15 @@
     }
   }
 }
+
+#block-content {
+  .order-items {
+    li a {
+      .dark {
+        font-weight: 600;
+        letter-spacing: normal;
+        margin-bottom: 0.3125rem;
+      }
+    }
+  }
+}
