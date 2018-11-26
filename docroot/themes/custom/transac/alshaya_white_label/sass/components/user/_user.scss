@@ -706,12 +706,16 @@
           }
 
           @include breakpoint($only-tablet) {
-            width: 32%;
-            height: 96px;
+            width: 36%;
+            height: 6rem;
             padding-#{$left}: 0.5rem;
 
             .second {
               display: none;
+            }
+
+            .order-id {
+              margin-bottom: -1px;
             }
           }
 
@@ -776,9 +780,10 @@
           padding: 0;
           display: table-cell;
           vertical-align: middle;
+          line-height: 1.2;
 
           > div {
-            padding: 0 16px;
+            padding: 0 1rem;
             white-space: nowrap;
 
             @include breakpoint($only-tablet) {
@@ -789,7 +794,7 @@
 
         .first {
           @include breakpoint($desktop) {
-            width: 125px;
+            width: 7.8125rem;
           }
         }
 
@@ -803,18 +808,12 @@
           }
 
           @include breakpoint($only-tablet) {
-            margin-bottom: 10px;
-          }
-        }
-
-        .order-quantity {
-          @include breakpoint($only-tablet) {
-            margin-top: 10px;
+            margin-bottom: 0.625rem;
           }
         }
 
         .third {
-          width: 105px;
+          width: 6.5625rem;
         }
 
         .fourth {
@@ -834,13 +833,12 @@
 
         .light {
           color: $user_order_list_light;
-          height: 14px;
           font-family: $arial;
-          font-size: 12px;
-          margin-bottom: 5px;
+          font-size: 0.75rem;
+          margin-bottom: 0.3125rem;
 
-          @include breakpoint($upto-desktop) {
-            font-size: 0.625rem;
+          @include breakpoint($desktop) {
+            font-size: 0.875rem;
           }
         }
 
@@ -858,7 +856,7 @@
         }
 
         .date {
-          margin-top: 10px;
+          margin-top: 0.3125rem;
         }
       }
     }
