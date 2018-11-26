@@ -11,6 +11,22 @@ use Drupal\user\Entity\User;
 
 /**
  * Implements hook_update_N().
+ *
+ * Create user_registration_mail end point for anonymous user.
+ */
+function alshaya_mobile_app_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.user_registration_mail'],
+      'alshaya_mobile_app'
+    );
+
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+}
+
+/**
+ * Implements hook_update_N().
  */
 function alshaya_mobile_app_update_8001() {
   \Drupal::service('module_installer')->install(['webform_rest']);
