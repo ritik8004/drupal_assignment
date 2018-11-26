@@ -1769,8 +1769,9 @@ schemas:
             description: "The Preference of channel of communication."
             required: true
             type: string
+            enum: [ "Email", "Mobile"]
             example: |
-              "email"
+              "Email"
           first_name:
             description: "The first name of user."
             required: true
