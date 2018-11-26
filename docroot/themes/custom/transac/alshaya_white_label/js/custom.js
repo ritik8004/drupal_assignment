@@ -142,7 +142,7 @@
         });
       });
 
-      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
+      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay', 'social-modal-overlay'];
 
       $(document).on('keyup', function (evt) {
         // Remove class when esc button is used to remove the overlay.
