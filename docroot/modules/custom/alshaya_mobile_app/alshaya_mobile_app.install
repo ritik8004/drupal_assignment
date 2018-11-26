@@ -79,10 +79,11 @@ function _alshaya_mobile_app_create_consumer() {
   }
 
   // Add Simple Oauth - Consumer client.
-  $client = Consumer::create([]);
-  $client->set('label', 'Alshaya Mobile App Consumer');
-  $client->set('secret', Settings::get('alshaya_mobile_app_soauth_client_secret'));
-  $client->set('roles', ['mobile_app_consumer']);
-  $client->set('uuid', Settings::get('alshaya_mobile_app_soauth_client_uuid'));
+  $client = Consumer::create([
+    'uuid' => Settings::get('alshaya_mobile_app_soauth_client_uuid'),
+    'label' => 'Alshaya Mobile App Consumer',
+    'secret' => Settings::get('alshaya_mobile_app_soauth_client_secret'),
+    'roles' => ['mobile_app_consumer'],
+  ]);
   $client->save();
 }
