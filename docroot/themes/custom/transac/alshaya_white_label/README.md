@@ -117,24 +117,45 @@ sass/
 
 we have created a separate folder named as conditional-sass inside which we will create a separate folder as per requested feature. we have added a gulp task for making a separate css file and defining a separate library for each feature. we will attach the same library by checking the condition if feature is enabled.
 
-### How feature related sass is ging to work in each subtheme
+### how to override conditional feature in brand theme.
 
-while working on one of the feature magazine layout we noticed that conditional-sass which is defined inside the alshaya_whitelabel theme not getting updated with brand colour and fonts so we came up with this approach where we need to make same directory structure inside enabled brand theme and will inherit the whitelabel scss inside from conditional-sass directory and override the library accordingly!!
-
-### Note related to Feature specific approach
-this will require one time copying all the defined feature scss component inside from conditional-sass and pasting it to the newly added brand theme (or we can do it as a part of alshaya_example_subtheme)
+All the feature resides in the CORE theme, if it is enabled by default it will show CORE fonts and colors in brand theme. To prevent this from happening, and allow each brands to override fonts and colors, we need to replicate the structure inside each brand theme, and also override the library with the new SCSS generated inside brand theme. This will be a compulsory step for each conditional-sass component, otherwise fonts and colors wont be correct.
 
 ### Conditional feature Sass Structure
 
-Setup of the Sass files for the specific feature.
+Setup of the Sass files for the specific feature inside Base theme.
 
 ```
 conditional-sass/example-feature
   |-- example-feature.scss
   |-- component/
+  |-- sass/_brand-feature.scss
 ```
 * **example-feature.scss**  This file will be different for different feature.
 * **component/** these module files are the component parts of our design.
+* **brand-feature.scss** This file import all the required variables, mixins, fonts and colours.
+
+Setup of the Sass files for the specific feature inside Brand theme.
+
+```
+conditional-sass/example-feature
+  |-- example-feature.scss
+  |-- component/
+  |-- saaa/component/_brand-feature-override.scss
+```
+* **example-feature.scss**  This file will be different for different feature.
+* **component/** these module files are the component parts of our design.
+* **brand-feature-override.scss** This file import all the required variables, mixins, fonts and colours from the brand theme.
+
+### Step to setup the example feature:
+* Add a directory example-feature inside conditional sass in CORE theme.
+* Add files as per structure mentioned above.
+* Write scss in .scss file inside component folder.
+* Define the library whcih will add the css file compiled for the example feature.
+* In order to show correct brand fonts and colors, do the below in each brand theme.
+* create a .scss file naming as brand-feature-override.scss inside sass folder and import the required mixin, variales, color, fonts as per brand.
+* Import the brand-feature-override.scss file inside example-feature.scss.
+* and run the gulp task inside the brand theme.
 
 ### Gulp 
 
