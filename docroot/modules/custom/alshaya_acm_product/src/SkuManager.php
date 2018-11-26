@@ -690,6 +690,27 @@ class SkuManager {
   }
 
   /**
+   * Get Promotions data for provided SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Array of promotions data.
+   */
+  public function getPromotionsForSearchViewFromSkuId(SKUInterface $sku): array {
+    $cache_key = 'promotions_for_search_view';
+    $promos = $this->getProductCachedData($sku, $cache_key);
+
+    if (!is_array($promos)) {
+      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
+      $this->setProductCachedData($sku, $cache_key, $promos);
+    }
+
+    return $promos ?? [];
+  }
+
+  /**
    * Get Promotion node object(s) related to provided SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -1227,6 +1248,15 @@ class SkuManager {
       return NULL;
     }
 
+    $static = &drupal_static('sku_manager_get_display_node', []);
+
+    $langcode = $sku_entity->language()->getId();
+    $sku_string = $sku_entity->getSku();
+
+    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
@@ -1235,12 +1265,15 @@ class SkuManager {
     if (!($node instanceof NodeInterface)) {
       if ($check_parent) {
         $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-          '@sku' => $sku_entity->getSku(),
+          '@langcode' => $langcode,
+          '@sku' => $sku_string,
         ]);
       }
 
       return NULL;
     }
+
+    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
