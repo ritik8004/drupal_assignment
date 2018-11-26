@@ -15,7 +15,8 @@ bundle: 1_row_3_col_text
 label: 'Promo Block'
 description: ''
 required: false
-translatable: true
+translatable: false
+skip_translation_check: true
 default_value: {  }
 default_value_callback: ''
 settings:

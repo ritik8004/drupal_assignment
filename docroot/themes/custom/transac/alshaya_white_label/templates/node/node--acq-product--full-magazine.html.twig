@@ -1,0 +1,35 @@
+{% extends 'node--acq-product--full.html.twig' %}
+{% set attributes = attributes.addClass('magazine-layout') %}
+{% block mainContent %}
+  <div class="content__main">
+    {% if content.gallery is not null %}
+      {{ content.gallery }}
+    {% else %}
+      <div id="product-zoom-container"></div>
+    {% endif %}
+
+    {% if content.cross_sell %}
+      <div class="horizontal-crossell above-mobile-block">
+        {{ content.cross_sell }}
+      </div>
+    {% endif %}
+
+    {% if content.up_sell %}
+      <div class="horizontal-upell above-mobile-block">
+        {{ content.up_sell }}
+      </div>
+    {% endif %}
+
+    {% if content.related %}
+      <div class="horizontal-related above-mobile-block">
+        {{ content.related }}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block shortDescBlock %}
+{% endblock %}
+
+{% block descBlock %}
+{% endblock %}

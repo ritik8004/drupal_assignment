@@ -16,11 +16,10 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Correcting the block positions for promotion banner blocks.
  */
-function alshaya_transac_update_8118() {
+function alshaya_transac_update_8119() {
   // Place the block in highlighted region.
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
-
   // Place block in correct region for all sites.
   $manager->updateConfigs(
     ['block.block.views_block__promotion_banner_block_1'],
@@ -35,6 +34,15 @@ function alshaya_transac_update_8118() {
     'alshaya_transac',
     'optional'
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable alshaya_social_facebook module.
+ */
+function alshaya_transac_update_8118() {
+  \Drupal::service('module_installer')->install(['alshaya_social_facebook']);
 }
 
 /**
@@ -395,6 +403,7 @@ function alshaya_transac_install() {
     'alshaya_promo_panel',
     'alshaya_search',
     'alshaya_seo_transac',
+    'alshaya_social_facebook',
     'alshaya_stores_finder',
     'alshaya_stores_finder_transac',
     'alshaya_super_category',

@@ -32,7 +32,7 @@ class MiniCartManager {
       '#suffix' => '</div><div id="cart_notification"></div>',
     ];
 
-    if (!empty($cart) && !empty($items = $cart->items())) {
+    if (!empty($cart)) {
       $totals = $cart->totals();
 
       // The grand total including discounts and taxes.

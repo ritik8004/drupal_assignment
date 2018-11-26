@@ -13,6 +13,20 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ *  Update the text link paragraph type.
+ */
+function alshaya_paragraphs_update_8123() {
+  $configs = [
+    'core.entity_view_display.paragraph.text_links.default',
+    'core.entity_form_display.paragraph.text_links.default',
+    'language.content_settings.paragraph.text_links',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make entity_reference_revisions field translatable: true. Reverting 8120.
  */
 function alshaya_paragraphs_update_8122() {
@@ -103,7 +117,6 @@ function alshaya_paragraphs_update_8119() {
     'core.entity_form_display.paragraph.slug_banner.default',
     'core.entity_view_display.paragraph.slug_banner.default',
     'core.base_field_override.paragraph.slug_banner.created',
-    'core.base_field_override.paragraph.slug_banner.moderation_state',
     'core.base_field_override.paragraph.slug_banner.status',
     'core.base_field_override.paragraph.slug_banner.uid',
     'language.content_settings.paragraph.slug_banner',

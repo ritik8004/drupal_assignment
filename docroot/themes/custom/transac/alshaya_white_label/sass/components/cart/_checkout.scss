@@ -711,6 +711,7 @@ body.alias--cart {
           display: block;
           width: auto;
           padding-bottom: 0;
+          padding-top: 1.5rem;
         }
 
         div.image {
@@ -1186,11 +1187,7 @@ body.alias--cart {
       max-height: 2.188rem;
       line-height: 2.7;
 
-      @include breakpoint($desktop) {
-        &:hover {
-          opacity: 0.75;
-        }
-      }
+      @include link-ripple();
 
       &.disabled {
         &:hover {
