@@ -15,6 +15,7 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Implements hook_css_alter().
@@ -427,6 +428,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['vat_text_footer'] = $settings->get('vat_text_footer');
     $variables['attributes']['data-nid'] = $variables['node']->id();
     $variables['attributes']['data-vmode'] = $variables['view_mode'];
+    $variables['pdp_layout'] = $settings->get('pdp_layout');
 
     // Cross sell/ Up sell items count on carousel on pdp page.
     $variables['#attached']['drupalSettings']['pdp_items_mob'] = $settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_0');
@@ -451,8 +453,9 @@ function alshaya_white_label_preprocess_node(&$variables) {
     $variables['#attached']['drupalSettings']['color_swatches_hover'] = $product_display_settings->get('color_swatches_hover');
 
     if ($variables['view_mode'] == 'full') {
-      if ($settings->get('pdp_layout') == 'magazine') {
+      if ('pdp-' . $settings->get('pdp_layout') == SkuManager::PDP_LAYOUT_MAGAZINE) {
         $variables['#attached']['library'][] = 'alshaya_white_label/magazine_select2Option';
+        $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
       }
 
       else {

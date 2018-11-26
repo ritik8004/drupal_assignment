@@ -260,7 +260,7 @@
                 "Integration with password_policy": "https://www.drupal.org/files/issues/2933747-4.patch"
             },
             "drupal/sharethis": {
-                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/an-alter-required-2900290_4.patch",
+                "An alter required for altering attributes variable": "https://www.drupal.org/files/issues/2018-11-21/an_alter_required_for-2900290-18.patch",
                 "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
             },
             "drupal/recaptcha": {
