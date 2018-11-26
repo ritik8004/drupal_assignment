@@ -9,13 +9,16 @@ field_name: field_plp_layout
 entity_type: taxonomy_term
 type: list_string
 settings:
+  allowed_values: {  }
+  allowed_values_function: 'alshaya_acm_product_category_plp_layout_values'
+settings:
   allowed_values:
     -
       value: default
       label: Default
     -
-      value: moschino
-      label: 'Moschino PLP'
+      value: campaign-plp-style-1
+      label: 'Campaign PLP style 1'
   allowed_values_function: ''
 module: options
 locked: false

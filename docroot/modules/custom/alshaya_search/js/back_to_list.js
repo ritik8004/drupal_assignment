@@ -1,9 +1,39 @@
+/**
+ * @file
+ * JS for Back to PLP.
+ */
+
 (function ($) {
   'use strict';
 
+  var replaceState;
+
   $.fn.updateWindowLocation = function (data) {
-    history.replaceState({'back_to_list': true}, document.title, data);
+    replaceState = data;
   };
+
+  $(window).on('beforeunload', function () {
+    if (typeof replaceState !== 'undefined') {
+      history.replaceState({'back_to_list': true}, document.title, replaceState);
+    }
+  });
+
+  // For RTL, we have some code to mess with page scroll.
+  // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
+  $(window).on('pageshow', function () {
+    if (window.location.search.indexOf('show_on_load') > -1) {
+      var url = returnRefinedURL('show_on_load', window.location.href);
+      url = url.replace(/&$/g, "");
+      history.replaceState({}, document.title, url);
+    }
+
+    setTimeout('Drupal.processBackToList()', 10);
+  });
+
+  function returnRefinedURL(key, url){
+     return url.replace(new RegExp(key + "=\\w+"),"").replace("?&","?")
+    .replace("&&","&");
+  }
 
   /**
    * Get the storage values.
@@ -45,6 +75,7 @@
    * Check if element is fully visible in viewport or not.
    *
    * @param element
+   *
    * @returns {boolean}
    */
   function isElementInViewPort(element) {
@@ -59,20 +90,14 @@
     return elementTop >= viewportTop && elementBottom <= viewportBottom;
   }
 
-  // For RTL, we have some code to mess with page scroll.
-  // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
-  $(window).on('pageshow', function () {
-    setTimeout('Drupal.processBackToList()', 10);
-  });
-
   Drupal.processBackToList = function () {
     // On page load, apply filter/sort if any.
-    $('html').once('back-to-list').each(function() {
+    $('html').once('back-to-list').each(function () {
       var storage_value = getStorageValues();
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
         if (typeof storage_value.nid !== 'undefined') {
           // Set timeout because of conflict.
-          setTimeout(function(){
+          setTimeout(function () {
             scrollToProduct();
           }, 1);
         }

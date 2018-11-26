@@ -2,6 +2,7 @@
  * @file
  * Override infinite scroll library.
  */
+
 (function ($, Drupal, debounce) {
   'use strict';
 
@@ -41,7 +42,7 @@
     view.$view.removeOnce('ajax-pager');
 
     // Detach ajax handler from the submit button before re-attaching it below.
-    $('input[type=submit], input[type=image]', view.$exposed_form).off();
+    $('[type=submit], input[type=image]', view.$exposed_form).off();
 
     view.$exposed_form.removeOnce('exposed-form');
     // Make sure infinite scroll can be reinitialized.

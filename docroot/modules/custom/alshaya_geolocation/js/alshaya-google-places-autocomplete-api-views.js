@@ -75,7 +75,7 @@
         var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
         $('body').after(progress_element);
       }
-      $(field).parents('form').find('input[type="submit"]').click();
+      $(field).parents('form').find('[type="submit"]').click();
     }
   };
 

@@ -1,0 +1,7 @@
+name: 'Alshaya country (Egypt)'
+type: module
+description: 'Country related settings for Alshaya Egypt.'
+package: 'Alshaya'
+core: 8.x
+dependencies:
+  - alshaya_country:alshaya_country

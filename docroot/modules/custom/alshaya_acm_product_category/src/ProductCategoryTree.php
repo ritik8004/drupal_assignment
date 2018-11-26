@@ -25,7 +25,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
   const CACHE_TAG = 'acq_product_category_list';
 
-  const PLP_LAYOUT_MOSCHINO = 'moschino';
+  const PLP_LAYOUT_1 = 'campaign-plp-style-1';
 
   /**
    * Term storage object.

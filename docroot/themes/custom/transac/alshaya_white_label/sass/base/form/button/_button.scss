@@ -1,3 +1,49 @@
+/**
+ * Animation: Ripple
+ * --------------------------------------------------
+ */
+
+@keyframes ripple {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+@mixin link-ripple($ripple-color: $primary_ripple_color) {
+  overflow: hidden;
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 10%;
+    top: -50%;
+    width: 200px;
+    height: 200px;
+    margin-left: -60px;
+    margin-top: -60px;
+    background: $ripple-color;
+    border-radius: 100%;
+    transform: scale(0);
+  }
+
+  &:not(:active)::after {
+    animation: ripple 1s ease-in;
+  }
+}
+
 %button-wide,
 .button-wide {
   background-color: $primary_btn_bg;
@@ -8,11 +54,7 @@
   padding: 11px;
   text-align: center;
 
-  @include breakpoint($desktop) {
-    &:hover {
-      opacity: 0.75;
-    }
-  }
+  @include link-ripple();
 }
 
 %button-brand,
@@ -23,11 +65,7 @@
   font-weight: bold;
   padding: 10px 20px 9px;
 
-  @include breakpoint($desktop) {
-    &:hover {
-      opacity: 0.75;
-    }
-  }
+  @include link-ripple();
 }
 
 .button {
@@ -44,6 +82,8 @@
     height: 23px;
     line-height: 23px;
     width: 106px;
+
+    @include link-ripple();
 
     @include breakpoint($desktop) {
       font-size: 0.75rem;
@@ -89,14 +129,12 @@
     border: 1px solid $primary_brand_button;
     padding: 0.563rem 4.12rem;
     font-family: $arial;
+
+    @include link-ripple();
   }
 }
 
 button[type="submit"],
 .button {
-  @include breakpoint($desktop) {
-    &:hover {
-      opacity: 0.75;
-    }
-  }
+  @include link-ripple();
 }

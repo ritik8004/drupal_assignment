@@ -30,3 +30,11 @@ pdp_layout: 'default'
 pdp_layout_options:
   default: 'Default'
   magazine: 'Magazine'
+pdp_colour_swatch_items_settings:
+  pdp_colour_swatch_items_0: 6
+  pdp_colour_swatch_items_768: 14
+  pdp_colour_swatch_items_1025: 14
+pdp_product_swatch_items_settings:
+  pdp_product_swatch_items_0: 4
+  pdp_product_swatch_items_768: 12
+  pdp_product_swatch_items_1025: 12
