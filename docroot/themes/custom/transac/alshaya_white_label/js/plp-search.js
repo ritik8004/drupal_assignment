@@ -184,8 +184,7 @@
       }
 
       /**
-       * Place the search count from view header in different locations based
-       * on resolution.
+       * Place the search count from view header in different locations based on resolution.
        */
       function placeSearchCount() {
         var viewHeader = null;

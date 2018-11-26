@@ -31,6 +31,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product.display_settings');
     $config->set('image_thumb_gallery', $form_state->getValue('image_thumb_gallery'));
     $config->set('color_swatches', $form_state->getValue('color_swatches'));
+    $config->set('color_swatches_hover', $form_state->getValue('color_swatches_hover'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
     $config->save();
@@ -56,6 +57,12 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Display color swatches on product node.'),
       '#default_value' => $config->get('color_swatches'),
+    ];
+
+    $form['color_swatches_hover'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Apply hover effect on color swatches.'),
+      '#default_value' => $config->get('color_swatches_hover'),
     ];
 
     $form['short_desc'] = [

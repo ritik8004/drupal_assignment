@@ -290,7 +290,13 @@ class Configurable extends SKUPluginBase {
       }
     }
     else {
-      drupal_set_message(t('The current selection does not appear to be valid.'));
+      $message = t('The current selection does not appear to be valid.');
+      drupal_set_message($message);
+      // Dispatch event so action can be taken.
+      $dispatcher = \Drupal::service('event_dispatcher');
+      $exception = new \Exception($message);
+      $event = new AddToCartErrorEvent($exception);
+      $dispatcher->dispatch(AddToCartErrorEvent::SUBMIT, $event);
     }
   }
 
@@ -653,6 +659,17 @@ class Configurable extends SKUPluginBase {
     }
 
     return $children;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getParentSku(SKU $sku) {
+    // For configurable SKUs we will never have parent.
+    // In generic codes we can invoke this function and can unnecessarily
+    // execute a query, we avoid that by overriding the function here
+    // and simply returning the same sku.
+    return $sku;
   }
 
 }

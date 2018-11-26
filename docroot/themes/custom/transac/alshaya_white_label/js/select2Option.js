@@ -104,6 +104,40 @@ jQuery.fn.select2Option = function (options) {
       select.trigger('change');
     });
 
+    if (drupalSettings.color_swatches_hover) {
+      if ((select.attr('data-drupal-selector') === 'edit-configurables-color')) {
+        $('.form-item-configurables-color .select2Option .list-title span:first-child').hide();
+        buttonsHtml.find('a').on('mouseover', function (e) {
+          e.preventDefault();
+
+          var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
+          $(this).closest('.select2Option').find('.list-title .selected-text').remove();
+
+          var selectedText = clickedOption.text();
+
+          $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + selectedText + '</span>');
+        });
+
+        buttonsHtml.find('a').on('mouseout', function (e) {
+          e.preventDefault();
+
+          // Set the value for selected option.
+          $('.select-buttons').find('a.picked').each(function () {
+            var selectedText = $(this).attr('class').replace(' picked', '');
+
+            var selectedTextSelector = $(this).closest('ul').siblings('h4.list-title').find('.selected-text');
+
+            if (selectedTextSelector.length > 0) {
+              selectedTextSelector.text(selectedText);
+            }
+            else {
+              $(this).closest('ul').siblings('h4.list-title').append('<span class="selected-text">' + selectedText + '</span>');
+            }
+          });
+        });
+      }
+    }
+
     select.parent().find('.select2Option').remove();
     select.after(buttonsHtml);
   });

@@ -1,0 +1,47 @@
+fields:
+  size_shoe_uk:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_shoe_eu:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_shoe_us:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_textile_uk:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_textile_eu:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_textile_us:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_socks:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_bras:
+    configurable: 1
+    index: 1
+    facet: 1
+  size_rest:
+    configurable: 1
+    index: 1
+    facet: 1
+  color_family:
+    configurable: 1
+    index: 1
+    facet: 1
+  product_brand:
+    source: 'brand'
+  material:
+    label: 'Material'
+    type: 'string'
+    index: 1

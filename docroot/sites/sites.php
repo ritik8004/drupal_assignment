@@ -38,9 +38,9 @@ if (!function_exists('is_acquia_host')) {
   }
 }
 
-// HTTP_HOST can be empty during early drush bootstrap. Also, check that we're
-// on an Acquia server so we don't run this code for local development.
-if (empty($_SERVER['HTTP_HOST']) || !is_acquia_host()) {
+// Check that we are on an Acquia server so we do not run this code for local
+// development.
+if (!is_acquia_host()) {
   return;
 }
 
@@ -72,21 +72,36 @@ if (empty($_ENV['AH_SITE_GROUP']) || empty($_ENV['AH_SITE_ENVIRONMENT']) || !fun
   return;
 }
 
-// Drush site-install gets confused about the uri when we specify the
-// --sites-subdir option. The HTTP_HOST is set incorrectly and we can't
-// find it in the sites.json. By specifying the --acsf-install-uri option
-// with the value of the standard domain, we can catch that here and
-// correct the uri argument for drush site installs.
-// Leaving notes here on a lesson I learned the hard way: it is absolutely
-// imperative that no variable name defined in this file collides with any
-// variable defined in DrupalKernel::findSitePath before the inclusion of this
-// file (eg $http_host) as values here may overwrite values from there.
-if (PHP_SAPI === 'cli' && function_exists('drush_get_option') && ($acsf_http_host = drush_get_option('acsf-install-uri', FALSE))) {
-  // The acsf-install-uri argument contains a pure domain string, one without a
-  // leading http:// string. To make sure that the parse_url properly identifies
-  // the host portion, add a http:// string.
-  $host = $_SERVER['HTTP_HOST'] = parse_url('http://' . $acsf_http_host, PHP_URL_HOST);
-  $acsf_uri_path = parse_url('http://' . $acsf_http_host, PHP_URL_PATH);
+if (PHP_SAPI === 'cli') {
+  // Leaving notes here on a lesson I learned the hard way: it is absolutely
+  // imperative that no variable name defined in this file collides with any
+  // variable defined in DrupalKernel::findSitePath before the inclusion of this
+  // file (eg $http_host) as values here may overwrite values from there.
+  $acsf_http_host = '';
+  if (class_exists('\Drush\Drush') && \Drush\Drush::hasContainer()) {
+    $acsf_drush_boot_manager = \Drush\Drush::bootstrapManager();
+    if ($acsf_drush_boot_manager->getUri()) {
+      $acsf_http_host = $acsf_drush_boot_manager->getUri();
+    }
+    // Drush site-install gets confused about the uri when we specify the
+    // --sites-subdir option. By specifying the --acsf-install-uri option with
+    // the value of the standard domain, we can catch that here and correct the
+    // uri argument for drush site installs.
+    $acsf_drush_input = \Drush\Drush::input();
+    try {
+      $acsf_install_uri = $acsf_drush_input->getOption('acsf-install-uri');
+      if ($acsf_install_uri) {
+        $acsf_http_host = $acsf_install_uri;
+      }
+    }
+    catch (InvalidArgumentException $e) {
+    }
+  }
+  if (!preg_match('|https?://|', $acsf_http_host)) {
+    $acsf_http_host = 'http://' . $acsf_http_host;
+  }
+  $host = $_SERVER['HTTP_HOST'] = parse_url($acsf_http_host, PHP_URL_HOST);
+  $acsf_uri_path = parse_url($acsf_http_host, PHP_URL_PATH);
   $acsf_uri_path .= '/index.php';
 }
 else {

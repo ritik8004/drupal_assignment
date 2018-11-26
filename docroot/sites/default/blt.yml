@@ -1,0 +1,9 @@
+project:
+  local:
+    hostname: local.alshaya.com
+    protocol: http
+  machine_name: alshaya
+drush:
+  aliases:
+    local: self
+    remote: alshaya.test

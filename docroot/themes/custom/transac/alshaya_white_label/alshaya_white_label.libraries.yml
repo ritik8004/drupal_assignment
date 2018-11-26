@@ -147,7 +147,15 @@ pace:
   js:
     /libraries/pace/pace.min.js: {}
 
-plp-moschino-video-provider:
+magazine_select2Option:
+  js:
+    js/magazine_select2Option.js: {}
+    js/magazine_attribute.js: {}
+  css:
+    theme:
+      css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+
+campaign-plp-style-1-video-provider:
   css:
     theme:
       vendor/css/video-js.min.css: {}
@@ -156,6 +164,6 @@ plp-moschino-video-provider:
     vendor/js/Youtube.min.js: {}
     vendor/js/videojs-vimeo.js: {}
 
-plp-moschino-common:
+campaign-plp-style-1-common:
   js:
-    js/plp-moschino-layout.js: {}
+    js/campaign-plp-style-1-layout.js: {}

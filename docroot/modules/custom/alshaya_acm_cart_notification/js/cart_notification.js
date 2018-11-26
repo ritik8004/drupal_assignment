@@ -83,15 +83,21 @@
       });
 
       $.fn.cartNotificationScroll = function () {
-        $('html, body').animate({
-          scrollTop: $('.header--wrapper').offset().top
-        }, 'slow');
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
+        // If magazine layout is enabled.
+        if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
+          $('#cart_notification').addClass('cart-notification-animate');
+        }
+        else {
+          $('html, body').animate({
+            scrollTop: $('.header--wrapper').offset().top
+          }, 'slow');
 
-        setTimeout(function () {
-          $('#cart_notification').fadeOut();
-        }, drupalSettings.addToCartNotificationTime * 1000);
+          setTimeout(function () {
+            $('#cart_notification').fadeOut();
+          }, drupalSettings.addToCartNotificationTime * 1000);
+        }
       };
 
       // On PDP scroll to first error label.

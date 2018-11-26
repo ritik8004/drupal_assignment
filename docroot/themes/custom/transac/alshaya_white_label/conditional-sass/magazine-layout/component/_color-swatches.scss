@@ -1,0 +1,42 @@
+.magazine-layout {
+  .form-item-configurables-article-castor-id {
+    .select2Option {
+      .show-less-color,
+      .show-more-color,
+      .selected-text {
+        font-family: $alshaya-thin;
+        font-size: 0.75rem;
+        line-height: 1.33;
+        letter-spacing: 0.6px;
+        color: $colour-swatches-show-list-button;
+      }
+
+      .selected-text {
+        letter-spacing: 1.5px;
+        font-weight: normal;
+      }
+
+      .show-less-color,
+      .show-more-color {
+        margin-top: 0.3125rem;
+        margin-bottom: 1.125rem;
+        cursor: pointer;
+      }
+
+      .list-title {
+        margin-bottom: 0.625rem;
+      }
+
+      .select-buttons {
+        li,
+        span {
+          a:not([data-swatch-type=RGB]) {
+            @include breakpoint($tablet) {
+              width: 2.9375rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}

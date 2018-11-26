@@ -266,7 +266,7 @@
                   exposedForm.find('input[name="' + dynamic_map_settings.parameter_identifier + '[lat_south_west]"]').val(currentBounds.getSouthWest().lat());
                   exposedForm.find('input[name="' + dynamic_map_settings.parameter_identifier + '[lng_south_west]"]').val(currentBounds.getSouthWest().lng());
 
-                  $('input[type=submit], input[type=image], button[type=submit]', exposedForm).not('[data-drupal-selector=edit-reset]').trigger('click');
+                  $('[type=submit], input[type=image]', exposedForm).not('[data-drupal-selector=edit-reset]').trigger('click');
                 }
                 // No AJAX, no form, just enforce a page reload with GET parameters set.
                 else {
