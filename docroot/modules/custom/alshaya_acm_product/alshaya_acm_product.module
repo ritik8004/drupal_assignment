@@ -728,6 +728,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
     // Number of items to show in a slider on PDP.
     $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
+    $build['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
   }
 }
 
