@@ -67,7 +67,7 @@
     padding: 0.5625rem 0.9375rem;
     font-weight: 700;
     display: flex;
-    justify-content: $left;
+    justify-content: flex-start;
     align-items: center;
 
     @include breakpoint($upto-tablet) {
