@@ -111,8 +111,8 @@ jQuery.fn.select2Option = function (options) {
       select.trigger('change');
     });
 
-    var showMoreHtml = $('<div class="show-more-color">View more colours</div>');
-    var showLessHtml = $('<div class="show-less-color">View less colours</div>');
+    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View more colours') + '</div>');
+    var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
 
     if ($('.show-more-color').length === 0) {
       showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();

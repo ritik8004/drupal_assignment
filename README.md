@@ -257,3 +257,7 @@ Specific notes for debugging drush commands:
 * Do NOT use drush aliases like @mckw.local for debugging, use always the -l parameter instead (see above for a valid example)
 
 After finishing CLI debuging it's recommended to disable xdebug back again, to increase performance. To debug CLI commands like Drush, Drupal console or PhpUnit, follow these steps:
+
+### Remote debugging from ACSF
+On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging. 
+Follow instructions [here](https://support.acquia.com/hc/en-us/articles/360006231933-How-to-debug-an-Acquia-Cloud-environment-using-PhpStorm-and-Remote-Xdebug) to set up remote debugging on your local PhpStorm to leverage it.

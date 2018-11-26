@@ -91,17 +91,6 @@ class AlshayaSearchApiQueryExecute {
   protected $priceFacetKey = 'skus_sku_reference_final_price';
 
   /**
-   * Make key integer for facets defined in this array.
-   *
-   * @var array
-   */
-  protected $intKeyFacets = [
-    'plp_category_facet',
-    'promotion_category_facet',
-    'category',
-  ];
-
-  /**
    * Processed facets array.
    *
    * @var array
@@ -502,12 +491,11 @@ class AlshayaSearchApiQueryExecute {
         continue;
       }
 
-      $convert_int = in_array($facet->id(), $this->intKeyFacets);
       $facet_option_data = [];
       foreach ($facet_results as $result) {
         // For storing intermediate temporary data.
         $temp_data = [
-          'key' => $convert_int ? (int) $result->getRawValue() : $result->getRawValue(),
+          'key' => $result->getRawValue(),
           'label' => $result->getDisplayValue(),
           'count' => $result->getCount(),
         ];
@@ -516,7 +504,7 @@ class AlshayaSearchApiQueryExecute {
         if (!empty($children = $result->getChildren())) {
           foreach ($children as $child) {
             $temp_data['children'][] = [
-              'key' => $convert_int ? (int) $child->getRawValue() : $child->getRawValue(),
+              'key' => $child->getRawValue(),
               'label' => $child->getDisplayValue(),
               'count' => $child->getCount(),
             ];
@@ -659,7 +647,7 @@ class AlshayaSearchApiQueryExecute {
       // Remove extra spaces from text.
       $display_value = preg_replace('/\s\s+/', ' ', $display_value);
       $option_data[] = [
-        'key' => $result->getRawValue(),
+        'key' => (string) $result->getRawValue(),
         'label' => $display_value,
         'count' => $result->getCount(),
       ];

@@ -1077,8 +1077,6 @@ html[lang=ar] {
     #table-cart-items {
       tr {
         td {
-          padding: 0 1.2rem;
-
           @include breakpoint($tablet) {
             padding: 1.9rem 0.7rem;
           }
@@ -1090,10 +1088,6 @@ html[lang=ar] {
           &:first-child a {
             line-height: 18px;
           }
-
-          @include breakpoint($only-mobile) {
-            margin-top: -2.2rem;
-          }
         }
 
         td.delivery-option {
@@ -1103,12 +1097,6 @@ html[lang=ar] {
 
           @include breakpoint($only-tablet) {
             padding-top: 1.35rem;
-          }
-        }
-
-        td.name {
-          @include breakpoint($only-mobile) {
-            margin-top: 2rem;
           }
         }
 

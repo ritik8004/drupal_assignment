@@ -543,14 +543,11 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if ($sku_for_gallery instanceof SKUInterface) {
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, 'pdp');
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child, $sku_entity);
         }
 
-        // Attach libraries.
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
-        $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom';
+        $build['price_block'] = $skuManager->getPriceBlock($sku_for_gallery);
 
-        $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
@@ -732,7 +729,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $check_parent_child = TRUE;
           $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity, $check_parent_child);
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', $check_parent_child, $sku_entity);
         }
         catch (\Exception $e) {
           // Do nothing.
@@ -806,6 +803,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $build['#attached']['drupalSettings']['pdp_items_desk'] = $alshaya_acm_product_slider_settings->get('cross_up_sell_items_settings.pdp_carousel_items_size_1025');
     // Number of items to show in a slider on PDP.
     $build['#attached']['drupalSettings']['pdp_slider_items'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number');
+    $build['#attached']['drupalSettings']['pdp_slider_items_cs_us'] = $alshaya_acm_product_slider_settings->get('pdp_slider_items_settings.pdp_slider_items_number_cs_us');
   }
 }
 
@@ -1632,7 +1630,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
       if ($first_child instanceof SKU) {
         $pdp_layout = $skuManager->getPdpLayout($first_child, 'pdp');
-        $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout);
+        $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, $sku);
 
         if (!empty($build['gallery'])) {
           $dynamic_parts['product_zoom'] = $build['gallery']['product_zoom'];

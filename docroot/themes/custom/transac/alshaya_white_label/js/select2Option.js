@@ -104,7 +104,7 @@ jQuery.fn.select2Option = function (options) {
       select.trigger('change');
     });
 
-    if (drupalSettings.color_swatches_hover) {
+    if (drupalSettings.color_swatches_hover && $(window).width() > 767) {
       if ((select.attr('data-drupal-selector') === 'edit-configurables-color')) {
         $('.form-item-configurables-color .select2Option .list-title span:first-child').hide();
         buttonsHtml.find('a').on('mouseover', function (e) {
