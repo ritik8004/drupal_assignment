@@ -241,6 +241,9 @@
       $(window).resize(debounce(function () {
         setMenuHeight();
       }, 250));
+
+      var menuTiming = $('.main--menu').attr('data-menu-timing');
+      $(':root').css({'--menuTiming': menuTiming + 'ms'});
     }
   };
 
