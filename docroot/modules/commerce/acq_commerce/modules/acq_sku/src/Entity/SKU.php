@@ -870,6 +870,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // This is done by default when using entity storage.
     // We don't use entity storage and use custom code for static cache.
     drupal_static_reset('loadFromSku');
+    drupal_static_reset('getParentSku');
   }
 
 }
