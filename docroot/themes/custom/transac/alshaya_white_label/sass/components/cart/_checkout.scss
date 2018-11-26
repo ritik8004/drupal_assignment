@@ -680,6 +680,7 @@ body.alias--cart {
         &.price {
           @include breakpoint($only-tablet) {
             width: 7.2rem;
+            padding: 1rem 0.5rem;
           }
 
           @include breakpoint($desktop) {
@@ -758,9 +759,9 @@ body.alias--cart {
         }
 
         @include breakpoint($only-tablet) {
-          width: 7rem;
-          min-width: 7rem;
-          padding: 1rem 0.7rem;
+          width: 7.07rem;
+          min-width: 7.07rem;
+          padding: 1rem 0.5rem;
         }
 
         @include breakpoint($desktop) {
@@ -1042,7 +1043,7 @@ body.alias--cart {
 
       @include breakpoint($only-tablet) {
         width: 7.07rem;
-        padding: 1rem 0.7rem;
+        padding: 1rem 0.5rem;
       }
 
       @include breakpoint($desktop) {

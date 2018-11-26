@@ -1,9 +1,5 @@
 .path--cart {
   @include breakpoint($only-tablet) {
-    .price-wrapper .price {
-      max-width: 5rem !important;
-    }
-
     &.alias--cart-checkout-payment,
     &.alias--cart-checkout-delivery {
       .price-wrapper .price {
