@@ -739,6 +739,7 @@
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
+              margin-bottom: 0.3125rem;
             }
           }
 
@@ -836,10 +837,6 @@
           font-family: $arial;
           font-size: 0.75rem;
           margin-bottom: 0.3125rem;
-
-          @include breakpoint($desktop) {
-            font-size: 0.875rem;
-          }
         }
 
         .dark {
