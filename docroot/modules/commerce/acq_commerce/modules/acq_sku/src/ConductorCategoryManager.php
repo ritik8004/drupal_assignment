@@ -465,15 +465,16 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * Get orphan categories.
+   * Identify the categories which are not in commerce backend anymore and must
+   * be deleted.
    *
-   * @param array $syncd_cats
-   *   Syncd categories.
+   * @param array $sync_categories
+   *   Sync categories.
    *
    * @return array
    *   Orphan categories.
    */
-  public function getOrphanTerms(array $syncd_cats) {
+  public function getOrphanCategories(array $sync_categories) {
     // Get all category terms with commerce id.
     $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
     $query->fields('ttd', ['tid', 'name']);
@@ -482,7 +483,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $query->condition('ttd.vid', 'acq_product_category');
     $result = $query->execute()->fetchAllAssoc('tid', \PDO::FETCH_ASSOC);
 
-    $affected_terms = array_unique(array_merge($syncd_cats['created'], $syncd_cats['updated']));
+    $affected_terms = array_unique(array_merge($sync_categories['created'], $sync_categories['updated']));
     // Filter terms which are not in sync response.
     return $result = array_filter($result, function ($val) use ($affected_terms) {
       return !in_array($val['field_commerce_id_value'], $affected_terms);

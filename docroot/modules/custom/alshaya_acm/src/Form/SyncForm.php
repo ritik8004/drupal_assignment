@@ -231,7 +231,7 @@ class SyncForm extends FormBase {
         // If there is any term update/create during category sync.
         if (!empty($response['created']) || !empty($response['updated'])) {
           // Get orphan terms.
-          $all_orphan_terms = $orphan_terms = $this->productCategoriesManager->getOrphanTerms($response);
+          $all_orphan_terms = $orphan_terms = $this->productCategoriesManager->getOrphanCategories($response);
           // If there is any orphan term.
           if (!empty($orphan_terms)) {
             // Allow other modules to skipping the deleting of terms.
