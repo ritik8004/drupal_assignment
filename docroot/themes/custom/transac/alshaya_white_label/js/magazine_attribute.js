@@ -220,7 +220,6 @@
   Drupal.behaviors.mobileMagazine = {
     attach: function (context, settings) {
       if ($(window).width() < 768) {
-
         // Moving color swatches from sidebar to main content in between the gallery after
         // first image as per design.
         var productSwatch = $('.sku-base-form .configurable-swatch');
@@ -231,6 +230,11 @@
         var tittleSection = $('.content__title_wrapper');
         tittleSection.insertAfter('.mobile-content-wrapper');
 
+        // Moving sharethis before description field in mobile.
+        var sharethisSection = $('.basic-details-wrapper .sharethis-wrapper');
+        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .product-swatch');
+        $('.basic-details-wrapper .sharethis-wrapper').hide();
+
         var sizeDiv = $('#configurable_ajax');
         var sizeLink = $('<div class="size-link">Select Size</div>');
         if ($('.content__title_wrapper').find('.size-link').length < 1) {
@@ -239,8 +243,13 @@
 
         sizeDiv.hide();
         sizeLink.on('click', function () {
-          sizeDiv.prepend('<span class="close"></span>');
-          sizeDiv.toggle();
+          sizeDiv.prepend('<div class="sizediv-close">x</div>');
+          $('body').append(sizeDiv);
+          $('body > #configurable_ajax').wrap('<div class="div-modal-mobile"></div>');
+
+          $('.sizediv-close').on('click', function () {
+            $('.div-modal-mobile').remove();
+          });
         });
       }
     }
