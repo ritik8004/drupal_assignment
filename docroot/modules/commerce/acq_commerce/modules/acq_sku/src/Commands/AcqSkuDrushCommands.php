@@ -283,18 +283,7 @@ class AcqSkuDrushCommands extends DrushCommands {
     // So if API does not return anything, we don't delete all the categories.
     if (!empty($response['created']) || !empty($response['updated'])) {
       // Get all category terms with commerce id.
-      $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
-      $query->fields('ttd', ['tid', 'name']);
-      $query->leftJoin('taxonomy_term__field_commerce_id', 'tcid', 'ttd.tid=tcid.entity_id');
-      $query->fields('tcid', ['field_commerce_id_value']);
-      $query->condition('ttd.vid', 'acq_product_category');
-      $result = $query->execute()->fetchAllAssoc('tid', \PDO::FETCH_ASSOC);
-
-      $affected_terms = array_unique(array_merge($response['created'], $response['updated']));
-      // Filter terms which are not in sync response.
-      $result = array_filter($result, function ($val) use ($affected_terms) {
-        return !in_array($val['field_commerce_id_value'], $affected_terms);
-      });
+      $result = $this->conductorCategoryManager->getOrphanTerms($response);
 
       // If there are categories to delete.
       if (!empty($result)) {
