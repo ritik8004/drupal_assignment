@@ -1020,32 +1020,34 @@ class SkuImagesManager {
 
     // Create our thumbnails to be rendered for zoom.
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      $file_uri = $media_item['file']->getFileUri();
+      if ($media_item['file'] instanceof FileInterface) {
+        $file_uri = $media_item['file']->getFileUri();
 
-      // Show original full image in the modal inside a draggable container.
-      $original_image = $media_item['file']->url();
+        // Show original full image in the modal inside a draggable container.
+        $original_image = $media_item['file']->url();
 
-      $image_small = ImageStyle::load($thumbnail_style)
-        ->buildUrl($file_uri);
-      $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-      $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+        $image_small = ImageStyle::load($thumbnail_style)
+          ->buildUrl($file_uri);
+        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
-      if ($get_main_image && empty($main_image)) {
-        $main_image = [
-          'zoomurl' => $image_zoom,
+        if ($get_main_image && empty($main_image)) {
+          $main_image = [
+            'zoomurl' => $image_zoom,
+            'mediumurl' => $image_medium,
+            'label' => $media_item['label'],
+          ];
+        }
+
+        $thumbnails[] = [
+          'thumburl' => $image_small,
           'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => $original_image,
           'label' => $media_item['label'],
+          'type' => 'image',
         ];
       }
-
-      $thumbnails[] = [
-        'thumburl' => $image_small,
-        'mediumurl' => $image_medium,
-        'zoomurl' => $image_zoom,
-        'fullurl' => $original_image,
-        'label' => $media_item['label'],
-        'type' => 'image',
-      ];
     }
     foreach ($media['media_items']['videos'] ?? [] as $media_item) {
       // @TODO:
