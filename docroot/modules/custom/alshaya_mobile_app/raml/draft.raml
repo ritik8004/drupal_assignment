@@ -11,8 +11,27 @@ baseUriParameters:
     type: string
     enum: [ "en", "ar" ]
     description: "The langcode to get localized results from the endpoints."
+securitySchemes:
+  - oauth_2_0:
+      description: |
+          OAuth 2.0 implementation.
+      type: OAuth 2.0
+      settings:
+        authorizationUri: https://{domain}/{langcode}/oauth2/authorize
+        accessTokenUri: https://{domain}/{langcode}/oauth2/token
+        authorizationGrants: [ authorization_code, password ]
 mediaType: application/json
 schemas:
+  - GetWebformSubmission: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        }
+      }
   - GetOauthToken: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -1730,4 +1749,65 @@ schemas:
                 "expires_in": 300,
                 "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjEzMDU4YzE5ZWNjZGJiMTliZGMyZTRkNWM1OGNhMWYwM2Y3NTY0Njk3MTM4MjM1MDYzODZjYTMxMWI0ZjU2YzMzNTZkODZhZDAyZDhhOTg3In0.eyJhdWQiOiJhYzczZGNjNy02OTE4LTRlMTQtOGI0OC04NmI1Y2QxN2Y0ZDIiLCJqdGkiOiIxMzA1OGMxOWVjY2RiYjE5YmRjMmU0ZDVjNThjYTFmMDNmNzU2NDY5NzEzODIzNTA2Mzg2Y2EzMTFiNGY1NmMzMzU2ZDg2YWQwMmQ4YTk4NyIsImlhdCI6MTU0Mjk2NzM4MiwibmJmIjoxNTQyOTY3MzgyLCJleHAiOjE1NDI5OTczODIsInN1YiI6IjUzNzM5Iiwic2NvcGVzIjpbImF1dGhlbnRpY2F0ZWQiLCJtb2JpbGVfYXBwX2NvbnN1bWVyIl19.FxdexdbanLuhuAR_Wf",
                 "refresh_token": "def502007eca0d3f91a3b6597f010e5f8ae1503ccf586de59cd3a4fe5f6d095d4e8e03fa619333887bc340269d47f53a1b2b7c1350c0cc40bd21ad4380640e71bbe1657bcb611dc26c2d9100339f29692396393e606ff721e4f2e1526e"
+              }
+/webform_rest/submit:
+  description: "Submit alshaya_contact webform data as a mobile app consumer."
+  post:
+    description: |
+      Use the "multipart-form/data" to submit data to get token
+    securedBy: [oauth_2_0]
+    body:
+     multipart/formdata:
+        formParameters:
+          webform_id:
+            description: "The webform id."
+            required: true
+            type: string
+            example: |
+              "alshaya_contact"
+          select_your_preference_of_channel_of_communication:
+            description: "The Preference of channel of communication."
+            required: true
+            type: string
+            enum: [ "Email", "Mobile"]
+            example: |
+              "Email"
+          first_name:
+            description: "The first name of user."
+            required: true
+            type: string
+            example: |
+              "nicolas"
+          last_name:
+            description: "The last name of user."
+            required: true
+            type: string
+            example: |
+              "tesla"
+          mobile_number:
+            description: "The user's mobile number."
+            required: true
+            type: string
+            example: |
+              "+96555591411"
+          email:
+            description: "The user's email id."
+            required: true
+            type: string
+            example: |
+              "no-reply@alshaya.com"
+          message:
+            description: "The msg that user want to add."
+            required: true
+            type: string
+            example: |
+              "any random msg string"
+    responses:
+      200:
+        body:
+          application/json:
+            schema: GetWebformSubmission
+            example: |
+              {
+                "sid": "1234"
               }
