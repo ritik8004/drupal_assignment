@@ -17,6 +17,24 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Database;
 
 /**
+ * Implements hook_acq_sku_sync_categories_delete_alter().
+ */
+function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$result) {
+  if (!empty($result)) {
+    foreach ($result as $tid => $rs) {
+      // If department page node exists for the given term, don't delete it.
+      if (!empty($dpt_nid = alshaya_advanced_page_is_department_page($tid))) {
+        unset($result[$tid]);
+        \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
+          '@tid' => $tid,
+          '@nid' => $dpt_nid,
+        ]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {

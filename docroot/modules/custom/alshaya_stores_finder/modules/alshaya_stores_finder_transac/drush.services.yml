@@ -1,0 +1,6 @@
+services:
+  alshaya_stores_finder_transac.commands:
+    class: \Drupal\alshaya_stores_finder_transac\Commands\AlshayaStoreFinderCommands
+    arguments: [ '@logger.factory', '@alshaya_stores_finder_transac.manager' ]
+    tags:
+      - { name: drush.command }

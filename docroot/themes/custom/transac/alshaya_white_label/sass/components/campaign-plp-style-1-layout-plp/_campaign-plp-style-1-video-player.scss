@@ -1,0 +1,32 @@
+.campaign-plp-style-1-plp-layout {
+  .video-js {
+    .vjs-play-control,
+    .vjs-time-control,
+    .vjs-duration,
+    .vjs-progress-control,
+    .vjs-fullscreen-control {
+      display: none;
+    }
+  }
+
+  .vjs-paused {
+    .vjs-big-play-button {
+      display: block !important;
+    }
+  }
+
+  .vjs-big-play-button {
+    background: url(#{$base_theme_img_directory_path}/icons/play-campaign-plp-style-1.png) no-repeat !important;
+    margin-top: -2.5rem !important;
+    height: 6rem !important;
+    width: 6rem !important;
+    background-size: contain !important;
+    border: none !important;
+
+    .vjs-icon-placeholder {
+      &::before {
+        display: none;
+      }
+    }
+  }
+}

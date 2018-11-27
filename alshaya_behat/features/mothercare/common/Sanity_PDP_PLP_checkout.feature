@@ -4,7 +4,7 @@ Feature: As a guest user I should be able to
   Select a product from PLP and proceed to checkout
 
   Background:
-    Given I am on "/gift-ideas/gift-by-occasion/babyshower-gifts"
+    Given I am on "/baby-clothing/baby-newborn-18-months/bodysuits"
     And I wait for the page to load
 
   Scenario: As a Guest user
@@ -23,7 +23,7 @@ Feature: As a guest user I should be able to
     And I wait for the page to load
     Then more items should get loaded
     Then I should see "Filter"
-    And I should see "Collection"
+    #And I should see "Collection"
     Then I should see "Colour"
     And I should see "Price"
     Then I should see "Size"
@@ -54,7 +54,7 @@ Feature: As a guest user I should be able to
     Then I should see buttons for facebook, Twitter and Pinterest
     And I should see "Delivery Options"
     Then I should see "Home Delivery"
-    And I should see "Delivered in 1-2 days for just KWD 1"
+    And I should see "Free Delivery in 1-2 days on orders over kwd 20"
     Then I should see "Click and Collect"
     And I should see "free delivery to stores across Kuwait in 1-2 days"
     When I select a size for the product
@@ -70,14 +70,14 @@ Feature: As a guest user I should be able to
     When I select the first autocomplete option for "shuwaikh" on the "edit-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then I should see "Shuwaikh Industrial 1, Shuwaikh Industrial, Kuwait"
+    Then I should see "Shuwaikh Industrial, Kuwait"
     And I should see the link for ".change-location-link"
     Then I should see "Other stores nearby"
     When I click the label for ".change-location-link"
     Then I select the first autocomplete option for "kuwait" on the "store-location" field
     And I wait for AJAX to finish
     And I wait 10 seconds
-    Then I should see "Sharq, Kuwait City, Kuwait"
+    Then I should see "Souq Sharq"
     When I click the label for ".other-stores-link"
     And I wait for AJAX to finish
     Then I should see the inline modal for ".click-collect-all-stores.inline-modal-wrapper.desc-open"
@@ -90,12 +90,12 @@ Feature: As a guest user I should be able to
     When I click the label for ".close"
     Then I should not see the inline modal for ".description-wrapper.desc-open"
     And I wait 10 seconds
-    When I follow "Size Guide"
+    When I follow "size guide"
     And I wait for AJAX to finish
     Then I should see "Please select the category you require"
     When I press "Close"
     Then I should not see "Please select the category you require"
-    And I should see the link "Size Guide"
+    And I should see the link "size guide"
 
 
   Scenario: As a Guest user I should be able to select product from
