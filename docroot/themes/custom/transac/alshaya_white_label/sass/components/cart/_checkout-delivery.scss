@@ -667,11 +667,11 @@
   padding-#{$left}: 0;
   margin-top: 0;
 
-  #payment_method_knet {
+  > div:first-child {
     border-top: 2px solid $checkout_payment_form_border;
 
     @include breakpoint($only-mobile) {
-      border-top-width: 1px;
+      border-top: 1px solid $checkout_payment_option_border;
     }
 
     .payment-plugin-wrapper-div {

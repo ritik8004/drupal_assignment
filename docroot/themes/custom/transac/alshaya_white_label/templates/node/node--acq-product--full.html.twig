@@ -78,34 +78,71 @@ set classes = [
       </div>
     {% endblock %}
 
-    <div class="content__sidebar">
-      {% block sizeVolume %}
-      {% endblock %}
+    {% block pdpSidebar %}
+      <div class="content__sidebar">
+        {% block sizeVolume %}
+        {% endblock %}
 
-      <div class="mobile-content-wrapper">
-        <div class="basic-details-wrapper">
-          {{ content.field_skus }}
-        </div>
+        <div class="mobile-content-wrapper">
+          <div class="basic-details-wrapper">
+            {{ content.field_skus }}
+          </div>
 
-        {% block shortDescBlock %}
-          <div class="short-description-wrapper">
-            <div class="content--short-description">
-              <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-              <div class="field__content-wrapper">
-                <div class="field__content">
-                  <div class="desc-wrapper">
-                    {% if content.short_desc.label|render %}
-                      <div class="desc-label">
-                        {{ content.short_desc.label }}
-                      </div>
-                    {% endif %}
-                    {% if content.short_desc.value|render %}
-                      <div class="desc-value">
-                        {{ content.short_desc.value }}
-                      </div>
-                    {% endif %}
+          {% block shortDescBlock %}
+            <div class="short-description-wrapper">
+              <div class="content--short-description">
+                <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+                <div class="field__content-wrapper">
+                  <div class="field__content">
+                    <div class="desc-wrapper">
+                      {% if content.short_desc.label|render %}
+                        <div class="desc-label">
+                          {{ content.short_desc.label }}
+                        </div>
+                      {% endif %}
+                      {% if content.short_desc.value|render %}
+                        <div class="desc-value">
+                          {{ content.short_desc.value }}
+                        </div>
+                      {% endif %}
+                    </div>
+                    {% for desc in content.description %}
+                      {% if desc.value|render %}
+                        <div class="desc-wrapper">
+                          {% if desc.label|render %}
+                            <div class="desc-label">
+                              {{ desc.label }}
+                            </div>
+                          {% endif %}
+
+                          <div class="desc-value">
+                            {{ desc.value }}
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
                   </div>
-                  {% for desc in content.description %}
+                  {% if content.description %}
+                    {% if content.read_more_style.value|render %}
+                      <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                      <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                    {% else %}
+                      <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+                      <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endblock %}
+
+          {% block descBlock %}
+            <div class="description-wrapper">
+              <div class="content--description">
+                <span class="close"></span>
+                <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+                <div class="field__content">
+                  {% for desc in content.description  %}
                     {% if desc.value|render %}
                       <div class="desc-wrapper">
                         {% if desc.label|render %}
@@ -121,92 +158,57 @@ set classes = [
                     {% endif %}
                   {% endfor %}
                 </div>
-                {% if content.description %}
-                  {% if content.read_more_style.value|render %}
-                    <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                    <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                  {% else %}
-                    <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                    <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+              </div>
+              <div class="gradient-holder"></div>
+            </div>
+          {% endblock %}
+
+          {% block afterDescription %}
+          {% endblock %}
+
+            {% if content.home_delivery or content.click_and_collect %}
+              <div class="delivery-options-wrapper">
+                <div class="product-out-of-stock-layer"></div>
+                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                <div class="field__content">
+                  {{ content.home_delivery }}
+
+                  {% if content.click_and_collect %}
+                    {{ content.click_and_collect }}
                   {% endif %}
-                {% endif %}
+                </div>
               </div>
-            </div>
+            {% endif %}
+
+            {{ content.sharethis }}
+
+        </div>
+
+
+        {% if content.up_sell or content.related or content.cross_sell %}
+          <div class="mobile-related-wrapper">
+            {% if content.cross_sell %}
+              <div class="horizontal-crossell mobile-only-block">
+                <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
+                {{ content.cross_sell }}
+              </div>
+            {% endif %}
+
+            {% if content.up_sell %}
+              <div class="horizontal-upell mobile-only-block">
+                  {{ content.up_sell }}
+              </div>
+            {% endif %}
+
+            {% if content.related %}
+              <div class="horizontal-upell mobile-only-block">
+                  {{ content.related }}
+              </div>
+            {% endif %}
           </div>
-        {% endblock %}
-
-        {% block descBlock %}
-          <div class="description-wrapper">
-            <div class="content--description">
-              <span class="close"></span>
-              <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-              <div class="field__content">
-                {% for desc in content.description  %}
-                  {% if desc.value|render %}
-                    <div class="desc-wrapper">
-                      {% if desc.label|render %}
-                        <div class="desc-label">
-                          {{ desc.label }}
-                        </div>
-                      {% endif %}
-
-                      <div class="desc-value">
-                        {{ desc.value }}
-                      </div>
-                    </div>
-                  {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-            <div class="gradient-holder"></div>
-          </div>
-        {% endblock %}
-
-        {% block afterDescription %}
-        {% endblock %}
-
-          {% if content.home_delivery or content.click_and_collect %}
-            <div class="delivery-options-wrapper">
-              <div class="product-out-of-stock-layer"></div>
-              <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
-              <div class="field__content">
-                {{ content.home_delivery }}
-
-                {% if content.click_and_collect %}
-                  {{ content.click_and_collect }}
-                {% endif %}
-              </div>
-            </div>
-          {% endif %}
-
-          {{ content.sharethis }}
+        {% endif %}
 
       </div>
-
-
-      {% if content.up_sell or content.related or content.cross_sell %}
-        <div class="mobile-related-wrapper">
-					{% if content.cross_sell %}
-            <div class="horizontal-crossell mobile-only-block">
-              <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
-							{{ content.cross_sell }}
-            </div>
-					{% endif %}
-
-          {% if content.up_sell %}
-            <div class="horizontal-upell mobile-only-block">
-                {{ content.up_sell }}
-            </div>
-          {% endif %}
-
-          {% if content.related %}
-            <div class="horizontal-upell mobile-only-block">
-                {{ content.related }}
-            </div>
-          {% endif %}
-        </div>
-      {% endif %}
-
-    </div>
+    {% endblock %}
   </div>
 </article>

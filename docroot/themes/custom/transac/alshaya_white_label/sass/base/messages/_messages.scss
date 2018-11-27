@@ -66,6 +66,9 @@
     font-size: 0.875rem;
     padding: 0.5625rem 0.9375rem;
     font-weight: 700;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
     @include breakpoint($upto-tablet) {
       text-indent: -2.725rem;
@@ -111,14 +114,9 @@
     display: inline-block;
     text-indent: 0;
     vertical-align: top;
-    padding-top: 0.1875rem;
 
     @include breakpoint($tablet) {
       width: 80%;
-    }
-
-    @include breakpoint($upto-desktop) {
-      float: $right;
     }
   }
 }

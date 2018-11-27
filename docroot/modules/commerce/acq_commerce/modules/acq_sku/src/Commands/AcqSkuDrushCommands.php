@@ -283,30 +283,19 @@ class AcqSkuDrushCommands extends DrushCommands {
     // So if API does not return anything, we don't delete all the categories.
     if (!empty($response['created']) || !empty($response['updated'])) {
       // Get all category terms with commerce id.
-      $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
-      $query->fields('ttd', ['tid', 'name']);
-      $query->leftJoin('taxonomy_term__field_commerce_id', 'tcid', 'ttd.tid=tcid.entity_id');
-      $query->fields('tcid', ['field_commerce_id_value']);
-      $query->condition('ttd.vid', 'acq_product_category');
-      $result = $query->execute()->fetchAllAssoc('tid', \PDO::FETCH_ASSOC);
-
-      $affected_terms = array_unique(array_merge($response['created'], $response['updated']));
-      // Filter terms which are not in sync response.
-      $result = array_filter($result, function ($val) use ($affected_terms) {
-        return !in_array($val['field_commerce_id_value'], $affected_terms);
-      });
+      $orphan_categories = $this->conductorCategoryManager->getOrphanCategories($response);
 
       // If there are categories to delete.
-      if (!empty($result)) {
+      if (!empty($orphan_categories)) {
         // Confirmation to delete old categories.
         if ($this->io()->confirm(dt('Are you sure you want to clean old categories @cat', [
-          '@cat' => json_encode(array_column($result, 'name')),
+          '@cat' => json_encode(array_column($orphan_categories, 'name')),
         ]), FALSE)) {
 
           // Allow other modules to skipping the deleting of terms.
-          $this->moduleHandler->alter('acq_sku_sync_categories_delete', $result);
+          $this->moduleHandler->alter('acq_sku_sync_categories_delete', $orphan_categories);
 
-          foreach ($result as $tid => $rs) {
+          foreach ($orphan_categories as $tid => $rs) {
             $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
             if ($term instanceof TermInterface) {
               // Delete the term.

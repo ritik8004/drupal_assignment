@@ -10,6 +10,7 @@ use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Implements hook_views_query_alter().
@@ -102,12 +103,25 @@ function alshaya_product_alshaya_i18n_onetime_translation_add() {
 }
 
 /**
- * Implements hook_sharethis_attributes_alter().
+ * Implements hook_sharethis_render_alter().
  */
-function alshaya_product_sharethis_attributes_alter(&$attributes) {
+function alshaya_product_sharethis_render_alter(&$attributes, $data_options, &$span_text) {
   // Add title to sharethis span.
   if (isset($attributes['displayText'])) {
     $attributes['title'] = ucfirst($attributes['displayText']);
+
+    /** @var \Drupal\alshaya_acm_product_category\ProductCategoryTree $product_category_tree */
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    $inner_term_id = $product_category_tree->getProductInnermostCategoryIdFromRoute();
+    if (!empty($inner_term_id)) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $pdp_layout = $skuManager->getPdpLayoutFromTermId($inner_term_id);
+      if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+        $span_text = $attributes['title'];
+      }
+
+    }
   }
 }
 

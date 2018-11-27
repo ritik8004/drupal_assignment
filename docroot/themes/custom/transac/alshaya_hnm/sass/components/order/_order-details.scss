@@ -26,7 +26,6 @@
     .total-row .dark .price {
       color: $black;
       font-family: $hnm-demibold;
-      font-size: 0.875rem;
 
       @include breakpoint($only-mobile) {
         font-size: 0.75rem;
@@ -250,7 +249,6 @@
 
   .dark {
     color: $user_order_detail_dark;
-    line-height: 1.125rem;
     font-weight: normal;
     font-family: $hnm-regular;
   }

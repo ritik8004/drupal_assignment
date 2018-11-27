@@ -89,7 +89,7 @@ mcuat:
         output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://mckw-uat.factory.alshaya.com/en'
+      base_url: 'https://mckw-uat.factory.alshaya.com/'
       files_path: "%paths.base%/images"
 
 mcprod:
