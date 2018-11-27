@@ -169,7 +169,7 @@ class MobileAppUtility {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   The renderer.
+   *   The ApiWrapper object.
    */
   public function __construct(
     CacheBackendInterface $cache,
