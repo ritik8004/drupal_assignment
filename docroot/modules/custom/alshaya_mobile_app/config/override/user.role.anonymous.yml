@@ -14,3 +14,4 @@ permissions:
   - 'restful get knet_init_request'
   - 'restful get knet_finalize_request'
   - 'restful get deeplink'
+  - 'restful post user_registration_mail'

@@ -30,6 +30,10 @@ schemas:
           "success": {
             "type": "boolean",
             "description": "TRUE if email sent successfully otherwise false."
+          },
+          "message": {
+            "type": "string",
+            "description": "string containing error message if fails to send an email, otherwise nothing."
           }
         }
       }
@@ -1731,7 +1735,8 @@ schemas:
               schema: RegistrationEmailResponse
               example: |
                 {
-                  "success": "false"
+                  "success": false,
+                  "message": "User with email randomuser@gmail.com does not exist.",
                 }
 /oauth/token:
   description: "Get the token for mobile app consumer."
