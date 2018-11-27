@@ -20,6 +20,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -101,6 +102,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The renderer.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -117,9 +120,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     ProductCategoryTreeInterface $product_category_tree,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    APIWrapper $api_wrapper
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
