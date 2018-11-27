@@ -22,6 +22,17 @@ securitySchemes:
         authorizationGrants: [ authorization_code, password ]
 mediaType: application/json
 schemas:
+  - RegistrationEmailResponse: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "TRUE if email sent successfully otherwise false."
+          }
+        }
+      }
   - GetWebformSubmission: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -1700,6 +1711,28 @@ schemas:
                   schema: KnetFinalizeRequest
                   example: |
                     {"payment_id":"5339950131882960","result":"CAPTURED","post_date":"1024","transaction_id":"1571958141882960","auth_code":"188519","ref":"829618580773","tracking_id":"HMKWHDE0000812","user_id":"0","customer_id":"158","quote_id":"2871","amount":2.5,"status":"success"}
+  /user/send-registration-email:
+    post:
+      description: |
+        Post request with email to send email notification for registration.
+      body:
+        application/json:
+          formParameters:
+            email:
+              description: "The user's email id."
+              required: true
+              type: string
+              example: |
+                "randomuser@gmail.com"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: RegistrationEmailResponse
+              example: |
+                {
+                  "success": "false"
+                }
 /oauth/token:
   description: "Get the token for mobile app consumer."
   post:
