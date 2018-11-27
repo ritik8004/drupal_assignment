@@ -450,7 +450,7 @@ class MobileAppUtility {
    */
   public function sendStatusResponse(string $message = '', $status = FALSE) {
     $response['success'] = (bool) ($status);
-    if (!empty($message)) {
+    if ($message) {
       $response['message'] = $message;
     }
     return (new ResourceResponse($response));
