@@ -12,6 +12,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Routing\RequestContext;
 
 /**
  * Provides a resource to get deeplink.
@@ -55,6 +56,13 @@ class DeeplinkResource extends ResourceBase {
   protected $requestStack;
 
   /**
+   * Base url of current site.
+   *
+   * @var string
+   */
+  protected $baseUrl;
+
+  /**
    * DeeplinkResource constructor.
    *
    * @param array $configuration
@@ -75,6 +83,8 @@ class DeeplinkResource extends ResourceBase {
    *   The mobile app utility service.
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack service.
+   * @param \Drupal\Core\Routing\RequestContext $request_context
+   *   The request context.
    */
   public function __construct(
     array $configuration,
@@ -85,13 +95,15 @@ class DeeplinkResource extends ResourceBase {
     LanguageManagerInterface $language_manager,
     AliasManagerInterface $alias_manager,
     MobileAppUtility $mobile_app_utility,
-    RequestStack $request_stack
+    RequestStack $request_stack,
+    RequestContext $request_context
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->languageManager = $language_manager;
     $this->aliasManager = $alias_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
+    $this->baseUrl = $request_context->getCompleteBaseUrl();
   }
 
   /**
@@ -107,7 +119,8 @@ class DeeplinkResource extends ResourceBase {
       $container->get('language_manager'),
       $container->get('path.alias_manager'),
       $container->get('alshaya_mobile_app.utility'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('router.request_context')
     );
   }
 
@@ -119,8 +132,13 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
-    if (empty($alias) || UrlHelper::isExternal($alias)) {
+
+    if (empty($alias) || (UrlHelper::isExternal($alias) && !UrlHelper::externalIsLocal($alias, $this->baseUrl))) {
       return $this->mobileAppUtility->throwException();
+    }
+
+    if (UrlHelper::externalIsLocal($alias, $this->baseUrl)) {
+      $alias = str_replace($this->baseUrl, '', $alias);
     }
 
     if (strpos($alias, 'search') !== FALSE) {
