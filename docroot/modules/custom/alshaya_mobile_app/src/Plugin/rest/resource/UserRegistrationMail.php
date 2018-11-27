@@ -57,7 +57,7 @@ class UserRegistrationMail extends ResourceBase {
   protected $mobileAppUtility;
 
   /**
-   * SimplePageResource constructor.
+   * UserRegistrationMail constructor.
    *
    * @param array $configuration
    *   Configuration array.
