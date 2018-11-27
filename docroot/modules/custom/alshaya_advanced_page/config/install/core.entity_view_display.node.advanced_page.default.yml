@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.advanced_page.field_banner
     - field.field.node.advanced_page.field_delivery_banner
     - field.field.node.advanced_page.field_meta_tags
-    - field.field.node.advanced_page.field_promo_banner_full_width
     - field.field.node.advanced_page.field_promo_blocks
     - field.field.node.advanced_page.field_related_info
     - field.field.node.advanced_page.field_slider
@@ -52,15 +51,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: metatag_empty_formatter
-    region: content
-  field_promo_banner_full_width:
-    type: entity_reference_revisions_entity_view
-    weight: 8
-    label: hidden
-    settings:
-      view_mode: w1026
-      link: ''
-    third_party_settings: {  }
     region: content
   field_promo_blocks:
     type: entity_reference_revisions_entity_view
