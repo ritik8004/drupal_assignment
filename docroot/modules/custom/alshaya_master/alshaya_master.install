@@ -10,6 +10,20 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Enable link_attributes module globally.
+ *
+ * Also uninstalls some modules that should not be enabled on any site.
+ */
+function alshaya_master_update_8022() {
+  // Install link_attributes module.
+  if (!\Drupal::moduleHandler()->moduleExists('link_attributes')) {
+    \Drupal::service('module_installer')->install(['link_attributes'], TRUE);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Turning off the seckit referrer policy.
  */
 function alshaya_master_update_8021() {
