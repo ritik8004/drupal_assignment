@@ -10,6 +10,7 @@ use Drupal\user\UserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 
 /**
  * Class UserRegistrationMail.
@@ -49,6 +50,13 @@ class UserRegistrationMail extends ResourceBase {
   protected $mailManager;
 
   /**
+   * The mobile app utility service.
+   *
+   * @var \Drupal\alshaya_mobile_app\Service\MobileAppUtility
+   */
+  protected $mobileAppUtility;
+
+  /**
    * SimplePageResource constructor.
    *
    * @param array $configuration
@@ -67,6 +75,8 @@ class UserRegistrationMail extends ResourceBase {
    *   The renderer.
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
    *   The mail manager.
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   The mobile app utility service.
    */
   public function __construct(
     array $configuration,
@@ -76,12 +86,14 @@ class UserRegistrationMail extends ResourceBase {
     LoggerInterface $logger,
     APIWrapper $api_wrapper,
     ModuleHandlerInterface $module_handler,
-    MailManagerInterface $mail_manager
+    MailManagerInterface $mail_manager,
+    MobileAppUtility $mobile_app_utility
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->apiWrapper = $api_wrapper;
     $this->moduleHandler = $module_handler;
     $this->mailManager = $mail_manager;
+    $this->mobileAppUtility = $mobile_app_utility;
   }
 
   /**
@@ -96,7 +108,8 @@ class UserRegistrationMail extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('acq_commerce.api'),
       $container->get('module_handler'),
-      $container->get('plugin.manager.mail')
+      $container->get('plugin.manager.mail'),
+      $container->get('alshaya_mobile_app.utility')
     );
   }
 
@@ -114,7 +127,7 @@ class UserRegistrationMail extends ResourceBase {
 
     if (empty($email)) {
       $this->logger->error('Invalid data to send an email to user.');
-      return $this->sendStatusResponse($this->t('Invalid data to send an email to user.'));
+      return $this->mobileAppUtility->sendStatusResponse($this->t('Invalid data to send an email to user.'));
     }
 
     /* @var \Drupal\user\Entity\User $user */
@@ -142,9 +155,9 @@ class UserRegistrationMail extends ResourceBase {
     }
 
     if (!$user instanceof UserInterface) {
-      $this->logger->warning("User with email %email does not exist.", ['%email' => $email]);
-      return $this->sendStatusResponse(
-        $this->t("User with email %email does not exist.", ['%email' => $email])
+      $this->logger->error('User with email @email does not exist.', ['@email' => $email]);
+      return $this->mobileAppUtility->sendStatusResponse(
+        $this->t('User with email @email does not exist.', ['@email' => $email])
       );
     }
 
@@ -159,13 +172,13 @@ class UserRegistrationMail extends ResourceBase {
     );
 
     if (!$mail['result']) {
-      $this->logger->warning("Can not able to send an email to %email.", ['%email' => $email]);
-      return $this->sendStatusResponse(
-        $this->t("Can not able to send an email to %email.", ['%email' => $email])
+      $this->logger->warning('Can not able to send an email to @email.', ['@mail' => $email]);
+      return $this->mobileAppUtility->sendStatusResponse(
+        $this->t('Can not able to send an email to @email.', ['@email' => $email])
       );
     }
 
-    return $this->sendStatusResponse('', TRUE);
+    return $this->mobileAppUtility->sendStatusResponse('', TRUE);
   }
 
 }
