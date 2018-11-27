@@ -23,6 +23,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\rest\ResourceResponse;
 
 /**
  * Utilty Class.
@@ -434,6 +435,25 @@ class MobileAppUtility {
    */
   public function throwException() {
     throw new NotFoundHttpException($this->t("page not found"));
+  }
+
+  /**
+   * Helper method to return a response.
+   *
+   * @param string $message
+   *   (Optional) status message when necessary.
+   * @param bool $status
+   *   (Optional) True if you want to send success => TRUE, else FALSE.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   HTTP Response.
+   */
+  public function sendStatusResponse(string $message = '', $status = FALSE) {
+    $response['success'] = (bool) ($status);
+    if (!empty($message)) {
+      $response['message'] = $message;
+    }
+    return (new ResourceResponse($response));
   }
 
   /**

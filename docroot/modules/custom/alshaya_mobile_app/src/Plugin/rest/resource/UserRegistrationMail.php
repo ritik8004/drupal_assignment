@@ -3,12 +3,13 @@
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
 use Drupal\rest\Plugin\ResourceBase;
-use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\user\UserInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Class UserRegistrationMail.
@@ -24,6 +25,8 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
  */
 class UserRegistrationMail extends ResourceBase {
 
+  use StringTranslationTrait;
+
   /**
    * API Wrapper object.
    *
@@ -37,6 +40,13 @@ class UserRegistrationMail extends ResourceBase {
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
+
+  /**
+   * The mail manager.
+   *
+   * @var \Drupal\Core\Mail\MailManagerInterface
+   */
+  protected $mailManager;
 
   /**
    * SimplePageResource constructor.
@@ -55,6 +65,8 @@ class UserRegistrationMail extends ResourceBase {
    *   The renderer.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The renderer.
+   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
+   *   The mail manager.
    */
   public function __construct(
     array $configuration,
@@ -63,11 +75,13 @@ class UserRegistrationMail extends ResourceBase {
     array $serializer_formats,
     LoggerInterface $logger,
     APIWrapper $api_wrapper,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    MailManagerInterface $mail_manager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->apiWrapper = $api_wrapper;
     $this->moduleHandler = $module_handler;
+    $this->mailManager = $mail_manager;
   }
 
   /**
@@ -81,7 +95,8 @@ class UserRegistrationMail extends ResourceBase {
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('acq_commerce.api'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('plugin.manager.mail')
     );
   }
 
@@ -98,15 +113,15 @@ class UserRegistrationMail extends ResourceBase {
     $email = $data['email'] ?? FALSE;
 
     if (empty($email)) {
-      $this->logger->error('Invalid data to send an email to customer.');
-      return $this->sendStatusResponse();
+      $this->logger->error('Invalid data to send an email to user.');
+      return $this->sendStatusResponse($this->t('Invalid data to send an email to user.'));
     }
 
     /* @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($email);
-    // If there is user with given email.
+    // Try to get user from mdc and create new user account, when user does not
+    // exists in drupal.
     if (!$user instanceof UserInterface) {
-      // Try API now.
       try {
         /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
         $customer = $this->apiWrapper->getCustomer($email);
@@ -127,40 +142,30 @@ class UserRegistrationMail extends ResourceBase {
     }
 
     if (!$user instanceof UserInterface) {
-      $this->logger->warning('User with email %email doesn\'t exist.', ['%email' => $email]);
-      return $this->sendStatusResponse();
+      $this->logger->warning("User with email %email does not exist.", ['%email' => $email]);
+      return $this->sendStatusResponse(
+        $this->t("User with email %email does not exist.", ['%email' => $email])
+      );
     }
 
     // Mail one time login URL and instructions using current language.
     $params['account'] = $user;
-    $mail = \Drupal::service('plugin.manager.mail')
-      ->mail(
-        'user_registrationpassword',
-        'register_confirmation_with_pass',
-        $user->getEmail(),
-        $user->getPreferredLangcode(),
-        $params
-      );
+    $mail = $this->mailManager->mail(
+      'user_registrationpassword',
+      'register_confirmation_with_pass',
+      $user->getEmail(),
+      $user->getPreferredLangcode(),
+      $params
+    );
 
     if (!$mail['result']) {
-      return $this->sendStatusResponse();
+      $this->logger->warning("Can not able to send an email to %email.", ['%email' => $email]);
+      return $this->sendStatusResponse(
+        $this->t("Can not able to send an email to %email.", ['%email' => $email])
+      );
     }
 
-    return $this->sendStatusResponse(TRUE);
-  }
-
-  /**
-   * Helper method to return a response.
-   *
-   * @param bool $status
-   *   (optional) True if you want to send success => TRUE, else FALSE.
-   *
-   * @return \Drupal\rest\ResourceResponse
-   *   HTTP Response.
-   */
-  protected function sendStatusResponse($status = FALSE) {
-    $response['success'] = (bool) ($status);
-    return (new ResourceResponse($response));
+    return $this->sendStatusResponse('', TRUE);
   }
 
 }
