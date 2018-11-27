@@ -132,13 +132,10 @@ class DeeplinkResource extends ResourceBase {
    */
   public function get() {
     $alias = $this->requestStack->query->get('url');
+    $alias = str_replace($this->baseUrl, '', $alias);
 
-    if (empty($alias) || (UrlHelper::isExternal($alias) && !UrlHelper::externalIsLocal($alias, $this->baseUrl))) {
+    if (empty($alias) || UrlHelper::isExternal($alias)) {
       return $this->mobileAppUtility->throwException();
-    }
-
-    if (UrlHelper::externalIsLocal($alias, $this->baseUrl)) {
-      $alias = str_replace($this->baseUrl, '', $alias);
     }
 
     if (strpos($alias, 'search') !== FALSE) {
