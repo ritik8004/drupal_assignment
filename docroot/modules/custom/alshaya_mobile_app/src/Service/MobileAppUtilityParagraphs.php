@@ -368,10 +368,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   (optional) The type of the field to return with response and optionally
    *   process data according to given type.
    *
-   * @return array|string
+   * @return array
    *   Return array with processed field data and string when callback is empty.
    */
   public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL) {
+    $data = [];
     if (empty($callback)) {
       if (!empty($entity->get($field)->first())) {
         $data = array_merge(
