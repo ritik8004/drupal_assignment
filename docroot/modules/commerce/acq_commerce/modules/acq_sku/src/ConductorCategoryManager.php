@@ -359,11 +359,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
             // only on Drupal and thus we skip processing.
             if ($commerce_id = $child->get('field_commerce_id')->first()) {
               // We check if the child exists in the response get from magento.
-              foreach ($category['children'] as $key => $sync_cat_child) {
-                if ($commerce_id = $child->get('field_commerce_id')->first()) {
-                  if ($commerce_id->getString() == $sync_cat_child['category_id']) {
-                    return $child->id();
-                  }
+              foreach ($category['children'] as $sync_cat_child) {
+                if ($commerce_id->getString() == $sync_cat_child['category_id']) {
+                  return $child->id();
                 }
               }
             }
