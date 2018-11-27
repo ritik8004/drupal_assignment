@@ -712,68 +712,17 @@ class SkuImagesManager {
       case 'modal':
       case 'pdp':
         $media = $this->getAllMedia($sku, $check_parent_child);
-        $main_image = $media['main'];
-        $thumbnails = $media['thumbs'];
-
-        // Fetch settings.
+        $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
+        $thumbnails = $mediaItems['thumbnails'];
+        $main_image = $mediaItems['main_image'];
         $settings = $this->getCloudZoomDefaultSettings();
-        $thumbnail_style = $settings['thumb_style'];
-        $zoom_style = $settings['zoom_style'];
-        $slide_style = $settings['slide_style'];
-
-        // Create our thumbnails to be rendered for zoom.
-        foreach ($media['media_items']['images'] ?? [] as $media_item) {
-          $file_uri = $media_item['file']->getFileUri();
-
-          // Show original full image in the modal inside a draggable container.
-          $original_image = $media_item['file']->url();
-
-          $image_small = ImageStyle::load($thumbnail_style)
-            ->buildUrl($file_uri);
-          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-          if (empty($main_image)) {
-            $main_image = [
-              'zoomurl' => $image_zoom,
-              'mediumurl' => $image_medium,
-              'label' => $media_item['label'],
-            ];
-          }
-
-          $thumbnails[] = [
-            'thumburl' => $image_small,
-            'mediumurl' => $image_medium,
-            'zoomurl' => $image_zoom,
-            'fullurl' => $original_image,
-            'label' => $media_item['label'],
-            'type' => 'image',
-          ];
-        }
-        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-          // @TODO:
-          // Receiving video_provider as NULL, should be set to youtube
-          // or vimeo. Till then using $type as provider flag.
-          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-          $thumbnails[] = [
-            'thumburl' => $media_item['file'],
-            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-            'video_title' => $media_item['video_title'],
-            'video_desc' => $media_item['video_description'],
-            'type' => $type,
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
 
         // If no main image and no video, use default image.
         if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
-            $image_zoom = ImageStyle::load($zoom_style)
+            $image_zoom = ImageStyle::load($settings['zoom_style'])
               ->buildUrl($default_image->getFileUri());
-            $image_medium = ImageStyle::load($slide_style)
+            $image_medium = ImageStyle::load($settings['slide_style'])
               ->buildUrl($default_image->getFileUri());
 
             $main_image = [
@@ -853,55 +802,12 @@ class SkuImagesManager {
         $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
 
         $media = $this->getAllMedia($sku, $check_parent_child);
-        $thumbnails = $media['thumbs'];
-
-        // Fetch settings.
-        $settings = $this->getCloudZoomDefaultSettings();
-        $thumbnail_style = $settings['thumb_style'];
-        $zoom_style = $settings['zoom_style'];
-        $slide_style = $settings['slide_style'];
-
-        // Create our thumbnails to be rendered for zoom.
-        foreach ($media['media_items']['images'] ?? [] as $media_item) {
-          $file_uri = $media_item['file']->getFileUri();
-
-          // Show original full image in the modal inside a draggable container.
-          $original_image = $media_item['file']->url();
-
-          $image_small = ImageStyle::load($thumbnail_style)
-            ->buildUrl($file_uri);
-          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-          $thumbnails[] = [
-            'thumburl' => $image_small,
-            'mediumurl' => $image_medium,
-            'zoomurl' => $image_zoom,
-            'fullurl' => $original_image,
-            'label' => $media_item['label'],
-            'type' => 'image',
-          ];
-        }
-        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-          // @TODO:
-          // Receiving video_provider as NULL, should be set to youtube
-          // or vimeo. Till then using $type as provider flag.
-          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-          $thumbnails[] = [
-            'thumburl' => $media_item['file'],
-            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-            'video_title' => $media_item['video_title'],
-            'video_desc' => $media_item['video_description'],
-            'type' => $type,
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
+        $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
+        $thumbnails = $mediaItems['thumbnails'];
 
         // If thumbnails available.
         if (!empty($thumbnails)) {
+          $settings = $this->getCloudZoomDefaultSettings();
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
@@ -1094,6 +1000,84 @@ class SkuImagesManager {
     }
 
     return $swatches;
+  }
+
+  /**
+   * Get thumbnails for gallery from media array.
+   *
+   * @param array $media
+   *   Array of media items.
+   * @param bool $get_main_image
+   *   Whether to get main image as well or not.
+   *
+   * @return array
+   *   Thumbnails.
+   */
+  protected function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
+    $thumbnails = $media['thumbs'];
+
+    // Fetch settings.
+    $settings = $this->getCloudZoomDefaultSettings();
+    $thumbnail_style = $settings['thumb_style'];
+    $zoom_style = $settings['zoom_style'];
+    $slide_style = $settings['slide_style'];
+    $main_image = $media['main'];
+
+    // Create our thumbnails to be rendered for zoom.
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      if ($media_item['file'] instanceof FileInterface) {
+        $file_uri = $media_item['file']->getFileUri();
+
+        // Show original full image in the modal inside a draggable container.
+        $original_image = $media_item['file']->url();
+
+        $image_small = ImageStyle::load($thumbnail_style)
+          ->buildUrl($file_uri);
+        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+        if ($get_main_image && empty($main_image)) {
+          $main_image = [
+            'zoomurl' => $image_zoom,
+            'mediumurl' => $image_medium,
+            'label' => $media_item['label'],
+          ];
+        }
+
+        $thumbnails[] = [
+          'thumburl' => $image_small,
+          'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => $original_image,
+          'label' => $media_item['label'],
+          'type' => 'image',
+        ];
+      }
+    }
+    foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+      // @TODO:
+      // Receiving video_provider as NULL, should be set to youtube
+      // or vimeo. Till then using $type as provider flag.
+      $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+      $thumbnails[] = [
+        'thumburl' => $media_item['file'],
+        'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+        'video_title' => $media_item['video_title'],
+        'video_desc' => $media_item['video_description'],
+        'type' => $type,
+        // @TODO: should this be config?
+        'width' => 81,
+        // @TODO: should this be config?
+        'height' => 81,
+      ];
+    }
+
+    $return['thumbnails'] = $thumbnails;
+    if ($get_main_image) {
+      $return['main_image'] = $main_image;
+    }
+
+    return $return;
   }
 
 }
