@@ -236,7 +236,7 @@
         $('.basic-details-wrapper .sharethis-wrapper').hide();
 
         var sizeDiv = $('#configurable_ajax');
-        var sizeLink = $('<div class="size-link">' + Drupal.t("Select Size") + '</div>');
+        var sizeLink = $('<div class="size-link">' + Drupal.t('Select Size') + '</div>');
         if ($('.content__title_wrapper').find('.size-link').length < 1) {
           sizeLink.insertBefore(sizeDiv);
         }
