@@ -483,7 +483,5 @@ function alshaya_acm_customer_build_order_detail(array $order) {
   $shippingTerm = $checkoutOptionsManager->loadShippingMethod($order['shipping']['method']['carrier_code']);
   $build['#delivery_detail_notice'] = $shippingTerm->get('field_shipping_method_desc')->getString();
 
-  \Drupal::moduleHandler()->alter('alshaya_acm_customer_build_order_detail', $build, $order);
-
   return $build;
 }
