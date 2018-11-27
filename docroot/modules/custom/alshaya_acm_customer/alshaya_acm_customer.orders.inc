@@ -454,7 +454,7 @@ function alshaya_acm_customer_build_order_detail(array $order) {
     else {
       /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
       $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-      $item['name'] = $productInfoHelper->getTitle($sku, 'basket');
+      $product['name'] = $productInfoHelper->getTitle($sku, 'basket');
 
       // Check if we can find a parent SKU for this to get proper name.
       if (alshaya_acm_product_get_parent_sku_by_sku($sku)) {
