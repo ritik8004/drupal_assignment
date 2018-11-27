@@ -5,9 +5,7 @@ namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 use Drupal\rest\Plugin\ResourceBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\user\UserInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
@@ -27,20 +25,6 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 class UserRegistrationMail extends ResourceBase {
 
   use StringTranslationTrait;
-
-  /**
-   * API Wrapper object.
-   *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
-   */
-  protected $apiWrapper;
-
-  /**
-   * API Wrapper object.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
 
   /**
    * The mail manager.
@@ -69,10 +53,6 @@ class UserRegistrationMail extends ResourceBase {
    *   Serializer formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   The renderer.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The renderer.
    * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
    *   The mail manager.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
@@ -84,14 +64,10 @@ class UserRegistrationMail extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    APIWrapper $api_wrapper,
-    ModuleHandlerInterface $module_handler,
     MailManagerInterface $mail_manager,
     MobileAppUtility $mobile_app_utility
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->apiWrapper = $api_wrapper;
-    $this->moduleHandler = $module_handler;
     $this->mailManager = $mail_manager;
     $this->mobileAppUtility = $mobile_app_utility;
   }
@@ -106,8 +82,6 @@ class UserRegistrationMail extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('acq_commerce.api'),
-      $container->get('module_handler'),
       $container->get('plugin.manager.mail'),
       $container->get('alshaya_mobile_app.utility')
     );
@@ -130,29 +104,9 @@ class UserRegistrationMail extends ResourceBase {
       return $this->mobileAppUtility->sendStatusResponse($this->t('Invalid data to send an email to user.'));
     }
 
-    /* @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($email);
     // Try to get user from mdc and create new user account, when user does not
     // exists in drupal.
-    if (!$user instanceof UserInterface) {
-      try {
-        /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-        $customer = $this->apiWrapper->getCustomer($email);
-
-        if (!empty($customer)) {
-          $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-          /** @var \Drupal\user\Entity\User $user */
-          $user = alshaya_acm_customer_create_drupal_user($customer);
-        }
-      }
-      catch (\Exception $e) {
-        // Do nothing except for downtime exception, let default validation
-        // handle the error messages.
-        if (acq_commerce_is_exception_api_down_exception($e)) {
-          $this->logger->error($e->getMessage());
-        }
-      }
-    }
+    $user = $this->mobileAppUtility->fetchUserByMail($email);
 
     if (!$user instanceof UserInterface) {
       $this->logger->error('User with email @email does not exist.', ['@email' => $email]);
