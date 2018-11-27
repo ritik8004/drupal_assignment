@@ -125,4 +125,133 @@
       }
     }
   };
+
+  /**
+   * Helper function to compute height of add to cart button and make it sticky.
+   * @param {String} direction The scroll direction
+   *
+   * @param {string} state The moment when function is called, initial/after.
+   */
+  function mobileMagazineSticky(direction, state) {
+    // Sticky Section.
+    var stickyDiv = $('.magazine-layout .content__title_wrapper');
+    // This is the wrapper that holds delivery options.
+    var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
+    var windowBottom;
+    var mobileCWBottom;
+    if (state === 'initial') {
+      // Button top.
+      var stickyDivTop = stickyDiv.offset().top + stickyDiv.height();
+      // Screen bottom.
+      windowBottom = $(window).scrollTop() + $(window).height();
+      if (stickyDivTop > windowBottom) {
+        stickyDiv.addClass('fixed');
+      }
+      else {
+        stickyDiv.removeClass('fixed');
+      }
+      return;
+    }
+    else {
+      // mobileContentWrapper bottom, based on direction we have to factor in the height of button
+      // if it is already fixed.
+      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height();
+      if (direction === 'up') {
+        mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + stickyDiv.outerHeight() - 60;
+      }
+
+      // Screen scroll offset.
+      windowBottom = $(window).scrollTop() + $(window).height();
+      // Hide button when we are below delivery wrapper.
+      if (windowBottom > mobileCWBottom && mobileContentWrapper.length) {
+        stickyDiv.removeClass('fixed');
+      }
+      else {
+        stickyDiv.addClass('fixed');
+      }
+    }
+  }
+
+  Drupal.behaviors.stickyMagazineDiv = {
+    attach: function (context, settings) {
+      // Only on mobile.
+      if ($(window).width() < 768) {
+        // Select the node that will be observed for mutations
+        var targetNode = document.querySelector('.acq-content-product .sku-base-form');
+        // Options for the observer (which mutations to observe)
+        var config = {attributes: true, childList: false, subtree: false};
+        // Callback function to execute when mutations are observed
+        var callback = function (mutationsList, observer) {
+          mutationsList.forEach(function (mutation) {
+            if ((mutation.type === 'attributes') &&
+              (mutation.attributeName === 'class') &&
+              (!mutation.target.classList.contains('visually-hidden'))) {
+              var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
+              var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
+              mobileContentWrapper.css('height', 'auto');
+              mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
+              observer.disconnect();
+            }
+          });
+        };
+        // Create an observer instance linked to the callback function
+        var observer = new MutationObserver(callback);
+        // Start observing the target node for configured mutations
+        observer.observe(targetNode, config);
+        mobileMagazineSticky('bottom', 'initial');
+        var lastScrollTop = 0;
+        $(window).on('scroll', function () {
+          var windowScrollTop = $(this).scrollTop();
+          var direction = 'bottom';
+          if (windowScrollTop > lastScrollTop) {
+            direction = 'bottom';
+          }
+          else {
+            direction = 'up';
+          }
+          lastScrollTop = windowScrollTop;
+          mobileMagazineSticky(direction, 'after');
+        });
+
+      }
+    }
+  };
+
+  Drupal.behaviors.mobileMagazine = {
+    attach: function (context, settings) {
+      if ($(window).width() < 768) {
+        // Moving color swatches from sidebar to main content in between the gallery after
+        // first image as per design.
+        var productSwatch = $('.sku-base-form .configurable-swatch');
+        $('.magazine-product-description').once('bind-events').prepend(productSwatch);
+        $('.sku-base-form .product-swatch').hide();
+
+        // Moving title section below delivery options in mobile.
+        var tittleSection = $('.content__title_wrapper');
+        tittleSection.insertAfter('.mobile-content-wrapper');
+
+        // Moving sharethis before description field in mobile.
+        var sharethisSection = $('.basic-details-wrapper .sharethis-wrapper');
+        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .product-swatch');
+        $('.basic-details-wrapper .sharethis-wrapper').hide();
+
+        var sizeDiv = $('#configurable_ajax');
+        var sizeLink = $('<div class="size-link">' + Drupal.t('Select Size') + '</div>');
+        if ($('.content__title_wrapper').find('.size-link').length < 1) {
+          sizeLink.insertBefore(sizeDiv);
+        }
+
+        sizeDiv.hide();
+        sizeLink.on('click', function () {
+          sizeDiv.prepend('<div class="sizediv-close">x</div>');
+          $('body').append(sizeDiv);
+          $('body > #configurable_ajax').wrap('<div class="div-modal-mobile"></div>');
+
+          $('.sizediv-close').on('click', function () {
+            $('.div-modal-mobile').remove();
+          });
+        });
+      }
+    }
+  };
 })(jQuery, Drupal);

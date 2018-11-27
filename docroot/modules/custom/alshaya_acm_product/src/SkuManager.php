@@ -33,6 +33,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 
 /**
  * Class SkuManager.
@@ -48,6 +49,8 @@ class SkuManager {
   const FREE_GIFT_PRICE = 0.01;
 
   const PDP_LAYOUT_INHERIT_KEY = 'inherit';
+
+  const PDP_LAYOUT_MAGAZINE = 'pdp-magazine';
 
   /**
    * The database service.
@@ -690,6 +693,27 @@ class SkuManager {
   }
 
   /**
+   * Get Promotions data for provided SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Array of promotions data.
+   */
+  public function getPromotionsForSearchViewFromSkuId(SKUInterface $sku): array {
+    $cache_key = 'promotions_for_search_view';
+    $promos = $this->getProductCachedData($sku, $cache_key);
+
+    if (!is_array($promos)) {
+      $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
+      $this->setProductCachedData($sku, $cache_key, $promos);
+    }
+
+    return $promos ?? [];
+  }
+
+  /**
    * Get Promotion node object(s) related to provided SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -815,7 +839,9 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos) && $check_parent) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
+        if ($parentSku->getSku() != $sku->getSku()) {
+          return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
+        }
       }
     }
 
@@ -1227,6 +1253,15 @@ class SkuManager {
       return NULL;
     }
 
+    $static = &drupal_static('sku_manager_get_display_node', []);
+
+    $langcode = $sku_entity->language()->getId();
+    $sku_string = $sku_entity->getSku();
+
+    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
@@ -1235,12 +1270,15 @@ class SkuManager {
     if (!($node instanceof NodeInterface)) {
       if ($check_parent) {
         $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-          '@sku' => $sku_entity->getSku(),
+          '@langcode' => $langcode,
+          '@sku' => $sku_string,
         ]);
       }
 
       return NULL;
     }
+
+    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
@@ -2343,6 +2381,40 @@ class SkuManager {
 
       case 'magazine':
         return $context . '-' . $pdp_layout;
+    }
+  }
+
+  /**
+   * Helper function to fetch pdp layout for a particular Term ID.
+   *
+   * @param int $tid
+   *   Term ID for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout to be used.
+   */
+  public function getPdpLayoutFromTermId($tid) {
+    $term = $this->termStorage->load($tid);
+    $context = 'pdp';
+    if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
+      if ($term->get('field_pdp_layout')->first()) {
+        $pdp_layout = $term->get('field_pdp_layout')->getString();
+        if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+          foreach ($this->termStorage->loadAllParents($tid) as $taxonomy_parent) {
+            $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
+            if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
+              return $this->getContextFromLayoutKey($context, $pdp_layout);
+            }
+          }
+        }
+        else {
+          return $this->getContextFromLayoutKey($context, $pdp_layout);
+        }
+      }
+
+      $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')
+        ->get('pdp_layout');
+      return $this->getContextFromLayoutKey($context, $default_pdp_layout);
     }
   }
 

@@ -10,6 +10,51 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Enable link_attributes module globally.
+ *
+ * Also uninstalls some modules that should not be enabled on any site.
+ */
+function alshaya_master_update_8022() {
+  // Install link_attributes module.
+  if (!\Drupal::moduleHandler()->moduleExists('link_attributes')) {
+    \Drupal::service('module_installer')->install(['link_attributes'], TRUE);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+    \Drupal::service('module_installer')->uninstall(['field_ui']);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('dblog')) {
+    \Drupal::service('module_installer')->uninstall(['dblog']);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('update')) {
+    \Drupal::service('module_installer')->uninstall(['update']);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('views_ui')) {
+    \Drupal::service('module_installer')->uninstall(['views_ui']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Turning off the seckit referrer policy.
+ */
+function alshaya_master_update_8021() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['seckit.settings'],
+    'seckit',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - View more/less colours.
  */
 function alshaya_master_update_8020() {

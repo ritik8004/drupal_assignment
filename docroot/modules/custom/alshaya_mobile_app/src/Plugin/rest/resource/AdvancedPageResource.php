@@ -120,6 +120,10 @@ class AdvancedPageResource extends ResourceBase {
       $this->mobileAppUtility->throwException();
     }
 
+    if (!$node->isPublished()) {
+      $this->mobileAppUtility->throwException();
+    }
+
     // Get bubbleable metadata for CacheableDependency to avoid fatal error.
     $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
 

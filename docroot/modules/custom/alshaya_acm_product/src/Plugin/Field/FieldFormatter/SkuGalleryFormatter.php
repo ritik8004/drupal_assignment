@@ -168,15 +168,14 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         try {
           $check_parent_child = TRUE;
           $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child);
-          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, $check_parent_child);
+          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, FALSE);
           $product_url .= '?selected=' . $sku_for_gallery->id();
         }
         catch (\Exception $e) {
           $sku_gallery = [];
         }
 
-        $promotion_types = ['cart'];
-        $promotions = $this->skuManager->getPromotionsFromSkuId($sku, 'default', $promotion_types);
+        $promotions = $this->skuManager->getPromotionsForSearchViewFromSkuId($sku);
 
         $promotion_cache_tags = [];
         foreach ($promotions as $key => $promotion) {
