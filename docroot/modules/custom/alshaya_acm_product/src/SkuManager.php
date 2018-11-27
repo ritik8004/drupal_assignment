@@ -836,8 +836,6 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos) && $check_parent) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        // In case of configurable SKU, parent sku is returned same as
-        // configurable.
         if ($parentSku->getSku() != $sku->getSku()) {
           return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
         }
