@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Component\Utility\NestedArray;
 
 /**
  * Provides a resource to get product details.
@@ -189,8 +190,7 @@ class ProductResource extends ResourceBase {
     }
 
     $data = $this->getSkuData($skuEntity);
-    $data['delivery_options'] = $this->prepareDeliveryOptions($skuEntity);
-
+    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -230,7 +230,11 @@ class ProductResource extends ResourceBase {
     $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
     $data['stock'] = (int) $sku->get('stock')->getString();
     $data['in_stock'] = (bool) alshaya_acm_get_stock_from_sku($sku);
-    $data['delivery_options'] = [];
+    $data['delivery_options'] = [
+      'home_delivery' => [],
+      'click_and_collect' => [],
+    ];
+    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
 
     $linked_types = [
       LINKED_SKU_TYPE_RELATED,
@@ -306,21 +310,32 @@ class ProductResource extends ResourceBase {
    * @return array
    *   Delivery options for pdp.
    */
-  private function prepareDeliveryOptions(SKUInterface $sku) {
-    $data = [
+  private function getDeliveryOptionsConfig(SKUInterface $sku) {
+    return [
       'home_delivery' => alshaya_acm_product_get_home_delivery_config(),
       'click_and_collect' => alshaya_click_collect_get_config(),
     ];
+  }
 
+  /**
+   * Wrapper function to get media items for an SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Media Items.
+   */
+  private function getDeliveryOptionsStatus(SKUInterface $sku) {
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-    $data['home_delivery']['status'] = alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku);
-    $data['click_and_collect']['status'] = alshaya_acm_product_available_click_collect($sku);
-
-    if (!$data['click_and_collect']['status']) {
-      $data['click_and_collect']['subtitle'] = ['click_and_collect']['unavailable'];
-    }
-    unset($data['click_and_collect']['unavailable']);
-    return $data;
+    return [
+      'home_delivery' => [
+        'status' => alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku),
+      ],
+      'click_and_collect' => [
+        'status' => alshaya_acm_product_available_click_collect($sku),
+      ],
+    ];
   }
 
   /**
