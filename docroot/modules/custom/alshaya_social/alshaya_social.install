@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_social.
+ */
+
+/**
+ * Implements hook_update_N().
+ */
+function alshaya_social_update_8001() {
+  \Drupal::configFactory()->getEditable('alshaya_social.settings')->save();
+}
