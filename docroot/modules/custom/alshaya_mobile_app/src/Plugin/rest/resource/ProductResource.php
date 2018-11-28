@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a resource to get product details.
@@ -89,6 +90,13 @@ class ProductResource extends ResourceBase {
   private $cache;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -113,18 +121,23 @@ class ProductResource extends ResourceBase {
    *   The mobile app utility service.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
    *   Production Options Manager service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
-  public function __construct(array $configuration,
-                              $plugin_id,
-                              $plugin_definition,
-                              array $serializer_formats,
-                              LoggerInterface $logger,
-                              SkuManager $sku_manager,
-                              SkuImagesManager $sku_images_manager,
-                              ProductInfoHelper $product_info_helper,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              MobileAppUtility $mobile_app_utility,
-                              ProductOptionsManager $product_options_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    SkuManager $sku_manager,
+    SkuImagesManager $sku_images_manager,
+    ProductInfoHelper $product_info_helper,
+    EntityTypeManagerInterface $entity_type_manager,
+    MobileAppUtility $mobile_app_utility,
+    ProductOptionsManager $product_options_manager,
+    ModuleHandlerInterface $module_handler
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -137,6 +150,7 @@ class ProductResource extends ResourceBase {
       'tags' => [],
       'contexts' => [],
     ];
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -155,7 +169,7 @@ class ProductResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('acq_sku.product_options_manager'),
-      $container->get('language_manager')
+      $container->get('module_handler')
     );
   }
 
@@ -298,6 +312,7 @@ class ProductResource extends ResourceBase {
       'click_and_collect' => alshaya_click_collect_get_config(),
     ];
 
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
     $data['home_delivery']['status'] = alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku);
     $data['click_and_collect']['status'] = alshaya_acm_product_available_click_collect($sku);
 
