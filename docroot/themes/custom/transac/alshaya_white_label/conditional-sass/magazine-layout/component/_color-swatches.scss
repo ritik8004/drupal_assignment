@@ -5,6 +5,10 @@
     }
 
     .select2Option {
+      @include breakpoint($only-mobile) {
+        margin-top: 1.6875rem;
+      }
+
       .show-less-color,
       .show-more-color,
       .selected-text {
