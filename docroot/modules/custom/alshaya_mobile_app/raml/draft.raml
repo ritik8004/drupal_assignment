@@ -22,14 +22,14 @@ securitySchemes:
         authorizationGrants: [ authorization_code, password ]
 mediaType: application/json
 schemas:
-  - RegistrationEmailResponse: |
+  - EmailResponse: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
         "type": "object",
         "properties": {
           "success": {
             "type": "boolean",
-            "description": "TRUE if email sent successfully otherwise false."
+            "description": "true if email sent successfully otherwise false."
           },
           "message": {
             "type": "string",
@@ -1367,14 +1367,15 @@ schemas:
                     }
                   ]
                 }
-  /store/search:
+  /store/search/{lat}/{lng}:
+    uriParameters:
+      lat:
+        type: number
+        description: "The latitude."
+      lng:
+        type: number
+        description: "The longitude."
     get:
-      description: "Search stores IDs by latitude/longitude."
-      queryParameters:
-        latitude:
-          type: number
-        longitude:
-          type: number
       responses:
         200:
           body:
@@ -1718,7 +1719,7 @@ schemas:
   /user/send-registration-email:
     post:
       description: |
-        Post request with email to send email notification for registration.
+        Post request to send email notification for registration.
       body:
         application/json:
           formParameters:
@@ -1732,7 +1733,30 @@ schemas:
         200:
           body:
             application/json:
-              schema: RegistrationEmailResponse
+              schema: EmailResponse
+              example: |
+                {
+                  "success": false,
+                  "message": "User with email randomuser@gmail.com does not exist.",
+                }
+  /user/forgot-password-email:
+    post:
+      description: |
+        Post request for forgot password email.
+      body:
+        application/json:
+          formParameters:
+            email:
+              description: "The user's email id."
+              required: true
+              type: string
+              example: |
+                "randomuser@gmail.com"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: EmailResponse
               example: |
                 {
                   "success": false,
