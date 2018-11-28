@@ -844,6 +844,11 @@ function alshaya_white_label_preprocess_input(&$variables) {
       '#markup' => $tooltip,
     ];
   }
+
+  // If button is of submit and of the plp/srp/promo list page, not convert it.
+  if ($element['#type'] == 'submit' && isset($element['#attributes']['data-bef-auto-submit-click'])) {
+    $variables['no_ripple'] = TRUE;
+  }
 }
 
 /**
