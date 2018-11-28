@@ -1162,18 +1162,6 @@ header {
 
 .mobile--close {
   background: $mm_mobile_icon;
-  position: fixed;
-  top: 0.5rem;
-  #{$left}: -100%;
-  width: 35px;
-  height: 1.9375rem;
-  z-index: 12;
-  text-align: center;
-  padding-top: 0.25rem;
-  will-change: $left;
-  -moz-transition: #{$left 0.5s ease-in-out};
-  transition: #{$left 0.5s ease-in-out};
-  -moz-transform: translateZ(0);
 
   span {
     @include icon(close) {
