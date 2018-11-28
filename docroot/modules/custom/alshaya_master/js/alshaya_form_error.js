@@ -16,8 +16,8 @@ Drupal.alshayaFormError = Drupal.alshayaFormError || {};
     // We doing this as at this point of time, process is not fully completed
     // so we relying on this ajaxComplete. This will only be called when there
     // is error on address book form.
-    $(document).ajaxComplete(function(event, xhr, settings) {
-      var focusElement = $(arg+ ' .error:first');
+    $(document).ajaxComplete(function (event, xhr, settings) {
+      var focusElement = $(arg + ' .error:first');
 
       focusElement.focus();
 
@@ -34,22 +34,61 @@ Drupal.alshayaFormError = Drupal.alshayaFormError || {};
 
 Drupal.behaviors.alshayaFormError = {
   attach: function (context, settings) {
-    $(context).find('form').each(function() {
-      $(this).on('submit.validate', function() {
+    $(context).find('form').each(function () {
+      $(this).on('submit.validate', function () {
         var form_element = this;
         // This is because we getting some race condition.
-        setTimeout(function() {
+        setTimeout(function () {
           Drupal.setFocusToFirstError($(form_element));
         }, 100);
       });
     });
+
+    // Mutation observer to remove the BE validation message if we also get a
+    // FE validaion message for change password fields.
+    const target1 = document.querySelector('.change-pwd-form .form-item-current-pass');
+    const target2 = document.querySelector('.change-pwd-form .form-item-pass');
+    const observerConfig = {
+      childList: true,
+      attributes: true,
+      attributeOldValue: true,
+    };
+
+    /**
+     * Create Subscriber.
+     *
+     * @param {*} mutations
+     */
+    function subscriber(mutations) {
+      mutations.forEach((mutation) => {
+        // Only when Mutation is for changes in childlist.
+        if (mutation.type === 'childList') {
+          var addedNode = mutation.addedNodes[0];
+          // Check if added node is inline clientside error label.
+          if ($(addedNode).is('label') && $(addedNode).hasClass('error')) {
+            // Check if we have a BE message lying around.
+            if ($(addedNode).siblings('.form-item--error-message').length) {
+              // Remove the message to avoid two error messages.
+              $(addedNode).siblings('.form-item--error-message').remove();
+            }
+          }
+        }
+      });
+    }
+
+    // Create observer.
+    const observer = new MutationObserver(subscriber);
+
+    // Observing targets.
+    observer.observe(target1, observerConfig);
+    observer.observe(target2, observerConfig);
   }
 };
 
 /**
 * Helper function to set focus to first error element in the form.
 */
-Drupal.setFocusToFirstError =  function(errorElement) {
+Drupal.setFocusToFirstError = function (errorElement) {
   try {
     var focusElement = errorElement.find('input.error:first');
     var stickyHeaderHeight = ($('.branding__menu').length > 0) ? $('.branding__menu').height() + 40 : 40;

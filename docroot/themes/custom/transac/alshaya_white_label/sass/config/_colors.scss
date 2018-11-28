@@ -33,6 +33,7 @@ $very-light-blue: #d9efff;
 $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
+$grey-light-two: #f3f3f3;
 // Mothercare
 $warm-grey: #9b9b9b;
 $warm-grey-two: #dadada;
@@ -1019,6 +1020,7 @@ $social-sign-in-option-text: $black;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $mothercare-black;
+$colour-swatches-simple-effect-bg: $grey-light-two;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
@@ -1031,3 +1033,9 @@ $plp-sub-menu-cls-btn-bg: $white-five;
 $plp-machino-modal-content-bg: $white-five;
 $plp-machino-modal-content: $black;
 $plp-machino-modal-content-title: $mothercare-black;
+
+// PDP Magazine layout social share popup
+$sharethis-popup-bg: $white-five;
+$sharethis-icon-bg: $mothercare-black;
+$sharethis-label-color: $mothercare-black;
+$sharethis-social-displaytext-color: rgba(0, 0, 0, 0.87);

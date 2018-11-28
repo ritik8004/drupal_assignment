@@ -14,6 +14,31 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Correcting the block positions for promotion banner blocks.
+ */
+function alshaya_transac_update_8119() {
+  // Place the block in highlighted region.
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Place block in correct region for all sites.
+  $manager->updateConfigs(
+    ['block.block.views_block__promotion_banner_block_1'],
+    'alshaya_transac',
+    'optional'
+  );
+
+  // Fix weight for blocks in all sites, respective override file
+  // added in each brand.
+  $manager->updateConfigs(
+    ['block.block.views_block__alshaya_promotion_description_block_1'],
+    'alshaya_transac',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable alshaya_social_facebook module.
  */
 function alshaya_transac_update_8118() {
