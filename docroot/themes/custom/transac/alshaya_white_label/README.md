@@ -113,6 +113,50 @@ sass/
 * **state/** modules will adjust when in a particular state, in regards to targeting how changes happen on contextual alterations for regions or similar  
 * **style-guide-only/** contains homepage.md which provides the content for the Overview section of the styleguide, and kss-only.scss which generates a css file for styling needed by a component for display in the style guide, but not loaded into the actual theme  
 
+### Feature specific approach
+
+we have created a separate folder named as conditional-sass inside which we will create a separate folder as per requested feature. we have added a gulp task for making a separate css file and defining a separate library for each feature. we will attach the same library by checking the condition if feature is enabled.
+
+### how to override conditional feature in brand theme.
+
+All the feature resides in the CORE theme, if it is enabled by default it will show CORE fonts and colors in brand theme. To prevent this from happening, and allow each brands to override fonts and colors, we need to replicate the structure inside each brand theme, and also override the library with the new SCSS generated inside brand theme. This will be a compulsory step for each conditional-sass component, otherwise fonts and colors wont be correct.
+
+### Conditional feature Sass Structure
+
+Setup of the Sass files for the specific feature inside Base theme.
+
+```
+conditional-sass/example-feature
+  |-- example-feature.scss
+  |-- component/
+  |-- sass/_brand-feature.scss
+```
+* **example-feature.scss**  This file will be different for different feature.
+* **component/** these module files are the component parts of our design.
+* **brand-feature.scss** This file import all the required variables, mixins, fonts and colours.
+
+Setup of the Sass files for the specific feature inside Brand theme.
+
+```
+conditional-sass/example-feature
+  |-- example-feature.scss
+  |-- component/
+  |-- saaa/component/_brand-feature-override.scss
+```
+* **example-feature.scss**  This file will be different for different feature.
+* **component/** these module files are the component parts of our design.
+* **brand-feature-override.scss** This file import all the required variables, mixins, fonts and colours from the brand theme.
+
+### Step to setup the example feature:
+* Add a directory example-feature inside conditional sass in CORE theme.
+* Add files as per structure mentioned above.
+* Write scss in .scss file inside component folder.
+* Define the library whcih will add the css file compiled for the example feature.
+* In order to show correct brand fonts and colors, do the below in each brand theme.
+* create a .scss file naming as brand-feature-override.scss inside sass folder and import the required mixin, variales, color, fonts as per brand.
+* Import the brand-feature-override.scss file inside example-feature.scss.
+* and run the gulp task inside the brand theme.
+
 ### Gulp 
 
 The Gulp installation and tasks are setup to work on install, but are still intended to be easily updated based on project needs. The tasks are declared in `gulpfile.js` and broken out within the `gulp-tasks/` subfolder. You can list the available Gulp tasks with `gulp --tasks`. The most common gulp task is `gulp watch` when developing locally, which covers Sass compiling, JS linting, and building dynamic styleguides.  
