@@ -1367,14 +1367,15 @@ schemas:
                     }
                   ]
                 }
-  /store/search:
+  /store/search/{lat}/{lng}:
+    uriParameters:
+      lat:
+        type: number
+        description: "The latitude."
+      lng:
+        type: number
     get:
-      description: "Search stores IDs by latitude/longitude."
-      queryParameters:
-        latitude:
-          type: number
-        longitude:
-          type: number
+      description: "The longitude."
       responses:
         200:
           body:
