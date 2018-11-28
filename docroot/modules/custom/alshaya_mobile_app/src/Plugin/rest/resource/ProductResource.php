@@ -175,6 +175,7 @@ class ProductResource extends ResourceBase {
     }
 
     $data = $this->getSkuData($skuEntity);
+    $data['delivery_options'] = $this->prepareDeliveryOptions($skuEntity);
 
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
@@ -215,6 +216,7 @@ class ProductResource extends ResourceBase {
     $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
     $data['stock'] = (int) $sku->get('stock')->getString();
     $data['in_stock'] = (bool) alshaya_acm_get_stock_from_sku($sku);
+    $data['delivery_options'] = [];
 
     $linked_types = [
       LINKED_SKU_TYPE_RELATED,
@@ -278,6 +280,31 @@ class ProductResource extends ResourceBase {
       }
     }
 
+    return $data;
+  }
+
+  /**
+   * Get delivery options for pdp.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Delivery options for pdp.
+   */
+  private function prepareDeliveryOptions(SKUInterface $sku) {
+    $data = [
+      'home_delivery' => alshaya_acm_product_get_home_delivery_config(),
+      'click_and_collect' => alshaya_click_collect_get_config(),
+    ];
+
+    $data['home_delivery']['status'] = alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku);
+    $data['click_and_collect']['status'] = alshaya_acm_product_available_click_collect($sku);
+
+    if (!$data['click_and_collect']['status']) {
+      $data['click_and_collect']['subtitle'] = ['click_and_collect']['unavailable'];
+    }
+    unset($data['click_and_collect']['unavailable']);
     return $data;
   }
 
