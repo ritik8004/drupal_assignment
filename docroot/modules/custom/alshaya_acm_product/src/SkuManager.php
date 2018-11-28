@@ -815,7 +815,9 @@ class SkuManager {
     // it is done in Drupal to avoid more performance issues Magento.
     if (empty($promos) && $check_parent) {
       if ($parentSku = $this->getParentSkuBySku($sku)) {
-        return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
+        if ($parentSku->getSku() != $sku->getSku()) {
+          return $this->getPromotionsFromSkuId($parentSku, $view_mode, $types, $product_view_mode);
+        }
       }
     }
 
@@ -1227,6 +1229,15 @@ class SkuManager {
       return NULL;
     }
 
+    $static = &drupal_static('sku_manager_get_display_node', []);
+
+    $langcode = $sku_entity->language()->getId();
+    $sku_string = $sku_entity->getSku();
+
+    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
 
@@ -1235,12 +1246,15 @@ class SkuManager {
     if (!($node instanceof NodeInterface)) {
       if ($check_parent) {
         $this->logger->warning('SKU entity available but no display node found for @sku with langcode: @langcode. SkuManager::getDisplayNode().', [
-          '@sku' => $sku_entity->getSku(),
+          '@langcode' => $langcode,
+          '@sku' => $sku_string,
         ]);
       }
 
       return NULL;
     }
+
+    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
