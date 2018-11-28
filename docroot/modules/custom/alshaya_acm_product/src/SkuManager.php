@@ -27,6 +27,9 @@ use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\NodeInterface;
+use Drupal\pathauto\PathautoState;
+use Drupal\search_api\Item\ItemInterface;
+use Drupal\simple_sitemap\Simplesitemap;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\taxonomy\TermInterface;
@@ -190,6 +193,13 @@ class SkuManager {
   protected $renderer;
 
   /**
+   * Simple sitemap generator.
+   *
+   * @var \Drupal\simple_sitemap\Simplesitemap
+   */
+  protected $generator;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -228,6 +238,8 @@ class SkuManager {
    *   GuzzleHttp\Client object.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer service.
+   * @param \Drupal\simple_sitemap\Simplesitemap $generator
+   *   Simple sitemap generator.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -246,7 +258,8 @@ class SkuManager {
                               SKUFieldsManager $sku_fields_manager,
                               AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
                               Client $http_client,
-                              RendererInterface $renderer) {
+                              RendererInterface $renderer,
+                              Simplesitemap $generator) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -268,6 +281,7 @@ class SkuManager {
     $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->httpClient = $http_client;
     $this->renderer = $renderer;
+    $this->generator = $generator;
   }
 
   /**
@@ -658,6 +672,43 @@ class SkuManager {
     }
 
     return $child_skus;
+  }
+
+  /**
+   * Get all available children for configurable product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   Parent sku to get children of.
+   * @param bool $first_only
+   *   Flag to specify only first is required or all.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|\Drupal\acq_sku\Entity\SKU[]|null
+   *   First sku if first_only true or array of skus.
+   */
+  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE): ?SKU {
+    $childSkus = [];
+
+    $langcode = $sku->language()->getId();
+    $combinations = $this->getConfigurableCombinations($sku);
+    foreach ($combinations['attribute_sku'] ?? [] as $children) {
+      foreach ($children as $child_skus) {
+        foreach ($child_skus as $child_sku) {
+          $child = SKU::loadFromSku($child_sku, $langcode);
+
+          if (!($child instanceof SKUInterface)) {
+            continue;
+          }
+
+          if ($first_only) {
+            return $child;
+          }
+
+          $childSkus[$child->getSku()] = $child;
+        }
+      }
+    }
+
+    return $childSkus;
   }
 
   /**
@@ -1379,7 +1430,7 @@ class SkuManager {
    */
   public function filterRelatedSkus(array $skus) {
     $related_items_size = $this->configFactory->get('alshaya_acm_product.settings')->get('related_items_size');
-    $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
+    $stock_mode = $this->getStockMode();
 
     $related = [];
 
@@ -1870,17 +1921,86 @@ class SkuManager {
   }
 
   /**
+   * Helper function to get current stock mode.
+   *
+   * @return string
+   *   Stock mode.
+   */
+  public function getStockMode() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $static = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
+    }
+
+    return $static;
+  }
+
+  /**
+   * Helper function to get mode to use for displaying content on listing pages.
+   *
+   * @return string
+   *   Mode to use for displaying content on listing pages.
+   */
+  public function getListingDisplayMode() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $static = $this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
+    }
+
+    return $static;
+  }
+
+  /**
+   * Helper function to get attributes used for swatch on PDP.
+   *
+   * @return array
+   *   Array containing attributes used for swatch on PDP.
+   */
+  public function getPdpSwatchAttributes() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $static = $this->configFactory
+        ->get('alshaya_acm_product.display_settings')
+        ->get('swatches')['pdp'] ?? ['color'];
+    }
+
+    return $static;
+  }
+
+  /**
+   * Wrapper function to get value of swatch attribute for given SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return string|null
+   *   Attribute value if found for the SKU.
+   */
+  public function getPdpSwatchValue(SKU $sku) {
+    foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+      $attributes = $sku->get('attributes')->getValue();
+      $attributes = array_column($attributes, 'value', 'key');
+      if (isset($attributes[$attribute_code]) && !empty($attributes[$attribute_code])) {
+        return $attributes[$attribute_code];
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get all the swatch images with sku text as key.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   Parent SKU.
-   * @param array $attribute_codes
-   *   Attribute codes used for swatches.
    *
    * @return array
    *   Swatches array.
    */
-  public function getSwatches(SKUInterface $sku, array $attribute_codes = ['color']) {
+  public function getSwatches(SKUInterface $sku) {
     $swatches = $this->getProductCachedData($sku, 'swatches');
 
     // We may have nothing for an SKU, we should not keep processing for it.
@@ -1894,24 +2014,14 @@ class SkuManager {
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
-      $value = NULL;
-
-      foreach ($attribute_codes as $attribute_code) {
-        $value = $child->get('attr_' . $attribute_code)->getString();
-
-        if (empty($value)) {
-          continue;
-        }
-
-        break;
-      }
+      $value = $this->getPdpSwatchValue($sku);
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
       }
 
       // Do not show OOS swatches.
-      if (!alshaya_acm_get_stock_from_sku($child)) {
+      if (!$this->isProductInStock($child)) {
         continue;
       }
 
@@ -1951,16 +2061,10 @@ class SkuManager {
       return SKU::loadFromSku($child_sku, $sku->language()->getId());
     }
 
-    $combinations = $this->getConfigurableCombinations($sku);
-
-    foreach ($combinations['attribute_sku'] ?? [] as $children) {
-      foreach ($children as $child_skus) {
-        foreach ($child_skus as $child_sku) {
-          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          $this->setProductCachedData($sku, $cache_key, $child->getSku());
-          return $child;
-        }
-      }
+    $child = $this->getAvailableChildren($sku, TRUE);
+    if (!($child instanceof SKUInterface)) {
+      $this->setProductCachedData($sku, $cache_key, $child->getSku());
+      return $child;
     }
 
     return $sku;
@@ -2379,6 +2483,332 @@ class SkuManager {
       case 'magazine':
         return $context . '-' . $pdp_layout;
     }
+  }
+
+  /**
+   * Add/update/translate node for specific color.
+   *
+   * @param \Drupal\node\NodeInterface $original
+   *   Original node for configurable parent.
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   * @param string $color
+   *   Color for which we want to create nodes.
+   *
+   * @return \Drupal\node\NodeInterface|null
+   *   Color Node.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function processColorNode(NodeInterface $original, SKU $sku, $color): ?NodeInterface {
+    $data = [
+      'field_parent_sku' => $sku->getSku(),
+      'field_product_color' => $color,
+    ];
+
+    $langcode = $original->language()->getId();
+    $nodes = $this->nodeStorage->loadByProperties($data);
+
+    $node = NULL;
+
+    if (empty($nodes)) {
+      $data['type'] = 'acq_product';
+      $data['langcode'] = $langcode;
+      $data['path'] = [
+        'alias' => '/color-node-' . $sku->getSku() . '-' . $color,
+        'pathauto' => PathautoState::SKIP,
+      ];
+
+      $node = $this->nodeStorage->create($data);
+
+      $this->logger->info('Creating color node for color: @color, parent sku: @sku, langcode: @langcode', [
+        '@color' => $color,
+        '@sku' => $sku->getSku(),
+        '@langcode' => $langcode,
+      ]);
+    }
+    else {
+      $node = reset($nodes);
+
+      if ($node->language()->getId() == $langcode) {
+        // Do nothing.
+      }
+      // If node has translation, we return the translation.
+      elseif ($node->hasTranslation($langcode)) {
+        $node = $node->getTranslation($langcode);
+      }
+      // If translation not available and create flag is true.
+      else {
+        $node = $node->addTranslation($langcode);
+        $this->logger->info('Adding translation for color: @color, parent sku: @sku, langcode: @langcode', [
+          '@color' => $color,
+          '@sku' => $sku->getSku(),
+          '@langcode' => $langcode,
+        ]);
+      }
+    }
+
+    $node->get('title')->setValue($original->label());
+    $node->get('field_category')->setValue($original->get('field_category')->getValue());
+    $node->get('body')->setValue($original->get('body')->getValue());
+    $node->save();
+
+    $settings = [
+      'index' => 0,
+      'priority' => '0.5',
+      'changefreq' => 'never',
+      'include_images' => '0',
+    ];
+
+    $this->generator->setEntityInstanceSettings('node', $node->id(), $settings);
+
+    return $node;
+  }
+
+  /**
+   * Wrapper function to get SKU for particular product node.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product Node.
+   * @param bool $main_field_only
+   *   Check only the main field - field_skus.
+   *
+   * @return string
+   *   SKU string if found.
+   */
+  public function getSkuForNode(NodeInterface $node, $main_field_only = FALSE) {
+    $sku_string = $node->get('field_skus')->getString();
+    $parent_sku = $node->get('field_parent_sku')->getString();
+    $product_color = $node->get('field_product_color')->getString();
+
+    if ($sku_string) {
+      return $sku_string;
+    }
+
+    if (!($main_field_only) && $product_color) {
+      return $parent_sku;
+    }
+
+    return '';
+  }
+
+  /**
+   * Wrapper function to process all color nodes from it.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Parent product node.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function processColorNodes(NodeInterface $node) {
+    $mode = $this->getListingDisplayMode();
+
+    if ($mode != 'group_by_color') {
+      return;
+    }
+
+    $sku_string = $this->getSkuForNode($node);
+
+    if (empty($sku_string)) {
+      return;
+    }
+
+    $langcode = $node->language()->getId();
+    $sku = SKU::loadFromSku($sku_string, $langcode);
+
+    $colors = [];
+    foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
+      $child_color = $this->getPdpSwatchValue($child);
+
+      if (!empty($child_color) && !isset($colors[$child_color])) {
+        $colors[$child_color] = 1;
+        // Create the node if not available.
+        $this->processColorNode(
+          $node,
+          $sku,
+          $child_color
+        );
+      }
+    }
+  }
+
+  /**
+   * Helper function to process index item.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Node.
+   * @param \Drupal\search_api\Item\ItemInterface $item
+   *   Index item.
+   *
+   * @throws \Exception
+   */
+  public function processIndexItem(NodeInterface $node, ItemInterface $item) {
+    $langcode = $node->language()->getId();
+
+    $sku_string = $this->getSkuForNode($node);
+    $sku = SKU::loadFromSku($sku_string, $langcode);
+
+    if (!($sku instanceof SKUInterface)) {
+      throw new \Exception('Not able to load sku from node.');
+    }
+
+    $product_color = $node->get('field_product_color')->getString();
+
+    if ($sku->bundle() === 'configurable') {
+      $this->processIndexItemConfigurable($sku, $item, $product_color);
+    }
+    elseif ($sku->bundle() == 'simple') {
+      if ($this->isSkuFreeGift($sku)) {
+        throw new \Exception('SKU is free gift sku');
+      }
+    }
+
+    $this->updateStockForIndex($sku, $item);
+  }
+
+  /**
+   * Wrapper function to update stock data for index item.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param \Drupal\search_api\Item\ItemInterface $item
+   *   Index item.
+   */
+  private function updateStockForIndex(SKUInterface $sku, ItemInterface $item) {
+    // For stock index, we use only in stock (2) or out of stock (0).
+    // We will use 2 for not-buyable products too.
+    // We will use 1 for all in pull mode.
+    $in_stock = 0;
+
+    if ($this->getStockMode() == 'pull') {
+      $in_stock = 1;
+    }
+    elseif (!alshaya_acm_product_is_buyable($sku)) {
+      $in_stock = 2;
+
+      // Get price and final price for the non-buyable SKU.
+      $sku_prices = $this->getMinPrices($sku);
+
+      // If no final price available for the SKU, then use initial price as
+      // the final price for the SKU (if initial price available).
+      if (empty($sku_prices['final_price']) && !empty($sku_prices['price'])) {
+        $item->getField('final_price')->setValues([$sku_prices['price']]);
+      }
+    }
+    elseif ($this->isProductInStock($sku)) {
+      $in_stock = 2;
+    }
+    else {
+      // If product is not in stock, remove all attributes data.
+      // Get indexed fields.
+      $fields = $item->getFields();
+
+      // Iterate over each indexed field.
+      foreach ($fields as $field_key => $field_val) {
+        // Only unset/remove of attribute fields or this will remove the
+        // SKU from the indexing on default listing (without any filter).
+        if (strpos($field_key, 'attr_') !== FALSE) {
+          $item->getField($field_key)->setValues([]);
+        }
+      }
+    }
+
+    $item->getField('stock')->setValues([$in_stock]);
+  }
+
+  /**
+   * Process index item for configurable product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param \Drupal\search_api\Item\ItemInterface $item
+   *   Index item.
+   * @param string $product_color
+   *   Product color.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  private function processIndexItemConfigurable(SKUInterface $sku, ItemInterface $item, $product_color) {
+    $mode = $this->getListingDisplayMode();
+
+    $prices = $this->getMinPrices($sku);
+    $min_final_price = $prices['final_price'];
+    $item->getField('final_price')->setValues([$min_final_price]);
+
+    $data = [];
+    $has_color_data = FALSE;
+
+    // Gather data from children to set in parent.
+    foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
+      $child_color = $this->getPdpSwatchValue($child);
+
+      if (!empty($child_color)) {
+        $has_color_data = TRUE;
+      }
+
+      if ($product_color) {
+        if ($child_color !== $product_color) {
+          continue;
+        }
+      }
+
+      // Loop through the indexable fields.
+      foreach ($this->getAttributesToIndex() as $key => $field) {
+        $field_key = 'attr_' . $key;
+        $field_data = $child->get($field_key)->first();
+
+        if (!empty($field_data)) {
+          $field_value = $field_data->getString();
+          $data[$key][$field_value] = $field_value;
+        }
+      }
+    }
+
+    if ($product_color && empty($data)) {
+      throw new \Exception('No valid children found for color ' . $product_color);
+    }
+
+    // Load all item fields.
+    $itemFields = $item->getFields();
+
+    if ($mode === 'group_by_color') {
+      if (empty($product_color) && $has_color_data) {
+        throw new \Exception('Product has color, we do not index main node when doing group by color');
+      }
+    }
+
+    // Set gathered data into parent.
+    foreach ($data as $key => $values) {
+      $field_key = 'attr_' . $key;
+
+      // There is an issue with color field in indexes.
+      // It is color in solr and attr_color in database index.
+      // For all other fields it is attr_field in both indexes.
+      if (isset($itemFields[$field_key])) {
+        $item->getField($field_key)->setValues(array_keys($values));
+      }
+      elseif (isset($itemFields[$key])) {
+        $item->getField($key)->setValues(array_keys($values));
+      }
+    }
+  }
+
+  /**
+   * Get the configurable fields we want to capture separately as fields.
+   */
+  public function getAttributesToIndex() {
+    static $indexFields;
+
+    if (isset($indexFields)) {
+      return $indexFields;
+    }
+
+    $fields = $this->skuFieldsManager->getFieldAdditions();
+    $indexFields = array_filter($fields, function ($field) {
+      return !empty($field['index']);
+    });
+
+    return $indexFields;
   }
 
 }

@@ -156,6 +156,7 @@ class AlshayaImageSitemapGenerator {
    */
   public function getNodes() {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
+    // @TODO: Nik: Remove nodes with empty field_skus.
     return $query->condition('type', 'acq_product')
       ->condition('status', NODE_PUBLISHED)
       ->execute();
@@ -183,8 +184,8 @@ class AlshayaImageSitemapGenerator {
 
         if ($product instanceof Node) {
           // Get SKU from product.
-          $skuId = $product->get('field_skus')->first()->getString();
-          if (isset($skuId)) {
+          $skuId = $this->skuManager->getSkuForNode($product);
+          if (!empty($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
               $combinations = $this->skuManager->getConfigurableCombinations($sku);

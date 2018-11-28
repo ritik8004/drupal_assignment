@@ -33,3 +33,5 @@ hidden:
   field_skus: true
   langcode: true
   scheduled_publication: true
+  field_parent_sku: true
+  field_product_color: true

@@ -109,10 +109,14 @@ function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = 
  * Implements hook_ENTITY_TYPE_load() for node entities.
  */
 function alshaya_vs_transac_node_load($nodes) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   /** @var \Drupal\node\NodeInterface $node */
   foreach ($nodes as $node) {
     if ($node->bundle() === 'acq_product') {
-      $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
+      $sku_string = $skuManager->getSkuForNode($node);
+      $sku = SKU::loadFromSku($sku_string);
 
       if ($sku instanceof SKU) {
         // This is done for all Meta title, Page title.
@@ -189,7 +193,10 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
  */
 function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
