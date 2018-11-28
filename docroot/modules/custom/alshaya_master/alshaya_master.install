@@ -20,20 +20,8 @@ function alshaya_master_update_8022() {
     \Drupal::service('module_installer')->install(['link_attributes'], TRUE);
   }
 
-  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
-    \Drupal::service('module_installer')->uninstall(['field_ui']);
-  }
-
-  if (\Drupal::moduleHandler()->moduleExists('dblog')) {
-    \Drupal::service('module_installer')->uninstall(['dblog']);
-  }
-
   if (\Drupal::moduleHandler()->moduleExists('update')) {
     \Drupal::service('module_installer')->uninstall(['update']);
-  }
-
-  if (\Drupal::moduleHandler()->moduleExists('views_ui')) {
-    \Drupal::service('module_installer')->uninstall(['views_ui']);
   }
 }
 

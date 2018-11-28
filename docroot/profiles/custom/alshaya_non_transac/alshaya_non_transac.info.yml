@@ -17,7 +17,6 @@ themes:
 base profile: alshaya
 
 exclude:
-  - dblog
   - help
   - history
   - lightning_landing_page
@@ -29,8 +28,6 @@ exclude:
   - lightning_media_slideshow
   - lightning_search
   - shortcut
-  - views_ui
   - lightning_scheduler
   - moderation_sidebar
-  - field_ui
   - update
