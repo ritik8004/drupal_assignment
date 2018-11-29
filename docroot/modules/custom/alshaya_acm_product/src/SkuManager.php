@@ -2274,7 +2274,7 @@ class SkuManager {
 
     // No variant selection if product is OOS.
     if (!$this->isProductInStock($sku)) {
-      return $sku;
+      return NULL;
     }
 
     $static = &drupal_static('getSelectedVariant', []);
