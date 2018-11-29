@@ -85,7 +85,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while deleting color nodes, please check logs.',
       'operations' => [
-        ['_alshaya_acm_product_delete_configurable_nodes_for_color', []],
+        [[__CLASS__, 'deleteColorNodes'], []],
       ],
     ];
 
@@ -138,7 +138,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       'progress_message' => 'Processed @current out of @total.',
       'error_message' => 'Error occurred while creating color nodes, please check logs.',
       'operations' => [
-        ['_alshaya_acm_product_create_configurable_nodes_for_color', []],
+        [[__CLASS__, 'createColorNodes'], []],
       ],
 
     ];
@@ -166,6 +166,93 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     // Reset static caches.
     drupal_static_reset();
+  }
+
+  /**
+   * Batch callback to create color nodes when switching to split listing.
+   *
+   * @param mixed $context
+   *   Batch context.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public static function createColorNodes(&$context) {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    if (empty($context['sandbox'])) {
+      $query = $storage->getQuery();
+      $query->condition('type', 'acq_product');
+      $query->exists('field_skus');
+      $context['sandbox']['result'] = array_chunk($query->execute(), 100);
+      $context['sandbox']['max'] = count($context['sandbox']['result']);
+      $context['sandbox']['current'] = 0;
+    }
+
+    if (empty($context['sandbox']['result'])) {
+      $context['finished'] = 1;
+      return;
+    }
+
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $nids = array_shift($context['sandbox']['result']);
+
+    foreach ($nids as $nid) {
+      /** @var \Drupal\node\NodeInterface $node */
+      $node = $storage->load($nid);
+
+      foreach ($node->getTranslationLanguages() as $language) {
+        $translationNode = $node->getTranslation($language->getId());
+        $skuManager->processColorNodesForConfigurable($translationNode);
+      }
+
+      // Reset static caches, we won't need it again.
+      $storage->resetCache();
+      drupal_static_reset('loadFromSku');
+    }
+
+    $context['sandbox']['current']++;
+    $context['finished'] = $context['sandbox']['current'] / $context['sandbox']['max'];
+  }
+
+  /**
+   * Batch callback to delete color nodes when switching to aggregated listing.
+   *
+   * @param mixed $context
+   *   Batch context.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public static function deleteColorNodes(&$context) {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+    if (empty($context['sandbox'])) {
+      $query = $storage->getQuery();
+      $query->condition('type', 'acq_product');
+      $query->exists('field_product_color');
+      $context['sandbox']['result'] = array_chunk($query->execute(), 250);
+      $context['sandbox']['current'] = 0;
+    }
+
+    if (empty($context['sandbox']['result'])) {
+      $context['finished'] = 1;
+      return;
+    }
+
+    $nids = array_shift($context['sandbox']['result']);
+
+    foreach ($nids as $nid) {
+      $node = $storage->load($nid);
+      $node->delete();
+    }
+
+    $context['sandbox']['current']++;
+    $context['finished'] = $context['sandbox']['current'] / $context['sandbox']['max'];
   }
 
 }
