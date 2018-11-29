@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Turning off the seckit referrer policy.
+ */
+function alshaya_master_update_8021() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['seckit.settings'],
+    'seckit',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - View more/less colours.
  */
 function alshaya_master_update_8020() {

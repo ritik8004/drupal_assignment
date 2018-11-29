@@ -11,6 +11,9 @@ use Drupal\user\Entity\User;
 
 /**
  * Implements hook_update_N().
+ *
+ * Create webform submit, user_registration_mail and user_forgot_password_mail
+ * end points.
  */
 function alshaya_mobile_app_update_8001() {
   \Drupal::service('module_installer')->install(['webform_rest']);
@@ -23,10 +26,15 @@ function alshaya_mobile_app_update_8001() {
     ->updateConfigs(
       [
         'rest.resource.webform_rest_submit',
+        'rest.resource.user_registration_mail',
+        'rest.resource.user_forgot_password_mail',
         'user.role.mobile_app_consumer',
       ],
       'alshaya_mobile_app'
     );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
 }
 
 /**

@@ -11,7 +11,7 @@ dependencies:
 id: views_block__alshaya_promotion_description_block_1
 theme: alshaya_white_label
 region: content
-weight: -30
+weight: -25
 provider: null
 plugin: 'views_block:alshaya_promotion_description-block_1'
 settings:

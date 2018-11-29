@@ -12,4 +12,8 @@
  * @ingroup themeable
  */
 #}
-<button{{ attributes }}>{{ attributes.value }}{{ children }}</button>
+{% if no_ripple is not empty %}
+    <input{{ attributes }} />{{ children }}
+{% else %}
+    <button{{ attributes }}>{{ attributes.value }}{{ children }}</button>
+{% endif %}

@@ -20,7 +20,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Provides a resource to get delivery methods data.
+ * Provides a resource to get product details.
  *
  * @RestResource(
  *   id = "product",
@@ -31,13 +31,6 @@ use Drupal\taxonomy\TermInterface;
  * )
  */
 class ProductResource extends ResourceBase {
-
-  /**
-   * Delivery method term object.
-   *
-   * @var array
-   */
-  protected $deliveryTerms = [];
 
   /**
    * SKU Manager.
@@ -96,7 +89,7 @@ class ProductResource extends ResourceBase {
   private $cache;
 
   /**
-   * DeliveryMethodResource constructor.
+   * ProductResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
