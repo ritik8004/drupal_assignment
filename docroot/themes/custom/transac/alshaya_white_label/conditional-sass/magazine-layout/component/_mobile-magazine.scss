@@ -1,5 +1,5 @@
 .magazine-layout-node {
-  .content-sidebar {
+  .content-sidebar-wrapper {
     @include breakpoint($tablet) {
       width: 30%;
       float: right;
