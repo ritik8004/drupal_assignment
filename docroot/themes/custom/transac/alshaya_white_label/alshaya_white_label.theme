@@ -681,18 +681,18 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
   $node = $variables['elements']['#node'];
 
   // Check if the current node is front page.
-  if (\Drupal::service('path.matcher')->isFrontPage()) {
-    if ($node instanceof Node) {
+  if ($node instanceof Node) {
+    if (\Drupal::service('path.matcher')->isFrontPage()) {
       if ($node->getType() == 'advanced_page') {
         $suggestions[] = 'node__advanced_page_front';
       }
-      elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
-        /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-        $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-        if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $suggestions[] = 'node__acq_product__full_magazine';
-        }
+    }
+    elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+      if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+        $suggestions[] = 'node__acq_product__full_magazine';
       }
     }
   }
