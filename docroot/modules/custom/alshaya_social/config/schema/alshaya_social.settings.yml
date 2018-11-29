@@ -1,0 +1,7 @@
+alshaya_social.settings:
+  type: config_object
+  label: 'Alshaya social settings'
+  mapping:
+    social_login:
+      type: boolean
+      label: 'Display social login links'
