@@ -6,16 +6,19 @@
       position: relative;
     }
 
+    @include breakpoint($only-mobile) {
+      text-align: $right;
+      margin-#{$right}: 1.125rem;
+    }
+
     .share-icon {
-      position: absolute;
-      top: -3.5rem;
-      #{$left}: 12.125rem;
       font-size: 0;
       cursor: pointer;
 
-      @include breakpoint($only-mobile) {
-        #{$right}: 0;
-        #{$left}: auto;
+      @include breakpoint($tablet) {
+        position: absolute;
+        top: -3.5rem;
+        #{$left}: 12.125rem;
       }
 
       html[lang=ar] & {
@@ -26,7 +29,7 @@
 
       &::before {
         content: '';
-        background: url('../../../imgs/icons/share.svg') center center no-repeat;
+        background: url('#{$base_theme_img_directory_path}/icons/share.svg') center center no-repeat;
         width: 1.5625rem;
         height: 1.5625rem;
         display: inline-block;
@@ -60,6 +63,10 @@ body {
       opacity: 1;
       z-index: 6;
       transform: translate3d(0, 0, 0);
+
+      @include breakpoint($only-mobile) {
+        z-index: 100;
+      }
     }
 
     .modal-share-this {
@@ -72,6 +79,10 @@ body {
         font-size: 1.125rem;
         line-height: 1.22;
         color: $sharethis-label-color;
+
+        @include breakpoint($only-mobile) {
+          text-align: $left;
+        }
       }
     }
 
@@ -94,6 +105,10 @@ body {
       opacity: 3;
       background-color: $sharethis-popup-bg;
       min-width: 17.5rem;
+
+      @include breakpoint($only-mobile) {
+        z-index: 100;
+      }
     }
 
     .sharethis-wrapper {

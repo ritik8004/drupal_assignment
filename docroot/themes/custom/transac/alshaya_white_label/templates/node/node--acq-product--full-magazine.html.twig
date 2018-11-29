@@ -69,7 +69,14 @@
 
     <div class="basic-details-wrapper">
       {{ content.field_skus }}
-      {{ content.sharethis }}
+      <div class="modal-share-this">
+        <span class="share-icon"></span>
+        <div class="sharethis-container">
+          <span class="close-icon"></span>
+          <div class="sharethis-label">{{ 'Share'|t }}</div>
+          {{ content.sharethis }}
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
