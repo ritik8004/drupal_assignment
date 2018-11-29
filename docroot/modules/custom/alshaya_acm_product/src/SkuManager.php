@@ -685,7 +685,7 @@ class SkuManager {
    * @return \Drupal\acq_sku\Entity\SKU|\Drupal\acq_sku\Entity\SKU[]|null
    *   First sku if first_only true or array of skus.
    */
-  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE): ?SKU {
+  public function getAvailableChildren(SKUInterface $sku, $first_only = FALSE) {
     $childSkus = [];
 
     $langcode = $sku->language()->getId();
@@ -2600,7 +2600,7 @@ class SkuManager {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function processColorNodes(NodeInterface $node) {
+  public function processColorNodesForConfigurable(NodeInterface $node) {
     $mode = $this->getListingDisplayMode();
 
     if ($mode != 'group_by_color') {
@@ -2731,6 +2731,12 @@ class SkuManager {
   private function processIndexItemConfigurable(SKUInterface $sku, ItemInterface $item, $product_color) {
     $mode = $this->getListingDisplayMode();
 
+    $is_product_in_stock = $this->isProductInStock($sku);
+
+    if (!$is_product_in_stock && $product_color) {
+      throw new \Exception('Product not in stock, not indexing color node');
+    }
+
     $prices = $this->getMinPrices($sku);
     $min_final_price = $prices['final_price'];
     $item->getField('final_price')->setValues([$min_final_price]);
@@ -2742,14 +2748,15 @@ class SkuManager {
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
       $child_color = $this->getPdpSwatchValue($child);
 
+      // Need to have a flag to avoid indexing main node when it has colors.
+      // For nodes not having swatch/color attribute, we still need to index it.
       if (!empty($child_color)) {
         $has_color_data = TRUE;
       }
 
-      if ($product_color) {
-        if ($child_color !== $product_color) {
-          continue;
-        }
+      // Avoid all products of different color when indexing product color node.
+      if ($product_color && $child_color !== $product_color) {
+        continue;
       }
 
       // Loop through the indexable fields.
@@ -2764,6 +2771,7 @@ class SkuManager {
       }
     }
 
+    // We do not index for color node with no variant in stock.
     if ($product_color && empty($data)) {
       throw new \Exception('No valid children found for color ' . $product_color);
     }
@@ -2771,10 +2779,9 @@ class SkuManager {
     // Load all item fields.
     $itemFields = $item->getFields();
 
-    if ($mode === 'group_by_color') {
-      if (empty($product_color) && $has_color_data) {
-        throw new \Exception('Product has color, we do not index main node when doing group by color');
-      }
+    // Do not index main parent if product is in stock and has color data.
+    if ($mode === 'group_by_color' && $is_product_in_stock && empty($product_color) && $has_color_data) {
+      throw new \Exception('Product has color, we do not index main node when doing group by color');
     }
 
     // Set gathered data into parent.
