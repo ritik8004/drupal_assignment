@@ -6,32 +6,24 @@ use Drupal\rest\Plugin\ResourceBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Drupal\user\UserInterface;
-use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 
 /**
- * Class UserRegistrationMail.
+ * Class UserForgotPasswordMail.
  *
  * @RestResource(
- *   id = "user_registration_mail",
- *   label = @Translation("Alshaya user registration mail"),
+ *   id = "user_forgot_password_mail",
+ *   label = @Translation("Alshaya user forgot password mail"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/user/send-registration-email",
- *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/send-registration-email"
+ *     "canonical" = "/rest/v1/user/forgot-password-email",
+ *     "https://www.drupal.org/link-relations/create" = "/rest/v1/user/forgot-password-email"
  *   }
  * )
  */
-class UserRegistrationMail extends ResourceBase {
+class UserForgotPasswordMail extends ResourceBase {
 
   use StringTranslationTrait;
-
-  /**
-   * The mail manager.
-   *
-   * @var \Drupal\Core\Mail\MailManagerInterface
-   */
-  protected $mailManager;
 
   /**
    * The mobile app utility service.
@@ -41,7 +33,7 @@ class UserRegistrationMail extends ResourceBase {
   protected $mobileAppUtility;
 
   /**
-   * UserRegistrationMail constructor.
+   * UserForgotPasswordMail constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -53,8 +45,6 @@ class UserRegistrationMail extends ResourceBase {
    *   Serializer formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
-   * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
-   *   The mail manager.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
    */
@@ -64,11 +54,9 @@ class UserRegistrationMail extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    MailManagerInterface $mail_manager,
     MobileAppUtility $mobile_app_utility
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->mailManager = $mail_manager;
     $this->mobileAppUtility = $mobile_app_utility;
   }
 
@@ -82,7 +70,6 @@ class UserRegistrationMail extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('plugin.manager.mail'),
       $container->get('alshaya_mobile_app.utility')
     );
   }
@@ -115,23 +102,18 @@ class UserRegistrationMail extends ResourceBase {
       );
     }
 
-    // Mail one time login URL and instructions using current language.
-    $params['account'] = $user;
-    $mail = $this->mailManager->mail(
-      'user_registrationpassword',
-      'register_confirmation_with_pass',
-      $user->getEmail(),
-      $user->getPreferredLangcode(),
-      $params
-    );
-
-    if (!$mail['result']) {
-      $this->logger->warning('Can not able to send an email to @email.', ['@mail' => $email]);
+    // Send the password reset email.
+    $mail = _user_mail_notify('password_reset', $user, $user->getPreferredLangcode());
+    if (empty($mail)) {
       return $this->mobileAppUtility->sendStatusResponse(
         $this->t('Unable to send email. Contact the site administrator if the problem persists')
       );
     }
 
+    $this->logger->notice(
+      'Password reset instructions mailed to @name at @email.',
+      ['@name' => $user->getAccountName(), '@email' => $user->getEmail()]
+    );
     return $this->mobileAppUtility->sendStatusResponse('', TRUE);
   }
 
