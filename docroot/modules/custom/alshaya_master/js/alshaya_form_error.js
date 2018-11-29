@@ -44,16 +44,6 @@ Drupal.behaviors.alshayaFormError = {
       });
     });
 
-    // Mutation observer to remove the BE validation message if we also get a
-    // FE validaion message for change password fields.
-    const target1 = document.querySelector('.change-pwd-form .form-item-current-pass');
-    const target2 = document.querySelector('.change-pwd-form .form-item-pass');
-    const observerConfig = {
-      childList: true,
-      attributes: true,
-      attributeOldValue: true,
-    };
-
     /**
      * Create Subscriber.
      *
@@ -76,12 +66,25 @@ Drupal.behaviors.alshayaFormError = {
       });
     }
 
-    // Create observer.
-    const observer = new MutationObserver(subscriber);
+    // Only on Change password form under my account.
+    if ($('form.change-pwd-form').length > 0) {
+      // Mutation observer to remove the BE validation message if we also get a
+      // FE validaion message for change password fields.
+      const target1 = document.querySelector('.change-pwd-form .form-item-current-pass');
+      const target2 = document.querySelector('.change-pwd-form .form-item-pass');
+      const observerConfig = {
+        childList: true,
+        attributes: true,
+        attributeOldValue: true,
+      };
 
-    // Observing targets.
-    observer.observe(target1, observerConfig);
-    observer.observe(target2, observerConfig);
+      // Create observer.
+      const observer = new MutationObserver(subscriber);
+
+      // Observing targets.
+      observer.observe(target1, observerConfig);
+      observer.observe(target2, observerConfig);
+    }
   }
 };
 
