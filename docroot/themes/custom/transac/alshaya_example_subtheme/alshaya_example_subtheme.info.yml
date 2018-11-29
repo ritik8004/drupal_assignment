@@ -25,7 +25,7 @@ libraries:
   - alshaya_white_label/ucfix
 
 libraries-override:
-  alshaya_white_label/magazine_select2Option:
+  alshaya_white_label/magazine_attribute:
     css:
       theme:
         css/conditional-sass/magazine-layout/magazine-layout.ltr.css: css/conditional-sass/example-feature/example-feature.ltr.css
