@@ -459,7 +459,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
         if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_select2Option';
+          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
         }
         else {
