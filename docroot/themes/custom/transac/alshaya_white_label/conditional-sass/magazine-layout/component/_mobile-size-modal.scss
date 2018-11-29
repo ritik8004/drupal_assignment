@@ -43,13 +43,12 @@
         @include icon(close) {
           color: $modal_close_icon;
           font-size: 2rem;
-        };
+        }
       }
 
       .size-guide-link {
         #{$left}: 1rem;
         #{$right}: auto;
-
         float: none;
         width: 8.75rem;
         display: block;
