@@ -252,6 +252,28 @@
           });
         });
       }
+      else {
+        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height();
+        var mainbottom = $('.gallery-wrapper').offset().top + $('.gallery-wrapper').height();
+        $(window).on('scroll', function () {
+          if (($(this).scrollTop() > topposition)) {
+            $('.content-sidebar').addClass('sidebar-fixed');
+          }
+          else {
+            $('.content-sidebar').removeClass('sidebar-fixed');
+          }
+
+          if (($('.content-sidebar').offset().top + $('.content-sidebar').height()) > mainbottom) {
+            $('.content-sidebar').addClass('contain');
+          }
+
+          if ($(this).scrollTop() <= $('.content-sidebar').offset().top) {
+            if ($('.content-sidebar').hasClass('contain')) {
+              $('.content-sidebar').removeClass('contain');
+            }
+          }
+        });
+      }
     }
   };
 })(jQuery, Drupal);

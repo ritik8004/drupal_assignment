@@ -1,12 +1,43 @@
-.magazine-layout {
+.magazine-layout-node {
+  .content-sidebar {
+    @include breakpoint($tablet) {
+      width: 30%;
+      float: right;
+
+      .content__title_wrapper {
+        width: 100%;
+        float: none;
+      }
+
+      .content__sidebar {
+        width: 100%;
+        float: none;
+      }
+
+      &.sidebar-fixed {
+        position: fixed;
+        top: 130px;
+        right: calc((100vw - 66.35rem) / 2);
+        width: calc((30 * 66.35rem) / 100);
+
+        &.contain {
+          position: absolute;
+          bottom: 0;
+          top: auto;
+          right: 0
+        }
+      }
+    }
+  }
+
   .content__sidebar .mobile-content-wrapper {
     @include breakpoint($only-mobile) {
       padding: 1rem;
-    }
 
-    .delivery-options-wrapper {
-      .field__label {
-        display: none;
+      .delivery-options-wrapper {
+        .field__label {
+          display: none;
+        }
       }
     }
   }
