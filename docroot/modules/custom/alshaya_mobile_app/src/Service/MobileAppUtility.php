@@ -844,11 +844,13 @@ class MobileAppUtility {
    *   The user mail string.
    * @param bool $create
    *   (Optional) True to create user from mdc, otherwise false.
+   * @param bool $block
+   *   (Optional) True to block user after created, otherwise false.
    *
    * @return \Drupal\user\Entity\User|false
    *   Return user object or false.
    */
-  public function fetchUserByMail(string $email, $create = TRUE) {
+  public function fetchUserByMail(string $email, $create = TRUE, $block = TRUE) {
     /* @var \Drupal\user\Entity\User $user */
     $user = user_load_by_mail($email);
     // Try to get user from mdc and create new user account, when user does not
@@ -862,6 +864,10 @@ class MobileAppUtility {
           $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
           /** @var \Drupal\user\Entity\User $user */
           $user = alshaya_acm_customer_create_drupal_user($customer);
+          if ($block) {
+            $user->block();
+            $user->save();
+          }
         }
       }
       catch (\Exception $e) {
