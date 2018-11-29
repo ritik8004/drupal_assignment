@@ -25,11 +25,6 @@ $conductors = [
     'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
     'api_version' => 'v2',
   ],
-  'mckw_prod_v1' => [
-    'url' => 'https://alshaya-mckw-prod.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => '3d136846d24040099a7eed6c1f4e80b9',
-    'hmac_secret' => 'zUt1psyEWi5xO-glHlH_tw',
-  ],
   'mckw_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '389c52cfe70d4f81954ea7d751040eef',
@@ -49,11 +44,6 @@ $conductors = [
     'hmac_secret' => 'Zjk5ZjhkYzgtYmRmZC00',
     'api_version' => 'v2',
   ],
-  'mcsa_prod_v1' => [
-    'url' => 'https://alshaya-mcksa-prod.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => 'd6b5bf8e0ea74347aaeb10dd5548c827',
-    'hmac_secret' => 'nSAHBiZvuTiiJa-HC9xdnw',
-  ],
   'mcsa_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'da6d8048001a42dcae8fc9a38b2dd670',
@@ -72,11 +62,6 @@ $conductors = [
     'hmac_id' => '843bb58e8fff4c37bdfa17675497c80e',
     'hmac_secret' => 'NzYxMzYxNWYtYzc2MS00',
     'api_version' => 'v2',
-  ],
-  'mcae_prod_v1' => [
-    'url' => 'https://alshaya-mcae-prod.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => 'f755609b5006476e85acf942f54da3a0',
-    'hmac_secret' => 'GOvi4TncWFS-kqU9H6p4vg',
   ],
   'mcae_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -102,10 +87,16 @@ $conductors = [
     'hmac_secret' => 'NmViNWNjYTgtMTI1ZS00',
     'api_version' => 'v2',
   ],
-  'hmkw_prod' => [
+  'hmkw_prod_v1' => [
     'url' => 'https://alshaya-hm-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '3844f45d61d7467d9a671f3e1cf4bea8',
     'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
+  ],
+  'hmkw_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'f343b7daa231462e82368ab7df3217ff',
+    'hmac_secret' => 'YzJiNGQzYWItYzk0Yy00',
+    'api_version' => 'v2',
   ],
   // H&M SA.
   'hmsa_test' => [
@@ -125,10 +116,16 @@ $conductors = [
     'hmac_secret' => 'ZmU3MDBmMzctMTM0Yy00',
     'api_version' => 'v2',
   ],
-  'hmsa_prod' => [
+  'hmsa_prod_v1' => [
     'url' => 'https://alshaya-hmsa-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '046a4e9c6ef8467da0e29ca8f3b1793f',
     'hmac_secret' => 'hGeJbwVRoDK-H336mE3BFg',
+  ],
+  'hmsa_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'c3334e9728bc4d46a999a31aaf0f3bad',
+    'hmac_secret' => 'NTFkM2E4ZmMtZWE5MS00',
+    'api_version' => 'v2',
   ],
   // H&M AE.
   'hmae_test' => [
@@ -148,12 +145,18 @@ $conductors = [
     'hmac_secret' => 'MzY3ZDg1NDEtZTlmYy00',
     'api_version' => 'v2',
   ],
-  'hmae_prod' => [
+  'hmae_prod_v1' => [
     'url' => 'https://alshaya-hmae-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
     'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
   ],
   // H&M EG.
+  'hmae_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '31a535578a434459a044b5dda6e6b735',
+    'hmac_secret' => 'MWYxYTA0NmItMjM1Yy00',
+    'api_version' => 'v2',
+  ],
   'hmeg_test' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
@@ -329,11 +332,6 @@ $conductors = [
     'hmac_id' => '56b8b235bf854030ba2ae71473cf28fd',
     'hmac_secret' => 'ZmU2ZTE0MTUtNGY4MC00',
     'api_version' => 'v2',
-  ],
-  'vsae_prod_v1' => [
-    'url' => 'https://alshaya-vsae-prod.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => '0272644d5be84efb9dd246478367e947',
-    'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
   ],
   'vsae_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
