@@ -682,10 +682,8 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
 
   // Check if the current node is front page.
   if ($node instanceof Node) {
-    if (\Drupal::service('path.matcher')->isFrontPage()) {
-      if ($node->getType() == 'advanced_page') {
-        $suggestions[] = 'node__advanced_page_front';
-      }
+    if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
+      $suggestions[] = 'node__advanced_page_front';
     }
     elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
