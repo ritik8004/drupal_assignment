@@ -25,6 +25,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\user\UserInterface;
 
 /**
  * Utilty Class.
