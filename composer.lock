@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "a6130e71f5b19ba41c7a536f28886abd",
@@ -23,12 +23,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "87a92de714ffb9bf13b76a2023d8602fc482f624"
+                "reference": "36ddfc2035a4e975078f90378c646568649e2509"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/87a92de714ffb9bf13b76a2023d8602fc482f624",
-                "reference": "87a92de714ffb9bf13b76a2023d8602fc482f624",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/36ddfc2035a4e975078f90378c646568649e2509",
+                "reference": "36ddfc2035a4e975078f90378c646568649e2509",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-11-28T14:40:52+00:00"
+            "time": "2018-11-30T08:32:02+00:00"
         },
         {
             "name": "acquia/blt",
