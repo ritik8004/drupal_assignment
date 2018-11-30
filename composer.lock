@@ -12339,7 +12339,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-rc26",
-                    "datestamp": "1541466481",
+                    "datestamp": "1543520280",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -20352,6 +20352,17 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webflo/drupal-core-require-dev.git",
+                "reference": "128ed1111501ff14f5acadc50f214b1e47d591ad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/128ed1111501ff14f5acadc50f214b1e47d591ad",
+                "reference": "128ed1111501ff14f5acadc50f214b1e47d591ad",
+                "shasum": ""
+            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",
