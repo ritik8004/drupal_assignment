@@ -213,6 +213,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           }
 
           $data_layer_cart = [
+            'event' => 'checkout',
             'ecommerce' => [
               'currencyCode' => $gtm_manager->getGtmCurrency(),
               'checkout' => [
