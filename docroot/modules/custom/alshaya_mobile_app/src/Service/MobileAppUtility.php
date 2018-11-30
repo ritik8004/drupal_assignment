@@ -23,6 +23,9 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\rest\ResourceResponse;
+use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\user\UserInterface;
 
 /**
  * Utilty Class.
@@ -135,6 +138,13 @@ class MobileAppUtility {
   protected $currencyConfig;
 
   /**
+   * API Wrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -159,6 +169,8 @@ class MobileAppUtility {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The ApiWrapper object.
    */
   public function __construct(
     CacheBackendInterface $cache,
@@ -171,7 +183,8 @@ class MobileAppUtility {
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     ProductCategoryTreeInterface $product_category_tree,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    APIWrapper $api_wrapper
   ) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
@@ -186,6 +199,7 @@ class MobileAppUtility {
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
     $this->currencyConfig = $config_factory->get('acq_commerce.currency');
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -434,6 +448,25 @@ class MobileAppUtility {
    */
   public function throwException() {
     throw new NotFoundHttpException($this->t("page not found"));
+  }
+
+  /**
+   * Helper method to return a response.
+   *
+   * @param string $message
+   *   (Optional) status message when necessary.
+   * @param bool $status
+   *   (Optional) True if you want to send success => TRUE, else FALSE.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   HTTP Response.
+   */
+  public function sendStatusResponse(string $message = '', $status = FALSE) {
+    $response['success'] = (bool) ($status);
+    if ($message) {
+      $response['message'] = $message;
+    }
+    return (new ResourceResponse($response));
   }
 
   /**
@@ -802,6 +835,51 @@ class MobileAppUtility {
   public function convertRelativeUrlsToAbsolute(string $string): string {
     global $base_url;
     return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
+  }
+
+  /**
+   * Load user from drupal by email, If not get it from mdc and create it.
+   *
+   * @param string $email
+   *   The user mail string.
+   * @param bool $create
+   *   (Optional) True to create user from mdc, otherwise false.
+   * @param bool $block
+   *   (Optional) True to block user after created, otherwise false.
+   *
+   * @return \Drupal\user\Entity\User|false
+   *   Return user object or false.
+   */
+  public function fetchUserByMail(string $email, $create = TRUE, $block = TRUE) {
+    /* @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($email);
+    // Try to get user from mdc and create new user account, when user does not
+    // exists in drupal.
+    if (!$user instanceof UserInterface && $create) {
+      try {
+        /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+        $customer = $this->apiWrapper->getCustomer($email);
+
+        if (!empty($customer)) {
+          $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+          /** @var \Drupal\user\Entity\User $user */
+          $user = alshaya_acm_customer_create_drupal_user($customer);
+          if ($block) {
+            $user->block();
+            $user->save();
+          }
+        }
+      }
+      catch (\Exception $e) {
+        // Do nothing except for downtime exception, let default validation
+        // handle the error messages.
+        if (acq_commerce_is_exception_api_down_exception($e)) {
+          $this->logger->error($e->getMessage());
+        }
+      }
+    }
+
+    return $user;
   }
 
 }

@@ -40,7 +40,7 @@ echo -e "\n"
 if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   echo "Change in install file detected, restoring databases before executing updb."
 
-  ./../../../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
+  ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
 else
   ## Clear cache for frontend change.
   echo "No change in install files, clearing caches only."
@@ -54,7 +54,7 @@ fi
 echo -e "\n"
 
 ## Clear varnish caches for all domains of this environment.
-./../../../scripts/utilities/clear-varnish.sh $subscription $target_env
+./../scripts/utilities/clear-varnish.sh $subscription $target_env
 
 if [ $slack == 1 ]; then
   curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Varnish cache cleared on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null

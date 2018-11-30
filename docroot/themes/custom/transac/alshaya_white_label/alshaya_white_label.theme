@@ -459,13 +459,12 @@ function alshaya_white_label_preprocess_node(&$variables) {
         $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
         $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
         if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_select2Option';
+          $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
         }
-      }
-
-      else {
-        $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+        else {
+          $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+        }
       }
     }
   }
@@ -682,18 +681,16 @@ function alshaya_white_label_theme_suggestions_node_alter(array &$suggestions, a
   $node = $variables['elements']['#node'];
 
   // Check if the current node is front page.
-  if (\Drupal::service('path.matcher')->isFrontPage()) {
-    if ($node instanceof Node) {
-      if ($node->getType() == 'advanced_page') {
-        $suggestions[] = 'node__advanced_page_front';
-      }
-      elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
-        /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-        $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-        $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
-        if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
-          $suggestions[] = 'node__acq_product__full_magazine';
-        }
+  if ($node instanceof Node) {
+    if (\Drupal::service('path.matcher')->isFrontPage() && $node->getType() == 'advanced_page') {
+      $suggestions[] = 'node__advanced_page_front';
+    }
+    elseif ($node->getType() == 'acq_product' && $variables['elements']['#view_mode'] == 'full') {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $pdp_layout = $skuManager->getPdpLayout($node, 'pdp');
+      if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+        $suggestions[] = 'node__acq_product__full_magazine';
       }
     }
   }
@@ -843,6 +840,11 @@ function alshaya_white_label_preprocess_input(&$variables) {
     $variables['password_tooltip'] = [
       '#markup' => $tooltip,
     ];
+  }
+
+  // If button is of submit and of the plp/srp/promo list page, not convert it.
+  if ($element['#type'] == 'submit' && isset($element['#attributes']['data-bef-auto-submit-click'])) {
+    $variables['no_ripple'] = TRUE;
   }
 }
 
