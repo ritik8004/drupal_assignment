@@ -277,7 +277,7 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
       return $cache_terms->data;
     }
 
-    $terms = $this->getCategoryRootTerms();
+    $terms = $this->getCategoryRootTerms($langcode);
     $cache_terms = [];
     $cache_terms += $terms;
     // Loop through each parent to map parent key to child.

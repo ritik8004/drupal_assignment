@@ -93,7 +93,7 @@ class UserForgotPasswordMail extends ResourceBase {
 
     // Try to get user from mdc and create new user account, when user does not
     // exists in drupal.
-    $user = $this->mobileAppUtility->fetchUserByMail($email);
+    $user = $this->mobileAppUtility->fetchUserByMail($email, TRUE, FALSE);
 
     if (!$user instanceof UserInterface) {
       $this->logger->error('User with email @email does not exist.', ['@email' => $email]);
