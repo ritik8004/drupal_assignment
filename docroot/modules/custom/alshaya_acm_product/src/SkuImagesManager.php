@@ -383,10 +383,10 @@ class SkuImagesManager {
   }
 
   /**
-   * Wrapper function to get flag from config to add parent images from child.
+   * Wrapper function to get flag from config to show parent images in child.
    *
    * @return bool
-   *   TRUE if we need to add parent images in child.
+   *   TRUE if we need to show parent images in child.
    */
   public function addParentImagesInChild() {
     $static = &drupal_static(__FUNCTION__, NULL);
@@ -652,10 +652,7 @@ class SkuImagesManager {
         // image from child, if still not - empty/default image.
         if ($check_parent_child) {
           if ($is_configurable) {
-            if ($this->hasMedia($sku)) {
-              // Do nothing.
-            }
-            else {
+            if (!$this->hasMedia($sku)) {
               $child = $this->getFirstChildWithMedia($sku);
               if ($child instanceof SKU) {
                 $skuForGallery = $child;
