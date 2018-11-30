@@ -9,7 +9,8 @@
  * Implements hook_simple_sitemap_arbitrary_links_alter().
  */
 function alshaya_image_sitemap_simple_sitemap_arbitrary_links_alter(&$arbitrary_links) {
-  $url = $GLOBALS['base_url'] . '/image-sitemap';
+  global $base_url;
+  $url = $base_url . '/image-sitemap';
   $arbitrary_links[] = [
     'url' => $url,
     'priority' => '0.5',
