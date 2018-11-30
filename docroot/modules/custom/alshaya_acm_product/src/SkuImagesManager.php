@@ -458,8 +458,7 @@ class SkuImagesManager {
       foreach ($children as $child_skus) {
         foreach ($child_skus as $child_sku) {
           $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-
-          if (($child instanceof SKUInterface) &&  ($this->hasMedia($child))) {
+          if (($child instanceof SKUInterface) && ($this->hasMedia($child))) {
             $this->skuManager->setProductCachedData(
               $sku, $cache_key, $child->getSku()
             );
