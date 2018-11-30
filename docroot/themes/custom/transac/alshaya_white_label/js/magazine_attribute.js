@@ -225,7 +225,7 @@
         // first image as per design.
         var productSwatch = $('.sku-base-form .configurable-swatch');
         $('.magazine-product-description').once('bind-events').prepend(productSwatch);
-        $('.sku-base-form .product-swatch').hide();
+        $('.sku-base-form .form-item-configurables-article-castor-id').hide();
 
         // Moving title section below delivery options in mobile.
         var tittleSection = $('.content__title_wrapper');
@@ -233,7 +233,7 @@
 
         // Moving sharethis before description field in mobile.
         var sharethisSection = $('.basic-details-wrapper .modal-share-this');
-        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .product-swatch');
+        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .form-item-configurables-article-castor-id');
         $('.basic-details-wrapper .modal-share-this').hide();
 
         var sizeDiv = $('#configurable_ajax');
