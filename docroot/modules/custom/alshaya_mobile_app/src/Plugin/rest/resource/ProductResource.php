@@ -406,7 +406,7 @@ class ProductResource extends ResourceBase {
       }
     }
 
-    $size_lables = $this->getSizeLables($sku);
+    $size_labels = $this->getSizeLabels($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -418,8 +418,8 @@ class ProductResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size' && !empty($size_lables[$value])) {
-          $attr_value['label'] = $size_lables[$value];
+        if ($attribute_code == 'size' && !empty($size_labels[$value])) {
+          $attr_value['label'] = $size_labels[$value];
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
@@ -442,7 +442,7 @@ class ProductResource extends ResourceBase {
    * @return array
    *   Return the keyed array of size attributes code and label.
    */
-  private function getSizeLables(SKUInterface $sku): array {
+  private function getSizeLabels(SKUInterface $sku): array {
     $configurables = unserialize(
       $sku->get('field_configurable_attributes')->getString()
     );
