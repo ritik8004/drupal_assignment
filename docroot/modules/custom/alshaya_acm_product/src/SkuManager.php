@@ -2553,6 +2553,11 @@ class SkuManager {
     $node->get('body')->setValue($original->get('body')->getValue());
     $node->save();
 
+    // Since we already have main node and this is additional node that we
+    // just create for indexing things properly, we actually do not want this
+    // to be indexed in xml sitemap or image sitemap. We mark this node as
+    // non-indexable.
+    // Code below is copied from simple_sitemap_entity_form_submit().
     $settings = [
       'index' => 0,
       'priority' => '0.5',

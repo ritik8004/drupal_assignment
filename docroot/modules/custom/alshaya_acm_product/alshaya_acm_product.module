@@ -330,6 +330,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        $skuNode = $skuManager->getDisplayNode($sku, FALSE);
+
+        // Show 404 if current node is color node.
+        // Redirecting to proper node may make it indexed and we don't want
+        // this to be indexed or known as valid url in any case.
+        if ($skuNode instanceof NodeInterface && $skuNode->id() != $entity->id()) {
+          throw new NotFoundHttpException();
+        }
+
         // Do not display PDP for free gifts.
         if ($skuManager->isSkuFreeGift($sku_entity)) {
           throw new NotFoundHttpException();
