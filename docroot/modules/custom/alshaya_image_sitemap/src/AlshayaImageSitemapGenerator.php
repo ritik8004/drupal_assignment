@@ -16,6 +16,7 @@ use Drupal\node\Entity\Node;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\simple_sitemap\Simplesitemap;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -90,6 +91,13 @@ class AlshayaImageSitemapGenerator {
   protected $configFactory;
 
   /**
+   * Simple Sitemap.
+   *
+   * @var \Drupal\simple_sitemap\Simplesitemap
+   */
+  protected $simpleSitemap;
+
+  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -112,6 +120,8 @@ class AlshayaImageSitemapGenerator {
    *   SKU Manager service object.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config Factory service.
+   * @param \Drupal\simple_sitemap\Simplesitemap $simple_sitemap
+   *   Simple sitemap.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -122,7 +132,8 @@ class AlshayaImageSitemapGenerator {
                               LanguageManagerInterface $language_manager,
                               SkuImagesManager $skuImagesManager,
                               SkuManager $sku_manager,
-                              ConfigFactory $configFactory) {
+                              ConfigFactory $configFactory,
+                              Simplesitemap $simple_sitemap) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -133,6 +144,7 @@ class AlshayaImageSitemapGenerator {
     $this->skuImagesManager = $skuImagesManager;
     $this->skuManager = $sku_manager;
     $this->configFactory = $configFactory;
+    $this->simpleSitemap = $simple_sitemap;
   }
 
   /**
@@ -156,8 +168,10 @@ class AlshayaImageSitemapGenerator {
    */
   public function getNodes() {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
+
     return $query->condition('type', 'acq_product')
       ->condition('status', NODE_PUBLISHED)
+      ->exists('field_skus')
       ->execute();
   }
 
@@ -177,14 +191,22 @@ class AlshayaImageSitemapGenerator {
         // Fetch list of media files for each nid.
         // Load product from id.
         $product = $node_storage->load($nid);
+
+        $sitemap_settings = $this->simpleSitemap->getEntityInstanceSetting($product->getEntityTypeId(), $product->id());
+
+        // Skip all nodes that are marked as not indexable in simple sitemap.
+        if (!empty($sitemap_settings) && empty($sitemap_settings['index'])) {
+          continue;
+        }
+
         $media = [];
         $all_media = [];
         $sku_for_gallery = NULL;
 
         if ($product instanceof Node) {
           // Get SKU from product.
-          $skuId = $product->get('field_skus')->first()->getString();
-          if (isset($skuId)) {
+          $skuId = $this->skuManager->getSkuForNode($product);
+          if (!empty($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
               $combinations = $this->skuManager->getConfigurableCombinations($sku);

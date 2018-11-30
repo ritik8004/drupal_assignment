@@ -1,0 +1,16 @@
+content:
+  field_parent_sku:
+    type: sku_widget
+    weight: 8
+    region: content
+    settings:
+      size: 60
+    third_party_settings: {  }
+  field_product_color:
+    type: string_textfield
+    weight: 9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }

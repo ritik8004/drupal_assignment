@@ -56,168 +56,29 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
  *   The items that will be indexed.
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
-  // Get the configurable fields we want to capture separately as fields.
-  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
-  $indexFields = array_filter($fields, function ($field) {
-    return !empty($field['index']);
-  });
-
-  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  $logger = \Drupal::logger('alshaya_acm_product');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   foreach ($items as $item_id => $item) {
+    /** @var \Drupal\node\NodeInterface $object */
     $object = $item->getOriginalObject()->getValue();
-    $type = $object->getEntityType()->id();
-    $bundle = $object->bundle();
 
     // Deal with all indexable fields not available by default in configurable
     // parent but available in the variants.
     // Deal with final price of configurable that needs to come from variants.
-    if ($type == 'node' && $bundle == 'acq_product') {
-      $sku = $object->get('field_skus')->first()->getString();
+    if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
+      try {
+        $skuManager->processIndexItem($object, $item);
+      }
+      catch (\Throwable $e) {
+        $logger->error('Indexing failed for the node:@nid message:@message', [
+          '@nid' => $object->id(),
+          '@message' => $e->getMessage(),
+        ]);
 
-      if (!empty($sku)) {
-        $langcode = $object->language()->getId();
-        $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE);
-
-        if (empty($sku_entity)) {
-          continue;
-        }
-
-        // For stock index, we use only in stock (2) or out of stock (0).
-        // We will use 2 for not-buyable products too.
-        // We will use 1 for all in pull mode.
-        $in_stock = 0;
-
-        if ($stock_mode == 'pull') {
-          $in_stock = 1;
-        }
-        elseif (!alshaya_acm_product_is_buyable($sku_entity)) {
-          $in_stock = 2;
-          // Get price and final price for the non-buyable SKU.
-          $sku_prices = $skuManager->getMinPrices($sku_entity);
-          // If no final price available for the SKU, then use initial price as
-          // the final price for the SKU (if initial price available).
-          if (empty($sku_prices['final_price']) && !empty($sku_prices['price'])) {
-            $item->getField('final_price')->setValues([$sku_prices['price']]);
-          }
-        }
-        elseif ($skuManager->isProductInStock($sku_entity)) {
-          $in_stock = 2;
-        }
-
-        $item->getField('stock')->setValues([$in_stock]);
-
-        if ($sku_entity->bundle() == 'configurable') {
-          $data = [];
-
-          $prices = $skuManager->getMinPrices($sku_entity);
-          $min_final_price = $prices['final_price'];
-          // Index final_price.
-          $item->getField('final_price')->setValues([$min_final_price]);
-          $child_sku_found = FALSE;
-          foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
-            try {
-              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode, FALSE);
-            }
-            catch (\Exception $e) {
-              // Do nothing, child sku might not be available or deleted.
-              continue;
-            }
-
-            // Additional check if it returns NULL.
-            if (empty($child_sku_entity) || $skuManager->isSkuFreeGift($child_sku_entity)) {
-              continue;
-            }
-
-            $child_sku_found = TRUE;
-
-            // If child SKU is OOS, then no need to index attributes of this
-            // child SKU.
-            if (!alshaya_acm_get_stock_from_sku($child_sku_entity)) {
-              continue;
-            }
-
-            // Loop through the indexable fields.
-            foreach ($indexFields as $key => $field) {
-              $field_key = 'attr_' . $key;
-              $field_data = $child_sku_entity->get($field_key)->first();
-
-              if (!empty($field_data)) {
-                $field_value = $field_data->getString();
-                $data[$key][$field_value] = $field_value;
-              }
-            }
-          }
-
-          // Do not index the product in case its linked with a configurable
-          // SKU, but the config SKU is missing its children.
-          if (!$child_sku_found) {
-            unset($items[$item_id]);
-          }
-
-          // Load all item fields, we'll need it to check condition inside loop.
-          $itemFields = $item->getFields();
-
-          foreach ($data as $key => $values) {
-            $field_key = 'attr_' . $key;
-
-            // There is an issue with color field in indexes.
-            // It is color in solr and attr_color in database index.
-            // For all other fields it is attr_field in both indexes.
-            if (isset($itemFields[$field_key])) {
-              $item->getField($field_key)->setValues(array_keys($values));
-            }
-            elseif (isset($itemFields[$key])) {
-              $item->getField($key)->setValues(array_keys($values));
-            }
-          }
-
-          // It means there is no data indexed for child sku. Thus we need to
-          // skip the indexing of parent sku attributes as well.
-          if (empty($data)) {
-            // Iterate over each indexed field.
-            foreach ($itemFields as $field_key => $field_val) {
-              // Only unset/remove of attribute fields or this will remove the
-              // SKU from the indexing on default listing (without any filter).
-              if (strpos($field_key, 'attr_') !== FALSE && isset($items[$item_id])) {
-                try {
-                  $items[$item_id]->getField($field_key)->setValues([]);
-                }
-                catch (\Throwable $e) {
-                  // Do nothing, just log.
-                  \Drupal::logger('alshaya_acm_product')->error('Indexing failed for the index: @index field:@field_key item:@item_id', [
-                    '@index' => $index->id(),
-                    '@field_key' => $field_key,
-                    '@item_id' => $item_id,
-                  ]);
-                }
-              }
-            }
-          }
-        }
-
-        elseif ($sku_entity->bundle() == 'simple') {
-          if ($skuManager->isSkuFreeGift($sku_entity)) {
-            unset($items[$item_id]);
-          }
-
-          // If SKU is OOS.
-          if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
-            // Get indexed fields.
-            $fields = $items[$item_id]->getFields();
-            // Iterate over each indexed field.
-            foreach ($fields as $field_key => $field_val) {
-              // Only unset/remove of attribute fields or this will remove the
-              // SKU from the indexing on default listing (without any filter).
-              if (strpos($field_key, 'attr_') !== FALSE) {
-                $items[$item_id]->getField($field_key)->setValues([]);
-              }
-            }
-          }
-        }
+        unset($items[$item_id]);
       }
     }
   }
@@ -226,7 +87,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 /**
  * Implements hook_acq_sku_product_sku_alter().
  */
-function alshaya_acm_product_acq_sku_product_sku_alter(&$sku, $product) {
+function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
@@ -241,6 +102,14 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
   if (isset($product['attributes']['product_activation_date'])) {
     $node->setCreatedTime(strtotime($product['attributes']['product_activation_date']));
   }
+
+  if ($product['type'] !== 'configurable') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $skuManager->processColorNodesForConfigurable($node);
 }
 
 /**
@@ -443,7 +312,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
-    $sku = $entity->get('field_skus')->first()->getString();
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
 
@@ -461,6 +330,15 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        $skuNode = $skuManager->getDisplayNode($sku, FALSE);
+
+        // Show 404 if current node is color node.
+        // Redirecting to proper node may make it indexed and we don't want
+        // this to be indexed or known as valid url in any case.
+        if ($skuNode instanceof NodeInterface && $skuNode->id() != $entity->id()) {
+          throw new NotFoundHttpException();
+        }
+
         // Do not display PDP for free gifts.
         if ($skuManager->isSkuFreeGift($sku_entity)) {
           throw new NotFoundHttpException();

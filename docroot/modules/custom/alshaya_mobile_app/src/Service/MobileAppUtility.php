@@ -252,7 +252,7 @@ class MobileAppUtility {
     elseif ($object instanceof NodeInterface) {
       switch ($object->bundle()) {
         case 'acq_product':
-          $sku = $object->get('field_skus')->getString();
+          $sku = $this->skuManager->getSkuForNode($object);
           $return = 'product/' . $sku;
           break;
 
@@ -705,7 +705,7 @@ class MobileAppUtility {
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
     // Get SKU attached with node.
-    $sku = $node->get('field_skus')->getString();
+    $sku = $this->skuManager->getSkuForNode($node);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
