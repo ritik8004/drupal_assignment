@@ -2612,7 +2612,7 @@ class SkuManager {
       return;
     }
 
-    $sku_string = $this->getSkuForNode($node);
+    $sku_string = $this->getSkuForNode($node, TRUE);
 
     if (empty($sku_string)) {
       return;
@@ -2620,6 +2620,10 @@ class SkuManager {
 
     $langcode = $node->language()->getId();
     $sku = SKU::loadFromSku($sku_string, $langcode);
+
+    if (!($sku instanceof SKUInterface)) {
+      return;
+    }
 
     $colors = [];
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
