@@ -235,21 +235,21 @@ class AlshayaApiCommands extends DrushCommands {
               if ($data['stock'] != $mskus[$type][$key]['qty']) {
                 $stock_output .= 'Drupal stock:' . $data['stock'] . ' | ';
                 $stock_output .= 'MDC stock:' . $mskus[$type][$key]['qty'];
-                $stock_mismatch_sync[$type][] = $stock_output;
+                $stock_mismatch_sync[$type][] = $key;
               }
 
               // If price in drupal not matches with what in magento.
               if ($data['price'] != $mskus[$type][$key]['price']) {
                 $price_output .= 'Drupal price:' . $data['price'] . ' | ';
                 $price_output .= 'MDC price:' . $mskus[$type][$key]['price'];
-                $price_mismatch_sync[$type][] = $price_output;
+                $price_mismatch_sync[$type][] = $key;
               }
 
               // If special price in drupal not matches with what in magento.
               if ($data['special_price'] != $mskus[$type][$key]['special_price']) {
                 $price_output .= 'Drupal spl price:' . $data['special_price'] . ' | ';
                 $price_output .= 'MDC spl price:' . $mskus[$type][$key]['special_price'];
-                $price_mismatch_sync[$type][] = $price_output;
+                $price_mismatch_sync[$type][] = $key;
               }
 
               // If there any sku having stock mismatch.
