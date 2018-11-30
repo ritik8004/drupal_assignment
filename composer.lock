@@ -23,12 +23,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "85369b9b7ed4b6ede1345a56a318dc93eabfb684"
+                "reference": "36ddfc2035a4e975078f90378c646568649e2509"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/85369b9b7ed4b6ede1345a56a318dc93eabfb684",
-                "reference": "85369b9b7ed4b6ede1345a56a318dc93eabfb684",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/36ddfc2035a4e975078f90378c646568649e2509",
+                "reference": "36ddfc2035a4e975078f90378c646568649e2509",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-11-20T20:12:28+00:00"
+            "time": "2018-11-30T08:32:02+00:00"
         },
         {
             "name": "acquia/blt",

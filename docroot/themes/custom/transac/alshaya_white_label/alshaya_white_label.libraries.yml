@@ -147,7 +147,7 @@ pace:
   js:
     /libraries/pace/pace.min.js: {}
 
-magazine_select2Option:
+magazine_attribute:
   js:
     js/magazine_select2Option.js: {}
     js/magazine_attribute.js: {}

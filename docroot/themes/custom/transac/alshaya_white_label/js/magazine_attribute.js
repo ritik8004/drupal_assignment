@@ -36,6 +36,7 @@
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
         $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
+        Drupal.alshaya_hm_images_update_selected_label();
       }
     });
   };
@@ -224,16 +225,16 @@
         // first image as per design.
         var productSwatch = $('.sku-base-form .configurable-swatch');
         $('.magazine-product-description').once('bind-events').prepend(productSwatch);
-        $('.sku-base-form .product-swatch').hide();
+        $('.sku-base-form .form-item-configurables-article-castor-id').hide();
 
         // Moving title section below delivery options in mobile.
         var tittleSection = $('.content__title_wrapper');
         tittleSection.insertAfter('.mobile-content-wrapper');
 
         // Moving sharethis before description field in mobile.
-        var sharethisSection = $('.basic-details-wrapper .sharethis-wrapper');
-        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .product-swatch');
-        $('.basic-details-wrapper .sharethis-wrapper').hide();
+        var sharethisSection = $('.basic-details-wrapper .modal-share-this');
+        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .form-item-configurables-article-castor-id');
+        $('.basic-details-wrapper .modal-share-this').hide();
 
         var sizeDiv = $('#configurable_ajax');
         var sizeLink = $('<div class="size-link">' + Drupal.t('Select Size') + '</div>');

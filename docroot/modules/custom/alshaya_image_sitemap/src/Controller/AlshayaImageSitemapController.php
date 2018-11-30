@@ -8,6 +8,7 @@ use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\alshaya_image_sitemap\AlshayaImageSitemapGenerator;
 use Drupal\Core\State\StateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Class AlshayaImageSitemapController.
@@ -49,10 +50,14 @@ class AlshayaImageSitemapController extends ControllerBase {
   }
 
   /**
-   * List.
-   *
-   * @return string
-   *   Return Hello string.
+   * {@inheritdoc}
+   */
+  public function getImageSitemapUrl() {
+    return new RedirectResponse(file_create_url('public://alshaya_image_sitemap/image_sitemap.xml'));
+  }
+
+  /**
+   * {@inheritdoc}
    */
   public function listImageSitemap() {
     $header = [
