@@ -104,8 +104,8 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $pane_form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
     $pane_form['request_password']['#weight'] = 101;
-    // @todo: find a way to use this as dependency injection.
-    // Costructor of Parent class "CheckoutPaneBase" has
+
+    // Constructor of parent class "CheckoutPaneBase" has
     // "CheckoutFlowInterface" injected this object, but couldn't find a
     // service/plugin service that can be used with "static create" method to
     // be injected in this class, even if we implement
