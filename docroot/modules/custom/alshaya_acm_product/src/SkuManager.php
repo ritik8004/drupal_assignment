@@ -2548,6 +2548,7 @@ class SkuManager {
       }
     }
 
+    $node->get('field_product_color')->setValue($color);
     $node->get('title')->setValue($original->label());
     $node->get('field_category')->setValue($original->get('field_category')->getValue());
     $node->get('body')->setValue($original->get('body')->getValue());
