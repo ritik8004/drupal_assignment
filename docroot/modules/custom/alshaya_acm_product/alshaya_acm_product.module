@@ -73,10 +73,12 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         $skuManager->processIndexItem($object, $item);
       }
       catch (\Throwable $e) {
-        $logger->error('Indexing failed for the node:@nid message:@message', [
-          '@nid' => $object->id(),
-          '@message' => $e->getMessage(),
-        ]);
+        if ($e->getMessage() !== 'Product has color, we do not index main node when doing group by color') {
+          $logger->error('Indexing failed for the node:@nid message:@message', [
+            '@nid' => $object->id(),
+            '@message' => $e->getMessage(),
+          ]);
+        }
 
         unset($items[$item_id]);
       }
