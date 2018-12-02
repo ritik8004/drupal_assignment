@@ -197,6 +197,20 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    * {@inheritdoc}
    */
   public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_string = $sku->getSku();
+
+    // Do not use static cache during sync when create translation flag is set
+    // to true.
+    if (!($create_translation) && isset($static[$langcode], $static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
+    // Initialise with empty value.
+    $static[$langcode][$sku_string] = NULL;
+
     if ($check_parent) {
       if ($parent_sku = $this->getParentSku($sku)) {
         $sku = $parent_sku;
@@ -221,27 +235,29 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     // Check language checks if site is in multilingual mode.
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
-      if ($node->language()->getId() == $sku->language()->getId()) {
+      if ($node->language()->getId() == $langcode) {
         return $node;
       }
 
       // If node has translation, we return the translation.
-      if ($node->hasTranslation($sku->language()->getId())) {
-        return $node->getTranslation($sku->language()->getId());
+      if ($node->hasTranslation($langcode)) {
+        return $node->getTranslation($langcode);
       }
 
       // If translation not available and create_translation flag is true.
       if ($create_translation) {
-        return $node->addTranslation($sku->language()->getId());
+        return $node->addTranslation($langcode);
       }
 
       // Just log the message and continue.
       // Don't want to show any fatal error anywhere.
       \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
         '@sku' => $sku->getSku(),
-        '@langcode' => $sku->language()->getId(),
+        '@langcode' => $langcode,
       ]);
     }
+
+    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
