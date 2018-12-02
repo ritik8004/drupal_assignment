@@ -2509,6 +2509,7 @@ class SkuManager {
     $langcode = $original->language()->getId();
     $nodes = $this->nodeStorage->loadByProperties($data);
 
+    /** @var \Drupal\node\NodeInterface $node */
     $node = NULL;
 
     if (empty($nodes)) {
@@ -2548,6 +2549,7 @@ class SkuManager {
       }
     }
 
+    $node->setCreatedTime($original->getCreatedTime());
     $node->get('field_product_color')->setValue($color);
     $node->get('title')->setValue($original->label());
     $node->get('field_category')->setValue($original->get('field_category')->getValue());
