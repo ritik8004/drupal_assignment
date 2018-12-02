@@ -236,6 +236,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       $query->condition('type', 'acq_product');
       $query->exists('field_product_color');
       $context['sandbox']['result'] = array_chunk($query->execute(), 250);
+      $context['sandbox']['max'] = count($context['sandbox']['result']);
       $context['sandbox']['current'] = 0;
     }
 
