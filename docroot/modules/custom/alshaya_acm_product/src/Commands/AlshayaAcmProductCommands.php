@@ -59,24 +59,24 @@ class AlshayaAcmProductCommands extends DrushCommands {
     if ($mode === 'all') {
       $message = 'Current mode is already set to display one product per configurable in listing pages.';
       $this->logger->info($message);
-      $this->yell($message);
+      $this->yell($message, 40, 'red');
 
-      $ask = 'Are you sure you want to redo node deletion? Type "all" if you are sure.';
+      $ask = 'Are you sure you want to redo node deletion? Type "ok" if you are sure.';
     }
     else {
       $ask = 'Are you sure you want to switch to one product per configurable in listing pages? Type "all" if you are sure.';
     }
 
     $confirmation = $this->ask($ask);
-    if ($confirmation !== 'all') {
+    if ($confirmation !== 'ok') {
       return;
     }
 
     // Update mode.
     $this->updateListingMode('all');
 
-    // Reset index.
-    drush_invoke_process('@self', 'sapi-r');
+    // Clear all indexed data.
+    drush_invoke_process('@self', 'sapi-c');
 
     // Delete color nodes.
     $batch = [
@@ -112,24 +112,24 @@ class AlshayaAcmProductCommands extends DrushCommands {
     if ($mode === 'group_by_color') {
       $message = 'Current mode is already set to display one product per color in listing pages.';
       $this->logger->info($message);
-      $this->yell($message);
+      $this->yell($message, 40, 'red');
 
-      $ask = 'Are you sure you want to redo node creation? Type "group_by_color" if you are sure.';
+      $ask = 'Are you sure you want to redo node creation? Type "ok" if you are sure.';
     }
     else {
-      $ask = 'Are you sure you want to switch to one product per color in listing pages? Type "group_by_color" if you are sure.';
+      $ask = 'Are you sure you want to switch to one product per color in listing pages? Type "ok" if you are sure.';
     }
 
     $confirmation = $this->ask($ask);
-    if ($confirmation !== 'group_by_color') {
+    if ($confirmation !== 'ok') {
       return;
     }
 
     // Update mode.
     $this->updateListingMode('group_by_color');
 
-    // Reset index.
-    drush_invoke_process('@self', 'sapi-r');
+    // Clear all indexed data.
+    drush_invoke_process('@self', 'sapi-c');
 
     // Create color nodes.
     $batch = [

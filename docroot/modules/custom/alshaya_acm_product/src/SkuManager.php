@@ -2808,6 +2808,22 @@ class SkuManager {
       throw new \Exception('Product has color, we do not index main node when doing group by color');
     }
 
+    if ($mode === 'group_by_color' && $product_color) {
+      $item->getField('field_skus')->setValues([$sku->getSku()]);
+
+      // Copy values from parent.
+      // Loop through all the fields.
+      foreach ($itemFields as $key => $field) {
+        if (strpos($key, 'attr_') !== 0) {
+          continue;
+        }
+
+        foreach ($sku->get($key)->getValue() as $value) {
+          $item->getField($key)->setValues(array_column($value, 'value'));
+        }
+      }
+    }
+
     // Set gathered data into parent.
     foreach ($data as $key => $values) {
       $field_key = 'attr_' . $key;
