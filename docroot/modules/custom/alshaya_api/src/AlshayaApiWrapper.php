@@ -470,17 +470,17 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to get all the enabled SKUs from the API.
+   * Function to get enabled SKUs from the API.
    *
-   * @param array|string $types
+   * @param array $types
    *   The SKUs type to get from Magento (simple, configurable).
+   * @param array $skus
+   *   The SKUs to get from Magento.
    *
    * @return array
    *   An array of SKUs indexed by type.
-   *
-   * @TODO: Create appropriate endpoint on conductor and move this to commerce.
    */
-  public function getSkusFromApi($types = ['simple', 'configurable']) {
+  public function getSkusFromApi(array $types = ['simple', 'configurable'], array $skus = []) {
     $endpoint = 'products?';
 
     // Query parameters to get all enabled SKUs. We only want the SKUs.
@@ -519,6 +519,14 @@ class AlshayaApiWrapper {
       ],
       'fields' => 'items[sku]',
     ];
+
+    foreach ($skus as $index => $sku) {
+      $query['searchCriteria']['filterGroups'][2]['filters'][$index] = [
+        'field' => 'sku',
+        'condition_type' => 'eq',
+        'value' => $sku,
+      ];
+    }
 
     $mskus = [];
     foreach ($types as $type) {
