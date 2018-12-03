@@ -11,3 +11,10 @@ alshaya_image_sitemap.alshaya_image_sitemap_batch_controller_generate:
     _controller: '\Drupal\alshaya_image_sitemap\Controller\AlshayaImageSitemapController::generate'
   requirements:
     _permission: 'administer alshaya image sitemap'
+
+alshaya_image_sitemap.alshaya_image_sitemap_get_url:
+  path: '/image-sitemap'
+  defaults:
+    _controller: '\Drupal\alshaya_image_sitemap\Controller\AlshayaImageSitemapController::getImageSitemapUrl'
+  requirements:
+    _permission: 'access content'

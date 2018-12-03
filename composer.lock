@@ -2884,7 +2884,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.48",
-                    "datestamp": "1526468584",
+                    "datestamp": "1539175681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2919,6 +2919,10 @@
                     "homepage": "https://www.drupal.org/user/762986"
                 },
                 {
+                    "name": "lcatlett",
+                    "homepage": "https://www.drupal.org/user/855628"
+                },
+                {
                     "name": "nagba",
                     "homepage": "https://www.drupal.org/user/21231"
                 },
@@ -2951,7 +2955,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.48",
-                    "datestamp": "1526468584",
+                    "datestamp": "1539175681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2978,6 +2982,10 @@
                 {
                     "name": "attila.fekete",
                     "homepage": "https://www.drupal.org/user/762986"
+                },
+                {
+                    "name": "lcatlett",
+                    "homepage": "https://www.drupal.org/user/855628"
                 },
                 {
                     "name": "nagba",
@@ -3013,7 +3021,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.48",
-                    "datestamp": "1526468584",
+                    "datestamp": "1539175681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3040,6 +3048,10 @@
                 {
                     "name": "attila.fekete",
                     "homepage": "https://www.drupal.org/user/762986"
+                },
+                {
+                    "name": "lcatlett",
+                    "homepage": "https://www.drupal.org/user/855628"
                 },
                 {
                     "name": "nagba",
@@ -3074,7 +3086,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.48",
-                    "datestamp": "1526468584",
+                    "datestamp": "1539175681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3101,6 +3113,10 @@
                 {
                     "name": "attila.fekete",
                     "homepage": "https://www.drupal.org/user/762986"
+                },
+                {
+                    "name": "lcatlett",
+                    "homepage": "https://www.drupal.org/user/855628"
                 },
                 {
                     "name": "nagba",
@@ -4938,7 +4954,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -6985,7 +7001,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.10",
-                    "datestamp": "1536261180",
+                    "datestamp": "1539818880",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7798,7 +7814,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7853,7 +7869,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha1",
-                    "datestamp": "1537264380",
+                    "datestamp": "1506671645",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -8723,7 +8739,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc1",
-                    "datestamp": "1532303881",
+                    "datestamp": "1538143680",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -11446,7 +11462,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1536408480",
+                    "datestamp": "1537557481",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11741,16 +11757,16 @@
             ],
             "authors": [
                 {
+                    "name": "Yogesh Pawar",
+                    "homepage": "https://www.drupal.org/user/2922907"
+                },
+                {
                     "name": "iamEAP",
                     "homepage": "https://www.drupal.org/user/1467594"
                 },
                 {
                     "name": "sumitmadan",
                     "homepage": "https://www.drupal.org/user/1538790"
-                },
-                {
-                    "name": "yogeshmpawar",
-                    "homepage": "https://www.drupal.org/user/2922907"
                 }
             ],
             "description": "Provides blocks for Views exposed filters on View blocks.",
@@ -11971,7 +11987,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-rc21",
-                    "datestamp": "1536405484",
+                    "datestamp": "1538482685",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
