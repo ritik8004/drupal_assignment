@@ -1286,7 +1286,7 @@ class SkuManager {
    * @param bool $check_parent
    *   Flag to check for parent sku or not (for configurable products).
    *
-   * @return object
+   * @return \Drupal\node\NodeInterface|null
    *   Loaded node object.
    */
   public function getDisplayNode($sku, $check_parent = TRUE) {
@@ -2662,6 +2662,18 @@ class SkuManager {
 
     if (!($sku instanceof SKUInterface)) {
       throw new \Exception('Not able to load sku from node.');
+    }
+
+    // Set nid to original node's id.
+    $original = $this->getDisplayNode($sku);
+
+    if (!($original instanceof NodeInterface)) {
+      throw new \Exception('Unable to load original node.');
+    }
+
+    $nid_field = $item->getField('original_nid');
+    if ($nid_field) {
+      $nid_field->setValues([$original->id()]);
     }
 
     $product_color = $node->get('field_product_color')->getString();

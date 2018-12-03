@@ -55,6 +55,11 @@ function alshaya_acm_product_update_8034() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+
+  // Update alshaya product index to reflect created field.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+
+  _alshaya_search_resave_indexes(['product']);
 }
 
 /**
