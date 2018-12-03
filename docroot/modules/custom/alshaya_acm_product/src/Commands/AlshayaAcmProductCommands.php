@@ -61,14 +61,14 @@ class AlshayaAcmProductCommands extends DrushCommands {
       $this->logger->info($message);
       $this->yell($message);
 
-      $ask = 'Are you sure you want to redo node deletion? Type "all" if you are sure.';
+      $ask = 'Are you sure you want to redo node deletion? Type "ok" if you are sure.';
     }
     else {
       $ask = 'Are you sure you want to switch to one product per configurable in listing pages? Type "all" if you are sure.';
     }
 
     $confirmation = $this->ask($ask);
-    if ($confirmation !== 'all') {
+    if ($confirmation !== 'ok') {
       return;
     }
 
@@ -114,14 +114,14 @@ class AlshayaAcmProductCommands extends DrushCommands {
       $this->logger->info($message);
       $this->yell($message);
 
-      $ask = 'Are you sure you want to redo node creation? Type "group_by_color" if you are sure.';
+      $ask = 'Are you sure you want to redo node creation? Type "ok" if you are sure.';
     }
     else {
-      $ask = 'Are you sure you want to switch to one product per color in listing pages? Type "group_by_color" if you are sure.';
+      $ask = 'Are you sure you want to switch to one product per color in listing pages? Type "ok" if you are sure.';
     }
 
     $confirmation = $this->ask($ask);
-    if ($confirmation !== 'group_by_color') {
+    if ($confirmation !== 'ok') {
       return;
     }
 
