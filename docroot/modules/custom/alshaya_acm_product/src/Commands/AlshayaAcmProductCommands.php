@@ -75,8 +75,8 @@ class AlshayaAcmProductCommands extends DrushCommands {
     // Update mode.
     $this->updateListingMode('all');
 
-    // Reset index.
-    drush_invoke_process('@self', 'sapi-r');
+    // Clear all indexed data.
+    drush_invoke_process('@self', 'sapi-c');
 
     // Delete color nodes.
     $batch = [
@@ -128,8 +128,8 @@ class AlshayaAcmProductCommands extends DrushCommands {
     // Update mode.
     $this->updateListingMode('group_by_color');
 
-    // Reset index.
-    drush_invoke_process('@self', 'sapi-r');
+    // Clear all indexed data.
+    drush_invoke_process('@self', 'sapi-c');
 
     // Create color nodes.
     $batch = [
