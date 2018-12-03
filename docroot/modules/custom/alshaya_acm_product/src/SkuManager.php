@@ -2502,7 +2502,7 @@ class SkuManager {
    */
   public function processColorNode(NodeInterface $original, SKU $sku, $color): ?NodeInterface {
     $data = [
-      'field_parent_sku' => $sku->getSku(),
+      'field_skus' => $sku->getSku(),
       'field_product_color' => $color,
     ];
 
@@ -2578,26 +2578,21 @@ class SkuManager {
    *
    * @param \Drupal\node\NodeInterface $node
    *   Product Node.
-   * @param bool $main_field_only
-   *   Check only the main field - field_skus.
+   * @param bool $no_color_node
+   *   Flag to specify we do not want to get sku for color nodes.
    *
    * @return string
    *   SKU string if found.
    */
-  public function getSkuForNode(NodeInterface $node, $main_field_only = FALSE) {
+  public function getSkuForNode(NodeInterface $node, $no_color_node = FALSE) {
     $sku_string = $node->get('field_skus')->getString();
-    $parent_sku = $node->get('field_parent_sku')->getString();
     $product_color = $node->get('field_product_color')->getString();
 
-    if ($sku_string) {
-      return $sku_string;
+    if ($no_color_node && $product_color) {
+      return '';
     }
 
-    if (!($main_field_only) && $product_color) {
-      return $parent_sku;
-    }
-
-    return '';
+    return $sku_string;
   }
 
   /**
@@ -2628,20 +2623,49 @@ class SkuManager {
       return;
     }
 
+    // Get existing color nodes.
+    // We will delete ones which are no longer available.
+    $nids = array_flip($this->getColorNodeIds($sku->getSku()));
+
     $colors = [];
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
       $child_color = $this->getPdpSwatchValue($child);
 
       if (!empty($child_color) && !isset($colors[$child_color])) {
-        $colors[$child_color] = 1;
         // Create the node if not available.
-        $this->processColorNode(
+        $node = $this->processColorNode(
           $node,
           $sku,
           $child_color
         );
+
+        $colors[$child_color] = $node->id();
+        unset($nids[$node->id()]);
       }
     }
+
+    // Delete all the nodes for which color nodes were not updated now.
+    if ($nids) {
+      $nodes = $this->nodeStorage->loadMultiple($nids);
+      $this->nodeStorage->delete($nodes);
+    }
+  }
+
+  /**
+   * Get nids for all color nodes of particular sku.
+   *
+   * @param string $sku
+   *   SKU as string.
+   *
+   * @return array
+   *   Array of nids.
+   */
+  public function getColorNodeIds(string $sku) {
+    $query = $this->nodeStorage->getQuery();
+    $query->condition('type', 'acq_product');
+    $query->condition('field_skus', $sku);
+    $query->exists('field_product_color');
+    return $query->execute();
   }
 
   /**
@@ -2805,23 +2829,8 @@ class SkuManager {
 
     // Do not index main parent if product is in stock and has color data.
     if ($mode === 'group_by_color' && $is_product_in_stock && empty($product_color) && $has_color_data) {
-      throw new \Exception('Product has color, we do not index main node when doing group by color');
-    }
-
-    if ($mode === 'group_by_color' && $product_color) {
-      $item->getField('sku')->setValues([$sku->getSku()]);
-
-      // Copy values from parent.
-      // Loop through all the fields.
-      foreach ($itemFields as $key => $field) {
-        if (strpos($key, 'attr_') !== 0) {
-          continue;
-        }
-
-        foreach ($sku->get($key)->getValue() as $value) {
-          $item->getField($key)->setValues(array_column($value, 'value'));
-        }
-      }
+      // We use the code 200 as it is normal with the configuration.
+      throw new \Exception('Product has color, we do not index main node when doing group by color', 200);
     }
 
     // Set gathered data into parent.

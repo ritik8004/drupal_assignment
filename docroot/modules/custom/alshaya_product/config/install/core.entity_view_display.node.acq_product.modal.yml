@@ -33,5 +33,4 @@ hidden:
   field_meta_tags: true
   langcode: true
   links: true
-  field_parent_sku: true
   field_product_color: true

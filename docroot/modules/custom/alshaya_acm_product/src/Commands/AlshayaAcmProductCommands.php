@@ -64,7 +64,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       $ask = 'Are you sure you want to redo node deletion? Type "ok" if you are sure.';
     }
     else {
-      $ask = 'Are you sure you want to switch to one product per configurable in listing pages? Type "all" if you are sure.';
+      $ask = 'Are you sure you want to switch to one product per configurable in listing pages? Type "ok" if you are sure.';
     }
 
     $confirmation = $this->ask($ask);
@@ -185,6 +185,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
       $query = $storage->getQuery();
       $query->condition('type', 'acq_product');
       $query->exists('field_skus');
+      $query->notExists('field_product_color');
       $context['sandbox']['result'] = array_chunk($query->execute(), 100);
       $context['sandbox']['max'] = count($context['sandbox']['result']);
       $context['sandbox']['current'] = 0;
