@@ -117,11 +117,6 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
         return;
       }
       $fields['acq_customer_id'] = $customer['customer_id'];
-
-      if (!isset($fields['mail'])) {
-        $fields['mail'] = $fb_profile->getField('email');
-      }
-
       $event->setUserFields($fields);
     }
   }
