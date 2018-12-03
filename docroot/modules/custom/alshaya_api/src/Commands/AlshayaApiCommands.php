@@ -162,6 +162,9 @@ class AlshayaApiCommands extends DrushCommands {
     $page_size = $options['page_size'];
     $use_delete = $options['use_delete'];
 
+    // We want to be sure the live_check is used only for report.
+    $live_check = $msource == 'report' ? $options['live_check'] : FALSE;
+
     $languages = $this->languageManager->getLanguages();
 
     // Retrieve all enabled SKUs from Magento indexed by type.
@@ -227,11 +230,29 @@ class AlshayaApiCommands extends DrushCommands {
       foreach ($languages as $language) {
         // The ones which are missing in Drupal.
         $missing[$type][$language->getId()] = array_diff(array_keys($mskus[$type]), array_keys($dskus[$type][$language->getId()]));
+
+        // If live-check is enabled, we confirm the missing SKUs are enabled
+        // in MDC.
+        if ($live_check && !empty($missing[$type][$language->getId()])) {
+          $mskus2 = $this->alshayaApiWrapper->getSkusFromApi([$type], $missing[$type][$language->getId()]);
+          $missing[$type][$language->getId()] = array_diff(array_keys($mskus2[$type]), array_keys($dskus[$type][$language->getId()]));
+        }
         $mall = array_merge($missing[$type]['all'], $missing[$type][$language->getId()]);
         $missing[$type]['all'] = $mall;
 
         // The ones which are only in Drupal and should be removed.
         $to_be_deleted[$type][$language->getId()] = array_diff(array_keys($dskus[$type][$language->getId()]), array_keys($mskus[$type]));
+
+        // If live-check is enabled, we confirm none of the identified SKUs to
+        // be deleted are actually enabled in MDC. If any, we remove these from
+        // the list of SKUs to be deleted from Drupal.
+        if ($live_check && !empty($to_be_deleted[$type][$language->getId()])) {
+          $enabled = $this->alshayaApiWrapper->getSkusFromApi([$type], $to_be_deleted[$type][$language->getId()]);
+
+          if (!empty($enabled[$type])) {
+            $to_be_deleted[$type][$language->getId()] = array_diff($to_be_deleted[$type][$language->getId()], array_keys($enabled[$type]));
+          }
+        }
         $tall = array_merge($to_be_deleted[$type]['all'], $to_be_deleted[$type][$language->getId()]);
         $to_be_deleted[$type]['all'] = $tall;
 
