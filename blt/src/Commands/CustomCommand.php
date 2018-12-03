@@ -369,4 +369,37 @@ class CustomCommand extends BltTasks {
     return $result;
   }
 
+  /**
+   * Executes YAML validator against paragraph files.
+   *
+   * Paragraph field config yml files should have 'translatable=false' and
+   * 'skip_translation_check=true'. If these values not exist in yml, then
+   * invalidate/inform user/developer to add them.
+   *
+   * @param string $file_list
+   *   A list of files to scan, separated by \n.
+   *
+   * @command tests:yaml:lint:files:paragraph
+   * @aliases tylfp
+   */
+  public function lintFileList($file_list) {
+    $this->say("Linting Paragraph Field YAML files...");
+    $files = explode("\n", $file_list);
+    $paragraph_ymls = array_filter($files, function ($paragraph_yml) {
+      // Only fot the field config ymls.
+      if (strpos($paragraph_yml, 'field.field.')) {
+        $yaml_parsed = Yaml::parse(file_get_contents($paragraph_yml));
+        return ($yaml_parsed['field_type'] == 'entity_reference_revisions'
+        && (empty($yaml_parsed['skip_translation_check']) || !empty($yaml_parsed['translatable'])));
+      }
+    });
+
+    // If there are any field config ymls not have proper translation config.
+    if (!empty($paragraph_ymls)) {
+      $this->say('Paragraph field yml file ' . $paragraph_ymls[0] . ' should have translatable=false and skip_translation_check=true');
+      // Exit with a status of 1.
+      return 1;
+    }
+  }
+
 }

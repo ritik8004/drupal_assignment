@@ -6,3 +6,5 @@ services:
     arguments:
       - '@plugin.network.manager'
       - '@social_auth_facebook.manager'
+      - '@alshaya_acm_customer.helper'
+      - '@logger.factory'
