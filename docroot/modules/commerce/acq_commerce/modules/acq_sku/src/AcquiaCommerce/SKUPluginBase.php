@@ -206,6 +206,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $query = \Drupal::entityQuery('node');
     $query->condition('type', 'acq_product');
     $query->condition('field_skus', $sku->getSku());
+    $query->addTag('get_display_node_for_sku');
 
     $query->range(0, 1);
 

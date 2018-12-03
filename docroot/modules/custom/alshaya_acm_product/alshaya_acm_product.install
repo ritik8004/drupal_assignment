@@ -20,9 +20,7 @@ function alshaya_acm_product_update_8034() {
 
   $manager->updateConfigs(
     [
-      'field.storage.node.field_parent_sku',
       'field.storage.node.field_product_color',
-      'field.field.node.acq_product.field_parent_sku',
       'field.field.node.acq_product.field_product_color',
     ],
     'alshaya_acm_product'
