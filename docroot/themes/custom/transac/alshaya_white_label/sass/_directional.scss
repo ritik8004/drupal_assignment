@@ -25,7 +25,14 @@ $dir: ltr !default;
 $left: if-ltr(left, right);
 $right: if-ltr(right, left);
 
+$top: if-ltr(top, bottom);
 $bottom: if-ltr(bottom, top);
+
+$next: if-ltr(next, prev);
+$prev: if-ltr(prev, next);
+
+$first-child: if-ltr(":first-child", ":last-child");
+$last-child: if-ltr(":last-child", ":first-child");
 
 @function side-values($values) {
   @if $dir == rtl and length($values) >= 4 {
@@ -91,4 +98,6 @@ $alshaya-bold: if-ltr($alshaya-bold, $alshaya-arabic-bold);
 $alshaya-arabic-bold: if-ltr($alshaya-arabic-bold, $alshaya-bold);
 $alshaya-thin: if-ltr($alshaya-thin, $alshaya-arabic-thin);
 $alshaya-arabic-thin: if-ltr($alshaya-arabic-thin, $alshaya-thin);
+$after: if-ltr("after", "before");
+$before: if-ltr("before", "after");
 $campaign-plp-style-1-font: if-ltr($campaign-plp-style-1-font, $campaign-plp-style-1-arabic-font);
