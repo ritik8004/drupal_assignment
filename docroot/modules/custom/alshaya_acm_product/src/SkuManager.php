@@ -2809,7 +2809,7 @@ class SkuManager {
     }
 
     if ($mode === 'group_by_color' && $product_color) {
-      $item->getField('field_skus')->setValues([$sku->getSku()]);
+      $item->getField('sku')->setValues([$sku->getSku()]);
 
       // Copy values from parent.
       // Loop through all the fields.
