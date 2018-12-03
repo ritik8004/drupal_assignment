@@ -59,7 +59,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     if ($mode === 'all') {
       $message = 'Current mode is already set to display one product per configurable in listing pages.';
       $this->logger->info($message);
-      $this->yell($message);
+      $this->yell($message, 40, 'red');
 
       $ask = 'Are you sure you want to redo node deletion? Type "ok" if you are sure.';
     }
@@ -112,7 +112,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     if ($mode === 'group_by_color') {
       $message = 'Current mode is already set to display one product per color in listing pages.';
       $this->logger->info($message);
-      $this->yell($message);
+      $this->yell($message, 40, 'red');
 
       $ask = 'Are you sure you want to redo node creation? Type "ok" if you are sure.';
     }
