@@ -25,7 +25,6 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\user\UserInterface;
 
 /**
  * Utilty Class.
@@ -838,44 +837,37 @@ class MobileAppUtility {
   }
 
   /**
-   * Load user from drupal by email, If not get it from mdc and create it.
+   * Get use info from mdc and create it.
    *
    * @param string $email
    *   The user mail string.
-   * @param bool $create
-   *   (Optional) True to create user from mdc, otherwise false.
    * @param bool $block
    *   (Optional) True to block user after created, otherwise false.
    *
    * @return \Drupal\user\Entity\User|false
    *   Return user object or false.
    */
-  public function fetchUserByMail(string $email, $create = TRUE, $block = TRUE) {
-    /* @var \Drupal\user\Entity\User $user */
-    $user = user_load_by_mail($email);
-    // Try to get user from mdc and create new user account, when user does not
-    // exists in drupal.
-    if (!$user instanceof UserInterface && $create) {
-      try {
-        /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-        $customer = $this->apiWrapper->getCustomer($email);
+  public function createUserFromCommerce(string $email, $block = TRUE) {
+    // Try to get user from mdc and create new user account.
+    try {
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $customer = $this->apiWrapper->getCustomer($email);
 
-        if (!empty($customer)) {
-          $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
-          /** @var \Drupal\user\Entity\User $user */
-          $user = alshaya_acm_customer_create_drupal_user($customer);
-          if ($block) {
-            $user->block();
-            $user->save();
-          }
+      if (!empty($customer)) {
+        $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+        /** @var \Drupal\user\Entity\User $user */
+        $user = alshaya_acm_customer_create_drupal_user($customer);
+        if ($block) {
+          $user->block();
+          $user->save();
         }
       }
-      catch (\Exception $e) {
-        // Do nothing except for downtime exception, let default validation
-        // handle the error messages.
-        if (acq_commerce_is_exception_api_down_exception($e)) {
-          $this->logger->error($e->getMessage());
-        }
+    }
+    catch (\Exception $e) {
+      // Do nothing except for downtime exception, let default validation
+      // handle the error messages.
+      if (acq_commerce_is_exception_api_down_exception($e)) {
+        $this->logger->error($e->getMessage());
       }
     }
 
