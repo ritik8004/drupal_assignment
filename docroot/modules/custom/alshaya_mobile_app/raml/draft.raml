@@ -646,6 +646,38 @@ schemas:
           }
         }
       }
+  - GetProductMedia: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "images": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The LiquidPixel url to the image."
+                  },
+                  "image_type": {
+                    "type": "string",
+                    "description": "The image type to determine model vs product.",
+                    "enum": [ "image", "Lookbook", "Environmental", "CreativeDetail", "DescriptiveStillLife", "Pictogram", "DescriptiveDetail", "MODEL_IMAGE", "STILL_LIFE_FRONT_URL", "DETAIL_IMAGE" ]
+                  }
+                }
+              }
+            ]
+          },
+          "videos": {
+            "type": "array",
+            "items": {
+              "description": "Structure TBD, not in use on H&M."
+            }
+          }
+        }
+      }
   - GetProduct: |
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
@@ -700,40 +732,7 @@ schemas:
             "description": "Images and videos for galleries.",
             "items": [
               {
-                "type": "object",
-                "properties": {
-                  "context": {
-                    "type": "string",
-                    "enum": [
-                      "detail",
-                      "listing",
-                      "teaser"
-                    ]
-                  },
-                  "media": {
-                    "type": "object",
-                    "properties": {
-                      "images": {
-                        "type": "array",
-                        "items": [
-                          {
-                            "type": "string",
-                            "description": "The path to the image."
-                          }
-                        ]
-                      },
-                      "videos": {
-                        "type": "array",
-                        "items": [
-                          {
-                            "type": "string",
-                            "description": "Video urls."
-                          }
-                        ]
-                      }
-                    }
-                  }
-                }
+                "schema": "GetProductMedia"
               }
             ]
           },
@@ -856,7 +855,7 @@ schemas:
                                 "type": "string"
                               },
                               "value": {
-                                "type": "string"
+                                "type": "integer"
                               }
                             }
                           }
@@ -957,40 +956,7 @@ schemas:
                     "description": "Images and videos for galleries.",
                     "items": [
                       {
-                        "type": "object",
-                        "properties": {
-                          "context": {
-                            "type": "string",
-                            "enum": [
-                              "detail",
-                              "listing",
-                              "teaser"
-                            ]
-                          },
-                          "media": {
-                            "type": "object",
-                            "properties": {
-                              "images": {
-                                "type": "array",
-                                "items": [
-                                  {
-                                    "type": "string",
-                                    "description": "The path to the image."
-                                  }
-                                ]
-                              },
-                              "videos": {
-                                "type": "array",
-                                "items": [
-                                  {
-                                    "type": "string",
-                                    "description": "Video urls."
-                                  }
-                                ]
-                              }
-                            }
-                          }
-                        }
+                        "schema": "GetProductMedia"
                       }
                     ]
                   },
