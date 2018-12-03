@@ -300,6 +300,27 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_acm_product_node_delete(NodeInterface $node) {
+  $sku = $node->get('field_skus')->getString();
+
+  // Delete the color nodes available in system for this particular product.
+  if ($sku) {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $query = $storage->getQuery();
+    $query->condition('type', 'acq_product');
+    $query->condition('field_parent_sku', $sku);
+    $nids = $query->execute();
+
+    if ($nids) {
+      $nodes = $storage->loadMultiple($nids);
+      $storage->delete($nodes);
+    }
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_view().
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
