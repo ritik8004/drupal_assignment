@@ -127,12 +127,22 @@ class AlshayaApiCommands extends DrushCommands {
    *
    * @command alshaya_api:santity-check-sku-diff
    *
-   * @option types The comma-separated list of SKUs types to check (simple, configurable).
-   * @option magento_source The source to get the SKUs (api, report). Default is merchandising report.
-   * @option page_size ACM page size.
-   * @option use_delete Hidden deletion option.
+   * @option types
+   *   The comma-separated list of SKUs types to check (simple, configurable).
+   * @option magento_source
+   *   The source to get the SKUs (api, report). Default is merchandising
+   *   report.
+   * @option page_size
+   *   ACM page size.
+   * @option use_delete
+   *   Hidden deletion option.
+   * @option live_check
+   *   In context of merchandising report as magento source, confirm the diff
+   *   via api to avoid mismatch due to outdated report.
    *
    * @aliases aascsd,alshaya-api-sanity-check-sku-diff
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function sanityCheckSkuDiff(
     array $options = [
@@ -140,23 +150,25 @@ class AlshayaApiCommands extends DrushCommands {
       'magento_source' => 'report',
       'page_size' => 10,
       'use_delete' => FALSE,
+      'live_check' => FALSE,
     ]
   ) {
+    $debug = $options['debug'];
+    $verbose = $options['verbose'];
+
     $types = array_map('trim', explode(',', $options['types']));
 
     $msource = $options['magento_source'];
-    $debug = $options['debug'];
-    $verbose = $options['verbose'];
-    $languages = $this->languageManager->getLanguages();
-
     $page_size = $options['page_size'];
     $use_delete = $options['use_delete'];
 
+    $languages = $this->languageManager->getLanguages();
+
+    // Retrieve all enabled SKUs from Magento indexed by type.
     $this->output->writeln(dt('Getting @types SKUs from Magento, please wait...', [
       '@types' => implode(dt(' and '), $types),
     ]));
 
-    // Retrieve all enabled SKUs from Magento indexed by type.
     if ($msource == 'report') {
       $mskus = $this->alshayaApiWrapper->getEnabledSkusFromMerchandisingReport($types);
     }
@@ -175,15 +187,15 @@ class AlshayaApiCommands extends DrushCommands {
 
       // Notify in debug mode.
       if ($msource == 'api') {
-        $this->logger->notice(dt('With source=api, stock and price will not be validated for skus.'));
+        $this->logger->notice(dt('With source=api, stock and price will not be validated.'));
       }
     }
 
+    // Retrieve all enabled SKUs from Drupal indexed by type and langcode.
     $this->output->writeln(dt("\nGetting @types SKUs from Drupal, please wait...", [
       '@types' => implode(dt(' and '), $types),
     ]));
 
-    // Get all SKUs from Drupal indexed by type and langcode.
     foreach ($types as $type) {
       foreach ($languages as $language) {
         $dskus[$type][$language->getId()] = $this->skuManager->getSkus($language->getId(), $type);
@@ -266,11 +278,11 @@ class AlshayaApiCommands extends DrushCommands {
 
           // Output the details of stock mismatch.
           if (!empty($stock_mismatch[$type][$language->getId()])) {
-            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different stock than magento:\n!output", [
+            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different stock than magento!output", [
               '@count' => count($stock_mismatch[$type][$language->getId()]),
               '@language' => $language->getName(),
               '@type' => $type,
-              '!output' => $verbose ? implode("\n", $stock_mismatch[$type][$language->getId()]) : '',
+              '!output' => $verbose ? ":\n" . implode("\n", $stock_mismatch[$type][$language->getId()]) : '.',
             ]));
           }
           else {
@@ -282,11 +294,11 @@ class AlshayaApiCommands extends DrushCommands {
 
           // Output the details of price mismatch.
           if (!empty($price_mismatch[$type][$language->getId()])) {
-            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different price than magento:\n!output", [
+            $this->output->writeln(dt("\n@count @language @type's SKUs in drupal have different price than magento!output", [
               '@count' => count($price_mismatch[$type][$language->getId()]),
               '@language' => $language->getName(),
               '@type' => $type,
-              '!output' => $verbose ? implode("\n", $price_mismatch[$type][$language->getId()]) : '',
+              '!output' => $verbose ? ":\n" . implode("\n", $price_mismatch[$type][$language->getId()]) : '.',
             ]));
           }
           else {
@@ -298,11 +310,11 @@ class AlshayaApiCommands extends DrushCommands {
         }
 
         if (!empty($missing[$type][$language->getId()])) {
-          $this->output->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced:\n!skus", [
+          $this->output->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced!skus", [
             '@count' => count($missing[$type][$language->getId()]),
             '@language' => $language->getName(),
             '@type' => $type,
-            '!skus' => $verbose ? "'" . implode("','", $missing[$type][$language->getId()]) . "'" : '',
+            '!skus' => $verbose ? ":\n'" . implode("','", $missing[$type][$language->getId()]) . "'" : '.',
           ]));
         }
         else {
@@ -313,11 +325,11 @@ class AlshayaApiCommands extends DrushCommands {
         }
 
         if (!empty($to_be_deleted[$type][$language->getId()])) {
-          $this->output->writeln(dt("\n@count @language @type's SKUs are only in Drupal and must be removed:\n!skus", [
+          $this->output->writeln(dt("\n@count @language @type's SKUs are only in Drupal and must be removed!skus", [
             '@count' => count($to_be_deleted[$type][$language->getId()]),
             '@language' => $language->getName(),
             '@type' => $type,
-            '!skus' => $verbose ? "'" . implode("','", $to_be_deleted[$type][$language->getId()]) . "'" : '',
+            '!skus' => $verbose ? ":\n'" . implode("','", $to_be_deleted[$type][$language->getId()]) . "'" : '.',
           ]));
         }
         else {
