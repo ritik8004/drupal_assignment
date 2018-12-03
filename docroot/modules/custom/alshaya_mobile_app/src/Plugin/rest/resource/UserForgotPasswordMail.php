@@ -91,9 +91,12 @@ class UserForgotPasswordMail extends ResourceBase {
       return $this->mobileAppUtility->sendStatusResponse($this->t('Invalid data to send an email to user.'));
     }
 
-    // Try to get user from mdc and create new user account, when user does not
+    $user = user_load_by_mail($email);
+    // Get user from mdc and create new user account, when user does not
     // exists in drupal.
-    $user = $this->mobileAppUtility->fetchUserByMail($email, TRUE, FALSE);
+    if (!$user instanceof UserInterface) {
+      $user = $this->mobileAppUtility->createUserFromCommerce($email, FALSE);
+    }
 
     if (!$user instanceof UserInterface) {
       $this->logger->error('User with email @email does not exist.', ['@email' => $email]);
