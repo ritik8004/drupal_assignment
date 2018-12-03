@@ -188,5 +188,5 @@ tracker_settings:
     indexing_order: fifo
 options:
   index_directly: false
-  cron_limit: 1000
+  cron_limit: 0
 server: acquia_search_server
