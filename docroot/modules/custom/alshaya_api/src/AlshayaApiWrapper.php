@@ -141,6 +141,8 @@ class AlshayaApiWrapper {
    *
    * @return string
    *   Token as string.
+   *
+   * @throws \Exception
    */
   private function getToken() {
     if ($this->token) {
@@ -174,7 +176,6 @@ class AlshayaApiWrapper {
       // Calculate the timestamp when we want the cache to expire.
       $expire = $this->dateTime->getRequestTime() + $this->config->get('token_cache_time');
 
-      // Set the stock in cache.
       $this->cache->set($cid, $this->token, $expire);
     }
 
@@ -765,6 +766,27 @@ class AlshayaApiWrapper {
 
     $response = json_decode($response, TRUE);
     return $response['method'] ?? '';
+  }
+
+  /**
+   * Get the stock for a sku.
+   *
+   * @param string $sku
+   *   The sku to fetch the stock for.
+   *
+   * @return int
+   *   The returned stock for the sku.
+   */
+  public function getStock(string $sku) : int {
+    $endpoint = 'stockItems/' . $sku;
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return 0;
+    }
+
+    $response = json_decode($response, TRUE);
+    return $response['qty'] ?? 0;
   }
 
 }
