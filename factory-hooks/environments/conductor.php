@@ -358,7 +358,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // FootLocker KW.
-  'flkw_test' => [
+  'flkw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
@@ -371,7 +371,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // FootLocker SA.
-  'flsa_test' => [
+  'flsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '31a27139b98448379c08c90bee5e866e',
     'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',
