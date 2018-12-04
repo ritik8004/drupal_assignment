@@ -837,7 +837,7 @@ class MobileAppUtility {
   }
 
   /**
-   * Get use info from mdc and create it.
+   * Get user info from mdc and create it.
    *
    * @param string $email
    *   The user mail string.
