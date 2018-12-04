@@ -176,7 +176,7 @@ class AlshayaApiCommands extends DrushCommands {
       $mskus = $this->alshayaApiWrapper->getEnabledSkusFromMerchandisingReport($types);
     }
     else {
-      $mskus = $this->alshayaApiWrapper->getSkusFromApi($types);
+      $mskus = $this->alshayaApiWrapper->getSkus($types);
     }
 
     if ($debug) {
@@ -234,7 +234,7 @@ class AlshayaApiCommands extends DrushCommands {
         // If live-check is enabled, we confirm the missing SKUs are enabled
         // in MDC.
         if ($live_check && !empty($missing[$type][$language->getId()])) {
-          $mskus2 = $this->alshayaApiWrapper->getSkusFromApi([$type], $missing[$type][$language->getId()]);
+          $mskus2 = $this->alshayaApiWrapper->getSkus([$type], $missing[$type][$language->getId()]);
           $missing[$type][$language->getId()] = array_diff(array_keys($mskus2[$type]), array_keys($dskus[$type][$language->getId()]));
         }
         $mall = array_merge($missing[$type]['all'], $missing[$type][$language->getId()]);
@@ -247,7 +247,7 @@ class AlshayaApiCommands extends DrushCommands {
         // be deleted are actually enabled in MDC. If any, we remove these from
         // the list of SKUs to be deleted from Drupal.
         if ($live_check && !empty($to_be_deleted[$type][$language->getId()])) {
-          $enabled = $this->alshayaApiWrapper->getSkusFromApi([$type], $to_be_deleted[$type][$language->getId()]);
+          $enabled = $this->alshayaApiWrapper->getSkus([$type], $to_be_deleted[$type][$language->getId()]);
 
           if (!empty($enabled[$type])) {
             $to_be_deleted[$type][$language->getId()] = array_diff($to_be_deleted[$type][$language->getId()], array_keys($enabled[$type]));

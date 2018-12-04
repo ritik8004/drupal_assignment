@@ -480,7 +480,7 @@ class AlshayaApiWrapper {
    * @return array
    *   An array of SKUs indexed by type.
    */
-  public function getSkusFromApi(array $types = ['simple', 'configurable'], array $skus = []) {
+  public function getSkus(array $types = ['simple', 'configurable'], array $skus = []) {
     $endpoint = 'products?';
 
     // Query parameters to get all enabled SKUs. We only want the SKUs.
