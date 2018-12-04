@@ -140,7 +140,6 @@ class AlshayaAcmProductCommands extends DrushCommands {
       'operations' => [
         [[__CLASS__, 'createColorNodes'], []],
       ],
-
     ];
 
     batch_set($batch);

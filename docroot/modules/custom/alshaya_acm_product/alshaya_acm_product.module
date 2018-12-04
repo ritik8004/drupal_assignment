@@ -1845,7 +1845,7 @@ function _alshaya_acm_product_clean_form_for_oos(array $form): array {
 }
 
 /**
- * Implements  hook_query_TAG_alter().
+ * Implements hook_query_TAG_alter().
  */
 function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInterface $query) {
   $query->addJoin('left', 'node__field_product_color', 'color', 'node_field_data.vid = color.revision_id');
