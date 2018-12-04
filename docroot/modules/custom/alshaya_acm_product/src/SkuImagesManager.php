@@ -362,16 +362,14 @@ class SkuImagesManager {
 
     // For simple children we need to add images from parent
     // if configured to do so.
-    if ($sku->bundle() === 'simple' && !$check_parent_child) {
-      if ($this->productDisplaySettings->get('show_parent_images_in_child')) {
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku->getPluginInstance();
-        $parent = $plugin->getParentSku($sku);
+    if ($sku->bundle() === 'simple' && !$check_parent_child && $this->addParentImagesInChild()) {
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+      $plugin = $sku->getPluginInstance();
+      $parent = $plugin->getParentSku($sku);
 
-        if ($parent instanceof SKUInterface) {
-          $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
-          $return = array_merge_recursive($return, $parent_media);
-        }
+      if ($parent instanceof SKUInterface) {
+        $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
+        $return = array_merge_recursive($return, $parent_media);
       }
     }
 
@@ -382,6 +380,22 @@ class SkuImagesManager {
     );
 
     return $return;
+  }
+
+  /**
+   * Wrapper function to get flag from config to show parent images in child.
+   *
+   * @return bool
+   *   TRUE if we need to show parent images in child.
+   */
+  public function addParentImagesInChild() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $static = (bool) $this->productDisplaySettings->get('show_parent_images_in_child');
+    }
+
+    return $static;
   }
 
   /**
@@ -491,16 +505,15 @@ class SkuImagesManager {
    *   Media item array.
    */
   public function getFirstImage(SKUInterface $sku) {
-    $check_parent_child = TRUE;
 
     try {
-      $sku = $this->getSkuForGallery($sku, $check_parent_child);
+      $sku = $this->getSkuForGallery($sku);
     }
     catch (\Exception $e) {
       return [];
     }
 
-    $media = $this->getAllMedia($sku, $check_parent_child);
+    $media = $this->getAllMedia($sku);
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {
@@ -541,16 +554,18 @@ class SkuImagesManager {
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU entity.
    * @param bool $check_parent_child
-   *   Flag (by reference) to mention if parent/child should be checked later.
+   *   Flag to mention if parent/child should be checked later.
    * @param string $case
    *   Case to override config.
+   * @param \Drupal\acq_commerce\SKUInterface $preferred
+   *   Preferred child.
    *
    * @return \Drupal\acq_commerce\SKUInterface
    *   SKU to be used for gallery.
    *
    * @throws \Exception
    */
-  public function getSkuForGallery(SKUInterface $sku, &$check_parent_child, string $case = '') {
+  public function getSkuForGallery(SKUInterface $sku, $check_parent_child = TRUE, string $case = '', SKUInterface $preferred = NULL) {
     $configurable_use_parent_images = $this->productDisplaySettings->get('configurable_use_parent_images');
     $is_configurable = $sku->bundle() == 'configurable';
 
@@ -569,7 +584,6 @@ class SkuImagesManager {
     if (is_array($cache)) {
       $child = SKU::loadFromSku($cache['sku']);
       if ($child instanceof SKUInterface) {
-        $check_parent_child = $cache['check_parent_child'];
         return $child;
       }
     }
@@ -578,12 +592,15 @@ class SkuImagesManager {
 
     switch ($configurable_use_parent_images) {
       case 'never':
-        // Case were we will show default/empty gallery but never use
-        // from parent.
-        $check_parent_child = FALSE;
-
         if ($is_configurable) {
-          $child = $this->getFirstChildWithMedia($sku);
+          if ($preferred instanceof SKUInterface
+            && $preferred->bundle() === 'simple'
+            && $this->hasMedia($preferred)) {
+            $child = $preferred;
+          }
+          else {
+            $child = $this->getFirstChildWithMedia($sku);
+          }
 
           // Try to get first valid in stock child.
           if ($child instanceof SKU) {
@@ -606,14 +623,20 @@ class SkuImagesManager {
         // Here we first check if images are there in child.
         // If not only then we use image from parent.
         if ($is_configurable) {
-          $check_parent_child = FALSE;
-          $child = $this->getFirstChildWithMedia($sku);
+          if ($preferred instanceof SKUInterface
+            && $preferred->bundle() === 'simple'
+            && $this->hasMedia($preferred)) {
+            $child = $preferred;
+          }
+          else {
+            $child = $this->getFirstChildWithMedia($sku);
+          }
+
           if ($child instanceof SKU) {
             $skuForGallery = $child;
           }
-
           // Check if parent has image before fallbacking to OOS children.
-          if (!$this->hasMedia($sku)) {
+          elseif (!$this->hasMedia($sku)) {
             // Try to get first available child for OOS.
             $child = $this->skuManager->getFirstAvailableConfigurableChild($sku);
             if ($child instanceof SKU) {
@@ -627,23 +650,30 @@ class SkuImagesManager {
       default:
         // Case were we will show image from parent first, if not available
         // image from child, if still not - empty/default image.
-        if ($this->hasMedia($sku)) {
-          // Do nothing.
-        }
-        elseif ($is_configurable) {
-          $check_parent_child = FALSE;
-          $child = $this->getFirstChildWithMedia($sku);
-          if ($child instanceof SKU) {
-            $skuForGallery = $child;
+        if ($check_parent_child) {
+          if ($is_configurable) {
+            if (!$this->hasMedia($sku)) {
+              $child = $this->getFirstChildWithMedia($sku);
+              if ($child instanceof SKU) {
+                $skuForGallery = $child;
+              }
+            }
+          }
+          elseif ($this->hasMedia($sku) && $this->addParentImagesInChild()) {
+            $skuForGallery = $sku;
+          }
+          else {
+            // Always check parent first.
+            $parent = $this->skuManager->getParentSkuBySku($sku);
+            if ($parent instanceof SKUInterface) {
+              return $this->getSkuForGallery($parent);
+            }
           }
         }
         break;
     }
 
-    $cache = [
-      'check_parent_child' => $check_parent_child,
-      'sku' => $skuForGallery->getSku(),
-    ];
+    $cache = ['sku' => $skuForGallery->getSku()];
 
     $this->skuManager->setProductCachedData($sku, $cache_key, $cache);
 
@@ -659,27 +689,18 @@ class SkuImagesManager {
    *   Context - pdp/search/modal/teaser.
    * @param string $product_label
    *   Translated product label to use in alt/title.
-   * @param bool $check_parent_child
-   *   Flag to mention if parent/child should be checked later.
+   * @param bool $add_default_image
+   *   Flag to mention if default image needs to be added or not.
    * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
    *   Th default sku for the product.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $check_parent_child = TRUE, SKUInterface $original_sku_entity = NULL) {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE, SKUInterface $original_sku_entity = NULL) {
     $gallery = [];
 
     $display_thumbnails = $this->productDisplaySettings->get('image_thumb_gallery');
-
-    try {
-      if ($check_parent_child) {
-        $sku = $this->getSkuForGallery($sku, $check_parent_child);
-      }
-    }
-    catch (\Exception $e) {
-      return [];
-    }
 
     switch ($context) {
       case 'search':
@@ -692,7 +713,7 @@ class SkuImagesManager {
         if (empty($gallery)) {
           $search_main_image = $thumbnails = [];
 
-          $media = $this->getAllMedia($sku, $check_parent_child);
+          $media = $this->getAllMedia($sku);
 
           // Loop through all media items and prepare thumbnails array.
           foreach ($media['media_items']['images'] ?? [] as $media_item) {
@@ -719,14 +740,17 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
-        $media = $this->getAllMedia($sku, $check_parent_child);
+
+        $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
         $thumbnails = $mediaItems['thumbnails'];
         $main_image = $mediaItems['main_image'];
+
+        // Fetch settings.
         $settings = $this->getCloudZoomDefaultSettings();
 
         // If no main image and no video, use default image.
-        if (empty($main_image) && $check_parent_child && empty($media['media_items']['videos'])) {
+        if (empty($main_image) && $add_default_image && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
             $image_zoom = ImageStyle::load($settings['zoom_style'])
               ->buildUrl($default_image->getFileUri());
@@ -809,7 +833,7 @@ class SkuImagesManager {
         // Alter description Since this could be different for each brand.
         $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
 
-        $media = $this->getAllMedia($sku, $check_parent_child);
+        $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
 
