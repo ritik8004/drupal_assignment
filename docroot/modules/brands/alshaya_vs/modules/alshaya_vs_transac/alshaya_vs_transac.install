@@ -11,6 +11,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable WhatsApp and Email in Sharethis.
+ */
+function alshaya_vs_transac_update_8004() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+
+  $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest','WhatsApp:whatsapp','Email:email'");
+
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change images mode to fallback for VS.
  * Enable the module alshaya_vs_search.
  */

@@ -11,6 +11,21 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Enable WhatsApp and Email in Sharethis.
+ */
+function alshaya_bbw_transac_update_8006() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+
+  $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Pinterest:pinterest','WhatsApp:whatsapp','Email:email'");
+
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-create all facets and facet blocks.
  */
 function alshaya_bbw_transac_update_8005() {
