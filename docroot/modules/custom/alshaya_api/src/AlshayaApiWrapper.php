@@ -481,6 +481,11 @@ class AlshayaApiWrapper {
       }
 
       while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+        // We don't deal with SKUs which we don't have enough information.
+        if (!isset($data[$indexes['status']]) || !isset($data[$indexes['type']])) {
+          continue;
+        }
+
         // We don't deal with disabled SKUs.
         if (trim(strtolower($data[$indexes['status']])) !== 'enabled') {
           continue;
