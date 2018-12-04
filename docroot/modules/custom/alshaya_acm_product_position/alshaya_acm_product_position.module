@@ -23,7 +23,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     // Get the default sort which is always the first config value.
     $default_sort = current(_alshaya_acm_product_position_get_config());
     // This to check if user has selected sort from drop down or the page load.
-    $exposed_input = !empty($_POST['sort_bef_combine']) ? $_POST['sort_bef_combine'] : NULL;
+    $exposed_input = !empty($_REQUEST['sort_bef_combine']) ? $_REQUEST['sort_bef_combine'] : NULL;
 
     // Get and set sort order from the views config.
     $views_storage = Views::getView('alshaya_product_list')->storage;

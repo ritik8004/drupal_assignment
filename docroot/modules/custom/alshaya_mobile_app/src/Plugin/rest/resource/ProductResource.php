@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
-use Drupal\taxonomy\TermInterface;
 
 /**
  * Provides a resource to get product details.
@@ -392,7 +391,6 @@ class ProductResource extends ResourceBase {
    */
   private function getConfigurableCombinations(SKUInterface $sku): array {
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
-
     unset($combinations['by_attribute']);
 
     foreach ($combinations['by_sku'] ?? [] as $child_sku => $attributes) {
@@ -408,6 +406,7 @@ class ProductResource extends ResourceBase {
       }
     }
 
+    $size_labels = $this->getSizeLabels($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
       $combinations['attribute_sku'][$attribute_code] = [
         'attribute_code' => $attribute_code,
@@ -419,15 +418,8 @@ class ProductResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size'
-          && ($term = $this->productOptionsManager->loadProductOptionByOptionId(
-            $attribute_code,
-            $value,
-            $this->mobileAppUtility->currentLanguage()
-          ))
-          && $term instanceof TermInterface
-        ) {
-          $attr_value['label'] = $term->label();
+        if ($attribute_code == 'size' && !empty($size_labels[$value])) {
+          $attr_value['label'] = $size_labels[$value];
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
@@ -439,6 +431,37 @@ class ProductResource extends ResourceBase {
     }
 
     return $combinations;
+  }
+
+  /**
+   * Get the size attributes with code and label.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Return the keyed array of size attributes code and label.
+   */
+  private function getSizeLabels(SKUInterface $sku): array {
+    $configurables = unserialize(
+      $sku->get('field_configurable_attributes')->getString()
+    );
+
+    if (empty($configurables)) {
+      return [];
+    }
+
+    $size_key = array_search('size', array_column($configurables, 'label'));
+    if (!isset($configurables[$size_key])) {
+      return [];
+    }
+
+    $size_array = [];
+    array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_array) {
+      $size_array[$value['value_id']] = $value['label'];
+    });
+
+    return $size_array;
   }
 
   /**

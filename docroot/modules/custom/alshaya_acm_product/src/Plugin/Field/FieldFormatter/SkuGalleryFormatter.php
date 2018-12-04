@@ -212,12 +212,20 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
             }
           }
           else {
-            $check_parent_child = TRUE;
-            $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child);
+            $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku);
           }
 
-          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, FALSE);
-          $product_url .= '?selected=' . $sku_for_gallery->id();
+          if (!($sku_for_gallery instanceof SKUInterface)) {
+            $sku_for_gallery = $sku;
+          }
+
+          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
+
+          // Do not add selected param if we are using parent sku itself for
+          // gallery. This is normal for PB, MC, etc.
+          if ($sku_for_gallery->id() != $sku->id()) {
+            $product_url .= '?selected=' . $sku_for_gallery->id();
+          }
         }
         catch (\Exception $e) {
           $sku_gallery = [];

@@ -210,7 +210,6 @@ class AlshayaImageSitemapGenerator {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
               $combinations = $this->skuManager->getConfigurableCombinations($sku);
-              $check_parent_child = TRUE;
               // This code need to be in sync with PDP. The images that
               // are displayed on PDP page should be fetched here.
               if ($sku->bundle() == 'configurable') {
@@ -222,7 +221,7 @@ class AlshayaImageSitemapGenerator {
 
                   // Try to load images first for child to be displayed.
                   try {
-                    $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child, 'fallback');
+                    $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, TRUE, 'fallback');
                   }
                   catch (\Exception $e) {
                     $sku_for_gallery = $sku;
@@ -233,7 +232,7 @@ class AlshayaImageSitemapGenerator {
                 $sku_for_gallery = $sku;
               }
               if ($sku_for_gallery instanceof SKU) {
-                $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery, $check_parent_child);
+                $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery);
               }
 
               if (!empty($all_media['images'])) {

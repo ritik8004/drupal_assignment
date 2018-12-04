@@ -86,9 +86,9 @@ class ProductReportController extends ControllerBase {
   public function downloadReport() {
     $path = file_create_url($this->fileSystem->realpath("temporary://"));
     // @codingStandardsIgnoreLine
-    global $site_name;
+    global $acsf_site_name;
     $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
-    $filename = 'product-report-' . $site_name . '-' . $time_format . '.csv';
+    $filename = 'product-report-' . $acsf_site_name . '-' . $time_format . '.csv';
 
     $fp = fopen($path . '/' . $filename, 'w');
     fwrite($fp, 'SKU, Type, Language, Product ID, Stock, Price, Final Price, Special Price' . "\n");
