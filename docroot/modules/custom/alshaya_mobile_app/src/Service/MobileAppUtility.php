@@ -704,12 +704,14 @@ class MobileAppUtility {
     }
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+    $color = $node->get('field_product_color')->getString();
+
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      return $this->getLightProduct($sku_entity);
+      return $this->getLightProduct($sku_entity, $color);
     }
     return [];
   }
@@ -719,11 +721,13 @@ class MobileAppUtility {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string|null $color
+   *   Color value.
    *
    * @return array
    *   Light Product.
    */
-  public function getLightProduct(SKUInterface $sku): array {
+  public function getLightProduct(SKUInterface $sku, $color): array {
     // Get the prices.
     $prices = $this->skuManager->getMinPrices($sku);
 
@@ -742,7 +746,8 @@ class MobileAppUtility {
     $labels = $this->getLabels($sku, 'plp');
 
     // Get media (images/video) for the SKU.
-    $images = $this->getMedia($sku, 'search');
+    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
+    $images = $this->getMedia($sku_for_gallery, 'search');
 
     $data = [
       'id' => (int) $sku->id(),
@@ -755,10 +760,16 @@ class MobileAppUtility {
       'promo' => $promotions,
       'medias' => $images,
       'labels' => $labels,
+      'color' => NULL,
     ];
 
     // Allow other modules to alter light product data.
     $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);
+
+    if ($color) {
+      $data['color'] = (int) $sku_for_gallery->id();
+      $data['swatches'] = [];
+    }
 
     return $data;
   }
