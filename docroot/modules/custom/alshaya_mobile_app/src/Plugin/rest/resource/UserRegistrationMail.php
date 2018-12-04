@@ -104,9 +104,18 @@ class UserRegistrationMail extends ResourceBase {
       return $this->mobileAppUtility->sendStatusResponse($this->t('Invalid data to send an email to user.'));
     }
 
-    // Try to get user from mdc and create new user account, when user does not
+    /* @var \Drupal\user\Entity\User $user */
+    $user = user_load_by_mail($email);
+    if ($user instanceof UserInterface) {
+      $this->logger->error('User with email @email already exist.', ['@email' => $email]);
+      return $this->mobileAppUtility->sendStatusResponse(
+        $this->t('Can not send an email, user with email @email already exist.', ['@email' => $email])
+      );
+    }
+
+    // Get user from mdc and create new user account, when user does not
     // exists in drupal.
-    $user = $this->mobileAppUtility->fetchUserByMail($email);
+    $user = $this->mobileAppUtility->createUserFromCommerce($email);
 
     if (!$user instanceof UserInterface) {
       $this->logger->error('User with email @email does not exist.', ['@email' => $email]);
