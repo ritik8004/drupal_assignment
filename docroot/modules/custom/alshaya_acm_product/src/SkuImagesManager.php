@@ -549,6 +549,40 @@ class SkuImagesManager {
   }
 
   /**
+   * Wrapper function to get sku for gallery considering color value.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   * @param string|null $color
+   *   Color value.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|null
+   *   SKU to use for gallery.
+   *
+   * @throws \Exception
+   */
+  public function getSkuForGalleryWithColor(SKU $sku, $color): ?SKU {
+    if (empty($color)) {
+      try {
+        return $this->getSkuForGallery($sku);
+      }
+      catch (\Exception $e) {
+      }
+
+      return NULL;
+    }
+
+    foreach ($this->skuManager->getPdpSwatchAttributes() as $attribute_code) {
+      $sku_for_gallery = $this->skuManager->getChildSkuFromAttribute($sku, $attribute_code, $color);
+      if ($sku_for_gallery instanceof SKUInterface) {
+        return $sku_for_gallery;
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get SKU to use for gallery when no specific child is selected.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku

@@ -2167,7 +2167,7 @@ class SkuManager {
         ->get('alshaya_acm_product.display_settings')
         ->get('show_child_images_after_selecting');
 
-      $static = (bool) $value == 'all';
+      $static = ($value == 'all');
     }
 
     return $static;
@@ -2556,6 +2556,7 @@ class SkuManager {
     }
 
     $node->setCreatedTime($original->getCreatedTime());
+    $node->get('field_skus')->setValue($sku->getSku());
     $node->get('field_product_color')->setValue($color);
     $node->get('title')->setValue($original->label());
     $node->get('field_category')->setValue($original->get('field_category')->getValue());

@@ -165,6 +165,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     $elements = [];
     $product_url = $product_base_url = $product_label = '';
 
+    $color = '';
+
     $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
@@ -194,17 +196,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $product_label = $node->getTitle();
 
         try {
-          if (!empty($color)) {
-            foreach ($this->skuManager->getPdpSwatchAttributes() as $attribute_code) {
-              $sku_for_gallery = $this->skuManager->getChildSkuFromAttribute($sku, $attribute_code, $color);
-              if ($sku_for_gallery instanceof SKUInterface) {
-                break;
-              }
-            }
-          }
-          else {
-            $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku);
-          }
+          $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color);
 
           if (!($sku_for_gallery instanceof SKUInterface)) {
             $sku_for_gallery = $sku;
