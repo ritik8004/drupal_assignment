@@ -6,8 +6,10 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
@@ -69,6 +71,20 @@ class AlshayaApiWrapper {
   private $i18nHelper;
 
   /**
+   * The state factory.
+   *
+   * @var \Drupal\Core\KeyValueStore\StateInterface
+   */
+  protected $state;
+
+  /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -83,13 +99,19 @@ class AlshayaApiWrapper {
    *   LoggerFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state factory.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The filesystem service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
                               CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory,
-                              I18nHelper $i18n_helper) {
+                              I18nHelper $i18n_helper,
+                              StateInterface $state,
+                              FileSystemInterface $fileSystem) {
     $this->config = $config_factory->get('alshaya_api.settings');
     $this->logger = $logger_factory->get('alshaya_api');
     $this->languageManager = $language_manager;
@@ -97,6 +119,8 @@ class AlshayaApiWrapper {
     $this->dateTime = $date_time;
     $this->cache = $cache;
     $this->i18nHelper = $i18n_helper;
+    $this->state = $state;
+    $this->fileSystem = $fileSystem;
   }
 
   /**
@@ -364,23 +388,45 @@ class AlshayaApiWrapper {
   /**
    * Function to get the merchandising report from Magento.
    *
+   * @param bool $reset
+   *   Either to force download of a fresh merch report.
+   *
    * @return bool|resource
    *   The file opened or FALSE if not accessible.
    */
-  public function getMerchandisingReport() {
+  public function getMerchandisingReport($reset = TRUE) {
     $lang_prefix = explode('_', $this->config->get('magento_lang_prefix'))[0];
 
-    $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+    $path = file_create_url($this->fileSystem->realpath("temporary://"));
+    $filename = 'merchandising-report-' . $lang_prefix . '.csv';
 
-    // We need this to avoid issue with invalid certificate.
-    $context = [
-      'ssl' => [
-        'verify_peer' => FALSE,
-        'verify_peer_name' => FALSE,
-      ],
-    ];
+    $download_time = $this->state->get('alshaya_api.last_report_download');
+    $max_age = $this->config->get('merch_report_max_age') ?? 3600;
 
-    return @fopen($url, 'r', FALSE, stream_context_create($context));
+    // We download a new merch report if asked, if too old or if file does not
+    // exist yet in temporary directory.
+    if ($reset || $download_time < (time() - $max_age) || !file_exists($path . '/' . $filename)) {
+      $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+
+      // We need this to avoid issue with invalid certificate.
+      $context = [
+        'ssl' => [
+          'verify_peer' => FALSE,
+          'verify_peer_name' => FALSE,
+        ],
+      ];
+      $handle = @fopen($url, 'r', FALSE, stream_context_create($context));
+
+      $fp = fopen($path . '/' . $filename, 'w');
+      while (($data = fgets($handle)) !== FALSE) {
+        fwrite($fp, $data);
+      }
+      fclose($fp);
+
+      $this->state->set('alshaya_api.last_report_download', time());
+    }
+
+    return @fopen($path . '/' . $filename, 'r');
   }
 
   /**
@@ -388,12 +434,14 @@ class AlshayaApiWrapper {
    *
    * @param array|string $types
    *   The SKUs type to get from Magento (simple, configurable).
+   * @param bool $reset
+   *   Force download of a fresh merch report.
    *
    * @return array
    *   An array of SKUs indexed by type.
    */
-  public function getEnabledSkusFromMerchandisingReport($types = ['simple', 'configurable']) {
-    $handle = $this->getMerchandisingReport();
+  public function getEnabledSkusFromMerchandisingReport($types = ['simple', 'configurable'], $reset = TRUE) {
+    $handle = $this->getMerchandisingReport($reset);
 
     $mskus = [];
     foreach ($types as $type) {
@@ -795,6 +843,23 @@ class AlshayaApiWrapper {
 
     $response = json_decode($response, TRUE);
     return $response['qty'] ?? 0;
+  }
+
+  /**
+   * Get data for a sku.
+   *
+   * @param string $sku
+   *   The sku to fetch the data for.
+   *
+   * @return array
+   *   The sku object from Magento.
+   */
+  public function getSku(string $sku) : array {
+    $endpoint = 'products/' . $sku;
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $response = json_decode($response, TRUE);
+    return $response['message'] ? [] : $response;
   }
 
 }
