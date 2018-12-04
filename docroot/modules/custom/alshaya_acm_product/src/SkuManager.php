@@ -2066,7 +2066,7 @@ class SkuManager {
         ->get('alshaya_acm_product.display_settings')
         ->get('show_child_images_after_selecting');
 
-      $static = (bool) $value === 'all';
+      $static = (bool) $value == 'all';
     }
 
     return $static;
@@ -2316,6 +2316,12 @@ class SkuManager {
           // Set it to NULL to indicate code below that we didn't change.
           $this->currentRequest->query->set('selected', NULL);
         }
+      }
+
+      $selected_sku = $this->getFirstValidConfigurableChild($sku);
+      if ($selected_sku instanceof SKUInterface) {
+        $this->currentRequest->query->set('selected', $selected_sku->id());
+        return $selected_sku;
       }
     }
 
