@@ -77,10 +77,16 @@ $conductors = [
     'hmac_secret' => 'NmViNWNjYTgtMTI1ZS00',
     'api_version' => 'v2',
   ],
-  'hmkw_prod' => [
+  'hmkw_prod_v1' => [
     'url' => 'https://alshaya-hm-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '3844f45d61d7467d9a671f3e1cf4bea8',
     'hmac_secret' => 'ngRQUE3QBP9zL-0-TC9XhQ',
+  ],
+  'hmkw_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'f343b7daa231462e82368ab7df3217ff',
+    'hmac_secret' => 'YzJiNGQzYWItYzk0Yy00',
+    'api_version' => 'v2',
   ],
   // H&M SA.
   'hmsa_qa' => [
@@ -95,10 +101,16 @@ $conductors = [
     'hmac_secret' => 'ZmU3MDBmMzctMTM0Yy00',
     'api_version' => 'v2',
   ],
-  'hmsa_prod' => [
+  'hmsa_prod_v1' => [
     'url' => 'https://alshaya-hmsa-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '046a4e9c6ef8467da0e29ca8f3b1793f',
     'hmac_secret' => 'hGeJbwVRoDK-H336mE3BFg',
+  ],
+  'hmsa_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'c3334e9728bc4d46a999a31aaf0f3bad',
+    'hmac_secret' => 'NTFkM2E4ZmMtZWE5MS00',
+    'api_version' => 'v2',
   ],
   // H&M AE.
   'hmae_qa' => [
@@ -113,13 +125,19 @@ $conductors = [
     'hmac_secret' => 'MzY3ZDg1NDEtZTlmYy00',
     'api_version' => 'v2',
   ],
-  'hmae_prod' => [
+  'hmae_prod_v1' => [
     'url' => 'https://alshaya-hmae-prod.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
     'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
   ],
   // H&M EG.
-  'hmeg_test' => [
+  'hmae_prod' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '31a535578a434459a044b5dda6e6b735',
+    'hmac_secret' => 'MWYxYTA0NmItMjM1Yy00',
+    'api_version' => 'v2',
+  ],
+  'hmeg_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
     'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
@@ -297,7 +315,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // FootLocker KW.
-  'flkw_test' => [
+  'flkw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
@@ -310,7 +328,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // FootLocker SA.
-  'flsa_test' => [
+  'flsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '31a27139b98448379c08c90bee5e866e',
     'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',

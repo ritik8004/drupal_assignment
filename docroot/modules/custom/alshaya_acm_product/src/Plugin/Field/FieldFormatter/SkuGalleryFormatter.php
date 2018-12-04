@@ -166,9 +166,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $skus[$delta] = $sku;
       if ($sku instanceof SKU) {
         try {
-          $check_parent_child = TRUE;
-          $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child);
-          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label, FALSE);
+          $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku);
+          $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
           $product_url .= '?selected=' . $sku_for_gallery->id();
         }
         catch (\Exception $e) {

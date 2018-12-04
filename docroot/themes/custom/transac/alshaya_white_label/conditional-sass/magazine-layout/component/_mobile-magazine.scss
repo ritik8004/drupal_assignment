@@ -72,6 +72,7 @@
     @include breakpoint($only-mobile) {
       .field--name-field-skus .field__item {
         display: block;
+        padding: 0;
       }
 
       .sku-base-form {
