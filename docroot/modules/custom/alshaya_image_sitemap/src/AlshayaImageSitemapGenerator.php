@@ -171,7 +171,7 @@ class AlshayaImageSitemapGenerator {
 
     return $query->condition('type', 'acq_product')
       ->condition('status', NODE_PUBLISHED)
-      ->exists('field_skus')
+      ->addTag('get_display_node_for_sku')
       ->execute();
   }
 

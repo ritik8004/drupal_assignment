@@ -183,7 +183,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     if (empty($context['sandbox'])) {
       $query = $storage->getQuery();
       $query->condition('type', 'acq_product');
-      $query->exists('field_skus');
+      $query->addTag('get_display_node_for_sku');
       $query->notExists('field_product_color');
       $context['sandbox']['result'] = array_chunk($query->execute(), 100);
       $context['sandbox']['max'] = count($context['sandbox']['result']);

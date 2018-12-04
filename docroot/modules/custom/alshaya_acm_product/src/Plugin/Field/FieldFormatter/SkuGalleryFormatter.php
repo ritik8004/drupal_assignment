@@ -144,9 +144,6 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       return [];
     }
 
-    // For color nodes we will not have value in field_skus.
-    $mode = $items->getName() == 'field_skus' ? 'all' : 'color';
-
     $context = 'search';
     $skus = [];
     $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
@@ -168,24 +165,18 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     $elements = [];
     $product_url = $product_base_url = $product_label = '';
 
-    if ($mode === 'color') {
-      $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
-      // Fetch Product in which this sku is referenced.
-      $entity_adapter = $items->first()->getParent()->getParent();
-      if ($entity_adapter instanceof EntityAdapter) {
-        /** @var \Drupal\node\NodeInterface $colorNode */
-        $colorNode = $entity_adapter->getValue();
+    $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
+    // Fetch Product in which this sku is referenced.
+    $entity_adapter = $items->first()->getParent()->getParent();
+    if ($entity_adapter instanceof EntityAdapter) {
+      /** @var \Drupal\node\NodeInterface $colorNode */
+      $colorNode = $entity_adapter->getValue();
 
-        if ($colorNode->hasTranslation($currentLangCode)) {
-          $colorNode = $colorNode->getTranslation($currentLangCode);
-        }
-
-        $color = $colorNode->get('field_product_color')->getString();
+      if ($colorNode->hasTranslation($currentLangCode)) {
+        $colorNode = $colorNode->getTranslation($currentLangCode);
       }
 
-      if (empty($color)) {
-        return [];
-      }
+      $color = $colorNode->get('field_product_color')->getString();
     }
 
     foreach ($items as $delta => $item) {
@@ -274,7 +265,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           ],
         ];
 
-        if ($mode === 'color') {
+        if (!empty($color)) {
           $this->skuManager->buildPrice($elements[$delta], $sku_for_gallery);
         }
         else {
@@ -300,7 +291,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         );
 
         // We don't show swatches for color nodes.
-        if ($mode === 'color') {
+        if (!empty($color)) {
           $element['#swatches'] = [];
         }
       }
