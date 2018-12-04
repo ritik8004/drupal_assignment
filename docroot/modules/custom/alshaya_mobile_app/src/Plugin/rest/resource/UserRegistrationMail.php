@@ -109,7 +109,7 @@ class UserRegistrationMail extends ResourceBase {
     if ($user instanceof UserInterface) {
       $this->logger->error('User with email @email already exist.', ['@email' => $email]);
       return $this->mobileAppUtility->sendStatusResponse(
-        $this->t('Can not send an email, use with email @email already exist.', ['@email' => $email])
+        $this->t('Can not send an email, user with email @email already exist.', ['@email' => $email])
       );
     }
 
