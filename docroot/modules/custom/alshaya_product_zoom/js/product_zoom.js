@@ -121,6 +121,8 @@
             $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
             appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
             $('.acq-content-product-modal #cloud-zoom-wrap').hide();
+            $(this).siblings('.slick-slide').removeClass('slick-current');
+            $(this).addClass('slick-current');
           }
         });
       }
