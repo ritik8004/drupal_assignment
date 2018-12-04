@@ -16,9 +16,9 @@ use Drupal\Core\Site\Settings;
 function alshaya_vs_transac_update_8004() {
   // Configure ShareThis defaults.
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-
-  $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Instagram:instagram','Pinterest:pinterest','WhatsApp:whatsapp','Email:email'");
-
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
 }

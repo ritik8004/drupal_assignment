@@ -16,9 +16,9 @@ use Drupal\search_api\Entity\Index;
 function alshaya_bbw_transac_update_8006() {
   // Configure ShareThis defaults.
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-
-  $configFactory->set('service_option', "'Facebook:facebook','Twitter:twitter','Instagram:instagram','Pinterest:pinterest','WhatsApp:whatsapp','Email:email'");
-
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
 }
