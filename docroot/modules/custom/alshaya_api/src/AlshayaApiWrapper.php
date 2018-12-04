@@ -466,7 +466,7 @@ class AlshayaApiWrapper {
       'web_qty' => FALSE,
     ];
 
-    if ($data = fgetcsv($handle, 1000, ',')) {
+    if ($data = fgetcsv($handle, 10000, ',')) {
       foreach ($data as $position => $key) {
         foreach ($indexes as $name => $index) {
           if (trim(strtolower($key)) == $name) {
@@ -480,7 +480,7 @@ class AlshayaApiWrapper {
         return $mskus;
       }
 
-      while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+      while (($data = fgetcsv($handle, 10000, ',')) !== FALSE) {
         // We don't deal with SKUs which we don't have enough information.
         if (!isset($data[$indexes['status']]) || !isset($data[$indexes['type']])) {
           continue;
