@@ -725,7 +725,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
 /**
  * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp', $color = '') {
   switch ($context) {
     case 'teaser':
       // If no main image, then use default main image.

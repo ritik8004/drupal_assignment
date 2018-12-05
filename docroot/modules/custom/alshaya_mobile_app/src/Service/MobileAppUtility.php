@@ -763,13 +763,12 @@ class MobileAppUtility {
       'color' => NULL,
     ];
 
-    // Allow other modules to alter light product data.
-    $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);
-
     if ($color) {
       $data['color'] = (int) $sku_for_gallery->id();
-      $data['swatches'] = [];
     }
+
+    // Allow other modules to alter light product data.
+    $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);
 
     return $data;
   }
