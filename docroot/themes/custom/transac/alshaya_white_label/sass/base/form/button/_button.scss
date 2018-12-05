@@ -124,6 +124,7 @@
 
 #cart_notification a,
 #coupon-button,
+a.select-store,
 button[type="submit"],
 .button {
   @include link-ripple;
