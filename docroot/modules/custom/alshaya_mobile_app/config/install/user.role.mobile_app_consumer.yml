@@ -12,3 +12,5 @@ weight: 20
 is_admin: null
 permissions:
   - 'restful post webform_rest_submit'
+  - 'restful post user_registration_mail'
+  - 'restful post user_forgot_password_mail'
