@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product_position\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class AlshayaPlpSortSettingsForm.
@@ -42,8 +43,8 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $config->set('sort_options', $result);
     $config->save();
 
-    // Flush all caches so that the change takes effect.
-    drupal_flush_all_caches();
+    // Invalidate cache so that the change takes effect.
+    Cache::invalidateTags(['search_api_list:product']);
 
     return parent::submitForm($form, $form_state);
   }
