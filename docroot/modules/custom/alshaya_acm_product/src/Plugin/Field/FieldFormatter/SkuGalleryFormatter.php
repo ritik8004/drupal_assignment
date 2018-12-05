@@ -167,10 +167,11 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     $color = '';
 
-    $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
     if ($entity_adapter instanceof EntityAdapter) {
+      $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
+
       /** @var \Drupal\node\NodeInterface $colorNode */
       $colorNode = $entity_adapter->getValue();
 

@@ -1853,6 +1853,9 @@ function _alshaya_acm_product_clean_form_for_oos(array $form): array {
  * Implements hook_query_TAG_alter().
  */
 function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInterface $query) {
+  // For Alshaya we have developed a feature to display one entry per color
+  // on listing pages. For this we need extra nodes. To avoid affecting original
+  // functionality we add conditions below.
   $query->addJoin('left', 'node__field_product_color', 'color', 'node_field_data.vid = color.revision_id');
   $query->isNull('field_product_color_value');
 }

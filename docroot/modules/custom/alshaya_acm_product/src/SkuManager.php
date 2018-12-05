@@ -52,6 +52,10 @@ class SkuManager {
 
   const PDP_LAYOUT_INHERIT_KEY = 'inherit';
 
+  const AGGREGATED_LISTING = 'aggregated';
+
+  const NON_AGGREGATED_LISTING = 'non_aggregated';
+
   /**
    * The database service.
    *
@@ -2544,7 +2548,7 @@ class SkuManager {
       elseif ($node->hasTranslation($langcode)) {
         $node = $node->getTranslation($langcode);
       }
-      // If translation not available and create flag is true.
+      // If translation not available.
       else {
         $node = $node->addTranslation($langcode);
         $this->logger->info('Adding translation for color: @color, parent sku: @sku, langcode: @langcode', [
@@ -2613,7 +2617,7 @@ class SkuManager {
   public function processColorNodesForConfigurable(NodeInterface $node) {
     $mode = $this->getListingDisplayMode();
 
-    if ($mode != 'group_by_color') {
+    if ($mode != self::NON_AGGREGATED_LISTING) {
       return;
     }
 
@@ -2835,7 +2839,7 @@ class SkuManager {
     $itemFields = $item->getFields();
 
     // Do not index main parent if product is in stock and has color data.
-    if ($mode === 'group_by_color' && $is_product_in_stock && empty($product_color) && $has_color_data) {
+    if ($mode === self::NON_AGGREGATED_LISTING && $is_product_in_stock && empty($product_color) && $has_color_data) {
       // We use the code 200 as it is normal with the configuration.
       throw new \Exception('Product has color, we do not index main node when doing group by color', 200);
     }
