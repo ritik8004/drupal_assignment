@@ -946,7 +946,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         }
         return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
       });
-
       $this->cache->set($cid, $magento_form);
     }
     catch (\Exception $e) {
@@ -1146,8 +1145,23 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     $prefix_settings = $this->configFactory->get('alshaya_addressbook.settings')->get('prefix_settings');
     $mapping = $this->getMagentoFieldMappings();
     $form_fields = $this->getMagentoFormFields();
+
     // Rearrange mapping array according to $form_fields.
     $mapping = array_merge(array_flip(array_keys($form_fields)), array_flip($mapping));
+    // Remove any additional keys, which are associated as index id.
+    $mapping = array_filter($mapping, function ($value) {
+      return !is_numeric($value);
+    });
+
+    if (isset($address['telephone'])) {
+      $address['mobile_number'] = str_replace(' ', '', $address['telephone']);
+      unset($address['telephone']);
+    }
+
+    if (isset($address['country'])) {
+      $address['country_code'] = $address['country'];
+      unset($address['country']);
+    }
 
     // Reverse the string for rtl language.
     $language = $this->languageManager->getCurrentLanguage();
@@ -1174,6 +1188,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         ]);
       }
     }
+
     // Remove keys from array.
     $address = array_diff_key($address, array_flip($remove_keys));
     // Rearrange address fields based on mapping array.

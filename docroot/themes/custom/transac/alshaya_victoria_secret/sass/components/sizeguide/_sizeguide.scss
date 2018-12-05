@@ -56,3 +56,13 @@
     }
   }
 }
+
+.sizeguide-modal-overlay {
+  .size-guide-link {
+    + .ajax-progress-throbber {
+      .throbber {
+        background-position: center !important;
+      }
+    }
+  }
+}
