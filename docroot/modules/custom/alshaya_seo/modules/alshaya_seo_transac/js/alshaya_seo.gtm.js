@@ -534,7 +534,7 @@
             body.addClass('virtualpageview-fired');
           }
 
-          if (($('input.cc-action', context).length > 0) && (context === document)) {
+          if (($('button.cc-action', context).length > 0) && (context === document)) {
             Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
           }
         }
