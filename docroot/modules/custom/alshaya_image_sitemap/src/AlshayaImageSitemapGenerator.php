@@ -171,6 +171,7 @@ class AlshayaImageSitemapGenerator {
 
     return $query->condition('type', 'acq_product')
       ->condition('status', NODE_PUBLISHED)
+      // Add tag to ensure this can be altered easily in custom modules.
       ->addTag('get_display_node_for_sku')
       ->execute();
   }

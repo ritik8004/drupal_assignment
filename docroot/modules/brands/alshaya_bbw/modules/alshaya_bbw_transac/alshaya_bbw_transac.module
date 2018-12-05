@@ -13,7 +13,7 @@ use Drupal\acq_commerce\SKUInterface;
 /**
  * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_bbw_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+function alshaya_bbw_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp', $color = '') {
   $form = $sku->get('attr_form')->getString();
 
   if ($form) {

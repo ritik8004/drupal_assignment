@@ -56,7 +56,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
   public function aggregateListing() {
     $mode = $this->skuManager->getListingDisplayMode();
 
-    if ($mode === 'all') {
+    if ($mode === SkuManager::AGGREGATED_LISTING) {
       $message = 'Current mode is already set to display one product per configurable in listing pages.';
       $this->logger->info($message);
       $this->yell($message, 40, 'red');
@@ -73,7 +73,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     }
 
     // Update mode.
-    $this->updateListingMode('all');
+    $this->updateListingMode(SkuManager::AGGREGATED_LISTING);
 
     // Clear all indexed data.
     drush_invoke_process('@self', 'sapi-c');
@@ -109,7 +109,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
   public function splitListing() {
     $mode = $this->skuManager->getListingDisplayMode();
 
-    if ($mode === 'group_by_color') {
+    if ($mode === SkuManager::NON_AGGREGATED_LISTING) {
       $message = 'Current mode is already set to display one product per color in listing pages.';
       $this->logger->info($message);
       $this->yell($message, 40, 'red');
@@ -126,7 +126,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     }
 
     // Update mode.
-    $this->updateListingMode('group_by_color');
+    $this->updateListingMode(SkuManager::NON_AGGREGATED_LISTING);
 
     // Clear all indexed data.
     drush_invoke_process('@self', 'sapi-c');

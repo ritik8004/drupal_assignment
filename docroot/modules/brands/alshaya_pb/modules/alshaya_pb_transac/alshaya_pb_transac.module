@@ -132,7 +132,7 @@ function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(
 /**
  * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
+function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp', $color = '') {
   if ($context == 'search') {
     // Display swatches on PLP/Search/Promo. We use sku gallery formatter for
     // all these cases and context received here is 'search' for that.
@@ -141,7 +141,7 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
     $swatches_display_status = $settings->get('color_swatches');
 
     // Display swatches only if enabled in configuration.
-    if ($swatches_display_status) {
+    if ($swatches_display_status && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
