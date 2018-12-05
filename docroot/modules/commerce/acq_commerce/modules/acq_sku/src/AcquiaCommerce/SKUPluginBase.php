@@ -204,7 +204,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
 
     // Do not use static cache during sync when create translation flag is set
     // to true.
-    if (!($create_translation) && isset($static[$langcode], $static[$langcode][$sku_string])) {
+    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string])) {
       return $static[$langcode][$sku_string];
     }
 
