@@ -41,6 +41,10 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product_position.settings');
     $config->set('sort_options', $result);
     $config->save();
+
+    // Flush all caches so that the change takes effect.
+    drupal_flush_all_caches();
+
     return parent::submitForm($form, $form_state);
   }
 
