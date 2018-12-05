@@ -122,6 +122,8 @@
   }
 }
 
+#cart_notification a,
+#coupon-button,
 button[type="submit"],
 .button {
   @include link-ripple;
