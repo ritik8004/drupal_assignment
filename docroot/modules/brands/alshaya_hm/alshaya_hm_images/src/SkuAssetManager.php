@@ -301,12 +301,20 @@ class SkuAssetManager {
    *   Overridden config in context of the category product belongs to.
    */
   public function overrideConfig($sku, $page_type) {
+    // @TODO: Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
+    $overrides = $alshaya_hm_images_settings->get('overrides');
+
+    // No further processing if overrides is empty.
+    if (empty($overrides)) {
+      return [];
+    }
 
     $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
     $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $overrides = $alshaya_hm_images_settings->get('overrides');
+
     $tid = NULL;
 
     // Identify the category for the product being displayed.
