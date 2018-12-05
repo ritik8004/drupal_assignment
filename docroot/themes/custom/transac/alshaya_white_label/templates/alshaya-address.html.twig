@@ -3,12 +3,14 @@
     {{ address.given_name }} {{ address.family_name }}
   </div>
 {% endif %}
-{% for item in address|without('country_code') %}
-  {% if item == 'telephone' %}
-    <div class="address--contact">
-      {{ 'Mobile Number' | t }}: <div class="no-direction">{{ item|replace({' ':''}) }}</div>
-    </div>
-  {% elseif item is not empty %}
-    <div class="address--content">{{ item }}</div>
+{% for key, item in address|without('given_name', 'family_name') %}
+  {% if item is not empty %}
+    {% if key == 'mobile_number' %}
+      <div class="address--contact">
+        {{ 'Mobile Number' | t }}: <div class="no-direction">{{ item|replace({' ':''}) }}</div>
+      </div>
+    {% else %}
+      <div class="address--content">{{ item }}</div>
+    {% endif %}
   {% endif %}
 {% endfor %}
