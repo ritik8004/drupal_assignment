@@ -283,3 +283,87 @@
     }
   }
 }
+
+.super-category-pink {
+  .sfb-letter {
+    .shop-by-size-letter {
+      > div {
+        &.is-active {
+          background-color: $bra_size_active_filter_box_bg_pink;
+        }
+
+        @include breakpoint($desktop) {
+          &:hover {
+            background-color: $bra_size_active_filter_box_bg_pink;
+          }
+        }
+      }
+    }
+  }
+
+  .shop-by-size-band {
+    > div {
+      &:hover {
+        background-color: $bra_size_active_filter_box_bg_pink;
+      }
+    }
+
+    .is-active {
+      background-color: $bra_size_active_filter_box_bg_pink;
+    }
+  }
+
+  .sfb-facets-container {
+    &.slick-slider {
+      .slick-arrow {
+        &:hover {
+          &::before {
+            color: $bra_size_active_filter_box_bg_pink;
+          }
+        }
+      }
+    }
+  }
+}
+
+.super-category-victoria-sport {
+  .sfb-letter {
+    .shop-by-size-letter {
+      > div {
+        &.is-active {
+          background-color: $bra_size_active_filter_box_bg_sport;
+        }
+
+        @include breakpoint($desktop) {
+          &:hover {
+            background-color: $bra_size_active_filter_box_bg_sport;
+          }
+        }
+      }
+    }
+  }
+
+  .shop-by-size-band {
+    > div {
+      &:hover {
+        background-color: $bra_size_active_filter_box_bg_sport;
+      }
+    }
+
+    .is-active {
+      background-color: $bra_size_active_filter_box_bg_sport;
+    }
+  }
+
+  .sfb-facets-container {
+    &.slick-slider {
+      .slick-arrow {
+        &:hover {
+          &::before {
+            color: $bra_size_active_filter_box_bg_sport;
+          }
+        }
+      }
+    }
+  }
+}

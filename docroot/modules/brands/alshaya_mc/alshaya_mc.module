@@ -34,6 +34,10 @@ function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityView
         }
       }
 
+      // Trim the short description.
+      $short_desc = \Drupal::service('alshaya_acm_product.helper')
+        ->createShortDescription($return['short_desc']['value']['#markup']);
+      $return['short_desc']['value']['#markup'] = $short_desc['html'];
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];
     }
