@@ -383,6 +383,8 @@ class ProductSyncResource extends ResourceBase {
             $node = $this->createDisplayNode($product, $langcode);
           }
 
+          $existingCategories = $node->get('field_category')->getValue();
+
           $node->get('title')->setValue(html_entity_decode($product['name']));
 
           $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
@@ -409,6 +411,17 @@ class ProductSyncResource extends ResourceBase {
           \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
 
           $node->save();
+
+          // Log the diff if there were any existing categories in the node.
+          // This will avoid logging any diffs when we are creating node.
+          if ($existingCategories) {
+            $updatedCategories = $node->get('field_category')->getValue();
+            $this->logger->info('Categories diff for @sku for @langcode: @diff', [
+              '@sku' => $sku->getSku(),
+              '@langcode' => $langcode,
+              '@diff' => self::getArrayDiff($existingCategories, $updatedCategories),
+            ]);
+          }
         }
         else {
           try {
