@@ -50,3 +50,15 @@
     float: $right;
   }
 }
+
+@include breakpoint($only-mobile) {
+  .path--user {
+    .ui-dialog {
+      .ui-dialog-content {
+        &.ui-front {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
