@@ -44,7 +44,11 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $config->save();
 
     // Invalidate cache so that the change takes effect.
-    Cache::invalidateTags(['search_api_list:product']);
+    Cache::invalidateTags([
+      'search_api_list:product',
+      'config:block.block.exposedformalshaya_product_listblock_1',
+      'config:block.block.exposedformalshaya_product_listblock_2',
+    ]);
 
     return parent::submitForm($form, $form_state);
   }
