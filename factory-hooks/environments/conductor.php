@@ -137,7 +137,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // H&M EG.
-  'hmeg_test' => [
+  'hmeg_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
     'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
