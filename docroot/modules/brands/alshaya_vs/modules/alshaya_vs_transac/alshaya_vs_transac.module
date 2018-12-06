@@ -129,7 +129,7 @@ function alshaya_vs_transac_node_load($nodes) {
 /**
  * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp', $color = '') {
+function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
   $title = _alshaya_vs_transac_get_title($sku, $context);
 
   if ($context == 'search') {
@@ -140,6 +140,11 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
     $settings = \Drupal::config('alshaya_acm_product.display_settings');
 
     $swatches_display_status = $settings->get('color_swatches');
+
+    // We do not display swatches for color nodes.
+    $color = $build['#color'] ?? '';
+
+    // Display swatches only if enabled in configuration and not color node.
     if ($swatches_display_status && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');

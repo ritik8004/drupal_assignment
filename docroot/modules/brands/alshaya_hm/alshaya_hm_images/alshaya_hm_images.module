@@ -122,13 +122,15 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
 /**
  * Implements hook_alshaya_acm_product_build_alter().
  */
-function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp', $color = '') {
+function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
   if ($context == 'search') {
     $swatches_display_status = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
 
+    // We do not display swatches for color nodes.
+    $color = $build['#color'] ?? '';
     if ($swatches_display_status && empty($color)) {
       $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
       if ($swatches) {
