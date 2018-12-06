@@ -90,6 +90,9 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 14, 'ar' => 11],
     ],
+    'eg' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
+    ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
       'consumer_secret' => 'w9fadch6mnekfcwp4c6y46avsubhy0pi',
