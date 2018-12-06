@@ -412,16 +412,12 @@ class ProductSyncResource extends ResourceBase {
 
           $node->save();
 
-          // Log the diff if there were any existing categories in the node.
-          // This will avoid logging any diffs when we are creating node.
-          if ($existingCategories) {
-            $updatedCategories = $node->get('field_category')->getValue();
-            $this->logger->info('Categories diff for @sku for @langcode: @diff', [
-              '@sku' => $sku->getSku(),
-              '@langcode' => $langcode,
-              '@diff' => self::getArrayDiff($existingCategories, $updatedCategories),
-            ]);
-          }
+          $updatedCategories = $node->get('field_category')->getValue();
+          $this->logger->info('Categories diff for @sku for @langcode: @diff', [
+            '@sku' => $sku->getSku(),
+            '@langcode' => $langcode,
+            '@diff' => self::getArrayDiff($existingCategories, $updatedCategories),
+          ]);
         }
         else {
           try {
