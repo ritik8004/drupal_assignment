@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e2e680b07025e27d1a03b04ebbfd579a",
+    "content-hash": "a6130e71f5b19ba41c7a536f28886abd",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -963,6 +963,48 @@
                 "html"
             ],
             "time": "2018-03-15T21:23:44+00:00"
+        },
+        {
+            "name": "charliekassel/array-diff",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliekassel/array-diff.git",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "psr-4": {
+                    "Differ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charlie Kassel",
+                    "email": "ck@charliekassel.com"
+                }
+            ],
+            "description": "Find the difference between two array's",
+            "time": "2018-02-19T14:48:47+00:00"
         },
         {
             "name": "chi-teck/drupal-code-generator",
@@ -4912,7 +4954,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7772,7 +7814,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -7827,7 +7869,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha1",
-                    "datestamp": "1537264380",
+                    "datestamp": "1506671645",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -11715,16 +11757,16 @@
             ],
             "authors": [
                 {
+                    "name": "Yogesh Pawar",
+                    "homepage": "https://www.drupal.org/user/2922907"
+                },
+                {
                     "name": "iamEAP",
                     "homepage": "https://www.drupal.org/user/1467594"
                 },
                 {
                     "name": "sumitmadan",
                     "homepage": "https://www.drupal.org/user/1538790"
-                },
-                {
-                    "name": "yogeshmpawar",
-                    "homepage": "https://www.drupal.org/user/2922907"
                 }
             ],
             "description": "Provides blocks for Views exposed filters on View blocks.",
