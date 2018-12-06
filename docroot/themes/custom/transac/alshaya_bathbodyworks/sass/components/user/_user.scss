@@ -111,3 +111,35 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .path--user {
+    .ui-dialog {
+      .ui-dialog-buttonpane {
+        button {
+          &.dialog-cancel {
+            display: block;
+          }
+        }
+      }
+
+      .ui-dialog-content {
+        padding-#{$right}: 1rem;
+      }
+    }
+
+    .profile-address-book-delete-form {
+      a {
+        &.dialog-cancel {
+          &.button {
+            display: none !important;
+          }
+        }
+      }
+
+      .button--primary {
+        width: 100%;
+      }
+    }
+  }
+}
