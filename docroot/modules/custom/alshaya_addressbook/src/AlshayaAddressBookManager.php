@@ -1142,6 +1142,13 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Address array.
    */
   public function decorateAddressDispaly(array $address) {
+    $address = array_filter($address);
+
+    if (!isset($address['country'])) {
+      $country_list = \Drupal::service('address.country_repository')->getList();
+      $address['country'] = $country_list[$address['country_code']];
+    }
+
     $prefix_settings = $this->configFactory->get('alshaya_addressbook.settings')->get('prefix_settings');
     $mapping = $this->getMagentoFieldMappings();
     $form_fields = $this->getMagentoFormFields();
@@ -1149,19 +1156,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     // Rearrange mapping array according to $form_fields.
     $mapping = array_merge(array_flip(array_keys($form_fields)), array_flip($mapping));
     // Remove any additional keys, which are associated as index id.
-    $mapping = array_filter($mapping, function ($value) {
-      return !is_numeric($value);
+    $mapping = array_filter($mapping, function ($value) use ($address) {
+      return (!is_numeric($value) && in_array($value, array_keys($address))) || strpos($value, 'country') !== FALSE;
     });
-
-    if (isset($address['telephone'])) {
-      $address['mobile_number'] = str_replace(' ', '', $address['telephone']);
-      unset($address['telephone']);
-    }
-
-    if (isset($address['country'])) {
-      $address['country_code'] = $address['country'];
-      unset($address['country']);
-    }
 
     // Reverse the string for rtl language.
     $language = $this->languageManager->getCurrentLanguage();
