@@ -22,6 +22,23 @@ securitySchemes:
         authorizationGrants: [ authorization_code, password ]
 mediaType: application/json
 schemas:
+  - GetImage: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The path to the image."
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          }
+        }
+      }
   - EmailResponse: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -170,8 +187,7 @@ schemas:
               "type": "string"
             },
             "banner": {
-              "type": "string",
-              "description": "The path to the banner image."
+              "schema": "GetImage"
             },
             "path": {
               "type": "string"
@@ -229,8 +245,7 @@ schemas:
           "images": {
             "type": "array",
             "items": {
-              "type": "string",
-              "description": "The path to the image."
+              "schema": "GetImage"
             }
           }
         }
@@ -267,7 +282,7 @@ schemas:
               "type": "string"
             },
             "image": {
-              "type": "string"
+              "schema": "GetImage"
             },
             "url": {
               "type": "string"
@@ -560,8 +575,7 @@ schemas:
             "description": "The endpoint to invoke to build the promotion product list page."
           },
           "banner": {
-            "type": "string",
-            "description": "The path to the banner image."
+            "schema": "GetImage"
           },
           "description": {
             "type": "string"
@@ -1179,7 +1193,11 @@ schemas:
                   "label": "Buy 1 Get 1 Free",
                   "path": "/promotions/buy-1-get-1-free",
                   "deeplink": "/rest/v1/promotion/1234/product-list",
-                  "banner": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                  "banner": {
+                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                    "width": 840,
+                    "height": 742
+                  },
                   "description": "",
                   "total": 123,
                   "filters": [],
@@ -1207,8 +1225,16 @@ schemas:
                   "css": ".staticPage h1{ color: #000; font-size: 20px; padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; text-transform: uppercase;} .staticPage h3{ color: #333; font-size: 14px; padding-bottom: 5px; line-height: 24px; font-weight: 600;} .staticPage p, .staticPage ul{ color: #666; font-size: 13px; line-height: 24px; padding-bottom: 15px;}",
                   "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}",
                   "images": [
-                    "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-23082018-shine-on-en-m.jpg",
-                    "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-26082018-shine-on-en-d.jpg"
+                    {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-23082018-shine-on-en-m.jpg",
+                      "width": 638,
+                      "height": 430
+                    },
+                    {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-26082018-shine-on-en-d.jpg",
+                      "width": 638,
+                      "height": 430
+                    },
                   ]
                 }
   /page/advanced:
@@ -1239,7 +1265,11 @@ schemas:
                     },
                     {
                       "type": "promo_block",
-                      "image": "https://hmsa.dev2-alshaya.acsitefactory.com/sites/g/files/bndsjb361/files/2018-10/dp-b1-uae-w42-v1-10102018-pre-autumn-favourites-m-en.jpg",
+                      "image": {
+                        "url": "https://hmsa.dev2-alshaya.acsitefactory.com/sites/g/files/bndsjb361/files/2018-10/dp-b1-uae-w42-v1-10102018-pre-autumn-favourites-m-en.jpg",
+                        "width": 638,
+                        "height": 426
+                      },
                       "url": "/en/ladies/selected/pre-autumn-favourites",
                       "deeplink": "/rest/v1/category/59036/product-list"
                     },
@@ -1317,7 +1347,11 @@ schemas:
                     },
                     {
                       "type": "promo_block",
-                      "image": "https://hmsa.dev2-alshaya.acsitefactory.com/sites/g/files/bndsjb361/files/2018-10/banner_0.png",
+                      "image": {
+                        "url": "https://hmsa.dev2-alshaya.acsitefactory.com/sites/g/files/bndsjb361/files/2018-10/banner_0.png",
+                        "width": 638,
+                        "height": 426
+                      },
                       "margin": "10px 10px 10px 10px"
                     },
                     {
@@ -1370,7 +1404,11 @@ schemas:
                     "path": "/ladies",
                     "deeplink": "/rest/v1/page/advanced/4567",
                     "include_in_menu": true,
-                    "banner": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-09/black.png",
+                    "banner": {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-09/black.png",
+                      "width": 638,
+                      "height": 430
+                    },
                     "child":
                     [
                       {
@@ -1435,7 +1473,11 @@ schemas:
                   "label": "Ladies",
                   "path": "/ladies",
                   "deeplink": "/rest/v1/category/1234/product-list",
-                  "banner": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                  "banner": {
+                    "url": "https://local.alshaya-hmkw.com/sites/g/files/hmkw/2018-12/Drupal-8-Service-Decorators-b-v2.jpg",
+                    "width": 1385,
+                    "height": 742
+                  },
                   "description": "",
                   "total": 123,
                   "filters": [],

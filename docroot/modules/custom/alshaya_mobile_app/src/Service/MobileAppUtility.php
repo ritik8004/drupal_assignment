@@ -415,9 +415,9 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) The type of the field.
    *
-   * @return array|string
+   * @return array
    *   The array containing information of images if image cardinality
-   *   is greater then 1, otherwise return the first image string.
+   *   is greater then 1, otherwise return the first image array.
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
     if (!$entity->hasField($field_name)) {
@@ -428,7 +428,11 @@ class MobileAppUtility {
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
         if (($file = $entity->get($field_name)->get($key)->entity) && $file instanceof FileInterface) {
-          $images[] = file_create_url($file->getFileUri());
+          $images[] = [
+            'url' => file_create_url($file->getFileUri()),
+            'width' => (int) $value['width'],
+            'height' => (int) $value['height'],
+          ];
         }
       }
     }
@@ -437,7 +441,7 @@ class MobileAppUtility {
       return $images;
     }
 
-    return !empty($images) ? $images[0] : '';
+    return !empty($images) ? $images[0] : [];
   }
 
   /**
@@ -541,11 +545,15 @@ class MobileAppUtility {
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
-      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))
-        && !empty($file->field_promotion_banner_target_id)
+      if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
+        && !empty($file->field_promotion_banner_mobile_target_id)
       ) {
-        $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
-        $record['banner'] = file_create_url($image->getFileUri());
+        $image = $this->fileStorage->load($file->field_promotion_banner_mobile_target_id);
+        $record['banner'] = [
+          'url' => file_create_url($image->getFileUri()),
+          'width' => (int) $file->field_promotion_banner_mobile_width,
+          'height' => (int) $file->field_promotion_banner_mobile_height,
+        ];
       }
 
       if ($child) {
