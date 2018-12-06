@@ -26,6 +26,8 @@ function alshaya_acm_product_update_8034() {
     'alshaya_acm_product'
   );
 
+  $manager->updateConfigs(['views.view.product_slider'], 'alshaya_acm_product', 'optional');
+
   $manager->updateConfigs(
     [
       'core.entity_view_display.node.acq_product.modal',
