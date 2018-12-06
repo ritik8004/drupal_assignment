@@ -994,13 +994,15 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
   /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
   $csrf_token_generator = \Drupal::service('csrf_token');
 
-  $token = $csrf_token_generator->get($cart->id() . '/' . $sku->getSku());
+  // We use encoded string to handle cases like "MHHW0629 1 6/7Y".
+  $sku_text = base64_encode($sku->getSku());
+  $token = $csrf_token_generator->get($cart->id() . '/' . $sku_text);
 
   // Add remove link as suffix of quantity.
   $remove_url = Url::fromRoute('alshaya_acm.cart_remove_sku',
     [
       'js' => 'nojs',
-      'sku' => $sku->getSku(),
+      'sku' => $sku_text,
       'token' => $token,
       'coupon' => 'nochange',
     ],
