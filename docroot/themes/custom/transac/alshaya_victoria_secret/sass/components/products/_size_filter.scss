@@ -307,6 +307,10 @@
         background-color: $bra_size_active_filter_box_bg_pink;
       }
     }
+
+    .is-active {
+      background-color: $bra_size_active_filter_box_bg_pink;
+    }
   }
 
   .sfb-facets-container {
@@ -344,6 +348,10 @@
       &:hover {
         background-color: $bra_size_active_filter_box_bg_sport;
       }
+    }
+
+    .is-active {
+      background-color: $bra_size_active_filter_box_bg_sport;
     }
   }
 

@@ -140,7 +140,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       }
     }
   }
-  elseif (in_array($context, ['teaser', 'product_category_carousel']) && empty($build['image'])) {
+  elseif (in_array($context, ['teaser', 'product_category_carousel'])) {
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
     try {

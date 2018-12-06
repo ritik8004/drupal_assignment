@@ -57,7 +57,7 @@ installed_extras:
   - solr
   - xdebug
   - memcached
-  - xhprof
+  - tideways
   - varnish
   - pimpmylog
   - drupalconsole
