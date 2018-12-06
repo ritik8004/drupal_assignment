@@ -176,6 +176,7 @@ class AcqSkuDrushCommands extends DrushCommands {
                               CacheBackendInterface $linkedSkuCache,
                               CacheBackendInterface $stockCache,
                               CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
+    parent::__construct();
     $this->apiWrapper = $apiWrapper;
     $this->i18nhelper = $i18nHelper;
     $this->ingestApiWrapper = $ingestAPIWrapper;
@@ -258,9 +259,22 @@ class AcqSkuDrushCommands extends DrushCommands {
       }
     }
 
-    $this->output->writeln(dt('Requesting all commerce products for selected language code...'));
-    $this->ingestApiWrapper->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
-    $this->output->writeln(dt('Done.'));
+    $prod_sync_free_text = dt('I CONFIRM SYNC');
+    // Make the user cautious about product sync.
+    $this->io()->caution(dt("You are about to run a product sync"));
+    $input = $this->io()->ask(dt("Do you confirm you want to do that? If yes, type: '@type'", [
+      '@type' => $prod_sync_free_text,
+    ]));
+
+    // If user types correct text.
+    if ($input == $prod_sync_free_text) {
+      $this->io()->note(dt("Product sync is launched."));
+      $this->ingestApiWrapper->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
+      $this->io()->note(dt("Product sync is completed."));
+    }
+    else {
+      throw new UserAbortException();
+    }
   }
 
   /**
