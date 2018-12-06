@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -177,4 +178,16 @@ function alshaya_acm_product_category_link_attributes_plugin_alter(array &$defin
     'campaign-plp-style-1-modal-link use-ajax' => 'Campaign PLP Style 1 Modal',
   ];
   $definitions['class']['default_value'] = '';
+}
+
+/**
+ * Implements hook_acq_sku_product_node_alter().
+ */
+function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $node, $product) {
+  // Set the category from ACM field to our backup field.
+  $node->get('field_category_original')->setValue($node->get('field_category')->getValue());
+
+  /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
+  $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
+  $manager->processSalesCategoryCheckForNode($node);
 }
