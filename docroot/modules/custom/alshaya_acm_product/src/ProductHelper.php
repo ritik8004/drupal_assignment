@@ -82,7 +82,7 @@ class ProductHelper {
     }
     else {
       $desc = ($this->useTextSummary)
-        ? text_summary($html, NULL, $this->shortDescMaxLength)
+        ? text_summary($html, NULL, $limit)
         : Unicode::truncate($desc_stripped, $limit, TRUE, FALSE);
 
       $return = [
