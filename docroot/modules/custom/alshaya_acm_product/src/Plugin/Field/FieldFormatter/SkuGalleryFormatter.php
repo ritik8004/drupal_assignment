@@ -256,6 +256,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
             'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
             'contexts' => ['route'],
           ],
+          '#color' => $color,
         ];
 
         if (!empty($color)) {
@@ -280,7 +281,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       if ($sku instanceof SKUInterface) {
         // Invoke the alter hook to allow all modules to update the element.
         \Drupal::moduleHandler()->alter(
-          'alshaya_acm_product_build', $element, $sku, $context, $color
+          'alshaya_acm_product_build', $element, $sku, $context
         );
       }
     }
