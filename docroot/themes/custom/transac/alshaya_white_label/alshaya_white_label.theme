@@ -1384,6 +1384,16 @@ function _alshaya_white_label_get_video_attributes($video_url) {
  */
 function alshaya_white_label_preprocess_checkout_selected_address(&$variables) {
   $variables['delivery_address'] = \Drupal::service('alshaya_addressbook.manager')->decorateAddressDispaly($variables['delivery_address']);
+
+  if (isset($variables['delivery_address']['telephone'])) {
+    $variables['delivery_address']['mobile_number'] = str_replace(' ', '', $variables['delivery_address']['telephone']);
+    unset($variables['delivery_address']['telephone']);
+  }
+
+  if (isset($variables['delivery_address']['country'])) {
+    $variables['delivery_address']['country_code'] = $variables['delivery_address']['country'];
+    unset($variables['delivery_address']['country']);
+  }
 }
 
 /**
@@ -1391,4 +1401,14 @@ function alshaya_white_label_preprocess_checkout_selected_address(&$variables) {
  */
 function alshaya_white_label_preprocess_alshaya_address(&$variables) {
   $variables['address'] = \Drupal::service('alshaya_addressbook.manager')->decorateAddressDispaly($variables['address']);
+
+  if (isset($variables['address']['telephone'])) {
+    $variables['address']['mobile_number'] = str_replace(' ', '', $variables['address']['telephone']);
+    unset($variables['address']['telephone']);
+  }
+
+  if (isset($variables['address']['country'])) {
+    $variables['address']['country_code'] = $variables['address']['country'];
+    unset($variables['address']['country']);
+  }
 }

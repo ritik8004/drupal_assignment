@@ -207,3 +207,21 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .path--user {
+    .profile-address-book-delete-form {
+      a {
+        &.dialog-cancel {
+          &.button {
+            display: none !important;
+          }
+        }
+      }
+
+      .button--primary {
+        width: 100%;
+      }
+    }
+  }
+}

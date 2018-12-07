@@ -8,6 +8,11 @@
     }
 
     .ui-dialog-buttonpane .ui-dialog-buttonset {
+      @include breakpoint($only-mobile) {
+        float: none;
+        text-align: center;
+      }
+
       button {
         text-transform: uppercase;
         font-weight: normal;
