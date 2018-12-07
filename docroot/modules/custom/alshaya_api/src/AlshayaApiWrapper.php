@@ -603,20 +603,22 @@ class AlshayaApiWrapper {
 
         if ($response && is_string($response)) {
           if ($decode_response = json_decode($response, TRUE)) {
-            $current_page_skus = array_column($decode_response['items'], 'sku');
+            if (!empty($decode_response['items'])) {
+              $current_page_skus = array_column($decode_response['items'], 'sku');
 
-            $skus = array_unique(array_merge($skus, $current_page_skus));
+              $skus = array_unique(array_merge($skus, $current_page_skus));
 
-            // We don't have any way to know we reached the latest page as
-            // Magento keep continue returning the same latest result. For this
-            // we test if there is any SKU in current page which was already
-            // present in previous page. If yes, then we reached the end of
-            // the list.
-            if (!empty(array_diff($current_page_skus, $previous_page_skus))) {
-              $continue = TRUE;
+              // We don't have any way to know we reached the latest page as
+              // Magento keep continue returning the same latest result. For
+              // this we test if there is any SKU in current page which was
+              // already present in previous page. If yes, then we reached the
+              // end of the list.
+              if (!empty(array_diff($current_page_skus, $previous_page_skus))) {
+                $continue = TRUE;
+              }
+
+              $previous_page_skus = $current_page_skus;
             }
-
-            $previous_page_skus = $current_page_skus;
           }
         }
       }

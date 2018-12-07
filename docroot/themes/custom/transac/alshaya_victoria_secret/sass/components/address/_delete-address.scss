@@ -15,7 +15,8 @@
     }
 
     .ui-dialog-content {
-      margin-bottom: 1rem;
+      margin-bottom: 0;
+      padding-#{$right}: 1rem;
 
       @include breakpoint($only-tablet) {
         margin-bottom: 2rem;
