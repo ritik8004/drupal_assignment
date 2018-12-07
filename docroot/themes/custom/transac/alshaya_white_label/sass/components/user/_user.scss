@@ -1327,7 +1327,7 @@ input::-webkit-credentials-auto-fill-button {
   }
 }
 
-@include breakpoint($only-mobile) {
+@include breakpoint($upto-desktop) {
   .c-user-register {
     .c-content__region {
       .user-form {
@@ -1349,9 +1349,17 @@ input::-webkit-credentials-auto-fill-button {
         }
       }
     }
+  }
+}
 
-    h1 {
+.c-user-register {
+  h1 {
+    @include breakpoint($only-mobile) {
       top: -2.1875rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: -3.125rem;
     }
   }
 }
