@@ -250,29 +250,13 @@ class AcqSkuDrushCommands extends DrushCommands {
 
     // Ask for confirmation from user if attempt is to run full sync.
     if (empty($skus) && empty($category_id)) {
-      $confirm = dt('Are you sure you want to import all products for @language language?', [
+      $confirmation_text = dt('I CONFIRM');
+      $input = $this->io()->ask(dt('Are you sure you want to import all products for @language language? If yes, type: "@confirmation"', [
         '@language' => $langcode,
-      ]);
-
-      if (!$this->io()->confirm($confirm)) {
-        throw new UserAbortException();
-      }
-
-      $prod_sync_free_text = dt('I CONFIRM SYNC');
-      // Make the user cautious about full product sync.
-      $this->io()->caution(dt("You are about to run full product sync"));
-      $input = $this->io()->ask(dt("Do you confirm you want to do that? If yes, type: '@type'", [
-        '@type' => $prod_sync_free_text,
+        '@confirmation' => $confirmation_text,
       ]));
 
-      // If user types correct text.
-      if ($input == $prod_sync_free_text) {
-        $this->io()->note(dt("Full product sync is launched."));
-        $this->ingestApiWrapper->productFullSync($store_id, $langcode, $skus, $category_id, $page_size);
-        $this->io()->note(dt("Full product sync is completed."));
-        return;
-      }
-      else {
+      if ($input != $confirmation_text) {
         throw new UserAbortException();
       }
     }
