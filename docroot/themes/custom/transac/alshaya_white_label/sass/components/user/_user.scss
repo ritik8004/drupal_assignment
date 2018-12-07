@@ -1326,3 +1326,32 @@ input::-webkit-credentials-auto-fill-button {
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .c-user-register {
+    .c-content__region {
+      .user-form {
+        #edit-account {
+          &.form-wrapper {
+            clear: both;
+            overflow: auto;
+
+            .js-form-type-password {
+              margin-top: 2.93rem;
+            }
+          }
+        }
+
+        #edit-field-last-name-wrapper {
+          &.form-wrapper {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+
+    h1 {
+      top: -2.1875rem;
+    }
+  }
+}
