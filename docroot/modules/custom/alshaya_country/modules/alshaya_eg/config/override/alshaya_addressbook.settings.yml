@@ -1,2 +1,6 @@
 mapping:
-  area_parent: 'address_city_segment'
+  area_parent: 'region_address'
+  administrative_area: 'address_city_segment'
+  sorting_code: 'landmark'
+  additional_name: 'apartment'
+  postal_code: 'postcode'
