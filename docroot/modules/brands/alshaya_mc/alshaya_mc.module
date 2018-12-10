@@ -33,57 +33,18 @@ function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityView
       }
 
       // Trim the short description.
-      $short_desc = \Drupal::service('alshaya_acm_product.helper')
-        ->createShortDescription($return['short_desc']['value']['#markup']);
-      $short_desc = _alshaya_mc_process_short_desc($short_desc);
+      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      $product_helper = \Drupal::service('alshaya_acm_product.helper');
+      $short_desc = $product_helper->createShortDescription($return['short_desc']['value']['#markup']);
+      // If there is 'readmore' available only then process.
+      if (!empty($short_desc['read_more'])) {
+        $short_desc['html'] = $product_helper->processShortDescEllipsis($short_desc['html']);
+      }
       $return['short_desc']['value']['#markup'] = $short_desc['html'];
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];
     }
   }
-}
-
-/**
- * Process short description for ellipsis.
- *
- * @param array $short_desc
- *   Short description.
- *
- * @return array
- *   Short description.
- */
-function _alshaya_mc_process_short_desc(array $short_desc) {
-  // If content is less than length.
-  if (empty($short_desc['read_more'])) {
-    return $short_desc;
-  }
-
-  // If normal string without any html tag.
-  if (strip_tags($short_desc['html']) == $short_desc['html']) {
-    return $short_desc;
-  }
-
-  // Remove the ellipses appended at last.
-  if (substr($short_desc['html'], -4) == ' ...') {
-    $short_desc['html'] = substr($short_desc['html'], 0, -4);
-  }
-
-  libxml_use_internal_errors(true);
-  $dom = new \DOMDocument();
-  $dom->loadHTML($short_desc['html']);
-  $last_child = &$dom->lastChild;
-  // Iterate recursively until we reach the last child element.
-  while ($last_child) {
-    if (!$last_child->lastChild) {
-      // Append ellipsis on last child element content.
-      $last_child->textContent .= ' ...';
-    }
-    $last_child = &$last_child->lastChild;
-  }
-
-  $short_desc['html'] = trim($dom->saveHTML());
-
-  return $short_desc;
 }
 
 /**
