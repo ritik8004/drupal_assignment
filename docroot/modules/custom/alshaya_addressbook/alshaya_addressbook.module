@@ -696,7 +696,7 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       'dependent_locality' => $values[0]['dependent_locality'],
       'administrative_area' => $values[0]['administrative_area'],
       'sorting_code' => $values[0]['sorting_code'],
-      'additional_name'=> $values[0]['additional_name'],
+      'additional_name' => $values[0]['additional_name'],
     ];
 
     if (isset($values[0]['locality']) && !empty($values[0]['locality'])) {
