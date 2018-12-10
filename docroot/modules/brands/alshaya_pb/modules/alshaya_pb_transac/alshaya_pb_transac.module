@@ -24,6 +24,18 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
+      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+      $variant = $sku_manager->getSelectedVariant($sku_entity);
+
+      if ($variant instanceof SKUInterface) {
+        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+        $build['title'] = [
+          '#markup' => $productInfoHelper->getTitle($variant, 'pdp'),
+        ];
+      }
+
       $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
@@ -34,6 +46,10 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['description'][] = $description;
 
         $productHelper->updateShortDescription($build, $body[0]['value']);
+
+        if (!empty($build['short_desc'])) {
+          $build['short_desc']['value']['#markup'] = $productHelper->processShortDescEllipsis($build['short_desc']['value']['#markup']);
+        }
       }
 
       $product_info = $sku_entity->get('attr_short_description')->getValue();
@@ -111,26 +127,6 @@ function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(
       $selector = 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h1,';
       $selector .= 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h2';
       $response->addCommand(new HtmlCommand($selector, $title));
-    }
-  }
-}
-
-/**
- * Implements hook_alshaya_acm_customer_build_order_detail_alter().
- */
-function hook_alshaya_acm_customer_build_order_detail_alter(array &$build, array $order) {
-  foreach ($build['#products'] as &$product) {
-    $sku = SKU::loadFromSku($product['sku']);
-
-    if (!($sku instanceof SKUInterface)) {
-      continue;
-    }
-
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $title = $productInfoHelper->getTitle($sku, 'basket');
-    if ($title) {
-      $product['name'] = $title;
     }
   }
 }

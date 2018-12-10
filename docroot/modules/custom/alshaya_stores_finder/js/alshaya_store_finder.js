@@ -73,7 +73,7 @@
         });
       });
 
-      $('.view-stores-finder', context).find('a[data-glossary-view]').each(function(){
+      $('.view-stores-finder', context).find('a[data-glossary-view]').each(function () {
         $(this).once('glossary-view').on('click', function (e) {
           e.preventDefault();
 
@@ -198,7 +198,7 @@
 
       // Avoid form submit on click of enter for stores finder's autocomplete
       // textfield.
-      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').on('keypress', function(event) {
+      $('[data-drupal-selector^="views-exposed-form-stores-finder-page-"] form').on('keypress', function (event) {
         return event.keyCode != 13;
       });
 
@@ -214,7 +214,7 @@
           var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
           $('body').after(progress_element);
           setTimeout(function () {
-            storeFinder.find('input[id^="edit-submit-stores-finder"]').trigger('click');
+            storeFinder.find('[id^="edit-submit-stores-finder"]').trigger('click');
             $(progress_element).remove();
           }, 500);
         });

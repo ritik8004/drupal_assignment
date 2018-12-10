@@ -11,6 +11,17 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Uninstall lightning_scheduler module.
+ */
+function alshaya_update_8011() {
+  if (\Drupal::moduleHandler()->moduleExists('lightning_media_audio')) {
+    \Drupal::service('module_installer')->uninstall(['lightning_media_audio']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Migrate paragraphs content from asymmetric to symmetric translations.
  */
 function alshaya_update_8010() {

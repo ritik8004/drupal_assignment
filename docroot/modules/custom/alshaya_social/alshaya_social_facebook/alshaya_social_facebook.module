@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_social_facebook.
+ */
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_social_facebook_preprocess_alshaya_social(&$variables) {
+  if ($variables['form'] == 'user_login_form' && isset($variables['social_networks']['social_auth_facebook'])) {
+    $variables['social_networks']['social_auth_facebook']['text_link'] = t('Sign in with facebook');
+  }
+  elseif ($variables['form'] == 'user_register_form' && isset($variables['social_networks']['social_auth_facebook'])) {
+    $variables['social_networks']['social_auth_facebook']['text_link'] = t('Sign up with facebook');
+  }
+}

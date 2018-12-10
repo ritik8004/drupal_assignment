@@ -156,6 +156,19 @@ $conductors = [
     'hmac_secret' => 'MWYxYTA0NmItMjM1Yy00',
     'api_version' => 'v2',
   ],
+  // H&M EG.
+  'hmeg_test' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => '34780fdeb07441048af8fb931a75f788',
+    'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
+    'api_version' => 'v2',
+  ],
+  'hmeg_uat' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'cd34bf1fd5c048df9b21fb80c0d9c392',
+    'hmac_secret' => 'Njk4NjYxZDItMmIzYS00',
+    'api_version' => 'v2',
+  ],
   // Pottery Barn KW.
   'pbkw_test' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -372,8 +385,3 @@ $conductors = [
     'api_version' => 'v2',
   ],
 ];
-
-$conductor_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/conductor.php';
-if (file_exists($conductor_settings_file)) {
-  require_once $conductor_settings_file;
-}

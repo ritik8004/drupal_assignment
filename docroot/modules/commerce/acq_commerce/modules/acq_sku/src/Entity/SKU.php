@@ -407,6 +407,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
       return NULL;
     }
 
+    // Get the first entity to use from result.
+    $sku_entity = reset($skus);
+
+    // Sanity check.
+    if (!($sku_entity instanceof SKUInterface)) {
+      return NULL;
+    }
+
     // Remove all skus in other languages if there are more than one available
     // We need to have multiple languages enabled to clean db result.
     // If only one is available, we might be adding translation, leave it as is.
@@ -424,11 +432,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
-    $sku_entity = array_shift($skus);
-
     if ($is_multilingual) {
       if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
+
+        // Set value in static variable.
+        // We set in static cache only for proper case, when returning different
+        // language or creating translation we can avoid static cache.
+        $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
       }
       elseif ($create_translation) {
         $sku_entity = $sku_entity->addTranslation($langcode, ['sku' => $sku]);
@@ -438,9 +449,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
         \Drupal::logger('acq_sku')->error('SKU translation not found of @sku for @langcode', ['@sku' => $sku, '@langcode' => $langcode]);
       }
     }
-
-    // Set value in static variable.
-    $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
+    else {
+      // Set value in static variable directly if not a multi-lingual site.
+      $skus_static_cache[$static_cache_sku_identifier] = $sku_entity;
+    }
 
     return $sku_entity;
   }

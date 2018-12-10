@@ -75,6 +75,9 @@ $magentos = [
     'ae' => [
       'store_id' => ['en' => 6, 'ar' => 5],
     ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
   ],
   'hm_uat' => [
     'url' => 'https://hm-uat.store.alshaya.com',
@@ -86,6 +89,9 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 14, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
     ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
@@ -312,10 +318,11 @@ $magentos = [
         'ar' => 'are_ar',
       ],
     ],
+    'eg' => [
+      'magento_lang_prefix' => [
+        'en' => 'egy_en',
+        'ar' => 'egy_ar',
+      ],
+    ],
   ],
 ];
-
-$magento_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/magento.php';
-if (file_exists($magento_settings_file)) {
-  require_once $magento_settings_file;
-}

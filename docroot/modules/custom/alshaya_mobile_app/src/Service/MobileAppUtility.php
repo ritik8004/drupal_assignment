@@ -23,6 +23,8 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\rest\ResourceResponse;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
  * Utilty Class.
@@ -42,6 +44,13 @@ class MobileAppUtility {
    * @var array
    */
   protected $termUrls = [];
+
+  /**
+   * Array of term tags.
+   *
+   * @var array
+   */
+  protected $termTags = [];
 
   /**
    * Cache Backend service for alshaya.
@@ -128,6 +137,13 @@ class MobileAppUtility {
   protected $currencyConfig;
 
   /**
+   * API Wrapper object.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  protected $apiWrapper;
+
+  /**
    * Utility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -152,6 +168,8 @@ class MobileAppUtility {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The ApiWrapper object.
    */
   public function __construct(
     CacheBackendInterface $cache,
@@ -164,7 +182,8 @@ class MobileAppUtility {
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     ProductCategoryTreeInterface $product_category_tree,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    APIWrapper $api_wrapper
   ) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
@@ -179,6 +198,7 @@ class MobileAppUtility {
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
     $this->currencyConfig = $config_factory->get('acq_commerce.currency');
+    $this->apiWrapper = $api_wrapper;
   }
 
   /**
@@ -430,6 +450,25 @@ class MobileAppUtility {
   }
 
   /**
+   * Helper method to return a response.
+   *
+   * @param string $message
+   *   (Optional) status message when necessary.
+   * @param bool $status
+   *   (Optional) True if you want to send success => TRUE, else FALSE.
+   *
+   * @return \Drupal\rest\ResourceResponse
+   *   HTTP Response.
+   */
+  public function sendStatusResponse(string $message = '', $status = FALSE) {
+    $response['success'] = (bool) ($status);
+    if ($message) {
+      $response['message'] = $message;
+    }
+    return (new ResourceResponse($response));
+  }
+
+  /**
    * Get the link parameters for link field type.
    *
    * @param object $entity
@@ -491,13 +530,14 @@ class MobileAppUtility {
     foreach ($terms as $term) {
       $term_url = Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(TRUE);
       $this->termUrls[] = $term_url;
+      $this->termTags[] = "term:{$term->tid}";
 
       $record = [
         'id' => (int) $term->tid,
         'name' => $term->name,
         'description'  => !empty($term->description__value) ? $term->description__value : '',
         'path' => $term_url->getGeneratedUrl(),
-        'deeplink' => $this->mobileAppUtility->getDeepLink($term),
+        'deeplink' => $this->getDeepLink($term),
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
@@ -518,12 +558,22 @@ class MobileAppUtility {
   }
 
   /**
+   * Return term tags to cache.
+   *
+   * @return array
+   *   Return Term urls array.
+   */
+  public function cacheableTermTags() {
+    return $this->termTags;
+  }
+
+  /**
    * Return term urls to cache.
    *
    * @return array
    *   Return Term urls array.
    */
-  public function cachedTermUrls() {
+  public function cacheableTermUrls() {
     return $this->termUrls;
   }
 
@@ -765,11 +815,63 @@ class MobileAppUtility {
    * @param float $price
    *   The price.
    *
-   * @return float
-   *   Return float price upto configured decimal points.
+   * @return string
+   *   Return string price upto configured decimal points.
    */
-  public function formatPriceDisplay(float $price): float {
-    return number_format($price, $this->currencyConfig->get('decimal_points'));
+  public function formatPriceDisplay(float $price): string {
+    return (string) number_format($price, $this->currencyConfig->get('decimal_points'));
+  }
+
+  /**
+   * Convert relative url img tag in string with absolute url.
+   *
+   * @param string $string
+   *   The string containing html tags.
+   *
+   * @return string
+   *   Return the complete url string with domain.
+   */
+  public function convertRelativeUrlsToAbsolute(string $string): string {
+    global $base_url;
+    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
+  }
+
+  /**
+   * Get user info from mdc and create it.
+   *
+   * @param string $email
+   *   The user mail string.
+   * @param bool $block
+   *   (Optional) True to block user after created, otherwise false.
+   *
+   * @return \Drupal\user\Entity\User|false
+   *   Return user object or false.
+   */
+  public function createUserFromCommerce(string $email, $block = TRUE) {
+    // Try to get user from mdc and create new user account.
+    try {
+      /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
+      $customer = $this->apiWrapper->getCustomer($email);
+
+      if (!empty($customer)) {
+        $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.utility');
+        /** @var \Drupal\user\Entity\User $user */
+        $user = alshaya_acm_customer_create_drupal_user($customer);
+        if ($block) {
+          $user->block();
+          $user->save();
+        }
+      }
+    }
+    catch (\Exception $e) {
+      // Do nothing except for downtime exception, let default validation
+      // handle the error messages.
+      if (acq_commerce_is_exception_api_down_exception($e)) {
+        $this->logger->error($e->getMessage());
+      }
+    }
+
+    return $user;
   }
 
 }

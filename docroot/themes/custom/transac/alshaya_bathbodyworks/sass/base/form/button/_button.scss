@@ -13,8 +13,9 @@
   &.status-processing,
   &.status-returned {
     text-transform: uppercase;
+    padding-top: 0.125rem;
 
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($tablet) {
       padding-top: 0.1875rem;
     }
 

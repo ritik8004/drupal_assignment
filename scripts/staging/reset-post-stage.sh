@@ -22,8 +22,8 @@ fi
 # Get the environment without the "01" prefix.
 env=${target_env:2}
 
-# Move to proper directory to get access to drush acsf-tools commands.
-cd `drush8 sa @alshaya.$target_env | grep root | cut -d"'" -f4`
+# Move to proper directory to get access to drush9 acsf-tools commands.
+cd /var/www/html/alshaya$target_env/docroot
 
 echo "Starting post stage reset process on $sites."
 
@@ -31,22 +31,31 @@ echo "Starting post stage reset process on $sites."
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site before doing anything."
-  drush8 @alshaya.$target_env sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
+  drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/pre-stage/$site.sql --gzip
+done
+
+# Run updb. In case of soft-stage, it is required to be sure next steps don't
+# fail due to invalid code/database. In case of hard-stage, it does not have
+# any impact given code is same as on prod environment.
+echo "$sites" | while IFS= read -r site
+do
+  echo "Running database update on $site."
+  drush sql-dump -l $site.$env-alshaya.acsitefactory.com updb -y
 done
 
 ###### CLEAR + SYNC.
 echo "$sites" | while IFS= read -r site
 do
   # Get the installed profile on the given site.
-  profile="$(drush8 -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
+  profile="$(drush -l $site.$env-alshaya.acsitefactory.com php-eval 'echo drupal_get_profile();')"
 
   # For transac sites, we launch the commerce clean.
   if [ $profile = "alshaya_transac" ]
   then
     echo "Cleaning and syncing commerce data on $site."
-    ./../scripts/staging/sub/prepare-site-for-reset.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/clean-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
-    ./../scripts/staging/sub/sync-commerce-data.sh "alshaya" $target_env $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/prepare-site-for-reset.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/clean-commerce-data.sh $site.$env-alshaya.acsitefactory.com
+    ./../scripts/staging/sub-sh/sync-commerce-data.sh $site.$env-alshaya.acsitefactory.com
   fi
 
 done
@@ -55,5 +64,5 @@ done
 echo "$sites" | while IFS= read -r site
 do
   echo "Taking database dump of $site after process."
-  drush8 @alshaya.$target_env sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
+  drush sql-dump -l $site.$env-alshaya.acsitefactory.com --result-file=~/backup/$target_env/post-stage/$site.sql --gzip
 done

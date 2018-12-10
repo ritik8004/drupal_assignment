@@ -20,6 +20,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
  * MobileAppUtilityParagraphs service decorators for MobileAppUtility .
@@ -31,7 +32,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *
    * @var array
    */
-  protected $cachedEntities = [];
+  protected $cacheableEntities = [];
 
   /**
    * The paragraph Base Fields.
@@ -101,6 +102,8 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   Product category tree.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   The renderer.
    */
   public function __construct(
     MobileAppUtility $mobile_app_utility,
@@ -117,9 +120,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     SkuImagesManager $sku_images_manager,
     ModuleHandlerInterface $module_handler,
     ProductCategoryTreeInterface $product_category_tree,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    APIWrapper $api_wrapper
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
@@ -128,13 +132,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   }
 
   /**
-   * Return array of cached entities.
+   * Return array of cacheable entities.
    *
    * @return array
-   *   Return array of cached entities.
+   *   Return array of cacheable entities.
    */
-  public function getCachedEntities() {
-    return $this->cachedEntities;
+  public function getCacheableEntities() {
+    return $this->cacheableEntities;
   }
 
   /**
@@ -175,7 +179,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
                 'type' => 'banner',
               ] + $default_values,
               'field_slider' => [
-                'callback' => 'getFieldParagraphItems',
+                'callback' => 'getFieldMultipleParagraphItems',
                 'type' => 'slider',
               ] + $default_values,
               'body' => [
@@ -240,6 +244,26 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
               'field_block_reference' => [
                 'callback' => 'getFieldBlockReference',
                 'label' => 'block',
+              ] + $default_values,
+            ],
+          ],
+          'delivery_usp_block' => [
+            'callback' => 'paragraphDeliveryUspBlock',
+            'fields' => [
+              'field_arrow_color' => [
+                'label' => 'arrow_color',
+              ] + $default_values,
+              'field_usp_text' => [
+                'label' => 'text',
+              ] + $default_values,
+              'field_usp_text_background' => [
+                'label' => 'text_background',
+              ] + $default_values,
+              'field_usp_text_font_color' => [
+                'label' => 'text_font_color',
+              ] + $default_values,
+              'field_usp_timer' => [
+                'label' => 'timer',
               ] + $default_values,
             ],
           ],
@@ -334,7 +358,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   public function processEntityBundleData($entity) {
     $data = FALSE;
     $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
-    $this->cachedEntities[] = $entity;
+    $this->cacheableEntities[] = $entity;
     if (!empty($bundle_info = $this->getEntityBundleInfo($entity->getEntityTypeId(), $entity->bundle()))) {
       $data = call_user_func_array(
         [
@@ -364,10 +388,11 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    *   (optional) The type of the field to return with response and optionally
    *   process data according to given type.
    *
-   * @return array|string
+   * @return array
    *   Return array with processed field data and string when callback is empty.
    */
   public function getFieldData($entity, string $field, $callback = NULL, $label = NULL, $type = NULL) {
+    $data = [];
     if (empty($callback)) {
       if (!empty($entity->get($field)->first())) {
         $data = array_merge(
@@ -423,6 +448,58 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       }
     }
     return !empty($field_output) ? $field_output : [];
+  }
+
+  /**
+   * Function to get multiple paragraph items associated with the field.
+   *
+   * This kind of fields does not have layout paragraph types in-between.
+   *
+   * @param object $entity
+   *   The paragraph entity or node entity object.
+   * @param string $field
+   *   The field name.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
+   *
+   * @return array
+   *   Return array of data.
+   */
+  protected function getFieldMultipleParagraphItems($entity, string $field, $label = NULL, $type = NULL): array {
+    if (!$entity->hasField($field)) {
+      return [];
+    }
+    // Load entities associated with entity reference revision field.
+    $entities = $entity->get($field)->referencedEntities();
+    $field_output = ['type' => $type, 'items' => []];
+    foreach ($entities as $entity) {
+      // Call a callback function to prepare data if paragraph type is one of
+      // the paragraph types listed in getEntityBundleInfo().
+      if ($result = $this->processEntityBundleData($entity)) {
+        $field_output['items'][] = $entity->bundle() == 'delivery_usp_block'
+        ? $result[0]
+        : array_merge(['type' => $entity->bundle()], $result);
+      }
+    }
+    return !empty($field_output) ? $field_output : [];
+  }
+
+  /**
+   * Prepare paragraph data based on given fields for given entity.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  protected function paragraphDeliveryUspBlock(ParagraphInterface $entity, array $fields) {
+    $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
+    return [array_merge(['type' => $entity->bundle()], $data)];
   }
 
   /**
@@ -484,7 +561,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
    */
   protected function getRecursiveParagraphData($entity): array {
     $entity = $this->getEntityTranslation($entity, $this->currentLanguage);
-    $this->cachedEntities[] = $entity;
+    $this->cacheableEntities[] = $entity;
     // Process data for given entity if callback exists.
     if ($result = $this->processEntityBundleData($entity)) {
       return array_merge(['type' => $entity->bundle()], $result);
@@ -573,7 +650,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         }
       }
       elseif ($entity->hasField($field) && !empty($entity->get($field)->getString())) {
-        $data[$field_info['label']] = $entity->get($field)->getString();
+        // Check cardinality of given field.
+        $data[$field_info['label']] = $entity->get($field)->getFieldDefinition()->getFieldStorageDefinition()->isMultiple()
+        ? array_map(function ($value) {
+          return $value['value'];
+        }, $entity->get($field)->getValue())
+        : $entity->get($field)->getString();
       }
     }
     return $data;
@@ -707,20 +789,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
-  }
-
-  /**
-   * Convert relative url img tag in string with absolute url.
-   *
-   * @param string $string
-   *   The string containing html tags.
-   *
-   * @return string
-   *   Return the complete url string with domain.
-   */
-  protected function convertRelativeUrlsToAbsolute(string $string): string {
-    global $base_url;
-    return preg_replace('#(src)="([^:"]*)(?:")#', '$1="' . $base_url . '$2"', $string);
   }
 
 }

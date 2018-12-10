@@ -7,6 +7,6 @@
  */
 
 if (extension_loaded('newrelic')) {
-  global $site_name;
-  newrelic_set_appname("$site_name;alshaya.01live", '', 'true');
+  global $acsf_site_name;
+  newrelic_set_appname("$acsf_site_name;alshaya.01live", '', 'true');
 }

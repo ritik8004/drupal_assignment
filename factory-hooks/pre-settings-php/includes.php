@@ -7,6 +7,8 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
+// Configure your hash salt here.
+// $settings['hash_salt'] = '';.
 require DRUPAL_ROOT . '/../vendor/acquia/blt/settings/blt.settings.php';
 
 $env = 'local';
@@ -19,6 +21,57 @@ elseif (getenv('TRAVIS')) {
 
 // Set the env in settings to allow re-using in custom code.
 $settings['env'] = $env;
+
+if ($settings['env'] === 'local') {
+  // For Drush and other CLI commands increase the memory limit to 512 MB.
+  // We do this only for local env, for cloud envs it is already done.
+  // This is as suggested in https://support.acquia.com/hc/en-us/articles/360004542293-Conditionally-increasing-memory-limits
+  if (PHP_SAPI === 'cli') {
+    ini_set('memory_limit', '512M');
+  }
+
+  global $host_site_code;
+
+  // Get site code from site uri.
+  if (!empty($_SERVER['HTTP_HOST'])) {
+    $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
+    $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
+  }
+  else {
+    foreach ($_SERVER['argv'] as $arg) {
+      preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
+      if (!empty($matches)) {
+        $host_site_code = $matches[1];
+        break;
+      }
+    }
+  }
+
+  // Set private files directory for local, it is not set in
+  // '/../vendor/acquia/blt/settings/filesystem.settings.php' file.
+  $settings['file_private_path'] = '/var/www/alshaya/files-private/' . $host_site_code;
+}
+
+switch ($env) {
+  case 'local':
+    $settings['social_auth_facebook.settings']['app_id'] = '2140208022890023';
+    $settings['social_auth_facebook.settings']['app_secret'] = '7cde10657c1866f072c56283af920484';
+    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
+    break;
+
+  case '01live':
+    $social_auth_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/01live/social_auth.php';
+    if (file_exists($social_auth_settings_file)) {
+      include_once $social_auth_settings_file;
+    }
+    break;
+
+  default:
+    $settings['social_auth_facebook.settings']['app_id'] = '452346355260372';
+    $settings['social_auth_facebook.settings']['app_secret'] = '466de9be713752a2f19eb566270013ab';
+    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
+    break;
+}
 
 // Configure your hash salt here.
 // TODO: Security.
@@ -38,6 +91,10 @@ $settings['alshaya_acm_user_password'] = 'AlShAyA_AcM';
 $settings['alshaya_magento_user_username'] = 'alshaya_magento';
 $settings['alshaya_magento_user_email'] = 'noreply-magento@alshaya.com';
 $settings['alshaya_magento_user_password'] = 'AlShAyA_MaGeNtO';
+
+$settings['alshaya_mobile_app_user_username'] = 'alshaya_mobile_app';
+$settings['alshaya_mobile_app_user_email'] = 'noreply-mobile-app@alshaya.com';
+$settings['alshaya_mobile_app_user_password'] = 'AlShAyA_MoBiLe';
 
 // Simple Oauth.
 // TODO: Security.
@@ -60,6 +117,9 @@ $settings['alshaya_acm_soauth_client_uuid'] = '35b9a28a-939f-4e2b-be55-9445c5b65
 
 $settings['alshaya_magento_soauth_client_uuid'] = '4cacd535-3b24-434e-9d32-d6e843f7b91a';
 $settings['alshaya_magento_soauth_client_secret'] = 'AlShAyA';
+
+$settings['alshaya_mobile_app_soauth_client_uuid'] = 'ac73dcc7-6918-4e14-8b48-86b5cd17f4d2';
+$settings['alshaya_mobile_app_soauth_client_secret'] = 'AlShAyA';
 
 $settings['alshaya_api.settings']['magento_api_base'] = 'rest/V1';
 $settings['alshaya_api.settings']['verify_ssl'] = 0;

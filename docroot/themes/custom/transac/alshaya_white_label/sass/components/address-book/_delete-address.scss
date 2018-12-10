@@ -15,6 +15,19 @@
     color: $black;
     font-size: 0.875rem;
     min-height: 2rem;
+
+    a.dialog-cancel {
+      width: auto !important;
+      height: 2.5rem !important;
+      display: inline-flex !important;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .button--primary {
+      margin-top: 1rem;
+      margin-#{$right}: 1rem;
+    }
   }
 
   .ui-dialog {
@@ -31,6 +44,12 @@
 
     @include breakpoint($only-mobile) {
       width: 100% !important;
+    }
+
+    .ui-dialog-buttonpane {
+      button.dialog-cancel {
+        display: none;
+      }
     }
 
     .ui-dialog-buttonpane .ui-dialog-buttonset,
@@ -60,6 +79,10 @@
     .ui-dialog-content {
       margin-bottom: 2rem;
       padding-#{$right}: 3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
     }
   }
 

@@ -29,10 +29,10 @@ jQuery.fn.select2Option = function (options) {
           liHtml.hide();
           var defaultTitle = $(this).parent().attr('data-default-title');
           if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : </span><span class="selected-text"></span></h4>';
           }
           else {
-            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : </span><span class="selected-text"></span></h4>';
           }
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
@@ -109,6 +109,32 @@ jQuery.fn.select2Option = function (options) {
       }
       select.trigger('change');
     });
+
+    if (drupalSettings.color_swatches_hover) {
+      if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id')) {
+        $('.form-item-configurables-article-castor-id .select2Option .list-title span:first-child').hide();
+        buttonsHtml.find('a').on('mouseover', function (e) {
+          e.preventDefault();
+
+          var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
+          $(this).closest('.select2Option').find('.list-title .selected-text').remove();
+
+          var selectedText = clickedOption.text();
+
+          if ($(this).attr('data-color-label')) {
+            selectedText = $(this).attr('data-color-label');
+          }
+
+          $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + selectedText + '</span>');
+        });
+
+        buttonsHtml.find('a').on('mouseout', function (e) {
+          e.preventDefault();
+
+          Drupal.alshaya_hm_images_update_selected_label();
+        });
+      }
+    }
   });
 };
 

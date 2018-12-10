@@ -139,6 +139,9 @@
           float: $right;
           margin: 0;
           margin-#{$right}: 0.75em;
+          line-height: 1.5;
+
+          @include link-ripple();
 
           @include breakpoint($tablet) {
             margin-#{$right}: 0;
@@ -608,7 +611,7 @@
 .page-standard.user-page.c-delivery-checkout,
 .pdp-modal-overlay .page-standard,
 .free-gifts-modal-overlay .page-standard,
-.sizeguide-modal-overlay .page-standard {
+.sizeguide-modal-overlay {
   .ajax-progress-throbber {
     position: fixed !important;
     width: 100% !important;

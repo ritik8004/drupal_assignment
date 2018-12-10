@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_social_facebook.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_social_facebook_install() {
+  // Configure recaptcha settings.
+  $config = \Drupal::configFactory()->getEditable('social_auth_facebook.settings');
+
+  $facebook_settings = Settings::get('social_auth_facebook.settings');
+  if (!empty($facebook_settings)) {
+    $facebook_settings['post_login'] = '/user';
+    $facebook_settings['disable_admin_login'] = 1;
+    foreach ($facebook_settings as $key => $value) {
+      $config->set($key, $value);
+    }
+  }
+
+  $config->save();
+}
