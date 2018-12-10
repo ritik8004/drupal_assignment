@@ -1321,3 +1321,40 @@ input::-webkit-credentials-auto-fill-button {
     }
   }
 }
+
+@include breakpoint($upto-desktop) {
+  .c-user-register {
+    .c-content__region {
+      .user-form {
+        #edit-account {
+          &.form-wrapper {
+            clear: both;
+            overflow: auto;
+
+            .js-form-type-password {
+              margin-top: 2.93rem;
+            }
+          }
+        }
+
+        #edit-field-last-name-wrapper {
+          &.form-wrapper {
+            margin-top: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.c-user-register {
+  h1 {
+    @include breakpoint($only-mobile) {
+      top: -2.1875rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: -3.125rem;
+    }
+  }
+}
