@@ -96,10 +96,8 @@ class AlshayaSearchApiHelper {
       $query_params['f'][$key] = $data[0] . ':' . $term->label();
     }
 
-    if (!empty($brand = $query_params['brand'])) {
-      $this->moduleHandler->alter('alshaya_search_api_language_switcher_brand', $brand, $langcode);
-      $query_params['brand'] = $brand;
-    }
+    // Call hook alter for other parameters.
+    $this->moduleHandler->alter('alshaya_search_api_language_switcher', $query_params, $langcode);
 
     return $query_params;
   }
