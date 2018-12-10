@@ -19,3 +19,4 @@ services:
     class: Drupal\alshaya_search_api\AlshayaSearchApiHelper
     arguments:
       - '@entity_type.manager'
+      - '@module_handler'
