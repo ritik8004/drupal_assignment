@@ -1,0 +1,5 @@
+alshaya_acm_dashboard.dashboard_settings:
+  title: 'Alshaya acm dashboard configuration'
+  route_name: 'alshaya_acm_dashboard.settings_form'
+  parent: 'acq_commerce.configuration'
+  description: 'Configure alshaya acm dashboard settings.'
