@@ -6,12 +6,6 @@
       // For now we want to do it for PLP only.
       $('.region__sidebar-first [data-block-plugin-id="facet_block:plp_size"]:first').once('size-copy').each(function () {
         var $wrapper = $(this);
-        $('.sfb-band-cup .sfb-facets-container').each(function () {
-          try {
-            $(this).slick('destroy');
-          }
-          catch (e) {  }
-        });
 
         $('.sfb-facets-container').html('');
 
@@ -57,46 +51,112 @@
           $('.facet-item a[data-drupal-facet-item-value="' + $value + '"]', $wrapper).closest('.facet-item').trigger('click');
         });
 
-        applySlickSlider();
-      });
-
-      $('html').once('SlickSizeFilterSlider').each(function () {
-        $(window).on('resize', function () {
-          applySlickSlider();
-        });
+        applyFilterSlider();
       });
     }
   };
 
-  function applySlickSlider() {
-    var filterOptions = {
-      slidesToShow: 2,
-      vertical: false,
-      arrows: true,
-      focusOnSelect: false,
-      infinite: false,
-      touchThreshold: 1000
-    };
+  function applyFilterSlider() {
+    if ($(window).width() > 1024) {
+      // duration of scroll animation.
+      var scrollDuration = 300;
 
-    $('.sfb-band-cup .sfb-facets-container').each(function () {
-      if ($(window).width() > 1024) {
-        applyRtl($(this), filterOptions);
-        $(this).slick('resize');
-      }
-      else {
-        $(this).slick('destroy');
-      }
-    });
+      // paddles.
+      var leftPaddle = $('.paddle_prev');
+      var rightPaddle = $('.paddle_next');
+
+      // get items dimensions.
+      var itemsLength = $('.shop-by-size-band').length;
+      var itemSize = $('.shop-by-size-band').outerWidth();
+
+      var DifferenceOfsCupsizewrapper = [];
+      var CupsizewrapperWidthsum = 0;
+      $('.sfb-band-cup').find('.shop-by-size-band').each(function () {
+        // Get the distance of different cup size wrapper from starting point.
+        CupsizewrapperWidthsum += $(this).outerWidth() + 16;
+        DifferenceOfsCupsizewrapper.push(CupsizewrapperWidthsum);
+      });
+
+      // get wrapper width.
+      var getMenuWrapperSize = function () {
+        return $('.sfb-facets-container').outerWidth();
+      };
+
+      var menuWrapperSize = getMenuWrapperSize();
+      // the wrapper is responsive
+      $(window).on('resize', function () {
+        menuWrapperSize = getMenuWrapperSize();
+      });
+
+      // size of the visible part of the menu is equal as the wrapper size.
+      var menuVisibleSize = menuWrapperSize;
+
+      // get total width of all menu items.
+      var getMenuSize = function () {
+        return $('.sfb-band-cup').outerWidth();
+      };
+
+      var menuSize = getMenuSize();
+      // get how much of menu is invisible.
+      var menuInvisibleSize = menuSize - menuWrapperSize;
+
+      // get how much have we scrolled to the left.
+      var getMenuPosition = function () {
+        return $('.sfb-facets-container').scrollLeft();
+      };
+
+      // finally, what happens when we are actually scrolling the menu
+      $('.sfb-facets-container').on('scroll', function () {
+
+        // get how much of menu is invisible
+        menuInvisibleSize = menuSize - menuWrapperSize;
+        // get how much have we scrolled so far
+        var menuPosition = getMenuPosition();
+
+        var menuEndOffset = menuInvisibleSize;
+
+        // show & hide the paddles depending on scroll position
+        if (menuPosition <= 0) {
+          $(leftPaddle).addClass('hidden');
+          $(rightPaddle).removeClass('hidden');
+        }
+        else if (menuPosition >= (DifferenceOfsCupsizewrapper[itemsLength - 1] - (menuWrapperSize + 17))) {
+          $(leftPaddle).removeClass('hidden');
+          $(rightPaddle).addClass('hidden');
+        }
+        else {
+          $(leftPaddle).removeClass('hidden');
+          $(rightPaddle).removeClass('hidden');
+        }
+      });
+
+      var sliderIndex = 0;
+
+      // scroll to left.
+      $(rightPaddle).once().on('click', function () {
+        $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
+        sliderIndex++;
+      });
+
+      // scroll to right.
+      $(leftPaddle).once().on('click', function () {
+        sliderIndex--;
+        if (sliderIndex == 0) {
+          $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
+        }
+        else {
+          // scroll by a single size wrapper.
+          $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex] - DifferenceOfsCupsizewrapper[sliderIndex - 1])}, scrollDuration);
+        }
+      });
+    }
   }
 
-  function applyRtl(ocObject, options) {
-    if (isRTL()) {
-      ocObject.attr('dir', 'rtl');
-      ocObject.slick($.extend({}, options, {rtl: true}));
-    }
-    else {
-      ocObject.slick(options);
-    }
+  if( $( "html" ).attr("dir") == "rtl" ) {
+    $('.paddle_next').addClass('hidden');
+  }
+  else {
+    $('.paddle_prev').addClass('hidden');
   }
 
 }(jQuery));
