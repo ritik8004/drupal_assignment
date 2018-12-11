@@ -123,7 +123,7 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
         foreach ($results as $i => $result) {
           $term = isset($entities[$ids[$i]]) ? $entities[$ids[$i]] : NULL;
 
-          if ($term->hasTranslation($langcode)) {
+          if (($term instanceof TermInterface) && $term->hasTranslation($langcode)) {
             $term = $term->getTranslation($langcode);
           }
 
