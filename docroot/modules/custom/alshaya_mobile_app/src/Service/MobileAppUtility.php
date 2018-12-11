@@ -727,7 +727,7 @@ class MobileAppUtility {
    * @return array
    *   Light Product.
    */
-  public function getLightProduct(SKUInterface $sku, $color): array {
+  public function getLightProduct(SKUInterface $sku, $color = NULL): array {
     // Get the prices.
     $prices = $this->skuManager->getMinPrices($sku);
 

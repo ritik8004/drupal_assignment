@@ -561,7 +561,7 @@ class SkuImagesManager {
    *
    * @throws \Exception
    */
-  public function getSkuForGalleryWithColor(SKU $sku, $color): ?SKU {
+  public function getSkuForGalleryWithColor(SKU $sku, $color = NULL): ?SKU {
     if (empty($color)) {
       try {
         return $this->getSkuForGallery($sku);
