@@ -344,6 +344,8 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
  * Implements hook_alshaya_mobile_app_light_product_data_alter().
  */
 function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku, array &$data) {
+  $data['swatches'] = [];
+
   if (!empty($data['color'])) {
     return;
   }
@@ -352,7 +354,7 @@ function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku,
   $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
   // Get colors for the SKU.
   $colors = $sku_assets_manager->getColorsForSku($sku);
-  $data['swatches'] = [];
+
   foreach ($colors as $key => $color) {
     $data['swatches'][] = [
       'key' => $key,
