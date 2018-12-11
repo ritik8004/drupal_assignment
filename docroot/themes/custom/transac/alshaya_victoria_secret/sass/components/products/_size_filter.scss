@@ -83,7 +83,6 @@
   padding: 0.75rem 0 1.625rem;
 
   @include breakpoint($upto-desktop) {
-    overflow: auto;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }

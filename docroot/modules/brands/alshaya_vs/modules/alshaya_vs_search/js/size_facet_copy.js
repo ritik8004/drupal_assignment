@@ -84,9 +84,10 @@
 
       var menuWrapperSize = getMenuWrapperSize();
       // the wrapper is responsive
-      $(window).on('resize', function () {
+
+      $(window).resize(debounce(function () {
         menuWrapperSize = getMenuWrapperSize();
-      });
+      }, 500));
 
       // size of the visible part of the menu is equal as the wrapper size.
       var menuVisibleSize = menuWrapperSize;
