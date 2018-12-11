@@ -46,6 +46,10 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['description'][] = $description;
 
         $productHelper->updateShortDescription($build, $body[0]['value']);
+
+        if (!empty($build['short_desc'])) {
+          $build['short_desc']['value']['#markup'] = $productHelper->processShortDescEllipsis($build['short_desc']['value']['#markup']);
+        }
       }
 
       $product_info = $sku_entity->get('attr_short_description')->getValue();
