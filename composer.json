@@ -90,7 +90,6 @@
         "springimport/magento2-api-v1": "^1.0",
         "drupal/adminimal_theme": "^1.3",
         "charliekassel/array-diff": "^0.0.2",
-        "drupal/logs_http": "^1.0",
         "drupal/link_attributes": "^1.5",
         "drupal/social_auth_facebook": "^1.0",
         "drupal/webform_rest": "^2.0"
@@ -286,9 +285,6 @@
             },
             "drupal/seckit": {
                 "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
-            },
-            "drupal/logs_http": {
-                "Allows to alter an event and allow to stop sending it as well": "https://patch-diff.githubusercontent.com/raw/Gizra/logs_http/pull/20.patch"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
