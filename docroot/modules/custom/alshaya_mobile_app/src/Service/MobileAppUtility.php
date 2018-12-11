@@ -764,7 +764,8 @@ class MobileAppUtility {
     ];
 
     if ($color) {
-      $data['color'] = (int) $sku_for_gallery->id();
+      // Keep data type consistent here.
+      $data['color'] = (string) $color;
     }
 
     // Allow other modules to alter light product data.
