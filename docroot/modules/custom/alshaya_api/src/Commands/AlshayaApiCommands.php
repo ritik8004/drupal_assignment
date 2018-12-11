@@ -332,10 +332,13 @@ class AlshayaApiCommands extends DrushCommands {
                 if (isset($sku_data['price'])) {
                   $mskus[$type][$sku]['price'] = $sku_data['price'];
                 }
-                foreach ($sku_data['custom_attributes'] as $attribute) {
-                  if ($attribute['attribute_code'] == 'special_price') {
-                    $mskus[$type][$sku]['special_price'] = $attribute['value'];
-                    break;
+
+                if (!empty($sku_data['custom_attributes'])) {
+                  foreach ($sku_data['custom_attributes'] as $attribute) {
+                    if ($attribute['attribute_code'] == 'special_price') {
+                      $mskus[$type][$sku]['special_price'] = $attribute['value'];
+                      break;
+                    }
                   }
                 }
               }
