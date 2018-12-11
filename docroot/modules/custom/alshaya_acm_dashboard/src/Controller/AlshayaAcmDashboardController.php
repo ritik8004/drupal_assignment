@@ -84,11 +84,11 @@ class AlshayaAcmDashboardController extends ControllerBase {
     $build['mdc_stats'] = [
       '#type' => 'table',
       '#caption' => $this
-        ->t('MDC Queue Stats'),
+        ->t('MDC Queue Stats (Note: Queue count below is for all countries for the current Brand)'),
       '#header' => [
         $this->t('Queue Name'),
         $this->t('Number of items in Queue'),
-        $this->t('ETA to Conductor(approx.)'),
+        $this->t('ETA to ACM(approx.)'),
       ],
     ];
 
@@ -105,7 +105,7 @@ class AlshayaAcmDashboardController extends ControllerBase {
 
     $build['acm_stats'] = [
       '#type' => 'table',
-      '#caption' => $this->t('Conductor Queue Stats'),
+      '#caption' => $this->t('ACM Queue Stats. (Shows stats only for current brand & country)'),
       '#header' => [
         $this->t('Number of items in Queue'),
         $this->t('ETA to Drupal(approx.)'),
