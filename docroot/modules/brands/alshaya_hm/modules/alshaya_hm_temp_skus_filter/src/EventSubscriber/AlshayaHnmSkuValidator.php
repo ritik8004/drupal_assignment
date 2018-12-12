@@ -77,6 +77,8 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
         }
       }
 
+      $event->setProduct($product);
+
       if ($product['skip']) {
         $this->logger->info('SKU @sku missing asset with DescriptiveStillLife & multipack set to "true". Skipping import.', ['@sku' => $product['sku']]);
       }
