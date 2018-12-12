@@ -34,4 +34,14 @@ class AcqSkuValidateEvent extends Event {
     return $this->product;
   }
 
+  /**
+   * Set the product to event object.
+   *
+   * @param array $product
+   *   Array of product attributes.
+   */
+  public function setProduct($product) {
+    $this->product = $product;
+  }
+
 }

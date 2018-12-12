@@ -65,7 +65,7 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
         // Avoid skipping product import only if we find an asset with
         // DescriptiveStillLife image & multipack attribute set to TRUE.
 
-        if ($asset['Data']['AssetType'] === 'DescriptiveStillLife') {
+        if ($asset['Data']['AssetType'] === 'StillMediaComponents/Product/DescriptiveStillLife') {
           if (($skip_skus_without_multipack) && ($asset['Data']['isMultiPack'] == 'true')) {
             $product['skip'] = FALSE;
             break;
@@ -76,6 +76,8 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
           }
         }
       }
+
+      $event->setProduct($product);
 
       if ($product['skip']) {
         $this->logger->info('SKU @sku missing asset with DescriptiveStillLife & multipack set to "true". Skipping import.', ['@sku' => $product['sku']]);
