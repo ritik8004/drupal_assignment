@@ -115,9 +115,9 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     if (!isset($context['results']['success'])) {
       $context['results']['success'] = $context['results']['error'] = 0;
     }
-    global $host_site_code;
+    global $acsf_site_code;
 
-    $fp = fopen('/tmp/skus_'  . $host_site_code . '.log','a');
+    $fp = fopen('/tmp/skus_'  . $acsf_site_code; . '.log','a');
     foreach ($chunk as $item) {
       if ($success = self::processSku($item, $context)) {
         fwrite($fp, $item->sku . PHP_EOL);
