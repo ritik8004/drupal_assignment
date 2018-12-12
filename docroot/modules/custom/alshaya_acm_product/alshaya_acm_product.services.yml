@@ -37,6 +37,7 @@ services:
       - '@alshaya_acm_product.breadcrumb'
       - '@http_client'
       - '@renderer'
+      - '@simple_sitemap.generator'
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:

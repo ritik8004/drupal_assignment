@@ -63,6 +63,12 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
       // @TODO: Make this smart in CORE-3443.
       Cache::invalidateTags($parent->getCacheTagsToInvalidate());
+
+      // Update color nodes on save of each child.
+      $node = $this->skuManager->getDisplayNode($parent, FALSE);
+      if ($node instanceof NodeInterface) {
+        $this->skuManager->processColorNodesForConfigurable($node);
+      }
     }
   }
 

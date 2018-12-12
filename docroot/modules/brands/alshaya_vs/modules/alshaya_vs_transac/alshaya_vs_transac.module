@@ -109,10 +109,14 @@ function alshaya_vs_transac_acq_sku_base_field_additions_alter(array &$fields = 
  * Implements hook_ENTITY_TYPE_load() for node entities.
  */
 function alshaya_vs_transac_node_load($nodes) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   /** @var \Drupal\node\NodeInterface $node */
   foreach ($nodes as $node) {
     if ($node->bundle() === 'acq_product') {
-      $sku = SKU::loadFromSku($node->get('field_skus')->first()->getString());
+      $sku_string = $skuManager->getSkuForNode($node);
+      $sku = SKU::loadFromSku($sku_string);
 
       if ($sku instanceof SKU) {
         // This is done for all Meta title, Page title.
@@ -136,7 +140,12 @@ function alshaya_vs_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
     $settings = \Drupal::config('alshaya_acm_product.display_settings');
 
     $swatches_display_status = $settings->get('color_swatches');
-    if ($swatches_display_status) {
+
+    // We do not display swatches for color nodes.
+    $color = $build['#color'] ?? '';
+
+    // Display swatches only if enabled in configuration and not color node.
+    if ($swatches_display_status && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
@@ -189,7 +198,10 @@ function _alshaya_vs_transac_get_title(SKUInterface $sku, $context = 'pdp') {
  */
 function alshaya_vs_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
@@ -230,7 +242,12 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
     ];
     
     // Get short description of given html.
-    $desc = \Drupal::service('alshaya_acm_product.helper')->createShortDescription($description_value);
+    /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+    $product_helper = \Drupal::service('alshaya_acm_product.helper');
+    $desc = $product_helper->createShortDescription($description_value);
+    if (!empty($desc['read_more'])) {
+      $desc['html'] = $product_helper->processShortDescEllipsis($desc['html']);
+    }
     $short_desc['value'] = [
       '#markup' => $desc['html'],
     ];
