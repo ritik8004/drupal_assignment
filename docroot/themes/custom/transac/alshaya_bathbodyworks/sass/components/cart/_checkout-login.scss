@@ -46,7 +46,6 @@ html[lang=ar] {
 .user-page.checkout-login {
   h1 {
     @include breakpoint($tablet) {
-      padding-top: 0;
       padding-bottom: 0.625rem;
     }
   }
