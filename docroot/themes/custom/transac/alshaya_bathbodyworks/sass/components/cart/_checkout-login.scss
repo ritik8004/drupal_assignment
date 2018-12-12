@@ -44,6 +44,13 @@ html[lang=ar] {
 }
 
 .user-page.checkout-login {
+  h1 {
+    @include breakpoint($tablet) {
+      padding-top: 0;
+      padding-bottom: 0.625rem;
+    }
+  }
+
   a.back-link {
     @include breakpoint($only-mobile) {
       @include icon(chevronleft, before) {
