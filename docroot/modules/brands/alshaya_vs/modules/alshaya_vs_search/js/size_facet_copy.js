@@ -58,14 +58,14 @@
 
   function applyFilterSlider() {
     if ($(window).width() > 1024) {
-      // duration of scroll animation.
+      // Duration of scroll animation.
       var scrollDuration = 300;
 
-      // paddles.
+      // Paddles.
       var leftPaddle = $('.paddle_prev');
       var rightPaddle = $('.paddle_next');
 
-      // get items dimensions.
+      // Get items dimensions.
       var itemsLength = $('.shop-by-size-band').length;
       var itemSize = $('.shop-by-size-band').outerWidth();
 
@@ -73,7 +73,7 @@
       var CupsizewrapperWidthsum = 0;
       $('.sfb-band-cup').find('.shop-by-size-band').each(function () {
         // Get the distance of different cup size wrapper from starting point.
-        if( $( "html" ).attr("dir") == "rtl" ) {
+        if ($('html').attr('dir') == 'rtl') {
           CupsizewrapperWidthsum = $(this).outerWidth() + 16;
           DifferenceOfsCupsizewrapper.push(CupsizewrapperWidthsum);
         }
@@ -84,7 +84,7 @@
 
       });
 
-      if( $( "html" ).attr("dir") == "rtl" ) {
+      if ($('html').attr('dir') == 'rtl') {
         DifferenceOfsCupsizewrapper.reverse();
         var i;
         for (i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
@@ -92,46 +92,46 @@
         }
       }
 
-      // get wrapper width.
+      // Get wrapper width.
       var getMenuWrapperSize = function () {
         return $('.sfb-facets-container').outerWidth();
       };
 
       var menuWrapperSize = getMenuWrapperSize();
-      // the wrapper is responsive
+      // The wrapper is responsive.
 
       $(window).resize(debounce(function () {
         menuWrapperSize = getMenuWrapperSize();
       }, 500));
 
-      // size of the visible part of the menu is equal as the wrapper size.
+      // Size of the visible part of the menu is equal as the wrapper size.
       var menuVisibleSize = menuWrapperSize;
 
-      // get total width of all menu items.
+      // Get total width of all menu items.
       var getMenuSize = function () {
         return $('.sfb-band-cup').outerWidth();
       };
 
       var menuSize = getMenuSize();
-      // get how much of menu is invisible.
+      // Get how much of menu is invisible.
       var menuInvisibleSize = menuSize - menuWrapperSize;
 
-      // get how much have we scrolled to the left.
+      // Get how much have we scrolled to the left.
       var getMenuPosition = function () {
         return $('.sfb-facets-container').scrollLeft();
       };
 
-      // finally, what happens when we are actually scrolling the menu
+      // Finally, what happens when we are actually scrolling the menu.
       $('.sfb-facets-container').on('scroll', function () {
 
-        // get how much of menu is invisible
+        // Get how much of menu is invisible.
         menuInvisibleSize = menuSize - menuWrapperSize;
-        // get how much have we scrolled so far
+        // Get how much have we scrolled so far.
         var menuPosition = getMenuPosition();
 
         var menuEndOffset = menuInvisibleSize;
 
-        // show & hide the paddles depending on scroll position
+        // Show & hide the paddles depending on scroll position.
         if (menuPosition <= 0) {
           $(leftPaddle).addClass('hidden');
           $(rightPaddle).removeClass('hidden');
@@ -148,7 +148,7 @@
 
       var sliderIndex = 0;
 
-      if( $( "html" ).attr("dir") == "rtl" ) {
+      if ($('html').attr('dir') == 'rtl') {
 
         $(leftPaddle).once().on('click', function () {
           // Fixing edge case when we have only right paddle.
@@ -168,7 +168,7 @@
 
         });
 
-        // scroll to right.
+        // Scroll to right.
         $(rightPaddle).once().on('click', function () {
           if (sliderIndex < 0) {
             sliderIndex++;
@@ -183,13 +183,13 @@
         });
       }
       else {
-        // scroll to left.
+        // Scroll to left.
         $(rightPaddle).once().on('click', function () {
           $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
           sliderIndex++;
         });
 
-        // scroll to right.
+        // Scroll to right.
         $(leftPaddle).once().on('click', function () {
           sliderIndex--;
           if (sliderIndex == 0) {
@@ -204,7 +204,7 @@
     }
   }
 
-  if( $( "html" ).attr("dir") == "rtl" ) {
+  if ($('html').attr('dir') == 'rtl') {
     $('.paddle_next').addClass('hidden');
   }
   else {
