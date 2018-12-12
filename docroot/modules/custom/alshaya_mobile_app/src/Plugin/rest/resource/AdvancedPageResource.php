@@ -169,16 +169,17 @@ class AdvancedPageResource extends ResourceBase {
     foreach ($this->mobileAppUtility->getCacheableEntities() as $cacheable_entity) {
       $response->addCacheableDependency($cacheable_entity);
     }
+
     $response->addCacheableDependency(CacheableMetadata::createFromRenderArray([
       '#cache' => [
         'contexts' => [
           'url.query_args:url',
         ],
-        'tags' => [
+        'tags' => array_merge([
           'node:taxonomy_term.accordion',
           'node_view',
           'paragraph_view',
-        ],
+        ], $this->mobileAppUtility->getBlockCacheTags()),
       ],
     ]));
 
