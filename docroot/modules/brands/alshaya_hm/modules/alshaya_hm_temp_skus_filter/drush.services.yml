@@ -1,0 +1,5 @@
+services:
+  alshaya_hm_temp_skus_filter.commands:
+    class: \Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand
+    tags:
+      - { name: drush.command }
