@@ -266,7 +266,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
 
     // If the form has color config attribute available.
     if (isset($form['ajax']['configurables']['article_castor_id'])) {
-      $options = $form['ajax']['configurables']['article_castor_id']['#options'];
+      $options = &$form['ajax']['configurables']['article_castor_id']['#options'];
       $form['ajax']['configurables']['article_castor_id']['#title'] = t('Color');
       $form['ajax']['configurables']['article_castor_id']['#attributes']['data-default-title'] = t('Color');
 
@@ -291,11 +291,13 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
               $assets = $sku_asset_manager->getSkuAssets($sku_entity, 'swatch', ['swatch'], $swatch_type, FALSE);
             }
 
+            $options[$key] = $sku_entity->get('attr_color_label')->getString();
+
             // If swatch type is not miniature_image or assets were missing from
             // sku, use rgb color code instead.
             $sku_configurable_options_color[$key] = [
               'display_value' => empty($assets) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $assets[0]['url']->toString() . '">',
-              'display_label' => $sku_entity->get('attr_color_label')->getString(),
+              'display_label' => $options[$key],
               'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
           }
