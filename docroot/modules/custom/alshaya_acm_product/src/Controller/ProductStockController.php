@@ -117,7 +117,7 @@ class ProductStockController extends ControllerBase {
    */
   public function checkStock(EntityInterface $entity) {
     if ($entity instanceof Node) {
-      $sku = $entity->get('field_skus')->first()->getString();
+      $sku = $entity->get('field_skus')->getString();
       $sku_entity = SKU::loadFromSku($sku);
     }
     elseif ($entity instanceof SKU) {

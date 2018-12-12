@@ -96,9 +96,11 @@ function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
  *   Return the array of images or empty array.
  */
 function alshaya_hm_get_product_images(NodeInterface $product) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') &&
-    !empty($product_field_sku = $product->get('field_skus')->first())) {
-    $skuId = $product_field_sku->getString();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $skuId = $skuManager->getSkuForNode($product);
+
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') && !empty($skuId)) {
     return alshaya_hm_get_sku_images($skuId);
   }
   return [];
@@ -140,11 +142,11 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
  */
 function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
-    $sku_entity = SKU::loadFromSku($sku);
-
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_hm_get_product_description($sku_entity);

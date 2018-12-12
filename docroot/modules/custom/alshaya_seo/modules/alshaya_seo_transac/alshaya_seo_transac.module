@@ -80,8 +80,11 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
     $node = $route_match->getParameter('node');
     // If 'product' node.
     if ($node && $node->getType() == 'acq_product') {
-      if ($sku_field = $node->get('field_skus')) {
-        $sku_id = $sku_field->first()->getString();
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      $sku_id = $skuManager->getSkuForNode($node);
+      if ($sku_id) {
         $sku_entity = SKU::loadFromSku($sku_id);
 
         if (empty($sku_entity)) {
@@ -379,7 +382,10 @@ function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {
 
   if ($product_node instanceof NodeInterface) {
     $sku_attributes['gtm-category'] = implode('/', $gtm_manager->fetchProductCategories($product_node));
-    $sku_attributes['gtm-main-sku'] = $product_node->get('field_skus')->first()->getString();
+
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku_attributes['gtm-main-sku'] = $skuManager->getSkuForNode($product_node);
   }
 
   $sku_attributes['gtm-type'] = 'gtm-remove-cart-wrapper';
@@ -454,7 +460,10 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
   $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
     ->get('disabled_vars');
   if ($entity->bundle() == 'acq_product' && $view_mode == 'full' && !in_array('dimension6', $gtm_disabled_vars)) {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
     if (!empty($sku)) {
       // Always load the en values for GTM.
       $sku_entity = SKU::loadFromSku($sku);

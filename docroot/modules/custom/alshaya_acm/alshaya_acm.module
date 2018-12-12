@@ -678,7 +678,10 @@ function alshaya_acm_get_stock_from_sku(SKU $sku_entity, $reset = FALSE) {
  *   Stock of the product.
  */
 function alshaya_acm_get_stock_from_product(Node $node) {
-  $sku_entity_id = $node->get('field_skus')->first()->getString();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $sku_entity_id = $skuManager->getSkuForNode($node);
   $sku = SKU::loadFromSku($sku_entity_id);
   if ($sku) {
     return alshaya_acm_get_stock_from_sku($sku);
