@@ -2019,7 +2019,7 @@ class SkuManager {
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
-      $value = $this->getPdpSwatchValue($sku);
+      $value = $this->getPdpSwatchValue($child);
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
