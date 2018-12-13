@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_hm_temp_skus_filter\EventSubscriber;
 
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -19,13 +20,24 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
   protected $logger;
 
   /**
+   * Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * Constructs event subscriber.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   The Logger factory object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(LoggerChannelFactoryInterface $logger_factory,
+                              ConfigFactoryInterface $config_factory) {
     $this->logger = $logger_factory->get('acq_sku');
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -36,7 +48,7 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
    */
   public function onValidate(AcqSkuValidateEvent $event) {
     $product = $event->getProduct();
-    $skip_skus_without_multipack = $this->configFactory('alshaya_hm_temp_skus_filter.config')->get('skip_skus_without_multipack');
+    $skip_skus_without_multipack = $this->configFactory->get('alshaya_hm_temp_skus_filter.config')->get('skip_skus_without_multipack');
 
     // Check for assets to contain valid image types for season 6+ products.
     if (isset($product['extension'], $product['extension']['assets'])) {
@@ -53,7 +65,7 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
         // Avoid skipping product import only if we find an asset with
         // DescriptiveStillLife image & multipack attribute set to TRUE.
 
-        if ($asset['Data']['AssetType'] === 'DescriptiveStillLife') {
+        if ($asset['Data']['AssetType'] === 'StillMediaComponents/Product/DescriptiveStillLife') {
           if (($skip_skus_without_multipack) && ($asset['Data']['isMultiPack'] == 'true')) {
             $product['skip'] = FALSE;
             break;
@@ -64,6 +76,8 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
           }
         }
       }
+
+      $event->setProduct($product);
 
       if ($product['skip']) {
         $this->logger->info('SKU @sku missing asset with DescriptiveStillLife & multipack set to "true". Skipping import.', ['@sku' => $product['sku']]);
