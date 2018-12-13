@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbc820851bac4d2e70696953bbcf4874",
+    "content-hash": "c262fd1f8a26f36e8b8f9ded1692abf1",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -1005,6 +1005,48 @@
                 "html"
             ],
             "time": "2018-03-15T21:23:44+00:00"
+        },
+        {
+            "name": "charliekassel/array-diff",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliekassel/array-diff.git",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "psr-4": {
+                    "Differ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charlie Kassel",
+                    "email": "ck@charliekassel.com"
+                }
+            ],
+            "description": "Find the difference between two array's",
+            "time": "2018-02-19T14:48:47+00:00"
         },
         {
             "name": "chi-teck/drupal-code-generator",
@@ -18912,48 +18954,6 @@
                 "behat-screenshot"
             ],
             "time": "2018-03-08T13:20:42+00:00"
-        },
-        {
-            "name": "charliekassel/array-diff",
-            "version": "0.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/charliekassel/array-diff.git",
-                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
-                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.5"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ],
-                "psr-4": {
-                    "Differ\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Charlie Kassel",
-                    "email": "ck@charliekassel.com"
-                }
-            ],
-            "description": "Find the difference between two array's",
-            "time": "2018-02-19T14:48:47+00:00"
         },
         {
             "name": "dflydev/dot-access-configuration",
