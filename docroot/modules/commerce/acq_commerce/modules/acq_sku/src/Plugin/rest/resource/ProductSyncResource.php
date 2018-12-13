@@ -201,6 +201,7 @@ class ProductSyncResource extends ResourceBase {
         // imported.
         $event = new AcqSkuValidateEvent($product);
         $this->eventDispatcher->dispatch(AcqSkuValidateEvent::ACQ_SKU_VALIDATE, $event);
+        $product = $event->getProduct();
 
         // If skip attribute is set via any event subscriber, skip importing the
         // product.
