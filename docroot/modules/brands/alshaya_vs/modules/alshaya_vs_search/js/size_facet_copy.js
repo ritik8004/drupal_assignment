@@ -71,35 +71,44 @@
 
       var DifferenceOfsCupsizewrapper = [];
       var CupsizewrapperWidthsum = 0;
-      $('.sfb-band-cup').find('.shop-by-size-band').each(function () {
-        // Get the distance of different cup size wrapper from starting point.
-        if ($('html').attr('dir') == 'rtl') {
-          CupsizewrapperWidthsum = $(this).outerWidth() + 16;
-          DifferenceOfsCupsizewrapper.push(CupsizewrapperWidthsum);
-        }
-        else {
-          CupsizewrapperWidthsum += $(this).outerWidth() + 16;
-          DifferenceOfsCupsizewrapper.push(CupsizewrapperWidthsum);
-        }
 
-      });
-
-      if ($('html').attr('dir') == 'rtl') {
-        DifferenceOfsCupsizewrapper.reverse();
-        var i;
-        for (i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
-          DifferenceOfsCupsizewrapper[i] = DifferenceOfsCupsizewrapper[i] + DifferenceOfsCupsizewrapper[i - 1];
-        }
-      }
+      // Get total width of all menu items.
+      var getMenuSize = function () {
+        return $('.sfb-band-cup').outerWidth();
+      };
 
       // Get wrapper width.
       var getMenuWrapperSize = function () {
         return $('.sfb-facets-container').outerWidth();
       };
 
-      var menuWrapperSize = getMenuWrapperSize();
-      // The wrapper is responsive.
+      // Get how much have we scrolled to the left.
+      var getMenuPosition = function () {
+        return $('.sfb-facets-container').scrollLeft();
+      };
 
+      $('.sfb-band-cup').find('.shop-by-size-band').each(function () {
+        // Get the distance of different cup size wrapper from starting point.
+        if ($('html').attr('dir') == 'rtl') {
+          CupsizewrapperWidthsum = $(this).outerWidth() + 16;
+        }
+        else {
+          CupsizewrapperWidthsum += $(this).outerWidth() + 16;
+        }
+        DifferenceOfsCupsizewrapper.push(CupsizewrapperWidthsum);
+
+      });
+
+      if ($('html').attr('dir') == 'rtl') {
+        DifferenceOfsCupsizewrapper.reverse();
+        for (var i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
+          DifferenceOfsCupsizewrapper[i] = DifferenceOfsCupsizewrapper[i] + DifferenceOfsCupsizewrapper[i - 1];
+        }
+      }
+
+      var menuWrapperSize = getMenuWrapperSize();
+
+      // The wrapper is responsive.
       $(window).resize(debounce(function () {
         menuWrapperSize = getMenuWrapperSize();
       }, 500));
@@ -107,19 +116,9 @@
       // Size of the visible part of the menu is equal as the wrapper size.
       var menuVisibleSize = menuWrapperSize;
 
-      // Get total width of all menu items.
-      var getMenuSize = function () {
-        return $('.sfb-band-cup').outerWidth();
-      };
-
       var menuSize = getMenuSize();
       // Get how much of menu is invisible.
       var menuInvisibleSize = menuSize - menuWrapperSize;
-
-      // Get how much have we scrolled to the left.
-      var getMenuPosition = function () {
-        return $('.sfb-facets-container').scrollLeft();
-      };
 
       // Finally, what happens when we are actually scrolling the menu.
       $('.sfb-facets-container').on('scroll', function () {
@@ -128,7 +127,6 @@
         menuInvisibleSize = menuSize - menuWrapperSize;
         // Get how much have we scrolled so far.
         var menuPosition = getMenuPosition();
-
         var menuEndOffset = menuInvisibleSize;
 
         // Show & hide the paddles depending on scroll position.
@@ -175,10 +173,8 @@
             $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex + 1] + DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
           }
           else {
-
             $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
             sliderIndex++;
-
           }
         });
       }
