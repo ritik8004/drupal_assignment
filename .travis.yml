@@ -105,12 +105,6 @@ deploy:
     script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
     on:
-      branch: CORE-5280
-      php: 7.1
-  - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
-    skip_cleanup: true
-    on:
       branch: qa
       php: 7.1
   - provider: script

@@ -159,7 +159,6 @@ class SkuAssetManager {
           'Data' => $asset['Data'] ?? [],
         ];
 
-
         // Prepare raw url without res and call.
         unset($set['res']);
         $raw_query_options = $this->getAssetQueryString($set, $image_location_identifier);
@@ -258,10 +257,10 @@ class SkuAssetManager {
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] ."]";
+      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
       $detect = new MobileDetect();
       if ($detect->isMobile()) {
-        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] ."]";
+        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] . "]";
       }
 
       // Check for overrides for style identifiers & dimensions.
@@ -274,7 +273,7 @@ class SkuAssetManager {
         }
 
         if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['desktop'])) {
-          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] ."]";
+          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] . "]";
         }
 
         $detect = new MobileDetect();
@@ -380,12 +379,11 @@ class SkuAssetManager {
       foreach ($grouped_assets as $key => $asset) {
         if (!empty($asset)) {
           $sort_angle_weights = array_flip($sort_angle_weights);
-          uasort($asset, function ($a, $b) use ($sort_angle_weights, $key) {
+          uasort($asset, function ($a, $b) use ($key) {
             // Different rules for LookBook and reset.
             if ($key != 'Lookbook') {
               // For non-lookbook first check packaging in/out.
               // packaging=false first.
-
               // IsMultiPack didn't help, we check Facing now.
               $a_packaging = isset($a['Data']['Angle']['Packaging'])
                 ? (float) $a['Data']['Angle']['Packaging']
@@ -567,7 +565,7 @@ class SkuAssetManager {
     }
 
     $article_castor_ids = [];
-    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $article_castor_id => $skus) {
+    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
       $child_sku_entity = NULL;
       $color_attributes = [];
 
