@@ -17,7 +17,9 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
@@ -142,13 +144,16 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
 
     $swatches_display_status = $settings->get('color_swatches');
 
-    // Display swatches only if enabled in configuration.
-    if ($swatches_display_status) {
+    // We do not display swatches for color nodes.
+    $color = $build['#color'] ?? '';
+
+    // Display swatches only if enabled in configuration and not color node.
+    if ($swatches_display_status && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
       // Get swatches for this product from media.
-      $swatches = $sku_manager->getSwatches($sku, $settings->get('swatches')['pdp']);
+      $swatches = $sku_manager->getSwatches($sku);
       if ($swatches) {
         // Show only first 'X' swatches as defined in configuration.
         $swatch_plp_limit = $settings->get('swatch_plp_limit');
