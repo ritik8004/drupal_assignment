@@ -21,6 +21,10 @@
       var mobileDialog = Drupal.dialog(mobileElement, mobiledialogsettings);
 
       if ($(window).width() < 768) {
+        $('#product-zoom-container .pdp-image a').on('click', function (e) {
+          e.preventDefault()
+        });
+
         $('.pdp-image').off().on('click', function () {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
@@ -32,7 +36,7 @@
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
         if (items.length) {
-          items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
+          items.addClass('cloud-zoom-processed').CloudZoom();
         }
 
         $('.pdp-image').off().on('click', function (e) {
