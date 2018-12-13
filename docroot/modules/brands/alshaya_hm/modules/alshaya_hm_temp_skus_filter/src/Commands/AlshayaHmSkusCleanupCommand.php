@@ -49,6 +49,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
 
     // Process multipack case if passed via options.
     if ($options['process_multipack']) {
+      ini_set('memory_limit', -1);
       // Fetch list of all season5+ SKUs which have DescriptiveStillLife image.
       // Filtering on this data will be done as a part of the batch process itself
       $query = $connection->select('acq_sku_field_data', 'asfd');
@@ -173,11 +174,30 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
       return FALSE;
     }
 
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skumanager */
+    // @codingStandardsIgnoreStart
+    $skumanager = \Drupal::service('alshaya_acm_product.skumanager');
+    // @codingStandardsIgnoreEnd
+
+    $parent_sku = $skumanager->getParentSkuBySku($sku);
+
     // Delete the SKU.
     $sku->delete();
 
     // Get parent SKU for the deleted SKU.
     $context['results']['skus_processed'][] = $sku->getSku();
+
+    // Delete parent SKUs & their corresponding node if the parent SKU has no
+    // children.
+    if (($parent_sku instanceof SKU) &&
+      (empty($skumanager->getChildSkus($parent_sku))) &&
+      ($parent_node = $skumanager->getDisplayNode($sku)) &&
+      ($parent_node instanceof NodeInterface)) {
+      $parent_sku->delete();
+      $parent_node->delete();
+      $context['results']['parent_sku_processed'][] = $sku;
+    }
+
     return TRUE;
   }
 
@@ -185,37 +205,12 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
    * This callback is called when the batch process finishes.
    */
   public function postCleanupCallback($success, $results, $operations) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skumanager */
+    // Log data to watchdog around SKUs that were deleted & configurable SKUs
+    // that were cleaned up as a result of deleting simple SKUs.
     // @codingStandardsIgnoreStart
-    $skumanager = \Drupal::service('alshaya_acm_product.skumanager');
+    \Drupal::logger('acq_sku')->info(dt('Cleaned up following SKUs without any DescriptiveStillLife image. List of SKUs deleted: @skus', ['@skus' => implode(',', $results['skus_processed'])]));
+    \Drupal::logger('acq_sku')->info(dt('Cleaned up configurable SKUs without any children items: @skus', ['@skus' => implode(',', $results['parent_sku_processed'])]));
     // @codingStandardsIgnoreEnd
-    if (!empty($results['skus_processed'])) {
-      $parent_skus = array_unique($skumanager->getParentSkus($results['skus_processed']));
-
-      $parent_sku_processed = [];
-      // Post-process parent SKUs for the simple SKUs deleted.
-      foreach ($parent_skus as $sku) {
-        $parent_sku = SKU::loadFromSku($sku);
-
-        // Delete parent SKUs & their corresponding node if the parent SKU has no
-        // children.
-        if (($parent_sku instanceof SKU) &&
-          (empty($skumanager->getChildSkus($parent_sku))) &&
-          ($parent_node = $skumanager->getDisplayNode($sku)) &&
-          ($parent_node instanceof NodeInterface)) {
-          $parent_sku->delete();
-          $parent_node->delete();
-          $parent_sku_processed[] = $sku;
-        }
-      }
-
-      // Log data to watchdog around SKUs that were deleted & configurable SKUs
-      // that were cleaned up as a result of deleting simple SKUs.
-      // @codingStandardsIgnoreStart
-      \Drupal::logger('acq_sku')->info(dt('Cleaned up following SKUs without any DescriptiveStillLife image. List of SKUs deleted: @skus', ['@skus' => implode(',', $results['skus_processed'])]));
-      \Drupal::logger('acq_sku')->info(dt('Cleaned up configurable SKUs without any children items: @skus', ['@skus' => implode(',', $parent_sku_processed)]));
-      // @codingStandardsIgnoreEnd
-    }
   }
 
 }
