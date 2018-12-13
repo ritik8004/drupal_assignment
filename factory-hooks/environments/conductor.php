@@ -130,17 +130,23 @@ $conductors = [
     'hmac_id' => '7640a5cfcaef4efc815230419a0c5b06',
     'hmac_secret' => 'wOSnsIw9eRfSpkjOSaXTAw',
   ],
-  // H&M EG.
   'hmae_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '31a535578a434459a044b5dda6e6b735',
     'hmac_secret' => 'MWYxYTA0NmItMjM1Yy00',
     'api_version' => 'v2',
   ],
+  // H&M EG.
   'hmeg_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
     'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
+    'api_version' => 'v2',
+  ],
+  'hmeg_uat' => [
+    'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
+    'hmac_id' => 'cd34bf1fd5c048df9b21fb80c0d9c392',
+    'hmac_secret' => 'Njk4NjYxZDItMmIzYS00',
     'api_version' => 'v2',
   ],
   // Pottery Barn KW.

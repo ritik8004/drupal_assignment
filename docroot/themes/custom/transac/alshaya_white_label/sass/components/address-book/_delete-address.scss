@@ -79,6 +79,10 @@
     .ui-dialog-content {
       margin-bottom: 2rem;
       padding-#{$right}: 3rem;
+
+      @include breakpoint($only-mobile) {
+        margin-bottom: 0;
+      }
     }
   }
 

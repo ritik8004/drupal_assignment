@@ -1007,6 +1007,48 @@
             "time": "2018-03-15T21:23:44+00:00"
         },
         {
+            "name": "charliekassel/array-diff",
+            "version": "0.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/charliekassel/array-diff.git",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/charliekassel/array-diff/zipball/897941234515b2916cf4e74de972ea9d6346b1ee",
+                "reference": "897941234515b2916cf4e74de972ea9d6346b1ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ],
+                "psr-4": {
+                    "Differ\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charlie Kassel",
+                    "email": "ck@charliekassel.com"
+                }
+            ],
+            "description": "Find the difference between two array's",
+            "time": "2018-02-19T14:48:47+00:00"
+        },
+        {
             "name": "chi-teck/drupal-code-generator",
             "version": "1.27.0",
             "source": {
@@ -3359,6 +3401,10 @@
                 {
                     "name": "mtift",
                     "homepage": "https://www.drupal.org/user/751908"
+                },
+                {
+                    "name": "quicksketch",
+                    "homepage": "https://www.drupal.org/user/35821"
                 },
                 {
                     "name": "rudygalfi",
@@ -7588,65 +7634,6 @@
             "homepage": "https://www.drupal.org/project/link_attributes",
             "support": {
                 "source": "http://cgit.drupalcode.org/link_attributes"
-            }
-        },
-        {
-            "name": "drupal/logs_http",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/logs_http",
-                "reference": "8.x-1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/logs_http-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "b7e38024879b262223c7dbe9d4bb4ab322c7223b"
-            },
-            "require": {
-                "drupal/core": "~8.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1469351639",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "patches_applied": {
-                    "Allows to alter an event and allow to stop sending it as well": "https://patch-diff.githubusercontent.com/raw/Gizra/logs_http/pull/20.patch"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "amitaibu",
-                    "homepage": "https://www.drupal.org/user/57511"
-                },
-                {
-                    "name": "ordavidil",
-                    "homepage": "https://www.drupal.org/user/3105583"
-                },
-                {
-                    "name": "prdctvtxt",
-                    "homepage": "https://www.drupal.org/user/930642"
-                }
-            ],
-            "description": "Client for the Logs HTTP API.",
-            "homepage": "https://drupal.org/project/logs_http",
-            "support": {
-                "source": "https://cgit.drupalcode.org/logs_http",
-                "issues": "https://drupal.org/project/issues/logs_http"
             }
         },
         {
@@ -12394,7 +12381,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-beta1",
-                    "datestamp": "1537417681",
+                    "datestamp": "1543288980",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"

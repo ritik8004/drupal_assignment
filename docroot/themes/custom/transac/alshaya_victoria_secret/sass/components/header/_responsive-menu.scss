@@ -86,7 +86,7 @@ header {
 @include breakpoint($upto-desktop) {
   .logged-in .mobile--close,
   .mobile--close {
-    top: 3.7rem;
+    top: 2.8125rem;
   }
 
   .logged-in .toggle--sign,

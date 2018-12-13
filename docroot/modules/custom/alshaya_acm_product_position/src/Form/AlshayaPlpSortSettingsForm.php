@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product_position\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class AlshayaPlpSortSettingsForm.
@@ -41,6 +42,14 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product_position.settings');
     $config->set('sort_options', $result);
     $config->save();
+
+    // Invalidate cache so that the change takes effect.
+    Cache::invalidateTags([
+      'search_api_list:product',
+      'config:block.block.exposedformalshaya_product_listblock_1',
+      'config:block.block.exposedformalshaya_product_listblock_2',
+    ]);
+
     return parent::submitForm($form, $form_state);
   }
 
@@ -76,6 +85,9 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       'name_1' => $this->t('Name'),
       'final_price' => $this->t('Final Price'),
     ];
+
+    // Sort the form options based on the config.
+    $options = array_replace(array_flip($sort_options), $options);
 
     // Maintaining the weight.
     $weight = 0;
