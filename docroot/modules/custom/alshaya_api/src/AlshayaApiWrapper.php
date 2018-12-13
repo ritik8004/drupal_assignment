@@ -841,7 +841,7 @@ class AlshayaApiWrapper {
    *   The returned stock for the sku.
    */
   public function getStock(string $sku) : int {
-    $endpoint = 'stockItems/' . $sku;
+    $endpoint = 'stockItems/' . urlencode($sku);
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     if (empty($response)) {
@@ -862,11 +862,11 @@ class AlshayaApiWrapper {
    *   The sku object from Magento.
    */
   public function getSku(string $sku) : array {
-    $endpoint = 'products/' . $sku;
+    $endpoint = 'products/' . urlencode($sku);
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     $response = json_decode($response, TRUE);
-    return $response['message'] ? [] : $response;
+    return isset($response['message']) ? [] : $response;
   }
 
 }
