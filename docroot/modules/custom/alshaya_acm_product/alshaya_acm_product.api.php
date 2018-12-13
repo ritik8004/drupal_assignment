@@ -22,8 +22,10 @@ use Drupal\Core\Ajax\AjaxResponse;
  *   SKU entity.
  * @param string $context
  *   Context - pdp/search/modal/teaser.
+ * @param string $color
+ *   Color value used to show the product.
  */
-function hook_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
+function hook_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp', $color = '') {
 
 }
 
