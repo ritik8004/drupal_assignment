@@ -40,7 +40,7 @@ done
 echo "$sites" | while IFS= read -r site
 do
   echo "Running database update on $site."
-  drush sql-dump -l $site.$env-alshaya.acsitefactory.com updb -y
+  drush -l $site.$env-alshaya.acsitefactory.com updb -y
 done
 
 ###### CLEAR + SYNC.
