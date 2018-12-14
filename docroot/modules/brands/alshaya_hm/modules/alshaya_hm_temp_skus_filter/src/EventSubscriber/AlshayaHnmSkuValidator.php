@@ -58,7 +58,7 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
 
       foreach ($assets as $asset) {
         // Ignore season 5 assets & assets missing a type.
-        if (empty($asset['Data']['AssetType']) || ($asset['is_old_format'])) {
+        if (empty($asset['Data']['AssetType']) || !empty($asset['is_old_format'])) {
           continue;
         }
 
