@@ -479,18 +479,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if (alshaya_acm_product_is_buyable($sku_entity)) {
           // Check if home delivery is available for this product.
           if (alshaya_acm_product_available_home_delivery($sku)) {
-            $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
-
-            $home_delivery_options = [];
-            $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
-            $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
+            $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
 
             // @TODO: Next day delivery not done for now.
             $build['home_delivery'] = [
               '#theme' => 'pdp_delivery_option',
-              '#title' => $home_delivery_config->get('title'),
-              '#subtitle' => $home_delivery_config->get('subtitle'),
-              '#options' => $home_delivery_options,
+              '#title' => $home_delivery_config['title'],
+              '#subtitle' => $home_delivery_config['subtitle'],
+              '#options' => [
+                'standard_title' => $home_delivery_config['options_standard_title'],
+                'standard_subtitle' => $home_delivery_config['options_standard_subtitle'],
+              ],
             ];
           }
         }
@@ -671,6 +670,23 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
     }
   }
+}
+
+/**
+ * Get home delivery config.
+ *
+ * @return array
+ *   Return array of config data.
+ */
+function alshaya_acm_product_get_home_delivery_config() {
+  $config = \Drupal::config('alshaya_acm_product.home_delivery');
+
+  return [
+    'title' => $config->get('title'),
+    'subtitle' => $config->get('subtitle'),
+    'standard_title' => $config->get('options_standard_title'),
+    'standard_subtitle' => $config->get('options_standard_subtitle'),
+  ];
 }
 
 /**
