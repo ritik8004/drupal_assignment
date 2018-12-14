@@ -1861,6 +1861,7 @@ class SkuManager {
    *   SKU entity.
    */
   public function clearProductCachedData(SKU $sku) {
+    drupal_static_reset('alshaya_product_cached_data');
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
   }
@@ -2021,7 +2022,7 @@ class SkuManager {
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
-      $value = $this->getPdpSwatchValue($sku);
+      $value = $this->getPdpSwatchValue($child);
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
@@ -2681,20 +2682,20 @@ class SkuManager {
 
       if (!empty($child_color) && !isset($colors[$child_color])) {
         // Create the node if not available.
-        $node = $this->processColorNode(
+        $colorNode = $this->processColorNode(
           $node,
           $sku,
           $child_color
         );
 
-        $colors[$child_color] = $node->id();
-        unset($nids[$node->id()]);
+        $colors[$child_color] = $colorNode->id();
+        unset($nids[$colorNode->id()]);
       }
     }
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nodes = $this->nodeStorage->loadMultiple($nids);
+      $nodes = $this->nodeStorage->loadMultiple(array_flip($nids));
       $this->nodeStorage->delete($nodes);
     }
   }
