@@ -23,10 +23,10 @@
     var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
 
     if ($('.show-more-color').length === 0) {
-      showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+      showMoreHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
     if ($('.show-less-color').length === 0) {
-      showLessHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+      showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
     Drupal.magazine_swatches_count();
   };
@@ -47,7 +47,7 @@
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
         $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
-        Drupal.alshaya_hm_images_update_selected_label();
+        Drupal.alshaya_liquid_pixel_images_update_selected_swatch_label();
       }
     });
   };
@@ -56,11 +56,11 @@
    * implementation of view more/less colour for swatches.
    */
   Drupal.magazine_swatches_count = function () {
-    if ($('.form-item-configurables-article-castor-id .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
-      $('.form-item-configurables-article-castor-id').addClass('product-swatch');
+    if ($('.configurable-swatch .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
+      $('.configurable-swatch').addClass('product-swatch');
     }
     else {
-      $('.form-item-configurables-article-castor-id').addClass('colour-swatch');
+      $('.configurable-swatch').addClass('colour-swatch');
     }
 
     var colour_swatches = drupalSettings.colour_swatch_items_mob;
@@ -84,24 +84,24 @@
       swatch_items_to_show = colour_swatches + 1;
     }
 
-    if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show) {
+    if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch').addClass('swatch-toggle');
       }
-      $('.form-item-configurables-article-castor-id').addClass('swatch-effect');
+      $('.configurable-swatch').addClass('swatch-effect');
       $('.show-more-color').show();
     }
     else {
-      $('.form-item-configurables-article-castor-id').addClass('simple-swatch-effect');
+      $('.configurable-swatch').addClass('simple-swatch-effect');
     }
 
     $('.show-more-color').on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+        $('.configurable-swatch').addClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-less-color').show();
@@ -109,10 +109,10 @@
 
     $('.show-less-color').on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id').removeClass('swatch-toggle');
+        $('.configurable-swatch').removeClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-more-color').show();
