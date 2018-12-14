@@ -149,7 +149,7 @@ pace:
 
 magazine_attribute:
   js:
-    js/magazine_select2Option.js: {}
+    js/select2Option.js: {}
     js/magazine_attribute.js: {}
   css:
     theme:

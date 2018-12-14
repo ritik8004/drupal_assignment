@@ -17,6 +17,17 @@
     $('.form-item-configurable-swatch').addClass('visually-hidden');
 
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch'));
+
+    // Markup for show more/less color swatches.
+    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View more colours') + '</div>');
+    var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
+
+    if ($('.show-more-color').length === 0) {
+      showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+    }
+    if ($('.show-less-color').length === 0) {
+      showLessHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+    }
     Drupal.magazine_swatches_count();
   };
 
