@@ -1861,6 +1861,12 @@ class SkuManager {
     drupal_static_reset('alshaya_product_cached_data');
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
+
+    // We also invalidate caches for node here.
+    $node = $this->getDisplayNode($sku);
+    if ($node instanceof NodeInterface) {
+      Cache::invalidateTags($node->getCacheTagsToInvalidate());
+    }
   }
 
   /**

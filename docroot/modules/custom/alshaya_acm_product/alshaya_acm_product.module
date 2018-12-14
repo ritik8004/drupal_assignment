@@ -14,6 +14,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
 use Drupal\Core\Ajax\InsertCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -1397,6 +1398,19 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $selected_sku = $tree_pointer;
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+    }
+    else {
+      // Something is wrong here, we shouldn't land here with a selected sku
+      // with no quantity, this could be an old form open in browser and
+      // stock became empty now. We invalidate product cache again and
+      // reload the browser.
+      $skuManager->clearProductCachedData($selected_sku);
+      $skuManager->clearProductCachedData($sku);
+
+      $node = $skuManager->getDisplayNode($sku, FALSE);
+      $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
+      $response->addCommand(new RedirectCommand($url->toString()));
+      return $response;
     }
 
     $build = [];
