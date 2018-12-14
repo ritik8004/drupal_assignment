@@ -630,7 +630,7 @@ class AlshayaGtmManager {
       $dimension7 = '';
       $dimension8 = '';
 
-      $cartItems = $cart->get('items');
+      $cartItems = $cart->items();
 
       $address = $this->cartHelper->getShipping($cart);
 
@@ -1088,7 +1088,7 @@ class AlshayaGtmManager {
 
         if ($cart) {
           $cart_totals = $cart->totals();
-          $cart_items = $cart->get('items') ?? [];
+          $cart_items = $cart->items() ?? [];
           $productStyleCode = [];
           $productSKU = [];
 

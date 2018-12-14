@@ -372,9 +372,14 @@ class ProductResource extends ResourceBase {
     }
 
     $values = $this->skuManager->getConfigurableValues($sku);
+    $size_labels = $this->getSizeLabels($sku);
 
     foreach ($values as $attribute_code => &$value) {
       $value['attribute_code'] = $attribute_code;
+
+      if ($attribute_code == 'attr_size' && !empty($size_labels[$value['value']])) {
+        $value['value'] = $size_labels[$value['value']];
+      }
     }
 
     return array_values($values);
@@ -443,25 +448,38 @@ class ProductResource extends ResourceBase {
    *   Return the keyed array of size attributes code and label.
    */
   private function getSizeLabels(SKUInterface $sku): array {
-    $configurables = unserialize(
-      $sku->get('field_configurable_attributes')->getString()
-    );
+    $size_array = &drupal_static(__METHOD__, []);
 
-    if (empty($configurables)) {
-      return [];
+    if ($sku->bundle() == 'simple') {
+      $plugin = $sku->getPluginInstance();
+      if (($parent = $plugin->getParentSku($sku)) && $parent instanceof SKUInterface) {
+        $sku = $parent;
+      }
+    }
+    $sku_string = $sku->get('sku')->getString();
+
+    if (!isset($size_array[$sku_string])) {
+      $configurables = unserialize(
+        $sku->get('field_configurable_attributes')->getString()
+      );
+
+      if (empty($configurables)) {
+        return [];
+      }
+
+      $size_key = array_search('size', array_column($configurables, 'label'));
+      if (!isset($configurables[$size_key])) {
+        return [];
+      }
+
+      $size_options = [];
+      array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_options) {
+        $size_options[$value['value_id']] = $value['label'];
+      });
+      $size_array[$sku_string] = $size_options;
     }
 
-    $size_key = array_search('size', array_column($configurables, 'label'));
-    if (!isset($configurables[$size_key])) {
-      return [];
-    }
-
-    $size_array = [];
-    array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_array) {
-      $size_array[$value['value_id']] = $value['label'];
-    });
-
-    return $size_array;
+    return $size_array[$sku_string];
   }
 
   /**

@@ -519,6 +519,31 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
+   * Gets the image from 'field_promotion_banner_mobile' field.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getMobileBanner($tid, $langcode) {
+    $query = $this->connection->select('taxonomy_term__field_promotion_banner_mobile', 'ttbc');
+    $query->fields('ttbc', [
+      'entity_id',
+      'field_promotion_banner_mobile_target_id',
+      'field_promotion_banner_mobile_width',
+      'field_promotion_banner_mobile_height',
+    ]);
+    $query->condition('ttbc.entity_id', $tid);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    return $query->execute()->fetchObject();
+  }
+
+  /**
    * Fetch a flat list of all child tids for a given term.
    *
    * @param \Drupal\taxonomy\TermInterface $term
