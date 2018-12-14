@@ -56,7 +56,7 @@
     @include breakpoint($only-mobile) {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: auto auto 3rem;
+      grid-template-rows: auto auto auto;
       padding: 1rem;
 
       &.fixed {
@@ -87,18 +87,33 @@
   }
 
   .basic-details-wrapper {
+    article {
+      @include breakpoint($only-mobile) {
+        display: table;
+        width: 100%;
+      }
+    }
+
     @include breakpoint($only-mobile) {
-      .field--name-field-skus .field__item {
-        display: block;
-        padding: 0;
+      .field--name-field-skus {
         min-height: inherit;
+
+        .field__item {
+          display: block;
+          padding: 0;
+          min-height: inherit;
+        }
       }
 
       .sku-base-form {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto;
-        grid-gap: 1rem;
+        grid-gap: 0 1rem;
+
+        .js-form-wrapper {
+          grid-column: 1 / -1;
+        }
 
         .size-tray-link {
           height: 3rem;
@@ -107,11 +122,13 @@
           text-align: center;
           color: $primary_empty_btn;
           cursor: pointer;
+          grid-column: 1 / 2;
         }
 
         .edit-add-to-cart {
           height: 3rem !important;
           cursor: pointer;
+          grid-column: 2 / -1;
         }
       }
     }
