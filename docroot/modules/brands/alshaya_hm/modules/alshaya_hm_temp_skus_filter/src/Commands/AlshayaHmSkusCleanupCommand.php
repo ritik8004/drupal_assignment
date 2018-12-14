@@ -63,7 +63,10 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
 
     $chunks = array_chunk($entity_list, $batch_size);
     $progress = 0;
-    $operations = new SplFixedArray($total);
+
+    // Calculate size of Array & allocate space for it.
+    $array_size = ceil(count($entity_list)/$batch_size) + ceil($count_descriptive/$batch_size);
+    $operations = new SplFixedArray($array_size);
     $counter = 0;
 
     // Process SKUs missing DescriptiveStillLife imgages.
@@ -248,7 +251,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
       ($parent_node instanceof NodeInterface)) {
       $parent_sku->delete();
       $parent_node->delete();
-      $results['parent_sku_processed'][] = $sku;
+      $context['results']['parent_sku_processed'][] = $sku;
     }
 
     // Get parent SKU for the deleted SKU.
@@ -263,8 +266,12 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     // Log data to watchdog around SKUs that were deleted & configurable SKUs
     // that were cleaned up as a result of deleting simple SKUs.
     // @codingStandardsIgnoreStart
-    \Drupal::logger('acq_sku')->info(dt('Cleaned up following SKUs without any DescriptiveStillLife image. List of SKUs deleted: @skus', ['@skus' => implode(',', $results['skus_processed'])]));
-    \Drupal::logger('acq_sku')->info(dt('Cleaned up configurable SKUs without any children items: @skus', ['@skus' => implode(',', $results['parent_sku_processed'])]));
+    if (!empty($results['skus_processed'])) {
+      \Drupal::logger('acq_sku')->info(dt('Cleaned up following SKUs without any DescriptiveStillLife image. List of SKUs deleted: @skus', ['@skus' => implode(',', $results['skus_processed'])]));
+    }
+    if (!empty($results['parent_sku_processed'])) {
+      \Drupal::logger('acq_sku')->info(dt('Cleaned up configurable SKUs without any children items: @skus', ['@skus' => implode(',', $results['parent_sku_processed'])]));
+    }
     // @codingStandardsIgnoreEnd
   }
 
