@@ -151,9 +151,12 @@
 
           if ((noOfResult === 0) || (isNaN(noOfResult))) {
             dataLayer.push({
-              event: 'internalSearch',
-              searchKeyword: keyword,
-              noOfResult: 0
+              event: 'eventTracker',
+              eventCategory: 'Internal Site Search',
+              eventAction: '404 Results',
+              eventLabel: keyword,
+              eventValue: 0,
+              nonInteraction: 0
             });
           }
         });
