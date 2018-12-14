@@ -41,8 +41,9 @@
    * @returns {null}
    */
   function getStorageValues() {
-    if (localStorage.getItem(window.location.href)) {
-      return JSON.parse(localStorage.getItem(window.location.href));
+    let value = localStorage.getItem(window.location.pathname);
+    if (typeof value !== 'undefined' && value !== null) {
+      return JSON.parse(value);
     }
 
     return null;
@@ -68,7 +69,7 @@
     }
 
     // Once scroll to product, clear the storage.
-    localStorage.removeItem(window.location.href);
+    localStorage.removeItem(window.location.pathname);
   }
 
   /**
@@ -115,7 +116,7 @@
         };
 
         // As local storage only supports string key/value pair.
-        localStorage.setItem(window.location.href, JSON.stringify(storage_details));
+        localStorage.setItem(window.location.pathname, JSON.stringify(storage_details));
       });
     }
   };
