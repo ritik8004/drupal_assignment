@@ -13,6 +13,22 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_update_N().
  *
+ * Add mapping for EG and make V2 default and sync areas.
+ * Correct the mapping to handle additional fields in EG
+ * without creating issue for other markets.
+ */
+function alshaya_addressbook_update_8305() {
+  alshaya_config_install_configs(['alshaya_addressbook.settings'], 'alshaya_addressbook');
+
+  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressbook_manager */
+  $addressbook_manager = \Drupal::service('alshaya_addressbook.manager');
+  $addressbook_manager->syncAreas();
+  $addressbook_manager->resetMagentoFormFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add prefix_key to alshaya_addressbook.settings.
  */
 function alshaya_addressbook_update_8304() {
