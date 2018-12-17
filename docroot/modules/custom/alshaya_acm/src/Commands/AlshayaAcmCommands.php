@@ -516,17 +516,23 @@ class AlshayaAcmCommands extends DrushCommands {
       $i = 0;
       $j = 0;
       $csv_skus = [];
+
       while (($data = fgetcsv($handle, $options['batch_size'], ",")) !== FALSE) {
         $csv_skus[$j][] = $data[0];
         if ($i++ % $options['batch_size'] == 0) {
           $j++;
         }
       }
+
+      // Remove additinoal options which are not understood by the actual import
+      // command.
       unset($command_options['csv_path']);
       unset($command_options['batch_size']);
     }
 
     if (!empty($csv_skus)) {
+      // Override skus option with the list retrieved from csv file. The command
+      // would give preference to list of SKUs supplied by csv file.
       unset($command_options['skus']);
       foreach ($csv_skus as $csv_skus_chunk) {
         $command_options['skus'] = implode(',', $csv_skus_chunk);
