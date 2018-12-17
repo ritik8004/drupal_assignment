@@ -467,16 +467,16 @@ class AlshayaAcmCommands extends DrushCommands {
   /**
    * Product sync if confirmed based on queue status.
    *
-   * @throws \Drush\Exceptions\UserAbortException
-   *
-   * @command alshaya_acm:sync-products
-   *
    * @param string $langcode
    *   Sync products available in this langcode.
    * @param string $page_size
    *   Number of items to be synced in one batch.
    * @param array $options
    *   List of options supported by the drush command.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   *
+   * @command alshaya_acm:sync-products
    *
    * @option skus SKUs to import (like query).
    * @option category_id Magento category id to sync the products for.
@@ -486,11 +486,11 @@ class AlshayaAcmCommands extends DrushCommands {
    * @aliases aasp,alshaya-sync-commerce-products
    *
    * @usage drush acsp en 50
-   *   Run a full product synchronization of all available products in store linked to en and page size 50.
+   *   Full sync for products in store linked to en and page size 50.
    * @usage drush acsp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
-   *   Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only in store linked to en and page size 50.
+   *   Import skus mentioned with --skus switch.
    * @usage drush acsp en 50 --category_id=1234
-   *   Synchronize sku data for the skus in category with id 1234 only in store linked to en and page size 50.
+   *   Import skus in category id 1234 & store linked to en & page size 50.
    */
   public function syncProducts($langcode,
                                $page_size,
