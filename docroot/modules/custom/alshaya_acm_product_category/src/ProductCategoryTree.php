@@ -651,4 +651,24 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     return $tid;
   }
 
+  /**
+   * Get the category term name by tid and langcode.
+   *
+   * @param int $tid
+   *   Term id.
+   * @param string $langcode
+   *   Langcode.
+   *
+   * @return string
+   *   Term name.
+   */
+  public function getCategoryTermNameByIdLangcode(int $tid, string $langcode) {
+    $query = $this->connection->select('taxonomy_term_field_data', 'ttfd');
+    $query->fields('ttfd', ['name']);
+    $query->condition('ttfd.langcode', $langcode);
+    $query->condition('ttfd.vid', self::VOCABULARY_ID);
+    $query->condition('ttfd.tid', $tid);
+    return $query->execute()->fetchCol();
+  }
+
 }
