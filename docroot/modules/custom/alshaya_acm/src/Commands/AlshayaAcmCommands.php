@@ -475,8 +475,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Sync products available in this langcode.
    * @param string $page_size
    *   Number of items to be synced in one batch.
-   *
    * @param array $options
+   *   List of options supported by the drush command.
    *
    * @option skus SKUs to import (like query).
    * @option category_id Magento category id to sync the products for.
@@ -492,7 +492,14 @@ class AlshayaAcmCommands extends DrushCommands {
    * @usage drush acsp en 50 --category_id=1234
    *   Synchronize sku data for the skus in category with id 1234 only in store linked to en and page size 50.
    */
-  public function syncProducts($langcode, $page_size, $options = ['skus' => NULL, 'category_id' => NULL, 'csv_path' => NULL, 'batch_size' => 500]) {
+  public function syncProducts($langcode,
+                               $page_size,
+                               array $options = [
+                                 'skus' => NULL,
+                                 'category_id' => NULL,
+                                 'csv_path' => NULL,
+                                 'batch_size' => 500
+                               ]) {
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
     $mdc_queue_stats = json_decode($this->acmDashboardManager->getMdcQueueStats('connectorProductPushQueue'));
     $mdc_queue_count = $mdc_queue_stats->messages;
