@@ -5,7 +5,7 @@ namespace Drupal\alshaya_acm\Commands;
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
-use Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager;
+use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -85,9 +85,9 @@ class AlshayaAcmCommands extends DrushCommands {
   /**
    * Alshaya acm dashboard manager.
    *
-   * @var \Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager
+   * @var \Drupal\alshaya_acm\AlshayaMdcQueueManager
    */
-  private $acmDashboardManager;
+  private $mdcQueueManager;
 
   /**
    * AlshayaAcmCommands constructor.
@@ -108,8 +108,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Database connection service.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   Commerce API wrapper.
-   * @param \Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager $acm_dashboard_manager
-   *   Alshaya Dashboard manager.
+   * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
+   *   Mdc Queue Manager.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -119,7 +119,7 @@ class AlshayaAcmCommands extends DrushCommands {
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
                               Connection $connection,
                               APIWrapper $api_wrapper,
-                              AlshayaAcmDashboardManager $acm_dashboard_manager) {
+                              AlshayaMdcQueueManager $mdcQueueManager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -128,7 +128,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->alshayaAcmConfigCheck = $alshayaAcmConfigCheck;
     $this->connection = $connection;
     $this->apiWrapper = $api_wrapper;
-    $this->acmDashboardManager = $acm_dashboard_manager;
+    $this->mdcQueueManager = $mdcQueueManager;
   }
 
   /**
@@ -501,7 +501,7 @@ class AlshayaAcmCommands extends DrushCommands {
                                  'batch_size' => 500,
                                ]) {
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
-    $mdc_queue_stats = json_decode($this->acmDashboardManager->getMdcQueueStats('connectorProductPushQueue'));
+    $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
     $mdc_queue_count = $mdc_queue_stats->messages;
 
     if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
