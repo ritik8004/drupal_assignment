@@ -19,11 +19,6 @@ use Drupal\user\RoleInterface;
  */
 function alshaya_addressbook_update_8305() {
   alshaya_config_install_configs(['alshaya_addressbook.settings'], 'alshaya_addressbook');
-
-  /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $addressbook_manager */
-  $addressbook_manager = \Drupal::service('alshaya_addressbook.manager');
-  $addressbook_manager->syncAreas();
-  $addressbook_manager->resetMagentoFormFields();
 }
 
 /**

@@ -160,7 +160,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['additional_name']['#maxlength'] = 92;
   $element['additional_name']['#required'] = FALSE;
   $element['postal_code']['#title'] = t('Postal Code (Optional)', [], ['context' => 'Address label']);
-  $element['postal_code']['#maxlength'] = 92;
+  $element['postal_code']['#maxlength'] = 8;
   $element['postal_code']['#required'] = FALSE;
   $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
   $element['address_line2']['#maxlength'] = 92;
