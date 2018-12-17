@@ -100,7 +100,8 @@ class ProductStockSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $stock) {
-    $lock = \Drupal::lock();
+    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+    $lock = \Drupal::service('lock.persistent');
 
     $response = [
       'success' => FALSE,

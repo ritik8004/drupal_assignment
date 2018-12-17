@@ -304,6 +304,9 @@
             },
             "drupal/simple_oauth": {
                 "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
+            },
+            "drupal/memcache": {
+                "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             }
         },
         "installer-paths": {
