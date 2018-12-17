@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_acm\Commands;
 
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
+use Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -13,6 +15,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drush\Commands\DrushCommands;
+use Drush\Drush;
+use Drush\Exceptions\UserAbortException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class AlshayaAcmCommands.
@@ -71,6 +76,20 @@ class AlshayaAcmCommands extends DrushCommands {
   private $connection;
 
   /**
+   * Conductor API wrapper service.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  private $apiWrapper;
+
+  /**
+   * Alshaya acm dashboard manager.
+   *
+   * @var \Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager
+   */
+  private $acmDashboardManager;
+
+  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -87,6 +106,10 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Alshaya config check service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   Commerce API wrapper.
+   * @param \Drupal\alshaya_acm_dashboard\AlshayaAcmDashboardManager $acm_dashboard_manager
+   *   Alshaya Dashboard manager.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -94,7 +117,9 @@ class AlshayaAcmCommands extends DrushCommands {
                               EntityManagerInterface $entityManager,
                               ProductCategoryTree $productCategoryTree,
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
-                              Connection $connection) {
+                              Connection $connection,
+                              APIWrapper $api_wrapper,
+                              AlshayaAcmDashboardManager $acm_dashboard_manager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -102,6 +127,8 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->productCategoryTree = $productCategoryTree;
     $this->alshayaAcmConfigCheck = $alshayaAcmConfigCheck;
     $this->connection = $connection;
+    $this->apiWrapper = $api_wrapper;
+    $this->acmDashboardManager = $acm_dashboard_manager;
   }
 
   /**
@@ -434,6 +461,80 @@ class AlshayaAcmCommands extends DrushCommands {
 
       array_unshift($rows, ['SKU', 'File ID']);
       return new RowsOfFields($rows);
+    }
+  }
+
+  /**
+   * Product sync if confirmed based on queue status.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   *
+   * @command alshaya_acm:sync-products
+   *
+   * @param string $langcode
+   *   Sync products available in this langcode.
+   * @param string $page_size
+   *   Number of items to be synced in one batch.
+   *
+   * @param array $options
+   *
+   * @option skus SKUs to import (like query).
+   * @option category_id Magento category id to sync the products for.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @aliases aasp,alshaya-sync-commerce-products
+   *
+   * @usage drush acsp en 50
+   *   Run a full product synchronization of all available products in store linked to en and page size 50.
+   * @usage drush acsp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
+   *   Synchronize sku data for the skus M-H3495 130 2  FW, M-H3496 130 004FW & M-H3496 130 005FW only in store linked to en and page size 50.
+   * @usage drush acsp en 50 --category_id=1234
+   *   Synchronize sku data for the skus in category with id 1234 only in store linked to en and page size 50.
+   */
+  public function syncProducts($langcode, $page_size, $options = ['skus' => NULL, 'category_id' => NULL, 'csv_path' => NULL, 'batch_size' => 500]) {
+    $acm_queue_count = $this->apiWrapper->getQueueStatus();
+    $mdc_queue_stats = json_decode($this->acmDashboardManager->getMdcQueueStats('connectorProductPushQueue'));
+    $mdc_queue_count = $mdc_queue_stats->messages;
+
+    if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
+      drush_print('Items in MDC Queue: ' . $mdc_queue_count);
+      drush_print('Items in ACM Queue: ' . $acm_queue_count);
+      if (!$this->io()->confirm('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation?')) {
+        throw new UserAbortException();
+      }
+    }
+
+    $command_options = Drush::redispatchOptions();
+
+    if (!empty($options['csv_path'])) {
+      if (($handle = fopen($options['csv_path'], 'r')) === FALSE) {
+        print "File not readable or not available at the specified path.";
+        throw new FileNotFoundException();
+      }
+
+      $i = 0;
+      $j = 0;
+      $csv_skus = [];
+      while (($data = fgetcsv($handle, $options['batch_size'], ",")) !== FALSE) {
+        $csv_skus[$j][] = $data[0];
+        if ($i++ % $options['batch_size'] == 0) {
+          $j++;
+        }
+      }
+      unset($command_options['csv_path']);
+      unset($command_options['batch_size']);
+    }
+
+    if (!empty($csv_skus)) {
+      unset($command_options['skus']);
+      foreach ($csv_skus as $csv_skus_chunk) {
+        $command_options['skus'] = implode(',', $csv_skus_chunk);
+        drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+      }
+    }
+    else {
+      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
     }
   }
 
