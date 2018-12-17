@@ -65,12 +65,12 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     $progress = 0;
 
     // Calculate size of Array & allocate space for it.
-    $array_size = ceil(count($entity_list)/$batch_size) + ceil($count_descriptive/$batch_size);
+    $array_size = ceil(count($entity_list) / $batch_size) + ceil($count_descriptive / $batch_size);
     $operations = new SplFixedArray($array_size);
     $counter = 0;
 
     // Process SKUs missing DescriptiveStillLife imgages.
-    foreach ($chunks as $key => $chunk) {
+    foreach ($chunks as $chunk) {
       $progress += count($chunk);
       $operations[$counter] = [
         ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand', 'processBatch'],
@@ -88,16 +88,16 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
 
     // Process multipack case if passed via options.
     if ($options['process_multipack']) {
-      for ($i = 0; $i < $count_descriptive; $i+=$batch_size) {
+      for ($i = 0; $i < $count_descriptive; $i += $batch_size) {
         $progress += count($chunk);
 
-        // Keeping this light since the loop might run for a huge number of SKUs.
-        // Passing only start & end range to the chunks & load items to be
+        // Keeping this light since the loop might run for a huge number of
+        // SKUs. Passing only start & end range to the chunks & load items to be
         // processed while processing the batch itself.
         $operations[$counter] = [
           ['\Drupal\alshaya_hm_temp_skus_filter\Commands\AlshayaHmSkusCleanupCommand', 'processBatch'],
           [
-            [['start_range' => $i, 'end_range' => $i + $batch_size,]],
+            [['start_range' => $i, 'end_range' => $i + $batch_size]],
             dt('@percent% (Processing @progress of @total)', [
               '@percent' => round(100 * $progress / $total),
               '@progress' => $progress,
@@ -142,14 +142,15 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     if (!isset($context['results']['success'])) {
       $context['results']['success'] = $context['results']['error'] = 0;
     }
+
+    // @codingStandardsIgnoreStart
     global $acsf_site_code;
     global $country_code;
 
-    // @codingStandardsIgnoreStart
     $connection = \Drupal::database();
     // @codingStandardsIgnoreEnd
 
-    $fp = fopen('/tmp/skus_'  . $acsf_site_code . $country_code . '.log','a');
+    $fp = fopen('/tmp/skus_' . $acsf_site_code . $country_code . '.log', 'a');
 
     foreach ($chunk as $item) {
       // For multipack case, do the query while processing the batch & fetch
@@ -168,7 +169,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
         $items = $res->fetchAll();
 
         foreach ($items as $item) {
-          if ($success = self::processSku($item, $context)) {
+          if (self::processSku($item, $context)) {
             fwrite($fp, $item->sku . PHP_EOL);
             $context['results']['success']++;
           }
@@ -200,6 +201,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
    *
    * @return bool
    *   TRUE if deletion was successful.
+   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function processSku($item, $context) {
