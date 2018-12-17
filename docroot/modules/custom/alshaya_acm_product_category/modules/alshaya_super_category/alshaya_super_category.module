@@ -658,8 +658,9 @@ function alshaya_super_category_preprocess_html(&$variables) {
     // english version/name of the super category term.
     if (!empty($term)
       && \Drupal::languageManager()->getCurrentLanguage()->getId() != 'en'
-      && !empty($term_en = $product_category_tree->getCategoryTermNameByIdLangcode($term['id'], 'en'))) {
-      $term_label = $term_en[0];
+      && !empty($term_object = Term::load($term['id']))) {
+      $term_object = \Drupal::service('entity.repository')->getTranslationFromContext($term_object, 'en');
+      $term_label = $term_object->getName();
     }
     else {
       $term_label = isset($term['label']) ? $term['label'] : '';
