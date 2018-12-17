@@ -498,7 +498,7 @@ class AlshayaAcmCommands extends DrushCommands {
                                  'skus' => NULL,
                                  'category_id' => NULL,
                                  'csv_path' => NULL,
-                                 'batch_size' => 500
+                                 'batch_size' => 500,
                                ]) {
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
     $mdc_queue_stats = json_decode($this->acmDashboardManager->getMdcQueueStats('connectorProductPushQueue'));
