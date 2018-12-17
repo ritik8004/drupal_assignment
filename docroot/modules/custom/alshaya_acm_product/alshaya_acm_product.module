@@ -487,8 +487,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               '#title' => $home_delivery_config['title'],
               '#subtitle' => $home_delivery_config['subtitle'],
               '#options' => [
-                'standard_title' => $home_delivery_config['options_standard_title'],
-                'standard_subtitle' => $home_delivery_config['options_standard_subtitle'],
+                'standard_title' => $home_delivery_config['standard_title'],
+                'standard_subtitle' => $home_delivery_config['standard_subtitle'],
               ],
             ];
           }
