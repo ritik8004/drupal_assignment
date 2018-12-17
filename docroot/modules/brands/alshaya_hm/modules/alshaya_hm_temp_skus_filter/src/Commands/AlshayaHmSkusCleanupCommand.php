@@ -154,7 +154,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     foreach ($chunk as $item) {
       // For multipack case, do the query while processing the batch & fetch
       // items we interested in processing.
-      if ($item->start_range && $item->end_range) {
+      if (is_array($item) && isset($item['start_range']) && isset($item['end_range'])) {
         // Set memory limit to -1 while processing the multipack case.
         ini_set('memory_limit', -1);
         $query = $connection->select('acq_sku_field_data', 'asfd');
@@ -162,8 +162,8 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
         $query->condition('asfd.type', 'configurable', "!=");
         $query->condition('asfd.attr_assets__value', '%is_old_format%', 'NOT LIKE');
         $query->condition('asfd.attr_assets__value', '%DescriptiveStillLife%', 'LIKE');
+        $query->range($item['start_range'], $item['end_range']);
         $query->distinct();
-        $query->range($item->start_range, $item->end_range);
         $res = $query->execute();
         $items = $res->fetchAll();
 
