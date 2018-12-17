@@ -19,6 +19,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Database\Driver\mysql\Connection;
 
 /**
  * Provides a resource to get product details.
@@ -97,6 +98,13 @@ class ProductResource extends ResourceBase {
   protected $moduleHandler;
 
   /**
+   * The database service.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $database;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -123,6 +131,8 @@ class ProductResource extends ResourceBase {
    *   Production Options Manager service object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $database
+   *   Database object.
    */
   public function __construct(
     array $configuration,
@@ -136,7 +146,8 @@ class ProductResource extends ResourceBase {
     EntityTypeManagerInterface $entity_type_manager,
     MobileAppUtility $mobile_app_utility,
     ProductOptionsManager $product_options_manager,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    Connection $database
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
@@ -151,6 +162,7 @@ class ProductResource extends ResourceBase {
       'contexts' => [],
     ];
     $this->moduleHandler = $module_handler;
+    $this->database = $database;
   }
 
   /**
@@ -169,7 +181,8 @@ class ProductResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('acq_sku.product_options_manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('database')
     );
   }
 
@@ -429,17 +442,34 @@ class ProductResource extends ResourceBase {
     }
 
     $values = $this->skuManager->getConfigurableValues($sku);
-    $size_labels = $this->getSizeLabels($sku);
 
     foreach ($values as $attribute_code => &$value) {
       $value['attribute_code'] = $attribute_code;
-
-      if ($attribute_code == 'attr_size' && !empty($size_labels[$value['value']])) {
-        $value['value'] = $size_labels[$value['value']];
+      if ($attr_value = $this->getAttributeValue($sku->id(), str_replace('attr_', '', $attribute_code))) {
+        $value['value'] = $attr_value;
       }
     }
 
     return array_values($values);
+  }
+
+  /**
+   * Get attribute value from key-value field.
+   *
+   * @param int $sku_id
+   *   The object of product.
+   * @param string $key
+   *   Name of attribute.
+   *
+   * @return string|null
+   *   Value of field or null if empty.
+   */
+  private function getAttributeValue($sku_id, $key) {
+    $query = $this->database->select('acq_sku__attributes', 'acq_sku__attributes');
+    $query->addField('acq_sku__attributes', 'attributes_value');
+    $query->condition("acq_sku__attributes.entity_id", $sku_id);
+    $query->condition("acq_sku__attributes.attributes_key", $key);
+    return $query->execute()->fetchField();
   }
 
   /**
