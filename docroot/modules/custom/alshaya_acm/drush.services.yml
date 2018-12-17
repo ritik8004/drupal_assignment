@@ -10,6 +10,6 @@ services:
       - '@alshaya_acm.config_check'
       - '@database'
       - '@acq_commerce.agent_api'
-      - '@alshaya_acm_dashboard.dashboard_manager'
+      - '@lshaya_acm.mdc_queue_manager'
     tags:
       - { name: drush.command }
