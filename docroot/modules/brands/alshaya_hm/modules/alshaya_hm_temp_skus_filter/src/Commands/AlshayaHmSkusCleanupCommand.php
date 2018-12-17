@@ -154,7 +154,7 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
     foreach ($chunk as $item) {
       // For multipack case, do the query while processing the batch & fetch
       // items we interested in processing.
-      if ($item->start_range && $item->end_range) {
+      if ($item['start_range'] && $item['end_range']) {
         // Set memory limit to -1 while processing the multipack case.
         ini_set('memory_limit', -1);
         $query = $connection->select('acq_sku_field_data', 'asfd');
