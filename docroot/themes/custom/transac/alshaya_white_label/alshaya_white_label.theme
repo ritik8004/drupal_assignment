@@ -461,6 +461,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
         if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
           $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
+          $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
         }
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
@@ -1100,6 +1101,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           return;
         }
 
+        $category_id = (int) $category_id;
+
         $is_accordion = FALSE;
         if ($paragraph->hasField('field_use_as_accordion')
           && $accordion = $paragraph->get('field_use_as_accordion')->getValue()) {
@@ -1157,21 +1160,8 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
           ];
         }
         else {
-          $terms = _alshaya_master_get_recursive_child_terms($category_id);
-          $arguments = [
-            'tid' => implode('+', $terms),
-          ];
-
-          // Get views result.
-          $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
-          $nodes = array_map(function ($result) {
-            if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
-              return $node;
-            }
-          }, $results);
-
           $product_in_carousel = (int) $paragraph->get('field_category_carousel_limit')->getString();
-          $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $product_in_carousel);
+          $nodes = _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $product_in_carousel);
 
           if (!empty($nodes)) {
             $data = array_map(function ($node) {

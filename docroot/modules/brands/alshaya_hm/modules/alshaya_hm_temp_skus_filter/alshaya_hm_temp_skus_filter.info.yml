@@ -1,0 +1,5 @@
+name: Alshaya H&M Temp SKU Filter
+type: module
+description: Temporary module to filter out SKUs which don't have DescriptiveStillLife Image.
+package: Alshaya
+core: 8.x

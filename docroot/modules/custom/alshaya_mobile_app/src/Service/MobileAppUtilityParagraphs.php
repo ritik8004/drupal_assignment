@@ -35,6 +35,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected $cacheableEntities = [];
 
   /**
+   * The cache tags.
+   *
+   * @var string
+   */
+  protected $cacheTags = [];
+
+  /**
    * The paragraph Base Fields.
    *
    * @var string
@@ -773,22 +780,39 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
     $items = $entity->get($field)->getValue();
 
+    $this->cacheTags[] = 'block_view';
+    $this->cacheTags[] = 'block';
+    $this->cacheTags[] = 'block_content_view';
     $results = array_map(function ($item) {
       list($entity_type, $uuid) = explode(':', $item['plugin_id']);
-      $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
-      $block = reset($block);
-      $block = $this->getEntityTranslation($block, $this->currentLanguage);
-      return [
-        'label' => $item['settings']['label'],
-        'label_display' => (bool) $item['settings']['label_display'],
-        'body' => !empty($block->get('body')->first())
-        ? $this->convertRelativeUrlsToAbsolute($block->get('body')->first()->getValue()['value'])
-        : '',
-        'image' => $this->getImages($block, 'field_image'),
-      ];
+      if ($entity_type == 'block_content') {
+        $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
+        $block = reset($block);
+        $block = $this->getEntityTranslation($block, $this->currentLanguage);
+        $this->cacheTags = array_merge($this->cacheTags, $block->getCacheTags());
+
+        return [
+          'label' => $item['settings']['label'],
+          'label_display' => (bool) $item['settings']['label_display'],
+          'body' => !empty($block->get('body')->first())
+          ? $this->convertRelativeUrlsToAbsolute($block->get('body')->first()->getValue()['value'])
+          : '',
+          'image' => $this->getImages($block, 'field_image'),
+        ];
+      }
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Return all cache tags.
+   *
+   * @return array
+   *   Return array of all cache tags.
+   */
+  public function getBlockCacheTags(): array {
+    return $this->cacheTags;
   }
 
 }
