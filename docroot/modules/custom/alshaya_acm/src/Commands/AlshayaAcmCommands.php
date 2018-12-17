@@ -469,8 +469,6 @@ class AlshayaAcmCommands extends DrushCommands {
    *
    * @param string $langcode
    *   Sync products available in this langcode.
-   * @param string $page_size
-   *   Number of items to be synced in one batch.
    * @param array $options
    *   List of options supported by the drush command.
    *
@@ -485,20 +483,20 @@ class AlshayaAcmCommands extends DrushCommands {
    *
    * @aliases aasp,alshaya-sync-commerce-products
    *
-   * @usage drush acsp en 50
-   *   Full sync for products in store linked to en and page size 50.
-   * @usage drush acsp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
+   * @usage drush acsp en
+   *   Full sync for products in store linked to en in batch size set as config.
+   * @usage drush acsp en --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
    *   Import skus mentioned with --skus switch.
-   * @usage drush acsp en 50 --category_id=1234
+   * @usage drush acsp en --category_id=1234 --page_size=50
    *   Import skus in category id 1234 & store linked to en & page size 50.
    */
   public function syncProducts($langcode,
-                               $page_size,
                                array $options = [
                                  'skus' => NULL,
                                  'category_id' => NULL,
                                  'csv_path' => NULL,
                                  'batch_size' => 500,
+                                 'page_size' => NULL,
                                ]) {
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
     $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
@@ -531,11 +529,16 @@ class AlshayaAcmCommands extends DrushCommands {
         }
       }
 
-      // Remove additinoal options which are not understood by the actual import
+      // Remove additional options which are not understood by the actual import
       // command.
       unset($command_options['csv_path']);
       unset($command_options['batch_size']);
     }
+
+    // Use page size configured for conductor as default in case no override is
+    // supplied via options.
+    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')->get('product_page_size');
+    unset($options['page_size']);
 
     if (!empty($csv_skus)) {
       // Override skus option with the list retrieved from csv file. The command
