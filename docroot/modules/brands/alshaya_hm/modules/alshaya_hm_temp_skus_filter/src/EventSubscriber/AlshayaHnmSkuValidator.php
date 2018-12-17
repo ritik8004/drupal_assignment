@@ -68,7 +68,6 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
 
         // Avoid skipping product import only if we find an asset with
         // DescriptiveStillLife image & multipack attribute set to TRUE.
-
         if ($asset['Data']['AssetType'] === 'StillMediaComponents/Product/DescriptiveStillLife') {
           if (($skip_skus_without_multipack) && ($asset['Data']['isMultiPack'] == 'true')) {
             $product['skip'] = FALSE;
