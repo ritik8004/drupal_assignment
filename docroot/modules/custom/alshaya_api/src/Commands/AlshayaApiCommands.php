@@ -10,7 +10,7 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Lock\PersistentDatabaseLockBackend;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -73,7 +73,7 @@ class AlshayaApiCommands extends DrushCommands {
   /**
    * Database lock service.
    *
-   * @var \Drupal\Core\Lock\PersistentDatabaseLockBackend
+   * @var \Drupal\Core\Lock\LockBackendInterface
    */
   private $lock;
 
@@ -96,7 +96,7 @@ class AlshayaApiCommands extends DrushCommands {
    *   Database connection object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager.
-   * @param \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Database lock service.
    */
   public function __construct(LanguageManagerInterface $languageManager,
@@ -107,7 +107,7 @@ class AlshayaApiCommands extends DrushCommands {
                               LoggerChannelFactoryInterface $loggerChannelFactory,
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
-                              PersistentDatabaseLockBackend $lock) {
+                              LockBackendInterface $lock) {
     $this->languageManager = $languageManager;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->skuManager = $skuManager;
@@ -135,7 +135,7 @@ class AlshayaApiCommands extends DrushCommands {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function sanityCheck(array $options = [
-    'types' => 'simple,configurable',
+    'types' => 'configurable,simple',
   ]) {
     $verbose = $options['verbose'];
 
