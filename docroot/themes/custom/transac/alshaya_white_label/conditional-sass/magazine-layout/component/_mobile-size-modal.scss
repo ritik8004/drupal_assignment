@@ -72,4 +72,12 @@
       display: none;
     }
   }
+
+  .magazine-layout {
+    &.sizeguide-modal-overlay {
+      .ui-dialog {
+        z-index: 10000;
+      }
+    }
+  }
 }
