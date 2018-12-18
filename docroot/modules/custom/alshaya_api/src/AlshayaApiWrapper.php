@@ -573,6 +573,7 @@ class AlshayaApiWrapper {
       'fields' => 'items[sku]',
     ];
 
+    // @TODO: Make use of in condition to allow covering large set of SKUs.
     foreach ($skus as $index => $sku) {
       $query['searchCriteria']['filterGroups'][2]['filters'][$index] = [
         'field' => 'sku',
@@ -599,8 +600,9 @@ class AlshayaApiWrapper {
         $page += 1;
         $query['searchCriteria']['currentPage'] = $page;
 
-        $response = $this->invokeApi($endpoint . http_build_query($query), [], 'GET');
-
+        // Need to fallback to PHP_QUERY_RFC3986 to convert spaces in SKUs to
+        // '%20' rather than '+'.
+        $response = $this->invokeApi($endpoint . http_build_query($query, null, '&', PHP_QUERY_RFC3986), [], 'GET');
         if ($response && is_string($response)) {
           if ($decode_response = json_decode($response, TRUE)) {
             if (!empty($decode_response['items'])) {
