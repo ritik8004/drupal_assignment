@@ -327,9 +327,14 @@
         tittleSection.insertAfter('.mobile-content-wrapper');
 
         // Moving sharethis before description field in mobile.
-        var sharethisSection = $('.basic-details-wrapper .modal-share-this');
-        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .magazine-swatch-placeholder');
-        $('.basic-details-wrapper .modal-share-this').hide();
+        var sharethisSection = $('.basic-details-wrapper .modal-share-this').clone();
+        if ($('.magazine-product-description .modal-share-this').length < 1) {
+          sharethisSection.once('bind-events').insertBefore('.magazine-swatch-placeholder');
+        }
+        $('.basic-details-wrapper .modal-share-this').addClass('visually-hidden');
+        if ($('.magazine-product-description .modal-share-this').hasClass('visually-hidden')) {
+          $('.magazine-product-description .modal-share-this').removeClass('visually-hidden');
+        }
 
         // JS function to move mobile colors to bellow of PDP main image in
         // product description section.
