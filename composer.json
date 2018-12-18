@@ -231,7 +231,8 @@
                 "Adding a new batch set while the batch is running breaks batch order": "https://www.drupal.org/files/issues/2664016-41.patch",
                 "Make language switcher block cacheable": "https://www.drupal.org/files/issues/2232375-54_0.patch",
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
-                "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch"
+                "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch",
+                "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -298,6 +299,9 @@
             },
             "drupal/simple_oauth": {
                 "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
+            },
+            "drupal/memcache": {
+                "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             }
         },
         "installer-paths": {
