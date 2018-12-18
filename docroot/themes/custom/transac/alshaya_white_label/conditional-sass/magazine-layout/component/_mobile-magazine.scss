@@ -7,11 +7,13 @@
       .content__title_wrapper {
         width: 100%;
         float: none;
+        margin: 0;
       }
 
       .content__sidebar {
         width: 100%;
         float: none;
+        margin: 0.625rem 0 0;
       }
 
       &.sidebar-fixed {
