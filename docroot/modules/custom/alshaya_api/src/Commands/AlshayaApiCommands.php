@@ -73,7 +73,7 @@ class AlshayaApiCommands extends DrushCommands {
   /**
    * Database lock service.
    *
-   * @var \Drupal\Core\Lock\LockBackendInterface
+   * @var \Drupal\Core\Lock\PersistentDatabaseLockBackend
    */
   private $lock;
 
