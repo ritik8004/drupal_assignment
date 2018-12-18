@@ -2,15 +2,22 @@
 .block-acm-checkout-progress {
   .checkout-progress__step {
     font-family: $alshaya-thin;
+    font-size: 0.875rem;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.625rem;
+    }
 
     &.-current {
       &::before {
         border: 1px solid $checkout_current_counter_border;
+        font-size: 0.875rem;
       }
     }
 
     &::before {
       border: 1px solid $checkout_counter_border;
+      font-size: 0.875rem;
 
       @include breakpoint($only-tablet) {
         html[lang=ar] & {

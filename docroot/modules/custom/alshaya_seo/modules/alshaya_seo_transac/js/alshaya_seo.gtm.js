@@ -561,8 +561,9 @@
       // Push purchaseSuccess for Order confirmation page.
       if (orderConfirmationPage.length !== 0 && settings.gtmOrderConfirmation) {
         dataLayer.push({
-          event: 'purchaseSuccess',
-          ecommerce: settings.gtmOrderConfirmation
+          event: settings.gtmOrderConfirmation.event,
+          virtualPageUrl: settings.gtmOrderConfirmation.virtualPageURL,
+          virtualPageTitle: settings.gtmOrderConfirmation.virtualPageTitle
         });
       }
 

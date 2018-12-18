@@ -519,6 +519,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $address['administrative_area'] = '';
       $address['locality'] = '';
       $address['dependent_locality'] = '';
+      $address['sorting_code'] = '';
+      $address['additional_name'] = '';
+      $address['postal_code'] = '';
 
       if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
         if (isset($magento_address['extension']['address_apartment_segment'])) {
@@ -535,6 +538,18 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
         if (isset($magento_address['extension']['address_building_segment'])) {
           $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+        }
+
+        if (isset($magento_address['extension']['landmark'])) {
+          $address['sorting_code'] = $magento_address['extension']['landmark'];
+        }
+
+        if (isset($magento_address['extension']['apartment'])) {
+          $address['additional_name'] = $magento_address['extension']['apartment'];
+        }
+
+        if (isset($magento_address['extension']['postcode'])) {
+          $address['postal_code'] = $magento_address['extension']['postcode'];
         }
       }
 
@@ -660,6 +675,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
       $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
       $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
+      $magento_address['extension']['landmark'] = (string) $address['sorting_code'];
+      $magento_address['extension']['apartment'] = (string) $address['additional_name'];
+      $magento_address['extension']['postcode'] = (string) $address['postal_code'];
       $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
       $magento_address['country_id'] = $address['country_code'];
     }
