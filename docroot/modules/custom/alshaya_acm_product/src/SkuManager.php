@@ -2509,9 +2509,11 @@ class SkuManager {
    *   PDP layout to be used.
    */
   public function getPdpLayoutFromTermId($tid) {
+    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+
     $term = $this->termStorage->load($tid);
-    $context = 'pdp';
-    if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+      $context = 'pdp';
       if ($term->get('field_pdp_layout')->first()) {
         $pdp_layout = $term->get('field_pdp_layout')->getString();
         if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
@@ -2527,10 +2529,10 @@ class SkuManager {
         }
       }
 
-      $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')
-        ->get('pdp_layout');
       return $this->getContextFromLayoutKey($context, $default_pdp_layout);
     }
+
+    return $default_pdp_layout;
   }
 
   /**
