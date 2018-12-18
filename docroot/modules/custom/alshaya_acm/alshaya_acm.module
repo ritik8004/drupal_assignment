@@ -1021,3 +1021,33 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
     ? Link::fromTextAndUrl(t('Remove'), $remove_url)->toString()
     : NULL;
 }
+
+/**
+ * Check if Exception from API response is for OOS products in cart.
+ *
+ * @param \Exception $e
+ *   Exception to check.
+ *
+ * @return bool
+ *   TRUE if exception matches OOS criteria.
+ */
+function _alshaya_acm_is_out_of_stock_exception(\Exception $e) {
+  // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
+  // We use t() to match translated message.
+  // It is contributor's responsibility to add the translation in Magento
+  // and in Drupal.
+  $oos_messages = [
+    t('This product is out of stock.')->render(),
+    t('Some of the products are out of stock.')->render(),
+    t('Not all of your products are available in the requested quantity.')->render(),
+    t("We don't have as many")->render(),
+  ];
+
+  foreach ($oos_messages as $message) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
