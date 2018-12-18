@@ -21,19 +21,20 @@
   // For RTL, we have some code to mess with page scroll.
   // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
   $(window).on('pageshow', function () {
+    function returnRefinedURL(key, url){
+       return url.replace(new RegExp(key + "=\\w+"),"").replace("?&","?")
+      .replace("&&","&");
+    }
+
     if (window.location.search.indexOf('show_on_load') > -1) {
+      replaceState = window.location.href;
       var url = returnRefinedURL('show_on_load', window.location.href);
       url = url.replace(/&$/g, "");
       history.replaceState({}, document.title, url);
     }
 
-    setTimeout('Drupal.processBackToList()', 10);
+    setTimeout(Drupal.processBackToList, 10);
   });
-
-  function returnRefinedURL(key, url){
-     return url.replace(new RegExp(key + "=\\w+"),"").replace("?&","?")
-    .replace("&&","&");
-  }
 
   /**
    * Get the storage values.
@@ -66,9 +67,6 @@
         scrollTop: ($(first_visible_product).offset().top - $('.branding__menu').height())
       }, 400);
     }
-
-    // Once scroll to product, clear the storage.
-    localStorage.removeItem(window.location.href);
   }
 
   /**
