@@ -461,7 +461,7 @@ class CheckoutHelper {
           '@message' => $e->getMessage(),
         ]);
 
-        if (_acq_commerce_is_out_of_stock_exception($e)) {
+        if (_alshaya_acm_is_out_of_stock_exception($e)) {
           $this->clearCacheForProductsInCart($cart);
         }
 

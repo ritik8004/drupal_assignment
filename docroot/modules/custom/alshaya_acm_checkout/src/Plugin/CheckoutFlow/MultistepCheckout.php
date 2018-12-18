@@ -359,7 +359,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
-        if (_acq_commerce_is_out_of_stock_exception($e)) {
+        if (_alshaya_acm_is_out_of_stock_exception($e)) {
           $cart = $this->getCart();
           $this->getCheckoutHelper()->clearCacheForProductsInCart($cart);
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
