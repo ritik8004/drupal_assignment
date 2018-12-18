@@ -32,7 +32,7 @@ class AddressFormatSubscriber implements EventSubscriberInterface {
     $definition['administrative_area_type'] = AdministrativeAreaType::AREA;
     $definition['subdivision_depth'] = 0;
 
-    $definition['format'] = "%givenName %familyName\n%organization\n%administrativeArea\n%locality\n%addressLine1\n%dependentLocality\n%addressLine2";
+    $definition['format'] = "%givenName %familyName\n%organization\n%administrativeArea\n%locality\n%addressLine1\n%dependentLocality\n%addressLine2\n%sortingCode\n%additionalName\n%postalCode";
 
     $definition['required_fields'][] = 'dependentLocality';
     $definition['required_fields'][] = 'administrativeArea';
