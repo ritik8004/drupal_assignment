@@ -1,8 +1,6 @@
 .c-facet {
   ul {
     input[type="text"] {
-      padding: 0.75rem 0.5rem;
-      margin-bottom: 0;
       height: 2.5rem;
     }
 
@@ -59,13 +57,9 @@
 .js-facets-checkbox-links {
   .facet-item {
     min-height: auto;
-    padding: 0.625rem 0;
-    margin-bottom: 0;
 
     label {
       &::before {
-        font-size: 1.125rem;
-
         @include breakpoint($only-mobile) {
           margin-top: -0.125rem;
         }
@@ -99,12 +93,10 @@ ul[data-drupal-facet-id=promotion_category_facet] {
   }
 
   .facet-item {
-    margin-bottom: 0;
-
     &.facet-item--expanded {
       & > label {
         &::before {
-          top: 0.5rem !important;
+          top: 0.6875rem !important;
         }
 
         .facet-item--active-trail & {
@@ -122,12 +114,6 @@ ul[data-drupal-facet-id=promotion_category_facet] {
       }
 
       ul li {
-        > label {
-          &::before {
-            margin-top: -0.3125rem;
-          }
-        }
-
         &:not(:last-child) {
           margin-bottom: 0;
         }
@@ -147,7 +133,6 @@ ul[data-drupal-facet-id=promotion_category_facet] {
     }
 
     label {
-      min-height: 0.875rem;
       margin: 0;
     }
 
@@ -158,14 +143,6 @@ ul[data-drupal-facet-id=promotion_category_facet] {
 
   .facet-item--expanded {
     > ul {
-      padding-top: 0.625rem !important;
-
-      li.facet-item--expanded {
-        ul {
-          margin-#{$left}: 0.625rem !important;
-        }
-      }
-
       li:not(:last-child) {
         margin-bottom: 0.625rem;
       }
@@ -182,12 +159,6 @@ ul[data-drupal-facet-id=promotion_category_facet] {
 }
 
 ul[data-drupal-facet-id=category] {
-  .facet-item--expanded {
-    & > ul {
-      margin-#{$left}: 0;
-    }
-  }
-
   & > li {
     &.facet-item--expanded {
       & > label {
@@ -258,5 +229,13 @@ ul[data-drupal-facet-id=promotion_category_facet] {
 
   .c-accordion {
     clear: both;
+  }
+}
+
+ul[data-drupal-facet-id=category],
+ul[data-drupal-facet-id=plp_category_facet],
+ul[data-drupal-facet-id=promotion_category_facet] {
+  .facet-item label {
+    min-height: 2.5rem;
   }
 }

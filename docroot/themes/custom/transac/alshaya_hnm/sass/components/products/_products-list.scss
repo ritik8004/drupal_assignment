@@ -457,18 +457,6 @@
   }
 }
 
-.c-search {
-  .facet-item {
-    input[type=checkbox] ~ label {
-      &::before {
-        @include breakpoint($tablet) {
-          top: 0.125rem;
-        }
-      }
-    }
-  }
-}
-
 .alshaya_search_hoverimage {
   position: absolute;
   top: 0;
