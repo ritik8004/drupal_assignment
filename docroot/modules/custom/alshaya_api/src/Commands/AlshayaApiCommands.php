@@ -10,7 +10,7 @@ use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Lock\PersistentDatabaseLockBackend;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -96,7 +96,7 @@ class AlshayaApiCommands extends DrushCommands {
    *   Database connection object.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity Type Manager.
-   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   * @param \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock
    *   Database lock service.
    */
   public function __construct(LanguageManagerInterface $languageManager,
@@ -107,7 +107,7 @@ class AlshayaApiCommands extends DrushCommands {
                               LoggerChannelFactoryInterface $loggerChannelFactory,
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
-                              LockBackendInterface $lock) {
+                              PersistentDatabaseLockBackend $lock) {
     $this->languageManager = $languageManager;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->skuManager = $skuManager;
@@ -120,12 +120,347 @@ class AlshayaApiCommands extends DrushCommands {
   }
 
   /**
+   * Run sanity check to get diff between Magento and Drupal SKUs data.
+   *
+   * @param array $options
+   *   List of options supported by drush command.
+   *
+   * @command alshaya_api:sanity-check
+   *
+   * @option types
+   *   The comma-separated list of SKUs types to check (simple, configurable).
+   *
+   * @aliases aasc,alshaya-api-sanity-check
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function sanityCheck(array $options = [
+    'types' => 'simple,configurable',
+  ]) {
+    $verbose = $options['verbose'];
+
+    $types = array_map('trim', explode(',', $options['types']));
+
+    $languages = $this->languageManager->getLanguages();
+
+    $this->output->writeln(dt("\n#### FETCHING DATA ####"));
+
+    // Retrieve all enabled SKUs from Magento.
+    $this->output->writeln(dt('Getting SKUs from Magento, please wait...'));
+    $mskus = $this->alshayaApiWrapper->getSkusData();
+
+    foreach ($types as $type) {
+      $this->logger()->debug(dt("@type SKUs (@count) from Magento:\n@skus", [
+        '@type' => $type,
+        '@count' => count($mskus[$type]),
+        '@skus' => "'" . implode("','", array_keys($mskus[$type])) . "'",
+      ]));
+    }
+
+    // Retrieve all enabled SKUs from Drupal indexed by type and langcode.
+    $this->output->writeln(dt("\nGetting @types SKUs from Drupal, please wait...", [
+      '@types' => implode(dt(' and '), $types),
+    ]));
+
+    foreach ($types as $type) {
+      foreach ($languages as $language) {
+        $dskus[$type][$language->getId()] = $this->skuManager->getSkus($language->getId(), $type);
+
+        $this->logger()->debug(dt("@type @language SKUs (@count) from Drupal:\n@skus", [
+          '@type' => $type,
+          '@language' => $language->getName(),
+          '@count' => count($dskus[$type][$language->getId()]),
+          '@skus' => "'" . implode("','", array_keys($dskus[$type][$language->getId()])) . "'",
+        ]));
+      }
+    }
+
+    $this->output->writeln(dt("\n#### REPORT SUMMARY ####"));
+
+    $missing = [];
+    $to_be_deleted = [];
+    $stock_mismatch_sync = [];
+    $price_mismatch_sync = [];
+
+    foreach ($types as $type) {
+      $missing[$type]['all'] = [];
+      $to_be_deleted[$type]['all'] = [];
+      $stock_mismatch[$type] = [];
+      $price_mismatch[$type] = [];
+
+      foreach ($languages as $language) {
+        // The ones which are missing in Drupal.
+        $missing[$type][$language->getId()] = array_diff(array_keys($mskus[$type]), array_keys($dskus[$type][$language->getId()]));
+        $missing[$type]['all'] = array_merge($missing[$type]['all'], $missing[$type][$language->getId()]);
+
+        // The ones which are only in Drupal and should be removed.
+        $to_be_deleted[$type][$language->getId()] = array_diff(array_keys($dskus[$type][$language->getId()]), array_keys($mskus[$type]));
+        $to_be_deleted[$type]['all'] = array_merge($to_be_deleted[$type]['all'], $to_be_deleted[$type][$language->getId()]);
+
+        if (!empty($missing[$type][$language->getId()])) {
+          $this->output->writeln(dt("\n@count @language @type's SKUs are missing in Drupal and must be synced!skus", [
+            '@count' => count($missing[$type][$language->getId()]),
+            '@language' => strtolower($language->getName()),
+            '@type' => $type,
+            '!skus' => $verbose ? ":\n'" . implode("','", $missing[$type][$language->getId()]) . "'" : '.',
+          ]));
+        }
+        else {
+          $this->output->writeln(dt("\nNo missing SKUs match for @language @type in Drupal.", [
+            '@language' => strtolower($language->getName()),
+            '@type' => $type,
+          ]));
+        }
+
+        if (!empty($to_be_deleted[$type][$language->getId()])) {
+          $this->output->writeln(dt("\n@count @language @type's SKUs are only in Drupal and must be removed!skus", [
+            '@count' => count($to_be_deleted[$type][$language->getId()]),
+            '@language' => strtolower($language->getName()),
+            '@type' => $type,
+            '!skus' => $verbose ? ":\n'" . implode("','", $to_be_deleted[$type][$language->getId()]) . "'" : '.',
+          ]));
+        }
+        else {
+          $this->output->writeln(dt("\nNo additional SKUs for @language @type found in Drupal. Nothing to delete.", [
+            '@language' => strtolower($language->getName()),
+            '@type' => $type,
+          ]));
+        }
+      }
+
+      // We check stock and price only for simple SKUs.
+      if ($type == 'simple') {
+        $checked_skus = [];
+
+        foreach ($languages as $language) {
+          foreach ($dskus[$type][$language->getId()] as $sku => $data) {
+            // We will check the stock and price for this SKU only if it exists
+            // in Magento (otherwise it must be deleted) and if it has not been
+            // checked yet in another language.
+            if (!empty($mskus[$type][$sku]) && !in_array($sku, $checked_skus)) {
+              $checked_skus[] = $sku;
+
+              $stock_output = '';
+              $price_output = '';
+
+              // If stock in Drupal does not match with stock in Magento.
+              if ($data['stock'] != (int) $mskus[$type][$sku]['qty']) {
+                $stock_output .= 'Drupal stock:' . $data['stock'] . ' | ';
+                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'];
+                $stock_mismatch_sync[$type][] = $sku;
+              }
+
+              // If price in Drupal not matches with price in Magento.
+              if ($data['price'] != $mskus[$type][$sku]['price']) {
+                $price_output .= 'Drupal price:' . $data['price'] . ' | ';
+                $price_output .= 'MDC price:' . $mskus[$type][$sku]['price'];
+                $price_mismatch_sync[$type][] = $sku;
+              }
+
+              // If special price in Drupal not matches with final price
+              // in Magento.
+              if ($data['special_price'] != $mskus[$type][$sku]['final_price']) {
+                $price_output .= 'Drupal spl price:' . $data['special_price'] . ' | ';
+                $price_output .= 'MDC spl price:' . $mskus[$type][$sku]['final_price'];
+                $price_mismatch_sync[$type][] = $sku;
+              }
+
+              // If there any sku having stock mismatch.
+              if (!empty($stock_output)) {
+                $stock_mismatch[$type][$sku] = "SKU:" . $sku . " | " . $stock_output;
+              }
+
+              // If there any sku having price mismatch.
+              if (!empty($price_output)) {
+                $price_mismatch[$type][$sku] = "SKU:" . $sku . " | " . $price_output;
+              }
+            }
+          }
+        }
+
+        // Output the details of stock mismatch.
+        if (!empty($stock_mismatch[$type])) {
+          $this->output->writeln(dt("\n@count @type's SKUs in Drupal have different stock than Magento!output", [
+            '@count' => count($stock_mismatch[$type]),
+            '@type' => $type,
+            '!output' => $verbose ? ":\n" . implode("\n", $stock_mismatch[$type]) : '.',
+          ]));
+        }
+        else {
+          $this->output->writeln(dt("\nNo stock mismatch for @type's in Drupal.", [
+            '@type' => $type,
+          ]));
+        }
+
+        // Output the details of price mismatch.
+        if (!empty($price_mismatch[$type])) {
+          $this->output->writeln(dt("\n@count @type's SKUs in Drupal have different price than Magento!output", [
+            '@count' => count($price_mismatch[$type]),
+            '@type' => $type,
+            '!output' => $verbose ? ":\n" . implode("\n", $price_mismatch[$type]) : '.',
+          ]));
+        }
+        else {
+          $this->output->writeln(dt("\nNo price mismatch for @type's in Drupal.", [
+            '@type' => $type,
+          ]));
+        }
+      }
+
+      $missing[$type]['all'] = array_unique($missing[$type]['all']);
+      $to_be_deleted[$type]['all'] = array_unique($to_be_deleted[$type]['all']);
+      $stock_mismatch_sync[$type] = !empty($stock_mismatch_sync[$type]) ? array_unique($stock_mismatch_sync[$type]) : [];
+      $price_mismatch_sync[$type] = !empty($price_mismatch_sync[$type]) ? array_unique($price_mismatch_sync[$type]) : [];
+    }
+
+    $this->output->writeln(dt("\n#### SYNCHRONIZATION ####"));
+
+    $chunk_size = 100;
+    $page_size = 10;
+
+    foreach ($types as $type) {
+      // Missing SKUs synchronization.
+      if (!empty($missing[$type]['all']) && $this->io()->confirm(dt('Do you want to sync the @count @type missing SKUs?', [
+        '@count' => count($missing[$type]['all']),
+        '@type' => $type,
+      ]))) {
+        foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+          foreach (array_chunk(str_replace("'", '', $missing[$type]['all']), $chunk_size) as $chunk) {
+            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+          }
+
+          $this->output->writeln(dt('Sync launched for the @count @language @type missing SKUs.', [
+            '@count' => count($missing[$type]['all']),
+            '@language' => $languages[$langcode]->getName(),
+            '@type' => $type,
+          ]));
+        }
+      }
+
+      // Additional SKUs synchronization/deletion.
+      if (!empty($to_be_deleted[$type]['all'])) {
+        $this->output->writeln(dt('Extra SKUs can be deleted in Drupal directly or can be synchronized with Magento to trigger the deletion.'));
+        if ($this->io()
+          ->confirm(dt('Do you want to delete the @count @type extra SKUs in Drupal directly?', [
+            '@count' => count($to_be_deleted[$type]['all']),
+            '@type' => $type,
+          ]))) {
+          foreach ($languages as $langcode => $language) {
+            foreach ($to_be_deleted[$type][$langcode] as $sku) {
+              if ($sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, TRUE)) {
+                $this->logger->notice('Removing disabled @language @type SKU @sku from the system: @sku.', [
+                  '@language' => $languages[$langcode]->getName(),
+                  '@type' => $type,
+                  '@sku' => $sku,
+                ]);
+
+                $lock_key = 'deleteProduct' . $sku;
+
+                // Acquire lock to ensure parallel processes are executed
+                // sequentially.
+                // @TODO: These 8 lines might be duplicated in multiple places. We
+                // may want to create a utility service in alshaya_performance.
+                do {
+                  $lock_acquired = $this->lock->acquire($lock_key);
+
+                  // Sleep for half a second before trying again.
+                  // @TODO: Move this 0.5s to a config variable.
+                  if (!$lock_acquired) {
+                    usleep(500000);
+                  }
+                } while (!$lock_acquired);
+
+                // Delete the node if it is linked to this SKU only.
+                try {
+                  if ($node = $sku_entity->getPluginInstance()->getDisplayNode($sku_entity, FALSE, FALSE)) {
+                    $node->delete();
+                  }
+                }
+                catch (\Exception $e) {
+                  // Not doing anything, we might not have node for the sku.
+                }
+
+                // Delete the SKU.
+                $sku_entity->delete();
+
+                // Release the lock.
+                $this->lock->release($lock_key);
+
+                $this->logger()->debug(dt('Disabled @language @type SKU @sku removed from the system.', [
+                  '@language' => $languages[$langcode]->getName(),
+                  '@type' => $type,
+                  '@sku' => $sku,
+                ]));
+              }
+            }
+          }
+        }
+        elseif ($this->io()
+          ->confirm(dt('Do you want to sync the @count @type extra SKUs?', [
+            '@count' => count($to_be_deleted[$type]['all']),
+            '@type' => $type,
+          ]))) {
+          foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+            foreach (array_chunk(str_replace("'", '', $to_be_deleted[$type]['all']), $chunk_size) as $chunk) {
+              $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+            }
+
+            $this->output->writeln(dt('Sync launched for the @count @language @type extra SKUs.', [
+              '@count' => count($to_be_deleted[$type]['all']),
+              '@language' => $languages[$langcode]->getName(),
+              '@type' => $type,
+            ]));
+          }
+        }
+      }
+
+      // Stock and price sync is only valid for simple SKUs. Also, these are
+      // not translatable fields, hence we only need to sync one language.
+      if ($type == 'simple') {
+        $stores = $this->i18nHelper->getStoreLanguageMapping();
+        $langcode = key($stores);
+        $store_id = $stores[$langcode];
+
+        // Stock mismatch synchronization.
+        if (!empty($stock_mismatch_sync[$type]) && $this->io()->confirm(dt('Do you want to sync the @count @type SKUs with stock mismatch?', [
+          '@count' => count($stock_mismatch_sync[$type]),
+          '@type' => $type,
+        ]))) {
+          foreach (array_chunk(str_replace("'", '', $stock_mismatch_sync[$type]), $chunk_size) as $chunk) {
+            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+          }
+
+          $this->output->writeln(dt('Sync launched for the @count @type SKUs with stock mismatch.', [
+            '@count' => count($stock_mismatch_sync[$type]),
+            '@type' => $type,
+          ]));
+        }
+
+        // Price mismatch synchronization.
+        if (!empty($price_mismatch_sync[$type]) && $this->io()->confirm(dt('Do you want to sync the @count @type SKUs with price mismatch?', [
+          '@count' => count($price_mismatch_sync[$type]),
+          '@type' => $type,
+        ]))) {
+          foreach (array_chunk(str_replace("'", '', $price_mismatch_sync[$type]), $chunk_size) as $chunk) {
+            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+          }
+
+          $this->output->writeln(dt('Sync launched for the @count @type SKUs with price mismatch.', [
+            '@count' => count($price_mismatch_sync[$type]),
+            '@type' => $type,
+          ]));
+        }
+      }
+    }
+  }
+
+  /**
    * Run sanity check to get a diff of SKUs between Drupal and Magento.
    *
    * @param array $options
    *   List of options supported by drush command.
    *
-   * @command alshaya_api:santity-check-sku-diff
+   * @command alshaya_api:sanity-check-sku-diff
    *
    * @option types
    *   The comma-separated list of SKUs types to check (simple, configurable).
