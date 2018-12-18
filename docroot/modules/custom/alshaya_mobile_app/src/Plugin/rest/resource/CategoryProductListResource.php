@@ -158,7 +158,7 @@ class CategoryProductListResource extends ResourceBase {
    *   Throws when term provided not exists.
    */
   public function get($id = NULL) {
-    if (!is_int($id) || empty($id)) {
+    if (!is_numeric($id) || empty($id)) {
       $this->mobileAppUtility->throwException();
     }
 

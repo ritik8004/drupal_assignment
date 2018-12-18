@@ -50,6 +50,10 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
     $product = $event->getProduct();
     $skip_skus_without_multipack = $this->configFactory->get('alshaya_hm_temp_skus_filter.config')->get('skip_skus_without_multipack');
 
+    if ($product['type'] == 'configurable') {
+      return;
+    }
+
     // Check for assets to contain valid image types for season 6+ products.
     if (isset($product['extension'], $product['extension']['assets'])) {
       $assets = $product['extension']['assets'];
@@ -64,7 +68,6 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
 
         // Avoid skipping product import only if we find an asset with
         // DescriptiveStillLife image & multipack attribute set to TRUE.
-
         if ($asset['Data']['AssetType'] === 'StillMediaComponents/Product/DescriptiveStillLife') {
           if (($skip_skus_without_multipack) && ($asset['Data']['isMultiPack'] == 'true')) {
             $product['skip'] = FALSE;
