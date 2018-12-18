@@ -292,7 +292,7 @@ class ProductResource extends ResourceBase {
           continue;
         }
         $variant = $this->getSkuData($child);
-        $variant['configurable_values'] = $this->getConfigurableValues($child);
+        $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
         $data['variants'][] = $variant;
       }
     }
@@ -419,23 +419,23 @@ class ProductResource extends ResourceBase {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param array $attributes
+   *   Array of attributes containing attribute code and value.
    *
    * @return array
    *   Configurable Values.
    */
-  private function getConfigurableValues(SKUInterface $sku): array {
+  private function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
     if ($sku->bundle() !== 'simple') {
       return [];
     }
 
     $values = $this->skuManager->getConfigurableValues($sku);
-    $size_labels = $this->getSizeLabels($sku);
-
+    $attr_values = array_column($attributes, 'value', 'attribute_code');
     foreach ($values as $attribute_code => &$value) {
       $value['attribute_code'] = $attribute_code;
-
-      if ($attribute_code == 'attr_size' && !empty($size_labels[$value['value']])) {
-        $value['value'] = $size_labels[$value['value']];
+      if ($attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
+        $value['value'] = (string) $attr_value;
       }
     }
 
