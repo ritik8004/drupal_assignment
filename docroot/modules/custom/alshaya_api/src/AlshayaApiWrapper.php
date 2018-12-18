@@ -602,7 +602,7 @@ class AlshayaApiWrapper {
 
         // Need to fallback to PHP_QUERY_RFC3986 to convert spaces in SKUs to
         // '%20' rather than '+'.
-        $response = $this->invokeApi($endpoint . http_build_query($query, null, '&', PHP_QUERY_RFC3986), [], 'GET');
+        $response = $this->invokeApi($endpoint . http_build_query($query, NULL, '&', PHP_QUERY_RFC3986), [], 'GET');
         if ($response && is_string($response)) {
           if ($decode_response = json_decode($response, TRUE)) {
             if (!empty($decode_response['items'])) {
