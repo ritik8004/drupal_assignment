@@ -72,6 +72,9 @@ class CartController extends ControllerBase {
         throw new AccessDeniedHttpException();
       }
 
+      // We use encoded string to handle cases like "MHHW0629 1 6/7Y".
+      $sku = base64_decode($sku);
+
       // If there is a coupon applied on cart.
       if (!empty($this->cart->getCoupon())) {
         // If only one item in cart.
