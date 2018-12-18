@@ -48,7 +48,6 @@ cache:
   - "$HOME/.drush/cache"
   - "$HOME/.npm"
   - "$HOME/.nvm"
-  - "vendor"
   - "docroot/modules/contrib"
   - "docroot/themes/contrib"
   - "docroot/profiles/contrib"
