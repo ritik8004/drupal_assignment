@@ -108,14 +108,7 @@
       }
 
       .sku-base-form {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
-        grid-gap: 0 1rem;
-
-        .js-form-wrapper {
-          grid-column: 1 / -1;
-        }
+        display: flex;
 
         .size-tray-link {
           display: flex;
@@ -127,7 +120,7 @@
           text-align: center;
           color: $primary_empty_btn;
           cursor: pointer;
-          grid-column: 1 / 2;
+          margin-right: 1rem;
         }
 
         .edit-add-to-cart {
