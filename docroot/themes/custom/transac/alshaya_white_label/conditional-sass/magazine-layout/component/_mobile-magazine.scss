@@ -139,3 +139,13 @@
     }
   }
 }
+
+.social-modal-overlay {
+  .magazine-layout-node {
+    .content-sidebar-wrapper {
+      &.sidebar-fixed {
+        position: static;
+      }
+    }
+  }
+}

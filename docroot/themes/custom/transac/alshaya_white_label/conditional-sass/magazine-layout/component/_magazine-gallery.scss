@@ -151,6 +151,11 @@
 
     #wrap {
       z-index: 1 !important;
+      position: static !important;
+
+      > a {
+        position: static !important;
+      }
 
       #cloud-zoom-big {
         width: 19.88rem;
@@ -158,6 +163,20 @@
 
         .cloud-zoom-title {
           display: none;
+        }
+      }
+    }
+  }
+}
+
+.pdp-modal-overlay {
+  .magazine__gallery--container {
+    .pdp-image {
+      #wrap {
+        position: relative !important;
+
+        > a {
+          position: relative !important;
         }
       }
     }
