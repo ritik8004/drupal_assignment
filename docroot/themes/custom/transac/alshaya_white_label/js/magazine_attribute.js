@@ -11,7 +11,9 @@
    *  @param {context} context on ajax update.
    */
   Drupal.select2OptionConvert = function (context) {
-    $('#configurable_ajax').addClass('visually-hidden');
+    if ($(window).width() < 768) {
+      $('#configurable_ajax').addClass('visually-hidden');
+    }
     // Hide the dropdowns when user resizes window and is now in desktop mode.
     $('.form-item-configurable-select').addClass('visually-hidden');
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-select', context));
