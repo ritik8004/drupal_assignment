@@ -50,6 +50,8 @@
 
 body {
   &.social-modal-overlay {
+    overflow: hidden;
+
     &::before {
       content: '';
       position: fixed;

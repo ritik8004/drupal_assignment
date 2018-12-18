@@ -328,7 +328,7 @@
 
         // Moving sharethis before description field in mobile.
         var sharethisSection = $('.basic-details-wrapper .modal-share-this');
-        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .form-item-configurables-article-castor-id');
+        sharethisSection.once('bind-events').insertBefore('.magazine-product-description .magazine-swatch-placeholder');
         $('.basic-details-wrapper .modal-share-this').hide();
 
         // JS function to move mobile colors to bellow of PDP main image in
