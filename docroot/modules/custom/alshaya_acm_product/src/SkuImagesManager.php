@@ -774,6 +774,7 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
+      case 'modal-magazine':
 
         $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
@@ -851,7 +852,6 @@ class SkuImagesManager {
         }
         break;
 
-      case 'modal-magazine':
       case 'pdp-magazine':
         // We will use below variable for alter hooks.
         $prod_description = [];

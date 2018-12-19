@@ -464,6 +464,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
         }
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';
+          $variables['#attached']['library'][] = 'alshaya_white_label/stickybutton';
         }
       }
     }
