@@ -55,6 +55,11 @@
       .select-buttons {
         @include breakpoint($only-mobile) {
           text-align: center;
+          white-space: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          display: block !important;
+          margin-#{$left}: 0.5rem;
         }
 
         li,
@@ -96,8 +101,8 @@
       .select2Option {
         .select-buttons {
           @include breakpoint($only-mobile) {
-            display: flex !important;
             margin: 0 1rem;
+            white-space: inherit;
           }
 
           li {
