@@ -260,13 +260,11 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         ];
 
         if (!empty($color)) {
-          $this->skuManager->buildPrice($elements[$delta], $sku_for_gallery);
+          $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku_for_gallery);
         }
         else {
-          $this->skuManager->buildPrice($elements[$delta], $sku);
+          $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
         }
-
-        $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
 
         $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
