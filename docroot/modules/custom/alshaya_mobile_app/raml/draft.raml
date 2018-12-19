@@ -530,6 +530,20 @@ schemas:
         },
         "required": [ "key", "label" ]
       }
+  - Message: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "description": "Messages that are passed to the user.",
+        "type": "object",
+        "properties": {
+          "spellcheck": {
+            "type": "array",
+            "items": {
+              "description": "Suggestions for the word, if no results found."
+            }
+          },
+        }
+      }
   - GetSearch: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -556,7 +570,12 @@ schemas:
             "items": {
               "schema": "LightProduct"
             }
-          }
+          },
+          "message": {
+            "type": "array",
+            "items": {
+              "schema": "Message"
+            }
         }
       }
   - GetProductsList: |
@@ -1220,7 +1239,9 @@ schemas:
                 {
                   "filters": [],
                   "sorting": [],
-                  "products": []
+                  "products": [],
+                  "total": 10,
+                  "message": { "spellcheck": [] }
                 }
   /promotion/all:
     get:
