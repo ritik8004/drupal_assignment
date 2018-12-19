@@ -22,6 +22,8 @@
     $('.form-item-configurable-swatch').addClass('visually-hidden');
 
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch', context));
+
+    // JS function to show less/more for colour swatches.
     Drupal.magazine_swatches_count();
   };
 
@@ -83,11 +85,11 @@
         $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
         $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
       }
-      $('.form-item-configurables-article-castor-id').addClass('swatch-effect');
+      $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-effect');
       $('.show-more-color').show();
     }
     else {
-      $('.form-item-configurables-article-castor-id').addClass('simple-swatch-effect');
+      $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
     }
 
     $('.show-more-color').on('click', function (e) {
@@ -95,7 +97,7 @@
         $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-less-color').show();
@@ -106,7 +108,7 @@
         $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id').removeClass('swatch-toggle');
+        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').removeClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-more-color').show();
@@ -342,6 +344,9 @@
 
         // JS function to move mobile size div to size-tray.
         mobileSize(context);
+
+        // JS function to show less/more for colour swatches.
+        Drupal.magazine_swatches_count();
 
         $('.edit-add-to-cart', context).on('mousedown', function () {
           var that = this;
