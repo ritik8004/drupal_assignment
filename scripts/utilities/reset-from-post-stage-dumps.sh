@@ -47,6 +47,9 @@ do
     rm ~/backup/$target_env/post-stage/$site.sql
   fi
 
+  ## Clearing cache before running updb to the site.
+  drush -l $site.$env-alshaya.acsitefactory.com cr
+
   ## Apply the database updates to the site.
   echo "Executing updb."
   drush -l $site.$env-alshaya.acsitefactory.com updb 2> /tmp/drush_updb_$site_$target_env.log
