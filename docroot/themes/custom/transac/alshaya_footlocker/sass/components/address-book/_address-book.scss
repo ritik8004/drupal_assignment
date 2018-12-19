@@ -17,6 +17,10 @@
 
   @include breakpoint($tablet) {
     max-width: 20rem;
+
+    &:nth-of-type(odd) {
+      clear: both;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -85,11 +89,10 @@
       border: 0;
       border-#{$left}: 0.0625rem solid $address_book_border;
       height: 2.5rem;
-      padding: 0.9375rem 0;
+      padding: 0.75rem 0;
       min-width: 4.9375rem;
 
       @include breakpoint($desktop) {
-        padding: 0.9375rem 0;
         font-weight: normal;
       }
     }
@@ -99,7 +102,7 @@
     text-align: unset;
     padding-#{$left}: 2.125rem;
     padding-bottom: 0;
-    padding-top: 0.4375rem;
+    padding-top: 0.125rem;
 
     @include breakpoint($tablet) {
       width: auto;
