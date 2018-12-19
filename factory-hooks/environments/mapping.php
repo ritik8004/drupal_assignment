@@ -123,6 +123,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_qa',
         'conductor' => 'hmkw_test',
       ],
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmkw_mapp',
+      ],
     ],
     // H&M SA.
     'hmsa' => [
@@ -142,6 +146,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_prod',
         'conductor' => 'hmsa_prod'
       ],
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmsa_mapp',
+      ],
     ],
     // H&M AE.
     'hmae' => [
@@ -160,6 +168,10 @@ function alshaya_get_env_keys($site, $env) {
       '01live' => [
         'magento' => 'hm_prod',
         'conductor' => 'hmae_prod'
+      ],
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmae_mapp',
       ],
     ],
     // H&M EG.
