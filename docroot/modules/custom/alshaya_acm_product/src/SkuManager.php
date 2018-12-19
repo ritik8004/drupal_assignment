@@ -2059,7 +2059,7 @@ class SkuManager {
     }
 
     $child = $this->getAvailableChildren($sku, TRUE);
-    if (!($child instanceof SKUInterface)) {
+    if ($child instanceof SKUInterface) {
       $this->setProductCachedData($sku, $cache_key, $child->getSku());
       return $child;
     }
