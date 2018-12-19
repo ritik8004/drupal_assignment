@@ -1308,14 +1308,8 @@ class SkuManager {
       return NULL;
     }
 
-    $static = &drupal_static('sku_manager_get_display_node', []);
-
     $langcode = $sku_entity->language()->getId();
     $sku_string = $sku_entity->getSku();
-
-    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
-    }
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
@@ -1332,8 +1326,6 @@ class SkuManager {
 
       return NULL;
     }
-
-    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
@@ -1449,10 +1441,7 @@ class SkuManager {
           continue;
         }
 
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-
-        $node = $plugin->getDisplayNode($sku_entity);
+        $node = $this->getDisplayNode($sku_entity);
 
         if (empty($node)) {
           continue;
