@@ -36,7 +36,8 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events = [];
-    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 500];
+    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdated', 999];
+    $events[ProductUpdatedEvent::EVENT_NAME][] = ['onProductUpdatedProcessColor', 500];
     return $events;
   }
 
@@ -63,7 +64,22 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
       // @TODO: Make this smart in CORE-3443.
       Cache::invalidateTags($parent->getCacheTagsToInvalidate());
+    }
+  }
 
+  /**
+   * Subscriber Callback for the event to process color nodes.
+   *
+   * @param \Drupal\alshaya_acm_product\Event\ProductUpdatedEvent $event
+   *   Event object.
+   */
+  public function onProductUpdatedProcessColor(ProductUpdatedEvent $event) {
+    $entity = $event->getSku();
+
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $entity->getPluginInstance();
+
+    if ($parent = $plugin->getParentSku($entity)) {
       // Update color nodes on save of each child.
       $node = $this->skuManager->getDisplayNode($parent, FALSE);
       if ($node instanceof NodeInterface) {
