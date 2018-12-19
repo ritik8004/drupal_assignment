@@ -112,8 +112,8 @@ function alshaya_get_env_keys($site, $env) {
         'conductor' => 'hmkw_uat'
       ],
       '01pprod' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmkw_pprod'
+        'magento' => 'hm_prod',
+        'conductor' => 'hmkw_prod'
       ],
       '01live' => [
         'magento' => 'hm_prod',
@@ -134,6 +134,10 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_uat',
         'conductor' => 'hmsa_uat',
       ],
+      '01pprod' => [
+        'magento' => 'hm_prod',
+        'conductor' => 'hmsa_prod'
+      ],
       '01live' => [
         'magento' => 'hm_prod',
         'conductor' => 'hmsa_prod'
@@ -148,6 +152,10 @@ function alshaya_get_env_keys($site, $env) {
       '01uat' => [
         'magento' => 'hm_uat',
         'conductor' => 'hmae_uat',
+      ],
+      '01pprod' => [
+        'magento' => 'hm_prod',
+        'conductor' => 'hmae_prod'
       ],
       '01live' => [
         'magento' => 'hm_prod',
