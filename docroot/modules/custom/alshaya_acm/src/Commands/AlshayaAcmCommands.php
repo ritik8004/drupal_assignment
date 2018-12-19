@@ -7,7 +7,6 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
 use Drupal\alshaya_acm\AlshayaMdcQueueManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
-use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
@@ -91,13 +90,6 @@ class AlshayaAcmCommands extends DrushCommands {
   private $mdcQueueManager;
 
   /**
-   * Alshaya api wrapper service.
-   *
-   * @var \Drupal\alshaya_api\AlshayaApiWrapper
-   */
-  private $alshayaApiWrapper;
-
-  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -118,8 +110,6 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Commerce API wrapper.
    * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
    *   Mdc Queue Manager.
-   * @param \Drupal\alshaya_api\AlshayaApiWrapper $alshayaApiWrapper
-   *   Alshaya api wrapper service.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -129,8 +119,7 @@ class AlshayaAcmCommands extends DrushCommands {
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
                               Connection $connection,
                               APIWrapper $api_wrapper,
-                              AlshayaMdcQueueManager $mdcQueueManager,
-                              AlshayaApiWrapper $alshayaApiWrapper) {
+                              AlshayaMdcQueueManager $mdcQueueManager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -140,7 +129,6 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->connection = $connection;
     $this->apiWrapper = $api_wrapper;
     $this->mdcQueueManager = $mdcQueueManager;
-    $this->alshayaApiWrapper = $alshayaApiWrapper;
   }
 
   /**
@@ -515,8 +503,8 @@ class AlshayaAcmCommands extends DrushCommands {
     $mdc_queue_count = $mdc_queue_stats->messages;
 
     if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
-      drush_print('Items in MDC Queue: ' . $mdc_queue_count);
-      drush_print('Items in ACM Queue: ' . $acm_queue_count);
+      $this->output->writeln('Items in MDC Queue: ' . $mdc_queue_count);
+      $this->output->writeln('Items in ACM Queue: ' . $acm_queue_count);
 
       // Avoid bypassing check using -y switch.
       $confirm_text = dt('yes');
@@ -564,10 +552,7 @@ class AlshayaAcmCommands extends DrushCommands {
       // would give preference to list of SKUs supplied by csv file.
       unset($command_options['skus']);
       foreach ($csv_skus as $csv_skus_chunk) {
-        // Filter out only enabled SKUs from the csv chunk.
-        $enabled_skus = $this->alshayaApiWrapper->getSkus(['simple', 'configurable'], $csv_skus_chunk);
-        $enabled_skus = $enabled_skus['simple'] + $enabled_skus['configurable'];
-        $command_options['skus'] = implode(',', array_keys($enabled_skus));
+        $command_options['skus'] = implode(',', $csv_skus_chunk);
 
         if (!empty($command_options['skus'])) {
           drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
@@ -575,21 +560,11 @@ class AlshayaAcmCommands extends DrushCommands {
       }
     }
     else {
-      $skus = [];
-      if ($command_options['skus']) {
-        $skus = explode(',', $command_options['skus']);
-      }
-      // Filter out only enabled SKUs from the list passed via options. If none,
-      // pull out list of all enabled SKUs from MDC & pass it to the command
-      // as an option.
-      $enabled_skus = $this->alshayaApiWrapper->getSkus(['simple', 'configurable'], $skus);
-      $enabled_skus = $enabled_skus['simple'] + $enabled_skus['configurable'];
-      $command_options['skus'] = implode(',', array_keys($enabled_skus));
       if (!empty($command_options['skus'])) {
         drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
       }
       else {
-        drush_print('No enabled SKUs found to import.');
+        $this->output->writeln('No enabled SKUs found to import.');
       }
     }
   }

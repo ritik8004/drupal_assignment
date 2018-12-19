@@ -11,6 +11,5 @@ services:
       - '@database'
       - '@acq_commerce.agent_api'
       - '@alshaya_acm.mdc_queue_manager'
-      - '@alshaya_api.api'
     tags:
       - { name: drush.command }
