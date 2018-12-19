@@ -1,17 +1,17 @@
 <?php
 
-namespace Drupal\alshaya_acm_dashboard;
+namespace Drupal\alshaya_acm;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
- * Class AlshayaAcmDashaboardManager.
+ * Class AlshayMdcQueueManager.
  *
- * @package Drupal\alshaya_acm_dashboard
+ * @package Drupal\alshaya_acm
  */
-class AlshayaAcmDashboardManager {
+class AlshayaMdcQueueManager {
   /**
    * HttpClientFactory instance.
    *
@@ -46,7 +46,7 @@ class AlshayaAcmDashboardManager {
   public function __construct(ClientFactory $clientFactory, ConfigFactoryInterface $configFactory, LoggerChannelFactoryInterface $logger) {
     $this->clientFactory = $clientFactory;
     $this->configFactory = $configFactory;
-    $this->logger = $logger->get('alshaya_acm_dashboard');
+    $this->logger = $logger->get('alshaya_acm');
   }
 
   /**
