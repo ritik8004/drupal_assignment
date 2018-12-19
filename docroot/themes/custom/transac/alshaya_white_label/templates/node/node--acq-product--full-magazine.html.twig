@@ -117,7 +117,6 @@
           <div class="mobile-related-wrapper">
             {% if content.cross_sell %}
               <div class="horizontal-crossell mobile-only-block">
-                <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
                 {{ content.cross_sell }}
               </div>
             {% endif %}
@@ -139,4 +138,8 @@
       </div>
     {% endblock %}
   </div>
+<div class="size-tray">
+    <div class="size-tray-buttons"></div>
+    <div class="size-tray-content"></div>
+</div>
 {% endblock %}

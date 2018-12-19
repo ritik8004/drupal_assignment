@@ -1,5 +1,5 @@
 @include breakpoint($only-mobile) {
-  .div-modal-mobile {
+  .size-tray {
     height: 100%;
     width: 100%;
     position: fixed;
@@ -7,27 +7,17 @@
     bottom: 0;
     right: 0;
     left: 0;
-    z-index: 99;
+    z-index: 9999;
     background: rgba(0, 0, 0, 0.5);
 
-    #configurable_ajax {
-      display: block !important;
+    .size-tray-buttons {
       position: absolute;
-      bottom: 0;
-      background: $primary-bg;
+      bottom: 11rem;
+      display: flex;
+      justify-content: space-between;
       width: 100%;
-      height: 10rem;
 
-      .form-item-configurables-size {
-        padding: 1rem;
-
-        label {
-          display: none;
-        }
-      }
-
-      .sizediv-close {
-        position: absolute;
+      .size-tray-close {
         height: 2rem;
         width: 2rem;
         display: flex;
@@ -35,10 +25,10 @@
         justify-content: center;
         line-height: 0;
         background: $modal_close_bg;
-        top: -3rem;
         z-index: 100;
         border-radius: 1rem;
-        #{$right}: 1rem;
+        margin-#{$right}: 1rem;
+        cursor: pointer;
 
         @include icon(close) {
           color: $modal_close_icon;
@@ -47,18 +37,46 @@
       }
 
       .size-guide-link {
-        #{$left}: 1rem;
-        #{$right}: auto;
+        margin-#{$left}: 1rem;
+        margin-#{$right}: auto;
         float: none;
         width: 8.75rem;
         display: block;
         font-size: 0.75rem;
-        position: absolute;
         background: $primary-bg;
         padding: 0.75rem 2rem;
-        top: -3rem;
         z-index: 100;
         border-radius: 1.2rem;
+        cursor: pointer;
+      }
+    }
+
+    .size-tray-content {
+      display: block !important;
+      position: absolute;
+      bottom: 0;
+      background: $primary-bg;
+      width: 100%;
+      min-height: 10rem;
+
+      .select2Option {
+        padding: 1rem;
+      }
+
+      label {
+        display: none;
+      }
+    }
+
+    .configurable-swatch {
+      display: none;
+    }
+  }
+
+  .magazine-layout {
+    &.sizeguide-modal-overlay {
+      .ui-dialog {
+        z-index: 10000;
       }
     }
   }
