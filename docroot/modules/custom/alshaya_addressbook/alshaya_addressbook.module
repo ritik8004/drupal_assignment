@@ -305,7 +305,12 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element[$field_code]['#type'] = 'hidden';
       $element[$field_code]['#required'] = FALSE;
       $element[$field_code]['#validated'] = TRUE;
-      $element[$field_code]['#value'] = '&#8203;';
+      if ($field_code == 'postal_code') {
+        $element[$field_code]['#value'] = '';
+      }
+      else {
+        $element[$field_code]['#value'] = '&#8203;';
+      }
     }
 
     $fields_disabled = $address_book_manager->getMagentoDisabledFields();
@@ -313,7 +318,12 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       $element[$field_code]['#type'] = 'hidden';
       $element[$field_code]['#required'] = FALSE;
       $element[$field_code]['#validated'] = TRUE;
-      $element[$field_code]['#value'] = '&#8203;';
+      if ($field_code == 'postal_code') {
+        $element[$field_code]['#value'] = '';
+      }
+      else {
+        $element[$field_code]['#value'] = '&#8203;';
+      }
     }
   }
   else {
