@@ -363,8 +363,14 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Return the taxonomy term object if found else NULL.
    */
   public function getCategoryTermFromRoute() {
+    static $term = NULL;
+
+    if ($term instanceof TermInterface) {
+      return $term;
+    }
+
     $route_name = $this->routeMatch->getRouteName();
-    $term = NULL;
+
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
       /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
