@@ -351,8 +351,14 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Return the taxonomy term object if found else NULL.
    */
   public function getCategoryTermFromRoute() {
+    static $term = NULL;
+
+    if ($term instanceof TermInterface) {
+      return $term;
+    }
+
     $route_name = $this->routeMatch->getRouteName();
-    $term = NULL;
+
     // If /taxonomy/term/tid page.
     if ($route_name == 'entity.taxonomy_term.canonical') {
       /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
@@ -499,6 +505,31 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->fields('ttbc', [
       'entity_id',
       'field_promotion_banner_target_id',
+    ]);
+    $query->condition('ttbc.entity_id', $tid);
+    $query->condition('ttbc.langcode', $langcode);
+    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    return $query->execute()->fetchObject();
+  }
+
+  /**
+   * Gets the image from 'field_promotion_banner_mobile' field.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getMobileBanner($tid, $langcode) {
+    $query = $this->connection->select('taxonomy_term__field_promotion_banner_mobile', 'ttbc');
+    $query->fields('ttbc', [
+      'entity_id',
+      'field_promotion_banner_mobile_target_id',
+      'field_promotion_banner_mobile_width',
+      'field_promotion_banner_mobile_height',
     ]);
     $query->condition('ttbc.entity_id', $tid);
     $query->condition('ttbc.langcode', $langcode);

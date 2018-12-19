@@ -1305,14 +1305,8 @@ class SkuManager {
       return NULL;
     }
 
-    $static = &drupal_static('sku_manager_get_display_node', []);
-
     $langcode = $sku_entity->language()->getId();
     $sku_string = $sku_entity->getSku();
-
-    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
-    }
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
@@ -1329,8 +1323,6 @@ class SkuManager {
 
       return NULL;
     }
-
-    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
@@ -1446,10 +1438,7 @@ class SkuManager {
           continue;
         }
 
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-
-        $node = $plugin->getDisplayNode($sku_entity);
+        $node = $this->getDisplayNode($sku_entity);
 
         if (empty($node)) {
           continue;
@@ -1858,6 +1847,7 @@ class SkuManager {
    *   SKU entity.
    */
   public function clearProductCachedData(SKU $sku) {
+    drupal_static_reset('alshaya_product_cached_data');
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
   }
@@ -2018,7 +2008,7 @@ class SkuManager {
     $children = $this->getChildSkus($sku);
 
     foreach ($children as $child) {
-      $value = $this->getPdpSwatchValue($sku);
+      $value = $this->getPdpSwatchValue($child);
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
@@ -2644,20 +2634,20 @@ class SkuManager {
 
       if (!empty($child_color) && !isset($colors[$child_color])) {
         // Create the node if not available.
-        $node = $this->processColorNode(
+        $colorNode = $this->processColorNode(
           $node,
           $sku,
           $child_color
         );
 
-        $colors[$child_color] = $node->id();
-        unset($nids[$node->id()]);
+        $colors[$child_color] = $colorNode->id();
+        unset($nids[$colorNode->id()]);
       }
     }
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nodes = $this->nodeStorage->loadMultiple($nids);
+      $nodes = $this->nodeStorage->loadMultiple(array_flip($nids));
       $this->nodeStorage->delete($nodes);
     }
   }

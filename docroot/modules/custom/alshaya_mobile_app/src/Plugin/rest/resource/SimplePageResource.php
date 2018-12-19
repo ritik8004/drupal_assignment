@@ -159,9 +159,9 @@ class SimplePageResource extends ResourceBase {
       'name' => $node->label(),
       'path' => $node_url->getGeneratedUrl(),
       'deeplink' => $this->mobileAppUtility->getDeepLink($node),
-      'html' => $this->mobileAppUtility->convertRelativeUrlsToAbsolute(
-        $node->get('body')->first()->getValue()['value']
-      ),
+      'html' => !empty($node->get('body')->first())
+      ? $this->mobileAppUtility->convertRelativeUrlsToAbsolute($node->get('body')->first()->getValue()['value'])
+      : '',
       'css' => $node->get('field_css')->getString(),
       'js' => $node->get('field_javascript')->getString(),
       'images' => $this->mobileAppUtility->getImages($node, 'field_static_html_images'),

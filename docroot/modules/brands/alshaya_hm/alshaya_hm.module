@@ -42,10 +42,11 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
   }
   try {
     if (isset($data_layer['cartItemsFlocktory'])) {
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
       $cart_storage = \Drupal::service('acq_cart.cart_storage');
       $cart = $cart_storage->getCart(FALSE);
       if ($cart) {
-        $cart_items = $cart->get('items');
+        $cart_items = $cart->items();
         if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
           foreach ($cart_items as $key => $item) {
             $sku = SKU::loadFromSku($item['sku']);
