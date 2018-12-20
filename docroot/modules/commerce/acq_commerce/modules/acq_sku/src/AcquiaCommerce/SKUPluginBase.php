@@ -304,7 +304,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
           ->fetchField();
       }
 
-      // Fallback to pull mode if no value available for the SKU.
+      // If value not found in SKU we will try and get it using stock API.
       if (!($stock === '' || $stock === NULL)) {
         return (int) $stock;
       }
