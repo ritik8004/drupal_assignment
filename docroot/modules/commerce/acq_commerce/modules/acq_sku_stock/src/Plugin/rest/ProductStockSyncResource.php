@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acq_sku\Plugin\rest\resource;
+namespace Drupal\acq_sku_stock\Plugin\rest\resource;
 
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\Entity\SKU;
@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class ProductStockSyncResource.
  *
- * @package Drupal\acq_sku\Plugin
+ * @package Drupal\acq_sku_stock\Plugin
  *
  * @ingroup acq_sku
  *

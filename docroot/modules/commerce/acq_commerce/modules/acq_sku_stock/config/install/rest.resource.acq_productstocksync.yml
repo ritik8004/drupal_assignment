@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - acq_sku
+    - acq_sku_stock
     - serialization
     - simple_oauth
     - user
