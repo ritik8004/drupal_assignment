@@ -151,11 +151,6 @@
 
     #wrap {
       z-index: 1 !important;
-      position: static !important;
-
-      > a {
-        position: static !important;
-      }
 
       #cloud-zoom-big {
         width: 19.88rem;
@@ -169,24 +164,38 @@
   }
 }
 
-.pdp-modal-overlay {
-  .magazine__gallery--container {
-    .pdp-image {
-      #wrap {
-        position: relative !important;
-
-        > a {
+@include breakpoint($only-mobile) {
+  .pdp-modal-overlay {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
           position: relative !important;
+
+          > a {
+            position: relative !important;
+          }
         }
       }
     }
   }
-}
 
-.nodetype--acq_product {
-  .magazine-layout {
-    .dialog-product-image-gallery-container-mobile {
-      z-index: 10001;
+  .nodetype--acq_product {
+    &.magazine-layout {
+      .magazine__gallery--container {
+        .pdp-image {
+          #wrap {
+            position: static !important;
+
+            > a {
+              position: static !important;
+            }
+          }
+        }
+      }
+
+      .dialog-product-image-gallery-container-mobile {
+        z-index: 10001;
+      }
     }
   }
 }
