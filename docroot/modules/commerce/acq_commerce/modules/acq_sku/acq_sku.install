@@ -17,6 +17,9 @@ use Symfony\Component\Yaml\Yaml;
  * Manage stock through separate module acq_sku_stock.
  */
 function acq_sku_update_8018() {
+  // @TODO: Check if anything required around permissions.
+  \Drupal::configFactory()->getEditable('rest.resource.acq_productstocksync')->delete();
+
   \Drupal::service('module_installer')->install(['acq_sku_stock']);
 }
 
