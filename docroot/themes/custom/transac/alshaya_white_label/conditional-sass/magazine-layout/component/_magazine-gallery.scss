@@ -182,3 +182,11 @@
     }
   }
 }
+
+.nodetype--acq_product {
+  .magazine-layout {
+    .dialog-product-image-gallery-container-mobile {
+      z-index: 10001;
+    }
+  }
+}
