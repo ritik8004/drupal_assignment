@@ -2006,3 +2006,19 @@ html[lang=ar] {
     }
   }
 }
+
+.nodetype--acq_product {
+  .select2-container--open {
+    .select2-dropdown {
+      z-index: 1;
+    }
+  }
+
+  &.pdp-modal-overlay {
+    .select2-container--open {
+      .select2-dropdown {
+        z-index: 1001;
+      }
+    }
+  }
+}
