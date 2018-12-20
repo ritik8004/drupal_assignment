@@ -86,6 +86,23 @@ To prepare your local env:
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
 
+### Running behat tests with headless Chrome locally on MacOS
+This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.
+You **do not** need Java/Selenium/BLT/drupalvm installed for this.
+
+* Make sure you have Google Chrome browser installed on your host PC
+* Navigate to your repo root (you will run all commands below from repo root of host PC)
+* Make alias to your chrome browser, e.g. `alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"`
+* Run `chrome --headless --remote-debugging-port=9222 --window-size=1920,1080 http://localhost`
+* Open new terminal window
+* Run `vendor/bin/behat  --format pretty alshaya_behat/features/hmkw/common/sign_in.feature --colors --no-interaction --stop-on-failure --strict --config tests/behat/integration.yml --profile hmkw-uat -v`
+
+Notes:
+* Replace the "sign_in.feature" with other features or folder to run different tests
+* Replace "hmkw-uat" profile with other profiles, see `tests/behat/integration.yml` file for more examples.
+* While headless chrome is running, you can visit http://localhost:9222 to see how the "screen" of the tests looks like.
+* You can also see the screenshots of failed tests in `tests/behat/reports` folder
+
 ### Troubleshooting
 
 * `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
