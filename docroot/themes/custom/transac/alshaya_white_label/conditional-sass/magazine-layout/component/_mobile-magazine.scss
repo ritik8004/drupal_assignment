@@ -1,24 +1,26 @@
 .magazine-layout-node {
   .content-sidebar-wrapper {
     @include breakpoint($tablet) {
-      width: 30%;
+      width: 40%;
       float: $right;
 
       .content__title_wrapper {
         width: 100%;
         float: none;
+        margin: 0;
       }
 
       .content__sidebar {
         width: 100%;
         float: none;
+        margin: 0.625rem 0 0;
       }
 
       &.sidebar-fixed {
         position: fixed;
-        top: 8.125rem;
-        #{$right}: calc((100vw - 66.35rem) / 2);
-        width: calc((30 * 66.35rem) / 100);
+        top: 5rem;
+        #{$right}: calc((100vw - 45rem) / 2);
+        width: calc((40 * 45rem) / 100);
 
         &.contain {
           position: absolute;
@@ -26,6 +28,16 @@
           top: auto;
           #{$right}: 0;
         }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      width: 30%;
+
+      &.sidebar-fixed {
+        top: 8.125rem;
+        #{$right}: calc((100vw - 67.35rem) / 2);
+        width: calc((30 * 66.35rem) / 100);
       }
     }
   }
@@ -46,7 +58,7 @@
     @include breakpoint($only-mobile) {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: auto auto 3rem;
+      grid-template-rows: auto auto auto;
       padding: 1rem;
 
       &.fixed {
@@ -68,33 +80,64 @@
     }
   }
 
+  .size-tray {
+    display: none;
+
+    &.tray-open {
+      display: block;
+    }
+  }
+
   .basic-details-wrapper {
+    article {
+      @include breakpoint($only-mobile) {
+        display: table;
+        width: 100%;
+      }
+    }
+
     @include breakpoint($only-mobile) {
-      .field--name-field-skus .field__item {
-        display: block;
-        padding: 0;
+      .field--name-field-skus {
+        min-height: inherit;
+
+        .field__item {
+          display: block;
+          padding: 0;
+          min-height: inherit;
+        }
       }
 
       .sku-base-form {
         display: flex;
-        flex-wrap: wrap;
-        align-items: flex-end;
-        justify-content: space-between;
 
-        .size-link {
-          width: 47%;
+        .size-tray-link {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           height: 3rem;
           border: 2px solid $primary_empty_btn_border;
           padding: 0.65rem;
           text-align: center;
           color: $primary_empty_btn;
-          margin-#{$right}: 1rem;
+          cursor: pointer;
+          margin-right: 1rem;
         }
 
         .edit-add-to-cart {
-          width: 47% !important;
           height: 3rem !important;
+          cursor: pointer;
+          grid-column: 2 / -1;
         }
+      }
+    }
+  }
+}
+
+.social-modal-overlay {
+  .magazine-layout-node {
+    .content-sidebar-wrapper {
+      &.sidebar-fixed {
+        position: static;
       }
     }
   }

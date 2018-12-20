@@ -1175,7 +1175,7 @@
       display: block;
       position: absolute;
       top: 0;
-      #{$right}: -100%;
+      #{$right}: -99999rem;
       transition: #{$right} 1s ease;
       height: 33.75rem;
       border: 1px solid $pdp_all_stores_modal_border;
