@@ -44,7 +44,6 @@
 
   Drupal.behaviors.joinusblock = {
     attach: function (context, settings) {
-
       if ($('#block-content div').hasClass('joinclub')) {
         $('#block-content article').addClass('joinclubblock');
       }
