@@ -102,7 +102,17 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
   if (empty($filters['sort_bef_combine'])) {
     // Get sorts.
     if (is_array($view->sort) && !empty($view->sort)) {
+      $sorts = $view->sort;
       $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
+
+      // Remove the ones not enabled in view's sorting options.
+      foreach ($labels as $key => $sort_option) {
+        $sort_field = explode(' ', $key)[0];
+        if (!isset($sorts[$sort_field])) {
+          unset($labels[$key]);
+        }
+      }
+
       $labels = _alshaya_acm_product_position_sorted_options($labels);
       $filters['sort_bef_combine'] = reset(array_keys($labels));
 
