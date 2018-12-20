@@ -89,13 +89,6 @@
   }
 
   .basic-details-wrapper {
-    article {
-      @include breakpoint($only-mobile) {
-        display: table;
-        width: 100%;
-      }
-    }
-
     @include breakpoint($only-mobile) {
       .field--name-field-skus {
         min-height: inherit;
@@ -108,7 +101,14 @@
       }
 
       .sku-base-form {
-        display: flex;
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+        grid-gap: 0 1rem;
+
+        .js-form-wrapper {
+          grid-column: 1 / -1;
+        }
 
         .size-tray-link {
           display: flex;
@@ -120,7 +120,7 @@
           text-align: center;
           color: $primary_empty_btn;
           cursor: pointer;
-          margin-right: 1rem;
+          grid-column: 1 / 2;
         }
 
         .edit-add-to-cart {
