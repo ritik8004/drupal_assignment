@@ -101,23 +101,12 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
   $filters = $view->getExposedInput();
   if (empty($filters['sort_bef_combine'])) {
     // Get sorts.
-    if (is_array($view->sort) && !empty($sorts = array_keys($view->sort))) {
-      $enabled_sorts = _alshaya_acm_product_position_get_config();
-      if ($enabled_sorts) {
-        $default_sort = FALSE;
-        foreach ($sorts as $sort) {
-          if (isset($enabled_sorts[$sort])) {
-            $default_sort = $sort . ' ASC';
-            break;
-          }
-        }
+    if (is_array($view->sort) && !empty($view->sort)) {
+      $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
+      $labels = _alshaya_acm_product_position_sorted_options($labels);
+      $filters['sort_bef_combine'] = reset(array_keys($labels));
 
-        if ($default_sort) {
-          $filters['sort_bef_combine'] = $default_sort;
-        }
-
-        $view->setExposedInput($filters);
-      }
+      $view->setExposedInput($filters);
     }
   }
 
