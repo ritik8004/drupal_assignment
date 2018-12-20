@@ -1409,12 +1409,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    if ($form_state->getValue('page-context') == 'modal') {
-      $context = 'modal';
-    }
-    else {
-      $context = 'pdp';
-    }
+    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
     $pdp_layout = $skuManager->getPdpLayout($tree_pointer, $context);
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, $pdp_layout, '', FALSE);
 
@@ -1578,12 +1573,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
       if ($first_child instanceof SKU) {
-        if ($form_state->getValue('page-context') == 'modal') {
-          $context = 'modal';
-        }
-        else {
-          $context = 'pdp';
-        }
+        $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
 
         $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
         $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE, $sku);
