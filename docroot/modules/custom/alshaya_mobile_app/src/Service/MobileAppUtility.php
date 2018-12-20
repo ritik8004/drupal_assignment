@@ -469,7 +469,11 @@ class MobileAppUtility {
     if ($message) {
       $response['message'] = $message;
     }
-    return (new ResourceResponse($response));
+
+    // If success:false, set status code as 404.
+    $status_code = $response['success'] ? 200 : 404;
+
+    return (new ResourceResponse($response, $status_code));
   }
 
   /**
