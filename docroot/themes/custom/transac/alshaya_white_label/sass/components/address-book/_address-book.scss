@@ -791,7 +791,10 @@
   .form-item-member-delivery-home-address-form-form-address-line2,
   .form-item-guest-delivery-home-address-shipping-sorting-code,
   .form-item-guest-delivery-home-address-shipping-postal-code,
-  .form-item-guest-delivery-home-address-shipping-additional-name {
+  .form-item-guest-delivery-home-address-shipping-additional-name,
+  .form-item-field-address-0-address-postal-code,
+  .form-item-field-address-0-address-sorting-code,
+  .form-item-field-address-0-address-additional-name {
     input[type=text] ~ label:not(.active-label) {
       font-size: 1rem !important;
       color: $primary_input_label !important;
