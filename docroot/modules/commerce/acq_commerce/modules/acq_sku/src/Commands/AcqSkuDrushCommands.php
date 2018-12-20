@@ -121,13 +121,6 @@ class AcqSkuDrushCommands extends DrushCommands {
   private $cacheTagsInvalidator;
 
   /**
-   * Stock Cache Handler.
-   *
-   * @var \Drupal\Core\Cache\CacheBackendInterface
-   */
-  private $stockCache;
-
-  /**
    * AcqSkuDrushCommands constructor.
    *
    * @param \Drupal\acq_commerce\Conductor\APIWrapperInterface $apiWrapper
@@ -156,8 +149,6 @@ class AcqSkuDrushCommands extends DrushCommands {
    *   Module Handler service.
    * @param \Drupal\Core\Cache\CacheBackendInterface $linkedSkuCache
    *   Cache Backend Service.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $stockCache
-   *   Stock Cache Handler.
    * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator
    *   Cache Tags invalidator.
    */
@@ -174,7 +165,6 @@ class AcqSkuDrushCommands extends DrushCommands {
                               LanguageManagerInterface $langaugeManager,
                               ModuleHandlerInterface $moduleHandler,
                               CacheBackendInterface $linkedSkuCache,
-                              CacheBackendInterface $stockCache,
                               CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
     $this->apiWrapper = $apiWrapper;
     $this->i18nhelper = $i18nHelper;
@@ -190,7 +180,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     $this->moduleHandler = $moduleHandler;
     $this->linkedSkuCache = $linkedSkuCache;
     $this->cacheTagsInvalidator = $cacheTagsInvalidator;
-    $this->stockCache = $stockCache;
   }
 
   /**
@@ -612,80 +601,6 @@ class AcqSkuDrushCommands extends DrushCommands {
   }
 
   /**
-   * Sync stock into all SKU entities using API.
-   *
-   * @command acq_sku:sync-stock
-   *
-   * @validate-module-enabled acq_sku
-   *
-   * @aliases sync-stock
-   *
-   * @usage drush sync-stock
-   *   Sync stock into all SKU entities using API.
-   */
-  public function syncStock() {
-    $query = $this->connection->select('acq_sku_field_data', 'asfd');
-    $query->addField('asfd', 'sku', 'sku');
-    $query->condition('asfd.type', 'simple');
-    $query->isNull('asfd.stock');
-    $result = $query->execute()->fetchAllKeyed(0, 0);
-
-    $this->output->writeln(sprintf('Found %d skus without stock info.', count($result)));
-
-    if (empty($result)) {
-      return;
-    }
-
-    $this->output->writeln('Processing in batches of 25');
-
-    $batches = array_chunk($result, 25);
-
-    // Entity storage can blow up with caches so clear them out.
-    // We always process for en.
-    $langcode = $this->languageManager->getDefaultLanguage()->getId();
-
-    $counter = 0;
-
-    foreach ($batches as $batch) {
-      foreach ($batch as $sku) {
-        $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE, FALSE);
-
-        // Sanity check, another process can delete the sku.
-        if (empty($sku_entity)) {
-          continue;
-        }
-
-        // Check again this sku doesn't have stock saved once.
-        // Another process might have updated the info while we were processing.
-        $stock = $sku_entity->get('stock')->getString();
-        if (!($stock === '' || $stock === NULL)) {
-          continue;
-        }
-
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-        $plugin->getProcessedStock($sku_entity, TRUE);
-
-        // Reset static caches to release memory.
-        drupal_static_reset();
-
-        // Adding sleep of 200 ms to ensure API calls don't overload the server.
-        usleep(200);
-      }
-
-      $counter++;
-
-      $this->output->writeln(sprintf('Processed batch %d of %d.', $counter, count($batches)));
-
-      foreach ($this->entityManager->getDefinitions() as $id => $definition) {
-        $this->entityManager->getStorage($id)->resetCache();
-      }
-    }
-
-    $this->output->writeln('Done');
-  }
-
-  /**
    * Function to process entity delete operation.
    *
    * @param mixed|array $context
@@ -775,77 +690,6 @@ class AcqSkuDrushCommands extends DrushCommands {
     if ($context['sandbox']['progress'] !== $context['sandbox']['max']) {
       $context['finished'] = $context['sandbox']['progress'] / $context['sandbox']['max'];
     }
-  }
-
-  /**
-   * Get stock cache for particular SKU.
-   *
-   * @command acq_sku:get-stock-cache
-   *
-   * @param string $sku
-   *   SKU to get stock of.
-   *
-   * @validate-module-enabled acq_sku
-   *
-   * @aliases acgsc,get-stock-cache
-   *
-   * @usage drush acgsc SKU
-   *   Get stock cache for particular SKU.
-   */
-  public function getStockCache($sku) {
-    if ($sku_entity = SKU::loadFromSku($sku)) {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
-      $plugin = $sku_entity->getPluginInstance();
-      $this->output->writeln($plugin->getProcessedStock($sku_entity));
-    }
-    else {
-      $this->output->writeln(dt('SKU not found.'));
-    }
-  }
-
-  /**
-   * Flush the stock cache.
-   *
-   * @return void
-   *
-   * @throws \Drush\Exceptions\UserAbortException
-   *
-   * @command acq_sku:flush-stock-cache
-   *
-   * @param array $options
-   *
-   * @option sku SKU to clean stock of.
-   *
-   * @validate-module-enabled acq_sku
-   *
-   * @aliases accsc,clean-stock-cache
-   *
-   * @usage drush accsc
-   *   Flush the stock cache for all SKUs.
-   * @usage drush acsp --sku=SKU
-   *   SKU to clean stock for particular SKU.
-   */
-  public function flushStockCache($options = ['sku' => NULL]) {
-    // Check if we are asked to clear cache of specific SKU.
-    if (!empty($options['sku'])) {
-      if ($sku_entity = SKU::loadFromSku($options['sku'])) {
-        $sku_entity->clearStockCache();
-
-        $this->output->writeln(dt('Invalidated stock cache for @sku.', [
-          '@sku' => $options['sku'],
-        ]));
-      }
-
-      return;
-    }
-
-    if (!$this->io()->confirm(dt('Are you sure you want to clean stock cache?'))) {
-      throw new UserAbortException();
-    }
-
-    $this->stockCache->deleteAllPermanent();
-
-    $this->output->writeln(dt('Deleted all cache for stock.'));
   }
 
   /**

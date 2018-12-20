@@ -71,13 +71,6 @@ services:
     parent: logger.channel_base
     arguments: ['acq_sku']
 
-  cache.stock:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin, default_backend: cache.backend.permanent_database }
-    factory: cache_factory:get
-    arguments: [stock]
-
   cache.linked_skus:
     class: Drupal\Core\Cache\CacheInterface
     tags:

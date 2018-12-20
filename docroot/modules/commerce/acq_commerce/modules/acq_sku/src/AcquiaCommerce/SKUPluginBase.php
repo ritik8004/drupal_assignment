@@ -290,38 +290,23 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    *   Available stock quantity.
    */
   protected function getStock($sku, $reset = FALSE) {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
     $sku_string = ($sku instanceof SKU) ? $sku->getSku() : $sku;
 
     if (!$reset) {
-      // Return from Entity field in push mode.
-      if ($stock_mode == 'push') {
-        if ($sku instanceof SKU) {
-          $stock = $sku->get('stock')->getString();
-        }
-        else {
-          $stock = \Drupal::database()->select('acq_sku_field_data', 'asfd')
-            ->fields('asfd', ['stock'])
-            ->condition('asfd.sku', $sku_string)
-            ->execute()
-            ->fetchField();
-        }
-
-        // Fallback to pull mode if no value available for the SKU.
-        if (!($stock === '' || $stock === NULL)) {
-          return (int) $stock;
-        }
+      if ($sku instanceof SKU) {
+        $stock = $sku->get('stock')->getString();
       }
-      // Return from Cache in Pull mode.
       else {
-        // Cache id.
-        $cid = 'stock:' . $sku_string;
+        $stock = \Drupal::database()->select('acq_sku_field_data', 'asfd')
+          ->fields('asfd', ['stock'])
+          ->condition('asfd.sku', $sku_string)
+          ->execute()
+          ->fetchField();
+      }
 
-        $cache = \Drupal::cache('stock')->get($cid);
-
-        if (!empty($cache)) {
-          return (int) $cache->data;
-        }
+      // If value not found in SKU we will try and get it using stock API.
+      if (!($stock === '' || $stock === NULL)) {
+        return (int) $stock;
       }
     }
 
@@ -355,27 +340,12 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $stock = (int) $stock_info['quantity'];
 
     // Save the value in SKU if we came here as fallback of push mode.
-    if ($stock_mode == 'push') {
-      if (!$sku instanceof SKU) {
-        $sku = SKU::loadFromSku($sku_string);
-      }
-
-      $sku->get('stock')->setValue($stock);
-      $sku->save();
+    if (!$sku instanceof SKU) {
+      $sku = SKU::loadFromSku($sku_string);
     }
-    // Save the value in cache if we are in pull mode.
-    // If cache multiplier is zero we don't cache the stock.
-    elseif ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-      $default_cache_lifetime = $stock ? $stock * $cache_multiplier : $cache_multiplier;
-      $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
 
-      // Calculate the timestamp when we want the cache to expire.
-      $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
-      $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
-
-      // Set the stock in cache.
-      \Drupal::cache('stock')->set($cid, $stock, $expire);
-    }
+    $sku->get('stock')->setValue($stock);
+    $sku->save();
 
     return $stock;
   }
