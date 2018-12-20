@@ -265,6 +265,9 @@
         clickedOption.prop('selected', true);
       }
       select.trigger('change');
+
+      // Closing the tray after selection.
+      $('.size-tray').toggleClass('tray-open');
     });
   }
 

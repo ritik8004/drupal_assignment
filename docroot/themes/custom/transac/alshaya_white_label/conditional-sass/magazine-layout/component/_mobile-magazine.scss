@@ -142,3 +142,17 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  body {
+    &.mobile--overlay {
+      .magazine-layout-node {
+        .content__title_wrapper {
+          &.fixed {
+            z-index: 1;
+          }
+        }
+      }
+    }
+  }
+}

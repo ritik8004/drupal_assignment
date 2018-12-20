@@ -156,3 +156,11 @@
     }
   }
 }
+
+.magazine-layout {
+  .magazine-swatch-placeholder {
+    > label {
+      display: none;
+    }
+  }
+}
