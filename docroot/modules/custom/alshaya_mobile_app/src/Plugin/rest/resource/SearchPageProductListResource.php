@@ -149,6 +149,11 @@ class SearchPageProductListResource extends ResourceBase {
     // Get result set.
     $result_set = $this->prepareAndExecuteQuery($search_keyword);
     $response_data = $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+
+    // Get spell check results, if avaialable.
+    $message['message']['spellcheck'] = $this->prepareSpellCheckResults($result_set, $search_keyword) ?? NULL;
+    $response_data = array_merge($response_data, $message);
+
     return (new ModifiedResourceResponse($response_data));
   }
 
@@ -188,8 +193,37 @@ class SearchPageProductListResource extends ResourceBase {
       $query->setFulltextFields($index->getFulltextFields());
     }
 
+    // Enable solr spellcheck.
+    $query->setOption('search_api_spellcheck', TRUE);
+
     // Prepare and execute query and pass result set.
     return $this->alshayaSearchApiQueryExecute->prepareExecuteQuery($query);
+  }
+
+  /**
+   * Prepare message array for spellcheck.
+   *
+   * @param array $result_set
+   *   Result set data.
+   * @param string $search_keyword
+   *   Search key word.
+   *
+   * @return array
+   *   Spell check results.
+   */
+  public function prepareSpellCheckResults(array $result_set, $search_keyword) {
+    // Prepare spellcheck data, if available and if there are no search results.
+    if (($this->alshayaSearchApiQueryExecute->getResultTotalCount() === 0) && !empty($suggestions = $result_set['search_api_results']->getExtraData('search_api_solr_response')['spellcheck'])) {
+      $spellcheck_results = [];
+      foreach ($suggestions as $suggestion) {
+        if ($search_keyword == $suggestion[0]) {
+          if (!empty($suggestion[1]['suggestion'][0])) {
+            $spellcheck_results[$search_keyword] = $suggestion[1]['suggestion'][0];
+          }
+        }
+      }
+      return $spellcheck_results;
+    }
   }
 
 }

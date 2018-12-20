@@ -113,6 +113,27 @@ $magentos = [
       'store_id' => ['en' => 17, 'ar' => 23],
     ],
   ],
+  'hm_mapp' => [
+    'url' => 'https://mapp-hjuuq7a-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => 'acnbwifl9olohrh30g1t4liqnwqwi6p2',
+      'consumer_secret' => 'ctuivmr0bnqbq357xqalotnocntidcay',
+      'access_token' => '12hbl5i7yg6683nsb1o94ude9p5eg35d',
+      'access_token_secret' => '3h20t43laa6yff4yssjajgxuj692ru96',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
+    ],
+  ],
   // Pottery Barn.
   'pb_qa' => [
     'url' => 'https://integration-5ojmyuq-rfuu4sicyisyw.eu.magentosite.cloud',
