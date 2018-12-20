@@ -113,7 +113,7 @@
       // If the product opens in modal,
       // populate the hidden field with correct context.
       if ($(context).filter('article[data-vmode="modal"]').length === 1) {
-        $('.nodetype--acq_product #drupal-modal input.hidden-context').val('modal');
+        $('.nodetype--acq_product #drupal-modal input.hidden-context, .path--cart #drupal-modal input.hidden-context').val('modal');
       }
 
       /**
