@@ -833,6 +833,16 @@ class SkuImagesManager {
           // Add PDP slider position class in template.
           $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
 
+          $library_array = [
+            'alshaya_product_zoom/cloud_zoom',
+            'alshaya_product_zoom/cloud_zoom_pdp_gallery',
+            'alshaya_product_zoom/product.cloud_zoom',
+          ];
+
+          if ($context == 'modal-magazine') {
+            $library_array[] = 'alshaya_product_zoom/magazine_gallery';
+          }
+
           $gallery['product_zoom'] = [
             '#theme' => 'product_zoom',
             '#mainImage' => $main_image,
@@ -842,11 +852,7 @@ class SkuImagesManager {
             '#labels' => $labels,
             '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
-              'library' => [
-                'alshaya_product_zoom/cloud_zoom',
-                'alshaya_product_zoom/cloud_zoom_pdp_gallery',
-                'alshaya_product_zoom/product.cloud_zoom',
-              ],
+              'library' => $library_array,
             ],
           ];
         }

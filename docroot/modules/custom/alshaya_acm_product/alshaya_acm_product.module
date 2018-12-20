@@ -1100,6 +1100,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['add_to_cart']['#attributes']['id'] = 'edit-add-to-cart-' . $sku_entity->id();
   $form['add_to_cart']['#name'] = 'add_to_cart_' . $sku_entity->id();
 
+  // Add an empty field that can be filled with the correct context - pdp/modal.
+  $form['page-context']['#type'] = 'hidden';
+  $form['page-context']['#attributes']['class'] = 'hidden-context';
+
   $form['add_to_cart']['#ajax'] = [
     'url' => Url::fromRoute(
       'alshaya_acm_product.add_to_cart_submit',
@@ -1405,7 +1409,13 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $pdp_layout = $skuManager->getPdpLayout($tree_pointer, 'pdp');
+    if ($form_state->getValue('page-context') == 'modal') {
+      $context = 'modal';
+    }
+    else {
+      $context = 'pdp';
+    }
+    $pdp_layout = $skuManager->getPdpLayout($tree_pointer, $context);
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, $pdp_layout, '', FALSE);
 
     if (isset($build['gallery'])) {
@@ -1568,11 +1578,18 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
       if ($first_child instanceof SKU) {
-        $pdp_layout = $skuManager->getPdpLayout($first_child, 'pdp');
+        if ($form_state->getValue('page-context') == 'modal') {
+          $context = 'modal';
+        }
+        else {
+          $context = 'pdp';
+        }
+
+        $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
         $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE, $sku);
 
         if (!empty($build['gallery'])) {
-          if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+          if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE && $context != 'modal') {
             $dynamic_parts['alshaya_magazine'] = $build['gallery']['alshaya_magazine'];
           }
           else {

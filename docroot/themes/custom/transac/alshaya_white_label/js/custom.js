@@ -44,6 +44,7 @@
 
   Drupal.behaviors.joinusblock = {
     attach: function (context, settings) {
+
       if ($('#block-content div').hasClass('joinclub')) {
         $('#block-content article').addClass('joinclubblock');
       }
@@ -109,6 +110,12 @@
 
   Drupal.behaviors.pdpModal = {
     attach: function (context, settings) {
+
+      // If the product opens in modal,
+      // populate the hidden field with correct context.
+      if ($(context).filter('article[data-vmode="modal"]').length === 1) {
+        $('#drupal-modal input.hidden-context').val('modal');
+      }
 
       /**
        * Helper function to remove classes from body when dailog is closed.
