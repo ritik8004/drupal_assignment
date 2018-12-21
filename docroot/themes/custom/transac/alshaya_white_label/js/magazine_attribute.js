@@ -360,7 +360,7 @@
       }
       else {
         // JS to make sidebar sticky in desktop.
-        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height();
+        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height() - 20;
         var mainbottom = $('.gallery-wrapper').offset().top + $('.gallery-wrapper').height();
         $(window).on('scroll', function () {
           if (($(this).scrollTop() > topposition)) {
@@ -374,7 +374,7 @@
             $('.content-sidebar-wrapper').addClass('contain');
           }
 
-          if ($(this).scrollTop() <= $('.content-sidebar-wrapper').offset().top) {
+          if ($(document).scrollTop() <= $('.content-sidebar-wrapper').offset().top - $('.branding__menu').height() - 16) {
             if ($('.content-sidebar-wrapper').hasClass('contain')) {
               $('.content-sidebar-wrapper').removeClass('contain');
             }
