@@ -7,12 +7,14 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\node\Entity\Node;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -203,6 +205,7 @@ class ProductSyncResource extends ResourceBase {
     $deleted = 0;
     $ignored_skus = [];
     static $child_skus_processed = [];
+    static $child_skus = [];
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
@@ -307,8 +310,28 @@ class ProductSyncResource extends ResourceBase {
               // Not doing anything, we might not have node for the sku.
             }
 
+            // Fetch parent SKU for this SKU before deleting.
+            $parent_sku = NULL;
+            if ($sku->getType() === 'simple') {
+              $parent_sku = $plugin->getParentSku($sku);
+            }
+
             // Delete the SKU.
             $sku->delete();
+
+            $child_skus = Configurable::getChildren($parent_sku);
+
+            // Check if this was the last simple SKU in its parent. If that's
+            // the case, unpublish the node too.
+            if (($parent_sku instanceof SKU) &&
+              (empty($child_skus = Configurable::getChildren($parent_sku)))) {
+              $parent_plugin = $parent_sku->getPluginInstance();
+
+              if (($node = $parent_plugin->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
+                $node->setPublished(FALSE);
+                $node->save();
+              }
+            }
 
             $deleted++;
 
@@ -442,8 +465,28 @@ class ProductSyncResource extends ResourceBase {
 
           // Check if the SKU is configurable & mark its node as unpublished.
           // Publish it when we receive a simple SKU for this one.
-          if ($product['type'] == 'configurable') {
+          if (($node->isNew()) && ($product['type'] == 'configurable')) {
             $node->setPublished(FALSE);
+          }
+          elseif (!$node->isNew() && $product['type'] == 'configurable') {
+            // Check in case of update if this configurable SKU has a simple
+            // children in DB. If not, set node as unpublished.
+            if (!isset($child_skus[$product['sku']])) {
+              $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
+                ->fields('asfcs', ['field_configured_skus_value']);
+              $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
+              $result = $query->condition('sku', $product['sku'])->distinct()->execute();
+              $child_skus[$product['sku']] = array_merge($child_skus_processed, $result->fetchAllKeyed(0, 0));
+            }
+
+            if (!empty($child_skus[$product['sku']])) {
+              foreach ($child_skus[$product['sku']] as $child_sku) {
+                if ($sku_entity = SKU::loadFromSku($child_sku) instanceof SKU) {
+                  $node->setPublished();
+                  break;
+                }
+              }
+            }
           }
 
           // We doing this because when the translation of node is created by
@@ -484,11 +527,17 @@ class ProductSyncResource extends ResourceBase {
             // already been enabled.
             $config_sku = $node->get('field_skus')->getString();
 
-            $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
-              ->fields('asfcs', ['field_configured_skus_value']);
-            $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
-            $result = $query->condition('sku', $config_sku)->distinct()->execute();
-            $child_skus_processed = array_merge($child_skus_processed, $result->fetchAllKeyed(0, 0));
+            if (!isset($child_skus[$config_sku])) {
+              $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
+                ->fields('asfcs', ['field_configured_skus_value']);
+              $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
+              $result = $query->condition('sku', $config_sku)->distinct()->execute();
+              $child_skus[$config_sku] = $result->fetchAllKeyed(0, 0);
+              $child_skus_processed = array_merge($child_skus_processed, $child_skus[$config_sku]);
+            }
+            else {
+              $child_skus_processed = array_merge($child_skus_processed, $child_skus[$config_sku]);
+            }
           }
         }
         else {
