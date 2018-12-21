@@ -2,7 +2,7 @@
 
 namespace Drupal\acq_sku\Plugin\facets\processor;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\FacetInterface;
@@ -34,11 +34,11 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
   protected $languageManager;
 
   /**
-   * The entity type manager.
+   * DB Connection.
    *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   * @var \Drupal\Core\Database\Connection
    */
-  protected $entityTypeManager;
+  protected $connection;
 
   /**
    * Constructs a new object.
@@ -51,14 +51,18 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
    *   The plugin implementation definition.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   DB Connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LanguageManagerInterface $language_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              LanguageManagerInterface $language_manager,
+                              Connection $connection) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->languageManager = $language_manager;
-    $this->entityTypeManager = $entity_type_manager;
+    $this->connection = $connection;
   }
 
   /**
@@ -70,7 +74,7 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
       $plugin_id,
       $plugin_definition,
       $container->get('language_manager'),
-      $container->get('entity_type.manager')
+      $container->get('database')
     );
   }
 
@@ -114,36 +118,49 @@ class HideTaxonomyNotInMenu extends ProcessorPluginBase implements BuildProcesso
           $ids[$delta] = $result->getRawValue();
         }
 
-        // Load all indexed entities of this type.
-        $entities = $this->entityTypeManager
-          ->getStorage($entity_type)
-          ->loadMultiple($ids);
+        // Load terms info for required term ids.
+        $terms_info = $ids ? $this->getTermsInfo($ids, $langcode) : [];
 
         // Loop over all results.
         foreach ($results as $i => $result) {
-          $term = isset($entities[$ids[$i]]) ? $entities[$ids[$i]] : NULL;
+          $term_info = isset($terms_info[$ids[$i]]) ? $terms_info[$ids[$i]] : NULL;
 
-          if (($term instanceof TermInterface) && $term->hasTranslation($langcode)) {
-            $term = $term->getTranslation($langcode);
+          if (empty($term_info) || empty($term_info->status) || empty($term_info->include)) {
+            // Remove from results if either term load failed or not included
+            // in menu or status is disabled.
+            unset($results[$i]);
           }
-
-          // Display the term if included in menu and status is enabled.
-          if (($term instanceof TermInterface) &&
-            ($term->bundle() == 'acq_product_category') &&
-            ($term->get('field_category_include_menu')->getString()) &&
-            ($term->get('field_commerce_status')->getString())) {
-            continue;
-          }
-
-          // Remove from results if either term load failed or not included
-          // in menu or status is disabled.
-          unset($results[$i]);
         }
       }
     }
 
     // Return the results with the new display values.
     return $results;
+  }
+
+  /**
+   * Get status and include in menu flags for the specific term ids.
+   *
+   * @param array $tids
+   *   Term IDs.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return array
+   *   DB result or empty array.
+   */
+  private function getTermsInfo(array $tids, string $langcode) {
+    $query = $this->connection->select('taxonomy_term_field_data', 'term');
+    $query->leftJoin('taxonomy_term__field_category_include_menu', 'include', 'term.tid = include.entity_id and term.langcode = include.langcode');
+    $query->leftJoin('taxonomy_term__field_commerce_status', 'status', 'term.tid = status.entity_id and term.langcode = status.langcode');
+    $query->addField('term', 'tid');
+    $query->addField('include', 'field_category_include_menu_value', 'include');
+    $query->addField('status', 'field_commerce_status_value', 'status');
+    $query->condition('term.vid', 'acq_product_category');
+    $query->condition('term.tid', $tids, 'IN');
+    $query->condition('term.langcode', $langcode);
+    $result = $query->execute()->fetchAllAssoc('tid');
+    return is_array($result) ? $result : [];
   }
 
 }
