@@ -43,7 +43,7 @@
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
         if ($(this).parent().hasClass('form-item-configurables-article-castor-id')) {
-          Drupal.alshaya_liquid_pixel_images_update_selected_swatch_label();
+          Drupal.alshaya_color_swatch_update_selected_label();
         }
         else {
           $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
