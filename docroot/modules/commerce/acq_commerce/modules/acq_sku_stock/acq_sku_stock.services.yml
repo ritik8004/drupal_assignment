@@ -1,19 +1,4 @@
 services:
-  logger.channel.acq_sku_stock:
-    parent: logger.channel_base
-    arguments: ['acq_sku_stock']
-
-  acq_sku_stock.manager:
-    class: Drupal\acq_sku_stock\Service\StockManager
-    arguments:
-      - '@database'
-      - '@acq_commerce.api'
-      - '@acq_commerce.i18n_helper'
-      - '@config.factory'
-      - '@lock.persistent'
-      - '@event_dispatcher'
-      - '@logger.channel.acq_sku_stock'
-
   acq_sku_stock.stock_updated_event_subscriber:
     class: Drupal\acq_sku_stock\EventSubscriber\StockUpdatedEventSubscriber
     tags:

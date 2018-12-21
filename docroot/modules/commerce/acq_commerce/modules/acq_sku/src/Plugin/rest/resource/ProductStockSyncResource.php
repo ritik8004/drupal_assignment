@@ -1,9 +1,8 @@
 <?php
 
-namespace Drupal\acq_sku_stock\Plugin\rest\resource;
+namespace Drupal\acq_sku\Plugin\rest\resource;
 
-use Drupal\acq_sku_stock\Service\StockManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\acq_sku\StockManager;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -12,9 +11,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class ProductStockSyncResource.
  *
- * @package Drupal\acq_sku_stock\Plugin
+ * @package Drupal\acq_sku\Plugin
  *
- * @ingroup acq_sku_stock
+ * @ingroup acq_sku
  *
  * @RestResource(
  *   id = "acq_productstocksync",
@@ -30,7 +29,7 @@ class ProductStockSyncResource extends ResourceBase {
   /**
    * Stock Manager.
    *
-   * @var \Drupal\acq_sku_stock\Service\StockManager
+   * @var \Drupal\acq_sku\StockManager
    */
   private $stockManager;
 
@@ -47,7 +46,7 @@ class ProductStockSyncResource extends ResourceBase {
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\acq_sku_stock\Service\StockManager $stock_manager
+   * @param \Drupal\acq_sku\StockManager $stock_manager
    *   Stock Manager.
    */
   public function __construct(array $configuration,
@@ -69,8 +68,8 @@ class ProductStockSyncResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('acq_sku_stock'),
-      $container->get('acq_sku_stock.manager')
+      $container->get('logger.factory')->get(self::class),
+      $container->get('acq_sku.stock_manager')
     );
   }
 

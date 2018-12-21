@@ -1,15 +1,16 @@
 <?php
 
-namespace Drupal\acq_sku_stock\Service;
+namespace Drupal\acq_sku;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_sku_stock\StockUpdatedEvent;
+use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -88,14 +89,14 @@ class StockManager {
                               ConfigFactoryInterface $config_factory,
                               LockBackendInterface $lock,
                               EventDispatcherInterface $dispatcher,
-                              LoggerChannelInterface $logger) {
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->connection = $connection;
     $this->apiWrapper = $api_wrapper;
     $this->i18nHelper = $i18n_helper;
     $this->configFactory = $config_factory;
     $this->lock = $lock;
     $this->dispatcher = $dispatcher;
-    $this->logger = $logger;
+    $this->logger = $logger_factory->get(self::class);
   }
 
   /**
@@ -108,16 +109,9 @@ class StockManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKU $sku) {
-    $status = &drupal_static('acq_sku_stock_status', []);
-
-    if (isset($status[$sku->getSku()])) {
-      return $status[$sku->getSku()];
-    }
-
     $stock = $this->getStock($sku->getSku());
 
     if (empty($stock['status'])) {
-      $status[$sku->getSku()] = FALSE;
       return FALSE;
     }
 
@@ -180,12 +174,6 @@ class StockManager {
    *   Stock data with keys [sku, status, quantity].
    */
   public function getStock(string $sku) {
-    $stock = &drupal_static('acq_sku_stock_quantity', []);
-
-    if (isset($stock[$sku])) {
-      return $stock[$sku];
-    }
-
     $query = $this->connection->select('acq_sku_stock');
     $query->condition('sku', $sku);
     $result = $query->execute()->fetchAll();
@@ -197,9 +185,7 @@ class StockManager {
 
     // Get the first result.
     // @TODO: Add checks for multiple entries.
-    $stock[$sku] = (array) reset($result);
-
-    return $stock[$sku];
+    return reset($result);
   }
 
   /**
@@ -224,6 +210,9 @@ class StockManager {
    * @param int $status
    *   Stock status.
    *
+   * @return bool
+   *   TRUE if stock status changed.
+   *
    * @throws \Exception
    */
   public function updateStock($sku, $quantity, $status) {
@@ -245,18 +234,22 @@ class StockManager {
         ->fields($new)
         ->execute();
 
+      $status_changed = $current
+        ? $this->isStockStatusChanged($current, $new)
+        : TRUE;
+
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
-        $status_changed = $current
-          ? $this->isStockStatusChanged($current, $new)
-          : TRUE;
         $low_quantity = $this->isQuantityLow($new);
         $event = new StockUpdatedEvent($sku_entity, $status_changed, $low_quantity);
         $this->dispatcher->dispatch(StockUpdatedEvent::EVENT_NAME, $event);
       }
+
+      return $status_changed;
     }
 
     $this->releaseLock($sku);
+    return FALSE;
   }
 
   /**
@@ -297,9 +290,10 @@ class StockManager {
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
 
-    $this->updateStock($stock['sku'], $quantity, $stock_status);
+    $changed = $this->updateStock($stock['sku'], $quantity, $stock_status);
 
-    $this->logger->info('Processed stock message for sku @sku. Message: @message', [
+    $this->logger->info('@operation stock for sku @sku. Message: @message', [
+      '@operation' => $changed ? 'Updated' : 'Processed',
       '@sku' => $stock['sku'],
       '@message' => json_encode($stock),
     ]);
@@ -342,8 +336,8 @@ class StockManager {
    * @param array $new
    *   New stock.
    *
-   * @return string
-   *   Field Code.
+   * @return bool
+   *   TRUE if stock status changed.
    */
   private function isStockStatusChanged(array $old, array $new) {
     if ($old['status'] != $new['status']) {

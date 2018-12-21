@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acq_sku_stock;
+namespace Drupal\acq_sku_stock\Event;
 
 use Drupal\acq_sku\Entity\SKU;
 use Symfony\Component\EventDispatcher\Event;
