@@ -101,6 +101,7 @@ deploy:
     on:
       branch: develop
       php: 7.1
+      condition: $TRAVIS_EVENT_TYPE != cron
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
