@@ -116,10 +116,10 @@ $magentos = [
   'hm_mapp' => [
     'url' => 'https://mapp-hjuuq7a-zbrr3sobrsb3o.eu.magentosite.cloud',
     'magento_secrets' => [
-      'consumer_key' => 'acnbwifl9olohrh30g1t4liqnwqwi6p2',
-      'consumer_secret' => 'ctuivmr0bnqbq357xqalotnocntidcay',
-      'access_token' => '12hbl5i7yg6683nsb1o94ude9p5eg35d',
-      'access_token_secret' => '3h20t43laa6yff4yssjajgxuj692ru96',
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 2],
