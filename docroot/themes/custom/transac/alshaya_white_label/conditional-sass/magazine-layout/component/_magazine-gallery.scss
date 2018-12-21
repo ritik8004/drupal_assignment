@@ -25,12 +25,8 @@
     }
   }
 
-  @include breakpoint($tablet) {
-    margin-#{$right}: 1rem;
-  }
-
   @include breakpoint($desktop) {
-    margin-#{$right}: 2rem;
+    margin-#{$right}: 1rem;
   }
 
   figure {
@@ -179,6 +175,10 @@
 
             > a {
               position: static !important;
+            }
+
+            .mousetrap {
+              display: none;
             }
           }
         }

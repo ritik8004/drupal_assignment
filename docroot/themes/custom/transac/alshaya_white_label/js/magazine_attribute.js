@@ -234,13 +234,14 @@
     if (context === document) {
       var sizeDiv = $('#configurable_ajax .form-item-configurables-size', context).clone();
       var sizeTray = $('.size-tray', context);
+      var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
       var sizeGuideLink = $('#configurable_ajax .size-guide-link', context);
       // Move size guide link & size-tray close buttons inside confiruable size container.
-      sizeTray.find('.size-tray-buttons').prepend(sizeGuideLink);
-      sizeTray.find('.size-tray-buttons').append('<div class="size-tray-close"></div>');
+      sizeTrayButtons.prepend(sizeGuideLink);
+      sizeTrayButtons.append('<div class="size-tray-close"></div>');
       // Move the configurable select container to size tray.
       if (sizeDiv.length > 0) {
-        $('.size-tray-content').html(sizeDiv);
+        $('.size-tray-content').html(sizeDiv).prepend(sizeTrayButtons);
       }
     }
 
@@ -276,6 +277,9 @@
         clickedOption.prop('selected', true);
       }
       select.trigger('change');
+
+      // Closing the tray after selection.
+      $('.size-tray').toggleClass('tray-open');
     });
   }
 
@@ -373,7 +377,7 @@
       }
       else {
         // JS to make sidebar sticky in desktop.
-        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height();
+        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height() - 20;
         var mainbottom = $('.gallery-wrapper').offset().top + $('.gallery-wrapper').height();
         $(window).on('scroll', function () {
           if (($(this).scrollTop() > topposition)) {
@@ -387,7 +391,7 @@
             $('.content-sidebar-wrapper').addClass('contain');
           }
 
-          if ($(this).scrollTop() <= $('.content-sidebar-wrapper').offset().top) {
+          if ($(document).scrollTop() <= $('.content-sidebar-wrapper').offset().top - $('.branding__menu').height() - 16) {
             if ($('.content-sidebar-wrapper').hasClass('contain')) {
               $('.content-sidebar-wrapper').removeClass('contain');
             }
