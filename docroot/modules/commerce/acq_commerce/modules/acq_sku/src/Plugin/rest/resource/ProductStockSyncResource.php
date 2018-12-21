@@ -2,7 +2,7 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
-use Drupal\acq_sku_stock\Service\StockManager;
+use Drupal\acq_sku\StockManager;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -29,7 +29,7 @@ class ProductStockSyncResource extends ResourceBase {
   /**
    * Stock Manager.
    *
-   * @var \Drupal\acq_sku_stock\Service\StockManager
+   * @var \Drupal\acq_sku\StockManager
    */
   private $stockManager;
 
@@ -46,7 +46,7 @@ class ProductStockSyncResource extends ResourceBase {
    *   The available serialization formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\acq_sku_stock\Service\StockManager $stock_manager
+   * @param \Drupal\acq_sku\StockManager $stock_manager
    *   Stock Manager.
    */
   public function __construct(array $configuration,

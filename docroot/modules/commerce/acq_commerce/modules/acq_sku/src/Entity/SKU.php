@@ -591,17 +591,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['stock'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Stock'))
-      ->setDescription(t('Stock quantity.'))
-      ->setTranslatable(FALSE)
-      ->setDisplayOptions('form', [
-        'type' => 'number',
-        'weight' => -10,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Display Price'))
       ->setDescription(t('Display Price of this SKU.'))
@@ -802,30 +791,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     return $fields;
-  }
-
-  /**
-   * Helper function to clear stock cache for particular sku.
-   */
-  public function clearStockCache() {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-
-    // Clear product and forms related to sku.
-    Cache::invalidateTags(['acq_sku:' . $this->id()]);
-
-    if ($stock_mode == 'push') {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $this->getPluginInstance();
-
-      // Reset the stock value.
-      $plugin->getProcessedStock($this, TRUE);
-    }
-    else {
-      $stock_cid = 'stock:' . $this->getSku();
-
-      // Clear stock cache.
-      \Drupal::cache('stock')->invalidate($stock_cid);
-    }
   }
 
   /**
