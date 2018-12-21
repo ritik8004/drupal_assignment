@@ -57,12 +57,13 @@
     .field__item {
       text-align: center;
       line-height: 1;
-      height: 2.5rem;
+      min-height: 2.5rem;
       display: inline-flex;
       align-items: center;
 
       @include breakpoint($upto-desktop) {
         justify-content: center;
+        height: 3rem;
       }
 
       p {
