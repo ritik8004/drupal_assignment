@@ -1821,7 +1821,7 @@ class SkuManager {
     $cache = $this->productCache->get($cid);
     $data = $cache->data ?? [];
     $data[$key] = $value;
-    $this->productCache->set($cid, $data);
+    $this->productCache->set($cid, $data, Cache::PERMANENT, ['acq_sku:' . $sku->id()]);
 
     // Update value in static cache too.
     $static = &drupal_static('alshaya_product_cached_data', []);
