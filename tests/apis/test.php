@@ -28,6 +28,8 @@ use GuzzleHttp\HandlerStack;
 function invoke_api($api, $method = 'GET', array $data = [], $store_id = 1) {
   // Update this from envs available in conductor.php file.
   $env = 'hm_dev';
+
+  // @codingStandardsIgnoreLine
   global $conductors;
 
   $endpoint = $conductors[$env]['url'] . $conductors[$env]['api_version'] . '/' . $api;
