@@ -530,6 +530,20 @@ schemas:
         },
         "required": [ "key", "label" ]
       }
+  - Message: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "description": "Messages that are passed to the user.",
+        "type": "object",
+        "properties": {
+          "spellcheck": {
+            "type": "array",
+            "items": {
+              "description": "Suggestions for the word, if no results found."
+            }
+          },
+        }
+      }
   - GetSearch: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -556,7 +570,12 @@ schemas:
             "items": {
               "schema": "LightProduct"
             }
-          }
+          },
+          "message": {
+            "type": "array",
+            "items": {
+              "schema": "Message"
+            }
         }
       }
   - GetProductsList: |
@@ -722,6 +741,64 @@ schemas:
           "stock": {
             "type": "integer",
             "description": "Stock of this SKU, will be 0 for configurables."
+          },
+          "in_stock": {
+            "type": "boolean",
+            "description": "Status of product in stock."
+          },
+          "delivery_options": {
+            "type": "object",
+            "description": "Delivery options home delivery and click and collect config.",
+            "properties": {
+              "home_delivery": {
+                "type": "object",
+                "description": "Home delivery configs.",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "standard_title": {
+                    "type": "string"
+                  },
+                  "standard_subtitle": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "click_and_collect": {
+                "type": "object",
+                "description": "Click and collect configs.",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "unavailable": {
+                    "type": "string"
+                  },
+                  "title_price": {
+                    "type": "number"
+                  },
+                  "help_text": {
+                    "type": "string"
+                  },
+                  "select_option_text": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
           },
           "linked": {
             "type": "array",
@@ -947,6 +1024,34 @@ schemas:
                     "type": "integer",
                     "description": "Stock of this SKU, will be 0 for configurables."
                   },
+                  "in_stock": {
+                    "type": "boolean",
+                    "description": "Status of product in stock."
+                  },
+                  "delivery_options": {
+                    "type": "object",
+                    "description": "Delivery options home delivery and click and collect config.",
+                    "properties": {
+                      "home_delivery": {
+                        "type": "object",
+                        "description": "Home delivery configs.",
+                        "properties": {
+                          "status": {
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "click_and_collect": {
+                        "type": "object",
+                        "description": "Click and collect configs.",
+                        "properties": {
+                          "status": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  },
                   "linked": {
                     "type": "array",
                     "items": [
@@ -1134,7 +1239,9 @@ schemas:
                 {
                   "filters": [],
                   "sorting": [],
-                  "products": []
+                  "products": [],
+                  "total": 10,
+                  "message": { "spellcheck": [] }
                 }
   /promotion/all:
     get:
@@ -1576,6 +1683,24 @@ schemas:
                     "original_price": "5.90",
                     "final_price": "5.90",
                     "stock": 0,
+                    "delivery_options": {
+                      "home_delivery": {
+                        "title": "Home Delivery",
+                        "subtitle": "FREE DELIVERY on all orders over KD 9",
+                        "standard_title": "Standard Delivery",
+                        "standard_subtitle": "(within 1-2 working days)",
+                        "status": true
+                      },
+                      "click_and_collect": {
+                        "title": "Click and Collect",
+                        "subtitle": "Collect the order from store in 1-2 days",
+                        "unavailable": "Click & collect in-store is not available",
+                        "title_price": 0,
+                        "help_text": "<p>This service is <strong>FREE</strong> of charge.</p>\r\n",
+                        "select_option_text": "<p><span class=\"highlight\">Select a size</span> to check stock availability near to you</p>\r\n",
+                        "status": true
+                      }
+                    },
                     "linked": [
                       {
                         "link_type": "related",

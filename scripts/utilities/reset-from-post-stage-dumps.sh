@@ -45,6 +45,9 @@ do
     drush -l $site.$env-alshaya.acsitefactory.com sql-drop -y
     `drush -l $site.$env-alshaya.acsitefactory.com sql-connect` < ~/backup/$target_env/post-stage/$site.sql
     rm ~/backup/$target_env/post-stage/$site.sql
+
+    ## Clearing cache before running updb to the site.
+    drush -l $site.$env-alshaya.acsitefactory.com cr
   fi
 
   ## Apply the database updates to the site.

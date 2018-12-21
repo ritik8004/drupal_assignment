@@ -151,9 +151,12 @@
 
           if ((noOfResult === 0) || (isNaN(noOfResult))) {
             dataLayer.push({
-              event: 'internalSearch',
-              searchKeyword: keyword,
-              noOfResult: 0
+              event: 'eventTracker',
+              eventCategory: 'Internal Site Search',
+              eventAction: '404 Results',
+              eventLabel: keyword,
+              eventValue: 0,
+              nonInteraction: 0
             });
           }
         });
@@ -558,8 +561,9 @@
       // Push purchaseSuccess for Order confirmation page.
       if (orderConfirmationPage.length !== 0 && settings.gtmOrderConfirmation) {
         dataLayer.push({
-          event: 'purchaseSuccess',
-          ecommerce: settings.gtmOrderConfirmation
+          event: settings.gtmOrderConfirmation.event,
+          virtualPageUrl: settings.gtmOrderConfirmation.virtualPageURL,
+          virtualPageTitle: settings.gtmOrderConfirmation.virtualPageTitle
         });
       }
 

@@ -1,5 +1,0 @@
-name: 'Openapi Redoc - temporary'
-type: module
-core: 8.x
-description: 'Temporary workaround fix for missing module warning during updb. This can be removed from the codebase after lightning_api_update_8300() will be applied'
-package: Alshaya

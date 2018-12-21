@@ -1308,14 +1308,8 @@ class SkuManager {
       return NULL;
     }
 
-    $static = &drupal_static('sku_manager_get_display_node', []);
-
     $langcode = $sku_entity->language()->getId();
     $sku_string = $sku_entity->getSku();
-
-    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
-    }
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku_entity->getPluginInstance();
@@ -1332,8 +1326,6 @@ class SkuManager {
 
       return NULL;
     }
-
-    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
@@ -1449,10 +1441,7 @@ class SkuManager {
           continue;
         }
 
-        /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-        $plugin = $sku_entity->getPluginInstance();
-
-        $node = $plugin->getDisplayNode($sku_entity);
+        $node = $this->getDisplayNode($sku_entity);
 
         if (empty($node)) {
           continue;
@@ -2070,7 +2059,7 @@ class SkuManager {
     }
 
     $child = $this->getAvailableChildren($sku, TRUE);
-    if (!($child instanceof SKUInterface)) {
+    if ($child instanceof SKUInterface) {
       $this->setProductCachedData($sku, $cache_key, $child->getSku());
       return $child;
     }
@@ -2509,9 +2498,11 @@ class SkuManager {
    *   PDP layout to be used.
    */
   public function getPdpLayoutFromTermId($tid) {
+    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+
     $term = $this->termStorage->load($tid);
-    $context = 'pdp';
-    if ($term->getVocabularyId() == ProductCategoryTree::VOCABULARY_ID) {
+    if ($term instanceof TermInterface && $term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+      $context = 'pdp';
       if ($term->get('field_pdp_layout')->first()) {
         $pdp_layout = $term->get('field_pdp_layout')->getString();
         if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
@@ -2527,10 +2518,10 @@ class SkuManager {
         }
       }
 
-      $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')
-        ->get('pdp_layout');
       return $this->getContextFromLayoutKey($context, $default_pdp_layout);
     }
+
+    return $default_pdp_layout;
   }
 
   /**

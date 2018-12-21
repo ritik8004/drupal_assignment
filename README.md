@@ -159,15 +159,9 @@ In order to perform the private key forwarding, do following:
 
 As mentioned above, you should typically run all the blt and drush commands (except the initial one `blt vm` that initializes your virtual machine) from inside of your vm. This should cover all the typical cases and you can skip this part if you are fully comfortable with that approach. However, for the better convenience, it is sometimes quicker to run some drush commands from host PC. For example, running drush uli from host logs quickly user 1 into the site without need of copy/pasting of login link. PC To make this working follow these steps:
 
-* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (before that, please make sure you don’t need drush 8 for Alshaya anymore, or you archive old drush 8 e.g. under drush8 command - see Transition phase between drush 8 and drush 9 article for more details). Alternatively, you can manually run vendor/drush/drush/drush command if you want to run drush 9 commands without installing Drush launcher
+* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
 * To connect to vagrant instances from host pc, use @<site>.vm aliases, e.g. `drush @hmkw.vm status`. These aliases cannot be used to sync databases to local (see Technical details on aliases structure for more information)
 * To connect to remote sites, use standard `drush @<site>.01<env>` form, e.g. `drush @hmkw.01dev3 status`. Note this will only work if the remote site has already deployed blt9 and drush9 (see next topic)
-
-### Transition phase between drush 8 and drush 9
-
-General rule is: drush 8 site aliases can be properly interpreted only with drush 8, drush 9 sites only with drush 9. That brings some challenges when trying to reach the sites with old (drush 8) codebase from the new (already upgraded) drush 9 local environment.
-
-In order to still reach the old drush 8 sites after upgrade with old drush aliases (e.g. `drush @alshaya.01uat status -l ...`), it’s recommended to make the drush 8 command reachable from host PC (either by keeping the old version on host, or by renaming the drush executable to drush8 or by installing it as a separate distribution) and make it reachable with e.g. drush8 command. That way, you can still reach the drush 8 sites by typing e.g. `drush8 @alshaya.01uat -l ... status`. Ensure the drush8 is reaching the proper version by typing drush8 --version.
 
 ### Technical details on drush 9 aliases structure
 
