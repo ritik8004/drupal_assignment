@@ -6,10 +6,12 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku_stock\StockUpdatedEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class StockManager {
 
@@ -49,6 +51,13 @@ class StockManager {
   private $lock;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  private $dispatcher;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -68,6 +77,8 @@ class StockManager {
    *   Config Factory.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Lock.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+   *   Event Dispatcher.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
    */
@@ -76,12 +87,14 @@ class StockManager {
                               I18nHelper $i18n_helper,
                               ConfigFactoryInterface $config_factory,
                               LockBackendInterface $lock,
+                              EventDispatcherInterface $dispatcher,
                               LoggerChannelInterface $logger) {
     $this->connection = $connection;
     $this->apiWrapper = $api_wrapper;
     $this->i18nHelper = $i18n_helper;
     $this->configFactory = $config_factory;
     $this->lock = $lock;
+    $this->dispatcher = $dispatcher;
     $this->logger = $logger;
   }
 
@@ -232,7 +245,15 @@ class StockManager {
         ->fields($new)
         ->execute();
 
-      // @TODO: Dispatch event to allow other code to act on stock update.
+      $sku_entity = SKU::loadFromSku($sku);
+      if ($sku_entity instanceof SKUInterface) {
+        $status_changed = $current
+          ? $this->isStockStatusChanged($current, $new)
+          : TRUE;
+        $low_quantity = $this->isQuantityLow($new);
+        $event = new StockUpdatedEvent($sku_entity, $status_changed, $low_quantity);
+        $this->dispatcher->dispatch(StockUpdatedEvent::EVENT_NAME, $event);
+      }
     }
 
     $this->releaseLock($sku);
