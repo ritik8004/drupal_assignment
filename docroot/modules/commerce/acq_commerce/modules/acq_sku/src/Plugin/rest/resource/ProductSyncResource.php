@@ -9,7 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
-use Drupal\Component\Utility\DiffArray;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -17,7 +17,6 @@ use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -95,6 +94,13 @@ class ProductSyncResource extends ResourceBase {
   private $eventDispatcher;
 
   /**
+   * Database connection service.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  private $database;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -123,6 +129,8 @@ class ProductSyncResource extends ResourceBase {
    *   SKU Fields Manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   Event dispatcher object.
+   * @param \Drupal\Core\Database\Connection $database
+   *   Database connection service.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -136,7 +144,8 @@ class ProductSyncResource extends ResourceBase {
                               ProductOptionsManager $product_options_manager,
                               I18nHelper $i18n_helper,
                               SKUFieldsManager $sku_fields_manager,
-                              EventDispatcherInterface $event_dispatcher) {
+                              EventDispatcherInterface $event_dispatcher,
+                              Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
@@ -146,6 +155,7 @@ class ProductSyncResource extends ResourceBase {
     $this->i18nHelper = $i18n_helper;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->eventDispatcher = $event_dispatcher;
+    $this->database = $database;
   }
 
   /**
@@ -165,7 +175,8 @@ class ProductSyncResource extends ResourceBase {
       $container->get('acq_sku.product_options_manager'),
       $container->get('acq_commerce.i18n_helper'),
       $container->get('acq_sku.fields_manager'),
-      $container->get('event_dispatcher')
+      $container->get('event_dispatcher'),
+      $container->get('database')
     );
   }
 
@@ -191,6 +202,7 @@ class ProductSyncResource extends ResourceBase {
     $ignored = 0;
     $deleted = 0;
     $ignored_skus = [];
+    static $child_skus_processed = [];
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
@@ -222,6 +234,7 @@ class ProductSyncResource extends ResourceBase {
         }
 
         if ($debug && !empty($debug_dir)) {
+          $fps = [];
           // Export product data into file.
           if (!isset($fps) || !isset($fps[$langcode])) {
             $filename = $debug_dir . '/products_' . $langcode . '.data';
@@ -427,7 +440,11 @@ class ProductSyncResource extends ResourceBase {
           $categories = $this->formatCategories($categories);
           $node->field_category = $categories;
 
-          $node->setPublished(TRUE);
+          // Check if the SKU is configurable & mark its node as unpublished.
+          // Publish it when we receive a simple SKU for this one.
+          if ($product['type'] == 'configurable') {
+            $node->setPublished(FALSE);
+          }
 
           // We doing this because when the translation of node is created by
           // addTranslation(), pathauto alias is not created for the translated
@@ -449,9 +466,34 @@ class ProductSyncResource extends ResourceBase {
             '@diff' => self::getArrayDiff($existingCategories, $updatedCategories),
           ]);
         }
+        // If importing a simple SKU, make sure product node for its
+        // configurable SKU is published.
+        elseif ((!in_array($product['sku'], $child_skus_processed)) &&
+            $product['status'] == 1 && $product['visibility'] != 1 &&
+            $product['type'] === 'simple') {
+          $sku = SKU::loadFromSku($product['sku']);
+
+          if (($sku instanceof SKU) &&
+            ($node = $plugin->getDisplayNode($sku)) &&
+            (!$node->isPublished())) {
+            $node->setPublished(TRUE);
+            $node->save();
+
+            // Mark all children SKUs as processed once the node is enabled.
+            // Avoid processing a simple SKU again if its parent's node has
+            // already been enabled.
+            $config_sku = $node->get('field_skus')->getString();
+
+            $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
+              ->fields('asfcs', ['field_configured_skus_value']);
+            $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
+            $result = $query->condition('sku', $config_sku)->distinct()->execute();
+            $child_skus_processed = array_merge($child_skus_processed, $result->fetchAllKeyed(0, 0));
+          }
+        }
         else {
           try {
-            // Un-publish if node available.
+            // Delete if node available.
             if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
               $node->delete();
             }
@@ -464,13 +506,13 @@ class ProductSyncResource extends ResourceBase {
       catch (\Exception $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
+        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() . ')';
         $failed++;
       }
       catch (\Throwable $e) {
         // We consider this as failure as it failed for an unknown reason.
         // (not taken care of above).
-        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() .')';
+        $failed_skus[] = $product['sku'] . '(' . $e->getMessage() . ')';
         $failed++;
       }
       finally {
@@ -605,7 +647,7 @@ class ProductSyncResource extends ResourceBase {
    *
    * @param string $type
    *   Type of link.
-   * @param Drupal\acq_sku\Entity\SKU $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Root SKU.
    * @param array $linked
    *   Linked SKUs.
@@ -647,7 +689,7 @@ class ProductSyncResource extends ResourceBase {
    *
    * @param string $parent
    *   Fields to get from this parent will be processed.
-   * @param Drupal\acq_sku\Entity\SKU $sku
+   * @param \Drupal\acq_sku\Entity\SKU $sku
    *   The root SKU.
    * @param array $values
    *   The product attributes/extensions to get value from.
@@ -706,9 +748,17 @@ class ProductSyncResource extends ResourceBase {
   }
 
   /**
+   * Helper function to process SKU media.
    *
+   * @param array $product
+   *   Product being synced.
+   * @param string $current_value
+   *   Current media value for the product.
+   *
+   * @return string
+   *   Processed media serialized data.
    */
-  protected function getProcessedMedia($product, $current_value) {
+  protected function getProcessedMedia(array $product, $current_value) {
     $media = [];
 
     if (isset($product['extension'], $product['extension']['media'])) {
@@ -777,7 +827,7 @@ class ProductSyncResource extends ResourceBase {
    * @return string
    *   JSON string of array containing diff of two arrays.
    */
-  public static function getArrayDiff($array1, $array2): string {
+  public static function getArrayDiff(array $array1, array $array2): string {
     $differ = new ArrayDiff();
     return json_encode($differ->diff($array1, $array2));
   }
