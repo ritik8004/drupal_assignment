@@ -10,6 +10,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Disable hover gallery on PLP for PB.
+ */
+function alshaya_pb_transac_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make finish a swatch field.
  * Add config translation for placeholder text.
  * Update field type for attr_color_lhn to attribute from string.
