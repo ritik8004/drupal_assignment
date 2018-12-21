@@ -100,7 +100,9 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
 
   $filters = $view->getExposedInput();
   if (empty($filters['sort_bef_combine'])) {
-    // Get sorts.
+    // We allow administrators to override the order of sorting options.
+    // Here we try to set the default sort order based on config when there
+    // is nothing in exposed input.
     if (is_array($view->sort) && !empty($view->sort)) {
       $sorts = $view->sort;
       $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
