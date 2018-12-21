@@ -2254,6 +2254,11 @@ class SkuManager {
       $pdp_image_slider_position = (!empty($pdp_image_slider_position)) ? $pdp_image_slider_position : $default_pdp_image_slider_position;
       return $pdp_image_slider_position;
     }
+    else {
+      // In the rare case that the products are not assigned any category, we
+      // want to return the default setting for position so the PDP works.
+      return $default_pdp_image_slider_position;
+    }
   }
 
   /**
