@@ -1,9 +1,8 @@
 <?php
 
-namespace Drupal\acq_sku_stock\Plugin\rest\resource;
+namespace Drupal\acq_sku\Plugin\rest\resource;
 
 use Drupal\acq_sku_stock\Service\StockManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -12,9 +11,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Class ProductStockSyncResource.
  *
- * @package Drupal\acq_sku_stock\Plugin
+ * @package Drupal\acq_sku\Plugin
  *
- * @ingroup acq_sku_stock
+ * @ingroup acq_sku
  *
  * @RestResource(
  *   id = "acq_productstocksync",
@@ -69,8 +68,8 @@ class ProductStockSyncResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('acq_sku_stock'),
-      $container->get('acq_sku_stock.manager')
+      $container->get('logger.factory')->get(self::class),
+      $container->get('acq_sku.stock_manager')
     );
   }
 

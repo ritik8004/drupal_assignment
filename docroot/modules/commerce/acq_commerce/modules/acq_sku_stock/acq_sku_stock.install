@@ -8,13 +8,13 @@
 /**
  * Implements hook_schema().
  */
-function acq_sku_position_schema() {
+function acq_sku_stock_schema() {
   $schema['acq_sku_stock'] = [
     'description' => 'Stores sku stock info.',
     'fields' => [
       'sku' => [
         'type' => 'varchar',
-        'length' => 255,
+        'length' => 50,
         'not null' => TRUE,
         'description' => 'Product SKU.',
       ],

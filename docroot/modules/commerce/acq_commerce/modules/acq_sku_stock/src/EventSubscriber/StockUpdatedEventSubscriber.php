@@ -3,7 +3,7 @@
 namespace Drupal\acq_sku_stock\EventSubscriber;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\acq_sku_stock\StockUpdatedEvent;
+use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -32,7 +32,7 @@ class StockUpdatedEventSubscriber implements EventSubscriberInterface {
   /**
    * Subscriber Callback for the event.
    *
-   * @param \Drupal\acq_sku_stock\StockUpdatedEvent $event
+   * @param \Drupal\acq_sku_stock\Event\StockUpdatedEvent $event
    *   Event object.
    */
   public function onStockUpdated(StockUpdatedEvent $event) {
