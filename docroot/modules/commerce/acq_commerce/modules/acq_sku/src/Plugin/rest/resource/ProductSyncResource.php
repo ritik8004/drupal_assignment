@@ -319,8 +319,6 @@ class ProductSyncResource extends ResourceBase {
             // Delete the SKU.
             $sku->delete();
 
-            $child_skus = Configurable::getChildren($parent_sku);
-
             // Check if this was the last simple SKU in its parent. If that's
             // the case, unpublish the node too.
             if (($parent_sku instanceof SKU) &&
