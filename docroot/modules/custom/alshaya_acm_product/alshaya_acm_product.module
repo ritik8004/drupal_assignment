@@ -311,18 +311,20 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_node_delete(NodeInterface $node) {
-  $sku = $node->get('field_skus')->getString();
+  if ($node->bundle() == 'acq_product') {
+    $sku = $node->get('field_skus')->getString();
 
-  // Delete the color nodes available in system for this particular product.
-  if ($sku) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $nids = $skuManager->getColorNodeIds($sku);
+    // Delete the color nodes available in system for this particular product.
+    if ($sku) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $nids = $skuManager->getColorNodeIds($sku);
 
-    if ($nids) {
-      $storage = \Drupal::entityTypeManager()->getStorage('node');
-      $nodes = $storage->loadMultiple($nids);
-      $storage->delete($nodes);
+      if ($nids) {
+        $storage = \Drupal::entityTypeManager()->getStorage('node');
+        $nodes = $storage->loadMultiple($nids);
+        $storage->delete($nodes);
+      }
     }
   }
 }
