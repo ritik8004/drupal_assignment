@@ -144,7 +144,7 @@ class SkuAssetManager {
     foreach ($location_images as $location_image) {
       $asset_urls = [];
       foreach ($assets as $asset) {
-        if (!empty($avoid_assets) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
+        if (!empty($avoid_assets) && isset($asset['Data']['AssetId']) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
           continue;
         }
 

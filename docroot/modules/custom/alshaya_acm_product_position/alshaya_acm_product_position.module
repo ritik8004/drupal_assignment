@@ -115,8 +115,8 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
         }
       }
 
-      $labels = _alshaya_acm_product_position_sorted_options($labels);
-      $filters['sort_bef_combine'] = reset(array_keys($labels));
+      $labels = array_keys(_alshaya_acm_product_position_sorted_options($labels));
+      $filters['sort_bef_combine'] = reset($labels);
 
       $view->setExposedInput($filters);
     }
