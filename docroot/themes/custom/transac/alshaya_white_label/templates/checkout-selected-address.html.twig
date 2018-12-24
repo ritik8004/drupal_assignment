@@ -34,7 +34,7 @@
     {% if delivery_address is not empty %}
       <div class="address--delivery">
         <div class="address--label">{{ 'Delivery address' | t }}</div>
-        {% for item in delivery_address|without('organization', 'family_name', 'given_name', 'mobile_number', 'country_code') %}
+        {% for item in delivery_address|without('organization', 'family_name', 'given_name', 'mobile_number') %}
           {% if item is not empty %}
             <div class="address--content">{{ item }}</div>
           {% endif %}

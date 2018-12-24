@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -162,7 +161,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
     if (empty($cart) || !$cart->items()) {
       $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
       $response->send();
-      return;
+      exit;
     }
 
     $cart_step_id = $cart->getCheckoutStep();
@@ -302,6 +301,38 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
   /**
    * {@inheritdoc}
    */
+  public function getCart() {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+      $response->send();
+      exit;
+    }
+
+    return $cart;
+  }
+
+  /**
+   * Get checkout helper service object.
+   *
+   * @return \Drupal\alshaya_acm_checkout\CheckoutHelper
+   *   Checkout Helper service object.
+   */
+  public function getCheckoutHelper() {
+    static $helper;
+
+    if (empty($helper)) {
+      /** @var \Drupal\alshaya_acm_checkout\CheckoutHelper $helper */
+      $helper = \Drupal::service('alshaya_acm_checkout.checkout_helper');
+    }
+
+    return $helper;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->getTriggeringElement()['#parents'][0] != 'actions') {
       return;
@@ -328,21 +359,9 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           '@message' => $e->getMessage(),
         ]);
 
-        // @TODO: RELYING ON ERROR MESSAGE FROM MAGENTO.
-        if ($e->getMessage() == $this->t('This product is out of stock.')->render()
-          || $e->getMessage() == $this->t('Some of the products are out of stock.')->render()
-          || $e->getMessage() == $this->t('Not all of your products are available in the requested quantity.')->render()
-          || strpos($e->getMessage(), $this->t("We don't have as many")->render()) !== FALSE) {
-
+        if (_alshaya_acm_is_out_of_stock_exception($e)) {
           $cart = $this->getCart();
-
-          // Clear stock of items in cart.
-          foreach ($cart->items() as $item) {
-            if ($sku_entity = SKU::loadFromSku($item['sku'])) {
-              $sku_entity->clearStockCache();
-            }
-          }
-
+          $this->getCheckoutHelper()->clearCacheForProductsInCart($cart);
           $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
           $response->send();
           exit;
@@ -371,7 +390,7 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
           \Drupal::moduleHandler()->invokeAll('alshaya_acm_checkout_pre_place_order', [$cart]);
 
           // Place an order.
-          \Drupal::service('alshaya_acm_checkout.checkout_helper')->placeOrder($cart);
+          $this->getCheckoutHelper()->placeOrder($cart);
         }
         catch (\Exception $e) {
           drupal_set_message($e->getMessage(), 'error');

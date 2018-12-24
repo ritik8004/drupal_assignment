@@ -157,32 +157,31 @@ class CategoryProductListResource extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    *   Throws when term provided not exists.
    */
-  public function get(int $id = NULL) {
-    if ($id) {
-      // Load the term object.
-      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($id);
-      // If given term exists in system.
-      if ($term instanceof TermInterface) {
-        $term = $this->entityRepository->getTranslationFromContext($term, $this->languageManager->getCurrentLanguage()->getId());
-        // If term is department page.
-        if (alshaya_advanced_page_is_department_page($term->id())) {
-          $this->mobileAppUtility->throwException();
-        }
-
-        // Get result set.
-        $result_set = $this->prepareAndExecuteQuery($id);
-        // Prepare response from result set.
-        $response_data = $this->addExtraTermData($term);
-        $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
-        $response_data['total'] = $this->alshayaSearchApiQueryExecute->getResultTotalCount();
-        return (new ModifiedResourceResponse($response_data));
-      }
-
+  public function get($id = NULL) {
+    if (!is_numeric($id) || empty($id)) {
       $this->mobileAppUtility->throwException();
-
     }
 
-    $this->mobileAppUtility->throwException();
+    // Load the term object.
+    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($id);
+    // If given term exists in system.
+    if (!$term instanceof TermInterface) {
+      $this->mobileAppUtility->throwException();
+    }
+
+    $term = $this->entityRepository->getTranslationFromContext($term, $this->languageManager->getCurrentLanguage()->getId());
+    // If term is department page.
+    if (alshaya_advanced_page_is_department_page($term->id())) {
+      $this->mobileAppUtility->throwException();
+    }
+
+    // Get result set.
+    $result_set = $this->prepareAndExecuteQuery($id);
+    // Prepare response from result set.
+    $response_data = $this->addExtraTermData($term);
+    $response_data += $this->alshayaSearchApiQueryExecute->prepareResponseFromResult($result_set);
+    $response_data['total'] = $this->alshayaSearchApiQueryExecute->getResultTotalCount();
+    return (new ModifiedResourceResponse($response_data));
   }
 
   /**

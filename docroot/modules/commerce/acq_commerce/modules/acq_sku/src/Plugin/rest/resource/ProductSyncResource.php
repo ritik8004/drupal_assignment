@@ -6,6 +6,7 @@ use Differ\ArrayDiff;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Event\AcqSkuValidateEvent;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Component\Utility\DiffArray;
@@ -16,6 +17,8 @@ use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class ProductSyncResource.
@@ -85,6 +88,13 @@ class ProductSyncResource extends ResourceBase {
   private $skuFieldsManager;
 
   /**
+   * Event Dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcher
+   */
+  private $eventDispatcher;
+
+  /**
    * Construct.
    *
    * @param array $configuration
@@ -111,6 +121,8 @@ class ProductSyncResource extends ResourceBase {
    *   I18nHelper object.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   Event dispatcher object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -123,7 +135,8 @@ class ProductSyncResource extends ResourceBase {
                               CategoryRepositoryInterface $cat_repo,
                               ProductOptionsManager $product_options_manager,
                               I18nHelper $i18n_helper,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              EventDispatcherInterface $event_dispatcher) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->entityManager = $entity_type_manager;
     $this->configFactory = $config_factory;
@@ -132,6 +145,7 @@ class ProductSyncResource extends ResourceBase {
     $this->productOptionsManager = $product_options_manager;
     $this->i18nHelper = $i18n_helper;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -150,7 +164,8 @@ class ProductSyncResource extends ResourceBase {
       $container->get('acq_sku.category_repo'),
       $container->get('acq_sku.product_options_manager'),
       $container->get('acq_commerce.i18n_helper'),
-      $container->get('acq_sku.fields_manager')
+      $container->get('acq_sku.fields_manager'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -166,7 +181,8 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products) {
-    $lock = \Drupal::lock();
+    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+    $lock = \Drupal::service('lock.persistent');
 
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
@@ -182,6 +198,20 @@ class ProductSyncResource extends ResourceBase {
 
     foreach ($products as $product) {
       try {
+        // Allow other modules to subscribe to pre-validation of the SKU being
+        // imported.
+        $event = new AcqSkuValidateEvent($product);
+        $this->eventDispatcher->dispatch(AcqSkuValidateEvent::ACQ_SKU_VALIDATE, $event);
+        $product = $event->getProduct();
+
+        // If skip attribute is set via any event subscriber, skip importing the
+        // product.
+        if (isset($product['skip']) && $product['skip']) {
+          $ignored_skus[] = $product['sku'] . '(SKU doesn\'t meet the criteria for import set for this site.)';
+          $ignored++;
+          continue;
+        }
+
         $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
 
         // Magento might have stores that what we don't support.
@@ -383,6 +413,8 @@ class ProductSyncResource extends ResourceBase {
             $node = $this->createDisplayNode($product, $langcode);
           }
 
+          $existingCategories = $node->get('field_category')->getValue();
+
           $node->get('title')->setValue(html_entity_decode($product['name']));
 
           $description = (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '';
@@ -409,6 +441,13 @@ class ProductSyncResource extends ResourceBase {
           \Drupal::moduleHandler()->alter('acq_sku_product_node', $node, $product);
 
           $node->save();
+
+          $updatedCategories = $node->get('field_category')->getValue();
+          $this->logger->info('Categories diff for @sku for @langcode: @diff', [
+            '@sku' => $sku->getSku(),
+            '@langcode' => $langcode,
+            '@diff' => self::getArrayDiff($existingCategories, $updatedCategories),
+          ]);
         }
         else {
           try {

@@ -9,6 +9,7 @@
     @include breakpoint($only-mobile) {
       text-align: $right;
       margin-#{$right}: 1.125rem;
+      margin-top: -3.25rem;
     }
 
     .share-icon {
@@ -50,6 +51,8 @@
 
 body {
   &.social-modal-overlay {
+    overflow: hidden;
+
     &::before {
       content: '';
       position: fixed;
@@ -65,7 +68,7 @@ body {
       transform: translate3d(0, 0, 0);
 
       @include breakpoint($only-mobile) {
-        z-index: 100;
+        z-index: 10000;
       }
     }
 
@@ -107,7 +110,7 @@ body {
       min-width: 17.5rem;
 
       @include breakpoint($only-mobile) {
-        z-index: 100;
+        z-index: 10000;
       }
     }
 

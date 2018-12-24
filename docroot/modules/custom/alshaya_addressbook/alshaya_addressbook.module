@@ -142,6 +142,15 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['dependent_locality']['#maxlength'] = 89;
   $element['locality']['#title'] = t('Block', [], ['context' => 'Address label']);
   $element['locality']['#maxlength'] = 92;
+  $element['sorting_code']['#title'] = t('Landmark (Optional)', [], ['context' => 'Address label']);
+  $element['sorting_code']['#maxlength'] = 92;
+  $element['sorting_code']['#required'] = FALSE;
+  $element['additional_name']['#title'] = t('Apartment (Optional)', [], ['context' => 'Address label']);
+  $element['additional_name']['#maxlength'] = 92;
+  $element['additional_name']['#required'] = FALSE;
+  $element['postal_code']['#title'] = t('Postal Code (Optional)', [], ['context' => 'Address label']);
+  $element['postal_code']['#maxlength'] = 8;
+  $element['postal_code']['#required'] = FALSE;
   $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
   $element['address_line2']['#maxlength'] = 92;
 
@@ -710,6 +719,8 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
       'postal_code' => $values[0]['postal_code'],
       'dependent_locality' => $values[0]['dependent_locality'],
       'administrative_area' => $values[0]['administrative_area'],
+      'sorting_code' => $values[0]['sorting_code'],
+      'additional_name' => $values[0]['additional_name'],
     ];
 
     if (isset($values[0]['locality']) && !empty($values[0]['locality'])) {
@@ -718,6 +729,14 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
 
     if (isset($values[0]['sorting_code']) && !empty($values[0]['sorting_code'])) {
       $variables['delivery_address']['sorting_code'] = $values[0]['sorting_code'];
+    }
+
+    if (isset($values[0]['additional_name']) && !empty($values[0]['additional_name'])) {
+      $variables['delivery_address']['additional_name'] = $values[0]['additional_name'];
+    }
+
+    if (isset($values[0]['postal_code']) && !empty($values[0]['postal_code'])) {
+      $variables['delivery_address']['postal_code'] = $values[0]['postal_code'];
     }
 
     $dm_version = \Drupal::config('alshaya_addressbook.settings')->get('dm_version');
@@ -745,6 +764,8 @@ function alshaya_addressbook_preprocess_profile__address_book(&$variables) {
     $variables['delivery_address']['country'] = $country_list[$values[0]['country_code']];
 
     $variables['delivery_address'] = \Drupal::service('alshaya_addressbook.manager')->decorateAddressDispaly($variables['delivery_address']);
+    $variables['delivery_address']['country_code'] = $variables['delivery_address']['country'];
+    unset($variables['delivery_address']['country']);
     // If profile is default profile.
     $variables['is_default_profile'] = $profile->isDefault() ?: '';
 

@@ -374,7 +374,7 @@ class Configurable extends SKUPluginBase {
     );
 
     $tree['configurables'] = [];
-    foreach ($configurables as $configurable) {
+    foreach ($configurables ?? [] as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
 

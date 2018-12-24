@@ -309,7 +309,7 @@ class AlshayaGtmManager {
       $product = $product->getTranslation('en');
     }
 
-    $skuId = $product->get('field_skus')->first()->getString();
+    $skuId = $this->skuManager->getSkuForNode($product);
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
 
     $attributes['gtm-type'] = 'gtm-product-link';
@@ -317,7 +317,8 @@ class AlshayaGtmManager {
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
-    $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
+
+    $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
     return $attributes;
   }
@@ -629,7 +630,7 @@ class AlshayaGtmManager {
       $dimension7 = '';
       $dimension8 = '';
 
-      $cartItems = $cart->get('items');
+      $cartItems = $cart->items();
 
       $address = $this->cartHelper->getShipping($cart);
 
@@ -679,7 +680,7 @@ class AlshayaGtmManager {
           // Get product media.
           $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
           $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
-          $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
+          $attributes[$skuId]['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
         }
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
 
@@ -786,9 +787,9 @@ class AlshayaGtmManager {
   public function getRootGroup($tid) {
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $this->database->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
+      $query = $this->database->select('taxonomy_term__parent', 'tth');
+      $query->fields('tth', ['parent_target_id']);
+      $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
         return $tid;
@@ -889,7 +890,7 @@ class AlshayaGtmManager {
       $productNode = $this->skuManager->getDisplayNode($item['sku']);
       if ($productNode instanceof NodeInterface) {
         $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
-        $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
+        $product['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
       }
       $productExtras = [
         'quantity' => $item['ordered'],
@@ -987,7 +988,7 @@ class AlshayaGtmManager {
         if ($node->hasTranslation('en')) {
           $node = $node->getTranslation('en');
         }
-        $product_sku = $node->get('field_skus')->getString();
+        $product_sku = $this->skuManager->getSkuForNode($node);
 
         $sku_entity = SKU::loadFromSku($product_sku);
 
@@ -1087,7 +1088,7 @@ class AlshayaGtmManager {
 
         if ($cart) {
           $cart_totals = $cart->totals();
-          $cart_items = $cart->get('items') ?? [];
+          $cart_items = $cart->items() ?? [];
           $productStyleCode = [];
           $productSKU = [];
 
@@ -1095,7 +1096,7 @@ class AlshayaGtmManager {
             $productSKU[] = $item['sku'];
             $product_node = $this->skuManager->getDisplayNode($item['sku']);
             if ($product_node instanceof NodeInterface) {
-              $productStyleCode[] = $product_node->get('field_skus')->getString();
+              $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
             }
           }
 
@@ -1195,7 +1196,7 @@ class AlshayaGtmManager {
           $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 
           if ($product_node instanceof NodeInterface) {
-            $productStyleCode[] = $product_node->get('field_skus')->getString();
+            $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
           }
         }
 
