@@ -536,6 +536,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // If L3 active item for 'search' page.
     if (count($parent_ids) == 2
+      && isset($parent_ids[0])
       && $context['result']->isActive()
       && ($facet_source_id == 'search_api:views_page__search__page'
       || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2')) {
