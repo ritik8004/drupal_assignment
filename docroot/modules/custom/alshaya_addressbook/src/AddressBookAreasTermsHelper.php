@@ -92,6 +92,11 @@ class AddressBookAreasTermsHelper {
    *   List or governates.
    */
   public function getAllGovernates() {
+    $governate = $this->getAddressCachedData('getAllGovernates');
+    if (is_array($governate)) {
+      return $governate;
+    }
+
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, 0, 1, TRUE);
 
     $term_list = [];
@@ -105,6 +110,8 @@ class AddressBookAreasTermsHelper {
     }
 
     asort($term_list);
+
+    $this->setAddressCachedData($term_list);
 
     return $term_list;
   }
@@ -154,6 +161,12 @@ class AddressBookAreasTermsHelper {
    *   List or areas.
    */
   public function getAllAreas() {
+    $area = $this->getAddressCachedData('getAllAreas');
+
+    if (is_array($area)) {
+      return $area;
+    }
+
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, 0, 2, TRUE);
 
     $term_list = [];
@@ -174,6 +187,8 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
+    $this->setAddressCachedData($term_list);
+
     return $term_list;
   }
 
@@ -191,6 +206,12 @@ class AddressBookAreasTermsHelper {
    *   Array of term objects.
    */
   private function getLocationTerms(array $conditions = []) {
+    $locations = $this->getAddressCachedData('getLocationTerms');
+
+    if (is_array($locations)) {
+      return $locations;
+    }
+
     $terms = [];
 
     $query = $this->termStorage->getQuery()->condition(
@@ -210,6 +231,8 @@ class AddressBookAreasTermsHelper {
     if (!empty($tids)) {
       $terms = $this->termStorage->loadMultiple($tids);
     }
+
+    $this->setAddressCachedData($terms);
 
     return $terms;
   }
@@ -273,6 +296,47 @@ class AddressBookAreasTermsHelper {
     }
 
     return $value;
+  }
+
+  /**
+   * Get cache id for particular address area.
+   *
+   * @return string
+   *   Cache key.
+   */
+  public function getAddressbookCachedId() {
+    return 'alshaya_addressbook:' . \Drupal::languageManager()->getCurrentLanguage()->getId();
+  }
+
+  /**
+   * Get data from Cache for an address area.
+   *
+   * @param string $key
+   *   Key of the data to get from cache.
+   *
+   * @return array|null
+   *   Data if found or null.
+   */
+  public function getAddressCachedData($key) {
+    $data = &drupal_static($key);
+    $cid = $this->getAddressbookCachedId();
+
+    if ($cache = \Drupal::cache()->get($cid)) {
+      $data = $cache->data;
+      return $data;
+    }
+    return NULL;
+  }
+
+  /**
+   * Set data in Cache for an address areas.
+   *
+   * @param array $data
+   *   Data to set in cache.
+   */
+  public function setAddressCachedData(array $data) {
+    $cid = $this->getAddressbookCachedId();
+    \Drupal::cache()->set($cid, $data);
   }
 
 }
