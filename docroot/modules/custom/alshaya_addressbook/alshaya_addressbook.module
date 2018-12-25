@@ -125,6 +125,9 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['family_name']['#element_validate'][] = '_alshaya_addressbook_lastname_validate';
   $element['family_name']['#maxlength'] = 50;
 
+  // Validation for postal code.
+  $element['postal_code']['#element_validate'][] = '_alshaya_addressbook_postalcode_validate';
+
   // This is required for guest checkout pages.
   if (isset($element['#require_email']) && $element['#require_email']) {
     // Use organization field as email.
@@ -371,6 +374,16 @@ function _alshaya_addressbook_name_validation($element, FormStateInterface $form
   }
 
   return $element;
+}
+
+/**
+ * Adding validation for the postal code.
+ */
+function _alshaya_addressbook_postalcode_validate($element, FormStateInterface $form_state) {
+  $postal_code = $element['#default_value'];
+  if (_alshaya_custom_get_site_level_country_code() == 'EG' && !preg_match('/^[0-9]{5}$/', $postal_code)) {
+    $form_state->setError($element, t('@postalcode field is not in the right format', ['@postalcode' => 'Postal code']));
+  }
 }
 
 /**
