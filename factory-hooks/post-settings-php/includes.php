@@ -45,6 +45,10 @@ $country_code = substr($acsf_site_name, -2);
 // Country code is based on ISO 3166-1 alpha-2.
 $settings['country_code'] = strtoupper($country_code);
 
+// Filepath for MDC rabbitmq credentials.
+$rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home/alshaya/rabbitmq-creds/' . $settings['env'] . '/';
+$settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
+
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env']));
@@ -59,6 +63,7 @@ if (file_exists($brand_country_file)) {
 }
 
 $brand_file = $settings_path . $acsf_site_code . '.php';
+
 if (file_exists($brand_file)) {
   include_once $brand_file;
 }
