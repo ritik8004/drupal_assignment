@@ -86,6 +86,10 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
 
       // Order by name if two products have same position (to avoid duplicity).
       $db_query->orderBy('t.name_1', QueryInterface::SORT_ASC);
+
+      // Order by sku for products with same name (to avoid random results).
+      // Affects most when displaying color nodes separately.
+      $db_query->orderBy('t.sku', QueryInterface::SORT_ASC);
     }
   }
 }
