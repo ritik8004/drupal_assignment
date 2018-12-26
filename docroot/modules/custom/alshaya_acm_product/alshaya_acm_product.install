@@ -30,6 +30,7 @@ function alshaya_acm_product_update_8034() {
     [
       'core.entity_view_display.node.acq_product.modal',
       'core.entity_view_display.node.acq_product.product_category_carousel',
+      'views.view.alshaya_product_list',
     ],
     'alshaya_product'
   );

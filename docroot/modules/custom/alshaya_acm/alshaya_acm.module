@@ -997,13 +997,15 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
   /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
   $csrf_token_generator = \Drupal::service('csrf_token');
 
-  $token = $csrf_token_generator->get($cart->id() . '/' . $sku->getSku());
+  // We use encoded string to handle cases like "MHHW0629 1 6/7Y".
+  $sku_text = base64_encode($sku->getSku());
+  $token = $csrf_token_generator->get($cart->id() . '/' . $sku_text);
 
   // Add remove link as suffix of quantity.
   $remove_url = Url::fromRoute('alshaya_acm.cart_remove_sku',
     [
       'js' => 'nojs',
-      'sku' => $sku->getSku(),
+      'sku' => $sku_text,
       'token' => $token,
       'coupon' => 'nochange',
     ],
@@ -1020,4 +1022,34 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
   return $remove_url
     ? Link::fromTextAndUrl(t('Remove'), $remove_url)->toString()
     : NULL;
+}
+
+/**
+ * Check if Exception from API response is for OOS products in cart.
+ *
+ * @param \Exception $e
+ *   Exception to check.
+ *
+ * @return bool
+ *   TRUE if exception matches OOS criteria.
+ */
+function _alshaya_acm_is_out_of_stock_exception(\Exception $e) {
+  // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
+  // We use t() to match translated message.
+  // It is contributor's responsibility to add the translation in Magento
+  // and in Drupal.
+  $oos_messages = [
+    t('This product is out of stock.')->render(),
+    t('Some of the products are out of stock.')->render(),
+    t('Not all of your products are available in the requested quantity.')->render(),
+    t("We don't have as many")->render(),
+  ];
+
+  foreach ($oos_messages as $message) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
