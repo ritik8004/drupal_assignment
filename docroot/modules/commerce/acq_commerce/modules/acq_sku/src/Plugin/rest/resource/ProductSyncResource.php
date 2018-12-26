@@ -7,7 +7,6 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\CategoryRepositoryInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
-use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Database\Connection;
@@ -321,13 +320,34 @@ class ProductSyncResource extends ResourceBase {
 
             // Check if this was the last simple SKU in its parent. If that's
             // the case, unpublish the node too.
-            if (($parent_sku instanceof SKU) &&
-              (empty($child_skus = Configurable::getChildren($parent_sku)))) {
-              $parent_plugin = $parent_sku->getPluginInstance();
+            if ($parent_sku instanceof SKU) {
+              foreach ($parent_sku->get('field_configured_skus')->getValue() as $child) {
+                if (empty($child['value'])) {
+                  continue;
+                }
 
-              if (($node = $parent_plugin->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
-                $node->setPublished(FALSE);
-                $node->save();
+                $child_skus[] = $child['value'];
+              }
+
+              if (!empty($child_skus)) {
+                // Query to fetch Ids of child SKUs.
+                $result = $this->database->select('acq_sku_field_data', 'asfd')
+                  ->fields('asfd', ['id'])
+                  ->condition('sku', $child_skus, 'IN')
+                  ->execute();
+
+                $child_sku_ids = $result->fetchAll();
+
+                // In case of no child SKU, unpublish the configurable product
+                // node.
+                if (empty($child_sku_ids)) {
+                  $parent_plugin = $parent_sku->getPluginInstance();
+
+                  if (($node = $parent_plugin->getDisplayNode($parent_sku, FALSE, FALSE)) instanceof Node) {
+                    $node->setPublished(FALSE);
+                    $node->save();
+                  }
+                }
               }
             }
 
@@ -478,12 +498,7 @@ class ProductSyncResource extends ResourceBase {
             }
 
             if (!empty($child_skus[$product['sku']])) {
-              foreach ($child_skus[$product['sku']] as $child_sku) {
-                if ($sku_entity = SKU::loadFromSku($child_sku) instanceof SKU) {
-                  $node->setPublished();
-                  break;
-                }
-              }
+              $node->setPublished();
             }
           }
 
