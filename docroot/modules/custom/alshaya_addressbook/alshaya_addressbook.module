@@ -164,7 +164,7 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
   $element['additional_name']['#required'] = FALSE;
   $element['postal_code']['#title'] = t('Postal Code (Optional)', [], ['context' => 'Address label']);
   $element['postal_code']['#maxlength'] = 8;
-  $element['postal_code']['#required'] = FALSE;
+  $element['postal_code']['#required'] = TRUE;
   $element['address_line2']['#title'] = t('Floor (Optional)', [], ['context' => 'Address label']);
   $element['address_line2']['#maxlength'] = 92;
 
@@ -381,7 +381,7 @@ function _alshaya_addressbook_name_validation($element, FormStateInterface $form
  */
 function _alshaya_addressbook_postalcode_validate($element, FormStateInterface $form_state) {
   $postal_code = $element['#default_value'];
-  if (_alshaya_custom_get_site_level_country_code() == 'EG' && !preg_match('/^[0-9]{5}$/', $postal_code)) {
+  if (!empty($postal_code) && _alshaya_custom_get_site_level_country_code() == 'EG' && !preg_match('/^[0-9]{5}$/', $postal_code)) {
     $form_state->setError($element, t('@postalcode field is not in the right format', ['@postalcode' => 'Postal code']));
   }
 }
