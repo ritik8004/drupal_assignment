@@ -6,15 +6,6 @@
  */
 
 /**
- * Implements hook_update_N().
- *
- * Grant dashboard access permission to webmaster.
- */
-function alshaya_acm_dashboard_update_8001() {
-  \Drupal::configFactory()->getEditable('user.role.webmaster')->save();
-}
-
-/**
  * Implements hook_install().
  */
 function alshaya_acm_dashboard_install() {
