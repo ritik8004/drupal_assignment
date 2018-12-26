@@ -186,33 +186,32 @@
   function mobileColors(context) {
     // Moving color swatches from sidebar to main content in between the gallery after
     // first image as per design.
-    var sku_swatch = $('.configurable-swatch', context);
-    if (sku_swatch !== 'undefined') {
-      $('.magazine-swatch-placeholder').replaceWith('<div class="magazine-swatch-placeholder">' + sku_swatch.html() + '</div>');
-      $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
 
-      $('.magazine-product-description .select2Option li a').on('click', function (e) {
-        e.preventDefault();
-        var select = $('.sku-base-form .configurable-swatch select');
-        var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
+    var sku_swatch = $('.configurable-swatch', context).clone();
+    $('.magazine-swatch-placeholder').html(sku_swatch);
+    $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
 
-        if (clickedOption.is(':selected')) {
-          return;
-        }
+    $('.magazine-product-description .select2Option li a').on('click', function (e) {
+      e.preventDefault();
+      var select = $('.sku-base-form .configurable-swatch select');
+      var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
 
-        $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
-        if ($(this).hasClass('picked')) {
-          $(this).removeClass('picked');
-          clickedOption.removeProp('selected');
-        }
-        else {
-          $('.magazine-product-description .select-buttons').find('a, span').removeClass('picked');
-          $(this).addClass('picked');
-          clickedOption.prop('selected', true);
-        }
-        select.trigger('change');
-      });
-    }
+      if (clickedOption.is(':selected')) {
+        return;
+      }
+
+      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
+      if ($(this).hasClass('picked')) {
+        $(this).removeClass('picked');
+        clickedOption.removeProp('selected');
+      }
+      else {
+        $('.magazine-product-description .select-buttons').find('a, span').removeClass('picked');
+        $(this).addClass('picked');
+        clickedOption.prop('selected', true);
+      }
+      select.trigger('change');
+    });
   }
 
   /**
