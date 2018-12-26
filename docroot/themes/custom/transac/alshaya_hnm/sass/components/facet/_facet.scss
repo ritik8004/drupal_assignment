@@ -190,7 +190,8 @@ ul[data-drupal-facet-id=promotion_category_facet] {
     }
   }
 
-  .item-list__checkbox {
+  .item-list__checkbox,
+  .item-list__range_checkbox {
     @include breakpoint($desktop) {
       max-height: 14.75rem;
     }
