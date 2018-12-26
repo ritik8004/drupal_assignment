@@ -133,6 +133,11 @@
           height: 100%;
         }
       }
+
+      &.swatch-more-link {
+        text-decoration: underline;
+        font-size: 0.75rem;
+      }
     }
   }
 }
