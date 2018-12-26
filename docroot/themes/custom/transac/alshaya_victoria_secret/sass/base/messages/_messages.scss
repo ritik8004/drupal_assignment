@@ -16,7 +16,6 @@
     &.messages--warning,
     &.messages--error {
       font-family: $vs-regular;
-      font-size: 0.875rem;
 
       @include breakpoint($upto-tablet) {
         padding: 0.8rem 1.5625rem;
@@ -34,7 +33,6 @@
         margin-#{$right}: 0.4rem;
         height: auto;
         width: auto;
-        font-size: 2rem;
 
         @include breakpoint($upto-tablet) {
           position: absolute;

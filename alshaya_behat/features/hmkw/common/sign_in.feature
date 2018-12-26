@@ -8,7 +8,7 @@ Feature: Test Sign in and Forgot password features
     When I close the popup
     And I wait for the page to load
     And I go to "/user/login"
-    When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
+    When I fill in "edit-name" with "kanchan.patil+uat@qed42.com"
     And I fill in "edit-pass" with "Password@1"
     And I press "sign in"
     Then I should see the link "My account"
@@ -20,7 +20,7 @@ Feature: Test Sign in and Forgot password features
   I should be able to sign in after providing valid credentials
     Given I go to "/user/login"
     And I follow "عربية"
-    When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
+    When I fill in "edit-name" with "kanchan.patil+uat@qed42.com"
     And I fill in "edit-pass" with "Password@1"
     And I press "تسجيل الدخول"
     Then I should see the link "حسابي"
@@ -73,7 +73,7 @@ Feature: Test Sign in and Forgot password features
     Given I am on "/user/login"
     And I follow "Forgot password?"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
+    When I fill in "edit-name" with "kanchan.patil+uat@qed42.com"
     And I press "Submit"
     Then I should see "Further instructions have been sent to your email address."
     And the url should match "/user/login"
@@ -86,7 +86,7 @@ Feature: Test Sign in and Forgot password features
     And I follow "عربية"
     And I follow "هل نسيت كلمة السر؟"
     And the url should match "/user/password"
-    When I fill in "edit-name" with "kanchan.patil+test@qed42.com"
+    When I fill in "edit-name" with "kanchan.patil+uat@qed42.com"
     And I press "إرسال"
     Then I should see "تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني"
     And the url should match "/user/login"

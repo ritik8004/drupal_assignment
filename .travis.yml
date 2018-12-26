@@ -12,12 +12,12 @@ matrix:
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   - php: 7.1
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_non_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   #- php: 7.1
   #  env:
   #  - INSTALL_TYPE=update
@@ -101,6 +101,7 @@ deploy:
     on:
       branch: develop
       php: 7.1
+      condition: $TRAVIS_EVENT_TYPE != cron
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
