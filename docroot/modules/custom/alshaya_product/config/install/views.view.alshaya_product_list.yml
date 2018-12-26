@@ -496,10 +496,22 @@ display:
           expose:
             label: ''
           plugin_id: search_api
-        sku:
-          id: sku
+        original_nid:
+          id: original_nid
           table: search_api_index_product
-          field: sku
+          field: original_nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        nid_1:
+          id: nid_1
+          table: search_api_index_product
+          field: nid
           relationship: none
           group_type: group
           admin_label: ''
@@ -645,10 +657,22 @@ display:
           expose:
             label: ''
           plugin_id: search_api
-        sku:
-          id: sku
+        original_nid:
+          id: original_nid
           table: search_api_index_product
-          field: sku
+          field: original_nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        nid_1:
+          id: nid_1
+          table: search_api_index_product
+          field: nid
           relationship: none
           group_type: group
           admin_label: ''
