@@ -81,7 +81,8 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $group_name = $sku->get('attr_group_name')->getString();
     $sku_name = $sku->get('attr_sku_name')->getString();
 
-    if ($group_name && $sku_name) {
+    // Show only group name on PDP.
+    if ($group_name && $sku_name && $event->getContext() != 'pdp') {
       $title = $this->t('@group_name/@sku_name', [
         '@group_name' => $group_name,
         '@sku_name' => $sku_name,
