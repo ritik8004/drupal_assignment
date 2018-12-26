@@ -1,0 +1,7 @@
+alshaya_acm_product_category.settings_form:
+  path: '/admin/commerce/config/category-settings'
+  defaults:
+    _form: '\Drupal\alshaya_acm_product_category\Form\AlshayaAcmProductCategorySettingsForm'
+    _title: 'ACM Category Settings'
+  requirements:
+    _permission: 'access commerce product settings'
