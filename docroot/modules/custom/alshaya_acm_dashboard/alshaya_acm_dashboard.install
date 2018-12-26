@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_dashboard module.
+ */
+
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant dashboard access permission to webmaster.
+ */
+function alshaya_acm_dashboard_update_8001() {
+  $role = Role::load('webmaster');
+  $role->grantPermission('access commerce dashboard');
+  $role->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant dashboard access permission to webmaster.
+ */
+function alshaya_acm_dashboard_install() {
+  alshaya_acm_dashboard_update_8001();
+}
