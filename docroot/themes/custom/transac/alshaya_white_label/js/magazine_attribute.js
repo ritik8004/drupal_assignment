@@ -86,13 +86,13 @@
     }
 
     if ($('.configurable-swatch.product-swatch').length > 0) {
-      swatch_items_to_show = product_swatches + 1;
+      swatch_items_to_show = product_swatches;
     }
     else {
-      swatch_items_to_show = colour_swatches + 1;
+      swatch_items_to_show = colour_swatches;
     }
 
-    if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show) {
+    if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show + 1) {
       if ($(window).width() > 767) {
         $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
         $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
@@ -200,6 +200,7 @@
     var sku_swatch = $('.configurable-swatch', context);
     if (sku_swatch !== 'undefined') {
       $('.magazine-swatch-placeholder').replaceWith('<div class="magazine-swatch-placeholder">' + sku_swatch.html() + '</div>');
+      $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
 
       $('.magazine-product-description .select2Option li a').on('click', function (e) {
         e.preventDefault();

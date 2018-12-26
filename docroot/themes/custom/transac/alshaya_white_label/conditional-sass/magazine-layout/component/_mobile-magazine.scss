@@ -79,9 +79,6 @@
 
   .content__title_wrapper {
     @include breakpoint($only-mobile) {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: auto auto auto;
       padding: 1rem;
 
       &.fixed {
@@ -113,8 +110,21 @@
 
   .basic-details-wrapper {
     .sku-base-form {
-      display: table;
-      width: 100%;
+      @include breakpoint($tablet) {
+        display: grid;
+        grid-column: 3 / -1;
+        grid-row: 1 / 2;
+        width: 100%;
+
+        button[type="submit"] {
+          width: 100%;
+          max-width: 11.125rem;
+
+          html[lang=ar] & {
+            max-width: 13.7rem;
+          }
+        }
+      }
     }
 
     @include breakpoint($only-mobile) {
