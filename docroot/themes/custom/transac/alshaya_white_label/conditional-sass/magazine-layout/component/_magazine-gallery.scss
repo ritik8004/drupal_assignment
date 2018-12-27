@@ -44,6 +44,10 @@
     font-size: 0.75rem;
     padding: 0;
 
+    .magazine-desc-wrapper {
+      padding: 2rem;
+    }
+
     @include breakpoint($tablet) {
       width: 60%;
       margin: 0 auto;
