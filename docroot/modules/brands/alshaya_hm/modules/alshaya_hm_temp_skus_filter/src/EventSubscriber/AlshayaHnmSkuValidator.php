@@ -54,11 +54,13 @@ class AlshayaHnmSkuValidator implements EventSubscriberInterface {
       return;
     }
 
+    // Skip the product by default. Also, for case where we have no assets with
+    // the SKU.
+    $product['skip'] = TRUE;
+
     // Check for assets to contain valid image types for season 6+ products.
     if (isset($product['extension'], $product['extension']['assets'])) {
       $assets = $product['extension']['assets'];
-      // Skip the product by default.
-      $product['skip'] = TRUE;
 
       foreach ($assets as $asset) {
         // Ignore season 5 assets & assets missing a type.
