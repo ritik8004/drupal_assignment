@@ -7,8 +7,6 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -107,29 +105,6 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
   // Use title of child product in cart only for PB.
   if ($title) {
     isset($variables['name']['#title']) ? $variables['name']['#title'] = $title : $variables['name'] = $title;
-  }
-}
-
-/**
- * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
- */
-function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKU $sku, SKUInterface $selected_sku = NULL) {
-  if ($sku->bundle() != 'configurable') {
-    return;
-  }
-
-  // Update title of parent product based on selected sku if available.
-  if ($selected_sku instanceof SKUInterface) {
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $title = $productInfoHelper->getTitle($selected_sku, 'pdp');
-
-    if ($title) {
-      // For modal and teaser it will be h2, for main product h1.
-      $selector = 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h1,';
-      $selector .= 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h2';
-      $response->addCommand(new HtmlCommand($selector, $title));
-    }
   }
 }
 
