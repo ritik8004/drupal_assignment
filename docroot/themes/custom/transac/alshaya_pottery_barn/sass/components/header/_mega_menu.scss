@@ -13,11 +13,11 @@
 
       a.menu--one__link,
       div.menu__link.menu--one__link {
+        font-size: 0.8125rem;
         height: 2rem;
         border-bottom: none;
         border-top: none;
         color: $mm_l1_link;
-        text-transform: uppercase;
         display: block;
         line-height: 1;
       }
@@ -120,7 +120,10 @@
       div.menu-two__link {
         @include breakpoint($desktop) {
           font-weight: bold;
-          text-transform: uppercase;
+        }
+
+        @include breakpoint($upto-desktop) {
+          text-transform: capitalize;
         }
       }
 
@@ -136,8 +139,24 @@
 
   .menu--three__list-item > .menu-two__link-wrapper a {
     @include breakpoint($desktop) {
+      &.menu__link {
+        font-size: 0.875rem !important;
+      }
+
       &:hover {
         text-decoration: underline;
+      }
+    }
+  }
+
+  .menu--three__list {
+    .level-three__wrapper {
+      .menu--three__list-item {
+        a {
+          @include breakpoint($upto-desktop) {
+            text-transform: capitalize;
+          }
+        }
       }
     }
   }

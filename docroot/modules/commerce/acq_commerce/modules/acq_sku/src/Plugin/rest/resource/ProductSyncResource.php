@@ -206,7 +206,7 @@ class ProductSyncResource extends ResourceBase {
 
         // If skip attribute is set via any event subscriber, skip importing the
         // product.
-        if ($product['skip']) {
+        if (isset($product['skip']) && $product['skip']) {
           $ignored_skus[] = $product['sku'] . '(SKU doesn\'t meet the criteria for import set for this site.)';
           $ignored++;
           continue;
