@@ -22,7 +22,6 @@ function alshaya_eg_element_info_alter(array &$info) {
 function _alshaya_eg_country_process(array &$element, FormStateInterface $form_state) {
   // Validation for postal code.
   $element['postal_code']['#element_validate'][] = '_alshaya_eg_postalcode_validate';
-
   return $element;
 }
 
@@ -30,8 +29,7 @@ function _alshaya_eg_country_process(array &$element, FormStateInterface $form_s
  * Adding validation for the postal code.
  */
 function _alshaya_eg_postalcode_validate($element, FormStateInterface $form_state) {
-  $postal_code = $element['#default_value'];
-  if (!empty($postal_code) && !preg_match('/^[0-9]{5}$/', $postal_code)) {
+  if (!empty($element['#default_value']) && !preg_match('/^[0-9]{5}$/', $element['#default_value'])) {
     $form_state->setError($element, t('%name field is not in the right format.', ['%name' => t('Postal code')]));
   }
 }
