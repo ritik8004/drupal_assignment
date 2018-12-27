@@ -1362,6 +1362,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   }
 
   if ($tree_pointer instanceof SKU) {
+    $selected_sku = $tree_pointer;
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
@@ -1521,6 +1522,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     if ($display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
+      $selected_sku = $first_child;
 
       /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
@@ -1561,6 +1563,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     // Send the updated settings in ajax response.
     $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
   }
+
+  \Drupal::moduleHandler()->alter('alshaya_acm_product_add_to_cart_ajax_response', $response, $sku, $selected_sku);
 
   return $response;
 }
