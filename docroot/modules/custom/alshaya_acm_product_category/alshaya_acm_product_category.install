@@ -33,6 +33,7 @@ function alshaya_acm_product_category_update_8027() {
 
 /**
  * Implements hook_update_N().
+ *
  * Add new field to store original category.
  */
 function alshaya_acm_product_category_update_8026() {
