@@ -425,7 +425,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         if ($sku_for_gallery instanceof SKUInterface) {
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, 'pdp');
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE, $sku_entity);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE);
         }
 
         $build['price_block'] = $skuManager->getPriceBlock($selected_variant);
@@ -609,7 +609,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         try {
           $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity);
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', FALSE, $sku_entity);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', FALSE);
         }
         catch (\Exception $e) {
           // Do nothing.
@@ -1546,7 +1546,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
 
         $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
-        $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE, $sku);
+        $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE);
 
         if (!empty($build['gallery'])) {
           if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE && $context != 'modal') {
