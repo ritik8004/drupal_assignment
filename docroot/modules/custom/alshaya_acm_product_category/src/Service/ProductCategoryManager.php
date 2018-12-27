@@ -295,6 +295,11 @@ class ProductCategoryManager {
       if ($node instanceof NodeInterface) {
         if ($this->processSalesCategoryCheckForNode($node)) {
           $node->save();
+
+          // Reset static cache to ensure we use updated node in later
+          // code execution.
+          // @see Drupal\acq_sku\AcquiaCommerce\SKUPluginBase::getDisplayNode().
+          drupal_static_reset('getDisplayNode');
         }
       }
     }
