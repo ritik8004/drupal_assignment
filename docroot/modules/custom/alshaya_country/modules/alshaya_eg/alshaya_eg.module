@@ -32,6 +32,6 @@ function _alshaya_eg_country_process(array &$element, FormStateInterface $form_s
 function _alshaya_eg_postalcode_validate($element, FormStateInterface $form_state) {
   $postal_code = $element['#default_value'];
   if (!empty($postal_code) && !preg_match('/^[0-9]{5}$/', $postal_code)) {
-    $form_state->setError($element, t('%name field is not in the right format.', ['%name' => 'Zip/Postal Code']));
+    $form_state->setError($element, t('%name field is not in the right format.', ['%name' => t('Postal code')]));
   }
 }
