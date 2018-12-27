@@ -80,17 +80,19 @@
       swatch_items_to_show = colour_swatches;
     }
 
-    if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show + 1) {
-      if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+    $('.configurable-swatch').each(function () {
+      if ($(this).find('.select-buttons li').length > swatch_items_to_show + 1) {
+        if ($(window).width() > 767) {
+          $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+          $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+        }
+        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-effect');
+        $('.show-more-color').show();
       }
-      $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-effect');
-      $('.show-more-color').show();
-    }
-    else {
-      $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
-    }
+      else {
+        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
+      }
+    });
 
     $('.show-more-color').on('click', function (e) {
       if ($(window).width() > 767) {
@@ -245,6 +247,9 @@
 
     $('.size-tray-close', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      if ($('body').hasClass('open-tray-without-selection')) {
+        $('body').removeClass('open-tray-without-selection');
+      }
     });
 
     $('.size-tray-content .select2Option li a').on('click', function (e) {
@@ -257,6 +262,10 @@
       }
 
       $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
+
+      // Replace the size tray text with selected value..
+      $('.size-tray-link').html(clickedOption.text());
+
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');
@@ -358,8 +367,19 @@
           setTimeout(function () {
             if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
               $('.size-tray').toggleClass('tray-open');
+              $('body').addClass('open-tray-without-selection');
             }
           }, 10);
+        });
+
+        // If tray is opening on clicking of add to basket (missing attribute selection).
+        // then on selection of attribute product should add to basket directly.
+        $(document).ajaxComplete(function (event, xhr, settings) {
+          if ((settings.hasOwnProperty('extraData')) &&
+            ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0)) &&
+            $('body').hasClass('open-tray-without-selection')) {
+            $('.edit-add-to-cart').mousedown();
+          }
         });
 
       }
