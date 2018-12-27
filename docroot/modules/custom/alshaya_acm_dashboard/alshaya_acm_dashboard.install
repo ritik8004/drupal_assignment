@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * Contains install, update, uninstall hooks for alshaya_acm_dashboard module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_acm_dashboard_install() {
+  // Grant dashboard access permission to webmaster.
+  \Drupal::configFactory()->getEditable('user.role.webmaster')->save();
+}
