@@ -398,6 +398,8 @@ class AlshayaAcmCommands extends DrushCommands {
   /**
    * Check config state as a part of post-command to reset.
    *
+   * Added (*) to execute after each drush command.
+   *
    * @hook post-command *
    */
   public function resetConfigPostCommand($result, CommandData $commandData) {
