@@ -126,8 +126,8 @@ class StockManager {
     // Check status + quantity of children if configurable.
     switch ($sku->bundle()) {
       case 'configurable':
-        // To check if product is in stock or not, we just need first child in
-        // stock.
+        // For configurable product to be in-stock only one in-stock child
+        // is enough.
         foreach ($sku->get('field_configured_skus')->getValue() as $child) {
           if (empty($child['value'])) {
             continue;
