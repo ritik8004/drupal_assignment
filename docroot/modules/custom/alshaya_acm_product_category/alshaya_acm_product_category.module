@@ -19,10 +19,10 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 function alshaya_acm_product_category_module_implements_alter(&$implementations, $hook) {
   // To call the alshaya_acm_product_category_acq_sku_product_node_alter first.
   // We want to categorise first before creating color nodes.
-  if ($hook == 'acq_sku_product_node') {
-    $group = $implementations['acq_sku_product_node'];
-    unset($implementations['alshaya_acm_product_build']);
-    $implementations = ['alshaya_acm_product_build' => $group] + $implementations;
+  if ($hook == 'acq_sku_product_node_alter') {
+    $group = $implementations['alshaya_acm_product_category'];
+    unset($implementations['alshaya_acm_product_category']);
+    $implementations = ['alshaya_acm_product_category' => $group] + $implementations;
   }
 }
 
