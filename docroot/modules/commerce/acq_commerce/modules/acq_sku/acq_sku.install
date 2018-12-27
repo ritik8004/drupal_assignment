@@ -17,10 +17,11 @@ use Symfony\Component\Yaml\Yaml;
  * Manage stock through separate module acq_sku_stock.
  */
 function acq_sku_update_8018() {
+  \Drupal::service('module_installer')->install(['acq_sku_stock']);
+
+  // @TODO: Copy existing stock data from SKU entity to new tables.
   // Apply updates to remove stock field.
   \Drupal::service('entity.definition_update_manager')->applyUpdates();
-
-  \Drupal::service('module_installer')->install(['acq_sku_stock']);
 }
 
 /**
@@ -184,12 +185,6 @@ function acq_sku_update_8002() {
   \Drupal::configFactory()
     ->getEditable('rest.resource.acq_productstocksync')
     ->setData($config_yaml)
-    ->save();
-
-  // Set stock mode to pull by default.
-  \Drupal::configFactory()
-    ->getEditable('acq_sku.settings')
-    ->set('stock_mode', 'pull')
     ->save();
 }
 

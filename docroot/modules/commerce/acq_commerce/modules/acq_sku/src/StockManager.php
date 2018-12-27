@@ -11,7 +11,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class StockManager {
@@ -109,8 +108,17 @@ class StockManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKU $sku) {
-    $stock = $this->getStock($sku->getSku());
+    $sku_string = $sku->getSku();
 
+    $static = &drupal_static(self::class . '_' . __FUNCTION__, []);
+    if (isset($static[$sku_string])) {
+      return $static[$sku_string];
+    }
+
+    // Initialise static value with FALSE.
+    $static[$sku_string] = FALSE;
+
+    $stock = $this->getStock($sku_string);
     if (empty($stock['status'])) {
       return FALSE;
     }
@@ -128,18 +136,19 @@ class StockManager {
           $child_sku = SKU::loadFromSku($child['value']);
           if ($child_sku instanceof SKU) {
             if ($this->getStockQuantity($child_sku->getSku()) > 0) {
-              return TRUE;
+              $static[$sku_string] = TRUE;
+              break;
             }
           }
         }
         break;
       case 'simple':
       default:
-        return (bool) $this->getStockQuantity($sku->getSku());
+        $static[$sku_string] = (bool) $this->getStockQuantity($sku->getSku());
         break;
     }
 
-    return FALSE;
+    return $static[$sku_string];
   }
 
   /**
@@ -175,6 +184,7 @@ class StockManager {
    */
   public function getStock(string $sku) {
     $query = $this->connection->select('acq_sku_stock');
+    $query->fields('acq_sku_stock');
     $query->condition('sku', $sku);
     $result = $query->execute()->fetchAll();
 
@@ -185,7 +195,8 @@ class StockManager {
 
     // Get the first result.
     // @TODO: Add checks for multiple entries.
-    return reset($result);
+    $data = reset($result);
+    return (array) $data;
   }
 
   /**
