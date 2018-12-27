@@ -6,7 +6,7 @@ alshaya_acm_dashboard.dashboard:
   options:
     _admin_route: TRUE
   requirements:
-    _permission: 'access commerce dashboard'
+    _permission: 'access alshaya acm dashaboard'
 
 alshaya_acm_dashboard.settings_form:
   path: '/admin/commerce/config/alshaya-acm-dashboard'
