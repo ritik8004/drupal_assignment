@@ -50,13 +50,8 @@ field_settings:
   stock:
     label: Stock
     datasource_id: 'entity:node'
-    property_path: 'field_skus:entity:stock'
+    property_path: sticky
     type: integer
-    dependencies:
-      config:
-        - field.storage.node.field_skus
-      module:
-        - acq_sku
   field_category:
     label: Category
     datasource_id: 'entity:node'
