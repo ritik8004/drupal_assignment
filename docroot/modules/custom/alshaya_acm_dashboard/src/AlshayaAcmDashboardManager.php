@@ -83,7 +83,7 @@ class AlshayaAcmDashboardManager {
     ];
 
     try {
-      $endpoint = 'api/queues/mc/' . $queue . '.' . $brand_name;
+      $endpoint = 'api/queues/' . $rabbitmq_creds->username . '/' . $queue . '.' . $brand_name;
 
       $client = $this->clientFactory->fromOptions($clientConfig);
       $response = $client->get($endpoint);

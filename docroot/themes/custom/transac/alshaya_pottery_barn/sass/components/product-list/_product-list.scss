@@ -65,6 +65,14 @@
     }
   }
 
+  ul.js-pager__items {
+    a {
+      background-color: $plp_pager_btn_bg;
+      border: none;
+      text-transform: uppercase;
+    }
+  }
+
   .c-products-list {
     .view-content {
       & > div {
@@ -101,6 +109,9 @@
   }
 
   .swatches {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 0.625rem;
 
     > a {
@@ -108,14 +119,24 @@
 
       .swatch-block {
         display: block;
-        width: 0.875rem;
-        height: 0.875rem;
+        width: 1.875rem;
+        height: 1.875rem;
         margin: 0 0.3125rem;
+
+        @include breakpoint($only-mobile) {
+          width: 1.1875rem;
+          height: 1.1875rem;
+        }
 
         img {
           width: 100%;
           height: 100%;
         }
+      }
+
+      &.swatch-more-link {
+        text-decoration: underline;
+        font-size: 0.75rem;
       }
     }
   }
