@@ -22,13 +22,6 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Implements hook_drush_command_alter().
- */
-function alshaya_acm_drush_command_alter(&$command) {
-  \Drupal::service('alshaya_acm.config_check')->checkConfig();
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
