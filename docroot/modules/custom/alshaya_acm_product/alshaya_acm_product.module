@@ -1243,7 +1243,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
         if ($variation instanceof SKU) {
           $attribute_parts = explode(':', $key);
 
-          $quantity = (int) alshaya_acm_get_stock_from_sku($variation);
+          $quantity = $sku_manager->getStockQuantity($variation);
           if ($quantity > 0) {
             // Set the dropdown quantity options only for selected option.
             if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $attribute_parts[1]) {
@@ -1292,7 +1292,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     }
   }
   // Stock check for quantity for all other products.
-  elseif ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
+  elseif ($quantity = $sku_manager->getStockQuantity($sku_entity)) {
     $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
   }
   else {
@@ -1363,7 +1363,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
   if ($tree_pointer instanceof SKU) {
     $selected_sku = $tree_pointer;
-    if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
+    if ($quantity = $sku_manager->getStockQuantity($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
 
@@ -1763,7 +1763,9 @@ function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $sto
     return $data;
   }
 
-  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   foreach ($nodes as $node) {
     /* @var \Drupal\node\Entity\Node $node */
     if (!$node instanceof NodeInterface) {
@@ -1773,9 +1775,8 @@ function alshaya_acm_product_filter_out_of_stock_products(array $nodes, int $sto
     if ($stock_check_limit <= 0) {
       break;
     }
-    // In case stock_mode is not "push", we always select the product
-    // assuming it has stock.
-    if (($stock_mode == 'push' && alshaya_acm_get_stock_from_product($node)) || $stock_mode !== 'push') {
+
+    if ($skuManager->isProductNodeInStock($node)) {
       $data[] = $node;
       $stock_check_limit--;
     }
