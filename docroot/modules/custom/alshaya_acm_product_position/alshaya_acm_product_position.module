@@ -60,9 +60,9 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     $conditions = $query->getConditionGroup()->getConditions();
     foreach ($conditions as $condition) {
       if ($condition) {
-        $query_conditions = $query->hasTag('category_product_list')
-          ? $condition
-          : ($condition instanceof ConditionGroupInterface ? $condition->getConditions()[0] : $condition);
+        $query_conditions = $condition instanceof ConditionGroupInterface
+          ? $condition->getConditions()[0]
+          : $condition;
         if ($query_conditions->getField() == 'tid') {
           $tid = $query_conditions->getValue();
           // First tid in the array is always the current tid.
