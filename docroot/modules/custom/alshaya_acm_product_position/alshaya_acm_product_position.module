@@ -20,34 +20,66 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
   if ($query->hasTag('views_alshaya_product_list') || $query->hasTag('category_product_list')) {
     $sorts =& $query->getSorts();
 
-    // Get the default sort which is always the first config value.
-    $default_sort = current(_alshaya_acm_product_position_get_config());
-    // This to check if user has selected sort from drop down or the page load.
-    $exposed_input = !empty($_REQUEST['sort_bef_combine']) ? $_REQUEST['sort_bef_combine'] : NULL;
-
     // Get and set sort order from the views config.
     $views_storage = Views::getView('alshaya_product_list')->storage;
     $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
 
+    // Get all available sorting options as per sorting done by admin
+    // (intersection of sort options in views and sort options from config).
+    $sort_options = _alshaya_acm_product_position_sorted_available_options($views_sort);
+
+    // Get default sort option, first one from available sorted sort options.
+    $default_sort = reset($sort_options);
+    list ($default_sort_key, $default_sort_order) = explode(' ', $default_sort);
+
+    // Prepare flag to check if default sort option is sort by position or not.
+    $default_sort_is_nid = ($default_sort_key == 'nid');
+
     // For the rest endpoint.
     // Tag added in CategoryProductListResource::prepareAndExecuteQuery().
     if ($query->hasTag('category_product_list')) {
-      // We apply default sort only when no other sort is applied except stock.
-      if (!isset($sorts[$default_sort]) && count($sorts) == 1 && isset($sorts['stock'])) {
-        $sorts[$default_sort] = $views_sort[$default_sort]['order'];;
+      // @TODO: Find a way to use the class constant here.
+      // Module alshaya_mobile_app is not dependency of current one.
+      // Get requested sort option for mobile app.
+      $exposed_input = $_REQUEST['sort'] ?? '';
+
+      // If no sorting option provided, we add the default sort here.
+      // Case where sort by position is default, it will be handled below.
+      if (empty($exposed_input) && !$default_sort_is_nid) {
+        $sorts[$default_sort_key] = $default_sort_order;
       }
     }
-    // If position(nid) is set as the default sort.
-    elseif ($default_sort != 'nid' && empty($exposed_input)) {
-      // Removing the nid default sort as coming from views config.
-      unset($sorts['nid']);
-
-      $sorts[$default_sort] = $views_sort[$default_sort]['order'];
-      return;
+    // For web get the requested sort option.
+    else {
+      $exposed_input = $_REQUEST['sort_bef_combine'] ?? '';
     }
 
-    // Check if nid is there in sorts, we are using it for position.
-    if (!isset($sorts['nid'])) {
+    $sort_by_position = FALSE;
+
+    // If requested sort option is position, set the flag to TRUE.
+    if (strpos($exposed_input, 'nid') === 0) {
+      $sort_by_position = TRUE;
+    }
+    // If no sort option requested and default sorting is by position, set the
+    // flag to TRUE.
+    elseif (empty($exposed_input) && $default_sort_is_nid) {
+      $sort_by_position = TRUE;
+    }
+
+    // Check if sort by position flag is true. If not we don't want to do
+    // execute any code after this condition.
+    if (!$sort_by_position) {
+      // For mobile app add sorts at the end to remove duplicates.
+      // This is done in views for web.
+      if ($query->hasTag('category_product_list')) {
+        if (empty(name_1)) {
+          $sorts['name_1'] = 'ASC';
+        }
+
+        $sorts['original_nid'] = 'DESC';
+        $sorts['nid'] = 'asc';
+      }
+
       return;
     }
 
@@ -111,18 +143,8 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
     // is nothing in exposed input.
     if (is_array($view->sort) && !empty($view->sort)) {
       $sorts = $view->sort;
-      $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
-
-      // Remove the ones not enabled in view's sorting options.
-      foreach ($labels as $key => $sort_option) {
-        $sort_field = explode(' ', $key)[0];
-        if (!isset($sorts[$sort_field])) {
-          unset($labels[$key]);
-        }
-      }
-
-      $labels = _alshaya_acm_product_position_sorted_options($labels);
-      $filters['sort_bef_combine'] = reset(array_keys($labels));
+      $sort_options = _alshaya_acm_product_position_sorted_available_options($sorts);
+      $filters['sort_bef_combine'] = reset($sort_options);
 
       $view->setExposedInput($filters);
     }
@@ -257,4 +279,28 @@ function _alshaya_acm_product_position_get_config($label = FALSE) {
     return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue((array) $position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
+}
+
+/**
+ * Wrapper function to get sorted and enabled + available sort options.
+ *
+ * @param array $sorts
+ *   Sort options in views.
+ *
+ * @return array
+ *   Sorted and enabled + available sort options.
+ */
+function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
+  $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
+
+  // Remove the ones not enabled in view's sorting options.
+  foreach ($labels as $key => $sort_option) {
+    $sort_field = explode(' ', $key)[0];
+    if (!isset($sorts[$sort_field])) {
+      unset($labels[$key]);
+    }
+  }
+
+  $labels = _alshaya_acm_product_position_sorted_options($labels);
+  return array_keys($labels);
 }
