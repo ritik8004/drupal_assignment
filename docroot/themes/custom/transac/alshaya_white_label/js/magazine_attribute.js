@@ -242,10 +242,12 @@
 
     $('.size-tray-link', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      $('body').addClass('tray-overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
       }
@@ -263,7 +265,7 @@
       $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
 
       // Replace the size tray text with selected value..
-      $('.size-tray-link').html(clickedOption.text());
+      $('.size-tray-link').addClass('selected-text').html(clickedOption.text());
 
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
@@ -278,6 +280,7 @@
 
       // Closing the tray after selection.
       $('.size-tray').toggleClass('tray-open');
+      $('body').removeClass('tray-overlay');
     });
   }
 
