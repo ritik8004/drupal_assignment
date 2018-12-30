@@ -111,7 +111,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list);
+    $this->setAddressCachedData($term_list, 'getAllGovernates');
 
     return $term_list;
   }
@@ -187,7 +187,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list);
+    $this->setAddressCachedData($term_list, 'getAllAreas');
 
     return $term_list;
   }
@@ -232,7 +232,7 @@ class AddressBookAreasTermsHelper {
       $terms = $this->termStorage->loadMultiple($tids);
     }
 
-    $this->setAddressCachedData($terms);
+    $this->setAddressCachedData($terms, 'getLocationTerms');
 
     return $terms;
   }
@@ -304,8 +304,8 @@ class AddressBookAreasTermsHelper {
    * @return string
    *   Cache key.
    */
-  public function getAddressbookCachedId() {
-    return 'alshaya_addressbook:' . \Drupal::languageManager()->getCurrentLanguage()->getId();
+  public function getAddressbookCachedId($key) {
+    return 'alshaya_addressbook:' . \Drupal::languageManager()->getCurrentLanguage()->getId() . $key;
   }
 
   /**
@@ -319,7 +319,7 @@ class AddressBookAreasTermsHelper {
    */
   public function getAddressCachedData($key) {
     $data = &drupal_static($key);
-    $cid = $this->getAddressbookCachedId();
+    $cid = $this->getAddressbookCachedId($key);
 
     if ($cache = \Drupal::cache()->get($cid)) {
       $data = $cache->data;
@@ -333,9 +333,11 @@ class AddressBookAreasTermsHelper {
    *
    * @param array $data
    *   Data to set in cache.
+   * @param string $key
+   *   Key of the data to get from cache.
    */
-  public function setAddressCachedData(array $data) {
-    $cid = $this->getAddressbookCachedId();
+  public function setAddressCachedData(array $data, $key) {
+    $cid = $this->getAddressbookCachedId($key);
     \Drupal::cache()->set($cid, $data);
   }
 
