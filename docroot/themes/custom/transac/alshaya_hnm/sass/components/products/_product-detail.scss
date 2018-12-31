@@ -223,6 +223,12 @@
       label {
         @include u-visibility(none);
       }
+
+      select.form-select {
+        @include select-style(12.3125rem);
+
+        width: 100%;
+      }
     }
   }
 }
