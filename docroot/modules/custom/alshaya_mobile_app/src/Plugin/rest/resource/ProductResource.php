@@ -214,8 +214,6 @@ class ProductResource extends ResourceBase {
    *   Product Data.
    */
   private function getSkuData(SKUInterface $sku): array {
-    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -224,7 +222,7 @@ class ProductResource extends ResourceBase {
 
     $data['id'] = (int) $sku->id();
     $data['sku'] = $sku->getSku();
-    $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku);
+    $parent_sku = $this->skuManager->getParentSkuBySku($sku);
     $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
