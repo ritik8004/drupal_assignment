@@ -72,12 +72,12 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
       // For mobile app add sorts at the end to remove duplicates.
       // This is done in views for web.
       if ($query->hasTag('category_product_list')) {
-        if (empty(name_1)) {
-          $sorts['name_1'] = 'ASC';
+        if (empty($sorts['name_1'])) {
+          $sorts['name_1'] = QueryInterface::SORT_ASC;
         }
 
-        $sorts['original_nid'] = 'DESC';
-        $sorts['nid'] = 'asc';
+        $sorts['original_nid'] = QueryInterface::SORT_DESC;
+        $sorts['nid'] = QueryInterface::SORT_ASC;
       }
 
       return;
