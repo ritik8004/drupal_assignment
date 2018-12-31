@@ -12,6 +12,11 @@
     .facet-item__value {
       text-transform: capitalize;
     }
+
+    .facet-item__value,
+    .facet-item__count {
+      display: inline-block;
+    }
   }
 
   a {
