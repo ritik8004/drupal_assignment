@@ -281,9 +281,11 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 function alshaya_acm_product_node_delete(NodeInterface $node) {
   if ($node->bundle() == 'acq_product') {
     $sku = $node->get('field_skus')->getString();
+    $color = $node->get('field_product_color')->getString();
 
     // Delete the color nodes available in system for this particular product.
-    if ($sku) {
+    // Do nothing when deleting color node itself.
+    if ($sku && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $nids = $skuManager->getColorNodeIds($sku);
