@@ -56,6 +56,10 @@
       }
     }
 
+    .content__title_wrapper {
+      border-bottom: none;
+    }
+
     @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
