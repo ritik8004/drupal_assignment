@@ -560,12 +560,7 @@ class AlshayaAcmCommands extends DrushCommands {
       }
     }
     else {
-      if (!empty($command_options['skus'])) {
-        drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
-      }
-      else {
-        $this->output->writeln('No enabled SKUs found to import.');
-      }
+      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
     }
   }
 
