@@ -92,6 +92,10 @@
       vertical-align: bottom !important;
     }
   }
+
+  .facet-item__count {
+    display: inline-block;
+  }
 }
 
 .c-facet__label {
@@ -114,6 +118,7 @@
 
   .facets-soft-limit-link {
     display: none;
+    float: $left;
   }
 }
 
