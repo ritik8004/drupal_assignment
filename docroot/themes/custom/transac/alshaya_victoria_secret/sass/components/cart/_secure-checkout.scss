@@ -23,7 +23,6 @@
       #addresses-header {
         #add-address-button {
           font-family: $vs-regular;
-          text-transform: capitalize;
 
           @include breakpoint($only-mobile) {
             position: absolute;
