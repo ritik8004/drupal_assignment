@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class AddressBookAreasTermsHelper.
@@ -92,7 +93,7 @@ class AddressBookAreasTermsHelper {
    *   List or governates.
    */
   public function getAllGovernates() {
-    $governate = $this->getAddressCachedData('getAllGovernates');
+    $governate = $this->getAddressCachedData('get_addressbook_areas');
     if (is_array($governate)) {
       return $governate;
     }
@@ -111,7 +112,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'getAllGovernates');
+    $this->setAddressCachedData($term_list, 'get_addressbook_areas');
 
     return $term_list;
   }
@@ -161,7 +162,7 @@ class AddressBookAreasTermsHelper {
    *   List or areas.
    */
   public function getAllAreas() {
-    $area = $this->getAddressCachedData('getAllAreas');
+    $area = $this->getAddressCachedData('get_addressbook_areas');
 
     if (is_array($area)) {
       return $area;
@@ -187,7 +188,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'getAllAreas');
+    $this->setAddressCachedData($term_list, 'get_addressbook_areas');
 
     return $term_list;
   }
@@ -206,12 +207,6 @@ class AddressBookAreasTermsHelper {
    *   Array of term objects.
    */
   private function getLocationTerms(array $conditions = []) {
-    $locations = $this->getAddressCachedData('getLocationTerms');
-
-    if (is_array($locations)) {
-      return $locations;
-    }
-
     $terms = [];
 
     $query = $this->termStorage->getQuery()->condition(
@@ -231,8 +226,6 @@ class AddressBookAreasTermsHelper {
     if (!empty($tids)) {
       $terms = $this->termStorage->loadMultiple($tids);
     }
-
-    $this->setAddressCachedData($terms, 'getLocationTerms');
 
     return $terms;
   }
@@ -305,7 +298,7 @@ class AddressBookAreasTermsHelper {
    *   Cache key.
    */
   public function getAddressbookCachedId($key) {
-    return 'alshaya_addressbook:' . \Drupal::languageManager()->getCurrentLanguage()->getId() . $key;
+    return 'alshaya_addressbook:' . $this->languageManager->getCurrentLanguage()->getId() . $key;
   }
 
   /**
@@ -321,7 +314,7 @@ class AddressBookAreasTermsHelper {
     $data = &drupal_static($key);
     $cid = $this->getAddressbookCachedId($key);
 
-    if ($cache = \Drupal::cache()->get($cid)) {
+    if ($cache = $this->cache->get($cid)) {
       $data = $cache->data;
       return $data;
     }
@@ -338,7 +331,19 @@ class AddressBookAreasTermsHelper {
    */
   public function setAddressCachedData(array $data, $key) {
     $cid = $this->getAddressbookCachedId($key);
-    \Drupal::cache()->set($cid, $data);
+    $this->cache->set($cid, $data, Cache::PERMANENT, ['taxonomy_term:area_list']);
+  }
+
+  /**
+   * Clear the cache for area list.
+   *
+   * @param string $key
+   *   Key of the data to reset the cache..
+   */
+  public function clearAddressCachedData($key) {
+    drupal_static_reset($key);
+    $cid = $this->getAddressbookCachedId($key);
+    $this->cache->delete($cid);
   }
 
 }
