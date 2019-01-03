@@ -1,0 +1,17 @@
+alshaya_acm_dashboard.dashboard:
+  path: '/alshaya-acm-dashboard'
+  defaults:
+    _title: 'Alshaya Acm Dashboard'
+    _controller: '\Drupal\alshaya_acm_dashboard\Controller\AlshayaAcmDashboardController::queuesStatuses'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'access alshaya acm dashaboard'
+
+alshaya_acm_dashboard.settings_form:
+  path: '/admin/commerce/config/alshaya-acm-dashboard'
+  defaults:
+    _title: 'Alshaya acm dashboard settings'
+    _form: 'Drupal\alshaya_acm_dashboard\Form\SettingsForm'
+  requirements:
+    _permission: 'access commerce administration pages'

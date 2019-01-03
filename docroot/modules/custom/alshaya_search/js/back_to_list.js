@@ -18,14 +18,13 @@
     }
   });
 
+  function returnRefinedURL(key, url) {
+    return url.replace(new RegExp(key + "=\\w+"), "").replace("?&", "?").replace("&&", "&");
+  }
+
   // For RTL, we have some code to mess with page scroll.
   // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
   $(window).on('pageshow', function () {
-    function returnRefinedURL(key, url){
-       return url.replace(new RegExp(key + "=\\w+"),"").replace("?&","?")
-      .replace("&&","&");
-    }
-
     if (window.location.search.indexOf('show_on_load') > -1) {
       replaceState = window.location.href;
       var url = returnRefinedURL('show_on_load', window.location.href);
@@ -42,8 +41,9 @@
    * @returns {null}
    */
   function getStorageValues() {
-    if (localStorage.getItem(window.location.href)) {
-      return JSON.parse(localStorage.getItem(window.location.href));
+    let value = localStorage.getItem(window.location.pathname);
+    if (typeof value !== 'undefined' && value !== null) {
+      return JSON.parse(value);
     }
 
     return null;
@@ -113,7 +113,7 @@
         };
 
         // As local storage only supports string key/value pair.
-        localStorage.setItem(window.location.href, JSON.stringify(storage_details));
+        localStorage.setItem(window.location.pathname, JSON.stringify(storage_details));
       });
     }
   };

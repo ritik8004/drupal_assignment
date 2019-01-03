@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Component\Utility\NestedArray;
 
 /**
  * Provides a resource to get product details.
@@ -88,6 +90,13 @@ class ProductResource extends ResourceBase {
   private $cache;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * ProductResource constructor.
    *
    * @param array $configuration
@@ -112,18 +121,23 @@ class ProductResource extends ResourceBase {
    *   The mobile app utility service.
    * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
    *   Production Options Manager service object.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module handler.
    */
-  public function __construct(array $configuration,
-                              $plugin_id,
-                              $plugin_definition,
-                              array $serializer_formats,
-                              LoggerInterface $logger,
-                              SkuManager $sku_manager,
-                              SkuImagesManager $sku_images_manager,
-                              ProductInfoHelper $product_info_helper,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              MobileAppUtility $mobile_app_utility,
-                              ProductOptionsManager $product_options_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    array $serializer_formats,
+    LoggerInterface $logger,
+    SkuManager $sku_manager,
+    SkuImagesManager $sku_images_manager,
+    ProductInfoHelper $product_info_helper,
+    EntityTypeManagerInterface $entity_type_manager,
+    MobileAppUtility $mobile_app_utility,
+    ProductOptionsManager $product_options_manager,
+    ModuleHandlerInterface $module_handler
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->skuManager = $sku_manager;
     $this->skuImagesManager = $sku_images_manager;
@@ -136,6 +150,7 @@ class ProductResource extends ResourceBase {
       'tags' => [],
       'contexts' => [],
     ];
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -154,7 +169,7 @@ class ProductResource extends ResourceBase {
       $container->get('entity_type.manager'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('acq_sku.product_options_manager'),
-      $container->get('language_manager')
+      $container->get('module_handler')
     );
   }
 
@@ -174,7 +189,7 @@ class ProductResource extends ResourceBase {
     }
 
     $data = $this->getSkuData($skuEntity);
-
+    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
 
@@ -207,6 +222,8 @@ class ProductResource extends ResourceBase {
 
     $data['id'] = (int) $sku->id();
     $data['sku'] = $sku->getSku();
+    $parent_sku = $this->skuManager->getParentSkuBySku($sku);
+    $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');
 
     $prices = $this->skuManager->getMinPrices($sku);
@@ -214,6 +231,11 @@ class ProductResource extends ResourceBase {
     $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
     $data['stock'] = (int) $sku->get('stock')->getString();
     $data['in_stock'] = (bool) alshaya_acm_get_stock_from_sku($sku);
+    $data['delivery_options'] = [
+      'home_delivery' => [],
+      'click_and_collect' => [],
+    ];
+    $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsStatus($sku), $data['delivery_options']], TRUE);
 
     $linked_types = [
       LINKED_SKU_TYPE_RELATED,
@@ -272,12 +294,49 @@ class ProductResource extends ResourceBase {
           continue;
         }
         $variant = $this->getSkuData($child);
-        $variant['configurable_values'] = $this->getConfigurableValues($child);
+        $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
         $data['variants'][] = $variant;
       }
     }
 
     return $data;
+  }
+
+  /**
+   * Get delivery options for pdp.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Delivery options for pdp.
+   */
+  private function getDeliveryOptionsConfig(SKUInterface $sku) {
+    return [
+      'home_delivery' => alshaya_acm_product_get_home_delivery_config(),
+      'click_and_collect' => alshaya_click_collect_get_config(),
+    ];
+  }
+
+  /**
+   * Wrapper function to get media items for an SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Media Items.
+   */
+  private function getDeliveryOptionsStatus(SKUInterface $sku) {
+    $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+    return [
+      'home_delivery' => [
+        'status' => alshaya_acm_product_is_buyable($sku) && alshaya_acm_product_available_home_delivery($sku),
+      ],
+      'click_and_collect' => [
+        'status' => alshaya_acm_product_available_click_collect($sku),
+      ],
+    ];
   }
 
   /**
@@ -362,19 +421,24 @@ class ProductResource extends ResourceBase {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param array $attributes
+   *   Array of attributes containing attribute code and value.
    *
    * @return array
    *   Configurable Values.
    */
-  private function getConfigurableValues(SKUInterface $sku): array {
+  private function getConfigurableValues(SKUInterface $sku, array $attributes = []): array {
     if ($sku->bundle() !== 'simple') {
       return [];
     }
 
     $values = $this->skuManager->getConfigurableValues($sku);
-
+    $attr_values = array_column($attributes, 'value', 'attribute_code');
     foreach ($values as $attribute_code => &$value) {
       $value['attribute_code'] = $attribute_code;
+      if ($attr_value = $attr_values[str_replace('attr_', '', $attribute_code)]) {
+        $value['value'] = (string) $attr_value;
+      }
     }
 
     return array_values($values);
@@ -443,25 +507,38 @@ class ProductResource extends ResourceBase {
    *   Return the keyed array of size attributes code and label.
    */
   private function getSizeLabels(SKUInterface $sku): array {
-    $configurables = unserialize(
-      $sku->get('field_configurable_attributes')->getString()
-    );
+    $size_array = &drupal_static(__METHOD__, []);
 
-    if (empty($configurables)) {
-      return [];
+    if ($sku->bundle() == 'simple') {
+      $plugin = $sku->getPluginInstance();
+      if (($parent = $plugin->getParentSku($sku)) && $parent instanceof SKUInterface) {
+        $sku = $parent;
+      }
+    }
+    $sku_string = $sku->get('sku')->getString();
+
+    if (!isset($size_array[$sku_string])) {
+      $configurables = unserialize(
+        $sku->get('field_configurable_attributes')->getString()
+      );
+
+      if (empty($configurables)) {
+        return [];
+      }
+
+      $size_key = array_search('size', array_column($configurables, 'label'));
+      if (!isset($configurables[$size_key])) {
+        return [];
+      }
+
+      $size_options = [];
+      array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_options) {
+        $size_options[$value['value_id']] = $value['label'];
+      });
+      $size_array[$sku_string] = $size_options;
     }
 
-    $size_key = array_search('size', array_column($configurables, 'label'));
-    if (!isset($configurables[$size_key])) {
-      return [];
-    }
-
-    $size_array = [];
-    array_walk($configurables[$size_key]['values'], function ($value, $key) use (&$size_array) {
-      $size_array[$value['value_id']] = $value['label'];
-    });
-
-    return $size_array;
+    return $size_array[$sku_string];
   }
 
   /**

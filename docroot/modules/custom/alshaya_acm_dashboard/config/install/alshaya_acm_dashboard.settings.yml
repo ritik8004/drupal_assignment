@@ -1,0 +1,8 @@
+queues:
+  alshaya-pims-product-import-service : 'PIMS import Queue'
+  connectorProductPushQueue : 'Product Push Queue'
+  connectorStockPushQueue: 'Stock Push Queue'
+processing_rate_acm_queue: 5000
+processing_rate_alshaya-pims-product-import-service: 5000
+processing_rate_connectorProductPushQueue: 5000
+processing_rate_connectorStockPushQueue: 5000

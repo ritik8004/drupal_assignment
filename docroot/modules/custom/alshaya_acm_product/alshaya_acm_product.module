@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Controller\ProductStockController;
+use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
@@ -20,7 +21,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Cache\Cache;
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Link;
@@ -56,168 +57,31 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
  *   The items that will be indexed.
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
-  // Get the configurable fields we want to capture separately as fields.
-  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
-  $indexFields = array_filter($fields, function ($field) {
-    return !empty($field['index']);
-  });
-
-  $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  $logger = \Drupal::logger('alshaya_acm_product');
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
   foreach ($items as $item_id => $item) {
+    /** @var \Drupal\node\NodeInterface $object */
     $object = $item->getOriginalObject()->getValue();
-    $type = $object->getEntityType()->id();
-    $bundle = $object->bundle();
 
     // Deal with all indexable fields not available by default in configurable
     // parent but available in the variants.
     // Deal with final price of configurable that needs to come from variants.
-    if ($type == 'node' && $bundle == 'acq_product') {
-      $sku = $object->get('field_skus')->first()->getString();
-
-      if (!empty($sku)) {
-        $langcode = $object->language()->getId();
-        $sku_entity = SKU::loadFromSku($sku, $langcode, FALSE);
-
-        if (empty($sku_entity)) {
-          continue;
+    if ($object instanceof NodeInterface && $object->bundle() == 'acq_product') {
+      try {
+        $skuManager->processIndexItem($object, $item);
+      }
+      catch (\Throwable $e) {
+        if ($e->getCode() != 200) {
+          $logger->warning('Indexing failed for the node:@nid message:@message', [
+            '@nid' => $object->id(),
+            '@message' => $e->getMessage(),
+          ]);
         }
 
-        // For stock index, we use only in stock (2) or out of stock (0).
-        // We will use 2 for not-buyable products too.
-        // We will use 1 for all in pull mode.
-        $in_stock = 0;
-
-        if ($stock_mode == 'pull') {
-          $in_stock = 1;
-        }
-        elseif (!alshaya_acm_product_is_buyable($sku_entity)) {
-          $in_stock = 2;
-          // Get price and final price for the non-buyable SKU.
-          $sku_prices = $skuManager->getMinPrices($sku_entity);
-          // If no final price available for the SKU, then use initial price as
-          // the final price for the SKU (if initial price available).
-          if (empty($sku_prices['final_price']) && !empty($sku_prices['price'])) {
-            $item->getField('final_price')->setValues([$sku_prices['price']]);
-          }
-        }
-        elseif ($skuManager->isProductInStock($sku_entity)) {
-          $in_stock = 2;
-        }
-
-        $item->getField('stock')->setValues([$in_stock]);
-
-        if ($sku_entity->bundle() == 'configurable') {
-          $data = [];
-
-          $prices = $skuManager->getMinPrices($sku_entity);
-          $min_final_price = $prices['final_price'];
-          // Index final_price.
-          $item->getField('final_price')->setValues([$min_final_price]);
-          $child_sku_found = FALSE;
-          foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
-            try {
-              $child_sku_entity = SKU::loadFromSku($child_sku->getString(), $langcode, FALSE);
-            }
-            catch (\Exception $e) {
-              // Do nothing, child sku might not be available or deleted.
-              continue;
-            }
-
-            // Additional check if it returns NULL.
-            if (empty($child_sku_entity) || $skuManager->isSkuFreeGift($child_sku_entity)) {
-              continue;
-            }
-
-            $child_sku_found = TRUE;
-
-            // If child SKU is OOS, then no need to index attributes of this
-            // child SKU.
-            if (!alshaya_acm_get_stock_from_sku($child_sku_entity)) {
-              continue;
-            }
-
-            // Loop through the indexable fields.
-            foreach ($indexFields as $key => $field) {
-              $field_key = 'attr_' . $key;
-              $field_data = $child_sku_entity->get($field_key)->first();
-
-              if (!empty($field_data)) {
-                $field_value = $field_data->getString();
-                $data[$key][$field_value] = $field_value;
-              }
-            }
-          }
-
-          // Do not index the product in case its linked with a configurable
-          // SKU, but the config SKU is missing its children.
-          if (!$child_sku_found) {
-            unset($items[$item_id]);
-          }
-
-          // Load all item fields, we'll need it to check condition inside loop.
-          $itemFields = $item->getFields();
-
-          foreach ($data as $key => $values) {
-            $field_key = 'attr_' . $key;
-
-            // There is an issue with color field in indexes.
-            // It is color in solr and attr_color in database index.
-            // For all other fields it is attr_field in both indexes.
-            if (isset($itemFields[$field_key])) {
-              $item->getField($field_key)->setValues(array_keys($values));
-            }
-            elseif (isset($itemFields[$key])) {
-              $item->getField($key)->setValues(array_keys($values));
-            }
-          }
-
-          // It means there is no data indexed for child sku. Thus we need to
-          // skip the indexing of parent sku attributes as well.
-          if (empty($data)) {
-            // Iterate over each indexed field.
-            foreach ($itemFields as $field_key => $field_val) {
-              // Only unset/remove of attribute fields or this will remove the
-              // SKU from the indexing on default listing (without any filter).
-              if (strpos($field_key, 'attr_') !== FALSE && isset($items[$item_id])) {
-                try {
-                  $items[$item_id]->getField($field_key)->setValues([]);
-                }
-                catch (\Throwable $e) {
-                  // Do nothing, just log.
-                  \Drupal::logger('alshaya_acm_product')->error('Indexing failed for the index: @index field:@field_key item:@item_id', [
-                    '@index' => $index->id(),
-                    '@field_key' => $field_key,
-                    '@item_id' => $item_id,
-                  ]);
-                }
-              }
-            }
-          }
-        }
-
-        elseif ($sku_entity->bundle() == 'simple') {
-          if ($skuManager->isSkuFreeGift($sku_entity)) {
-            unset($items[$item_id]);
-          }
-
-          // If SKU is OOS.
-          if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
-            // Get indexed fields.
-            $fields = $items[$item_id]->getFields();
-            // Iterate over each indexed field.
-            foreach ($fields as $field_key => $field_val) {
-              // Only unset/remove of attribute fields or this will remove the
-              // SKU from the indexing on default listing (without any filter).
-              if (strpos($field_key, 'attr_') !== FALSE) {
-                $items[$item_id]->getField($field_key)->setValues([]);
-              }
-            }
-          }
-        }
+        unset($items[$item_id]);
       }
     }
   }
@@ -226,7 +90,7 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 /**
  * Implements hook_acq_sku_product_sku_alter().
  */
-function alshaya_acm_product_acq_sku_product_sku_alter(&$sku, $product) {
+function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   // Set sku activation date if product activation date available.
   if (isset($product['attributes']['product_activation_date'])) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
@@ -241,6 +105,14 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
   if (isset($product['attributes']['product_activation_date'])) {
     $node->setCreatedTime(strtotime($product['attributes']['product_activation_date']));
   }
+
+  if ($product['type'] !== 'configurable') {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $skuManager->processColorNodesForConfigurable($node);
 }
 
 /**
@@ -367,40 +239,14 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  * Perform actions related to entity just added/updated/deleted.
  *
  * @param \Drupal\acq_sku\Entity\SKU $entity
- *   SKU for which display node is to be updated.
+ *   SKU for which event needs to be dispatched.
+ * @param string $operation
+ *   Operation performed.
  */
-function _alshaya_acm_product_post_sku_operation(SKU $entity) {
+function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation) {
   try {
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $entity->getPluginInstance();
-
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-    // Clear cached data for products.
-    $skuManager->clearProductCachedData($entity);
-
-    if ($parent = $plugin->getParentSku($entity)) {
-      // Clear cached data for configurable products.
-      $skuManager->clearProductCachedData($parent);
-
-      // Reset the sku static cache.
-      drupal_static_reset('loadFromSku');
-
-      // @TODO: Make this smart in CORE-3443.
-      Cache::invalidateTags($parent->getCacheTagsToInvalidate());
-    }
-
-    // Re-index if search_api is enabled.
-    if (\Drupal::moduleHandler()->moduleExists('search_api')) {
-      // Check if node is available.
-      if ($node = $plugin->getDisplayNode($entity)) {
-        $node->original = clone $node;
-
-        // Mark node for reindexing on add/update/delete of SKUs.
-        search_api_entity_update($node);
-      }
-    }
+    $event = new ProductUpdatedEvent($entity, $operation);
+    \Drupal::service('event_dispatcher')->dispatch(ProductUpdatedEvent::EVENT_NAME, $event);
   }
   catch (\Exception $e) {
     // Translation might not be available.
@@ -411,21 +257,45 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_acm_product_acq_sku_insert(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity);
+  _alshaya_acm_product_post_sku_operation($entity, 'insert');
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
 function alshaya_acm_product_acq_sku_update(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity);
+  _alshaya_acm_product_post_sku_operation($entity, 'update');
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity);
+  _alshaya_acm_product_post_sku_operation($entity, 'delete');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_acm_product_node_delete(NodeInterface $node) {
+  if ($node->bundle() == 'acq_product') {
+    $sku = $node->get('field_skus')->getString();
+    $color = $node->get('field_product_color')->getString();
+
+    // Delete the color nodes available in system for this particular product.
+    // Do nothing when deleting color node itself.
+    if ($sku && empty($color)) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $nids = $skuManager->getColorNodeIds($sku);
+
+      if ($nids) {
+        $storage = \Drupal::entityTypeManager()->getStorage('node');
+        $nodes = $storage->loadMultiple($nids);
+        $storage->delete($nodes);
+      }
+    }
+  }
 }
 
 /**
@@ -433,17 +303,16 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if (($entity->bundle() == 'acq_product')) {
-    $product_settings = \Drupal::config('alshaya_acm_product.settings');
-
-    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
-
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
+
+    $product_settings = \Drupal::config('alshaya_acm_product.settings');
+    \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
-    $sku = $entity->get('field_skus')->first()->getString();
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku));
     $sku_entity = SKU::loadFromSku($sku);
 
@@ -461,6 +330,20 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         ];
       }
       elseif ($view_mode == 'full') {
+        $sku = $skuManager->getSkuForNode($entity, TRUE);
+        if (empty($sku)) {
+          throw new NotFoundHttpException();
+        }
+
+        $skuNode = $skuManager->getDisplayNode($sku, FALSE);
+
+        // Show 404 if current node is color node.
+        // Redirecting to proper node may make it indexed and we don't want
+        // this to be indexed or known as valid url in any case.
+        if ($skuNode instanceof NodeInterface && $skuNode->id() != $entity->id()) {
+          throw new NotFoundHttpException();
+        }
+
         // Do not display PDP for free gifts.
         if ($skuManager->isSkuFreeGift($sku_entity)) {
           throw new NotFoundHttpException();
@@ -568,18 +451,17 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         if (alshaya_acm_product_is_buyable($sku_entity)) {
           // Check if home delivery is available for this product.
           if (alshaya_acm_product_available_home_delivery($sku)) {
-            $home_delivery_config = \Drupal::config('alshaya_acm_product.home_delivery');
-
-            $home_delivery_options = [];
-            $home_delivery_options['standard_title'] = $home_delivery_config->get('options_standard_title');
-            $home_delivery_options['standard_subtitle'] = $home_delivery_config->get('options_standard_subtitle');
+            $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
 
             // @TODO: Next day delivery not done for now.
             $build['home_delivery'] = [
               '#theme' => 'pdp_delivery_option',
-              '#title' => $home_delivery_config->get('title'),
-              '#subtitle' => $home_delivery_config->get('subtitle'),
-              '#options' => $home_delivery_options,
+              '#title' => $home_delivery_config['title'],
+              '#subtitle' => $home_delivery_config['subtitle'],
+              '#options' => [
+                'standard_title' => $home_delivery_config['standard_title'],
+                'standard_subtitle' => $home_delivery_config['standard_subtitle'],
+              ],
             ];
           }
         }
@@ -760,6 +642,23 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
       }
     }
   }
+}
+
+/**
+ * Get home delivery config.
+ *
+ * @return array
+ *   Return array of config data.
+ */
+function alshaya_acm_product_get_home_delivery_config() {
+  $config = \Drupal::config('alshaya_acm_product.home_delivery');
+
+  return [
+    'title' => $config->get('title'),
+    'subtitle' => $config->get('subtitle'),
+    'standard_title' => $config->get('options_standard_title'),
+    'standard_subtitle' => $config->get('options_standard_subtitle'),
+  ];
 }
 
 /**
@@ -1936,4 +1835,67 @@ function _alshaya_acm_product_clean_form_for_oos(array $form): array {
   ];
 
   return $form;
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInterface $query) {
+  // For Alshaya we have developed a feature to display one entry per color
+  // on listing pages. For this we need extra nodes. To avoid affecting original
+  // functionality we add conditions below.
+  $query->addJoin('left', 'node__field_product_color', 'color', 'node_field_data.vid = color.revision_id');
+  $query->isNull('field_product_color_value');
+}
+
+/**
+ * Get unique products from plp list.
+ *
+ * @param int $category_id
+ *   Category id.
+ * @param int $limit
+ *   Limit.
+ *
+ * @return \Drupal\node\NodeInterface[]
+ *   Array of nodes.
+ */
+function _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $limit) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $terms = _alshaya_master_get_recursive_child_terms($category_id);
+  $arguments = [
+    'tid' => implode('+', $terms),
+  ];
+
+  $unique_nodes = [];
+  $page = 0;
+
+  do {
+    // Get views result.
+    $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments, $page);
+
+    $nodes = array_map(function ($result) use ($skuManager) {
+      if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
+        $color = $node->get('field_product_color')->getString();
+
+        if ($color) {
+          $node = $skuManager->getDisplayNode($skuManager->getSkuForNode($node), FALSE);
+        }
+
+        return $node;
+      }
+    }, $results);
+
+    $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $limit);
+    foreach ($nodes as $node) {
+      $unique_nodes[$node->id()] = $node;
+    }
+
+    $page++;
+  } while (!empty($nodes) && count($unique_nodes) < $limit);
+
+  $unique_nodes = array_slice($unique_nodes, 0, $limit);
+
+  return $unique_nodes;
 }
