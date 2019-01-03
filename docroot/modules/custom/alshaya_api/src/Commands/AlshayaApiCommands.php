@@ -181,12 +181,14 @@ class AlshayaApiCommands extends DrushCommands {
     $to_be_deleted = [];
     $stock_mismatch_sync = [];
     $price_mismatch_sync = [];
+    $cat_mismatch_sync = [];
 
     foreach ($types as $type) {
       $missing[$type]['all'] = [];
       $to_be_deleted[$type]['all'] = [];
       $stock_mismatch[$type] = [];
       $price_mismatch[$type] = [];
+      $cat_mismatch[$type] = [];
 
       foreach ($languages as $language) {
         // The ones which are missing in Drupal.
@@ -226,6 +228,45 @@ class AlshayaApiCommands extends DrushCommands {
             '@type' => $type,
           ]));
         }
+
+        // Get the commerce category ids for the skus from drupal.
+        $dsku_cats = $this->skuManager->getSkuWithCat($language->getId(), array_keys($dskus[$type][$language->getId()]));
+        $dsku_cats_data = [];
+        foreach ($dsku_cats as $dsku_cat) {
+          $dsku_cats_data[$dsku_cat['field_skus_value']][] = $dsku_cat['field_commerce_id_value'];
+        }
+        foreach ($dsku_cats_data as $sku => $dsku_cat_data) {
+          if (!empty($mskus[$type][$sku])) {
+            $cat_diff_output = '';
+            if (!empty(array_diff(explode(',', $mskus[$type][$sku]['category_ids']), $dsku_cat_data))) {
+              $cat_diff_output .= 'Drupal Cat:' . implode(',', array_unique($dsku_cat_data)) . ' | ';
+              $cat_diff_output .= 'MDC Cat:' . $mskus[$type][$sku]['category_ids'];
+              $cat_mismatch_sync[$type][] = $sku;
+            }
+
+            // If there any sku having category mismatch.
+            if (!empty($cat_diff_output)) {
+              $cat_mismatch[$type][$language->getId()][] = "SKU:" . $sku . " | " . $cat_diff_output;
+            }
+          }
+        }
+
+        // Output the details of category mismatch.
+        if (!empty($cat_mismatch[$type][$language->getId()])) {
+          $this->output->writeln(dt("\n@count @type type SKUs of @langcode in Drupal have different category than Magento!output", [
+            '@count' => count($cat_mismatch[$type][$language->getId()]),
+            '@type' => $type,
+            '@langcode' => $language->getId(),
+            '!output' => $verbose ? ":\n" . implode("\n", $cat_mismatch[$type][$language->getId()]) : '.',
+          ]));
+        }
+        else {
+          $this->output->writeln(dt("\nNo category mismatch for language @langcode of type @type in Drupal.", [
+            '@langcode' => $language->getId(),
+            '@type' => $type,
+          ]));
+        }
+
       }
 
       // We check stock and price only for simple SKUs.
@@ -311,6 +352,7 @@ class AlshayaApiCommands extends DrushCommands {
       $to_be_deleted[$type]['all'] = array_unique($to_be_deleted[$type]['all']);
       $stock_mismatch_sync[$type] = !empty($stock_mismatch_sync[$type]) ? array_unique($stock_mismatch_sync[$type]) : [];
       $price_mismatch_sync[$type] = !empty($price_mismatch_sync[$type]) ? array_unique($price_mismatch_sync[$type]) : [];
+      $cat_mismatch_sync[$type] = !empty($cat_mismatch_sync[$type]) ? array_unique($cat_mismatch_sync[$type]) : [];
     }
 
     $this->output->writeln(dt("\n#### SYNCHRONIZATION ####"));
@@ -411,6 +453,24 @@ class AlshayaApiCommands extends DrushCommands {
               '@type' => $type,
             ]));
           }
+        }
+      }
+
+      // Category diff sku synchronization.
+      if (!empty($cat_mismatch_sync[$type]) && $this->io()->confirm(dt('Do you want to sync the @count @type category diff SKUs?', [
+        '@count' => count($cat_mismatch_sync[$type]),
+        '@type' => $type,
+      ]))) {
+        foreach ($this->i18nHelper->getStoreLanguageMapping() as $langcode => $store_id) {
+          foreach (array_chunk(str_replace("'", '', $cat_mismatch_sync[$type]), $chunk_size) as $chunk) {
+            $this->ingestApiWrapper->productFullSync($store_id, $langcode, implode(',', $chunk), NULL, $page_size);
+          }
+
+          $this->output->writeln(dt('Sync launched for the @count @language @type category diff SKUs.', [
+            '@count' => count($cat_mismatch_sync[$type]),
+            '@language' => $languages[$langcode]->getName(),
+            '@type' => $type,
+          ]));
         }
       }
 
