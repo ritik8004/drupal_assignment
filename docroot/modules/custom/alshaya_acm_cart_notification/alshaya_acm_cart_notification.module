@@ -15,6 +15,7 @@ use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Ajax\AjaxResponse;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -152,7 +153,7 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
   // Prepare the ajax Response.
   $response = ProductStockController::$response;
 
-  if ($response) {
+  if ($response instanceof AjaxResponse) {
     $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
     $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
 
