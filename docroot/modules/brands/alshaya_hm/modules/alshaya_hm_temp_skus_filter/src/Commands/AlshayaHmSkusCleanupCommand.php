@@ -253,11 +253,10 @@ class AlshayaHmSkusCleanupCommand extends DrushCommands {
       ($parent_node instanceof NodeInterface)) {
       $parent_sku->delete();
       $parent_node->delete();
-      $context['results']['parent_sku_processed'][] = $sku;
+      $context['results']['parent_sku_processed'][] = $parent_sku->getSku();
     }
 
-    // Get parent SKU for the deleted SKU.
-    $context['results']['skus_processed'][] = $sku->getSku();
+    $context['results']['skus_processed'][] = $item->sku;
     return TRUE;
   }
 

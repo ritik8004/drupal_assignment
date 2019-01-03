@@ -2691,8 +2691,13 @@ class SkuManager {
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nodes = $this->nodeStorage->loadMultiple(array_flip($nids));
+      $nids = array_flip($nids);
+      $nodes = $this->nodeStorage->loadMultiple($nids);
       $this->nodeStorage->delete($nodes);
+      $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
+        '@ids' => implode(',', $nids),
+        '@id' => $node->id(),
+      ]);
     }
   }
 

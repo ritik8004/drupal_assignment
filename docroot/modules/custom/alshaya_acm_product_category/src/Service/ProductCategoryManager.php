@@ -184,7 +184,7 @@ class ProductCategoryManager {
   private function isProductWithSpecialPrice(NodeInterface $node) {
     $sku = SKU::loadFromSku($node->get('field_skus')->getString());
     $prices = $this->skuManager->getMinPrices($sku);
-    return ($prices['price'] != $prices['final_price']);
+    return ($prices['price'] > 0) && ($prices['final_price'] > 0) && ($prices['price'] != $prices['final_price']);
   }
 
   /**
@@ -295,6 +295,11 @@ class ProductCategoryManager {
       if ($node instanceof NodeInterface) {
         if ($this->processSalesCategoryCheckForNode($node)) {
           $node->save();
+
+          // Reset static cache to ensure we use updated node in later
+          // code execution.
+          // @see Drupal\acq_sku\AcquiaCommerce\SKUPluginBase::getDisplayNode().
+          drupal_static_reset('getDisplayNode');
         }
       }
     }
