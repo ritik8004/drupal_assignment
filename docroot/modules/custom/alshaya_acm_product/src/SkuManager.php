@@ -1172,7 +1172,7 @@ class SkuManager {
    * @return array
    *   An array of SKU with commerce category ids.
    */
-  public function getSkuWithCat($langcode, array $skus = []) {
+  public function getCategoriesOfSkus($langcode, array $skus = []) {
     $query = $this->connection->select('node__field_skus', 'nfs');
     $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id AND nfc.langcode=nfs.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_id', 'ttfcid', 'ttfcid.entity_id=nfc.field_category_target_id');

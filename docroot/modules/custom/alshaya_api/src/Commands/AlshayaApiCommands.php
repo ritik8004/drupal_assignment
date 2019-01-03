@@ -230,7 +230,7 @@ class AlshayaApiCommands extends DrushCommands {
         }
 
         // Get the commerce category ids for the skus from drupal.
-        $dsku_cats = $this->skuManager->getSkuWithCat($language->getId(), array_keys($dskus[$type][$language->getId()]));
+        $dsku_cats = $this->skuManager->getCategoriesOfSkus($language->getId(), array_keys($dskus[$type][$language->getId()]));
         $dsku_cats_data = [];
         foreach ($dsku_cats as $dsku_cat) {
           $dsku_cats_data[$dsku_cat['field_skus_value']][] = $dsku_cat['field_commerce_id_value'];
