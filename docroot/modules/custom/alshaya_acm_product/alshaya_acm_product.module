@@ -14,7 +14,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
 use Drupal\Core\Ajax\InsertCommand;
-use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -1402,14 +1401,17 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     else {
       // Something is wrong here, we shouldn't land here with a selected sku
       // with no quantity, this could be an old form open in browser and
-      // stock became empty now. We invalidate product cache again and
-      // reload the browser.
-      $skuManager->clearProductCachedData($selected_sku);
-      $skuManager->clearProductCachedData($sku);
+      // stock became empty now.
+      $log_data = [
+        'selected_sku' => $tree_pointer->getSku(),
+        'sku' => $sku->getSku(),
+      ];
 
-      $node = $skuManager->getDisplayNode($sku, FALSE);
-      $url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
-      $response->addCommand(new RedirectCommand($url->toString()));
+      \Drupal::logger('alshaya_acm_product')->error('Combination selected in add to cart form which is OOS. Data: @data', [
+        '@data' => json_encode($log_data),
+      ]);
+
+      // Return empty response.
       return $response;
     }
 
