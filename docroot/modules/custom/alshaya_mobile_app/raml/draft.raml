@@ -729,6 +729,13 @@ schemas:
             "type": "string",
             "description": "SKU - Unique value for products."
           },
+          "parent_sku": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "SKU of parent for child SKU's, otherwise null."
+          },
           "title": {
             "type": "string"
           },
@@ -1680,6 +1687,7 @@ schemas:
                   {
                     "id": 301,
                     "sku": "0189691",
+                    "parent_sku": null,
                     "title": "Sweatshirt",
                     "original_price": "5.90",
                     "final_price": "5.90",

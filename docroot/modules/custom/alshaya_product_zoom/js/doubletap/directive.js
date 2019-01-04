@@ -1,3 +1,5 @@
+// @codingStandardsIgnoreStart
+
 "use strict";
 
 /* @->zoom */
@@ -5,7 +7,25 @@ zoom();
 
 /* @-<zoom ********************************************************************/
 /******************************************************************************/
-function zoom(classNames = {}, settings = {}) {
+function zoom(classNames, settings) {
+    /**
+     * IE 11 Compatiblity fix.
+     *
+     * IE 11 doesnt support ES6 standard so the function defination line,
+     *  function zoom(classNames = {}, settings = {}) {
+     * needs to be changed to,
+     *  function zoom(classNames, settings) {
+     *
+     * And we need to explictly check for empty argument and assign a default
+     * value below
+     *
+     * Patch starts.
+     */
+    var classNames = classNames || {};
+    var settings = settings || {};
+    /**
+     * Patch ends.
+     */
     /* Settings */
     var C_scaleDefault = settings["scaleDefault"] || 2; // Used on doubleclick, doubletap and resize
     var C_scaleDifference = settings["scaleDifference"] || 0.5; // Used on wheel zoom
@@ -679,3 +699,5 @@ function removeClass($element, targetClass) {
 
     $element.className = $element.className.replace(rgx, "");
 }
+
+// @codingStandardsIgnoreEnd
