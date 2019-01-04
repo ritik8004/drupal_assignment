@@ -146,52 +146,6 @@
   };
 
   /**
-   * Helper function to compute height of add to cart button and make it sticky.
-   *
-   * @param {String} direction The scroll direction.
-   * @param {string} state The moment when function is called, initial/after.
-   */
-  function mobileMagazineSticky(direction, state) {
-    // Sticky Section.
-    var stickyDiv = $('.magazine-layout .content__title_wrapper');
-    // This is the wrapper that holds delivery options.
-    var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
-    var windowBottom;
-    var mobileCWBottom;
-    if (state === 'initial') {
-      // Button top.
-      var stickyDivTop = stickyDiv.offset().top + stickyDiv.height();
-      // Screen bottom.
-      windowBottom = $(window).scrollTop() + $(window).height();
-      if (stickyDivTop > windowBottom) {
-        stickyDiv.addClass('fixed');
-      }
-      else {
-        stickyDiv.removeClass('fixed');
-      }
-      return;
-    }
-    else {
-      // mobileContentWrapper bottom, based on direction we have to factor in
-      // the height of button if it is already fixed.
-      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height();
-      if (direction === 'up') {
-        mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + stickyDiv.outerHeight() - 60;
-      }
-
-      // Screen scroll offset.
-      windowBottom = $(window).scrollTop() + $(window).height();
-      // Hide button when we are below delivery wrapper.
-      if (windowBottom > mobileCWBottom && mobileContentWrapper.length) {
-        stickyDiv.removeClass('fixed');
-      }
-      else {
-        stickyDiv.addClass('fixed');
-      }
-    }
-  }
-
-  /**
    * JS function to move mobile colors to bellow of PDP main image in product description section.
    *
    * @param {context} context on ajax update.
