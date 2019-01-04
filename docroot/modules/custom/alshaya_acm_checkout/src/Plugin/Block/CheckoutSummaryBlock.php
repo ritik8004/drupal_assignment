@@ -378,6 +378,18 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           $line1[] = $shipping_address['address_line2'];
           $line1[] = $shipping_address['dependent_locality'];
 
+          if (!empty($shipping_address['sorting_code'])) {
+            $line2[] = $shipping_address['sorting_code'] . $comma;
+          }
+
+          if (!empty($shipping_address['additional_name'])) {
+            $line2[] = $shipping_address['additional_name'] . $comma;
+          }
+
+          if (!empty($shipping_address['postal_code'])) {
+            $line2[] = $shipping_address['postal_code'] . $comma;
+          }
+
           if (!empty($shipping_address['locality'])) {
             $line2[] = $shipping_address['locality'] . $comma;
           }
