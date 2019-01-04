@@ -45,7 +45,29 @@
     padding: 0;
 
     .magazine-desc-wrapper {
-      padding: 2rem;
+      padding: 1.25rem 2rem;
+      font-family: $arial;
+      font-size: 18.2px;
+      line-height: 1.71;
+      text-align: center;
+      color: #555555;
+
+      div[class*="label"] {
+        font-family: $alshaya-bold;
+        font-size: 15.6px;
+        font-weight: 600;
+        letter-spacing: 3.1px;
+        text-align: center;
+        color: #000000;
+      }
+
+      div[class*="value"] {
+        font-family: $arial;
+        font-size: 18.2px;
+        line-height: 1.71;
+        text-align: center;
+        color: #555555;
+      }
     }
 
     @include breakpoint($tablet) {
