@@ -93,8 +93,10 @@ class AlshayaAcmConfigCheck {
    *
    * @param bool $force
    *   Force reset.
+   * @param string $config_reset
+   *   Config that needs to reset.
    */
-  public function checkConfig($force = FALSE) {
+  public function checkConfig($force = FALSE, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
       return;
@@ -105,6 +107,11 @@ class AlshayaAcmConfigCheck {
 
     // We don't do anything on update envs like 01uatup.
     if (substr($env, -2) === 'up') {
+      return;
+    }
+
+    // If config that needs to reset not provided.
+    if (empty($config_reset)) {
       return;
     }
 
@@ -144,10 +151,10 @@ class AlshayaAcmConfigCheck {
       'social_auth_facebook.settings',
     ];
 
-    // Reset the settings.
-    foreach ($reset as $config_key) {
-      $config = $this->configFactory->getEditable($config_key);
-      $settings = Settings::get($config_key);
+    if (in_array($config_reset, $reset)) {
+      // Reset the settings.
+      $config = $this->configFactory->getEditable($config_reset);
+      $settings = Settings::get($config_reset);
 
       foreach ($settings as $key => $value) {
         $config->set($key, $value);
