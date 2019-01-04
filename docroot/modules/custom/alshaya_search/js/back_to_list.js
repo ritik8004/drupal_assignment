@@ -12,7 +12,7 @@
     replaceState = data;
   };
 
-  $(window).on('beforeunload', function () {
+  $(window).on('beforeunload pagehide', function () {
     if (typeof replaceState !== 'undefined') {
       history.replaceState({'back_to_list': true}, document.title, replaceState);
     }
