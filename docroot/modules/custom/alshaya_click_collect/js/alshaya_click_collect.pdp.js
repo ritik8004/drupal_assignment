@@ -146,7 +146,9 @@
       lng: position.coords.longitude
     };
     geoPerm = true;
-    Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
+    setTimeout(function(){
+      Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
+    }, 3000);
   };
 
   // Set the location coordinates, but don't render the stores.
