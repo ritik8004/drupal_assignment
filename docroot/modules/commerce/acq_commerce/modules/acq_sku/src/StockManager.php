@@ -193,22 +193,36 @@ class StockManager {
       return [];
     }
 
+    // Log if more than one found.
+    if (count($result) > 1) {
+      $this->logger->error('Duplicate entries found for stock of sku @sku.', [
+        '@sku' => $sku
+      ]);
+    }
+
     // Get the first result.
-    // @TODO: Add checks for multiple entries.
     $data = reset($result);
+
     return (array) $data;
   }
 
   /**
-   * Get stock from API.
-   *
-   * @TODO: Implement this.
+   * Refresh stock for an SKU from API.
    *
    * @param string $sku
    *   SKU string.
    */
-  public function getStockFallback(string $sku) {
-    // @TODO: Invoke Stock API to get stock data.
+  public function refreshStock(string $sku) {
+    try {
+      $stock = $this->apiWrapper->skuStockCheck($sku);
+      $this->processStockMessage($stock);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Exception occurred while resetting stock for sku: @sku, message: @message', [
+        '@sku' => $sku,
+        '@message' => $e->getMessage(),
+      ]);
+    }
   }
 
   /**

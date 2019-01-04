@@ -301,7 +301,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    * {@inheritdoc}
    */
   public function refreshStock(SKU $sku) {
-    // @TODO: Use fallback api and refresh stock for SKU.
+    $this->getStockManager()->refreshStock($sku->getSku());
   }
 
   /**

@@ -828,4 +828,13 @@ class SKU extends ContentEntityBase implements SKUInterface {
     drupal_static_reset('getParentSku');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function refreshStock() {
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $this->getPluginInstance();
+    $plugin->refreshStock($this->getSku());
+  }
+
 }

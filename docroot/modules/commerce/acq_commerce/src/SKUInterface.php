@@ -13,4 +13,9 @@ use Drupal\Core\Entity\EntityChangedInterface;
  */
 interface SKUInterface extends ContentEntityInterface, EntityOwnerInterface, EntityChangedInterface {
 
+  /**
+   * Refresh stock for the sku using stock api.
+   */
+  public function refreshStock();
+
 }
