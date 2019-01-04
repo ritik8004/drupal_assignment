@@ -500,7 +500,7 @@ class AlshayaAcmCommands extends DrushCommands {
                                ]) {
     // SKUs must be supplied either via skus option or csv_path.
     if (empty($options['csv_path']) && empty($options['skus'])) {
-      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      $this->output->wriAlshayaAcmCommands.phpteln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
       return;
     }
 
@@ -566,7 +566,7 @@ class AlshayaAcmCommands extends DrushCommands {
       }
     }
     elseif (!empty($command_options['skus'])) {
-        drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
     }
   }
 
