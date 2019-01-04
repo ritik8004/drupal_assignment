@@ -5,6 +5,8 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Entity\SKU;
+
 /**
  * Implements hook_acq_sku_product_sku_alter().
  */
