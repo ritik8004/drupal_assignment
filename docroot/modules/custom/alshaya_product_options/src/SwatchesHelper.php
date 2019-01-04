@@ -395,12 +395,11 @@ class SwatchesHelper {
   public function getSwatchForFacet(FacetInterface $facet, $value) {
     if (empty($this->skuBaseFieldDefination)) {
       $this->skuBaseFieldDefination = $this->skuFieldsManager->getFieldAdditions();
+      // Filter attributes fields.
+      $this->skuBaseFieldDefination = array_filter($this->skuBaseFieldDefination, function ($field) {
+        return ($field['parent'] == 'attributes');
+      });
     }
-
-    // Filter attributes fields.
-    $this->skuBaseFieldDefination = array_filter($this->skuBaseFieldDefination, function ($field) {
-      return ($field['parent'] == 'attributes');
-    });
 
     $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());
 
