@@ -56,6 +56,10 @@
       }
     }
 
+    .content__title_wrapper {
+      border-bottom: none;
+    }
+
     @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
@@ -128,6 +132,8 @@
     }
 
     @include breakpoint($only-mobile) {
+      min-height: 3rem;
+
       .field--name-field-skus {
         min-height: inherit;
 
@@ -149,16 +155,28 @@
         }
 
         .size-tray-link {
+          @include icon(dropdown-expand, after);
+
+          position: relative;
           display: flex;
-          justify-content: center;
+          justify-content: $left;
           align-items: center;
           height: 3rem;
           border: 2px solid $primary_empty_btn_border;
           padding: 0.65rem;
-          text-align: center;
           color: $primary_empty_btn;
           cursor: pointer;
           grid-column: 1 / 2;
+
+          &::after {
+            position: absolute;
+            #{$right}: 0;
+            font-size: 2.125rem;
+          }
+
+          &.selected-text {
+            justify-content: center;
+          }
         }
 
         .edit-add-to-cart {
@@ -191,6 +209,11 @@
           }
         }
       }
+    }
+
+    &.tray-overlay,
+    &.open-tray-without-selection {
+      overflow: hidden;
     }
   }
 }

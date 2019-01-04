@@ -57,7 +57,8 @@
   }
 }
 
-.sizeguide-modal-overlay {
+.sizeguide-modal-overlay,
+#block-sizefacetblock {
   .size-guide-link {
     + .ajax-progress-throbber {
       .throbber {

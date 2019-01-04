@@ -25,7 +25,7 @@
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch', context));
 
     // Markup for show more/less color swatches.
-    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View more colours') + '</div>');
+    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View all colours') + '</div>');
     var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
 
     if ($('.show-more-color').length === 0) {
@@ -253,10 +253,12 @@
 
     $('.size-tray-link', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      $('body').addClass('tray-overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
       }
@@ -274,7 +276,7 @@
       $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
 
       // Replace the size tray text with selected value..
-      $('.size-tray-link').html(clickedOption.text());
+      $('.size-tray-link').addClass('selected-text').html(clickedOption.text());
 
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
@@ -289,6 +291,7 @@
 
       // Closing the tray after selection.
       $('.size-tray').toggleClass('tray-open');
+      $('body').removeClass('tray-overlay');
     });
   }
 
