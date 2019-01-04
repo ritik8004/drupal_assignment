@@ -193,7 +193,7 @@ class AlshayaImageSitemapGenerator {
         // Load product from id.
         $product = $node_storage->load($nid);
 
-        $sitemap_settings = $this->simpleSitemap->getEntityInstanceSetting($product->getEntityTypeId(), $product->id());
+        $sitemap_settings = $this->simpleSitemap->getEntityInstanceSettings($product->getEntityTypeId(), $product->id());
 
         // Skip all nodes that are marked as not indexable in simple sitemap.
         if (!empty($sitemap_settings) && empty($sitemap_settings['index'])) {

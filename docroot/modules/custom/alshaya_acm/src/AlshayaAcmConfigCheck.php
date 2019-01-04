@@ -141,6 +141,7 @@ class AlshayaAcmConfigCheck {
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.settings',
+      'social_auth_facebook.settings',
     ];
 
     // Reset the settings.
