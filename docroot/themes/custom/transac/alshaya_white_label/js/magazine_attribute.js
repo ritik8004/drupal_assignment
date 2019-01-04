@@ -407,6 +407,18 @@
             }
           }
         });
+
+        $('.size-guide-link').on('click', function (e) {
+          $('body').addClass('magazine-layout-ajax-throbber');
+        });
+
+        setTimeout(function () {
+          $('.ui-dialog-titlebar-close').on('click', function (e) {
+            if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+              $('body').removeClass('magazine-layout-ajax-throbber');
+            }
+          });
+        }, 10);
       }
     }
   };
