@@ -500,7 +500,7 @@ class AlshayaAcmCommands extends DrushCommands {
                                ]) {
     // SKUs must be supplied either via skus option or csv_path.
     if (empty($options['csv_path']) && empty($options['skus'])) {
-      $this->output->wriAlshayaAcmCommands.phpteln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
       return;
     }
 
