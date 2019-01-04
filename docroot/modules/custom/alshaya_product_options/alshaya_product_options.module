@@ -26,20 +26,3 @@ function alshaya_product_options_theme() {
 
   return $items;
 }
-
-/**
- * Implements hook_drush_command_alter().
- */
-function alshaya_product_options_drush_command_alter(&$command) {
-  $sync_options_commands = [
-    'sync-commerce-product-options',
-    'acspo',
-  ];
-
-  if (in_array($command['command'], $sync_options_commands) && (drush_drupal_major_version() >= 8)) {
-    $command['command'] = 'alshaya-sync-commerce-product-options';
-    $command['command-hook'] = 'alshaya-sync-commerce-product-options';
-    $command['primary function'] = FALSE;
-    drush_set_command($command);
-  }
-}
