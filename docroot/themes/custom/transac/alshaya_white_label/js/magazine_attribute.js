@@ -304,43 +304,20 @@
     attach: function (context, settings) {
       // Only on mobile.
       if ($(window).width() < 768) {
-        // Select the node that will be observed for mutations.
-        var targetNode = document.querySelector('.acq-content-product .sku-base-form');
-        // Options for the observer (which mutations to observe).
-        var config = {attributes: true, childList: false, subtree: false};
-        // Callback function to execute when mutations are observed.
-        var callback = function (mutationsList, observer) {
-          mutationsList.forEach(function (mutation) {
-            if ((mutation.type === 'attributes') &&
-              (mutation.attributeName === 'class') &&
-              (!mutation.target.classList.contains('visually-hidden'))) {
-              var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
-              var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
-              mobileContentWrapper.css('height', 'auto');
-              mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
-              observer.disconnect();
-            }
-          });
-        };
-        // Create an observer instance linked to the callback function.
-        var observer = new MutationObserver(callback);
-        // Start observing the target node for configured mutations.
-        observer.observe(targetNode, config);
-        mobileMagazineSticky('bottom', 'initial');
-        var lastScrollTop = 0;
+        var stickyDiv = $('.magazine-layout .content__title_wrapper');
+        var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
+        stickyDiv.addClass('fixed');
         $(window).on('scroll', function () {
-          var windowScrollTop = $(this).scrollTop();
-          var direction = 'bottom';
-          if (windowScrollTop > lastScrollTop) {
-            direction = 'bottom';
+          // Screen bottom.
+          var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + stickyDiv.height() + 64;
+          var windowBottom = $(this).scrollTop() + $(this).height();
+          if (mobileCWBottom > windowBottom) {
+            stickyDiv.addClass('fixed');
           }
           else {
-            direction = 'up';
+            stickyDiv.removeClass('fixed');
           }
-          lastScrollTop = windowScrollTop;
-          mobileMagazineSticky(direction, 'after');
         });
-
       }
     }
   };

@@ -1376,6 +1376,22 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
+    else {
+      // Something is wrong here, we shouldn't land here with a selected sku
+      // with no quantity, this could be an old form open in browser and
+      // stock became empty now.
+      $log_data = [
+        'selected_sku' => $tree_pointer->getSku(),
+        'sku' => $sku->getSku(),
+      ];
+
+      \Drupal::logger('alshaya_acm_product')->error('Combination selected in add to cart form which is OOS. Data: @data', [
+        '@data' => json_encode($log_data),
+      ]);
+
+      // Return empty response.
+      return $response;
+    }
 
     $build = [];
 
