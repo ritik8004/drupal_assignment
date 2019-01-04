@@ -498,6 +498,11 @@ class AlshayaAcmCommands extends DrushCommands {
                                  'batch_size' => 500,
                                  'page_size' => NULL,
                                ]) {
+    if (!empty($options['csv_path']) && !empty($options['skus'])) {
+      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      return;
+    }
+    
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
     $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
     $mdc_queue_count = $mdc_queue_stats->messages;
@@ -559,8 +564,8 @@ class AlshayaAcmCommands extends DrushCommands {
         }
       }
     }
-    else {
-      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+    elseif (!empty($command_options['skus'])) {
+        drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
     }
   }
 
