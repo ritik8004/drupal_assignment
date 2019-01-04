@@ -18,6 +18,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Consolidation\AnnotatedCommand\CommandData;
 
 /**
  * Class AlshayaAcmCommands.
@@ -392,6 +393,17 @@ class AlshayaAcmCommands extends DrushCommands {
 
     // Reset country specific settings.
     $this->alshayaAcmConfigCheck->resetCountrySpecificSettings();
+  }
+
+  /**
+   * Check config state as a part of post-command to reset.
+   *
+   * Added (*) to execute after each drush command.
+   *
+   * @hook post-command *
+   */
+  public function resetConfigPostCommand($result, CommandData $commandData) {
+    $this->alshayaAcmConfigCheck->checkConfig();
   }
 
   /**
