@@ -113,3 +113,4 @@ permissions:
   - 'use alshaya_workflow transition needs_review_draft'
   - 'use text format mail_text'
   - 'use text format limited_options'
+  - 'access taxonomy overview'
