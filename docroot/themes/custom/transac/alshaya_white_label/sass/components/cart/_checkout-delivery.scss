@@ -910,11 +910,15 @@
             background: transparent;
             margin-top: 0;
             width: 100%;
-            text-transform: unset;
+            text-transform: lowercase;
             color: $content_link_color;
             font-size: 0.75rem;
             display: block;
             padding: 0.5rem 0;
+
+            &::first-letter {
+              text-transform: uppercase;
+            }
 
             @include breakpoint($only-mobile) {
               text-align: $left;

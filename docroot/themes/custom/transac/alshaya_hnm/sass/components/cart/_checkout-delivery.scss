@@ -445,6 +445,7 @@
             background: $white-five;
             font-family: $hnm-bold;
             font-weight: normal;
+            text-transform: uppercase;
             top: -0.3125rem;
 
             @include breakpoint($only-mobile) {
