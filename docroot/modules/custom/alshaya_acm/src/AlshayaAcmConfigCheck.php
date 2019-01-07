@@ -96,7 +96,7 @@ class AlshayaAcmConfigCheck {
    * @param string $config_reset
    *   Config that needs to reset.
    */
-  public function checkConfig($force, string $config_reset = '') {
+  public function checkConfig($force = FALSE, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
       return;
@@ -129,7 +129,7 @@ class AlshayaAcmConfigCheck {
     // We store reset time in state, check if variable is set for our ENV.
     $reset_time = $this->state->get($flag_var);
 
-    if (empty($config_reset) && !empty($reset_time)) {
+    if (!$force && !empty($reset_time)) {
       return;
     }
 
