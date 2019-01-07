@@ -531,7 +531,6 @@ header {
 .main--menu {
   @include breakpoint($desktop) {
     display: block !important;
-    position: relative;
   }
 
   @include breakpoint($upto-desktop) {
@@ -563,17 +562,22 @@ header {
     }
 
     ul.menu--one__list {
-      display: table !important;
-      width: auto;
-      margin: 0 auto;
-
-      .menu-backdrop {
-        border-bottom: 4px solid $mm_l2_hover_border;
-      }
+      display: block !important;
+      text-align: center;
+      width: 100%;
+      margin: 0;
+      font-size: 0;
+      background: $mm_bg;
+      padding: 0 calc((100% - 1284px) / 2);
     }
 
     li.menu--one__list-item {
       display: inline-block;
+      vertical-align: top;
+      list-style: none;
+      text-align: center;
+      text-transform: lowercase;
+      height: 2.6875rem;
 
       .menu__link-wrapper {
         .menu--one__link {
@@ -628,6 +632,12 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
+          visibility: visible;
+          opacity: 1;
+          z-index: 1;
+          border-top: none;
+          transform: none;
+
           &::after {
             content: '';
             height: 1px;
@@ -641,8 +651,33 @@ header {
         }
       }
 
+      .menu__link {
+        font-size: 0.75rem;
+        color: $mm_l1_link;
+        text-decoration: none;
+      }
+
+      ul ul {
+        display: none;
+      }
+
       ul.menu--two__list {
+        max-width: 80.25rem;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 100%;
+        #{$left}: 0;
+        width: 100%;
+        z-index: -1;
+        position: absolute;
+        display: block;
+        opacity: 0;
+        visibility: hidden;
         overflow: hidden;
+        transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
+        transform: none;
+        border-top: none;
         border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
@@ -666,7 +701,18 @@ header {
   }
 
   .menu--two__list {
+    position: absolute;
+    width: 100%;
+    text-align: $left;
+    top: 2.5625rem;
+    #{$left}: 0;
+    #{$left}: 0;
     background: $mm_l2_bg;
+    z-index: 10;
+    padding-top: 0.5625rem;
+    padding-#{$left}: 0;
+    padding-#{$right}: calc((100% - 1284px) / 2);
+    min-height: 22.125rem;
 
     a {
       color: $mm_l2_link;
@@ -787,6 +833,19 @@ header {
 }
 
 @include breakpoint($desktop) {
+  .overlay::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100;
+    top: 0;
+    #{$left}: 0;
+    bottom: 0;
+    #{$left}: 0;
+    background-color: rgba(0, 0, 0, 0.48);
+    z-index: 5;
+  }
+
   .menu--four__list {
     display: block !important;
     padding-#{$left}: 0;
@@ -1042,6 +1101,7 @@ header {
   .menu--three__list,
   .menu--four__list {
     will-change: $left;
+    // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
     #{$left}: -100%;
     transition: $left 0.5s ease-in-out;
     position: absolute;
@@ -1382,16 +1442,19 @@ html[lang=ar] {
     top: 0;
     width: 100%;
     height: 100%;
+    // transition: transform 0.5s ease-in-out;
     -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     -moz-transform: translateZ(0);
     #{$left}: -100%;
+    // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: $left;
     z-index: 9;
   }
 
   .menu--active,
   .menu__list--active {
+    // transform: translate(0, 0) !important;
     #{$left}: 0;
   }
 }

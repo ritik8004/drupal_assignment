@@ -604,31 +604,6 @@ header {
       margin: 0;
       background: $mm_bg;
       padding: 0 calc((100% - 1284px) / 2);
-
-      .menu-backdrop {
-        padding-top: 9px;
-        border-bottom: 1px solid $mm_l1_border;
-        position: absolute;
-        width: 100%;
-        top: 100%;
-        #{$left}: 0;
-        #{$right}: 0;
-        z-index: -1;
-        opacity: 0;
-        visibility: hidden;
-        overflow: hidden;
-        background: #fff;
-        transition: all 0.25s ease-in 0s;
-      }
-
-      &:hover {
-        .menu-backdrop {
-          visibility: visible;
-          opacity: 1;
-          z-index: 1;
-          transition: all 0.25s ease-in 0s;
-        }
-      }
     }
 
     li.menu--one__list-item {
@@ -666,7 +641,7 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          transition: all 0.25s ease-in 0s;
+          transform: translateY(-2rem);
         }
       }
 
@@ -692,16 +667,19 @@ header {
 
       ul.menu--two__list {
         max-width: 80.25rem;
+        left: 0;
+        right: 0;
         margin: auto;
         visibility: hidden;
         opacity: 0;
         position: absolute;
         top: 100%;
         #{$left}: 0;
-        #{$right}: 0;
         width: 100%;
+        transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.25s ease-in 0s;
+        transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
+        border-top: 3rem solid transparent;
       }
     }
 
@@ -739,6 +717,7 @@ header {
     width: 100%;
     text-align: $left;
     top: 2.5625rem;
+    #{$left}: 0;
     #{$left}: 0;
     background: $mm_bg;
     z-index: 10;
@@ -872,29 +851,17 @@ header {
 }
 
 @include breakpoint($desktop) {
-  body {
-    &::before {
-      content: '';
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      #{$left}: 0;
-      bottom: 0;
-      #{$left}: 0;
-      opacity: 0;
-      z-index: -1;
-      background-color: rgba(0, 0, 0, 0.48);
-      transition: all 0.25s ease-in 0s;
-    }
-
-    &.overlay {
-      &::before {
-        opacity: 1;
-        z-index: 1;
-        transition: all 0.25s ease-in 0s;
-      }
-    }
+  .overlay::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100;
+    top: 0;
+    #{$left}: 0;
+    bottom: 0;
+    #{$left}: 0;
+    background-color: $mm_body_overlay;
+    z-index: 5;
   }
 
   .menu--four__list {
