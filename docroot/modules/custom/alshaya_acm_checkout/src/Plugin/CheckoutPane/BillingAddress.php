@@ -154,13 +154,10 @@ class BillingAddress extends CheckoutPaneBase implements CheckoutPaneInterface {
         $form_state->setTemporaryValue('default_value_mobile', $address_default_value['mobile_number']);
       }
       elseif ($same_as_shipping == self::BILLING_ADDR_CASE_CLICK_COLLECT) {
-        /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-        $api_wrapper = \Drupal::service('acq_commerce.api');
-
-        $customer = $api_wrapper->getCustomer($cart->customerEmail());
+        $shipping = $cart->getShipping();
         $address_default_value = [
-          'given_name' => $customer['firstname'],
-          'family_name' => $customer['lastname'],
+          'given_name' => $shipping['firstname'],
+          'family_name' => $shipping['lastname'],
           'country_code' => _alshaya_custom_get_site_level_country_code(),
         ];
       }

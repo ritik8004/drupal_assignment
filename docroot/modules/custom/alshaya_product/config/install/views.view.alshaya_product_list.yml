@@ -496,6 +496,30 @@ display:
           expose:
             label: ''
           plugin_id: search_api
+        original_nid:
+          id: original_nid
+          table: search_api_index_product
+          field: original_nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        nid_1:
+          id: nid_1
+          table: search_api_index_product
+          field: nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
       title: ''
       header:
         result:
@@ -625,6 +649,30 @@ display:
           id: name_1_1
           table: search_api_index_product
           field: name_1
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        original_nid:
+          id: original_nid
+          table: search_api_index_product
+          field: original_nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        nid_1:
+          id: nid_1
+          table: search_api_index_product
+          field: nid
           relationship: none
           group_type: group
           admin_label: ''

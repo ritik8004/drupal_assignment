@@ -92,6 +92,10 @@
       vertical-align: bottom !important;
     }
   }
+
+  .facet-item__count {
+    display: inline-block;
+  }
 }
 
 .c-facet__label {
@@ -105,13 +109,16 @@
 }
 
 .c-facet__blocks {
-  .item-list__checkbox {
-    max-height: 228px;
+  .item-list__checkbox,
+  .item-list__range_checkbox,
+  .item-list__swatch_list {
+    max-height: 14.25rem;
     overflow: auto;
   }
 
   .facets-soft-limit-link {
     display: none;
+    float: $left;
   }
 }
 

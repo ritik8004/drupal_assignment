@@ -1165,6 +1165,29 @@ class SkuManager {
   }
 
   /**
+   * Get commerce category ids for the given skus.
+   *
+   * @param string $langcode
+   *   Language code.
+   * @param array $skus
+   *   SKU list.
+   *
+   * @return array
+   *   An array of SKU with commerce category ids.
+   */
+  public function getCategoriesOfSkus($langcode, array $skus = []) {
+    $query = $this->connection->select('node__field_skus', 'nfs');
+    $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id AND nfc.langcode=nfs.langcode');
+    $query->innerJoin('taxonomy_term__field_commerce_id', 'ttfcid', 'ttfcid.entity_id=nfc.field_category_target_id');
+    $query->fields('ttfcid', ['field_commerce_id_value']);
+    $query->fields('nfs', ['field_skus_value']);
+    $query->condition('nfs.field_skus_value', $skus, 'IN');
+    $query->condition('nfc.langcode', $langcode);
+
+    return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+  }
+
+  /**
    * Helper function to do a cheaper call to fetch skus for a promotion.
    *
    * @param \Drupal\node\Entity\Node $promotion
@@ -1853,6 +1876,12 @@ class SkuManager {
     drupal_static_reset('alshaya_product_cached_data');
     $cid = $this->getProductCachedId($sku);
     $this->productCache->delete($cid);
+
+    // We also invalidate caches for node here.
+    $node = $this->getDisplayNode($sku);
+    if ($node instanceof NodeInterface) {
+      Cache::invalidateTags($node->getCacheTagsToInvalidate());
+    }
   }
 
   /**
@@ -2245,6 +2274,11 @@ class SkuManager {
       }
       $pdp_image_slider_position = (!empty($pdp_image_slider_position)) ? $pdp_image_slider_position : $default_pdp_image_slider_position;
       return $pdp_image_slider_position;
+    }
+    else {
+      // In the rare case that the products are not assigned any category, we
+      // want to return the default setting for position so the PDP works.
+      return $default_pdp_image_slider_position;
     }
   }
 
@@ -2686,8 +2720,13 @@ class SkuManager {
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nodes = $this->nodeStorage->loadMultiple(array_flip($nids));
+      $nids = array_flip($nids);
+      $nodes = $this->nodeStorage->loadMultiple($nids);
       $this->nodeStorage->delete($nodes);
+      $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
+        '@ids' => implode(',', $nids),
+        '@id' => $node->id(),
+      ]);
     }
   }
 

@@ -28,7 +28,7 @@ else
 
     echo -en "travis_fold:end:Setup\r"
 
-    blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
+    # blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
   fi
 fi
 
