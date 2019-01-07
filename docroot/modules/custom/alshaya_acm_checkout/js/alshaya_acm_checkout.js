@@ -245,6 +245,9 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-sorting-code"]').val(data.sorting_code);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-additional-name"]').val(data.additional_name);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-postal-code"]').val(data.postal_code);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val(data.mobile);
 
     // Select value and trigger change to ensure js dropdown shows proper value.
@@ -308,7 +311,7 @@
   };
 
   // Show loader every-time we are reloading page.
-  $(window).on('beforeunload', function () {
+  $(window).on('beforeunload pagehide', function () {
     $(this).showCheckoutLoader();
   });
 

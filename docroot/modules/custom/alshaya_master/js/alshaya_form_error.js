@@ -43,6 +43,48 @@ Drupal.behaviors.alshayaFormError = {
         }, 100);
       });
     });
+
+    /**
+     * Create Subscriber.
+     *
+     * @param {*} mutations
+     */
+    function subscriber(mutations) {
+      mutations.forEach(function (mutation) {
+        // Only when Mutation is for changes in childlist.
+        if (mutation.type === 'childList') {
+          var addedNode = mutation.addedNodes[0];
+          // Check if added node is inline clientside error label.
+          if ($(addedNode).is('label') && $(addedNode).hasClass('error')) {
+            // Check if we have a BE message lying around.
+            if ($(addedNode).siblings('.form-item--error-message').length) {
+              // Remove the message to avoid two error messages.
+              $(addedNode).siblings('.form-item--error-message').remove();
+            }
+          }
+        }
+      });
+    }
+
+    // Only on Change password form under my account.
+    if ($('form.change-pwd-form').length > 0) {
+      // Mutation observer to remove the BE validation message if we also get a
+      // FE validaion message for change password fields.
+      const target1 = document.querySelector('.change-pwd-form .form-item-current-pass');
+      const target2 = document.querySelector('.change-pwd-form .form-item-pass');
+      const observerConfig = {
+        childList: true,
+        attributes: true,
+        attributeOldValue: true,
+      };
+
+      // Create observer.
+      const observer = new MutationObserver(subscriber);
+
+      // Observing targets.
+      observer.observe(target1, observerConfig);
+      observer.observe(target2, observerConfig);
+    }
   }
 };
 

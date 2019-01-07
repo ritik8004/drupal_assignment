@@ -10,6 +10,9 @@ mapping:
   dependent_locality: 'address_building_segment'
   administrative_area: 'area'
   area_parent: 'governate'
+  sorting_code: ''
+  additional_name: ''
+  postal_code: ''
 prefix_settings:
   key: 'display_prefix'
   except:
