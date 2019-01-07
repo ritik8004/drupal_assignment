@@ -113,7 +113,7 @@ class AlshayaAcmConfigCheck {
     // If we want to force reset and config is empty, we don't check for
     // other conditions.
     // We don't do anything on prod.
-    if (!$force && empty($config_reset) && alshaya_is_env_prod()) {
+    if (alshaya_is_env_prod() && (!$force || empty($config_reset))) {
       return;
     }
 
