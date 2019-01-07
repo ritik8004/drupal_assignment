@@ -96,7 +96,7 @@ class AlshayaAcmConfigCheck {
    * @param string $config_reset
    *   Config that needs to reset.
    */
-  public function checkConfig(bool $force, string $config_reset = '') {
+  public function checkConfig($force, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
       return;
