@@ -244,6 +244,12 @@ body {
     ul.menu--one__list {
       display: flex !important;
       justify-content: space-between;
+
+      li.menu--one__list-item {
+        .ie & {
+          display: flex;
+        }
+      }
     }
   }
 }
