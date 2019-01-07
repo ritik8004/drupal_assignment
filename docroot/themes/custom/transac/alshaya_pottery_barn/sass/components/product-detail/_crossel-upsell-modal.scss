@@ -84,15 +84,7 @@
     }
 
     #drupal-modal {
-      overflow-y: scroll;
-
-      @include breakpoint($tablet) {
-        height: 43rem !important;
-      }
-
-      @include breakpoint($desktop) {
-        height: 48.4375rem !important;
-      }
+      overflow-y: auto;
 
       #lightSlider {
         &.pager-yes {
