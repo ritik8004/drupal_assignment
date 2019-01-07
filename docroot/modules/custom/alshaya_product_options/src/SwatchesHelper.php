@@ -403,6 +403,9 @@ class SwatchesHelper {
 
     $field_code = str_replace('attr_', '', $facet->getFieldIdentifier());
 
+    if (!isset($this->skuBaseFieldDefination[$field_code])) {
+      return [];
+    }
     // If field/facet is not swatchable, no need to process further.
     if (isset($this->skuBaseFieldDefination[$field_code])
       && empty($this->skuBaseFieldDefination[$field_code]['swatch'])) {
