@@ -191,9 +191,7 @@
       var sizeDiv = $('#configurable_ajax .form-item-configurables-size', context).clone();
       var sizeTray = $('.size-tray', context);
       var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
-      var sizeGuideLink = $('#configurable_ajax .size-guide-link', context);
-      // Move size guide link & size-tray close buttons inside confiruable size container.
-      sizeTrayButtons.prepend(sizeGuideLink);
+      // Move size-tray close buttons inside configurable size container.
       sizeTrayButtons.append('<div class="size-tray-close"></div>');
       // Move the configurable select container to size tray.
       if (sizeDiv.length > 0) {
@@ -307,6 +305,12 @@
 
         // JS function to show less/more for colour swatches.
         Drupal.magazine_swatches_count();
+
+        var sizeTray = $('.size-tray', context);
+        var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
+        var sizeGuideLink = $('#configurable_ajax .size-guide-link', context);
+        // Move size guide link inside configurable size container.
+        sizeTrayButtons.prepend(sizeGuideLink);
 
         $('.edit-add-to-cart', context).on('mousedown', function () {
           var that = this;
