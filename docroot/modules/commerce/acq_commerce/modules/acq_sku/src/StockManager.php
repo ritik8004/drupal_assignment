@@ -403,4 +403,23 @@ class StockManager {
     return ($new['quantity'] && $new['quantity'] < $low_stock);
   }
 
+  /**
+   * Remove stock entry.
+   *
+   * @param string $sku
+   *   SKU for which stock entry needs to be removed.
+   */
+  public function removeStockEntry(string $sku) {
+    if (empty($sku)) {
+      return;
+    }
+
+    // Remove stock only after SKU is removed in all the languages.
+    $this->connection->query('DELETE FROM acq_sku_stock stock 
+      LEFT JOIN acq_sku_field_data sku ON stock.sku=sku.sku 
+      WHERE sku.sku IS NULL AND stock.sku=:sku', [
+        ':sku' => $sku
+    ]);
+  }
+
 }
