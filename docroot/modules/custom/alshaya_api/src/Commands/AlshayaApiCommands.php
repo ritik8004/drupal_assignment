@@ -11,6 +11,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 
@@ -78,6 +79,13 @@ class AlshayaApiCommands extends DrushCommands {
   private $lock;
 
   /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * AlshayaApiCommands constructor.
    *
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
@@ -98,6 +106,8 @@ class AlshayaApiCommands extends DrushCommands {
    *   Entity Type Manager.
    * @param \Drupal\Core\Lock\LockBackendInterface $lock
    *   Database lock service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config factory.
    */
   public function __construct(LanguageManagerInterface $languageManager,
                               AlshayaApiWrapper $alshayaApiWrapper,
@@ -107,7 +117,8 @@ class AlshayaApiCommands extends DrushCommands {
                               LoggerChannelFactoryInterface $loggerChannelFactory,
                               Connection $connection,
                               EntityTypeManagerInterface $entityTypeManager,
-                              LockBackendInterface $lock) {
+                              LockBackendInterface $lock,
+                              ConfigFactoryInterface $config_factory) {
     $this->languageManager = $languageManager;
     $this->alshayaApiWrapper = $alshayaApiWrapper;
     $this->skuManager = $skuManager;
@@ -117,6 +128,7 @@ class AlshayaApiCommands extends DrushCommands {
     $this->connection = $connection;
     $this->entityTypeManager = $entityTypeManager;
     $this->lock = $lock;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -183,6 +195,21 @@ class AlshayaApiCommands extends DrushCommands {
     $price_mismatch_sync = [];
     $cat_mismatch_sync = [];
 
+    $skip_cats = [];
+    // MDC categories those needs to be ignored while checking for the category
+    // diff between drupal and mdc.
+    if (!empty($cats_to_ignore = $this->configFactory->get('alshaya_api.settings')->get('mdc_cats_ignore_sanity_check'))) {
+      $skip_cats = explode(',', $cats_to_ignore);
+    }
+
+    // Informing user in debug mode to setup ignored categories.
+    if (empty($skip_cats)) {
+      $this->logger()->debug(dt('You can set the category ids which can be ignored in key @key of @config config.', [
+        '@key' => 'mdc_cats_ignore_sanity_check',
+        '@config' => 'alshaya_api.settings',
+      ]));
+    }
+
     foreach ($types as $type) {
       $missing[$type]['all'] = [];
       $to_be_deleted[$type]['all'] = [];
@@ -238,11 +265,10 @@ class AlshayaApiCommands extends DrushCommands {
         foreach ($dsku_cats_data as $sku => $dsku_cat_data) {
           if (!empty($mskus[$type][$sku])) {
             $cat_diff_output = '';
-            // We removing the category id `2` from MDC categories as this is
-            // the id of `Default` category and we don't attach `Default`
-            // category to the product nodes on Drupal and thus we don't want
-            // any diff due to the `Default` category only.
-            $mdc_cats = array_diff(explode(',', $mskus[$type][$sku]['category_ids']), [2]);
+            // Remove categories from MDC response for which we don't need the
+            // diff. Example is like `2` which is `Default` category id of MDC
+            // and we don't use/attach `Default` category to the product nodes.
+            $mdc_cats = array_diff(explode(',', $mskus[$type][$sku]['category_ids']), $skip_cats);
             if (!empty(array_diff($mdc_cats, $dsku_cat_data))) {
               $cat_diff_output .= 'Drupal Cat:' . implode(',', array_unique($dsku_cat_data)) . ' | ';
               $cat_diff_output .= 'MDC Cat:' . implode(',', $mdc_cats);
