@@ -148,15 +148,18 @@ class AlshayaAcmConfigCheck {
     ];
 
     if (in_array($config_reset, $reset)) {
+      $reset = !empty($config_reset) ? [$config_reset] : $reset;
       // Reset the settings.
-      $config = $this->configFactory->getEditable($config_reset);
-      $settings = Settings::get($config_reset);
+      foreach ($reset as $config_key) {
+        $config = $this->configFactory->getEditable($config_key);
+        $settings = Settings::get($config_key);
 
-      foreach ($settings as $key => $value) {
-        $config->set($key, $value);
+        foreach ($settings as $key => $value) {
+          $config->set($key, $value);
+        }
+
+        $config->save();
       }
-
-      $config->save();
     }
 
     // Re-configure Simple Oauth.
