@@ -8,7 +8,6 @@
     <span></span>
   </div>
   <ul class="menu__list menu--one__list">
-    <div class="menu-backdrop"></div>
     {% for key1, level1 in term_tree %}
       {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
       {% set level_class = level1.term_bg_color == true ? level1.class ~ ' has-bg-color' : level1.class %}

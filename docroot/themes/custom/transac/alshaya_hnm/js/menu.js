@@ -70,19 +70,18 @@
 
       $('.hamburger--menu').click(function () {
         if ($('.search-active').length > 0) {
-          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
+          $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
           $('.search-active').removeClass('search-active');
         }
 
         $('.main--menu').addClass('menu--active');
-        $('.block-alshaya-super-category .main--menu ').removeClass('menu--active');
         $('html').addClass('html--overlay');
         $('body').addClass('mobile--overlay');
       });
 
       $('.c-menu-primary .mobile--search').off().on('click', function (e) {
         e.preventDefault();
-        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle().toggleClass('show-search');
+        $('.c-header__region .block-views-exposed-filter-blocksearch-page').toggle();
         $('.c-header__region .block-views-exposed-filter-blocksearch-page input.ui-autocomplete-input').focus();
         $(this).parent().toggleClass('search-active');
       });
@@ -134,7 +133,7 @@
         $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
       });
 
-      $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
+      $('.main--menu .has-child .menu--one__link, .main--menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
       }, function () {
         $('body').removeClass('overlay');
@@ -142,7 +141,7 @@
 
       // Close mobile menu when clicked outside the menu.
       var mobileMenu = $('.main--menu');
-      $('body', context).once().click(function (e) {
+      $('body').click(function (e) {
         if (mobileMenu.hasClass('menu--active') && e.target === $('.menu--active')[0]) {
           $('.mobile--close').trigger('click');
         }
@@ -188,16 +187,16 @@
       });
 
       /**
-       * Add active state to the menu.
-       */
+      * Add active state to the menu.
+      */
 
       if ($('.block-alshaya-main-menu').length) {
-        var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
+        var parent = $('.block-alshaya-main-menu li.menu--one__list-item');
 
-        $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
+        $('.block-alshaya-main-menu').mouseenter(function () {
           setTimeout(function () {
             $(parent).parent().addClass('active--menu--links');
-          }, 500);
+          }, 300);
           $(parent).children('.menu--two__list').css('transition-delay', '0.3s');
         });
 
@@ -208,22 +207,19 @@
       }
 
       /**
-       * Make Header sticky on scroll.
-       */
+      * Make Header sticky on scroll.
+      */
 
       if ($('.branding__menu').length) {
         var position = $('.branding__menu').offset().top;
         var nav = $('.branding__menu');
-        var topHeader = $('.header--wrapper');
         $(window, context).once().scroll(function () {
           if ($(this).scrollTop() > position) {
             $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');
-            topHeader.addClass('navbar-fixed-top');
           }
           else {
             nav.removeClass('navbar-fixed-top');
-            topHeader.removeClass('navbar-fixed-top');
             $('body').removeClass('header--fixed');
           }
         });
@@ -241,10 +237,10 @@
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
-              .toArray()
-              .reduce(function (first, second) {
-                return Math.max(first, second);
-              });
+          .toArray()
+          .reduce(function (first, second) {
+            return Math.max(first, second);
+          });
 
           menuLevel2.each(function () {
             $(this).height(maxHeight);
