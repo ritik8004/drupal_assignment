@@ -409,8 +409,13 @@ class SwatchesHelper {
       return [];
     }
 
-    $attribute_code = $this->skuBaseFieldDefination[$field_code]['source'] ?? $field_code;
-    return $this->getSwatch($attribute_code, $value);
+    $attribute_code = isset($this->skuBaseFieldDefination[$field_code])
+    ? $this->skuBaseFieldDefination[$field_code]['source'] ?? $field_code
+    : $field_code;
+
+    return (strpos($attribute_code, 'field_') !== FALSE)
+    ? []
+    : $this->getSwatch($attribute_code, $value);
   }
 
 }
