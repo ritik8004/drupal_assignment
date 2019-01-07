@@ -110,7 +110,7 @@ class AlshayaAcmConfigCheck {
       return;
     }
 
-    // If we want to force reset and config is empty, we don't check for
+    // If we want to force reset or config is empty, we don't check for
     // other conditions.
     // We don't do anything on prod.
     if (alshaya_is_env_prod() && (!$force || empty($config_reset))) {
@@ -147,9 +147,9 @@ class AlshayaAcmConfigCheck {
       'social_auth_facebook.settings',
     ];
 
+    // Reset the settings.
     if (in_array($config_reset, $reset)) {
       $reset = !empty($config_reset) ? [$config_reset] : $reset;
-      // Reset the settings.
       foreach ($reset as $config_key) {
         $config = $this->configFactory->getEditable($config_key);
         $settings = Settings::get($config_key);
