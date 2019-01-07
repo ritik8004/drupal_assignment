@@ -373,7 +373,7 @@ class AlshayaAcmCommands extends DrushCommands {
       return;
     }
     // Force reset all the settings.
-    $this->alshayaAcmConfigCheck->checkConfig(TRUE, $config);
+    $this->alshayaAcmConfigCheck->checkConfig($config);
 
     // Reset country specific settings.
     $this->alshayaAcmConfigCheck->resetCountrySpecificSettings();
