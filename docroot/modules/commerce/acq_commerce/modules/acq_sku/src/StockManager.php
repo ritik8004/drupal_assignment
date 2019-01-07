@@ -403,4 +403,31 @@ class StockManager {
     return ($new['quantity'] && $new['quantity'] < $low_stock);
   }
 
+  /**
+   * Remove stock entry.
+   *
+   * @param string $sku
+   *   SKU for which stock entry needs to be removed.
+   */
+  public function removeStockEntry(string $sku) {
+    if (empty($sku)) {
+      return;
+    }
+
+    // Confirm SKU is not available in any language.
+    $query = $this->connection->select('acq_sku_field_data', 'sku');
+    $query->condition('sku', $sku);
+    $query->addField('sku', 'sku');
+    $result = $query->execute()->fetchAssoc();
+
+    if (!empty($result)) {
+      return;
+    }
+
+    // Remove stock only after SKU is removed in all the languages.
+    $this->connection->delete('acq_sku_stock')
+      ->condition('sku', $sku)
+      ->execute();
+  }
+
 }
