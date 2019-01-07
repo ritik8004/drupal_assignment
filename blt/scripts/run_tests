@@ -6,8 +6,6 @@ if ([ $TRAVIS_PULL_REQUEST == "false" ])
 then
   echo "No need to run validations."
 else
-  chmod 600 ${BUILD_DIR}/private/travis_acm.pub
-
   #  The local.hostname must be set to 127.0.0.1:8888 because we are using drush runserver to test the site.
   yaml-cli update:value blt/blt.yml project.local.hostname '127.0.0.1:8888'
   yaml-cli update:value blt/blt.yml project.profile.name ${PROFILE}
@@ -33,7 +31,7 @@ else
 fi
 
 # This part will invoke selected integration tests against cloud enviroment on daily basis
-if ([ $TRAVIS_EVENT_TYPE == "cron" ])
+if ([ $TRAVIS_EVENT_TYPE == "cron" ]) && ([ $PROFILE == "alshaya_transac"])
 then
   # Run google chrome in headless mode in background
   google-chrome --version

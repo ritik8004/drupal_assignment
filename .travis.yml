@@ -79,6 +79,7 @@ before_install:
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
+  - chmod 600 ${BUILD_DIR}/private/travis_acm.pub
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
