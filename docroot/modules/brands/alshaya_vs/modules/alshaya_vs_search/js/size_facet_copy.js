@@ -70,6 +70,8 @@
       var itemSize = $('.shop-by-size-band').outerWidth();
 
       var DifferenceOfsCupsizewrapper = [];
+      var widthOfsCupsizewrapper = [];
+      var Cupsizewrapperwidth = 0;
       var CupsizewrapperWidthsum = 0;
 
       // Get total width of all menu items.
@@ -97,7 +99,21 @@
         }
         DifferenceOfsCupsizewrapper.push(CupsizewrapperWidthsum);
 
+        // Get the distance of different cup size wrapper from starting point to check the slider required or not.
+        Cupsizewrapperwidth += $(this).outerWidth() + 16;
+        widthOfsCupsizewrapper.push(Cupsizewrapperwidth);
+
       });
+
+      // Compare the last element value with the max width of the wrapper.
+      if (widthOfsCupsizewrapper[widthOfsCupsizewrapper.length - 1] < 1000) {
+        if ($('html').attr('dir') == 'rtl') {
+          $('.paddle_prev').addClass('hidden');
+        }
+        else {
+          $('.paddle_next').addClass('hidden');
+        }
+      }
 
       if ($('html').attr('dir') == 'rtl') {
         DifferenceOfsCupsizewrapper.reverse();

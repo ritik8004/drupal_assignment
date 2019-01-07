@@ -50,7 +50,7 @@ Drupal.behaviors.alshayaFormError = {
      * @param {*} mutations
      */
     function subscriber(mutations) {
-      mutations.forEach((mutation) => {
+      mutations.forEach(function (mutation) {
         // Only when Mutation is for changes in childlist.
         if (mutation.type === 'childList') {
           var addedNode = mutation.addedNodes[0];

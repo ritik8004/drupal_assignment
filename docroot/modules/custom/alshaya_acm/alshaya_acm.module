@@ -22,13 +22,6 @@ use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Implements hook_drush_command_alter().
- */
-function alshaya_acm_drush_command_alter(&$command) {
-  \Drupal::service('alshaya_acm.config_check')->checkConfig();
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $form_state) {
@@ -611,6 +604,20 @@ function alshaya_acm_price_get_formatted_price($price) {
   }
 
   return alshaya_acm_price_format($price);
+}
+
+/**
+ * Helper function to format price upto configured decimal points.
+ *
+ * @param float $price
+ *   The price value.
+ *
+ * @return float
+ *   Return formatted price with decimal points.
+ */
+function alshaya_acm_format_raw_price(float $price): float {
+  $decimal_points = \Drupal::configFactory()->get('acq_commerce.currency')->get('decimal_points');
+  return (float) number_format($price, $decimal_points, '.', '');
 }
 
 /**

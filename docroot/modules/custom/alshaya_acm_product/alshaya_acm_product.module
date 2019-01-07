@@ -281,9 +281,11 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
 function alshaya_acm_product_node_delete(NodeInterface $node) {
   if ($node->bundle() == 'acq_product') {
     $sku = $node->get('field_skus')->getString();
+    $color = $node->get('field_product_color')->getString();
 
     // Delete the color nodes available in system for this particular product.
-    if ($sku) {
+    // Do nothing when deleting color node itself.
+    if ($sku && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
       $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $nids = $skuManager->getColorNodeIds($sku);
@@ -1373,6 +1375,22 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $selected_sku = $tree_pointer;
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+    }
+    else {
+      // Something is wrong here, we shouldn't land here with a selected sku
+      // with no quantity, this could be an old form open in browser and
+      // stock became empty now.
+      $log_data = [
+        'selected_sku' => $tree_pointer->getSku(),
+        'sku' => $sku->getSku(),
+      ];
+
+      \Drupal::logger('alshaya_acm_product')->error('Combination selected in add to cart form which is OOS. Data: @data', [
+        '@data' => json_encode($log_data),
+      ]);
+
+      // Return empty response.
+      return $response;
     }
 
     $build = [];
