@@ -91,10 +91,12 @@ class AlshayaAcmConfigCheck {
   /**
    * Helper function to check config and reset if required.
    *
+   * @param bool $force
+   *   Force reset.
    * @param string $config_reset
    *   Config that needs to reset.
    */
-  public function checkConfig(string $config_reset = '') {
+  public function checkConfig(bool $force, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
       return;
@@ -108,16 +110,17 @@ class AlshayaAcmConfigCheck {
       return;
     }
 
-    // If empty config, we don't check for other conditions.
+    // If we want to force reset and config is empty, we don't check for
+    // other conditions.
     // We don't do anything on prod.
-    if (empty($config_reset) && alshaya_is_env_prod()) {
+    if (!$force && empty($config_reset) && alshaya_is_env_prod()) {
       return;
     }
 
     $request_time = $this->dateTime->getRequestTime();
 
     // Check if reverting of settings is disabled.
-    if (empty($config_reset) && !empty(Settings::get('disable_config_reset'))) {
+    if (!$force && !empty(Settings::get('disable_config_reset'))) {
       return;
     }
 
