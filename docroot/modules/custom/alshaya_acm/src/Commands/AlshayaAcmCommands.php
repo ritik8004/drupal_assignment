@@ -366,7 +366,7 @@ class AlshayaAcmCommands extends DrushCommands {
    * @usage drush alshaya-reset-config acq_commerce.conductor
    *   Resets the conductor config.
    */
-  public function resetConfig(string $config) {
+  public function resetConfig(string $config = '') {
     // If config not provided.
     if (empty($config)) {
       $this->io()->error(dt('Please provide the config to reset.'));
