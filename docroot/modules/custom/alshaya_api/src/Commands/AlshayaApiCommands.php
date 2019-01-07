@@ -238,9 +238,14 @@ class AlshayaApiCommands extends DrushCommands {
         foreach ($dsku_cats_data as $sku => $dsku_cat_data) {
           if (!empty($mskus[$type][$sku])) {
             $cat_diff_output = '';
-            if (!empty(array_diff(explode(',', $mskus[$type][$sku]['category_ids']), $dsku_cat_data))) {
+            // We removing the category id `2` from MDC categories as this is
+            // the id of `Default` category and we don't attach `Default`
+            // category to the product nodes on Drupal and thus we don't want
+            // any diff due to the `Default` category only.
+            $mdc_cats = array_diff(explode(',', $mskus[$type][$sku]['category_ids']), [2]);
+            if (!empty(array_diff($mdc_cats, $dsku_cat_data))) {
               $cat_diff_output .= 'Drupal Cat:' . implode(',', array_unique($dsku_cat_data)) . ' | ';
-              $cat_diff_output .= 'MDC Cat:' . $mskus[$type][$sku]['category_ids'];
+              $cat_diff_output .= 'MDC Cat:' . implode(',', $mdc_cats);
               $cat_mismatch_sync[$type][] = $sku;
             }
 
