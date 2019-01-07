@@ -414,12 +414,20 @@ class StockManager {
       return;
     }
 
+    // Confirm SKU is not available in any language.
+    $query = $this->connection->select('acq_sku_field_data', 'sku');
+    $query->condition('sku', $sku);
+    $query->addField('sku', 'sku');
+    $result = $query->execute()->fetchAssoc();
+
+    if (!empty($result)) {
+      return;
+    }
+
     // Remove stock only after SKU is removed in all the languages.
-    $this->connection->query('DELETE FROM acq_sku_stock stock 
-      LEFT JOIN acq_sku_field_data sku ON stock.sku=sku.sku 
-      WHERE sku.sku IS NULL AND stock.sku=:sku', [
-        ':sku' => $sku
-    ]);
+    $this->connection->delete('acq_sku_stock')
+      ->condition('sku', $sku)
+      ->execute();
   }
 
 }

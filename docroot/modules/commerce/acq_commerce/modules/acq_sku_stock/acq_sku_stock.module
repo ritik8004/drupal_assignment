@@ -35,7 +35,7 @@ function acq_sku_stock_acq_sku_product_sku_alter(SKU $sku, $product) {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function alshaya_acm_product_acq_sku_delete(SKU $entity) {
+function acq_sku_stock_acq_sku_delete(SKU $entity) {
   /** @var \Drupal\acq_sku\StockManager $manager */
   $manager = \Drupal::service('acq_sku.stock_manager');
   $manager->removeStockEntry($entity->getSku());
