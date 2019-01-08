@@ -216,3 +216,15 @@
     }
   }
 }
+
+@include breakpoint($tablet) {
+  .magazine-layout-ajax-throbber {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
+          position: inherit !important;
+        }
+      }
+    }
+  }
+}
