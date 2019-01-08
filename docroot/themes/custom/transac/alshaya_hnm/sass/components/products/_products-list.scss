@@ -512,12 +512,6 @@
   .js-pager__items.visually-hidden {
     position: static !important;
   }
-
-  .ajax-progress-throbber {
-    .throbber {
-      background-image: url(../imgs/icons/ic-loader.svg) !important;
-    }
-  }
 }
 
 @include breakpoint($only-mobile) {
