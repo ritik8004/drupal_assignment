@@ -17,6 +17,16 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class ProcessFinishEventSubscriber implements EventSubscriberInterface {
 
   /**
+   * Contains configurable skus on update/add/delete.
+   *
+   * @var array
+   *   Array of configurable skus.
+   *
+   * @see _alshaya_acm_product_post_sku_operation().
+   */
+  public static $colorNodeSkus = [];
+
+  /**
    * SKU Manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -62,8 +72,14 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    $color_node_skus = &drupal_static('_alshaya_acm_product_post_sku_operation', []);
-    foreach ($color_node_skus as $sku) {
+    $this->processSkuColorNodes();
+  }
+
+  /**
+   * Mark color nodes of the configurable skus for indexing.
+   */
+  protected function processSkuColorNodes() {
+    foreach (self::$colorNodeSkus as $sku) {
       if (!empty($color_nodes = $this->skuManager->getColorNodeIds($sku))) {
         foreach ($color_nodes as $nid) {
           $node = $this->entityTypeManager->getStorage('node')->load($nid);
@@ -76,8 +92,8 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
       }
     }
 
-    // Clear static cache if any.
-    drupal_static_reset('_alshaya_acm_product_post_sku_operation');
+    // Reset for next request.
+    self::$colorNodeSkus = [];
   }
 
 }

@@ -34,7 +34,7 @@ use Drupal\search_api\IndexInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
-use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -246,12 +246,9 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  */
 function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation) {
   try {
-    $color_node_skus = &drupal_static(__FUNCTION__, []);
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $entity->getPluginInstance();
     // Only for configurable sku.
-    if ($plugin instanceof Configurable) {
-      $color_node_skus[] = $entity->getSku();
+    if ($entity->getType() == 'configurable') {
+      ProcessFinishEventSubscriber::$colorNodeSkus[] = $entity->getSku();
     }
 
     $event = new ProductUpdatedEvent($entity, $operation);
