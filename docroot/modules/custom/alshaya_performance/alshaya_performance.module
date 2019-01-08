@@ -21,6 +21,16 @@ function alshaya_performance_node_presave(EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_performance_taxonomy_term_presave(EntityInterface $entity) {
+  // Allows for clearing of blocks based on taxonomy type.
+  // Used for address book area list.
+  $tags = ['taxonomy_term:' . $entity->bundle()];
+  Cache::invalidateTags($tags);
+}
+
+/**
  * Helper function to set log mode from settings.
  */
 function alshaya_performance_reset_log_mode() {
