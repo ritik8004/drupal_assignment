@@ -381,15 +381,21 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Reset all config from settings.
+   * Reset specified config from settings.
+   *
+   * @param string $config
+   *   Config that needs to reset.
    *
    * @command alshaya_acm:reset-config
    *
    * @aliases arc,alshaya-reset-config
+   *
+   * @usage drush alshaya-reset-config acq_commerce.conductor
+   *   Resets the conductor config.
    */
-  public function resetConfig() {
+  public function resetConfig(string $config = '') {
     // Force reset all the settings.
-    $this->alshayaAcmConfigCheck->checkConfig(TRUE);
+    $this->alshayaAcmConfigCheck->checkConfig(TRUE, $config);
 
     // Reset country specific settings.
     $this->alshayaAcmConfigCheck->resetCountrySpecificSettings();

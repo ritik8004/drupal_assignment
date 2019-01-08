@@ -11,6 +11,16 @@ use Drupal\node\Entity\NodeType;
 /**
  * Implements hook_update_N().
  *
+ * Install memory_limit_policy module and path plugin.
+ */
+function alshaya_update_8012() {
+  \Drupal::service('module_installer')->install(['memory_limit_policy']);
+  \Drupal::service('module_installer')->install(['memory_limit_policy_path']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Uninstall lightning_scheduler module.
  */
 function alshaya_update_8011() {
