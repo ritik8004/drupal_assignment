@@ -93,7 +93,7 @@ class AddressBookAreasTermsHelper {
    *   List or governates.
    */
   public function getAllGovernates() {
-    $governate = $this->getAddressCachedData('get_addressbook_areas');
+    $governate = $this->getAddressCachedData('getAllGovernates');
     if (is_array($governate)) {
       return $governate;
     }
@@ -112,7 +112,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'get_addressbook_areas');
+    $this->setAddressCachedData($term_list, 'getAllGovernates');
 
     return $term_list;
   }
@@ -130,6 +130,11 @@ class AddressBookAreasTermsHelper {
     if (empty($parent) && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       // Parent is required in DM_VERSION_2, not throwing error though.
       return [];
+    }
+
+    $area_withparent = $this->getAddressCachedData('getAllAreasWithParent:' . $parent);
+    if (is_array($area_withparent)) {
+      return $area_withparent;
     }
 
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, $parent, 1, TRUE);
@@ -152,6 +157,8 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
+    $this->setAddressCachedData($term_list, 'getAllAreasWithParent:' . $parent);
+
     return $term_list;
   }
 
@@ -162,8 +169,7 @@ class AddressBookAreasTermsHelper {
    *   List or areas.
    */
   public function getAllAreas() {
-    $area = $this->getAddressCachedData('get_addressbook_areas');
-
+    $area = $this->getAddressCachedData('getAllAreas');
     if (is_array($area)) {
       return $area;
     }
@@ -188,7 +194,7 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
-    $this->setAddressCachedData($term_list, 'get_addressbook_areas');
+    $this->setAddressCachedData($term_list, 'getAllAreas');
 
     return $term_list;
   }
@@ -311,12 +317,14 @@ class AddressBookAreasTermsHelper {
    *   Data if found or null.
    */
   public function getAddressCachedData($key) {
-    $data = &drupal_static($key);
     $cid = $this->getAddressbookCachedId($key);
+    $static = &drupal_static($cid);
+    if (isset($static)) {
+      return $static;
+    }
 
     if ($cache = $this->cache->get($cid)) {
-      $data = $cache->data;
-      return $data;
+      return $cache->data;
     }
     return NULL;
   }
@@ -332,18 +340,12 @@ class AddressBookAreasTermsHelper {
   public function setAddressCachedData(array $data, $key) {
     $cid = $this->getAddressbookCachedId($key);
     $this->cache->set($cid, $data, Cache::PERMANENT, ['taxonomy_term:area_list']);
-  }
 
-  /**
-   * Clear the cache for area list.
-   *
-   * @param string $key
-   *   Key of the data to reset the cache..
-   */
-  public function clearAddressCachedData($key) {
-    drupal_static_reset($key);
-    $cid = $this->getAddressbookCachedId($key);
-    $this->cache->delete($cid);
+    // Update data in static cache too.
+    $static = &drupal_static($cid);
+    if (isset($static)) {
+      $static = $data;
+    }
   }
 
 }

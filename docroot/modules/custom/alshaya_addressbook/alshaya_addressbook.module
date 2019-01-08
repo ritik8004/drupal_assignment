@@ -893,36 +893,8 @@ function _alshaya_addressbook_get_area_from_id($tid) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function alshaya_addressbook_taxonomy_term_insert(Term $term) {
-  _alshaya_addressbook_post_area_list_operation($term);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function alshaya_addressbook_taxonomy_term_update(Term $term) {
-  _alshaya_addressbook_post_area_list_operation($term);
-}
-
-/**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_addressbook_taxonomy_term_delete(Term $term) {
-  _alshaya_addressbook_post_area_list_operation($term);
-}
-
-/**
- * Perform actions related to area list just added/updated/deleted.
- *
- * @param \Drupal\taxonomy\Entity\Term $term
- *   Area list for which display term is to be updated.
- */
-function _alshaya_addressbook_post_area_list_operation(Term $term) {
-  // Clear cached data for area list.
-  /** @var \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $addressBookArea */
-  $addressBookArea = \Drupal::service('alshaya_addressbook.area_terms_helper');
-  $addressBookArea->clearAddressCachedData('get_addressbook_areas');
   Cache::invalidateTags(['taxonomy_term:' . $term->bundle()]);
 }
