@@ -17,10 +17,8 @@
         position: absolute;
         #{$left}: 40%;
 
-        cybersource-ajax-progress-throbber {
-          .message {
-            display: none;
-          }
+        .message {
+          display: none;
         }
 
         .throbber {
