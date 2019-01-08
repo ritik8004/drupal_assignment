@@ -869,4 +869,24 @@ class AlshayaApiWrapper {
     return isset($response['message']) ? [] : $response;
   }
 
+  /**
+   * Get data for all enabled SKUs from Magento.
+   *
+   * @return array
+   *   The SKUs data.
+   */
+  public function getSkusData() : array {
+    $endpoint = 'sanity-check-data';
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $response = json_decode($response, TRUE) ?? [];
+
+    $skus = [];
+    foreach ($response as $data) {
+      $skus[$data['type_id']][$data['sku']] = $data;
+    }
+
+    return $skus;
+  }
+
 }

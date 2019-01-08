@@ -25,14 +25,14 @@
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch', context));
 
     // Markup for show more/less color swatches.
-    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View more colours') + '</div>');
+    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View all colours') + '</div>');
     var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
 
     if ($('.show-more-color').length === 0) {
-      showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+      showMoreHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
     if ($('.show-less-color').length === 0) {
-      showLessHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+      showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
 
     // JS function to show less/more for colour swatches.
@@ -55,7 +55,7 @@
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
         $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
-        Drupal.alshaya_hm_images_update_selected_label();
+        Drupal.alshaya_color_swatch_update_selected_label();
       }
     });
   };
@@ -64,11 +64,11 @@
    * Implementation of view more/less colour for swatches.
    */
   Drupal.magazine_swatches_count = function () {
-    if ($('.form-item-configurables-article-castor-id .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
-      $('.form-item-configurables-article-castor-id').addClass('product-swatch');
+    if ($('.configurable-swatch .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
+      $('.configurable-swatch').addClass('product-swatch');
     }
     else {
-      $('.form-item-configurables-article-castor-id').addClass('colour-swatch');
+      $('.configurable-swatch').addClass('colour-swatch');
     }
 
     var colour_swatches = drupalSettings.colour_swatch_items_mob;
@@ -86,30 +86,30 @@
     }
 
     if ($('.configurable-swatch.product-swatch').length > 0) {
-      swatch_items_to_show = product_swatches + 1;
+      swatch_items_to_show = product_swatches;
     }
     else {
-      swatch_items_to_show = colour_swatches + 1;
+      swatch_items_to_show = colour_swatches;
     }
 
-    if ($('.form-item-configurables-article-castor-id .select-buttons li').length > swatch_items_to_show) {
+    if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show) {
       if ($(window).width() > 767) {
         $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-        $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
+        $('.configurable-swatch').addClass('swatch-toggle');
       }
-      $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-effect');
+      $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
       $('.show-more-color').show();
     }
     else {
-      $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
+      $('.configurable-swatch, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
     }
 
     $('.show-more-color').on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-less-color').show();
@@ -117,10 +117,10 @@
 
     $('.show-less-color').on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').removeClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder').removeClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-more-color').show();
@@ -144,52 +144,6 @@
   };
 
   /**
-   * Helper function to compute height of add to cart button and make it sticky.
-   *
-   * @param {String} direction The scroll direction.
-   * @param {string} state The moment when function is called, initial/after.
-   */
-  function mobileMagazineSticky(direction, state) {
-    // Sticky Section.
-    var stickyDiv = $('.magazine-layout .content__title_wrapper');
-    // This is the wrapper that holds delivery options.
-    var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
-    var windowBottom;
-    var mobileCWBottom;
-    if (state === 'initial') {
-      // Button top.
-      var stickyDivTop = stickyDiv.offset().top + stickyDiv.height();
-      // Screen bottom.
-      windowBottom = $(window).scrollTop() + $(window).height();
-      if (stickyDivTop > windowBottom) {
-        stickyDiv.addClass('fixed');
-      }
-      else {
-        stickyDiv.removeClass('fixed');
-      }
-      return;
-    }
-    else {
-      // mobileContentWrapper bottom, based on direction we have to factor in
-      // the height of button if it is already fixed.
-      mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height();
-      if (direction === 'up') {
-        mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + stickyDiv.outerHeight() - 60;
-      }
-
-      // Screen scroll offset.
-      windowBottom = $(window).scrollTop() + $(window).height();
-      // Hide button when we are below delivery wrapper.
-      if (windowBottom > mobileCWBottom && mobileContentWrapper.length) {
-        stickyDiv.removeClass('fixed');
-      }
-      else {
-        stickyDiv.addClass('fixed');
-      }
-    }
-  }
-
-  /**
    * JS function to move mobile colors to bellow of PDP main image in product description section.
    *
    * @param {context} context on ajax update.
@@ -197,32 +151,32 @@
   function mobileColors(context) {
     // Moving color swatches from sidebar to main content in between the gallery after
     // first image as per design.
-    var sku_swatch = $('.configurable-swatch', context);
-    if (sku_swatch !== 'undefined') {
-      $('.magazine-swatch-placeholder').replaceWith('<div class="magazine-swatch-placeholder">' + sku_swatch.html() + '</div>');
 
-      $('.magazine-product-description .select2Option li a').on('click', function (e) {
-        e.preventDefault();
-        var select = $('.sku-base-form .configurable-swatch select');
-        var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
+    var sku_swatch = $('.configurable-swatch', context).clone();
+    $('.magazine-swatch-placeholder').html(sku_swatch);
+    $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
 
-        if (clickedOption.is(':selected')) {
-          return;
-        }
+    $('.magazine-product-description .select2Option li a').on('click', function (e) {
+      e.preventDefault();
+      var select = $('.sku-base-form .configurable-swatch select');
+      var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
 
-        $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
-        if ($(this).hasClass('picked')) {
-          $(this).removeClass('picked');
-          clickedOption.removeProp('selected');
-        }
-        else {
-          $('.magazine-product-description .select-buttons').find('a, span').removeClass('picked');
-          $(this).addClass('picked');
-          clickedOption.prop('selected', true);
-        }
-        select.trigger('change');
-      });
-    }
+      if (clickedOption.is(':selected')) {
+        return;
+      }
+
+      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
+      if ($(this).hasClass('picked')) {
+        $(this).removeClass('picked');
+        clickedOption.removeProp('selected');
+      }
+      else {
+        $('.magazine-product-description .select-buttons').find('a, span').removeClass('picked');
+        $(this).addClass('picked');
+        clickedOption.prop('selected', true);
+      }
+      select.trigger('change');
+    });
   }
 
   /**
@@ -235,9 +189,7 @@
       var sizeDiv = $('#configurable_ajax .form-item-configurables-size', context).clone();
       var sizeTray = $('.size-tray', context);
       var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
-      var sizeGuideLink = $('#configurable_ajax .size-guide-link', context);
-      // Move size guide link & size-tray close buttons inside confiruable size container.
-      sizeTrayButtons.prepend(sizeGuideLink);
+      // Move size-tray close buttons inside configurable size container.
       sizeTrayButtons.append('<div class="size-tray-close"></div>');
       // Move the configurable select container to size tray.
       if (sizeDiv.length > 0) {
@@ -251,10 +203,15 @@
 
     $('.size-tray-link', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      $('body').addClass('tray-overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
       $('.size-tray').toggleClass('tray-open');
+      $('body').removeClass('tray-overlay');
+      if ($('body').hasClass('open-tray-without-selection')) {
+        $('body').removeClass('open-tray-without-selection');
+      }
     });
 
     $('.size-tray-content .select2Option li a').on('click', function (e) {
@@ -267,6 +224,10 @@
       }
 
       $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
+
+      // Replace the size tray text with selected value..
+      $('.size-tray-link').addClass('selected-text').html(clickedOption.text());
+
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');
@@ -280,6 +241,7 @@
 
       // Closing the tray after selection.
       $('.size-tray').toggleClass('tray-open');
+      $('body').removeClass('tray-overlay');
     });
   }
 
@@ -292,43 +254,20 @@
     attach: function (context, settings) {
       // Only on mobile.
       if ($(window).width() < 768) {
-        // Select the node that will be observed for mutations.
-        var targetNode = document.querySelector('.acq-content-product .sku-base-form');
-        // Options for the observer (which mutations to observe).
-        var config = {attributes: true, childList: false, subtree: false};
-        // Callback function to execute when mutations are observed.
-        var callback = function (mutationsList, observer) {
-          mutationsList.forEach(function (mutation) {
-            if ((mutation.type === 'attributes') &&
-              (mutation.attributeName === 'class') &&
-              (!mutation.target.classList.contains('visually-hidden'))) {
-              var buttonHeight = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper .edit-add-to-cart').outerHeight();
-              var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper .basic-details-wrapper');
-              mobileContentWrapper.css('height', 'auto');
-              mobileContentWrapper.css('height', mobileContentWrapper.height() + buttonHeight - 8);
-              observer.disconnect();
-            }
-          });
-        };
-        // Create an observer instance linked to the callback function.
-        var observer = new MutationObserver(callback);
-        // Start observing the target node for configured mutations.
-        observer.observe(targetNode, config);
-        mobileMagazineSticky('bottom', 'initial');
-        var lastScrollTop = 0;
+        var stickyDiv = $('.magazine-layout .content__title_wrapper');
+        var mobileContentWrapper = $('.c-pdp .mobile-content-wrapper');
+        stickyDiv.addClass('fixed');
         $(window).on('scroll', function () {
-          var windowScrollTop = $(this).scrollTop();
-          var direction = 'bottom';
-          if (windowScrollTop > lastScrollTop) {
-            direction = 'bottom';
+          // Screen bottom.
+          var mobileCWBottom = mobileContentWrapper.offset().top + mobileContentWrapper.height() + stickyDiv.height() + 64;
+          var windowBottom = $(this).scrollTop() + $(this).height();
+          if (mobileCWBottom > windowBottom) {
+            stickyDiv.addClass('fixed');
           }
           else {
-            direction = 'up';
+            stickyDiv.removeClass('fixed');
           }
-          lastScrollTop = windowScrollTop;
-          mobileMagazineSticky(direction, 'after');
         });
-
       }
     }
   };
@@ -365,13 +304,30 @@
         // JS function to show less/more for colour swatches.
         Drupal.magazine_swatches_count();
 
+        var sizeTray = $('.size-tray', context);
+        var sizeTrayButtons = sizeTray.find('.size-tray-buttons');
+        var sizeGuideLink = $('#configurable_ajax .size-guide-link', context);
+        // Move size guide link inside configurable size container.
+        sizeTrayButtons.prepend(sizeGuideLink);
+
         $('.edit-add-to-cart', context).on('mousedown', function () {
           var that = this;
           setTimeout(function () {
             if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
               $('.size-tray').toggleClass('tray-open');
+              $('body').addClass('open-tray-without-selection');
             }
           }, 10);
+        });
+
+        // If tray is opening on clicking of add to basket (missing attribute selection).
+        // then on selection of attribute product should add to basket directly.
+        $(document).ajaxComplete(function (event, xhr, settings) {
+          if ((settings.hasOwnProperty('extraData')) &&
+            ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0)) &&
+            $('body').hasClass('open-tray-without-selection')) {
+            $('.edit-add-to-cart').mousedown();
+          }
         });
 
       }
@@ -397,6 +353,18 @@
             }
           }
         });
+
+        $('.size-guide-link').on('click', function (e) {
+          $('body').addClass('magazine-layout-ajax-throbber');
+        });
+
+        setTimeout(function () {
+          $('.ui-dialog-titlebar-close').on('click', function (e) {
+            if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+              $('body').removeClass('magazine-layout-ajax-throbber');
+            }
+          });
+        }, 10);
       }
     }
   };

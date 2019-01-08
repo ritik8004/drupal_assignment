@@ -10,6 +10,10 @@
   }
 }
 
+.select2-dropdown {
+  border-color: $primary_dropdown_border;
+}
+
 @mixin select2-style($select-width) {
   width: $select-width !important;
 
@@ -35,21 +39,21 @@
   }
 
   .select2-selection__arrow {
-    top: 0;
-    #{$right}: 0;
+    top: 1px;
+    #{$right}: 1px;
     width: 2.1875rem;
-    height: 2.1875rem;
+    height: 2rem;
     background: $primary_dropdown_arrow_bg;
 
     &::after {
       // IE10 needs this in px.
-      line-height: 35px;
+      line-height: 32px;
       font-size: 1.75rem;
-      top: 0;
+      top: 1px;
       #{$left}: auto;
       width: 2.1875rem;
-      height: 2.1875rem;
-      #{$right}: 0;
+      height: 2rem;
+      #{$right}: 1px;
       text-align: center;
       display: inline-block;
       background: $primary_dropdown_arrow_bg;
@@ -66,16 +70,16 @@
 
   @include icon(chevrondown, after) {
     font-size: 1.75rem;
-    line-height: 35px;
+    line-height: 32px;
     pointer-events: none;
     position: absolute;
-    #{$right}: 0;
-    top: 0;
+    #{$right}: 1px;
+    top: 2px;
     text-align: center;
     background-color: $primary_dropdown_arrow_bg;
     width: 2.1875rem;
-    height: 35px;
-    height: 2.1875rem;
+    height: 32px;
+    height: 2rem;
     border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
     color: $primary_dropdown_arrow_icon;
 

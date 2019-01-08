@@ -79,6 +79,7 @@ before_install:
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
+  - chmod 600 ${BUILD_DIR}/private/travis_acm.pub
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
@@ -124,7 +125,7 @@ deploy:
     script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
     on:
-      branch: non-aggregated-plp
+      branch: category-sale
       php: 7.1
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"

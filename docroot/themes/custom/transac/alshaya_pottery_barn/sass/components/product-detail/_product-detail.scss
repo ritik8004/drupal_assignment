@@ -135,14 +135,6 @@
           }
         }
 
-        &.form-item-configurables-size {
-          @include breakpoint($only-mobile) {
-            &::after {
-              top: 0;
-            }
-          }
-        }
-
         &.configurable-swatch {
           @include breakpoint($only-mobile) {
             margin: 0;
