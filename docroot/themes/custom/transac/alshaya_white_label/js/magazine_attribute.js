@@ -29,10 +29,10 @@
     var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
 
     if ($('.show-more-color').length === 0) {
-      showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+      showMoreHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
     if ($('.show-less-color').length === 0) {
-      showLessHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();
+      showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
 
     // JS function to show less/more for colour swatches.
@@ -55,7 +55,7 @@
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
         $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
-        Drupal.alshaya_hm_images_update_selected_label();
+        Drupal.alshaya_color_swatch_update_selected_label();
       }
     });
   };
@@ -64,11 +64,11 @@
    * Implementation of view more/less colour for swatches.
    */
   Drupal.magazine_swatches_count = function () {
-    if ($('.form-item-configurables-article-castor-id .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
-      $('.form-item-configurables-article-castor-id').addClass('product-swatch');
+    if ($('.configurable-swatch .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
+      $('.configurable-swatch').addClass('product-swatch');
     }
     else {
-      $('.form-item-configurables-article-castor-id').addClass('colour-swatch');
+      $('.configurable-swatch').addClass('colour-swatch');
     }
 
     var colour_swatches = drupalSettings.colour_swatch_items_mob;
@@ -92,26 +92,24 @@
       swatch_items_to_show = colour_swatches;
     }
 
-    $('.configurable-swatch').each(function () {
-      if ($(this).find('.select-buttons li').length > swatch_items_to_show + 1) {
-        if ($(window).width() > 767) {
-          $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-          $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
-        }
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-effect');
-        $('.show-more-color').show();
+    if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show) {
+      if ($(window).width() > 767) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch').addClass('swatch-toggle');
       }
-      else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
-      }
-    });
+      $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+      $('.show-more-color').show();
+    }
+    else {
+      $('.configurable-swatch, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
+    }
 
     $('.show-more-color').on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-less-color').show();
@@ -119,10 +117,10 @@
 
     $('.show-less-color').on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').removeClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder').removeClass('swatch-toggle');
       }
       $(this).hide();
       $('.show-more-color').show();
