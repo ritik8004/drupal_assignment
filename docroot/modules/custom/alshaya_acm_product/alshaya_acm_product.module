@@ -1389,7 +1389,8 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
         '@data' => json_encode($log_data),
       ]);
 
-      // Return empty response.
+      // Return response with fake command to ensure nothing happens in FE.
+      $response->addCommand(new HtmlCommand('.fake-selector', ''));
       return $response;
     }
 

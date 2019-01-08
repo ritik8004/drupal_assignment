@@ -1,0 +1,10 @@
+id: path_based_memory
+label: 'Path based memory'
+weight: -10
+status: true
+memory: 286M
+langcode: en
+policy_constraints:
+  -
+    id: path
+    paths: /skus/list

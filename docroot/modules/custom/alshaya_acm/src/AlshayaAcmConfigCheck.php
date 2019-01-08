@@ -93,8 +93,10 @@ class AlshayaAcmConfigCheck {
    *
    * @param bool $force
    *   Force reset.
+   * @param string $config_reset
+   *   Config that needs to reset.
    */
-  public function checkConfig($force = FALSE) {
+  public function checkConfig($force = FALSE, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
       return;
@@ -108,9 +110,10 @@ class AlshayaAcmConfigCheck {
       return;
     }
 
-    // If we want to force reset, we don't check for other conditions.
+    // If we want to force reset or config is empty, we don't check for
+    // other conditions.
     // We don't do anything on prod.
-    if (!$force && alshaya_is_env_prod()) {
+    if (alshaya_is_env_prod() && (!$force || empty($config_reset))) {
       return;
     }
 
@@ -143,6 +146,15 @@ class AlshayaAcmConfigCheck {
       'google_tag.settings',
       'social_auth_facebook.settings',
     ];
+
+    if (!empty($config_reset)) {
+      if (!in_array($config_reset, $reset)) {
+        return;
+      }
+      else {
+        $reset = [$config_reset];
+      }
+    }
 
     // Reset the settings.
     foreach ($reset as $config_key) {
