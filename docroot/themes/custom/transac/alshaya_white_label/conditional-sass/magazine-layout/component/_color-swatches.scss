@@ -116,6 +116,8 @@
 
     @include breakpoint($only-mobile) {
       &.simple-swatch-effect {
+        margin-bottom: 0.625rem;
+
         .select2Option {
           .select-buttons {
             background-color: $colour-swatches-simple-effect-bg;
@@ -124,10 +126,8 @@
 
             li,
             span {
-              @include breakpoint($only-mobile) {
-                a:not([data-swatch-type=RGB]) {
-                  margin-bottom: 0;
-                }
+              a:not([data-swatch-type=RGB]) {
+                margin-bottom: 0;
               }
             }
           }
@@ -153,6 +153,14 @@
           display: none;
         }
       }
+    }
+  }
+}
+
+.magazine-layout {
+  .magazine-swatch-placeholder {
+    > label {
+      display: none;
     }
   }
 }

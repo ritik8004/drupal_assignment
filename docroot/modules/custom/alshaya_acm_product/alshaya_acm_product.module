@@ -8,6 +8,7 @@
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Controller\ProductStockController;
+use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\block\Entity\Block;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
@@ -20,7 +21,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -240,46 +240,14 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  * Perform actions related to entity just added/updated/deleted.
  *
  * @param \Drupal\acq_sku\Entity\SKU $entity
- *   SKU for which display node is to be updated.
+ *   SKU for which event needs to be dispatched.
+ * @param string $operation
+ *   Operation performed.
  */
-function _alshaya_acm_product_post_sku_operation(SKU $entity) {
+function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation) {
   try {
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $entity->getPluginInstance();
-
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-    // Clear cached data for products.
-    $skuManager->clearProductCachedData($entity);
-
-    if ($parent = $plugin->getParentSku($entity)) {
-      // Clear cached data for configurable products.
-      $skuManager->clearProductCachedData($parent);
-
-      // Reset the sku static cache.
-      drupal_static_reset('loadFromSku');
-
-      // @TODO: Make this smart in CORE-3443.
-      Cache::invalidateTags($parent->getCacheTagsToInvalidate());
-
-      // Update color nodes on save of each child.
-      $node = $skuManager->getDisplayNode($parent, FALSE);
-      if ($node instanceof NodeInterface) {
-        $skuManager->processColorNodesForConfigurable($node);
-      }
-    }
-
-    // Re-index if search_api is enabled.
-    if (\Drupal::moduleHandler()->moduleExists('search_api')) {
-      // Check if node is available.
-      if ($node = $plugin->getDisplayNode($entity)) {
-        $node->original = clone $node;
-
-        // Mark node for reindexing on add/update/delete of SKUs.
-        search_api_entity_update($node);
-      }
-    }
+    $event = new ProductUpdatedEvent($entity, $operation);
+    \Drupal::service('event_dispatcher')->dispatch(ProductUpdatedEvent::EVENT_NAME, $event);
   }
   catch (\Exception $e) {
     // Translation might not be available.
@@ -290,39 +258,43 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_acm_product_acq_sku_insert(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity);
+  _alshaya_acm_product_post_sku_operation($entity, 'insert');
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
 function alshaya_acm_product_acq_sku_update(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity);
+  _alshaya_acm_product_post_sku_operation($entity, 'update');
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity);
+  _alshaya_acm_product_post_sku_operation($entity, 'delete');
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_node_delete(NodeInterface $node) {
-  $sku = $node->get('field_skus')->getString();
+  if ($node->bundle() == 'acq_product') {
+    $sku = $node->get('field_skus')->getString();
+    $color = $node->get('field_product_color')->getString();
 
-  // Delete the color nodes available in system for this particular product.
-  if ($sku) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-    $nids = $skuManager->getColorNodeIds($sku);
+    // Delete the color nodes available in system for this particular product.
+    // Do nothing when deleting color node itself.
+    if ($sku && empty($color)) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $nids = $skuManager->getColorNodeIds($sku);
 
-    if ($nids) {
-      $storage = \Drupal::entityTypeManager()->getStorage('node');
-      $nodes = $storage->loadMultiple($nids);
-      $storage->delete($nodes);
+      if ($nids) {
+        $storage = \Drupal::entityTypeManager()->getStorage('node');
+        $nodes = $storage->loadMultiple($nids);
+        $storage->delete($nodes);
+      }
     }
   }
 }
@@ -1100,6 +1072,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   $form['add_to_cart']['#attributes']['id'] = 'edit-add-to-cart-' . $sku_entity->id();
   $form['add_to_cart']['#name'] = 'add_to_cart_' . $sku_entity->id();
 
+  // Add an empty field that can be filled with the correct context - pdp/modal.
+  $form['page-context']['#type'] = 'hidden';
+  $form['page-context']['#attributes']['class'] = 'hidden-context';
+
   $form['add_to_cart']['#ajax'] = [
     'url' => Url::fromRoute(
       'alshaya_acm_product.add_to_cart_submit',
@@ -1400,12 +1376,29 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
+    else {
+      // Something is wrong here, we shouldn't land here with a selected sku
+      // with no quantity, this could be an old form open in browser and
+      // stock became empty now.
+      $log_data = [
+        'selected_sku' => $tree_pointer->getSku(),
+        'sku' => $sku->getSku(),
+      ];
+
+      \Drupal::logger('alshaya_acm_product')->error('Combination selected in add to cart form which is OOS. Data: @data', [
+        '@data' => json_encode($log_data),
+      ]);
+
+      // Return empty response.
+      return $response;
+    }
 
     $build = [];
 
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $pdp_layout = $skuManager->getPdpLayout($tree_pointer, 'pdp');
+    $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
+    $pdp_layout = $skuManager->getPdpLayout($tree_pointer, $context);
     $build['gallery'] = $skuImagesManager->getGallery($tree_pointer, $pdp_layout, '', FALSE);
 
     if (isset($build['gallery'])) {
@@ -1568,11 +1561,13 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
       if ($first_child instanceof SKU) {
-        $pdp_layout = $skuManager->getPdpLayout($first_child, 'pdp');
+        $context = ($form_state->getValue('page-context') == 'modal') ? 'modal' : 'pdp';
+
+        $pdp_layout = $skuManager->getPdpLayout($first_child, $context);
         $build['gallery'] = $skuImagesManager->getGallery($first_child, $pdp_layout, '', FALSE, $sku);
 
         if (!empty($build['gallery'])) {
-          if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
+          if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE && $context != 'modal') {
             $dynamic_parts['alshaya_magazine'] = $build['gallery']['alshaya_magazine'];
           }
           else {

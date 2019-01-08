@@ -363,6 +363,13 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $do_api_check = FALSE;
     }
   }
+  else {
+    \Drupal::logger('alshaya_acm_customer')->warning('Failed to load user from mail: @mail. Values for form name element validate: @element_validate and form validate: @validate', [
+      '@mail' => $mail,
+      '@element_validate' => json_encode($form['name']['#element_validate']),
+      '@validate' => json_encode($form['#validate']),
+    ]);
+  }
 
   // Do check against Magento only if user is unknown or just authenticated.
   if ($do_api_check) {

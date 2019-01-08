@@ -170,19 +170,6 @@
   }
 }
 
-.c-footer {
-  position: relative;
-  padding-top: 3.5rem;
-
-  @include breakpoint($tablet) {
-    padding-top: 2.75rem;
-  }
-
-  @include breakpoint($desktop) {
-    padding-top: 3.75rem;
-  }
-}
-
 .c-footer-primary {
   @include clearfix;
 

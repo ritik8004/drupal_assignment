@@ -73,12 +73,6 @@
       }
     }
   }
-
-  .block-language-blocklanguage-interface {
-    .is-active {
-      @include u-visibility(none);
-    }
-  }
 }
 
 .c-my-account-nav {

@@ -7,25 +7,23 @@
     {% else %}
       <div id="product-zoom-container"></div>
     {% endif %}
-
-    {% if content.cross_sell %}
-      <div class="horizontal-crossell above-mobile-block">
-        {{ content.cross_sell }}
-      </div>
-    {% endif %}
-
-    {% if content.up_sell %}
-      <div class="horizontal-upell above-mobile-block">
-        {{ content.up_sell }}
-      </div>
-    {% endif %}
-
-    {% if content.related %}
-      <div class="horizontal-related above-mobile-block">
-        {{ content.related }}
-      </div>
-    {% endif %}
   </div>
+  {% if content.cross_sell %}
+    <div class="horizontal-crossell above-mobile-block">
+      {{ content.cross_sell }}
+    </div>
+  {% endif %}
+
+  {% if content.up_sell %}
+    <div class="horizontal-upell above-mobile-block">
+      {{ content.up_sell }}
+    </div>
+  {% endif %}
+  {% if content.related %}
+    <div class="horizontal-related above-mobile-block">
+      {{ content.related }}
+    </div>
+  {% endif %}
 {% endblock %}
 {% block contentSidebar %}
   <div class="content-sidebar-wrapper">
@@ -100,7 +98,6 @@
           {% if content.home_delivery or content.click_and_collect %}
             <div class="delivery-options-wrapper">
               <div class="product-out-of-stock-layer"></div>
-              <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
               <div class="field__content">
                 {{ content.home_delivery }}
 
@@ -139,7 +136,8 @@
     {% endblock %}
   </div>
 <div class="size-tray">
-    <div class="size-tray-buttons"></div>
-    <div class="size-tray-content"></div>
+    <div class="size-tray-content">
+      <div class="size-tray-buttons"></div>
+    </div>
 </div>
 {% endblock %}

@@ -1,8 +1,33 @@
 .magazine-layout-node {
+  .acq-content-product {
+    @include breakpoint($tablet) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto auto;
+      grid-gap: 0 1rem;
+    }
+  }
+
+  .content__main {
+    @include breakpoint($tablet) {
+      grid-column: 1 / 3;
+      width: auto;
+      float: none;
+    }
+  }
+
+  .horizontal-upell,
+  .horizontal-related,
+  .horizontal-crossell {
+    @include breakpoint($tablet) {
+      grid-column: 1 / 3;
+    }
+  }
+
   .content-sidebar-wrapper {
     @include breakpoint($tablet) {
-      width: 40%;
-      float: $right;
+      grid-column: 3 / -1;
+      grid-row: 1 / 2;
 
       .content__title_wrapper {
         width: 100%;
@@ -20,7 +45,7 @@
         position: fixed;
         top: 5rem;
         #{$right}: calc((100vw - 45rem) / 2);
-        width: calc((40 * 45rem) / 100);
+        width: calc((40 * 35.5rem) / 100);
 
         &.contain {
           position: absolute;
@@ -31,13 +56,15 @@
       }
     }
 
-    @include breakpoint($desktop) {
-      width: 30%;
+    .content__title_wrapper {
+      border-bottom: none;
+    }
 
+    @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
-        #{$right}: calc((100vw - 67.35rem) / 2);
-        width: calc((30 * 66.35rem) / 100);
+        #{$right}: calc((100vw - 66.5rem) / 2);
+        width: calc((30 * 71.5rem) / 100);
       }
     }
   }
@@ -56,9 +83,6 @@
 
   .content__title_wrapper {
     @include breakpoint($only-mobile) {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: auto auto auto;
       padding: 1rem;
 
       &.fixed {
@@ -89,7 +113,27 @@
   }
 
   .basic-details-wrapper {
+    .sku-base-form {
+      @include breakpoint($tablet) {
+        display: grid;
+        grid-column: 3 / -1;
+        grid-row: 1 / 2;
+        width: 100%;
+
+        button[type="submit"] {
+          width: 100%;
+          max-width: 11.125rem;
+
+          html[lang=ar] & {
+            max-width: 13.7rem;
+          }
+        }
+      }
+    }
+
     @include breakpoint($only-mobile) {
+      min-height: 3rem;
+
       .field--name-field-skus {
         min-height: inherit;
 
@@ -111,16 +155,28 @@
         }
 
         .size-tray-link {
+          @include icon(dropdown-expand, after);
+
+          position: relative;
           display: flex;
-          justify-content: center;
+          justify-content: $left;
           align-items: center;
           height: 3rem;
           border: 2px solid $primary_empty_btn_border;
           padding: 0.65rem;
-          text-align: center;
           color: $primary_empty_btn;
           cursor: pointer;
           grid-column: 1 / 2;
+
+          &::after {
+            position: absolute;
+            #{$right}: 0;
+            font-size: 2.125rem;
+          }
+
+          &.selected-text {
+            justify-content: center;
+          }
         }
 
         .edit-add-to-cart {
@@ -139,6 +195,25 @@
       &.sidebar-fixed {
         position: static;
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  body {
+    &.mobile--overlay {
+      .magazine-layout-node {
+        .content__title_wrapper {
+          &.fixed {
+            z-index: 1;
+          }
+        }
+      }
+    }
+
+    &.tray-overlay,
+    &.open-tray-without-selection {
+      overflow: hidden;
     }
   }
 }

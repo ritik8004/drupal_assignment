@@ -52,7 +52,6 @@
     }
 
     label.option {
-      top: 0;
       padding-#{$left}: 2.5rem;
       font-size: 0.875rem;
 
@@ -88,12 +87,7 @@
 
   .form-type-checkbox {
     .option {
-      top: 0;
-
       &::before {
-        margin-#{$right}: 0.9rem;
-        top: 0;
-        float: $left;
         position: absolute;
         #{$left}: 0;
 
