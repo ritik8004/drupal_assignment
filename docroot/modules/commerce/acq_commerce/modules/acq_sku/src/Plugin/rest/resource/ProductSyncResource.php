@@ -204,7 +204,6 @@ class ProductSyncResource extends ResourceBase {
     $deleted = 0;
     $ignored_skus = [];
     static $child_skus_processed = [];
-    static $child_skus = [];
 
     $config = $this->configFactory->get('acq_commerce.conductor');
     $debug = $config->get('debug');
@@ -321,6 +320,7 @@ class ProductSyncResource extends ResourceBase {
             // Check if this was the last simple SKU in its parent. If that's
             // the case, unpublish the node too.
             if ($parent_sku instanceof SKU) {
+              $child_skus = [];
               foreach ($parent_sku->get('field_configured_skus')->getValue() as $child) {
                 if (empty($child['value'])) {
                   continue;
@@ -489,13 +489,11 @@ class ProductSyncResource extends ResourceBase {
           elseif (!$node->isNew() && $product['type'] == 'configurable') {
             // Check in case of update if this configurable SKU has a simple
             // children in DB. If not, set node as unpublished.
-            if (!isset($child_skus[$product['sku']])) {
-              $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
-                ->fields('asfcs', ['field_configured_skus_value']);
-              $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
-              $result = $query->condition('sku', $product['sku'])->distinct()->execute();
-              $child_skus[$product['sku']] = array_merge($child_skus_processed, $result->fetchAllKeyed(0, 0));
-            }
+            $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
+              ->fields('asfcs', ['field_configured_skus_value']);
+            $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
+            $result = $query->condition('sku', $product['sku'])->distinct()->execute();
+            $child_skus[$product['sku']] = array_merge($child_skus_processed, $result->fetchAllKeyed(0, 0));
 
             if (!empty($child_skus[$product['sku']])) {
               $node->setPublished();
