@@ -11,3 +11,4 @@ dependencies:
   - form_options_attributes:form_options_attributes
   - metatag:metatag
   - drupal:views
+  - simple_sitemap:simple_sitemap

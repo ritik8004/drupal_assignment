@@ -25,12 +25,8 @@
     }
   }
 
-  @include breakpoint($tablet) {
-    margin-#{$right}: 1rem;
-  }
-
   @include breakpoint($desktop) {
-    margin-#{$right}: 2rem;
+    margin-#{$right}: 1rem;
   }
 
   figure {
@@ -52,15 +48,6 @@
       width: 60%;
       margin: 0 auto;
       padding: 1rem 0;
-    }
-
-    .magazine-read-more-link {
-      font-family: $arial;
-      font-size: 0.875rem;
-      font-weight: bold;
-      line-height: 1.83;
-      color: $pdp_sidebar_link;
-      cursor: pointer;
     }
 
     ul {
@@ -106,6 +93,11 @@
     .cloud-zoom-lens {
       border: 1px solid $cloudzoom_hovertext;
       background-color: rgba(255, 255, 255, 0.5);
+      display: none;
+
+      @include breakpoint($desktop) {
+        display: block;
+      }
     }
 
     &:nth-child(2n) {
@@ -154,6 +146,46 @@
         .cloud-zoom-title {
           display: none;
         }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .pdp-modal-overlay {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
+          position: relative !important;
+
+          > a {
+            position: relative !important;
+          }
+        }
+      }
+    }
+  }
+
+  .nodetype--acq_product {
+    &.magazine-layout {
+      .magazine__gallery--container {
+        .pdp-image {
+          #wrap {
+            position: static !important;
+
+            > a {
+              position: static !important;
+            }
+
+            .mousetrap {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .dialog-product-image-gallery-container-mobile {
+        z-index: 10001;
       }
     }
   }

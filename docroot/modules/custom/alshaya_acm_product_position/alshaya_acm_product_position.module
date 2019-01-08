@@ -70,7 +70,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
 
     if ($tid) {
-      $db_query->leftJoin('acq_sku_position', 'acq_sku_position', '(t.nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)', [
+      $db_query->leftJoin('acq_sku_position', 'acq_sku_position', '(t.original_nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)', [
         ':tid' => $tid,
         ':position_type' => 'position',
       ]);
@@ -100,24 +100,25 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
 
   $filters = $view->getExposedInput();
   if (empty($filters['sort_bef_combine'])) {
-    // Get sorts.
-    if (is_array($view->sort) && !empty($sorts = array_keys($view->sort))) {
-      $enabled_sorts = _alshaya_acm_product_position_get_config();
-      if ($enabled_sorts) {
-        $default_sort = FALSE;
-        foreach ($sorts as $sort) {
-          if (isset($enabled_sorts[$sort])) {
-            $default_sort = $sort . ' ASC';
-            break;
-          }
-        }
+    // We allow administrators to override the order of sorting options.
+    // Here we try to set the default sort order based on config when there
+    // is nothing in exposed input.
+    if (is_array($view->sort) && !empty($view->sort)) {
+      $sorts = $view->sort;
+      $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
 
-        if ($default_sort) {
-          $filters['sort_bef_combine'] = $default_sort;
+      // Remove the ones not enabled in view's sorting options.
+      foreach ($labels as $key => $sort_option) {
+        $sort_field = explode(' ', $key)[0];
+        if (!isset($sorts[$sort_field])) {
+          unset($labels[$key]);
         }
-
-        $view->setExposedInput($filters);
       }
+
+      $labels = _alshaya_acm_product_position_sorted_options($labels);
+      $filters['sort_bef_combine'] = reset(array_keys($labels));
+
+      $view->setExposedInput($filters);
     }
   }
 

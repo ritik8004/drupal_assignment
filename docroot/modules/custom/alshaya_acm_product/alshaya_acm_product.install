@@ -12,6 +12,58 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Enable creating product nodes for colors.
+ */
+function alshaya_acm_product_update_8034() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    [
+      'field.storage.node.field_product_color',
+      'field.field.node.acq_product.field_product_color',
+    ],
+    'alshaya_acm_product'
+  );
+
+  $manager->updateConfigs(
+    [
+      'core.entity_view_display.node.acq_product.modal',
+      'core.entity_view_display.node.acq_product.product_category_carousel',
+      'views.view.alshaya_product_list',
+    ],
+    'alshaya_product'
+  );
+
+  $manager->updateConfigs(
+    ['core.entity_view_display.node.acq_product.search_result'],
+    'alshaya_search'
+  );
+
+  $manager->updateConfigs(
+    [
+      'core.entity_view_display.node.acq_product.default',
+      'core.entity_form_display.node.acq_product.default',
+    ],
+    'acq_sku'
+  );
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  // Update alshaya product index to reflect created field.
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+
+  _alshaya_search_resave_indexes(['product']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * To show the color swatches hover & active effects
  * on PDP.
  */

@@ -556,10 +556,13 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
  * Helper function to clear all indexed items resave indexes.
  *
  * Since we will add/update lot of attributes, best to re-use the code.
+ *
+ * @param array $indexes
+ *   Indexes to resave.
+ *
+ * @throws \Exception
  */
-function _alshaya_search_resave_indexes() {
-  $indexes = ['product', 'acquia_search_index'];
-
+function _alshaya_search_resave_indexes(array $indexes = ['product', 'acquia_search_index']) {
   foreach ($indexes as $index_name) {
     // Queue items for re-indexing. Required specifically for search_api_db to
     // avoid creating tables with numeric prefixes when indexing content.

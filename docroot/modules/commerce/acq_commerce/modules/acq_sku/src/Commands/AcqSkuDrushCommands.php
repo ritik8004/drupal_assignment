@@ -176,6 +176,7 @@ class AcqSkuDrushCommands extends DrushCommands {
                               CacheBackendInterface $linkedSkuCache,
                               CacheBackendInterface $stockCache,
                               CacheTagsInvalidatorInterface $cacheTagsInvalidator) {
+    parent::__construct();
     $this->apiWrapper = $apiWrapper;
     $this->i18nhelper = $i18nHelper;
     $this->ingestApiWrapper = $ingestAPIWrapper;
@@ -249,11 +250,13 @@ class AcqSkuDrushCommands extends DrushCommands {
 
     // Ask for confirmation from user if attempt is to run full sync.
     if (empty($skus) && empty($category_id)) {
-      $confirm = dt('Are you sure you want to import all products for @language language?', [
+      $confirmation_text = dt('I CONFIRM');
+      $input = $this->io()->ask(dt('Are you sure you want to import all products for @language language? If yes, type: "@confirmation"', [
         '@language' => $langcode,
-      ]);
+        '@confirmation' => $confirmation_text,
+      ]));
 
-      if (!$this->io()->confirm($confirm)) {
+      if ($input != $confirmation_text) {
         throw new UserAbortException();
       }
     }

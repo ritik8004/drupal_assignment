@@ -59,6 +59,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       case 'media':
         $this->processMedia($event);
         break;
+
       case 'swatch':
         $this->processSwatch($event);
         break;
