@@ -198,15 +198,20 @@ class AlshayaApiCommands extends DrushCommands {
     $skip_cats = [];
     // MDC categories those needs to be ignored while checking for the category
     // diff between drupal and mdc.
-    if (!empty($cats_to_ignore = $this->configFactory->get('alshaya_api.settings')->get('mdc_cats_ignore_sanity_check'))) {
+    if (!empty($cats_to_ignore = $this->configFactory->get('alshaya_api.settings')->get('ignored_mdc_cats_on_sanity_check'))) {
       $skip_cats = explode(',', $cats_to_ignore);
     }
 
     // Informing user in debug mode to setup ignored categories.
     if (empty($skip_cats)) {
       $this->logger()->debug(dt('You can set the category ids which can be ignored in key @key of @config config.', [
-        '@key' => 'mdc_cats_ignore_sanity_check',
+        '@key' => 'ignored_mdc_cats_on_sanity_check',
         '@config' => 'alshaya_api.settings',
+      ]));
+    }
+    else {
+      $this->logger()->debug(dt('Category IDs:@cat_ids are being ignored while computing MDC and Drupal category diff.', [
+        '@cat_ids' => implode(',', $skip_cats),
       ]));
     }
 
