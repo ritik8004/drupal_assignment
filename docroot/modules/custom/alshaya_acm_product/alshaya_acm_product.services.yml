@@ -85,7 +85,7 @@ services:
   alshaya_acm_product.process_finish_event:
     class: Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber
     arguments:
-    - '@alshaya_acm_product.skumanager'
-    - '@entity_type.manager'
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
     tags:
-    - { name: 'event_subscriber' }
+      - { name: 'event_subscriber' }
