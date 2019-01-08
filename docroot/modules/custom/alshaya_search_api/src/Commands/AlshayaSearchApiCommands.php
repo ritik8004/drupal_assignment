@@ -72,17 +72,27 @@ class AlshayaSearchApiCommands extends DrushCommands {
 
     foreach ($item_ids as $item_id) {
       foreach ($indexes as $index) {
-        $this->connection->merge('search_api_item')
-          ->key([
+        try {
+          $query = $this->connection->insert('search_api_item');
+
+          $query->fields([
             'item_id' => $item_id,
             'index_id' => $index,
-          ])
-          ->fields([
             'datasource' => 'entity:node',
             'status' => 1,
             'changed' => $requested_time,
-          ])
-          ->execute();
+          ]);
+
+          $query->execute();
+        }
+        catch (\Exception $e) {
+          // Entry may exist, doing nothing here.
+          $this->io()->writeln('Failed to insert for: ' . $index . ' : ' . $item_id);
+          $this->logger->info('Failed to insert for: @index : @item_id', [
+            '@index' => $index,
+            '@item_id' => $item_id,
+          ]);
+        }
       }
 
       $this->io()->writeln('Index data corrected for: ' . $item_id);
