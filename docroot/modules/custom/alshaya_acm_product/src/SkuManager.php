@@ -1846,13 +1846,11 @@ class SkuManager {
     $cache = $this->productCache->get($cid);
     $data = $cache->data ?? [];
     $data[$key] = $value;
-    $this->productCache->set($cid, $data);
+    $this->productCache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
 
     // Update value in static cache too.
     $static = &drupal_static('alshaya_product_cached_data', []);
-    if (isset($static[$cid], $static[$cid][$key])) {
-      $static[$cid][$key] = $value;
-    }
+    $static[$cid][$key] = $value;
   }
 
   /**
@@ -1866,24 +1864,6 @@ class SkuManager {
    */
   public function getProductCachedId(SKU $sku) {
     return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
-  }
-
-  /**
-   * Clear configurable product cache for particular SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity.
-   */
-  public function clearProductCachedData(SKU $sku) {
-    drupal_static_reset('alshaya_product_cached_data');
-    $cid = $this->getProductCachedId($sku);
-    $this->productCache->delete($cid);
-
-    // We also invalidate caches for node here.
-    $node = $this->getDisplayNode($sku);
-    if ($node instanceof NodeInterface) {
-      Cache::invalidateTags($node->getCacheTagsToInvalidate());
-    }
   }
 
   /**
