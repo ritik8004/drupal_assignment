@@ -834,7 +834,7 @@ class SKU extends ContentEntityBase implements SKUInterface {
   public function refreshStock() {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $this->getPluginInstance();
-    $plugin->refreshStock($this->getSku());
+    $plugin->refreshStock($this);
   }
 
 }
