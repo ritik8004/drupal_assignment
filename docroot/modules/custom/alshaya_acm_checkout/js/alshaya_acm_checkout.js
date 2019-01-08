@@ -311,7 +311,7 @@
   };
 
   // Show loader every-time we are reloading page.
-  $(window).on('beforeunload pagehide', function () {
+  $(window).on('beforeunload', function () {
     $(this).showCheckoutLoader();
   });
 
