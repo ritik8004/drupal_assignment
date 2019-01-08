@@ -66,7 +66,6 @@ class ProductStockController extends ControllerBase {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('plugin.manager.sku'),
       $container->get('acq_sku.form_builder'),
       $container->get('alshaya_acm_product.skumanager')
     );
