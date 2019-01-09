@@ -274,8 +274,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Parent Category.
    */
   private function syncCategory(array $categories, $parent = NULL) {
-    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-    $lock = \Drupal::service('lock.persistent');
+    $lock = \Drupal::lock();
 
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
