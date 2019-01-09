@@ -95,15 +95,23 @@ class AcqSkuPositionCommands extends DrushCommands {
   public function syncPositions($position_type = 'position') {
     $this->logger->notice('Product position sync in progress...');
 
+    // SQL query to fetch categories from DB.
+    $sql_query = 'SELECT tc.entity_id as tid, tc.field_commerce_id_value as commerce_id, td.name
+                  FROM taxonomy_term__field_commerce_id tc
+                  INNER JOIN taxonomy_term_field_data td
+                  ON td.tid=tc.entity_id AND td.langcode=tc.langcode';
+
     // Get all product category terms.
-    $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('acq_product_category');
+    $query = $this->connection->query($sql_query);
+    $query->execute();
+    $terms = $query->fetchAll();
 
     // Allow other modules to skip terms from position sync.
     $this->moduleHandler->alter('acq_sku_position_sync', $terms);
 
     foreach ($terms as $term) {
       // Find the commerce id from the term. Skip if not found.
-      $commerce_id = $this->entityTypeManager->getStorage('taxonomy_term')->load($term->tid)->get('field_commerce_id')->value;
+      $commerce_id = $term->commerce_id;
       if (!$commerce_id) {
         continue;
       }
