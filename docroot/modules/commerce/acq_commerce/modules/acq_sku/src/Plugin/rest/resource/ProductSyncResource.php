@@ -181,8 +181,7 @@ class ProductSyncResource extends ResourceBase {
    *   HTTP Response object.
    */
   public function post(array $products) {
-    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-    $lock = \Drupal::service('lock.persistent');
+    $lock = \Drupal::lock();
 
     $em = $this->entityManager->getStorage('acq_sku');
     $created = 0;
