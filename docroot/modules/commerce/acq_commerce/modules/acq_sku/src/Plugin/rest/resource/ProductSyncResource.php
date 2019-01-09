@@ -198,35 +198,6 @@ class ProductSyncResource extends ResourceBase {
 
     foreach ($products as $product) {
       try {
-        $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
-
-        // Magento might have stores that what we don't support.
-        if (empty($langcode)) {
-          $ignored_skus[] = $product['sku'] . '(unsupported store id:' . $product['store_id'] . ')';
-          $ignored++;
-          continue;
-        }
-
-        if (!isset($product['sku']) || !strlen($product['sku'])) {
-          $this->logger->warning('Invalid or empty product SKU.');
-          $ignored_skus[] = $product['sku'] . '(invalid sku)';
-          $ignored++;
-          continue;
-        }
-
-        if (!isset($product['type'])) {
-          $ignored_skus[] = $product['sku'] . '(Missing product type)';
-          $ignored++;
-          continue;
-        }
-
-        // Don't import configurable SKU if it has no configurable options.
-        if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
-          $ignored_skus[] = $product['sku'] . '(empty configurable options)';
-          $ignored++;
-          continue;
-        }
-
         // Allow other modules to subscribe to pre-validation of the SKU being
         // imported.
         $event = new AcqSkuValidateEvent($product);
@@ -236,19 +207,21 @@ class ProductSyncResource extends ResourceBase {
         // If skip attribute is set via any event subscriber, skip importing the
         // product.
         if (isset($product['skip']) && $product['skip']) {
-          // We need to skip import of this product and delete if the product
-          // already available in system.
-          $sku = SKU::loadFromSku($product['sku']);
-          if ($sku instanceof SKU) {
-            $this->deleteSku($sku, $langcode);
+          // We mark the status to disabled so product is deleted if available
+          // later in code.
+          $product['status'] = 0;
 
-            $this->logger->info('Deleted SKU @sku for @langcode as it is skipped based on new data received.', [
-              '@sku' => $sku->getSku(),
-              '@langcode' => $langcode,
-            ]);
-          }
+          // Add warning for this status change.
+          $this->logger->warning('Updated status of sku @sku to 0 as it is marked as skipped.', [
+            '@sku' => $product['sku'],
+          ]);
+        }
 
-          $ignored_skus[] = $product['sku'] . '(SKU doesn\'t meet the criteria for import set for this site.)';
+        $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
+
+        // Magento might have stores that what we don't support.
+        if (empty($langcode)) {
+          $ignored_skus[] = $product['sku'] . '(unsupported store id:' . $product['store_id'] . ')';
           $ignored++;
           continue;
         }
@@ -263,6 +236,12 @@ class ProductSyncResource extends ResourceBase {
           fwrite($fps[$langcode], '\n');
         }
 
+        if (!isset($product['type'])) {
+          $ignored_skus[] = $product['sku'] . '(Missing product type)';
+          $ignored++;
+          continue;
+        }
+
         $query = $this->queryFactory->get('acq_sku_type');
         $query->condition('id', $product['type']);
         $query->count();
@@ -271,6 +250,20 @@ class ProductSyncResource extends ResourceBase {
 
         if (!$has_bundle) {
           $ignored_skus[] = $product['sku'] . '(unsupported product type:' . $product['type'] . ' )';
+          $ignored++;
+          continue;
+        }
+
+        if (!isset($product['sku']) || !strlen($product['sku'])) {
+          $this->logger->warning('Invalid or empty product SKU.');
+          $ignored_skus[] = $product['sku'] . '(invalid sku)';
+          $ignored++;
+          continue;
+        }
+
+        // Don't import configurable SKU if it has no configurable options.
+        if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
+          $ignored_skus[] = $product['sku'] . '(empty configurable options)';
           $ignored++;
           continue;
         }
@@ -293,7 +286,36 @@ class ProductSyncResource extends ResourceBase {
           $skuData = $sku->toArray();
 
           if ($product['status'] != 1) {
-            $this->deleteSku($sku, $langcode);
+            try {
+              /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+              $plugin = $sku->getPluginInstance();
+
+              if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
+                // Delete the node if it is linked to this SKU only.
+                $node->delete();
+                $this->logger->info('Deleted node for SKU @sku for @langcode.', [
+                  '@sku' => $sku->getSku(),
+                  '@langcode' => $langcode,
+                ]);
+              }
+              else {
+                $this->logger->info('Node for SKU @sku for @langcode not found for deletion.', [
+                  '@sku' => $sku->getSku(),
+                  '@langcode' => $langcode,
+                ]);
+              }
+            }
+            catch (\Exception $e) {
+              // Not doing anything, we might not have node for the sku.
+              $this->logger->info('Error while deleting node for the SKU @sku for @langcode. Message:@message', [
+                '@sku' => $sku->getSku(),
+                '@langcode' => $langcode,
+                '@message' => $e->getMessage(),
+              ]);
+            }
+
+            // Delete the SKU.
+            $sku->delete();
 
             $deleted++;
 
@@ -778,47 +800,6 @@ class ProductSyncResource extends ResourceBase {
   public static function getArrayDiff($array1, $array2): string {
     $differ = new ArrayDiff();
     return json_encode($differ->diff($array1, $array2));
-  }
-
-  /**
-   * Wrapper function to delete sku and it's display node if available.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity.
-   * @param string $langcode
-   *   Language code used in logs.
-   */
-  protected function deleteSku(SKU $sku, string $langcode) {
-    try {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $sku->getPluginInstance();
-
-      if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
-        // Delete the node if it is linked to this SKU only.
-        $node->delete();
-        $this->logger->info('Deleted node for SKU @sku for @langcode.', [
-          '@sku' => $sku->getSku(),
-          '@langcode' => $langcode,
-        ]);
-      }
-      else {
-        $this->logger->info('Node for SKU @sku for @langcode not found for deletion.', [
-          '@sku' => $sku->getSku(),
-          '@langcode' => $langcode,
-        ]);
-      }
-    }
-    catch (\Exception $e) {
-      // Not doing anything, we might not have node for the sku.
-      $this->logger->info('Error while deleting node for the SKU @sku for @langcode. Message:@message', [
-        '@sku' => $sku->getSku(),
-        '@langcode' => $langcode,
-        '@message' => $e->getMessage(),
-      ]);
-    }
-
-    // Delete the SKU.
-    $sku->delete();
   }
 
 }
