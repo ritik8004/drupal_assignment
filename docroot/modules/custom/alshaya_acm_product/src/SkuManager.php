@@ -1574,32 +1574,6 @@ class SkuManager {
   }
 
   /**
-   * Helper function to fetch SKU's property value.
-   *
-   * @param string $sku
-   *   SKU code for the product.
-   * @param array $properties
-   *   Property name that needs to be fetched.
-   *
-   * @return \stdClass
-   *   Result object keyed with the list of properties.
-   */
-  public function getSkuPropertyValue($sku, array $properties) {
-    $result = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', $properties)
-      ->condition('asfd.sku', $sku)
-      ->condition('asfd.langcode', $this->languageManager->getCurrentLanguage()->getId())
-      ->range(0, 1)
-      ->execute()->fetchAll();
-
-    if (!empty($result)) {
-      return array_shift($result);
-    }
-
-    return NULL;
-  }
-
-  /**
    * Get possible combinations for a configurable SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
