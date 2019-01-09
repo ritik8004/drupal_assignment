@@ -235,8 +235,9 @@ class ProductSyncResource extends ResourceBase {
 
         if ($debug && !empty($debug_dir)) {
           $fps = [];
+
           // Export product data into file.
-          if (!isset($fps) || !isset($fps[$langcode])) {
+          if (!isset($fps[$langcode])) {
             $filename = $debug_dir . '/products_' . $langcode . '.data';
             $fps[$langcode] = fopen($filename, 'a');
           }
