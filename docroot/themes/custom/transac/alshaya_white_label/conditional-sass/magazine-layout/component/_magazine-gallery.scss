@@ -44,6 +44,10 @@
     font-size: 0.75rem;
     padding: 0;
 
+    .magazine-desc-wrapper {
+      padding: 2rem;
+    }
+
     @include breakpoint($tablet) {
       width: 60%;
       margin: 0 auto;
@@ -120,6 +124,17 @@
       &:nth-child(2n+1) {
         grid-column: 1 / 2;
       }
+
+      &.last {
+        &:nth-child(2n+1) {
+          grid-column: 1 / -1;
+
+          img {
+            width: 47%;
+            margin: 0 auto;
+          }
+        }
+      }
     }
 
     @include breakpoint($only-mobile) {
@@ -133,6 +148,17 @@
 
       &:nth-child(3n) {
         grid-column: 2 / -1;
+      }
+
+      &.last {
+        &:nth-child(3n+2) {
+          grid-column: 1 / -1;
+
+          img {
+            width: 47%;
+            margin: 0 auto;
+          }
+        }
       }
     }
 
@@ -186,6 +212,18 @@
 
       .dialog-product-image-gallery-container-mobile {
         z-index: 10001;
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .magazine-layout-ajax-throbber {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
+          position: inherit !important;
+        }
       }
     }
   }

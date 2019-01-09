@@ -43,11 +43,7 @@
 .subtitle.crossell-title {
   @include arabic-letter-spacing;
 
-  font-size: 1rem;
   font-family: $hnm-demibold;
-  font-weight: normal;
-  text-align: center;
-  margin-bottom: 0.3rem;
   letter-spacing: 1px;
 
   @include breakpoint($tablet) {
@@ -106,12 +102,6 @@
           }
         }
       }
-
-      select.form-select {
-        @include select-style(12.375rem);
-
-        width: 100%;
-      }
     }
   }
 
@@ -134,12 +124,6 @@
 }
 
 .mobile--only--sell {
-  width: 100%;
-
-  @include breakpoint($tablet) {
-    display: none;
-  }
-
   .sell-sku {
     .field__items {
       @include breakpoint($only-mobile) {
@@ -182,8 +166,6 @@
 
   .views-row {
     @include breakpoint($tablet) {
-      width: 33%;
-      float: $left;
       max-width: 12rem;
 
       @include breakpoint($desktop) {

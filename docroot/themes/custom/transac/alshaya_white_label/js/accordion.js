@@ -176,10 +176,12 @@
           if ($(this).find('ul').length > 0) {
             Drupal.convertIntoAccordion($(this));
           }
-
           else {
             $(this).addClass('empty-accordion-delivery-options');
           }
+          // Add class on parent of c-accordion-delivery-options so we can hide
+          // the paragraph with margin in desktop.
+          $(this).parents('.c-promo__item').addClass('c-accordion-delivery-option-parent');
         });
       }
 
