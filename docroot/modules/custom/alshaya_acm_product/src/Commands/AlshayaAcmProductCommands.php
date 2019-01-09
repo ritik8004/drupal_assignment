@@ -276,8 +276,6 @@ class AlshayaAcmProductCommands extends DrushCommands {
   /**
    * Post command hook to execute after each drush command.
    *
-   * Re-index the color nodes attached with the configurable skus (if any).
-   *
    * Added (*) to execute after each drush command.
    *
    * @hook post-command *
