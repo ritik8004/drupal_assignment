@@ -41,6 +41,10 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   echo "Change in install file detected, restoring databases before executing updb."
 
   ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
+else
+  if [ $slack == 1 ]; then
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  fi
 fi
 
 echo -e "\n"
