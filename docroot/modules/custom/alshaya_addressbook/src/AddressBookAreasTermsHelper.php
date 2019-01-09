@@ -319,14 +319,10 @@ class AddressBookAreasTermsHelper {
   public function getAddressCachedData($key) {
     $cid = $this->getAddressbookCachedId($key);
     $static = &drupal_static($cid);
-    if (isset($static)) {
-      return $static;
+    if (!isset($static) && $cache = $this->cache->get($cid)) {
+      $static = $cache->data;
     }
-
-    if ($cache = $this->cache->get($cid)) {
-      return $cache->data;
-    }
-    return NULL;
+    return $static;
   }
 
   /**
@@ -343,9 +339,7 @@ class AddressBookAreasTermsHelper {
 
     // Update data in static cache too.
     $static = &drupal_static($cid);
-    if (isset($static)) {
-      $static = $data;
-    }
+    $static = $data;
   }
 
 }
