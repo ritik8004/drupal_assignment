@@ -22,11 +22,6 @@ function alshaya_acm_product_update_8035() {
     'alshaya_acm_product',
     'optional'
   );
-  $manager->updateConfigs(
-    ['memory_limit_policy.settings'],
-    'alshaya',
-    'install'
-  );
 }
 
 /**
