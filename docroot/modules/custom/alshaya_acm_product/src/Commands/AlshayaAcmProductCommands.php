@@ -280,7 +280,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *
    * @hook post-command *
    */
-  public function reIndexConfigurableSkuColorNodesPostCommand($result, CommandData $commandData) {
+  public function alshayaAcmProductPostCommand($result, CommandData $commandData) {
     $this->eventDispatcher->dispatch(self::POST_DRUSH_COMMAND_EVENT);
   }
 
