@@ -289,7 +289,6 @@ class ProductSyncResource extends ResourceBase {
         } while (!$lock_acquired);
 
         $skuData = [];
-
         if ($sku = SKU::loadFromSku($product['sku'], $langcode, FALSE, TRUE)) {
           $skuData = $sku->toArray();
 
@@ -319,9 +318,9 @@ class ProductSyncResource extends ResourceBase {
             // Check if this was the last simple SKU in its parent. If that's
             // the case, un-publish the node too.
             if ($parent_sku instanceof SKU) {
-              $child_skus = $this->getChildSkus($product['sku']);
+              $child_skus = $this->getChildSkus($parent_sku->id());
 
-              if (!empty($child_skus)) {
+              if (empty($child_skus)) {
                 // In case of no child SKU, un-publish the configurable product
                 // node.
                 $parent_plugin = $parent_sku->getPluginInstance();
@@ -471,9 +470,8 @@ class ProductSyncResource extends ResourceBase {
             $child_skus = [];
 
             if (!$node->isNew()) {
-              $child_skus = $this->getChildSkus($product['sku']);
+              $child_skus = $this->getChildSkus($sku->id());
             }
-
             $node->setPublished(!empty($child_skus));
           }
 
@@ -851,17 +849,19 @@ class ProductSyncResource extends ResourceBase {
   /**
    * Helper function to fetch list of child SKUs.
    *
-   * @param string $sku
-   *   SKU for which child SKUs need to be fetched.
+   * @param string $sku_entity_id
+   *   SKU entity id for which child SKUs need to be fetched.
    *
    * @return array
    *   List of child SKUs.
    */
-  protected function getChildSkus($sku) {
-    $query = $this->database->select('acq_sku__field_configured_skus', 'asfcs')
-      ->fields('asfcs', ['field_configured_skus_value']);
-    $query->join('acq_sku_field_data', 'asfcs1', 'id = entity_id');
-    $result = $query->condition('sku', $sku)->distinct()->execute();
+  protected function getChildSkus($sku_entity_id) {
+    $query = $this->database->select('acq_sku_field_data', 'asfd')
+      ->fields('asfd', ['sku']);
+    $query->join('acq_sku__field_configured_skus', 'asfd1', 'field_configured_skus_value = sku');
+    $result = $query
+      ->condition('entity_id', $sku_entity_id)
+      ->execute();
 
     return $result->fetchAllKeyed(0, 0);
   }
