@@ -4,7 +4,6 @@ namespace Drupal\acq_sku_position\Commands;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
@@ -38,13 +37,6 @@ class AcqSkuPositionCommands extends DrushCommands {
   private $apiWrapper;
 
   /**
-   * Entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  private $entityTypeManager;
-
-  /**
    * Logger Factory.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -56,8 +48,6 @@ class AcqSkuPositionCommands extends DrushCommands {
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   Looger Factory.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity Type Manager.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $APIWrapper
    *   Commerce Api Wrapper.
    * @param \Drupal\Core\Database\Connection $connection
@@ -66,12 +56,10 @@ class AcqSkuPositionCommands extends DrushCommands {
    *   Module Handler service.
    */
   public function __construct(LoggerChannelFactoryInterface $logger,
-                              EntityTypeManagerInterface $entityTypeManager,
                               APIWrapper $APIWrapper,
                               Connection $connection,
                               ModuleHandlerInterface $moduleHandler) {
     $this->logger = $logger->get('acq_sku_position_position');
-    $this->entityTypeManager = $entityTypeManager;
     $this->apiWrapper = $APIWrapper;
     $this->connection = $connection;
     $this->moduleHandler = $moduleHandler;
