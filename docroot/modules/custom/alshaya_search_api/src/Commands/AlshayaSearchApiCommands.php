@@ -5,6 +5,7 @@ namespace Drupal\alshaya_search_api\Commands;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\search_api\Entity\Index;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -54,21 +55,103 @@ class AlshayaSearchApiCommands extends DrushCommands {
    * @aliases correct-index-data
    */
   public function correctIndexData() {
-    $query = $this->connection->query('SELECT product.item_id FROM {search_api_db_product} product 
-      LEFT JOIN {search_api_item} item ON item.item_id = product.item_id 
-      WHERE item.item_id IS NULL');
+    // 1. Delete items from search_api which are no longer available in system.
+    $query = $this->connection->query('SELECT node.nid, node.langcode, item.item_id 
+      FROM search_api_item item 
+      LEFT JOIN node ON item.item_id LIKE CONCAT("%", node.nid, ":", node.langcode)
+      WHERE node.nid IS NULL AND node.type = "acq_product"');
 
     $item_ids = $query->fetchAll();
+    $indexes = ['acquia_search_index', 'product'];
+    $item_ids = array_column($item_ids, 'item_id');
+    $this->deleteItems($indexes, $item_ids);
 
+    // 2. Delete items from db index which are no longer available in system.
+    $query = $this->connection->query('SELECT node.nid, node.langcode, item.item_id 
+      FROM search_api_db_product item 
+      LEFT JOIN node ON item.item_id LIKE CONCAT("%", node.nid, ":", node.langcode) 
+      WHERE node.nid IS NULL AND node.type = "acq_product"');
+
+    $item_ids = $query->fetchAll();
+    $indexes = ['product'];
+    $item_ids = array_column($item_ids, 'item_id');
+
+    // First add entry in search_api_item if required.
+    $this->addEntryToSearchApiItem($indexes, $item_ids);
+    $this->deleteItems($indexes, $item_ids);
+
+    // 3. Re-index items that are missing in DB index.
+    $query = $this->connection->query('SELECT node.nid, node.langcode, item.item_id 
+      FROM node 
+      LEFT JOIN search_api_db_product item ON item.item_id LIKE CONCAT("%", node.nid, ":", node.langcode) 
+      WHERE item.item_id IS NULL AND node.type = "acq_product"');
+
+    $data = $query->fetchAll();
+    ndebug($data);
+    $item_ids = $insert_item_ids = [];
+    foreach ($data as $row) {
+      $item_ids[] = $row->nid . ':' . $row->langcode;
+    }
+
+    $indexes = ['product'];
+    $this->deleteItems($indexes, $item_ids);
+    $this->indexItems($indexes, $insert_item_ids);
+  }
+
+  /**
+   * Delete items from index.
+   *
+   * @param array $indexes
+   *   Indexes for which entry needs to be added in search api item.
+   * @param array $item_ids
+   *   Item ids.
+   */
+  private function deleteItems(array $indexes, array $item_ids) {
     if (empty($item_ids)) {
-      $this->say('Every-thing good.');
       return;
     }
 
-    $indexes = ['acquia_search_index', 'product'];
-    $requested_time = $this->dateTime->getRequestTime();
+    $item_ids = array_map(function ($a) {
+      return str_replace('entity:node/', '', $a);
+    }, $item_ids);
 
-    $item_ids = array_column($item_ids, 'item_id');
+    foreach ($indexes as $index_id) {
+      $index = Index::load($index_id);
+      $index->trackItemsDeleted('entity:node', $item_ids);
+    }
+  }
+
+  /**
+   * Mark items for indexation.
+   *
+   * @param array $indexes
+   *   Indexes for which entry needs to be added in search api item.
+   * @param array $item_ids
+   *   Item ids.
+   */
+  private function indexItems(array $indexes, array $item_ids) {
+    if (empty($item_ids)) {
+      return;
+    }
+
+    foreach ($indexes as $index_id) {
+      $index = Index::load($index_id);
+      $index->trackItemsInserted('entity:node', $item_ids);
+    }
+  }
+
+  /**
+   * Add entries in search_api_item.
+   *
+   * @param array $indexes
+   *   Indexes for which entry needs to be added in search api item.
+   * @param array $item_ids
+   *   Item ids.
+   */
+  private function addEntryToSearchApiItem(array $indexes, array $item_ids) {
+    if (empty($item_ids)) {
+      return;
+    }
 
     foreach ($item_ids as $item_id) {
       foreach ($indexes as $index) {
@@ -80,26 +163,32 @@ class AlshayaSearchApiCommands extends DrushCommands {
             'index_id' => $index,
             'datasource' => 'entity:node',
             'status' => 1,
-            'changed' => $requested_time,
+            'changed' => $this->getRequestedTime(),
           ]);
 
           $query->execute();
         }
         catch (\Exception $e) {
-          // Entry may exist, doing nothing here.
-          $this->io()->writeln('Failed to insert for: ' . $index . ' : ' . $item_id);
-          $this->logger->info('Failed to insert for: @index : @item_id', [
-            '@index' => $index,
-            '@item_id' => $item_id,
-          ]);
+          // Do nothing.
         }
       }
-
-      $this->io()->writeln('Index data corrected for: ' . $item_id);
-      $this->logger->info('Index data corrected for: @item_id', [
-        '@item_id' => $item_id,
-      ]);
     }
+  }
+
+  /**
+   * Get requested time.
+   *
+   * @return int
+   *   Requested time.
+   */
+  private function getRequestedTime() {
+    static $time;
+
+    if (empty($time)) {
+      $time = $this->dateTime->getRequestTime();
+    }
+
+    return $time;
   }
 
 }
