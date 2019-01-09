@@ -311,7 +311,7 @@ class StockManager {
       }
     }
 
-    // Work Around for the ACM V1 as quantity key is changed in ACM V2.
+    // We get qty in product data and quantity in stock push or from stock api.
     $quantity = array_key_exists('qty', $stock) ? $stock['qty'] : $stock['quantity'];
     $stock_status = isset($stock['is_in_stock']) ? (int) $stock['is_in_stock'] : 1;
 
