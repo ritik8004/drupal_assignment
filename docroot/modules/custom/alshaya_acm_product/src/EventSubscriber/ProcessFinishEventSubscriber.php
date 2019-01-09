@@ -5,6 +5,8 @@ namespace Drupal\alshaya_acm_product\EventSubscriber;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm_product\Commands\AlshayaAcmProductCommands;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -59,6 +61,7 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     $events[KernelEvents::TERMINATE][] = ['onKernelTerminate', 200];
+    $events[AlshayaAcmProductCommands::POST_DRUSH_COMMAND_EVENT][] = ['postDrushCommand', 200];
     return $events;
   }
 
@@ -72,6 +75,16 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
+    $this->processSkuColorNodes();
+  }
+
+  /**
+   * Mark the color nodes for sku for re-indexing after each drush command.
+   *
+   * @param \Symfony\Component\EventDispatcher\Event $event
+   *   Event object.
+   */
+  public function postDrushCommand(Event $event) {
     $this->processSkuColorNodes();
   }
 
@@ -91,9 +104,6 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
         }
       }
     }
-
-    // Reset for next request.
-    self::$colorNodeSkus = [];
   }
 
 }

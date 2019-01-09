@@ -2,10 +2,12 @@
 
 namespace Drupal\alshaya_acm_product\Commands;
 
+use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class AlshayaAddressBookCommands.
@@ -13,6 +15,11 @@ use Drush\Commands\DrushCommands;
  * @package Drupal\alshaya_acm_product\Commands
  */
 class AlshayaAcmProductCommands extends DrushCommands {
+
+  /**
+   * Event dispatched after each drush commmand.
+   */
+  const POST_DRUSH_COMMAND_EVENT = 'alshaya_acm_product.post_drush_command';
 
   /**
    * Config Factory.
@@ -29,6 +36,13 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $skuManager;
 
   /**
+   * Event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  private $eventDispatcher;
+
+  /**
    * AlshayaAcmProductCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -37,13 +51,17 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *   Config Factory.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   Event dispatcher.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_channel_factory,
                               ConfigFactoryInterface $config_factory,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              EventDispatcherInterface $event_dispatcher) {
     $this->logger = $logger_channel_factory->get('alshaya_acm_product');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -253,6 +271,19 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     $context['sandbox']['current']++;
     $context['finished'] = $context['sandbox']['current'] / $context['sandbox']['max'];
+  }
+
+  /**
+   * Post command hook to execute after each drush command.
+   *
+   * Re-index the color nodes attached with the configurable skus (if any).
+   *
+   * Added (*) to execute after each drush command.
+   *
+   * @hook post-command *
+   */
+  public function reIndexConfigurableSkuColorNodesPostCommand($result, CommandData $commandData) {
+    $this->eventDispatcher->dispatch(self::POST_DRUSH_COMMAND_EVENT);
   }
 
 }
