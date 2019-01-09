@@ -97,6 +97,10 @@ class AcqSkuPositionCommands extends DrushCommands {
 
     // Get all product category terms.
     $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('acq_product_category');
+
+    // Allow other modules to skip terms from position sync.
+    $this->moduleHandler->alter('acq_sku_position_sync', $terms);
+
     foreach ($terms as $term) {
       // Find the commerce id from the term. Skip if not found.
       $commerce_id = $this->entityTypeManager->getStorage('taxonomy_term')->load($term->tid)->get('field_commerce_id')->value;
