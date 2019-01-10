@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\acq_sku\EventSubscriber;
+namespace Drupal\alshaya_acm_product\EventSubscriber;
 
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
