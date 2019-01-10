@@ -193,16 +193,6 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
   if (empty($main_image) && ($sku instanceof SKU)) {
     /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $color = \Drupal::request()->query->get('color');
-
-    // If we have color attribute available from query params & the SKU being
-    // rendered is configurable, lookup for a simple SKU with that color.
-    // Fallback for the same in case of not a valid color is the parent SKU.
-    if (($color) &&
-      ($sku->bundle() === 'configurable') &&
-      (($sku_color = $sku_assets_manager->getChildSkuFromColor($sku, $color)) instanceof SKU)) {
-      $sku = $sku_color;
-    }
 
     if ($sku instanceof SKU) {
       $pdp_images = $sku_assets_manager->getImagesForSku($sku, 'pdp',

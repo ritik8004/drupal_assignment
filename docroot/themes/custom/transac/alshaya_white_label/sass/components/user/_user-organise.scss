@@ -51,9 +51,8 @@
     top: 1rem;
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: right center !important;
-      background-repeat: no-repeat !important;
+      @include throbberLoader();
+
       background-size: 2.5rem;
       padding: 1rem;
     }
@@ -198,9 +197,8 @@
             }
 
             .throbber {
-              background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-              background-position: $right center !important;
-              background-repeat: no-repeat !important;
+              @include throbberLoader();
+
               background-size: 2.5rem;
               padding: 1rem;
 

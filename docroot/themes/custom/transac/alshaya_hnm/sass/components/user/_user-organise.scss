@@ -11,15 +11,6 @@
       }
     }
   }
-
-  .ajax-progress-throbber {
-    .throbber {
-      background-image: url(../imgs/icons/ic-loader.svg) !important;
-      background-position: right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 2.5rem;
-    }
-  }
 }
 
 .c-user-register {
@@ -33,24 +24,6 @@
         font-family: $hnm-demibold;
         font-size: 0.75rem;
         color: $privilege_card_title;
-      }
-
-      .privilege-card-wrapper {
-        .form-item-privilege-card-number,
-        .form-item-privilege-card-number2 {
-          .ajax-progress-throbber {
-            .throbber {
-              background-image: url(../imgs/icons/ic-loader.svg) !important;
-              background-position: $right center !important;
-              background-repeat: no-repeat !important;
-              background-size: 2.5rem;
-
-              @include breakpoint($only-mobile) {
-                background-size: 1.5rem;
-              }
-            }
-          }
-        }
       }
     }
   }

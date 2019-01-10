@@ -6,6 +6,7 @@ use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;

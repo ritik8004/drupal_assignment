@@ -1,6 +1,6 @@
 services:
   alshaya_api.commands:
     class: Drupal\alshaya_api\Commands\AlshayaApiCommands
-    arguments: [ '@language_manager', '@alshaya_api.api', '@alshaya_acm_product.skumanager', '@acq_commerce.i18n_helper', '@acq_commerce.ingest_api', '@logger.factory', '@database', '@entity_type.manager', '@lock' ]
+    arguments: [ '@language_manager', '@alshaya_api.api', '@alshaya_acm_product.skumanager', '@acq_commerce.i18n_helper', '@acq_commerce.ingest_api', '@logger.factory', '@database', '@entity_type.manager', '@lock', '@config.factory' ]
     tags:
       - { name: drush.command }
