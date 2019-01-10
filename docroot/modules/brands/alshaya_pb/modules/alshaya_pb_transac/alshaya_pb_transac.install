@@ -10,6 +10,19 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Adding new menu and block for free design services.
+ */
+function alshaya_pb_transac_update_8008() {
+  $configs = [
+    'system.menu.design-services',
+    'block.block.designservices',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search placeholder based configurations.
  * Update arabic translations for search_field_placeholder.
  */
@@ -50,19 +63,6 @@ function alshaya_pb_transac_update_8005() {
     ['alshaya_acm_product.display_settings'],
     'alshaya_acm_product'
   );
-}
-
-/**
- * Implements hook_update_N().
- *
- * Adding new menu and block for free design services.
- */
-function alshaya_pb_transac_update_8004() {
-  $configs = [
-    'system.menu.design-services',
-    'block.block.designservices',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'install');
 }
 
 /**
