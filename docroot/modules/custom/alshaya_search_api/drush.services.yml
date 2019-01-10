@@ -1,0 +1,13 @@
+services:
+  logger.channel.alshaya_search_api:
+    parent: logger.channel_base
+    arguments: ['alshaya_search_api']
+
+  alshaya_search_api.commands:
+    class: Drupal\alshaya_search_api\Commands\AlshayaSearchApiCommands
+    arguments:
+      - '@database'
+      - '@datetime.time'
+      - '@logger.channel.alshaya_search_api'
+    tags:
+      - { name: drush.command }
