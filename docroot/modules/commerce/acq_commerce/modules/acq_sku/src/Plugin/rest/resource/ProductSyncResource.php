@@ -468,11 +468,7 @@ class ProductSyncResource extends ResourceBase {
           if ($product['type'] == 'configurable') {
             // Check in case of update if this configurable SKU has a simple
             // children in DB. If not, set node as unpublished.
-            $child_skus = [];
-
-            if (!$node->isNew()) {
-              $child_skus = $this->getChildSkus($sku->id());
-            }
+            $child_skus = $this->getChildSkus($sku->id());
             $node->setPublished(!empty($child_skus));
           }
 
