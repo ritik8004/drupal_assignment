@@ -6,7 +6,7 @@ use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
-use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_admin\QueueHelper;
@@ -19,7 +19,6 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\alshaya_product_options\ProductOptionsHelper;
 
 /**
  * Class SyncForm.
@@ -34,13 +33,12 @@ class SyncForm extends FormBase {
    */
   private $productCategoriesManager;
 
-
   /**
-   * Conductor product options manager.
+   * Product Options Helper.
    *
-   * @var \Drupal\acq_sku\ProductOptionsManager
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
    */
-  private $productOptionsManager;
+  private $productOptionshelper;
 
   /**
    * Conductor promotions manager.
@@ -113,19 +111,12 @@ class SyncForm extends FormBase {
   private $moduleHandler;
 
   /**
-   * Product Options Helper.
-   *
-   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
-   */
-  private $productOptionshelper;
-
-  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
    *   Category manager interface.
-   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
-   *   Product options manager interface.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper
+   *   Product Options Helper.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $promotions_manager
    *   Promotions manager interface.
    * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingest_api
@@ -146,12 +137,10 @@ class SyncForm extends FormBase {
    *   Entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
-   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper
-   *   Product Options Helper.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
-    ProductOptionsManager $product_options_manager,
+    ProductOptionsHelper $productOptionsHelper,
     AcqPromotionsManager $promotions_manager,
     IngestAPIWrapper $ingest_api,
     AlshayaApiWrapper $alshaya_api,
@@ -161,11 +150,10 @@ class SyncForm extends FormBase {
     AlshayaAddressBookManager $address_book_manager,
     QueueHelper $queue_helper,
     EntityTypeManagerInterface $entity_type_manager,
-    ModuleHandlerInterface $module_handler,
-    ProductOptionsHelper $productOptionsHelper
+    ModuleHandlerInterface $module_handler
   ) {
     $this->productCategoriesManager = $product_categories_manager;
-    $this->productOptionsManager = $product_options_manager;
+    $this->productOptionshelper = $productOptionsHelper;
     $this->promotionsManager = $promotions_manager;
     $this->ingestApi = $ingest_api;
     $this->alshayaApi = $alshaya_api;
@@ -176,7 +164,6 @@ class SyncForm extends FormBase {
     $this->queueHelper = $queue_helper;
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
-    $this->productOptionshelper = $productOptionsHelper;
   }
 
   /**
@@ -185,7 +172,7 @@ class SyncForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_sku.category_manager'),
-      $container->get('acq_sku.product_options_manager'),
+      $container->get('alshaya_product_options.helper'),
       $container->get('acq_promotion.promotions_manager'),
       $container->get('acq_commerce.ingest_api'),
       $container->get('alshaya_api.api'),
@@ -195,8 +182,7 @@ class SyncForm extends FormBase {
       $container->get('alshaya_addressbook.manager'),
       $container->get('alshaya_admin.queue_helper'),
       $container->get('entity_type.manager'),
-      $container->get('module_handler'),
-      $container->get('alshaya_product_options.helper')
+      $container->get('module_handler')
     );
   }
 
