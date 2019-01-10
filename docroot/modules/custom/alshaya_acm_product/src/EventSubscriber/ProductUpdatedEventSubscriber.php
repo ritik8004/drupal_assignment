@@ -51,20 +51,21 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
   public function onProductUpdated(ProductUpdatedEvent $event) {
     $entity = $event->getSku();
 
-    $this->skuManager->clearProductCachedData($entity);
+    // Reset all static caches.
+    drupal_static_reset();
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 
+    // @TODO: Make this smart in CORE-3443.
     if ($parent = $plugin->getParentSku($entity)) {
-      // Clear cached data for configurable products.
-      $this->skuManager->clearProductCachedData($parent);
-
-      // Reset the sku static cache.
-      drupal_static_reset('loadFromSku');
-
-      // @TODO: Make this smart in CORE-3443.
       Cache::invalidateTags($parent->getCacheTagsToInvalidate());
+    }
+
+    // We also invalidate caches for node here.
+    $node = $this->skuManager->getDisplayNode($parent);
+    if ($node instanceof NodeInterface) {
+      Cache::invalidateTags($node->getCacheTagsToInvalidate());
     }
   }
 
