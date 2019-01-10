@@ -89,3 +89,9 @@ services:
       - '@entity_type.manager'
     tags:
       - { name: 'event_subscriber' }
+  alshaya_acm_product.acq_sku_validate_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\AlshayaAcmProductAcqSkuValidateEventSubscriber
+    arguments:
+      - '@logger.factory'
+    tags:
+      - { name: event_subscriber }
