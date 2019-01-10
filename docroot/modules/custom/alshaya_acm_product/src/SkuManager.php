@@ -37,6 +37,7 @@ use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\acq_sku\ProductInfoHelper;
 
 /**
  * Class SkuManager.
@@ -207,6 +208,13 @@ class SkuManager {
   protected $generator;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -247,6 +255,8 @@ class SkuManager {
    *   Renderer service.
    * @param \Drupal\simple_sitemap\Simplesitemap $generator
    *   Simple sitemap generator.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -266,7 +276,8 @@ class SkuManager {
                               AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
                               Client $http_client,
                               RendererInterface $renderer,
-                              Simplesitemap $generator) {
+                              Simplesitemap $generator,
+                              ProductInfoHelper $product_info_helper) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -289,6 +300,7 @@ class SkuManager {
     $this->httpClient = $http_client;
     $this->renderer = $renderer;
     $this->generator = $generator;
+    $this->productInfoHelper = $product_info_helper;
   }
 
   /**
@@ -2910,6 +2922,29 @@ class SkuManager {
     });
 
     return $indexFields;
+  }
+
+  /**
+   * Get description for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Description of the product.
+   */
+  public function getDescription(SKUInterface $sku, $context) {
+    $prod_description = [];
+    if ($body = $sku->get('attr_description')->getValue()) {
+      $prod_description['description'] = [
+        '#markup' => $body[0]['value'],
+      ];
+    }
+    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
+
+    return $prod_description;
   }
 
 }

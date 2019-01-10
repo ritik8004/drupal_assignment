@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Implements hook_theme().
@@ -66,22 +67,12 @@ function alshaya_product_zoom_preprocess_node(&$variables) {
  */
 function alshaya_product_zoom_preprocess_alshaya_magazine(&$vars) {
   if ($vars['sku'] instanceof SKUInterface) {
-    $prod_description = [];
-
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-    // Get description from parent sku.
+    // Get parent sku.
     $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
     $sku_for_description = $parent_sku instanceof SKUInterface ? $parent_sku : $vars['sku'];
-    if ($body = $sku_for_description->get('attr_description')->getValue()) {
-      $prod_description['description'] = [
-        '#markup' => $body[0]['value'],
-      ];
-    }
-
-    // Alter description Since this could be different for each brand.
-    \Drupal::moduleHandler()->alter('acq_sku_magazine_product_description', $sku_for_description, $prod_description);
+    $prod_description = $skuManager->getDescription($sku_for_description, SkuManager::PDP_LAYOUT_MAGAZINE);
     $vars['description'] = $prod_description['description'];
   }
 }
