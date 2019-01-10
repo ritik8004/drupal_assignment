@@ -23,6 +23,12 @@
         color: $footer_link_hover;
         text-decoration: underline;
       }
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        line-height: 1.2;
+        margin: 0.4375rem 0;
+      }
     }
   }
 
