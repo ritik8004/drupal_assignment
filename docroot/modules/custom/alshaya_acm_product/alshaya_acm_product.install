@@ -13,6 +13,7 @@ use Drupal\node\Entity\Node;
  * Implements hook_update_N().
  *
  * Add config for memory limit policy module.
+ * Clear alshaya_product cache to use cache tags.
  */
 function alshaya_acm_product_update_8035() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -22,6 +23,10 @@ function alshaya_acm_product_update_8035() {
     'alshaya_acm_product',
     'optional'
   );
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**
