@@ -207,9 +207,14 @@ class ProductSyncResource extends ResourceBase {
         // If skip attribute is set via any event subscriber, skip importing the
         // product.
         if (isset($product['skip']) && $product['skip']) {
-          $ignored_skus[] = $product['sku'] . '(SKU doesn\'t meet the criteria for import set for this site.)';
-          $ignored++;
-          continue;
+          // We mark the status to disabled so product is deleted if available
+          // later in code.
+          $product['status'] = 0;
+
+          // Add warning for this status change.
+          $this->logger->warning('Updated status of sku @sku to 0 as it is marked as skipped.', [
+            '@sku' => $product['sku'],
+          ]);
         }
 
         $langcode = $this->i18nHelper->getLangcodeFromStoreId($product['store_id']);
