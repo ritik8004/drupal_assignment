@@ -3,7 +3,6 @@
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
 use Drupal\acq_sku\Event\AcqSkuValidateEvent;
-use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -28,7 +27,7 @@ class AlshayaAcmProductAcqSkuValidateEventSubscriber implements EventSubscriberI
    *   The Logger factory object.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_factory) {
-    $this->logger = $logger_factory->get(__CLASS__);
+    $this->logger = $logger_factory->get('AlshayaAcmProductAcqSkuValidateEventSubscriber');
   }
 
   /**
@@ -72,7 +71,7 @@ class AlshayaAcmProductAcqSkuValidateEventSubscriber implements EventSubscriberI
    */
   private function validateConfigurableProduct(array $product) {
     // Simply return true for non-configurable products.
-    if ($product['type'] != Configurable::class) {
+    if ($product['type'] != 'configurable') {
       return TRUE;
     }
 
