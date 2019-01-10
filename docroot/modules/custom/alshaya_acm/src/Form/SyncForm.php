@@ -19,6 +19,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 
 /**
  * Class SyncForm.
@@ -112,6 +113,13 @@ class SyncForm extends FormBase {
   private $moduleHandler;
 
   /**
+   * Product Options Helper.
+   *
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
+   */
+  private $productOptionshelper;
+
+  /**
    * ProductSyncForm constructor.
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
@@ -138,6 +146,8 @@ class SyncForm extends FormBase {
    *   Entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper
+   *   Product Options Helper.
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
@@ -151,7 +161,9 @@ class SyncForm extends FormBase {
     AlshayaAddressBookManager $address_book_manager,
     QueueHelper $queue_helper,
     EntityTypeManagerInterface $entity_type_manager,
-    ModuleHandlerInterface $module_handler) {
+    ModuleHandlerInterface $module_handler,
+    ProductOptionsHelper $productOptionsHelper
+  ) {
     $this->productCategoriesManager = $product_categories_manager;
     $this->productOptionsManager = $product_options_manager;
     $this->promotionsManager = $promotions_manager;
@@ -164,6 +176,7 @@ class SyncForm extends FormBase {
     $this->queueHelper = $queue_helper;
     $this->entityTypeManager = $entity_type_manager;
     $this->moduleHandler = $module_handler;
+    $this->productOptionshelper = $productOptionsHelper;
   }
 
   /**
@@ -182,7 +195,8 @@ class SyncForm extends FormBase {
       $container->get('alshaya_addressbook.manager'),
       $container->get('alshaya_admin.queue_helper'),
       $container->get('entity_type.manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('alshaya_product_options.helper')
     );
   }
 
@@ -274,7 +288,7 @@ class SyncForm extends FormBase {
         break;
 
       case $this->t('Synchronize product options'):
-        $this->productOptionsManager->synchronizeProductOptions();
+        $this->productOptionshelper->synchronizeProductOptions();
         drupal_set_message($this->t('Product options synchronization complete.'), 'status');
         break;
 
