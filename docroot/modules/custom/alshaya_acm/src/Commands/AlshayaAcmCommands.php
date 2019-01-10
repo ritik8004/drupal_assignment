@@ -501,10 +501,10 @@ class AlshayaAcmCommands extends DrushCommands {
    *
    * @aliases aasp,alshaya-sync-commerce-products
    *
-   * @usage drush aasp en
-   *   Full sync for products in store linked to en in batch size set as config.
    * @usage drush aasp en --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
    *   Import skus mentioned with --skus switch.
+   * @usage drush aasp en --csv_path=/tmp/skus.csv
+   *   Import skus provided in  the csv file for import.
    * @usage drush aasp en --category_id=1234 --page_size=50
    *   Import skus in category id 1234 & store linked to en & page size 50.
    */
@@ -516,6 +516,12 @@ class AlshayaAcmCommands extends DrushCommands {
                                  'batch_size' => 500,
                                  'page_size' => NULL,
                                ]) {
+    // SKUs must be supplied either via skus option or csv_path.
+    if (empty($options['csv_path']) && empty($options['skus'])) {
+      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      return;
+    }
+
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
     $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
     $mdc_queue_count = $mdc_queue_stats->messages;
@@ -577,13 +583,8 @@ class AlshayaAcmCommands extends DrushCommands {
         }
       }
     }
-    else {
-      if (!empty($command_options['skus'])) {
-        drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
-      }
-      else {
-        $this->output->writeln('No enabled SKUs found to import.');
-      }
+    elseif (!empty($command_options['skus'])) {
+      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
     }
   }
 
