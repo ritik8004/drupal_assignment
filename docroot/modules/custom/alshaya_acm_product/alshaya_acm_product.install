@@ -12,6 +12,26 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add config for memory limit policy module.
+ * Clear alshaya_product cache to use cache tags.
+ */
+function alshaya_acm_product_update_8035() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['memory_limit_policy.memory_limit_policy.path_based_memory'],
+    'alshaya_acm_product',
+    'optional'
+  );
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable creating product nodes for colors.
  */
 function alshaya_acm_product_update_8034() {
