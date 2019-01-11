@@ -13,6 +13,7 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\node\NodeInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides a resource to node data of advanced page.
@@ -54,6 +55,13 @@ class AdvancedPageResource extends ResourceBase {
   protected $entityTypeManager;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AdvancedPageResource constructor.
    *
    * @param array $configuration
@@ -72,6 +80,8 @@ class AdvancedPageResource extends ResourceBase {
    *   The request stack service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
   public function __construct(
     array $configuration,
@@ -81,12 +91,14 @@ class AdvancedPageResource extends ResourceBase {
     LoggerInterface $logger,
     MobileAppUtility $mobile_app_utility,
     RequestStack $request_stack,
-    EntityTypeManagerInterface $entity_type_manager
+    EntityTypeManagerInterface $entity_type_manager,
+    ConfigFactoryInterface $config_factory
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->requestStack = $request_stack->getCurrentRequest();
     $this->entityTypeManager = $entity_type_manager;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -101,7 +113,8 @@ class AdvancedPageResource extends ResourceBase {
       $container->get('logger.factory')->get('alshaya_mobile_app'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('request_stack'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -125,7 +138,8 @@ class AdvancedPageResource extends ResourceBase {
     }
 
     // Get bubbleable metadata for CacheableDependency to avoid fatal error.
-    $node_url = Url::fromRoute('entity.node.canonical', ['node' => $node->id()])->toString(TRUE);
+    $node_url_obj = Url::fromRoute('entity.node.canonical', ['node' => $node->id()]);
+    $node_url = $node_url_obj->toString(TRUE);
 
     $response_data = [
       'id' => (int) $node->id(),
@@ -146,7 +160,15 @@ class AdvancedPageResource extends ResourceBase {
       }
     }
 
-    foreach ($this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'] as $field => $field_info) {
+    $advanced_page_fields = $this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'];
+    $frontPage = $this->configFactory->get('system.site')->get('page.front');
+    if ($node_url_obj->getRouteName() && '/' . $node_url_obj->getInternalPath() === $frontPage) {
+      $elem = ['body' => $advanced_page_fields['body']];
+      $start = array_splice($advanced_page_fields, 0, array_search('field_delivery_banner', array_keys($advanced_page_fields)));
+      $advanced_page_fields = $start + $elem + $advanced_page_fields;
+    }
+
+    foreach ($advanced_page_fields as $field => $field_info) {
       $current_blocks = $this->mobileAppUtility->getFieldData(
         $node,
         $field,
