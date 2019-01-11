@@ -58,10 +58,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'mc_uat',
         'conductor' => 'mckw_uat',
       ],
-      '01pprod' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mckw_pprod',
-      ],
       '01live' => [
         'magento' => 'mc_prod',
         'conductor' => 'mckw_prod',
@@ -76,10 +72,6 @@ function alshaya_get_env_keys($site, $env) {
       '01uat' => [
         'magento' => 'mc_uat',
         'conductor' => 'mcsa_uat',
-      ],
-      '01pprod' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcsa_pprod',
       ],
       '01live' => [
         'magento' => 'mc_prod',
@@ -111,10 +103,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_uat',
         'conductor' => 'hmkw_uat'
       ],
-      '01pprod' => [
-        'magento' => 'hm_prod',
-        'conductor' => 'hmkw_prod'
-      ],
       '01live' => [
         'magento' => 'hm_prod',
         'conductor' => 'hmkw_prod'
@@ -138,10 +126,6 @@ function alshaya_get_env_keys($site, $env) {
         'magento' => 'hm_uat',
         'conductor' => 'hmsa_uat',
       ],
-      '01pprod' => [
-        'magento' => 'hm_prod',
-        'conductor' => 'hmsa_prod'
-      ],
       '01live' => [
         'magento' => 'hm_prod',
         'conductor' => 'hmsa_prod'
@@ -160,10 +144,6 @@ function alshaya_get_env_keys($site, $env) {
       '01uat' => [
         'magento' => 'hm_uat',
         'conductor' => 'hmae_uat',
-      ],
-      '01pprod' => [
-        'magento' => 'hm_prod',
-        'conductor' => 'hmae_prod'
       ],
       '01live' => [
         'magento' => 'hm_prod',
@@ -372,6 +352,13 @@ function alshaya_get_env_keys($site, $env) {
   foreach ($mapping as $site_code => $envs) {
     if (isset($mapping[$site_code]['01live'])) {
       $mapping[$site_code]['01update'] = $mapping[$site_code]['01live'];
+    }
+  }
+
+  // By default, map pprod with prod acm+mdc.
+  foreach ($mapping as $site_code => $envs) {
+    if (isset($mapping[$site_code]['01live']) && !isset($mapping[$site_code]['01pprod'])) {
+      $mapping[$site_code]['01pprod'] = $mapping[$site_code]['01live'];
     }
   }
 
