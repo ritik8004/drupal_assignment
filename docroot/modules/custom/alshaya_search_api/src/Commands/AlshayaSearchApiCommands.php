@@ -2,8 +2,11 @@
 
 namespace Drupal\alshaya_search_api\Commands;
 
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\search_api\Entity\Index;
 use Drush\Commands\DrushCommands;
@@ -30,6 +33,20 @@ class AlshayaSearchApiCommands extends DrushCommands {
   private $dateTime;
 
   /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  private $skuManager;
+
+  /**
+   * Entity Type Manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
    * AlshayaSearchApiCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -38,13 +55,21 @@ class AlshayaSearchApiCommands extends DrushCommands {
    *   The Date Time service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
+   * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
+   *   SKU Manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    */
   public function __construct(Connection $connection,
                               TimeInterface $date_time,
-                              LoggerChannelInterface $logger) {
+                              LoggerChannelInterface $logger,
+                              SkuManager $sku_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->connection = $connection;
     $this->dateTime = $date_time;
     $this->setLogger($logger);
+    $this->skuManager = $sku_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -108,6 +133,56 @@ class AlshayaSearchApiCommands extends DrushCommands {
   }
 
   /**
+   * Correct index stock data.
+   *
+   * @command alshaya_search_api:correct-index-stock-data
+   *
+   * @aliases correct-index-stock-data
+   */
+  public function correctIndexStockData() {
+    // Find all index entries for which sku is in stock but index data says OOS
+    // OR sku is OOS and index data says in stock.
+    $query = $this->connection->query("SELECT sku.sku, sku.langcode, db.nid, db.stock 
+      FROM {acq_sku_field_data} sku 
+      LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.item_id LIKE CONCAT('%:', sku.langcode)
+      WHERE db.nid IS NOT NULL");
+
+    // Ideally it will return all configurable products.
+    $data = $query->fetchAll();
+
+    if (empty($data)) {
+      return;
+    }
+
+    $item_ids = [];
+    foreach (array_chunk($data, 100) as $chunk) {
+      foreach ($chunk as $row) {
+        $sku = SKU::loadFromSku($row->sku);
+
+        // Not able to load SKU, we will handle it separately.
+        if (!($sku instanceof SKU)) {
+          continue;
+        }
+
+        $is_in_stock = $this->skuManager->isProductInStock($sku);
+
+        // Valid data checks.
+        if (($is_in_stock && $row->stock == 2) || (!$is_in_stock && $row->stock != 2)) {
+          continue;
+        }
+
+        $item_ids[] = $row->nid . ':' . $row->langcode;
+      }
+
+      $indexes = ['acquia_search_index', 'product'];
+      $this->reIndexItems($indexes, $item_ids);
+
+      $this->entityTypeManager->getStorage('acq_sku')->resetCache();
+      drupal_static_reset();
+    }
+  }
+
+  /**
    * Delete items from index.
    *
    * @param array $indexes
@@ -146,6 +221,25 @@ class AlshayaSearchApiCommands extends DrushCommands {
     foreach ($indexes as $index_id) {
       $index = Index::load($index_id);
       $index->trackItemsInserted('entity:node', $item_ids);
+    }
+  }
+
+  /**
+   * Mark items for re-indexation.
+   *
+   * @param array $indexes
+   *   Indexes for which entry needs to be added in search api item.
+   * @param array $item_ids
+   *   Item ids.
+   */
+  private function reIndexItems(array $indexes, array $item_ids) {
+    if (empty($item_ids)) {
+      return;
+    }
+
+    foreach ($indexes as $index_id) {
+      $index = Index::load($index_id);
+      $index->trackItemsUpdated('entity:node', $item_ids);
     }
   }
 
