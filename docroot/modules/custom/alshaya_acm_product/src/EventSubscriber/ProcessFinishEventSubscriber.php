@@ -103,14 +103,6 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
           }
         }
       }
-
-      // Mark the display node of configurable sku as well for re-indexing.
-      $display_node = $this->skuManager->getDisplayNode($sku);
-      if ($display_node instanceof NodeInterface) {
-        $display_node->original = clone $display_node;
-        // Mark display node for indexing.
-        search_api_entity_update($display_node);
-      }
     }
   }
 
