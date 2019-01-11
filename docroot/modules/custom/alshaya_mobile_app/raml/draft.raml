@@ -152,6 +152,29 @@ schemas:
           "required": [ "name", "order_description", "cart_description", "codes" ]
         }
       }
+  - GetPaymetMethods: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "code": {
+              "type": "string"
+            },
+            "default": {
+              "type": "boolean"
+            }
+          },
+          "required": [ "name", "code", "default" ]
+        }
+      }
   - GetAutocomplete: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
@@ -1673,6 +1696,29 @@ schemas:
                         "code": "click_and_collect_click_and_collect"
                       }
                   }
+                ]
+  /payment-methods:
+    get:
+      description: Get the data related to payment methods.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetPaymentMethods
+              example: |
+                [
+                  {
+                    "name": "Credit Card",
+                    "description": null,
+                    "code": "authorizenet_directpost",
+                    "default": false
+                  },
+                  {
+                    "name": "Check/Money Order",
+                    "description": null,
+                    "code": "checkmo",
+                    "default": false
+                  },
                 ]
   /product:
     /{sku}:

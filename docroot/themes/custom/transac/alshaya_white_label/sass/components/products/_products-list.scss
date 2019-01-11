@@ -27,6 +27,16 @@
       }
     }
 
+    .block-views-blockalshaya-product-list-block-1 + .block-views-blockalshaya-term-description-block-1 {
+      .c-page-title__description {
+        width: 100%;
+
+        @include breakpoint($only-tablet) {
+          max-width: 100%;
+        }
+      }
+    }
+
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
       @include breakpoint($only-mobile) {
         border: none;
@@ -298,9 +308,8 @@
           }
 
           .throbber {
-            background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-            background-position: $right center !important;
-            background-repeat: no-repeat !important;
+            @include throbberLoader();
+
             background-size: 2rem;
             padding: 1rem;
 
@@ -394,7 +403,6 @@
     width: 65%;
     font-size: 1rem;
     font-weight: normal;
-    text-transform: lowercase;
     color: $plp_promotion_description;
     margin-top: 0.45rem;
     font-family: $alshaya-thin;
@@ -1138,9 +1146,8 @@ html[lang=ar] {
     }
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
+      @include throbberLoader();
+
       background-size: 2.5rem;
       padding: 1rem;
 
