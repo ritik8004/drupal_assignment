@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_hm\EventSubscriber;
 
-use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -83,14 +82,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $sku_entity = $event->getSku();
     $prod_description = [];
     $event->getValue();
-
     $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
-    $description_value = '';
 
-    if ($body = $sku_entity->get('attr_description')->getValue()) {
-      $description_value = $event->getValue()['description']['#markup'];
-    }
-
+    $description_value = $event->getValue()['description']['#markup'] ?? '';
     if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
       $concepts_markup = [
         '#theme' => 'product_concept_markup',
@@ -120,7 +114,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       ->getString();
     if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
       $description_value .= '<div class="care-instructions-wrapper">';
-      $description_value .= '<div class="care-instructions-label">' . t('care instructions') . '</div>';
+      $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions') . '</div>';
       if (!empty($washing_instructions)) {
         $description_value .= '<div class="care-instructions-value washing-instructions">' . $washing_instructions . '</div>';
       }
@@ -151,7 +145,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     if ($this->configFactory->get('alshaya_acm.settings')
       ->get('pdp_show_specifications')) {
       $specifications['label'] = [
-        '#markup' => t('Specifications'),
+        '#markup' => $this->t('Specifications'),
       ];
 
       $specifications['value'] = [
@@ -160,25 +154,25 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       ];
 
       if ($attr_style_code = $sku_entity->get('attr_style')->getString()) {
-        $specifications['value']['#items'][] = t('Style Code: @value', [
+        $specifications['value']['#items'][] = $this->t('Style Code: @value', [
           '@value' => $attr_style_code,
         ]);
       }
 
       if ($attr_color = $sku_entity->get('attr_color')->getString()) {
-        $specifications['value']['#items'][] = t('Color: @value', [
+        $specifications['value']['#items'][] = $this->t('Color: @value', [
           '@value' => $attr_color,
         ]);
       }
 
       if ($attr_season = $sku_entity->get('attr_season')->getString()) {
-        $specifications['value']['#items'][] = t('Season: @value', [
+        $specifications['value']['#items'][] = $this->t('Season: @value', [
           '@value' => $attr_season,
         ]);
       }
 
       if ($attr_brand = $sku_entity->get('attr_product_brand')->getString()) {
-        $specifications['value']['#items'][] = t('Product brand: @value', [
+        $specifications['value']['#items'][] = $this->t('Product brand: @value', [
           '@value' => $attr_brand,
         ]);
       }
