@@ -97,14 +97,14 @@ class AlshayaSearchApiCommands extends DrushCommands {
 
     $data = $query->fetchAll();
 
-    $item_ids = $insert_item_ids = [];
+    $item_ids = [];
     foreach ($data as $row) {
       $item_ids[] = $row->nid . ':' . $row->langcode;
     }
 
     $indexes = ['product'];
     $this->deleteItems($indexes, $item_ids);
-    $this->indexItems($indexes, $insert_item_ids);
+    $this->indexItems($indexes, $item_ids);
   }
 
   /**
