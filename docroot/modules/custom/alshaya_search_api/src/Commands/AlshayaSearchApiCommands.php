@@ -147,7 +147,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
       LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.item_id LIKE CONCAT('%:', sku.langcode)
       WHERE db.nid IS NOT NULL");
 
-    // Ideally it will return all configurable products.
+    // Above query will return all the products in system.
     $data = $query->fetchAll();
 
     if (empty($data)) {
