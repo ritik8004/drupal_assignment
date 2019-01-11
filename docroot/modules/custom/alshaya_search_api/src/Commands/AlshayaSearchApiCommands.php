@@ -81,13 +81,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
    */
   public function correctIndexData() {
     // 1. Delete items from search_api which are no longer available in system.
-    $query = $this->connection->query("SELECT node.nid, node.langcode, item.item_id 
+    $query = $this->connection->query("SELECT item.item_id 
       FROM search_api_item item 
-      LEFT JOIN node ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode) 
-      WHERE node.nid IS NULL AND node.type = :node_type", [
-        ':node_type' => 'acq_product',
-      ]
-    );
+      LEFT JOIN node ON item.item_id LIKE CONCAT('entity:node/', node.nid, ':%') 
+      WHERE node.nid IS NULL");
 
     $item_ids = $query->fetchAll();
     $indexes = ['acquia_search_index', 'product'];
@@ -95,13 +92,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->deleteItems($indexes, $item_ids);
 
     // 2. Delete items from db index which are no longer available in system.
-    $query = $this->connection->query("SELECT node.nid, node.langcode, item.item_id 
+    $query = $this->connection->query("SELECT item.item_id 
       FROM search_api_db_product item 
-      LEFT JOIN node ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode) 
-      WHERE node.nid IS NULL AND node.type = :node_type", [
-        ':node_type' => 'acq_product',
-      ]
-    );
+      LEFT JOIN node ON item.original_nid = node.nid
+      WHERE node.nid IS NULL");
 
     $item_ids = $query->fetchAll();
     $indexes = ['product'];
@@ -112,7 +106,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->deleteItems($indexes, $item_ids);
 
     // 3. Re-index items that are missing in DB index.
-    $query = $this->connection->query("SELECT node.nid, node.langcode, item.item_id 
+    $query = $this->connection->query("SELECT node.nid, node.langcode 
       FROM node 
       LEFT JOIN search_api_db_product item ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode) 
       WHERE item.item_id IS NULL AND node.type = :node_type", [
@@ -199,6 +193,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return str_replace('entity:node/', '', $a);
     }, $item_ids);
 
+    $this->logger->warning(dt('Deleting items from index @items', [
+      '@items' => json_encode($item_ids),
+    ]));
+
     foreach ($indexes as $index_id) {
       $index = Index::load($index_id);
       $index->trackItemsDeleted('entity:node', $item_ids);
@@ -217,6 +215,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
     if (empty($item_ids)) {
       return;
     }
+
+    $this->logger->warning(dt('Indexing items @items', [
+      '@items' => json_encode($item_ids),
+    ]));
 
     foreach ($indexes as $index_id) {
       $index = Index::load($index_id);
@@ -237,6 +239,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return;
     }
 
+    $this->logger->warning(dt('Re-indexing items @items', [
+      '@items' => json_encode($item_ids),
+    ]));
+
     foreach ($indexes as $index_id) {
       $index = Index::load($index_id);
       $index->trackItemsUpdated('entity:node', $item_ids);
@@ -255,6 +261,10 @@ class AlshayaSearchApiCommands extends DrushCommands {
     if (empty($item_ids)) {
       return;
     }
+
+    $this->logger->warning(dt('Adding entries for search_api_item for items @items', [
+      '@items' => json_encode($item_ids),
+    ]));
 
     foreach ($item_ids as $item_id) {
       foreach ($indexes as $index) {
