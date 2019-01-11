@@ -169,7 +169,7 @@ class ProductSyncResource extends ResourceBase {
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('acq_commerce'),
+      $container->get('logger.factory')->get(self::class),
       $container->get('config.factory'),
       $container->get('entity.query'),
       $container->get('acq_sku.category_repo'),
@@ -414,20 +414,6 @@ class ProductSyncResource extends ResourceBase {
           'value' => (isset($product['attributes']['description'])) ? $product['attributes']['description'] : '',
           'format' => 'rich_text',
         ]);
-
-        // Set default value of stock to 0.
-        $stock = 0;
-
-        if (isset($product['extension']['stock_item'],
-            $product['extension']['stock_item']['is_in_stock'],
-            $product['extension']['stock_item']['qty'])
-          && $product['extension']['stock_item']['is_in_stock']) {
-
-          // Store stock value in sku.
-          $stock = $product['extension']['stock_item']['qty'];
-        }
-
-        $sku->get('stock')->setValue($stock);
 
         // Update product media to set proper position.
         $sku->media = $this->getProcessedMedia($product, $sku->media->value);
