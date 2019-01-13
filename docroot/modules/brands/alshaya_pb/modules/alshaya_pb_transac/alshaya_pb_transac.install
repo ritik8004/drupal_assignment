@@ -68,6 +68,19 @@ function alshaya_pb_transac_update_8005() {
 /**
  * Implements hook_update_N().
  *
+ * Adding new menu and block for free design services.
+ */
+function alshaya_pb_transac_update_8004() {
+  $configs = [
+    'system.menu.design-services',
+    'block.block.designservices',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make finish a swatch field.
  * Add config translation for placeholder text.
  * Update field type for attr_color_lhn to attribute from string.
