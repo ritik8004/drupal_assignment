@@ -5,7 +5,6 @@ global_styles:
   js:
     vendor/js/calc.min.js: {}
     js/back_to_top.js: {}
-    js/menu.js: {}
     js/form.js: {}
     js/custom_overrides.js: {}
     vendor/js/details-polyfill.js: {}

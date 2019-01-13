@@ -459,6 +459,11 @@ header {
 }
 
 .main--menu {
+  @include breakpoint($desktop) {
+    display: block !important;
+    position: relative;
+  }
+
   @include breakpoint($upto-desktop) {
     ul {
       padding: 0;
@@ -469,9 +474,13 @@ header {
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
     ul.menu--one__list {
-      display: block !important;
-      text-align: center;
-      font-size: 0;
+      display: table !important;
+      width: auto;
+      margin: 0 auto;
+
+      .menu-backdrop {
+        border-bottom: 4px solid $mm_l2_hover_border;
+      }
     }
 
     li.menu--one__list-item {
@@ -530,9 +539,6 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          border-top: none;
-          transform: none;
-
           &::after {
             content: '';
             height: 1px;
@@ -546,25 +552,8 @@ header {
         }
       }
 
-      .menu__link {
-        font-size: 0.75rem;
-        color: $mm_l1_link;
-        text-decoration: none;
-      }
-
-      ul ul {
-        display: none;
-      }
-
       ul.menu--two__list {
-        position: absolute;
-        display: block;
-        opacity: 0;
-        visibility: hidden;
         overflow: hidden;
-        transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
-        transform: none;
-        border-top: none;
         border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
@@ -670,8 +659,10 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .overlay::before {
-    background-color: rgba(0, 0, 0, 0.48);
+  .menu--four__list {
+    display: block !important;
+    padding-#{$left}: 0;
+    font-family: $arial;
   }
 
   .level--three {
@@ -823,6 +814,15 @@ header {
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
+    will-change: $left;
+    #{$left}: -100%;
+    transition: $left 0.5s ease-in-out;
+    position: absolute;
+    top: 0;
+    display: block !important;
+    bottom: 0;
+    z-index: 1000;
+    height: auto !important;
     background: $mm_bg;
 
     @include breakpoint ($only-tablet) {
@@ -987,6 +987,33 @@ html[lang=ar] {
         max-width: 100%;
       }
     }
+  }
+}
+
+.html--overlay {
+  @include breakpoint($upto-desktop) {
+    overflow: hidden;
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .main--menu {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
+    transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
+    -moz-transform: translateZ(0);
+    #{$left}: -100%;
+    will-change: $left;
+    z-index: 9;
+  }
+
+  .menu--active,
+  .menu__list--active {
+    #{$left}: 0;
   }
 }
 

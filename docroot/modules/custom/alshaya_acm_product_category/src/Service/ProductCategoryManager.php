@@ -184,7 +184,20 @@ class ProductCategoryManager {
    *   TRUE if product has special price.
    */
   private function isProductWithSpecialPrice(NodeInterface $node) {
-    $sku = SKU::loadFromSku($node->get('field_skus')->getString());
+    $sku = $node->get('field_skus')->getString();
+
+    // We should never have this case but to avoid fatal error we do it.
+    if (empty($sku)) {
+      return FALSE;
+    }
+
+    $sku = SKU::loadFromSku($sku);
+
+    // Again, we should never have this case but to avoid fatal error we do it.
+    if (!($sku instanceof SKUInterface)) {
+      return FALSE;
+    }
+
     $prices = $this->skuManager->getMinPrices($sku);
     return ($prices['price'] > 0) && ($prices['final_price'] > 0) && ($prices['price'] != $prices['final_price']);
   }
