@@ -2666,13 +2666,23 @@ class SkuManager {
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nids = array_flip($nids);
-      $nodes = $this->nodeStorage->loadMultiple($nids);
-      $this->nodeStorage->delete($nodes);
-      $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
-        '@ids' => implode(',', $nids),
-        '@id' => $node->id(),
-      ]);
+      try {
+        $nids = array_flip($nids);
+        $nodes = $this->nodeStorage->loadMultiple($nids);
+        $this->nodeStorage->delete($nodes);
+        $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
+          '@ids' => implode(',', $nids),
+          '@id' => $node->id(),
+        ]);
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
+          '@nids' => implode(',', $nids),
+          '@pid' => $node->id(),
+          '@message' => $e->getMessage(),
+          '@method' => 'SkuManager::processColorNodesForConfigurable',
+        ]);
+      }
     }
   }
 
