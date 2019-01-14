@@ -773,7 +773,7 @@ class MobileAppUtility {
       'deeplink' => $this->getDeepLink($sku),
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
-      'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku),
+      'in_stock' => $this->skuManager->isProductInStock($sku),
       'promo' => $promotions,
       'medias' => $images,
       'labels' => $labels,
