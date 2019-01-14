@@ -18,6 +18,10 @@ function alshaya_pb_transac_update_8008() {
     'block.block.designservices',
   ];
   alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+
+  // Enable super category feature.
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
+  $super_category_feature->enableSuperCategory();
 }
 
 /**
