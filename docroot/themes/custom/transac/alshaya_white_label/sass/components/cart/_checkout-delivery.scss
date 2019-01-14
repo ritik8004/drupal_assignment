@@ -890,6 +890,10 @@
             display: block;
             padding: 0.5rem 0;
 
+            &::first-letter {
+              text-transform: uppercase;
+            }
+
             @include breakpoint($only-mobile) {
               text-align: $left;
             }
