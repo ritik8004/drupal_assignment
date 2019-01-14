@@ -63,7 +63,7 @@
     @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
-        #{$right}: calc((100vw - 66.5rem) / 2);
+        #{$right}: calc((100vw - 67.25rem) / 2);
         width: calc((30 * 71.5rem) / 100);
       }
     }
