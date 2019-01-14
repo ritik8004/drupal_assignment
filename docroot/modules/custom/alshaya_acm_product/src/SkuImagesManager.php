@@ -725,13 +725,11 @@ class SkuImagesManager {
    *   Translated product label to use in alt/title.
    * @param bool $add_default_image
    *   Flag to mention if default image needs to be added or not.
-   * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
-   *   Th default sku for the product.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE, SKUInterface $original_sku_entity = NULL) {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
 
     $display_thumbnails = $this->productDisplaySettings->get('image_thumb_gallery');
@@ -859,20 +857,6 @@ class SkuImagesManager {
         break;
 
       case 'pdp-magazine':
-        // We will use below variable for alter hooks.
-        $prod_description = [];
-        if (!isset($original_sku_entity)) {
-          $original_sku_entity = $sku;
-        }
-        if ($body = $original_sku_entity->get('attr_description')->getValue()) {
-          $prod_description['description'] = [
-            '#markup' => $body[0]['value'],
-          ];
-        }
-
-        // Alter description Since this could be different for each brand.
-        $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
-
         $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
@@ -905,7 +889,7 @@ class SkuImagesManager {
 
           $gallery['alshaya_magazine'] = [
             '#theme' => 'alshaya_magazine',
-            '#description' => $prod_description['description'],
+            '#sku' => $sku,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
             '#properties' => $this->getRelCloudZoom($settings),
