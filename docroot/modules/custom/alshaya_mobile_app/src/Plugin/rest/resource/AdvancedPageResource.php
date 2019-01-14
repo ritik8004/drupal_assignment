@@ -160,7 +160,7 @@ class AdvancedPageResource extends ResourceBase {
       }
     }
 
-    // Change order of body field ad promo block fileds for front page.
+    // Change the position of the "delivery_banner" on the frontpage.
     $advanced_page_fields = $this->mobileAppUtility->getEntityBundleInfo($node->getEntityTypeId(), $node->bundle())['fields'];
     $frontPage = $this->configFactory->get('system.site')->get('page.front');
     if ($node_url_obj->getRouteName() && '/' . $node_url_obj->getInternalPath() === $frontPage) {
