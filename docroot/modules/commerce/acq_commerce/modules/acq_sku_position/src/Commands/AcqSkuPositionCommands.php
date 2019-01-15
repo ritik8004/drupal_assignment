@@ -97,7 +97,7 @@ class AcqSkuPositionCommands extends DrushCommands {
     // Allow other modules to skip terms from position sync.
     $this->moduleHandler->alter('acq_sku_position_sync', $terms);
 
-    $chunk_size = 10;
+    $chunk_size = 100;
     foreach (array_chunk($terms, $chunk_size) as $categories_chunk) {
       $is_data_available = FALSE;
       $insert_query = $this->connection->insert('acq_sku_position')
@@ -167,7 +167,7 @@ class AcqSkuPositionCommands extends DrushCommands {
               'position_type' => $position_type,
             ];
             $is_data_available = TRUE;
-            $query->values($record);
+            $insert_query->values($record);
           }
         }
       }
@@ -183,7 +183,7 @@ class AcqSkuPositionCommands extends DrushCommands {
 
         // Run query only if there is any record to insert.
         if ($is_data_available) {
-          $query->execute();
+          $insert_query->execute();
         }
       }
       catch (\Exception $e) {
