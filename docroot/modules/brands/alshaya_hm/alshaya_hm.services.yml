@@ -1,0 +1,8 @@
+services:
+  alshaya_hm.product_info_requested_event:
+    class: Drupal\alshaya_hm\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
+    tags:
+      - { name: 'event_subscriber' }

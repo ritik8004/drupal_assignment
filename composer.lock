@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "212dfc05b5941b83aec432ff1e863a48",
+    "content-hash": "6b361a68c208197ea66f50148ecce826",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -137,6 +137,9 @@
                 "composer-exit-on-patch-failure": true,
                 "branch-alias": {
                     "dev-master": "9.x-dev"
+                },
+                "patches_applied": {
+                    "Add truncate-branch option to deploy command": "https://patch-diff.githubusercontent.com/raw/nedsbeds/blt/pull/1.patch"
                 }
             },
             "autoload": {
@@ -3403,10 +3406,6 @@
                     "homepage": "https://www.drupal.org/user/751908"
                 },
                 {
-                    "name": "quicksketch",
-                    "homepage": "https://www.drupal.org/user/35821"
-                },
-                {
                     "name": "rudygalfi",
                     "homepage": "https://www.drupal.org/user/3390576"
                 },
@@ -3703,10 +3702,10 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc3",
-                    "datestamp": "1538045580",
+                    "datestamp": "1545235980",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -4426,7 +4425,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -5071,7 +5070,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -7388,7 +7387,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.1",
-                    "datestamp": "1538573880",
+                    "datestamp": "1544729280",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7511,7 +7510,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.1",
-                    "datestamp": "1538155380",
+                    "datestamp": "1545276780",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7880,7 +7879,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -9951,7 +9950,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -10200,7 +10199,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch"
+                    "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
+                    "Argument #2 is not an array": "https://www.drupal.org/files/issues/2019-01-11/Fix_array_not_defined_error-2978275-6.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11237,7 +11237,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.11",
-                    "datestamp": "1542151980",
+                    "datestamp": "1546039681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11282,7 +11282,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.11",
-                    "datestamp": "1542151980",
+                    "datestamp": "1546039681",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -11393,7 +11393,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0",
-                    "datestamp": "1495746183",
+                    "datestamp": "1545236281",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -13671,7 +13671,7 @@
                 {
                     "name": "Luís Otávio Cobucci Oblonczyk",
                     "email": "lcobucci@gmail.com",
-                    "role": "Developer"
+                    "role": "developer"
                 }
             ],
             "description": "A simple library to work with JSON Web Token and JSON Web Signature",
@@ -19453,6 +19453,62 @@
             ],
             "description": "Drupal Console Extend Plugin",
             "time": "2017-07-28T17:11:54+00:00"
+        },
+        {
+            "name": "drupal/logs_http",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/logs_http",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/logs_http-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "b7e38024879b262223c7dbe9d4bb4ab322c7223b"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1469351639",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "amitaibu",
+                    "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "ordavidil",
+                    "homepage": "https://www.drupal.org/user/3105583"
+                },
+                {
+                    "name": "prdctvtxt",
+                    "homepage": "https://www.drupal.org/user/930642"
+                }
+            ],
+            "description": "Client for the Logs HTTP API.",
+            "homepage": "https://drupal.org/project/logs_http",
+            "support": {
+                "source": "https://cgit.drupalcode.org/logs_http",
+                "issues": "https://drupal.org/project/issues/logs_http"
+            }
         },
         {
             "name": "drupal/stage_file_proxy",

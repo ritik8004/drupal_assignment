@@ -21,6 +21,22 @@ function alshaya_performance_node_presave(EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_performance_taxonomy_term_presave(EntityInterface $entity) {
+  // Used for address book area list.
+  Cache::invalidateTags(['taxonomy_term:' . $entity->bundle()]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_performance_taxonomy_term_delete(EntityInterface $entity) {
+  // Used for address book area list.
+  Cache::invalidateTags(['taxonomy_term:' . $entity->bundle()]);
+}
+
+/**
  * Helper function to set log mode from settings.
  */
 function alshaya_performance_reset_log_mode() {

@@ -72,17 +72,5 @@ function hook_acq_sku_cart_media_alter(array &$image, SKUInterface $sku, $contex
 }
 
 /**
- * Alter product description for PDP.
- *
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   SKU entity.
- * @param array $prod_description
- *   Product description array.
- */
-function hook_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
-
-}
-
-/**
  * @} End of "addtogroup hooks".
  */

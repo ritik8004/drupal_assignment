@@ -507,10 +507,10 @@
 }
 
 .c-products-list {
-  .ajax-progress-throbber {
-    .throbber {
-      background-image: url(../imgs/icons/ic-loader.svg) !important;
-    }
+  position: relative;
+
+  .js-pager__items.visually-hidden {
+    position: static !important;
   }
 }
 

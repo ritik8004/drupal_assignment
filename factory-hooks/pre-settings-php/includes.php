@@ -157,6 +157,7 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 // ################################################################
 switch ($env) {
   case 'local':
+  case 'travis':
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
@@ -170,13 +171,6 @@ switch ($env) {
 
     // Log debug messages too.
     $settings['alshaya_performance_log_mode'] = 'developer';
-
-  // Please note there is no "break" at the end of "local" case so "travis"
-  // settings are applied both on "local" and on "travis" environments.
-  case 'travis':
-    // Disable stock check.
-    global $_alshaya_acm_disable_stock_check;
-    $_alshaya_acm_disable_stock_check = TRUE;
     break;
 
   case '01dev':

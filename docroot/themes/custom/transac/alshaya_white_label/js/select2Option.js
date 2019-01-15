@@ -54,7 +54,7 @@ jQuery.fn.select2Option = function (options) {
           else if ($(this).attr('disabled') || select.attr('disabled')) {
             liHtml.addClass('disabled');
             option_id = $(this).val();
-            swatch_markup = Drupal.alshaya_hm_images_generate_swatch_markup($(this), select, option_id, 'disabled', '');
+            swatch_markup = Drupal.alshaya_color_images_generate_swatch_markup($(this), select, option_id, 'disabled', '');
             if (swatch_markup) {
               liHtml.append(swatch_markup);
             }
@@ -64,7 +64,7 @@ jQuery.fn.select2Option = function (options) {
           }
           else {
             option_id = $(this).val();
-            swatch_markup = Drupal.alshaya_hm_images_generate_swatch_markup($(this), select, option_id, 'enabled', selectIndex);
+            swatch_markup = Drupal.alshaya_color_images_generate_swatch_markup($(this), select, option_id, 'enabled', selectIndex);
             if (swatch_markup) {
               liHtml.append(swatch_markup);
             }
@@ -187,7 +187,7 @@ jQuery.fn.select2Option = function (options) {
 
 (function ($) {
   'use strict';
-  Drupal.alshaya_hm_images_update_selected_label = function () {
+  Drupal.alshaya_color_swatch_update_selected_label = function () {
     // Set the value for selected option.
     $('.select-buttons').find('a.picked').each(function () {
       var selectedText = $(this).attr('class').replace(' picked', '');
@@ -212,7 +212,7 @@ jQuery.fn.select2Option = function (options) {
 }(jQuery));
 
 /**
- * Helper function to generate swatch markup.
+ * Helper function to generate colour swatch markup.
  *
  * @param {Object} currentOption
  *   Option being processed
@@ -228,7 +228,7 @@ jQuery.fn.select2Option = function (options) {
  * @return {string}
  *   Swatch markup depending on the above options.
  */
-Drupal.alshaya_hm_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
+Drupal.alshaya_color_images_generate_swatch_markup = function (currentOption, select, option_id, status, selectIndex) {
   'use strict';
 
   if ((select.attr('data-drupal-selector') === 'edit-configurables-article-castor-id') &&

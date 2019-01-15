@@ -38,6 +38,7 @@ services:
       - '@http_client'
       - '@renderer'
       - '@simple_sitemap.generator'
+      - '@acq_sku.product_info_helper'
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
@@ -82,3 +83,16 @@ services:
     - '@alshaya_acm_product.skumanager'
     tags:
     - { name: 'event_subscriber' }
+  alshaya_acm_product.process_finish_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+    tags:
+      - { name: 'event_subscriber' }
+  alshaya_acm_product.acq_sku_validate_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\AlshayaAcmProductAcqSkuValidateEventSubscriber
+    arguments:
+      - '@logger.factory'
+    tags:
+      - { name: event_subscriber }

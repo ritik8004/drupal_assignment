@@ -42,12 +42,8 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
 
   ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
 else
-  ## Clear cache for frontend change.
-  echo "No change in install files, clearing caches only."
-  drush acsf-tools-ml cr
-
   if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Cache cleared on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
   fi
 fi
 

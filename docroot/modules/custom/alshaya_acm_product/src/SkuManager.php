@@ -37,6 +37,7 @@ use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\acq_sku\ProductInfoHelper;
 
 /**
  * Class SkuManager.
@@ -207,6 +208,13 @@ class SkuManager {
   protected $generator;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -247,6 +255,8 @@ class SkuManager {
    *   Renderer service.
    * @param \Drupal\simple_sitemap\Simplesitemap $generator
    *   Simple sitemap generator.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -266,7 +276,8 @@ class SkuManager {
                               AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
                               Client $http_client,
                               RendererInterface $renderer,
-                              Simplesitemap $generator) {
+                              Simplesitemap $generator,
+                              ProductInfoHelper $product_info_helper) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -289,6 +300,7 @@ class SkuManager {
     $this->httpClient = $http_client;
     $this->renderer = $renderer;
     $this->generator = $generator;
+    $this->productInfoHelper = $product_info_helper;
   }
 
   /**
@@ -1175,10 +1187,15 @@ class SkuManager {
    * @return array
    *   An array of SKU with commerce category ids.
    */
-  public function getCategoriesOfSkus($langcode, array $skus = []) {
+  public function getCategoriesOfSkus($langcode, array $skus) {
+    // SQL 'IN' condition throws exception on empty array.
+    if (empty($skus)) {
+      return [];
+    }
+
     $query = $this->connection->select('node__field_skus', 'nfs');
-    $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id AND nfc.langcode=nfs.langcode');
-    $query->innerJoin('taxonomy_term__field_commerce_id', 'ttfcid', 'ttfcid.entity_id=nfc.field_category_target_id');
+    $query->innerJoin('node__field_category_original', 'nfc', 'nfc.entity_id=nfs.entity_id AND nfc.langcode=nfs.langcode');
+    $query->innerJoin('taxonomy_term__field_commerce_id', 'ttfcid', 'ttfcid.entity_id=nfc.field_category_original_target_id');
     $query->fields('ttfcid', ['field_commerce_id_value']);
     $query->fields('nfs', ['field_skus_value']);
     $query->condition('nfs.field_skus_value', $skus, 'IN');
@@ -1452,29 +1469,21 @@ class SkuManager {
    */
   public function filterRelatedSkus(array $skus) {
     $related_items_size = $this->configFactory->get('alshaya_acm_product.settings')->get('related_items_size');
-    $stock_mode = $this->getStockMode();
-
     $related = [];
 
     foreach ($skus as $sku) {
       try {
         $sku_entity = SKU::loadFromSku($sku);
-
         if (empty($sku_entity)) {
           continue;
         }
 
         $node = $this->getDisplayNode($sku_entity);
-
         if (empty($node)) {
           continue;
         }
 
-        // No stock check for related items in pull mode.
-        if ($stock_mode == 'pull') {
-          $related[$sku] = $node->id();
-        }
-        elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
+        if ($this->isProductInStock($sku_entity)) {
           $related[$sku] = $node->id();
         }
       }
@@ -1572,32 +1581,6 @@ class SkuManager {
   }
 
   /**
-   * Helper function to fetch SKU's property value.
-   *
-   * @param string $sku
-   *   SKU code for the product.
-   * @param array $properties
-   *   Property name that needs to be fetched.
-   *
-   * @return \stdClass
-   *   Result object keyed with the list of properties.
-   */
-  public function getSkuPropertyValue($sku, array $properties) {
-    $result = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', $properties)
-      ->condition('asfd.sku', $sku)
-      ->condition('asfd.langcode', $this->languageManager->getCurrentLanguage()->getId())
-      ->range(0, 1)
-      ->execute()->fetchAll();
-
-    if (!empty($result)) {
-      return array_shift($result);
-    }
-
-    return NULL;
-  }
-
-  /**
    * Get possible combinations for a configurable SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -1639,8 +1622,12 @@ class SkuManager {
         continue;
       }
 
-      // Disable OOS combinations too.
-      if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+      // Do not display OOS variants.
+      // Bypass wrapper function in this class as it creates cyclic
+      // dependency.
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $childPlugin */
+      $childPlugin = $sku->getPluginInstance();
+      if (!$childPlugin->isProductInStock($sku_entity)) {
         continue;
       }
 
@@ -1665,8 +1652,7 @@ class SkuManager {
       // even when there are children in stock.
       // @TODO: To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
-      $stock = alshaya_acm_get_stock_from_sku($sku);
-      if ($stock > 0) {
+      if ($plugin->isProductInStock($sku)) {
         // Log message here to allow debugging further.
         $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
           '@sku' => $sku->getSku(),
@@ -1844,13 +1830,11 @@ class SkuManager {
     $cache = $this->productCache->get($cid);
     $data = $cache->data ?? [];
     $data[$key] = $value;
-    $this->productCache->set($cid, $data);
+    $this->productCache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
 
     // Update value in static cache too.
     $static = &drupal_static('alshaya_product_cached_data', []);
-    if (isset($static[$cid], $static[$cid][$key])) {
-      $static[$cid][$key] = $value;
-    }
+    $static[$cid][$key] = $value;
   }
 
   /**
@@ -1864,24 +1848,6 @@ class SkuManager {
    */
   public function getProductCachedId(SKU $sku) {
     return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
-  }
-
-  /**
-   * Clear configurable product cache for particular SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity.
-   */
-  public function clearProductCachedData(SKU $sku) {
-    drupal_static_reset('alshaya_product_cached_data');
-    $cid = $this->getProductCachedId($sku);
-    $this->productCache->delete($cid);
-
-    // We also invalidate caches for node here.
-    $node = $this->getDisplayNode($sku);
-    if ($node instanceof NodeInterface) {
-      Cache::invalidateTags($node->getCacheTagsToInvalidate());
-    }
   }
 
   /**
@@ -1916,7 +1882,7 @@ class SkuManager {
     if ($sku_id && $sku_id != $sku->id()) {
       $first_child = $this->loadSkuById($sku_id);
 
-      if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
+      if ($first_child instanceof SKUInterface && $this->isProductInStock($first_child)) {
         return $first_child;
       }
     }
@@ -1944,22 +1910,6 @@ class SkuManager {
 
     // Fallback.
     return $this->getChildSkus($sku, TRUE);
-  }
-
-  /**
-   * Helper function to get current stock mode.
-   *
-   * @return string
-   *   Stock mode.
-   */
-  public function getStockMode() {
-    $static = &drupal_static(__FUNCTION__, NULL);
-
-    if ($static === NULL) {
-      $static = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
-    }
-
-    return $static;
   }
 
   /**
@@ -2374,7 +2324,7 @@ class SkuManager {
   }
 
   /**
-   * Check if product is in stock or not.
+   * Check if product (SKU) is in stock or not.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
@@ -2383,11 +2333,49 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
+    // For configurable we check combinations are valid to keep
+    // it consistent between detail and listing.
     if ($sku->bundle() == 'configurable') {
       return $this->skuAttributeCombinationsValid($sku);
     }
 
-    return (bool) alshaya_acm_get_stock_from_sku($sku);
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku->getPluginInstance();
+    return $plugin->isProductInStock($sku);
+  }
+
+  /**
+   * Get stock quantity for a product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return int
+   *   Stock quantity.
+   */
+  public function getStockQuantity(SKUInterface $sku): int {
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku->getPluginInstance();
+    return (int) $plugin->getStock($sku);
+  }
+
+  /**
+   * Check if product (node) is in stock or not.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product Node.
+   *
+   * @return bool
+   *   TRUE if product is in stock.
+   */
+  public function isProductNodeInStock(NodeInterface $node): bool {
+    $sku = $this->getSkuForNode($node);
+
+    if ($sku instanceof SKUInterface) {
+      return $this->isProductInStock($sku);
+    }
+
+    return FALSE;
   }
 
   /**
@@ -2802,15 +2790,12 @@ class SkuManager {
    *   Index item.
    */
   private function updateStockForIndex(SKUInterface $sku, ItemInterface $item) {
-    // For stock index, we use only in stock (2) or out of stock (0).
-    // We will use 2 for not-buyable products too.
-    // We will use 1 for all in pull mode.
+    // We will use node.sticky to map stock status in index.
+    // For stock index, we use only in stock (1) or out of stock (0).
+    // We will use 1 for not-buyable products too.
     $in_stock = 0;
 
-    if ($this->getStockMode() == 'pull') {
-      $in_stock = 1;
-    }
-    elseif (!alshaya_acm_product_is_buyable($sku)) {
+    if (!alshaya_acm_product_is_buyable($sku)) {
       $in_stock = 2;
 
       // Get price and final price for the non-buyable SKU.
@@ -2944,6 +2929,29 @@ class SkuManager {
     });
 
     return $indexFields;
+  }
+
+  /**
+   * Get description for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Description of the product.
+   */
+  public function getDescription(SKUInterface $sku, $context) {
+    $prod_description = [];
+    if ($body = $sku->get('attr_description')->getValue()) {
+      $prod_description['description'] = [
+        '#markup' => $body[0]['value'],
+      ];
+    }
+    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
+
+    return $prod_description;
   }
 
 }

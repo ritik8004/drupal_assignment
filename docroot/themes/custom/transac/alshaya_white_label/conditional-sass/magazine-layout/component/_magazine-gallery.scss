@@ -45,7 +45,38 @@
     padding: 0;
 
     .magazine-desc-wrapper {
-      padding: 2rem;
+      padding: 1.25rem 2rem;
+      font-family: $arial;
+      font-size: 1.1375rem;
+      line-height: 1.71;
+      color: $magazine-pdp-description;
+
+      @include breakpoint($only-mobile) {
+        padding: 0.375rem 1.5rem;
+        font-size: 0.875rem;
+      }
+
+      div[class*="label"] {
+        font-family: $alshaya-bold;
+        font-size: 0.975rem;
+        letter-spacing: 3.1px;
+        color: $magazine-pdp-label;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+        }
+      }
+
+      div[class*="value"] {
+        font-family: $arial;
+        font-size: 1.1375rem;
+        line-height: 1.71;
+        color: $magazine-pdp-description;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
+      }
     }
 
     @include breakpoint($tablet) {
@@ -129,9 +160,13 @@
         &:nth-child(2n+1) {
           grid-column: 1 / -1;
 
-          img {
+          #wrap {
             width: 47%;
             margin: 0 auto;
+
+            #cloud-zoom-big {
+              #{$left}: calc(150% + 3rem) !important;
+            }
           }
         }
       }
@@ -166,7 +201,7 @@
       z-index: 1 !important;
 
       #cloud-zoom-big {
-        width: 19.88rem;
+        width: 21.88rem;
         top: 0 !important;
 
         .cloud-zoom-title {
@@ -212,6 +247,18 @@
 
       .dialog-product-image-gallery-container-mobile {
         z-index: 10001;
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .magazine-layout-ajax-throbber {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
+          position: inherit !important;
+        }
       }
     }
   }

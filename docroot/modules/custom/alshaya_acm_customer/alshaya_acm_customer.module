@@ -364,10 +364,22 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
     }
   }
   else {
-    \Drupal::logger('alshaya_acm_customer')->warning('Failed to load user from mail: @mail. Values for form name element validate: @element_validate and form validate: @validate', [
+    $module_implements = \Drupal::cache('bootstrap')->get('module_implements');
+    $module_implements_cache = [];
+    if ($module_implements && isset($module_implements->data)) {
+      $module_implements_cache = $module_implements->data['module_implements_alter'] ?? [];
+    }
+
+    $modules = array_keys(\Drupal::getContainer()->getParameter('container.modules'));
+
+    \Drupal::logger('alshaya_acm_customer')->warning('Failed to load user from mail: @mail. Debug data: @data', [
       '@mail' => $mail,
-      '@element_validate' => json_encode($form['name']['#element_validate']),
-      '@validate' => json_encode($form['#validate']),
+      '@data' => json_encode([
+        'form_name_element_validate' => $form['name']['#element_validate'],
+        'form_validate' => $form['#validate'],
+        'module_implements_cache' => $module_implements_cache,
+        'modules_container_parameter' => $modules,
+      ]),
     ]);
   }
 

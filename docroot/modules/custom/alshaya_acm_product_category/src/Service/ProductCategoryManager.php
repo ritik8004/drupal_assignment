@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product_category\Service;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -17,6 +18,8 @@ use Drupal\node\NodeInterface;
  * @package Drupal\alshaya_acm_product_category\Service
  */
 class ProductCategoryManager {
+
+  const SALES_CATEGORY_IDS_CACHE_TAG = 'alshaya_acm_sales_category_ids';
 
   /**
    * SKU Manager.
@@ -98,19 +101,18 @@ class ProductCategoryManager {
     $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
     $treeTids = [];
     foreach ($salesCategoryIds as $salesCategoryId) {
-      $tree = $termStorage->loadTree('acq_product_category', $salesCategoryId);
+      $tree = $termStorage->loadTree(ProductCategoryTree::VOCABULARY_ID, $salesCategoryId);
       $treeTids = array_merge($treeTids, array_column($tree, 'tid'));
     }
 
     $salesCategoryIds = array_merge($salesCategoryIds, $treeTids);
 
-    $tags = [];
-    foreach ($salesCategoryIds as $salesCategoryId) {
-      $tags[] = 'taxonomy_term:' . $salesCategoryId;
-    }
+    // Use cache tags of config.
+    $tags = $config->getCacheTags();
 
-    // Add cache tag of config.
-    $tags = array_merge($tags, $config->getCacheTags());
+    // Use custom cache tag to invalidate when any category
+    // from sales tree is updated.
+    $tags[] = self::SALES_CATEGORY_IDS_CACHE_TAG;
 
     $this->cache->set('alshaya_acm_sales_category_ids', $salesCategoryIds, Cache::PERMANENT, $tags);
 
@@ -182,7 +184,20 @@ class ProductCategoryManager {
    *   TRUE if product has special price.
    */
   private function isProductWithSpecialPrice(NodeInterface $node) {
-    $sku = SKU::loadFromSku($node->get('field_skus')->getString());
+    $sku = $node->get('field_skus')->getString();
+
+    // We should never have this case but to avoid fatal error we do it.
+    if (empty($sku)) {
+      return FALSE;
+    }
+
+    $sku = SKU::loadFromSku($sku);
+
+    // Again, we should never have this case but to avoid fatal error we do it.
+    if (!($sku instanceof SKUInterface)) {
+      return FALSE;
+    }
+
     $prices = $this->skuManager->getMinPrices($sku);
     return ($prices['price'] > 0) && ($prices['final_price'] > 0) && ($prices['price'] != $prices['final_price']);
   }
