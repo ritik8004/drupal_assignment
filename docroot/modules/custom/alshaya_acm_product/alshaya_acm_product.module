@@ -297,9 +297,19 @@ function alshaya_acm_product_node_delete(NodeInterface $node) {
       $nids = $skuManager->getColorNodeIds($sku);
 
       if ($nids) {
-        $storage = \Drupal::entityTypeManager()->getStorage('node');
-        $nodes = $storage->loadMultiple($nids);
-        $storage->delete($nodes);
+        try {
+          $storage = \Drupal::entityTypeManager()->getStorage('node');
+          $nodes = $storage->loadMultiple($nids);
+          $storage->delete($nodes);
+        }
+        catch (\Exception $e) {
+          \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids for node: @pid Message: @message in method: @method', [
+            '@nids' => implode(',', $nids),
+            '@pid' => $node->id(),
+            '@message' => $e->getMessage(),
+            '@method' => 'alshaya_acm_product_node_delete',
+          ]);
+        }
       }
     }
   }
