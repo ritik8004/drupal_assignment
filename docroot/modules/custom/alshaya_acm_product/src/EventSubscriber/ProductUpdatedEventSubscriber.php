@@ -63,7 +63,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     }
 
     // We also invalidate caches for node here.
-    $node = $this->skuManager->getDisplayNode($parent);
+    $node = $this->skuManager->getDisplayNode($entity);
     if ($node instanceof NodeInterface) {
       Cache::invalidateTags($node->getCacheTagsToInvalidate());
     }
