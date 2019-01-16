@@ -4,15 +4,15 @@ subset_name:
     selected_label: 'Selected'
     error: 'Please make your selection'
   ar:
-    label: 'Please select an option ar'
-    selected_label: 'Selected ar'
-    error: 'Please make your selection ar'
+    label: 'يرجى تحديد الاختيار'
+    selected_label: 'اختر'
+    error: 'يرجى التحديد'
 option:
   en:
     label: 'Please select an option'
     selected_label: 'Selected'
     error: 'Please make your selection'
   ar:
-    label: 'Please select an option ar'
-    selected_label: 'Selected ar'
-    error: 'Please make your selection ar'
+    label: 'يرجى تحديد الاختيار'
+    selected_label: 'اختر'
+    error: 'يرجى التحديد'

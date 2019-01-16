@@ -34,6 +34,7 @@ use Drupal\search_api\IndexInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
+use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -245,6 +246,11 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  */
 function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation) {
   try {
+    // Only for configurable sku.
+    if ($entity->getType() == 'configurable') {
+      ProcessFinishEventSubscriber::$colorNodeSkus[] = $entity->getSku();
+    }
+
     $event = new ProductUpdatedEvent($entity, $operation);
     \Drupal::service('event_dispatcher')->dispatch(ProductUpdatedEvent::EVENT_NAME, $event);
   }
@@ -290,9 +296,19 @@ function alshaya_acm_product_node_delete(NodeInterface $node) {
       $nids = $skuManager->getColorNodeIds($sku);
 
       if ($nids) {
-        $storage = \Drupal::entityTypeManager()->getStorage('node');
-        $nodes = $storage->loadMultiple($nids);
-        $storage->delete($nodes);
+        try {
+          $storage = \Drupal::entityTypeManager()->getStorage('node');
+          $nodes = $storage->loadMultiple($nids);
+          $storage->delete($nodes);
+        }
+        catch (\Exception $e) {
+          \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids for node: @pid Message: @message in method: @method', [
+            '@nids' => implode(',', $nids),
+            '@pid' => $node->id(),
+            '@message' => $e->getMessage(),
+            '@method' => 'alshaya_acm_product_node_delete',
+          ]);
+        }
       }
     }
   }
@@ -1369,6 +1385,23 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $selected_sku = $tree_pointer;
     if ($quantity = alshaya_acm_get_stock_from_sku($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
+    }
+    else {
+      // Something is wrong here, we shouldn't land here with a selected sku
+      // with no quantity, this could be an old form open in browser and
+      // stock became empty now.
+      $log_data = [
+        'selected_sku' => $tree_pointer->getSku(),
+        'sku' => $sku->getSku(),
+      ];
+
+      \Drupal::logger('alshaya_acm_product')->error('Combination selected in add to cart form which is OOS. Data: @data', [
+        '@data' => json_encode($log_data),
+      ]);
+
+      // Return response with fake command to ensure nothing happens in FE.
+      $response->addCommand(new HtmlCommand('.fake-selector', ''));
+      return $response;
     }
 
     $build = [];

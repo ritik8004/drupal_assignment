@@ -8,6 +8,11 @@
         margin-#{$left}: 0;
       }
     }
+
+    .c-accordion {
+      display: table;
+      width: 100%;
+    }
   }
 
   .region__content {
@@ -240,6 +245,8 @@
           .c-accordion {
             margin-left: 0;
             margin-right: 0;
+            display: table;
+            width: 100%;
 
             @include breakpoint($only-tablet) {
               ul {
