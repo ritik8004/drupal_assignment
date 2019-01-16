@@ -447,10 +447,13 @@ class MobileAppUtility {
   /**
    * Helper function to throw an error.
    *
+   * @param string $message
+   *   (Optional) status message when necessary.
+   *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
-  public function throwException() {
-    throw new NotFoundHttpException($this->t("page not found"));
+  public function throwException($message = NULL) {
+    throw new NotFoundHttpException($message ?? $this->t("page not found"));
   }
 
   /**
@@ -465,10 +468,16 @@ class MobileAppUtility {
    *   HTTP Response.
    */
   public function sendStatusResponse(string $message = '', $status = FALSE) {
+    // If status is false, throw a 404 exception.
+    if (!$status) {
+      return $this->throwException($message);
+    }
+
     $response['success'] = (bool) ($status);
     if ($message) {
       $response['message'] = $message;
     }
+
     return (new ResourceResponse($response));
   }
 
@@ -764,7 +773,7 @@ class MobileAppUtility {
       'deeplink' => $this->getDeepLink($sku),
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
-      'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku),
+      'in_stock' => $this->skuManager->isProductInStock($sku),
       'promo' => $promotions,
       'medias' => $images,
       'labels' => $labels,
