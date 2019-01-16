@@ -14,6 +14,7 @@ git:
 deploy:
   tag_source: true
   gitignore_file: '${repo.root}/blt/config/.gitignore'
+  truncate_history: true
 drush:
   aliases:
     remote: '${project.machine_name}.test'
@@ -69,10 +70,9 @@ command-hooks:
     command: 'echo ''No post-deploy build configured.'''
 import: '${repo.root}/blt/setup.local.xml'
 behat:
-  paths:
-    - '${repo.root}/tests/behat'
-  tags: '~manual&&~ajax&&~experimental&&~lightningextension&&~example'
-  web-driver: selenium
+  web-driver: chrome
+  chrome:
+    args: '--window-size=1920,1080'
 multisite:
   name:
     - g
@@ -83,3 +83,7 @@ validate:
     functions: [alshaya_main_menu]
 cloud:
   appId: f8ab35c4-f119-4acd-b080-d3014358e5b8
+# We must disable security checks for module updates until
+# https://github.com/drush-ops/drush/issues/3748 will be fixed
+# (test with drush pm:security command)
+disable-targets.tests.security.check.updates: true

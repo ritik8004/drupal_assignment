@@ -6,7 +6,7 @@ use Drupal\acq_commerce\Conductor\IngestAPIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_promotion\AcqPromotionsManager;
 use Drupal\acq_sku\CategoryManagerInterface;
-use Drupal\acq_sku\ProductOptionsManager;
+use Drupal\alshaya_product_options\ProductOptionsHelper;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
 use Drupal\alshaya_admin\QueueHelper;
@@ -33,13 +33,12 @@ class SyncForm extends FormBase {
    */
   private $productCategoriesManager;
 
-
   /**
-   * Conductor product options manager.
+   * Product Options Helper.
    *
-   * @var \Drupal\acq_sku\ProductOptionsManager
+   * @var \Drupal\alshaya_product_options\ProductOptionsHelper
    */
-  private $productOptionsManager;
+  private $productOptionshelper;
 
   /**
    * Conductor promotions manager.
@@ -116,8 +115,8 @@ class SyncForm extends FormBase {
    *
    * @param \Drupal\acq_sku\CategoryManagerInterface $product_categories_manager
    *   Category manager interface.
-   * @param \Drupal\acq_sku\ProductOptionsManager $product_options_manager
-   *   Product options manager interface.
+   * @param \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper
+   *   Product Options Helper.
    * @param \Drupal\acq_promotion\AcqPromotionsManager $promotions_manager
    *   Promotions manager interface.
    * @param \Drupal\acq_commerce\Conductor\IngestAPIWrapper $ingest_api
@@ -141,7 +140,7 @@ class SyncForm extends FormBase {
    */
   public function __construct(
     CategoryManagerInterface $product_categories_manager,
-    ProductOptionsManager $product_options_manager,
+    ProductOptionsHelper $productOptionsHelper,
     AcqPromotionsManager $promotions_manager,
     IngestAPIWrapper $ingest_api,
     AlshayaApiWrapper $alshaya_api,
@@ -151,9 +150,10 @@ class SyncForm extends FormBase {
     AlshayaAddressBookManager $address_book_manager,
     QueueHelper $queue_helper,
     EntityTypeManagerInterface $entity_type_manager,
-    ModuleHandlerInterface $module_handler) {
+    ModuleHandlerInterface $module_handler
+  ) {
     $this->productCategoriesManager = $product_categories_manager;
-    $this->productOptionsManager = $product_options_manager;
+    $this->productOptionshelper = $productOptionsHelper;
     $this->promotionsManager = $promotions_manager;
     $this->ingestApi = $ingest_api;
     $this->alshayaApi = $alshaya_api;
@@ -172,7 +172,7 @@ class SyncForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_sku.category_manager'),
-      $container->get('acq_sku.product_options_manager'),
+      $container->get('alshaya_product_options.helper'),
       $container->get('acq_promotion.promotions_manager'),
       $container->get('acq_commerce.ingest_api'),
       $container->get('alshaya_api.api'),
@@ -274,7 +274,7 @@ class SyncForm extends FormBase {
         break;
 
       case $this->t('Synchronize product options'):
-        $this->productOptionsManager->synchronizeProductOptions();
+        $this->productOptionshelper->synchronizeProductOptions();
         drupal_set_message($this->t('Product options synchronization complete.'), 'status');
         break;
 

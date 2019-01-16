@@ -49,10 +49,6 @@
             min-width: 12rem;
           }
         }
-
-        @include breakpoint($desktop) {
-          min-width: 15rem;
-        }
       }
     }
   }
@@ -84,14 +80,11 @@
   .order-print-button a {
     @include arabic-letter-spacing;
 
-    display: inline-block;
     font-family: $hnm-bold;
     text-transform: uppercase;
     color: $order_print_btn_text;
     background: $order_print_btn_bg;
-    padding: 0.5rem 2.45rem;
     border: 1px solid $order_print_btn_border;
-    font-size: 0.75rem;
     letter-spacing: 1px;
   }
 
@@ -132,8 +125,6 @@
   }
 
   .right--align {
-    text-align: $right;
-
     &.label {
       color: $order_print_right_label;
       font-family: $hnm-regular;
@@ -179,9 +170,7 @@
     @include arabic-letter-spacing;
 
     border-bottom: 1px solid $secondary_border;
-    margin-bottom: 0.75rem;
     color: $order_print_label;
-    font-size: 1rem;
     font-family: $hnm-demibold;
     letter-spacing: 1px;
     font-weight: normal;
@@ -225,15 +214,10 @@
 #edit-confirmation-continue-shopping {
   @include arabic-letter-spacing;
 
-  font-size: 0.75rem;
   font-family: $hnm-bold;
   font-weight: bold;
   border: 1px solid $primary_empty_btn_border;
   color: $primary_empty_btn;
-  float: $right;
-  padding: 0.5rem 1em;
-  width: 100%;
-  text-align: center;
   text-transform: uppercase;
   letter-spacing: 1px;
 

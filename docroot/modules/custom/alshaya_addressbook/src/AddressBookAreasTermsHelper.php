@@ -7,6 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class AddressBookAreasTermsHelper.
@@ -92,6 +93,11 @@ class AddressBookAreasTermsHelper {
    *   List or governates.
    */
   public function getAllGovernates() {
+    $governate = $this->getAddressCachedData('getAllGovernates');
+    if (is_array($governate)) {
+      return $governate;
+    }
+
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, 0, 1, TRUE);
 
     $term_list = [];
@@ -105,6 +111,8 @@ class AddressBookAreasTermsHelper {
     }
 
     asort($term_list);
+
+    $this->setAddressCachedData($term_list, 'getAllGovernates');
 
     return $term_list;
   }
@@ -122,6 +130,11 @@ class AddressBookAreasTermsHelper {
     if (empty($parent) && $this->dmVersion == AlshayaAddressBookManagerInterface::DM_VERSION_2) {
       // Parent is required in DM_VERSION_2, not throwing error though.
       return [];
+    }
+
+    $area_withparent = $this->getAddressCachedData('getAllAreasWithParent:' . $parent);
+    if (is_array($area_withparent)) {
+      return $area_withparent;
     }
 
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, $parent, 1, TRUE);
@@ -144,6 +157,8 @@ class AddressBookAreasTermsHelper {
 
     asort($term_list);
 
+    $this->setAddressCachedData($term_list, 'getAllAreasWithParent:' . $parent);
+
     return $term_list;
   }
 
@@ -154,6 +169,11 @@ class AddressBookAreasTermsHelper {
    *   List or areas.
    */
   public function getAllAreas() {
+    $area = $this->getAddressCachedData('getAllAreas');
+    if (is_array($area)) {
+      return $area;
+    }
+
     $term_tree = $this->termStorage->loadTree(AlshayaAddressBookManagerInterface::AREA_VOCAB, 0, 2, TRUE);
 
     $term_list = [];
@@ -173,6 +193,8 @@ class AddressBookAreasTermsHelper {
     }
 
     asort($term_list);
+
+    $this->setAddressCachedData($term_list, 'getAllAreas');
 
     return $term_list;
   }
@@ -273,6 +295,51 @@ class AddressBookAreasTermsHelper {
     }
 
     return $value;
+  }
+
+  /**
+   * Get cache id for particular address area.
+   *
+   * @return string
+   *   Cache key.
+   */
+  public function getAddressbookCachedId($key) {
+    return 'alshaya_addressbook:' . $this->languageManager->getCurrentLanguage()->getId() . $key;
+  }
+
+  /**
+   * Get data from Cache for an address area.
+   *
+   * @param string $key
+   *   Key of the data to get from cache.
+   *
+   * @return array|null
+   *   Data if found or null.
+   */
+  public function getAddressCachedData($key) {
+    $cid = $this->getAddressbookCachedId($key);
+    $static = &drupal_static($cid);
+    if (!isset($static) && $cache = $this->cache->get($cid)) {
+      $static = $cache->data;
+    }
+    return $static;
+  }
+
+  /**
+   * Set data in Cache for an address areas.
+   *
+   * @param array $data
+   *   Data to set in cache.
+   * @param string $key
+   *   Key of the data to get from cache.
+   */
+  public function setAddressCachedData(array $data, $key) {
+    $cid = $this->getAddressbookCachedId($key);
+    $this->cache->set($cid, $data, Cache::PERMANENT, ['taxonomy_term:area_list']);
+
+    // Update data in static cache too.
+    $static = &drupal_static($cid);
+    $static = $data;
   }
 
 }

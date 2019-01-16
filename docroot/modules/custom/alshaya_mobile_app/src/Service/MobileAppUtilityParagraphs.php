@@ -35,6 +35,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected $cacheableEntities = [];
 
   /**
+   * The cache tags.
+   *
+   * @var string
+   */
+  protected $cacheTags = [];
+
+  /**
    * The paragraph Base Fields.
    *
    * @var string
@@ -179,7 +186,7 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
                 'type' => 'banner',
               ] + $default_values,
               'field_slider' => [
-                'callback' => 'getFieldParagraphItems',
+                'callback' => 'getFieldMultipleParagraphItems',
                 'type' => 'slider',
               ] + $default_values,
               'body' => [
@@ -244,6 +251,26 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
               'field_block_reference' => [
                 'callback' => 'getFieldBlockReference',
                 'label' => 'block',
+              ] + $default_values,
+            ],
+          ],
+          'delivery_usp_block' => [
+            'callback' => 'paragraphDeliveryUspBlock',
+            'fields' => [
+              'field_arrow_color' => [
+                'label' => 'arrow_color',
+              ] + $default_values,
+              'field_usp_text' => [
+                'label' => 'text',
+              ] + $default_values,
+              'field_usp_text_background' => [
+                'label' => 'text_background',
+              ] + $default_values,
+              'field_usp_text_font_color' => [
+                'label' => 'text_font_color',
+              ] + $default_values,
+              'field_usp_timer' => [
+                'label' => 'timer',
               ] + $default_values,
             ],
           ],
@@ -431,6 +458,58 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   }
 
   /**
+   * Function to get multiple paragraph items associated with the field.
+   *
+   * This kind of fields does not have layout paragraph types in-between.
+   *
+   * @param object $entity
+   *   The paragraph entity or node entity object.
+   * @param string $field
+   *   The field name.
+   * @param string $label
+   *   (optional) The label.
+   * @param string $type
+   *   (optional) The type of the field.
+   *
+   * @return array
+   *   Return array of data.
+   */
+  protected function getFieldMultipleParagraphItems($entity, string $field, $label = NULL, $type = NULL): array {
+    if (!$entity->hasField($field)) {
+      return [];
+    }
+    // Load entities associated with entity reference revision field.
+    $entities = $entity->get($field)->referencedEntities();
+    $field_output = ['type' => $type, 'items' => []];
+    foreach ($entities as $entity) {
+      // Call a callback function to prepare data if paragraph type is one of
+      // the paragraph types listed in getEntityBundleInfo().
+      if ($result = $this->processEntityBundleData($entity)) {
+        $field_output['items'][] = $entity->bundle() == 'delivery_usp_block'
+        ? $result[0]
+        : array_merge(['type' => $entity->bundle()], $result);
+      }
+    }
+    return !empty($field_output) ? $field_output : [];
+  }
+
+  /**
+   * Prepare paragraph data based on given fields for given entity.
+   *
+   * @param \Drupal\paragraphs\ParagraphInterface $entity
+   *   The paragraph entity object.
+   * @param array $fields
+   *   The array of fields to return for given entity.
+   *
+   * @return array
+   *   The converted array with necessary fields.
+   */
+  protected function paragraphDeliveryUspBlock(ParagraphInterface $entity, array $fields) {
+    $data = call_user_func_array([$this, 'paragraphPrepareData'], [$entity, $fields]);
+    return [array_merge(['type' => $entity->bundle()], $data)];
+  }
+
+  /**
    * Function to get inside paragraphs and avoid layout paragraph items.
    *
    * @param object $entity
@@ -578,7 +657,12 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
         }
       }
       elseif ($entity->hasField($field) && !empty($entity->get($field)->getString())) {
-        $data[$field_info['label']] = $entity->get($field)->getString();
+        // Check cardinality of given field.
+        $data[$field_info['label']] = $entity->get($field)->getFieldDefinition()->getFieldStorageDefinition()->isMultiple()
+        ? array_map(function ($value) {
+          return $value['value'];
+        }, $entity->get($field)->getValue())
+        : $entity->get($field)->getString();
       }
     }
     return $data;
@@ -696,22 +780,39 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected function getFieldBlockReference($entity, string $field, $label = NULL, $type = NULL) {
     $items = $entity->get($field)->getValue();
 
+    $this->cacheTags[] = 'block_view';
+    $this->cacheTags[] = 'block';
+    $this->cacheTags[] = 'block_content_view';
     $results = array_map(function ($item) {
       list($entity_type, $uuid) = explode(':', $item['plugin_id']);
-      $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
-      $block = reset($block);
-      $block = $this->getEntityTranslation($block, $this->currentLanguage);
-      return [
-        'label' => $item['settings']['label'],
-        'label_display' => (bool) $item['settings']['label_display'],
-        'body' => !empty($block->get('body')->first())
-        ? $this->convertRelativeUrlsToAbsolute($block->get('body')->first()->getValue()['value'])
-        : '',
-        'image' => $this->getImages($block, 'field_image'),
-      ];
+      if ($entity_type == 'block_content') {
+        $block = $this->entityTypeManager->getStorage($entity_type)->loadByProperties(['uuid' => $uuid]);
+        $block = reset($block);
+        $block = $this->getEntityTranslation($block, $this->currentLanguage);
+        $this->cacheTags = array_merge($this->cacheTags, $block->getCacheTags());
+
+        return [
+          'label' => $item['settings']['label'],
+          'label_display' => (bool) $item['settings']['label_display'],
+          'body' => !empty($block->get('body')->first())
+          ? $this->convertRelativeUrlsToAbsolute($block->get('body')->first()->getValue()['value'])
+          : '',
+          'image' => $this->getImages($block, 'field_image'),
+        ];
+      }
     }, $items);
     // Return only first result as Block reference has delta limit to 1.
     return $results[0];
+  }
+
+  /**
+   * Return all cache tags.
+   *
+   * @return array
+   *   Return array of all cache tags.
+   */
+  public function getBlockCacheTags(): array {
+    return $this->cacheTags;
   }
 
 }

@@ -81,7 +81,9 @@ function alshaya_click_collect_theme($existing, $type, $theme, $path) {
  */
 function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
   if ($entity->bundle() == 'acq_product' && $build['#view_mode'] == 'full') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if (empty($sku_entity)) {
@@ -99,7 +101,7 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
     // Adding shipping options.
     \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
-    $config = \Drupal::config('alshaya_click_collect.settings');
+    $config = alshaya_click_collect_get_config();
 
     // Click and collect availability for given sku.
     $state = alshaya_acm_product_available_click_collect($sku);
@@ -112,11 +114,11 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
       '#state' => $state ? 'enabled' : 'disabled',
       '#sku' => $sku,
       '#type' => $sku_entity->bundle(),
-      '#title' => $config->get('pdp_click_collect_title'),
-      '#title_price' => alshaya_acm_price_get_formatted_price((float) $config->get('pdp_click_collect_price')),
-      '#subtitle' => $state ? $config->get('pdp_click_collect_subtitle') : $config->get('pdp_click_collect_unavailable'),
-      '#help_text' => $config->get('pdp_click_collect_help_text.value'),
-      '#select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
+      '#title' => $config['title'],
+      '#title_price' => alshaya_acm_price_get_formatted_price($config['title_price']),
+      '#subtitle' => $state ? $config['subtitle'] : $config['unavailable'],
+      '#help_text' => $config['help_text'],
+      '#select_option_text' => $config['select_option_text'],
       '#available_at_title' => '',
       '#store_finder_form' => render($store_form),
       '#attached' => [
@@ -133,4 +135,22 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
       ],
     ];
   }
+}
+
+/**
+ * Get click and collect delivery option config.
+ *
+ * @return array
+ *   Return array of config data.
+ */
+function alshaya_click_collect_get_config() {
+  $config = \Drupal::config('alshaya_click_collect.settings');
+  return [
+    'title' => $config->get('pdp_click_collect_title'),
+    'subtitle' => $config->get('pdp_click_collect_subtitle'),
+    'unavailable' => $config->get('pdp_click_collect_unavailable'),
+    'title_price' => (float) $config->get('pdp_click_collect_price'),
+    'help_text' => $config->get('pdp_click_collect_help_text.value'),
+    'select_option_text' => $config->get('pdp_click_collect_select_option_text.value'),
+  ];
 }

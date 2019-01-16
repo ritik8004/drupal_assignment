@@ -13,6 +13,7 @@ use Drupal\Core\Entity\Plugin\DataType\EntityAdapter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\node\Entity\Node;
@@ -60,6 +61,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $configFactory;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -84,6 +92,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   SKU Images Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Sku Manager service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -95,12 +105,14 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
                               SkuImagesManager $skuImagesManager,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              LanguageManagerInterface $language_manager) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $config_factory;
+    $this->languageManager = $language_manager;
   }
 
   /**
@@ -128,10 +140,12 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    * @throws \InvalidArgumentException
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+    if (empty($items->getValue())) {
+      return [];
+    }
+
     $context = 'search';
     $skus = [];
-    $stock_mode = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
-
     $promotion_page_nid = NULL;
 
     $current_route_name = $this->currentRouteMatch->getRouteName();
@@ -149,15 +163,21 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     $elements = [];
     $product_url = $product_base_url = $product_label = '';
 
+    $color = '';
+
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
     if ($entity_adapter instanceof EntityAdapter) {
-      $node = $entity_adapter->getValue();
-      if ($node instanceof Node) {
-        $translatedNode = $node->getTranslation(\Drupal::service('language_manager')->getCurrentLanguage()->getId());
-        $product_base_url = $product_url = $translatedNode->url();
-        $product_label = $translatedNode->getTitle();
+      $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
+
+      /** @var \Drupal\node\NodeInterface $colorNode */
+      $colorNode = $entity_adapter->getValue();
+
+      if ($colorNode->hasTranslation($currentLangCode)) {
+        $colorNode = $colorNode->getTranslation($currentLangCode);
       }
+
+      $color = $colorNode->get('field_product_color')->getString();
     }
 
     foreach ($items as $delta => $item) {
@@ -165,10 +185,29 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $sku = $this->viewValue($item);
       $skus[$delta] = $sku;
       if ($sku instanceof SKU) {
+        $node = $this->skuManager->getDisplayNode($sku, FALSE);
+
+        if (!($node instanceof Node)) {
+          continue;
+        }
+
+        $product_base_url = $product_url = $node->url();
+        $product_label = $node->getTitle();
+
         try {
-          $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku);
+          $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color);
+
+          if (!($sku_for_gallery instanceof SKUInterface)) {
+            $sku_for_gallery = $sku;
+          }
+
           $sku_gallery = $this->skuImagesManager->getGallery($sku_for_gallery, 'search', $product_label);
-          $product_url .= '?selected=' . $sku_for_gallery->id();
+
+          // Do not add selected param if we are using parent sku itself for
+          // gallery. This is normal for PB, MC, etc.
+          if ($sku_for_gallery->id() != $sku->id()) {
+            $product_url .= '?selected=' . $sku_for_gallery->id();
+          }
         }
         catch (\Exception $e) {
           $sku_gallery = [];
@@ -189,18 +228,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         $stock_placeholder = NULL;
 
-        if (alshaya_acm_product_is_buyable($sku)) {
-          if ($stock_mode == 'pull') {
-            $stock_placeholder = [
-              '#markup' => '<div class="stock-placeholder out-of-stock">' . t('Checking stock...') . '</div>',
-            ];
-          }
-          // In push mode we check stock on page load only.
-          elseif (!alshaya_acm_get_stock_from_sku($sku)) {
-            $stock_placeholder = [
-              '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
-            ];
-          }
+        if (alshaya_acm_product_is_buyable($sku) && !$this->skuManager->isProductInStock($sku)) {
+          $stock_placeholder = [
+            '#markup' => '<div class="out-of-stock"><span class="out-of-stock">' . t('out of stock') . '</span></div>',
+          ];
         }
 
         $elements[$delta] = [
@@ -212,14 +243,18 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           '#promotions' => $promotions,
           '#stock_placeholder' => $stock_placeholder,
           '#cache' => [
-            'tags' => array_merge($promotion_cache_tags, ['sku:' . $sku->id()]),
+            'tags' => array_merge($promotion_cache_tags, $sku->getCacheTags()),
             'contexts' => ['route'],
           ],
+          '#color' => $color,
         ];
 
-        $this->skuManager->buildPrice($elements[$delta], $sku);
-
-        $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
+        if (!empty($color)) {
+          $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku_for_gallery);
+        }
+        else {
+          $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
+        }
 
         $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
@@ -281,7 +316,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('current_route_match'),
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('language_manager')
     );
   }
 

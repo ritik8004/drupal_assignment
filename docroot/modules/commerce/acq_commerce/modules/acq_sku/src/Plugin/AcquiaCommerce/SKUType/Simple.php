@@ -89,8 +89,7 @@ class Simple extends SKUPluginBase {
       \Drupal::service('acq_cart.cart_storage')->updateCart();
     }
     catch (\Exception $e) {
-      // Clear stock cache.
-      $sku_entity->clearStockCache();
+      $this->refreshStock($sku_entity);
 
       // Dispatch event so action can be taken.
       $dispatcher = \Drupal::service('event_dispatcher');

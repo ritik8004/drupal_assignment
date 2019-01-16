@@ -39,7 +39,10 @@ function alshaya_bbw_transac_alshaya_acm_product_build_alter(&$build, SKUInterfa
  */
 function alshaya_bbw_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
@@ -152,11 +155,4 @@ function _alshaya_bbw_transac_get_product_title(SKU $sku) {
 function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
   $alshaya_bbw_transac_fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $alshaya_bbw_transac_fields);
-}
-
-/**
- * Implements hook_acq_sku_magazine_product_description_alter().
- */
-function alshaya_bbw_transac_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
-  $prod_description = _alshaya_bbw_transac_get_product_description($sku);
 }

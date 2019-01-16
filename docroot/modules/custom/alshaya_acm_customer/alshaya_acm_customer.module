@@ -363,6 +363,25 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $do_api_check = FALSE;
     }
   }
+  else {
+    $module_implements = \Drupal::cache('bootstrap')->get('module_implements');
+    $module_implements_cache = [];
+    if ($module_implements && isset($module_implements->data)) {
+      $module_implements_cache = $module_implements->data['module_implements_alter'] ?? [];
+    }
+
+    $modules = array_keys(\Drupal::getContainer()->getParameter('container.modules'));
+
+    \Drupal::logger('alshaya_acm_customer')->warning('Failed to load user from mail: @mail. Debug data: @data', [
+      '@mail' => $mail,
+      '@data' => json_encode([
+        'form_name_element_validate' => $form['name']['#element_validate'],
+        'form_validate' => $form['#validate'],
+        'module_implements_cache' => $module_implements_cache,
+        'modules_container_parameter' => $modules,
+      ]),
+    ]);
+  }
 
   // Do check against Magento only if user is unknown or just authenticated.
   if ($do_api_check) {

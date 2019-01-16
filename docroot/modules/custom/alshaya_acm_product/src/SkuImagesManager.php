@@ -549,6 +549,40 @@ class SkuImagesManager {
   }
 
   /**
+   * Wrapper function to get sku for gallery considering color value.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   * @param string|null $color
+   *   Color value.
+   *
+   * @return \Drupal\acq_sku\Entity\SKU|null
+   *   SKU to use for gallery.
+   *
+   * @throws \Exception
+   */
+  public function getSkuForGalleryWithColor(SKU $sku, $color = NULL): ?SKU {
+    if (empty($color)) {
+      try {
+        return $this->getSkuForGallery($sku);
+      }
+      catch (\Exception $e) {
+      }
+
+      return NULL;
+    }
+
+    foreach ($this->skuManager->getPdpSwatchAttributes() as $attribute_code) {
+      $sku_for_gallery = $this->skuManager->getChildSkuFromAttribute($sku, $attribute_code, $color);
+      if ($sku_for_gallery instanceof SKUInterface) {
+        return $sku_for_gallery;
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * Get SKU to use for gallery when no specific child is selected.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -691,13 +725,11 @@ class SkuImagesManager {
    *   Translated product label to use in alt/title.
    * @param bool $add_default_image
    *   Flag to mention if default image needs to be added or not.
-   * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
-   *   Th default sku for the product.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE, SKUInterface $original_sku_entity = NULL) {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
 
     $display_thumbnails = $this->productDisplaySettings->get('image_thumb_gallery');
@@ -740,6 +772,7 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
+      case 'modal-magazine':
 
         $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
@@ -798,6 +831,16 @@ class SkuImagesManager {
           // Add PDP slider position class in template.
           $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
 
+          $library_array = [
+            'alshaya_product_zoom/cloud_zoom',
+            'alshaya_product_zoom/cloud_zoom_pdp_gallery',
+            'alshaya_product_zoom/product.cloud_zoom',
+          ];
+
+          if ($context == 'modal-magazine') {
+            $library_array[] = 'alshaya_product_zoom/magazine_gallery';
+          }
+
           $gallery['product_zoom'] = [
             '#theme' => 'product_zoom',
             '#mainImage' => $main_image,
@@ -807,32 +850,13 @@ class SkuImagesManager {
             '#labels' => $labels,
             '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
-              'library' => [
-                'alshaya_product_zoom/cloud_zoom',
-                'alshaya_product_zoom/cloud_zoom_pdp_gallery',
-                'alshaya_product_zoom/product.cloud_zoom',
-              ],
+              'library' => $library_array,
             ],
           ];
         }
         break;
 
-      case 'modal-magazine':
       case 'pdp-magazine':
-        // We will use below variable for alter hooks.
-        $prod_description = [];
-        if (!isset($original_sku_entity)) {
-          $original_sku_entity = $sku;
-        }
-        if ($body = $original_sku_entity->get('attr_description')->getValue()) {
-          $prod_description['description'] = [
-            '#markup' => $body[0]['value'],
-          ];
-        }
-
-        // Alter description Since this could be different for each brand.
-        $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
-
         $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
@@ -865,7 +889,7 @@ class SkuImagesManager {
 
           $gallery['alshaya_magazine'] = [
             '#theme' => 'alshaya_magazine',
-            '#description' => $prod_description['description'],
+            '#sku' => $sku,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
             '#properties' => $this->getRelCloudZoom($settings),

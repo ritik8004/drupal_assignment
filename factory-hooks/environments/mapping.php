@@ -78,10 +78,30 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     '01pprod' => 'prod',
     '01live' => 'prod',
     'local' => 'qa',
+    'travis' => 'qa'
   ];
 
   // Fill this variable to override the default mapping.
-  $mapping = [];
+  $mapping = [
+    'hmkw' => [
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmkw_mapp',
+      ],
+    ],
+    'hmsa' => [
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmsa_mapp',
+      ],
+    ],
+    'hmae' => [
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmae_mapp',
+      ],
+    ],
+  ];
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.

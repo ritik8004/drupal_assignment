@@ -252,7 +252,7 @@ class MobileAppUtility {
     elseif ($object instanceof NodeInterface) {
       switch ($object->bundle()) {
         case 'acq_product':
-          $sku = $object->get('field_skus')->getString();
+          $sku = $this->skuManager->getSkuForNode($object);
           $return = 'product/' . $sku;
           break;
 
@@ -415,9 +415,9 @@ class MobileAppUtility {
    * @param string $type
    *   (optional) The type of the field.
    *
-   * @return array|string
+   * @return array
    *   The array containing information of images if image cardinality
-   *   is greater then 1, otherwise return the first image string.
+   *   is greater then 1, otherwise return the first image array.
    */
   public function getImages($entity, $field_name, $label = NULL, $type = NULL) {
     if (!$entity->hasField($field_name)) {
@@ -428,7 +428,11 @@ class MobileAppUtility {
     if (!empty($entity->get($field_name)->getValue())) {
       foreach ($entity->get($field_name)->getValue() as $key => $value) {
         if (($file = $entity->get($field_name)->get($key)->entity) && $file instanceof FileInterface) {
-          $images[] = file_create_url($file->getFileUri());
+          $images[] = [
+            'url' => file_create_url($file->getFileUri()),
+            'width' => (int) $value['width'],
+            'height' => (int) $value['height'],
+          ];
         }
       }
     }
@@ -437,16 +441,19 @@ class MobileAppUtility {
       return $images;
     }
 
-    return !empty($images) ? $images[0] : '';
+    return !empty($images) ? $images[0] : [];
   }
 
   /**
    * Helper function to throw an error.
    *
+   * @param string $message
+   *   (Optional) status message when necessary.
+   *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
    */
-  public function throwException() {
-    throw new NotFoundHttpException($this->t("page not found"));
+  public function throwException($message = NULL) {
+    throw new NotFoundHttpException($message ?? $this->t("page not found"));
   }
 
   /**
@@ -461,10 +468,16 @@ class MobileAppUtility {
    *   HTTP Response.
    */
   public function sendStatusResponse(string $message = '', $status = FALSE) {
+    // If status is false, throw a 404 exception.
+    if (!$status) {
+      return $this->throwException($message);
+    }
+
     $response['success'] = (bool) ($status);
     if ($message) {
       $response['message'] = $message;
     }
+
     return (new ResourceResponse($response));
   }
 
@@ -541,11 +554,15 @@ class MobileAppUtility {
         'include_in_menu' => (bool) $term->include_in_menu,
       ];
 
-      if (is_object($file = $this->productCategoryTree->getBanner($term->tid, $langcode))
-        && !empty($file->field_promotion_banner_target_id)
+      if (is_object($file = $this->productCategoryTree->getMobileBanner($term->tid, $langcode))
+        && !empty($file->field_promotion_banner_mobile_target_id)
       ) {
-        $image = $this->fileStorage->load($file->field_promotion_banner_target_id);
-        $record['banner'] = file_create_url($image->getFileUri());
+        $image = $this->fileStorage->load($file->field_promotion_banner_mobile_target_id);
+        $record['banner'] = [
+          'url' => file_create_url($image->getFileUri()),
+          'width' => (int) $file->field_promotion_banner_mobile_width,
+          'height' => (int) $file->field_promotion_banner_mobile_height,
+        ];
       }
 
       if ($child) {
@@ -704,12 +721,14 @@ class MobileAppUtility {
     }
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
+    $color = $node->get('field_product_color')->getString();
+
     // Get SKU attached with node.
-    $sku = $node->get('field_skus')->getString();
+    $sku = $this->skuManager->getSkuForNode($node);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU) {
-      return $this->getLightProduct($sku_entity);
+      return $this->getLightProduct($sku_entity, $color);
     }
     return [];
   }
@@ -719,11 +738,13 @@ class MobileAppUtility {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string|null $color
+   *   Color value.
    *
    * @return array
    *   Light Product.
    */
-  public function getLightProduct(SKUInterface $sku): array {
+  public function getLightProduct(SKUInterface $sku, $color = NULL): array {
     // Get the prices.
     $prices = $this->skuManager->getMinPrices($sku);
 
@@ -742,7 +763,8 @@ class MobileAppUtility {
     $labels = $this->getLabels($sku, 'plp');
 
     // Get media (images/video) for the SKU.
-    $images = $this->getMedia($sku, 'search');
+    $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
+    $images = $this->getMedia($sku_for_gallery, 'search');
 
     $data = [
       'id' => (int) $sku->id(),
@@ -751,11 +773,17 @@ class MobileAppUtility {
       'deeplink' => $this->getDeepLink($sku),
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
-      'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku),
+      'in_stock' => $this->skuManager->isProductInStock($sku),
       'promo' => $promotions,
       'medias' => $images,
       'labels' => $labels,
+      'color' => NULL,
     ];
+
+    if ($color) {
+      // Keep data type consistent here.
+      $data['color'] = (string) $color;
+    }
 
     // Allow other modules to alter light product data.
     $this->moduleHandler->alter('alshaya_mobile_app_light_product_data', $sku, $data);

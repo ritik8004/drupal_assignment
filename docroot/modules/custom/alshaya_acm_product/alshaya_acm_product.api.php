@@ -22,8 +22,10 @@ use Drupal\Core\Ajax\AjaxResponse;
  *   SKU entity.
  * @param string $context
  *   Context - pdp/search/modal/teaser.
+ * @param string $color
+ *   Color value used to show the product.
  */
-function hook_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp') {
+function hook_alshaya_acm_product_build_alter(array &$build, SKUInterface $sku, $context = 'pdp', $color = '') {
 
 }
 
@@ -66,18 +68,6 @@ function hook_alshaya_acm_product_gallery_alter(array &$gallery, SKUInterface $s
  *   Context - pdp/search/modal/teaser.
  */
 function hook_acq_sku_cart_media_alter(array &$image, SKUInterface $sku, $context = 'cart') {
-
-}
-
-/**
- * Alter product description for PDP.
- *
- * @param \Drupal\acq_commerce\SKUInterface $sku
- *   SKU entity.
- * @param array $prod_description
- *   Product description array.
- */
-function hook_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
 
 }
 
