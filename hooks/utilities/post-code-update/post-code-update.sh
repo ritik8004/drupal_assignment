@@ -53,10 +53,6 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   output=$(cat /tmp/drush_updb_$target_env.log | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
   echo $output
 else
-  ## Clear cache for frontend change.
-  echo "No change in install files, clearing caches only."
-  drush acsf-tools-ml cr
-
   ## Set the output variable which is used to update the Slack channel.
   output=$nothingstr
 fi
@@ -84,7 +80,7 @@ if [ $slack == 1 ]; then
       curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     elif echo $output | grep -q "$nothingstr"; then
       echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully cleared cache on $target_env. No database update needed.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
     else
       echo "Sending success notification to Slack channel."
       curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null

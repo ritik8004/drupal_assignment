@@ -17,6 +17,8 @@ dependencies:
   - drupal:syslog
   - twig_tweak:twig_tweak
   - drupal:restrict_role_login_by_ip
+  - drupal:memory_limit_policy
+  - drupal:memory_limit_policy_path
 
 themes:
   - bartik

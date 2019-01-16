@@ -12,6 +12,62 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Update all GET endpoints to use cookie instead of oauth.
+ */
+function alshaya_mobile_app_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $configManager = \Drupal::service('alshaya_config.manager');
+
+  $configManager->updateConfigs(
+      [
+        'rest.resource.advanced_page',
+        'rest.resource.alshaya_error_messages',
+        'rest.resource.categories',
+        'rest.resource.category_product_list',
+        'rest.resource.deeplink',
+        'rest.resource.delivery_methods',
+        'rest.resource.product',
+        'rest.resource.promotion_product_list',
+        'rest.resource.promotions',
+        'rest.resource.search_page_product_list',
+        'rest.resource.simple_page',
+        'rest.resource.social_media_links',
+        'rest.resource.stores_finder',
+      ],
+      'alshaya_mobile_app'
+    );
+
+  $configManager->updateConfigs(
+    [
+      'rest.resource.knet_finalize_request',
+      'rest.resource.knet_init_request',
+    ],
+    'alshaya_mobile_app',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add rest end point for payment-methods.
+ */
+function alshaya_mobile_app_update_8003() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.payment_methods'],
+      'alshaya_mobile_app',
+      'install'
+    );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Grant Get permissions to authenticated users.
  */
 function alshaya_mobile_app_update_8002() {

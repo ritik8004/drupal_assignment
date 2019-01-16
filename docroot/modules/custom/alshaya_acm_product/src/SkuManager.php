@@ -1172,10 +1172,15 @@ class SkuManager {
    * @return array
    *   An array of SKU with commerce category ids.
    */
-  public function getCategoriesOfSkus($langcode, array $skus = []) {
+  public function getCategoriesOfSkus($langcode, array $skus) {
+    // SQL 'IN' condition throws exception on empty array.
+    if (empty($skus)) {
+      return [];
+    }
+
     $query = $this->connection->select('node__field_skus', 'nfs');
-    $query->innerJoin('node__field_category', 'nfc', 'nfc.entity_id=nfs.entity_id AND nfc.langcode=nfs.langcode');
-    $query->innerJoin('taxonomy_term__field_commerce_id', 'ttfcid', 'ttfcid.entity_id=nfc.field_category_target_id');
+    $query->innerJoin('node__field_category_original', 'nfc', 'nfc.entity_id=nfs.entity_id AND nfc.langcode=nfs.langcode');
+    $query->innerJoin('taxonomy_term__field_commerce_id', 'ttfcid', 'ttfcid.entity_id=nfc.field_category_original_target_id');
     $query->fields('ttfcid', ['field_commerce_id_value']);
     $query->fields('nfs', ['field_skus_value']);
     $query->condition('nfs.field_skus_value', $skus, 'IN');
@@ -1841,13 +1846,11 @@ class SkuManager {
     $cache = $this->productCache->get($cid);
     $data = $cache->data ?? [];
     $data[$key] = $value;
-    $this->productCache->set($cid, $data);
+    $this->productCache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
 
     // Update value in static cache too.
     $static = &drupal_static('alshaya_product_cached_data', []);
-    if (isset($static[$cid], $static[$cid][$key])) {
-      $static[$cid][$key] = $value;
-    }
+    $static[$cid][$key] = $value;
   }
 
   /**
@@ -1861,18 +1864,6 @@ class SkuManager {
    */
   public function getProductCachedId(SKU $sku) {
     return 'alshaya_product:' . $sku->language()->getId() . ':' . $sku->getSku();
-  }
-
-  /**
-   * Clear configurable product cache for particular SKU.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU entity.
-   */
-  public function clearProductCachedData(SKU $sku) {
-    drupal_static_reset('alshaya_product_cached_data');
-    $cid = $this->getProductCachedId($sku);
-    $this->productCache->delete($cid);
   }
 
   /**
@@ -2675,13 +2666,23 @@ class SkuManager {
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nids = array_flip($nids);
-      $nodes = $this->nodeStorage->loadMultiple($nids);
-      $this->nodeStorage->delete($nodes);
-      $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
-        '@ids' => implode(',', $nids),
-        '@id' => $node->id(),
-      ]);
+      try {
+        $nids = array_flip($nids);
+        $nodes = $this->nodeStorage->loadMultiple($nids);
+        $this->nodeStorage->delete($nodes);
+        $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
+          '@ids' => implode(',', $nids),
+          '@id' => $node->id(),
+        ]);
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
+          '@nids' => implode(',', $nids),
+          '@pid' => $node->id(),
+          '@message' => $e->getMessage(),
+          '@method' => 'SkuManager::processColorNodesForConfigurable',
+        ]);
+      }
     }
   }
 
