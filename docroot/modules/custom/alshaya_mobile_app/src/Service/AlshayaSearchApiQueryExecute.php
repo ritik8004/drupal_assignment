@@ -371,6 +371,11 @@ class AlshayaSearchApiQueryExecute {
     // Execute the search.
     $results = $query->execute();
 
+    // Process all facets in advance, instead of doing it on build.
+    // We are updating facet results, in below foreach. So, we want to
+    // make sure the facets are ready to receive updated results for current
+    // query.
+    $this->facetManager->processFacets($this->getFacetSourceId());
     // Set the result count.
     $this->setResultTotalCount($results->getResultCount());
 
