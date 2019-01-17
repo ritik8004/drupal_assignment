@@ -1,0 +1,52 @@
+.c-our-brands {
+  .region__post-content & {
+    background: $footer_bg;
+    border-bottom: 1px solid $our_brands_footer_separator;
+
+    @include breakpoint($desktop) {
+      .brand-name {
+        display: none;
+      }
+
+      .brand-list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 43.75rem;
+        margin: 1.3125rem auto;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: $alshaya-bold;
+        font-size: 0.875rem;
+        color: $our_brand_section_title;
+        padding: 0.875rem 0;
+      }
+
+      .brand img {
+        max-height: 1.125rem;
+      }
+    }
+
+    @include breakpoint($upto-desktop) {
+      .brand img {
+        display: none;
+      }
+    }
+  }
+}
+
+.our-brand-processed {
+  @include breakpoint($desktop) {
+    &.c-footer {
+      padding-top: 0;
+    }
+
+    &.c-post-content {
+      padding-top: 3.75rem;
+    }
+  }
+}

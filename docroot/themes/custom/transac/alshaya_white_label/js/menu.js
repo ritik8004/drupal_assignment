@@ -236,6 +236,11 @@
       var windowWidth = $(window).width();
       var menuLevel2 = $('.menu--two__list');
 
+      // Check if our brands block is present in the footer to re-adjust the margin.
+      if ($('.c-our-brands').length) {
+        $('.c-footer, .c-post-content').addClass('our-brand-processed');
+      }
+
       function setMenuHeight() {
         if (menuLevel2.length > 0 && windowWidth > 767) {
           var maxHeight = menuLevel2.map(function () {
