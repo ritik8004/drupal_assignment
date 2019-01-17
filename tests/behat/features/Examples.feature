@@ -7,9 +7,9 @@ Feature: Web drivers
 
   @javascript
   Scenario: Load a page with Javascript
-    Given I am on "/"
-    Then I should see the text "English"
+    Given I am on "/en/user/login"
+    Then I should see the text "Sign In"
 
   Scenario: Load a page without Javascript
-    Given I am on "/"
-    Then I should see the text "English"
+    Given I am on "/en/user/login"
+    Then I should see the text "Sign In"
