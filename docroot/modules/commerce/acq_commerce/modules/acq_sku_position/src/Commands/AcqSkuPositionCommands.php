@@ -4,7 +4,6 @@ namespace Drupal\acq_sku_position\Commands;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
@@ -38,13 +37,6 @@ class AcqSkuPositionCommands extends DrushCommands {
   private $apiWrapper;
 
   /**
-   * Entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  private $entityTypeManager;
-
-  /**
    * Logger Factory.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -56,8 +48,6 @@ class AcqSkuPositionCommands extends DrushCommands {
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   Looger Factory.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   Entity Type Manager.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $APIWrapper
    *   Commerce Api Wrapper.
    * @param \Drupal\Core\Database\Connection $connection
@@ -66,12 +56,10 @@ class AcqSkuPositionCommands extends DrushCommands {
    *   Module Handler service.
    */
   public function __construct(LoggerChannelFactoryInterface $logger,
-                              EntityTypeManagerInterface $entityTypeManager,
                               APIWrapper $APIWrapper,
                               Connection $connection,
                               ModuleHandlerInterface $moduleHandler) {
     $this->logger = $logger->get('acq_sku_position_position');
-    $this->entityTypeManager = $entityTypeManager;
     $this->apiWrapper = $APIWrapper;
     $this->connection = $connection;
     $this->moduleHandler = $moduleHandler;
@@ -95,11 +83,23 @@ class AcqSkuPositionCommands extends DrushCommands {
   public function syncPositions($position_type = 'position') {
     $this->logger->notice('Product position sync in progress...');
 
+    // SQL query to fetch categories from DB.
+    $sql_query = 'SELECT tc.entity_id as tid, tc.field_commerce_id_value as commerce_id, td.name
+                  FROM taxonomy_term__field_commerce_id tc
+                  INNER JOIN taxonomy_term_field_data td
+                  ON td.tid=tc.entity_id AND td.langcode=tc.langcode';
+
     // Get all product category terms.
-    $terms = $this->entityTypeManager->getStorage('taxonomy_term')->loadTree('acq_product_category');
+    $query = $this->connection->query($sql_query);
+    $query->execute();
+    $terms = $query->fetchAll();
+
+    // Allow other modules to skip terms from position sync.
+    $this->moduleHandler->alter('acq_sku_position_sync', $terms);
+
     foreach ($terms as $term) {
       // Find the commerce id from the term. Skip if not found.
-      $commerce_id = $this->entityTypeManager->getStorage('taxonomy_term')->load($term->tid)->get('field_commerce_id')->value;
+      $commerce_id = $term->commerce_id;
       if (!$commerce_id) {
         continue;
       }
