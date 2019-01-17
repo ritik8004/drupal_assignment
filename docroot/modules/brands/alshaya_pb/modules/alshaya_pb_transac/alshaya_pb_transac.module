@@ -24,18 +24,6 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
-      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-      $variant = $sku_manager->getSelectedVariant($sku_entity);
-
-      if ($variant instanceof SKUInterface) {
-        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-        $build['title'] = [
-          '#markup' => $productInfoHelper->getTitle($variant, 'pdp'),
-        ];
-      }
-
       $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
