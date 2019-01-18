@@ -15,6 +15,7 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
+use Drupal\file\Entity\File;
 
 /**
  * Implements hook_css_alter().
@@ -272,6 +273,25 @@ function alshaya_white_label_preprocess_block(&$variables) {
     if (isset($variables['attributes']['class'])) {
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('block--' . $bundle_class);
       $variables['attributes']['data-bundle-class'] = $bundle_class;
+    }
+
+    // Check if block is our brands block.
+    $block_id = $variables['elements']['content']['#block_content']->get('template_suggestion')->value;
+    if ($block_id === 'block__ourbrands') {
+      $paragraph_content = $variables['elements']['content']['#block_content']->get('field_paragraph_content')->getValue();
+      $brands = [];
+      foreach ($paragraph_content as $paragraph_id) {
+        $paragraph_entity = Paragraph::load($paragraph_id['target_id']);
+        $link = $paragraph_entity->get('field_link')->getValue();
+        $brand_logo_target_id = $paragraph_entity->get('field_banner')->getValue();
+        $file = File::load($brand_logo_target_id[0]['target_id']);
+        $brands[] = [
+          'title' => $paragraph_entity->get('field_title')->value,
+          'link' => Url::fromUri($link[0]['uri'])->toString(),
+          'brand_logo' => file_create_url($file->getFileUri()),
+        ];
+      }
+      $variables['brands'] = $brands;
     }
   }
   elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
