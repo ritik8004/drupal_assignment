@@ -363,7 +363,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       $do_api_check = FALSE;
     }
   }
-  else {
+  elseif (strpos($mail, '@') === FALSE) {
     $module_implements = \Drupal::cache('bootstrap')->get('module_implements');
     $module_implements_cache = [];
     if ($module_implements && isset($module_implements->data)) {
