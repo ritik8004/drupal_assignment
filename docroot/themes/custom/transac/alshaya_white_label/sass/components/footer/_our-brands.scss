@@ -50,6 +50,10 @@
         max-height: 1.125rem;
       }
     }
+
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
   }
 
   .c-footer-primary__region & {
