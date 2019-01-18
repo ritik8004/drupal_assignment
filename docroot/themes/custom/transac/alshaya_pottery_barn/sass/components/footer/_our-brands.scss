@@ -1,0 +1,10 @@
+.c-our-brands {
+  .region__post-content & {
+    @include breakpoint($desktop) {
+      .section-title {
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
