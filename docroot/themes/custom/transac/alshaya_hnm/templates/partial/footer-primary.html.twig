@@ -17,6 +17,8 @@
           <div class="language--switcher tablet-only-block">
             {{ page.footer_primary.languageswitcher_2 }}
           </div>
+
+          {{ page.footer_primary|without('alshayanewslettersubscription', 'shopby', 'aboutbrand', 'alshaya_help', 'languageswitcher_2') }}
         </div>
       </div>
     </div>

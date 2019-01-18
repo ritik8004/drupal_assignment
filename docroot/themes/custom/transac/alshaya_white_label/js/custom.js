@@ -213,4 +213,17 @@
     }
   };
 
+  // Add class to footer region when our brands block is present.
+  Drupal.behaviors.slugBannerModal = {
+    attach: function (context, settings) {
+      // Check if our brands block is present in the footer to re-adjust the margin.
+      if ($('.c-our-brands').length) {
+        $('.c-footer, .c-post-content').addClass('our-brand-processed');
+        // In mobile move the block after footer--menu.
+        if ($(window).width() < 768) {
+          $('footer .c-our-brands').insertAfter('.footer--menu');
+        }
+      }
+    }
+  };
 })(jQuery, Drupal);
