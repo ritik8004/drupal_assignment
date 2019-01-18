@@ -239,6 +239,10 @@
       // Check if our brands block is present in the footer to re-adjust the margin.
       if ($('.c-our-brands').length) {
         $('.c-footer, .c-post-content').addClass('our-brand-processed');
+        // In mobile move the block after footer--menu.
+        if ($(window).width() < 768) {
+          $('.primary--footer--right .c-our-brands').insertAfter('.footer--menu');
+        }
       }
 
       function setMenuHeight() {

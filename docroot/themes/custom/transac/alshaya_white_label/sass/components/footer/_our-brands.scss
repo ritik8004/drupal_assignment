@@ -1,19 +1,39 @@
 .c-our-brands {
+  @include breakpoint($desktop) {
+    .brand-name {
+      display: none;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .brand img,
+    .section-title {
+      display: none;
+    }
+
+    margin: 1.5rem 0;
+  }
+
+  @include breakpoint($only-mobile) {
+    margin: 1.5rem 0 0;
+  }
+
   .region__post-content & {
     background: $footer_bg;
     border-bottom: 1px solid $our_brands_footer_separator;
 
     @include breakpoint($desktop) {
-      .brand-name {
-        display: none;
-      }
-
       .brand-list {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
+        flex-wrap: wrap;
         width: 43.75rem;
         margin: 1.3125rem auto;
+
+        .brand {
+          margin: 0 2.125rem;
+        }
       }
 
       .section-title {
@@ -30,11 +50,40 @@
         max-height: 1.125rem;
       }
     }
+  }
 
+  .c-footer-primary__region & {
     @include breakpoint($upto-desktop) {
-      .brand img {
-        display: none;
+      .brand-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
       }
+
+      .brand {
+        margin: 0 0.625rem;
+        font-size: 0.875rem;
+
+        a {
+          color: $our_brand_link;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .brand-list {
+        justify-content: flex-start;
+      }
+
+      .brand:first-child {
+        margin-#{$left}: 0;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      display: none;
     }
   }
 }
