@@ -2048,8 +2048,10 @@ class SkuManager {
       }
 
       $duplicates[$value] = 1;
-      $swatches[$child->id()]['swatch-url'] = $swatch_item['file']->url();
-      $swatches[$child->id()]['swatch-product-url'] = $swatch_product_image_url ?? '';
+      $swatches[$child->id()] = [
+        'swatch_url' => $swatch_item['file']->url(),
+        'swatch_product_url' => $swatch_product_image_url ?? '',
+      ];
     }
 
     $this->setProductCachedData($sku, 'swatches', $swatches);
