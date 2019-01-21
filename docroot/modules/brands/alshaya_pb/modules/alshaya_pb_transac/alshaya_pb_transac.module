@@ -129,3 +129,26 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_search_facet_price_alter().
+ */
+function alshaya_pb_transac_alshaya_search_facet_price_alter($range, &$displayValue) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Fetch the currency format from the config factor.
+  $currency_code = $config->get('currency_code');
+
+  // If this is the first range, display, "under X".
+  if (floor($range['start']) == 0) {
+    $displayValue = t('@currency_code under @start', ['@currency_code' => $currency_code, '@start' => number_format($range['start'])]);
+  }
+  else {
+    $displayValue = t('@currency_code @start - @currency_code @stop', [
+      '@currency_code' => $currency_code,
+      '@start' => number_format($range['start']),
+      '@stop' => number_format($range['stop']),
+    ]);
+  }
+}
