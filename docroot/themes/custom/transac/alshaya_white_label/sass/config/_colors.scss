@@ -88,6 +88,7 @@ $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
+$_instagram_dots_default: #e3e3e3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -303,7 +304,7 @@ $hp_slider_dots: $marine-blue-two;
 $hp_slider_arrows_dark: $mothercare-black;
 
 // Instragram slider dots.
-$instagram_dots_default: $light-greyish;
+$instagram_dots_default: $_instagram_dots_default;
 // Active color same as $hp_slider_dots;
 
 // Sharethis

@@ -4,17 +4,9 @@
   display: flex;
   padding: 0;
   margin: 0.625rem auto;
-  height: 0.6875rem;
-  position: absolute !important;
-  left: 50% !important;
-  transform: translateX(-50%);
+  height: 0.75rem;
+  position: relative !important;
   bottom: 2px !important;
-}
-
-html[lang=ar] .slick-slider > .i-dots.slick-dots {
-  right: 50% !important;
-  transform: translateX(50%) !important;
-  left: unset !important;
 }
 
 ul.i-dots.slick-dots > .slick-dots-container {
@@ -23,15 +15,15 @@ ul.i-dots.slick-dots > .slick-dots-container {
   transition: all 0.25s;
   position: relative;
   margin: 0;
-  height: 0.6875rem;
+  height: 0.75rem;
   list-style: none;
   transform: translateX(0);
   align-items: center;
 }
 
 .i-dots .slick-dots-container > li {
-  width: 0.625rem !important;
-  height: 0.625rem !important;
+  width: 0.6875rem !important;
+  height: 0.6875rem !important;
   margin: 0 0.25rem !important;
   border: none !important;
   border-radius: 50% !important;
@@ -58,6 +50,6 @@ ul.i-dots.slick-dots > .slick-dots-container {
 }
 
 .i-dots .slick-dots-container > li.slick-active {
-  width: 0.6875rem !important;
-  height: 0.6875rem !important;
+  width: 0.75rem !important;
+  height: 0.75rem !important;
 }
