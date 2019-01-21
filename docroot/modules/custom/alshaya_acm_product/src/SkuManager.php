@@ -2034,13 +2034,22 @@ class SkuManager {
       }
 
       $swatch_item = $child->getSwatchImage();
+      $swatch_product_image = $child->getThumbnail();
+
+      // If we have image for the product.
+      if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+        $uri = $swatch_product_image['file']->getFileUri();
+        $url = file_create_url($uri);
+        $swatch_product_image_url = file_url_transform_relative($url);
+      }
 
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
         continue;
       }
 
       $duplicates[$value] = 1;
-      $swatches[$child->id()] = $swatch_item['file']->url();
+      $swatches[$child->id()]['swatch-url'] = $swatch_item['file']->url();
+      $swatches[$child->id()]['swatch-product-url'] = $swatch_product_image_url ?? '';
     }
 
     $this->setProductCachedData($sku, 'swatches', $swatches);
