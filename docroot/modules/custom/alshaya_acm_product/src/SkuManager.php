@@ -2722,6 +2722,9 @@ class SkuManager {
     if (!($sku instanceof SKUInterface)) {
       throw new \Exception('Not able to load sku from node.');
     }
+    elseif ($sku->language()->getId() != $langcode) {
+      throw new \Exception('SKU not available for language of Node');
+    }
 
     // Set nid to original node's id.
     $original = $this->getDisplayNode($sku);
@@ -2826,9 +2829,10 @@ class SkuManager {
 
     $data = [];
     $has_color_data = FALSE;
+    $children = $this->getAvailableChildren($sku) ?? [];
 
     // Gather data from children to set in parent.
-    foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
+    foreach ($children as $child) {
       $child_color = $this->getPdpSwatchValue($child);
 
       // Need to have a flag to avoid indexing main node when it has colors.
@@ -2839,6 +2843,11 @@ class SkuManager {
 
       // Avoid all products of different color when indexing product color node.
       if ($product_color && $child_color !== $product_color) {
+        continue;
+      }
+
+      // Do not add data from child to parent if language do not match.
+      if ($child->language()->getId() != $sku->language()->getId()) {
         continue;
       }
 
@@ -2855,7 +2864,7 @@ class SkuManager {
     }
 
     // We do not index for color node with no variant in stock.
-    if ($product_color && empty($data)) {
+    if ($product_color && empty($children)) {
       throw new \Exception('No valid children found for color ' . $product_color);
     }
 
