@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
+use Drush\Exceptions\UserAbortException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -330,9 +331,8 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     $this->io()->writeln($message);
 
-    $answer = $this->ask(dt('Do you want to delete them? Type "delete" to delete'));
-    if ($answer != 'delete') {
-      return;
+    if (!$this->io()->confirm(dt('Do you want to delete them?'))) {
+      throw new UserAbortException();
     }
 
     $vids = array_column($result, 'vid');
