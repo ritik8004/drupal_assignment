@@ -45,9 +45,8 @@
   .paragraph--type--offers-bordered {
     .field--name-field-link {
       a {
-        border: none;
-        background: $primary_brand_button;
-        color: $primary_brand_button_text;
+        border-color: $_promo_panel_CTA_border;
+        color: $_promo_panel_CTA_text;
       }
     }
   }
