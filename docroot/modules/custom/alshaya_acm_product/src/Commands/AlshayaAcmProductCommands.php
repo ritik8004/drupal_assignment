@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -43,6 +44,13 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $eventDispatcher;
 
   /**
+   * Database Connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  private $connection;
+
+  /**
    * AlshayaAcmProductCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -53,15 +61,19 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *   SKU Manager.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   Event dispatcher.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database Connection.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_channel_factory,
                               ConfigFactoryInterface $config_factory,
                               SkuManager $sku_manager,
-                              EventDispatcherInterface $event_dispatcher) {
+                              EventDispatcherInterface $event_dispatcher,
+                              Connection $connection) {
     $this->logger = $logger_channel_factory->get('alshaya_acm_product');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
     $this->eventDispatcher = $event_dispatcher;
+    $this->connection = $connection;
   }
 
   /**
@@ -291,6 +303,45 @@ class AlshayaAcmProductCommands extends DrushCommands {
    */
   public function alshayaAcmProductPostCommand($result, CommandData $commandData) {
     $this->eventDispatcher->dispatch(self::POST_DRUSH_COMMAND_EVENT);
+  }
+
+  /**
+   * Clean up data in node_field_data table.
+   *
+   * @command alshaya_acm_product:cleanup-node-field-data
+   *
+   * @aliases cleanup-nfd, cleanup-node-field-data
+   */
+  public function cleanNodeFieldData() {
+    $query = $this->connection->query('SELECT nf.nid, nf.vid, nf.langcode 
+      FROM {node_field_data} nf 
+      WHERE vid NOT IN (SELECT vid FROM {node})');
+
+    $result = $query->fetchAll();
+
+    if (empty($result)) {
+      $this->yell('No corrupt entry found in node_field_data.');
+      return;
+    }
+
+    $message = dt('Found following entries in node_field_data which do not have any entry in node. Entries: @entries', [
+      '@entries' => print_r($result, TRUE),
+    ]);
+
+    $this->io()->writeln($message);
+
+    $answer = $this->ask(dt('Do you want to delete them? Type "delete" to delete'));
+    if ($answer != 'delete') {
+      return;
+    }
+
+    $vids = array_column($result, 'vid');
+
+    $this->connection->delete('node_field_data')
+      ->condition('vid', $vids, 'IN')
+      ->execute();
+
+    $this->io()->writeln(dt('Corrupt entries in node_field_data are removed.'));
   }
 
 }

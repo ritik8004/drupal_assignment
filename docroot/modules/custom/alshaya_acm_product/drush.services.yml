@@ -6,5 +6,6 @@ services:
       - '@config.factory'
       - '@alshaya_acm_product.skumanager'
       - '@event_dispatcher'
+      - '@database'
     tags:
       - { name: drush.command }
