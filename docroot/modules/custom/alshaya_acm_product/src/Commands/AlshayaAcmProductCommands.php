@@ -363,9 +363,10 @@ class AlshayaAcmProductCommands extends DrushCommands {
           }
         }
         catch (\Exception $e) {
-          $this->logger->error(dt('There was an error while deleting node:@nid of sku:@sku', [
+          $this->logger->error(dt('There was an error while deleting node:@nid of sku:@sku Message:@message', [
             '@nid' => $rs['nid'],
             '@sku' => $rs['sku'],
+            '@message' => $e->getMessage(),
           ]));
           continue;
         }
