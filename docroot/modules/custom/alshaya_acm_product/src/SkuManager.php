@@ -2034,13 +2034,17 @@ class SkuManager {
       }
 
       $swatch_item = $child->getSwatchImage();
-      $swatch_product_image = $child->getThumbnail();
 
-      // If we have image for the product.
-      if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-        $uri = $swatch_product_image['file']->getFileUri();
-        $url = file_create_url($uri);
-        $swatch_product_image_url = file_url_transform_relative($url);
+      $show_product_image = $this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image');
+      if ($show_product_image) {
+        $swatch_product_image = $child->getThumbnail();
+
+        // If we have image for the product.
+        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+          $uri = $swatch_product_image['file']->getFileUri();
+          $url = file_create_url($uri);
+          $swatch_product_image_url = file_url_transform_relative($url);
+        }
       }
 
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
