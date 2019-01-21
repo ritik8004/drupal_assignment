@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_acm\Commands;
 
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -12,6 +14,7 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -71,6 +74,13 @@ class AlshayaAcmCommands extends DrushCommands {
   private $connection;
 
   /**
+   * Sku manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  private $skuManager;
+
+  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -87,6 +97,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Alshaya config check service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku manager service.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -94,7 +106,8 @@ class AlshayaAcmCommands extends DrushCommands {
                               EntityManagerInterface $entityManager,
                               ProductCategoryTree $productCategoryTree,
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
-                              Connection $connection) {
+                              Connection $connection,
+                              SkuManager $skuManager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -102,6 +115,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->productCategoryTree = $productCategoryTree;
     $this->alshayaAcmConfigCheck = $alshayaAcmConfigCheck;
     $this->connection = $connection;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -440,6 +454,58 @@ class AlshayaAcmCommands extends DrushCommands {
 
       array_unshift($rows, ['SKU', 'File ID']);
       return new RowsOfFields($rows);
+    }
+  }
+
+  /**
+   * Cleanup Configurable SKUs without any child SKU.
+   *
+   * @command alshaya_acm:cleanup-orphan-skus
+   *
+   * @aliases alshaya-cleanup-orphan-skus, acos
+   *
+   * @usage drush alshaya-cleanup-orphan-skus
+   *   Cleanup Configurable SKUs without any child SKU.
+   */
+  public function cleanupOrphanSkus() {
+    $subquery = $this->connection->select('acq_sku__field_configured_skus', 'c')
+      ->fields('c', ['entity_id']);
+    $subquery->join('acq_sku_field_data', 'd', 'c.field_configured_skus_value = d.sku AND c.langcode = d.langcode');
+    $subquery->condition('c.bundle', "configurable");
+    
+    $query = $query = $this->connection->select('acq_sku__field_configured_skus', 's')
+      ->fields('s', ['entity_id'])
+      ->fields('b', ['sku']);
+    $query->leftJoin('acq_sku_field_data', 'b', 's.entity_id = b.id');
+    $query->condition('s.entity_id', $subquery, 'NOT IN');
+    $query->distinct();
+    $results = $query->execute()->fetchAll();
+
+    if (empty($results)) {
+      $this->output()->writeln('SKUs are already in a clean state. No configurable SKUs found without children.');
+      return;
+    }
+
+    foreach ($results as $result) {
+      if (($sku = SKU::loadFromSku($result->sku)) && $sku instanceof SKU) {
+        // Get parent node for SKU.
+        $parent_node = $this->skuManager->getDisplayNode($sku, FALSE);
+
+        // Unpublish the node rather than deleting it. We may run into orphan
+        // simple SKUs, if a simple SKU connected with a config is enabled on
+        // MDC (which has been cleaned from Drupal), unless we save the config
+        // SKU again on MDC.
+        if ($parent_node instanceof NodeInterface) {
+          $parent_node->setPublished(FALSE);
+          $parent_node->save();
+          $deleted_skus[] = $result->sku;
+        }
+      }
+    }
+
+    if (!empty($deleted_skus)) {
+      $this->logger->info('Cleaned up following SKUs which had no children attached: @cleaned_skus', ['@clenaed_skus' => implode(',', $deleted_skus)]);
+      $this->io()->success('Cleaned up following SKUs which had no children attached: ' . implode(',', $deleted_skus));
     }
   }
 
