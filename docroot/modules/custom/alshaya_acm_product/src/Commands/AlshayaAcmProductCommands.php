@@ -327,8 +327,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
     $query->leftJoin('acq_sku_field_data', 'ac', 'nfs.field_skus_value=ac.sku');
     $query->innerJoin('node_field_data', 'nfd', 'nfd.nid=nfs.entity_id');
     $query->isNull('ac.sku');
-    $query->groupBy('nfs.entity_id');
-    $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+    $result = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
 
     // If there are nodes having sku attached but sku not in system.
     if (!empty($result)) {
