@@ -15,7 +15,7 @@
        * Adding the hover effect to colour swatches on plp.
        */
       if ($(window).width() >= 1024) {
-        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseover', debounce(function (e) {
+        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').once().on('mouseover', debounce(function (e) {
           e.preventDefault();
           var ProductUrl = $(this).find('img').attr('data-sku-image');
           $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
