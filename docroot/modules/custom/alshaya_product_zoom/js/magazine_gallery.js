@@ -50,7 +50,7 @@
     }
   };
 
-  $(document).once('bind-slick-nav').once().on('click', '.slick-prev, .slick-next', function () {
+  $(document).once('bind-slick-nav').on('click', '.slick-prev, .slick-next', function () {
     var slider = $(this).closest('.slick-slider');
     setTimeout(function () {
       var currentSlide = slider.find('li.slick-current');
