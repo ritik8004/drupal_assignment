@@ -50,6 +50,21 @@
     }
   };
 
+  $(document).once('bind-slick-nav').once().on('click', '.slick-prev, .slick-next', function () {
+    var slider = $(this).closest('.slick-slider');
+    setTimeout(function () {
+      var currentSlide = slider.find('li.slick-current');
+      // If the new slide is video thubnail,
+      // we trigger click on slide to render video.
+      if (currentSlide.hasClass('cloudzoom__thumbnails__video') || currentSlide.hasClass('imagegallery__thumbnails__video')) {
+        currentSlide.trigger('click');
+      }
+      else {
+        slider.find('li.slick-current a').trigger('click');
+      }
+    }, 1);
+  });
+
   /**
    * Zoom modal dialog.
    */
@@ -80,6 +95,8 @@
       productGallery.slick('unslick');
       $('body').removeClass('pdp-modal-overlay');
     });
+
+    var slidercurrentSlide = $('.pdp-image.clicked').attr('data-image-index');
 
     // ZoomIn ZoomOut in Gallery view with a draggable container.
     if ($('#full-image-wrapper').length > 0) {
