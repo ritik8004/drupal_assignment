@@ -171,4 +171,3 @@ campaign-plp-style-1-common:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
-
