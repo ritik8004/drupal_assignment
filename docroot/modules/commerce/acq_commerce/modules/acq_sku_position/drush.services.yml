@@ -1,6 +1,6 @@
 services:
   acq_sku_position.commands:
     class: Drupal\acq_sku_position\Commands\AcqSkuPositionCommands
-    arguments: [ '@logger.factory', '@entity_type.manager', '@acq_commerce.api', '@database', '@module_handler' ]
+    arguments: [ '@logger.factory', '@acq_commerce.api', '@database', '@module_handler' ]
     tags:
       - { name: drush.command }
