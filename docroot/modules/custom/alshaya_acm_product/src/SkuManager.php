@@ -2413,9 +2413,31 @@ class SkuManager {
       }
     }
 
+    $select_from_query = TRUE;
+
+    // Check if we need the select the variant only after all
+    // options are selected.
+    if ($this->showImagesFromChildrenAfterAllOptionsSelected()) {
+      // If there is only one attribute, we will have selection by default.
+      // If there are more then one attributes, we will select by default only
+      // if there is one value in that specific attribute.
+      // Here we say not to select variant from query ?selected=xxx if there
+      // is any attribute (except the first one) which has more then one value.
+      if (count($combinations['attribute_sku']) > 1) {
+        // Remove first attribute.
+        array_shift($combinations['attribute_sku']);
+        foreach ($combinations['attribute_sku'] as $values) {
+          if (count($values) > 1) {
+            $select_from_query = FALSE;
+            break;
+          }
+        }
+      }
+    }
+
     // If there is only one attribute option or config says select one
     // child if only one attribute is selected, process further.
-    if (!$this->showImagesFromChildrenAfterAllOptionsSelected() || (count($combinations['attribute_sku']) === 1)) {
+    if ($select_from_query) {
       // Select first child based on value provided in query params.
       $sku_id = (int) $this->currentRequest->query->get('selected');
 
