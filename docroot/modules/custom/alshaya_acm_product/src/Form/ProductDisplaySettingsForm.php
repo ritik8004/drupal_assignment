@@ -36,7 +36,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('color_swatches_hover', $form_state->getValue('color_swatches_hover'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
-    $config->set('display_oos_product', $form_state->getValue('display_oos_product'));
+    $config->set('filter_oos_product', $form_state->getValue('filter_oos_product'));
     $config->save();
 
     $this->invalidateCacheTags();
@@ -86,10 +86,10 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('color_swatches_hover'),
     ];
 
-    $form['display_oos_product'] = [
+    $form['filter_oos_product'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Display out of stock product.'),
-      '#default_value' => $config->get('display_oos_product'),
+      '#default_value' => $config->get('filter_oos_product'),
     ];
 
     $form['short_desc'] = [

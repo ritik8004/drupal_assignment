@@ -1941,9 +1941,9 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
  * Alter query to filter in stock products.
  */
 function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
-  if (\Drupal::config('alshaya_acm_product.display_settings')->get('display_oos_product')) {
-    $stock_codition = $query->createConditionGroup('AND');
-    $stock_codition->addCondition('stock', 0, '>');
-    $query->getConditionGroup()->addConditionGroup($stock_codition);
+  if (\Drupal::config('alshaya_acm_product.display_settings')->get('filter_oos_product')) {
+    $stock_condition = $query->createConditionGroup('AND');
+    $stock_condition->addCondition('stock', 0, '>');
+    $query->getConditionGroup()->addConditionGroup($stock_condition);
   }
 }
