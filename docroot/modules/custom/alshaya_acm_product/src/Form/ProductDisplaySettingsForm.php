@@ -2,8 +2,10 @@
 
 namespace Drupal\alshaya_acm_product\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\views\Views;
 
 /**
  * Class ProductDisplaySettingsForm.
@@ -34,9 +36,28 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('color_swatches_hover', $form_state->getValue('color_swatches_hover'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
+    $config->set('display_oos_product', $form_state->getValue('display_oos_product'));
     $config->save();
 
+    $this->invalidateCacheTags();
     return parent::submitForm($form, $form_state);
+  }
+
+  /**
+   * Invalidate cache tags.
+   */
+  protected function invalidateCacheTags() {
+    $view = Views::getView('alshaya_product_list');
+    $view->setDisplay('block_1');
+    $tags = $view->getCacheTags();
+    $view->setDisplay('block_2');
+    $tags = array_unique(array_merge($tags, $view->getCacheTags()));
+
+    $view = Views::getView('search');
+    $view->setDisplay('page');
+    $tags = array_unique(array_merge($tags, $view->getCacheTags()));
+
+    Cache::invalidateTags($tags);
   }
 
   /**
@@ -63,6 +84,12 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Apply hover effect on color swatches.'),
       '#default_value' => $config->get('color_swatches_hover'),
+    ];
+
+    $form['display_oos_product'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display out of stock product.'),
+      '#default_value' => $config->get('display_oos_product'),
     ];
 
     $form['short_desc'] = [
