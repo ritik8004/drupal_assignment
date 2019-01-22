@@ -1,7 +1,9 @@
 /**
  * @file
- * PLP Hover js file.
+ * PLP Swatch Hover js file.
  */
+
+/* global debounce */
 
 (function ($, Drupal) {
   'use strict';
@@ -12,15 +14,20 @@
       /**
        * Adding the hover effect to colour swatches on plp.
        */
-      $('.product-plp-detail-wrapper .swatches a').find('img').on('mouseover', debounce(function() {
-        e.preventDefault();
-        var ProductUrl = $(this).attr('data-sku-image');
-        $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
-      }, 500));
+      if ($(window).width() >= 1024) {
+        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseover', debounce(function (e) {
+          e.preventDefault();
+          var ProductUrl = $(this).find('img').attr('data-sku-image');
+          $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
+        }, 100));
 
-      $('.product-plp-detail-wrapper .swatches a').find('img').on('mouseout', function (e) {
-        e.preventDefault();
-      });
+        $('.product-plp-detail-wrapper .swatches').find('.swatch-image').on('mouseout', debounce(function (e) {
+          e.preventDefault();
+
+          var ProductUrl = $(this).closest('.c-products__item').find('.alshaya_search_mainimage').attr('data-sku-image');
+          $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
+        }, 100));
+      }
     }
   };
 
