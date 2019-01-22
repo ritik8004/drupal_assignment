@@ -16,6 +16,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
+use Drush\Exceptions\UserAbortException;
 
 /**
  * Class AlshayaAcmCommands.
@@ -472,22 +473,26 @@ class AlshayaAcmCommands extends DrushCommands {
       ->fields('c', ['entity_id']);
     $subquery->join('acq_sku_field_data', 'd', 'c.field_configured_skus_value = d.sku AND c.langcode = d.langcode');
     $subquery->condition('c.bundle', "configurable");
-    
+
     $query = $query = $this->connection->select('acq_sku__field_configured_skus', 's')
-      ->fields('s', ['entity_id'])
       ->fields('b', ['sku']);
     $query->leftJoin('acq_sku_field_data', 'b', 's.entity_id = b.id');
     $query->condition('s.entity_id', $subquery, 'NOT IN');
     $query->distinct();
-    $results = $query->execute()->fetchAll();
+    $results = $query->execute()->fetchAllKeyed(0, 0);
 
     if (empty($results)) {
       $this->output()->writeln('SKUs are already in a clean state. No configurable SKUs found without children.');
       return;
     }
 
+    $confirm_message = dt('You are going to disable the following SKUs from Drupal: !skus', ['!skus' => implode(',', $results)]);
+    if (!$this->io()->confirm($confirm_message)) {
+      throw new UserAbortException();
+    }
+
     foreach ($results as $result) {
-      if (($sku = SKU::loadFromSku($result->sku)) && $sku instanceof SKU) {
+      if (($sku = SKU::loadFromSku($result)) && $sku instanceof SKU) {
         // Get parent node for SKU.
         $parent_node = $this->skuManager->getDisplayNode($sku, FALSE);
 
@@ -495,10 +500,10 @@ class AlshayaAcmCommands extends DrushCommands {
         // simple SKUs, if a simple SKU connected with a config is enabled on
         // MDC (which has been cleaned from Drupal), unless we save the config
         // SKU again on MDC.
-        if ($parent_node instanceof NodeInterface) {
+        if (($parent_node instanceof NodeInterface) && ($parent_node->isPublished())) {
           $parent_node->setPublished(FALSE);
           $parent_node->save();
-          $deleted_skus[] = $result->sku;
+          $deleted_skus[] = $result;
         }
       }
     }
