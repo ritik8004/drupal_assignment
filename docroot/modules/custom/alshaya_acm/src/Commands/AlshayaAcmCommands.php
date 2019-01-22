@@ -478,7 +478,11 @@ class AlshayaAcmCommands extends DrushCommands {
       ->fields('b', ['sku']);
     $query->leftJoin('acq_sku_field_data', 'b', 's.entity_id = b.id');
     $query->condition('s.entity_id', $subquery, 'NOT IN');
+    $query->join('node__field_skus', 'nfs', 'nfs.field_skus_value = b.sku');
+    $query->join('node_field_data', 'nfd', 'nfd.nid = nfs.entity_id');
+    $query->condition('nfd.status', 1);
     $query->distinct();
+
     $results = $query->execute()->fetchAllKeyed(0, 0);
 
     if (empty($results)) {
@@ -500,9 +504,24 @@ class AlshayaAcmCommands extends DrushCommands {
         // simple SKUs, if a simple SKU connected with a config is enabled on
         // MDC (which has been cleaned from Drupal), unless we save the config
         // SKU again on MDC.
-        if (($parent_node instanceof NodeInterface) && ($parent_node->isPublished())) {
+        if ($parent_node instanceof NodeInterface) {
           $parent_node->setPublished(FALSE);
           $parent_node->save();
+
+          // Get translation languages for the parent node.
+          $node_trans_languages = $parent_node->getTranslationLanguages();
+          $current_langauge = $parent_node->language();
+
+          // Disable translations as well.
+          foreach ($node_trans_languages as $language) {
+            if ($current_langauge->getId() !== $language->getId() &&
+              $parent_node->hasTranslation($language->getId()) &&
+              $translated_node = $parent_node->getTranslation($language->getId())) {
+              $translated_node->setPublished(FALSE);
+              $translated_node->save();
+            }
+          }
+
           $deleted_skus[] = $result;
         }
       }
