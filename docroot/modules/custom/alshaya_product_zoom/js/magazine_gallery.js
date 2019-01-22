@@ -96,8 +96,6 @@
       $('body').removeClass('pdp-modal-overlay');
     });
 
-    var slidercurrentSlide = $('.pdp-image.clicked').attr('data-image-index');
-
     // ZoomIn ZoomOut in Gallery view with a draggable container.
     if ($('#full-image-wrapper').length > 0) {
       var maskWidth = $('#full-image-wrapper').width();
