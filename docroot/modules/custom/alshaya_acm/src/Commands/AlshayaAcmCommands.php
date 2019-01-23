@@ -476,7 +476,7 @@ class AlshayaAcmCommands extends DrushCommands {
   public function cleanupOrphanSkus() {
     $subquery = $this->connection->select('acq_sku__field_configured_skus', 'c')
       ->fields('c', ['entity_id']);
-    $subquery->join('acq_sku_field_data', 'd', 'c.field_configured_skus_value = d.sku AND c.langcode = d.langcode');
+    $subquery->join('acq_sku_field_data', 'd', 'c.field_configured_skus_value = d.sku');
     $subquery->condition('c.bundle', "configurable");
 
     $query = $query = $this->connection->select('acq_sku__field_configured_skus', 's')
