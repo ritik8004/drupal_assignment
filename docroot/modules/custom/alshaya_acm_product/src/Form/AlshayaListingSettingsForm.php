@@ -64,7 +64,7 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
 
     $form['filter_oos_product'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Display out of stock product.'),
+      '#title' => $this->t('Display out of stock products in listing pages.'),
       '#default_value' => $config->get('filter_oos_product'),
     ];
 
