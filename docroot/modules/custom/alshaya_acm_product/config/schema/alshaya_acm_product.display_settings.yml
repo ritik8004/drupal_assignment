@@ -8,9 +8,6 @@ alshaya_acm_product.display_settings:
     color_swatches:
       type: boolean
       label: 'Display color swatches on product node'
-    filter_oos_product:
-      type: boolean
-      label: 'Display out of stock product'
     plp_slider:
       type: mapping
       label: 'Configuration for plp slider'

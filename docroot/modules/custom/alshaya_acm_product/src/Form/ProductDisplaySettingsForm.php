@@ -35,6 +35,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
     $config->save();
+
     return parent::submitForm($form, $form_state);
   }
 
