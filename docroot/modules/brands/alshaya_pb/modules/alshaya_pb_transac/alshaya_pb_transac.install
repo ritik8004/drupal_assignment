@@ -10,7 +10,7 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Adding new menu and block for free design services.
+ * Disable shop by block and enable policies block in footer.
  */
 function alshaya_pb_transac_update_8008() {
   // Disable shop by block.
