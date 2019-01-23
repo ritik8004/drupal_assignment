@@ -21,7 +21,7 @@
         <a href="{{ site_path }}" title="{{ site_name }}" rel="home" class="logo">
           {% if mobile_site_logo %}
             <picture>
-              <source media="(min-width: 461px)" srcset="{{ mobile_site_logo }}">
+              <source media="(min-width: 767px)" srcset="{{ mobile_site_logo }}">
               <img src="{{ site_logo }}" alt="{{ site_name }}"/>
             </picture>
           {% else %}
