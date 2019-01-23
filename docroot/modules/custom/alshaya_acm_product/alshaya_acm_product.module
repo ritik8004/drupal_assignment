@@ -851,6 +851,7 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
 
     // Set custom items per page in view object.
     $view->setItemsPerPage($per_page);
+    $view->display_handler->display['cache_metadata']['tags'][] = 'config:alshaya_acm_product.listing_settings';
   }
 }
 

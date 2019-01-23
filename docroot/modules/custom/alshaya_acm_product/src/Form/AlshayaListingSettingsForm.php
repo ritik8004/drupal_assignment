@@ -4,8 +4,6 @@ namespace Drupal\alshaya_acm_product\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\Views;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Class AlshayaListingSettingsForm.
@@ -33,25 +31,7 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_acm_product.listing_settings');
     $config->set('filter_oos_product', $form_state->getValue('filter_oos_product'));
     $config->save();
-    $this->invalidateCacheTags();
     return parent::submitForm($form, $form_state);
-  }
-
-  /**
-   * Invalidate cache tags.
-   */
-  protected function invalidateCacheTags() {
-    $view = Views::getView('alshaya_product_list');
-    $view->setDisplay('block_1');
-    $tags = $view->getCacheTags();
-    $view->setDisplay('block_2');
-    $tags = array_unique(array_merge($tags, $view->getCacheTags()));
-
-    $view = Views::getView('search');
-    $view->setDisplay('page');
-    $tags = array_unique(array_merge($tags, $view->getCacheTags()));
-
-    Cache::invalidateTags($tags);
   }
 
   /**
