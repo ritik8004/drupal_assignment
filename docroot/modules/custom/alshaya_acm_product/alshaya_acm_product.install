@@ -12,22 +12,9 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
- * Add config for all(general) listing page related settings and to show product
- * image on hover.
+ * Add config to show product image on hover.
  */
 function alshaya_acm_product_update_8036() {
-  \Drupal::configFactory()
-    ->getEditable('alshaya_acm_product.display_settings')
-    ->clear('listing_display_mode');
-
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_acm_product.listing_settings'],
-    'alshaya_acm_product',
-    'install'
-  );
-
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(

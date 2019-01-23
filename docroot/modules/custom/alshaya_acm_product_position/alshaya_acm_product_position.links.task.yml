@@ -1,7 +1,7 @@
 alshaya_acm_product_position.plp_sort_settings_admin_form:
   route_name: alshaya_acm_product_position.plp_sort_settings_admin_form
   title: 'PLP settings'
-  base_route: alshaya_acm_product.listing_page_settings
+  base_route: alshaya_search_api.listing_page_settings
 
 alshaya_acm_product_position.plp_sort_settings_admin_form.form:
   route_name: alshaya_acm_product_position.plp_sort_settings_admin_form

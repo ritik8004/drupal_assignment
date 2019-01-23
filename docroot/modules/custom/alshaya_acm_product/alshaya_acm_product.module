@@ -36,7 +36,6 @@ use Drupal\views\ViewExecutable;
 use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Drupal\search_api\Query\QueryInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -851,7 +850,6 @@ function alshaya_acm_product_views_pre_build(ViewExecutable $view) {
 
     // Set custom items per page in view object.
     $view->setItemsPerPage($per_page);
-    $view->display_handler->display['cache_metadata']['tags'][] = 'config:alshaya_acm_product.listing_settings';
   }
 }
 
@@ -1934,17 +1932,4 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
   $unique_nodes = array_slice($unique_nodes, 0, $limit);
 
   return $unique_nodes;
-}
-
-/**
- * Implements hook_search_api_query_alter().
- *
- * Alter query to filter in stock products.
- */
-function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
-  if (\Drupal::config('alshaya_acm_product.display_settings')->get('filter_oos_product')) {
-    $stock_condition = $query->createConditionGroup('AND');
-    $stock_condition->addCondition('stock', 0, '>');
-    $query->getConditionGroup()->addConditionGroup($stock_condition);
-  }
 }

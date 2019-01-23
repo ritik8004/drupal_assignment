@@ -7,7 +7,7 @@ alshaya_search.term_search:
 alshaya_search.srp_sort_settings_form:
   route_name: alshaya_search.srp_sort_settings_form
   title: 'SRP settings'
-  base_route: alshaya_acm_product.listing_page_settings
+  base_route: alshaya_search_api.listing_page_settings
 
 alshaya_search.srp_sort_settings_form.form:
   route_name: alshaya_search.srp_sort_settings_form

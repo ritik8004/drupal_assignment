@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_product\Form;
+namespace Drupal\alshaya_search_api\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,21 +14,21 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_acm_listing_settings_form';
+    return 'alshaya_search_api_listing_settings_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_acm_product.listing_settings'];
+    return ['alshaya_search_api.listing_settings'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_acm_product.listing_settings');
+    $config = $this->config('alshaya_search_api.listing_settings');
     $config->set('filter_oos_product', $form_state->getValue('filter_oos_product'));
     $config->save();
     return parent::submitForm($form, $form_state);
@@ -40,7 +40,7 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
 
-    $config = $this->config('alshaya_acm_product.listing_settings');
+    $config = $this->config('alshaya_search_api.listing_settings');
 
     $form['filter_oos_product'] = [
       '#type' => 'checkbox',
