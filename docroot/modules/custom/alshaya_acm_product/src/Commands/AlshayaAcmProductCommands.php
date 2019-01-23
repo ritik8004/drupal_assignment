@@ -177,7 +177,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *   New mode to set in config.
    */
   private function updateListingMode(string $mode) {
-    $config = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
+    $config = $this->configFactory->getEditable('alshaya_acm_product.listing_settings');
     $config->set('listing_display_mode', $mode);
     $config->save();
 

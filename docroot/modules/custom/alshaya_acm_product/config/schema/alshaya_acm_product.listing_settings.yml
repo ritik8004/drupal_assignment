@@ -1,0 +1,10 @@
+alshaya_acm_product.listing_settings:
+  type: config_object
+  label: 'Alshaya ACM Product listing settings'
+  mapping:
+    filter_oos_product:
+      type: boolean
+      label: 'Display out of stock product'
+    listing_display_mode:
+      type: string
+      label: 'Listing display mode'

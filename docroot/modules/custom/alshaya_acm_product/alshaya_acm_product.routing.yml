@@ -105,3 +105,11 @@ alshaya_acm_product.product_sku_export:
     _title: ''
   requirements:
     _role: 'webmaster+administrator'
+
+alshaya_acm_product.listing_page_settings:
+  path: '/admin/commerce/config/listing-settings'
+  defaults:
+    _form: '\Drupal\alshaya_acm_product\Form\AlshayaListingSettingsForm'
+    _title: 'Listing Page settings'
+  requirements:
+    _permission: 'administer alshaya config'

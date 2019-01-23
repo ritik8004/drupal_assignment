@@ -1954,7 +1954,7 @@ class SkuManager {
     $static = &drupal_static(__FUNCTION__, NULL);
 
     if ($static === NULL) {
-      $static = $this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
+      $static = $this->configFactory->get('alshaya_acm_product.listing_settings')->get('listing_display_mode');
     }
 
     return $static;

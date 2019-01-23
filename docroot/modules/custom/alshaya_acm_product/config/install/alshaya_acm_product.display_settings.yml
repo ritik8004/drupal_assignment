@@ -15,5 +15,3 @@ swatches:
 short_desc_characters: 160
 short_desc_text_summary: true
 hide_not_required_option: false
-listing_display_mode: 'aggregated'
-filter_oos_product: false
