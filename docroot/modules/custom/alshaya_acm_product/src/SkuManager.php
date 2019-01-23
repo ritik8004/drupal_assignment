@@ -2035,8 +2035,7 @@ class SkuManager {
 
       $swatch_item = $child->getSwatchImage();
 
-      $show_product_image = $this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image');
-      if ($show_product_image) {
+      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
         $swatch_product_image = $child->getThumbnail();
 
         // If we have image for the product.
