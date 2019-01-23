@@ -8,6 +8,12 @@ alshaya_master.theme.*:
     email_logo_url:
       type: label
       label: 'Email logo url'
+    mobile_logo_path:
+      type: label
+      label: 'Mobile logo path'
+    mobile_logo_url:
+      type: label
+      label: 'Mobile logo url'
     langcode:
       type: string
       label: 'Language code'
