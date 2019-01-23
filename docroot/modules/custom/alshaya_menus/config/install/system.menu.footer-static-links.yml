@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: footer-static-links
+label: 'Footer Static Links'
+description: 'Additional menu that can be placed in footer containing static links if required by brand design.'
+locked: false

@@ -10,6 +10,25 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Adding new menu and block for free design services.
+ */
+function alshaya_pb_transac_update_8008() {
+  // Disable shop by block.
+  $configs = [
+    'block.block.shopby',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  $configs = [
+    'block.block.footerstaticlinks',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'install');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search placeholder based configurations.
  * Update arabic translations for search_field_placeholder.
  */
@@ -211,6 +230,10 @@ function alshaya_pb_transac_install() {
 function alshaya_pb_transac_update_dependencies() {
   $dependencies['alshaya_pb_transac'][8004] = [
     'alshaya_search' => 8023,
+  ];
+  // Ensure the footer links menu is created first in alshaya_menus.
+  $dependencies['alshaya_pb_transac'][8008] = [
+    'alshaya_menus' => 8001,
   ];
   return $dependencies;
 }
