@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "698c495a94ec3078af74ccfacec02487",
+    "content-hash": "edfb34c933f5dff98ef140f4daf96cde",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -2726,7 +2726,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.14",
-                    "datestamp": "1511982786",
+                    "datestamp": "1547038684",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2744,14 +2744,6 @@
             ],
             "authors": [
                 {
-                    "name": "Dries",
-                    "homepage": "https://www.drupal.org/user/1"
-                },
-                {
-                    "name": "Gábor Hojtsy",
-                    "homepage": "https://www.drupal.org/user/4166"
-                },
-                {
                     "name": "Mark Trapp",
                     "homepage": "https://www.drupal.org/user/212019"
                 },
@@ -2760,8 +2752,12 @@
                     "homepage": "https://www.drupal.org/user/2859977"
                 },
                 {
-                    "name": "SteveEdwardsAcquia",
-                    "homepage": "https://www.drupal.org/user/3556170"
+                    "name": "ayang",
+                    "homepage": "https://www.drupal.org/user/1777884"
+                },
+                {
+                    "name": "blueminds",
+                    "homepage": "https://www.drupal.org/user/128652"
                 },
                 {
                     "name": "dmitrii",
@@ -2778,10 +2774,6 @@
                 {
                     "name": "mundanity",
                     "homepage": "https://www.drupal.org/user/373605"
-                },
-                {
-                    "name": "paul.lovvik",
-                    "homepage": "https://www.drupal.org/user/289213"
                 },
                 {
                     "name": "vlad.pavlovic",
@@ -4293,7 +4285,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.5",
-                    "datestamp": "1512587912",
+                    "datestamp": "1545090480",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4302,7 +4294,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -4344,7 +4336,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1536851884",
+                    "datestamp": "1546203481",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5449,7 +5441,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc5",
-                    "datestamp": "1491318182",
+                    "datestamp": "1545350880",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -5458,7 +5450,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -6873,7 +6865,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.7",
-                    "datestamp": "1535722380",
+                    "datestamp": "1545249181",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7119,7 +7111,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1535556181",
+                    "datestamp": "1545263881",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7502,62 +7494,6 @@
             }
         },
         {
-            "name": "drupal/logs_http",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/logs_http",
-                "reference": "8.x-1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/logs_http-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "b7e38024879b262223c7dbe9d4bb4ab322c7223b"
-            },
-            "require": {
-                "drupal/core": "~8.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1469351639",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "amitaibu",
-                    "homepage": "https://www.drupal.org/user/57511"
-                },
-                {
-                    "name": "ordavidil",
-                    "homepage": "https://www.drupal.org/user/3105583"
-                },
-                {
-                    "name": "prdctvtxt",
-                    "homepage": "https://www.drupal.org/user/930642"
-                }
-            ],
-            "description": "Client for the Logs HTTP API.",
-            "homepage": "https://drupal.org/project/logs_http",
-            "support": {
-                "source": "https://cgit.drupalcode.org/logs_http",
-                "issues": "https://drupal.org/project/issues/logs_http"
-            }
-        },
-        {
             "name": "drupal/machine_name_widget",
             "version": "1.0.0",
             "source": {
@@ -7856,7 +7792,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha1",
-                    "datestamp": "1506671645",
+                    "datestamp": "1537264380",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -7868,7 +7804,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {
@@ -8039,7 +7975,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/memory_limit_policy",
-                "reference": "897330c166378a627103478e63286bb1d7bffd88"
+                "reference": "594309cc9daf495c164453b4df741b05b7ba85bb"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -8051,11 +7987,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.x-dev",
-                    "datestamp": "1545046680",
+                    "version": "8.x-1.0+0-dev",
+                    "datestamp": "1547564880",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -8074,7 +8010,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/memory_limit_policy"
             },
-            "time": "2018-12-17T16:22:24+00:00"
+            "time": "2019-01-15T15:04:01+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -13321,7 +13257,7 @@
                 {
                     "name": "Luís Otávio Cobucci Oblonczyk",
                     "email": "lcobucci@gmail.com",
-                    "role": "developer"
+                    "role": "Developer"
                 }
             ],
             "description": "A simple library to work with JSON Web Token and JSON Web Signature",
@@ -19109,6 +19045,62 @@
             ],
             "description": "Drupal Console Extend Plugin",
             "time": "2017-07-28T17:11:54+00:00"
+        },
+        {
+            "name": "drupal/logs_http",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/logs_http",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/logs_http-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "b7e38024879b262223c7dbe9d4bb4ab322c7223b"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1469351639",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "amitaibu",
+                    "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "ordavidil",
+                    "homepage": "https://www.drupal.org/user/3105583"
+                },
+                {
+                    "name": "prdctvtxt",
+                    "homepage": "https://www.drupal.org/user/930642"
+                }
+            ],
+            "description": "Client for the Logs HTTP API.",
+            "homepage": "https://drupal.org/project/logs_http",
+            "support": {
+                "source": "https://cgit.drupalcode.org/logs_http",
+                "issues": "https://drupal.org/project/issues/logs_http"
+            }
         },
         {
             "name": "drupal/stage_file_proxy",
