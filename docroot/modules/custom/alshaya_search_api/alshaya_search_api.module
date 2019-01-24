@@ -161,13 +161,3 @@ function alshaya_search_api_search_api_query_alter(QueryInterface &$query) {
     $query->getConditionGroup()->addConditionGroup($stock_condition);
   }
 }
-
-/**
- * Implements hook_views_pre_build().
- */
-function alshaya_search_api_views_pre_build(ViewExecutable $view) {
-  // Alter number of items per page for PLP / Search pages.
-  if (in_array($view->id(), ['search', 'alshaya_product_list'])) {
-    $view->display_handler->display['cache_metadata']['tags'][] = 'config:alshaya_search_api.listing_settings';
-  }
-}

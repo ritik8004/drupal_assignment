@@ -33,11 +33,10 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
     $config->set('filter_oos_product', $form_state->getValue('filter_oos_product'));
     $config->save();
 
-    // Invalidate cache so that the change takes effect.
+    // Invalidate cache tags for plp/srp/promotion list pages.
     Cache::invalidateTags([
       'search_api_list:product',
-      'config:block.block.exposedformalshaya_product_listblock_1',
-      'config:block.block.exposedformalshaya_product_listblock_2',
+      'search_api_list:acquia_search_index',
     ]);
     return parent::submitForm($form, $form_state);
   }
@@ -47,7 +46,6 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildForm($form, $form_state);
-
     $config = $this->config('alshaya_search_api.listing_settings');
 
     $form['filter_oos_product'] = [
