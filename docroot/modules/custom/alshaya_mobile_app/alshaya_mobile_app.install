@@ -28,8 +28,8 @@ function alshaya_mobile_app_update_8006() {
       ['user.role.mobile_app_consumer'],
       'alshaya_mobile_app',
       'install',
-      ['replace_keys' => 'permissions'],
-      AlshayaConfigManager::MODE_REPLACE_KEY
+      AlshayaConfigManager::MODE_REPLACE_KEY,
+      ['replace_keys' => ['permissions']]
     );
 }
 
