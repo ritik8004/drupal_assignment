@@ -1,6 +1,6 @@
 services:
   alshaya_acm.commands:
     class: Drupal\alshaya_acm\Commands\AlshayaAcmCommands
-    arguments: [ '@config.factory', '@language_manager', '@entity_type.manager', '@entity.manager', '@alshaya_acm_product_category.product_category_tree', '@alshaya_acm.config_check', '@database', '@alshaya_acm_product.skumanager' ]
+    arguments: [ '@config.factory', '@language_manager', '@entity_type.manager', '@entity.manager', '@alshaya_acm_product_category.product_category_tree', '@alshaya_acm.config_check', '@database', '@acq_commerce.agent_api', '@alshaya_acm.mdc_queue_manager', '@alshaya_acm_product.skumanager' ]
     tags:
       - { name: drush.command }
