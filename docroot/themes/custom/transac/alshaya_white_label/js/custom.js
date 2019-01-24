@@ -3,6 +3,8 @@
  * Custom js file.
  */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -195,6 +197,7 @@
   // Add class to footer region when our brands block is present.
   Drupal.behaviors.slugBannerModal = {
     attach: function (context, settings) {
+
       /**
        * Place the Our brands block as per resolution.
        */
