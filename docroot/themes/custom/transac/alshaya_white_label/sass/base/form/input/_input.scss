@@ -1,9 +1,6 @@
 // Normalize input fields.
-input {
-  &::-moz-placeholder, /* Firefox 19+ */
-  &:-moz-placeholder { /* Firefox 18- */
-    opacity: 1;
-  }
+input::-moz-placeholder {
+  opacity: 1;
 }
 
 input[type="text"],
