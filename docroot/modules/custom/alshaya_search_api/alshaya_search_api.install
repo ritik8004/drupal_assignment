@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Add config for all(general) listing page related settings.
+ */
+function alshaya_search_api_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_search_api.listing_settings'],
+    'alshaya_search_api',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add clean_active_facets_processor to all active facets.
  */
 function alshaya_search_api_update_8001() {

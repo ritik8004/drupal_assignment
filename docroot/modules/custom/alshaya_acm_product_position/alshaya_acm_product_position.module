@@ -308,3 +308,13 @@ function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
   $labels = _alshaya_acm_product_position_sorted_options($labels);
   return array_keys($labels);
 }
+
+/**
+ * Implements hook_local_tasks_alter().
+ */
+function alshaya_acm_product_position_local_tasks_alter(&$local_tasks) {
+  // Change config translation local task hierarchy.
+  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form'])) {
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form']['parent_id'] = 'alshaya_acm_product_position.plp_sort_settings_admin_form';
+  }
+}
