@@ -1,0 +1,14 @@
+.paragraph--type--section-divider {
+  display: block;
+
+  &::before {
+    border: none;
+  }
+
+  .field--name-field-section-divider-text {
+    padding: 0;
+    text-align: $left;
+    font-size: 1.5625rem;
+    font-weight: 100;
+  }
+}
