@@ -18,6 +18,7 @@ use Drupal\user\Entity\Role;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\user\Entity\User;
+use Drupal\Core\Cache\Cache;
 
 // @codingStandardsIgnoreLine
 define('ALSHAYA_MASTER_CUSTOM_LOGO_TYPES', ['email', 'mobile']);
@@ -314,6 +315,8 @@ function alshaya_master_save_system_theme_settings(&$form, FormStateInterface $f
   if ($config_save) {
     $config->save();
   }
+
+  Cache::invalidateTags(['config:system.site']);
 }
 
 /**
