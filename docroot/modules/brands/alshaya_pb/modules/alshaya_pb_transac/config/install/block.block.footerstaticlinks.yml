@@ -11,7 +11,7 @@ dependencies:
 id: footerstaticlinks
 theme: alshaya_pottery_barn
 region: footer_primary
-weight: -44
+weight: -46
 provider: null
 plugin: 'system_menu_block:footer-static-links'
 settings:
@@ -21,19 +21,4 @@ settings:
   label_display: visible
   level: 1
   depth: 0
-visibility:
-  alshaya_super_category:
-    id: alshaya_super_category
-    use_super_category: false
-    categories:
-      21656: '21656'
-      21766: '21766'
-      21811: '21811'
-      21841: '21841'
-      21871: '21871'
-      21906: '21906'
-      21941: '21941'
-      22056: '22056'
-      29686: '29686'
-    negate: false
-    context_mapping: {  }
+visibility: {  }
