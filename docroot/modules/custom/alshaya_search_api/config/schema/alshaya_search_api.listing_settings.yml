@@ -4,4 +4,4 @@ alshaya_search_api.listing_settings:
   mapping:
     filter_oos_product:
       type: boolean
-      label: 'Display out of stock products in listing pages'
+      label: 'Filter out of stock products in listing pages'
