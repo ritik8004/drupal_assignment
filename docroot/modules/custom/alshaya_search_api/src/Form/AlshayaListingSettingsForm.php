@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_search_api\Form;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -31,6 +32,13 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_search_api.listing_settings');
     $config->set('filter_oos_product', $form_state->getValue('filter_oos_product'));
     $config->save();
+
+    // Invalidate cache so that the change takes effect.
+    Cache::invalidateTags([
+      'search_api_list:product',
+      'config:block.block.exposedformalshaya_product_listblock_1',
+      'config:block.block.exposedformalshaya_product_listblock_2',
+    ]);
     return parent::submitForm($form, $form_state);
   }
 
