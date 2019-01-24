@@ -23,7 +23,6 @@ use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Consolidation\AnnotatedCommand\CommandData;
 
-
 /**
  * Class AlshayaAcmCommands.
  *
@@ -100,7 +99,6 @@ class AlshayaAcmCommands extends DrushCommands {
    * @var \Drupal\alshaya_acm_product\SkuManager
    */
   private $skuManager;
-
 
   /**
    * AlshayaAcmCommands constructor.
@@ -537,88 +535,87 @@ class AlshayaAcmCommands extends DrushCommands {
                                  'batch_size' => 500,
                                  'page_size' => NULL,
                                ]) {
-      // SKUs must be supplied either via skus option or csv_path.
-      if (empty($options['csv_path']) && empty($options['skus'])) {
-        $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
-        return;
-      }
+    // SKUs must be supplied either via skus option or csv_path.
+    if (empty($options['csv_path']) && empty($options['skus'])) {
+      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      return;
+    }
 
-      $acm_queue_count = $this->apiWrapper->getQueueStatus();
-      $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
-      $mdc_queue_count = $mdc_queue_stats->messages;
+    $acm_queue_count = $this->apiWrapper->getQueueStatus();
+    $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
+    $mdc_queue_count = $mdc_queue_stats->messages;
 
-      if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
-        $this->output->writeln('Items in MDC Queue: ' . $mdc_queue_count);
-        $this->output->writeln('Items in ACM Queue: ' . $acm_queue_count);
+    if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
+      $this->output->writeln('Items in MDC Queue: ' . $mdc_queue_count);
+      $this->output->writeln('Items in ACM Queue: ' . $acm_queue_count);
 
-        // Avoid bypassing check using -y switch.
-        $confirm_text = dt('yes');
-        $input = $this->io()
-          ->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
-            '@confirm_text' => $confirm_text,
-          ]));
+      // Avoid bypassing check using -y switch.
+      $confirm_text = dt('yes');
+      $input = $this->io()
+        ->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
+          '@confirm_text' => $confirm_text,
+        ]));
 
-        if ($input != $confirm_text) {
-          throw new UserAbortException();
-        }
-      }
-
-      $command_options = Drush::redispatchOptions();
-
-      if (!empty($options['csv_path'])) {
-        if (($handle = fopen($options['csv_path'], 'r')) === FALSE) {
-          print "File not readable or not available at the specified path.";
-          throw new FileNotFoundException();
-        }
-
-        $i = 0;
-        $j = 0;
-        $csv_skus = [];
-
-        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-          $csv_skus[$j][] = $data[0];
-          if (++$i % $options['batch_size'] == 0) {
-            $j++;
-          }
-        }
-
-        // Remove additional options which are not understood by the actual import
-        // command.
-        unset($command_options['csv_path']);
-        unset($command_options['batch_size']);
-      }
-
-      // Use page size configured for conductor as default in case no override is
-      // supplied via options.
-      $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')
-        ->get('product_page_size');
-      unset($options['page_size']);
-
-      if (!empty($csv_skus)) {
-        // Override skus option with the list retrieved from csv file. The command
-        // would give preference to list of SKUs supplied by csv file.
-        unset($command_options['skus']);
-        foreach ($csv_skus as $csv_skus_chunk) {
-          $command_options['skus'] = implode(',', $csv_skus_chunk);
-
-          if (!empty($command_options['skus'])) {
-            drush_invoke_process('@self', 'acsp', [
-              'langcode' => $langcode,
-              'page_size' => $page_size
-            ], $command_options);
-          }
-        }
-      }
-      elseif (!empty($command_options['skus'])) {
-        drush_invoke_process('@self', 'acsp', [
-          'langcode' => $langcode,
-          'page_size' => $page_size
-        ], $command_options);
+      if ($input != $confirm_text) {
+        throw new UserAbortException();
       }
     }
 
+    $command_options = Drush::redispatchOptions();
+
+    if (!empty($options['csv_path'])) {
+      if (($handle = fopen($options['csv_path'], 'r')) === FALSE) {
+        print "File not readable or not available at the specified path.";
+        throw new FileNotFoundException();
+      }
+
+      $i = 0;
+      $j = 0;
+      $csv_skus = [];
+
+      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        $csv_skus[$j][] = $data[0];
+        if (++$i % $options['batch_size'] == 0) {
+          $j++;
+        }
+      }
+
+      // Remove additional options which are not understood by the actual import
+      // command.
+      unset($command_options['csv_path']);
+      unset($command_options['batch_size']);
+    }
+
+    // Use page size configured for conductor as default in case no override is
+    // supplied via options.
+    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')
+      ->get('product_page_size');
+    unset($options['page_size']);
+
+    if (!empty($csv_skus)) {
+      // Override skus option with the list retrieved from csv file. The command
+      // would give preference to list of SKUs supplied by csv file.
+      unset($command_options['skus']);
+      foreach ($csv_skus as $csv_skus_chunk) {
+        $command_options['skus'] = implode(',', $csv_skus_chunk);
+
+        if (!empty($command_options['skus'])) {
+          drush_invoke_process('@self', 'acsp', [
+            'langcode' => $langcode,
+            'page_size' => $page_size,
+          ], $command_options);
+        }
+      }
+    }
+    elseif (!empty($command_options['skus'])) {
+      drush_invoke_process('@self', 'acsp', [
+        'langcode' => $langcode,
+        'page_size' => $page_size,
+      ], $command_options);
+    }
+  }
+
   /**
-   *
    * Cleanup Configurable SKUs without any child SKU.
    *
    * @command alshaya_acm:cleanup-orphan-skus
