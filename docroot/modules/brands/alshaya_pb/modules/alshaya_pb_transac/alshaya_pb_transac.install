@@ -23,7 +23,7 @@ function alshaya_pb_transac_update_8008() {
   $configs = [
     'block.block.footerstaticlinks',
   ];
-  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'install');
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
 }
 
 /**
@@ -222,6 +222,12 @@ function alshaya_pb_transac_install() {
 
   // Re-save indexes to ensure config overrides are taken into consideration.
   _alshaya_search_resave_indexes();
+
+  // Disable shop by block.
+  alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_pb_transac', 'optional');
 }
 
 /**
