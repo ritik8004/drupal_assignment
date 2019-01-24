@@ -8,6 +8,30 @@
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add user get status endpoint.
+ */
+function alshaya_mobile_app_update_8006() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.user_get_status'],
+      'alshaya_mobile_app',
+      'install'
+    );
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['user.role.mobile_app_consumer'],
+      'alshaya_mobile_app',
+      'install',
+      ['replace_keys' => 'permissions'],
+      AlshayaConfigManager::MODE_REPLACE_KEY
+    );
+}
 
 /**
  * Implements hook_update_N().
