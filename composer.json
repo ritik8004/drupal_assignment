@@ -45,7 +45,6 @@
         "drupal/kashmir": "^1.1",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
-        "drupal/logs_http": "^1.0",
         "drupal/mailsystem": "^4.1",
         "drupal/media_entity": "^1.8",
         "drupal/media_entity_actions": "1.x-dev",

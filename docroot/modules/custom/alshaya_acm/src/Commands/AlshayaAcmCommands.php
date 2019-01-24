@@ -6,6 +6,8 @@ use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
 use Drupal\alshaya_acm\AlshayaMdcQueueManager;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -14,11 +16,13 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Consolidation\AnnotatedCommand\CommandData;
+
 
 /**
  * Class AlshayaAcmCommands.
@@ -91,6 +95,14 @@ class AlshayaAcmCommands extends DrushCommands {
   private $mdcQueueManager;
 
   /**
+   * Sku manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  private $skuManager;
+
+
+  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -111,6 +123,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Commerce API wrapper.
    * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
    *   Mdc Queue Manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku manager service.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -120,7 +134,8 @@ class AlshayaAcmCommands extends DrushCommands {
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
                               Connection $connection,
                               APIWrapper $api_wrapper,
-                              AlshayaMdcQueueManager $mdcQueueManager) {
+                              AlshayaMdcQueueManager $mdcQueueManager,
+                              SkuManager $skuManager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -130,6 +145,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->connection = $connection;
     $this->apiWrapper = $api_wrapper;
     $this->mdcQueueManager = $mdcQueueManager;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -521,75 +537,159 @@ class AlshayaAcmCommands extends DrushCommands {
                                  'batch_size' => 500,
                                  'page_size' => NULL,
                                ]) {
-    // SKUs must be supplied either via skus option or csv_path.
-    if (empty($options['csv_path']) && empty($options['skus'])) {
-      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      // SKUs must be supplied either via skus option or csv_path.
+      if (empty($options['csv_path']) && empty($options['skus'])) {
+        $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+        return;
+      }
+
+      $acm_queue_count = $this->apiWrapper->getQueueStatus();
+      $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
+      $mdc_queue_count = $mdc_queue_stats->messages;
+
+      if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
+        $this->output->writeln('Items in MDC Queue: ' . $mdc_queue_count);
+        $this->output->writeln('Items in ACM Queue: ' . $acm_queue_count);
+
+        // Avoid bypassing check using -y switch.
+        $confirm_text = dt('yes');
+        $input = $this->io()
+          ->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
+            '@confirm_text' => $confirm_text,
+          ]));
+
+        if ($input != $confirm_text) {
+          throw new UserAbortException();
+        }
+      }
+
+      $command_options = Drush::redispatchOptions();
+
+      if (!empty($options['csv_path'])) {
+        if (($handle = fopen($options['csv_path'], 'r')) === FALSE) {
+          print "File not readable or not available at the specified path.";
+          throw new FileNotFoundException();
+        }
+
+        $i = 0;
+        $j = 0;
+        $csv_skus = [];
+
+        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+          $csv_skus[$j][] = $data[0];
+          if (++$i % $options['batch_size'] == 0) {
+            $j++;
+          }
+        }
+
+        // Remove additional options which are not understood by the actual import
+        // command.
+        unset($command_options['csv_path']);
+        unset($command_options['batch_size']);
+      }
+
+      // Use page size configured for conductor as default in case no override is
+      // supplied via options.
+      $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')
+        ->get('product_page_size');
+      unset($options['page_size']);
+
+      if (!empty($csv_skus)) {
+        // Override skus option with the list retrieved from csv file. The command
+        // would give preference to list of SKUs supplied by csv file.
+        unset($command_options['skus']);
+        foreach ($csv_skus as $csv_skus_chunk) {
+          $command_options['skus'] = implode(',', $csv_skus_chunk);
+
+          if (!empty($command_options['skus'])) {
+            drush_invoke_process('@self', 'acsp', [
+              'langcode' => $langcode,
+              'page_size' => $page_size
+            ], $command_options);
+          }
+        }
+      }
+      elseif (!empty($command_options['skus'])) {
+        drush_invoke_process('@self', 'acsp', [
+          'langcode' => $langcode,
+          'page_size' => $page_size
+        ], $command_options);
+      }
+    }
+
+  /**
+   *
+   * Cleanup Configurable SKUs without any child SKU.
+   *
+   * @command alshaya_acm:cleanup-orphan-skus
+   *
+   * @aliases alshaya-cleanup-orphan-skus, acos
+   *
+   * @usage drush alshaya-cleanup-orphan-skus
+   *   Cleanup Configurable SKUs without any child SKU.
+   */
+  public function cleanupOrphanSkus() {
+    $subquery = $this->connection->select('acq_sku__field_configured_skus', 'c')
+      ->fields('c', ['entity_id']);
+    $subquery->join('acq_sku_field_data', 'd', 'c.field_configured_skus_value = d.sku AND c.langcode = d.langcode');
+    $subquery->condition('c.bundle', "configurable");
+
+    $query = $query = $this->connection->select('acq_sku__field_configured_skus', 's')
+      ->fields('b', ['sku']);
+    $query->leftJoin('acq_sku_field_data', 'b', 's.entity_id = b.id');
+    $query->condition('s.entity_id', $subquery, 'NOT IN');
+    $query->join('node__field_skus', 'nfs', 'nfs.field_skus_value = b.sku');
+    $query->join('node_field_data', 'nfd', 'nfd.nid = nfs.entity_id');
+    $query->condition('nfd.status', 1);
+    $query->distinct();
+
+    $results = $query->execute()->fetchAllKeyed(0, 0);
+
+    if (empty($results)) {
+      $this->output()->writeln('SKUs are already in a clean state. No configurable SKUs found without children.');
       return;
     }
 
-    $acm_queue_count = $this->apiWrapper->getQueueStatus();
-    $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
-    $mdc_queue_count = $mdc_queue_stats->messages;
-
-    if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
-      $this->output->writeln('Items in MDC Queue: ' . $mdc_queue_count);
-      $this->output->writeln('Items in ACM Queue: ' . $acm_queue_count);
-
-      // Avoid bypassing check using -y switch.
-      $confirm_text = dt('yes');
-      $input = $this->io()->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
-        '@confirm_text' => $confirm_text,
-      ]));
-
-      if ($input != $confirm_text) {
-        throw new UserAbortException();
-      }
+    $confirm_message = dt('You are going to disable the following SKUs from Drupal: !skus', ['!skus' => implode(',', $results)]);
+    if (!$this->io()->confirm($confirm_message)) {
+      throw new UserAbortException();
     }
 
-    $command_options = Drush::redispatchOptions();
+    foreach ($results as $result) {
+      if (($sku = SKU::loadFromSku($result)) && $sku instanceof SKU) {
+        // Get parent node for SKU.
+        $parent_node = $this->skuManager->getDisplayNode($sku, FALSE);
 
-    if (!empty($options['csv_path'])) {
-      if (($handle = fopen($options['csv_path'], 'r')) === FALSE) {
-        print "File not readable or not available at the specified path.";
-        throw new FileNotFoundException();
-      }
+        // Unpublish the node rather than deleting it. We may run into orphan
+        // simple SKUs, if a simple SKU connected with a config is enabled on
+        // MDC (which has been cleaned from Drupal), unless we save the config
+        // SKU again on MDC.
+        if ($parent_node instanceof NodeInterface) {
+          $parent_node->setPublished(FALSE);
+          $parent_node->save();
 
-      $i = 0;
-      $j = 0;
-      $csv_skus = [];
+          // Get translation languages for the parent node.
+          $node_trans_languages = $parent_node->getTranslationLanguages();
+          $current_langauge = $parent_node->language();
 
-      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        $csv_skus[$j][] = $data[0];
-        if (++$i % $options['batch_size'] == 0) {
-          $j++;
-        }
-      }
+          // Disable translations as well.
+          foreach ($node_trans_languages as $language) {
+            if ($current_langauge->getId() !== $language->getId() &&
+              $parent_node->hasTranslation($language->getId()) &&
+              $translated_node = $parent_node->getTranslation($language->getId())) {
+              $translated_node->setPublished(FALSE);
+              $translated_node->save();
+            }
+          }
 
-      // Remove additional options which are not understood by the actual import
-      // command.
-      unset($command_options['csv_path']);
-      unset($command_options['batch_size']);
-    }
-
-    // Use page size configured for conductor as default in case no override is
-    // supplied via options.
-    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')->get('product_page_size');
-    unset($options['page_size']);
-
-    if (!empty($csv_skus)) {
-      // Override skus option with the list retrieved from csv file. The command
-      // would give preference to list of SKUs supplied by csv file.
-      unset($command_options['skus']);
-      foreach ($csv_skus as $csv_skus_chunk) {
-        $command_options['skus'] = implode(',', $csv_skus_chunk);
-
-        if (!empty($command_options['skus'])) {
-          drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+          $deleted_skus[] = $result;
         }
       }
     }
-    elseif (!empty($command_options['skus'])) {
-      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+
+    if (!empty($deleted_skus)) {
+      $this->logger->info('Cleaned up following SKUs which had no children attached: @cleaned_skus', ['@clenaed_skus' => implode(',', $deleted_skus)]);
+      $this->io()->success('Cleaned up following SKUs which had no children attached: ' . implode(',', $deleted_skus));
     }
   }
 
