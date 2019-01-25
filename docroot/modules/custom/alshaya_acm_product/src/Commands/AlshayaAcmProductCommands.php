@@ -7,7 +7,10 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;
+use Drupal\Core\Database\Connection;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -52,6 +55,13 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $connection;
 
   /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
    * AlshayaAcmProductCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
@@ -64,17 +74,21 @@ class AlshayaAcmProductCommands extends DrushCommands {
    *   Event dispatcher.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_channel_factory,
                               ConfigFactoryInterface $config_factory,
                               SkuManager $sku_manager,
                               EventDispatcherInterface $event_dispatcher,
-                              Connection $connection) {
+                              Connection $connection,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->logger = $logger_channel_factory->get('alshaya_acm_product');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
     $this->eventDispatcher = $event_dispatcher;
     $this->connection = $connection;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -293,6 +307,75 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     $context['sandbox']['current']++;
     $context['finished'] = $context['sandbox']['current'] / $context['sandbox']['max'];
+  }
+
+  /**
+   * Deletes product nodes having sku attached but sku not available in system.
+   *
+   * @command alshaya_acm_product:delete-orphan-product-nodes
+   *
+   * @validate-module-enabled alshaya_acm_product
+   *
+   * @aliases delete-orphan-product-nodes
+   *
+   * @usage drush delete-orphan-product-nodes
+   *   Deletes orphan product nodes from drupal.
+   */
+  public function deleteOrphanProductNodes() {
+    $query = $this->connection->select('node__field_skus', 'nfs');
+    $query->addField('nfs', 'entity_id', 'nid');
+    $query->addField('nfs', 'field_skus_value', 'sku');
+    $query->leftJoin('acq_sku_field_data', 'ac', 'nfs.field_skus_value=ac.sku');
+    $query->innerJoin('node_field_data', 'nfd', 'nfd.nid=nfs.entity_id');
+    $query->isNull('ac.sku');
+    $result = $query->execute()->fetchAllAssoc('nid', \PDO::FETCH_ASSOC);
+
+    // If there are nodes having sku attached but sku not in system.
+    if (!empty($result)) {
+      // Print nids and skus for review/check.
+      $this->io()->table([dt('Node'), dt('SKU')], $result);
+
+      // Confirmation before delete.
+      if (!$this->io()->confirm(dt('Are you sure you want to delete these orphan product nodes?'), FALSE)) {
+        throw new UserAbortException();
+      }
+
+      foreach ($result as $rs) {
+        try {
+          $node = $this->entityTypeManager->getStorage('node')->load($rs['nid']);
+          if ($node instanceof NodeInterface) {
+            $node->delete();
+            $this->logger->notice(dt('Node:@nid having sku:@sku attached is deleted from the system successfully.', [
+              '@nid' => $rs['nid'],
+              '@sku' => $rs['sku'],
+            ]));
+          }
+          else {
+            // On deletion of actual/parent node, color nodes associated with
+            // the node also deleted. And this node might be a color node.
+            // @see alshaya_acm_product_node_delete().
+            // There are cases when there is an entry in node_field_data
+            // table but actual node not exists in the system.
+            $this->logger->error(dt('Node:@nid with sku:@sku was either a color node or just having an entry in `node_field_data` table but actual node not exists .', [
+              '@nid' => $rs['nid'],
+              '@sku' => $rs['sku'],
+            ]));
+          }
+        }
+        catch (\Exception $e) {
+          $this->logger->error(dt('There was an error while deleting node:@nid of sku:@sku Message:@message', [
+            '@nid' => $rs['nid'],
+            '@sku' => $rs['sku'],
+            '@message' => $e->getMessage(),
+          ]));
+          continue;
+        }
+      }
+
+      return;
+    }
+
+    $this->output->writeln(dt('There are no orphan product nodes in the system.'));
   }
 
   /**

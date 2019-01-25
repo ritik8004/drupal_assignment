@@ -45,7 +45,6 @@
         "drupal/kashmir": "^1.1",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
-        "drupal/logs_http": "^1.0",
         "drupal/mailsystem": "^4.1",
         "drupal/media_entity": "^1.8",
         "drupal/media_entity_actions": "1.x-dev",
@@ -188,6 +187,9 @@
         },
         "enable-patching": true,
         "patches": {
+            "acquia/blt": {
+              "Add truncate-branch option to deploy command": "https://patch-diff.githubusercontent.com/raw/nedsbeds/blt/pull/1.patch"
+            },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
             },
@@ -288,9 +290,6 @@
             },
             "drupal/seckit": {
                 "Add support for feature-policy header": "https://www.drupal.org/files/issues/2018-08-06/2990047-2-add-support-for-feature-policy.patch"
-            },
-            "drupal/logs_http": {
-                "Allows to alter an event and allow to stop sending it as well": "https://patch-diff.githubusercontent.com/raw/Gizra/logs_http/pull/20.patch"
             },
             "drupal/views_ajax_get": {
                 "Avoid conflicts in params from get and form.": "https://www.drupal.org/files/issues/2018-09-20/3001082-2.patch"
