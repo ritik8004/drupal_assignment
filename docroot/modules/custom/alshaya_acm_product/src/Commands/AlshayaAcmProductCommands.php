@@ -5,11 +5,11 @@ namespace Drupal\alshaya_acm_product\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drush\Commands\DrushCommands;
-use Drupal\Core\Database\Connection;
 use Drush\Exceptions\UserAbortException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -47,7 +47,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
   private $eventDispatcher;
 
   /**
-   * Database connection.
+   * Database Connection.
    *
    * @var \Drupal\Core\Database\Connection
    */
@@ -72,7 +72,7 @@ class AlshayaAcmProductCommands extends DrushCommands {
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   Event dispatcher.
    * @param \Drupal\Core\Database\Connection $connection
-   *   Database connection.
+   *   Database Connection.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
    */
@@ -386,6 +386,44 @@ class AlshayaAcmProductCommands extends DrushCommands {
    */
   public function alshayaAcmProductPostCommand($result, CommandData $commandData) {
     $this->eventDispatcher->dispatch(self::POST_DRUSH_COMMAND_EVENT);
+  }
+
+  /**
+   * Clean up data in node_field_data table.
+   *
+   * @command alshaya_acm_product:cleanup-node-field-data
+   *
+   * @aliases cleanup-nfd, cleanup-node-field-data
+   */
+  public function cleanNodeFieldData() {
+    $query = $this->connection->query('SELECT nf.nid, nf.vid, nf.langcode 
+      FROM {node_field_data} nf 
+      WHERE vid NOT IN (SELECT vid FROM {node})');
+
+    $result = $query->fetchAll();
+
+    if (empty($result)) {
+      $this->yell('No corrupt entry found in node_field_data.');
+      return;
+    }
+
+    $message = dt('Found following entries in node_field_data which do not have any entry in node. Entries: @entries', [
+      '@entries' => print_r($result, TRUE),
+    ]);
+
+    $this->io()->writeln($message);
+
+    if (!$this->io()->confirm(dt('Do you want to delete them?'))) {
+      throw new UserAbortException();
+    }
+
+    $vids = array_column($result, 'vid');
+
+    $this->connection->delete('node_field_data')
+      ->condition('vid', $vids, 'IN')
+      ->execute();
+
+    $this->io()->writeln(dt('Corrupt entries in node_field_data are removed.'));
   }
 
 }
