@@ -195,7 +195,7 @@
   };
 
   // Add class to footer region when our brands block is present.
-  Drupal.behaviors.slugBannerModal = {
+  Drupal.behaviors.ourBrandsBlock = {
     attach: function (context, settings) {
 
       /**
