@@ -14,5 +14,4 @@ permissions:
   - 'restful post webform_rest_submit'
   - 'restful post user_registration_mail'
   - 'restful post user_forgot_password_mail'
-  - 'access user profiles'
   - 'restful get user_get_status'

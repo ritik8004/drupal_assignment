@@ -7,11 +7,10 @@ dependencies:
     - simple_oauth
 id: user_get_status
 plugin_id: user_get_status
-granularity: resource
+granularity: method
 configuration:
-  methods:
-    - GET
-  formats:
-    - json
-  authentication:
-    - oauth2
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - oauth2
