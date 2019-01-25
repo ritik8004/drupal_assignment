@@ -26,3 +26,8 @@ services:
     - '@alshaya_acm_product.skumanager'
     tags:
     - { name: 'event_subscriber' }
+
+  alshaya_search_api.listing_settings_subscriber:
+    class: Drupal\alshaya_search_api\EventSubscriber\ProductListingSettingsSubscriber
+    tags:
+      - { name: 'event_subscriber' }
