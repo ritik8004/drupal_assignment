@@ -10,18 +10,8 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
- * Clear product cache.
- */
-function alshaya_pb_transac_update_8009() {
-  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
-  $cache = \Drupal::service('cache.alshaya_product');
-  $cache->deleteAllPermanent();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Disable shop by block and enable policies block in footer.
+ * Clear product cache.
  */
 function alshaya_pb_transac_update_8008() {
   // Disable shop by block.
@@ -35,6 +25,11 @@ function alshaya_pb_transac_update_8008() {
     'block.block.footerstaticlinks',
   ];
   alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+
+  // Clear product cache.
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**
