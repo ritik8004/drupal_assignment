@@ -301,6 +301,10 @@ function alshaya_acm_product_node_delete(NodeInterface $node) {
           $storage = \Drupal::entityTypeManager()->getStorage('node');
           $nodes = $storage->loadMultiple($nids);
           $storage->delete($nodes);
+          \Drupal::logger('alshaya_acm_product')->notice('Color nodes:@color_nids deleted successfully on deletion of parent node:@pid', [
+            '@color_nids' => implode(',', $nids),
+            '@pid' => $node->id(),
+          ]);
         }
         catch (\Exception $e) {
           \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids for node: @pid Message: @message in method: @method', [
@@ -1064,6 +1068,10 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // Ensure clientside validation is triggered to have proper data in maximum
   // number of the requests that reach server.
   $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
+
+  // Disable the submit button by default. We will enable it later with js,
+  // so that the button is disabled if js is disabled.
+  $form['add_to_cart']['#disabled'] = TRUE;
 
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 

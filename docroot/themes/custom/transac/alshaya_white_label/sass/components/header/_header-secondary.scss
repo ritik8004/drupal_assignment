@@ -384,15 +384,6 @@ body {
   }
 }
 
-.block-alshaya-main-menu .active--menu--links {
-  li.menu--one__list-item ul.menu--two__list {
-    @include breakpoint($desktop) {
-      display: block;
-      transition: none;
-    }
-  }
-}
-
 @include breakpoint($desktop) {
   .c-menu-secondary {
     .region__menu-secondary,

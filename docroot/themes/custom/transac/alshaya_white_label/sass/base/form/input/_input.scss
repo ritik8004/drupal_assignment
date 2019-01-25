@@ -1,4 +1,8 @@
 // Normalize input fields.
+input::-moz-placeholder {
+  opacity: 1;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"],
