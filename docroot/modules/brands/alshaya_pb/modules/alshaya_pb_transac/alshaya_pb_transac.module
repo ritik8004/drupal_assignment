@@ -45,6 +45,7 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['dimensions_and_care'] = [
           '#theme' => 'pdp_description_accordion',
           '#title' => t('Dimensions and Care'),
+          '#class' => 'dimensions-and-care',
           '#text' => [
             '#markup' => $product_info[0]['value'],
           ],
@@ -127,4 +128,15 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
       }
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_search_facet_price_alter().
+ */
+function alshaya_pb_transac_alshaya_search_facet_price_alter($range, &$displayValue) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Remove decimal points from price block filter.
+  $displayValue = str_replace('.' . str_repeat('0', $config->get('decimal_points')), '', $displayValue);
 }

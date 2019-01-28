@@ -1,9 +1,14 @@
 alshaya_acm_product_position.plp_sort_settings_admin_form:
   route_name: alshaya_acm_product_position.plp_sort_settings_admin_form
-  base_route: alshaya_acm_product_position.plp_sort_settings_admin_form
+  title: 'PLP settings'
+  base_route: alshaya_search_api.listing_page_settings
+
+alshaya_acm_product_position.plp_sort_settings_admin_form.form:
+  route_name: alshaya_acm_product_position.plp_sort_settings_admin_form
   title: 'PLP sort settings'
+  parent_id: alshaya_acm_product_position.plp_sort_settings_admin_form
 
 alshaya_acm_product_position.plp_sort_label_settings:
   route_name: alshaya_acm_product_position.plp_sort_label_settings
-  base_route: alshaya_acm_product_position.plp_sort_settings_admin_form
   title: 'PLP sort Labels'
+  parent_id: alshaya_acm_product_position.plp_sort_settings_admin_form

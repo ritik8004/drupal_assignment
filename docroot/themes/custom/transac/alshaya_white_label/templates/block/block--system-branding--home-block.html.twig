@@ -19,7 +19,14 @@
     {% if site_logo %}
       <h1 class="site-brand-home">
         <a href="{{ site_path }}" title="{{ site_name }}" rel="home" class="logo">
+          {% if mobile_site_logo %}
+            <picture>
+              <source media="(max-width: 767px)" srcset="{{ mobile_site_logo }}">
+              <img src="{{ site_logo }}" alt="{{ site_name }}"/>
+            </picture>
+          {% else %}
             <img src="{{ site_logo }}" alt="{{ site_name }}"/>
+          {% endif %}
         </a>
       </h1>
     {% endif %}
