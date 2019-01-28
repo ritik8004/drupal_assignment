@@ -7,8 +7,8 @@
 
 (function ($, Drupal) {
   'use strict';
-  var transformValueBackward = 18;
-  var transformValueForward = -18;
+  var transformValueBackward = 19;
+  var transformValueForward = -19;
   Drupal.behaviors.pdpInstagranDots = {
     attach: function (context, settings) {
       // Slick Selector.
