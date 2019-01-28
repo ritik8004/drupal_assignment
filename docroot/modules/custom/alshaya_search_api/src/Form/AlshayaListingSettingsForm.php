@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_search_api\Form;
 
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -32,12 +31,6 @@ class AlshayaListingSettingsForm extends ConfigFormBase {
     $config = $this->config('alshaya_search_api.listing_settings');
     $config->set('filter_oos_product', $form_state->getValue('filter_oos_product'));
     $config->save();
-
-    // Invalidate cache tags for plp/srp/promotion list pages.
-    Cache::invalidateTags([
-      'search_api_list:product',
-      'search_api_list:acquia_search_index',
-    ]);
     return parent::submitForm($form, $form_state);
   }
 
