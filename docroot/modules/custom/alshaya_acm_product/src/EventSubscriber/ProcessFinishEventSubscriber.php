@@ -111,6 +111,7 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function postDrushCommand(Event $event) {
+    $this->deleteColorNodes();
     $this->processSkuColorNodes();
   }
 
