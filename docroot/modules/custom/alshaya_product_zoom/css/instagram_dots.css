@@ -1,5 +1,5 @@
 .slick-slider > .i-dots.slick-dots {
-  width: 96px !important;
+  width: 6rem !important;
   overflow: hidden;
   display: flex;
   padding: 0;
@@ -47,8 +47,8 @@ ul.i-dots.slick-dots > .slick-dots-container {
 .i-dots .slick-dots-container > li.n-small-1 {
   width: 0.4375rem !important;
   height: 0.4375rem !important;
-  margin-left: 6px !important;
-  margin-right: 6px !important;
+  margin-left: 0.375rem !important;
+  margin-right: 0.375rem !important;
 }
 
 .i-dots .slick-dots-container > li.slick-active {
