@@ -12,6 +12,28 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_update_N().
  *
+ * Rework error message endpoint to static texts.
+ */
+function alshaya_mobile_app_update_8005() {
+  // Delete config so that plugin not found error is not thrown.
+  \Drupal::configFactory()->getEditable('rest.resource.alshaya_error_messages')->delete();
+
+  // Install new config.
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.alshaya_static_texts'],
+      'alshaya_mobile_app',
+      'install'
+    );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update payment-methods endpoint to use cookie.
  */
 function alshaya_mobile_app_update_8005() {
