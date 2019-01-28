@@ -52,6 +52,9 @@ class AlshayaHmImagesCommands extends DrushCommands {
    * @aliases hmir,alshaya-hm-images-report
    */
   public function generateImageReport(array $options = ['check_faults' => FALSE]) {
+    // Set memory limit to -1 while processing faulty images.
+    ini_set('memory_limit', -1);
+
     // product/listing without dam
     //  $faulty_image = 'eefda5660843594e82bf807be8edbe69';
     // product/miniature without dam
