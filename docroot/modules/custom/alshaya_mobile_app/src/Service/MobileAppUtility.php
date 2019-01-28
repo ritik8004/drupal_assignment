@@ -745,6 +745,11 @@ class MobileAppUtility {
    *   Light Product.
    */
   public function getLightProduct(SKUInterface $sku, $color = NULL): array {
+    $node = $this->skuManager->getDisplayNode($sku);
+    if (!($node instanceof NodeInterface)) {
+      return [];
+    }
+
     // Get the prices.
     $prices = $this->skuManager->getMinPrices($sku);
 
@@ -778,6 +783,7 @@ class MobileAppUtility {
       'medias' => $images,
       'labels' => $labels,
       'color' => NULL,
+      'link' => $node->toUrl('canonical', ['absolute' => TRUE])->toString(),
     ];
 
     if ($color) {

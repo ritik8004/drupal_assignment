@@ -11,6 +11,7 @@ use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Psr\Log\LoggerInterface;
@@ -188,7 +189,13 @@ class ProductResource extends ResourceBase {
       throw (new NotFoundHttpException());
     }
 
+    $node = $this->skuManager->getDisplayNode($sku);
+    if (!($node instanceof NodeInterface)) {
+      throw (new NotFoundHttpException());
+    }
+
     $data = $this->getSkuData($skuEntity);
+    $data['link'] = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
