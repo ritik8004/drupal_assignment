@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_acm_checkout\Plugin\CheckoutFlow;
 
 use Drupal\acq_checkout\Plugin\CheckoutFlow\CheckoutFlowWithPanesBase;
+use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RedirectDestinationTrait;
@@ -360,11 +361,12 @@ class MultistepCheckout extends CheckoutFlowWithPanesBase {
         ]);
 
         if (_alshaya_acm_is_out_of_stock_exception($e)) {
-          $cart = $this->getCart();
-          $this->getCheckoutHelper()->clearCacheForProductsInCart($cart);
-          $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
-          $response->send();
-          exit;
+          if ($cart = $this->getCart()) {
+            $cart->setCheckoutStep('');
+            $this->getCheckoutHelper()->clearCacheForProductsInCart($cart);
+          }
+
+          throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
         }
 
         // Show message from Magento to user if allowed in config.

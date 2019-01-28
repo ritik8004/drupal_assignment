@@ -6,6 +6,7 @@ use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
@@ -19,7 +20,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -292,7 +292,24 @@ class CheckoutHelper {
     $cart->setExtension('store_code', NULL);
     $cart->setExtension('click_and_collect_type', NULL);
     $cart->clearPayment();
-    $this->cartStorage->updateCart();
+
+    try {
+      $this->cartStorage->updateCart();
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while updating cart while clearing shipping info: @message', [
+        '@message' => $e->getMessage(),
+      ]);
+
+      if (_alshaya_acm_is_out_of_stock_exception($e)) {
+        if ($cart = $this->cartStorage->getCart(FALSE)) {
+          $this->clearCacheForProductsInCart($cart);
+          $cart->setCheckoutStep('');
+        }
+      }
+
+      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+    }
   }
 
   /**
@@ -463,12 +480,13 @@ class CheckoutHelper {
         ]);
 
         if (_alshaya_acm_is_out_of_stock_exception($e)) {
-          $this->clearCacheForProductsInCart($cart);
+          if ($cart = $this->cartStorage->getCart(FALSE)) {
+            $this->clearCacheForProductsInCart($cart);
+            $cart->setCheckoutStep('');
+          }
         }
 
-        $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
-        $response->send();
-        exit;
+        throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
       }
     }
 
