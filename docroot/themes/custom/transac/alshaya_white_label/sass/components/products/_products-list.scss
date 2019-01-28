@@ -449,6 +449,7 @@
     @include breakpoint($mobile) {
       width: calc(50% - 0.5rem);
       margin-bottom: 1rem;
+      min-height: 18rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -461,8 +462,13 @@
       }
     }
 
+    @include breakpoint($tablet) {
+      min-height: 20rem;
+    }
+
     @include breakpoint($desktop) {
       width: 33%;
+      min-height: 25rem;
     }
 
     .alshaya_search_gallery {
