@@ -5,8 +5,8 @@ dependencies:
     - alshaya_mobile_app
     - serialization
     - simple_oauth
-id: alshaya_error_messages
-plugin_id: alshaya_error_messages
+id: alshaya_static_texts
+plugin_id: alshaya_static_texts
 granularity: method
 configuration:
   GET:
