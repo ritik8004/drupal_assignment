@@ -194,10 +194,11 @@ class ProductResource extends ResourceBase {
       throw (new NotFoundHttpException());
     }
 
-    $data = $this->getSkuData($skuEntity);
-    $data['link'] = $node->toUrl('canonical', ['absolute' => TRUE])
+    $link = $node->toUrl('canonical', ['absolute' => TRUE])
       ->toString(TRUE)
       ->getGeneratedUrl();
+
+    $data = $this->getSkuData($skuEntity, $link);
 
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
@@ -219,11 +220,13 @@ class ProductResource extends ResourceBase {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
+   * @param string $link
+   *   Product link if main product.
    *
    * @return array
    *   Product Data.
    */
-  private function getSkuData(SKUInterface $sku): array {
+  private function getSkuData(SKUInterface $sku, string $link = ''): array {
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $data = [];
 
@@ -232,6 +235,9 @@ class ProductResource extends ResourceBase {
 
     $data['id'] = (int) $sku->id();
     $data['sku'] = $sku->getSku();
+    if ($link) {
+      $data['link'] = $link;
+    }
     $parent_sku = $this->skuManager->getParentSkuBySku($sku);
     $data['parent_sku'] = $parent_sku ? $parent_sku->getSku() : NULL;
     $data['title'] = (string) $this->productInfoHelper->getTitle($sku, 'pdp');

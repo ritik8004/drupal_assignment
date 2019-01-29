@@ -771,11 +771,16 @@ class MobileAppUtility {
     $sku_for_gallery = $this->skuImagesManager->getSkuForGalleryWithColor($sku, $color) ?? $sku;
     $images = $this->getMedia($sku_for_gallery, 'search');
 
+    $link = $node->toUrl('canonical', ['absolute' => TRUE])
+      ->toString(TRUE)
+      ->getGeneratedUrl();
+
     $data = [
       'id' => (int) $sku->id(),
       'title' => $sku->label(),
       'sku' => $sku->getSku(),
       'deeplink' => $this->getDeepLink($sku),
+      'link' => $link,
       'original_price' => $this->formatPriceDisplay($prices['price']),
       'final_price' => $this->formatPriceDisplay($prices['final_price']),
       'in_stock' => (bool) alshaya_acm_get_stock_from_sku($sku),
@@ -783,7 +788,6 @@ class MobileAppUtility {
       'medias' => $images,
       'labels' => $labels,
       'color' => NULL,
-      'link' => $node->toUrl('canonical', ['absolute' => TRUE])->toString(),
     ];
 
     if ($color) {
