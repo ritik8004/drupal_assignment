@@ -376,7 +376,9 @@ function alshaya_master_get_email_logo($theme = NULL, $lang = NULL) {
  *   Return array of logo path and url.
  */
 function alshaya_master_get_mobile_logo($theme = NULL, $lang = NULL) {
-  $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  if (empty($lang)) {
+    $lang = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  }
   return alshaya_master_get_custom_logo('mobile', $theme, $lang);
 }
 
