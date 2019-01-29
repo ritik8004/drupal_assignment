@@ -292,24 +292,7 @@ class CheckoutHelper {
     $cart->setExtension('store_code', NULL);
     $cart->setExtension('click_and_collect_type', NULL);
     $cart->clearPayment();
-
-    try {
-      $this->cartStorage->updateCart();
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error while updating cart while clearing shipping info: @message', [
-        '@message' => $e->getMessage(),
-      ]);
-
-      if (_alshaya_acm_is_out_of_stock_exception($e)) {
-        if ($cart = $this->cartStorage->getCart(FALSE)) {
-          $this->clearCacheForProductsInCart($cart);
-          $cart->setCheckoutStep('');
-        }
-      }
-
-      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
-    }
+    $this->updateCartWrapper(__FUNCTION__);
   }
 
   /**
@@ -471,23 +454,7 @@ class CheckoutHelper {
     $cart->setPaymentMethod($method, $data);
 
     if ($push) {
-      try {
-        $this->cartStorage->updateCart(FALSE);
-      }
-      catch (\Exception $e) {
-        $this->logger->error('Error while updating cart while setting selected payment method: @message', [
-          '@message' => $e->getMessage(),
-        ]);
-
-        if (_alshaya_acm_is_out_of_stock_exception($e)) {
-          if ($cart = $this->cartStorage->getCart(FALSE)) {
-            $this->clearCacheForProductsInCart($cart);
-            $cart->setCheckoutStep('');
-          }
-        }
-
-        throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
-      }
+      $this->updateCartWrapper(__FUNCTION__);
     }
 
     // Save the current selection into cache.
@@ -655,6 +622,42 @@ class CheckoutHelper {
     unset($full_address['address_id']);
     unset($full_address['customer_address_id']);
     return $full_address;
+  }
+
+  /**
+   * Wrapper function to update cart and handle exception.
+   *
+   * @param string $function
+   *   Function name invoking update cart for logs.
+   *
+   * @throws \Drupal\acq_commerce\Response\NeedsRedirectException
+   */
+  public function updateCartWrapper(string $function) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+    }
+
+    try {
+      $this->cartStorage->updateCart(FALSE);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while updating cart @cart_id, invoked from @function, exception: @message', [
+        '@message' => $e->getMessage(),
+        '@cart_id' => $cart->id(),
+        '@function' => $function,
+      ]);
+
+      if (_alshaya_acm_is_out_of_stock_exception($e)) {
+        if ($cart = $this->cartStorage->getCart(FALSE)) {
+          $this->clearCacheForProductsInCart($cart);
+          $cart->setCheckoutStep('');
+        }
+      }
+
+      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+    }
   }
 
 }
