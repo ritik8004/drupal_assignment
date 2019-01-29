@@ -1,0 +1,8 @@
+services:
+  acq_customer.commands:
+    class: \Drupal\acq_customer\Commands\AcqCustomerDrushCommands
+    arguments:
+      - '@database'
+      - '@logger.factory'
+    tags:
+      - { name: drush.command }
