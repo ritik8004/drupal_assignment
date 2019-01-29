@@ -195,7 +195,10 @@ class ProductResource extends ResourceBase {
     }
 
     $data = $this->getSkuData($skuEntity);
-    $data['link'] = $node->toUrl('canonical', ['absolute' => TRUE])->toString();
+    $data['link'] = $node->toUrl('canonical', ['absolute' => TRUE])
+      ->toString(TRUE)
+      ->getGeneratedUrl();
+
     $data['delivery_options'] = NestedArray::mergeDeepArray([$this->getDeliveryOptionsConfig($skuEntity), $data['delivery_options']], TRUE);
     $response = new ResourceResponse($data);
     $cacheableMetadata = $response->getCacheableMetadata();
