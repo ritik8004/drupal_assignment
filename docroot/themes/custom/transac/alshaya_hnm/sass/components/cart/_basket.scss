@@ -36,7 +36,7 @@
     .tooltip {
       font-family: $hnm-regular;
       top: 1.6rem;
-      border: 1px solid $tooltip_border_2;
+      border: 1px solid $tooltip_border;
       margin: 0;
 
       @include breakpoint($only-tablet) {
@@ -73,9 +73,20 @@
     }
   }
 
+  .tooltip::before,
   .tooltip::after {
+    @extend %tooltip-before-after;
+  }
+
+  .tooltip::after {
+    @extend %tooltip-after;
+
     border-bottom-width: 0.4375rem;
     bottom: calc(100% + -1px);
+  }
+
+  .tooltip::before {
+    @extend %tooltip-before;
   }
 }
 
