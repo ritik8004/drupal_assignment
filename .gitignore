@@ -149,3 +149,7 @@ alshaya_behat/vendor
 alshaya_behat/media
 
 scripts/integration/includes/global-api-settings.inc.sh
+
+behat_rework/bin
+behat_rework/vendor
+behat_rework/build/brands.yml

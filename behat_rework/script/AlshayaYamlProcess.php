@@ -1,9 +1,11 @@
 <?php
 
+namespace Alshaya\BehatBuild;
+
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
 
-class AlshayaBehatBase {
+class AlshayaYamlProcess {
 
   protected $parser;
 
@@ -28,14 +30,14 @@ class AlshayaBehatBase {
       $files[$market] = array_merge([TEMPLATE_DIR . '/variables/common.yml'], $market_common);
 
       $directory = TEMPLATE_DIR . '/variables/brands';
-      $brands_dirs = new DirectoryIterator($directory);
+      $brands_dirs = new \DirectoryIterator($directory);
 
       foreach ($brands_dirs as $brands_dir) {
 
-        $current_brand = $brands_dir->getBasename();
-        $files["{$current_brand}_{$market}"] = $files[$market];
-
         if (!$brands_dir->isDot() && $brands_dir->isDir()) {
+
+          $current_brand = $brands_dir->getBasename();
+          $files["{$current_brand}_{$market}"] = $files[$market];
 
           if (file_exists($brands_dir->getPathname() . "/{$current_brand}.yml")) {
             $files["{$current_brand}_{$market}"] = array_merge(
@@ -44,16 +46,16 @@ class AlshayaBehatBase {
             );
           }
 
-          if (file_exists($brands_dir->getPathname() . "/markets/$market.yml")) {
+          if (file_exists($brands_dir->getPathname() . "/markets/$market/$market.yml")) {
             $files["{$current_brand}_{$market}"] = array_merge(
               $files["{$current_brand}_{$market}"],
-              [$brands_dir->getPathname() . "/markets/$market.yml"]
+              [$brands_dir->getPathname() . "/markets/$market/$market.yml"]
             );
           }
 
 
           $env_directory = $brands_dir->getPathname() . "/env";
-          $env_dirs = new DirectoryIterator($env_directory);
+          $env_dirs = new \DirectoryIterator($env_directory);
 
           foreach ($env_dirs as $env_dir) {
             if (!$env_dir->isDot() && $env_dir->isDir()) {
@@ -68,7 +70,7 @@ class AlshayaBehatBase {
                 );
               }
 
-              $env_market_directory = $env_dir->getPathname() . "/markets/";
+              $env_market_directory = $env_dir->getPathname() . "/markets/$market/";
               if (file_exists($env_market_directory . "$market.yml")) {
 
                 $this->collectedFiles[$final_key] = array_merge(
@@ -145,13 +147,28 @@ class AlshayaBehatBase {
    * @param $content
    * @param $profile
    */
-  public function parePareBehatYaml($file, $content, $profile = NULL) {
+  public function prepareBehatYaml($file, $content, $profile = NULL) {
     $yaml = $this->getParsedContent($file);
+
+    $yaml['suites']['default']['paths'] = ["%paths.base%/templates/features/$profile"];
+
     // Update feature context variables array.
-    $featurecontext = &$yaml['suites']['default']['contexts'][0]['FeatureContext'];
-    $featurecontext['parameters'] = array_merge_recursive($featurecontext['parameters'], $content['variables']);
+//    if (isset($yaml['suites']['default']['contexts'][0]['Alshaya\BehatContexts\FeatureContext'])) {
+//      $featurecontext = &$yaml['suites']['default']['contexts'][0]['Alshaya\BehatContexts\FeatureContext'];
+//      $featurecontext['parameters'] = array_merge_recursive($featurecontext['parameters'], $content['variables']);
+//    }
+
     // Set the MinkExtension base_url to current site's base url.
-    $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $featurecontext['parameters']['base_url'] . '/';
+    if (isset($featurecontext['parameters']['base_url'])) {
+      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $content['variables']['base_url'] . '/';
+    }
+
+    if (isset($yaml['extensions']['kolevCustomized\MultilingualExtension'])) {
+      if (file_exists(__DIR__ . "/files/translations/$profile.yml")) {
+        $yaml['extensions']['kolevCustomized\MultilingualExtension']['translations'][] = "translations/$profile.yml";
+      }
+    }
+
     // Set the folder for report.
 //    if (!empty($profile)) {
 //      $yaml['formatters'] = [

@@ -1,0 +1,43 @@
+#behat.yml
+default:
+    autoload:
+        - '%paths.base%/build/bootstrap/Drupal'
+    suites:
+        default:
+            contexts:
+                - Alshaya\BehatContexts\FeatureContext:
+                      parameters: { }
+                - Drupal\DrupalExtension\Context\MinkContext
+                - Drupal\DrupalExtension\Context\DrupalContext
+                - Drupal\DrupalExtension\Context\MessageContext
+    extensions:
+        Behat\MinkExtension:
+            files_path: "%paths.base%/files"
+            browser_name: chrome
+            goutte:
+                guzzle_parameters:
+                    verify: false
+            javascript_session: selenium2
+            selenium2:
+                wd_host: http://127.0.0.1:4444/wd/hub
+#                capabilities:
+#                    chrome:
+#                        switches:
+#                            - "--headless"
+#                            - "--disable-gpu"
+#                            - "--window-size=1920,1080"
+#                            - "--no-sandbox"
+        Drupal\DrupalExtension:
+            blackbox: ~
+#        emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+#            name: html
+#            renderer: Twig,Behat2
+#            file_name: index
+#            print_args: true
+#            print_outp: true
+#            loop_break: true
+        kolevCustomized\MultilingualExtension:
+            default_language: en
+
+imports:
+    - build/brands.yml
