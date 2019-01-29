@@ -473,7 +473,7 @@ class SkuManager {
       return $prices;
     }
 
-    $cache_key = $color ? 'price_' . $color : $color;
+    $cache_key = $color ? 'price_' . $color : 'price';
 
     if ($cache = $this->getProductCachedData($sku_entity, $cache_key)) {
       return $cache;
