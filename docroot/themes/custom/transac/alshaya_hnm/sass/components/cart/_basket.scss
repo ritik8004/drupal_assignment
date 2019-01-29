@@ -84,7 +84,7 @@
     border-bottom-width: 0.4375rem;
     bottom: calc(100% + -1px);
   }
-  
+
   .tooltip::before {
     @extend %tooltip-before;
   }
