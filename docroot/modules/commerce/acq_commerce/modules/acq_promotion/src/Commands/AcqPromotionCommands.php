@@ -44,7 +44,7 @@ class AcqPromotionCommands extends DrushCommands {
    *   Run a full synchronization of all available cart promotions.
    * @param array $options
    */
-  public function synPromotions($options = ['types' => NULL]) {
+  public function syncPromotions($options = ['types' => NULL]) {
     if ($types = $options['types']) {
       $this->logger->notice(dt('Synchronizing all @types commerce promotions, this usually takes some time...', ['@types' => $types]));
       $types = explode(',', $types);

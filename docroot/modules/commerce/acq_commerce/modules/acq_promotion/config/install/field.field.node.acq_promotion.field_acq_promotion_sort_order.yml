@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_acq_promotion_sort_order
+    - node.type.acq_promotion
+id: node.acq_promotion.field_acq_promotion_sort_order
+field_name: field_acq_promotion_sort_order
+entity_type: node
+bundle: acq_promotion
+label: 'Sort Order'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

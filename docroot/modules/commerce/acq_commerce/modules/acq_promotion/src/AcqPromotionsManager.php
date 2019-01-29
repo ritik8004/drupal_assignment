@@ -300,6 +300,9 @@ class AcqPromotionsManager {
     // Set promotion coupon code.
     $promotion_node->get('field_coupon_code')->setValue($promotion['coupon_code']);
 
+    // Set promotion sort order.
+    $promotion_node->get('field_acq_promotion_sort_order')->setValue($promotion['order']);
+
     // Set the Promotion label.
     if (isset($promotion_label_languages[$site_default_langcode])) {
       $promotion_node->get('field_acq_promotion_label')->setValue($promotion_label_languages[$site_default_langcode]);

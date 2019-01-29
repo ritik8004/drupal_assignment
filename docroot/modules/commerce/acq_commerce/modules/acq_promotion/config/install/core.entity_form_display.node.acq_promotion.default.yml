@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.acq_promotion.field_acq_promotion_discount
     - field.field.node.acq_promotion.field_acq_promotion_label
     - field.field.node.acq_promotion.field_acq_promotion_rule_id
+    - field.field.node.acq_promotion.field_acq_promotion_sort_order
     - field.field.node.acq_promotion.field_acq_promotion_type
     - image.style.thumbnail
     - node.type.acq_promotion
@@ -44,6 +45,14 @@ content:
       progress_indicator: throbber
     third_party_settings: {  }
     region: content
+  field_acq_promotion_sort_order:
+    type: string_textfield
+    weight: 14
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_acq_promotion_data:
     weight: 15
     settings:
