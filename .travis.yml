@@ -120,6 +120,12 @@ deploy:
       branch: master
       php: 7.1
   - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: 2.1.x-hotfix
+      php: 7.1
+  - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"
     skip_cleanup: true
     on:
