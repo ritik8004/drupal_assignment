@@ -1,0 +1,5 @@
+alshaya_search_api.listing_page_settings:
+  title: 'Listing Page settings'
+  parent: acq_commerce.configuration
+  description: 'Listing Page settings'
+  route_name: alshaya_search_api.listing_page_settings

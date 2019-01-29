@@ -10,6 +10,31 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Disable shop by block and enable policies block in footer.
+ * Clear product cache.
+ */
+function alshaya_pb_transac_update_8008() {
+  // Disable shop by block.
+  $configs = [
+    'block.block.shopby',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  $configs = [
+    'block.block.footerstaticlinks',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+
+  // Clear product cache.
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update search placeholder based configurations.
  * Update arabic translations for search_field_placeholder.
  */
@@ -203,6 +228,12 @@ function alshaya_pb_transac_install() {
 
   // Re-save indexes to ensure config overrides are taken into consideration.
   _alshaya_search_resave_indexes();
+
+  // Disable shop by block.
+  alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_pb_transac', 'optional');
 }
 
 /**
@@ -211,6 +242,10 @@ function alshaya_pb_transac_install() {
 function alshaya_pb_transac_update_dependencies() {
   $dependencies['alshaya_pb_transac'][8004] = [
     'alshaya_search' => 8023,
+  ];
+  // Ensure the footer links menu is created first in alshaya_menus.
+  $dependencies['alshaya_pb_transac'][8008] = [
+    'alshaya_menus' => 8001,
   ];
   return $dependencies;
 }

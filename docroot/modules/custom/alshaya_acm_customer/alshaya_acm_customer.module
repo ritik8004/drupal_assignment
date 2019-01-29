@@ -359,7 +359,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
     $do_api_check = alshaya_acm_customer_is_customer($user);
 
     if ($do_api_check && !$user->isActive()) {
-      $form_state->setErrorByName('name', t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_error_message|account_already_exists']));
+      $form_state->setErrorByName('name', t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']));
       $do_api_check = FALSE;
     }
   }

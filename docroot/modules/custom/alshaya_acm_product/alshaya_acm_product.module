@@ -145,6 +145,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'title' => NULL,
       'text' => NULL,
+      'class' => NULL,
     ],
   ];
 
@@ -385,7 +386,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $build['cross_sell'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
-              '#section_title' => t('Customers also bought'),
+              '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
               '#views_name' => 'product_slider',
               '#views_display_id' => 'block_product_slider',
             ];
@@ -399,7 +400,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['up_sell'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
-            '#section_title' => t('You may also like'),
+            '#section_title' => t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
             '#views_name' => 'product_slider',
             '#views_display_id' => 'block_product_slider',
           ];
@@ -411,7 +412,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['related'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
-            '#section_title' => t('Related'),
+            '#section_title' => t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
             '#views_name' => 'product_slider',
             '#views_display_id' => 'block_product_slider',
           ];

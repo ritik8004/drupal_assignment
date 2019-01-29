@@ -153,7 +153,7 @@
    *   Slide slider slide selector for video slides.
    */
   function pauseVideos(slickSelector, videoSlideSelector) {
-    slickSelector.on('beforeChange', function (event, slick) {
+    slickSelector.once().on('beforeChange', function (event, slick) {
       var currentSlide;
       var slideType;
       var player;
