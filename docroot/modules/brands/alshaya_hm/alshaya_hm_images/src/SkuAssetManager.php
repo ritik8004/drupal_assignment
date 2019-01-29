@@ -124,22 +124,26 @@ class SkuAssetManager {
    *   Array of urls to sku assets.
    */
   public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE, array $avoid_assets = []) {
-    $sku = $sku instanceof SKU ? $sku->getSku() : $sku;
+    $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+    $sku = $skuEntity->getSku();
 
-    $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
-    $sku_property_values = $this->skuManager->getSkuPropertyValue($sku, ['attr_assets__value']);
+    $assets_data = $skuEntity->get('attr_assets')->getValue();
 
-    if (($sku_property_values) &&
-      !empty($unserialized_assets = unserialize($sku_property_values->attr_assets__value))) {
-      $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+    if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
+      $unserialized_assets = unserialize($assets_data[0]['value']);
+
+      if ($unserialized_assets) {
+        $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+      }
     }
-
-    $asset_variant_urls = [];
-    $asset_urls = [];
 
     if (empty($assets)) {
       return [];
     }
+
+    $asset_variant_urls = [];
+    $asset_urls = [];
+    $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
 
     foreach ($location_images as $location_image) {
       $asset_urls = [];
@@ -600,32 +604,6 @@ class SkuAssetManager {
     $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
 
     return $article_castor_ids;
-  }
-
-  /**
-   * Helper function to get SKU based on Castor Id.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $parent_sku
-   *   Parent Sku.
-   * @param int $rgb_color_label
-   *   Castor id for which child sku needs to be fetched.
-   *
-   * @return array|SKU
-   *   Array of SKUs or single SKU object matching the castor id.
-   */
-  public function getChildSkuFromColor(SKU $parent_sku, $rgb_color_label) {
-    $child_skus = $this->skuManager->getChildrenSkuIds($parent_sku);
-
-    if (empty($child_skus)) {
-      return NULL;
-    }
-
-    foreach ($child_skus as $child_sku) {
-      if (!empty($sku_attributes = $this->skuManager->getSkuPropertyValue($child_sku, ['attr_color_label'])) &&
-        ($sku_attributes->attr_color_label == $rgb_color_label)) {
-        return $child_sku;
-      }
-    }
   }
 
   /**
