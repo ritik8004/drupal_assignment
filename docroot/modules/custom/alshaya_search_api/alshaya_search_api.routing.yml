@@ -1,0 +1,7 @@
+alshaya_search_api.listing_page_settings:
+  path: '/admin/commerce/config/listing-pages'
+  defaults:
+    _form: '\Drupal\alshaya_search_api\Form\AlshayaListingSettingsForm'
+    _title: 'Listing Page settings'
+  requirements:
+    _permission: 'administer alshaya config'

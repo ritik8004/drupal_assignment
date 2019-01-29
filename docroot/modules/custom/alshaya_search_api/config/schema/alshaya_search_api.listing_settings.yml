@@ -1,0 +1,7 @@
+alshaya_search_api.listing_settings:
+  type: config_object
+  label: 'Alshaya ACM Product listing settings'
+  mapping:
+    filter_oos_product:
+      type: boolean
+      label: 'Filter out of stock products in listing pages'

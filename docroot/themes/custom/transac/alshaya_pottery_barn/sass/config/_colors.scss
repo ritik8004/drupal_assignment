@@ -43,6 +43,7 @@ $_gray_thirteen: #efefef;
 $_gray_fourteen: #f3f3f3;
 $_gray_fifteen: #acacac;
 $_grey_sixteen: #696969;
+$_grey_seventeen: #b4b3b3;
 
 // Overrides for variables.
 // Global elements.
@@ -243,6 +244,11 @@ $deliverybanner_link: $_black_two;
 $footer_bg: $PB_grey_five;
 $footer_title_h3: $_black_two;
 $footer_link_hover: $PB_deep_red;
+$_footer_mobile_accordion_border: $white;
+
+// Our Brands.
+$our_brands_footer_separator: $_grey_seventeen;
+$our_brand_section_title: $_black_two;
 
 // Copyright Footer.
 $copyright_footer_bg: $white-two;

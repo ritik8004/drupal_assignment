@@ -272,21 +272,29 @@
 }
 
 @include breakpoint($only-mobile) {
-  .basic-details-wrapper {
-    .field--name-field-skus {
-      #configurable_ajax {
-        width: 100%;
-        margin-#{$right}: 0;
-      }
-
-      .form-item {
-        &.form-item-quantity {
+  .c-pdp {
+    .basic-details-wrapper {
+      .field--name-field-skus {
+        #configurable_ajax {
           width: 100%;
-          margin-bottom: 1.5rem;
+          margin-#{$right}: 0;
+        }
+
+        .form-item {
+          &.form-item-quantity {
+            width: 100%;
+            margin-bottom: 1.5rem;
+
+            select {
+              &.form-select {
+                width: 100%;
+              }
+            }
+          }
 
           select {
             &.form-select {
-              width: 100%;
+              font-size: 0.875rem;
             }
           }
         }
