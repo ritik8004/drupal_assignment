@@ -12,6 +12,21 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Do not show oos product for h&m.
+ */
+function alshaya_hm_update_8029() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_search_api.listing_settings'],
+    'alshaya_hm',
+    'override'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Install alshaya_mobile_app module.
  */
 function alshaya_hm_update_8028() {

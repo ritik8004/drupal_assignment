@@ -6,6 +6,21 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Adds Footer static links menu, an additional menu that can be used by brand
+ * modules to place another static links block in footer.
+ */
+function alshaya_menus_update_8001() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['system.menu.footer-static-links'],
+    'alshaya_menus',
+    'install'
+  );
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_menus_install() {

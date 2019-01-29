@@ -6,10 +6,15 @@ alshaya_search.term_search:
 
 alshaya_search.srp_sort_settings_form:
   route_name: alshaya_search.srp_sort_settings_form
+  title: 'SRP settings'
+  base_route: alshaya_search_api.listing_page_settings
+
+alshaya_search.srp_sort_settings_form.form:
+  route_name: alshaya_search.srp_sort_settings_form
   title: 'SRP sort label settings'
-  base_route: alshaya_search.srp_sort_settings_form
+  parent_id: alshaya_search.srp_sort_settings_form
 
 alshaya_search.srp_sort_label_settings_form:
-  base_route: alshaya_search.srp_sort_settings_form
   route_name: alshaya_search.srp_sort_label_settings_form
   title: 'SRP sort labels'
+  parent_id: alshaya_search.srp_sort_settings_form
