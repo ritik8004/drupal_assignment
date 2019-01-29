@@ -100,7 +100,7 @@ schemas:
           "required": [ "media", "url" ]
         }
       }
-  - GetErrorMessages: |
+  - GetStaticTexts: |
       {
         "$schema": "http://json-schema.org/draft-04/schema",
         "type": "array",
@@ -1651,14 +1651,14 @@ schemas:
                     "url": "https://www.instagram.com/hm/"
                   }
                 ]
-  /error-messages:
+  /get-static-texts:
     get:
-      description: Get the error messages to be displayed on the frontend after validation.
+      description: Get the static texts to be displayed on the frontend.
       responses:
         200:
           body:
             application/json:
-              schema: GetErrorMessages
+              schema: GetStaticTexts
               example: |
                 [
                   {

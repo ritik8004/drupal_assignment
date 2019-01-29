@@ -1,6 +1,6 @@
 permissions:
   - 'restful get delivery_methods'
-  - 'restful get alshaya_error_messages'
+  - 'restful get alshaya_static_texts'
   - 'restful get social_media_links'
   - 'restful get categories'
   - 'restful get promotions'
