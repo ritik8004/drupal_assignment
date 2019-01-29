@@ -15,13 +15,9 @@ use Drupal\search_api\Entity\Index;
  * Do not show oos product for h&m.
  */
 function alshaya_hm_update_8029() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  $manager->updateConfigs(
-    ['alshaya_search_api.listing_settings'],
-    'alshaya_hm',
-    'override'
-  );
+  \Drupal::configFactory()->getEditable('alshaya_search_api.listing_settings')
+    ->set('filter_oos_product', TRUE)
+    ->save();
 }
 
 /**
