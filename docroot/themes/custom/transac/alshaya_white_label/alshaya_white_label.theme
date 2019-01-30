@@ -15,6 +15,7 @@ use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
+use Drupal\block_content\BlockContentInterface;
 use Drupal\file\Entity\File;
 
 /**
@@ -277,7 +278,13 @@ function alshaya_white_label_preprocess_block(&$variables) {
     }
 
     // Check if block is our brands block.
-    $block_id = $variables['elements']['content']['#block_content']->get('template_suggestion')->value;
+    /* @var \Drupal\block_content\Entity\BlockContent $block_content*/
+    $block_content = $variables['elements']['content']['#block_content'];
+    $block_id = '';
+    if ($block_content instanceof BlockContentInterface
+      && $block_content->hasField('template_suggestion')) {
+      $block_id = $block_content->get('template_suggestion')->getString();
+    }
     if ($block_id === 'block__ourbrands') {
       $paragraph_content = $variables['elements']['content']['#block_content']->get('field_paragraph_content')->getValue();
       $brands = [];
