@@ -30,7 +30,6 @@ use Drupal\node\NodeInterface;
 use Drupal\pathauto\PathautoState;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\simple_sitemap\Simplesitemap;
-use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\taxonomy\TermInterface;
@@ -2703,14 +2702,23 @@ class SkuManager {
 
     // Delete all the nodes for which color nodes were not updated now.
     if ($nids) {
-      $nids = array_flip($nids);
-      // Mark color nodes for deletion later in process.
-      ProcessFinishEventSubscriber::$colorNodesToBeDeleted = array_merge(ProcessFinishEventSubscriber::$colorNodesToBeDeleted, $nids);
-      $this->logger->info('Color nodes:@nids of node:@pid marked for deletion in method:@method.', [
-        '@nids' => implode(',', $nids),
-        '@pid' => $node->id(),
-        '@method' => 'SkuManager::processColorNodesForConfigurable',
-      ]);
+      try {
+        $nids = array_flip($nids);
+        $nodes = $this->nodeStorage->loadMultiple($nids);
+        $this->nodeStorage->delete($nodes);
+        $this->logger->info('Deleted color nodes as no variants available now for them. Color node ids: @ids, Parent Node id: @id', [
+          '@ids' => implode(',', $nids),
+          '@id' => $node->id(),
+        ]);
+      }
+      catch (\Exception $e) {
+        \Drupal::logger('alshaya_acm_product')->error('Error while deleting color nodes: @nids of parent node: @pid Message: @message in method: @method', [
+          '@nids' => implode(',', $nids),
+          '@pid' => $node->id(),
+          '@message' => $e->getMessage(),
+          '@method' => 'SkuManager::processColorNodesForConfigurable',
+        ]);
+      }
     }
   }
 

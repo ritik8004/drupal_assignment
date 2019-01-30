@@ -87,7 +87,6 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
-      - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
   alshaya_acm_product.acq_sku_validate_event:

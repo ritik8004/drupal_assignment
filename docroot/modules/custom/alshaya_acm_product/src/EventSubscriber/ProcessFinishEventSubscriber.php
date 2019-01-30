@@ -6,7 +6,6 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\Commands\AlshayaAcmProductCommands;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
@@ -30,17 +29,6 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
   public static $colorNodeSkus = [];
 
   /**
-   * Contains color node nids those will be deleted.
-   *
-   * @var array
-   *   Array of color node nids.
-   *
-   * @see alshaya_acm_product_node_delete().
-   * @see \Drupal\alshaya_acm_product\SkuManager::processColorNodesForConfigurable().
-   */
-  public static $colorNodesToBeDeleted = [];
-
-  /**
    * SKU Manager.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -55,28 +43,17 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
   protected $entityTypeManager;
 
   /**
-   * Logger channel.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelInterface
-   */
-  protected $logger;
-
-  /**
    * ProcessFinishEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
-   *   Logger factory.
    */
   public function __construct(SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager,
-                              LoggerChannelFactoryInterface $logger_factory) {
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->logger = $logger_factory->get('ProcessFinishEventSubscriber');
   }
 
   /**
@@ -98,9 +75,6 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    // Deleting the color node.
-    $this->deleteColorNodes();
-    // Process search index for the color nodes of the skus.
     $this->processSkuColorNodes();
   }
 
@@ -111,7 +85,6 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function postDrushCommand(Event $event) {
-    $this->deleteColorNodes();
     $this->processSkuColorNodes();
   }
 
@@ -129,30 +102,6 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
             search_api_entity_update($node);
           }
         }
-      }
-    }
-  }
-
-  /**
-   * Deletes the color nodes.
-   */
-  protected function deleteColorNodes() {
-    if (!empty(self::$colorNodesToBeDeleted)) {
-      try {
-        $storage = $this->entityTypeManager->getStorage('node');
-        $color_nodes = $storage->loadMultiple(self::$colorNodesToBeDeleted);
-        $storage->delete($color_nodes);
-        $this->logger->notice('Color nodes:@color_nids deleted successfully in method: @method.', [
-          '@color_nids' => implode(',', self::$colorNodesToBeDeleted),
-          '@method' => 'ProcessFinishEventSubscriber::deleteColorNodes()',
-        ]);
-      }
-      catch (\Exception $e) {
-        $this->logger->error('Error while deleting color nodes: @nids in method: @method. Message: @message.', [
-          '@nids' => implode(',', self::$colorNodesToBeDeleted),
-          '@message' => $e->getMessage(),
-          '@method' => 'ProcessFinishEventSubscriber::deleteColorNodes()',
-        ]);
       }
     }
   }
