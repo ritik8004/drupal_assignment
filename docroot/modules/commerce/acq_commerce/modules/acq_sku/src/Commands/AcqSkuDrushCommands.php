@@ -301,10 +301,10 @@ class AcqSkuDrushCommands extends DrushCommands {
 
       // If there are categories to delete.
       if (!empty($result)) {
+        // Show `cat name + tid + commerce id` for review.
+        $this->io()->table([dt('Category Name'), dt('Category Id'), dt('Category Commerce Id')], $result);
         // Confirmation to delete old categories.
-        if ($this->io()->confirm(dt('Are you sure you want to clean old categories @cat', [
-          '@cat' => json_encode(array_column($result, 'name')),
-        ]), FALSE)) {
+        if ($this->io()->confirm(dt('Are you sure you want to clean these old categories'), FALSE)) {
 
           // Allow other modules to skipping the deleting of terms.
           $this->moduleHandler->alter('acq_sku_sync_categories_delete', $result);
