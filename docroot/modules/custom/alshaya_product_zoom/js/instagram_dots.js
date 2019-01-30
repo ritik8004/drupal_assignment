@@ -9,11 +9,11 @@
   'use strict';
   var transformValueBackward = 19;
   var transformValueForward = -19;
+  var maxDots = 5;
   Drupal.behaviors.pdpInstagranDots = {
     attach: function (context, settings) {
       // Slick Selector.
       var slickSlider = $('#product-image-gallery-mobile, #product-image-gallery-mob', context);
-      var maxDots = 5;
       // Distance in px - by how much you want to move the dots.
       // Negative for Forward/Next direction.
       var transformXIntervalNext = isRTL() ? transformValueBackward : transformValueForward;
@@ -102,7 +102,11 @@
    * @param slick
    */
   Drupal.behaviors.pdpInstagranDots.initialSetup = function (slick) {
-    // Add a container for transform.
+    // Add a container for transform and slide count.
+    var dotsCount = slick.find('ul.slick-dots li').length;
+    if (dotsCount <= maxDots) {
+      slick.find('ul.slick-dots').addClass('i-dots-inactive');
+    }
     slick.find('ul.slick-dots').wrapInner('<div class="slick-dots-container"></div>');
     // Add a class to the dots so we don't mess other sliders.
     slick.find('ul.slick-dots').addClass('i-dots');
