@@ -2706,10 +2706,9 @@ class SkuManager {
       $nids = array_flip($nids);
       // Mark color nodes for deletion later in process.
       ProcessFinishEventSubscriber::$colorNodesToBeDeleted = array_merge(ProcessFinishEventSubscriber::$colorNodesToBeDeleted, $nids);
-      $this->logger->info('Color nodes:@nids of node:@pid sku:@sku marked for deletion in method:@method.', [
+      $this->logger->info('Color nodes:@nids of node:@pid marked for deletion in method:@method.', [
         '@nids' => implode(',', $nids),
         '@pid' => $node->id(),
-        '@sku' => $sku_string,
         '@method' => 'SkuManager::processColorNodesForConfigurable',
       ]);
     }
