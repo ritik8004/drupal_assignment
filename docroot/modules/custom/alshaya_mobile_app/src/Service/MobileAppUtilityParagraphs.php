@@ -63,13 +63,6 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
   protected $serializer;
 
   /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
    * The entity field manager.
    *
    * @var \Drupal\Core\Entity\EntityFieldManagerInterface
@@ -130,11 +123,10 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
     ConfigFactoryInterface $config_factory,
     APIWrapper $api_wrapper
   ) {
-    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper);
+    parent::__construct($cache, $language_manager, $request_stack, $alias_manager, $entity_type_manager, $entity_repository, $sku_manager, $sku_images_manager, $module_handler, $product_category_tree, $config_factory, $api_wrapper, $renderer);
     $this->entityFieldManager = $entity_field_manager;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->serializer = $serializer;
-    $this->renderer = $renderer;
     $this->paragraphBaseFields = $this->entityFieldManager->getBaseFieldDefinitions('paragraph');
   }
 
