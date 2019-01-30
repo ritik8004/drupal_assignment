@@ -69,6 +69,9 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
+  # Allow well-known links to be passed to Drupal.
+  RewriteRule ^(\.well-known)/(.*)$ /.well-known/$2.php [L,NC]
+
   # Rewrite rule to remove .html and remove kwt-* from url.
   RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
 
