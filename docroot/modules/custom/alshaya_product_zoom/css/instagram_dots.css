@@ -21,6 +21,10 @@ ul.i-dots.slick-dots > .slick-dots-container {
   align-items: center;
 }
 
+ul.i-dots-inactive.i-dots {
+  justify-content: center;
+}
+
 .i-dots .slick-dots-container > li {
   width: 0.6875rem !important;
   height: 0.6875rem !important;
