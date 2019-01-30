@@ -301,8 +301,8 @@ class AcqSkuDrushCommands extends DrushCommands {
 
       // If there are categories to delete.
       if (!empty($result)) {
-        // Show `cat name + tid + commerce id` for review.
-        $this->io()->table([dt('Category Name'), dt('Category Id'), dt('Category Commerce Id')], $result);
+        // Show `tid + cat name + commerce id` for review.
+        $this->io()->table([dt('Category Id'), dt('Category Name'), dt('Category Commerce Id')], $result);
         // Confirmation to delete old categories.
         if ($this->io()->confirm(dt('Are you sure you want to clean these old categories'), FALSE)) {
 
