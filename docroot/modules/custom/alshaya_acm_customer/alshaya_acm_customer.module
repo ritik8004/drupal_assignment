@@ -364,11 +364,9 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
     }
   }
   elseif (strpos($mail, '@') === FALSE) {
-    $module_implements = \Drupal::cache('bootstrap')->get('module_implements');
-    $module_implements_cache = [];
-    if ($module_implements && isset($module_implements->data)) {
-      $module_implements_cache = $module_implements->data['module_implements_alter'] ?? [];
-    }
+    $bootstrap = \Drupal::cache('bootstrap');
+    $module_implements = $bootstrap->get('module_implements');
+    $module_implements_cache = $module_implements->data ?? [];
 
     $modules = array_keys(\Drupal::getContainer()->getParameter('container.modules'));
 
@@ -379,6 +377,7 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
         'form_validate' => $form['#validate'],
         'module_implements_cache' => $module_implements_cache,
         'modules_container_parameter' => $modules,
+        'bootstrap_class' => get_class($bootstrap),
       ]),
     ]);
   }
