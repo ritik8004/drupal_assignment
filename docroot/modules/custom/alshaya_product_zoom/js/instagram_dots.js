@@ -104,7 +104,7 @@
   Drupal.behaviors.pdpInstagranDots.initialSetup = function (slick) {
     // Add a container for transform and slide count.
     var dotsCount = slick.find('ul.slick-dots li').length;
-    if (dotsCount <= maxDots) {
+    if (dotsCount < maxDots) {
       slick.find('ul.slick-dots').addClass('i-dots-inactive');
     }
     slick.find('ul.slick-dots').wrapInner('<div class="slick-dots-container"></div>');
