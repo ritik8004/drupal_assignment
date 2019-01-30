@@ -2964,4 +2964,44 @@ class SkuManager {
     return $prod_description;
   }
 
+  /**
+   * Helper function to invalidate PDP page caches.
+   */
+  public function invalidatePdpCache($term = NULL) {
+    if ($term instanceof TermInterface) {
+      $nids = $this->getNodesFromTermId($term->id());
+      foreach ($this->termStorage->loadTree('acq_product_category', $term->id(), NULL, TRUE) as $taxonomy_child) {
+        $pdp_layout = $taxonomy_child->get('field_pdp_layout')->getString() ?? NULL;
+        if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+          $nids = array_merge($nids, $this->getNodesFromTermId($taxonomy_child->id()));
+        }
+      }
+      foreach ($nids as $nid) {
+        Cache::invalidateTags([
+          'config:node.type.acq_product:' . $nid,
+          'node_type:acq_product:' . $nid,
+          'node_view',
+        ]);
+      }
+    }
+    else {
+      Cache::invalidateTags([
+        'config:node.type.acq_product',
+        'node_type:acq_product',
+        'node_view',
+      ]);
+    }
+  }
+
+  /**
+   * Helper function to get all nids associated with a term.
+   */
+  public function getNodesFromTermId($tid = '') {
+    $query = $this->connection->select('node__field_category', 'nc');
+    $query->fields('nc', ['entity_id']);
+    $query->condition('nc.field_category_target_id', $tid);
+    $query->distinct();
+    return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
 }
