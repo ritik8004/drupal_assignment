@@ -299,10 +299,9 @@ function alshaya_acm_product_node_delete(NodeInterface $node) {
       if ($nids) {
         // Mark color nodes for deletion later in process.
         ProcessFinishEventSubscriber::$colorNodesToBeDeleted = array_merge(ProcessFinishEventSubscriber::$colorNodesToBeDeleted, $nids);
-        \Drupal::logger('alshaya_acm_product')->info('Color nodes:@nids of node:@pid of sku:@sku marked for deletion in method:@method.', [
+        \Drupal::logger('alshaya_acm_product')->info('Color nodes:@nids of node:@pid marked for deletion in method:@method.', [
           '@nids' => implode(',', $nids),
           '@pid' => $node->id(),
-          '@sku' => $sku,
           '@method' => 'alshaya_acm_product_node_delete',
         ]);
       }
