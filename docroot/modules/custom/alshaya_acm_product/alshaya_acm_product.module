@@ -474,7 +474,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           if (alshaya_acm_product_available_home_delivery($sku)) {
             $home_delivery_config = alshaya_acm_product_get_home_delivery_config();
 
-            // @TODO: Next day delivery not done for now.
+            // @TODO: Next day delivery not available for now.
             $build['home_delivery'] = [
               '#theme' => 'pdp_delivery_option',
               '#title' => $home_delivery_config['title'],
