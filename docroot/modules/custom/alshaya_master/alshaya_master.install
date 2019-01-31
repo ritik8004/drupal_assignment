@@ -14,7 +14,7 @@ use Drupal\Core\Config\FileStorage;
  *
  * Also uninstalls some modules that should not be enabled on any site.
  */
-function alshaya_master_update_8022() {
+function alshaya_master_update_8023() {
   // Install link_attributes module.
   if (!\Drupal::moduleHandler()->moduleExists('link_attributes')) {
     \Drupal::service('module_installer')->install(['link_attributes'], TRUE);
