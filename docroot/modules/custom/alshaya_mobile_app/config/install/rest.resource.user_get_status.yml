@@ -5,12 +5,12 @@ dependencies:
     - alshaya_mobile_app
     - serialization
     - simple_oauth
-id: alshaya_error_messages
-plugin_id: alshaya_error_messages
+id: user_get_status
+plugin_id: user_get_status
 granularity: method
 configuration:
   GET:
     supported_formats:
       - json
     supported_auth:
-      - cookie
+      - oauth2

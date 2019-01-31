@@ -3,6 +3,8 @@
  * Custom js file.
  */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -109,61 +111,40 @@
 
   Drupal.behaviors.pdpModal = {
     attach: function (context, settings) {
-
-      // If the product opens in modal,
-      // populate the hidden field with correct context.
-      if ($(context).filter('article[data-vmode="modal"]').length === 1) {
-        $('.nodetype--acq_product #drupal-modal input.hidden-context, .path--cart #drupal-modal input.hidden-context').val('modal');
-      }
-
-      /**
-       * Helper function to remove classes from body when dailog is closed.
-       *
-       * @param {*} className
-       * The classname to be removed from body.
-       */
-      function modalCloseBtnEvent(className) {
-        $('.ui-dialog-titlebar-close').on('click', function () {
+      function modalOverlay(button, className) {
+        $(button).click(function () {
           $('body').removeClass(className);
         });
       }
 
-      /**
-       * Helper function to add classes to body when ajax dailog is opened.
-       *
-       * @param {*} ajaxString
-       * The string fragment from AJAX URL which can help us
-       * identify the AJAX request.
-       * @param {*} className
-       * The className to be added on body tag.
-       */
-      function modalClasses(ajaxString, className) {
-        $(document).ajaxComplete(function (event, xhr, settings) {
-          if (settings.url.indexOf(ajaxString) !== -1) {
-            $('body').addClass(className);
-          }
-          modalCloseBtnEvent(className);
-        });
-      }
-
-      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').on('click', function () {
-        modalClasses('product-quick-view', 'pdp-modal-overlay');
-      });
-
-      $('.size-guide-link').on('click', function () {
-        modalClasses('size-guide', 'sizeguide-modal-overlay');
-      });
-
-      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').on('click', function () {
-        $('body').addClass('free-gifts-modal-overlay');
-        modalCloseBtnEvent('free-gifts-modal-overlay');
+      $('.nodetype--acq_product .owl-carousel .above-mobile-block, .path--cart .owl-carousel .above-mobile-block').click(function () {
+        $('body').addClass('pdp-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
 
         $(document).ajaxComplete(function () {
-          modalCloseBtnEvent('free-gifts-modal-overlay');
+          modalOverlay('.ui-dialog-titlebar-close', 'pdp-modal-overlay');
         });
       });
 
-      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay', 'social-modal-overlay'];
+      $('.size-guide-link ').click(function () {
+        $('body').addClass('sizeguide-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'sizeguide-modal-overlay');
+        });
+      });
+
+      $('.free-gift-title a, .free-gift-image a, .path--cart #table-cart-items table tr td.name a').click(function () {
+        $('body').addClass('free-gifts-modal-overlay');
+        modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
+
+        $(document).ajaxComplete(function () {
+          modalOverlay('.ui-dialog-titlebar-close', 'free-gifts-modal-overlay');
+        });
+      });
+
+      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
 
       $(document).on('keyup', function (evt) {
         // Remove class when esc button is used to remove the overlay.
@@ -214,15 +195,34 @@
   };
 
   // Add class to footer region when our brands block is present.
-  Drupal.behaviors.slugBannerModal = {
+  Drupal.behaviors.ourBrandsBlock = {
     attach: function (context, settings) {
-      // Check if our brands block is present in the footer to re-adjust the margin.
-      if ($('.c-our-brands').length) {
-        $('.c-footer, .c-post-content').addClass('our-brand-processed');
+
+      /**
+       * Place the Our brands block as per resolution.
+       */
+      function placeOurBrandsBlock() {
         // In mobile move the block after footer--menu.
         if ($(window).width() < 768) {
           $('footer .c-our-brands').insertAfter('.footer--menu');
         }
+        // In desktop the block is above footer.
+        if ($(window).width() > 1024) {
+          $('footer .c-our-brands').insertBefore('.c-footer-primary');
+        }
+        // In tablet the correct position is inside the default footer region wrapper.
+        if ($(window).width() > 767 && $(window).width() < 1025) {
+          $('.region__footer-primary').append($('footer .c-our-brands'));
+        }
+      }
+
+      // Check if our brands block is present in the footer to re-adjust the position.
+      if ($('.c-our-brands').length) {
+        placeOurBrandsBlock();
+        // Limiting via debounce to 200ms.
+        $(window).on('resize', debounce(function () {
+          placeOurBrandsBlock();
+        }, 200));
       }
     }
   };

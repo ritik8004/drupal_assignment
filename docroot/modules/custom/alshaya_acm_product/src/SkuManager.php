@@ -2003,12 +2003,26 @@ class SkuManager {
 
       $swatch_item = $child->getSwatchImage();
 
+      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
+        $swatch_product_image = $child->getThumbnail();
+
+        // If we have image for the product.
+        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+          $uri = $swatch_product_image['file']->getFileUri();
+          $url = file_create_url($uri);
+          $swatch_product_image_url = file_url_transform_relative($url);
+        }
+      }
+
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
         continue;
       }
 
       $duplicates[$value] = 1;
-      $swatches[$child->id()] = $swatch_item['file']->url();
+      $swatches[$child->id()] = [
+        'swatch_url' => $swatch_item['file']->url(),
+        'swatch_product_url' => $swatch_product_image_url ?? '',
+      ];
     }
 
     $this->setProductCachedData($sku, 'swatches', $swatches);
@@ -2419,9 +2433,31 @@ class SkuManager {
       }
     }
 
+    $select_from_query = TRUE;
+
+    // Check if we need the select the variant only after all
+    // options are selected.
+    if ($this->showImagesFromChildrenAfterAllOptionsSelected()) {
+      // If there is only one attribute, we will have selection by default.
+      // If there are more then one attributes, we will select by default only
+      // if there is one value in that specific attribute.
+      // Here we say not to select variant from query ?selected=xxx if there
+      // is any attribute (except the first one) which has more then one value.
+      if (count($combinations['attribute_sku']) > 1) {
+        // Remove first attribute.
+        array_shift($combinations['attribute_sku']);
+        foreach ($combinations['attribute_sku'] as $values) {
+          if (count($values) > 1) {
+            $select_from_query = FALSE;
+            break;
+          }
+        }
+      }
+    }
+
     // If there is only one attribute option or config says select one
     // child if only one attribute is selected, process further.
-    if (!$this->showImagesFromChildrenAfterAllOptionsSelected() || (count($combinations['attribute_sku']) === 1)) {
+    if ($select_from_query) {
       // Select first child based on value provided in query params.
       $sku_id = (int) $this->currentRequest->query->get('selected');
 

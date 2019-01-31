@@ -100,6 +100,9 @@ class AlshayaSearchGranular extends SearchApiGranular {
       $displayValue = t('@start - @stop', $t_options)->render();
     }
 
+    // Invoke the alter hook to allow all modules to update the price facet.
+    \Drupal::moduleHandler()->alter('alshaya_search_facet_price', $range, $displayValue);
+
     return [
       'display' => $displayValue,
       'raw' => $range['start'],

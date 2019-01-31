@@ -15,44 +15,38 @@
   }
 
   @include breakpoint($only-mobile) {
-    margin: 1.5rem 0 0;
+    margin: 1.5rem 0.5rem 0;
   }
 
-  .region__post-content & {
+  @include breakpoint($desktop) {
     background: $footer_bg;
     border-bottom: 1px solid $our_brands_footer_separator;
 
-    @include breakpoint($desktop) {
-      .brand-list {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        width: 43.75rem;
-        margin: 1.3125rem auto;
+    .brand-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 64.125rem;
+      margin: 0 auto 1.8125rem;
 
-        .brand {
-          margin: 0 2.125rem;
-        }
-      }
-
-      .section-title {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: $alshaya-bold;
-        font-size: 0.875rem;
-        color: $our_brand_section_title;
-        padding: 0.875rem 0;
-      }
-
-      .brand img {
-        max-height: 1.125rem;
+      .brand {
+        margin: 0.875rem 2.125rem 0;
       }
     }
 
-    @include breakpoint($upto-desktop) {
-      display: none;
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+      color: $our_brand_section_title;
+      padding: 0.875rem 0;
+    }
+
+    .brand img {
+      max-height: 1.125rem;
     }
   }
 
@@ -66,7 +60,7 @@
       }
 
       .brand {
-        margin: 0 0.625rem;
+        margin: 0 0.625rem 0.625rem 0;
         font-size: 0.875rem;
 
         a {
@@ -92,14 +86,8 @@
   }
 }
 
-.our-brand-processed {
-  @include breakpoint($desktop) {
-    &.c-footer {
-      padding-top: 0;
-    }
-
-    &.c-post-content {
-      padding-top: 3.75rem;
-    }
+footer > .c-our-brands {
+  @include breakpoint($upto-desktop) {
+    display: none;
   }
 }
