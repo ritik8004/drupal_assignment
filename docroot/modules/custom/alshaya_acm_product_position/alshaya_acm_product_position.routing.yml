@@ -1,5 +1,5 @@
 alshaya_acm_product_position.plp_sort_settings_admin_form:
-  path: '/admin/commerce/config/plp-sort-settings'
+  path: '/admin/commerce/config/listing-pages/plp-sort-settings'
   defaults:
     _form: '\Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm'
     _title: 'PLP Sort Settings'
@@ -7,7 +7,7 @@ alshaya_acm_product_position.plp_sort_settings_admin_form:
     _permission: 'access commerce administration pages'
 
 alshaya_acm_product_position.plp_sort_label_settings:
-  path: '/admin/commerce/config/plp-sort-settings/label'
+  path: '/admin/commerce/config/listing-pages/plp-sort-settings/label'
   defaults:
     _form: '\Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortLabelSettingsForm'
     _title: 'PLP Sort Labels'

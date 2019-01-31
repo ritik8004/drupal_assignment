@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-static-links
+  module:
+    - system
+  theme:
+    - alshaya_pottery_barn
+id: footerstaticlinks
+theme: alshaya_pottery_barn
+region: footer_primary
+weight: -46
+provider: null
+plugin: 'system_menu_block:footer-static-links'
+settings:
+  id: 'system_menu_block:footer-static-links'
+  label: Policies
+  provider: system
+  label_display: visible
+  level: 1
+  depth: 0
+visibility: {  }

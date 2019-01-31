@@ -260,6 +260,10 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/stock_check';
+
+        if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
+          $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
+        }
       }
     }
 
