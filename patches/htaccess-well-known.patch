@@ -7,7 +7,7 @@ index d20700cc1..f751b908b 100644
    RewriteEngine on
 
 +  # Allow well-known links to be passed to Drupal.
-+  RewriteRule ^(\.well-known)/(.*)$ /.well-known/$2.php [L,NC]
++  RewriteRule ^(\.well-known)/(.*)$ /.well-known/$2.php [END,NC]
 +
    # Rewrite rule to remove .html and remove kwt-* from url.
    RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
