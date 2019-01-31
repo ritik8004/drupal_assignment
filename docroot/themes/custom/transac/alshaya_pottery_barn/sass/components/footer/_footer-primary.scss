@@ -5,10 +5,40 @@
     background: $PB_grey_five;
   }
 
+  .footer--static-links {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 11.4%;
+      width: 28%;
+    }
+
+    .c-footer-menu {
+      width: 100%;
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $right;
+      margin-#{$left}: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      float: none;
+      margin-bottom: 2.25em;
+      border-bottom: 1px solid $_footer_mobile_accordion_border;
+    }
+  }
+
+  .c-footer-menu--help {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+  }
+
   .c-footer-menu--about,
   .c-footer-menu--help,
   .c-footer-menu--category,
-  .block-alshaya-newsletter {
+  .block-alshaya-newsletter,
+  .c-footer-menu--static-links {
     h3 {
       font-weight: bold;
       text-transform: capitalize;
@@ -52,6 +82,14 @@
   .primary--footer--right {
     @include breakpoint($desktop) {
       width: 26.5%;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 41.4%;
+
+      .newsletter-block-label {
+        width: 88%;
+      }
     }
   }
 

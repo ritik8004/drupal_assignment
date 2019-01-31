@@ -1,6 +1,0 @@
-alshaya_acm_product_position.plp_sort_settings_admin_form:
-  title: 'PLP sort settings'
-  parent: acq_commerce.configuration
-  description: 'PLP sort settings.'
-  weight: 1
-  route_name: alshaya_acm_product_position.plp_sort_settings_admin_form

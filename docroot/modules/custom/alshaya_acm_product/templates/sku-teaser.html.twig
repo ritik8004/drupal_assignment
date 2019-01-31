@@ -34,7 +34,7 @@
           {% if swatch is not empty %}
             <a href="{{ product_base_url }}?selected={{ key }}">
               <span class='swatch-block swatch-image'>
-                <img src="{{ swatch }}" />
+                <img {% if (swatch.swatch_product_url) %} data-sku-image = "{{ swatch.swatch_product_url }}" {% endif %} src="{{ swatch.swatch_url }}" />
               </span>
             </a>
           {% endif %}

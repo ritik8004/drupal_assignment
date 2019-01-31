@@ -146,6 +146,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     'variables' => [
       'title' => NULL,
       'text' => NULL,
+      'class' => NULL,
     ],
   ];
 
@@ -386,7 +387,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             $build['cross_sell'] = [
               '#theme' => 'products_horizontal_slider',
               '#data' => $skuManager->filterRelatedSkus(array_unique($cross_sell_skus)),
-              '#section_title' => t('Customers also bought'),
+              '#section_title' => t('Customers also bought', [], ['context' => 'alshaya_static_text|pdp_crosssell_title']),
               '#views_name' => 'product_slider',
               '#views_display_id' => 'block_product_slider',
             ];
@@ -400,7 +401,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['up_sell'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($up_sell_skus)),
-            '#section_title' => t('You may also like'),
+            '#section_title' => t('You may also like', [], ['context' => 'alshaya_static_text|pdp_upsell_title']),
             '#views_name' => 'product_slider',
             '#views_display_id' => 'block_product_slider',
           ];
@@ -412,7 +413,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['related'] = [
             '#theme' => 'products_horizontal_slider',
             '#data' => $skuManager->filterRelatedSkus(array_unique($related_skus)),
-            '#section_title' => t('Related'),
+            '#section_title' => t('Related', [], ['context' => 'alshaya_static_text|pdp_related_title']),
             '#views_name' => 'product_slider',
             '#views_display_id' => 'block_product_slider',
           ];
@@ -1960,4 +1961,20 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
   $unique_nodes = array_slice($unique_nodes, 0, $limit);
 
   return $unique_nodes;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function alshaya_acm_product_taxonomy_term_update($term) {
+  if ($term->bundle() == 'acq_product_category') {
+    $old_pdp_layout = $term->original->get('field_pdp_layout')->value;
+    $new_pdp_layout = $term->get('field_pdp_layout')->value;
+    // If the pdp layout is updated, flush pdp caches.
+    if ($old_pdp_layout != $new_pdp_layout) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $skuManager->invalidatePdpCache($term);
+    }
+  }
 }

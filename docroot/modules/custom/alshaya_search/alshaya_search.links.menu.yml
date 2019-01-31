@@ -1,6 +1,0 @@
-alshaya_search.srp_sort_settings_form:
-  title: 'SRP sort settings'
-  parent: acq_commerce.configuration
-  description: 'SRP sort settings.'
-  weight: 1
-  route_name: alshaya_search.srp_sort_settings_form
