@@ -386,7 +386,7 @@ class AlshayaGtmManager {
     }
 
     $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
-    $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
+    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)
