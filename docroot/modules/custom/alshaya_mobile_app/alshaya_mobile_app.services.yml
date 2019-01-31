@@ -14,6 +14,7 @@ services:
       - '@alshaya_acm_product_category.product_category_tree'
       - '@config.factory'
       - '@acq_commerce.api'
+      - '@renderer'
   alshaya_mobile_app.utility.paragraphs:
     class: Drupal\alshaya_mobile_app\Service\MobileAppUtilityParagraphs
     decorates: alshaya_mobile_app.utility
