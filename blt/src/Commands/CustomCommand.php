@@ -266,6 +266,10 @@ class CustomCommand extends BltTasks {
    *
    * @command refresh:local:drupal
    * @description Reinstall local dev environment.
+   *
+   * @param null $site
+   *
+   * @throws \Acquia\Blt\Robo\Exceptions\BltException
    */
   public function refreshLocalDrupal($site = NULL) {
     $data = Yaml::parse(file_get_contents($this->getConfigValue('docroot') . '/../blt/alshaya_local_sites.yml'));
