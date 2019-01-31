@@ -57,6 +57,7 @@
         "drupal/migrate_source_csv": "^2.0",
         "drupal/migrate_tools": "^2.0",
         "drupal/mimemail": "1.x-dev",
+        "drupal/mobile_app_links": "1.x-dev",
         "drupal/mobile_number": "^1.0@alpha",
         "drupal/paragraphs": "^1.1",
         "drupal/password_policy": "^3.0",
@@ -377,8 +378,7 @@
             "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-well-known.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",

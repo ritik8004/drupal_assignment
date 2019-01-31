@@ -13,6 +13,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Enable module for app links.
+ */
+function alshaya_mobile_app_update_8008() {
+  \Drupal::service('module_installer')->install(['mobile_app_links']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new resource to return all the stores.
  */
 function alshaya_mobile_app_update_8007() {
