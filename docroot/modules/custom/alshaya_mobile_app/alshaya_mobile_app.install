@@ -13,20 +13,6 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Add configs with empty values for android and ios apps.
- */
-function alshaya_mobile_app_update_8006() {
-  $configs = [
-    'alshaya_mobile_app.android',
-    'alshaya_mobile_app.ios',
-  ];
-
-  \Drupal::service('alshaya_config.manager')->updateConfigs($configs, 'alshaya_mobile_app');
-}
-
-/**
- * Implements hook_update_N().
- *
  * Rework error message endpoint to static texts.
  * Update payment-methods endpoint to use cookie.
  * Add user get status endpoint.

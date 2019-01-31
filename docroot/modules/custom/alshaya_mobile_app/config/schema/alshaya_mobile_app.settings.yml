@@ -1,0 +1,21 @@
+alshaya_mobile_app.ios:
+  type: config_object
+  label: 'iOS App Configurations'
+  mapping:
+    appID:
+      type: string
+      label: 'App ID'
+    paths:
+      type: string
+      label: 'Paths'
+
+alshaya_mobile_app.android:
+  type: config_object
+  label: 'Android App Configurations'
+  mapping:
+    package_name:
+      type: string
+      label: 'Package Name'
+    sha256_cert_fingerprints:
+      type: string
+      label: 'SHA256 Certificate Fingerprints'
