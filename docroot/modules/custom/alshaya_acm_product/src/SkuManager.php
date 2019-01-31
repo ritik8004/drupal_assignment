@@ -582,7 +582,7 @@ class SkuManager {
         );
       }
       else {
-        $sku_cart_price['final_price'] = number_format($final_price, 3);
+        $sku_cart_price['final_price'] = _alshaya_acm_format_price_with_decimal($final_price);
         $discount = round((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
         $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
