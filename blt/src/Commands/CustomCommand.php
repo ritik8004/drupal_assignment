@@ -47,9 +47,11 @@ class CustomCommand extends BltTasks {
   public function createDefaultSettingsFiles() {
     // Default site directory.
     $default_multisite_dir = $this->getConfigValue('docroot') . "/sites/default";
+
     // Generate local.settings.php from file provided by blt.
     $default_local_settings_file = $default_multisite_dir . '/settings/default.local.settings.php';
     $local_settings_file = "$default_multisite_dir/settings/local.settings.php";
+
     // Generate local.drush.yml.
     $default_local_drush_file = "$default_multisite_dir/default.local.drush.yml";
     $local_drush_file = "$default_multisite_dir/local.drush.yml";

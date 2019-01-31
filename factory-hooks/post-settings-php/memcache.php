@@ -94,5 +94,12 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
     }
+
+    // Optionally set up chainedfast backend to measure performance difference.
+    if (isset($_REQUEST['chainedfast'])) {
+      $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+      $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+      $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+    }
   }
 }

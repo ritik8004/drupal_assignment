@@ -214,6 +214,54 @@
   }
 
   #table-cart-totals {
+    #edit-totals {
+      tr[data-drupal-selector="edit-totals-discount"] {
+        .price-type__wrapper .cart-promotions {
+          position: absolute;
+          #{$right}: -1.25rem;
+          top: -0.1875rem;
+
+          @include breakpoint($only-tablet) {
+            #{$right}: -0.4375rem;
+            top: -0.3125rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            #{$right}: -0.75rem;
+
+            html[lang=ar] & {
+              #{$right}: -2.1875rem;
+              top: -0.5rem;
+            }
+          }
+
+          .contains--tooltip {
+            position: relative;
+
+            .tooltip--head::after {
+              position: static;
+            }
+
+            .tooltip {
+              #{$left}: 2.5rem;
+              top: -0.125rem;
+              position: absolute;
+
+              @include breakpoint($only-tablet) {
+                #{$left}: -9.0625rem;
+                top: 2rem;
+              }
+
+              @include breakpoint($only-mobile) {
+                #{$left}: -8.375rem;
+                top: 2rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
     tr[data-drupal-selector="edit-totals-grand"] > td:first-child {
       text-transform: uppercase;
       font-family: $alshaya-bold;

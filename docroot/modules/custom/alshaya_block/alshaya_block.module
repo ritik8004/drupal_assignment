@@ -83,6 +83,10 @@ function alshaya_block_delete_blocks(array $blocks, $theme = NULL) {
  *
  * @param array $block_params
  *   An array of blocks with key and value pair as [block_id => region].
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\Entity\EntityStorageException
  */
 function alshaya_block_move_blocks(array $block_params) {
   foreach ($block_params as $block_id => $region) {
@@ -118,6 +122,7 @@ function alshaya_block_set_blocks_node_visibility(array $block_params) {
     $blocks = \Drupal::entityTypeManager()->getStorage('block')->loadByProperties(['id' => $block_id]);
     if (!empty($blocks)) {
       $block = reset($blocks);
+
       if ($block instanceof Block) {
         // Set key same as array values.
         $visibility_nodes = array_combine($param['bundles'], $param['bundles']);
