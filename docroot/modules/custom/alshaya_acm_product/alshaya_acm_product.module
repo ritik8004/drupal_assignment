@@ -1957,3 +1957,19 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
 
   return $unique_nodes;
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function alshaya_acm_product_taxonomy_term_update($term) {
+  if ($term->bundle() == 'acq_product_category') {
+    $old_pdp_layout = $term->original->get('field_pdp_layout')->value;
+    $new_pdp_layout = $term->get('field_pdp_layout')->value;
+    // If the pdp layout is updated, flush pdp caches.
+    if ($old_pdp_layout != $new_pdp_layout) {
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+      $skuManager->invalidatePdpCache($term);
+    }
+  }
+}
