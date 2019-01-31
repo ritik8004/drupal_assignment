@@ -377,7 +377,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-well-known.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
