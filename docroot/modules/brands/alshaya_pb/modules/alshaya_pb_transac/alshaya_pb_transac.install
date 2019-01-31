@@ -39,7 +39,6 @@ function alshaya_pb_transac_update_8009() {
   // Enable super category feature.
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   $super_category_feature->enableSuperCategory();
-
 }
 
 /**
@@ -284,7 +283,7 @@ function alshaya_pb_transac_update_dependencies() {
     'alshaya_search' => 8023,
   ];
   // Ensure the footer links menu is created first in alshaya_menus.
-  $dependencies['alshaya_pb_transac'][8008] = [
+  $dependencies['alshaya_pb_transac'][8009] = [
     'alshaya_menus' => 8001,
   ];
   return $dependencies;
