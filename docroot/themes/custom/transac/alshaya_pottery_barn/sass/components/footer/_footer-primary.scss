@@ -85,6 +85,7 @@
     }
 
     @include breakpoint($only-tablet) {
+      overflow: hidden;
       width: 41.4%;
 
       .newsletter-block-label {
