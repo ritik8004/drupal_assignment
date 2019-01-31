@@ -10,22 +10,22 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\locale\StringStorageInterface;
 
 /**
- * Provides a resource to get Alshaya error messages.
+ * Provides a resource to get Alshaya static texts.
  *
  * @RestResource(
- *   id = "alshaya_error_messages",
- *   label = @Translation("Error messages"),
+ *   id = "alshaya_static_texts",
+ *   label = @Translation("Static texts"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/error-messages"
+ *     "canonical" = "/rest/v1/get-static-texts"
  *   }
  * )
  */
-class AlshayaErrorMessages extends ResourceBase {
+class AlshayaStaticTexts extends ResourceBase {
 
   /**
-   * Error message context to look for.
+   * Static text context to look for.
    */
-  const CONTEXT_ERROR_MESSAGE = 'alshaya_error_message';
+  const CONTEXT_STATIC_TEXTS = 'alshaya_static_text';
 
   /**
    * Context and key separator used in table.
@@ -47,7 +47,7 @@ class AlshayaErrorMessages extends ResourceBase {
   protected $localeStorage;
 
   /**
-   * AlshayaErrorMessages constructor.
+   * AlshayaStaticTexts constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -88,20 +88,20 @@ class AlshayaErrorMessages extends ResourceBase {
   /**
    * Responds to GET requests.
    *
-   * Returns available error messages.
+   * Returns available static texts.
    *
    * @return \Drupal\rest\ResourceResponse
-   *   The response containing key and value of error messages.
+   *   The response containing key and value of static texts.
    */
   public function get() {
     $response_data = [];
-    $options = ['filters' => ['context' => self::CONTEXT_ERROR_MESSAGE]];
-    $error_messages = $this->localeStorage->getTranslations(['language' => $this->languageManager->getCurrentLanguage()->getId()], $options);
-    foreach ($error_messages as $string) {
-      list(, $error_message_key) = explode(self::CONTEXT_KEY_SEPARATOR, $string->getValues(['context'])['context']);
+    $options = ['filters' => ['context' => self::CONTEXT_STATIC_TEXTS]];
+    $static_texts = $this->localeStorage->getTranslations(['language' => $this->languageManager->getCurrentLanguage()->getId()], $options);
+    foreach ($static_texts as $string) {
+      list(, $static_texts_key) = explode(self::CONTEXT_KEY_SEPARATOR, $string->getValues(['context'])['context']);
       // Prepare response data.
       $response_data[] = [
-        'machine_name' => $error_message_key,
+        'machine_name' => $static_texts_key,
         'message' => !empty($string->getString()) ? $string->getString() : $string->getValues(['source'])['source'],
       ];
     }

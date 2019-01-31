@@ -10,10 +10,25 @@
  *
  * Use node.sticky for stock.
  */
-function alshaya_search_api_update_8002() {
+function alshaya_search_api_update_8003() {
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
   _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config for all(general) listing page related settings.
+ */
+function alshaya_search_api_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_search_api.listing_settings'],
+    'alshaya_search_api',
+    'install'
+  );
 }
 
 /**
