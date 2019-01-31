@@ -18,7 +18,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\node\NodeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 
@@ -730,28 +729,16 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
       $data['items'] = $this->getAllCategories($this->currentLanguage, $category_id, FALSE, TRUE);
     }
     else {
-      // Get selected category's child so it can be passed as views argument.
-      $terms = _alshaya_master_get_recursive_child_terms($category_id);
-      $arguments = ['tid' => implode('+', $terms)];
-
       // Invoke views display in executeInRenderContext to avoid cached
       // metadata leak issue.
       // @See https://www.drupal.org/project/drupal/issues/2450993
-      $results = $this->renderer->executeInRenderContext(
+      $nodes = $this->renderer->executeInRenderContext(
         new RenderContext(),
-        function () use ($arguments) {
-          return _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments);
+        function () use ($entity, $category_id) {
+          $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
+          return _alshaya_acm_product_get_unique_in_stock_products_for_category($category_id, $carousel_product_limit);
         }
       );
-      // Create an array of nodes.
-      $nodes = array_map(function ($result) {
-        if (($node = $result->_object->getValue()) && $node instanceof NodeInterface) {
-          return $node;
-        }
-      }, $results);
-
-      $carousel_product_limit = (int) $entity->get('field_category_carousel_limit')->getString();
-      $nodes = alshaya_acm_product_filter_out_of_stock_products($nodes, $carousel_product_limit);
 
       if (!empty($nodes)) {
         $data['items'] = array_map(function ($node) {
