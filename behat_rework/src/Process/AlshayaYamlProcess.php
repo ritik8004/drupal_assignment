@@ -150,7 +150,7 @@ class AlshayaYamlProcess {
   public function prepareBehatYaml($file, $content, $profile = NULL) {
     $yaml = $this->getParsedContent($file);
 
-    $yaml['suites']['default']['paths'] = ["%paths.base%/templates/features/$profile"];
+    $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
 
     // Update feature context variables array.
 //    if (isset($yaml['suites']['default']['contexts'][0]['Alshaya\BehatContexts\FeatureContext'])) {

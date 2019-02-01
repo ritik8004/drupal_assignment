@@ -30,7 +30,7 @@ class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingCont
    * You can also pass arbitrary arguments to the
    * context constructor through behat.yml.
    */
-  public function __construct($parameters) {
+  public function __construct($parameters = []) {
     $this->parameter_bag = $parameters;
   }
 
