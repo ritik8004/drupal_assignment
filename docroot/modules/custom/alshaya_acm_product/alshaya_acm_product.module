@@ -1171,7 +1171,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
     $sku_manager->disableUnavailableOptions($sku_entity, $form['ajax']['configurables'], $product_tree, $selected);
 
-    // Select configurable attrubutes for which only one option is available.
+    // Select configurable attributes for which only one option is available.
     // We do this before adding empty option.
     foreach ($form['ajax']['configurables'] as $key => &$configurable) {
       if (is_array($configurable) && !empty($configurable['#options'])) {
