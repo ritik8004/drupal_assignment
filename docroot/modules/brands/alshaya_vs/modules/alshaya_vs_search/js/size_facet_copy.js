@@ -106,7 +106,7 @@
       });
 
       // Compare the last element value with the max width of the wrapper.
-      if (widthOfsCupsizewrapper[widthOfsCupsizewrapper.length - 1] < 1000) {
+      if (widthOfsCupsizewrapper[widthOfsCupsizewrapper.length - 1] < 1000 || $('.sfb-facets-container').is(':empty')) {
         if ($('html').attr('dir') == 'rtl') {
           $('.paddle_prev').addClass('hidden');
         }
