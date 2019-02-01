@@ -9,16 +9,17 @@
   'use strict';
   var transformValueBackward = 19;
   var transformValueForward = -19;
+  // Distance in px - by how much you want to move the dots.
+  // Negative for Forward/Next direction.
+  var transformXIntervalNext = isRTL() ? transformValueBackward : transformValueForward;
+  // Positive for Backward/Previous direction.
+  var transformXIntervalPrev = isRTL() ? transformValueForward : transformValueBackward;
   var maxDots = 5;
+
   Drupal.behaviors.pdpInstagranDots = {
     attach: function (context, settings) {
       // Slick Selector.
       var slickSlider = $('#product-image-gallery-mobile, #product-image-gallery-mob', context);
-      // Distance in px - by how much you want to move the dots.
-      // Negative for Forward/Next direction.
-      var transformXIntervalNext = isRTL() ? transformValueBackward : transformValueForward;
-      // Positive for Backward/Previous direction.
-      var transformXIntervalPrev = isRTL() ? transformValueForward : transformValueBackward;
 
       // After slider is loaded, add a wrapper for dots.
       // We need a wrapper with fixed width and overflow hidden.
@@ -29,57 +30,64 @@
       // Before change fires before any slides are changed.
       // So nextSlide is soon to be currentSlide.
       // currentSlide is the one which is visible when user scrolls.
-      slickSlider.once().on('beforeChange', function (event, slick, currentSlide, nextSlide) {
-        // We do instagram dots only if we are above the limit.
-        // Else, let the slider function as is, no changes.
-        var totalCount = $(this).find('.slick-dots li').length;
-        // Transform counter.
-        var initialTranslate = $(this).find('ul.slick-dots .slick-dots-container').css('transform');
-        var transformCount = Drupal.behaviors.pdpInstagranDots.getTranslateXFromMatrix(initialTranslate);
-        if (totalCount > maxDots) {
-          // The slider is moving forward.
-          if (nextSlide > currentSlide) {
-            // Check if the next slide is the n-pointer only then we add transform.
-            if ($(this).find('ul.slick-dots li.dot-index-' + nextSlide).hasClass('n-small-1')) {
-              // Check for last slide.
-              if (!$(this).find('ul.slick-dots .slick-dots-container li:last-child').hasClass('n-small-1')) {
-                // Add transform X to the list.
-                transformCount = transformCount + transformXIntervalNext;
-                $(this).find('ul.slick-dots li.dot-index-' + nextSlide).removeClass('n-small-1');
-                var nextSlidePlusOne = nextSlide + 1;
-                $(this).find('ul.slick-dots li.dot-index-' + nextSlidePlusOne).addClass('n-small-1');
-                $(this).find('.slick-dots-container').css('transform', 'translateX(' + transformCount + 'px)');
-                // Move the p-pointer forwards.
-                var pPointer = nextSlide - 3;
-                var pPointerMinusOne = pPointer - 1;
-                $(this).find('ul.slick-dots .slick-dots-container li').eq(pPointerMinusOne).removeClass('p-small-1');
-                $(this).find('ul.slick-dots .slick-dots-container li').eq(pPointer).addClass('p-small-1');
-              }
-            }
-          }
-          // The slider is moving backward.
-          else {
-            // Check if the next slide is the p-pointer only then we add transform.
-            if ($(this).find('ul.slick-dots li.dot-index-' + nextSlide).hasClass('p-small-1')) {
-              // Check for first slide.
-              if (!$(this).find('ul.slick-dots .slick-dots-container li:first-child').hasClass('p-small-1')) {
-                // Add transform X to the list.
-                transformCount = transformCount + transformXIntervalPrev;
-                $(this).find('ul.slick-dots li.dot-index-' + nextSlide).removeClass('p-small-1');
-                var nextSlidePlusOne = nextSlide - 1;
-                $(this).find('ul.slick-dots li.dot-index-' + nextSlidePlusOne).addClass('p-small-1');
-                $(this).find('.slick-dots-container').css('transform', 'translateX(' + transformCount + 'px)');
-                // Move the n-pointer backwards.
-                var nPointer = currentSlide + 3;
-                var nPointerMinusOne = nPointer - 1;
-                $(this).find('ul.slick-dots .slick-dots-container li').eq(nPointer).removeClass('n-small-1');
-                $(this).find('ul.slick-dots .slick-dots-container li').eq(nPointerMinusOne).addClass('n-small-1');
-              }
+      Drupal.behaviors.pdpInstagranDots.attachBeforeChange(slickSlider);
+    }
+  };
+
+  /**
+   * Add before change event.
+   */
+  Drupal.behaviors.pdpInstagranDots.attachBeforeChange = function (slickSlider) {
+    slickSlider.once().on('beforeChange', function (event, slick, currentSlide, nextSlide) {
+      // We do instagram dots only if we are above the limit.
+      // Else, let the slider function as is, no changes.
+      var totalCount = $(this).find('.slick-dots li').length;
+      // Transform counter.
+      var initialTranslate = $(this).find('ul.slick-dots .slick-dots-container').css('transform');
+      var transformCount = Drupal.behaviors.pdpInstagranDots.getTranslateXFromMatrix(initialTranslate);
+      if (totalCount > maxDots) {
+        // The slider is moving forward.
+        if (nextSlide > currentSlide) {
+          // Check if the next slide is the n-pointer only then we add transform.
+          if ($(this).find('ul.slick-dots li.dot-index-' + nextSlide).hasClass('n-small-1')) {
+            // Check for last slide.
+            if (!$(this).find('ul.slick-dots .slick-dots-container li:last-child').hasClass('n-small-1')) {
+              // Add transform X to the list.
+              transformCount = transformCount + transformXIntervalNext;
+              $(this).find('ul.slick-dots li.dot-index-' + nextSlide).removeClass('n-small-1');
+              var nextSlidePlusOne = nextSlide + 1;
+              $(this).find('ul.slick-dots li.dot-index-' + nextSlidePlusOne).addClass('n-small-1');
+              $(this).find('.slick-dots-container').css('transform', 'translateX(' + transformCount + 'px)');
+              // Move the p-pointer forwards.
+              var pPointer = nextSlide - 3;
+              var pPointerMinusOne = pPointer - 1;
+              $(this).find('ul.slick-dots .slick-dots-container li').eq(pPointerMinusOne).removeClass('p-small-1');
+              $(this).find('ul.slick-dots .slick-dots-container li').eq(pPointer).addClass('p-small-1');
             }
           }
         }
-      });
-    }
+        // The slider is moving backward.
+        else {
+          // Check if the next slide is the p-pointer only then we add transform.
+          if ($(this).find('ul.slick-dots li.dot-index-' + nextSlide).hasClass('p-small-1')) {
+            // Check for first slide.
+            if (!$(this).find('ul.slick-dots .slick-dots-container li:first-child').hasClass('p-small-1')) {
+              // Add transform X to the list.
+              transformCount = transformCount + transformXIntervalPrev;
+              $(this).find('ul.slick-dots li.dot-index-' + nextSlide).removeClass('p-small-1');
+              var nextSlidePlusOne = nextSlide - 1;
+              $(this).find('ul.slick-dots li.dot-index-' + nextSlidePlusOne).addClass('p-small-1');
+              $(this).find('.slick-dots-container').css('transform', 'translateX(' + transformCount + 'px)');
+              // Move the n-pointer backwards.
+              var nPointer = currentSlide + 3;
+              var nPointerMinusOne = nPointer - 1;
+              $(this).find('ul.slick-dots .slick-dots-container li').eq(nPointer).removeClass('n-small-1');
+              $(this).find('ul.slick-dots .slick-dots-container li').eq(nPointerMinusOne).addClass('n-small-1');
+            }
+          }
+        }
+      }
+    });
   };
 
   /**
