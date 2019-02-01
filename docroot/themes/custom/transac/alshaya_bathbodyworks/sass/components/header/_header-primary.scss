@@ -325,6 +325,10 @@ header .block-views-exposed-filter-blocksearch-page {
         padding: 0.5rem;
         top: 0.5125rem;
 
+        html[lang=ar] & {
+          top: 0.3125rem;
+        }
+
         &:hover {
           background: none;
         }
@@ -786,8 +790,9 @@ header .region__header {
           max-width: 11.25rem;
           margin-top: 0.375rem;
 
-          html[lang="ar"] & {
-            max-width: 10rem;
+          html[lang=ar] & {
+            max-width: 10.9375rem;
+            margin-top: 2px;
           }
         }
       }
