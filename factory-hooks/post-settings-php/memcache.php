@@ -104,11 +104,12 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // backend instead of memcache.
     if (file_exists('/home/alshaya/includes/memcache-settings.php')) {
       include_once '/home/alshaya/includes/memcache-settings.php';
-    }
-    if (!empty($_ENV['MEMCACHE_CHAINEDFAST_ENABLE'])) {
-      $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
-      $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
-      $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+
+      if (!empty($_ENV['MEMCACHE_CHAINEDFAST_ENABLE'])) {
+        $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+        $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+        $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+      }
     }
   }
 }
