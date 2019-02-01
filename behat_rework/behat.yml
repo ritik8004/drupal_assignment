@@ -1,12 +1,11 @@
 #behat.yml
 default:
-    autoload:
-        - '%paths.base%/build/bootstrap/Drupal'
     suites:
         default:
+            paths:
+                - %paths.base%/build/features
             contexts:
-                - Alshaya\BehatContexts\FeatureContext:
-                      parameters: { }
+                - Alshaya\BehatContexts\FeatureContext
                 - Drupal\DrupalExtension\Context\MinkContext
                 - Drupal\DrupalExtension\Context\DrupalContext
                 - Drupal\DrupalExtension\Context\MessageContext
@@ -40,4 +39,4 @@ default:
             default_language: en
 
 imports:
-    - build/brands.yml
+    - build/profiles.yml

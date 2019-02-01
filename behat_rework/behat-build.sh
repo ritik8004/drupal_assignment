@@ -18,7 +18,7 @@ foreach ($behat->getCollectedYamlFiles() as $profile => $files) {
   $variables = $behat->mergeYamlFiles($files);
   if (isset($variables['variables']['base_url'])) {
     $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
-    $behat->dumpYaml(BUILD_DIR . '/brands.yml', ($i > 0), $prepare_behat, $profile);
+    $behat->dumpYaml(BUILD_DIR . '/profiles.yml', ($i > 0), $prepare_behat, $profile);
     $i++;
 
     $base_path = getcwd() . DIRECTORY_SEPARATOR;
