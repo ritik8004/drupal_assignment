@@ -376,7 +376,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['#attributes']['class'][] = 'product-out-of-stock';
         }
 
-        // Get cross sell block for the product.
+        // Get cross-sell block for the product.
         if (\Drupal::config('alshaya_acm.settings')->get('display_crosssell')) {
           if (!empty($cross_sell_skus = $skuManager->getLinkedSkusWithFirstChild($sku_entity, LINKED_SKU_TYPE_CROSSSELL))) {
             $build['cross_sell'] = [
