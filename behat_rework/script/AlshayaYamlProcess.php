@@ -159,7 +159,7 @@ class AlshayaYamlProcess {
 //    }
 
     // Set the MinkExtension base_url to current site's base url.
-    if (isset($featurecontext['parameters']['base_url'])) {
+    if (isset($content['variables']['base_url'])) {
       $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $content['variables']['base_url'] . '/';
     }
 

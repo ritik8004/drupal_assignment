@@ -1029,12 +1029,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/miteshmap/MultilingualExtension.git",
-                "reference": "649c38a77083d0d98b7986a566d06312b67e10fb"
+                "reference": "856213851ccd22036c430a0432981589eee3e531"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/miteshmap/MultilingualExtension/zipball/649c38a77083d0d98b7986a566d06312b67e10fb",
-                "reference": "649c38a77083d0d98b7986a566d06312b67e10fb",
+                "url": "https://api.github.com/repos/miteshmap/MultilingualExtension/zipball/856213851ccd22036c430a0432981589eee3e531",
+                "reference": "856213851ccd22036c430a0432981589eee3e531",
                 "shasum": ""
             },
             "require": {
@@ -1074,7 +1074,7 @@
             "support": {
                 "source": "https://github.com/miteshmap/MultilingualExtension/tree/master"
             },
-            "time": "2019-01-29T18:20:59+00:00"
+            "time": "2019-02-01T08:32:29+00:00"
         },
         {
             "name": "psr/http-message",

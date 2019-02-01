@@ -1,10 +1,7 @@
 suites:
   default:
-    paths:
-      - %paths.base%/templates/features
     contexts:
-      - Alshaya\BehatContexts\FeatureContext:
-          parameters: { }
+      - Alshaya\BehatContexts\FeatureContext
       - Drupal\DrupalExtension\Context\MinkContext
       - Drupal\DrupalExtension\Context\DrupalContext
       - Drupal\DrupalExtension\Context\MessageContext
