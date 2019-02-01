@@ -560,14 +560,9 @@
   .order-summary-row td:first-child .light {
     font-size: 0.75rem;
 
-    @include breakpoint($upto-desktop) {
-      font-size: 0.625rem;
-    }
-
     &.order--date--time {
       @include breakpoint($only-tablet) {
         font-size: 0.75rem;
-        margin-top: 0.875rem;
       }
     }
   }
@@ -685,21 +680,33 @@
 }
 
 #block-content .order-items li {
-  .second-third .second .dark {
-    @include breakpoint($tablet) {
-      white-space: nowrap;
-      overflow: hidden;
-      max-width: 9.825rem;
-      text-overflow: ellipsis;
+  .second-third {
+    .second .dark {
+      @include breakpoint($tablet) {
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 9.825rem;
+        text-overflow: ellipsis;
 
-      html[lang=ar] & {
-        position: relative;
-        display: inline-block;
+        html[lang=ar] & {
+          position: relative;
+          display: inline-block;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        height: 0.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        max-width: 10.825rem;
       }
     }
 
-    @include breakpoint($desktop) {
-      max-width: 10.825rem;
+    .order-quantity {
+      @include breakpoint($only-tablet) {
+        height: 0.75rem;
+      }
     }
   }
 
