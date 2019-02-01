@@ -361,7 +361,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           throw new NotFoundHttpException();
         }
 
-        // Do not display PDP for free gifts.
+        // Do not display PDP for free gift.
         if ($skuManager->isSkuFreeGift($sku_entity)) {
           throw new NotFoundHttpException();
         }
