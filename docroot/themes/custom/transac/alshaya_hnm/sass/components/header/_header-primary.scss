@@ -430,8 +430,7 @@ header {
       position: absolute;
       #{$right}: 3.25rem;
       font-size: 0;
-
-      background-color: #fff;
+      background-color: $primary_bg;
       padding: 0.5rem 0.5rem 0;
       padding-#{$right}: 1.25rem;
       top: 0.625rem;
