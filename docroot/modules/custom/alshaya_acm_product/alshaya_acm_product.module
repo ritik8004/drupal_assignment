@@ -1911,7 +1911,6 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
   $page = 0;
 
   do {
-    // Get views result.
     $results = _alshaya_master_get_views_result('alshaya_product_list', 'block_1', $arguments, $page);
 
     $nodes = array_map(function ($result) use ($skuManager) {
