@@ -50,12 +50,7 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
- * Alter the items that are indexed.
- *
- * @param \Drupal\search_api\IndexInterface $index
- *   The search index on which items will be indexed.
- * @param \Drupal\search_api\Item\ItemInterface[] $items
- *   The items that will be indexed.
+ * Implements hook_search_api_index_items_alter().
  */
 function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index, array &$items) {
   $logger = \Drupal::logger('alshaya_acm_product');
