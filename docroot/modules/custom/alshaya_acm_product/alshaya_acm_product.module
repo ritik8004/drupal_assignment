@@ -819,7 +819,7 @@ function alshaya_acm_product_acq_sku_view_alter(array &$build, EntityInterface $
 }
 
 /**
- * Wrapper function to get items per page on listing pages.
+ * Wrapper function to get the number of items per page on listing pages.
  *
  * @return int
  *   Items per page.
