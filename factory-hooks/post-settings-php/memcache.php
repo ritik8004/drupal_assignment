@@ -96,7 +96,10 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     }
 
     // Optionally set up chainedfast backend to measure performance difference.
-    if (isset($_REQUEST['chainedfast'])) {
+    if (file_exists('/home/alshaya/includes/memcache-settings.php')) {
+      include_once '/home/alshaya/includes/memcache-settings.php';
+    }
+    if (isset($_ENV['MEMCACHE_CHAINEDFAST_ENABLE'])) {
       $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
       $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
       $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
