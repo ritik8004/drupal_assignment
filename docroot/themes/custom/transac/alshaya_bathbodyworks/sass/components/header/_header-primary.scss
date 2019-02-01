@@ -766,7 +766,7 @@ header .region__header {
 
       @include breakpoint($only-mobile) {
         width: 100%;
-        margin-#{$left}: 19px;
+        margin-#{$left}: 1.1875rem;
 
         html[lang=ar] & {
           margin-#{$left}: 0.5625rem;
@@ -823,14 +823,14 @@ header .region__header {
 
 @media (max-width: 767px) and (min-width: 425px) {
   header .region__header .block-system-branding-block .site-brand-home a {
-    max-width: 210px;
+    max-width: 13.125rem;
     margin-top: 0.5rem;
   }
 }
 
 @media (max-width: 424px) and (min-width: 375px) {
   header .region__header .block-system-branding-block .site-brand-home a {
-    max-width: 200px;
+    max-width: 12.5rem;
     margin-top: 0.5rem;
   }
 }
