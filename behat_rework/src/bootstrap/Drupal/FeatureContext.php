@@ -43,14 +43,29 @@ class FeatureContext extends CustomMinkContext {
   /**
    * @When /^I close the popup$/
    */
-  public function iCloseThePopup()
-  {
+  public function iCloseThePopup() {
     $page = $this->getSession()->getPage();
     $popup = $this->getSession()->getPage()->findById("popup");
     if ($popup->isVisible()) {
       $page->findById('close-popup')->click();
     } else {
       echo 'Welcome Popup is currently not displayed';
+    }
+  }
+
+  /**
+   * @Then the breadcrumb :arg1 should be displayed
+   */
+  public function theBreadcrumbShouldBeDisplayed($breadcrumb) {
+    $page = $this->getSession()->getPage();
+    $breadcrumb_elements = $page->findAll('css', '#block-breadcrumbs > nav > ol > li');
+    $actual_breadcrumb = [];
+    foreach ($breadcrumb_elements as $element) {
+      $actual_breadcrumb[] = $element->find('css', 'a')->getText();
+    }
+    $actual_breadcrumb_result = implode(' > ', $actual_breadcrumb);
+    if ($breadcrumb !== $actual_breadcrumb_result) {
+      throw new \Exception('Incorrect breadcrumb displayed');
     }
   }
 

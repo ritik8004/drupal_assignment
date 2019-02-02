@@ -2,6 +2,7 @@
 
 namespace Alshaya\BehatBuild;
 
+use Behat\Gherkin\Node\TableNode;
 use FilesystemIterator;
 use DirectoryIterator;
 
@@ -143,7 +144,17 @@ class AlshayaFeatureProcess {
     // Generate array of variable values in the same order as the variables
     // found from the content.
     $replacement_variables = array_map(function($var) use ($variables) {
-      return $variables[$var] ?? '{' . $var . '}';
+      if (!isset($variables[$var])) {
+        return '';
+      }
+
+      if (!is_array($variables[$var])) {
+        return $variables[$var];
+      }
+      else {
+        $table = new TableNode($variables[$var]);
+        return $table->getTableAsString();
+      }
     }, $matches[1]);
     // Create an array of variable, with variable wrapped in curly brackets
     // as key and their actual value (from gathered config).
