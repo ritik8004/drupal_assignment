@@ -275,7 +275,6 @@ function alshaya_pb_transac_install() {
   // Re-save indexes to ensure config overrides are taken into consideration.
   _alshaya_search_resave_indexes();
 
-
   // Enable super category feature.
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   $super_category_feature->enableSuperCategory();
