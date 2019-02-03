@@ -10,6 +10,18 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Remove super_category dependence in block for free design services.
+ */
+function alshaya_pb_transac_update_8010() {
+  $configs = [
+    'block.block.designservices',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new sku attribute feature_lhn.
  */
 function alshaya_pb_transac_update_8009() {
