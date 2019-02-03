@@ -371,6 +371,11 @@ class AlshayaSearchApiQueryExecute {
     // Execute the search.
     $results = $query->execute();
 
+    // Process all facets in advance, instead of doing it on build.
+    // We are updating facet results, in below foreach. So, we want to
+    // make sure the facets are ready to receive updated results for current
+    // query.
+    $this->facetManager->processFacets($this->getFacetSourceId());
     // Set the result count.
     $this->setResultTotalCount($results->getResultCount());
 
@@ -504,12 +509,24 @@ class AlshayaSearchApiQueryExecute {
 
         // If children available, then add children to response.
         if (!empty($children = $result->getChildren())) {
+          $i = 0;
           foreach ($children as $child) {
-            $temp_data['children'][] = [
+            $temp_data['children'][$i] = [
               'key' => $child->getRawValue(),
               'label' => $child->getDisplayValue(),
               'count' => $child->getCount(),
             ];
+            // If L3 children available, then add them to response.
+            if (!empty($l3_children = $child->getChildren())) {
+              foreach ($l3_children as $l3_child) {
+                $temp_data['children'][$i]['children'][] = [
+                  'key' => $l3_child->getRawValue(),
+                  'label' => $l3_child->getDisplayValue(),
+                  'count' => $l3_child->getCount(),
+                ];
+              }
+            }
+            $i++;
           }
         }
 

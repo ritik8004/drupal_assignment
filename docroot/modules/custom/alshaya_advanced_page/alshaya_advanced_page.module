@@ -35,6 +35,25 @@ function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$resu
 }
 
 /**
+ * Implements hook_acq_sku_position_sync_alter().
+ */
+function alshaya_advanced_page_acq_sku_position_sync_alter(array &$terms) {
+  if (!empty($terms)) {
+    $dpt_pages = alshaya_advanced_page_get_pages();
+    foreach ($terms as $key => $term) {
+      // If category has a department page, skip it from position sync.
+      if (!empty($dpt_pages[$term->tid])) {
+        unset($terms[$key]);
+        \Drupal::logger('alshaya_advanced_page')->notice('Skipping position sync for category id: @cat_id as having department node: @dpt_nid', [
+          '@cat_id' => $term->tid,
+          '@dpt_nid' => $dpt_pages[$term->tid],
+        ]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {

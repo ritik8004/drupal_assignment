@@ -8,6 +8,43 @@
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Rework error message endpoint to static texts.
+ * Update payment-methods endpoint to use cookie.
+ * Add user get status endpoint.
+ */
+function alshaya_mobile_app_update_8005() {
+  // Delete config so that plugin not found error is not thrown.
+  \Drupal::configFactory()->getEditable('rest.resource.alshaya_error_messages')->delete();
+
+  // Install new config.
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.alshaya_static_texts',
+        'rest.resource.payment_methods',
+        'rest.resource.user_get_status',
+      ],
+      'alshaya_mobile_app',
+      'install'
+    );
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['user.role.mobile_app_consumer'],
+      'alshaya_mobile_app',
+      'install',
+      AlshayaConfigManager::MODE_REPLACE_KEY,
+      ['replace_keys' => ['permissions']]
+    );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
 
 /**
  * Implements hook_update_N().
@@ -21,7 +58,6 @@ function alshaya_mobile_app_update_8004() {
   $configManager->updateConfigs(
       [
         'rest.resource.advanced_page',
-        'rest.resource.alshaya_error_messages',
         'rest.resource.categories',
         'rest.resource.category_product_list',
         'rest.resource.deeplink',

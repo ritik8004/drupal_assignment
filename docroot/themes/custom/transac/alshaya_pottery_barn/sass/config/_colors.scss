@@ -15,6 +15,7 @@ $PB_blue_turquoise: #367fca;
 $PB_alshaya_priv: #ac8e54;
 $PB_info_blue: #e8eff5;
 $PB_message_green: #499900;
+$PB_blue: #0f2e5b;
 $white: #ddd;
 $white-two: #fff;
 $white-smoke: #f3f3f3;
@@ -42,6 +43,7 @@ $_gray_thirteen: #efefef;
 $_gray_fourteen: #f3f3f3;
 $_gray_fifteen: #acacac;
 $_grey_sixteen: #696969;
+$_grey_seventeen: #b4b3b3;
 
 // Overrides for variables.
 // Global elements.
@@ -123,6 +125,7 @@ $basket_total_label_text: $PB_black_one;
 $basket_total_label_text_subtitle: $PB_grey_one;
 $basket_table_th_and_tr_last_border: $white-two;
 $basket_continue_shopping_link: $PB_black_one;
+$basket_header_promo_bg: $PB_blue;
 $basket_empty_message: $PB_black_one;
 
 // Totals.
@@ -241,6 +244,15 @@ $deliverybanner_link: $_black_two;
 $footer_bg: $PB_grey_five;
 $footer_title_h3: $_black_two;
 $footer_link_hover: $PB_deep_red;
+$_footer_mobile_accordion_border: $white;
+
+// Our Brands.
+$our_brands_footer_separator: $_grey_seventeen;
+$our_brand_section_title: $_black_two;
+
+// Our Brands.
+$our_brands_footer_separator: $_grey_seventeen;
+$our_brand_section_title: $PB_black_one;
 
 // Copyright Footer.
 $copyright_footer_bg: $white-two;
@@ -300,6 +312,7 @@ $lang_switch_firsttime_bg: $_black_two;
 $vat: $PB_grey_two;
 
 // Product Listing page & Search results page.
+$plp_tile_product_title_hover: $_black_two;
 $plp_category_desc: $_black_two;
 $plp_promotion_description: $_black_two;
 $plp_sort_by_label: $_black_two;
@@ -497,6 +510,8 @@ $promo_panel_label: $white-two;
 $promo_panel_mobile_label: $white-two;
 $promo_panel_label_bg: rgba(0, 0, 0, 0.9);
 $promo_panel_label_bg_active: $PB_black_one;
+$_promo_panel_CTA_border: $_black_two;
+$_promo_panel_CTA_text: $_black_two;
 
 // Back to top.
 $btt_text: $PB_deep_red;

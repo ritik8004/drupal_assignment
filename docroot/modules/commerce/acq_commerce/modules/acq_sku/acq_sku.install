@@ -19,17 +19,22 @@ use Symfony\Component\Yaml\Yaml;
 function acq_sku_update_8018() {
   \Drupal::service('module_installer')->install(['acq_sku_stock']);
 
+  $db = \Drupal::database();
+
   // Copy existing stock data from SKU entity to new table.
-  $query = \Drupal::database()->select('acq_sku_field_data', 'sku');
+  $query = $db->select('acq_sku_field_data', 'sku');
   $query->fields('sku', ['sku', 'stock']);
   $result = $query->execute()->fetchAllAssoc('sku');
 
-  /** @var \Drupal\acq_sku\StockManager $manager */
-  $manager = \Drupal::service('acq_sku.stock_manager');
-
   // To start with we will let everything be handled by quantity only.
   foreach ($result as $row) {
-    $manager->updateStock($row->sku, $row->stock, 1);
+    $db->merge('acq_sku_stock')
+        ->key(['sku' => $row->sku])
+        ->fields([
+          'quantity' => $row->stock,
+          'status' => 1,
+        ])
+        ->execute();
   }
 
   // Apply updates to remove stock field.

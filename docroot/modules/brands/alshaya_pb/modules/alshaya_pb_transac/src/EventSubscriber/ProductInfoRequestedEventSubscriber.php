@@ -78,20 +78,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $sku = $event->getSku();
     $title = $event->getValue();
 
-    $group_name = $sku->get('attr_group_name')->getString();
     $sku_name = $sku->get('attr_sku_name')->getString();
 
-    // Do not merge group and sku names on PDP.
-    if ($group_name && $sku_name && $event->getContext() != 'pdp') {
-      $title = $this->t('@group_name/@sku_name', [
-        '@group_name' => $group_name,
-        '@sku_name' => $sku_name,
-      ]);
-    }
-    elseif ($group_name) {
-      $title = $group_name;
-    }
-    elseif ($sku_name) {
+    if ($sku_name) {
       $title = $sku_name;
     }
 

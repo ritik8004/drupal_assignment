@@ -149,8 +149,8 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
           user_login_finalize($account);
         }
         else {
-          drupal_set_message($this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_error_message|account_already_exists']), 'error');
-          $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_error_message|account_already_exists']));
+          drupal_set_message($this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']), 'error');
+          $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']));
         }
       }
       else {

@@ -29,11 +29,11 @@
         });
       });
 
-      var scrollHeight = $('#shipping_methods_wrapper').offset().top;
       // Scroll the checkout delivery page to 'Delivery option' section.
-      if (localStorage.getItem('address_save_scroll') === 'Y') {
+      var shippingMethodsWrapper = $('#shipping_methods_wrapper');
+      if (localStorage.getItem('address_save_scroll') === 'Y' && shippingMethodsWrapper.length) {
         $('html,body').animate({
-          scrollTop: scrollHeight
+          scrollTop: shippingMethodsWrapper.offset().top
         }, 'slow');
         localStorage.removeItem('address_save_scroll');
       }

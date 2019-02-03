@@ -171,3 +171,6 @@ campaign-plp-style-1-common:
 magazine_socialSharepopup:
   js:
     js/socialshare_popup.js: {}
+plp-swatch-hover:
+  js:
+    js/plp-swatch-hover.js: {}

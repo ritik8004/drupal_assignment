@@ -107,6 +107,12 @@ deploy:
     script: "$BLT_DIR/scripts/travis/deploy_branch"
     skip_cleanup: true
     on:
+      branch: pb-colleague
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
       branch: qa
       php: 7.1
   - provider: script
@@ -120,6 +126,18 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: rework-stock-storage
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    skip_cleanup: true
+    on:
+      branch: 2.1.x-hotfix
       php: 7.1
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"

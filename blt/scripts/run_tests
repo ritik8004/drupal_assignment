@@ -2,7 +2,7 @@
 
 set -e
 
-if ([ $TRAVIS_PULL_REQUEST == "false" ])
+if ([ $TRAVIS_PULL_REQUEST == "false" ]) && ([ $TRAVIS_EVENT_TYPE != "cron" ])
 then
   echo "No need to run validations."
 else
@@ -26,7 +26,12 @@ else
 
     echo -en "travis_fold:end:Setup\r"
 
-    # blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
+    if [[ $TRAVIS_EVENT_TYPE == "cron" ]]
+    then
+      blt tests --define drush.alias='${drush.aliases.ci}' --define tests.run-server=true --define environment=ci --yes -v
+    else
+      echo "Local behat tests are being run only on cron run."
+    fi
   fi
 fi
 

@@ -16,6 +16,7 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\node\NodeInterface;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\file\Entity\File;
 
 /**
  * Implements hook_css_alter().
@@ -260,6 +261,8 @@ function alshaya_white_label_preprocess_page(&$variables) {
   // Make site_name and site_logo available to all TWIG templates.
   $variables['site_name'] = \Drupal::config('system.site')->get('name');
   $variables['site_logo'] = theme_get_setting('logo.url');
+  $mobile_logo = alshaya_master_get_mobile_logo();
+  $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
 }
 
 /**
@@ -274,6 +277,25 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = Html::cleanCssIdentifier('block--' . $bundle_class);
       $variables['attributes']['data-bundle-class'] = $bundle_class;
     }
+
+    // Check if block is our brands block.
+    $block_id = $variables['elements']['content']['#block_content']->get('template_suggestion')->value;
+    if ($block_id === 'block__ourbrands') {
+      $paragraph_content = $variables['elements']['content']['#block_content']->get('field_paragraph_content')->getValue();
+      $brands = [];
+      foreach ($paragraph_content as $paragraph_id) {
+        $paragraph_entity = Paragraph::load($paragraph_id['target_id']);
+        $link = $paragraph_entity->get('field_link')->getValue();
+        $brand_logo_target_id = $paragraph_entity->get('field_banner')->getValue();
+        $file = File::load($brand_logo_target_id[0]['target_id']);
+        $brands[] = [
+          'title' => $paragraph_entity->get('field_title')->value,
+          'link' => Url::fromUri($link[0]['uri'])->toString(),
+          'brand_logo' => file_create_url($file->getFileUri()),
+        ];
+      }
+      $variables['brands'] = $brands;
+    }
   }
   elseif ($variables['elements']['#id'] === 'keywordsearchblock') {
     $variables['attributes']['class'][] = 'block-views-exposed-filter-blocksearch-page';
@@ -281,6 +303,12 @@ function alshaya_white_label_preprocess_block(&$variables) {
 
   if ($variables['plugin_id'] === 'basket_horizontal_recommendation') {
     $variables['attributes']['class'][] = 'horizontal-crossell';
+  }
+
+  // Custom block type helper classes.
+  if (isset($variables['elements'], $variables['elements']['#id']) && $variables['elements']['#id'] === 'branding') {
+    $mobile_logo = alshaya_master_get_mobile_logo();
+    $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
   }
 }
 

@@ -8,6 +8,10 @@
 
   &:last-child {
     margin-#{$right}: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 1.25rem;
+    }
   }
 
   > div {
@@ -156,6 +160,10 @@
   .sfb-facets-container {
     padding-top: 0.75rem;
     padding-bottom: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 1.25rem;
+    }
   }
 
   .shop-by-size-letter {

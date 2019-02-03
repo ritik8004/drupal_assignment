@@ -5,10 +5,40 @@
     background: $PB_grey_five;
   }
 
+  .footer--static-links {
+    @include breakpoint($desktop) {
+      margin-#{$left}: 11.4%;
+      width: 28%;
+    }
+
+    .c-footer-menu {
+      width: 100%;
+    }
+
+    @include breakpoint($only-tablet) {
+      float: $right;
+      margin-#{$left}: 2rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      float: none;
+      margin-bottom: 2.25em;
+      border-bottom: 1px solid $_footer_mobile_accordion_border;
+    }
+  }
+
+  .c-footer-menu--help {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+  }
+
   .c-footer-menu--about,
   .c-footer-menu--help,
   .c-footer-menu--category,
-  .block-alshaya-newsletter {
+  .block-alshaya-newsletter,
+  .c-footer-menu--static-links {
     h3 {
       font-weight: bold;
       text-transform: capitalize;
@@ -22,6 +52,12 @@
       &:hover {
         color: $footer_link_hover;
         text-decoration: underline;
+      }
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        line-height: 1.2;
+        margin: 0.4375rem 0;
       }
     }
   }
@@ -47,17 +83,25 @@
     @include breakpoint($desktop) {
       width: 26.5%;
     }
+
+    @include breakpoint($only-tablet) {
+      width: 41.4%;
+
+      .newsletter-block-label {
+        width: 88%;
+      }
+    }
   }
 
   .footer--categories {
     @include breakpoint($desktop) {
-      width: 38.2%;
+      width: 43.2%;
     }
   }
 
   .footer--abouthelp {
     @include breakpoint($desktop) {
-      width: 58.7%;
+      width: 54.7%;
     }
   }
 }

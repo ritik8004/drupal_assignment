@@ -1,0 +1,17 @@
+{% extends "block.html.twig" %}
+{% set attributes = attributes.addClass(['c-our-brands']) %}
+{% block content %}
+  <div class='brand-list-container'>
+    <span class='section-title'>{{ 'Our Family of Brands'|t }}</span>
+    <div class='brand-list'>
+      {% for brand in brands %}
+        <div class='brand'>
+          <a href={{ brand.link }}>
+            <img src={{ brand.brand_logo }}>
+            <span class='brand-name'>{{ brand.title }}</span>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

@@ -13,7 +13,7 @@ use Drupal\Core\Site\Settings;
  *
  * Enable WhatsApp and Email in Sharethis.
  */
-function alshaya_vs_transac_update_8004() {
+function alshaya_vs_transac_update_8005() {
   // Configure ShareThis defaults.
   $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
   $services = $configFactory->get('service_option');
@@ -21,6 +21,17 @@ function alshaya_vs_transac_update_8004() {
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Clear product cache.
+ */
+function alshaya_vs_transac_update_8004() {
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**

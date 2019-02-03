@@ -6,6 +6,8 @@ use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
 use Drupal\alshaya_acm\AlshayaMdcQueueManager;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -14,6 +16,7 @@ use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
@@ -91,6 +94,13 @@ class AlshayaAcmCommands extends DrushCommands {
   private $mdcQueueManager;
 
   /**
+   * Sku manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  private $skuManager;
+
+  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -111,6 +121,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Commerce API wrapper.
    * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
    *   Mdc Queue Manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   Sku manager service.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -120,7 +132,8 @@ class AlshayaAcmCommands extends DrushCommands {
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
                               Connection $connection,
                               APIWrapper $api_wrapper,
-                              AlshayaMdcQueueManager $mdcQueueManager) {
+                              AlshayaMdcQueueManager $mdcQueueManager,
+                              SkuManager $skuManager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -130,6 +143,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->connection = $connection;
     $this->apiWrapper = $api_wrapper;
     $this->mdcQueueManager = $mdcQueueManager;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -395,7 +409,12 @@ class AlshayaAcmCommands extends DrushCommands {
    */
   public function resetConfig(string $config = '') {
     // Force reset all the settings.
-    $this->alshayaAcmConfigCheck->checkConfig(TRUE, $config);
+    if (!$this->alshayaAcmConfigCheck->checkConfig(TRUE, $config)) {
+      $this->io()->error(dt('Config reset is not done.'));
+    }
+    else {
+      $this->io()->success(dt('Config reset done successfully.'));
+    }
 
     // Reset country specific settings.
     $this->alshayaAcmConfigCheck->resetCountrySpecificSettings();
@@ -532,9 +551,10 @@ class AlshayaAcmCommands extends DrushCommands {
 
       // Avoid bypassing check using -y switch.
       $confirm_text = dt('yes');
-      $input = $this->io()->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
-        '@confirm_text' => $confirm_text,
-      ]));
+      $input = $this->io()
+        ->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
+          '@confirm_text' => $confirm_text,
+        ]));
 
       if ($input != $confirm_text) {
         throw new UserAbortException();
@@ -568,7 +588,8 @@ class AlshayaAcmCommands extends DrushCommands {
 
     // Use page size configured for conductor as default in case no override is
     // supplied via options.
-    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')->get('product_page_size');
+    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')
+      ->get('product_page_size');
     unset($options['page_size']);
 
     if (!empty($csv_skus)) {
@@ -579,12 +600,93 @@ class AlshayaAcmCommands extends DrushCommands {
         $command_options['skus'] = implode(',', $csv_skus_chunk);
 
         if (!empty($command_options['skus'])) {
-          drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+          drush_invoke_process('@self', 'acsp', [
+            'langcode' => $langcode,
+            'page_size' => $page_size,
+          ], $command_options);
         }
       }
     }
     elseif (!empty($command_options['skus'])) {
-      drush_invoke_process('@self', 'acsp', ['langcode' => $langcode, 'page_size' => $page_size], $command_options);
+      drush_invoke_process('@self', 'acsp', [
+        'langcode' => $langcode,
+        'page_size' => $page_size,
+      ], $command_options);
+    }
+  }
+
+  /**
+   * Cleanup Configurable SKUs without any child SKU.
+   *
+   * @command alshaya_acm:cleanup-orphan-skus
+   *
+   * @aliases alshaya-cleanup-orphan-skus, acos
+   *
+   * @usage drush alshaya-cleanup-orphan-skus
+   *   Cleanup Configurable SKUs without any child SKU.
+   */
+  public function cleanupOrphanSkus() {
+    $subquery = $this->connection->select('acq_sku__field_configured_skus', 'c')
+      ->fields('c', ['entity_id']);
+    $subquery->join('acq_sku_field_data', 'd', 'c.field_configured_skus_value = d.sku');
+    $subquery->condition('c.bundle', "configurable");
+
+    $query = $query = $this->connection->select('acq_sku__field_configured_skus', 's')
+      ->fields('b', ['sku']);
+    $query->leftJoin('acq_sku_field_data', 'b', 's.entity_id = b.id');
+    $query->condition('s.entity_id', $subquery, 'NOT IN');
+    $query->join('node__field_skus', 'nfs', 'nfs.field_skus_value = b.sku');
+    $query->join('node_field_data', 'nfd', 'nfd.nid = nfs.entity_id');
+    $query->condition('nfd.status', 1);
+    $query->distinct();
+
+    $results = $query->execute()->fetchAllKeyed(0, 0);
+
+    if (empty($results)) {
+      $this->output()->writeln('SKUs are already in a clean state. No configurable SKUs found without children.');
+      return;
+    }
+
+    $confirm_message = dt('You are going to disable the following SKUs from Drupal: !skus', ['!skus' => implode(',', $results)]);
+    if (!$this->io()->confirm($confirm_message)) {
+      throw new UserAbortException();
+    }
+
+    foreach ($results as $result) {
+      if (($sku = SKU::loadFromSku($result)) && $sku instanceof SKU) {
+        // Get parent node for SKU.
+        $parent_node = $this->skuManager->getDisplayNode($sku, FALSE);
+
+        // Unpublish the node rather than deleting it. We may run into orphan
+        // simple SKUs, if a simple SKU connected with a config is enabled on
+        // MDC (which has been cleaned from Drupal), unless we save the config
+        // SKU again on MDC.
+        if ($parent_node instanceof NodeInterface) {
+          $parent_node->setPublished(FALSE);
+          $parent_node->save();
+
+          // Get translation languages for the parent node.
+          $node_trans_languages = $parent_node->getTranslationLanguages();
+          $current_langauge = $parent_node->language();
+
+          // Disable translations as well.
+          foreach ($node_trans_languages as $language) {
+            if ($current_langauge->getId() !== $language->getId() &&
+              $parent_node->hasTranslation($language->getId()) &&
+              $translated_node = $parent_node->getTranslation($language->getId())) {
+              $translated_node->setPublished(FALSE);
+              $translated_node->save();
+            }
+          }
+
+          $deleted_skus[] = $result;
+        }
+      }
+    }
+
+    if (!empty($deleted_skus)) {
+      $this->logger->info('Cleaned up following SKUs which had no children attached: @cleaned_skus', ['@clenaed_skus' => implode(',', $deleted_skus)]);
+      $this->io()->success('Cleaned up following SKUs which had no children attached: ' . implode(',', $deleted_skus));
     }
   }
 

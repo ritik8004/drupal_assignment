@@ -24,18 +24,6 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
-      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-      $variant = $sku_manager->getSelectedVariant($sku_entity);
-
-      if ($variant instanceof SKUInterface) {
-        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-        $build['title'] = [
-          '#markup' => $productInfoHelper->getTitle($variant, 'pdp'),
-        ];
-      }
-
       $description = [];
 
       if ($body = $entity->get('body')->getValue()) {
@@ -57,6 +45,7 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['dimensions_and_care'] = [
           '#theme' => 'pdp_description_accordion',
           '#title' => t('Dimensions and Care'),
+          '#class' => 'dimensions-and-care',
           '#text' => [
             '#markup' => $product_info[0]['value'],
           ],
@@ -139,4 +128,15 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
       }
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_search_facet_price_alter().
+ */
+function alshaya_pb_transac_alshaya_search_facet_price_alter($range, &$displayValue) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Remove decimal points from price block filter.
+  $displayValue = str_replace('.' . str_repeat('0', $config->get('decimal_points')), '', $displayValue);
 }

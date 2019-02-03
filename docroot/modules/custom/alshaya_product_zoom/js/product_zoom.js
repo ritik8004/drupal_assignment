@@ -41,7 +41,11 @@
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
-
+        if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
+          // Do initial setup again for slick dots.
+          Drupal.behaviors.pdpInstagranDots.initialSetup(mobilegallery);
+          Drupal.attachBehaviors(context);
+        }
         // Modal view on image click in desktop and tablet.
         // Modal view for PDP Slider, when clicking on main image.
         var element = $(zoomContainer.find('#product-image-gallery-container'));
@@ -170,7 +174,7 @@
    *   Slide slider slide selector for video slides.
    */
   function pauseVideos(slickSelector, videoSlideSelector) {
-    slickSelector.on('beforeChange', function (event, slick) {
+    slickSelector.once().on('beforeChange', function (event, slick) {
       var currentSlide;
       var slideType;
       var player;
