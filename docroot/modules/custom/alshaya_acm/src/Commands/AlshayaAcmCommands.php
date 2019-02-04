@@ -406,7 +406,7 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Print skus for which media is attached to SKU but not available in Drupal.
+   * Print skus for which media is attached to SKU but not available in drupal.
    *
    * @param string $langcode
    *   Language code for which we want to get skus.
