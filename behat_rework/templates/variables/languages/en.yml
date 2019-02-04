@@ -1,0 +1,3 @@
+variables:
+  lang_login_url: '/en/user/login'
+  lang_faq_url: '/en/faq'

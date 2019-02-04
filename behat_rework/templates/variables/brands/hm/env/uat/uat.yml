@@ -1,3 +1,3 @@
 variables:
-  var_username: 'bharat-qa@acquia.com'
+  var_username: 'mitesh-uat@acquia.com'
   var_password: 'acquia@123.com'

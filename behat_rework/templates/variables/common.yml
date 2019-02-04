@@ -1,5 +1,5 @@
 variables:
-  breadcrumb_examples:
+  var_breadcrumb_examples:
     1:
       - page
       - breadcrumb

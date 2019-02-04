@@ -7,4 +7,4 @@ Feature: To verify my account, Sign in functionality
     And I wait for the page to load
     Then the breadcrumb "<breadcrumb>" should be displayed
   Examples:
-    {breadcrumb_examples}
+    {var_breadcrumb_examples}

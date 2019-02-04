@@ -16,12 +16,11 @@ $i = 0;
 
 foreach ($behat->getCollectedYamlFiles() as $profile => $files) {
   $variables = $behat->mergeYamlFiles($files, $profile);
-  if (isset($variables['variables']['base_url'])) {
+  if (isset($variables['variables']['var_base_url'])) {
     $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
     $behat->dumpYaml(BUILD_DIR . '/profiles.yml', ($i > 0), $prepare_behat, $profile);
     $i++;
 
-    $base_path = getcwd() . DIRECTORY_SEPARATOR;
     $feature = new AlshayaFeatureProcess([
       'site' => $profile,
       'variables' => $variables['variables'] ?? [],

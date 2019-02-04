@@ -22,62 +22,100 @@ class AlshayaYamlProcess {
   }
 
   public function collectYamlFiles() {
+
+    $languages = ['en', 'ar'];
     foreach($this->markets as $market) {
-      $market_common = [];
-      if (file_exists(TEMPLATE_DIR . "/variables/markets/$market.yml")) {
-        $market_common[] = TEMPLATE_DIR . "/variables/markets/$market.yml";
-      }
-      $files[$market] = array_merge([TEMPLATE_DIR . '/variables/common.yml'], $market_common);
+      foreach ($languages as $language) {
+        $market_common = [];
 
-      $directory = TEMPLATE_DIR . '/variables/brands';
-      $brands_dirs = new \DirectoryIterator($directory);
+        if (file_exists(TEMPLATE_DIR . "/variables/languages/$language.yml")) {
+          $market_common[] = TEMPLATE_DIR . "/variables/languages/$language.yml";
+        }
 
-      foreach ($brands_dirs as $brands_dir) {
+        if (file_exists(TEMPLATE_DIR . "/variables/markets/$market.yml")) {
+          $market_common[] = TEMPLATE_DIR . "/variables/markets/$market.yml";
+        }
+        $files["{$market}_{$language}"] = array_merge([TEMPLATE_DIR . '/variables/common.yml'], $market_common);
 
-        if (!$brands_dir->isDot() && $brands_dir->isDir()) {
+        $directory   = TEMPLATE_DIR . '/variables/brands';
+        $brands_dirs = new \DirectoryIterator($directory);
 
-          $current_brand = $brands_dir->getBasename();
-          $files["{$current_brand}_{$market}"] = $files[$market];
+        foreach ($brands_dirs as $brands_dir) {
 
-          if (file_exists($brands_dir->getPathname() . "/{$current_brand}.yml")) {
-            $files["{$current_brand}_{$market}"] = array_merge(
-              $files["{$current_brand}_{$market}"],
-              [$brands_dir->getPathname() . "/{$current_brand}.yml"]
-            );
-          }
+          if (!$brands_dir->isDot() && $brands_dir->isDir()) {
 
-          if (file_exists($brands_dir->getPathname() . "/markets/$market/$market.yml")) {
-            $files["{$current_brand}_{$market}"] = array_merge(
-              $files["{$current_brand}_{$market}"],
-              [$brands_dir->getPathname() . "/markets/$market/$market.yml"]
-            );
-          }
+            $current_brand = $brands_dir->getBasename();
+            $files["{$current_brand}_{$market}_{$language}"] = $files["{$market}_{$language}"];
 
-          $env_directory = $brands_dir->getPathname() . "/env";
-          $env_dirs = new \DirectoryIterator($env_directory);
+            if (file_exists($brands_dir->getPathname() . "/{$current_brand}.yml")) {
+              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                $files["{$current_brand}_{$market}_{$language}"],
+                [$brands_dir->getPathname() . "/{$current_brand}.yml"]
+              );
+            }
 
-          foreach ($env_dirs as $env_dir) {
-            if (!$env_dir->isDot() && $env_dir->isDir()) {
-              $current_env = $env_dir->getBasename();
-              $final_key = "{$current_brand}-{$market}-{$current_env}";
+            if (file_exists($brands_dir->getPathname() . "/languages/$language.yml")) {
+              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                $files["{$current_brand}_{$market}_{$language}"],
+                [$brands_dir->getPathname() . "/languages/$language.yml"]
+              );
+            }
 
-              $this->collectedFiles[$final_key] = $files["{$current_brand}_{$market}"];
-              if (file_exists($env_dir->getPathname() . "/{$current_env}.yml")) {
-                $this->collectedFiles[$final_key] = array_merge(
-                  $files["{$current_brand}_{$market}"],
-                  [$env_dir->getPathname() . "/{$current_env}.yml"]
-                );
+            if (file_exists($brands_dir->getPathname() . "/markets/$market/$market.yml")) {
+              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                $files["{$current_brand}_{$market}_{$language}"],
+                [$brands_dir->getPathname() . "/markets/$market/$market.yml"]
+              );
+            }
+
+            if (file_exists($brands_dir->getPathname() . "/markets/$market/languages/$language.yml")) {
+              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                $files["{$current_brand}_{$market}_{$language}"],
+                [$brands_dir->getPathname() . "/markets/$market/languages/$language.yml"]
+              );
+            }
+
+            $env_directory = $brands_dir->getPathname() . "/env";
+            $env_dirs = new \DirectoryIterator($env_directory);
+
+            foreach ($env_dirs as $env_dir) {
+              if (!$env_dir->isDot() && $env_dir->isDir()) {
+                $current_env = $env_dir->getBasename();
+                $final_key   = "{$current_brand}-{$market}-{$current_env}-{$language}";
+
+                $this->collectedFiles[$final_key] = $files["{$current_brand}_{$market}_{$language}"];
+                if (file_exists($env_dir->getPathname() . "/{$current_env}.yml")) {
+                  $this->collectedFiles[$final_key] = array_merge(
+                    $files["{$current_brand}_{$market}_{$language}"],
+                    [$env_dir->getPathname() . "/{$current_env}.yml"]
+                  );
+                }
+
+                $env_lang_directory = $env_dir->getPathname() . "/languages/";
+                if (file_exists($env_lang_directory . "$language.yml")) {
+                  $this->collectedFiles[$final_key] = array_merge(
+                    $this->collectedFiles[$final_key],
+                    [$env_lang_directory . "$language.yml"]
+                  );
+                }
+
+                $env_market_directory = $env_dir->getPathname() . "/markets/$market/";
+                if (file_exists($env_market_directory . "$market.yml")) {
+                  $this->collectedFiles[$final_key] = array_merge(
+                    $this->collectedFiles[$final_key],
+                    [$env_market_directory . "$market.yml"]
+                  );
+                }
+
+                $env_market_language_directory = $env_dir->getPathname() . "/markets/$market/languages/";
+                if (file_exists($env_market_language_directory . "$language.yml")) {
+                  $this->collectedFiles[$final_key] = array_merge(
+                    $this->collectedFiles[$final_key],
+                    [$env_market_language_directory . "$language.yml"]
+                  );
+                }
+
               }
-
-              $env_market_directory = $env_dir->getPathname() . "/markets/$market/";
-              if (file_exists($env_market_directory . "$market.yml")) {
-
-                $this->collectedFiles[$final_key] = array_merge(
-                  $this->collectedFiles[$final_key],
-                  [$env_market_directory . "$market.yml"]
-                );
-              }
-
             }
           }
         }
@@ -179,8 +217,8 @@ class AlshayaYamlProcess {
 //    }
 
     // Set the MinkExtension base_url to current site's base url.
-    if (isset($content['variables']['base_url'])) {
-      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $content['variables']['base_url'] . '/';
+    if (isset($content['variables']['var_base_url'])) {
+      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $content['variables']['var_base_url'] . '/';
     }
 
     if (isset($yaml['extensions']['kolevCustomized\MultilingualExtension'])) {

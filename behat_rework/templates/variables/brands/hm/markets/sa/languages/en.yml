@@ -1,1 +1,2 @@
-feedback_url: '/en-hm-sa/send-feedback'
+variables:
+  lang_feedback_url: '/en-hm-sa/send-feedback'

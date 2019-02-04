@@ -9,4 +9,4 @@ Feature: Test Sign up features for hm-kw
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I go to "/user/register"
+    And I go to "{lang_faq_url}"
