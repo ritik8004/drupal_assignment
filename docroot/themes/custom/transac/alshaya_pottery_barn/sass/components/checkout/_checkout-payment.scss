@@ -161,3 +161,13 @@
     margin: 0 1.5rem;
   }
 }
+
+#payment_details_wrapper {
+  > div:first-child {
+    border-top: none;
+
+    @include breakpoint($only-mobile) {
+      border-top: none;
+    }
+  }
+}

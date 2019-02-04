@@ -203,4 +203,20 @@
       }
     }
   }
+
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: none;
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }
