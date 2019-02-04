@@ -114,9 +114,6 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $data = $config->getRawData();
     $override_deletions = [];
 
-    // Log the config changes.
-    $this->logConfigChanges($config_name, $config->getOriginal(), $data);
-
     // Override the config data with module overrides.
     $this->fetchOverrides($data, 'override', $config_name);
 
@@ -134,6 +131,9 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
     $this->configStorage->write($config->getName(), $data);
     Cache::invalidateTags($config->getCacheTags());
     $this->configFactory->reset($config_name);
+
+    // Log the config changes.
+    $this->logConfigChanges($config_name, $config->getOriginal(), $data);
   }
 
   /**
@@ -181,13 +181,13 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     // Do not log the message multiple times for the same config change.
     if (empty($config_logged[$config_name])) {
-      $differ = new ArrayDiff();
       // If user email no available, means config is saved via drush.
       $current_user_mail = $this->account->getEmail() ?? 'Drush';
-      $this->logger->info('Config: @config updated by @user. Diff: @diff', [
+      $this->logger->info('Config: @config updated by @user. Old config: @old. New config: @new', [
         '@config' => $config_name,
         '@user' => $current_user_mail,
-        '@diff' => json_encode($differ->diff($old_config, $new_config)),
+        '@old' => json_encode($old_config),
+        '@new' => json_encode($new_config),
       ]);
       $config_logged[$config_name] = $config_logged;
     }
