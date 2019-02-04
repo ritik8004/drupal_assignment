@@ -36,8 +36,9 @@ tests:                             # Contains a list of features to run.
   - 'login'                        # these contains real (*.feature) file names
   - 'sign-in'                      # without file extension.
 tags:              # list of tags that you want to replace with {@tags}
-  - 'loyalty'
-  - 'swatches'
+  - 'hm'
+  - 'hm-kw-uat'
+  - 'hm-uat'
 ```
 
 #### behat `tags` in `*.yml`
