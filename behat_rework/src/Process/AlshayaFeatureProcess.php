@@ -32,27 +32,6 @@ class AlshayaFeatureProcess {
   }
 
   /**
-   * Prepare locations array to check for features.
-   *
-   * @return array
-   *   Return array of paths.
-   */
-  protected function preparePathsToCheckForFeatures():array {
-    $suiteLocators = $this->suiteLocators;
-    $brand_feature_dir = explode('-', $this->site);
-
-    $newLocators = array_map(
-      function($dir_key) use ($brand_feature_dir) {
-        $path = $this->sourcePath . DIRECTORY_SEPARATOR. implode('/', array_slice($brand_feature_dir, 0, array_search($dir_key, $brand_feature_dir) + 1));
-        return $path;
-      }
-      , $brand_feature_dir);
-
-    $this->suiteLocators = array_merge($suiteLocators, $newLocators);
-    return $this->suiteLocators;
-  }
-
-  /**
    * Generate feature files.
    */
   public function generateFeatureFiles() {
@@ -88,6 +67,33 @@ class AlshayaFeatureProcess {
     }
   }
 
+  /**
+   * Prepare locations array to check for features.
+   *
+   * @return array
+   *   Return array of paths.
+   */
+  protected function preparePathsToCheckForFeatures():array {
+    $suiteLocators = $this->suiteLocators;
+    $brand_feature_dir = explode('-', $this->site);
+
+    $newLocators = array_map(
+      function($dir_key) use ($brand_feature_dir) {
+        $path = $this->sourcePath . DIRECTORY_SEPARATOR. implode('/', array_slice($brand_feature_dir, 0, array_search($dir_key, $brand_feature_dir) + 1));
+        return $path;
+      }
+      , $brand_feature_dir);
+
+    $this->suiteLocators = array_merge($suiteLocators, $newLocators);
+    return $this->suiteLocators;
+  }
+
+  /**
+   * Delete existing folders and files from given destination dir.
+   *
+   * @param $rootPath
+   *   The destination directory path.
+   */
   protected function deleteFolderAndFiles($rootPath) {
     if (!is_dir($rootPath)) {
       return;
@@ -118,6 +124,10 @@ class AlshayaFeatureProcess {
    * @return string
    */
   protected function createFolderAndFiles($file_name) {
+    if (!is_dir($this->destinationPath)) {
+      mkdir($this->destinationPath);
+    }
+
     if (!is_dir($this->destinationPath . DIRECTORY_SEPARATOR . $this->site)) {
       mkdir($this->destinationPath . DIRECTORY_SEPARATOR . $this->site);
     }
