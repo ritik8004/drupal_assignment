@@ -171,3 +171,25 @@
     }
   }
 }
+
+.checkout-payment {
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: none;
+
+        .messages {
+          margin-top: 1rem;
+        }
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
