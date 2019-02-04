@@ -17,18 +17,24 @@ $i = 0;
 foreach ($behat->getCollectedYamlFiles() as $profile => $files) {
   $variables = $behat->mergeYamlFiles($files, $profile);
   if (isset($variables['variables']['var_base_url'])) {
-    $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
-    $behat->dumpYaml(BUILD_DIR . '/profiles.yml', ($i > 0), $prepare_behat, $profile);
-    $i++;
+    if (!is_dir(BUILD_DIR)) {
+      mkdir(BUILD_DIR);
+    }
 
-    $feature = new AlshayaFeatureProcess([
-      'site' => $profile,
-      'variables' => $variables['variables'] ?? [],
-      'features' => $variables['tests'] ?? [],
-      'features' => $variables['tests'] ?? [],
-      'template_path' => TEMPLATE_DIR . '/features',
-      'build_path' => BUILD_DIR . '/features'
-    ]);
-    $feature->generateFeatureFiles();
+    if (is_dir(BUILD_DIR)) {
+      $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
+      $behat->dumpYaml(BUILD_DIR . '/profiles.yml', ($i > 0), $prepare_behat, $profile);
+      $i++;
+
+      $feature = new AlshayaFeatureProcess([
+        'site' => $profile,
+        'variables' => $variables['variables'] ?? [],
+        'features' => $variables['tests'] ?? [],
+        'features' => $variables['tests'] ?? [],
+        'template_path' => TEMPLATE_DIR . '/features',
+        'build_path' => BUILD_DIR . '/features'
+      ]);
+      $feature->generateFeatureFiles();
+    }
   }
 }
