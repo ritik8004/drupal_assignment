@@ -37,6 +37,61 @@ tests:                             # Contains a list of features to run.
   - 'sign-in'                      # without file extension.
 ```
 
+#### writing variable for behat `table` format in `*.yml`
+
+For example, you want to create feature with `Examples:` 
+```text
+  Scenario Outline: As a guest
+  I should be able to view breadcrumbs across the site
+    Given I am on "<page>"
+    And I wait for the page to load
+    Then the breadcrumb "<breadcrumb>" should be displayed
+  Examples:
+      | page                         | breadcrumb                             |
+      | /ladies                      | Home > Ladies                          |
+      | /ladies/new-arrivals/clothes | Home > Ladies > New Arrivals > Clothes |
+      | /cart                        | Home > Basket                          |
+```
+OR
+
+```text
+Scenario:
+  Given the following people exist:
+    | name  | email           | phone |
+    | Aslak | aslak@email.com | 123   |
+    | Joe   | joe@email.com   | 234   |
+    | Bryan | bryan@email.org | 456   |
+```
+
+Replace the table with variable like:
+```text
+Examples:
+  {breadcrumb_table}
+```
+OR
+```text
+Given the following people exist:
+  {people_table}
+```
+
+Define the variable as shown below in your `*.yml` file:
+```yaml
+variables:
+  breadcrumb_table:
+    1:                        # Row, this can be any number, it doesn't matter.
+      - page                  # column #1 title
+      - breadcrumb            # column #2 title
+    2:              
+      - '/ladies'             # column #1 value
+      - 'Home > Ladies'       # column #2 value
+    3:
+      - '/ladies/new-arrivals/clothes'
+      - 'Home > Ladies > New Arrivals > Clothes'
+    5:
+      - '/cart'
+      - 'Home > Basket'
+```
+
 Here are the naming convention of `*.yml` files to use: 
 1. Inside `market` directory `*.yml` filename contain country code of 
 2 characters.
