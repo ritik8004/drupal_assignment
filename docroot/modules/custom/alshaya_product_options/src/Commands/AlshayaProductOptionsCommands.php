@@ -53,10 +53,17 @@ class AlshayaProductOptionsCommands extends DrushCommands {
    */
   public function syncProductOptions() {
     $this->output->writeln('Alshaya - Synchronizing all commerce product options, please wait...');
-
     $this->productOptionshelper->synchronizeProductOptions();
-
     $this->output->writeln('Sync completed.');
+  }
+
+  /**
+   * Replace original command provided by acq_sku.
+   *
+   * @hook replace-command acq_sku:sync-product-options
+   */
+  public function syncProductOptionsReplaceCommand() {
+    $this->syncProductOptions();
   }
 
   /**

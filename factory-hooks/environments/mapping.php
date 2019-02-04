@@ -251,8 +251,8 @@ function alshaya_get_env_keys($site, $env) {
     // Pottery Barn AE.
     'pbae' => [
       '01dev2' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbae_dev2',
+        'magento' => 'pb_uat',
+        'conductor' => 'pbae_uat',
       ],
       'default' => [
         'magento' => 'pb_qa',
