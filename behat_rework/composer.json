@@ -10,19 +10,12 @@
     "drupal/drupal-driver": "*",
     "jakoch/phantomjs-installer": "*",
     "se/selenium-server-standalone": "3.4.0",
-    "emuse/behat-html-formatter": "^0.1.0",
-    "miteshmap/MultilingualExtension": "dev-master"
+    "emuse/behat-html-formatter": "^0.1.0"
   },
   "config": {
     "bin-dir": "bin"
   },
   "minimum-stability": "dev",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/miteshmap/MultilingualExtension"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Alshaya\\BehatContexts\\": "src/bootstrap/Drupal",
