@@ -35,11 +35,40 @@ variables:                         # Contains variables to replace with token
 tests:                             # Contains a list of features to run.
   - 'login'                        # these contains real (*.feature) file names
   - 'sign-in'                      # without file extension.
+tags:              # list of tags that you want to replace with {@tags}
+  - 'loyalty'
+  - 'swatches'
 ```
+
+#### behat `tags` in `*.yml`
+
+Add a `tags` key in `*.yml` file as shown in above sample and add as many tags
+as you want to add as a list.
+
+Here's how you use tags in your `*.feature` file.
+
+```text
+@signup @liveonly {@tags}
+Scenario: As an authenticated user,
+  I should be able to sign in after providing valid credentials
+    Given I am on homepage
+    And I initialize multilingual context
+    And I wait for the page to load
+    When I close the popup
+    And I wait for the page to load
+    And I go to "/ar/user/register"
+```
+
+add your custom tags for each scenario or feature inside the `*.feature` file
+as show in above example (`@signup @liveonly`), after that add `{@tags}` 
+variable.
+
+> NOTE: use `{@tags}` for only common tags, it means all the tags that you
+list in `*.yml` file will be replaced with `{@tags}` in all places.
 
 #### writing variable for behat `table` format in `*.yml`
 
-For example, you want to create feature with `Examples:` 
+For example, you want to create feature with `Examples:`
 ```text
   Scenario Outline: As a guest
   I should be able to view breadcrumbs across the site
@@ -92,7 +121,8 @@ variables:
       - 'Home > Basket'
 ```
 
-Here are the naming convention of `*.yml` files to use: 
+
+#### Here are the naming convention of `*.yml` files to use:
 1. Inside `market` directory `*.yml` filename contain country code of 
 2 characters.
 2. Inside `brands` directory, there will always be a folder with brand name 
