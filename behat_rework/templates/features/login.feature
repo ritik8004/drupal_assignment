@@ -1,6 +1,7 @@
 @javascript
 Feature: Test Sign in and Forgot password features
 
+  @signin {@tags}
   Scenario: As an authenticated user,
   I should be able to sign in after providing valid credentials
     Given I am on homepage

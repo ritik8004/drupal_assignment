@@ -151,9 +151,12 @@ class AlshayaFeatureProcess {
       if (!is_array($variables[$var])) {
         return $variables[$var];
       }
-      else {
+      elseif ($this->isMultiDimensional($variables[$var])) {
         $table = new TableNode($variables[$var]);
         return $table->getTableAsString();
+      }
+      elseif ($this->isTagVariable($var) && !empty($variables[$var])) {
+        return implode(' ', $variables[$var]);
       }
     }, $matches[1]);
     // Create an array of variable, with variable wrapped in curly brackets
@@ -161,6 +164,16 @@ class AlshayaFeatureProcess {
     $replacements = array_combine($matches[0], $replacement_variables);
 
     return strtr($file_content, $replacements);
+  }
+
+  protected function isMultiDimensional($array)  {
+    return !empty(array_filter($array, function($e) {
+      return is_array($e);
+    }));
+  }
+
+  protected function isTagVariable($var) {
+    return strpos($var, '@') !== FALSE;
   }
 
   /**

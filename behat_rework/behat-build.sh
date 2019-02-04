@@ -15,7 +15,7 @@ $behat->collectYamlFiles();
 $i = 0;
 
 foreach ($behat->getCollectedYamlFiles() as $profile => $files) {
-  $variables = $behat->mergeYamlFiles($files);
+  $variables = $behat->mergeYamlFiles($files, $profile);
   if (isset($variables['variables']['base_url'])) {
     $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
     $behat->dumpYaml(BUILD_DIR . '/profiles.yml', ($i > 0), $prepare_behat, $profile);

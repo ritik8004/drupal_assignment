@@ -53,7 +53,6 @@ class AlshayaYamlProcess {
             );
           }
 
-
           $env_directory = $brands_dir->getPathname() . "/env";
           $env_dirs = new \DirectoryIterator($env_directory);
 
@@ -94,14 +93,19 @@ class AlshayaYamlProcess {
   /**
    * Return a final array of merged keys from given yaml files.
    *
-   * @param $yaml_files
+   * @param array $yaml_files
    *   List of yaml files.
+   * @param string $profile
+   *   (Optional) Current site profile.
    *
    * @return array|mixed
    *   Return array.
    */
-  public function mergeYamlFiles(array $yaml_files) {
-    $final_yaml = ['variables' => [], 'tests' => []];
+  public function mergeYamlFiles(array $yaml_files, $profile = NULL): array {
+    $final_yaml = ['variables' => [], 'tests' => [], 'tags' => []];
+    if (!empty($profile)) {
+      $final_yaml['tags'] = (array) explode('-', $profile);
+    }
 
     if(count($yaml_files) < 2) {
       return $this->getParsedContent($yaml_files[0]);
@@ -114,6 +118,14 @@ class AlshayaYamlProcess {
         $final_yaml['variables'] = array_replace_recursive($final_yaml['variables'], $yaml_parsed['variables']);
       }
 
+      if (!empty($yaml_parsed['tags'])) {
+        $final_yaml['tags'] = array_merge($final_yaml['tags'], $yaml_parsed['tags']);
+
+        if (!empty($final_yaml['tags'])) {
+          $final_yaml['tags'] = array_unique($final_yaml['tags']);
+        }
+      }
+
       if (!empty($yaml_parsed['tests'])) {
         $final_yaml['tests'] = array_merge($final_yaml['tests'], $yaml_parsed['tests']);
         if (!empty($final_yaml['tests'])) {
@@ -123,6 +135,14 @@ class AlshayaYamlProcess {
       }
     }
 
+    $final_yaml['variables']['@tags'] = array_map(
+      function ($tag) {
+        return '@'. $tag;
+      },
+      $final_yaml['tags']
+    );
+
+    unset($final_yaml['tags']);
     return $final_yaml;
   }
 
