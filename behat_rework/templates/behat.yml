@@ -5,7 +5,3 @@ suites:
       - Drupal\DrupalExtension\Context\MinkContext
       - Drupal\DrupalExtension\Context\DrupalContext
       - Drupal\DrupalExtension\Context\MessageContext
-extensions:
-  kolevCustomized\MultilingualExtension:
-    translations:
-      - "translations/translations.yml"

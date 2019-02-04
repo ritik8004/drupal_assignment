@@ -207,24 +207,10 @@ class AlshayaYamlProcess {
    */
   public function prepareBehatYaml($file, $content, $profile = NULL) {
     $yaml = $this->getParsedContent($file);
-
     $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
-
-    // Update feature context variables array.
-//    if (isset($yaml['suites']['default']['contexts'][0]['Alshaya\BehatContexts\FeatureContext'])) {
-//      $featurecontext = &$yaml['suites']['default']['contexts'][0]['Alshaya\BehatContexts\FeatureContext'];
-//      $featurecontext['parameters'] = array_merge_recursive($featurecontext['parameters'], $content['variables']);
-//    }
-
     // Set the MinkExtension base_url to current site's base url.
     if (isset($content['variables']['var_base_url'])) {
       $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $content['variables']['var_base_url'] . '/';
-    }
-
-    if (isset($yaml['extensions']['kolevCustomized\MultilingualExtension'])) {
-      if (file_exists(__DIR__ . "/files/translations/$profile.yml")) {
-        $yaml['extensions']['kolevCustomized\MultilingualExtension']['translations'][] = "translations/$profile.yml";
-      }
     }
 
     // Set the folder for report.
