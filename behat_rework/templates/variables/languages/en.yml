@@ -1,3 +1,9 @@
 variables:
   lang_login_url: '/en/user/login'
   lang_faq_url: '/en/faq'
+  lang_txt_my_account: "My account"
+  lang_txt_sign_out: "Sign out"
+  lang_txt_recent_orders: "recent orders"
+  lang_txt_arabic: "Arabic"
+  lang_txt_sign_in: "sign in"
+  lang_txt_sign_in_caps: "Sign in"
