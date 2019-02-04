@@ -220,3 +220,10 @@
     }
   }
 }
+
+@include breakpoint($only-tablet) {
+  #product-image-gallery,
+  #lightSlider {
+    height: auto;
+  }
+}

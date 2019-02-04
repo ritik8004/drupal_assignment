@@ -74,7 +74,6 @@ function alshaya_mobile_app_update_8004() {
   $configManager->updateConfigs(
       [
         'rest.resource.advanced_page',
-        'rest.resource.alshaya_error_messages',
         'rest.resource.categories',
         'rest.resource.category_product_list',
         'rest.resource.deeplink',

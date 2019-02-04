@@ -20,8 +20,9 @@
         });
 
         $('.select2-select').once('bind-events').each(function () {
+          var placeHolder = $(this).find('option[value=""]').text();
           $(this).select2({
-            placeholder: Drupal.t('Select Area')
+            placeholder: placeHolder
           });
         });
 

@@ -17,6 +17,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
+use Consolidation\AnnotatedCommand\CommandData;
 
 /**
  * Class AlshayaAcmCommands.
@@ -391,6 +392,17 @@ class AlshayaAcmCommands extends DrushCommands {
 
     // Reset country specific settings.
     $this->alshayaAcmConfigCheck->resetCountrySpecificSettings();
+  }
+
+  /**
+   * Check config state as a part of post-command to reset.
+   *
+   * Added (*) to execute after each drush command.
+   *
+   * @hook post-command *
+   */
+  public function resetConfigPostCommand($result, CommandData $commandData) {
+    $this->alshayaAcmConfigCheck->checkConfig();
   }
 
   /**
