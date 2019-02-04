@@ -627,7 +627,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         try {
           $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku_entity);
           $pdp_layout = $skuManager->getPdpLayout($sku_for_gallery, $context);
-          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', FALSE);
+          $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE);
         }
         catch (\Exception $e) {
           // Do nothing.

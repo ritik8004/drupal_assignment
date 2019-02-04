@@ -283,7 +283,7 @@
     padding-#{$right}: 1.375rem;
   }
 
-  #payment_method_knet {
+  > div:first-child {
     border-top: none;
 
     .payment-plugin-wrapper-div {
