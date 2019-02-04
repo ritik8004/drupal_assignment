@@ -188,7 +188,7 @@
         "enable-patching": true,
         "patches": {
             "acquia/blt": {
-              "Add truncate-branch option to deploy command": "https://patch-diff.githubusercontent.com/raw/nedsbeds/blt/pull/1.patch"
+              "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
             },
             "drupal/webform": {
                 "The following module is missing from the file system: contribute": "https://www.drupal.org/files/issues/2018-05-23/webform-2951921-notice-from-update-8114.patch"
