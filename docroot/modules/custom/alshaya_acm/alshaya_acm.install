@@ -29,6 +29,15 @@ function alshaya_acm_update_dependencies() {
 /**
  * Implements hook_update_N().
  *
+ * Exclude sync requests from shield.
+ */
+function alshaya_acm_update_8011() {
+  _alshaya_acm_exclude_sync_from_shield();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Correct price info in local.
  */
 function alshaya_acm_update_8010() {
@@ -240,6 +249,8 @@ function alshaya_acm_install() {
   // Delete default store node.
   _alshaya_acm_delete_default_store_node();
 
+  // Exclude sync requests from shield.
+  _alshaya_acm_exclude_sync_from_shield();
 }
 
 /**
