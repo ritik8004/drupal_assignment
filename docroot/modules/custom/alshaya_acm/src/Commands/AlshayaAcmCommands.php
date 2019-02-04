@@ -476,7 +476,7 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Cleanup Configurable SKUs without any child SKU.
+   * Cleanup configurable SKUs without any child SKU.
    *
    * @command alshaya_acm:cleanup-orphan-skus
    *
