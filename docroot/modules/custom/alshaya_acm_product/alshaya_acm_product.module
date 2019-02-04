@@ -662,7 +662,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 }
 
 /**
- * Get home delivery config.
+ * Get home delivery configuration.
  *
  * @return array
  *   Return array of config data.
