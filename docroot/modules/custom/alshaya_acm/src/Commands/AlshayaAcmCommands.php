@@ -369,7 +369,7 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Reset specified config from settings.
+   * Reset the specified config from settings files.
    *
    * @param string $config
    *   Config that needs to reset.
