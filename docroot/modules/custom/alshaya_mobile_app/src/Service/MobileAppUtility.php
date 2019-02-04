@@ -857,7 +857,7 @@ class MobileAppUtility {
    *   Return string price upto configured decimal points.
    */
   public function formatPriceDisplay(float $price): string {
-    return (string) number_format($price, $this->currencyConfig->get('decimal_points'));
+    return (string) _alshaya_acm_format_price_with_decimal($price);
   }
 
   /**

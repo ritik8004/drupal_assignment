@@ -64,18 +64,22 @@
               touchThreshold: 5
             };
 
-            var gallery = $('#product-image-gallery-mob', context);
+            var gallery = $('#product-image-gallery-mob');
             if (!gallery.hasClass('slick-initialized')) {
               applyRtl(gallery, slickModalOptions);
               // Sync only the dots.
               // No need to scroll the slide as initialSlide param does that.
               Drupal.behaviors.pdpInstagranDots.syncDots(gallery, currentmobSlide, false);
+              // Attach the change event explicitly.
+              Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
             }
             else {
               // Refresh slick.
               gallery[0].slick.refresh();
               // Do initial setup again for slick dots.
               Drupal.behaviors.pdpInstagranDots.initialSetup(gallery);
+              // Attach the change event explicitly.
+              Drupal.behaviors.pdpInstagranDots.attachBeforeChange(gallery);
               // Sync the dots along with the slide.
               Drupal.behaviors.pdpInstagranDots.syncDots(gallery, currentmobSlide, true);
             }

@@ -364,11 +364,19 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
     }
   }
   elseif (strpos($mail, '@') === FALSE) {
-    $module_implements = \Drupal::cache('bootstrap')->get('module_implements');
-    $module_implements_cache = [];
-    if ($module_implements && isset($module_implements->data)) {
-      $module_implements_cache = $module_implements->data['module_implements_alter'] ?? [];
-    }
+    // It is bit complicated and to find what goes wrong after deployments.
+    // For some reason we feel hook_module_implements_alter is not invoked.
+    // Check CORE-6691 for further info.
+    $bootstrap = \Drupal::cache('bootstrap');
+    $module_implements = $bootstrap->get('module_implements');
+    $module_implements_cache = $module_implements->data ?? [];
+
+    // We will add log file name in watchdog.
+    // Since log is too big we store in file.
+    $log_name = '/tmp/module_implements_cache_' . $mail . '_' . microtime(TRUE);
+    $fp = fopen($log_name, 'w');
+    fwrite($fp, print_r($module_implements_cache, TRUE));
+    fclose($fp);
 
     $modules = array_keys(\Drupal::getContainer()->getParameter('container.modules'));
 
@@ -377,8 +385,9 @@ function alshaya_acm_customer_login_validate(array &$form, FormStateInterface &$
       '@data' => json_encode([
         'form_name_element_validate' => $form['name']['#element_validate'],
         'form_validate' => $form['#validate'],
-        'module_implements_cache' => $module_implements_cache,
+        'module_implements_cache' => $log_name,
         'modules_container_parameter' => $modules,
+        'bootstrap_class' => get_class($bootstrap),
       ]),
     ]);
   }
