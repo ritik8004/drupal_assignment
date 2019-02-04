@@ -1,5 +1,6 @@
 variables:
   lang_login_url: '/en/user/login'
+  lang_reg_url: '/en/user/register'
   lang_faq_url: '/en/faq'
   lang_txt_my_account: "My account"
   lang_txt_sign_out: "Sign out"
