@@ -27,25 +27,12 @@
     position: static;
   }
 
-  .sub-total-row,
-  .delivery-charge-row,
-  .total-row,
-  .discount-row {
-    td {
-      padding: 0.625rem 1rem;
-    }
-  }
-
   .total-row {
     &.vat-container {
       td.warm--white {
         font-family: $vs-regular;
       }
     }
-  }
-
-  .sub-total-row td {
-    padding-top: 1.125rem;
   }
 
   .order-transaction > .dark {
@@ -114,10 +101,6 @@
 
   .sub-total-row {
     border-top: 1px solid $order_detail_order_sub_total_border;
-
-    td {
-      padding-top: 1.125rem;
-    }
   }
 
   .order-item-row {
@@ -180,12 +163,13 @@
           display: table-cell !important;
         }
       }
-    }
 
-    .discount-row,
-    .surcharge-row {
-      td {
-        padding: 0.625rem 1rem;
+      td.above-mobile {
+        &.blend {
+          @include breakpoint($only-tablet) {
+            vertical-align: top;
+          }
+        }
       }
     }
 
@@ -204,6 +188,28 @@
 
         @include breakpoint($desktop) {
           top: -0.3125rem;
+        }
+      }
+    }
+
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row,
+    .discount-row,
+    .surcharge-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 0.625rem 0.5rem;
+        }
+      }
+    }
+
+    tr.order-item-row,
+    tr.order-details-row,
+    tr.order-summary-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 1.375rem 0.5rem 3.438rem !important;
         }
       }
     }

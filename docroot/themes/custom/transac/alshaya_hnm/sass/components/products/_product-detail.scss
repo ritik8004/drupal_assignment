@@ -500,7 +500,7 @@
         color: $accordion_subtitle;
         line-height: 1;
         text-transform: none;
-        margin-top: -0.5rem;
+        margin-top: -0.25rem;
         padding-bottom: 0;
       }
     }
@@ -606,31 +606,8 @@
   }
 }
 
-.click-collect-top-stores {
-  .ajax-progress-throbber {
-    .throbber {
-      background-image: url(../imgs/icons/ic-loader.svg) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-    }
-  }
-}
-
 .other-stores-link {
   color: $primary_link;
-}
-
-.click-collect-form,
-.store-finder-form-wrapper {
-  + .ajax-progress-throbber {
-    .throbber {
-      background-image: url(../imgs/icons/ic-loader.svg) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-    }
-  }
 }
 
 .click-collect-all-stores {
@@ -678,17 +655,6 @@
     .form-item-location {
       margin-bottom: 0.5rem;
       float: $left;
-    }
-
-    .stores-list-all {
-      .ajax-progress-throbber {
-        .throbber {
-          background-image: url(../imgs/icons/ic-loader.svg) !important;
-          background-position: $right center !important;
-          background-repeat: no-repeat !important;
-          background-size: 1.5rem;
-        }
-      }
     }
   }
 }

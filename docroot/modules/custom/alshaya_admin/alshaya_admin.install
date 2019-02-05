@@ -6,6 +6,22 @@
  */
 
 use Drupal\search_api\Entity\Index;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add archived state and it's transitions.
+ */
+function alshaya_admin_update_8005() {
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['workflows.workflow.alshaya_workflow'],
+    'alshaya_admin',
+    'install',
+    AlshayaConfigManager::MODE_MERGE
+  );
+}
 
 /**
  * Implements hook_update_N().

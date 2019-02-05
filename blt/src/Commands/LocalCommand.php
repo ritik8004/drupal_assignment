@@ -143,15 +143,6 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $this->taskDrush()
-      ->drush('cset')
-      ->arg('stage_file_proxy.settings')
-      ->arg('verify')
-      ->arg(0)
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
     $this->say('Finally clear cache once');
     $this->taskDrush()
       ->drush('cr')
@@ -375,7 +366,7 @@ class LocalCommand extends BltTasks {
         return $array['name'];
       }
       elseif ($info_required == 'url') {
-        return reset($array['domains']);
+        return array_pop($array['domains']);
       }
     }
 

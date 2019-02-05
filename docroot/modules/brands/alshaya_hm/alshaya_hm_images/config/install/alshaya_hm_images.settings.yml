@@ -35,6 +35,12 @@ dimensions:
     mobile: q
 # Weights are used to sort asset-types. Items with lower weight get precedence
 # while displaying them.
+# Image Types:
+# Lookbook: Model's image
+# DescriptiveStillLife: Product's image
+# DescriptiveDetail: Zoomed version of DescriptiveStillLife image
+# MODEL_IMAGE, STILL_LIFE_FRONT_URL, DETAIL_IMAGE are mostly applicable only to
+# old season products(season 5) {is_old_format: TRUE}.
 weights:
   plp:
     Lookbook: 1

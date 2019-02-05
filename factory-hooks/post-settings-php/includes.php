@@ -13,6 +13,8 @@ $config_directories['sync'] = '../config/default';
 
 use Symfony\Component\Yaml\Yaml;
 
+global $env;
+
 // This variable is declared and filled in post-sites-php/includes.php
 global $acsf_site_name;
 
@@ -47,6 +49,7 @@ $settings['country_code'] = strtoupper($country_code);
 
 // Filepath for MDC rabbitmq credentials.
 $rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home/alshaya/rabbitmq-creds/' . $settings['env'] . '/';
+
 $settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
 
 // We merge the entire settings with the specific ones.

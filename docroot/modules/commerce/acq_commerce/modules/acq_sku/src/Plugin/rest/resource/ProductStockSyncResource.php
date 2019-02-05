@@ -2,10 +2,7 @@
 
 namespace Drupal\acq_sku\Plugin\rest\resource;
 
-use Drupal\acq_commerce\I18nHelper;
-use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\acq_sku\StockManager;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
 use Psr\Log\LoggerInterface;
@@ -30,18 +27,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ProductStockSyncResource extends ResourceBase {
 
   /**
-   * Drupal Config Factory Instance.
+   * Stock Manager.
    *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   * @var \Drupal\acq_sku\StockManager
    */
-  private $configFactory;
-
-  /**
-   * I18n Helper.
-   *
-   * @var \Drupal\acq_commerce\I18nHelper
-   */
-  private $i18nHelper;
+  private $stockManager;
 
   /**
    * Construct.
@@ -54,23 +44,19 @@ class ProductStockSyncResource extends ResourceBase {
    *   The plugin implementation definition.
    * @param array $serializer_formats
    *   The available serialization formats.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
-   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
-   *   I18nHelper object.
+   * @param \Drupal\acq_sku\StockManager $stock_manager
+   *   Stock Manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               array $serializer_formats,
-                              ConfigFactoryInterface $config_factory,
                               LoggerInterface $logger,
-                              I18nHelper $i18n_helper) {
+                              StockManager $stock_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->configFactory = $config_factory;
-    $this->i18nHelper = $i18n_helper;
+    $this->stockManager = $stock_manager;
   }
 
   /**
@@ -82,9 +68,8 @@ class ProductStockSyncResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('config.factory'),
-      $container->get('logger.factory')->get('acq_commerce'),
-      $container->get('acq_commerce.i18n_helper')
+      $container->get('logger.factory')->get(self::class),
+      $container->get('acq_sku.stock_manager')
     );
   }
 
@@ -93,124 +78,41 @@ class ProductStockSyncResource extends ResourceBase {
    *
    * Handle Conductor posting an array of product / SKU data for update.
    *
-   * @param array $stock
+   * @param array $message
    *   Stock Data.
    *
    * @return \Drupal\rest\ModifiedResourceResponse
    *   HTTP Response object.
    */
-  public function post(array $stock) {
-    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
-    $lock = \Drupal::service('lock.persistent');
+  public function post(array $message) {
+    $this->logger->debug('Stock message received. @message', [
+      '@message' => json_encode($message),
+    ]);
 
-    $response = [
-      'success' => FALSE,
-    ];
-
-    $config = $this->configFactory->get('acq_commerce.conductor');
-    $debug = $config->get('debug');
-    $debug_dir = $config->get('debug_dir');
-
-    if ($debug && !empty($debug_dir)) {
-      // Export product data into file.
-      if (!isset($fps)) {
-        $filename = $debug_dir . '/stock.data';
-        $fps = fopen($filename, 'a');
-      }
-      fwrite($fps, var_export($stock, 1));
-      fwrite($fps, '\n');
-    }
-
-    // Work with single and array:
-    if (array_key_exists("sku", $stock)) {
-      $stockArray = [$stock];
-    }
-    else {
-      $stockArray = $stock;
-    }
+    // Work with single message and array of messages.
+    $stockArray = array_key_exists('sku', $message) ? [$message] : $message;
 
     foreach ($stockArray as $stock) {
-      if (!isset($stock['sku']) || !strlen($stock['sku'])) {
-        $this->logger->error('Invalid or empty product SKU.');
-        return (new ModifiedResourceResponse($response));
+      try {
+        $this->stockManager->processStockMessage($stock);
       }
-
-      $langcode = NULL;
-
-      if (isset($stock['store_id'])) {
-        $langcode = $this->i18nHelper->getLangcodeFromStoreId($stock['store_id']);
-
-        if (empty($langcode)) {
-          // It could be for a different store/website, don't do anything.
-          return (new ModifiedResourceResponse($response));
-        }
+      catch (\Exception $e) {
+        $this->logger->error('Failed to process stock message: @message, exception: @exception', [
+          '@message' => json_encode($stock),
+          '@exception' => $e->getMessage(),
+        ]);
       }
-
-      $lock_key = 'synchronizeProduct' . $stock['sku'];
-
-      // Acquire lock to ensure parallel processes are executed one by one.
-      do {
-        $lock_acquired = $lock->acquire($lock_key);
-
-        // Sleep for half a second before trying again.
-        if (!$lock_acquired) {
-          usleep(500000);
-        }
-      } while (!$lock_acquired);
-
-      /** @var \Drupal\acq_sku\Entity\SKU $sku */
-      if ($sku = SKU::loadFromSku($stock['sku'], $langcode, FALSE)) {
-        // Work Around for the ACM V1 as quantity key is changed in ACM V2.
-        $quantity_key = array_key_exists('qty', $stock) ? 'qty' : 'quantity';
-
-        if (isset($stock['is_in_stock']) && empty($stock['is_in_stock'])) {
-          $stock[$quantity_key] = 0;
-        }
-
-        $quantity = isset($stock[$quantity_key]) ? $stock[$quantity_key] : 0;
-        $old = $sku->get('stock')->getString();
-
-        $args = [
-          '@sku' => $stock['sku'],
-          '@old' => $old,
-          '@new' => $quantity,
-          '@debug' => json_encode($stock),
-        ];
-
-        if ($quantity != $old) {
-          $sku->get('stock')->setValue($quantity);
-          $sku->save();
-
-          // Clear product and forms related to sku.
-          Cache::invalidateTags(['acq_sku:' . $sku->id()]);
-
-          // Clear cache for parent SKU too.
-          /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Simple $plugin */
-          $plugin = $sku->getPluginInstance();
-          $parent = $plugin->getParentSku($sku);
-          if ($parent instanceof SKU) {
-            Cache::invalidateTags(['acq_sku:' . $parent->id()]);
-          }
-
-          $this->logger->info('Updated stock for SKU @sku: old quantity @old / new quantity: @new. Debug info @debug.', $args);
-        }
-        else {
-          $this->logger->info('Ignored stock update for SKU @sku: old quantity @old / new quantity: @new. Debug info @debug.', $args);
-        }
+      catch (\Throwable $e) {
+        $this->logger->error('Failed to process stock message: @message, exception: @exception', [
+          '@message' => json_encode($stock),
+          '@exception' => $e->getMessage(),
+        ]);
       }
-
-      // Release the lock.
-      $lock->release($lock_key);
     }
 
-    if (isset($fps)) {
-      fclose($fps);
-    }
-
-    $response = [
-      'success' => TRUE,
-    ];
-
+    // Always return success to ACM.
+    // We already log invalid data or exceptions.
+    $response = ['success' => TRUE];
     return (new ModifiedResourceResponse($response));
   }
 

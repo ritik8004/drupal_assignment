@@ -19,9 +19,15 @@
       if ($('.field--name-field-skus #product-zoom-container').length > 0) {
         $('.field--name-field-skus #product-zoom-container').each(function () {
           if ($(this).closest('td.sell-sku').length === 0) {
-            // Execute the attach function of alshaya_product_zoom again.
-            $(this).closest('.content__sidebar').siblings('.content__main').find('#product-zoom-container').replaceWith($(this));
-            Drupal.behaviors.alshaya_product_zoom.attach($(this), settings);
+            if ($('.magazine-layout').length > 0 && $('.pdp-modal-overlay').length < 1) {
+              $('.content__main #product-zoom-container').replaceWith($(this));
+              Drupal.behaviors.magazine_gallery.attach($(this), settings);
+            }
+            else {
+              // Execute the attach function of alshaya_product_zoom again.
+              $(this).closest('.content__sidebar').siblings('.content__main').find('#product-zoom-container').replaceWith($(this));
+              Drupal.behaviors.alshaya_product_zoom.attach($(this), settings);
+            }
           }
           else {
             $(this).remove();

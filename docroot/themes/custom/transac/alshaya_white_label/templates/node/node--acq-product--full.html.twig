@@ -8,197 +8,210 @@ set classes = [
 
   <article{{ attributes }} {{ gtm_attributes }}>
   <div class="acq-content-product">
-    <div class="content__main {{ image_slider_position_pdp }}">
-      {% if content.gallery is not null %}
-        {{ content.gallery }}
-      {% else %}
-        <div id="product-zoom-container"></div>
-      {% endif %}
+    {% block mainContent %}
+      <div class="content__main {{ image_slider_position_pdp }}">
+        {% if content.gallery is not null %}
+          {{ content.gallery }}
+        {% else %}
+          <div id="product-zoom-container"></div>
+        {% endif %}
 
-      {% if content.cross_sell %}
-        <div class="horizontal-crossell above-mobile-block">
-          {{ content.cross_sell }}
-        </div>
-      {% endif %}
+        {% if content.cross_sell %}
+          <div class="horizontal-crossell above-mobile-block">
+            {{ content.cross_sell }}
+          </div>
+        {% endif %}
 
-      {% if content.up_sell %}
-        <div class="horizontal-upell above-mobile-block">
-          {{ content.up_sell }}
-        </div>
-      {% endif %}
+        {% if content.up_sell %}
+          <div class="horizontal-upell above-mobile-block">
+            {{ content.up_sell }}
+          </div>
+        {% endif %}
 
-      {% if content.related %}
-        <div class="horizontal-related above-mobile-block">
-          {{ content.related }}
-        </div>
-      {% endif %}
+        {% if content.related %}
+          <div class="horizontal-related above-mobile-block">
+            {{ content.related }}
+          </div>
+        {% endif %}
 
-    </div>
-
-    <div class="content__title_wrapper">
-      {% if content.brand_logo %}
-        <div class="brand-logo-wrapper">
-          {{ content.brand_logo }}
-        </div>
-      {% endif %}
-
-      {% block productBrand %}
-      {% endblock %}
-
-      <h1>{{ label }}</h1>
-
-      {% block pricePrefix %}
-      {% endblock %}
-
-      <div class="price-block {{ content.price_block_identifier }}">
-        {{ content.price_block }}
       </div>
+    {% endblock %}
 
-      <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+    {% block contentSidebar %}
+      {% block titleBlock %}
+        <div class="content__title_wrapper">
+          {% if content.brand_logo %}
+            <div class="brand-logo-wrapper">
+              {{ content.brand_logo }}
+            </div>
+          {% endif %}
 
-      <div class="content--item-code">
-        <span class="field__label">{{ 'Item Code'|t }}:</span>
-        {{ content.item_code }}
-      </div>
+          {% block productBrand %}
+          {% endblock %}
 
-      {% if content.delivery_link is not empty %}
-        <div class="delivery">
-          {{ content.delivery_link }}
+          <h1>{{ label }}</h1>
+
+          {% block pricePrefix %}
+          {% endblock %}
+
+          <div class="price-block {{ content.price_block_identifier }}">
+            {{ content.price_block }}
+          </div>
+
+          <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+
+          <div class="content--item-code">
+            <span class="field__label">{{ 'Item Code'|t }}:</span>
+            {{ content.item_code }}
+          </div>
+
+          {% if content.delivery_link is not empty %}
+            <div class="delivery">
+              {{ content.delivery_link }}
+            </div>
+          {% endif %}
+
+          {% if content.free_gift_promotions %}
+            <div class="free-gift-promotions">
+              {{ content.free_gift_promotions }}
+            </div>
+          {% endif %}
         </div>
-      {% endif %}
-
-      {% if content.free_gift_promotions %}
-        <div class="free-gift-promotions">
-          {{ content.free_gift_promotions }}
-        </div>
-      {% endif %}
-    </div>
-
-    <div class="content__sidebar">
-      {% block sizeVolume %}
       {% endblock %}
 
-      <div class="mobile-content-wrapper">
-        <div class="basic-details-wrapper">
-          {{ content.field_skus }}
-        </div>
+      {% block pdpSidebar %}
+        <div class="content__sidebar">
+          {% block sizeVolume %}
+          {% endblock %}
 
-        <div class="short-description-wrapper">
-          <div class="content--short-description">
-            <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-            <div class="field__content-wrapper">
-              <div class="field__content">
-                <div class="desc-wrapper">
-                  {% if content.short_desc.label|render %}
-                    <div class="desc-label">
-                      {{ content.short_desc.label }}
+          <div class="mobile-content-wrapper">
+            <div class="basic-details-wrapper">
+              {{ content.field_skus }}
+            </div>
+
+            {% block shortDescBlock %}
+              <div class="short-description-wrapper">
+                <div class="content--short-description">
+                  <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+                  <div class="field__content-wrapper">
+                    <div class="field__content">
+                      <div class="desc-wrapper">
+                        {% if content.short_desc.label|render %}
+                          <div class="desc-label">
+                            {{ content.short_desc.label }}
+                          </div>
+                        {% endif %}
+                        {% if content.short_desc.value|render %}
+                          <div class="desc-value">
+                            {{ content.short_desc.value }}
+                          </div>
+                        {% endif %}
+                      </div>
+                      {% for desc in content.description %}
+                        {% if desc.value|render %}
+                          <div class="desc-wrapper">
+                            {% if desc.label|render %}
+                              <div class="desc-label">
+                                {{ desc.label }}
+                              </div>
+                            {% endif %}
+
+                            <div class="desc-value">
+                              {{ desc.value }}
+                            </div>
+                          </div>
+                        {% endif %}
+                      {% endfor %}
                     </div>
-                  {% endif %}
-                  {% if content.short_desc.value|render %}
-                    <div class="desc-value">
-                      {{ content.short_desc.value }}
-                    </div>
-                  {% endif %}
+                    {% if content.description %}
+                      {% if content.read_more_style.value|render %}
+                        <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                        <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
+                      {% else %}
+                        <span class="read-more-description-link">{{ 'Read more'|t }}</span>
+                        <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
+                      {% endif %}
+                    {% endif %}
+                  </div>
                 </div>
-                {% for desc in content.description %}
-                  {% if desc.value|render %}
-                    <div class="desc-wrapper">
-                      {% if desc.label|render %}
-                        <div class="desc-label">
-                          {{ desc.label }}
+              </div>
+            {% endblock %}
+
+            {% block descBlock %}
+              <div class="description-wrapper">
+                <div class="content--description">
+                  <span class="close"></span>
+                  <h2 class="field__label">{{ 'Product Description'|t }}</h2>
+                  <div class="field__content">
+                    {% for desc in content.description  %}
+                      {% if desc.value|render %}
+                        <div class="desc-wrapper">
+                          {% if desc.label|render %}
+                            <div class="desc-label">
+                              {{ desc.label }}
+                            </div>
+                          {% endif %}
+
+                          <div class="desc-value">
+                            {{ desc.value }}
+                          </div>
                         </div>
                       {% endif %}
-
-                      <div class="desc-value">
-                        {{ desc.value }}
-                      </div>
-                    </div>
-                  {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                  </div>
+                </div>
+                <div class="gradient-holder"></div>
               </div>
-              {% if content.description %}
-                {% if content.read_more_style.value|render %}
-                  <span class="read-more-description-link" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                  <span class="read-more-description-link-mobile" style="{{ content.read_more_style.value }}">{{ 'Read more'|t }}</span>
-                {% else %}
-                  <span class="read-more-description-link">{{ 'Read more'|t }}</span>
-                  <span class="read-more-description-link-mobile">{{ 'Read more'|t }}</span>
-                {% endif %}
+            {% endblock %}
+
+            {% block afterDescription %}
+            {% endblock %}
+
+            {% if content.home_delivery or content.click_and_collect %}
+              <div class="delivery-options-wrapper">
+                <div class="product-out-of-stock-layer"></div>
+                <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
+                <div class="field__content">
+                  {{ content.home_delivery }}
+
+                  {% if content.click_and_collect %}
+                    {{ content.click_and_collect }}
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+
+            {{ content.sharethis }}
+
+          </div>
+
+
+          {% if content.up_sell or content.related or content.cross_sell %}
+            <div class="mobile-related-wrapper">
+              {% if content.cross_sell %}
+                <div class="horizontal-crossell mobile-only-block">
+                  <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
+                  {{ content.cross_sell }}
+                </div>
+              {% endif %}
+
+              {% if content.up_sell %}
+                <div class="horizontal-upell mobile-only-block">
+                  {{ content.up_sell }}
+                </div>
+              {% endif %}
+
+              {% if content.related %}
+                <div class="horizontal-upell mobile-only-block">
+                  {{ content.related }}
+                </div>
               {% endif %}
             </div>
-          </div>
-        </div>
-
-        <div class="description-wrapper">
-          <div class="content--description">
-            <span class="close"></span>
-            <h2 class="field__label">{{ 'Product Description'|t }}</h2>
-            <div class="field__content">
-              {% for desc in content.description  %}
-                {% if desc.value|render %}
-                  <div class="desc-wrapper">
-                    {% if desc.label|render %}
-                      <div class="desc-label">
-                        {{ desc.label }}
-                      </div>
-                    {% endif %}
-
-                    <div class="desc-value">
-                      {{ desc.value }}
-                    </div>
-                  </div>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-          <div class="gradient-holder"></div>
-        </div>
-
-        {% block afterDescription %}
-        {% endblock %}
-
-          {% if content.home_delivery or content.click_and_collect %}
-            <div class="delivery-options-wrapper">
-              <div class="product-out-of-stock-layer"></div>
-              <h2 class="field__label">{{ 'Delivery Options'|t }}</h2>
-              <div class="field__content">
-                {{ content.home_delivery }}
-
-                {% if content.click_and_collect %}
-                  {{ content.click_and_collect }}
-                {% endif %}
-              </div>
-            </div>
           {% endif %}
 
-          {{ content.sharethis }}
-
-      </div>
-
-
-      {% if content.up_sell or content.related or content.cross_sell %}
-        <div class="mobile-related-wrapper">
-					{% if content.cross_sell %}
-            <div class="horizontal-crossell mobile-only-block">
-              <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
-							{{ content.cross_sell }}
-            </div>
-					{% endif %}
-
-          {% if content.up_sell %}
-            <div class="horizontal-upell mobile-only-block">
-                {{ content.up_sell }}
-            </div>
-          {% endif %}
-
-          {% if content.related %}
-            <div class="horizontal-upell mobile-only-block">
-                {{ content.related }}
-            </div>
-          {% endif %}
         </div>
-      {% endif %}
+      {% endblock %}
+    {% endblock %}
 
-    </div>
   </div>
 </article>

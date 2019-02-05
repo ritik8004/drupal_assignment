@@ -18,7 +18,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
@@ -637,53 +636,6 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
 }
 
 /**
- * Get stock quantity for a SKU.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   The Sku entity object.
- * @param bool $reset
- *   Flag to reset cache and get fresh stock.
- *
- * @return int
- *   Return quantity of stock.
- */
-function alshaya_acm_get_stock_from_sku(SKU $sku_entity, $reset = FALSE) {
-  static $stock = [];
-
-  if (isset($stock[$sku_entity->getSku()])) {
-    return $stock[$sku_entity->getSku()];
-  }
-
-  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
-  $plugin = $sku_entity->getPluginInstance();
-  $stock[$sku_entity->getSku()] = $plugin->getProcessedStock($sku_entity, $reset);
-
-  return $stock[$sku_entity->getSku()];
-}
-
-/**
- * Get the stock of product node.
- *
- * @param \Drupal\node\Entity\Node $node
- *   Node object.
- *
- * @return bool|mixed
- *   Stock of the product.
- */
-function alshaya_acm_get_stock_from_product(Node $node) {
-  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-  $sku_entity_id = $skuManager->getSkuForNode($node);
-  $sku = SKU::loadFromSku($sku_entity_id);
-  if ($sku) {
-    return alshaya_acm_get_stock_from_sku($sku);
-  }
-
-  return FALSE;
-}
-
-/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
@@ -936,8 +888,11 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $item_stock_error = '';
   $selected_quantity = $item['quantity']['#default_value'];
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // If item is not available in stock.
-  if ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
+  if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
     if ($selected_quantity > $quantity) {
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
@@ -951,8 +906,6 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
     }
   }
   else {
-    Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
-
     $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
     $item_stock_error = t('This product is out of stock. Please remove to proceed.');
 

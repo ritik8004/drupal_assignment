@@ -125,6 +125,8 @@
             $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
             appendVideoIframe($('.acq-content-product-modal .cloudzoom__video_main'), URL);
             $('.acq-content-product-modal #cloud-zoom-wrap').hide();
+            $(this).siblings('.slick-slide').removeClass('slick-current');
+            $(this).addClass('slick-current');
           }
         });
       }
@@ -150,9 +152,16 @@
 
   $(document).once('bind-slick-nav').on('click', '.slick-prev, .slick-next', function () {
     var slider = $(this).closest('.slick-slider');
-
     setTimeout(function () {
-      slider.find('li.slick-current a').trigger('click');
+      var currentSlide = slider.find('li.slick-current');
+      // If the new slide is video thubnail,
+      // we trigger click on slide to render video.
+      if (currentSlide.hasClass('cloudzoom__thumbnails__video') || currentSlide.hasClass('imagegallery__thumbnails__video')) {
+        currentSlide.trigger('click');
+      }
+      else {
+        slider.find('li.slick-current a').trigger('click');
+      }
     }, 1);
   });
 
@@ -394,18 +403,18 @@
         }
       });
 
-      $('li a', gallery).each(function () {
+      $('li', gallery).each(function () {
         $(this).once('bind-js').on('click', function (e) {
           e.preventDefault();
 
-          var index = $(this).parent().attr('data-slick-index');
+          var index = $(this).attr('data-slick-index');
           if (gallery.slick('slickCurrentSlide') !== index) {
             gallery.slick('slickGoTo', index);
           }
-          $(this).parent().siblings('.slick-slide').removeClass('slick-current');
-          $(this).parent().addClass('slick-current');
+          $(this).siblings('.slick-slide').removeClass('slick-current');
+          $(this).addClass('slick-current');
 
-          var li = $(this).closest('li');
+          var li = $(this);
           img_scale = 1;
           $('.zoomin').removeClass('disabled');
           $('.zoomout').removeClass('disabled');
@@ -417,7 +426,7 @@
           });
 
           // Video Handling for PDP Modal.
-          if ($(li).hasClass('youtube') || $(li).hasClass('vimeo')) {
+          if (li.hasClass('youtube') || li.hasClass('vimeo')) {
             var href = $(this).attr('data-iframe');
             $('#full-image-wrapper').hide();
             $('.cloudzoom__video_modal').show();
@@ -427,7 +436,7 @@
             $(this).parents('.imagegallery__wrapper').siblings('.button__wrapper').hide();
           }
           else {
-            var bigImage = $(this).attr('href');
+            var bigImage = $(this).find('a').attr('href');
             // Put the big image in our main container.
             $('#full-image-wrapper img').attr('src', bigImage);
             $('#full-image-wrapper img').css('transform', 'scale(1)');

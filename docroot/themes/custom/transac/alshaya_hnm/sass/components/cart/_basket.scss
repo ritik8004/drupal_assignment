@@ -1,12 +1,4 @@
 .path--cart {
-  @include breakpoint($only-tablet) {
-    .price-wrapper {
-      .price {
-        max-width: none !important;
-      }
-    }
-  }
-
   #table-cart-items {
     table tr {
       td {
