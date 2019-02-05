@@ -762,10 +762,10 @@ header .region__header {
 
       @include breakpoint($only-mobile) {
         width: 100%;
-        margin-#{$left}: 0.9375rem;
+        margin-#{$left}: 1.4375rem;
 
         html[lang="ar"] & {
-          margin-#{$left}: 0.5625rem;
+          margin-#{$left}: 1.0625rem;
         }
       }
 
@@ -788,6 +788,7 @@ header .region__header {
 
           html[lang="ar"] & {
             max-width: 10rem;
+            margin-top: 0.0625rem;
           }
         }
       }
@@ -896,6 +897,42 @@ header .region__header {
       &:hover {
         .hightlight__description {
           text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  header {
+    .region__header {
+      .block-system-branding-block {
+        padding: 0.25rem 0.5rem 0.125rem;
+
+        html[lang="ar"] & {
+          padding-bottom: 0;
+        }
+      }
+    }
+  }
+
+  #block-cartminiblock {
+    padding: 0.25rem 0.5rem 0.125rem;
+
+    html[lang="ar"] & {
+      padding-bottom: 0;
+    }
+  }
+
+  .mobile--overlay {
+    header {
+      .region__header {
+        .block-system-branding-block {
+          padding-bottom: 0.25rem;
+
+          html[lang="ar"] & {
+            padding-bottom: 0.125rem;
+          }
         }
       }
     }
