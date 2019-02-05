@@ -7,7 +7,7 @@ Feature: Test Sign in and Forgot password features from common
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I go to "{lang_login_url}"
+    And I go to "{url_login}"
     And I fill in "edit-name" with "{var_username}"
     And I fill in "edit-pass" with "{var_password}"
     And I press "{lang_txt_sign_in}"

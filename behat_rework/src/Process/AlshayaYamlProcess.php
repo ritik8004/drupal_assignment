@@ -191,6 +191,17 @@ class AlshayaYamlProcess {
       }
     }
 
+    // Convert url variables to full url.
+    if (!empty($final_yaml['variables']['url_base_uri'])) {
+      array_walk($final_yaml['variables'], function (&$item, $key, $prefix) {
+        if ($item !== $prefix && substr($key,0, 4) === 'url_') {
+          $item = $prefix . DIRECTORY_SEPARATOR . ltrim($item, '/');
+        }
+
+      }, $final_yaml['variables']['url_base_uri']);
+    }
+
+    // Moves 'tags' inside variables with '@tags' key.
     $final_yaml['variables']['@tags'] = array_map(
       function ($tag) {
         return '@'. $tag;

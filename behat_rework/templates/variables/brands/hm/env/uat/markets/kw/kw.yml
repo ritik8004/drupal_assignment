@@ -1,4 +1,2 @@
-variables:
-  var_base_url: 'hmkw-uat.factory.alshaya.com'
 tests:
   - 'sign-up'

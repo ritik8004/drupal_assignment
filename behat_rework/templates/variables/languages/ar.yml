@@ -1,6 +1,6 @@
 variables:
-  lang_login_url: '/ar/user/login'
-  lang_reg_url: '/ar/user/register'
+  url_login: '/user/login'
+  url_register: '/user/register'
   lang_txt_my_account: "حسابي"
   lang_txt_sign_out: "تسجيل الخروج"
   lang_txt_recent_orders: "أحدث الطلبيات"

@@ -7,4 +7,4 @@ Feature: Test Sign up features from -- common
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I go to "{lang_reg_url}"
+    And I go to "{url_register}"
