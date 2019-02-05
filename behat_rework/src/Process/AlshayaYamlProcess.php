@@ -4,7 +4,6 @@ namespace Alshaya\BehatBuild;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
-use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Config\Definition\Processor;
 
 class AlshayaYamlProcess {
