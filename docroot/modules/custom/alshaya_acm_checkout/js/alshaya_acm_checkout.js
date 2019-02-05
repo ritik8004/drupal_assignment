@@ -310,9 +310,16 @@
     }
   };
 
-  // Show loader every-time we are reloading page.
-  $(window).on('beforeunload', function () {
+  // Show loader every-time we are moving to a different page.
+  // Do this on specific selectors only.
+  var addLoaderTargets = '.tab-home-delivery, .tab-click-collect, .back-link, .tab-new-customer a, .tab-returning-customer a, button.cc-action, button.delivery-home-next';
+  $(addLoaderTargets).on('click', function () {
     $(this).showCheckoutLoader();
+  });
+
+  // As a precaution stop loader when the page is fully loaded.
+  $(window).on('load', function () {
+    $('.checkout-ajax-progress-throbber').remove();
   });
 
 })(jQuery, Drupal);
