@@ -84,7 +84,7 @@ class CategorySyncResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('acq_commerce'),
+      $container->get('logger.factory')->get(self::class),
       $container->get('acq_sku.category_manager')
     );
   }

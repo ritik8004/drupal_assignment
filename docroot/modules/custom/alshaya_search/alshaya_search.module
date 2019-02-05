@@ -537,8 +537,8 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
     // If L3 active item for 'search' page.
     if (count($parent_ids) == 2
       && $context['result']->isActive()
-      && $facet_source_id == 'search_api:views_page__search__page'
-      || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2') {
+      && ($facet_source_id == 'search_api:views_page__search__page'
+      || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2')) {
       // Index 0 will always be the L2 parent.
       $parent_id = $parent_ids[0];
       // Get all children of L2 parent.

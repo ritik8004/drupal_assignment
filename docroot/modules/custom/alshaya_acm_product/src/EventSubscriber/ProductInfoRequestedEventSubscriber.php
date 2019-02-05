@@ -107,4 +107,22 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $event->setValue($swatch);
   }
 
+  /**
+   * Process description for SKU based on brand specific rules.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processDescription(ProductInfoRequestedEvent $event): void {
+    // Don't modify again here.
+    if ($event->isValueModified()) {
+      return;
+    }
+
+    $event->setValue($this->skuManager->getDescription(
+      $event->getSku(),
+      $event->getContext()
+    ));
+  }
+
 }

@@ -13,6 +13,7 @@ services:
       - '@logger.factory'
       - '@acq_commerce.i18n_helper'
       - '@module_handler'
+      - '@database'
 
   acq_sku.product_options_manager:
     class: Drupal\acq_sku\ProductOptionsManager
@@ -71,13 +72,6 @@ services:
     parent: logger.channel_base
     arguments: ['acq_sku']
 
-  cache.stock:
-    class: Drupal\Core\Cache\CacheBackendInterface
-    tags:
-      - { name: cache.bin, default_backend: cache.backend.permanent_database }
-    factory: cache_factory:get
-    arguments: [stock]
-
   cache.linked_skus:
     class: Drupal\Core\Cache\CacheInterface
     tags:
@@ -89,3 +83,14 @@ services:
     class: Drupal\acq_sku\ProductInfoHelper
     arguments:
       - '@event_dispatcher'
+
+  acq_sku.stock_manager:
+    class: Drupal\acq_sku\StockManager
+    arguments:
+      - '@database'
+      - '@acq_commerce.api'
+      - '@acq_commerce.i18n_helper'
+      - '@config.factory'
+      - '@lock.persistent'
+      - '@event_dispatcher'
+      - '@logger.factory'

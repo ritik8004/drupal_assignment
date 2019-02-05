@@ -246,7 +246,7 @@ class ProductResource extends ResourceBase {
     $data['original_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['price']);
     $data['final_price'] = $this->mobileAppUtility->formatPriceDisplay((float) $prices['final_price']);
     $data['stock'] = (int) $sku->get('stock')->getString();
-    $data['in_stock'] = (bool) alshaya_acm_get_stock_from_sku($sku);
+    $data['in_stock'] = $this->skuManager->isProductInStock($sku);
     $data['delivery_options'] = [
       'home_delivery' => [],
       'click_and_collect' => [],

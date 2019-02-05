@@ -3,5 +3,3 @@ size_facet_copy:
     js/size_facet_copy.js: {}
   dependencies:
     - core/jquery.once
-    - alshaya_white_label/slick
-    - alshaya_white_label/utils

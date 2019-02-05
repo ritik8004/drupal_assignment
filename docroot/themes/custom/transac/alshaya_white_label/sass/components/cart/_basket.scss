@@ -1,9 +1,5 @@
 .path--cart {
   @include breakpoint($only-tablet) {
-    .price-wrapper .price {
-      max-width: 5rem !important;
-    }
-
     &.alias--cart-checkout-payment,
     &.alias--cart-checkout-delivery {
       .price-wrapper .price {
@@ -213,12 +209,7 @@
       }
 
       .throbber {
-        background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-        background-position: $right center !important;
-        background-repeat: no-repeat !important;
-        background-size: 1.5rem;
-        padding-left: 0.625rem;
-        padding-right: 0.625rem;
+        @include throbberLoader();
       }
 
       @include breakpoint($only-mobile) {
