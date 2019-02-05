@@ -4,12 +4,18 @@ namespace Alshaya\BehatBuild;
 
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\Definition\Processor;
 
 class AlshayaYamlProcess {
 
   protected $parser;
 
   protected $dumper;
+
+  protected $processor;
+
+  protected $configValidator;
 
   protected $collectedFiles = [];
 
@@ -18,6 +24,8 @@ class AlshayaYamlProcess {
   public function __construct() {
     $this->parser = new Parser();
     $this->dumper = new Dumper();
+    $this->processor = new Processor();
+    $this->configValidator = new AlshayaConfigValidator();
     $this->collectedFiles = [];
   }
 
@@ -121,6 +129,7 @@ class AlshayaYamlProcess {
         }
       }
     }
+
     return $this->collectedFiles;
   }
 
@@ -151,6 +160,16 @@ class AlshayaYamlProcess {
 
     foreach ($yaml_files as $yaml_file) {
       $yaml_parsed = $this->getParsedContent($yaml_file);
+
+      try {
+        $this->processor->processConfiguration(
+          $this->configValidator,
+          ['config' => $yaml_parsed]
+        );
+      }
+      catch (\Exception $e) {
+        throw new \Exception('file:' . $yaml_file .'::'. $e->getMessage());
+      }
 
       if (!empty($yaml_parsed['variables'])) {
         $final_yaml['variables'] = array_replace_recursive($final_yaml['variables'], $yaml_parsed['variables']);
