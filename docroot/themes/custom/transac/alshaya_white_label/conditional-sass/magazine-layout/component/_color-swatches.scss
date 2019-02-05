@@ -159,8 +159,10 @@
 
 .magazine-layout {
   .magazine-swatch-placeholder {
-    > label {
-      display: none;
+    .configurable-swatch {
+      > label {
+        display: none;
+      }
     }
   }
 }

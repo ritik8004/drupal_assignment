@@ -196,6 +196,10 @@
     #wrap {
       z-index: 1 !important;
 
+      @include breakpoint($desktop) {
+        z-index: 2 !important;
+      }
+
       #cloud-zoom-big {
         width: 19.88rem;
         top: 0 !important;
