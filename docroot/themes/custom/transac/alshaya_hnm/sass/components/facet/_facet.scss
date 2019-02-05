@@ -51,7 +51,6 @@
       text-transform: capitalize;
       line-height: 1.57;
       vertical-align: middle;
-      margin-top: 0.125rem;
       display: inline-block;
     }
 
@@ -152,7 +151,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
         font-size: 1.5rem;
 
         @include breakpoint($tablet) {
-          font-size: 1rem;
+          font-size: 1.125rem;
         }
       }
 
