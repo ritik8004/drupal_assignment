@@ -230,15 +230,14 @@
 
   // Make Ajax call to get stores and render html.
   Drupal.pdp.storesDisplay = function (coords, field, restriction, $trigger) {
-    if (Drupal.geolocation.maps_api_loading) {
+    new Promise(function (resolve, reject) {
       var wait_for_maps_api = setInterval(function () {
         if (Drupal.geolocation.maps_api_loading === false) {
           clearInterval(wait_for_maps_api);
-          Drupal.pdp.storesDisplay(coords, field, restriction, $trigger);
+          resolve();
         }
       }, 100);
-    }
-    else {
+    }).then(function () {
       if (coords) {
         asCoords = coords;
       }
@@ -308,7 +307,7 @@
           }
         }
       }
-    }
+    });
   };
 
   // Make autocomplete field in search form in the all stores.
