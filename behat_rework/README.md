@@ -34,7 +34,7 @@ Here's what actual structure will look like.
     │   │   ├── common.yml
     │   │   ├── languages
     │   │   │   ├── en.yml
-        │   │   ├── ar.yml
+    │   │   │   ├── ar.yml
     │   │   ├── markets
     │   │   │   ├── kw.yml
     │   │   │   ├── sa.yml
@@ -105,8 +105,8 @@ inside that folder `hm.yml, mc.yml` files respectively.
 > `Languages` folder is used to store language specific urls and variables.
 like a page url, currency etc..
 
-> variable inside `languages` folder must start with `lang_` and other variables
-must start with `var_` prefix. (to avoid conflict in name.)   
+> variable inside `languages` folder must start with `lang_` or `url_` and other
+ variables must start with `var_` prefix. (to avoid conflict in name.)
 
 So, for example: `hm-kw-uat-en` site these files picked up in following order:
 
@@ -133,7 +133,7 @@ Here's an example of sample `*.yml` file.
 variables:                         # Contains variables to replace with token
   var_username: 'kw-common@acquia.com'
   var_password: 'Common@123.com'
-  lang_login_url: '/en/user/login'
+  url_login_url: '/en/user/login'
 tests:                             # Contains a list of features to run.
   - 'login'                        # these contains real (*.feature) file names
   - 'sign-in'                      # without file extension.
@@ -159,7 +159,7 @@ Scenario: As an authenticated user,
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I go to "{lang_login_url}"
+    And I go to "{url_login_url}"
 ```
 
 add your custom tags for each scenario or feature inside the `*.feature` file
