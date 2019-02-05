@@ -41,7 +41,7 @@
   .c-footer-menu--static-links {
     h3 {
       font-weight: bold;
-      text-transform: uppercase;
+      text-transform: capitalize;
     }
   }
 
@@ -52,6 +52,12 @@
       &:hover {
         color: $footer_link_hover;
         text-decoration: underline;
+      }
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        line-height: 1.2;
+        margin: 0.4375rem 0;
       }
     }
   }
@@ -89,13 +95,13 @@
 
   .footer--categories {
     @include breakpoint($desktop) {
-      width: 38.2%;
+      width: 43.2%;
     }
   }
 
   .footer--abouthelp {
     @include breakpoint($desktop) {
-      width: 58.7%;
+      width: 54.7%;
     }
   }
 }

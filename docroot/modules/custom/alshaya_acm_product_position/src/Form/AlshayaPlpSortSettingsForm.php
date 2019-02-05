@@ -86,6 +86,9 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       'final_price' => $this->t('Final Price'),
     ];
 
+    // Sort the form options based on the config.
+    $options = array_replace(array_flip($sort_options), $options);
+
     // Maintaining the weight.
     $weight = 0;
     foreach ($options as $id => $title) {

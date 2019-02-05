@@ -489,6 +489,7 @@ function alshaya_white_label_preprocess_node(&$variables) {
         if ($pdp_layout == SkuManager::PDP_LAYOUT_MAGAZINE) {
           $variables['#attached']['library'][] = 'alshaya_white_label/magazine_attribute';
           $variables['#attached']['library'][] = 'alshaya_white_label/magazine_socialSharepopup';
+          $variables['#attached']['drupalSettings']['color_swatches_hover'] = TRUE;
         }
         else {
           $variables['#attached']['library'][] = 'alshaya_white_label/attribute';

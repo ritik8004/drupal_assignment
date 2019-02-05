@@ -20,6 +20,7 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-main-menu-level1',
       'variables' => [
         'term_tree' => NULL,
+        'settings' => [],
       ],
     ],
     'alshaya_main_menu_level2' => [

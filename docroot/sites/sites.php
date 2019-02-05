@@ -13,11 +13,12 @@ if (!function_exists('acsf_hooks_includes')) {
    *   The name of the hook whose files should be returned.
    *
    * @return string[]
-   *   A list of customer-defined hook files to include.
+   *   A list of customer-defined hook files to include sorted alphabetically
+   *   ascending.
    */
   function acsf_hooks_includes($hook_name) {
     $hook_pattern = sprintf('%s/../factory-hooks/%s/*.php', getcwd(), $hook_name);
-    return glob($hook_pattern, GLOB_NOSORT);
+    return glob($hook_pattern);
   }
 }
 

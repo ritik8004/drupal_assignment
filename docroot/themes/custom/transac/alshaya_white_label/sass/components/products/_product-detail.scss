@@ -489,6 +489,7 @@
       &__content {
         overflow: auto;
         height: 30.125rem;
+        padding-bottom: 2.5rem;
       }
     }
   }
@@ -957,7 +958,7 @@
     @include clearfix;
 
     .change-store-location {
-      width: 10rem;
+      width: 11.5625rem;
       height: 2.1875rem;
       font-size: 0.75rem;
       border: 1px solid $pdp_cc_changelocation;
@@ -1988,6 +1989,30 @@ html[lang=ar] {
 
     ul {
       font-size: 0.75rem;
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .select2-container--open {
+    .select2-dropdown {
+      z-index: 1;
+    }
+  }
+
+  &.pdp-modal-overlay {
+    .select2-container--open {
+      .select2-dropdown {
+        z-index: 1001;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .mobilegallery {
+    #product-image-gallery-mobile {
+      min-height: 18rem;
     }
   }
 }

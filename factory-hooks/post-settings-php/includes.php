@@ -13,8 +13,6 @@ $config_directories['sync'] = '../config/default';
 
 use Symfony\Component\Yaml\Yaml;
 
-global $env;
-
 // This variable is declared and filled in post-sites-php/includes.php
 global $acsf_site_name;
 
@@ -34,9 +32,18 @@ if (empty($acsf_site_name) && $settings['env'] == 'local') {
   }
 
   // We don't want to interrupt script on default domain, otherwise drush command without --uri parameter would fail
-  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') ) {
+  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') && ($host_site_code) ) {
     print 'Invalid domain';
     die();
+  }
+
+  // We hardcode vsae site for travis Drupal installation.
+  // We must choose some site to test whether Drupal installation works
+  // properly. But it doesn't really matter too much which site we will install
+  // locally, as we only run very simplistic behat tests against it.
+  if ($env == 'travis') {
+    echo "Setting up vsae for travis environment.";
+    $acsf_site_name = 'vsae';
   }
 }
 

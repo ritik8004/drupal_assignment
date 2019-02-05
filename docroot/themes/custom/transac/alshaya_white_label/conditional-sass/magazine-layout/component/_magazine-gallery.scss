@@ -160,9 +160,13 @@
         &:nth-child(2n+1) {
           grid-column: 1 / -1;
 
-          img {
+          #wrap {
             width: 47%;
             margin: 0 auto;
+
+            #cloud-zoom-big {
+              #{$left}: calc(150% + 3rem) !important;
+            }
           }
         }
       }
@@ -197,7 +201,7 @@
       z-index: 1 !important;
 
       #cloud-zoom-big {
-        width: 19.88rem;
+        width: 21.88rem;
         top: 0 !important;
 
         .cloud-zoom-title {
