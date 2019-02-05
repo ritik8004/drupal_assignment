@@ -15,13 +15,9 @@
     <div class="promotions">
       {% for id, promotion in promotions %}
         <span class="sku-promotion-item">
-          {% if (promotion.render_link) %}
-            <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
-              {{ promotion.text }}
-            </a>
-          {% else %}
+          <a class="sku-promotion-link" href="{{ path('entity.node.canonical', {'node': id }) }}">
             {{ promotion.text }}
-          {% endif %}
+          </a>
         </span>
       {% endfor %}
     </div>
