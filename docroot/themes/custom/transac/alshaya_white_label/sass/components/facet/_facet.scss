@@ -38,7 +38,7 @@
       font-size: 0.75rem;
       padding: 0.25rem 0.5rem;
       width: 13rem;
-      margin-bottom: 1.313rem;
+      margin-bottom: 0.625rem;
 
       @include breakpoint($only-mobile) {
         font-size: 0.875rem;
@@ -428,6 +428,22 @@ ul[data-drupal-facet-id="category"] {
       &:last-child {
         > div {
           border-bottom-width: 1px !important;
+        }
+      }
+    }
+  }
+}
+
+.c-facet {
+  &:not(#block-category,#block-plpcategoryfacet) {
+    .js-facets-checkbox-links,
+    .item-list__swatch_list {
+      .facet-item {
+        padding: 0.625rem 0;
+        margin-bottom: 0;
+
+        &:first-child {
+          padding-top: 0;
         }
       }
     }
