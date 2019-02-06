@@ -210,6 +210,7 @@ class AlshayaImageSitemapGenerator {
           if (!empty($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
+              $sku_for_gallery = $sku;
               $combinations = $this->skuManager->getConfigurableCombinations($sku);
               // This code need to be in sync with PDP. The images that
               // are displayed on PDP page should be fetched here.
@@ -225,13 +226,11 @@ class AlshayaImageSitemapGenerator {
                     $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, TRUE, 'fallback');
                   }
                   catch (\Exception $e) {
-                    $sku_for_gallery = $sku;
+                    // Do nothing.
                   }
                 }
               }
-              else {
-                $sku_for_gallery = $sku;
-              }
+
               if ($sku_for_gallery instanceof SKU) {
                 $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery);
               }
