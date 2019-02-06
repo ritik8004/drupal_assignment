@@ -290,14 +290,7 @@ function alshaya_advanced_page_is_department_page($tid, bool $publish_check = TR
     $nid = $department_pages[$tid];
     /** @var \Drupal\node\Entity\Node $node */
     if ($node = Node::load($nid)) {
-      if ($publish_check) {
-        if ($node->isPublished()) {
-          $data[$tid] = $nid;
-          \Drupal::cache('data')->set('advanced_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
-          return $nid;
-        }
-      }
-      else {
+      if (!$publish_check || ($publish_check && $node->isPublished())) {
         $data[$tid] = $nid;
         \Drupal::cache('data')->set('advanced_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
