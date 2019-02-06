@@ -1065,10 +1065,6 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   // number of the requests that reach server.
   $form['add_to_cart']['#attributes']['class'][] = 'cv-validate-before-ajax';
 
-  // Disable the submit button by default. We will enable it later with js,
-  // so that the button is disabled if js is disabled.
-  $form['add_to_cart']['#disabled'] = TRUE;
-
   \Drupal::moduleHandler()->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
 
   $form['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
