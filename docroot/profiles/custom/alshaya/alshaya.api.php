@@ -35,5 +35,15 @@ function hook_alshaya_profile_installed_final_task($profile, array $modules) {
 }
 
 /**
+ * Invoke the alter hook to allow all modules to update the currency code.
+ *
+ * @param array $currency
+ *   Currency code.
+ */
+function hook_alshaya_get_currency_code(array $currency) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */
