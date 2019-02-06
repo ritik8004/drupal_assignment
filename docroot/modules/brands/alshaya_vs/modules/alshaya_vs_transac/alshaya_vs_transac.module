@@ -12,7 +12,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\Component\Utility\Unicode;
 
 /**
  * Implements hook_module_implements_alter().
@@ -71,9 +70,11 @@ function alshaya_vs_transac_form_sku_base_form_alter(&$form, FormStateInterface 
  */
 function alshaya_vs_transac_preprocess_views_view_fields__stores_finder(&$variables) {
   $view = $variables['view'];
-  if (!in_array($view->current_display, ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
+  if (!in_array($view->current_display,
+  ['attachment_1', 'page_3', 'page_2', 'page_1'])) {
     return;
   }
+
   // Change the position of the field brand, to display it after store address.
   if (isset($variables['fields']['field_brand'])) {
     $fields = $variables['fields'];
@@ -240,7 +241,7 @@ function _alshaya_vs_transac_get_product_description(SKUInterface $sku_entity) {
     $short_desc['label'] = [
       '#markup' => t('Short Description'),
     ];
-    
+
     // Get short description of given html.
     /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
     $product_helper = \Drupal::service('alshaya_acm_product.helper');
@@ -309,4 +310,12 @@ function alshaya_vs_transac_alshaya_main_menu_links_alter(array &$term_tree, $pa
 function alshaya_vs_transac_alshaya_stores_finder_marker_label_position_alter(array &$label_position) {
   $label_position['y'] = 17;
   $label_position['single_y'] = 17;
+}
+
+/**
+ * Implements hook_alshaya_get_currency_code().
+ */
+function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
+  // Updated UAE currency code.
+  $currency['ae']['en'] = 'DHS';
 }
