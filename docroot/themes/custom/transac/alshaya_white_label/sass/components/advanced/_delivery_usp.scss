@@ -18,7 +18,8 @@
 
     .slick-slider {
       button.slick-arrow {
-        top: 0.15rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
 
         &::before {
           background: none;
