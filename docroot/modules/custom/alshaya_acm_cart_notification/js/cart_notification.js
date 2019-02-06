@@ -86,7 +86,7 @@
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
         // If magazine layout is enabled.
-        if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
+        if ($('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
         }
         else {
@@ -102,27 +102,30 @@
 
       // On PDP scroll to first error label.
       var scrollToErrorPDP = function() {
-        // Doing this for the JS conflict.
-        setTimeout(function(){
-          // First error label.
-          var first_error_label = $('form.ajax-submit-prevented label.error').first();
-          // If button is sticky (fix), just scroll.
-          var is_button_sticky = $('button.edit-add-to-cart').hasClass('fix-button');
+        // Check pdp layout is default one or work for tab and above view port.
+        if ($('.magazine-layout').length < 1 || $(window).width() > 767) {
+          // Doing this for the JS conflict.
+          setTimeout(function () {
+            // First error label.
+            var first_error_label = $('form.ajax-submit-prevented label.error').first();
+            // If button is sticky (fix), just scroll.
+            var is_button_sticky = $('button.edit-add-to-cart').hasClass('fix-button');
 
-          // If error already visible, no need to scroll.
-          if (isInViewPort(first_error_label) && !is_button_sticky) {
-            return;
-          }
+            // If error already visible, no need to scroll.
+            if (isInViewPort(first_error_label) && !is_button_sticky) {
+              return;
+            }
 
-          // Sticky header.
-          var stickyHeaderHeight = stickyHeaderHight();
-          // Scroll position.
-          var height_to_scroll = first_error_label.offset().top - stickyHeaderHeight - 25;
-          // Scroll to the error.
-          $('html, body').animate({
-            scrollTop: height_to_scroll
-          });
-        }, 500)
+            // Sticky header.
+            var stickyHeaderHeight = stickyHeaderHight();
+            // Scroll position.
+            var height_to_scroll = first_error_label.offset().top - stickyHeaderHeight - 25;
+            // Scroll to the error.
+            $('html, body').animate({
+              scrollTop: height_to_scroll
+            });
+          }, 500)
+        }
       }
 
       // Calculate the sticky header hight.

@@ -147,7 +147,7 @@ pace:
   js:
     /libraries/pace/pace.min.js: {}
 
-magazine_select2Option:
+magazine_attribute:
   js:
     js/magazine_select2Option.js: {}
     js/magazine_attribute.js: {}
@@ -168,6 +168,9 @@ campaign-plp-style-1-common:
   js:
     js/campaign-plp-style-1-layout.js: {}
 
+magazine_socialSharepopup:
+  js:
+    js/socialshare_popup.js: {}
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}

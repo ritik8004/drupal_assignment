@@ -3,8 +3,10 @@
 namespace Drupal\alshaya_acm\Commands;
 
 use Consolidation\OutputFormatters\StructuredData\RowsOfFields;
-use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\alshaya_acm\AlshayaAcmConfigCheck;
+use Drupal\alshaya_acm\AlshayaMdcQueueManager;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Component\Utility\Unicode;
@@ -16,7 +18,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
 use Drush\Commands\DrushCommands;
+use Drush\Drush;
 use Drush\Exceptions\UserAbortException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Consolidation\AnnotatedCommand\CommandData;
 
 /**
@@ -76,6 +80,20 @@ class AlshayaAcmCommands extends DrushCommands {
   private $connection;
 
   /**
+   * Conductor API wrapper service.
+   *
+   * @var \Drupal\acq_commerce\Conductor\APIWrapper
+   */
+  private $apiWrapper;
+
+  /**
+   * Alshaya acm dashboard manager.
+   *
+   * @var \Drupal\alshaya_acm\AlshayaMdcQueueManager
+   */
+  private $mdcQueueManager;
+
+  /**
    * Sku manager service.
    *
    * @var \Drupal\alshaya_acm_product\SkuManager
@@ -99,6 +117,10 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Alshaya config check service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service.
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
+   *   Commerce API wrapper.
+   * @param \Drupal\alshaya_acm\AlshayaMdcQueueManager $mdcQueueManager
+   *   Mdc Queue Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku manager service.
    */
@@ -109,6 +131,8 @@ class AlshayaAcmCommands extends DrushCommands {
                               ProductCategoryTree $productCategoryTree,
                               AlshayaAcmConfigCheck $alshayaAcmConfigCheck,
                               Connection $connection,
+                              APIWrapper $api_wrapper,
+                              AlshayaMdcQueueManager $mdcQueueManager,
                               SkuManager $skuManager) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
@@ -117,6 +141,8 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->productCategoryTree = $productCategoryTree;
     $this->alshayaAcmConfigCheck = $alshayaAcmConfigCheck;
     $this->connection = $connection;
+    $this->apiWrapper = $api_wrapper;
+    $this->mdcQueueManager = $mdcQueueManager;
     $this->skuManager = $skuManager;
   }
 
@@ -472,6 +498,120 @@ class AlshayaAcmCommands extends DrushCommands {
 
       array_unshift($rows, ['SKU', 'File ID']);
       return new RowsOfFields($rows);
+    }
+  }
+
+  /**
+   * Product sync if confirmed based on queue status.
+   *
+   * @param string $langcode
+   *   Sync products available in this langcode.
+   * @param array $options
+   *   List of options supported by the drush command.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
+   *
+   * @command alshaya_acm:sync-products
+   *
+   * @option skus SKUs to import (like query).
+   * @option category_id Magento category id to sync the products for.
+   *
+   * @validate-module-enabled acq_sku
+   *
+   * @aliases aasp,alshaya-sync-commerce-products
+   *
+   * @usage drush aasp en --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
+   *   Import skus mentioned with --skus switch.
+   * @usage drush aasp en --csv_path=/tmp/skus.csv
+   *   Import skus provided in  the csv file for import.
+   * @usage drush aasp en --category_id=1234 --page_size=50
+   *   Import skus in category id 1234 & store linked to en & page size 50.
+   */
+  public function syncProducts($langcode,
+                               array $options = [
+                                 'skus' => NULL,
+                                 'category_id' => NULL,
+                                 'csv_path' => NULL,
+                                 'batch_size' => 500,
+                                 'page_size' => NULL,
+                               ]) {
+    // SKUs must be supplied either via skus option or csv_path.
+    if (empty($options['csv_path']) && empty($options['skus'])) {
+      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+      return;
+    }
+
+    $acm_queue_count = $this->apiWrapper->getQueueStatus();
+    $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
+    $mdc_queue_count = $mdc_queue_stats->messages;
+
+    if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
+      $this->output->writeln('Items in MDC Queue: ' . $mdc_queue_count);
+      $this->output->writeln('Items in ACM Queue: ' . $acm_queue_count);
+
+      // Avoid bypassing check using -y switch.
+      $confirm_text = dt('yes');
+      $input = $this->io()
+        ->ask(dt('There are items in MDC/ ACM queues awaiting sync. Do you still want to continue with sync operation? If yes, type: "@confirm_text"', [
+          '@confirm_text' => $confirm_text,
+        ]));
+
+      if ($input != $confirm_text) {
+        throw new UserAbortException();
+      }
+    }
+
+    $command_options = Drush::redispatchOptions();
+
+    if (!empty($options['csv_path'])) {
+      if (($handle = fopen($options['csv_path'], 'r')) === FALSE) {
+        print "File not readable or not available at the specified path.";
+        throw new FileNotFoundException();
+      }
+
+      $i = 0;
+      $j = 0;
+      $csv_skus = [];
+
+      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        $csv_skus[$j][] = $data[0];
+        if (++$i % $options['batch_size'] == 0) {
+          $j++;
+        }
+      }
+
+      // Remove additional options which are not understood by the actual import
+      // command.
+      unset($command_options['csv_path']);
+      unset($command_options['batch_size']);
+    }
+
+    // Use page size configured for conductor as default in case no override is
+    // supplied via options.
+    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')
+      ->get('product_page_size');
+    unset($options['page_size']);
+
+    if (!empty($csv_skus)) {
+      // Override skus option with the list retrieved from csv file. The command
+      // would give preference to list of SKUs supplied by csv file.
+      unset($command_options['skus']);
+      foreach ($csv_skus as $csv_skus_chunk) {
+        $command_options['skus'] = implode(',', $csv_skus_chunk);
+
+        if (!empty($command_options['skus'])) {
+          drush_invoke_process('@self', 'acsp', [
+            'langcode' => $langcode,
+            'page_size' => $page_size,
+          ], $command_options);
+        }
+      }
+    }
+    elseif (!empty($command_options['skus'])) {
+      drush_invoke_process('@self', 'acsp', [
+        'langcode' => $langcode,
+        'page_size' => $page_size,
+      ], $command_options);
     }
   }
 

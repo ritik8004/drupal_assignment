@@ -1,0 +1,157 @@
+.magazine-layout-node {
+  .modal-share-this {
+    display: block;
+
+    @include breakpoint($tablet) {
+      position: relative;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: $right;
+      margin-#{$right}: 1.125rem;
+      margin-top: -3.25rem;
+    }
+
+    .share-icon {
+      font-size: 0;
+      cursor: pointer;
+
+      @include breakpoint($tablet) {
+        position: absolute;
+        top: -3.5rem;
+        #{$left}: 12.125rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          right: 14.4375rem;
+        }
+      }
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/share.svg') center center no-repeat;
+        width: 1.5625rem;
+        height: 1.5625rem;
+        display: inline-block;
+        background-size: 1.0625rem;
+      }
+    }
+
+    .close-icon,
+    .sharethis-label {
+      display: none;
+    }
+  }
+
+  .sharethis-wrapper {
+    display: none;
+  }
+}
+
+body {
+  &.social-modal-overlay {
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      #{$left}: 0;
+      bottom: -6rem;
+      background-color: rgba(0, 0, 0, 0.48);
+      transition: opacity 0.5s ease-in-out;
+      opacity: 1;
+      z-index: 1000;
+      transform: translate3d(0, 0, 0);
+
+      @include breakpoint($only-mobile) {
+        z-index: 10000;
+      }
+    }
+
+    .modal-share-this {
+      .close-icon,
+      .sharethis-label {
+        display: block;
+      }
+
+      .sharethis-label {
+        font-size: 1.125rem;
+        line-height: 1.22;
+        color: $sharethis-label-color;
+
+        @include breakpoint($only-mobile) {
+          text-align: $left;
+        }
+      }
+    }
+
+    .modal-share-this {
+      .sharethis-wrapper {
+        display: block;
+      }
+    }
+
+    .sharethis-container {
+      position: fixed;
+      top: 0;
+      width: auto;
+      padding: 2rem 1.25rem 1.625rem;
+      z-index: 1001;
+      opacity: 3;
+      background-color: $sharethis-popup-bg;
+      min-width: 17.5rem;
+
+      @include breakpoint($only-mobile) {
+        z-index: 10000;
+      }
+    }
+
+    .sharethis-wrapper {
+      margin-bottom: 0;
+
+      > span {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+        color: $sharethis-social-displaytext-color;
+        text-transform: capitalize;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &:first-child {
+          margin-top: 1.25rem;
+        }
+
+        &::before {
+          color: $sharethis-icon-bg;
+          margin-#{$right}: 0.875rem;
+        }
+      }
+    }
+
+    .close-icon {
+      font-size: 0;
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      cursor: pointer;
+
+      &::before {
+        content: '';
+        background: url('../../../../alshaya_hnm/imgs/icons/ic-close.svg') center center no-repeat;
+        width: 2rem;
+        height: 2rem;
+        display: inline-block;
+        background-size: 1.0625rem;
+        background-color: $sharethis-icon-bg;
+      }
+    }
+  }
+}

@@ -5,6 +5,9 @@
  * Contains hook implementations for Alshaya Product Zoom module.
  */
 
+use Drupal\acq_commerce\SKUInterface;
+use Drupal\alshaya_acm_product\SkuManager;
+
 /**
  * Implements hook_theme().
  */
@@ -23,7 +26,7 @@ function alshaya_product_zoom_theme($existing, $type, $theme, $path) {
     ],
     'alshaya_magazine' => [
       'variables' => [
-        'description' => '',
+        'sku' => '',
         'thumbnails' => '',
         'pager_flag' => '',
         'properties' => '',
@@ -56,5 +59,20 @@ function alshaya_product_zoom_preprocess_node(&$variables) {
       // in JS.
       $variables['#attached']['drupalSettings']['alshaya_white_label']['image_slider_position_pdp'] = 'slider-position-' . $pdp_image_slider_position;
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_template().
+ */
+function alshaya_product_zoom_preprocess_alshaya_magazine(&$vars) {
+  if ($vars['sku'] instanceof SKUInterface) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    // Get parent sku.
+    $parent_sku = $skuManager->getParentSkuBySku($vars['sku']);
+    $sku_for_description = $parent_sku instanceof SKUInterface ? $parent_sku : $vars['sku'];
+    $prod_description = $skuManager->getDescription($sku_for_description, SkuManager::PDP_LAYOUT_MAGAZINE);
+    $vars['description'] = $prod_description['description'];
   }
 }
