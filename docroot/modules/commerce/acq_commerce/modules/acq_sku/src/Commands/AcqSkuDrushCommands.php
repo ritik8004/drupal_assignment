@@ -278,9 +278,9 @@ class AcqSkuDrushCommands extends DrushCommands {
       $orphan_categories = $this->conductorCategoryManager->getOrphanCategories($response);
 
       // If there are categories to delete.
-      if (!empty($result)) {
+      if (!empty($orphan_categories)) {
         // Show `tid + cat name + commerce id` for review.
-        $this->io()->table([dt('Category Id'), dt('Category Name'), dt('Category Commerce Id')], $result);
+        $this->io()->table([dt('Category Id'), dt('Category Name'), dt('Category Commerce Id')], $orphan_categories);
         // Confirmation to delete old categories.
         if ($this->io()->confirm(dt('Are you sure you want to clean these old categories'), FALSE)) {
 

@@ -23,7 +23,7 @@ function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$resu
   if (!empty($result)) {
     foreach ($result as $tid => $rs) {
       // If department page node exists for the given term, don't delete it.
-      if (!empty($dpt_nid = alshaya_advanced_page_is_department_page($tid))) {
+      if (!empty($dpt_nid = alshaya_advanced_page_is_department_page($tid, FALSE))) {
         unset($result[$tid]);
         \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
           '@tid' => $tid,
@@ -266,11 +266,13 @@ function alshaya_advanced_page_language_switch_links_alter(array &$links, $type,
  *
  * @param int $tid
  *   The term id.
+ * @param bool $publish_check
+ *   Check for the publish node.
  *
  * @return int|bool
  *   Department page node id or false.
  */
-function alshaya_advanced_page_is_department_page($tid) {
+function alshaya_advanced_page_is_department_page($tid, bool $publish_check = TRUE) {
   $data = [];
   // Check for cache first.
   if ($cache = \Drupal::cache('data')->get('advanced_page:terms:nodes')) {
@@ -288,7 +290,14 @@ function alshaya_advanced_page_is_department_page($tid) {
     $nid = $department_pages[$tid];
     /** @var \Drupal\node\Entity\Node $node */
     if ($node = Node::load($nid)) {
-      if ($node->isPublished()) {
+      if ($publish_check) {
+        if ($node->isPublished()) {
+          $data[$tid] = $nid;
+          \Drupal::cache('data')->set('advanced_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
+          return $nid;
+        }
+      }
+      else {
         $data[$tid] = $nid;
         \Drupal::cache('data')->set('advanced_page:terms:nodes', $data, Cache::PERMANENT, ['node_type:advanced_page']);
         return $nid;
