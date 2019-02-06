@@ -10,7 +10,7 @@
  *
  * Update the currency_code for Arabic on all the AE sites.
  */
-function alshaya_ae_update_8005() {
+function alshaya_ae_update_8004() {
   // Reset currency code - AR.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
     ->set('currency_code', '.د.إ')

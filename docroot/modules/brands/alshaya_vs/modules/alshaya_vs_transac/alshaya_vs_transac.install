@@ -7,6 +7,7 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+use Drupal\Component\Utility\Unicode;
 
 /**
  * Implements hook_update_N().
@@ -14,9 +15,12 @@ use Drupal\Core\Site\Settings;
  * Update the currency_code to DHS.
  */
 function alshaya_vs_transac_update_8005() {
-  \Drupal::configFactory()->getEditable('acq_commerce.currency')
-    ->set('currency_code', 'DHS')
-    ->save();
+  $country_code = Unicode::strtolower(Settings::get('country_code'));
+  if ($country_code === 'ae') {
+    \Drupal::configFactory()->getEditable('acq_commerce.currency')
+      ->set('currency_code', 'DHS')
+      ->save();
+  }
 }
 
 /**

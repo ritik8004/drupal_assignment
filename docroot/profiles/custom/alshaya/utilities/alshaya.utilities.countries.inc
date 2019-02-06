@@ -37,5 +37,8 @@ function _alshaya_get_currency_code($country_code, $lang_code) {
   $currency['eg']['en'] = 'GBP';
   $currency['eg']['ar'] = 'جنيه';
 
+  // Invoke the alter hook to allow all modules to update the currency code.
+  \Drupal::moduleHandler()->alter('alshaya_get_currency_code', $currency);
+
   return $currency[$country_code][$lang_code];
 }
