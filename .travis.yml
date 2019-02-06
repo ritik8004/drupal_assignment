@@ -96,11 +96,12 @@ script:
 
 deploy:
   - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    script: if [[ ! $TRAVIS_BRANCH =~ ^revert-.*$ ]]; then ./$BLT_DIR/scripts/travis/deploy_branch; fi
     skip_cleanup: true
     on:
       all_branches: true
-      condition: ! $TRAVIS_BRANCH =~ ^revert-.*$
+      tags: false
+    #  condition: ! $TRAVIS_BRANCH =~ ^revert-.*$
       php: 7.1
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"
