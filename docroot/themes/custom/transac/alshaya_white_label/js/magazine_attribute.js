@@ -193,12 +193,17 @@
     }
 
     $('.size-tray-link', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray').addClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction:'down'}, 400);
       $('body').addClass('tray-overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction:'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function(){
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
