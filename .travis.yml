@@ -98,8 +98,8 @@ deploy:
   - provider: script
     script: echo $TRAVIS_TAG; if [[ "$TRAVIS_PHP_VERSION" == "7.1" && ! $TRAVIS_BRANCH =~ ^revert-.*$ ]]; then ./$BLT_DIR/scripts/travis/deploy_branch; fi
     skip_cleanup: true
-    #on:
-    #  all_branches: true
+    on:
+      all_branches: true
     #  #condition: ! $TRAVIS_BRANCH =~ ^revert-.*$
     #  php: 7.1
   - provider: script
