@@ -12,6 +12,17 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update the currency_code to DHS.
+ */
+function alshaya_hm_update_8030() {
+  \Drupal::configFactory()->getEditable('acq_commerce.currency')
+    ->set('currency_code', 'DHS')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Do not show oos product for h&m.
  */
 function alshaya_hm_update_8029() {

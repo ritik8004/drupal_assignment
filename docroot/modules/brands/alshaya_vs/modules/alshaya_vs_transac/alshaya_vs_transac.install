@@ -11,6 +11,17 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Update the currency_code to DHS.
+ */
+function alshaya_vs_transac_update_8005() {
+  \Drupal::configFactory()->getEditable('acq_commerce.currency')
+    ->set('currency_code', 'DHS')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Clear product cache.
  */
 function alshaya_vs_transac_update_8004() {
