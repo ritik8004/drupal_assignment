@@ -50,10 +50,10 @@ header {
       }
 
       @include breakpoint($only-mobile) {
-        top: 2.9rem;
+        top: 3.5625rem;
 
         html[lang=ar] & {
-          top: 3rem;
+          top: 3.5625rem;
         }
       }
     }
@@ -930,6 +930,7 @@ header .region__header {
     .region__header {
       .block-system-branding-block {
         padding: 0.25rem 0.5rem 0.125rem;
+        padding-#{$right}: 0;
 
         html[lang="ar"] & {
           padding-bottom: 0;
