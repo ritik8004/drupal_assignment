@@ -321,9 +321,12 @@ class AlshayaApiCommands extends DrushCommands {
               $price_output = '';
 
               // If stock in Drupal does not match with stock in Magento.
-              if ($data['stock'] != (int) $mskus[$type][$sku]['qty']) {
-                $stock_output .= 'Drupal stock:' . $data['stock'] . ' | ';
-                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'];
+              if ($data['quantity'] != (int) $mskus[$type][$sku]['qty']
+                || $data['status'] != $mskus[$type][$sku]['stock_status']) {
+                $stock_output .= 'Drupal stock:' . $data['quantity'] . ' | ';
+                $stock_output .= 'Drupal stock status:' . $data['status'] . ' | ';
+                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'] . ' | ';
+                $stock_output .= 'MDC stock status:' . $mskus[$type][$sku]['stock_status'];
                 $stock_mismatch_sync[$type][] = $sku;
               }
 
@@ -746,9 +749,12 @@ class AlshayaApiCommands extends DrushCommands {
               }
 
               // If stock in drupal does not match with stock from merch.
-              if ($data['stock'] != $mskus[$type][$sku]['qty']) {
-                $stock_output .= 'Drupal stock:' . $data['stock'] . ' | ';
-                $stock_output .= 'MDC stock:' . $mskus[$type][$sku]['qty'];
+              if ($data['quantity'] != (int) $mskus[$type][$sku]['qty']
+                || $data['status'] != $mskus[$type][$sku]['stock_status']) {
+                $stock_output .= 'Drupal stock:' . $data['quantity'] . ' | ';
+                $stock_output .= 'Drupal stock status:' . $data['status'] . ' | ';
+                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'] . ' | ';
+                $stock_output .= 'MDC stock status:' . $mskus[$type][$sku]['stock_status'];
                 $stock_mismatch_sync[$type][] = $sku;
               }
 
