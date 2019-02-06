@@ -1,9 +1,6 @@
 (function ($, Drupal, document) {
   'use strict';
 
-  // Enable the add to cart submit button.
-  $('.edit-add-to-cart').attr('disabled', false);
-
   // Function to start fullpage loader wherever we need.
   function spinner_start() {
     if ($('.page-standard > .checkout-ajax-progress-throbber').length === 0) {
