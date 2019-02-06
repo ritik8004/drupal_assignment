@@ -309,7 +309,6 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
  * Implements hook_alshaya_get_currency_code().
  */
 function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
-
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
 }

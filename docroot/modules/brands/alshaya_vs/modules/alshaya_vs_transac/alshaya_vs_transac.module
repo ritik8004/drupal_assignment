@@ -316,7 +316,6 @@ function alshaya_vs_transac_alshaya_stores_finder_marker_label_position_alter(ar
  * Implements hook_alshaya_get_currency_code().
  */
 function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
-
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
 }
