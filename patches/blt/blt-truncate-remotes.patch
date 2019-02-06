@@ -1,0 +1,150 @@
+diff --git a/docs/deploy.md b/docs/deploy.md
+index 3ce57945..63d146fe 100644
+--- a/docs/deploy.md
++++ b/docs/deploy.md
+@@ -58,6 +58,22 @@ When deploying a tag to the artifact repo, if the config option `deploy.tag_sour
+ 
+ *Note* however that BLT _does not_ automatically push the tag created on the source repository to its remote.
+ 
++### Truncating artifact repository history
++
++You may find on larger projects with a large numbers of files and front end resources, that deployment times start to increase to an unworkable level as more builds are made. 
++
++One possible cause is a large number of file objects in the artifact repository which then takes a long time to checkout to the server.
++
++When creating your build artifact, BLT can truncate the history on the build branch which dramatically reduces the amount of time required to checkout the build artifact. 
++
++This behaviour can be triggered by passing `--truncate-history` to the `blt artifact:deploy` command or turned on for all deployments by adding `truncate_history: true` to your blt.yml file e.g. 
++
++```yaml
++deploy:
++  truncate_history: true  
++```
++ 
++
+ ## Modifying the artifact
+ 
+ The artifact is built by running the `artifact:build` target, which does the following:
+diff --git a/src/Robo/Commands/Deploy/DeployCommand.php b/src/Robo/Commands/Deploy/DeployCommand.php
+index 33e0bf60..afe7ba98 100644
+--- a/src/Robo/Commands/Deploy/DeployCommand.php
++++ b/src/Robo/Commands/Deploy/DeployCommand.php
+@@ -20,6 +20,7 @@ class DeployCommand extends BltTasks {
+   protected $excludeFileTemp;
+   protected $deployDir;
+   protected $tagSource;
++  protected $truncateHistory;
+ 
+   /**
+    * This hook will fire for all commands in this command file.
+@@ -30,6 +31,7 @@ public function initialize() {
+     $this->excludeFileTemp = $this->getConfigValue('deploy.exclude_file') . '.tmp';
+     $this->deployDir = $this->getConfigValue('deploy.dir');
+     $this->tagSource = $this->getConfigValue('deploy.tag_source', TRUE);
++    $this->truncateHistory = $this->getConfigValue('deploy.truncate_history', FALSE);
+   }
+ 
+   /**
+@@ -45,6 +47,7 @@ public function deploy($options = [
+     'commit-msg' => InputOption::VALUE_REQUIRED,
+     'ignore-dirty' => FALSE,
+     'dry-run' => FALSE,
++    'truncate-history' => FALSE,
+   ]) {
+     if (!$this->getInspector()->isGitMinimumVersionSatisfied('2.0')) {
+       $this->logger->error("Your system does not meet BLT's requirements. Please update git to 2.0 or newer.");
+@@ -193,6 +196,7 @@ protected function deployToTag($options) {
+     $this->checkoutLocalDeployBranch();
+     $this->build();
+     $this->commit();
++    $this->truncateBuildRepoHistory($options);
+     $this->cutTag('build');
+ 
+     // Check the deploy.tag_source config value and also tag the source repo if
+@@ -215,6 +219,7 @@ protected function deployToBranch($options) {
+     $this->mergeUpstreamChanges();
+     $this->build();
+     $this->commit();
++    $this->truncateBuildRepoHistory($options);
+     $this->push($this->branchName, $options);
+   }
+ 
+@@ -528,11 +533,17 @@ protected function push($identifier, $options) {
+       $this->say("Pushing artifact to git.remotes...");
+     }
+ 
++    $arguments = "";
++
++    if ($options['truncate-history'] || $this->truncateHistory) {
++      $arguments .= " --force";
++    }
++
+     $task = $this->taskExecStack()
+       ->dir($this->deployDir);
+     foreach ($this->getConfigValue('git.remotes') as $remote) {
+       $remote_name = md5($remote);
+-      $task->exec("git push $remote_name $identifier");
++      $task->exec("git push $remote_name $identifier $arguments");
+     }
+     $result = $task->run();
+ 
+@@ -653,4 +664,59 @@ public function installDrupal() {
+     ]);
+   }
+ 
++  /**
++   *
++   * Truncates the history from the deployment branch on the remote repo.
++   * This reduces the number of objects in git and drastically reduces
++   * deployment times on much larger projects.
++   * Trigger with --truncate-history option
++   *
++   * @param $options
++   *
++   * @return bool
++   * @throws \Acquia\Blt\Robo\Exceptions\BltException
++   */
++  public function truncateBuildRepoHistory($options) {
++
++    if ($options['truncate-history'] || $this->truncateHistory) {
++      // branchName may have already been modified so do not use getBranchName()
++      $branchName = $this->branchName;
++
++      $this->logger->warning("Truncating commit history on $this->branchName.");
++
++      // Get commit hash.
++      $result = $this->taskExec('git rev-parse HEAD')
++        ->dir($this->deployDir)
++        ->printMetadata(FALSE)
++        ->printOutput(FALSE)
++        ->interactive(FALSE)
++        ->run();
++
++      $commitHash = $result->getMessage();
++
++      /*
++       * First create a temp branch with the single commit we are interested in
++       * Rebase our change on to the temp branch (that only has a single commit)
++       * Delete our temp branch
++       * *****-build now has only our latest commit.
++       */
++      $result = $this->taskExecStack()
++        ->dir($this->deployDir)
++        ->printOutput(FALSE)
++        ->exec("git checkout --orphan truncateTemp $commitHash")
++        ->exec("git commit -m \"Truncate $branchName history from commit $commitHash.\"")
++        ->exec("git rebase --onto truncateTemp $commitHash $branchName")
++        ->exec("git branch -d truncateTemp")
++        ->run();
++
++      if (!$result->wasSuccessful()) {
++        throw new BltException("Failed to truncate deployment branch!");
++      }
++    }
++    else {
++      return FALSE;
++    }
++
++  }
++
+ }

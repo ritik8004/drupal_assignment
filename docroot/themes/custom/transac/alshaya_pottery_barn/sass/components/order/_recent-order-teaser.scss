@@ -7,3 +7,13 @@
     color: $user_recent_order_icon;
   }
 }
+
+.recent__orders--list {
+  &.user__order--detail {
+    td.above-mobile {
+      .light {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}

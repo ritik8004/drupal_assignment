@@ -597,7 +597,7 @@ class SkuManager {
         );
       }
       else {
-        $sku_cart_price['final_price'] = number_format($final_price, 3);
+        $sku_cart_price['final_price'] = _alshaya_acm_format_price_with_decimal($final_price);
         $discount = round((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
         $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
@@ -2003,12 +2003,26 @@ class SkuManager {
 
       $swatch_item = $child->getSwatchImage();
 
+      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
+        $swatch_product_image = $child->getThumbnail();
+
+        // If we have image for the product.
+        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+          $uri = $swatch_product_image['file']->getFileUri();
+          $url = file_create_url($uri);
+          $swatch_product_image_url = file_url_transform_relative($url);
+        }
+      }
+
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
         continue;
       }
 
       $duplicates[$value] = 1;
-      $swatches[$child->id()] = $swatch_item['file']->url();
+      $swatches[$child->id()] = [
+        'swatch_url' => $swatch_item['file']->url(),
+        'swatch_product_url' => $swatch_product_image_url ?? '',
+      ];
     }
 
     $this->setProductCachedData($sku, 'swatches', $swatches);
@@ -2419,9 +2433,31 @@ class SkuManager {
       }
     }
 
+    $select_from_query = TRUE;
+
+    // Check if we need the select the variant only after all
+    // options are selected.
+    if ($this->showImagesFromChildrenAfterAllOptionsSelected()) {
+      // If there is only one attribute, we will have selection by default.
+      // If there are more then one attributes, we will select by default only
+      // if there is one value in that specific attribute.
+      // Here we say not to select variant from query ?selected=xxx if there
+      // is any attribute (except the first one) which has more then one value.
+      if (count($combinations['attribute_sku']) > 1) {
+        // Remove first attribute.
+        array_shift($combinations['attribute_sku']);
+        foreach ($combinations['attribute_sku'] as $values) {
+          if (count($values) > 1) {
+            $select_from_query = FALSE;
+            break;
+          }
+        }
+      }
+    }
+
     // If there is only one attribute option or config says select one
     // child if only one attribute is selected, process further.
-    if (!$this->showImagesFromChildrenAfterAllOptionsSelected() || (count($combinations['attribute_sku']) === 1)) {
+    if ($select_from_query) {
       // Select first child based on value provided in query params.
       $sku_id = (int) $this->currentRequest->query->get('selected');
 
@@ -2962,6 +2998,46 @@ class SkuManager {
     $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
 
     return $prod_description;
+  }
+
+  /**
+   * Helper function to invalidate PDP page caches.
+   */
+  public function invalidatePdpCache($term = NULL) {
+    if ($term instanceof TermInterface) {
+      $nids = $this->getNodesFromTermId($term->id());
+      foreach ($this->termStorage->loadTree('acq_product_category', $term->id(), NULL, TRUE) as $taxonomy_child) {
+        $pdp_layout = $taxonomy_child->get('field_pdp_layout')->getString() ?? NULL;
+        if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+          $nids = array_merge($nids, $this->getNodesFromTermId($taxonomy_child->id()));
+        }
+      }
+      foreach ($nids as $nid) {
+        Cache::invalidateTags([
+          'config:node.type.acq_product:' . $nid,
+          'node_type:acq_product:' . $nid,
+          'node_view',
+        ]);
+      }
+    }
+    else {
+      Cache::invalidateTags([
+        'config:node.type.acq_product',
+        'node_type:acq_product',
+        'node_view',
+      ]);
+    }
+  }
+
+  /**
+   * Helper function to get all nids associated with a term.
+   */
+  public function getNodesFromTermId($tid = '') {
+    $query = $this->connection->select('node__field_category', 'nc');
+    $query->fields('nc', ['entity_id']);
+    $query->condition('nc.field_category_target_id', $tid);
+    $query->distinct();
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
 }

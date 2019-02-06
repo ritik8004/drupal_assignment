@@ -12,9 +12,8 @@
 // @see https://support.acquia.com/hc/en-us/articles/360005253954-Fixing-database-deadlocks
 // for reference.
 
-$databases['default']['default']['init_commands'] = [
-  'isolation' => "SET SESSION tx_isolation='READ-COMMITTED'",
-];
+$databases['default']['default']['init_commands']['isolation'] =  "SET SESSION tx_isolation='READ-COMMITTED'";
+
 if (file_exists('/var/www/site-php')) {
   acquia_hosting_db_choose_active($conf['acquia_hosting_site_info']['db'], 'default', $databases, $conf);
 }

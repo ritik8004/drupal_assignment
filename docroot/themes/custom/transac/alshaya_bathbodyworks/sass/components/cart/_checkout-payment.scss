@@ -12,3 +12,35 @@
     border-top: 0;
   }
 }
+
+.checkout-payment {
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: 1px solid $checkout_payment_form_border;
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+#payment_details_wrapper {
+  > div:first-child {
+    border-top: none;
+
+    .payment-plugin-wrapper-div {
+      border-top: 1px solid $checkout_payment_option_border;
+    }
+
+    @include breakpoint($only-mobile) {
+      border-top: none;
+    }
+  }
+}

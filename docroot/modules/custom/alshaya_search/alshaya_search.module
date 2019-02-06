@@ -632,3 +632,13 @@ function alshaya_search_acquia_search_get_list_of_possible_cores_alter(&$possibl
     array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $acsf_site_code);
   }
 }
+
+/**
+ * Implements hook_local_tasks_alter().
+ */
+function alshaya_search_local_tasks_alter(&$local_tasks) {
+  // Change config translation local task hierarchy.
+  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_search.srp_sort_settings_form'])) {
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_search.srp_sort_settings_form']['parent_id'] = 'alshaya_search.srp_sort_settings_form';
+  }
+}

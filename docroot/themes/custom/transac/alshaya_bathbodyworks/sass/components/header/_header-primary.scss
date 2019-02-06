@@ -924,3 +924,39 @@ header .region__header {
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  header {
+    .region__header {
+      .block-system-branding-block {
+        padding: 0.25rem 0.5rem 0.125rem;
+
+        html[lang="ar"] & {
+          padding-bottom: 0;
+        }
+      }
+    }
+  }
+
+  #block-cartminiblock {
+    padding: 0.25rem 0.5rem 0.125rem;
+
+    html[lang="ar"] & {
+      padding-bottom: 0;
+    }
+  }
+
+  .mobile--overlay {
+    header {
+      .region__header {
+        .block-system-branding-block {
+          padding-bottom: 0.25rem;
+
+          html[lang="ar"] & {
+            padding-bottom: 0.125rem;
+          }
+        }
+      }
+    }
+  }
+}
