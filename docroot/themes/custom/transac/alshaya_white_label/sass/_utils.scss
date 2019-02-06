@@ -237,7 +237,9 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 // Mixin to add a spinner.
 // Can be used anywhere when you need a loader
 @mixin throbberLoader() {
-  background-image: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
+  background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
   background-size: 1.5rem;
   padding-left: 0.625rem;
   padding-right: 0.625rem;
