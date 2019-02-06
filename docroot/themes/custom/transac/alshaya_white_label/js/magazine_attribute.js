@@ -316,6 +316,7 @@
             ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0)) &&
             $('body').hasClass('open-tray-without-selection')) {
             $('.edit-add-to-cart').mousedown();
+            $('body').removeClass('open-tray-without-selection');
           }
         });
 
