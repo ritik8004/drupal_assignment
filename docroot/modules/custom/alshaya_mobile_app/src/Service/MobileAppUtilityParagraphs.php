@@ -180,13 +180,13 @@ class MobileAppUtilityParagraphs extends MobileAppUtility {
                 'callback' => 'getFieldMultipleParagraphItems',
                 'type' => 'slider',
               ] + $default_values,
-              'body' => [
-                'type' => 'body',
-              ] + $default_values,
               'field_delivery_banner' => [
                 'callback' => 'getFieldParagraphItems',
                 'label' => 'items',
                 'type' => 'delivery_banner',
+              ] + $default_values,
+              'body' => [
+                'type' => 'body',
               ] + $default_values,
               'field_promo_blocks' => [
                 'callback' => 'getFieldRecursiveParagraphItems',
