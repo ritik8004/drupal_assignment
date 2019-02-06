@@ -71,32 +71,32 @@ notifications:
 before_install:
   # Disable xdebug.
   - phpenv config-rm xdebug.ini
-  - composer self-update
-  - composer validate --no-check-all --ansi
-  - composer install
+  #- composer self-update
+  #- composer validate --no-check-all --ansi
+  #- composer install
   # Exit build early if only documentation was changed in a Pull Request.
-  - source ${BLT_DIR}/scripts/travis/exit_early
+  #- source ${BLT_DIR}/scripts/travis/exit_early
 
 install:
-  - source ${BLT_DIR}/scripts/travis/setup_environment
+  # - source ${BLT_DIR}/scripts/travis/setup_environment
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - source $BLT_DIR/scripts/travis/setup_project
-  - nvm install 6.10.0
-  - nvm use 6.10.0
+  # - source $BLT_DIR/scripts/travis/setup_project
+  # - nvm install 6.10.0
+  # - nvm use 6.10.0
   # Setup the themes here so the node_modules folders can be cached.
-  - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
+  # - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
   # Frontend-setup.sh changed directory, hence we return to the original dir.
   - cd ${BUILD_DIR}
 
 script:
   # Changing path to disable behat test on Travis.
   # - source $BLT_DIR/scripts/travis/run_tests
-  - source ${BUILD_DIR}/blt/scripts/run_tests
+  #- source ${BUILD_DIR}/blt/scripts/run_tests
 
 deploy:
   - provider: script
-    script: if [[ ! $TRAVIS_BRANCH =~ ^revert-.*$ ]]; then ./$BLT_DIR/scripts/travis/deploy_branch; fi
+    script: 'if [[ ! $TRAVIS_BRANCH =~ ^revert-.*$ ]]; then ./$BLT_DIR/scripts/travis/deploy_branch; fi'
     skip_cleanup: true
     on:
       all_branches: true
