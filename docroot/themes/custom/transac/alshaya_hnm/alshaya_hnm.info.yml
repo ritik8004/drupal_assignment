@@ -37,3 +37,8 @@ libraries-override:
   alshaya_white_label/attribute:
     js:
       js/select2Option.js: js/select2Option.js
+
+  alshaya_white_label/magazine_attribute:
+    css:
+      theme:
+        css/conditional-sass/magazine-layout/magazine-layout.ltr.css: css/conditional-sass/magazine-layout/magazine-layout.ltr.css

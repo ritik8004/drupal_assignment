@@ -680,6 +680,7 @@ body.alias--cart {
         &.price {
           @include breakpoint($only-tablet) {
             width: 7.2rem;
+            padding: 1rem 0.5rem;
           }
 
           @include breakpoint($desktop) {
@@ -758,9 +759,9 @@ body.alias--cart {
         }
 
         @include breakpoint($only-tablet) {
-          width: 7rem;
-          min-width: 7rem;
-          padding: 1rem 0.7rem;
+          width: 7.07rem;
+          min-width: 7.07rem;
+          padding: 1rem 0.5rem;
         }
 
         @include breakpoint($desktop) {
@@ -870,12 +871,7 @@ body.alias--cart {
           }
 
           .throbber {
-            background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-            background-position: $right center !important;
-            background-repeat: no-repeat !important;
-            background-size: 1.5rem;
-            padding-left: 0.625rem;
-            padding-right: 0.625rem;
+            @include throbberLoader();
           }
 
           @include breakpoint($only-mobile) {
@@ -1042,7 +1038,7 @@ body.alias--cart {
 
       @include breakpoint($only-tablet) {
         width: 7.07rem;
-        padding: 1rem 0.7rem;
+        padding: 1rem 0.5rem;
       }
 
       @include breakpoint($desktop) {

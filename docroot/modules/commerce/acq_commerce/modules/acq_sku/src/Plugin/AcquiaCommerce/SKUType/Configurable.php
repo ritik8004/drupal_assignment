@@ -289,8 +289,7 @@ class Configurable extends SKUPluginBase {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
       catch (\Exception $e) {
-        // Clear stock cache.
-        $tree_pointer->clearStockCache();
+        $this->refreshStock($tree_pointer);
 
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
@@ -580,35 +579,6 @@ class Configurable extends SKUPluginBase {
     }
 
     return $cartName;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getProcessedStock(SKU $sku, $reset = FALSE) {
-    $stock = &drupal_static('stock_static_cache', []);
-
-    if (!$reset && isset($stock[$sku->getSku()])) {
-      return $stock[$sku->getSku()];
-    }
-
-    $quantities = [];
-
-    foreach ($sku->get('field_configured_skus') as $child_sku) {
-      try {
-        $child_sku = $child_sku->getString();
-        $child_stock = (int) $this->getStock($child_sku, $reset);
-        $quantities[$child_sku] = $child_stock;
-      }
-      catch (\Exception $e) {
-        // Child SKU might be deleted or translation not available.
-        // Log messages are already set in previous functions.
-      }
-    }
-
-    $stock[$sku->getSku()] = empty($quantities) ? 0 : max($quantities);
-
-    return $stock[$sku->getSku()];
   }
 
   /**

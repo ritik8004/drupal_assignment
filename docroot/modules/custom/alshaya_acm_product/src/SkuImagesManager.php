@@ -725,13 +725,11 @@ class SkuImagesManager {
    *   Translated product label to use in alt/title.
    * @param bool $add_default_image
    *   Flag to mention if default image needs to be added or not.
-   * @param \Drupal\acq_commerce\SKUInterface $original_sku_entity
-   *   Th default sku for the product.
    *
    * @return array
    *   Gallery.
    */
-  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE, SKUInterface $original_sku_entity = NULL) {
+  public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
 
     $display_thumbnails = $this->productDisplaySettings->get('image_thumb_gallery');
@@ -774,69 +772,22 @@ class SkuImagesManager {
 
       case 'modal':
       case 'pdp':
+      case 'modal-magazine':
+
         $media = $this->getAllMedia($sku);
-        $main_image = $media['main'];
-        $thumbnails = $media['thumbs'];
+        $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
+        $thumbnails = $mediaItems['thumbnails'];
+        $main_image = $mediaItems['main_image'];
 
         // Fetch settings.
         $settings = $this->getCloudZoomDefaultSettings();
-        $thumbnail_style = $settings['thumb_style'];
-        $zoom_style = $settings['zoom_style'];
-        $slide_style = $settings['slide_style'];
-
-        // Create our thumbnails to be rendered for zoom.
-        foreach ($media['media_items']['images'] ?? [] as $media_item) {
-          $file_uri = $media_item['file']->getFileUri();
-
-          // Show original full image in the modal inside a draggable container.
-          $original_image = $media_item['file']->url();
-
-          $image_small = ImageStyle::load($thumbnail_style)
-            ->buildUrl($file_uri);
-          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-          if (empty($main_image)) {
-            $main_image = [
-              'zoomurl' => $image_zoom,
-              'mediumurl' => $image_medium,
-              'label' => $media_item['label'],
-            ];
-          }
-
-          $thumbnails[] = [
-            'thumburl' => $image_small,
-            'mediumurl' => $image_medium,
-            'zoomurl' => $image_zoom,
-            'fullurl' => $original_image,
-            'label' => $media_item['label'],
-            'type' => 'image',
-          ];
-        }
-        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-          // @TODO:
-          // Receiving video_provider as NULL, should be set to youtube
-          // or vimeo. Till then using $type as provider flag.
-          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-          $thumbnails[] = [
-            'thumburl' => $media_item['file'],
-            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-            'video_title' => $media_item['video_title'],
-            'video_desc' => $media_item['video_description'],
-            'type' => $type,
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
 
         // If no main image and no video, use default image.
         if (empty($main_image) && $add_default_image && empty($media['media_items']['videos'])) {
           if (!empty($default_image = $this->getProductDefaultImage())) {
-            $image_zoom = ImageStyle::load($zoom_style)
+            $image_zoom = ImageStyle::load($settings['zoom_style'])
               ->buildUrl($default_image->getFileUri());
-            $image_medium = ImageStyle::load($slide_style)
+            $image_medium = ImageStyle::load($settings['slide_style'])
               ->buildUrl($default_image->getFileUri());
 
             $main_image = [
@@ -880,6 +831,16 @@ class SkuImagesManager {
           // Add PDP slider position class in template.
           $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
 
+          $library_array = [
+            'alshaya_product_zoom/cloud_zoom',
+            'alshaya_product_zoom/cloud_zoom_pdp_gallery',
+            'alshaya_product_zoom/product.cloud_zoom',
+          ];
+
+          if ($context == 'modal-magazine') {
+            $library_array[] = 'alshaya_product_zoom/magazine_gallery';
+          }
+
           $gallery['product_zoom'] = [
             '#theme' => 'product_zoom',
             '#mainImage' => $main_image,
@@ -889,82 +850,20 @@ class SkuImagesManager {
             '#labels' => $labels,
             '#image_slider_position_pdp' => 'slider-position-' . $pdp_image_slider_position,
             '#attached' => [
-              'library' => [
-                'alshaya_product_zoom/cloud_zoom',
-                'alshaya_product_zoom/cloud_zoom_pdp_gallery',
-                'alshaya_product_zoom/product.cloud_zoom',
-              ],
+              'library' => $library_array,
             ],
           ];
         }
         break;
 
-      case 'modal-magazine':
       case 'pdp-magazine':
-        // We will use below variable for alter hooks.
-        $prod_description = [];
-        if (!isset($original_sku_entity)) {
-          $original_sku_entity = $sku;
-        }
-        if ($body = $original_sku_entity->get('attr_description')->getValue()) {
-          $prod_description['description'] = [
-            '#markup' => $body[0]['value'],
-          ];
-        }
-
-        // Alter description Since this could be different for each brand.
-        $this->moduleHandler->alter('acq_sku_magazine_product_description', $original_sku_entity, $prod_description);
-
         $media = $this->getAllMedia($sku);
-        $thumbnails = $media['thumbs'];
-
-        // Fetch settings.
-        $settings = $this->getCloudZoomDefaultSettings();
-        $thumbnail_style = $settings['thumb_style'];
-        $zoom_style = $settings['zoom_style'];
-        $slide_style = $settings['slide_style'];
-
-        // Create our thumbnails to be rendered for zoom.
-        foreach ($media['media_items']['images'] ?? [] as $media_item) {
-          $file_uri = $media_item['file']->getFileUri();
-
-          // Show original full image in the modal inside a draggable container.
-          $original_image = $media_item['file']->url();
-
-          $image_small = ImageStyle::load($thumbnail_style)
-            ->buildUrl($file_uri);
-          $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
-          $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
-
-          $thumbnails[] = [
-            'thumburl' => $image_small,
-            'mediumurl' => $image_medium,
-            'zoomurl' => $image_zoom,
-            'fullurl' => $original_image,
-            'label' => $media_item['label'],
-            'type' => 'image',
-          ];
-        }
-        foreach ($media['media_items']['videos'] ?? [] as $media_item) {
-          // @TODO:
-          // Receiving video_provider as NULL, should be set to youtube
-          // or vimeo. Till then using $type as provider flag.
-          $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
-          $thumbnails[] = [
-            'thumburl' => $media_item['file'],
-            'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
-            'video_title' => $media_item['video_title'],
-            'video_desc' => $media_item['video_description'],
-            'type' => $type,
-            // @TODO: should this be config?
-            'width' => 81,
-            // @TODO: should this be config?
-            'height' => 81,
-          ];
-        }
+        $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
+        $thumbnails = $mediaItems['thumbnails'];
 
         // If thumbnails available.
         if (!empty($thumbnails)) {
+          $settings = $this->getCloudZoomDefaultSettings();
           $config_name = ($context == 'modal') ? 'pdp_slider_items_settings.pdp_slider_items_number_cs_us' : 'pdp_gallery_pager_limit';
           $pdp_gallery_pager_limit = $this->configFactory->get('alshaya_acm_product.settings')
             ->get($config_name);
@@ -990,7 +889,7 @@ class SkuImagesManager {
 
           $gallery['alshaya_magazine'] = [
             '#theme' => 'alshaya_magazine',
-            '#description' => $prod_description['description'],
+            '#sku' => $sku,
             '#thumbnails' => $thumbnails,
             '#pager_flag' => $pager_flag,
             '#properties' => $this->getRelCloudZoom($settings),
@@ -1157,6 +1056,84 @@ class SkuImagesManager {
     }
 
     return $swatches;
+  }
+
+  /**
+   * Get thumbnails for gallery from media array.
+   *
+   * @param array $media
+   *   Array of media items.
+   * @param bool $get_main_image
+   *   Whether to get main image as well or not.
+   *
+   * @return array
+   *   Thumbnails.
+   */
+  protected function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
+    $thumbnails = $media['thumbs'];
+
+    // Fetch settings.
+    $settings = $this->getCloudZoomDefaultSettings();
+    $thumbnail_style = $settings['thumb_style'];
+    $zoom_style = $settings['zoom_style'];
+    $slide_style = $settings['slide_style'];
+    $main_image = $media['main'];
+
+    // Create our thumbnails to be rendered for zoom.
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      if ($media_item['file'] instanceof FileInterface) {
+        $file_uri = $media_item['file']->getFileUri();
+
+        // Show original full image in the modal inside a draggable container.
+        $original_image = $media_item['file']->url();
+
+        $image_small = ImageStyle::load($thumbnail_style)
+          ->buildUrl($file_uri);
+        $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
+        $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
+
+        if ($get_main_image && empty($main_image)) {
+          $main_image = [
+            'zoomurl' => $image_zoom,
+            'mediumurl' => $image_medium,
+            'label' => $media_item['label'],
+          ];
+        }
+
+        $thumbnails[] = [
+          'thumburl' => $image_small,
+          'mediumurl' => $image_medium,
+          'zoomurl' => $image_zoom,
+          'fullurl' => $original_image,
+          'label' => $media_item['label'],
+          'type' => 'image',
+        ];
+      }
+    }
+    foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+      // @TODO:
+      // Receiving video_provider as NULL, should be set to youtube
+      // or vimeo. Till then using $type as provider flag.
+      $type = strpos($media_item['video_url'], 'youtube') ? 'youtube' : 'vimeo';
+      $thumbnails[] = [
+        'thumburl' => $media_item['file'],
+        'url' => alshaya_acm_product_generate_video_embed_url($media_item['video_url'], $type),
+        'video_title' => $media_item['video_title'],
+        'video_desc' => $media_item['video_description'],
+        'type' => $type,
+        // @TODO: should this be config?
+        'width' => 81,
+        // @TODO: should this be config?
+        'height' => 81,
+      ];
+    }
+
+    $return['thumbnails'] = $thumbnails;
+    if ($get_main_image) {
+      $return['main_image'] = $main_image;
+    }
+
+    return $return;
   }
 
 }
