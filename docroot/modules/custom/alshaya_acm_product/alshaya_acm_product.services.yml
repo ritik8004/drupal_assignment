@@ -38,6 +38,13 @@ services:
       - '@http_client'
       - '@renderer'
       - '@simple_sitemap.generator'
+
+  alshaya_acm_product.price_helper:
+    class: Drupal\alshaya_acm_product\Service\SkuPriceHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
+
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
