@@ -31,20 +31,6 @@ fi
 
 cd `drush sa @$subscription.$target_env | grep root | cut -d"'" -f4`
 
-## Checking if any change in FE code
-echo "Checking git diff to identify changes in theme's files."
-echo $(cat ../git-diff.txt)
-echo -e "\n"
-
-## In case we have changes in FE code we clear cache.
-if echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
-  echo "Change in FE detected, clearing FE cache."
-  drush -l $site-$env.factory.alshaya.com cr
-  if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No FE change so no cache clear is required on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
-  fi
-fi
-
 ## Checking if any install/config file have been updated.
 echo "Checking git diff to identify hook_update() or config change."
 echo $(cat ../git-diff.txt)
@@ -55,6 +41,10 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
   echo "Change in install file detected, restoring databases before executing updb."
 
   ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
+elif echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
+    echo "Change in FE detected, clearing FE cache."
+    
+    drush acsf-tools-ml cr
 else
   if [ $slack == 1 ]; then
     curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
