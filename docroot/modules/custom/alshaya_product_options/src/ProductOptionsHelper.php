@@ -7,6 +7,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class ProductOptionsHelper.
@@ -144,6 +145,21 @@ class ProductOptionsHelper {
       // First get attribute info.
       $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
       $attribute = json_decode($attribute, TRUE);
+
+      // Dummy data to test product options.
+      $attribute = [];
+      $attribute['swatches'] = [];
+      $attribute['attribute_id'] = '5443';
+      $attribute['attribute_code'] = 'size_shoe_eu';
+      $attribute['size_chart'] = 1;
+      $attribute['size_chart_label'] = 'EU';
+      $attribute['size_group'] = 'shoes';
+      $attribute['options'] = [
+        [
+          "label" => "M",
+          "value" => "2028",
+        ],
+      ];
     }
     catch (\Exception $e) {
       // For now we have many fields in sku_base_fields which are not
@@ -186,6 +202,12 @@ class ProductOptionsHelper {
       if (isset($swatches[$option['value']])) {
         $this->swatches->updateAttributeOptionSwatch($term, $swatches[$option['value']]);
       }
+
+      // Check if we have value for multi size and it is changed, we trigger
+      // save only if value changed.
+      if (isset($attribute['size_chart'])) {
+        $this->updateAttributeOptionSize($term, $attribute);
+      }
     }
 
     $this->logger->debug('Sync for product attribute options finished of attribute @attribute_code in language @langcode.', [
@@ -194,6 +216,23 @@ class ProductOptionsHelper {
     ]);
 
     $this->apiWrapper->resetStoreContext();
+  }
+
+  /**
+   * Update Term with Attribute option value if changed.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Taxonomy term.
+   * @param array $attributes_info
+   *   Attributes info array received from API.
+   */
+  public function updateAttributeOptionSize(TermInterface $term, array $attributes_info) {
+    // Reset current values.
+    $term->get('field_attribute_size_chart')->setValue($attributes_info['size_chart']);
+    $term->get('field_attribute_size_chart_label')->setValue($attributes_info['size_chart_label']);
+    $term->get('field_attribute_size_group')->setValue($attributes_info['size_group']);
+
+    $term->save();
   }
 
 }
