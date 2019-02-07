@@ -80,3 +80,17 @@
     }
   }
 }
+
+.path--cart {
+  .multistep-checkout {
+    #edit-checkout-login {
+      &.social-signup-form {
+        .request-password-link {
+          @include breakpoint($tablet) {
+            bottom: 7.5625rem;
+          }
+        }
+      }
+    }
+  }
+}

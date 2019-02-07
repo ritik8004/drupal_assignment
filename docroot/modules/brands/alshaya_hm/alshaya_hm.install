@@ -8,6 +8,21 @@
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
+use Drupal\Component\Utility\Unicode;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the currency_code to DHS.
+ */
+function alshaya_hm_update_8030() {
+  $country_code = Unicode::strtolower(Settings::get('country_code'));
+  if ($country_code === 'ae') {
+    \Drupal::configFactory()->getEditable('acq_commerce.currency')
+      ->set('currency_code', 'DHS')
+      ->save();
+  }
+}
 
 /**
  * Implements hook_update_N().
