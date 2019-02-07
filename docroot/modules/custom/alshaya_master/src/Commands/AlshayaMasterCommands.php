@@ -295,6 +295,10 @@ class AlshayaMasterCommands extends DrushCommands {
     if (!$url['scheme']) {
       $self->set('uri', "https://$uri");
     }
+    elseif ($url['scheme'] == 'http') {
+      $uri = substr($uri, 4);
+      $self->set('uri', "https$uri");
+    }
   }
 
 }
