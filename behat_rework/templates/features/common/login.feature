@@ -3,7 +3,7 @@ Feature: Test Sign in and Forgot password features from common
 
   Scenario: As an authenticated user,
   I should be able to sign in after providing valid credentials
-    Given I am on homepage
+    Given I navigate to homepage
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load

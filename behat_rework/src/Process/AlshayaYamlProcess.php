@@ -50,12 +50,12 @@ class AlshayaYamlProcess {
   /**
    * Collect yaml files for all markets and languages.
    *
-   * @return array
-   *   Return associated array with profile and list of available files.
+   * @param bool $rebuild
+   *   True to recollect files else False.
    */
   protected function collectYamlFiles($rebuild = FALSE) {
     if ($rebuild) {
-      foreach($this->alshayaMarkets as $market) {
+      foreach ($this->alshayaMarkets as $market) {
         foreach ($this->alshayaLanguages as $language) {
           $market_common = [];
 
@@ -156,23 +156,38 @@ class AlshayaYamlProcess {
     }
   }
 
+  /**
+   * Collect variable files for given sites.
+   *
+   * @param array $specific_site
+   *   Generate variables for given sites.
+   * @param bool $rebuild
+   *   True to recollect all the variable files else false.
+   *
+   * @return array|mixed
+   *   Return assoc. array with profile name as key and file lists as value.
+   */
   public function buildVarsForGivenSites(array $specific_site = [], $rebuild = FALSE) {
     if (empty($specific_site)) {
-      return  $this->getCollectedYamlFiles(TRUE);
+      return $this->getCollectedYamlFiles(TRUE);
     }
 
     $profiles = $this->getCollectedYamlFiles($rebuild);
     if (!empty($specific_site)) {
-      $profiles = array_filter($profiles, function ($profile) use ($specific_site) {
-        $return = FALSE;
-        foreach ($specific_site as $site) {
-          if (strpos($profile, $site) !== FALSE) {
-            $return = TRUE;
-            break;
+      $profiles = array_filter(
+        $profiles,
+        function ($profile) use ($specific_site) {
+          $return = FALSE;
+          foreach ($specific_site as $site) {
+            if (strpos($profile, $site) !== FALSE) {
+              $return = TRUE;
+              break;
+            }
           }
-        }
-        return $return;
-      }, ARRAY_FILTER_USE_KEY);
+          return $return;
+        },
+        ARRAY_FILTER_USE_KEY
+      );
     }
 
     if (!empty($profiles)) {
@@ -186,10 +201,12 @@ class AlshayaYamlProcess {
    * Get collected yaml files with profiles.
    *
    * @param bool $rebuild
+   *   True to recollect all the variable files else false.
    *
    * @return array|mixed
+   *   Return assoc. array with profile name as key and file lists as value.
    */
-  public function getCollectedYamlFiles($rebuild = FALSE) {
+  protected function getCollectedYamlFiles($rebuild = FALSE) {
     if ($rebuild) {
       $this->collectYamlFiles($rebuild);
       return $this->collectedFilesList;
@@ -200,7 +217,6 @@ class AlshayaYamlProcess {
             && !$this->collectedFilesList = $this->getParsedContent($this->collectionFile)
         )
     ) {
-      var_dump('reading file!');
       $this->collectYamlFiles(TRUE);
     }
 
@@ -216,9 +232,12 @@ class AlshayaYamlProcess {
    *   List of yaml files.
    * @param string $profile
    *   (Optional) Current site profile.
+   * @param bool $rebuild
+   *   True to recollect all the variable files else false.
    *
    * @return array|mixed
    *   Return array.
+   *
    * @throws \Exception
    */
   public function mergeYamlFiles(array $yaml_files, $profile = NULL, $rebuild = FALSE): array {
@@ -292,7 +311,7 @@ class AlshayaYamlProcess {
     );
     unset($final_yaml['tags']);
 
-    # Generate a yaml file for all collected variables.
+    // Generate a yaml file for all collected variables.
     $this->dumpYaml($profile_file, $final_yaml);
     return $final_yaml;
   }
@@ -332,17 +351,17 @@ class AlshayaYamlProcess {
     $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
     // Set the MinkExtension base_url to current site's base url.
     if (isset($variables['variables']['url_base_uri'])) {
-      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $variables['variables']['url_base_uri'] . '/';
+      $yaml['extensions']['Behat\MinkExtension']['base_url'] = $variables['variables']['url_base_uri'];
     }
 
     // Set the folder for report.
-    if (!empty($profile)) {
-      $yaml['formatters'] = [
-        'html' => [
-          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
-        ],
-      ];
-    }
+//    if (!empty($profile)) {
+//      $yaml['formatters'] = [
+//        'html' => [
+//          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
+//        ],
+//      ];
+//    }
     return $yaml;
   }
 

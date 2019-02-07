@@ -53,4 +53,19 @@ class FeatureContext extends CustomMinkContext {
     }
   }
 
+
+  /**
+   * Opens homepage
+   * Example: Given I am on "/"
+   * Example: When I go to "/"
+   * Example: And I go to "/"
+   *
+   * @Given /^(?:|I )navigate to (?:|the )homepage$/
+   * @When /^(?:|I )open web (?:|the )homepage$/
+   */
+  public function iVisitHomePage()
+  {
+    $this->visitPath($this->minkParam['base_url']);
+  }
+
 }

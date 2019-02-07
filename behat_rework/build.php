@@ -47,19 +47,3 @@ foreach ($profiles as $profile => $files) {
   }
 }
 $behat->dumpYaml(BUILD_DIR . '/profiles.yml', $behat_config);
-
-//Create a variable for end time
-$time_end = microtime(true);
-$time = $time_end - $time_start;
-echo PHP_EOL;
-echo 'Execution time : '. $time.' seconds';
-
-echo PHP_EOL;
-echo "Memory Usage :".memory_get_usage();
-echo PHP_EOL;
-echo "Real Memory Usage :".memory_get_usage(true);
-echo PHP_EOL;
-echo "Real Peak Memory Usage :".memory_get_peak_usage(true);
-echo PHP_EOL;
-echo "Peak Memory Usage :".memory_get_peak_usage();
-echo PHP_EOL;
