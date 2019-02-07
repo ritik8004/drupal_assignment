@@ -154,6 +154,8 @@ magazine_attribute:
   css:
     theme:
       css/conditional-sass/magazine-layout/magazine-layout.ltr.css: {}
+  dependencies:
+    - core/jquery.ui.effects.slide
 
 campaign-plp-style-1-video-provider:
   css:
