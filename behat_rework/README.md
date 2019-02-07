@@ -128,20 +128,38 @@ Contains `.yml` files with `variables` and `tests` keys. `variables` are used
 to replace token, Which we wrote in feature files with curly braces 
 (i.e. `{userame}`), inside `template/features/*/*.feature` files.
 
-Here's an example of sample `*.yml` file.
+Here's an example of a sample `*.yml` file.
 ```yaml
 variables:                         # Contains variables to replace with token
   var_username: 'kw-common@acquia.com'
   var_password: 'Common@123.com'
-  url_login_url: '/en/user/login'
 tests:                             # Contains a list of features to run.
   - 'login'                        # these contains real (*.feature) file names
   - 'sign-in'                      # without file extension.
 tags:              # list of tags that you want to replace with {@tags}
   - 'hm'
-  - 'hm-kw-uat'
-  - 'hm-uat'
+  - 'kw'
+  - 'uat'
 ```
+
+Here's an examples of a sample `*.yml` file inside languages folder.
+
+> `en.yml`
+> ```yaml
+> variables:
+>   lang_sing_in_txt: 'sign in'
+>   lang_sing_in_btn: 'Sign In'
+>   url_login_link: '/user/login'
+>   url_product_link: '/product/any-dummy-product'
+> ```
+> `ar.yml`
+> ```yaml
+> variables:
+>  lang_sing_in_txt: 'تسجيل الدخول'
+>  lang_sing_in_btn: 'تسجيل الدخول'
+>  url_login_link: '/user/login'
+>  url_product_link: '/حلمات--من-تدفق-متوسط-عبوة-من-قطعتين'
+> ```
 
 #### behat `tags` in `*.yml`
 
