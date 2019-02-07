@@ -362,13 +362,15 @@ class SkuManager {
    *   Build array to modify.
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU entity to use for getting price.
+   * @param string $color
+   *   Color value to limit the scope of skus to get price.
    */
-  public function buildPrice(array &$build, SKU $sku_entity) {
+  public function buildPrice(array &$build, SKU $sku_entity, string $color = '') {
     // Get the price, discounted price and discount.
     $build['price'] = $build['final_price'] = $build['discount'] = [];
 
     if ($sku_entity->bundle() == 'configurable') {
-      $prices = $this->getMinPrices($sku_entity);
+      $prices = $this->getMinPrices($sku_entity, $color);
       $price = $prices['price'];
       $final_price = $prices['final_price'];
     }
@@ -438,11 +440,13 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku_entity
    *   SKU Entity.
+   * @param string $color
+   *   Color value to limit the scope of skus to get price.
    *
    * @return array
    *   Minimum final price and associated initial price.
    */
-  public function getMinPrices(SKU $sku_entity) {
+  public function getMinPrices(SKU $sku_entity, string $color = '') {
     $prices = [
       'price' => (float) $sku_entity->get('price')->getString(),
       'final_price' => (float) $sku_entity->get('final_price')->getString(),
@@ -454,14 +458,30 @@ class SkuManager {
       return $prices;
     }
 
-    if ($cache = $this->getProductCachedData($sku_entity, 'price')) {
+    $cache_key = $color ? 'price_' . $color : 'price';
+
+    if ($cache = $this->getProductCachedData($sku_entity, $cache_key)) {
       return $cache;
     }
 
     $sku_price = 0;
 
     $combinations = $this->getConfigurableCombinations($sku_entity);
-    $children = isset($combinations['by_sku']) ? array_keys($combinations['by_sku']) : [];
+
+    if (empty($combinations['by_sku'])) {
+      $children = [];
+    }
+    elseif ($color) {
+      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+        if (isset($combinations['attribute_sku'][$attribute_code])) {
+          $children = $combinations['attribute_sku'][$attribute_code][$color];
+          break;
+        }
+      }
+    }
+    else {
+      $children = array_keys($combinations['by_sku']);
+    }
 
     foreach ($children as $child_sku_code) {
       try {
@@ -503,7 +523,7 @@ class SkuManager {
     }
 
     // Set the price info to cache.
-    $this->setProductCachedData($sku_entity, 'price', $prices);
+    $this->setProductCachedData($sku_entity, $cache_key, $prices);
 
     return $prices;
   }
@@ -516,14 +536,16 @@ class SkuManager {
    * @param string $view_mode
    *   The view mode of ACQ product, if the value is teaser, VAT text won't be
    *   rendered.
+   * @param string $color
+   *   Color value to limit the scope of skus to get price.
    *
    * @return array
    *   Price block build array.
    */
-  public function getPriceBlock(SKU $sku_entity, $view_mode = 'full') {
+  public function getPriceBlock(SKU $sku_entity, string $view_mode = 'full', string $color = '') {
     $build = [];
     $vat_text = '';
-    $this->buildPrice($build, $sku_entity);
+    $this->buildPrice($build, $sku_entity, $color);
     // Adding vat text to product page.
     // Do not pass VAT text part of the price block for teaser and
     // product_category_carousel modes.
@@ -2830,7 +2852,7 @@ class SkuManager {
       throw new \Exception('Product not in stock, not indexing color node');
     }
 
-    $prices = $this->getMinPrices($sku);
+    $prices = $this->getMinPrices($sku, $product_color);
     $min_final_price = $prices['final_price'];
     $item->getField('final_price')->setValues([$min_final_price]);
 
