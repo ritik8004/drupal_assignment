@@ -313,7 +313,8 @@
           var that = this;
           setTimeout(function () {
             if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
-              $('.size-tray').toggleClass('tray-open');
+              $('.size-tray').addClass('tray-open');
+              $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
               $('body').addClass('open-tray-without-selection');
             }
           }, 10);
