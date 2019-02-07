@@ -145,21 +145,6 @@ class ProductOptionsHelper {
       // First get attribute info.
       $attribute = $this->apiWrapper->getProductAttributeWithSwatches($attribute_code);
       $attribute = json_decode($attribute, TRUE);
-
-      // Dummy data to test product options.
-      $attribute = [];
-      $attribute['swatches'] = [];
-      $attribute['attribute_id'] = '5443';
-      $attribute['attribute_code'] = 'size_shoe_eu';
-      $attribute['size_chart'] = 1;
-      $attribute['size_chart_label'] = 'EU';
-      $attribute['size_group'] = 'shoes';
-      $attribute['options'] = [
-        [
-          "label" => "M",
-          "value" => "2028",
-        ],
-      ];
     }
     catch (\Exception $e) {
       // For now we have many fields in sku_base_fields which are not
