@@ -13,6 +13,8 @@ use Symfony\Component\Config\Definition\Processor;
  */
 class AlshayaYamlProcess {
 
+  const PROFILE_COLLECTION = 'profiles/collection.yml';
+
   protected $parser;
 
   protected $dumper;
@@ -21,19 +23,28 @@ class AlshayaYamlProcess {
 
   protected $configValidator;
 
-  protected $collectedFiles = [];
+  protected $collectedFilesList;
 
-  protected $markets = ['kw', 'sa', 'ar'];
+  protected $alshayaMarkets = ['kw', 'sa', 'ae'];
+
+  protected $alshayaLanguages = ['en', 'ar'];
+
+  protected $buildDir;
+
+  protected $collectionFile;
 
   /**
    * AlshayaYamlProcess constructor.
    */
-  public function __construct() {
+  public function __construct($dir) {
     $this->parser = new Parser();
     $this->dumper = new Dumper();
     $this->processor = new Processor();
     $this->configValidator = new AlshayaConfigValidator();
-    $this->collectedFiles = [];
+    $this->collectedFilesList = [];
+    $this->buildDir = $dir . "/build";
+    $this->templateDir = $dir . "/templates";
+    $this->collectionFile = $this->buildDir . DIRECTORY_SEPARATOR . self::PROFILE_COLLECTION;
   }
 
   /**
@@ -42,117 +53,160 @@ class AlshayaYamlProcess {
    * @return array
    *   Return associated array with profile and list of available files.
    */
-  public function collectYamlFiles() {
-    $languages = ['en', 'ar'];
-    foreach ($this->markets as $market) {
-      foreach ($languages as $language) {
-        $market_common = [];
+  protected function collectYamlFiles($rebuild = FALSE) {
+    if ($rebuild) {
+      foreach($this->alshayaMarkets as $market) {
+        foreach ($this->alshayaLanguages as $language) {
+          $market_common = [];
 
-        if (file_exists(TEMPLATE_DIR . "/variables/languages/$language.yml")) {
-          $market_common[] = TEMPLATE_DIR . "/variables/languages/$language.yml";
-        }
+          if (file_exists($this->templateDir . "/variables/languages/$language.yml")) {
+            $market_common[] = $this->templateDir . "/variables/languages/$language.yml";
+          }
 
-        if (file_exists(TEMPLATE_DIR . "/variables/markets/$market.yml")) {
-          $market_common[] = TEMPLATE_DIR . "/variables/markets/$market.yml";
-        }
-        $files["{$market}_{$language}"] = array_merge([TEMPLATE_DIR . '/variables/common.yml'], $market_common);
+          if (file_exists($this->templateDir . "/variables/markets/$market.yml")) {
+            $market_common[] = $this->templateDir . "/variables/markets/$market.yml";
+          }
+          $files["{$market}_{$language}"] = array_merge([$this->templateDir . '/variables/common.yml'], $market_common);
 
-        $directory   = TEMPLATE_DIR . '/variables/brands';
-        $brands_dirs = new \DirectoryIterator($directory);
+          $directory   = $this->templateDir . '/variables/brands';
+          $brands_dirs = new \DirectoryIterator($directory);
 
-        foreach ($brands_dirs as $brands_dir) {
+          foreach ($brands_dirs as $brands_dir) {
 
-          if (!$brands_dir->isDot() && $brands_dir->isDir()) {
+            if (!$brands_dir->isDot() && $brands_dir->isDir()) {
 
-            $current_brand = $brands_dir->getBasename();
-            $files["{$current_brand}_{$market}_{$language}"] = $files["{$market}_{$language}"];
+              $current_brand                                   = $brands_dir->getBasename();
+              $files["{$current_brand}_{$market}_{$language}"] = $files["{$market}_{$language}"];
 
-            if (file_exists($brands_dir->getPathname() . "/{$current_brand}.yml")) {
-              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
-                $files["{$current_brand}_{$market}_{$language}"],
-                [$brands_dir->getPathname() . "/{$current_brand}.yml"]
-              );
-            }
+              if (file_exists($brands_dir->getPathname() . "/{$current_brand}.yml")) {
+                $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                  $files["{$current_brand}_{$market}_{$language}"],
+                  [$brands_dir->getPathname() . "/{$current_brand}.yml"]
+                );
+              }
 
-            if (file_exists($brands_dir->getPathname() . "/languages/$language.yml")) {
-              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
-                $files["{$current_brand}_{$market}_{$language}"],
-                [$brands_dir->getPathname() . "/languages/$language.yml"]
-              );
-            }
+              if (file_exists($brands_dir->getPathname() . "/languages/$language.yml")) {
+                $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                  $files["{$current_brand}_{$market}_{$language}"],
+                  [$brands_dir->getPathname() . "/languages/$language.yml"]
+                );
+              }
 
-            if (file_exists($brands_dir->getPathname() . "/markets/$market/$market.yml")) {
-              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
-                $files["{$current_brand}_{$market}_{$language}"],
-                [$brands_dir->getPathname() . "/markets/$market/$market.yml"]
-              );
-            }
+              if (file_exists($brands_dir->getPathname() . "/markets/$market/$market.yml")) {
+                $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                  $files["{$current_brand}_{$market}_{$language}"],
+                  [$brands_dir->getPathname() . "/markets/$market/$market.yml"]
+                );
+              }
 
-            if (file_exists($brands_dir->getPathname() . "/markets/$market/languages/$language.yml")) {
-              $files["{$current_brand}_{$market}_{$language}"] = array_merge(
-                $files["{$current_brand}_{$market}_{$language}"],
-                [$brands_dir->getPathname() . "/markets/$market/languages/$language.yml"]
-              );
-            }
+              if (file_exists($brands_dir->getPathname() . "/markets/$market/languages/$language.yml")) {
+                $files["{$current_brand}_{$market}_{$language}"] = array_merge(
+                  $files["{$current_brand}_{$market}_{$language}"],
+                  [$brands_dir->getPathname() . "/markets/$market/languages/$language.yml"]
+                );
+              }
 
-            $env_directory = $brands_dir->getPathname() . "/env";
-            $env_dirs = new \DirectoryIterator($env_directory);
+              $env_directory = $brands_dir->getPathname() . "/env";
+              $env_dirs      = new \DirectoryIterator($env_directory);
 
-            foreach ($env_dirs as $env_dir) {
-              if (!$env_dir->isDot() && $env_dir->isDir()) {
-                $current_env = $env_dir->getBasename();
-                $final_key   = "{$current_brand}-{$market}-{$current_env}-{$language}";
+              foreach ($env_dirs as $env_dir) {
+                if (!$env_dir->isDot() && $env_dir->isDir()) {
+                  $current_env = $env_dir->getBasename();
+                  $final_key   = "{$current_brand}-{$market}-{$current_env}-{$language}";
 
-                $this->collectedFiles[$final_key] = $files["{$current_brand}_{$market}_{$language}"];
-                if (file_exists($env_dir->getPathname() . "/{$current_env}.yml")) {
-                  $this->collectedFiles[$final_key] = array_merge(
-                    $files["{$current_brand}_{$market}_{$language}"],
-                    [$env_dir->getPathname() . "/{$current_env}.yml"]
-                  );
+                  $this->collectedFilesList[$final_key] = $files["{$current_brand}_{$market}_{$language}"];
+                  if (file_exists($env_dir->getPathname() . "/{$current_env}.yml")) {
+                    $this->collectedFilesList[$final_key] = array_merge(
+                      $files["{$current_brand}_{$market}_{$language}"],
+                      [$env_dir->getPathname() . "/{$current_env}.yml"]
+                    );
+                  }
+
+                  $env_lang_directory = $env_dir->getPathname() . "/languages/";
+                  if (file_exists($env_lang_directory . "$language.yml")) {
+                    $this->collectedFilesList[$final_key] = array_merge(
+                      $this->collectedFilesList[$final_key],
+                      [$env_lang_directory . "$language.yml"]
+                    );
+                  }
+
+                  $env_market_directory = $env_dir->getPathname() . "/markets/$market/";
+                  if (file_exists($env_market_directory . "$market.yml")) {
+                    $this->collectedFilesList[$final_key] = array_merge(
+                      $this->collectedFilesList[$final_key],
+                      [$env_market_directory . "$market.yml"]
+                    );
+                  }
+
+                  $env_market_language_directory = $env_dir->getPathname() . "/markets/$market/languages/";
+                  if (file_exists($env_market_language_directory . "$language.yml")) {
+                    $this->collectedFilesList[$final_key] = array_merge(
+                      $this->collectedFilesList[$final_key],
+                      [$env_market_language_directory . "$language.yml"]
+                    );
+                  }
+
                 }
-
-                $env_lang_directory = $env_dir->getPathname() . "/languages/";
-                if (file_exists($env_lang_directory . "$language.yml")) {
-                  $this->collectedFiles[$final_key] = array_merge(
-                    $this->collectedFiles[$final_key],
-                    [$env_lang_directory . "$language.yml"]
-                  );
-                }
-
-                $env_market_directory = $env_dir->getPathname() . "/markets/$market/";
-                if (file_exists($env_market_directory . "$market.yml")) {
-                  $this->collectedFiles[$final_key] = array_merge(
-                    $this->collectedFiles[$final_key],
-                    [$env_market_directory . "$market.yml"]
-                  );
-                }
-
-                $env_market_language_directory = $env_dir->getPathname() . "/markets/$market/languages/";
-                if (file_exists($env_market_language_directory . "$language.yml")) {
-                  $this->collectedFiles[$final_key] = array_merge(
-                    $this->collectedFiles[$final_key],
-                    [$env_market_language_directory . "$language.yml"]
-                  );
-                }
-
               }
             }
           }
         }
       }
+      $this->dumpYaml($this->collectionFile, $this->collectedFilesList);
+    }
+  }
+
+  public function buildVarsForGivenSites(array $specific_site = [], $rebuild = FALSE) {
+    if (empty($specific_site)) {
+      return  $this->getCollectedYamlFiles(TRUE);
     }
 
-    return $this->collectedFiles;
+    $profiles = $this->getCollectedYamlFiles($rebuild);
+    if (!empty($specific_site)) {
+      $profiles = array_filter($profiles, function ($profile) use ($specific_site) {
+        $return = FALSE;
+        foreach ($specific_site as $site) {
+          if (strpos($profile, $site) !== FALSE) {
+            $return = TRUE;
+            break;
+          }
+        }
+        return $return;
+      }, ARRAY_FILTER_USE_KEY);
+    }
+
+    if (!empty($profiles)) {
+      return $profiles;
+    }
+
+    return $this->buildVarsForGivenSites($specific_site, TRUE);
   }
 
   /**
-   * Return collected yaml Files.
+   * Get collected yaml files with profiles.
    *
-   * @return array
-   *   Return array which has collected files.
+   * @param bool $rebuild
+   *
+   * @return array|mixed
    */
-  public function getCollectedYamlFiles() {
-    return $this->collectedFiles;
+  public function getCollectedYamlFiles($rebuild = FALSE) {
+    if ($rebuild) {
+      $this->collectYamlFiles($rebuild);
+      return $this->collectedFilesList;
+    }
+
+    if (!file_exists($this->collectionFile)
+        || (file_exists($this->collectionFile)
+            && !$this->collectedFilesList = $this->getParsedContent($this->collectionFile)
+        )
+    ) {
+      var_dump('reading file!');
+      $this->collectYamlFiles(TRUE);
+    }
+
+    if (!empty($this->collectedFilesList)) {
+      return $this->collectedFilesList;
+    }
   }
 
   /**
@@ -165,8 +219,17 @@ class AlshayaYamlProcess {
    *
    * @return array|mixed
    *   Return array.
+   * @throws \Exception
    */
-  public function mergeYamlFiles(array $yaml_files, $profile = NULL): array {
+  public function mergeYamlFiles(array $yaml_files, $profile = NULL, $rebuild = FALSE): array {
+    $profile_file = $this->buildDir . DIRECTORY_SEPARATOR . "profiles/$profile.yml";
+    if ($rebuild == FALSE && file_exists($profile_file)) {
+      $final_yaml = $this->getParsedContent($profile_file);
+      if (!empty($final_yaml)) {
+        return $final_yaml;
+      }
+    }
+
     $final_yaml = ['variables' => [], 'tests' => [], 'tags' => []];
     if (!empty($profile)) {
       $final_yaml['tags'] = (array) explode('-', $profile);
@@ -227,8 +290,10 @@ class AlshayaYamlProcess {
       },
       $final_yaml['tags']
     );
-
     unset($final_yaml['tags']);
+
+    # Generate a yaml file for all collected variables.
+    $this->dumpYaml($profile_file, $final_yaml);
     return $final_yaml;
   }
 
@@ -242,6 +307,9 @@ class AlshayaYamlProcess {
    *   Return an array.
    */
   public function getParsedContent($yaml_file) {
+    if (!file_exists($yaml_file)) {
+      return [];
+    }
     $content = file_get_contents($yaml_file);
     return !empty($content) ? $this->parser->parse($content) : [];
   }
@@ -263,8 +331,8 @@ class AlshayaYamlProcess {
     $yaml = $this->getParsedContent($behat_template_file);
     $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
     // Set the MinkExtension base_url to current site's base url.
-    if (isset($variables['variables']['var_base_url'])) {
-      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $variables['variables']['var_base_url'] . '/';
+    if (isset($variables['variables']['url_base_uri'])) {
+      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $variables['variables']['url_base_uri'] . '/';
     }
 
     // Set the folder for report.
@@ -291,6 +359,13 @@ class AlshayaYamlProcess {
    *   (Optional) key if $content requires to be assigned with given key.
    */
   public function dumpYaml($new_file_path, array $content, $append = FALSE, $key = NULL) {
+    if (!file_exists($new_file_path)) {
+      $pathinfo = pathinfo($new_file_path);
+      if (!is_dir($pathinfo['dirname'])) {
+        mkdir($pathinfo['dirname']);
+      }
+    }
+
     $content = !empty($key) ? [$key => $content] : $content;
     $yaml = $this->dumper->dump($content, 10);
 

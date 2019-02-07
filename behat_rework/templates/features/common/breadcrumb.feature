@@ -1,5 +1,5 @@
 @javascript
-Feature: To verify my account, Sign in functionality
+Feature: To verify breadcrumb functionality
 
   Scenario Outline: As a guest
   I should be able to view breadcrumbs across the site

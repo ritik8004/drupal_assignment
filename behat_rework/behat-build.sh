@@ -1,6 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+require __DIR__ . "/build.php";
+die();
+
+#$options = getopt("b::m::e::l", ["brand::", "market::", "env::", "lang::"]);
+
 use Alshaya\BehatBuild\AlshayaFeatureProcess;
 use Alshaya\BehatBuild\AlshayaYamlProcess;
 
@@ -10,11 +15,15 @@ define('BUILD_DIR', __DIR__ . "/build");
 
 require_once getcwd() . '/vendor/autoload.php';
 
-$behat = new AlshayaYamlProcess();
-$behat->collectYamlFiles();
+$behat = new AlshayaYamlProcess($config, $profile);
+$profiles = $behat->getCollectedYamlFiles();
 $i = 0;
 
-foreach ($behat->getCollectedYamlFiles() as $profile => $files) {
+
+
+
+
+foreach ($profiles as $profile => $files) {
   $variables = $behat->mergeYamlFiles($files, $profile);
   if (isset($variables['variables']['var_base_url'])) {
     if (!is_dir(BUILD_DIR)) {
