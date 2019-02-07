@@ -96,7 +96,7 @@ script:
 
 deploy:
   - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    script: ${BUILD_DIR}/blt/scripts/deploy_branch.sh
     skip_cleanup: true
     on:
       all_branches: true

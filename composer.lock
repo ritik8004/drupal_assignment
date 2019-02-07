@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "004e2f74a30f479f273210d66bc2587a",
+    "content-hash": "0df4c89995017f5e9c8746141078bc76",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -23,12 +23,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/acsf-tools.git",
-                "reference": "b18ef08d891b7fe30921ca9a8a7e986e06198ae8"
+                "reference": "78e8f9be907370b5a6906711c4246e5c0de1a713"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/b18ef08d891b7fe30921ca9a8a7e986e06198ae8",
-                "reference": "b18ef08d891b7fe30921ca9a8a7e986e06198ae8",
+                "url": "https://api.github.com/repos/acquia/acsf-tools/zipball/78e8f9be907370b5a6906711c4246e5c0de1a713",
+                "reference": "78e8f9be907370b5a6906711c4246e5c0de1a713",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2018-12-03T09:09:39+00:00"
+            "time": "2019-02-05T09:48:06+00:00"
         },
         {
             "name": "acquia/blt",
@@ -139,7 +139,7 @@
                     "dev-master": "9.x-dev"
                 },
                 "patches_applied": {
-                    "Add truncate-branch option to deploy command": "https://patch-diff.githubusercontent.com/raw/nedsbeds/blt/pull/1.patch"
+                    "Add truncate-branch option to deploy command": "patches/blt/blt-truncate-remotes.patch"
                 }
             },
             "autoload": {
