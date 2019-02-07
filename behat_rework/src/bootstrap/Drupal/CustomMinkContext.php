@@ -12,6 +12,8 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingContext {
 
   /**
+   * The variable that holds the minkcontext.
+   *
    * @var \Drupal\DrupalExtension\Context\MinkContext
    */
   private $minkContext;
@@ -21,7 +23,7 @@ class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingCont
    *
    * @var array
    */
-  protected $parameter_bag = [];
+  protected $parameterBag = [];
 
   /**
    * Initializes context.
@@ -31,24 +33,32 @@ class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingCont
    * context constructor through behat.yml.
    */
   public function __construct($parameters = []) {
-    $this->parameter_bag = $parameters;
+    $this->parameterBag = $parameters;
   }
 
   /**
+   * Get the list of parameters.
+   *
    * @return mixed
+   *   Return the array of parameters.
    */
   public function getParameterBag() {
-    return $this->parameter_bag;
+    return $this->parameterBag;
   }
 
-  /** @BeforeScenario */
-  public function gatherContexts(BeforeScenarioScope $scope)  {
+  /**
+   * Get the mink context object.
+   *
+   * @BeforeScenario
+   */
+  public function gatherContexts(BeforeScenarioScope $scope) {
     $environment = $scope->getEnvironment();
     $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
   }
 
   /**
-   * Fills in form field with specified id|name|label|value
+   * Fills in form field with specified id|name|label|value.
+   *
    * Example: When I fill in dynamic field "username" with: "bwayne"
    * Example: And I fill in dynamic field "bwayne" for "username"
    *
@@ -58,8 +68,8 @@ class CustomMinkContext extends RawDrupalContext implements SnippetAcceptingCont
    */
   public function iFillInDynamicFieldWith($field, $value) {
     preg_match('/{([^}]*)}/', $value, $matches);
-    $value = !empty($matches) && !empty($this->parameter_bag[$matches[1]])
-      ? $this->parameter_bag[$matches[1]]
+    $value = !empty($matches) && !empty($this->parameterBag[$matches[1]])
+      ? $this->parameterBag[$matches[1]]
       : $value;
 
     $this->minkContext->fillField($field, $value);

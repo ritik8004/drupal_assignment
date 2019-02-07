@@ -23,7 +23,7 @@ foreach ($behat->getCollectedYamlFiles() as $profile => $files) {
 
     if (is_dir(BUILD_DIR)) {
       $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
-      $behat->dumpYaml(BUILD_DIR . '/profiles.yml', ($i > 0), $prepare_behat, $profile);
+      $behat->dumpYaml(BUILD_DIR . '/profiles.yml', $prepare_behat, ($i > 0), $profile);
       $i++;
 
       $feature = new AlshayaFeatureProcess([

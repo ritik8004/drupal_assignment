@@ -6,6 +6,11 @@ use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Config\Definition\Processor;
 
+/**
+ * Class AlshayaYamlProcess.
+ *
+ * @package Alshaya\BehatBuild
+ */
 class AlshayaYamlProcess {
 
   protected $parser;
@@ -20,6 +25,9 @@ class AlshayaYamlProcess {
 
   protected $markets = ['kw', 'sa', 'ar'];
 
+  /**
+   * AlshayaYamlProcess constructor.
+   */
   public function __construct() {
     $this->parser = new Parser();
     $this->dumper = new Dumper();
@@ -28,10 +36,15 @@ class AlshayaYamlProcess {
     $this->collectedFiles = [];
   }
 
+  /**
+   * Collect yaml files for all markets and languages.
+   *
+   * @return array
+   *   Return associated array with profile and list of available files.
+   */
   public function collectYamlFiles() {
-
     $languages = ['en', 'ar'];
-    foreach($this->markets as $market) {
+    foreach ($this->markets as $market) {
       foreach ($languages as $language) {
         $market_common = [];
 
@@ -132,6 +145,12 @@ class AlshayaYamlProcess {
     return $this->collectedFiles;
   }
 
+  /**
+   * Return collected yaml Files.
+   *
+   * @return array
+   *   Return array which has collected files.
+   */
   public function getCollectedYamlFiles() {
     return $this->collectedFiles;
   }
@@ -153,7 +172,7 @@ class AlshayaYamlProcess {
       $final_yaml['tags'] = (array) explode('-', $profile);
     }
 
-    if(count($yaml_files) < 2) {
+    if (count($yaml_files) < 2) {
       return $this->getParsedContent($yaml_files[0]);
     }
 
@@ -167,7 +186,7 @@ class AlshayaYamlProcess {
         );
       }
       catch (\Exception $e) {
-        throw new \Exception('file:' . $yaml_file .'::'. $e->getMessage());
+        throw new \Exception('file:' . $yaml_file . '::' . $e->getMessage());
       }
 
       if (!empty($yaml_parsed['variables'])) {
@@ -194,7 +213,7 @@ class AlshayaYamlProcess {
     // Convert url variables to full url.
     if (!empty($final_yaml['variables']['url_base_uri'])) {
       array_walk($final_yaml['variables'], function (&$item, $key, $prefix) {
-        if ($item !== $prefix && substr($key,0, 4) === 'url_') {
+        if ($item !== $prefix && substr($key, 0, 4) === 'url_') {
           $item = $prefix . DIRECTORY_SEPARATOR . ltrim($item, '/');
         }
 
@@ -204,7 +223,7 @@ class AlshayaYamlProcess {
     // Moves 'tags' inside variables with '@tags' key.
     $final_yaml['variables']['@tags'] = array_map(
       function ($tag) {
-        return '@'. $tag;
+        return '@' . $tag;
       },
       $final_yaml['tags']
     );
@@ -216,7 +235,7 @@ class AlshayaYamlProcess {
   /**
    * Parse content of given yaml file.
    *
-   * @param $yaml_file
+   * @param string $yaml_file
    *   Convert given file content to array.
    *
    * @return array|mixed
@@ -230,46 +249,56 @@ class AlshayaYamlProcess {
   /**
    * Prepare behat.yml config from template.
    *
-   * @param $file
-   * @param $content
-   * @param $profile
+   * @param string $behat_template_file
+   *   The path to behat template file.
+   * @param array $variables
+   *   Variables array that used to generate profile suites.
+   * @param null|string $profile
+   *   The name of the profile.
+   *
+   * @return array|mixed
+   *   Return the array generated from behat template file.
    */
-  public function prepareBehatYaml($file, $content, $profile = NULL) {
-    $yaml = $this->getParsedContent($file);
+  public function prepareBehatYaml($behat_template_file, array $variables, $profile = NULL) {
+    $yaml = $this->getParsedContent($behat_template_file);
     $yaml['suites']['default']['paths'] = ["%paths.base%/build/features/$profile"];
     // Set the MinkExtension base_url to current site's base url.
-    if (isset($content['variables']['var_base_url'])) {
-      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $content['variables']['var_base_url'] . '/';
+    if (isset($variables['variables']['var_base_url'])) {
+      $yaml['extensions']['Behat\MinkExtension']['base_url'] = 'https://' . $variables['variables']['var_base_url'] . '/';
     }
 
     // Set the folder for report.
-//    if (!empty($profile)) {
-//      $yaml['formatters'] = [
-//        'html' => [
-//          'output_path' => "%paths.base%/features/$profile/reports/html/behat"
-//        ]
-//      ];
-//    }
+    if (!empty($profile)) {
+      $yaml['formatters'] = [
+        'html' => [
+          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
+        ],
+      ];
+    }
     return $yaml;
   }
 
   /**
    * Dump given content to given file.
    *
-   * @param $path
-   * @param bool $appends
-   * @param $content
-   * @param null $key
+   * @param string $new_file_path
+   *   The path to yaml file that needs to be generated.
+   * @param array $content
+   *   The array of content that needs to be written in the file.
+   * @param bool $append
+   *   True if the file in append mode.
+   * @param null|string $key
+   *   (Optional) key if $content requires to be assigned with given key.
    */
-  public function dumpYaml($path, $append = FALSE, $content, $key = NULL) {
+  public function dumpYaml($new_file_path, array $content, $append = FALSE, $key = NULL) {
     $content = !empty($key) ? [$key => $content] : $content;
     $yaml = $this->dumper->dump($content, 10);
 
     if (!$append) {
-      file_put_contents($path, $yaml);
+      file_put_contents($new_file_path, $yaml);
     }
     else {
-      file_put_contents($path, $yaml, FILE_APPEND | LOCK_EX);
+      file_put_contents($new_file_path, $yaml, FILE_APPEND | LOCK_EX);
     }
   }
 
