@@ -11,10 +11,9 @@ use Drupal\Core\Config\FileStorage;
  * Implements hook_update_N().
  *
  * Enable link_attributes module globally.
- *
  * Also uninstalls some modules that should not be enabled on any site.
  */
-function alshaya_master_update_8023() {
+function alshaya_master_update_8024() {
   // Install link_attributes module.
   if (!\Drupal::moduleHandler()->moduleExists('link_attributes')) {
     \Drupal::service('module_installer')->install(['link_attributes'], TRUE);
@@ -23,6 +22,15 @@ function alshaya_master_update_8023() {
   if (\Drupal::moduleHandler()->moduleExists('update')) {
     \Drupal::service('module_installer')->uninstall(['update']);
   }
+}
+
+/***
+ * Clear product cache to rebuild image sitemap urls.
+ */
+function alshaya_master_update_8023() {
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**

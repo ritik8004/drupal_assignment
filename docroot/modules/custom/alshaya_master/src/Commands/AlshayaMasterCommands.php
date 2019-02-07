@@ -16,6 +16,9 @@ use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
+use Symfony\Component\Console\Input\InputInterface;
+use Consolidation\AnnotatedCommand\AnnotationData;
+use Drush\Drush;
 
 /**
  * AlshayaMasterCommands class.
@@ -284,6 +287,28 @@ class AlshayaMasterCommands extends DrushCommands {
     }
     else {
       $this->output()->writeln(dt('No matching users found to be deleted.'));
+    }
+  }
+
+  /**
+   * Alter the uri to use https.
+   *
+   * @hook pre-init *
+   */
+  public function alter(InputInterface $input, AnnotationData $annotationData) {
+    // We could also use DI once this is released
+    // https://github.com/drush-ops/drush/commit/fc6205aeb93099e91ca5f395cea958c3f0290b3e#diff-45719e337c3fa71a41f373a69e9a0c92.
+    $self = Drush::aliasManager()->getSelf();
+    $uri = $self->get('uri');
+    $url = parse_url($uri);
+
+    // If the uri does not have a scheme add https.
+    if (!$url['scheme']) {
+      $self->set('uri', "https://$uri");
+    }
+    elseif ($url['scheme'] == 'http') {
+      $uri = substr($uri, 4);
+      $self->set('uri', "https$uri");
     }
   }
 

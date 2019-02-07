@@ -57,8 +57,8 @@ function alshaya_social_display_social_authentication_links(array &$form, $form_
       '#form' => $form_id,
       '#weight' => 1000,
     ];
-    $form['#cache']['tags'][] = 'config:alshaya_social.settings';
   }
+  $form['#cache']['tags'][] = 'config:alshaya_social.settings';
 }
 
 /**
