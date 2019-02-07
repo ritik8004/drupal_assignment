@@ -244,7 +244,11 @@
       select.trigger('change');
 
       // Closing the tray after selection.
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function () {
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
     });
   }
