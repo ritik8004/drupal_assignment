@@ -6,6 +6,7 @@
  */
 
 if (!function_exists('acsf_hooks_includes')) {
+
   /**
    * Scans a factory-hooks sub-directory and returns PHP files to be included.
    *
@@ -20,6 +21,7 @@ if (!function_exists('acsf_hooks_includes')) {
     $hook_pattern = sprintf('%s/../factory-hooks/%s/*.php', getcwd(), $hook_name);
     return glob($hook_pattern);
   }
+
 }
 
 // Include custom sites.php code from factory-hooks/pre-sites-php.
@@ -28,6 +30,7 @@ foreach (acsf_hooks_includes('pre-sites-php') as $pre_hook) {
 }
 
 if (!function_exists('is_acquia_host')) {
+
   /**
    * Checks whether the site is on Acquia Hosting.
    *
@@ -37,6 +40,7 @@ if (!function_exists('is_acquia_host')) {
   function is_acquia_host() {
     return file_exists('/var/acquia');
   }
+
 }
 
 // Check that we are on an Acquia server so we do not run this code for local
@@ -115,7 +119,7 @@ $acsf_host = implode('.', array_reverse(explode(':', $host)));
 // with a '/' and we are splitting them by the '/', the array will always start
 // with an empty string.
 $acsf_uri_path_fragments = explode('/', $acsf_uri_path);
-$acsf_uri_path_fragments = array_diff($acsf_uri_path_fragments, array('index.php'));
+$acsf_uri_path_fragments = array_diff($acsf_uri_path_fragments, ['index.php']);
 $acsf_uri_path_fragments = array_slice($acsf_uri_path_fragments, 0, 2);
 // Check whether we can find site data for the hostname suffixed by one
 // fragment, or for only the hostname.
