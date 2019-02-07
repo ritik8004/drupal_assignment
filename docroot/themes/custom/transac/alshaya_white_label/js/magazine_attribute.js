@@ -151,7 +151,6 @@
   function mobileColors(context) {
     // Moving color swatches from sidebar to main content in between the gallery after
     // first image as per design.
-
     var sku_swatch = $('.configurable-swatch', context).clone();
     $('.magazine-swatch-placeholder').html(sku_swatch);
     $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
@@ -202,12 +201,17 @@
     }
 
     $('.size-tray-link', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray').addClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
       $('body').addClass('tray-overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function () {
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
@@ -240,7 +244,11 @@
       select.trigger('change');
 
       // Closing the tray after selection.
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function () {
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
     });
   }

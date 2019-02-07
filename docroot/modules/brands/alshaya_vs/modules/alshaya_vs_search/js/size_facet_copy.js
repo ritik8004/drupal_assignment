@@ -53,6 +53,10 @@
 
         applyFilterSlider();
       });
+
+      if ($('.sfb-facets-container').is(':empty')) {
+        $('.sfb-band-cup').addClass('empty-filter');
+      }
     }
   };
 
