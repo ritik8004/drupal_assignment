@@ -18,6 +18,10 @@ function alshaya_pb_transac_update_8009() {
     ->getEditable('alshaya_acm_product.display_settings')
     ->set('price_display_mode', SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO)
     ->save();
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**

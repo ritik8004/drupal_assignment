@@ -229,7 +229,29 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['price_range'] = [
+    'variables' => [
+      'price' => '',
+      'currency_format' => '',
+      'currency_code_position' => '',
+    ],
+  ];
+
   return $items;
+}
+
+/**
+ * Format price value with currency.
+ *
+ * Default template: price-range.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing.
+ */
+function template_preprocess_price_range(array &$variables) {
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+  $variables['currency_format'] = $config->get('currency_code');
+  $variables['currency_code_position'] = $config->get('currency_code_position');
 }
 
 /**
@@ -321,6 +343,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
   if (($entity->bundle() == 'acq_product')) {
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $priceHelper = _alshaya_acm_product_get_price_helper();
+
     $sku = $skuManager->getSkuForNode($entity);
 
     $product_settings = \Drupal::config('alshaya_acm_product.settings');
@@ -369,7 +394,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
 
         // This is required to allow showing different gallery on page load
         // when user clicked on swatch.
-        $build['#cache']['contexts'][] = 'url';
+        $build['#cache']['contexts'][] = 'url.query_args:selected';
 
         if (!$skuManager->isProductInStock($sku_entity)) {
           $build['#attributes']['class'][] = 'product-out-of-stock';
@@ -445,7 +470,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
           $build['gallery'] = $skuImagesManager->getGallery($sku_for_gallery, $pdp_layout, '', TRUE, $sku_entity);
         }
 
-        $build['price_block'] = $skuManager->getPriceBlock($selected_variant);
+        $build['price_block'] = $priceHelper->getPriceBlockForSku($selected_variant);
 
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
@@ -587,7 +612,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         }
 
         // Do not render VAT text along with price for teaser.
-        $build['price_block'] = $skuManager->getPriceBlock($sku_entity, $view_mode);
+        $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity, []);
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
 
         $build['labels'] = [
@@ -635,7 +660,8 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         // Attach libraries.
         $build['#attached']['library'][] = 'alshaya_product_zoom/cloud_zoom_pdp_gallery';
 
-        $build['price_block'] = $skuManager->getPriceBlock($sku_entity);
+        $build['price_block'] = $priceHelper->getPriceBlockForSku($sku_entity);
+
         $build['price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
         $build['item_code']['#markup'] = $sku;
         $build['brand_logo'] = alshaya_acm_product_get_brand_logo($sku_entity);
@@ -873,6 +899,13 @@ function alshaya_acm_product_theme_registry_alter(array &$theme_registry) {
     unset($theme_registry['views_infinite_scroll_pager']['preprocess functions'][$index]);
     $theme_registry['views_infinite_scroll_pager']['preprocess functions'][] = 'alshaya_acm_product_preprocess_views_infinite_scroll_pager';
   }
+
+  $theme_registry['acq_commerce_price']['variables']['final_price'] = NULL;
+  $theme_registry['acq_commerce_price']['variables']['discount'] = NULL;
+
+  // Keeping alter code for price_range here to keep both at same place.
+  $theme_registry['price_range']['variables']['final_price'] = NULL;
+  $theme_registry['price_range']['variables']['discount'] = NULL;
 }
 
 /**
@@ -1045,7 +1078,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
-  $form['#cache']['contexts'][] = 'url';
+  $form['#cache']['contexts'][] = 'url.query_args:selected';
 
   // If Product is OOS, remove all form items and display OOS message.
   if (!$sku_manager->isProductInStock($sku_entity)) {
@@ -1349,6 +1382,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $priceHelper = _alshaya_acm_product_get_price_helper();
 
   $sku = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
 
@@ -1429,7 +1463,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       '#value' => $tree_pointer->getSku(),
     ];
 
-    $price_block = $skuManager->getPriceBlock($tree_pointer);
+    $price_block = $priceHelper->getPriceBlockForSku($tree_pointer);
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
@@ -1575,11 +1609,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       }
     }
 
-    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
 
-    $price_block = $skuManager->getPriceBlock($sku);
+    $price_block = $priceHelper->getPriceBlockForSku($sku);
+
     $response->addCommand(new HtmlCommand('.price-block-' . $sku_identifier, $price_block));
 
     $selector = '.configurable-wrapper-' . $sku_identifier;
@@ -1931,4 +1964,14 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
   $unique_nodes = array_slice($unique_nodes, 0, $limit);
 
   return $unique_nodes;
+}
+
+/**
+ * Wrapper to Price Helper with type set for IDE.
+ *
+ * @return \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+ *   Price Helper.
+ */
+function _alshaya_acm_product_get_price_helper() {
+  return \Drupal::service('alshaya_acm_product.price_helper');
 }
