@@ -92,6 +92,14 @@
         width: 100%;
         background: $primary_bg;
         box-shadow: 0.0625rem 0.125rem 0.625rem $mothercare-black;
+
+        h1 {
+          span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
       }
 
       .price-block,
