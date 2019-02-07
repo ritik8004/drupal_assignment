@@ -398,3 +398,11 @@
     left: -2.3125rem;
   }
 }
+
+@include breakpoint($desktop) {
+  .empty-filter {
+    .shop-by-size-paddle-nav {
+      display: none;
+    }
+  }
+}
