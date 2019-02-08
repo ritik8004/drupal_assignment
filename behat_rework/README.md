@@ -124,6 +124,12 @@ templates/variables/brands/hm/env/uat/markets/kw/kw.yml
 templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml
 ```
 
+**IMPORANT NOTICE: This file is must for any given environment.**
+> `templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml`
+> And this file must contain base url inside `variables:`. i.e.
+> `url_base_uri: 'https://hmkw-uat.factory.alshaya.com/ar'` > `en.yml`
+> `url_base_uri: 'https://hmkw-uat.factory.alshaya.com/ar'` > `ar.yml`
+
 Contains `.yml` files with `variables` and `tests` keys. `variables` are used 
 to replace token, Which we wrote in feature files with curly braces 
 (i.e. `{userame}`), inside `template/features/*/*.feature` files.
