@@ -7,6 +7,9 @@ $time_start = microtime(true);
 
 use Alshaya\BehatBuild\AlshayaFeatureProcess;
 use Alshaya\BehatBuild\AlshayaYamlProcess;
+use Symfony\Component\Console\Formatter\OutputFormatter;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\Output;
 
 define('BEHAT_BIN_PATH', __FILE__);
 define('TEMPLATE_DIR', __DIR__ . "/templates");
@@ -33,8 +36,11 @@ foreach ($profiles as $profile => $files) {
 
     if (is_dir(BUILD_DIR)) {
       $prepare_behat = $behat->prepareBehatYaml(TEMPLATE_DIR . '/behat.yml', $variables, $profile);
+
+      $output = new ConsoleOutput();
+      $output->write("Building features for: $profile", TRUE, Output::VERBOSITY_NORMAL);
+
       $behat_config[$profile] = $prepare_behat;
-      // $behat->dumpYaml(BUILD_DIR . '/profiles.yml', $prepare_behat, ($i > 0), $profile);
       $feature = new AlshayaFeatureProcess([
         'site' => $profile,
         'variables' => $variables['variables'] ?? [],

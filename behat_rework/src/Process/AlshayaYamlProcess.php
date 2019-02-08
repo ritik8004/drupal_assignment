@@ -292,6 +292,10 @@ class AlshayaYamlProcess {
       }
     }
 
+    if (!empty($profile) && empty($final_yaml['variables']['url_base_uri'])) {
+      return [];
+    }
+
     // Convert url variables to full url.
     if (!empty($final_yaml['variables']['url_base_uri'])) {
       array_walk($final_yaml['variables'], function (&$item, $key, $prefix) {
