@@ -152,6 +152,10 @@
     display: block;
     font-size: 0.875rem;
     margin-bottom: 0.187rem;
+
+    &.simple-price--wrapper {
+      display: inline-block;
+    }
   }
 
   .owl-prev {
