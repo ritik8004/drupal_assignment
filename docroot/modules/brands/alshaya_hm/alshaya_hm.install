@@ -12,21 +12,21 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Mark all indexed data for re-indexation to get the price data indexed again.
+ */
+function alshaya_hm_update_8030() {
+  _alshaya_search_api_reindex();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Do not show oos product for h&m.
  */
 function alshaya_hm_update_8029() {
   \Drupal::configFactory()->getEditable('alshaya_search_api.listing_settings')
     ->set('filter_oos_product', TRUE)
     ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Mark all indexed data for re-indexation to get the price data indexed again.
- */
-function alshaya_hm_update_8029() {
-  _alshaya_search_api_reindex();
 }
 
 /**
