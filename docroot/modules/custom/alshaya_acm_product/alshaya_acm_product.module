@@ -1369,9 +1369,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   // Calculate available config options based on the attribute value selected,
   // in case of multiple config attributes with a product.
   if (count($product_tree['configurables']) > 1) {
-    /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-    $sku_manager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
+    $skuManager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
 
     // Traverse the product tree till the point where config attributes have a
     // value.
@@ -1389,7 +1387,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
   if ($tree_pointer instanceof SKU) {
     $selected_sku = $tree_pointer;
-    if ($quantity = $sku_manager->getStockQuantity($tree_pointer)) {
+    if ($quantity = $skuManager->getStockQuantity($tree_pointer)) {
       $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
     }
     else {
