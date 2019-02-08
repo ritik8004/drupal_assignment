@@ -28,13 +28,13 @@ default:
 #                            - "--no-sandbox"
         Drupal\DrupalExtension:
             blackbox: ~
-#        emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
-#            name: html
-#            renderer: Twig,Behat2
-#            file_name: index
-#            print_args: true
-#            print_outp: true
-#            loop_break: true
+        emuse\BehatHTMLFormatter\BehatHTMLFormatterExtension:
+            name: html
+            renderer: Twig,Behat2
+            file_name: index
+            print_args: true
+            print_outp: true
+            loop_break: true
 
 imports:
     - build/profiles.yml

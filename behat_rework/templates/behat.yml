@@ -5,3 +5,6 @@ suites:
       - Drupal\DrupalExtension\Context\MinkContext
       - Drupal\DrupalExtension\Context\DrupalContext
       - Drupal\DrupalExtension\Context\MessageContext
+extensions:
+  Behat\MinkExtension:
+    files_path: "%paths.base%/images"
