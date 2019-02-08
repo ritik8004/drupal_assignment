@@ -749,12 +749,9 @@ class AlshayaApiCommands extends DrushCommands {
               }
 
               // If stock in drupal does not match with stock from merch.
-              if ($data['quantity'] != (int) $mskus[$type][$sku]['qty']
-                || $data['status'] != $mskus[$type][$sku]['stock_status']) {
+              if ($data['quantity'] != (int) $mskus[$type][$sku]['qty']) {
                 $stock_output .= 'Drupal stock:' . $data['quantity'] . ' | ';
-                $stock_output .= 'Drupal stock status:' . $data['status'] . ' | ';
-                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'] . ' | ';
-                $stock_output .= 'MDC stock status:' . $mskus[$type][$sku]['stock_status'];
+                $stock_output .= 'MDC stock:' . (int) $mskus[$type][$sku]['qty'];
                 $stock_mismatch_sync[$type][] = $sku;
               }
 
