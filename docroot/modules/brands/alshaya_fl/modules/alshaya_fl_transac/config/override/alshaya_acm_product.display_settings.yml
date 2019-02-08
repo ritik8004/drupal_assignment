@@ -1,0 +1,14 @@
+image_thumb_gallery: true
+color_swatches: true
+show_child_images_after_selecting: 'all'
+show_parent_images_in_child: true
+swatches:
+  pdp:
+    - color
+    - color_family
+  plp:
+    - color_family
+hide_not_required_option: true
+plp_slider:
+  item: 3
+  margin: 3
