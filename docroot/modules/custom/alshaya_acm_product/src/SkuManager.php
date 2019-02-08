@@ -2358,8 +2358,9 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductNodeInStock(NodeInterface $node): bool {
-    $sku = $this->getSkuForNode($node);
+    $sku_string = $this->getSkuForNode($node);
 
+    $sku = SKU::loadFromSku($sku_string);
     if ($sku instanceof SKUInterface) {
       return $this->isProductInStock($sku);
     }
