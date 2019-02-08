@@ -1127,6 +1127,7 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
 
         // If category is null/empty, no need to process further.
         if (!$category_id) {
+          $variables['content'] = [];
           return;
         }
 
