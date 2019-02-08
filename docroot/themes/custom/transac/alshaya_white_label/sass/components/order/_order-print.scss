@@ -234,13 +234,22 @@ body.path--confirmation.alias--confirmation-print {
 
 .user__order--detail {
   .order-item-row {
-    td:last-child {
-      display: none !important;
-    }
+    td.above-mobile {
+      &.blend {
+        @include breakpoint($only-ptablet) {
+          width: 9rem;
+        }
+      }
 
-    td.above-mobile.blend {
-      @include breakpoint($only-ptablet) {
-        width: 9rem;
+      &.order__details--summary {
+        .light,
+        .currency-code {
+          display: none;
+        }
+      }
+
+      &.empty--cell {
+        display: none;
       }
     }
 
