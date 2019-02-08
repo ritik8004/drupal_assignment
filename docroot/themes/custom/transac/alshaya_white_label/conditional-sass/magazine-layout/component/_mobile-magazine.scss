@@ -181,6 +181,8 @@
             position: absolute;
             #{$right}: 0;
             font-size: 2.125rem;
+            top: 50%;
+            transform: translateY(-50%);
           }
 
           &.selected-text {
