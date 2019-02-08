@@ -8,10 +8,14 @@
  * in your subscription. Unlike most API-based hooks, this hook does not
  * take arguments, but instead executes the PHP code it is provided.
  *
- * This is used so that an ACSF site install will match a local BLT site
- * install. After a local site install, the update functions are run.
+ * This is used so that an ACSF site install is identical to the local BLT site
+ * install, with the environment, site, and uri CLI runtime arguments overriding
+ * all other configuration.
  *
+ * The blt 9.2.1's implementation is different from this file. Review the
+ * original file and join the functionality manually in case of any issues.
  */
+
 
 // @TODO: Add a way to by-pass commerce data sync via post-install-override.txt.
 // @TODO: Add possibility to override ACM+MDC stream before commerce data sync. See alshaya-switch-config.

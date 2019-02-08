@@ -10,6 +10,9 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -56,6 +59,30 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
+  // Update title of parent product based on selected sku if available.
+  if ($selected_sku instanceof SKUInterface) {
+    $final_price = (float) $selected_sku->get('final_price')->getString();
+    $response->addCommand(
+      new InvokeCommand(
+        'article[gtm-type="gtm-product-link"]',
+        'attr',
+        ['gtm-product-sku', $selected_sku->getSku()]
+      )
+    );
+    $response->addCommand(
+      new InvokeCommand(
+        'article[gtm-type="gtm-product-link"]',
+        'attr',
+        ['gtm-price', alshaya_acm_format_raw_price($final_price)]
+      )
+    );
   }
 }
 
@@ -250,6 +277,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
             $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
+            $data_layer['event'] = 'purchaseSuccess';
             $data_layer['ecommerce'] = [
               'currencyCode' => $gtm_manager->getGtmCurrency(),
               'purchase' => [
@@ -257,14 +285,6 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
                 'products' => $attributes['products'],
               ],
             ];
-
-            /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-            $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-            if ($attributes['general']['deliveryOption'] === $checkout_options_manager->getClickandColectShippingMethod()) {
-              $data_layer['event'] = 'VirtualPageView';
-              $data_layer['virtualPageUrl'] = '/virtualpv/click-and-collect/step4/order-success';
-              $data_layer['virtualPageTitle'] = 'C&C Step 4 – Order Success';
-            }
 
             user_cookie_save([$cookie_key => 1]);
           }
@@ -348,13 +368,15 @@ function alshaya_seo_transac_page_attachments(array &$attachments) {
       // Send order complete confirmation data only once.
       if ($already_visited !== 1) {
         $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-        $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
-          'currencyCode' => $gtm_manager->getGtmCurrency(),
-          'purchase' => [
-            'actionField' => $attributes['actionField'],
-            'products' => $attributes['products'],
-          ],
-        ];
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+        if ($attributes['general']['deliveryOption'] === $checkout_options_manager->getClickandColectShippingMethod()) {
+          $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
+            'event' => 'VirtualPageView',
+            'virtualPageUrl' => '/virtualpv/click-and-collect/step4/order-success',
+            'virtualPageTitle' => 'C&C Step 4 – Order Success',
+          ];
+        }
       }
     }
   }

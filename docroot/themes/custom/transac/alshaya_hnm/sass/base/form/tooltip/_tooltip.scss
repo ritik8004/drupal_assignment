@@ -3,15 +3,11 @@
 }
 
 %tooltip-after {
-  border-color: rgba(240, 246, 252, 0);
   border-bottom-color: $tooltip_border;
-  border-width: 5px;
 }
 
 %tooltip-before {
-  border-color: rgba(0, 132, 204, 0);
   border-bottom-color: $tooltip_border_2;
-  border-width: 6px;
 }
 
 .price-type__wrapper .simple-tooltip-wrap {

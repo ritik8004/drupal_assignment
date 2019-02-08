@@ -386,7 +386,7 @@ class AlshayaGtmManager {
     }
 
     $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
-    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
+    $attributes['gtm-price'] = alshaya_acm_format_raw_price($final_price);
 
     if ($final_price
       && ($original_price !== $final_price)
@@ -787,9 +787,9 @@ class AlshayaGtmManager {
   public function getRootGroup($tid) {
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $this->database->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
+      $query = $this->database->select('taxonomy_term__parent', 'tth');
+      $query->fields('tth', ['parent_target_id']);
+      $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
         return $tid;

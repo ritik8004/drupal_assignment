@@ -140,7 +140,7 @@ class AcqPromotionsManager {
     foreach ($types as $type) {
       $promotions = $this->apiWrapper->getPromotions($type);
 
-      foreach ($promotions as $key => $promotion) {
+      foreach ($promotions as $promotion) {
         // Add type to $promotion array, to be saved later.
         $promotion['promotion_type'] = $type;
         $fetched_promotions[] = $promotion;

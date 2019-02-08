@@ -52,6 +52,12 @@ function alshaya_permissions_form_taxonomy_term_acq_product_category_form_alter(
   if (!\Drupal::currentUser()->hasPermission('translate acq_product_category taxonomy_term')) {
     $form['name']['#disabled'] = TRUE;
   }
+  if (!\Drupal::currentUser()->hasPermission('alshaya edit language field on acq_product_category')) {
+    $form['langcode']['#access'] = FALSE;
+  }
+  if (!\Drupal::currentUser()->hasPermission('alshaya edit translation field on acq_product_category')) {
+    $form['content_translation']['#access'] = FALSE;
+  }
 }
 
 /**
@@ -90,5 +96,17 @@ function _alshaya_permissions_update_role_from_config(array $roles = NULL) {
       }
       $role->save();
     }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_permissions_module_implements_alter(&$implementations, $hook) {
+  // To call the form_alter at the end for final changes.
+  if ($hook == 'form_alter') {
+    $group = $implementations['alshaya_permissions'];
+    unset($implementations['alshaya_permissions']);
+    $implementations['alshaya_permissions'] = $group;
   }
 }

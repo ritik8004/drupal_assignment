@@ -34,8 +34,8 @@ function _alshaya_get_currency_code($country_code, $lang_code) {
   $currency['ae']['ar'] = '.د.إ';
 
   // Egypt.
-  $currency['eg']['en'] = 'GBP';
-  $currency['eg']['ar'] = 'جنيه';
+  $currency['eg']['en'] = 'EGP';
+  $currency['eg']['ar'] = 'ج.م';
 
   // Invoke the alter hook to allow all modules to update the currency code.
   \Drupal::moduleHandler()->alter('alshaya_get_currency_code', $currency);

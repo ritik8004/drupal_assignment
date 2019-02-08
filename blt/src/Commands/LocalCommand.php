@@ -101,29 +101,6 @@ class LocalCommand extends BltTasks {
         ->run();
     }
 
-    $this->say('Reset super admin account');
-    $this->taskDrush()
-      ->drush('sqlq')
-      ->arg('update users_field_data set name = "user1", mail = "no-reply@acquia.com" where uid = 1')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->taskDrush()
-      ->drush('user-password')
-      ->arg('user1')
-      ->arg('admin')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->taskDrush()
-      ->drush('user-unblock')
-      ->arg('user1')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
     $this->say('Configure stage_file_proxy');
     $this->taskDrush()
       ->drush('cset')
@@ -139,13 +116,6 @@ class LocalCommand extends BltTasks {
       ->arg('stage_file_proxy.settings')
       ->arg('origin_dir')
       ->arg($info['origin_dir'])
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->say('Finally clear cache once');
-    $this->taskDrush()
-      ->drush('cr')
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();

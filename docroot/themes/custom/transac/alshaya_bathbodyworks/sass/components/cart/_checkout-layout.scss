@@ -12,8 +12,8 @@
     }
 
     a {
-      text-align: #{$right};
-      width: 64%;
+      text-align: center;
+      width: 100%;
       max-width: 100%;
 
       @include breakpoint($only-mobile) {
@@ -70,6 +70,8 @@
 
   h3 {
     text-transform: uppercase;
+    font-family: $alshaya-bold;
+    font-size: 0.75rem;
   }
 
   p {

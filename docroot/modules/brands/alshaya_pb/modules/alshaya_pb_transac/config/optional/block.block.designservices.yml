@@ -4,7 +4,6 @@ dependencies:
   config:
     - system.menu.design-services
   module:
-    - alshaya_super_category
     - system
   theme:
     - alshaya_pottery_barn
@@ -21,17 +20,4 @@ settings:
   label_display: '0'
   level: 1
   depth: 0
-visibility:
-  alshaya_super_category:
-    id: alshaya_super_category
-    use_super_category: false
-    categories:
-      8: '8'
-      19: '19'
-      25: '25'
-      29: '29'
-      33: '33'
-      37: '37'
-      43: '43'
-    negate: false
-    context_mapping: {  }
+visibility: {  }

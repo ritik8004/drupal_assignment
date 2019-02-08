@@ -12,12 +12,12 @@ matrix:
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   - php: 7.1
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_non_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   #- php: 7.1
   #  env:
   #  - INSTALL_TYPE=update
@@ -79,6 +79,7 @@ before_install:
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
+  - chmod 600 ${BUILD_DIR}/private/travis_acm.pub
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
