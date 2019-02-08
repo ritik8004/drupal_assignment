@@ -5,7 +5,24 @@
  * Install, uninstall, update function for alshaya_pb_transac.
  */
 
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Use from_to display mode for price.
+ */
+function alshaya_pb_transac_update_8009() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.display_settings')
+    ->set('price_display_mode', SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO)
+    ->save();
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
 
 /**
  * Implements hook_update_N().

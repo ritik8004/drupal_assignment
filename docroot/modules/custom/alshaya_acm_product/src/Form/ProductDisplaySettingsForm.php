@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\Form;
 
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -63,6 +64,16 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Apply hover effect on color swatches.'),
       '#default_value' => $config->get('color_swatches_hover'),
+    ];
+
+    $form['price_display_mode'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Price display mode'),
+      '#default_value' => $config->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
+      '#options' => [
+        SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE => $this->t('Simple / Default'),
+        SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO => $this->t('From - To'),
+      ],
     ];
 
     $form['short_desc'] = [
