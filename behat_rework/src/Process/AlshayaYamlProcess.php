@@ -355,13 +355,13 @@ class AlshayaYamlProcess {
     }
 
     // Set the folder for report.
-//    if (!empty($profile)) {
-//      $yaml['formatters'] = [
-//        'html' => [
-//          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
-//        ],
-//      ];
-//    }
+    if (!empty($profile)) {
+      $yaml['formatters'] = [
+        'html' => [
+          'output_path' => "%paths.base%/features/$profile/reports/html/behat",
+        ],
+      ];
+    }
     return $yaml;
   }
 
