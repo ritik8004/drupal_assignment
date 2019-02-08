@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Service;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
@@ -26,6 +27,13 @@ class SkuPriceHelper {
    * @var \Drupal\alshaya_acm_product\SkuManager
    */
   private $skuManager;
+
+  /**
+   * Renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  private $renderer;
 
   /**
    * Current Display Mode.
@@ -55,10 +63,14 @@ class SkuPriceHelper {
    *   SKU Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer.
    */
   public function __construct(SkuManager $sku_manager,
-                              ConfigFactoryInterface $config_factory) {
+                              ConfigFactoryInterface $config_factory,
+                              RendererInterface $renderer) {
     $this->skuManager = $sku_manager;
+    $this->renderer = $renderer;
 
     $this->displayMode = $config_factory
       ->get('alshaya_acm_product.display_settings')
@@ -177,25 +189,22 @@ class SkuPriceHelper {
 
     if (count(array_filter($child_prices)) == count(array_filter($child_final_prices))) {
       $this->build['#price'] = [
-        '#theme' => 'price_range',
-        '#price' => $this->getMinMax($child_prices),
+        '#markup' => $this->getMinMax($child_prices),
       ];
 
       $this->build['#final_price'] = [
-        '#theme' => 'price_range',
-        '#price' => $this->getMinMax($child_final_prices),
+        '#markup' => $this->getMinMax($child_final_prices),
       ];
     }
     else {
       $selling_prices = array_column($prices['children'], 'price');
       $this->build['#price'] = [
-        '#theme' => 'price_range',
-        '#price' => $this->getMinMax($selling_prices),
+        '#markup' => $this->getMinMax($selling_prices),
       ];
     }
 
     $this->build['#discount'] = [
-      '#markup' => $this->getDiscountedPriceMarkup(max($discounts)),
+      '#markup' => $this->getDiscountedPriceMarkup($discounts),
     ];
   }
 
@@ -216,10 +225,7 @@ class SkuPriceHelper {
       return $this->getFormattedPrice($min);
     }
 
-    return (string) $this->t('@min - @max', [
-      '@min' => $this->getFormattedPrice($min),
-      '@max' => $this->getFormattedPrice($max),
-    ]);
+    return $this->getFormattedPrice($min) . ' - ' . $this->getFormattedPrice($max);
   }
 
   /**
@@ -232,22 +238,33 @@ class SkuPriceHelper {
    *   Formatted price.
    */
   private function getFormattedPrice($price):string {
-    return (string) number_format($price, $this->decimalPoints);
+    $build = [
+      '#theme' => 'commerce_price_with_currency',
+      '#price' => number_format($price, $this->decimalPoints),
+    ];
+
+    return (string) $this->renderer->renderPlain($build);
   }
 
   /**
    * Get Discounted Price markup.
    *
-   * @param float $discount
-   *   Discount percent.
+   * @param array $discounts
+   *   Discount percents.
    *
    * @return string
    *   Price markup.
    */
-  public function getDiscountedPriceMarkup($discount):string {
-    return $discount > 0
-      ? (string) $this->t('Save upto @discount%', ['@discount' => $discount])
-      : '';
+  public function getDiscountedPriceMarkup(array $discounts):string {
+    if (empty($discounts) || empty(max($discounts))) {
+      return '';
+    }
+
+    if (count(array_unique($discounts)) == 1) {
+      return (string) $this->t('Save @discount%', ['@discount' => reset($discounts)]);
+    }
+
+    return (string) $this->t('Save upto @discount%', ['@discount' => max($discounts)]);
   }
 
 }

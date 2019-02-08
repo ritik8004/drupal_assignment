@@ -44,6 +44,7 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'
+      - '@renderer'
 
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager

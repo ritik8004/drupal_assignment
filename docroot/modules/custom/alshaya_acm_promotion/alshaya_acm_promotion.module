@@ -36,9 +36,8 @@ function alshaya_acm_promotion_theme($existing, $type, $theme, $path) {
  */
 function alshaya_acm_promotion_theme_registry_alter(&$theme_registry) {
   $theme_registry['acq_commerce_price']['variables']['promotions'] = NULL;
-
-  // Keeping alter code for price_range here to keep both at same place.
-  $theme_registry['price_range']['variables']['promotions'] = NULL;
+  $theme_registry['acq_commerce_price']['variables']['final_price'] = NULL;
+  $theme_registry['acq_commerce_price']['variables']['discount'] = NULL;
 }
 
 /**

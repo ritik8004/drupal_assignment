@@ -229,9 +229,9 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
-  $items['price_range'] = [
+  $items['commerce_price_with_currency'] = [
     'variables' => [
-      'price' => '',
+      'price' => NULL,
       'currency_format' => '',
       'currency_code_position' => '',
     ],
@@ -248,7 +248,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
  * @param array $variables
  *   An associative array containing.
  */
-function template_preprocess_price_range(array &$variables) {
+function template_preprocess_commerce_price_with_currency(array &$variables) {
   $config = \Drupal::configFactory()->get('acq_commerce.currency');
   $variables['currency_format'] = $config->get('currency_code');
   $variables['currency_code_position'] = $config->get('currency_code_position');
@@ -899,13 +899,6 @@ function alshaya_acm_product_theme_registry_alter(array &$theme_registry) {
     unset($theme_registry['views_infinite_scroll_pager']['preprocess functions'][$index]);
     $theme_registry['views_infinite_scroll_pager']['preprocess functions'][] = 'alshaya_acm_product_preprocess_views_infinite_scroll_pager';
   }
-
-  $theme_registry['acq_commerce_price']['variables']['final_price'] = NULL;
-  $theme_registry['acq_commerce_price']['variables']['discount'] = NULL;
-
-  // Keeping alter code for price_range here to keep both at same place.
-  $theme_registry['price_range']['variables']['final_price'] = NULL;
-  $theme_registry['price_range']['variables']['discount'] = NULL;
 }
 
 /**
