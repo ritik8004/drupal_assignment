@@ -1071,6 +1071,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     return;
   }
 
+  $form_state->setTemporaryValue('sku', $sku_entity);
+
   $form['#cache']['contexts'][] = 'url.query_args:selected';
 
   // If Product is OOS, remove all form items and display OOS message.
@@ -1080,11 +1082,16 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   }
 
   // Process the alter hook only once.
-  static $processed = [];
+  $processed = &drupal_static('form_selected_values', []);
   if (isset($processed[$sku_entity->id()])) {
+    if (is_array($processed[$sku_entity->id()])) {
+      $sku_manager->updatedFormSelected($form_state, $processed[$sku_entity->id()]);
+    }
+
     return;
   }
-  $processed[$sku_entity->id()] = 1;
+
+  $processed[$sku_entity->id()] = [];
 
   // Ensure clientside validation is triggered to have proper data in maximum
   // number of the requests that reach server.
@@ -1145,7 +1152,7 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // Configurable plugin.
     $root_attribute_code = reset($configurable_codes);
 
-    if ($selected && count($selected) != count($product_tree['configurables'])) {
+    if ($selected) {
       $delete_next = FALSE;
 
       // Cleanup selected value.
@@ -1191,16 +1198,16 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // We do this before adding empty option.
     foreach ($form['ajax']['configurables'] as $key => &$configurable) {
       if (is_array($configurable) && !empty($configurable['#options'])) {
-        if (count($configurable['#options']) === 1) {
-          $selected[$key] = key($configurable['#options']);
+        $available_options = $sku_manager->getAvailableOptions($configurable);
+        if (count($available_options) === 1) {
+          $selected[$key] = reset($available_options);
           $configurable['#options_attributes'][$selected[$key]]['selected'] = 'selected';
         }
       }
     }
 
-    $form_state->setValue('configurables', $selected);
-    $user_input_configurables['configurables'] = $selected;
-    $form_state->setUserInput($user_input_configurables);
+    $processed[$sku_entity->id()] = $selected;
+    $sku_manager->updatedFormSelected($form_state, $selected);
 
     /** @var \Drupal\alshaya_acm_product\SkuFieldsHelper $skuFieldsHelper */
     $skuFieldsHelper = \Drupal::service('alshaya_acm_product.sku_fields_helper');
@@ -1211,6 +1218,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       if (!is_array($configurable)) {
         continue;
       }
+
+      $configurable['#code'] = $key;
+      $configurable['#value_callback'] = '_alshaya_acm_product_configurable_option_value_callback';
 
       // Add custom ajax callback for configurables to refresh the gallery.
       $configurable['#validate'][] = 'alshaya_acm_product_configurable_form_ajax_callback';
@@ -1377,7 +1387,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
   $priceHelper = _alshaya_acm_product_get_price_helper();
 
-  $sku = $skuManager->loadSkuById((int) $form['sku_id']['#value']);
+  $sku = $form_state->getTemporaryValue('sku');
 
   // Configurable product tree keyed with possible config tree, whose leaf items
   // contain the SKUs depending on the tree path traversed.
@@ -1385,6 +1395,14 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
   // List of attributes selected by end-users on the form.
   $selected = $form_state->getValue('configurables');
+
+  $processed = &drupal_static('form_selected_values', []);
+  if (isset($processed[$sku->id()])) {
+    if (is_array($processed[$sku->id()])) {
+      $selected = $processed[$sku->id()];
+      $skuManager->updatedFormSelected($form_state, $selected);
+    }
+  }
 
   $selected = $selected ?? [];
 
@@ -1967,4 +1985,21 @@ function _alshaya_acm_product_get_unique_in_stock_products_for_category($categor
  */
 function _alshaya_acm_product_get_price_helper() {
   return \Drupal::service('alshaya_acm_product.price_helper');
+}
+
+/**
+ * Value callback for configurable option in add to cart form.
+ */
+function _alshaya_acm_product_configurable_option_value_callback(&$element, $input, FormStateInterface $form_state) {
+  $code = $element['#code'] ?? $element['#name'];
+  $processed = &drupal_static('form_selected_values', []);
+  $sku = $form_state->getTemporaryValue('sku');
+  if (isset($processed[$sku->id()])) {
+    if (is_array($processed[$sku->id()])) {
+      $selected = $processed[$sku->id()];
+      return $selected[$code] ?? '';
+    }
+  }
+
+  return $input;
 }
