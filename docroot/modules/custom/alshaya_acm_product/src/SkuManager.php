@@ -475,11 +475,11 @@ class SkuManager {
         if ($child_sku_entity instanceof SKU) {
           $prices['children'][$child_sku_code] = $this->getMinPrices($child_sku_entity);
           $price = $prices['children'][$child_sku_code]['price'];
+          $final_price = $prices['children'][$child_sku_code]['final_price'];
 
           if ($prices['children'][$child_sku_code]['final_price'] == $price) {
             $prices['children'][$child_sku_code]['final_price'] = 0;
           }
-          $final_price = $prices['children'][$child_sku_code]['final_price'];
           $prices['children'][$child_sku_code]['selling_price'] = min($price, $final_price);
           $prices['children'][$child_sku_code]['discount'] = $this->getDiscountedPercent($price, $final_price);
 
@@ -2791,6 +2791,12 @@ class SkuManager {
 
     $product_color = $node->get('field_product_color')->getString();
 
+    $prices = $this->getMinPrices($sku, $product_color);
+    $price = empty($prices['final_price'])
+        ? $prices['price']
+        : $prices['final_price'];
+    $item->getField('final_price')->setValues([$price]);
+
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
     }
@@ -2819,15 +2825,6 @@ class SkuManager {
 
     if (!alshaya_acm_product_is_buyable($sku)) {
       $in_stock = 2;
-
-      // Get price and final price for the non-buyable SKU.
-      $sku_prices = $this->getMinPrices($sku);
-
-      // If no final price available for the SKU, then use initial price as
-      // the final price for the SKU (if initial price available).
-      if (empty($sku_prices['final_price']) && !empty($sku_prices['price'])) {
-        $item->getField('final_price')->setValues([$sku_prices['price']]);
-      }
     }
     elseif ($this->isProductInStock($sku)) {
       $in_stock = 2;
@@ -2870,10 +2867,6 @@ class SkuManager {
     if (!$is_product_in_stock && $product_color) {
       throw new \Exception('Product not in stock, not indexing color node');
     }
-
-    $prices = $this->getMinPrices($sku, $product_color);
-    $min_final_price = $prices['final_price'];
-    $item->getField('final_price')->setValues([$min_final_price]);
 
     $data = [];
     $has_color_data = FALSE;
