@@ -6,8 +6,6 @@ swatches:
   pdp:
     - color
     - color_family
-  plp:
-    - color_family
 hide_not_required_option: true
 plp_slider:
   item: 3
