@@ -195,7 +195,11 @@
       if ($('.size-tray .select2Option .list-title .selected-text').text().length > 0) {
         sizeTraylinkText = $('.size-tray .select2Option .list-title .selected-text').text();
       }
-      $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
+
+      // Add Size link only with product having size.
+      if ($('.form-item-configurables-size').length > 0) {
+        $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
+      }
     }
 
     $('.size-tray-link', context).once().on('click', function () {
