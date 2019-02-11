@@ -360,6 +360,18 @@
           }
         });
 
+        var ContentSidebarPosition;
+        // This is for arabic tab.
+        if ($(window).width() < 1024 && $('html').attr('dir') === 'rtl') {
+          ContentSidebarPosition = $('.content__main').width() + 40;
+          $('.content-sidebar-wrapper').css('right', ContentSidebarPosition);
+        }
+        else {
+          // Check position of content for sticky sidebar.
+          ContentSidebarPosition = $('.content-sidebar-wrapper').offset().left;
+          $('.content-sidebar-wrapper').css('left', ContentSidebarPosition);
+        }
+
         $('.size-guide-link').on('click', function (e) {
           $('body').addClass('magazine-layout-ajax-throbber');
         });
