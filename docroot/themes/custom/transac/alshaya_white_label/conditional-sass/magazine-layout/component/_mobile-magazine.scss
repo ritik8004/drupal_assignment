@@ -44,14 +44,13 @@
       &.sidebar-fixed {
         position: fixed;
         top: 5rem;
-        #{$right}: calc((100vw - 45rem) / 2);
         width: calc((40 * 35.5rem) / 100);
 
         &.contain {
           position: absolute;
           bottom: 0;
           top: auto;
-          #{$right}: 0;
+          #{$right}: 0 !important;
         }
       }
     }
@@ -63,7 +62,6 @@
     @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
-        #{$right}: calc((100vw - 67.25rem) / 2);
         width: calc((30 * 71.5rem) / 100);
       }
     }
@@ -135,6 +133,19 @@
 
           html[lang=ar] & {
             max-width: 13.7rem;
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        button[type="submit"] {
+          html[lang=ar] & {
+            padding: 0.5rem 1.875rem 0.5rem 0.5rem;
+            max-width: 11.75rem;
+
+            &::before {
+              right: 0.5rem;
+            }
           }
         }
       }

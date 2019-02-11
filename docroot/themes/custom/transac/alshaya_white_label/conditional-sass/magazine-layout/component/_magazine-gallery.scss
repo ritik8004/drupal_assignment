@@ -216,6 +216,10 @@
         width: 21.88rem;
         top: 0 !important;
 
+        @include breakpoint($desktop) {
+          width: 21.625rem !important;
+        }
+
         .cloud-zoom-title {
           display: none;
         }
