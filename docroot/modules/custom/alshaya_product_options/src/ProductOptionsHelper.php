@@ -7,6 +7,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Class ProductOptionsHelper.
@@ -186,6 +187,12 @@ class ProductOptionsHelper {
       if (isset($swatches[$option['value']])) {
         $this->swatches->updateAttributeOptionSwatch($term, $swatches[$option['value']]);
       }
+
+      // Check if we have value for multi size and it is changed, we trigger
+      // save only if value changed.
+      if (isset($attribute['size_chart'])) {
+        $this->updateAttributeOptionSize($term, $attribute);
+      }
     }
 
     $this->logger->debug('Sync for product attribute options finished of attribute @attribute_code in language @langcode.', [
@@ -194,6 +201,23 @@ class ProductOptionsHelper {
     ]);
 
     $this->apiWrapper->resetStoreContext();
+  }
+
+  /**
+   * Update Term with Attribute option value if changed.
+   *
+   * @param \Drupal\taxonomy\TermInterface $term
+   *   Taxonomy term.
+   * @param array $attributes_info
+   *   Attributes info array received from API.
+   */
+  public function updateAttributeOptionSize(TermInterface $term, array $attributes_info) {
+    // Reset current values.
+    $term->get('field_attribute_size_chart')->setValue($attributes_info['size_chart']);
+    $term->get('field_attribute_size_chart_label')->setValue($attributes_info['size_chart_label']);
+    $term->get('field_attribute_size_group')->setValue($attributes_info['size_group']);
+
+    $term->save();
   }
 
 }
