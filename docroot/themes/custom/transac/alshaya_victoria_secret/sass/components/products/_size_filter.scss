@@ -399,10 +399,6 @@
   }
 }
 
-@include breakpoint($desktop) {
-  .empty-filter {
-    .shop-by-size-paddle-nav {
-      display: none;
-    }
-  }
+.empty-bras-filter {
+  display: none;
 }
