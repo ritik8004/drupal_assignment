@@ -145,13 +145,13 @@
 
     &:nth-child(2n) {
       #cloud-zoom-big {
-        #{$left}: calc(100% + 2rem) !important;
+        #{$left}: calc(100% + 1.8125rem) !important;
       }
     }
 
     &:nth-child(2n+1) {
       #cloud-zoom-big {
-        #{$left}: calc(200% + 3rem) !important;
+        #{$left}: calc(200% + 2.8125rem) !important;
       }
     }
 
