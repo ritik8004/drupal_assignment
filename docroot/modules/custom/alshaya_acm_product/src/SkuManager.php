@@ -1771,7 +1771,7 @@ class SkuManager {
   public function getAvailableOptions(array $configurable) {
     $disabled_options = [];
 
-    foreach ($configurable['#options_attributes'] as $id => $options_attributes) {
+    foreach ($configurable['#options_attributes'] ?? [] as $id => $options_attributes) {
       if (isset($options_attributes['disabled'])) {
         $disabled_options[$id] = $id;
       }
