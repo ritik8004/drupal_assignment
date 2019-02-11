@@ -24,6 +24,10 @@
 
       html[lang=ar] & {
         @include breakpoint($tablet) {
+          right: 12.5rem;
+        }
+
+        @include breakpoint($desktop) {
           right: 14.4375rem;
         }
       }
