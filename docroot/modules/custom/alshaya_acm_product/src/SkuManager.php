@@ -17,6 +17,7 @@ use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
@@ -1756,6 +1757,42 @@ class SkuManager {
         }
       }
     }
+  }
+
+  /**
+   * Helper function to get available options in form item.
+   *
+   * @param array $configurable
+   *   Configurable attribute form item.
+   *
+   * @return array
+   *   Available options.
+   */
+  public function getAvailableOptions(array $configurable) {
+    $disabled_options = [];
+
+    foreach ($configurable['#options_attributes'] as $id => $options_attributes) {
+      if (isset($options_attributes['disabled'])) {
+        $disabled_options[$id] = $id;
+      }
+    }
+
+    return array_diff(array_keys($configurable['#options']), $disabled_options);
+  }
+
+  /**
+   * Wrapper function to update selected values in form.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form State object.
+   * @param array $selected
+   *   Selected values.
+   */
+  public function updatedFormSelected(FormStateInterface $form_state, array $selected) {
+    $form_state->setValue('configurables', $selected);
+    $user_input = $form_state->getUserInput();
+    $user_input['configurables'] = $selected;
+    $form_state->setUserInput($user_input);
   }
 
   /**
