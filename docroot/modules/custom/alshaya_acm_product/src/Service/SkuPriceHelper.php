@@ -57,6 +57,13 @@ class SkuPriceHelper {
   private $build;
 
   /**
+   * Cache tags from config to add to $build.
+   *
+   * @var string[]
+   */
+  private $configCacheTags;
+
+  /**
    * SkuPriceHelper constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -72,13 +79,15 @@ class SkuPriceHelper {
     $this->skuManager = $sku_manager;
     $this->renderer = $renderer;
 
-    $this->displayMode = $config_factory
-      ->get('alshaya_acm_product.display_settings')
-      ->get('price_display_mode') ?? self::PRICE_DISPLAY_MODE_SIMPLE;
+    $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
+
+    $this->displayMode = $display_settings->get('price_display_mode') ?? self::PRICE_DISPLAY_MODE_SIMPLE;
 
     $this->decimalPoints = (int) $config_factory
       ->get('acq_commerce.currency')
       ->get('decimal_points');
+
+    $this->configCacheTags = $display_settings->getCacheTags();
   }
 
   /**
@@ -95,6 +104,7 @@ class SkuPriceHelper {
   public function getPriceBlockForSku(SKU $sku, array $options = ['with_vat' => 1]):array {
     $this->build = [
       '#theme' => 'product_price_block',
+      '#cache' => ['tags' => $this->configCacheTags],
     ];
 
     if (empty($options['color'])) {

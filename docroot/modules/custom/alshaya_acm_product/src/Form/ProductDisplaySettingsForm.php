@@ -35,6 +35,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('color_swatches_hover', $form_state->getValue('color_swatches_hover'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
+    $config->set('price_display_mode', $form_state->getValue('price_display_mode'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
