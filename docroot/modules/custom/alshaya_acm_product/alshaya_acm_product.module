@@ -336,7 +336,6 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
     if ($sku_entity instanceof SKU) {
       $build['#attributes']['data-sku'] = $sku_entity->getSku();
       $build['#cache']['tags'][] = 'acq_sku:' . $sku_entity->id();
-      $build['#cache']['tags'][] = 'config:acq_commerce.currency';
 
       if ($view_mode == 'search_result') {
         $build['labels'] = [
