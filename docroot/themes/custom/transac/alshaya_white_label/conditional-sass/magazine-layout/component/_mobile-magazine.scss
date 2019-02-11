@@ -238,4 +238,14 @@
       overflow: hidden;
     }
   }
+
+  .magazine-layout {
+    article[gtm-sku-type="simple"] {
+      .content__title_wrapper {
+        .sku-base-form {
+          display: block;
+        }
+      }
+    }
+  }
 }

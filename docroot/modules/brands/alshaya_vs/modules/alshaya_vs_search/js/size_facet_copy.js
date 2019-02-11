@@ -50,13 +50,9 @@
           var $value = $(this).attr('data-facet-item-value');
           $('.facet-item a[data-drupal-facet-item-value="' + $value + '"]', $wrapper).closest('.facet-item').trigger('click');
         });
-
-        applyFilterSlider();
       });
 
-      if ($('.sfb-facets-container').is(':empty')) {
-        $('.sfb-band-cup').addClass('empty-filter');
-      }
+      applyFilterSlider();
     }
   };
 
@@ -110,7 +106,7 @@
       });
 
       // Compare the last element value with the max width of the wrapper.
-      if (widthOfsCupsizewrapper[widthOfsCupsizewrapper.length - 1] < 1000 || $('.sfb-facets-container').is(':empty')) {
+      if (widthOfsCupsizewrapper[widthOfsCupsizewrapper.length - 1] < 1000) {
         if ($('html').attr('dir') == 'rtl') {
           $('.paddle_prev').addClass('hidden');
         }
@@ -163,6 +159,19 @@
           $(rightPaddle).removeClass('hidden');
         }
       });
+
+      //JS for checking the empty filters.
+      function emptyBrasFilter(element) {
+        if (element.is(':empty')) {
+          element.parent().addClass('empty-bras-filter');
+        }
+        else {
+          element.parent().removeClass('empty-bras-filter');
+        }
+      }
+
+      emptyBrasFilter($('.sfb-letter .sfb-facets-container'));
+      emptyBrasFilter($('.sfb-band-cup .sfb-facets-container'));
 
       var sliderIndex = 0;
 
