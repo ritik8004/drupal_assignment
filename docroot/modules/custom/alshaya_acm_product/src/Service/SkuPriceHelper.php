@@ -197,7 +197,7 @@ class SkuPriceHelper {
       ];
     }
     else {
-      $selling_prices = array_column($prices['children'], 'price');
+      $selling_prices = array_column($prices['children'], 'selling_price');
       $this->build['#price'] = [
         '#markup' => $this->getMinMax($selling_prices),
       ];
