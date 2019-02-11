@@ -263,7 +263,7 @@ Here's a sample *.feature file:
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
-    And I go to "/user/login"
+    And I go to "{url_login}"
     When I fill in "edit-name" with "{var_username}"
     And I fill in "edit-pass" with "{var_password}"
     And I press "sign in"
@@ -305,6 +305,17 @@ Here's the directory structure:
 2. `composer install`
 3. `npm install --prefix bin chromedriver`
 4. `./behat-build.sh` This will generate feature files and 
+  - Also have parameters:
+    - `--rebuild` (boolean): `TRUE` to recollect yml files and variables.
+      - by default rebuild is false, and it will only regenerate features files
+        based on already collected variables. 
+        (It won't include any new variables.)
+    - `--site` parameter supports comma separated values:
+      - only brand name: `--site=hm,mc`
+      - brand + market: `--site=hm-kw,hm-sa`
+      - brand + market + env: `--site=hm-kw-uat,hm-sa-uat`
+      - brand + market + env + lang: `--site=hm-kw-uat-en,hm-sa-uat-ar`  
+    
 5. (In a separate terminal window)
 ```bash
 java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
