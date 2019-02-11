@@ -62,6 +62,10 @@
         letter-spacing: 3.1px;
         color: $magazine-pdp-label;
 
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
+
         @include breakpoint($only-mobile) {
           font-size: 0.75rem;
         }
@@ -106,6 +110,10 @@
         font-weight: bold;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
       }
     }
 
@@ -207,6 +215,10 @@
       #cloud-zoom-big {
         width: 21.88rem;
         top: 0 !important;
+
+        @include breakpoint($desktop) {
+          width: 21.625rem !important;
+        }
 
         .cloud-zoom-title {
           display: none;

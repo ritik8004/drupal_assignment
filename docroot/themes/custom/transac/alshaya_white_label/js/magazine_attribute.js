@@ -3,6 +3,8 @@
  * Size and Color Guide js.
  */
 
+/* global isRTL */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -197,7 +199,12 @@
     }
 
     if ($('.content__title_wrapper').find('.size-tray-link').length < 1) {
-      $('<div class="size-tray-link">' + Drupal.t('Select Size') + '</div>').insertBefore('.edit-add-to-cart');
+      var sizeTraylinkText = Drupal.t('Select Size');
+      // If size is default selected.
+      if ($('.size-tray .select2Option .list-title .selected-text').text().length > 0) {
+        sizeTraylinkText = $('.size-tray .select2Option .list-title .selected-text').text();
+      }
+      $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
     }
 
     $('.size-tray-link', context).once().on('click', function () {
@@ -363,6 +370,18 @@
             }
           }
         });
+
+        var ContentSidebarPosition;
+        // This is for arabic tab.
+        if ($(window).width() < 1024 && isRTL()) {
+          ContentSidebarPosition = $('.content__main').width() + 40;
+          $('.content-sidebar-wrapper').css('right', ContentSidebarPosition);
+        }
+        else {
+          // Check position of content for sticky sidebar.
+          ContentSidebarPosition = $('.content-sidebar-wrapper').offset().left;
+          $('.content-sidebar-wrapper').css('left', ContentSidebarPosition);
+        }
 
         $('.size-guide-link').on('click', function (e) {
           $('body').addClass('magazine-layout-ajax-throbber');
