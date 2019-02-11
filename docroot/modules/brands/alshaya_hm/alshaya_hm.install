@@ -13,6 +13,15 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Mark all indexed data for re-indexation to get the price data indexed again.
+ */
+function alshaya_hm_update_8031() {
+  _alshaya_search_api_reindex();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the currency_code to DHS.
  */
 function alshaya_hm_update_8030() {
@@ -33,15 +42,6 @@ function alshaya_hm_update_8029() {
   \Drupal::configFactory()->getEditable('alshaya_search_api.listing_settings')
     ->set('filter_oos_product', TRUE)
     ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
- * Mark all indexed data for re-indexation to get the price data indexed again.
- */
-function alshaya_hm_update_8029() {
-  _alshaya_search_api_reindex();
 }
 
 /**
