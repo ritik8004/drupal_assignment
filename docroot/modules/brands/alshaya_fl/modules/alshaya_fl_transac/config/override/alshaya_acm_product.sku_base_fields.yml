@@ -2,8 +2,8 @@ fields:
   color:
     configurable: 1
     cardinality: 1
-    index: 0
-    facet: 0
+    index: 1
+    facet: 1
   size:
     configurable: 1
     cardinality: 1
@@ -13,36 +13,36 @@ fields:
     label: 'Color'
     type: 'string'
     cardinality: -1
-    index: 1
-    facet: 1
+    index: 0
+    facet: 0
     swatch: 1
   size_shoe_eu:
-    label: 'Size Shoe EU'
+    label: 'Size Shoes'
     cardinality: -1
     index: 1
     facet: 1
   size_shoe_uk:
-    label: 'Size Shoe UK'
+    label: 'Size Shoes'
     cardinality: -1
     index: 1
     facet: 0
   size_shoe_us:
-    label: 'Size Shoe US'
+    label: 'Size Shoes'
     cardinality: -1
     index: 1
     facet: 0
   size_textile_eu:
-    label: 'Size Textile EU'
+    label: 'Size Clothing'
     cardinality: -1
     index: 1
     facet: 1
   size_textile_uk:
-    label: 'Size Textile UK'
+    label: 'Size Clothing'
     cardinality: -1
     index: 1
     facet: 0
   size_textile_us:
-    label: 'Size Textile US'
+    label: 'Size Clothing'
     cardinality: -1
     index: 1
     facet: 0
