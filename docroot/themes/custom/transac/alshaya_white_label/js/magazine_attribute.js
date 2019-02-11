@@ -3,6 +3,8 @@
  * Size and Color Guide js.
  */
 
+/* global isRTL */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -362,7 +364,7 @@
 
         var ContentSidebarPosition;
         // This is for arabic tab.
-        if ($(window).width() < 1024 && $('html').attr('dir') === 'rtl') {
+        if ($(window).width() < 1024 && isRTL()) {
           ContentSidebarPosition = $('.content__main').width() + 40;
           $('.content-sidebar-wrapper').css('right', ContentSidebarPosition);
         }
