@@ -206,7 +206,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ],
   ];
 
-  $fields_mapped = [];
   /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
   $mapping = $address_book_manager->getMagentoFieldMappings();
@@ -219,7 +218,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
 
     if (isset($mapping[$form_item['attribute_code']])) {
       $field_code = $mapping[$form_item['attribute_code']];
-      $fields_mapped[$form_item['attribute_code']] = $field_code;
 
       // Set access for all form items.
       $element[$field_code]['#access'] = TRUE;
@@ -281,24 +279,11 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
       'wrapper' => 'alshaya-addressbook-area',
     ];
 
-    // Populate all area terms from level 2, we don't use parent field
-    // but we are using DMV2.
+    // Populate all area terms from level 2.
     $area_options = $area_terms_helper->getAllAreasWithParent($area_parent);
-
-    // Disable the fields which we couldn't map.
-    $field_unmapped = array_diff($mapping, $fields_mapped);
-    foreach ($field_unmapped as $field_code) {
-      $element[$field_code]['#type'] = 'hidden';
-    }
-
-    $fields_disabled = $address_book_manager->getMagentoDisabledFields();
-    foreach ($fields_disabled as $field_code => $magento_field_code) {
-      $element[$field_code]['#type'] = 'hidden';
-    }
   }
   else {
-    // Populate area terms from level 1.
-    $area_options = $area_terms_helper->getAllAreasWithParent(0);
+    $area_options = $area_terms_helper->getAllAreas();
   }
 
   $area_empty_option = [
@@ -357,13 +342,18 @@ function _alshaya_addressbook_set_optional_field(array &$element, FormStateInter
   // Disable the fields which we couldn't map.
   $field_unmapped = array_diff($mapping, $fields_mapped);
   foreach ($field_unmapped as $field_code) {
+    $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
     $element['#field_overrides'][$field_code] = FieldOverride::OPTIONAL;
   }
 
   $fields_disabled = $address_book_manager->getMagentoDisabledFields();
   foreach ($fields_disabled as $field_code => $magento_field_code) {
-    $element['#field_overrides'][$field_code] = FieldOverride::OPTIONAL;
+    $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
+    $element['#field_overrides'][$field_code] = FieldOverride::HIDDEN;
   }
+
+  // Remove custom field area_parent from overrides.
+  unset($element['#field_overrides']['areaParent']);
 
   return $element;
 }
