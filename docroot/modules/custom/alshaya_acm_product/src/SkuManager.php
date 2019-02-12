@@ -2420,10 +2420,13 @@ class SkuManager {
       // Here we say not to select variant from query ?selected=xxx if there
       // is any attribute (except the first one) which has more then one value.
       if (count($combinations['attribute_sku']) > 1) {
-        // Remove first attribute.
-        array_shift($combinations['attribute_sku']);
         foreach ($combinations['attribute_sku'] as $values) {
-          if (count($values) > 1) {
+          // Get the SKUs attached with first attribute.
+          $first_attribute_sku_count = key($values);
+          // If more than one attribute and there more than one sku attached
+          // with the first attribute, it means no selection. If only one sku
+          // is attached with the first attribute, it means that is selected.
+          if (count($values) > 1 && count($first_attribute_sku_count) > 1) {
             $select_from_query = FALSE;
             break;
           }
