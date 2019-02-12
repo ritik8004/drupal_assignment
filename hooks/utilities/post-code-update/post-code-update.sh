@@ -42,9 +42,12 @@ if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
 
   ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
 elif echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
-    echo "Change in FE detected, clearing FE cache."
-    
-    drush acsf-tools-ml cr
+  echo "Change in FE detected, clearing cache."
+
+  if [ $slack == 1 ]; then
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Clearing drupal cache to reflect FE changes on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  fi
+  drush acsf-tools-ml cr
 else
   if [ $slack == 1 ]; then
     curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
