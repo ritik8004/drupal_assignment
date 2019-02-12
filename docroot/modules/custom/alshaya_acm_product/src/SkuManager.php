@@ -2426,7 +2426,7 @@ class SkuManager {
           // If more than one attribute and there more than one sku attached
           // with the first attribute, it means no selection. If only one sku
           // is attached with the first attribute, it means that is selected.
-          if (count($values) > 1 && count($first_attribute_sku_count) > 1) {
+          if (count($values) > 1 && count($values[$first_attribute_sku_count]) > 1) {
             $select_from_query = FALSE;
             break;
           }
