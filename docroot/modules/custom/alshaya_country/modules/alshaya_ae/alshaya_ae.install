@@ -8,12 +8,24 @@
 /**
  * Implements hook_update_N().
  *
- * Update the currency_code for Arabic on all the AE sites.
+ * Arabic currency_code text dot correction.
  */
 function alshaya_ae_update_8005() {
   // Reset currency code - AR.
   \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
     ->set('currency_code', 'د٠إ٠')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the currency_code for Arabic on all the AE sites.
+ */
+function alshaya_ae_update_8004() {
+  // Reset currency code - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
+    ->set('currency_code', '.د.إ')
     ->save();
 }
 
