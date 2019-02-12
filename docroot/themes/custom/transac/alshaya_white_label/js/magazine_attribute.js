@@ -217,6 +217,7 @@
       $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
+        $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
       }
     });
 
