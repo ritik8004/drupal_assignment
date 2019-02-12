@@ -42,12 +42,9 @@
 
   $(window).on('load', function () {
     // Show add to cart form now.
+    $('.sku-base-form').removeClass('visually-hidden');
     if ($('.magazine-layout').length > 0 || $(window).width() < 768) {
-      $('.sku-base-form').removeClass('visually-hidden');
       $('.content__title_wrapper').addClass('show-sticky-wrapper');
-    }
-    else {
-      $('.sku-base-form').removeClass('visually-hidden');
     }
   });
 
