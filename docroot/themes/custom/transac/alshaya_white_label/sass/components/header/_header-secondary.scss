@@ -309,24 +309,32 @@
   }
 }
 
-.mobile--overlay .branding__menu {
-  z-index: 7;
-  background: transparent;
+.branding__menu {
+  &::before {
+    content: '';
+    background-color: transparent;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+  }
+}
 
+.mobile--overlay .branding__menu {
   &.navbar-fixed-top,
   .block-views-exposed-filter-blocksearch-page {
     background: transparent;
   }
 
   &::before {
-    content: '';
     background: $header_mobile_menu_overlay;
     position: absolute;
-    left: 0;
-    right: 0;
     z-index: 6;
-    top: 0;
-    bottom: 0;
+    opacity: 1;
   }
 }
 

@@ -694,20 +694,6 @@ header {
   .mobile--overlay {
     overflow: hidden;
 
-    &::before {
-      content: '';
-      position: fixed;
-      z-index: 6;
-      width: 100%;
-      height: 100;
-      top: 0;
-      #{$left}: 0;
-      bottom: -6rem;
-      #{$right}: 0;
-      transform: translate3d(0, 0, 0);
-      background-color: rgba(0, 0, 0, 0.48);
-    }
-
     .branding__menu {
       border-bottom: 0;
     }
