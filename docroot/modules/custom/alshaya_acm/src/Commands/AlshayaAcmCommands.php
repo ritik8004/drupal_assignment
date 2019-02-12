@@ -524,11 +524,11 @@ class AlshayaAcmCommands extends DrushCommands {
    *
    * @aliases aasp,alshaya-sync-commerce-products
    *
-   * @usage drush aasp en 50 --category_id=10
-   *   Import skus in category id 10 and store linked to en and page size 50.
-   * @usage drush aasp en 50 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'
+   * @usage drush aasp en 10 --category_id=10
+   *   Import skus in category id 10 and store linked to en and page size 10.
+   * @usage drush aasp en 10 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'
    *   Import skus mentioned with --skus switch.
-   * @usage drush aasp en 50 --csv_path=/tmp/skus.csv
+   * @usage drush aasp en 10 --csv_path=/tmp/skus.csv
    *   Import skus provided in the csv file for import.
    */
   public function syncProducts($langcode,
