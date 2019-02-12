@@ -1,0 +1,19 @@
+services:
+  alshaya_social.social_auth_user_manager:
+    class: Drupal\alshaya_social\AlshayaSocialAuthUserManager
+    decorates: 'social_auth.user_manager'
+    decoration_priority: 9
+    public: false
+    arguments:
+      - '@alshaya_social.social_auth_user_manager.inner'
+      - '@request_stack'
+      - '@config.factory'
+      - '@logger.factory'
+      - '@event_dispatcher'
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@token'
+      - '@transliteration'
+      - '@language_manager'
+      - '@router.route_provider'
+      - '@session'
