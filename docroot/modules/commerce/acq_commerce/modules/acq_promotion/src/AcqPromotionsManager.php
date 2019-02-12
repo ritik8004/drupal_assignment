@@ -340,7 +340,7 @@ class AcqPromotionsManager {
       return $promotion_node;
     }
     else {
-      $this->logger->critical('Error occured while creating Promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
+      $this->logger->critical('An error occurred while creating promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
       return NULL;
     }
   }
