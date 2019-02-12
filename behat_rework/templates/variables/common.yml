@@ -1,4 +1,6 @@
 variables:
+  url_login: '/user/login'
+  url_register: '/user/register'
   var_breadcrumb_examples:
     1:
       - page
