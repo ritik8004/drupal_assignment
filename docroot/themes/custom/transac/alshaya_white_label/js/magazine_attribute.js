@@ -327,9 +327,7 @@
               $('.size-tray').addClass('tray-open');
               $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
               $('body').addClass('open-tray-without-selection');
-              $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
-                $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('submit');
-              });
+              $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('submit');
             }
           }, 10);
         });
