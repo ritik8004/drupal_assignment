@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
@@ -54,19 +55,40 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     // Reset all static caches.
     drupal_static_reset();
 
-    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-    $plugin = $entity->getPluginInstance();
+    // Get all parent skus this sku.
+    $parent_skus = $this->skuManager->getParentSkus([$entity->getSku()]);
 
-    // @TODO: Make this smart in CORE-3443.
-    if ($parent = $plugin->getParentSku($entity)) {
-      Cache::invalidateTags($parent->getCacheTagsToInvalidate());
+    $cache_tags = [];
+
+    // If there any parent sku available.
+    if (!empty($parent_skus)) {
+      foreach ($parent_skus as $parent_sku) {
+        if ($sku = SKU::loadFromSku($parent_sku)) {
+          // Invalidate caches for all parent skus here.
+          $cache_tags = Cache::mergeTags($cache_tags, $sku->getCacheTagsToInvalidate());
+          // We also invalidate caches for node here.
+          $node = $this->skuManager->getDisplayNode($sku);
+          if ($node instanceof NodeInterface) {
+            $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
+          }
+        }
+      }
+    }
+    else {
+      // If no parent sku, means this will either be a configurable sku or just
+      // a simple sku directly attached to node. Just invalidate the display
+      // node cache in this case.
+      $node = $this->skuManager->getDisplayNode($entity);
+      if ($node instanceof NodeInterface) {
+        $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
+      }
     }
 
-    // We also invalidate caches for node here.
-    $node = $this->skuManager->getDisplayNode($entity);
-    if ($node instanceof NodeInterface) {
-      Cache::invalidateTags($node->getCacheTagsToInvalidate());
+    // Invalidate cache.
+    if (!empty($cache_tags)) {
+      Cache::invalidateTags($cache_tags);
     }
+
   }
 
   /**
