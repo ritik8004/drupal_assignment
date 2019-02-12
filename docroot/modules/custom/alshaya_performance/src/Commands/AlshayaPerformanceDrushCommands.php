@@ -5,7 +5,7 @@ namespace Drupal\alshaya_performance\Commands;
 use Drush\Commands\DrushCommands;
 
 /**
- * class AcqSkuDrushCommands
+ * Class AlshayaPerformanceDrushCommands.
  */
 class AlshayaPerformanceDrushCommands extends DrushCommands {
 
@@ -23,4 +23,5 @@ class AlshayaPerformanceDrushCommands extends DrushCommands {
   public function cacheRebuildFrontend() {
     alshaya_performance_flush_frontend_caches();
   }
+
 }
