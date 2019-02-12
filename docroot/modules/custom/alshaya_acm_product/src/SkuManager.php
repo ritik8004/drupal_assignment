@@ -2459,11 +2459,11 @@ class SkuManager {
       if (count($combinations['attribute_sku']) > 1) {
         foreach ($combinations['attribute_sku'] as $values) {
           // Get the SKUs attached with first attribute.
-          $first_attribute_sku_count = key($values);
+          $first_attribute_index = key($values);
           // If more than one attribute and there more than one sku attached
           // with the first attribute, it means no selection. If only one sku
           // is attached with the first attribute, it means that is selected.
-          if (count($values) > 1 && count($first_attribute_sku_count) > 1) {
+          if (count($values) > 1 && count($values[$first_attribute_index]) > 1) {
             $select_from_query = FALSE;
             break;
           }
