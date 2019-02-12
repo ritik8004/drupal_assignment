@@ -51,3 +51,26 @@ function alshaya_performance_reset_log_mode() {
   $config->set('mode', $mode);
   $config->save();
 }
+
+/**
+ * Lighter version of drupal_flush_all_caches() function.
+ *
+ * This function clears frontend caches (css, js and twig) only.
+ *
+ * @see drupal_flush_all_caches()
+ */
+function alshaya_performance_flush_frontend_caches() {
+  // Frontend data can remain in these bins, so we need to empty them as well
+  foreach (Cache::getBins() as $service_id => $cache_backend) {
+    $cache_backend->deleteAll();
+  }
+
+  // Flush asset file caches.
+  \Drupal::service('asset.css.collection_optimizer')->deleteAll();
+  \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+  _drupal_flush_css_js();
+
+  // Wipe the Twig PHP Storage cache.
+  \Drupal::service('twig')->invalidate();
+
+}
