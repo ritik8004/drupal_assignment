@@ -132,7 +132,7 @@ class AlshayaMasterCommands extends DrushCommands {
    */
   public function postDrupalinstall($options = ['brand_module' => self::REQ, 'country_code' => self::REQ]) {
     $post_install_status = $this->state->get('alshaya_master_post_drupal_install', 'not done');
-    $modules = $this->state->get('system.module.files', []);
+    $modules = system_rebuild_module_data();
 
     // Determine which country module to install.
     $country_code = $options['country_code'];
