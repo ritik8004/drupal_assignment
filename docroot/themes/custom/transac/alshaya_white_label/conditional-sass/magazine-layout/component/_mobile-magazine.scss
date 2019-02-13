@@ -121,10 +121,10 @@
   }
 
   .size-tray {
-    display: none;
-
     &.tray-open {
-      display: block;
+      opacity: 1;
+      z-index: 12;
+      background-color: $header_mobile_menu_overlay;
     }
   }
 

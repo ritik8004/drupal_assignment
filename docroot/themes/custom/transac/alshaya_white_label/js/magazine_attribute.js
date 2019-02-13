@@ -218,11 +218,9 @@
     });
 
     $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-      // Close with a delay allowing time for sliding animation to finish.
-      setTimeout(function () {
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400, function () {
         $('.size-tray').removeClass('tray-open');
-      }, 400);
+      });
       $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');

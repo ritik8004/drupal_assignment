@@ -7,8 +7,10 @@
     bottom: 0;
     right: 0;
     left: 0;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    background-color: transparent;
 
     .size-tray-buttons {
       position: absolute;
