@@ -60,6 +60,14 @@ header {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 
+    @include breakpoint($only-mobile) {
+      height: 3.3rem;
+
+      html[lang=ar] & {
+        height: 3.7rem;
+      }
+    }
+
     @include breakpoint($desktop) {
       padding-bottom: 2rem;
       padding-top: 2.125rem;
@@ -81,8 +89,11 @@ header {
     @include container(1284px);
 
     @include breakpoint($only-mobile) {
-      margin: 0;
-      padding: 0;
+      margin: 0.25rem 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
   }
 
@@ -102,13 +113,13 @@ header {
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         position: absolute;
-        top: 3.5625rem;
+        top: 3.3rem;
         display: none;
         width: 100%;
         left: 0;
 
         html[lang=ar] & {
-          top: 3.9375rem;
+          top: 3.7rem;
         }
       }
     }
@@ -163,14 +174,7 @@ header {
 
     @include breakpoint($only-mobile) {
       .block-system-branding-block {
-        width: 64%;
-        padding: 0.25rem 0.5rem 0.4375rem;
-        padding-#{$right}: 0;
-        background: $primary_bg;
-
-        html[lang=ar] & {
-          padding-bottom: 0.0625rem;
-        }
+        width: 65%;
       }
     }
   }
@@ -290,7 +294,7 @@ header {
         height: 1.25rem;
 
         html[lang=ar] & {
-          margin-top: -0.25rem;
+          margin-top: -0.5rem;
         }
       }
     }
@@ -526,7 +530,7 @@ header {
       display: table-cell;
       text-align: center;
       padding: 0;
-      border: none;
+      border: 1px solid transparent;
 
       &:hover {
         background: none;
@@ -1035,9 +1039,11 @@ header {
       opacity: 0;
       z-index: -1;
       background-color: rgba(0, 0, 0, 0.48);
+      transition: opacity 0.5s ease-in-out;
     }
 
     &.mobile--overlay {
+      position: fixed;
       width: 100%;
 
       &::before {
@@ -1586,18 +1592,6 @@ html {
 
 #block-cartminiblock {
   position: relative;
-
-  @include breakpoint($only-mobile) {
-    padding: 0.625rem 0.5rem;
-  }
-}
-
-.mobile--overlay {
-  #block-cartminiblock {
-    @include breakpoint($only-mobile) {
-      background-color: $primary_bg;
-    }
-  }
 }
 
 @include breakpoint($only-mobile) {
