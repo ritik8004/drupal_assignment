@@ -331,11 +331,6 @@
 }
 
 .mobile--overlay .branding__menu {
-  &.navbar-fixed-top,
-  .block-views-exposed-filter-blocksearch-page {
-    background: transparent;
-  }
-
   &::before {
     background: $header_mobile_menu_overlay;
     position: absolute;

@@ -1043,9 +1043,6 @@ header {
     }
 
     &.mobile--overlay {
-      position: fixed;
-      width: 100%;
-
       .branding__menu {
         border-bottom-color: $header_mobile_menu_overlay;
         box-shadow: none;
