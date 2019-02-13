@@ -295,7 +295,7 @@
 
 .branding__menu {
   position: relative;
-  z-index: 6;
+  z-index: 11;
   background-color: $header_bg;
 
   @include breakpoint($upto-desktop) {
@@ -307,26 +307,35 @@
   @include breakpoint($only-mobile) {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
   }
+
+  @include breakpoint($upto-desktop) {
+    transition: border-bottom-color 0.5s ease, box-shadow 0.5s ease;
+  }
+}
+
+.branding__menu {
+  &::before {
+    @include breakpoint($upto-desktop) {
+      content: '';
+      background-color: transparent;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+  }
 }
 
 .mobile--overlay .branding__menu {
-  z-index: 7;
-  background: transparent;
-
-  &.navbar-fixed-top,
-  .block-views-exposed-filter-blocksearch-page {
-    background: transparent;
-  }
-
   &::before {
-    content: '';
     background: $header_mobile_menu_overlay;
     position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 6;
-    top: 0;
-    bottom: 0;
+    z-index: 9;
+    opacity: 1;
   }
 }
 
@@ -337,6 +346,7 @@
 
   .branding__menu {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
+    transition: border-bottom-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
   }
 }
 
@@ -412,17 +422,6 @@ body {
           position: absolute;
           #{$right}: 0.625rem;
         }
-      }
-    }
-  }
-
-  .mobile--overlay {
-    .block-views-exposed-filter-blocksearch-page {
-      opacity: 0.4;
-
-      .form-item-keywords,
-      .form-actions {
-        opacity: 0.3;
       }
     }
   }
