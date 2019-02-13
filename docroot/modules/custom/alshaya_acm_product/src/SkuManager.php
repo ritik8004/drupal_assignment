@@ -36,6 +36,8 @@ use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\acq_sku\ProductInfoHelper;
 
 /**
  * Class SkuManager.
@@ -51,6 +53,8 @@ class SkuManager {
   const FREE_GIFT_PRICE = 0.01;
 
   const PDP_LAYOUT_INHERIT_KEY = 'inherit';
+
+  const PDP_LAYOUT_MAGAZINE = 'pdp-magazine';
 
   const AGGREGATED_LISTING = 'aggregated';
 
@@ -204,6 +208,13 @@ class SkuManager {
   protected $generator;
 
   /**
+   * Product Info Helper.
+   *
+   * @var \Drupal\acq_sku\ProductInfoHelper
+   */
+  protected $productInfoHelper;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -244,6 +255,8 @@ class SkuManager {
    *   Renderer service.
    * @param \Drupal\simple_sitemap\Simplesitemap $generator
    *   Simple sitemap generator.
+   * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
+   *   Product Info Helper.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -263,7 +276,8 @@ class SkuManager {
                               AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler,
                               Client $http_client,
                               RendererInterface $renderer,
-                              Simplesitemap $generator) {
+                              Simplesitemap $generator,
+                              ProductInfoHelper $product_info_helper) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -286,6 +300,7 @@ class SkuManager {
     $this->httpClient = $http_client;
     $this->renderer = $renderer;
     $this->generator = $generator;
+    $this->productInfoHelper = $product_info_helper;
   }
 
   /**
@@ -582,7 +597,7 @@ class SkuManager {
         );
       }
       else {
-        $sku_cart_price['final_price'] = number_format($final_price, 3);
+        $sku_cart_price['final_price'] = _alshaya_acm_format_price_with_decimal($final_price);
         $discount = round((($sku_cart_price['price'] - $final_price) * 100) / $sku_cart_price['price']);
         $sku_cart_price['discount']['prefix'] = $this->t('Save', [], ['context' => 'discount']);
         $sku_cart_price['discount']['value'] = $discount . '%';
@@ -1153,10 +1168,14 @@ class SkuManager {
    *   An array of SKUs.
    */
   public function getSkus($langcode, $type) {
-    $query = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', ['sku', 'price', 'special_price', 'stock'])
-      ->condition('type', $type, '=')
-      ->condition('langcode', $langcode, '=');
+    $query = $this->connection->select('acq_sku_field_data', 'asfd');
+    $query->leftJoin('acq_sku_stock', 'stock', 'stock.sku = asfd.sku');
+
+    $query->fields('asfd', ['sku', 'price', 'special_price']);
+    $query->fields('stock', ['quantity', 'status']);
+
+    $query->condition('type', $type, '=');
+    $query->condition('langcode', $langcode, '=');
 
     return $query->execute()->fetchAllAssoc('sku', \PDO::FETCH_ASSOC);
   }
@@ -1454,29 +1473,21 @@ class SkuManager {
    */
   public function filterRelatedSkus(array $skus) {
     $related_items_size = $this->configFactory->get('alshaya_acm_product.settings')->get('related_items_size');
-    $stock_mode = $this->getStockMode();
-
     $related = [];
 
     foreach ($skus as $sku) {
       try {
         $sku_entity = SKU::loadFromSku($sku);
-
         if (empty($sku_entity)) {
           continue;
         }
 
         $node = $this->getDisplayNode($sku_entity);
-
         if (empty($node)) {
           continue;
         }
 
-        // No stock check for related items in pull mode.
-        if ($stock_mode == 'pull') {
-          $related[$sku] = $node->id();
-        }
-        elseif (alshaya_acm_get_stock_from_sku($sku_entity)) {
+        if ($this->isProductInStock($sku_entity)) {
           $related[$sku] = $node->id();
         }
       }
@@ -1574,32 +1585,6 @@ class SkuManager {
   }
 
   /**
-   * Helper function to fetch SKU's property value.
-   *
-   * @param string $sku
-   *   SKU code for the product.
-   * @param array $properties
-   *   Property name that needs to be fetched.
-   *
-   * @return \stdClass
-   *   Result object keyed with the list of properties.
-   */
-  public function getSkuPropertyValue($sku, array $properties) {
-    $result = $this->connection->select('acq_sku_field_data', 'asfd')
-      ->fields('asfd', $properties)
-      ->condition('asfd.sku', $sku)
-      ->condition('asfd.langcode', $this->languageManager->getCurrentLanguage()->getId())
-      ->range(0, 1)
-      ->execute()->fetchAll();
-
-    if (!empty($result)) {
-      return array_shift($result);
-    }
-
-    return NULL;
-  }
-
-  /**
    * Get possible combinations for a configurable SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -1641,8 +1626,12 @@ class SkuManager {
         continue;
       }
 
-      // Disable OOS combinations too.
-      if (!alshaya_acm_get_stock_from_sku($sku_entity)) {
+      // Do not display OOS variants.
+      // Bypass wrapper function in this class as it creates cyclic
+      // dependency.
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $childPlugin */
+      $childPlugin = $sku->getPluginInstance();
+      if (!$childPlugin->isProductInStock($sku_entity)) {
         continue;
       }
 
@@ -1667,8 +1656,7 @@ class SkuManager {
       // even when there are children in stock.
       // @TODO: To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
-      $stock = alshaya_acm_get_stock_from_sku($sku);
-      if ($stock > 0) {
+      if ($plugin->isProductInStock($sku)) {
         // Log message here to allow debugging further.
         $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
           '@sku' => $sku->getSku(),
@@ -1898,7 +1886,7 @@ class SkuManager {
     if ($sku_id && $sku_id != $sku->id()) {
       $first_child = $this->loadSkuById($sku_id);
 
-      if ($first_child instanceof SKUInterface && alshaya_acm_get_stock_from_sku($first_child)) {
+      if ($first_child instanceof SKUInterface && $this->isProductInStock($first_child)) {
         return $first_child;
       }
     }
@@ -1926,22 +1914,6 @@ class SkuManager {
 
     // Fallback.
     return $this->getChildSkus($sku, TRUE);
-  }
-
-  /**
-   * Helper function to get current stock mode.
-   *
-   * @return string
-   *   Stock mode.
-   */
-  public function getStockMode() {
-    $static = &drupal_static(__FUNCTION__, NULL);
-
-    if ($static === NULL) {
-      $static = $this->configFactory->get('acq_sku.settings')->get('stock_mode');
-    }
-
-    return $static;
   }
 
   /**
@@ -2035,12 +2007,26 @@ class SkuManager {
 
       $swatch_item = $child->getSwatchImage();
 
+      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
+        $swatch_product_image = $child->getThumbnail();
+
+        // If we have image for the product.
+        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+          $uri = $swatch_product_image['file']->getFileUri();
+          $url = file_create_url($uri);
+          $swatch_product_image_url = file_url_transform_relative($url);
+        }
+      }
+
       if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
         continue;
       }
 
       $duplicates[$value] = 1;
-      $swatches[$child->id()] = $swatch_item['file']->url();
+      $swatches[$child->id()] = [
+        'swatch_url' => $swatch_item['file']->url(),
+        'swatch_product_url' => $swatch_product_image_url ?? '',
+      ];
     }
 
     $this->setProductCachedData($sku, 'swatches', $swatches);
@@ -2356,7 +2342,7 @@ class SkuManager {
   }
 
   /**
-   * Check if product is in stock or not.
+   * Check if product (SKU) is in stock or not.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
@@ -2365,11 +2351,50 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
+    // For configurable we check combinations are valid to keep
+    // it consistent between detail and listing.
     if ($sku->bundle() == 'configurable') {
       return $this->skuAttributeCombinationsValid($sku);
     }
 
-    return (bool) alshaya_acm_get_stock_from_sku($sku);
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku->getPluginInstance();
+    return $plugin->isProductInStock($sku);
+  }
+
+  /**
+   * Get stock quantity for a product.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return int
+   *   Stock quantity.
+   */
+  public function getStockQuantity(SKUInterface $sku): int {
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku->getPluginInstance();
+    return (int) $plugin->getStock($sku);
+  }
+
+  /**
+   * Check if product (node) is in stock or not.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product Node.
+   *
+   * @return bool
+   *   TRUE if product is in stock.
+   */
+  public function isProductNodeInStock(NodeInterface $node): bool {
+    $sku_string = $this->getSkuForNode($node);
+
+    $sku = SKU::loadFromSku($sku_string);
+    if ($sku instanceof SKUInterface) {
+      return $this->isProductInStock($sku);
+    }
+
+    return FALSE;
   }
 
   /**
@@ -2413,9 +2438,31 @@ class SkuManager {
       }
     }
 
+    $select_from_query = TRUE;
+
+    // Check if we need the select the variant only after all
+    // options are selected.
+    if ($this->showImagesFromChildrenAfterAllOptionsSelected()) {
+      // If there is only one attribute, we will have selection by default.
+      // If there are more then one attributes, we will select by default only
+      // if there is one value in that specific attribute.
+      // Here we say not to select variant from query ?selected=xxx if there
+      // is any attribute (except the first one) which has more then one value.
+      if (count($combinations['attribute_sku']) > 1) {
+        // Remove first attribute.
+        array_shift($combinations['attribute_sku']);
+        foreach ($combinations['attribute_sku'] as $values) {
+          if (count($values) > 1) {
+            $select_from_query = FALSE;
+            break;
+          }
+        }
+      }
+    }
+
     // If there is only one attribute option or config says select one
     // child if only one attribute is selected, process further.
-    if (!$this->showImagesFromChildrenAfterAllOptionsSelected() || (count($combinations['attribute_sku']) === 1)) {
+    if ($select_from_query) {
       // Select first child based on value provided in query params.
       $sku_id = (int) $this->currentRequest->query->get('selected');
 
@@ -2502,6 +2549,42 @@ class SkuManager {
       case 'magazine':
         return $context . '-' . $pdp_layout;
     }
+  }
+
+  /**
+   * Helper function to fetch pdp layout for a particular Term ID.
+   *
+   * @param int $tid
+   *   Term ID for which layout needs to be fetched.
+   *
+   * @return string
+   *   PDP layout to be used.
+   */
+  public function getPdpLayoutFromTermId($tid) {
+    $default_pdp_layout = $this->configFactory->get('alshaya_acm_product.settings')->get('pdp_layout');
+
+    $term = $this->termStorage->load($tid);
+    if ($term instanceof TermInterface && $term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+      $context = 'pdp';
+      if ($term->get('field_pdp_layout')->first()) {
+        $pdp_layout = $term->get('field_pdp_layout')->getString();
+        if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+          foreach ($this->termStorage->loadAllParents($tid) as $taxonomy_parent) {
+            $pdp_layout = $taxonomy_parent->get('field_pdp_layout')->getString() ?? NULL;
+            if ($pdp_layout != NULL && $pdp_layout != self::PDP_LAYOUT_INHERIT_KEY) {
+              return $this->getContextFromLayoutKey($context, $pdp_layout);
+            }
+          }
+        }
+        else {
+          return $this->getContextFromLayoutKey($context, $pdp_layout);
+        }
+      }
+
+      return $this->getContextFromLayoutKey($context, $default_pdp_layout);
+    }
+
+    return $default_pdp_layout;
   }
 
   /**
@@ -2758,15 +2841,12 @@ class SkuManager {
    *   Index item.
    */
   private function updateStockForIndex(SKUInterface $sku, ItemInterface $item) {
-    // For stock index, we use only in stock (2) or out of stock (0).
-    // We will use 2 for not-buyable products too.
-    // We will use 1 for all in pull mode.
+    // We will use node.sticky to map stock status in index.
+    // For stock index, we use only in stock (1) or out of stock (0).
+    // We will use 1 for not-buyable products too.
     $in_stock = 0;
 
-    if ($this->getStockMode() == 'pull') {
-      $in_stock = 1;
-    }
-    elseif (!alshaya_acm_product_is_buyable($sku)) {
+    if (!alshaya_acm_product_is_buyable($sku)) {
       $in_stock = 2;
 
       // Get price and final price for the non-buyable SKU.
@@ -2900,6 +2980,69 @@ class SkuManager {
     });
 
     return $indexFields;
+  }
+
+  /**
+   * Get description for a sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Description of the product.
+   */
+  public function getDescription(SKUInterface $sku, $context) {
+    $prod_description = [];
+    if ($body = $sku->get('attr_description')->getValue()) {
+      $prod_description['description'] = [
+        '#markup' => $body[0]['value'],
+      ];
+    }
+    $prod_description = $this->productInfoHelper->getValue($sku, 'description', $context, $prod_description);
+
+    return $prod_description;
+  }
+
+  /**
+   * Helper function to invalidate PDP page caches.
+   */
+  public function invalidatePdpCache($term = NULL) {
+    if ($term instanceof TermInterface) {
+      $nids = $this->getNodesFromTermId($term->id());
+      foreach ($this->termStorage->loadTree('acq_product_category', $term->id(), NULL, TRUE) as $taxonomy_child) {
+        $pdp_layout = $taxonomy_child->get('field_pdp_layout')->getString() ?? NULL;
+        if ($pdp_layout == self::PDP_LAYOUT_INHERIT_KEY) {
+          $nids = array_merge($nids, $this->getNodesFromTermId($taxonomy_child->id()));
+        }
+      }
+      foreach ($nids as $nid) {
+        Cache::invalidateTags([
+          'config:node.type.acq_product:' . $nid,
+          'node_type:acq_product:' . $nid,
+          'node_view',
+        ]);
+      }
+    }
+    else {
+      Cache::invalidateTags([
+        'config:node.type.acq_product',
+        'node_type:acq_product',
+        'node_view',
+      ]);
+    }
+  }
+
+  /**
+   * Helper function to get all nids associated with a term.
+   */
+  public function getNodesFromTermId($tid = '') {
+    $query = $this->connection->select('node__field_category', 'nc');
+    $query->fields('nc', ['entity_id']);
+    $query->condition('nc.field_category_target_id', $tid);
+    $query->distinct();
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
 }

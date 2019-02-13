@@ -1,20 +1,3 @@
-.horizontal-upell,
-.horizontal-related,
-.horizontal-crossell {
-  .view-product-slider {
-    .views-row {
-      .ajax-progress-throbber {
-        .throbber {
-          background-image: url(../imgs/icons/ic-loader.svg) !important;
-          background-position: $right center !important;
-          background-repeat: no-repeat !important;
-          background-size: 1.5rem;
-        }
-      }
-    }
-  }
-}
-
 .view-product-slider {
   .c-products__item__label {
     font-size: 0.875rem;

@@ -213,7 +213,7 @@ bin/behat --@tagname --profile=mcuat
 
     
 ### How to interpret the Behat reports:
-  * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
+  * When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
   * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
   * In order to share the reports, compress the html directory immediately after every run.
 

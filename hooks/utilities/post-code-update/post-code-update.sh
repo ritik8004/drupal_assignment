@@ -13,79 +13,53 @@
 # post-code-update only runs if your site is using a Git repository. It does
 # not support SVN.
 
-site="$1"
+subscription="$1"
 target_env="$2"
 
-slack=0
+# Get the environment without the "01" prefix.
+env=${target_env:2}
 
+# Try to load the Slack webhook URL stored on the server.
+slack=0
 FILE=$HOME/slack_settings
 if [ -f $FILE ]; then
-  # Load the Slack webhook URL (which is not stored in this repo).
   . $HOME/slack_settings
   slack=1
 else
   echo "$HOME/slack_settings does not exist. Slack won't be notified."
 fi
 
-cd `drush sa @$site.$target_env | grep root | cut -d"'" -f4`
+cd `drush sa @$subscription.$target_env | grep root | cut -d"'" -f4`
 
-nothingstr="no update performed"
-errorstr="error"
-
-## Checking if there any install files has been updated.
-echo "Checking git diff to identify hook_update() change."
+## Checking if any install/config file have been updated.
+echo "Checking git diff to identify hook_update() or config change."
 echo $(cat ../git-diff.txt)
 echo -e "\n"
 
-## In case install file have been updated.
+## In case install/config file have been updated, we reset the sites.
 if echo $(cat ../git-diff.txt) | grep "\.install\|docroot/.*/config"; then
+  echo "Change in install file detected, restoring databases before executing updb."
+
+  ./../scripts/utilities/reset-from-post-stage-dumps.sh $subscription $target_env
+elif echo $(cat ../git-diff.txt) | grep "\.scss\|\.js\|\.twig\|\.theme"; then
+  echo "Change in FE detected, clearing cache."
+
   if [ $slack == 1 ]; then
-    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" We are about to restore database and run updb on $target_env. Sites won't be available during some minutes. This channel will be updated once the process is done.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Clearing drupal cache to reflect FE changes on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
   fi
-
-  ## Restore database dumps before applying database updates.
-  echo "Change in install file detected, restoring database before executing updb."
-  drush acsf-tools-restore --source-folder=~/backup/$target_env/post-stage --gzip -y
-
-  ## Apply the database updates to all sites.
-  echo "Executing updb."
-  drush acsf-tools-ml updb 2> /tmp/drush_updb_$target_env.log
-  output=$(cat /tmp/drush_updb_$target_env.log | perl -pe 's/\\/\\\\/g' | sed 's/"//g' | sed "s/'//g")
-  echo $output
+  drush acsf-tools-ml cr
 else
-  ## Set the output variable which is used to update the Slack channel.
-  output=$nothingstr
+  if [ $slack == 1 ]; then
+    curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  fi
 fi
 
 echo -e "\n"
 
-## Clear varnish caches for all sites of the factory.
-domains=$(drush acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
-
-echo "$domains" | while IFS= read -r line
-do
- echo "Clearing varnish cache for $line"
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1495.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-1496.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2295.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
- curl -X BAN -H "X-Acquia-Purge:alshaya" https://bal-2296.enterprise-g1.hosting.acquia.com/* -H "Host: $line" -k -s > /dev/null
-done
-
-echo -e "\n"
+## Clear varnish caches for all domains of this environment.
+./../scripts/utilities/clear-varnish.sh $subscription $target_env
 
 if [ $slack == 1 ]; then
-  if [ -n "$output" ]; then
-    if echo $output | grep -q "$errorstr"; then
-      echo "Sending error notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Error while executing updb on $target_env. \n$output.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
-    elif echo $output | grep -q "$nothingstr"; then
-      echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" No database update needed on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
-    else
-      echo "Sending success notification to Slack channel."
-      curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \" Successfully executed database restore and update on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
-    fi
-  else
-    echo "No output variable to check."
-  fi
+  curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Varnish cache cleared on $target_env.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+  curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Post code update on $target_env finished.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
 fi

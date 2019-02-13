@@ -33,6 +33,7 @@ $very-light-blue: #d9efff;
 $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
+$grey-light-two: #f3f3f3;
 // Mothercare
 $warm-grey: #9b9b9b;
 $warm-grey-two: #dadada;
@@ -88,6 +89,7 @@ $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
+$_instagram_dots_default: #e3e3e3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -302,6 +304,10 @@ $gallery_zoombtn_disabled: $light-ash;
 $hp_slider_dots: $marine-blue-two;
 $hp_slider_arrows_dark: $mothercare-black;
 
+// Instragram slider dots.
+$instagram_dots_default: $_instagram_dots_default;
+// Active color same as $hp_slider_dots;
+
 // Sharethis
 $sharethis_icon: $marine-blue-two;
 $sharethis_icon_hover: transparent;
@@ -437,6 +443,9 @@ $primary_footer_input_label: $greyish;
 $footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
+$our_brands_footer_separator: $peacock-blue;
+$our_brand_section_title: $marine-blue;
+$our_brand_link: $grey-ash;
 
 // Social links.
 $social_links: $marine-blue-two;
@@ -537,6 +546,7 @@ $pdp_sell_title: $grey-ash;
 $pdp_white_color_attribute: $white-five;
 $pdp_white_color_attribute_hover_border: $black;
 $pdp_white_color_attribute_border: $black;
+$pdp_swatch_selected_border: $black;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
@@ -1019,6 +1029,10 @@ $social-sign-in-option-text: $black;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $mothercare-black;
+$colour-swatches-simple-effect-bg: $grey-light-two;
+$sizeguide-text: $mothercare-black;
+$magazine-pdp-label: $mothercare-black;
+$magazine-pdp-description: $grey-light;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
@@ -1031,3 +1045,9 @@ $plp-sub-menu-cls-btn-bg: $white-five;
 $plp-machino-modal-content-bg: $white-five;
 $plp-machino-modal-content: $black;
 $plp-machino-modal-content-title: $mothercare-black;
+
+// PDP Magazine layout social share popup
+$sharethis-popup-bg: $white-five;
+$sharethis-icon-bg: $mothercare-black;
+$sharethis-label-color: $mothercare-black;
+$sharethis-social-displaytext-color: rgba(0, 0, 0, 0.87);

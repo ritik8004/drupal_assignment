@@ -8,6 +8,7 @@
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\views\ViewExecutable;
+use Drupal\search_api\Query\QueryInterface;
 
 /**
  * Wrapper function, removes a field from Index and trigger re-index.
@@ -146,4 +147,17 @@ function _alshaya_search_api_refactor_sku_base_fields() {
   /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
   $fieldsManager = \Drupal::service('acq_sku.fields_manager');
   $fieldsManager->resetBaseFields();
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ *
+ * Alter query to filter in stock products.
+ */
+function alshaya_search_api_search_api_query_alter(QueryInterface &$query) {
+  if (\Drupal::config('alshaya_search_api.listing_settings')->get('filter_oos_product')) {
+    $stock_condition = $query->createConditionGroup('AND');
+    $stock_condition->addCondition('stock', 0, '>');
+    $query->getConditionGroup()->addConditionGroup($stock_condition);
+  }
 }

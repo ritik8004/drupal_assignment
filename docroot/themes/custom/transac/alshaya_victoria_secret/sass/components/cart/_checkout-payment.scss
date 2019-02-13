@@ -303,3 +303,35 @@
     margin: 1.5rem 1.5rem 0;
   }
 }
+
+#payment_details_wrapper {
+  > div:first-child {
+    border-top: none;
+
+    .payment-plugin-wrapper-div {
+      border-top: 1px solid $checkout_payment_option_border;
+    }
+
+    @include breakpoint($only-mobile) {
+      border-top: none;
+    }
+  }
+}
+
+.checkout-payment {
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: none;
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -218,6 +218,7 @@ class Configurable extends SKUPluginBase {
     }
 
     if ($tree_pointer instanceof SKU) {
+      /** @var \Drupal\acq_cart\Cart $cart */
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
       // Cart here can be empty only if APIs aren't working.
@@ -264,14 +265,22 @@ class Configurable extends SKUPluginBase {
           ]
       ));
 
-      $cart->addRawItemToCart([
-        'name' => $label,
-        'sku' => $tree['parent']->getSKU(),
-        'qty' => $quantity,
-        'options' => [
-          'configurable_item_options' => $options,
-        ],
-      ]);
+      // Check if item already in cart.
+      // @TODO: This needs to be fixed further to handle multiple parent
+      // products for a child SKU. To be done as part of CORE-7003.
+      if ($cart->hasItem($tree_pointer->getSku())) {
+        $cart->addItemToCart($tree_pointer->getSku(), $quantity);
+      }
+      else {
+        $cart->addRawItemToCart([
+          'name' => $label,
+          'sku' => $tree['parent']->getSKU(),
+          'qty' => $quantity,
+          'options' => [
+            'configurable_item_options' => $options,
+          ],
+        ]);
+      }
 
       // Add child SKU to form state to allow other modules to use it.
       $form_state->setTemporaryValue('child_sku', $tree_pointer->getSKU());
@@ -280,8 +289,7 @@ class Configurable extends SKUPluginBase {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
       catch (\Exception $e) {
-        // Clear stock cache.
-        $tree_pointer->clearStockCache();
+        $this->refreshStock($tree_pointer);
 
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
@@ -571,35 +579,6 @@ class Configurable extends SKUPluginBase {
     }
 
     return $cartName;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getProcessedStock(SKU $sku, $reset = FALSE) {
-    $stock = &drupal_static('stock_static_cache', []);
-
-    if (!$reset && isset($stock[$sku->getSku()])) {
-      return $stock[$sku->getSku()];
-    }
-
-    $quantities = [];
-
-    foreach ($sku->get('field_configured_skus') as $child_sku) {
-      try {
-        $child_sku = $child_sku->getString();
-        $child_stock = (int) $this->getStock($child_sku, $reset);
-        $quantities[$child_sku] = $child_stock;
-      }
-      catch (\Exception $e) {
-        // Child SKU might be deleted or translation not available.
-        // Log messages are already set in previous functions.
-      }
-    }
-
-    $stock[$sku->getSku()] = empty($quantities) ? 0 : max($quantities);
-
-    return $stock[$sku->getSku()];
   }
 
   /**

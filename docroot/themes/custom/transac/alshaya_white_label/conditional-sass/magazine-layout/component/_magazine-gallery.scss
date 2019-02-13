@@ -1,26 +1,32 @@
 .magazine__gallery--container {
   display: grid;
-  grid-template:
-    "a a" auto
-    "c c" auto
-    "b d" auto
-    "e e" auto /
-    1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   grid-gap: 1rem;
-  grid-auto-rows: minmax(200px, auto);
-  align-items: start;
 
-  @include breakpoint($tablet) {
-    grid-template:
-      "a b" auto
-      "c c" auto
-      "d e" auto /
-      1fr 1fr;
-    margin-#{$right}: 1rem;
+  .ie & {
+    display: block;
+
+    .pdp-image {
+      &:nth-child(2n +1) {
+        width: 48%;
+        float: $right;
+      }
+
+      &:nth-child(2n) {
+        width: 48%;
+        float: $left;
+      }
+    }
+
+    .magazine-product-description {
+      width: 100%;
+      clear: both;
+    }
   }
 
   @include breakpoint($desktop) {
-    margin-#{$right}: 2rem;
+    margin-#{$right}: 1rem;
   }
 
   figure {
@@ -32,55 +38,242 @@
   }
 
   .magazine-product-description {
-    grid-area: c;
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
     text-align: center;
     font-size: 0.75rem;
+    padding: 0;
+
+    .magazine-desc-wrapper {
+      padding: 1.25rem 2rem;
+      font-family: $arial;
+      font-size: 1.1375rem;
+      line-height: 1.71;
+      color: $magazine-pdp-description;
+
+      @include breakpoint($only-mobile) {
+        padding: 0.375rem 1.5rem;
+        font-size: 0.875rem;
+      }
+
+      div[class*="label"] {
+        font-family: $alshaya-bold;
+        font-size: 0.975rem;
+        letter-spacing: 3.1px;
+        color: $magazine-pdp-label;
+
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.75rem;
+        }
+      }
+
+      div[class*="value"] {
+        font-family: $arial;
+        font-size: 1.1375rem;
+        line-height: 1.71;
+        color: $magazine-pdp-description;
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    @include breakpoint($tablet) {
+      width: 60%;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
 
     ul {
+      padding-#{$left}: 0;
+      margin: 0;
+
       li {
         list-style: none;
+      }
+    }
+
+    .composition,
+    .care-instructions,
+    .warning,
+    .concept {
+      &-wrapper {
+        padding: 0.5rem 5%;
+      }
+
+      &-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .product-swatch {
+        margin-bottom: 1.5rem;
+
+        .list-title {
+          text-transform: uppercase;
+        }
+
+        label {
+          display: none;
+        }
       }
     }
   }
 
   .pdp-image {
-    &:nth-child(4n +1) {
-      grid-area: a;
-    }
+    .cloud-zoom-lens {
+      border: 1px solid $cloudzoom_hovertext;
+      background-color: rgba(255, 255, 255, 0.5);
+      display: none;
 
-    &:nth-child(4n+2) {
-      grid-area: b;
-    }
-
-    &:nth-child(4n+3) {
-      grid-area: d;
-    }
-
-    &:nth-child(4n) {
-      grid-column: e;
+      @include breakpoint($desktop) {
+        display: block;
+      }
     }
 
     &:nth-child(2n) {
       #cloud-zoom-big {
-        left: calc(100% + 2rem) !important;
+        #{$left}: calc(100% + 1.8125rem) !important;
       }
     }
 
     &:nth-child(2n+1) {
       #cloud-zoom-big {
-        left: calc(200% + 3rem) !important;
+        #{$left}: calc(200% + 2.8125rem) !important;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      &:nth-child(2n) {
+        grid-column: 2 / -1;
+      }
+
+      &:nth-child(2n+1) {
+        grid-column: 1 / 2;
+      }
+
+      &.last {
+        &:nth-child(2n+1) {
+          grid-column: 1 / -1;
+
+          #wrap {
+            width: 47%;
+            margin: 0 auto;
+
+            #cloud-zoom-big {
+              #{$left}: calc(150% + 3.125rem) !important;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &:nth-child(3n+1) {
+        grid-column: 1 / -1;
+      }
+
+      &:nth-child(3n+2) {
+        grid-column: 1 / 2;
+      }
+
+      &:nth-child(3n) {
+        grid-column: 2 / -1;
+      }
+
+      &.last {
+        &:nth-child(3n+2) {
+          grid-column: 1 / -1;
+
+          img {
+            width: 47%;
+            margin: 0 auto;
+          }
+        }
       }
     }
 
     #wrap {
       z-index: 1 !important;
 
+      @include breakpoint($desktop) {
+        z-index: 2 !important;
+      }
+
       #cloud-zoom-big {
         width: 19.88rem;
         top: 0 !important;
 
+        @include breakpoint($desktop) {
+          width: 21.625rem !important;
+        }
+
         .cloud-zoom-title {
           display: none;
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .pdp-modal-overlay {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
+          position: relative !important;
+
+          > a {
+            position: relative !important;
+          }
+        }
+      }
+    }
+  }
+
+  .nodetype--acq_product {
+    &.magazine-layout {
+      .magazine__gallery--container {
+        .pdp-image {
+          #wrap {
+            position: static !important;
+
+            > a {
+              position: static !important;
+            }
+
+            .mousetrap {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .dialog-product-image-gallery-container-mobile {
+        z-index: 10001;
+      }
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .magazine-layout-ajax-throbber {
+    .magazine__gallery--container {
+      .pdp-image {
+        #wrap {
+          position: inherit !important;
         }
       }
     }

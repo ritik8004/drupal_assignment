@@ -13,6 +13,26 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Updating database search index to run on cron and content update/create.
+ */
+function alshaya_product_update_8022() {
+  /** @var AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(['search_api.index.product'], 'alshaya_product', 'install', AlshayaConfigManager::MODE_MERGE);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Updating alshaya product list view.
+ */
+function alshaya_product_update_8021() {
+  alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Re-create promotion facets using label field.
  */
 function alshaya_product_update_8020() {

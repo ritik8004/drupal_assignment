@@ -225,6 +225,20 @@ class Cart implements CartInterface {
   /**
    * {@inheritdoc}
    */
+  public function hasItem(string $sku) {
+    $items = $this->items();
+
+    if (empty($items)) {
+      return FALSE;
+    }
+
+    $skus = array_column($items, 'sku');
+    return in_array($sku, $skus);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function addItemToCart($sku, $quantity, array $extension = []) {
     $items = $this->items();
 

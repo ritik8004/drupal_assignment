@@ -363,7 +363,7 @@ function alshaya_acm_checkout_acq_cybersource_before_get_token_cart_alter(CartIn
 
   // Do all validations first.
   if (!$terms_accepted) {
-    $errors['checkout_terms[terms]'] = t('Please agree to the Terms and Conditions.', [], ['context' => 'alshaya_error_message|agree_terms_and_condition']);
+    $errors['checkout_terms[terms]'] = t('Please agree to the Terms and Conditions.', [], ['context' => 'alshaya_static_text|agree_terms_and_condition']);
   }
 
   if (empty($billing['same_as_shipping']) || $billing['same_as_shipping'] != 1) {

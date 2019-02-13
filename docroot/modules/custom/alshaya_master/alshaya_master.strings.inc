@@ -1232,6 +1232,12 @@ function alshaya_master_get_all_strings() {
     "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
       'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
     ],
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
+    ],
   ];
 
   return $strings;

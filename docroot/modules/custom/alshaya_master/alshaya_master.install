@@ -12,8 +12,25 @@ use Drupal\Core\Config\FileStorage;
  *
  * Add string translation for strings in v2.
  */
-function alshaya_master_update_8021() {
+function alshaya_master_update_8023() {
   alshaya_i18n_save_translations(alshaya_master_get_strings_to_translate('v2'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update context for strings.
+ */
+function alshaya_master_update_8021() {
+  $strings = [
+    'Please select a payment option to continue.' => 'alshaya_static_text|empty_payment_option',
+    'Please agree to the Terms and Conditions.' => 'alshaya_static_text|agree_terms_and_condition',
+    'Your account has not been activated or is blocked.' => 'alshaya_static_text|account_already_exists',
+    'Customers also bought' => 'alshaya_static_text|pdp_crosssell_title',
+    'You may also like' => 'alshaya_static_text|pdp_upsell_title',
+    'Related' => 'alshaya_static_text|pdp_related_title',
+  ];
+  alshaya_i18n_update_context($strings);
 }
 
 /**

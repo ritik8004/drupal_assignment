@@ -273,22 +273,6 @@
   }
 }
 
-// Adding throbber overlay for any ajax call on payment and checkout delivery page.
-.page-standard.c-pdp,
-.page-standard.c-address-book,
-.page-standard.checkout-login,
-.page-standard.user-page.checkout-payment,
-.page-standard.user-page.c-delivery-checkout,
-.pdp-modal-overlay .page-standard,
-.free-gifts-modal-overlay .page-standard {
-  .ajax-progress-throbber {
-    .throbber {
-      background: url(../imgs/icons/ic-loader.svg) center no-repeat !important;
-      background-size: 5.5rem !important;
-    }
-  }
-}
-
 #edit-acm-payment-methods-payment-options--wrapper {
   height: auto;
 
@@ -324,7 +308,7 @@
     padding-#{$right}: 1.375rem;
   }
 
-  #payment_method_knet {
+  > div:first-child {
     border-top: none;
 
     .payment-plugin-wrapper-div {

@@ -11,6 +11,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 
 /**
  * Class ProductCategoryTree.
@@ -105,6 +106,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $termsImagesAndColors = [];
 
   /**
+   * PDP Breadcrumb service.
+   *
+   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   */
+  protected $pdpBreadcrumbBuiler;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -117,18 +125,22 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
+   *   PDP Breadcrumb service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
-                              Connection $connection) {
+                              Connection $connection,
+                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
+    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
   }
 
@@ -618,6 +630,31 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return [];
+  }
+
+  /**
+   * Get the innermost term id for a product from current route.
+   *
+   * @return int|null
+   *   Return the taxonomy term ID if found else NULL.
+   */
+  public function getProductInnermostCategoryIdFromRoute() {
+    $route_name = $this->routeMatch->getRouteName();
+    $tid = NULL;
+
+    if ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      $terms = [];
+      if ($node->bundle() == 'acq_product') {
+        $terms = $node->get('field_category')->getValue();
+      }
+
+      if (count($terms) > 0) {
+        $tid = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
+      }
+    }
+
+    return $tid;
   }
 
 }
