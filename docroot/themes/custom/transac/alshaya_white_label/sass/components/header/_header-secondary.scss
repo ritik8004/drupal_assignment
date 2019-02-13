@@ -295,7 +295,7 @@
 
 .branding__menu {
   position: relative;
-  z-index: 6;
+  z-index: 11;
   background-color: $header_bg;
 
   @include breakpoint($upto-desktop) {
@@ -333,7 +333,7 @@
   &::before {
     background: $header_mobile_menu_overlay;
     position: absolute;
-    z-index: 6;
+    z-index: 9;
     opacity: 1;
   }
 }

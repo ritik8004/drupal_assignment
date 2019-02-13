@@ -823,18 +823,6 @@ header {
 
 .mobile--close {
   background: $mm_mobile_icon;
-
-  span {
-    @include icon(close) {
-      width: 1.563rem;
-      height: 1.563rem;
-      font-size: 2.5rem;
-      position: absolute;
-      top: -0.3125rem;
-      #{$left}: -2px;
-      color: $mm_bg;
-    }
-  }
 }
 
 .toggle--sign {
