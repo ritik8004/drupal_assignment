@@ -43,10 +43,10 @@ header {
       }
 
       @include breakpoint($only-mobile) {
-        top: 3.625rem;
+        top: 3.5rem;
 
         html[lang=ar] & {
-          top: 4.125rem;
+          top: 4rem;
         }
       }
     }
@@ -150,12 +150,7 @@ header {
 
     .block-system-branding-block {
       @include breakpoint($only-mobile) {
-        width: 62%;
-        padding: 0.125rem 0.5rem 0.5rem;
-
-        html[lang=ar] & {
-          padding: 0.125rem 0.5rem 1.0625rem;
-        }
+        width: 60%;
 
         .site-brand-home {
           max-width: 14rem;
@@ -172,6 +167,10 @@ header {
       @include breakpoint($only-tablet) {
         margin-top: 0.6875rem;
         padding-#{$left}: 1.5rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin: 0.125rem 0;
       }
 
       .block-system-branding-block .site-brand-home {
@@ -231,11 +230,5 @@ body {
 .c-menu-primary .store {
   @include breakpoint($only-mobile) {
     margin-#{$right}: 1.375rem;
-  }
-}
-
-@include breakpoint($only-mobile) {
-  #block-cartminiblock {
-    padding: 0.125rem 0.5rem 0.5rem;
   }
 }

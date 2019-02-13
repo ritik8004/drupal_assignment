@@ -15,18 +15,18 @@ header {
     }
 
     @include breakpoint($only-mobile) {
-      margin: 0;
-      padding: 0;
+      margin: 0.625rem 0;
+      height: 2.25rem;
 
       html[lang=ar] & {
-        height: auto;
+        height: 2.25rem;
       }
     }
 
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
         html[lang=ar] & {
-          top: 3.625rem;
+          top: 3rem;
         }
       }
     }
@@ -42,18 +42,12 @@ header {
     .site-branding {
       @include breakpoint($upto-desktop) {
         float: $left;
-        width: 100%;
-      }
-
-      @include breakpoint($only-mobile) {
-        background-color: $primary_bg;
-        padding: 0.625rem 0.5rem 0;
       }
     }
 
     .block-views-exposed-filter-blocksearch-page {
       @include breakpoint($only-mobile) {
-        top: 3.625rem;
+        top: 3rem;
       }
     }
 
@@ -429,11 +423,9 @@ header {
       margin-#{$right}: 1.0625rem;
       position: absolute;
       #{$right}: 3.25rem;
+      top: 0.8125rem;
       font-size: 0;
-      background-color: $primary_bg;
-      padding: 0.5rem 0.5rem 0;
-      padding-#{$right}: 1.25rem;
-      top: 0.625rem;
+      padding-top: 0.3125rem;
 
       html[lang=ar] & {
         font-size: 1px;
@@ -1115,20 +1107,6 @@ html[lang='ar'] {
               border-bottom: none;
             }
           }
-        }
-      }
-    }
-  }
-}
-
-@include breakpoint($only-mobile) {
-  header {
-    .region__header {
-      .site-branding {
-        padding: 0.625rem 0.5rem 0.5625rem;
-
-        html[lang=ar] & {
-          padding-bottom: 0.5rem;
         }
       }
     }

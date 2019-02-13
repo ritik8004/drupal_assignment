@@ -111,15 +111,11 @@
         $('.account--logged_in').removeClass('active');
         $('.account').removeClass('active');
         $('html').removeClass('html--overlay');
+        $('body').removeClass('mobile--overlay');
         $('.c-my-account-nav').removeClass('block--display');
         $('.mobile--close').removeClass('block--display');
         $('.remove--toggle').removeClass('remove--toggle');
         $('.menu--one__list').find('.menu__list--active').removeClass('.menu__list--active');
-
-        // Once menu gets closed.
-        setTimeout(function () {
-          $('body').removeClass('mobile--overlay');
-        }, 500);
       });
 
       $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
