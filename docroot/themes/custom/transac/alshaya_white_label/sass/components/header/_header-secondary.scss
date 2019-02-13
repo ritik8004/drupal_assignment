@@ -307,6 +307,10 @@
   @include breakpoint($only-mobile) {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
   }
+
+  @include breakpoint($upto-desktop) {
+    transition: border-bottom-color 0.5s ease, box-shadow 0.5s ease;
+  }
 }
 
 .branding__menu {
@@ -345,6 +349,7 @@
 
   .branding__menu {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
+    transition: border-bottom-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
   }
 }
 
@@ -420,17 +425,6 @@ body {
           position: absolute;
           #{$right}: 0.625rem;
         }
-      }
-    }
-  }
-
-  .mobile--overlay {
-    .block-views-exposed-filter-blocksearch-page {
-      opacity: 0.4;
-
-      .form-item-keywords,
-      .form-actions {
-        opacity: 0.3;
       }
     }
   }

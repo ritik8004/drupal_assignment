@@ -693,10 +693,6 @@ header {
 @include breakpoint($upto-desktop) {
   .mobile--overlay {
     overflow: hidden;
-
-    .branding__menu {
-      border-bottom: 0;
-    }
   }
 
   .main--menu {
@@ -1042,18 +1038,6 @@ html[lang='ar'] {
 #block-cartminiblock {
   @include breakpoint($desktop) {
     top: -0.25rem;
-  }
-}
-
-@include breakpoint($only-tablet) {
-  .mobile--overlay {
-    .block-views-exposed-filter-blocksearch-page {
-      .form-text {
-        &::placeholder {
-          color: transparent;
-        }
-      }
-    }
   }
 }
 
