@@ -2458,12 +2458,19 @@ class SkuManager {
       // is any attribute (except the first one) which has more then one value.
       if (count($combinations['attribute_sku']) > 1) {
         foreach ($combinations['attribute_sku'] as $values) {
-          // Get the SKUs attached with first attribute.
+          // Get the SKUs attached with first option of attribute.
           $first_attribute_index = key($values);
-          // If more than one attribute and there more than one sku attached
-          // with the first attribute, it means no selection. If only one sku
-          // is attached with the first attribute, it means that is selected.
-          if (count($values) > 1 && count($values[$first_attribute_index]) > 1) {
+          // If only one sku is attached with the first option of the first
+          // attribute, it means only one sku will be available for that
+          // combination and thus that will also be selected as well.
+          if (count($values[$first_attribute_index]) == 1) {
+            break;
+          }
+
+          // If more than one options for the attribute available or more than
+          // one skus attached with the first option of first attribute, means
+          // full selection of attributes is not made.
+          if (count($values) > 1 || count($values[$first_attribute_index]) > 1) {
             $select_from_query = FALSE;
             break;
           }
