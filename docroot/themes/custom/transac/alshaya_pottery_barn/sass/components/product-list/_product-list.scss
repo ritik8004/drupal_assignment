@@ -96,6 +96,21 @@
       }
     }
 
+    @include breakpoint($only-mobile) {
+      .price-wrapper {
+        font-size: 0.6875rem;
+      }
+
+      .price-block {
+        font-size: 0;
+
+        > div {
+          // Intentionally added in px.
+          line-height: 16px;
+        }
+      }
+    }
+
     @include breakpoint($desktop) {
       width: 32%;
       margin-#{$right}: 0.75rem;
