@@ -315,16 +315,18 @@
 
 .branding__menu {
   &::before {
-    content: '';
-    background-color: transparent;
-    position: absolute;
-    left: 0;
-    right: 0;
-    z-index: -1;
-    top: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    @include breakpoint($upto-desktop) {
+      content: '';
+      background-color: transparent;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
   }
 }
 

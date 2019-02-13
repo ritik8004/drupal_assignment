@@ -53,14 +53,45 @@
   }
 }
 
+.magazine-layout {
+  #backtotop {
+    transition: z-index 0.8s ease-in-out;
+  }
+}
+
 body {
   &.social-modal-overlay {
     overflow: hidden;
 
+    .magazine-layout-node  {
+      .content__title_wrapper {
+        z-index: 1;
+      }
+    }
+
+    #backtotop {
+      z-index: -1 !important;
+      opacity: 0 !important;
+    }
+
+    .branding__menu {
+      @include breakpoint ($upto-desktop) {
+        border-bottom-color: $header_mobile_menu_overlay;
+        box-shadow: none;
+
+        &::before {
+          background-color: $header_mobile_menu_overlay;
+          position: absolute;
+          z-index: 10;
+          opacity: 1;
+        }
+      }
+    }
+
     &::before {
       background-color: rgba(0, 0, 0, 0.48);
       opacity: 1;
-      z-index: 1000;
+      z-index: 10;
       transform: translate3d(0, 0, 0);
     }
 

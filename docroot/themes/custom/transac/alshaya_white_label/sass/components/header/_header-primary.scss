@@ -1046,18 +1046,16 @@ header {
       position: fixed;
       width: 100%;
 
+      .branding__menu {
+        border-bottom-color: $header_mobile_menu_overlay;
+        box-shadow: none;
+      }
+
       &::before {
         opacity: 1;
         z-index: 10;
         transform: translate3d(0, 0, 0);
         background-color: $header_mobile_menu_overlay;
-      }
-
-      @include breakpoint($upto-desktop) {
-        .branding__menu {
-          border-bottom-color: $header_mobile_menu_overlay;
-          box-shadow: none;
-        }
       }
     }
   }

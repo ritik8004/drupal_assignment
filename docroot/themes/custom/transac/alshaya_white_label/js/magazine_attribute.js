@@ -214,14 +214,14 @@
     $('.size-tray-link', context).once().on('click', function () {
       $('.size-tray').addClass('tray-open');
       $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-      $('body').addClass('tray-overlay');
+      $('body').addClass('tray-overlay mobile--overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
       $('.size-tray > div').toggle('slide', {direction: 'down'}, 400, function () {
         $('.size-tray').removeClass('tray-open');
       });
-      $('body').removeClass('tray-overlay');
+      $('body').removeClass('tray-overlay mobile--overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
         $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
