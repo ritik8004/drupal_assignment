@@ -190,9 +190,13 @@ class SkuPriceHelper {
     $child_final_prices = array_column($prices['children'], 'final_price');
     $discounts = array_column($prices['children'], 'discount');
 
+    // We show normal price(no range) only in below conditions.
+    // 1. If no variant available.
+    // 2. If all variants have same price.
+    // 3. If no discounted variant(price and final_price are same for all).
     if (count($prices['children']) <= 1
       || count(array_unique(array_filter($child_prices))) == 1
-      || count(array_unique(array_filter($child_final_prices))) == 1) {
+      || count(array_unique(array_filter($child_final_prices))) == 0) {
 
       return $this->buildPriceBlockSimple($sku);
     }
