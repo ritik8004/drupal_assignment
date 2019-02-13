@@ -227,7 +227,7 @@ class AlshayaAcmConfigCheck {
     // If the target country code does not have related country module, that
     // means we are not using a valid country code which may be on purpose so
     // don't do anything.
-    $modules = $this->state->get('system.module.files', []);
+    $modules = system_rebuild_module_data();
     if (!isset($modules['alshaya_' . $expected_country_code])) {
       return;
     }
