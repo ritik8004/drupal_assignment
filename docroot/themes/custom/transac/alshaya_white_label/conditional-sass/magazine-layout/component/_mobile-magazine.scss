@@ -57,6 +57,14 @@
 
     .content__title_wrapper {
       border-bottom: none;
+
+      @include breakpoint($only-mobile) {
+        visibility: hidden;
+
+        &.show-sticky-wrapper {
+          visibility: visible;
+        }
+      }
     }
 
     @include breakpoint($desktop) {
