@@ -385,6 +385,12 @@
       if ($(context).hasClass('block-facet--checkbox')) {
         processSoftLiniks($(context));
       }
+
+      if ($(window).width() < 768 && $('.filter--mobile .clear-all').length > 0 && !$('#block-sizefacetblock').siblings().hasClass('shop-by-size-clear-container')) {
+        // Show clear all button below to Bras size filter after facets block gets loaded.
+        var sizeClear = $('.filter--mobile li.clear-all').clone();
+        sizeClear.once('bind-events').insertAfter('#block-sizefacetblock').addClass('shop-by-size-clear-container');
+      }
     }
   };
 })(jQuery);
