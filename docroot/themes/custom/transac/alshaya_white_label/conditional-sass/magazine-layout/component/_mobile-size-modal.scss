@@ -1,0 +1,89 @@
+@include breakpoint($only-mobile) {
+  .size-tray {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.5);
+
+    .size-tray-buttons {
+      position: absolute;
+      margin-top: -3rem;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .size-tray-close {
+        height: 2rem;
+        width: 2rem;
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        line-height: 0;
+        background: $modal_close_bg;
+        z-index: 100;
+        border-radius: 1rem;
+        margin-#{$right}: 1rem;
+        cursor: pointer;
+
+        @include icon(close) {
+          color: $modal_close_icon;
+          font-size: 2rem;
+        }
+      }
+
+      .size-guide-link {
+        margin-#{$left}: 1rem;
+        margin-#{$right}: auto;
+        float: none;
+        width: 7.3125rem;
+        display: block;
+        font-size: 0.75rem;
+        padding: 0.75rem 2.5rem;
+        padding-#{$right}: 1rem;
+        z-index: 100;
+        border-radius: 1.2rem;
+        cursor: pointer;
+        color: $sizeguide-text;
+        background: $primary-bg url('#{$base_theme_img_directory_path}/assets/sizeguide_icon.svg') 0.625rem center no-repeat;
+
+        html[lang="ar"] & {
+          width: 8.3125rem;
+          background: $primary-bg url('#{$base_theme_img_directory_path}/assets/sizeguide_icon.svg') 6.125rem center no-repeat;
+        }
+      }
+    }
+
+    .size-tray-content {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      background: $primary-bg;
+      width: 100%;
+
+      .select2Option {
+        padding: 1rem;
+      }
+
+      label {
+        display: none;
+      }
+    }
+
+    .configurable-swatch {
+      display: none;
+    }
+  }
+
+  .magazine-layout {
+    &.sizeguide-modal-overlay {
+      .ui-dialog {
+        z-index: 10000;
+      }
+    }
+  }
+}

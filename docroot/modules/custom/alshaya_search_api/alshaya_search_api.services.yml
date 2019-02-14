@@ -19,6 +19,7 @@ services:
     class: Drupal\alshaya_search_api\AlshayaSearchApiHelper
     arguments:
       - '@entity_type.manager'
+      - '@module_handler'
 
   alshaya_search_api.product_updated_event:
     class: Drupal\alshaya_search_api\EventSubscriber\ProductUpdatedEventSubscriber

@@ -15,6 +15,7 @@ use Drush\Commands\DrushCommands;
  */
 class AlshayaImageSitemapCommands extends DrushCommands {
   use StringTranslationTrait;
+
   /**
    * Alshaya image sitemap generator.
    *

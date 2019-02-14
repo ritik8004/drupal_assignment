@@ -1117,12 +1117,7 @@
     }
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
+      @include throbberLoader();
     }
 
     @include breakpoint($only-mobile) {
@@ -1157,12 +1152,7 @@
     }
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
+      @include throbberLoader();
     }
   }
 }
@@ -1175,7 +1165,7 @@
       display: block;
       position: absolute;
       top: 0;
-      #{$right}: -100%;
+      #{$right}: -99999rem;
       transition: #{$right} 1s ease;
       height: 33.75rem;
       border: 1px solid $pdp_all_stores_modal_border;
@@ -1382,12 +1372,7 @@
         }
 
         .throbber {
-          background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-          background-position: $right center !important;
-          background-repeat: no-repeat !important;
-          background-size: 1.5rem;
-          padding-left: 0.625rem;
-          padding-right: 0.625rem;
+          @include throbberLoader();
         }
       }
     }
@@ -1596,6 +1581,7 @@
         padding: 0.75rem;
         font-size: 0.875rem;
         color: $pdp_size_option_text;
+        line-height: 1;
 
         &.picked,
         &:hover {

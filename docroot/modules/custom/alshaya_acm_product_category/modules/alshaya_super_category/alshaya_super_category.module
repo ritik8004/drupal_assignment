@@ -777,3 +777,20 @@ function alshaya_super_category_gtm_product_attributes_alter($product, array &$a
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_search_api_language_switcher_alter().
+ */
+function alshaya_super_category_alshaya_search_api_language_switcher_alter(&$query_params, $langcode) {
+  if (!empty($brand = $query_params['brand'])) {
+    $params = Url::fromUserInput("/$brand")->getRouteParameters();
+    if (!empty($brand_tid = $params['taxonomy_term'])) {
+      // Get term alias to replace it for brand query.
+      $alias = \Drupal::service('path.alias_manager')
+        ->getAliasByPath('/taxonomy/term/' . $brand_tid, $langcode);
+      // Decode url string of encoded value. (arabic strings are encoded).
+      $alias = str_replace("/", '', urldecode($alias));
+      $query_params['brand'] = $alias;
+    }
+  }
+}

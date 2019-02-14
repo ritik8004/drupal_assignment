@@ -91,24 +91,25 @@ class ProductReportController extends ControllerBase {
     $filename = 'product-report-' . $acsf_site_name . '-' . $time_format . '.csv';
 
     $fp = fopen($path . '/' . $filename, 'w');
-    fwrite($fp, 'SKU, Type, Language, Product ID, Stock, Price, Final Price, Special Price' . "\n");
+    fwrite($fp, 'SKU, Type, Language, Product ID, Price, Final Price, Special Price, Stock Quantity, Stock Status' . PHP_EOL);
 
     $select = $this->database->select('acq_sku_field_data');
     $select->fields('acq_sku_field_data', [
       'sku',
-      'product_id',
-      'langcode',
       'type',
-      'stock',
+      'langcode',
+      'product_id',
       'price',
-      'special_price',
       'final_price',
+      'special_price',
     ]);
+    $select->leftJoin('acq_sku_stock', 'stock', 'stock.sku = acq_sku_field_data.sku');
+    $select->fields('stock', ['quantity', 'status']);
     $select->orderBy('sku', 'ASC');
     $result = $select->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
-      fwrite($fp, $sku['sku'] . ',' . $sku['type'] . ',' . $sku['langcode'] . ',' . $sku['product_id'] . ',' . $sku['stock'] . ',' . $sku['price'] . ',' . $sku['final_price'] . ',' . $sku['special_price'] . "\n");
+      fwrite($fp, implode(',', $sku) . PHP_EOL);
     }
 
     fclose($fp);

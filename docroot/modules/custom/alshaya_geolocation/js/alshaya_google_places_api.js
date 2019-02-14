@@ -79,6 +79,19 @@
       }
     });
 
+    $(field).on('focusout', function (e) {
+      if ($('.pac-container').find('.pac-not-found').length > 0) {
+        // Remove the no results found html, we will add again in timeout if no results.
+        $('.pac-container').find('.pac-not-found').remove();
+
+        try {
+          clearTimeout(location_autocomplete_no_result_checked);
+        }
+        catch (e) {
+        }
+      }
+    });
+
     $(field).once('autocomplete-init').on('keyup', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {

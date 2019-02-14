@@ -256,7 +256,7 @@ class CheckoutHelper {
   public function clearCacheForProductsInCart(CartInterface $cart) {
     foreach ($cart->items() ?? [] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {
-        $sku_entity->clearStockCache();
+        $sku_entity->refreshStock();
       }
     }
   }
