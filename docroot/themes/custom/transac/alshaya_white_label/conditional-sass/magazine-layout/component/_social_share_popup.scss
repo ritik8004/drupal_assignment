@@ -4,6 +4,7 @@
 
     @include breakpoint($tablet) {
       position: relative;
+      display: none;
     }
 
     @include breakpoint($only-mobile) {
@@ -46,10 +47,40 @@
     .sharethis-label {
       display: none;
     }
+
+    &.social-share-out-of-stock {
+      .share-icon {
+        @include breakpoint($tablet) {
+          top: -2.875rem;
+          #{$left}: 9rem;
+        }
+
+        &::before {
+          cursor: auto;
+          opacity: 0.2;
+        }
+      }
+    }
   }
 
   .sharethis-wrapper {
     display: none;
+  }
+
+  .basic-details-wrapper {
+    span {
+      &.out-of-stock {
+        @include breakpoint($only-tablet) {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .show-sticky-wrapper {
+    .modal-share-this {
+      display: block;
+    }
   }
 }
 
