@@ -24,6 +24,9 @@ cd `drush sa | grep root | cut -d"'" -f4`
 echo "Starting post-install operation on $site with $brand_code brand code and $country_code country code." &>> $HOME/site-install.log
 drush -l $site status &>> $HOME/site-install.log
 
+drush -l $site sqlq "select * from taxonomy_term_data limit 0, 1;" &>> /tmp/site-install.log
+drush -l $site sqlq "select * from key_value limit 0, 1;" &>> /tmp/site-install.log
+
 ## Enable brand and country modules.
 drush -l $site apdi --brand_module="alshaya_$brand_code" --country_code="$country_code" &>> $HOME/site-install.log
 
