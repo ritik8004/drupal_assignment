@@ -7,4 +7,4 @@ Feature: To verify breadcrumb functionality
     And I wait for the page to load
     Then the breadcrumb "<breadcrumb>" should be displayed
   Examples:
-    {var_breadcrumb_examples}
+    {lang_breadcrumb_examples}

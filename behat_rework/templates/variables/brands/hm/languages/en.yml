@@ -1,2 +1,15 @@
 variables:
   lang_product_url: '/en-hm/product/1'
+  lang_breadcrumb_examples:
+    1:
+      - page
+      - breadcrumb
+    2:
+      - '/ladies'
+      - 'Home > Ladies'
+    3:
+      - '/ladies/new-arrivals/clothes'
+      - 'Home > Ladies > New Arrivals > Clothes'
+    5:
+      - '/cart'
+      - 'Home > Basket'
