@@ -819,7 +819,9 @@ class MobileAppUtility {
 
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-      $return[] = $this->getLightProduct($linkedSkuEntity);
+      if ($linkedSkuEntity->hasTranslation($this->currentLanguage())) {
+        $return[] = $this->getLightProduct($linkedSkuEntity);
+      }
     }
 
     return $return;
