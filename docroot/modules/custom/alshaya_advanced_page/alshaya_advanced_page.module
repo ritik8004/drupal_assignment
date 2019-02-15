@@ -22,13 +22,18 @@ use Drupal\Core\Database\Database;
 function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$result) {
   if (!empty($result)) {
     foreach ($result as $tid => $rs) {
+      // Get all advanced department page.
+      $all_dpt_page = alshaya_advanced_page_get_pages();
       // If department page node exists for the given term, don't delete it.
-      if (!empty($dpt_nid = alshaya_advanced_page_is_department_page($tid))) {
-        unset($result[$tid]);
-        \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
-          '@tid' => $tid,
-          '@nid' => $dpt_nid,
-        ]);
+      if (!empty($dpt_nid = $all_dpt_page[$tid])) {
+        $dpt_node = Node::load($dpt_nid);
+        if ($dpt_node instanceof Node) {
+          unset($result[$tid]);
+          \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
+            '@tid' => $tid,
+            '@nid' => $dpt_nid,
+          ]);
+        }
       }
     }
   }

@@ -116,6 +116,17 @@
                 }
               }
             }
+
+            @include breakpoint($only-tablet) {
+              padding: 1rem 0.625rem;
+            }
+          }
+
+          &.delivery-option {
+            @include breakpoint($only-tablet) {
+              padding-left: 3px;
+              padding-right: 3px;
+            }
           }
         }
 
@@ -234,11 +245,11 @@
   }
 }
 
-@include breakpoint($only-mobile) {
-  .path--cart {
-    .customer-cart-form {
-      .items {
-        .discount-value {
+.path--cart {
+  .customer-cart-form {
+    .items {
+      .discount-value {
+        @include breakpoint($only-mobile) {
           margin-left: 0.5rem;
         }
       }

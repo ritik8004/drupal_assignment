@@ -156,10 +156,3 @@ function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields =
   $alshaya_bbw_transac_fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $alshaya_bbw_transac_fields);
 }
-
-/**
- * Implements hook_acq_sku_magazine_product_description_alter().
- */
-function alshaya_bbw_transac_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
-  $prod_description = _alshaya_bbw_transac_get_product_description($sku);
-}

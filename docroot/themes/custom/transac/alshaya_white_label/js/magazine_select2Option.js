@@ -29,10 +29,10 @@ jQuery.fn.select2Option = function (options) {
           liHtml.hide();
           var defaultTitle = $(this).parent().attr('data-default-title');
           if (typeof defaultTitle !== 'undefined' && defaultTitle !== false) {
-            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : <span></h4>';
+            labeltext = '<h4 class="list-title"><span>' + $(this).parent().attr('data-default-title') + ' : </span><span class="selected-text"></span></h4>';
           }
           else {
-            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : <span></h4>';
+            labeltext = '<h4 class="list-title"><span>' + $(this).text() + ' : </span><span class="selected-text"></span></h4>';
           }
         }
         else if ($(this).attr('disabled') || select.attr('disabled')) {
@@ -111,8 +111,8 @@ jQuery.fn.select2Option = function (options) {
       select.trigger('change');
     });
 
-    var showMoreHtml = $('<div class="show-more-color">View more colours</div>');
-    var showLessHtml = $('<div class="show-less-color">View less colours</div>');
+    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View all colours') + '</div>');
+    var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
 
     if ($('.show-more-color').length === 0) {
       showMoreHtml.insertAfter($('.form-item-configurables-article-castor-id .select-buttons')).hide();

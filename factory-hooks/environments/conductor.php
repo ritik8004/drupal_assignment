@@ -8,12 +8,7 @@ global $conductors;
 
 $conductors = [
   // Mothercare KW.
-  'mckw_dev' => [
-    'url' => 'https://alshaya-mckw-dev.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => 'c37e4ed2d937425db29385d08491d53a',
-    'hmac_secret' => 'dZWSbz_TyTbyaJoBmIyNcA',
-  ],
-  'mckw_test' => [
+  'mckw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'a4288d2bc3a14db08f790ce7842cb6b1',
     'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
@@ -32,7 +27,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // Mothercare SA.
-  'mcsa_test' => [
+  'mcsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '57ec2ca3b0d54828a264ab529b7fab39',
     'hmac_secret' => 'M2I1YjMwZjctYzgzNS00',
@@ -51,7 +46,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // Mothercare UAE.
-  'mcae_test' => [
+  'mcae_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '66764a4f8f9146aaab1352fb66897fad',
     'hmac_secret' => 'YWY2ZmY0MjItZmQ2OS00',
@@ -70,16 +65,11 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // H&M KW.
-  'hmkw_test' => [
+  'hmkw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
     'api_version' => 'v2',
-  ],
-  'hmkw_uat_v1' => [
-    'url' => 'https://alshaya-hm-uat.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => 'b23acd31fa2543a0986d057194175312',
-    'hmac_secret' => 'ADBateHrtvFQSrradB8CNg',
   ],
   'hmkw_uat' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -105,16 +95,11 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // H&M SA.
-  'hmsa_test' => [
+  'hmsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
     'hmac_secret' => 'NDNkNDYzOGQtZjEyZC00',
     'api_version' => 'v2',
-  ],
-  'hmsa_uat_v1' => [
-    'url' => 'https://alshaya-hmsa-uat.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => 'c0c16680158b4caa91a0756e39f98d2f',
-    'hmac_secret' => 'HmPdJJdF_UAqNlWYiWsmdw',
   ],
   'hmsa_uat' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -140,16 +125,11 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // H&M AE.
-  'hmae_test' => [
+  'hmae_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
     'hmac_secret' => 'ZDI1OTgyNDEtNzlkMS00',
     'api_version' => 'v2',
-  ],
-  'hmae_uat_v1' => [
-    'url' => 'https://alshaya-hmae-uat.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => '01d9fafe1f5f4fc6b3d53e3badc61915',
-    'hmac_secret' => 'iO1OtAiXLrxbDzLVEEJSrg',
   ],
   'hmae_uat' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
@@ -175,7 +155,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // H&M EG.
-  'hmeg_test' => [
+  'hmeg_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '34780fdeb07441048af8fb931a75f788',
     'hmac_secret' => 'YjM1OWNiNTQtYmMzYy00',
@@ -188,7 +168,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // Pottery Barn KW.
-  'pbkw_test' => [
+  'pbkw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'd6d10e56ce03474db0b7fcbdd20ca2ba',
     'hmac_secret' => 'ZWQwZjNiNTYtYTRkOC00',
@@ -207,7 +187,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // Pottery Barn SA.
-  'pbsa_test' => [
+  'pbsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '76f67886b7d34f3aad6ae85e75f93550',
     'hmac_secret' => 'NTI1ZjAwMTUtMzE5OS00',
@@ -226,7 +206,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // Pottery Barn AE.
-  'pbae_test' => [
+  'pbae_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
     'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
@@ -245,7 +225,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // BathBodyWorks KW.
-  'bbwkw_test' => [
+  'bbwkw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '0b92904888cd422f8acd2938e199916e',
     'hmac_secret' => 'YWFiMzI4M2QtMzY5ZC00',
@@ -264,7 +244,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // BathBodyWorks SA.
-  'bbwsa_test' => [
+  'bbwsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '52fd839150734f1c8afe9db8c7f688e8',
     'hmac_secret' => 'ZTFjNTIzZTUtYzI3YS00',
@@ -283,7 +263,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // BathBodyWorks AE.
-  'bbwae_test' => [
+  'bbwae_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '83a388d79f834d20bef67de19ee177d7',
     'hmac_secret' => 'M2MyOWQ3YjgtNTJiNy00',
@@ -295,11 +275,6 @@ $conductors = [
     'hmac_secret' => 'ZjM3YzY3NWMtYTU3MC00',
     'api_version' => 'v2',
   ],
-  'bbwae_prod_v1' => [
-    'url' => 'https://alshaya-bbwae-prod.eu-west-1.prod.acm.acquia.io/',
-    'hmac_id' => '0272644d5be84efb9dd246478367e947',
-    'hmac_secret' => 'a0EQYgy8zDRm6aNW7FyPrQ',
-  ],
   'bbwae_prod' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '84d4fe2e1c144f22a78f855a32acbcd9',
@@ -307,7 +282,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // VictoriaSecret KW.
-  'vskw_test' => [
+  'vskw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'd00662613f144789831ebfe3d5885e37',
     'hmac_secret' => 'ZjI0NzBhNGUtMjM2Zi00',
@@ -326,7 +301,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // VictoriaSecret SA.
-  'vssa_test' => [
+  'vssa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'b88bad1f106b439ea3a156bd2085e178',
     'hmac_secret' => 'Yjc1YTRjNTAtNDNkNi00',
@@ -345,7 +320,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // VictoriaSecret AE.
-  'vsae_test' => [
+  'vsae_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => 'c938cdcc017b44bfb7bc736a0ab8a150',
     'hmac_secret' => 'MjM5Y2Q0OTMtMjczNy00',
@@ -364,7 +339,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // FootLocker KW.
-  'flkw_test' => [
+  'flkw_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '5532a53571c74e65b5b0f01e3cf2e791',
     'hmac_secret' => 'YjQ3M2M0ODktNjg3MS00',
@@ -377,7 +352,7 @@ $conductors = [
     'api_version' => 'v2',
   ],
   // FootLocker SA.
-  'flsa_test' => [
+  'flsa_qa' => [
     'url' => 'https://api.eu-west-1.prod.acm.acquia.io/',
     'hmac_id' => '31a27139b98448379c08c90bee5e866e',
     'hmac_secret' => 'Njk0ZDgyMTgtNTc3Mi00',

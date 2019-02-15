@@ -306,8 +306,9 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
 }
 
 /**
- * Implements hook_acq_sku_magazine_product_description_alter().
+ * Implements hook_alshaya_get_currency_code().
  */
-function alshaya_hm_acq_sku_magazine_product_description_alter(SKUInterface $sku, array &$prod_description) {
-  $prod_description = _alshaya_hm_get_product_description($sku);
+function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
+  // Updated UAE currency code.
+  $currency['ae']['en'] = 'DHS';
 }

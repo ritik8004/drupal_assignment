@@ -9,6 +9,7 @@ use Drupal\file\FileInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\alshaya_acm_product\SkuManager;
 
 /**
  * Class ProductSettingsForm.
@@ -30,6 +31,13 @@ class ProductSettingsForm extends ConfigFormBase {
   protected $cache;
 
   /**
+   * Sku Manager service.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  protected $skuManager;
+
+  /**
    * ProductSettingsForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -38,11 +46,18 @@ class ProductSettingsForm extends ConfigFormBase {
    *   Entity type manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
+   *   SkuManager service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $cache) {
+  public function __construct(ConfigFactoryInterface $config_factory,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              CacheBackendInterface $cache,
+                              SkuManager $skuManager
+  ) {
     parent::__construct($config_factory);
     $this->entityTypeManager = $entity_type_manager;
     $this->cache = $cache;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -52,7 +67,8 @@ class ProductSettingsForm extends ConfigFormBase {
     return new static(
       $container->get('config.factory'),
       $container->get('entity_type.manager'),
-      $container->get('cache.default')
+      $container->get('cache.default'),
+      $container->get('alshaya_acm_product.skumanager')
     );
   }
 
@@ -98,24 +114,22 @@ class ProductSettingsForm extends ConfigFormBase {
     $product_default_image = NULL;
 
     // Product default image.
+    $config->set('product_default_image', NULL);
     if (!empty($default_image = $form_state->getValue('product_default_image'))) {
       $file = $this->storeDefaultImageInSystem($default_image);
       if ($file instanceof FileInterface) {
         $config->set('product_default_image', $file->id());
         $product_default_image = $file;
       }
-      else {
-        $config->set('product_default_image', NULL);
-      }
-    }
-    else {
-      $config->set('product_default_image', NULL);
     }
 
     // Set the cache for default product image.
     $this->cache->set('product_default_image', $product_default_image);
 
     $config->save();
+
+    // Invalidate caches so that PDP reflects the changes.
+    $this->skuManager->invalidatePdpCache();
 
     return parent::submitForm($form, $form_state);
   }

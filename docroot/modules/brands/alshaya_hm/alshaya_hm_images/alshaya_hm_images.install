@@ -8,6 +8,17 @@
 /**
  * Implements hook_update_N().
  *
+ * Update default value for swatch type attribute to "Details"
+ */
+function alshaya_hm_images_update_8008() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(['field.field.taxonomy_term.acq_product_category.field_swatch_type'], 'alshaya_hm_images');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update missing style_identifiers.
  */
 function alshaya_hm_images_update_8007() {

@@ -16,6 +16,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 
 /**
  * Class ProductSuperCategoryTree.
@@ -51,6 +52,13 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
   protected $aliasManager;
 
   /**
+   * PDP Breadcrumb service.
+   *
+   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   */
+  protected $pdpBreadcrumbBuiler;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\alshaya_acm_product_category\ProductCategoryTreeInterface $product_category_tree
@@ -71,13 +79,15 @@ class ProductSuperCategoryTree extends ProductCategoryTree {
    *   The config factory.
    * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
    *   The path alias manager.
+   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
+   *   PDP Breadcrumb service.
    */
-  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager) {
+  public function __construct(ProductCategoryTreeInterface $product_category_tree, RequestStack $request_stack, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, CacheBackendInterface $cache, RouteMatchInterface $route_match, Connection $connection, ConfigFactoryInterface $config_factory, AliasManagerInterface $alias_manager, AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->requestStack = $request_stack;
     $this->aliasManager = $alias_manager;
-    parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection);
+    parent::__construct($entity_type_manager, $language_manager, $cache, $route_match, $connection, $pdpBreadcrumbBuiler);
   }
 
   /**

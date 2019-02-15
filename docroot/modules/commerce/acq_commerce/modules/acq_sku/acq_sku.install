@@ -14,6 +14,36 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Manage stock through separate module acq_sku_stock.
+ */
+function acq_sku_update_8018() {
+  \Drupal::service('module_installer')->install(['acq_sku_stock']);
+
+  $db = \Drupal::database();
+
+  // Copy existing stock data from SKU entity to new table.
+  $query = $db->select('acq_sku_field_data', 'sku');
+  $query->fields('sku', ['sku', 'stock']);
+  $result = $query->execute()->fetchAllAssoc('sku');
+
+  // To start with we will let everything be handled by quantity only.
+  foreach ($result as $row) {
+    $db->merge('acq_sku_stock')
+        ->key(['sku' => $row->sku])
+        ->fields([
+          'quantity' => $row->stock,
+          'status' => 1,
+        ])
+        ->execute();
+  }
+
+  // Apply updates to remove stock field.
+  \Drupal::service('entity.definition_update_manager')->applyUpdates();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make field_configured_skus non-translatable.
  */
 function acq_sku_update_8017() {
@@ -172,12 +202,6 @@ function acq_sku_update_8002() {
   \Drupal::configFactory()
     ->getEditable('rest.resource.acq_productstocksync')
     ->setData($config_yaml)
-    ->save();
-
-  // Set stock mode to pull by default.
-  \Drupal::configFactory()
-    ->getEditable('acq_sku.settings')
-    ->set('stock_mode', 'pull')
     ->save();
 }
 
