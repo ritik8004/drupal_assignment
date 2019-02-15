@@ -433,7 +433,8 @@
 .price--discount span,
 .special--price .price-amount,
 .special--price .price-currency,
-.special--price .price-wrapper {
+.special--price .price-wrapper,
+.special--price {
   color: $pdp_product_special_price_text !important;
 }
 

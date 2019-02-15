@@ -402,3 +402,23 @@
 .empty-bras-filter {
   display: none;
 }
+
+@include breakpoint($only-mobile) {
+  .shop-by-size-clear-container {
+    list-style: none;
+    text-align: center;
+    border: 1px solid $bra_shop_by_size_title;
+    display: block;
+    font-family: $vs-bentonsanscomp-medium;
+    width: 11.3125rem;
+    margin: 1.25rem auto;
+    padding: 0.5rem 0;
+
+    a {
+      color: $bra_shop_by_size_title;
+      font-size: 0.8125rem;
+      letter-spacing: 1.78px;
+      text-transform: uppercase;
+    }
+  }
+}
