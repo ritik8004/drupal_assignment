@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Utility\Html;
@@ -68,6 +69,13 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
   protected $languageManager;
 
   /**
+   * Price Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+   */
+  protected $priceHelper;
+
+  /**
    * SkuGalleryFormatter constructor.
    *
    * @param string $plugin_id
@@ -94,6 +102,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
    *   Sku Manager service.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   Language Manager.
+   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $price_helper
+   *   Price Helper.
    */
   public function __construct($plugin_id,
                               $plugin_definition,
@@ -106,13 +116,15 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
                               SkuManager $skuManager,
                               SkuImagesManager $skuImagesManager,
                               ConfigFactoryInterface $config_factory,
-                              LanguageManagerInterface $language_manager) {
+                              LanguageManagerInterface $language_manager,
+                              SkuPriceHelper $price_helper) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
     $this->skuManager = $skuManager;
     $this->skuImagesManager = $skuImagesManager;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
+    $this->priceHelper = $price_helper;
   }
 
   /**
@@ -249,12 +261,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           '#color' => $color,
         ];
 
-        if (!empty($color)) {
-          $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku_for_gallery);
-        }
-        else {
-          $elements[$delta]['#price_block'] = $this->skuManager->getPriceBlock($sku);
-        }
+        $elements[$delta]['#price_block'] = $this->priceHelper->getPriceBlockForSku($sku, ['color' => $color]);
 
         $sku_identifier = strtolower(Html::cleanCssIdentifier($sku->getSku()));
         $elements[$delta]['#price_block_identifier']['#markup'] = 'price-block-' . $sku_identifier;
@@ -321,7 +328,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       $container->get('alshaya_acm_product.skumanager'),
       $container->get('alshaya_acm_product.sku_images_manager'),
       $container->get('config.factory'),
-      $container->get('language_manager')
+      $container->get('language_manager'),
+      $container->get('alshaya_acm_product.price_helper')
     );
   }
 

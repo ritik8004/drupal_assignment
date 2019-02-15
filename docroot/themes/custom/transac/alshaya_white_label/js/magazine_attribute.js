@@ -7,7 +7,8 @@
   'use strict';
 
   /**
-   * Js to convert to select2Option to transform into boxes from select list.
+   * JS to convert to select2Option to transform into boxes from select list.
+   *
    *  @param {context} context on ajax update.
    */
   Drupal.select2OptionConvert = function (context) {
@@ -134,15 +135,13 @@
   };
 
   /**
+   * Move mobile colors to bellow of PDP main image.
    *
-   * JS function to move mobile colors to bellow of PDP main image in
-   * product description section.
    * @param {context} context on ajax update.
    */
   function mobileColors(context) {
     // Moving color swatches from sidebar to main content in between the gallery after
     // first image as per design.
-
     var sku_swatch = $('.configurable-swatch', context).clone();
     $('.magazine-swatch-placeholder').html(sku_swatch);
     $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
@@ -171,8 +170,8 @@
   }
 
   /**
-   *
    * JS function to move mobile size div to size-tray.
+   *
    *  @param {context} context on ajax update.
    */
   function mobileSize(context) {
@@ -189,19 +188,34 @@
     }
 
     if ($('.content__title_wrapper').find('.size-tray-link').length < 1) {
-      $('<div class="size-tray-link">' + Drupal.t('Select Size') + '</div>').insertBefore('.edit-add-to-cart');
+      var sizeTraylinkText = Drupal.t('Select Size');
+      // If size is default selected.
+      if ($('.size-tray .select2Option .list-title .selected-text').text().length > 0) {
+        sizeTraylinkText = $('.size-tray .select2Option .list-title .selected-text').text();
+      }
+
+      // Add Size link only with product having size.
+      if ($('.form-item-configurables-size').length > 0) {
+        $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
+      }
     }
 
     $('.size-tray-link', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray').addClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
       $('body').addClass('tray-overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function () {
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
+        $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
       }
     });
 
@@ -231,13 +245,18 @@
       select.trigger('change');
 
       // Closing the tray after selection.
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function () {
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
     });
   }
 
   /**
    * Js to make title section and add-to-cart form in mobile - sticky.
+   *
    * @type {{attach: Drupal.behaviors.stickyMagazineDiv.attach}}
    */
   Drupal.behaviors.stickyMagazineDiv = {
@@ -264,6 +283,7 @@
 
   /**
    * Js to implement mobile magazine layout.
+   *
    * @type {{attach: Drupal.behaviors.mobileMagazine.attach}}
    */
   Drupal.behaviors.mobileMagazine = {
@@ -303,8 +323,10 @@
           var that = this;
           setTimeout(function () {
             if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
-              $('.size-tray').toggleClass('tray-open');
+              $('.size-tray').addClass('tray-open');
+              $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
               $('body').addClass('open-tray-without-selection');
+              $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('submit');
             }
           }, 10);
         });
@@ -315,8 +337,8 @@
           if ((settings.hasOwnProperty('extraData')) &&
             ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0)) &&
             $('body').hasClass('open-tray-without-selection')) {
-            $('.edit-add-to-cart').mousedown();
             $('body').removeClass('open-tray-without-selection');
+            $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
           }
         });
 

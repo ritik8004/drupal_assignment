@@ -19,6 +19,10 @@
         letter-spacing: 0.6px;
         color: $colour-swatches-show-list-button;
 
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
+
         @include breakpoint($only-mobile) {
           display: block;
           text-align: center;
@@ -28,6 +32,10 @@
       .selected-text {
         letter-spacing: 1.5px;
         font-weight: normal;
+
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
       }
 
       .show-less-color,
