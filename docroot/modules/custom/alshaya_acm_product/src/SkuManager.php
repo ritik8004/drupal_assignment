@@ -2989,10 +2989,6 @@ class SkuManager {
       throw new \Exception('Product not in stock, not indexing color node');
     }
 
-    $prices = $this->getMinPrices($sku, $product_color);
-    $min_final_price = $prices['final_price'];
-    $item->getField('final_price')->setValues([$min_final_price]);
-
     $data = [];
     $has_color_data = FALSE;
 
