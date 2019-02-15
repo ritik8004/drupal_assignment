@@ -1,0 +1,11 @@
+<span class="simple-price--wrapper price-wrapper price">
+  {% if currency_code_position == 'before' %}
+    <span class="price-currency suffix">{{ currency_format }}</span>
+  {% endif %}
+
+  <span class="price-amount">{{ price }}</span>
+
+  {% if currency_code_position != 'before' %}
+    <span class="price-currency suffix">{{ currency_format }}</span>
+  {% endif %}
+</span>
