@@ -284,5 +284,25 @@
         }
       }
     }
+
+    article {
+      &.product-out-of-stock {
+        .basic-details-wrapper {
+          min-height: 2.5rem;
+
+          span {
+            &.out-of-stock {
+              position: relative;
+              box-shadow: none;
+              border: none;
+              height: 2.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
   }
 }
