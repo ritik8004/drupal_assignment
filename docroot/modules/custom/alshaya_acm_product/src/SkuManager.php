@@ -372,65 +372,6 @@ class SkuManager {
   }
 
   /**
-<<<<<<< HEAD
-   * Helper function to add price, final_price and discount info in build array.
-   *
-   * @param array $build
-   *   Build array to modify.
-   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
-   *   SKU entity to use for getting price.
-   * @param string $color
-   *   Color value to limit the scope of skus to get price.
-   */
-  public function buildPrice(array &$build, SKU $sku_entity, string $color = '') {
-    // Get the price, discounted price and discount.
-    $build['price'] = $build['final_price'] = $build['discount'] = [];
-
-    if ($sku_entity->bundle() == 'configurable') {
-      $prices = $this->getMinPrices($sku_entity, $color);
-      $price = $prices['price'];
-      $final_price = $prices['final_price'];
-    }
-    else {
-      $price = (float) $sku_entity->get('price')->getString();
-      $final_price = (float) $sku_entity->get('final_price')->getString();
-    }
-
-    if ($price) {
-      $build['price'] = [
-        '#theme' => 'acq_commerce_price',
-        '#price' => $price,
-      ];
-
-      // Get the discounted price.
-      if ($final_price) {
-        // Final price could be same as price, we dont need to show discount.
-        if ($final_price >= $price) {
-          return;
-        }
-
-        $build['final_price'] = [
-          '#theme' => 'acq_commerce_price',
-          '#price' => $final_price,
-        ];
-
-        // Get discount if discounted price available.
-        $build['discount'] = [
-          '#markup' => $this->getDiscountedPriceMarkup($price, $final_price),
-        ];
-      }
-    }
-    elseif ($final_price) {
-      $build['price'] = [
-        '#theme' => 'acq_commerce_price',
-        '#price' => $final_price,
-      ];
-    }
-  }
-
-  /**
-=======
->>>>>>> 7bd4d4b122661895b01f4dfd9c1002d2cf00f1ec
    * Get Discounted Price markup.
    *
    * @param float|string $price
