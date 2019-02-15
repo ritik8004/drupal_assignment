@@ -46,3 +46,10 @@ services:
       - { name: cache.bin }
     factory: cache_factory:get
     arguments: [alshaya_api]
+
+  alshaya_acm.mdc_queue_manager:
+    class: 'Drupal\alshaya_acm\AlshayaMdcQueueManager'
+    arguments:
+      - '@http_client_factory'
+      - '@config.factory'
+      - '@logger.factory'

@@ -8,11 +8,23 @@
 
   .c-content__region {
     @include breakpoint($tablet) {
-      flex-direction: column-reverse;
-      display: flex;
+      .term-description-mobile-only {
+        &.c-page-title__description {
+          display: block;
+        }
 
-      .term-description-mobile-only.c-page-title__description {
-        display: block;
+        .c-page-title {
+          display: none;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .term-description-mobile-only {
+        .nodetype--advanced_page & {
+          max-width: 64.125rem;
+          padding: 0;
+        }
       }
     }
   }

@@ -11,7 +11,7 @@
             <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </div>
         {% else %}
-          <figure class="pdp-image pdp-image-{{ loop.index0 }}" data-image-index={{ loop.index0 }}>
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
             <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
               <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
             </a>
@@ -19,7 +19,8 @@
         {% endif %}
       {% endfor %}
       <div class="magazine-product-description">
-        {{ description }}
+        <div class="magazine-swatch-placeholder"></div>
+        <div class="magazine-desc-wrapper"> {{ description }}</div>
       </div>
     </div>
   {% endblock %}

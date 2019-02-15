@@ -152,7 +152,7 @@ class AlshayaImageSitemapGenerator {
    */
   public function getSitemapReady() {
     $output = '<?xml version="1.0" encoding="UTF-8"?>';
-    $output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
+    $output .= '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="https://www.w3.org/1999/xhtml" xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">';
     $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
     if (!is_dir($path)) {
       $this->fileSystem->mkdir($path);
@@ -210,6 +210,7 @@ class AlshayaImageSitemapGenerator {
           if (!empty($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
+              $sku_for_gallery = $sku;
               $combinations = $this->skuManager->getConfigurableCombinations($sku);
               // This code need to be in sync with PDP. The images that
               // are displayed on PDP page should be fetched here.
@@ -225,13 +226,11 @@ class AlshayaImageSitemapGenerator {
                     $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, TRUE, 'fallback');
                   }
                   catch (\Exception $e) {
-                    $sku_for_gallery = $sku;
+                    // Do nothing.
                   }
                 }
               }
-              else {
-                $sku_for_gallery = $sku;
-              }
+
               if ($sku_for_gallery instanceof SKU) {
                 $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery);
               }
@@ -245,9 +244,13 @@ class AlshayaImageSitemapGenerator {
         }
 
         if (!empty($media)) {
-          $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE])->toString() . '</loc>';
+          $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'https' => TRUE])->toString() . '</loc>';
           foreach ($languages as $language) {
-            $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $language])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
+            $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], [
+              'absolute' => TRUE,
+              'https' => TRUE,
+              'language' => $language,
+            ])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
           }
           foreach ($media as $key => $value) {
             if ($key) {

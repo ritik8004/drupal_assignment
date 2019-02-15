@@ -140,6 +140,18 @@
 
     .user__order--detail {
       tr {
+        &.sub-total-row,
+        &.delivery-charge-row,
+        &.total-row,
+        &.discount-row,
+        &.surcharge-row {
+          td:nth-child(4) {
+            @include breakpoint($only-tablet) {
+              padding: 0.625rem 0.9375rem;
+            }
+          }
+        }
+
         &.order-details-row {
           background: $order_conf_order_details_row;
 
@@ -206,8 +218,6 @@
           }
 
           td {
-            padding: 0.875rem 1.25rem !important;
-
             div {
               margin-bottom: 0;
             }
@@ -224,8 +234,6 @@
           }
 
           td {
-            padding: 0.875rem 1.25rem !important;
-
             div {
               margin-bottom: 0;
             }

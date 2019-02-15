@@ -7,6 +7,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\acq_cart\CartInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -66,7 +67,7 @@ class CartController extends ControllerBase {
    * Handler for cart/remove/{sku}.
    */
   public function cartRemoveSku($sku, $token, $js, $coupon) {
-    if (!empty($sku)) {
+    if (!empty($sku) && $this->cart instanceof CartInterface) {
       $token_value = $this->cart->id() . '/' . $sku;
       if (!$this->csrfTokenGenerator->validate($token, $token_value)) {
         throw new AccessDeniedHttpException();
