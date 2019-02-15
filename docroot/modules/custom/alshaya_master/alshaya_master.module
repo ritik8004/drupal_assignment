@@ -923,3 +923,27 @@ function _alshaya_master_initialize_brand_theme($brand_theme) {
     ->set('email_logo_path', $site_logo . '-ar.png')
     ->save();
 }
+
+/**
+ * Get strings to translate in specific or all versions.
+ *
+ * @param string $version
+ *   Version to get strings for. Empty to get strings from all versions.
+ *
+ * @return array
+ *   Strings in specific version or all versions.
+ */
+function alshaya_master_get_strings_to_translate(string $version = 'all') {
+  \Drupal::moduleHandler()->loadInclude('alshaya_master', 'inc', 'alshaya_master.strings');
+  $versioned_strings = alshaya_master_get_all_strings();
+
+  if (empty($version) || $version == 'all') {
+    $all_strings = [];
+    foreach ($versioned_strings as $strings) {
+      $all_strings = array_merge($all_strings, $strings);
+    }
+    return $all_strings;
+  }
+
+  return $versioned_strings[$version] ?? [];
+}

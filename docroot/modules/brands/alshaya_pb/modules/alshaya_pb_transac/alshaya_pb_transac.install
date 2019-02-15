@@ -5,32 +5,26 @@
  * Install, uninstall, update function for alshaya_pb_transac.
  */
 
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Site\Settings;
 
 /**
  * Implements hook_update_N().
  *
  * Remove super_category dependence in block for free design services.
+ * Add new sku attribute feature_lhn.
  */
 function alshaya_pb_transac_update_8010() {
   $configs = [
     'block.block.designservices',
   ];
   alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
-}
 
-/**
- * Implements hook_update_N().
- *
- * Add new sku attribute feature_lhn.
- */
-function alshaya_pb_transac_update_8009() {
   $strings = [
     'Features' => [
       'ar' => 'المميزات',
     ],
   ];
-
   alshaya_i18n_save_translations($strings);
 
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -51,6 +45,22 @@ function alshaya_pb_transac_update_8009() {
   // Enable super category feature.
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   $super_category_feature->enableSuperCategory();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Use from_to display mode for price.
+ */
+function alshaya_pb_transac_update_8009() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.display_settings')
+    ->set('price_display_mode', SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO)
+    ->save();
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
 }
 
 /**
