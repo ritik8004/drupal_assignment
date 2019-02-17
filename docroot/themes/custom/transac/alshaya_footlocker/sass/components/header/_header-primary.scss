@@ -11,6 +11,7 @@
 
     html[lang='ar'] & {
       width: auto;
+      margin-#{$left}: 2.5rem;
 
       img {
         width: 13rem;
@@ -31,7 +32,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        max-width: 9rem;
+        max-width: 8.5rem;
 
         html[lang=ar] & {
           margin-top: 0.4375rem;
@@ -140,13 +141,14 @@ header.c-header {
   .block-cart-mini-block {
     .cart-link {
       background: url(#{$fl_theme_img_directory_path}/icons/shopping-bag.svg);
-      height: 1.75rem;
-      width: 1.75rem;
       margin-bottom: -0.625rem;
 
       @include breakpoint($only-mobile) {
+        height: 2rem;
+        width: 2rem;
+
         html[lang=ar] & {
-          margin-top: 0.25rem;
+          margin-top: 0;
         }
       }
     }
