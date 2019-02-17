@@ -2185,7 +2185,14 @@ class SkuManager {
    *   TRUE if value matches not required value.
    */
   public function isAttributeOptionNotRequired($value) {
-    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
+    $one_size_attribute_option = $this->configFactory
+      ->get('alshaya_acm_product.settings')
+      ->get('one_size_attribute_option');
+    $one_size_attribute_option_ar = $this->configFactory
+      ->get('alshaya_acm_product.settings')
+      ->get('one_size_attribute_option_ar');
+
+    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION || $value === $one_size_attribute_option || $value === $one_size_attribute_option_ar;
   }
 
   /**

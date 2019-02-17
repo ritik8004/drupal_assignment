@@ -1,0 +1,5 @@
+processor_configs:
+  exclude_specified_items:
+    processor_id: exclude_specified_items
+    settings:
+      exclude: 'One Size','مقاس موحد'
