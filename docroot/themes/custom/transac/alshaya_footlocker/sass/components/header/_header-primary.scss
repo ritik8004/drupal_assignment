@@ -242,7 +242,6 @@ header.c-header {
 .c-pre-content__region {
   @include breakpoint($desktop) {
     border-top: 0;
-    border-bottom: 0;
     height: auto;
   }
 }
