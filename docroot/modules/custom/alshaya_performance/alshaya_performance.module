@@ -60,18 +60,9 @@ function alshaya_performance_reset_log_mode() {
  * @see drupal_flush_all_caches()
  */
 function alshaya_performance_flush_frontend_caches() {
-  // Frontend data can remain in these bins, so we need to empty them as well.
-  $bins_to_clear = [
-    'render',
-    'dynamic_page_cache',
-    'page',
-  ];
-
-  foreach (Cache::getBins() as $key => $cache_backend) {
-    if (in_array($key, $bins_to_clear)) {
-      $cache_backend->deleteAll();
-    }
-  }
+  // Frontend data can remain in the rendered bins, so we need to empty them
+  // as well.
+  Cache::invalidateTags(['rendered']);
 
   // Flush asset file caches.
   \Drupal::service('asset.css.collection_optimizer')->deleteAll();
