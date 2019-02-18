@@ -1,0 +1,9 @@
+.price-block {
+  > div {
+    span:nth-child(2) {
+      .price-currency {
+        display: none;
+      }
+    }
+  }
+}
