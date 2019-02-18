@@ -190,8 +190,8 @@ class ProductOptionsHelper {
 
       // Check if we have value for multi size and it is changed, we trigger
       // save only if value changed.
-      if (isset($attribute['size_chart'])) {
-        $this->updateAttributeOptionSize($term, $attribute);
+      if (isset($attribute['extension_attributes']['size_chart'])) {
+        $this->updateAttributeOptionSize($term, $attribute['extension_attributes']);
       }
     }
 
