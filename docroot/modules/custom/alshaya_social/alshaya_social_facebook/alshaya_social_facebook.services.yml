@@ -8,8 +8,3 @@ services:
       - '@social_auth_facebook.manager'
       - '@alshaya_acm_customer.helper'
       - '@logger.factory'
-
-  alshaya_social_facebook.route_subscriber:
-    class: Drupal\alshaya_social_facebook\Routing\AlshayaSocialFacebookRouteSubscriber
-    tags:
-      - { name: event_subscriber }
