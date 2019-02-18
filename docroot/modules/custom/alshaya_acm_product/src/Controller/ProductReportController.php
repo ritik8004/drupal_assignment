@@ -103,9 +103,8 @@ class ProductReportController extends ControllerBase {
       'final_price',
       'special_price',
     ]);
-    $select->leftJoin('acq_sku_stock', 'stock', 'stock.sku = acq_sku_field_data.sku');
+    $select->join('acq_sku_stock', 'stock', 'stock.sku = acq_sku_field_data.sku');
     $select->fields('stock', ['quantity', 'status']);
-    $select->orderBy('sku', 'ASC');
     $result = $select->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
