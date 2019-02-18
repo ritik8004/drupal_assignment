@@ -67,7 +67,7 @@ class AlshayaFacebookAuthController extends OAuth2ControllerBase {
   public function callback() {
 
     // Gets destination parameter previously stored in session.
-    $checkout = $this->dataHandler->get('login_destination') == self::CHECKOUT_DELIVERY;
+    $checkout = strpos($this->dataHandler->get('login_destination'), self::CHECKOUT_DELIVERY) !== FALSE;
     $redirect = $checkout ? 'acq_checkout.form' : 'user.login';
     $step = $checkout ? ['step' => 'login'] : [];
 
