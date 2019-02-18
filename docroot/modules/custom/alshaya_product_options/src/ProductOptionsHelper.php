@@ -338,8 +338,8 @@ class ProductOptionsHelper {
     $query->join(
       'taxonomy_term__field_attribute_size_chart_label',
       'size_chart_label',
-      'attribute_code.entity_id = size_chart_label.entity_id',
-      ['@langcode' => $this->la]
+      'attribute_code.entity_id = size_chart_label.entity_id AND size_chart_label.langcode = :langcode',
+      [':langcode' => $langcode]
     );
     $query->addField('size_group', 'field_attribute_size_group_value', 'size_group');
     $query->addField('attribute_code', 'field_sku_attribute_code_value', 'attribute_code');
@@ -351,6 +351,29 @@ class ProductOptionsHelper {
 
     foreach ($result as $row) {
       $groups[$row['size_group']][$row['attribute_code']] = $row['size_chart_label'];
+    }
+
+    // As discussed in ticket, we are hard coding this for now.
+    // We can change it to config or ask sequence from Magento later
+    // when required.
+    $sorts = [
+      'eu' => 1,
+      'us' => 2,
+      'uk' => 3,
+    ];
+
+    foreach ($groups as &$attributes) {
+      uksort($attributes, function ($a, $b) use ($sorts) {
+        $a_suffix = substr($a, -2);
+        $b_suffix = substr($b, -2);
+
+        // Avoid notices and warnings if we get different attributes.
+        if (!isset($sorts[$a_suffix]) || !isset($sorts[$b_suffix])) {
+          return 0;
+        }
+
+        return $sorts[$a_suffix] > $sorts[$b_suffix] ? 1 : -1;
+      });
     }
 
     $this->cache->set($cid, $groups);
