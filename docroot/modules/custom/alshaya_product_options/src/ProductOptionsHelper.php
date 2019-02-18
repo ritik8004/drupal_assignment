@@ -6,6 +6,8 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
 
@@ -15,6 +17,8 @@ use Drupal\taxonomy\TermInterface;
  * @package Drupal\alshaya_product_options
  */
 class ProductOptionsHelper {
+
+  const CID_SIZE_GROUP = 'alshaya_size_group';
 
   /**
    * SKU Fields Manager.
@@ -52,6 +56,20 @@ class ProductOptionsHelper {
   protected $swatches;
 
   /**
+   * Database Connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
+   * Cache Backend service for product_options.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -73,6 +91,10 @@ class ProductOptionsHelper {
    *   Alshaya API Wrapper service object.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches
    *   Swatches Helper service object.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database Connection.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for product_options.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
    */
@@ -81,12 +103,16 @@ class ProductOptionsHelper {
                               ProductOptionsManager $product_options_manager,
                               AlshayaApiWrapper $api_wrapper,
                               SwatchesHelper $swatches,
+                              Connection $connection,
+                              CacheBackendInterface $cache,
                               LoggerChannelInterface $logger) {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
     $this->productOptionsManager = $product_options_manager;
     $this->apiWrapper = $api_wrapper;
     $this->swatches = $swatches;
+    $this->connection = $connection;
+    $this->cache = $cache;
     $this->logger = $logger;
   }
 
@@ -212,12 +238,103 @@ class ProductOptionsHelper {
    *   Attributes info array received from API.
    */
   public function updateAttributeOptionSize(TermInterface $term, array $attributes_info) {
-    // Reset current values.
-    $term->get('field_attribute_size_chart')->setValue($attributes_info['size_chart']);
-    $term->get('field_attribute_size_chart_label')->setValue($attributes_info['size_chart_label']);
-    $term->get('field_attribute_size_group')->setValue($attributes_info['size_group']);
+    $size_chart = $term->get('field_attribute_size_chart')->getString();
+    $size_chart_label = $term->get('field_attribute_size_chart_label')->getString();
+    $size_group = $term->get('field_attribute_size_group')->getString();
 
-    $term->save();
+    // @TODO: Confirm with Magento team.
+    if (empty($attributes_info['size_chart'])) {
+      $attributes_info['size_chart_label'] = '';
+      $attributes_info['size_group'] = '';
+    }
+
+    if ($size_chart != $attributes_info['size_chart']
+      || $size_chart_label != $attributes_info['size_chart_label']
+      || $size_group != $attributes_info['size_group']) {
+
+      $term->get('field_attribute_size_chart')->setValue($attributes_info['size_chart']);
+      $term->get('field_attribute_size_chart_label')->setValue($attributes_info['size_chart_label']);
+      $term->get('field_attribute_size_group')->setValue($attributes_info['size_group']);
+      $term->save();
+
+      // Delete the cache for size groups mapping, we will re-create it when
+      // accessed again.
+      $this->cache->delete(self::CID_SIZE_GROUP);
+    }
+  }
+
+  /**
+   * Get alternative attribute codes.
+   *
+   * @param string $attribute_code
+   *   Attribute code to get alternatives for.
+   *
+   * @return array
+   *   Alternative attributes in particular group for an attribute.
+   */
+  public function getSizeGroupAlternateAttributes(string $attribute_code) {
+    $group = $this->getSizeGroup($attribute_code);
+
+    if ($group) {
+      unset($group[$attribute_code]);
+      return array_values($group);
+    }
+
+    return [];
+  }
+
+  /**
+   * Get all attributes in particular group.
+   *
+   * @param string $attribute_code
+   *   Attribute code to get group to get all attributes in it.
+   *
+   * @return array
+   *   Attributes for particular group.
+   */
+  public function getSizeGroup(string $attribute_code) {
+    $groups = $this->getSizeGroups();
+
+    foreach ($groups ?? [] as $attributes) {
+      if (isset($attributes[$attribute_code])) {
+        unset($attributes[$attribute_code]);
+        return $attributes;
+      }
+    }
+
+    return [];
+  }
+
+  /**
+   * Wrapper function to get size groups.
+   *
+   * @return array
+   *   Multi-dimensional array with Group names as key and Attribute codes.
+   */
+  private function getSizeGroups() {
+    $cache = $this->cache->get(self::CID_SIZE_GROUP);
+    if (isset($cache->data)) {
+      return $cache->data;
+    }
+
+    $groups = [];
+
+    $query = $this->connection->select('taxonomy_term__field_sku_attribute_code', 'attribute_code');
+    $query->join('taxonomy_term__field_attribute_size_group', 'size_group', 'attribute_code.entity_id = size_group.entity_id');
+    $query->addField('size_group', 'field_attribute_size_group_value', 'size_group');
+    $query->addField('attribute_code', 'field_sku_attribute_code_value', 'attribute_code');
+    $query->groupBy('size_group');
+    $query->groupBy('attribute_code');
+    $query->having('attribute_code IS NOT NULL');
+    $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+    foreach ($result as $row) {
+      $groups[$row['size_group']][$row['attribute_code']] = $row['attribute_code'];
+    }
+
+    $this->cache->set(self::CID_SIZE_GROUP, $groups);
+
+    return $groups;
   }
 
 }

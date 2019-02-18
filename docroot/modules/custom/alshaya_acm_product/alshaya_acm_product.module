@@ -1065,6 +1065,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
+  /** @var \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper */
+  $productOptionsHelper = \Drupal::service('alshaya_product_options.helper');
+
   // Load SKU entity.
   $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
 
@@ -1132,8 +1135,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     ),
   ];
 
+  $swatches = $sku_manager->getPdpSwatchAttributes();
+
   $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-  $swatches = $display_settings->get('swatches')['pdp'];
   $form['#attached']['drupalSettings']['show_configurable_boxes_after'] = $display_settings->get('show_configurable_boxes_after');
 
   if (isset($form['ajax'], $form['ajax']['configurables'])) {
@@ -1256,6 +1260,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
           $configurable['#required_error'] = $overridden_error;
         }
 
+        // Process and remove not required options first.
+        $sku_manager->processAttribute($configurable);
+
         if (in_array($key, $swatches) && !$swatch_processed) {
           $swatch_processed = TRUE;
           $configurable['#attributes']['class'][] = 'form-item-configurable-swatch';
@@ -1281,12 +1288,33 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
 
           }
         }
+        elseif ($alternates = $productOptionsHelper->getSizeGroup($key)) {
+          $configurable['#attributes']['class'][] = 'form-item-configurable-select-group';
+          $combinations = $sku_manager->getConfigurableCombinations($sku_entity);
+          foreach ($configurable['#options'] as $value => $label) {
+            $group_data = [];
+            foreach ($combinations['attribute_sku'][$key][$value] ?? [] as $child_sku_code) {
+              $child_sku = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
+
+              if (!($child_sku instanceof SKU)) {
+                continue;
+              }
+
+              // Get all alternate labels from child sku.
+              foreach ($alternates as $alternate) {
+                $attribute_code = 'attr_' . $alternate;
+                $group_data[$alternate] = $child_sku->get($attribute_code)->getString();
+              }
+            }
+
+            $configurable['#options_attributes'][$value]['group-data'] = json_encode($group_data);
+          }
+        }
         else {
           $configurable['#attributes']['class'][] = 'form-item-configurable-select';
         }
       }
 
-      $sku_manager->processAttribute($configurable);
     }
 
     // Process stock now.
