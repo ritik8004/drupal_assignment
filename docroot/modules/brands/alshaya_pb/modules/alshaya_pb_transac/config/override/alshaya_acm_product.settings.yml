@@ -3,3 +3,4 @@ cross_up_sell_items_settings:
   basket_carousel_items_size: 5
 pdp_slider_items_settings:
   pdp_slider_items_number_cs_us: 4
+excluded_attribute_options: 'Not Required'
