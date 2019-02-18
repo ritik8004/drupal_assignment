@@ -314,6 +314,12 @@
             },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
+            },
+            "drupal/social_auth": {
+                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033749-3.patch"
+            },
+            "drupal/social_auth_facebook": {
+                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033751-2.patch"
             }
         },
         "installer-paths": {
