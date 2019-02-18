@@ -21,8 +21,8 @@ class AlshayaSocialFacebookRouteSubscriber extends RouteSubscriberBase {
     // checkout delivery page/ Checkout login page (on error) when user
     // return back from facebook.
     $collection
-      ->get('social_auth_facebook.return_from_fb')
-      ->setDefault('_controller', '\Drupal\alshaya_social_facebook\Controller\AlshayaFacebookAuthController::returnFromFb');
+      ->get('social_auth_facebook.callback')
+      ->setDefault('_controller', '\Drupal\alshaya_social_facebook\Controller\AlshayaFacebookAuthController::callback');
   }
 
 }

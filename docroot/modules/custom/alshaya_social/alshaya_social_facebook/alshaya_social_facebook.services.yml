@@ -13,18 +13,3 @@ services:
     class: Drupal\alshaya_social_facebook\Routing\AlshayaSocialFacebookRouteSubscriber
     tags:
       - { name: event_subscriber }
-
-  alshaya_social_facebook.social_auth_facebook_manager:
-    class: Drupal\alshaya_social_facebook\AlshayaSocialFacebookAuthManager
-    decorates: 'social_auth_facebook.manager'
-    decoration_priority: 9
-    public: false
-    arguments:
-      - '@alshaya_social_facebook.social_auth_facebook_manager.inner'
-      - '@request_stack'
-      - '@language_manager'
-      - '@logger.factory'
-      - '@event_dispatcher'
-      - '@entity_field.manager'
-      - '@url_generator.non_bubbling'
-      - '@social_auth_facebook.persistent_data_handler'
