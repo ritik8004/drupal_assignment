@@ -27,61 +27,63 @@
 
       // Loop through all alternates to add anchor and dropdown for each.
       for (var i in alternates) {
-        // Select needs to have some classes for styling and boxes JS.
-        var select = $('<select class="form-item-configurable-select form-select" />');
+        if (alternates.hasOwnProperty(i)) {
+          // Select needs to have some classes for styling and boxes JS.
+          var select = $('<select class="form-item-configurable-select form-select" />');
 
-        // Copy some other attributes.
-        select.attr('data-selected-title', $(this).attr('data-selected-title'));
-        select.attr('data-default-title', $(this).attr('data-default-title'));
+          // Copy some other attributes.
+          select.attr('data-selected-title', $(this).attr('data-selected-title'));
+          select.attr('data-default-title', $(this).attr('data-default-title'));
 
-        // Add each option but with different display label based on alternate.
-        $(this).find('option').each(function () {
-          var option = $(this).clone();
+          // Add each option with different display label based on alternate.
+          $(this).find('option').each(function () {
+            var option = $(this).clone();
 
-          var group_data = $(this).attr('group-data');
-          if ((typeof group_data == 'undefined')) {
-            option.html($(this).html());
-          }
-          else {
-            var option_alternates = JSON.parse(group_data);
-            option.html(option_alternates[i]['value'])
-          }
+            var group_data = $(this).attr('group-data');
+            if ((typeof group_data == 'undefined')) {
+              option.html($(this).html());
+            }
+            else {
+              var option_alternates = JSON.parse(group_data);
+              option.html(option_alternates[i]['value'])
+            }
 
-          select.append(option);
-        });
+            select.append(option);
+          });
 
-        // Bind to events and trigger same for original dropdown.
-        select.on('change', function () {
-          that.val($(this).val());
-          that.trigger('change');
-        });
+          // Bind to events and trigger same for original dropdown.
+          select.on('change', function () {
+            that.val($(this).val());
+            that.trigger('change');
+          });
 
-        // Using group class to link anchor to its group.
-        var group_class = 'group-' + alternates[i].label.toLowerCase();
+          // Using group class to link anchor to its group.
+          var group_class = 'group-' + alternates[i].label.toLowerCase();
 
-        // Adding each group inside its own wrapper to let boxes JS work as is.
-        var group = $('<div class="group ' + group_class + '" />');
-        group.append(select);
-        group_wrapper.append(group);
+          // Adding each group inside its own wrapper to let box JS work as is.
+          var group = $('<div class="group ' + group_class + '" />');
+          group.append(select);
+          group_wrapper.append(group);
 
-        // Adding anchor for each group.
-        var anchor = $('<a href="#" />');
-        anchor.html(alternates[i].label);
-        anchor.on('click', function (event) {
-          event.preventDefault();
+          // Adding anchor for each group.
+          var anchor = $('<a href="#" />');
+          anchor.html(alternates[i].label);
+          anchor.on('click', function (event) {
+            event.preventDefault();
 
-          // Remove active class from both anchor and group.
-          $(this).closest('.form-type-select').find('.active').removeClass('active');
+            // Remove active class from both anchor and group.
+            $(this).closest('.form-type-select').find('.active').removeClass('active');
 
-          // Add active class to anchor.
-          $(this).addClass('active');
+            // Add active class to anchor.
+            $(this).addClass('active');
 
-          // Add active class to linked group.
-          var group_class = 'group-' + $(this).html().toLowerCase();
-          $(this).closest('.form-type-select').find('.' + group_class).addClass('active');
-        });
+            // Add active class to linked group.
+            var group_class = 'group-' + $(this).html().toLowerCase();
+            $(this).closest('.form-type-select').find('.' + group_class).addClass('active');
+          });
 
-        group_anchor_wrapper.append(anchor);
+          group_anchor_wrapper.append(anchor);
+        }
       }
 
       if (group_wrapper.find('.group.active').length == 0) {
