@@ -224,7 +224,8 @@
     }
   }
 
-  .form-item-configurables-size, .form-type-configurable-select-group {
+  .form-item-configurables-size,
+  .form-type-configurable-select-group {
     label {
       @include u-visibility(none);
     }
