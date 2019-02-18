@@ -8,6 +8,7 @@ use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
 
@@ -56,6 +57,13 @@ class ProductOptionsHelper {
   protected $swatches;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
    * Database Connection.
    *
    * @var \Drupal\Core\Database\Connection
@@ -91,6 +99,8 @@ class ProductOptionsHelper {
    *   Alshaya API Wrapper service object.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches
    *   Swatches Helper service object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -103,6 +113,7 @@ class ProductOptionsHelper {
                               ProductOptionsManager $product_options_manager,
                               AlshayaApiWrapper $api_wrapper,
                               SwatchesHelper $swatches,
+                              LanguageManagerInterface $language_manager,
                               Connection $connection,
                               CacheBackendInterface $cache,
                               LoggerChannelInterface $logger) {
@@ -111,6 +122,7 @@ class ProductOptionsHelper {
     $this->productOptionsManager = $product_options_manager;
     $this->apiWrapper = $api_wrapper;
     $this->swatches = $swatches;
+    $this->languageManager = $language_manager;
     $this->connection = $connection;
     $this->cache = $cache;
     $this->logger = $logger;
@@ -259,7 +271,9 @@ class ProductOptionsHelper {
 
       // Delete the cache for size groups mapping, we will re-create it when
       // accessed again.
-      $this->cache->delete(self::CID_SIZE_GROUP);
+      foreach ($this->languageManager->getLanguages() as $language) {
+        $this->cache->delete(self::CID_SIZE_GROUP . ':' . $language);
+      }
     }
   }
 
@@ -276,7 +290,6 @@ class ProductOptionsHelper {
     $group = $this->getSizeGroup($attribute_code);
 
     if ($group) {
-      unset($group[$attribute_code]);
       return array_values($group);
     }
 
@@ -297,7 +310,6 @@ class ProductOptionsHelper {
 
     foreach ($groups ?? [] as $attributes) {
       if (isset($attributes[$attribute_code])) {
-        unset($attributes[$attribute_code]);
         return $attributes;
       }
     }
@@ -312,7 +324,9 @@ class ProductOptionsHelper {
    *   Multi-dimensional array with Group names as key and Attribute codes.
    */
   private function getSizeGroups() {
-    $cache = $this->cache->get(self::CID_SIZE_GROUP);
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $cid = self::CID_SIZE_GROUP . ':' . $langcode;
+    $cache = $this->cache->get($cid);
     if (isset($cache->data)) {
       return $cache->data;
     }
@@ -321,18 +335,25 @@ class ProductOptionsHelper {
 
     $query = $this->connection->select('taxonomy_term__field_sku_attribute_code', 'attribute_code');
     $query->join('taxonomy_term__field_attribute_size_group', 'size_group', 'attribute_code.entity_id = size_group.entity_id');
+    $query->join(
+      'taxonomy_term__field_attribute_size_chart_label',
+      'size_chart_label',
+      'attribute_code.entity_id = size_chart_label.entity_id',
+      ['@langcode' => $this->la]
+    );
     $query->addField('size_group', 'field_attribute_size_group_value', 'size_group');
     $query->addField('attribute_code', 'field_sku_attribute_code_value', 'attribute_code');
+    $query->addField('size_chart_label', 'field_attribute_size_chart_label_value', 'size_chart_label');
     $query->groupBy('size_group');
     $query->groupBy('attribute_code');
     $query->having('attribute_code IS NOT NULL');
     $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
     foreach ($result as $row) {
-      $groups[$row['size_group']][$row['attribute_code']] = $row['attribute_code'];
+      $groups[$row['size_group']][$row['attribute_code']] = $row['size_chart_label'];
     }
 
-    $this->cache->set(self::CID_SIZE_GROUP, $groups);
+    $this->cache->set($cid, $groups);
 
     return $groups;
   }

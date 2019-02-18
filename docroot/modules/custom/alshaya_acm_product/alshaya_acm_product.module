@@ -1301,9 +1301,12 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
               }
 
               // Get all alternate labels from child sku.
-              foreach ($alternates as $alternate) {
+              foreach ($alternates as $alternate => $alternate_label) {
                 $attribute_code = 'attr_' . $alternate;
-                $group_data[$alternate] = $child_sku->get($attribute_code)->getString();
+                $group_data[$alternate] = [
+                  'label' => $alternate_label,
+                  'value' => $child_sku->get($attribute_code)->getString(),
+                ];
               }
             }
 

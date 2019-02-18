@@ -7,6 +7,7 @@ services:
       - '@acq_sku.product_options_manager'
       - '@alshaya_api.api'
       - '@alshaya_product_options.swatches'
+      - '@language_manager'
       - '@database'
       - '@cache.product_options'
       - '@logger.channel.alshaya_product_options'

@@ -224,7 +224,7 @@
     }
   }
 
-  .form-item-configurables-size {
+  .form-item-configurables-size, .form-type-configurable-select-group {
     label {
       @include u-visibility(none);
     }
@@ -300,6 +300,18 @@
 
         min-width: 8.75rem;
         width: 100%;
+      }
+    }
+  }
+
+  .form-type-configurable-select-group {
+    .group-wrapper {
+      .group {
+        display: none;
+
+        &.active {
+          display: block;
+        }
       }
     }
   }
