@@ -502,10 +502,12 @@ class AlshayaAcmCommands extends DrushCommands {
   }
 
   /**
-   * Product sync if confirmed based on queue status.
+   * Sync products with confirmation on queue status.
    *
    * @param string $langcode
    *   Sync products available in this langcode.
+   * @param string $page_size
+   *   Page size to request from MDC for list of products.
    * @param array $options
    *   List of options supported by the drush command.
    *
@@ -515,34 +517,36 @@ class AlshayaAcmCommands extends DrushCommands {
    *
    * @option skus SKUs to import (like query).
    * @option category_id Magento category id to sync the products for.
+   * @option csv_path Path to csv file with list of SKUs to import.
+   * @option batch_size Size of batch in which the items should be processed.
    *
    * @validate-module-enabled acq_sku
    *
    * @aliases aasp,alshaya-sync-commerce-products
    *
-   * @usage drush aasp en --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\''
+   * @usage drush aasp en 10 --category_id=10
+   *   Import skus in category id 10 and store linked to en and page size 10.
+   * @usage drush aasp en 10 --skus=\'M-H3495 130 2  FW\',\'M-H3496 130 004FW\',\'M-H3496 130 005FW\'
    *   Import skus mentioned with --skus switch.
-   * @usage drush aasp en --csv_path=/tmp/skus.csv
-   *   Import skus provided in  the csv file for import.
-   * @usage drush aasp en --category_id=1234 --page_size=50
-   *   Import skus in category id 1234 & store linked to en & page size 50.
+   * @usage drush aasp en 10 --csv_path=/tmp/skus.csv
+   *   Import skus provided in the csv file for import.
    */
   public function syncProducts($langcode,
+                               $page_size,
                                array $options = [
                                  'skus' => NULL,
                                  'category_id' => NULL,
                                  'csv_path' => NULL,
-                                 'batch_size' => 500,
-                                 'page_size' => NULL,
+                                 'batch_size' => 100,
                                ]) {
-    // SKUs must be supplied either via skus option or csv_path.
-    if (empty($options['csv_path']) && empty($options['skus'])) {
-      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus option or --csv_path.');
+    // SKUs must be supplied either via skus option or csv_path or category_id.
+    if (empty($options['csv_path']) && empty($options['skus']) && empty($options['category_id'])) {
+      $this->output->writeln('No SKUs supplied for sync. Please add list of SKUs to sync either via --skus or --csv_path or category_id option.');
       return;
     }
 
     $acm_queue_count = $this->apiWrapper->getQueueStatus();
-    $mdc_queue_stats = json_decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
+    $mdc_queue_stats = JSON::decode($this->mdcQueueManager->getMdcQueueStats('connectorProductPushQueue'));
     $mdc_queue_count = $mdc_queue_stats->messages;
 
     if (($acm_queue_count > 0) || ($mdc_queue_count > 0)) {
@@ -588,9 +592,8 @@ class AlshayaAcmCommands extends DrushCommands {
 
     // Use page size configured for conductor as default in case no override is
     // supplied via options.
-    $page_size = !empty($options['page_size']) ? $options['page_size'] : $this->configFactory->get('acq_commerce.conductor')
+    $page_size = $page_size ?? $this->configFactory->get('acq_commerce.conductor')
       ->get('product_page_size');
-    unset($options['page_size']);
 
     if (!empty($csv_skus)) {
       // Override skus option with the list retrieved from csv file. The command
@@ -607,7 +610,7 @@ class AlshayaAcmCommands extends DrushCommands {
         }
       }
     }
-    elseif (!empty($command_options['skus'])) {
+    elseif (!empty($command_options['skus']) || !empty($command_options['category_id'])) {
       drush_invoke_process('@self', 'acsp', [
         'langcode' => $langcode,
         'page_size' => $page_size,
