@@ -64,7 +64,7 @@ function alshaya_performance_flush_frontend_caches() {
   $bins_to_clear = [
     'render',
     'dynamic_page_cache',
-    'page'
+    'page',
   ];
 
   foreach (Cache::getBins() as $key => $cache_backend) {
