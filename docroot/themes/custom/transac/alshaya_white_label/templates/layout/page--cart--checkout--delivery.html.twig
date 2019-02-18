@@ -75,18 +75,18 @@
   {% endif %}
 
   <!-- ______________________ FOOTER SECONDARY _______________________ -->
-
-  {% if page.footer_secondary %}
-    <div class="c-footer-secondary">
-      <div class="l-container">
-        <div class="c-footer-secondary__region">
-          {{ page.footer_secondary }}
+  <footer class="c-footer">
+    {% if page.footer_secondary %}
+      <div class="c-footer-secondary">
+        <div class="l-container">
+          <div class="c-footer-secondary__region">
+            {{ page.footer_secondary }}
+          </div>
         </div>
       </div>
-    </div>
-    <!-- /footer-secondary -->
-  {% endif %}
-
+      <!-- /footer-secondary -->
+    {% endif %}
+  </footer>
 
 </div>
 <!-- /page -->
