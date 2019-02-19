@@ -38,6 +38,4 @@ pdp_product_swatch_items_settings:
   pdp_product_swatch_items_0: 4
   pdp_product_swatch_items_768: 12
   pdp_product_swatch_items_1025: 12
-one_size_attribute_option: ''
-one_size_attribute_option_ar: ''
-excluded_attribute_options: ''
+excluded_attribute_options: []

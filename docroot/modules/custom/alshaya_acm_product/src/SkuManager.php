@@ -2183,7 +2183,7 @@ class SkuManager {
    *   TRUE if value matches options value to exclude.
    */
   public function isAttributeOptionToExclude($value) {
-    return $value === $this->configFactory->get('alshaya_acm_product.settings')->get('excluded_attribute_options');
+    return in_array($value, $this->configFactory->get('alshaya_acm_product.settings')->get('excluded_attribute_options'));
   }
 
   /**

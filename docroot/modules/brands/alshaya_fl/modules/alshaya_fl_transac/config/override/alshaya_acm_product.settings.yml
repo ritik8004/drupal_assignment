@@ -1,2 +1,2 @@
 image_slider_position_pdp: 'bottom'
-excluded_attribute_options: 'One Size'
+excluded_attribute_options: ['One Size', 'مقاس موحد']
