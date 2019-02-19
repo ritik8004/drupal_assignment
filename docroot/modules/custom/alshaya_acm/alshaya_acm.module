@@ -606,20 +606,6 @@ function alshaya_acm_price_get_formatted_price($price) {
 }
 
 /**
- * Helper function to format price upto configured decimal points.
- *
- * @param float $price
- *   The price value.
- *
- * @return float
- *   Return formatted price with decimal points.
- */
-function alshaya_acm_format_raw_price(float $price): float {
-  $decimal_points = \Drupal::configFactory()->get('acq_commerce.currency')->get('decimal_points');
-  return (float) number_format($price, $decimal_points, '.', '');
-}
-
-/**
  * Helper function to get cart quantity options.
  *
  * @param int|null $max
