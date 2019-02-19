@@ -278,7 +278,7 @@
           }
         });
 
-        if ($(context).find('.store-sequence')) {
+        if ($(context).find('.store-sequence').length !== 0){
           window.scrollTo(0, $('#pdp-stores-container h3.c-accordion__title').offset().top);
         }
       }
