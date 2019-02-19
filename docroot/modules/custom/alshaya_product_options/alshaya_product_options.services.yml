@@ -10,6 +10,7 @@ services:
       - '@language_manager'
       - '@database'
       - '@cache.product_options'
+      - '@config.factory'
       - '@logger.channel.alshaya_product_options'
 
   alshaya_product_options.swatches:

@@ -1,0 +1,10 @@
+alshaya_product_options.settings:
+  type: config_object
+  label: 'Alshaya Product Options settings'
+  mapping:
+    group_sequence:
+      type: sequence
+      label: 'Group Sequence'
+      sequence:
+        type: string
+        label: 'Suffix'

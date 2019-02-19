@@ -7,6 +7,7 @@ use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -78,6 +79,13 @@ class ProductOptionsHelper {
   protected $cache;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -105,6 +113,8 @@ class ProductOptionsHelper {
    *   Database Connection.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for product_options.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
    */
@@ -116,6 +126,7 @@ class ProductOptionsHelper {
                               LanguageManagerInterface $language_manager,
                               Connection $connection,
                               CacheBackendInterface $cache,
+                              ConfigFactoryInterface $config_factory,
                               LoggerChannelInterface $logger) {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
@@ -125,6 +136,7 @@ class ProductOptionsHelper {
     $this->languageManager = $language_manager;
     $this->connection = $connection;
     $this->cache = $cache;
+    $this->configFactory = $config_factory;
     $this->logger = $logger;
   }
 
@@ -357,11 +369,10 @@ class ProductOptionsHelper {
     // As discussed in ticket, we are hard coding this for now.
     // We can change it to config or ask sequence from Magento later
     // when required.
-    $sorts = [
-      'eu' => 1,
-      'us' => 2,
-      'uk' => 3,
-    ];
+    $sorts = $this->configFactory
+      ->get('alshaya_product_options.settings')
+      ->get('group_sequence') ?? [];
+    $sorts = array_flip($sorts);
 
     foreach ($groups as &$attributes) {
       uksort($attributes, function ($a, $b) use ($sorts) {
