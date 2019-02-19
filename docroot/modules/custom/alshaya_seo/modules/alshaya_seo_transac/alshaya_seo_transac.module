@@ -10,6 +10,9 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -56,6 +59,30 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
     $gtm_manager = \Drupal::service('alshaya_seo_transac.gtm_manager');
     $product_node = $gtm_manager->fetchProductGtmAttributes($entity, $view_mode);
     $variables['gtm_attributes']['#markup'] = $gtm_manager->convertAttrsToString($product_node);
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
+  // Update title of parent product based on selected sku if available.
+  if ($selected_sku instanceof SKUInterface) {
+    $final_price = (float) $selected_sku->get('final_price')->getString();
+    $response->addCommand(
+      new InvokeCommand(
+        'article[gtm-type="gtm-product-link"]',
+        'attr',
+        ['gtm-product-sku', $selected_sku->getSku()]
+      )
+    );
+    $response->addCommand(
+      new InvokeCommand(
+        'article[gtm-type="gtm-product-link"]',
+        'attr',
+        ['gtm-price', alshaya_acm_format_raw_price($final_price)]
+      )
+    );
   }
 }
 
