@@ -80,7 +80,7 @@ function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter
       new InvokeCommand(
         'article[gtm-type="gtm-product-link"]',
         'attr',
-        ['gtm-price', alshaya_acm_format_raw_price($final_price)]
+        ['gtm-price', _alshaya_acm_format_price_with_decimal($final_price)]
       )
     );
   }
