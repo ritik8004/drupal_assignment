@@ -254,7 +254,7 @@ class ProductOptionsHelper {
     $size_chart_label = $term->get('field_attribute_size_chart_label')->getString();
     $size_group = $term->get('field_attribute_size_group')->getString();
 
-    // @TODO: Confirm with Magento team.
+    // Size chart is like a flag, if set to zero - we ignore group and label.
     if (empty($attributes_info['size_chart'])) {
       $attributes_info['size_chart_label'] = '';
       $attributes_info['size_group'] = '';
