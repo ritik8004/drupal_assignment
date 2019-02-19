@@ -346,6 +346,7 @@ class ProductOptionsHelper {
     $query->addField('size_chart_label', 'field_attribute_size_chart_label_value', 'size_chart_label');
     $query->groupBy('size_group');
     $query->groupBy('attribute_code');
+    $query->groupBy('size_chart_label');
     $query->having('attribute_code IS NOT NULL');
     $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
