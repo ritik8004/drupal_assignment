@@ -356,9 +356,7 @@ class AlshayaGtmManager {
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
-      if (empty($final_price)) {
-        $final_price = $prices['final_price'];
-      }
+      $final_price = $prices['final_price'];
     }
 
     $product_type = 'Regular Product';
@@ -389,7 +387,7 @@ class AlshayaGtmManager {
     }
 
     $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
-    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
+    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price ?? (float) $original_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)

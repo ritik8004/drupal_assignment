@@ -69,6 +69,9 @@ function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter
   // Update title of parent product based on selected sku if available.
   if ($selected_sku instanceof SKUInterface) {
     $final_price = (float) $selected_sku->get('final_price')->getString();
+    if (empty($final_price)) {
+      $final_price = (float) $selected_sku->get('price')->getString();
+    }
     $response->addCommand(
       new InvokeCommand(
         'article[gtm-type="gtm-product-link"]',
