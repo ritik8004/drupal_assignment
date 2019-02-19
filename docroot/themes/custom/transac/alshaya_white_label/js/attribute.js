@@ -84,7 +84,10 @@
 
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
-        $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
+        var selectedText = clickedOption.attr('selected-text')
+          ? clickedOption.attr('selected-text')
+          : clickedOption.text();
+        $('.select2Option', that).find('.list-title .selected-text').html(selectedText);
       }
     });
   };
@@ -108,6 +111,7 @@
       else {
         var option_alternates = JSON.parse(group_data);
         option.html(option_alternates[i]['value']);
+        option.attr('selected-text', option_alternates[i]['label'] + ' ' + option_alternates[i]['value']);
       }
 
       select.append(option);

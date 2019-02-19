@@ -91,7 +91,10 @@ jQuery.fn.select2Option = function (options) {
       }
 
       $(this).closest('.sku-base-form').find('label.error, span.error, div.error').remove();
-      $(this).closest('.select2Option').find('.list-title .selected-text').html(clickedOption.text());
+      var selectedText = clickedOption.attr('selected-text')
+          ? clickedOption.attr('selected-text')
+          : clickedOption.text();
+      $(this).closest('.select2Option').find('.list-title .selected-text').html(selectedText);
       if ($(this).hasClass('picked')) {
         $(this).removeClass('picked');
         clickedOption.removeProp('selected');
@@ -113,7 +116,9 @@ jQuery.fn.select2Option = function (options) {
           var clickedOption = $(select.find('option')[$(this).attr('data-select-index')]);
           $(this).closest('.select2Option').find('.list-title .selected-text').remove();
 
-          var selectedText = clickedOption.text();
+          var selectedText = clickedOption.attr('selected-text')
+            ? clickedOption.attr('selected-text')
+            : clickedOption.text();
 
           $(this).closest('.select2Option').find('.list-title').append('<span class="selected-text">' + selectedText + '</span>');
         });
