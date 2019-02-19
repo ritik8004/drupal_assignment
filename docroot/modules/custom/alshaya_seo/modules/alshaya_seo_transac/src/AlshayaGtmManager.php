@@ -356,6 +356,9 @@ class AlshayaGtmManager {
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
+      if (empty($final_price)) {
+        $final_price = $prices['final_price'];
+      }
     }
 
     $product_type = 'Regular Product';
