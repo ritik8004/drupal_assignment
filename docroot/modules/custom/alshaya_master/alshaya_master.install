@@ -10,6 +10,15 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for strings in v3.
+ */
+function alshaya_master_update_8023() {
+  alshaya_i18n_save_translations(alshaya_master_get_strings_to_translate('v3'));
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - View more/less colours.
  */
 function alshaya_master_update_8022() {

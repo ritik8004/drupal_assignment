@@ -190,7 +190,7 @@ class Cart implements CartInterface {
 
       // Remove the items from cart that are still available but OOS.
       // We will display message for it to user.
-      if (!$plugin->isProductInStock($sku)) {
+      if (!$plugin->getProcessedStock($sku)) {
         $item_oos[$item['sku']] = $item['name'];
         unset($this->cart->items[$key]);
         unset($items[$key]);
