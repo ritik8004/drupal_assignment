@@ -147,12 +147,17 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function processTitle(ProductInfoRequestedEvent $event) {
+    // Don't modify again here.
+    if ($event->isValueModified()) {
+      return;
+    }
+
     $sku = $event->getSku();
     $title = $event->getValue();
 
     if ($sku->bundle() == 'simple') {
       if ($parentSku = $this->skuManager->getParentSkuBySku($sku)) {
-        $title = $parentSku->get('name')->value;
+        $title = $parentSku->label();
       }
     }
 
