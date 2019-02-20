@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d9a533c6bfc3cc0d6e44f2d7bd1921dd",
+    "content-hash": "38ea52aec8b9ef1d6655ef93751b35c2",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -2875,7 +2875,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.48",
-                    "datestamp": "1539175681",
+                    "datestamp": "1526468584",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2908,10 +2908,6 @@
                 {
                     "name": "attila.fekete",
                     "homepage": "https://www.drupal.org/user/762986"
-                },
-                {
-                    "name": "lcatlett",
-                    "homepage": "https://www.drupal.org/user/855628"
                 },
                 {
                     "name": "nagba",
@@ -3949,7 +3945,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1547893380",
+                    "datestamp": "1534320480",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -5585,7 +5581,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta4",
-                    "datestamp": "1539272580",
+                    "datestamp": "1528452184",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -7027,7 +7023,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.10",
-                    "datestamp": "1539818880",
+                    "datestamp": "1536261180",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8756,7 +8752,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc1",
-                    "datestamp": "1538143680",
+                    "datestamp": "1532303881",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -9367,7 +9363,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1547893980",
+                    "datestamp": "1540538580",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10045,7 +10041,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.15",
-                    "datestamp": "1541330284",
+                    "datestamp": "1496919842",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10440,7 +10436,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.10",
-                    "datestamp": "1542564480",
+                    "datestamp": "1537175280",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10963,6 +10959,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-04/2822720-32_1.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11479,7 +11478,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.4",
-                    "datestamp": "1537557481",
+                    "datestamp": "1536408480",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12004,7 +12003,7 @@
                 },
                 "drupal": {
                     "version": "8.x-5.0-rc21",
-                    "datestamp": "1538482685",
+                    "datestamp": "1536405484",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
