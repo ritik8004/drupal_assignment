@@ -759,7 +759,7 @@ class MobileAppUtility {
    */
   public function getLightProduct(SKUInterface $sku, $color = NULL): array {
     $node = $this->skuManager->getDisplayNode($sku);
-    if (!($node instanceof NodeInterface)) {
+    if (!($node instanceof NodeInterface) || !($node->hasTranslation($this->currentLanguage()))) {
       return [];
     }
 
@@ -832,8 +832,8 @@ class MobileAppUtility {
 
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-      if ($linkedSkuEntity->hasTranslation($this->currentLanguage())) {
-        $return[] = $this->getLightProduct($linkedSkuEntity);
+      if ($lightProduct = $this->getLightProduct($linkedSkuEntity)) {
+        $return[] = $lightProduct;
       }
     }
 
