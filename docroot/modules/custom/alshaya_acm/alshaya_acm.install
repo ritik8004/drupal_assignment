@@ -240,6 +240,8 @@ function alshaya_acm_install() {
   // Delete default store node.
   _alshaya_acm_delete_default_store_node();
 
+  // Exclude sync requests from shield.
+  _alshaya_acm_exclude_sync_from_shield();
 }
 
 /**

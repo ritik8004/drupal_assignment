@@ -313,6 +313,9 @@
             },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
+            },
+            "drupal/shield": {
+                "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-04/2822720-32_1.patch"
             }
         },
         "installer-paths": {
