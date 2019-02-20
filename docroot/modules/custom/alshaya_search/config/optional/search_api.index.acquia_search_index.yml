@@ -71,6 +71,16 @@ field_settings:
         - field.storage.node.field_category
       module:
         - taxonomy
+  price:
+    label: 'Price'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:price'
+    type: decimal
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   final_price:
     label: 'Final Price'
     datasource_id: 'entity:node'

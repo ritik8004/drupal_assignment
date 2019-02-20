@@ -2839,10 +2839,8 @@ class SkuManager {
     $product_color = $node->get('field_product_color')->getString();
 
     $prices = $this->getMinPrices($sku, $product_color);
-    $price = empty($prices['final_price'])
-        ? $prices['price']
-        : $prices['final_price'];
-    $item->getField('final_price')->setValues([$price]);
+    $item->getField('price')->setValues([$prices['price']]);
+    $item->getField('final_price')->setValues([$prices['final_price']]);
 
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
