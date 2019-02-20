@@ -58,7 +58,7 @@
         "drupal/migrate_tools": "^2.0",
         "drupal/mimemail": "1.x-dev",
         "drupal/mobile_number": "^1.0@alpha",
-        "drupal/paragraphs": "^1.1",
+        "drupal/paragraphs": "^1.6",
         "drupal/password_policy": "^3.0",
         "drupal/pcb": "^1.0",
         "drupal/profile": "^1.0@alpha",
