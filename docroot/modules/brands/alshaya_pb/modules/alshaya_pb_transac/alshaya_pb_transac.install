@@ -44,6 +44,8 @@ function alshaya_pb_transac_update_8010() {
       'override',
       AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
     );
+  // Resave indexes.
+  _alshaya_search_resave_indexes();
 
   $configs = [
     'system.menu.design-services',
