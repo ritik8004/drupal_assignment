@@ -644,6 +644,14 @@ header {
           }
         }
       }
+
+      &.active--menu--without__child {
+        .menu-backdrop {
+          @include breakpoint($desktop) {
+            display: none;
+          }
+        }
+      }
     }
 
     li.menu--one__list-item {
