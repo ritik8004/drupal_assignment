@@ -7,10 +7,8 @@ use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\EntityUrlGenerator;
 /**
  * Class AlshayaTaxonomyTermUrlGenerator.
  *
- * @package Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator
- *
  * @UrlGenerator(
- *   id = "entity_taxonomy_term",
+ *   id = "alshaya_entity_taxonomy_term",
  *   title = @Translation("Taxonomy term URL generator"),
  *   description = @Translation("Generates Taxononmy Term URLs by overriding the 'entity' URL generator."),
  *   weight = 5,
