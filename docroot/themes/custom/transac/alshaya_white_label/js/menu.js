@@ -222,7 +222,7 @@
       var menuBackdrop = $('.menu-backdrop');
 
       function setMenuHeight() {
-        if (menuLevel2.length > 0 && windowWidth > 767) {
+        if (menuLevel2.length > 0 && windowWidth > 1024) {
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
