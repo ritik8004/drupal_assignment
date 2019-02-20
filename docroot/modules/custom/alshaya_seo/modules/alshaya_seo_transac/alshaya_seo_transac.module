@@ -69,9 +69,6 @@ function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter
   // Update title of parent product based on selected sku if available.
   if ($selected_sku instanceof SKUInterface) {
     $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($selected_sku);
-    $price = empty($prices['final_price'])
-      ? $prices['price']
-      : $prices['final_price'];
 
     $response->addCommand(
       new InvokeCommand(
@@ -84,7 +81,7 @@ function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter
       new InvokeCommand(
         'article[gtm-type="gtm-product-link"]',
         'attr',
-        ['gtm-price', _alshaya_acm_format_price_with_decimal((float) $price)]
+        ['gtm-price', _alshaya_acm_format_price_with_decimal((float) $prices['final_price'])]
       )
     );
   }
