@@ -1041,6 +1041,8 @@ function _alshaya_acm_exclude_sync_from_shield() {
       '/productstocksync',
       '/categorysync',
       '/customer/delete',
+      '/oauth/token',
+      '/rest/session/token',
     ];
 
     \Drupal::getContainer()->get('config.factory')
