@@ -2843,6 +2843,12 @@ class SkuManager {
     $item->getField('final_price')->setValues([$prices['final_price']]);
 
     if ($sku->bundle() === 'configurable') {
+      // Use max of selling prices for price in configurable products.
+      if (!empty($prices['children'])) {
+        $selling_prices = array_column($prices['children'], 'selling_price');
+        $item->getField('price')->setValues([max($selling_prices)]);
+      }
+
       $this->processIndexItemConfigurable($sku, $item, $product_color);
     }
     elseif ($sku->bundle() == 'simple') {
