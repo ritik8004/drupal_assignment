@@ -11,6 +11,18 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * For from-to, not show the currency on second price.
+ */
+function alshaya_pb_transac_update_8010() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.display_settings')
+    ->set('show_currency_on_second_price', FALSE)
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Use from_to display mode for price.
  */
 function alshaya_pb_transac_update_8009() {

@@ -43,6 +43,13 @@ class SkuPriceHelper {
   private $displayMode;
 
   /**
+   * Whether to show currency on second price or not.
+   *
+   * @var bool
+   */
+  private $showCurrencyOnSecondPrice;
+
+  /**
    * Decimal points to show for price.
    *
    * @var int
@@ -82,6 +89,7 @@ class SkuPriceHelper {
     $display_settings = $config_factory->get('alshaya_acm_product.display_settings');
 
     $this->displayMode = $display_settings->get('price_display_mode') ?? self::PRICE_DISPLAY_MODE_SIMPLE;
+    $this->showCurrencyOnSecondPrice = $display_settings->get('show_currency_on_second_price') ?? TRUE;
 
     $this->decimalPoints = (int) $config_factory
       ->get('acq_commerce.currency')
@@ -242,7 +250,7 @@ class SkuPriceHelper {
       return $this->getFormattedPrice($min);
     }
 
-    return $this->getFormattedPrice($min) . ' - ' . $this->getFormattedPrice($max);
+    return $this->getFormattedPrice($min) . ' - ' . $this->getFormattedPrice($max, $this->showCurrencyOnSecondPrice);
   }
 
   /**
@@ -250,14 +258,17 @@ class SkuPriceHelper {
    *
    * @param string|float $price
    *   Price.
+   * @param bool $show_currency
+   *   Whether currency code to show or not.
    *
    * @return string
    *   Formatted price.
    */
-  private function getFormattedPrice($price):string {
+  private function getFormattedPrice($price, bool $show_currency = TRUE):string {
     $build = [
       '#theme' => 'commerce_price_with_currency',
       '#price' => number_format($price, $this->decimalPoints),
+      '#show_currency' => $show_currency,
     ];
 
     return (string) $this->renderer->renderPlain($build);
