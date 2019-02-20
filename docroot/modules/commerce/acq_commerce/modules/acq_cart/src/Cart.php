@@ -3,7 +3,6 @@
 namespace Drupal\acq_cart;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Class Cart.
@@ -164,8 +163,6 @@ class Cart implements CartInterface {
     }
 
     $items = $this->cart->items;
-    $item_not_found = [];
-    $item_oos = [];
 
     foreach ($items as $key => &$item) {
       if (!isset($item['sku'])) {
@@ -174,49 +171,25 @@ class Cart implements CartInterface {
 
       $sku = SKU::loadFromSku($item['sku']);
 
-      // Remove the items from cart that are no longer available.
-      // We will log message for it.
       if (!($sku instanceof SKU)) {
-        $items_not_found[] = $item['sku'];
-        unset($this->cart->items[$key]);
+        // We may have some products in cart which are now deleted in Drupal.
+        // This can happen when an item is blocked or deleted in Magento.
+        \Drupal::logger('acq_cart')->warning('Invalid SKU @sku found in Cart id: @cart_id.', [
+          '@sku' => $item['sku'],
+          '@cart_id' => $this->id(),
+        ]);
+
+        // Remove the item from cart in session.
         unset($items[$key]);
+
+        // Continue to next item, this item is removed in call above.
         continue;
       }
 
       // Get Plugin instance from SKU entity.
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
       $plugin = $sku->getPluginInstance();
+
       $item['name'] = $plugin->cartName($sku, $item);
-
-      // Remove the items from cart that are still available but OOS.
-      // We will display message for it to user.
-      if (!$plugin->getProcessedStock($sku)) {
-        $item_oos[$item['sku']] = $item['name'];
-        unset($this->cart->items[$key]);
-        unset($items[$key]);
-      }
-    }
-
-    if ($item_not_found || $item_oos) {
-      if ($item_not_found) {
-        // We may have some products in cart which are now deleted in Drupal.
-        // This can happen when an item is blocked or deleted in Magento.
-        \Drupal::logger('acq_cart')
-          ->warning('Invalid SKU @skus found in Cart id: @cart_id.', [
-            '@skus' => implode(', ', $item_not_found),
-            '@cart_id' => $this->id(),
-          ]);
-      }
-
-      if ($item_oos) {
-        // Using direct class instead of StringTranslationTrait because of
-        // the bug https://www.drupal.org/project/drupal/issues/2893029.
-        $message = new TranslatableMarkup('Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.');
-        \Drupal::messenger()->addWarning($message->render());
-      }
-
-      $this->updateCartItemsCount();
-      $this->setCheckoutStep('');
     }
 
     return $items;

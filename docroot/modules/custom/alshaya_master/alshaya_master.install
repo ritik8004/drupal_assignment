@@ -10,19 +10,18 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Add string translation for strings in v3.
- */
-function alshaya_master_update_8023() {
-  alshaya_i18n_save_translations(alshaya_master_get_strings_to_translate('v3'));
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add string translation for - View more/less colours.
  */
 function alshaya_master_update_8022() {
-  alshaya_i18n_save_translations(alshaya_master_get_strings_to_translate('v2'));
+  $strings = [
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
@@ -343,8 +342,1231 @@ function alshaya_master_update_8001() {
  * Implements hook_install().
  */
 function alshaya_master_install() {
-  // Set initial translation string for en and ar languages.
-  alshaya_i18n_save_translations(alshaya_master_get_strings_to_translate());
+  // Set initial translation string for en language.
+  // Array of language translation strings.
+  $strings = [
+    ',' => [
+      'ar' => '،',
+    ],
+    'Log in' => [
+      'en' => 'Sign in',
+      'ar' => 'تسجيل الدخول',
+    ],
+    'Sign In' => [
+      'ar' => 'تسجيل الدخول',
+    ],
+    'Returning customer? SIGN IN' => [
+      'ar' => 'زبون مشترك؟ سجل دخولك',
+    ],
+    'Log out' => [
+      'en' => 'Sign out',
+      'ar' => 'تسجيل الخروج',
+    ],
+    'Sign out' => [
+      'ar' => 'تسجيل الخروج',
+    ],
+    'Create new account' => [
+      'en' => 'Create an account',
+      'ar' => 'انشاء حساب جديد',
+    ],
+    'E-mail' => [
+      'en' => 'Email address',
+      'ar' => 'عنوان البريد الإلكتروني',
+    ],
+    'Create' => [
+      'ar' => 'تسجيل',
+    ],
+    'Arabic' => [
+      'ar' => 'عربية',
+    ],
+    'sign in' => [
+      'ar' => 'تسجيل الدخول',
+    ],
+    'Forgot password?' => [
+      'ar' => 'هل نسيت كلمة السر؟',
+    ],
+    'Password' => [
+      'ar' => 'كلمة السر',
+    ],
+    'Password strength' => [
+      'ar' => 'درحة تعقيد كلمة السر:',
+    ],
+    'First Name' => [
+      'ar' => 'الاسم الأول',
+    ],
+    'First name' => [
+      'ar' => 'الاسم الأول',
+    ],
+    'Last Name' => [
+      'ar' => 'اسم العائلة',
+    ],
+    'Last name' => [
+      'ar' => 'اسم العائلة',
+    ],
+    'PRIVILEGES CLUB card number' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات',
+    ],
+    'PRIVILEGES CLUB card number (optional)' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات (اختياري)',
+    ],
+    'you’ll be able to' => [
+      'ar' => 'سجل الآن',
+    ],
+    'online exclusive heading over two lines never three' => [
+      'ar' => 'عرض خاص 2 مقابل 20 د.ك',
+    ],
+    'forgot password' => [
+      'ar' => 'هل نسيت كلمة السر',
+    ],
+    'Please enter your email address.' => [
+      'ar' => 'يرجى إدخال عنوان البريد الإلكتروني',
+    ],
+    'We will send you an email with a password reminder.' => [
+      'ar' => 'سنرسل إليك بريداً إلكترونياً بكلمة السر الخاصة بك',
+    ],
+    'Enter your email address' => [
+      'ar' => 'أدخل بريدك الإلكتروني',
+    ],
+    'my account' => [
+      'ar' => 'حسابي',
+    ],
+    'My account' => [
+      'ar' => 'حسابي',
+    ],
+    'orders' => [
+      'ar' => 'الطلبيات',
+    ],
+    'contact details' => [
+      'ar' => 'تفاصيل الاتصال',
+    ],
+    'Contact Details' => [
+      'ar' => 'تفاصيل الاتصال',
+    ],
+    'Contact details changes have been saved.' => [
+      'ar' => 'تم حفظ ببيانات الاتصال',
+    ],
+    'address book' => [
+      'ar' => 'سجل العناوين ',
+    ],
+    'Address book' => [
+      'ar' => 'سجل العناوين ',
+    ],
+    'communication preferences' => [
+      'ar' => 'تفضيلات التواصل',
+    ],
+    'change password' => [
+      'ar' => 'تغيير كلمة السر',
+    ],
+    'Change Password' => [
+      'ar' => 'تغيير كلمة السر',
+    ],
+    'My Account' => [
+      'ar' => 'حسابي',
+    ],
+    'edit account details' => [
+      'ar' => 'تعديل معلومات الحساب',
+    ],
+    'recent orders' => [
+      'ar' => 'أحدث الطلبيات',
+    ],
+    'You don\'t have any orders to display.' => [
+      'ar' => 'لا توجد طلبيات لعرضها',
+    ],
+    'go shopping' => [
+      'ar' => 'اذهب للتسوق',
+    ],
+    'account details' => [
+      'ar' => 'تفاصيل الحساب',
+    ],
+    'Contact number' => [
+      'ar' => 'رقم الاتصال',
+    ],
+    'Order Total' => [
+      'ar' => 'المبلغ الإجمالي للطلبية',
+    ],
+    'pending' => [
+      'ar' => 'قيد الانتظار',
+    ],
+    'delivered' => [
+      'ar' => 'تم التوصيل',
+    ],
+    'refunded' => [
+      'ar' => 'تم استرداد قيمة المبلغ',
+    ],
+    'Order ID' => [
+      'ar' => 'رقم التعريف الخاص بالطلبية',
+    ],
+    'Total' => [
+      'ar' => 'الإجمالي',
+    ],
+    'Unit Price' => [
+      'ar' => 'سعر القطعة',
+    ],
+    'Unit price' => [
+      'ar' => 'سعر القطعة',
+    ],
+    'Item code' => [
+      'ar' => 'رمز القطعة',
+    ],
+    'Qty' => [
+      'ar' => 'الكمية',
+    ],
+    'View all orders' => [
+      'ar' => 'عرض كل الطلبيات',
+    ],
+    'Enter card details' => [
+      'ar' => 'يرجى إدخال تفاصيل بطاقة الائتمان',
+    ],
+    'enter card details' => [
+      'ar' => 'الرجاء إدخال معلومات البطاقة',
+    ],
+    '<p>By registering you agreed to our <a href="/terms" class="final-tnc">Terms and Conditions</a>.</p>' => [
+      'ar' => '<p>تسجيل بياناتك يعني موافقتك على <a href="/terms" class="final-tnc">الشروط والأحكام</a></p>',
+    ],
+    '@title is required.' => [
+      'ar' => 'يرجى إدخال @title',
+      'en' => 'Please enter your @title.',
+    ],
+    'Please select a size.' => [
+      'ar' => 'يرجى اختيار المقاس',
+    ],
+    '@title does not contain a valid email.' => [
+      'ar' => '@title لا يشمل عنوان بريد إلكتروني صحيح',
+    ],
+    '@number is not a valid PRIVILEGES CLUB card number.' => [
+      'ar' => 'رقم بطاقة نادي الامتيازات @number غير صحيح',
+    ],
+    'connect with us' => [
+      'ar' => 'تواصل معنا',
+    ],
+    'get email offers and the latest news from @site_name' => [
+      'ar' => 'احصل على أحدث العروض الحصرية من @site_name عبر عنوان البريد الإكتروني',
+    ],
+    'submit' => [
+      'ar' => 'إرسال',
+    ],
+    'Submit' => [
+      'ar' => 'إرسال',
+    ],
+    'search item or keyword' => [
+      'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
+    ],
+    'View order details' => [
+      'ar' => 'عرض تفاصيل الطلبية',
+    ],
+    'Orders' => [
+      'ar' => 'الطلبيات',
+    ],
+    'All Orders' => [
+      'ar' => 'كل الطلبيات',
+    ],
+    'Search orders by' => [
+      'ar' => 'البحث عن الطلبية',
+    ],
+    'You haven’t ordered anything recently.' => [
+      'ar' => 'لم يتم تسجيل أي طلبية مؤخرًا',
+    ],
+    'Mobile Number' => [
+      'ar' => 'رقم الجوال',
+    ],
+    'add address' => [
+      'ar' => 'أضف عنواناً',
+    ],
+    'Delivery address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
+    'Delivery Address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
+    'delivery address' => [
+      'ar' => 'عنوان التوصيل',
+    ],
+    'Primary address' => [
+      'ar' => 'عنوان التوصيل الأساسي',
+    ],
+    'Add new @type' => [
+      'ar' => 'إضافة @type جديد',
+    ],
+    'current password' => [
+      'ar' => 'كلمة السر الحالية',
+    ],
+    'new password' => [
+      'ar' => 'كلمة السر الجديدة',
+    ],
+    'Find Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Find stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Find Store' => [
+      'ar' => 'البحث عن محلاتنا',
+    ],
+    'KWD' => [
+      'ar' => 'د٠ك٠',
+    ],
+    'Map view' => [
+      'ar' => 'عرض الخريطة',
+    ],
+    'List view' => [
+      'ar' => 'عرض القائمة',
+    ],
+    'Use my current location' => [
+      'ar' => 'إستخدم موقعي الحالي',
+    ],
+    'Opening Hours' => [
+      'ar' => 'ساعات العمل',
+    ],
+    'Email verification required' => [
+      'ar' => 'التحقق من أصحية البريد الإلكتروني',
+    ],
+    'Search results for "@keyword"' => [
+      'ar' => 'نتائج البحث عن "@keyword"',
+    ],
+    'new customers' => [
+      'ar' => 'زبائن جدد',
+    ],
+    'checkout as guest' => [
+      'ar' => 'إتمام عملية الشراء كزبون زائر',
+    ],
+    'Your email will be used only to send you information about your order.' => [
+      'ar' => 'سيتم استخدام عنوان البريد الإلكتروني الخاص بك فقط عند إرسال تفاصيل الطلبية',
+    ],
+    '<p>You will have the opportunity to create an account during checkout to take advantage of features and benefits that makes shopping easier, faster and personalized<p>' => [
+      'ar' => '<p> بإمكانك إنشاء حساب جديد عند إتمام عملية الشراء لكي تحصل على خصائص ومزايا تسهل عليك التسوق<p>',
+    ],
+    'Checkout' => [
+      'ar' => 'إتمام عملية الشراء',
+    ],
+    'Cart' => [
+      'ar' => 'عربة التسوق',
+    ],
+    'Welcome' => [
+      'ar' => 'أهلا بك',
+    ],
+    'returning customers' => [
+      'ar' => 'الزبائن العائدون',
+    ],
+    'Sign in to speed up the checkout process. It is the fastest way to review your selections, access your Address Book, and submit your order.' => [
+      'ar' => 'يرجى تسجيل الدخول لتسريع عملية الشراء ومراجعة اختياراتك والدخول لسجل عناوينك وإتمام عملية الشراء',
+    ],
+    'ID, name, SKU' => [
+      'ar' => 'البحث (كلمة مفتاحية، رمز/كود منتج...)',
+    ],
+    'Company' => [
+      'ar' => 'الشركة',
+    ],
+    'Street address' => [
+      'en' => 'Street',
+      'ar' => 'الشارع',
+    ],
+    'City' => [
+      'ar' => 'المدينة',
+    ],
+    'Postal code' => [
+      'ar' => 'الرمز البريدي',
+    ],
+    'Country' => [
+      'ar' => 'البلد',
+    ],
+    'Telephone' => [
+      'ar' => 'الهاتف',
+    ],
+    'The phone number %value provided for %field is not a valid mobile number for country %country.' => [
+      'en' => 'The number provided %value is not a valid mobile number.',
+      'ar' => 'رقم الجوال %value غير صحيح',
+    ],
+    'Delivery to' => [
+      'ar' => 'توصيل إلى',
+    ],
+    'Address' => [
+      'ar' => 'العنوان',
+    ],
+    'Account' => [
+      'ar' => 'الحساب',
+    ],
+    'The current password you provided is incorrect.' => [
+      'ar' => 'كلمة السر الخاصة بك غير صحيحة',
+    ],
+    'e.g. Salmiya' => [
+      'ar' => 'مثلاً: السالمية',
+    ],
+    'Find stores nearest to' => [
+      'ar' => 'ابحث عن المحلات القريبة إليك',
+    ],
+    'select a store to see details' => [
+      'ar' => 'اختر محل للإطلاع على التفاصيل',
+    ],
+    'Store address' => [
+      'ar' => 'عنوان المحل',
+    ],
+    'Store Number' => [
+      'ar' => 'رقم المحل',
+    ],
+    'Further instructions have been sent to your email address.' => [
+      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
+    ],
+    'Further instructions have been sent to your e-mail address.' => [
+      'ar' => 'تم إرسال المزيد من التعليمات إلى عنوان بريدك الإلكتروني',
+    ],
+    'Please agree to the Terms and Conditions.' => [
+      'ar' => 'يرجى الموافقة على الشروط والأحكام',
+    ],
+    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li></ul>' => [
+      'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li></ul>',
+    ],
+    '<ul><li>Your password must have at-least 7 characters.</li><li>Your password must contain at-least 1 special character.</li><li>Your password must contain at-least 1 numeric character.</li><li>Spaces are not allowed in your password.</li><li>The previous four passwords are not allowed.</li></ul>' => [
+      'ar' => '<ul><li>يجب أن تكون كلمة السر الخاصة بك مكونة من سبعة عناصر على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رمزاً واحداً على الأقل</li><li>يجب أن تتضمن كلمة السر الخاصة بك رقماً واحداً على الأقل</li><li>يجب أن لا تحتوي كلمة السر الخاصة بك على مسافات</li><li>كلمات السر الأربع السابقة غير مسموح بها</li></ul>',
+    ],
+    '<p>You\'re almost done.</p><p>We\'ve sent a verification email to <a href="mailto:[email]">[email]</a>.</p><p>Clicking on the email confirmation link, lets us know the email address is both valid and yours.</p><p>It is also your final step in the sign up process.</p>' => [
+      'ar' => '<p>أنت على وشك آلإنتهاء!</p><p>لقد تم إرسال رسالة تحقق إلكترونية إلى&nbsp;<a href="mailto:[email]">[email]</a></p><p>عند ضغطك على رابط عنوان البريد الإلكتروني، يتيح لنا معرفة أن البريد الإلكتروني صالح الفعالية و لك</p><p>كما أن هذه تعتبر آخر خطوة في عملية التسجيل</p>',
+    ],
+    '@total items' => [
+      'ar' => '@total القطع',
+    ],
+    'Price' => [
+      'ar' => 'السعر',
+    ],
+    'Enter your filter name' => [
+      'ar' => 'إدخال اسم الاختيار',
+    ],
+    'Contact us' => [
+      'ar' => 'اتصل بنا',
+    ],
+    'Phone number' => [
+      'en' => 'Mobile number',
+      'ar' => 'رقم الجوال',
+    ],
+    'Show more' => [
+      'ar' => 'عرض المزيد',
+    ],
+    'show more' => [
+      'ar' => 'عرض المزيد',
+    ],
+    'Show less' => [
+      'ar' => 'عرض أقل',
+    ],
+    'show less' => [
+      'ar' => 'عرض أقل',
+    ],
+    'sign up' => [
+      'ar' => 'سجل الآن',
+    ],
+    'help' => [
+      'ar' => 'هل تحتاج مساعدة؟',
+    ],
+    'about brand' => [
+      'ar' => 'حول مذركير',
+    ],
+    'Shop by' => [
+      'ar' => 'التسوق حسب القسم',
+    ],
+    'shop by' => [
+      'ar' => 'التسوق حسب القسم',
+    ],
+    'Basket (@count)' => [
+      'ar' => 'حقيبة التسوق (@count)',
+    ],
+    'Basket' => [
+      'ar' => 'حقيبة التسوق',
+    ],
+    'has been added to your cart.' => [
+      'ar' => 'تم إضافته إلى سلتك',
+      'en' => 'has been added to your basket.',
+    ],
+    'view cart' => [
+      'ar' => 'عرض سلة التسوق',
+      'en' => 'view basket',
+    ],
+    'Some items in your basket are out of stock. Please remove them to proceed.' => [
+      'ar' => 'بعض القطع في حقيبة تسوقك نفذت من المخزون و تم إزالتها من حقيبة تسوقك',
+    ],
+    'Sub total' => [
+      'ar' => 'المبلغ',
+    ],
+    'Quantity' => [
+      'ar' => 'الكمية',
+    ],
+    'Product' => [
+      'ar' => 'المنتج',
+    ],
+    'Available delivery options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Home delivery in 2 days on orders over KWD 35' => [
+      'ar' => 'خدمة التوصيل للمنازل خلال 2 أيام للطلبيات التي تزيد عن 35 د.ك.',
+    ],
+    'Collect the order in store from 2-3 days' => [
+      'ar' => 'استلم طلبيتك من المحل بعد ساعة أو خلال يومين إلى 2-3 أيام',
+    ],
+    'Collect the order from store in 99 days' => [
+      'ar' => 'استلم طلبيتك من المحل خلال 99 أيام',
+    ],
+    'Home Delivery' => [
+      'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'OR' => [
+      'ar' => 'أو',
+    ],
+    'For orders over KWD99' => [
+      'ar' => 'على الطلبيات التي تزيد على "99" د.ك.',
+    ],
+    'Click and Collect' => [
+      'ar' => 'اختر واستلم',
+    ],
+    'Click & Collect' => [
+      'ar' => 'اختر واستلم',
+    ],
+    'checkout securely' => [
+      'ar' => 'إتمام الشراء بأمان',
+    ],
+    'continue shopping' => [
+      'ar' => 'تابع التسوق',
+    ],
+    'Continue shopping' => [
+      'ar' => 'تابع التسوق',
+    ],
+    'Add a promo code' => [
+      'ar' => 'هل لديك رمز عرض ؟',
+    ],
+    'Enter PRIVILEGES CLUB card number' => [
+      'ar' => 'أدخل رقم بطاقة نادي الامتيازات',
+    ],
+    'Have a PRIVILEGES CLUB card?' => [
+      'ar' => 'هل لديك بطاقة نادي الامتيازات؟',
+    ],
+    'Enter card number' => [
+      'ar' => 'الرجاء إدخال رقم البطاقة',
+    ],
+    'Promotion code' => [
+      'ar' => 'رمز العرض',
+    ],
+    'apply' => [
+      'ar' => 'تطبيق',
+    ],
+    'Re-enter PRIVILEGES CLUB card number' => [
+      'ar' => 'يرجى إدخال رقم بطاقة نادي الامتيازات مرةً أخرى',
+    ],
+    'Your cart has been updated.' => [
+      'ar' => 'قطعة/قطع أضيفت إلى سلة تسوقك',
+      'en' => 'Your basket has been updated.',
+    ],
+    'Horizontal Recommendations' => [
+      'ar' => 'ما ننصح به',
+    ],
+    'Loading ...' => [
+      'ar' => 'تحميل...',
+    ],
+    'Your shopping basket is empty' => [
+      'ar' => 'حقيبة التسوق الخاصة بك فارغة',
+    ],
+    'Sorry, we now only have @quantity of these available and we have updated your basket.' => [
+      'ar' => 'عفواً، لم يتبق سوى quantity@ قطع من هذا المنتج و لقد قمنا بتحديث حقيبة تسوقك',
+    ],
+    'add to cart' => [
+      'ar' => 'أضف إلى سلة التسوق',
+      'en' => 'add to cart',
+    ],
+    'Add to cart' => [
+      'ar' => 'أضف إلى سلة التسوق',
+      'en' => 'Add to cart',
+    ],
+    '@name field is required.' => [
+      'ar' => 'يرجى إدخال @name',
+      'en' => 'Please enter your @name.',
+    ],
+    'Order Total <span>(Before Delivery)</span>' => [
+      'ar' => 'المبلغ الإجمالي للطلبية <span>(قبل التوصيل)</span>',
+    ],
+    'Basket (%count)' => [
+      'ar' => 'حقيبة التسوق (%count)',
+    ],
+    'print' => [
+      'ar' => 'طباعة',
+    ],
+    'Payment method' => [
+      'ar' => 'طريقة الدفع',
+    ],
+    'Delivery method' => [
+      'ar' => 'طريقة التوصيل',
+    ],
+    'Shipping & Billing Address' => [
+      'ar' => 'عنوان اتوصيل و عنوان تحرير الفاتورة',
+    ],
+    'Delivery charge' => [
+      'ar' => 'رسوم التوصيل',
+    ],
+    'Quantity: @product.ordered' => [
+      'ar' => 'الكمية: @product.ordered',
+    ],
+    'Item code: @product.sku' => [
+      'ar' => 'رمز القطعة: @product.sku',
+    ],
+    'Item Code' => [
+      'ar' => 'رمز القطعة',
+    ],
+    'Product Description' => [
+      'ar' => 'وصف المنتج',
+    ],
+    'Read more' => [
+      'ar' => 'اقرأ المزيد',
+    ],
+    'Delivery Options' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Standard delivery' => [
+      'ar' => 'التوصيل العادي',
+    ],
+    'Standard Delivery' => [
+      'ar' => 'التوصيل العادي',
+    ],
+    'within 4 working days' => [
+      'ar' => 'خلال 4 أيام عمل',
+    ],
+    'FREE' => [
+      'ar' => 'مجاناً',
+    ],
+    'Free' => [
+      'ar' => 'مجاناً',
+    ],
+    'Shipping' => [
+      'ar' => 'التوصيل',
+    ],
+    'Next day delivery' => [
+      'ar' => 'التوصيل في اليوم التالي',
+    ],
+    'All orders' => [
+      'ar' => 'كل الطلبيات',
+    ],
+    'Enter your area' => [
+      'ar' => 'أدخل المنطقة',
+    ],
+    'Search Stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'search stores' => [
+      'ar' => 'البحث عن المحلات',
+    ],
+    'Hover over image to zoom' => [
+      'ar' => 'حرك مؤشر الماوس فوق الصورة للتكبير',
+    ],
+    'Customers also bought' => [
+      'ar' => 'الزبائن اشتروا أيضاً',
+    ],
+    'You may also like' => [
+      'ar' => 'قد يعجبك أيضاً',
+    ],
+    'Related' => [
+      'ar' => 'ذات صلة',
+    ],
+    'secure checkout' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'Secure Checkout' => [
+      'ar' => 'إتمام عملية الشراء بأمان',
+    ],
+    'Order Summary' => [
+      'ar' => 'ملخص الطلبية',
+    ],
+    'Items in your basket' => [
+      'ar' => 'القطع في حقيبة تسوقك',
+    ],
+    'Before Delivery' => [
+      'ar' => 'قبل التوصيل',
+    ],
+    'Make payment' => [
+      'ar' => 'الدفع',
+    ],
+    'Order confirmation' => [
+      'ar' => 'تأكيد الطلبية',
+    ],
+    'Home delivery' => [
+      'ar' => 'خدمة التوصيل للمنزل',
+    ],
+    'deliver to this address' => [
+      'ar' => 'توصيل إلى هذا العنوان',
+    ],
+    'proceed to payment' => [
+      'ar' => 'تابع للدفع',
+    ],
+    'Back to basket' => [
+      'ar' => 'العودة إلى حقيبة التسوق',
+    ],
+    'Choose delivery' => [
+      'ar' => 'التأكيد',
+    ],
+    'delivery information' => [
+      'ar' => 'معلومات التوصيل',
+    ],
+    'Email Address' => [
+      'ar' => 'عنوان البريد الإلكتروني',
+    ],
+    'Address Line 1' => [
+      'ar' => 'العنوان الأول',
+    ],
+    'Change' => [
+      'ar' => 'تغيير',
+    ],
+    'Payment Options' => [
+      'ar' => 'خيارات الدفع',
+    ],
+    'Is the delivery address the same as your billing address?' => [
+      'ar' => 'هل عنوان التوصيل هو نفس عنوان إرسال الفواتير؟',
+    ],
+    '<p>I confirm that I have read and accept the <a class="payment-privacy-policy" href="#">Privacy Policy</a> and <a class="payment-tnc" href="#">Terms &amp; Conditions</a> of purchase. Read our <a class="payment-return policy" href="#">Return Policy</a></p>' => [
+      'ar' => '<p>أؤكد أنني قرأت وفهمت شروط وأحكام الشراء. اقرأ سياسة الاسترجاع لدينا</p>',
+    ],
+    'Billing address' => [
+      'ar' => 'عنوان تحرير الفاتورة',
+    ],
+    'place order' => [
+      'ar' => 'سجل الطلبية',
+    ],
+    'Return to delivery options' => [
+      'ar' => 'العودة إلى خيارات التوصيل',
+    ],
+    '<p>Thank you for shopping online with us, <strong class="dark--text">@account.first_name @account.last_name</strong></p>' => [
+      'ar' => '<p>شكراً لتسوقكم معنا عبر الموقع، <strong class="dark--text">@account.first_name @account.last_name</strong></p>',
+    ],
+    '<p>You’ll receive an email addressed to <strong class="dark--text">@account.mail</strong> conﬁrming your order</p>' => [
+      'ar' => '<p>ستصلك رسالة تأكيد لطلبيتك بعد قليل على <strong class="dark--text">@account.mail</strong></p>',
+    ],
+    'print confirmation' => [
+      'ar' => 'اطبع التأكيد',
+    ],
+    'Your order number is <strong>@order.orderId</strong>' => [
+      'ar' => 'رقم طلبيتك هو <strong>@order.orderId</strong>',
+    ],
+    'order details' => [
+      'ar' => 'تفاصيل الطلبية',
+    ],
+    'Product details (@products_count)' => [
+      'ar' => 'تفاصيل المنتج (@products_count)',
+    ],
+    'Your account' => [
+      'ar' => 'حسابك',
+    ],
+    'Save your details to make shopping easier next time' => [
+      'ar' => 'احفظ التفاصيل الخاصة بك لتسهيل تسوقك المرة القادمة',
+    ],
+    'save' => [
+      'ar' => 'حفظ',
+    ],
+    'save' => [
+      'ar' => 'حفظ',
+      'context' => 'button',
+    ],
+    'Back to top' => [
+      'ar' => 'أعلى الصفحة',
+    ],
+    'The password does not satisfy the password policies.' => [
+      'ar' => 'كلمة السر لا تحتوي على العناصر المطلوبة',
+    ],
+    '%name is not recognized as a username or an email address.' => [
+      'ar' => 'كاسم مستخدم أو عنوان بريد إلكتروني %name لم يتم التعرف على',
+    ],
+    'Find stores near' => [
+      'ar' => 'البحث عن أقرب المحلات إليك',
+    ],
+    'Near me' => [
+      'ar' => 'المحلات القريبة مني',
+    ],
+    'Get directions' => [
+      'ar' => 'احصل على الإتجاهات',
+    ],
+    'View on map' => [
+      'ar' => 'عرض على الخريطة',
+    ],
+    'Sorry, there are no stores or locations available to display.' => [
+      'ar' => 'عفواً، لا توجد محلات أو مواقع لعرضها',
+    ],
+    '@total closest stores to' => [
+      'ar' => 'أقرب @total محلات إلى',
+    ],
+    'clear all' => [
+      'ar' => 'امسح الكل',
+    ],
+    'under @granularity' => [
+      'ar' => '@granlarity تحت',
+    ],
+    'Please fill the captcha.' => [
+      'ar' => 'يرجى إدخال الرمز الظاهر في الصورة',
+    ],
+    'You have just used your one-time login link. Your account is now active and you are authenticated.' => [
+      'ar' => 'لقد قمت للتو باستخدام رابط تسجيل الدخول المخصص لمرة واحدة. حسابك أصبح مفعلاً وموثوق.',
+    ],
+    'Orders over KWD 1234' => [
+      'ar' => 'على الطلبيات التي تزيد على 1234 د.ك.',
+    ],
+    'Orders under KWD 1234' => [
+      'ar' => 'على الطلبيات الأقل من 1234 د.ك.',
+    ],
+    'Standard delivery for purchases over KD 250' => [
+      'ar' => ' التوصيل العادي للطلبيات التي تزيد على 250 د.ك',
+    ],
+    'Collect your order in-store' => [
+      'ar' => 'استلم طلبيتك من المحل',
+    ],
+    'Please select a payment option to continue.' => [
+      'ar' => 'يرجى اختيار طريقة الدفع للمتابعة',
+    ],
+    'highlights' => [
+      'ar' => 'أهم العروض',
+    ],
+    'The product has been removed from your cart.' => [
+      'ar' => 'تم إزالة المنتج من سلتك ',
+      'en' => 'The product has been removed from your basket.',
+    ],
+    '<p>This service is <strong>FREE</strong> of charge.</p>' => [
+      'ar' => '<p>استلم من المحل مجاناً</p>',
+    ],
+    'Please enter an email address' => [
+      'ar' => 'يرجى إدخال عنوان بريدك الإلكتروني',
+    ],
+    'Select Area' => [
+      'ar' => 'يرجى اختيار المنطقة',
+    ],
+    'Select @title' => [
+      'ar' => 'يرجى اختيار @title',
+    ],
+    'The email address @email is already taken.' => [
+      'ar' => 'عنوان البريد الإلكتروني @email مستعمل مسبقاً',
+    ],
+    'You have selected to delete this address, are you sure?' => [
+      'ar' => 'هل أنت متأكد من حذف هذا العنوان؟',
+    ],
+    'yes, delete this address' => [
+      'ar' => 'نعم, احذف هذا العنوان',
+    ],
+    'Delete address' => [
+      'ar' => 'حذف العنوان',
+    ],
+    'No, take me back' => [
+      'ar' => 'الرجوع إلى الصفحة السابقة',
+    ],
+    'Address is added successfully.' => [
+      'ar' => 'تم إضافة العنوان بنجاح',
+    ],
+    'Address is deleted successfully.' => [
+      'ar' => 'تم حذف العنوان بنجاح',
+    ],
+    'Address is updated successfully.' => [
+      'ar' => 'تم تحديث العنوان بنجاح',
+    ],
+    'Primary address is updated successfully.' => [
+      'ar' => 'تم تحديث العنوان الرئيسي بنجاح',
+    ],
+    'added' => [
+      'ar' => 'تمت الإضافة',
+    ],
+    'Area' => [
+      'ar' => 'المنطقة',
+    ],
+    '@area Area' => [
+      'ar' => 'المنطقة @area',
+    ],
+    'You have tried to use a one-time login link that has either been used or is no longer valid. Please request a new one using the form below.' => [
+      'ar' => 'لقد حاولت استخدام رابطاً معداً للاستخدام مرة واحدة. هذا الرابط إما قد تم استخدامه أو لم يعد صالحاً، لذا يرجى طلب رابط جديد باستخدام الطلب أدناه.',
+    ],
+    'Load More' => [
+      'ar' => 'عرض المزيد',
+    ],
+    'Unrecognized username or password. <a href=":password">Forgot your password?</a>' => [
+      'ar' => ' لم يتم التعرف على عنوان البريد الإلكتروني أو كلمة السر',
+    ],
+    'shop' => [
+      'ar' => 'تسوق',
+    ],
+    'register' => [
+      'ar' => 'سجل الآن',
+    ],
+    'A @entity_type with @field_name @value already exists.' => [
+      'ar' => ' يوجد @entity_type مسجل بهذا @field_name @value',
+    ],
+    'Something went wrong, please try again later.' => [
+      'ar' => 'هناك خطأ ما, يرجى المحاولة لاحقاً.',
+    ],
+    'Your account has not been activated or is blocked.' => [
+      'ar' => 'لم يتم تفعيل حسابك أو تم منعه',
+    ],
+    'Colour' => [
+      'ar' => 'اللون',
+    ],
+    'Brand' => [
+      'ar' => 'العلامة التجارية',
+    ],
+    'Available at @count stores near' => [
+      'ar' => 'متوفر في @count محلات بالقرب من ',
+    ],
+    'change' => [
+      'ar' => 'تغيير',
+    ],
+    'Discount' => [
+      'ar' => 'الخصم',
+    ],
+    'under @stop' => [
+      'ar' => 'أقل من @stop',
+    ],
+    '@start - @stop' => [
+      'ar' => '@stop - @start',
+    ],
+    'Features and benefits' => [
+      'ar' => 'المزايا و الفوائد',
+    ],
+    'Specifications' => [
+      'ar' => 'المواصفات',
+    ],
+    'Specified PRIVILEGES CLUB card numbers do not match.' => [
+      'ar' => 'أرقام نادي الامتيازات التي أدخلتها غير متطابقة.',
+    ],
+    'logged in as @name' => [
+      'ar' => 'تم تسجيل الدخول: @name',
+    ],
+    'This email address is already subscribed.' => [
+      'ar' => 'هذا العنوان البريد الإلكتروني مستعمل مسبقاً',
+    ],
+    'Thank you for your subscription.' => [
+      'ar' => 'شكراً لاشتراككم في نشرتنا الاخبارية',
+    ],
+    'Save @discount%' => [
+      'ar' => 'وفّر %@discount',
+    ],
+    'Save' => [
+      'ar' => 'وفّر',
+      'context' => 'discount',
+    ],
+    'Filter' => [
+      'ar' => 'حدّد اختيارك',
+    ],
+    'filter' => [
+      'ar' => 'حدّد اختيارك',
+    ],
+    'Welcome, @name' => [
+      'ar' => 'أهلاً بك, @name',
+    ],
+    'You have no recent orders to display.' => [
+      'ar' => 'لا توجد طلبيات لعرضها',
+    ],
+    'Delivery' => [
+      'ar' => 'تكلفة التوصيل',
+    ],
+    'Credit Card Number' => [
+      'ar' => 'رقم بطاقة الائتمان',
+    ],
+    'CVV' => [
+      'ar' => 'الرقم السري للبطاقة CVV',
+    ],
+    'This code is a three or four digit number printed on the front or back of the credit card' => [
+      'ar' => 'هذا الرمز مكون من ثلاثة أو أربعة أرقام مطبوعة على ظهر أو وجه بطاقة الائتمان',
+    ],
+    'Expiration Year' => [
+      'ar' => 'تاريخ انتهاء البطاقة / السنة',
+    ],
+    'Expiration Month' => [
+      'ar' => 'تاريخ انتهاء البطاقة / الشهر',
+    ],
+    'Edit' => [
+      'ar' => 'تعديل',
+    ],
+    'error' => [
+      'ar' => 'يوجد خطأ',
+    ],
+    'Order Print' => [
+      'ar' => 'اطبع الطلبية',
+    ],
+    'Unrecognized email address or password.' => [
+      'ar' => 'لم يتم التعرف على عنوان البريد الإلكتروني أو كلمة السر',
+    ],
+    'find your closest collection point' => [
+      'ar' => 'ابحث عن المحلات القريبة إليك لاستلام طلبيتك',
+    ],
+    'Collect in store from' => [
+      'ar' => 'استلم من المحل بعد',
+    ],
+    'change store' => [
+      'ar' => 'تغيير المحل',
+    ],
+    'select this store' => [
+      'ar' => 'اختر هذا المحل',
+    ],
+    'Please provide your contact details' => [
+      'ar' => 'يرجى تزويدنا ببيانات الاتصال الخاصة بكم',
+    ],
+    'Enter a location' => [
+      'ar' => 'أدخل الموقع',
+    ],
+    '@title field has a maximum length of @max.' => [
+      'ar' => 'الحد الأقصى لملء بيانات المربع "@title" هو @max حرفاٌ',
+    ],
+    '@name cannot be longer than %max characters but is currently %length characters long.' => [
+      'ar' => 'لا يمكن أن يكون طول "@name" أطول من %max حرف لأنه الأن %length حرفاٌ',
+    ],
+    'Sorry, No store found for your location.' => [
+      'ar' => 'عفواً، لا توجد محلات في موقعك الحالي',
+    ],
+    'We’ll be using this information to keep in touch with you' => [
+      'ar' => 'سوف نقوم باستخدام هذه البيانات للتواصل معكم',
+    ],
+    'Please provide the mobile number of the person collecting the order' => [
+      'ar' => 'يرجى إدخال رقم جوال الشخص الذي سيقوم باستلام الطلبية',
+    ],
+    'We\'ll send you a text message when the order is ready to collect' => [
+      'ar' => 'سنقوم بإرسال رسالة قصيرة عندما تكون الطلبية جاهزة للاستلام',
+    ],
+    'Click & collect in-store is not available' => [
+      'ar' => 'خدمة اختيار المنتج واستلامه من المحل غير متوفرة',
+    ],
+    'add new address' => [
+      'ar' => 'إضافة عنوان جديد',
+    ],
+    'choose delivery address' => [
+      'ar' => 'اختر عنوان التوصيل',
+    ],
+    'cancel' => [
+      'ar' => 'إلغاء',
+    ],
+    'select delivery options' => [
+      'ar' => 'اختر خيارات التوصيل',
+    ],
+    'Phone number in %field is required.' => [
+      'ar' => 'يرجى إدخال رقم الجوال',
+      'en' => 'Please enter your %field.',
+    ],
+    '1 hour' => [
+      'ar' => 'ساعة واحدة',
+    ],
+    'Your order will be available in @duration' => [
+      'ar' => 'سيتم توصيل طلبيتك خلال @duration',
+    ],
+    'View Full Product Details' => [
+      'ar' => 'عرض جميع تفاصيل المنتج',
+    ],
+    'At a glance' => [
+      'ar' => 'في لمحة',
+    ],
+    'Double tap image to zoom' => [
+      'ar' => 'اضغط مرتين للتكبير',
+    ],
+    'Checking stock...' => [
+      'ar' => 'التحقق من توفر الكمية...',
+    ],
+    'Out of stock' => [
+      'ar' => 'نفدت الكمية',
+    ],
+    'out of stock' => [
+      'ar' => 'نفدت الكمية',
+    ],
+    'Check in-store availability' => [
+      'ar' => 'تحقق من توفر الكمية في المحلات',
+    ],
+    'Did you mean:' => [
+      'ar' => 'هل تقصد:',
+    ],
+    '<p><span class="highlight">Select a size</span> to check stock availability near to you</p>' => [
+      'ar' => '<p><span class="highlight">اختر المقاس</span> للتأكد من توفر الكمية في المحل الأقرب إليك',
+    ],
+    'Other stores nearby' => [
+      'ar' => 'محلات أخرى قريبة إليك',
+    ],
+    'Available at three stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
+    'Available at 3 stores near' => [
+      'ar' => 'متوفر في 3 محلات بالقرب من ',
+    ],
+    'Tap to enlarge' => [
+      'ar' => 'اضغط للتكبير',
+    ],
+    'Swipe to view more images' => [
+      'ar' => 'اسحب لعرض المزيد',
+    ],
+    'Collect from store in <em>@time</em>' => [
+      'ar' => 'استلم من المحل بعد <em>@time</em>',
+    ],
+    'please login' => [
+      'ar' => 'يرجى تسجيل الدخول',
+    ],
+    'You already have an account, @login_link.' => [
+      'ar' => 'يبدو أن لديك حساب  مسبقاً في سجلاتنا، @login_link.',
+    ],
+    'Earn one draw entry for every KD 5 spent online' => [
+      'ar' => 'إحصل على فرصة دخول السحب عند كل عملية شراء بقيمة 5 د.ك. عبر الموقع الالكتروني',
+    ],
+    'Size Guide' => [
+      'ar' => 'دليل المقاسات',
+    ],
+    '<p>Sorry unable to find the resource.</p>' => [
+      'ar' => 'ناسف لم نتمكن من العثور على المصدر',
+    ],
+    'Sorry Collect your order in-store is unavailable' => [
+      'ar' => 'عفواً، خدمة استلم طلبيتك من المحل غير متوفرة',
+    ],
+    'delivery option' => [
+      'ar' => 'خيارات التوصيل',
+    ],
+    'Collection Store' => [
+      'ar' => 'محل الاستلام',
+    ],
+    'Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.' => [
+      'ar' => 'عفواً، لقد نفدت الكمية من بعض القطع في سلة تسوقك. يرجى إزالة القطع من سلة التسوق لإكمال عملية الشراء بأمان.',
+    ],
+    'No area found' => [
+      'ar' => 'لا يوجد نتائج لبحثك',
+    ],
+    'Your order will be available for pickup at the following store' => [
+      'ar' => 'طلبيتك ستكون جاهزة للاستلام في هذا المحل',
+    ],
+    'Collection times' => [
+      'ar' => 'أوقات التسليم',
+    ],
+    'Collection Address' => [
+      'ar' => 'عنوان التسليم',
+    ],
+    'Your order will be delivered at the following address' => [
+      'ar' => 'سيتم توصيل طلبيتك على العنوان التالي',
+    ],
+    'Invalid Credit Card number' => [
+      'ar' => 'رقم البطاقة غير صحيح',
+    ],
+    'Invalid security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV غير صحيح',
+    ],
+    'Security code (CVV)' => [
+      'ar' => 'الرقم السري للبطاقة CVV',
+    ],
+    'Home' => [
+      'ar' => 'الصفحة الرئيسية',
+      'context' => 'breadcrumb',
+    ],
+    'Collection' => [
+      'ar' => 'المجموعة',
+    ],
+    'Style Code: @value' => [
+      'ar' => 'رمز المنتج: @value',
+    ],
+    'Season: @value' => [
+      'ar' => 'الموسم: @value',
+    ],
+    'Product brand: @value' => [
+      'ar' => 'العلامة التجارية: @value',
+    ],
+    'Color: @value' => [
+      'ar' => 'اللون: @value',
+    ],
+    "What's In The Box" => [
+      'ar' => 'ماذا يوجد في الصندوق؟',
+    ],
+    'Size' => [
+      'ar' => 'المقاس',
+    ],
+    'Sorry, we are unable to process your payment. Please contact our customer service team for assistance.' => [
+      'ar' => 'عذراً، لم نتمكن من متابعة تنفيذ طلبك. يرجى إعادة المحاولة او الاتصال بخدمة الزبائن للمساعدة.',
+    ],
+    'Your password has been changed.' => [
+      'ar' => 'تم تغيير كلمة السر بنجاح',
+    ],
+    'applied filters' => [
+      'ar' => 'الاختيارات المحددة',
+    ],
+    'This product is out of stock. Please remove to proceed.' => [
+      'ar' => 'لقد نفدت كمية هذا المنتج. يرجى حذف القطعة لمتابعة طلبيتك.',
+    ],
+    'Discount applied' => [
+      'ar' => 'تم تفعيل الخصم',
+    ],
+    'Please enter a valid @title with no special characters.' => [
+      'ar' => 'يرجى إدخال @title صحيح دون عناصر خاصة',
+    ],
+    'edit address' => [
+      'ar' => 'تعديل العنوان',
+    ],
+    'facebook' => [
+      'ar' => 'فيس بوك',
+    ],
+    'instagram' => [
+      'ar' => 'انستغرام',
+    ],
+    'youtube' => [
+      'ar' => 'يوتوب',
+    ],
+    'google' => [
+      'ar' => 'جوجل',
+    ],
+    'twitter' => [
+      'ar' => 'تويتر',
+    ],
+    'pinterest' => [
+      'ar' => 'بينتريست',
+    ],
+    '<p>Unfortunately, we do not yet offer furniture items for purchase online. But we will be happy to tell you more about this product and how you can buy it.</p>' => [
+      'ar' => '<p>لسوء الحظ لا يتوفر حالياً على الموقع منتجات الأثاث المنزلي. ولكن يسعدنا أن نخبرك بالمزيد من المعلومات عن المنتجات وعن طريقة شرائها.</p>',
+    ],
+    '<p>Please visit a <a href=":find_store">Mothercare store</a> or contact customer services for support on 182-12-12.</p>' => [
+      'ar' => '<p>يرجى زيارة <a href=":find_store"> محل مذركير</a>، أو الاتصال بمركز خدمة الزبائن للحصول على الدعم المطلوب على الرقم 182-12-12</p>',
+    ],
+    'List of all Mothercare Stores' => [
+      'ar' => 'جميع محلات مذركير',
+    ],
+    '<p>Your PRIVILEGES CLUB card number is: <strong class="dark--text">@order.loyaltyCard</strong></p>' => [
+      'ar' => '<p> رقم بطاقة نادي الامتيازات: <strong class="dark--text">@order.loyaltyCard</strong></p>',
+    ],
+    'Sorry, something went wrong and we are unable to process your request right now. Please try again later.' => [
+      'ar' => 'عفواً، حدث خطأ ما، ولم نتمكن من متابعة تنفيذ طلبك الآن. يرجى المحاولة مجدداً في وقت لاحق.',
+    ],
+    'not available' => [
+      'ar' => 'غير متوفر',
+    ],
+    "Add a promotional code" => [
+      'ar' => 'هل لديك رمز عرض ؟',
+    ],
+    'care instructions' => [
+      'ar' => 'إرشادات العناية',
+    ],
+    'New In' => [
+      'ar' => 'جديدنا',
+    ],
+    'Best Seller' => [
+      'ar' => 'الأفضل مبيعاً',
+    ],
+    'Please enter your selection' => [
+      'ar' => 'يرجى تحديد الاختيار',
+    ],
+    'Tax' => [
+      'ar' => 'الضريبة',
+    ],
+    'Your order qualifies for free delivery.' => [
+      'ar' => 'طلبيتك جاهزة للتوصيل المجاني',
+    ],
+    'Download Invoice' => [
+      'ar' => 'تحميل الفاتورة',
+    ],
+    'deliver to' => [
+      'ar' => 'التوصيل إلى',
+    ],
+    'Payment Methods' => [
+      'ar' => 'طرق الدفع',
+    ],
+    'delivery information' => [
+      'ar' => 'معلومات التوصيل',
+    ],
+    'Where do you want to collect from?' => [
+      'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
+    ],
+    'Select your preferred pickup store' => [
+      'ar' => 'يرجى اختيار المحل الذي ترغب في الاستلام منه',
+    ],
+    "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
+      'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
+    ],
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 
   // Get config factory object.
   $config_factory = \Drupal::configFactory();
