@@ -41,7 +41,7 @@
         "drupal/google_tag": "1.x-dev",
         "drupal/imagemagick": "^2.3",
         "drupal/jquery_minicolors": "^1.2",
-        "drupal/jsonapi": "^1.18",
+        "drupal/jsonapi": "^1.25",
         "drupal/kashmir": "^1.1",
         "drupal/key_value_field": "^1.0-beta1",
         "drupal/link_attributes": "^1.5",
