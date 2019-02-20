@@ -62,7 +62,7 @@ class AlshayaExcludeAttributeOptionsProcessor extends ExcludeSpecifiedItemsProce
    */
   public function defaultConfiguration() {
     return [
-      'exclude' => $this->configFactory->get('alshaya_acm_product.settings')->get('excluded_attribute_options'),
+      'exclude' => implode(',', $this->configFactory->get('alshaya_acm_product.settings')->get('excluded_attribute_options')),
       'regex' => 0,
     ];
   }
