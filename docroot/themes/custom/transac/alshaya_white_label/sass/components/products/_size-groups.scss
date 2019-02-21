@@ -19,23 +19,29 @@
 }
 
 .group-wrapper {
-  .select2Option .select-buttons li {
-    a {
-      min-width: 42px;
-      height: 42px;
-      margin-top: 0;
-      margin-bottom: 0.625rem;
-      margin-#{$right}: 0.625rem;
-      border: 1px solid #333;
-      color: #333;
+  .select2Option {
+    @include breakpoint($mobile) {
+      display: block;
+    }
 
-      &.picked {
-        background: #353132;
-        color: #fff;
-      }
+    .select-buttons li {
+      a {
+        min-width: 42px;
+        height: 42px;
+        margin-top: 0;
+        margin-bottom: 0.625rem;
+        margin-#{$right}: 0.625rem;
+        border: 1px solid #333;
+        color: #333;
 
-      &:hover {
-        background: none;
+        &.picked {
+          background: #353132;
+          color: #fff;
+        }
+
+        &:hover {
+          background: none;
+        }
       }
     }
   }

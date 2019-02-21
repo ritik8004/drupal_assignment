@@ -236,10 +236,10 @@
     .group-wrapper {
       .group {
         @include breakpoint($only-mobile) {
-          @include select-wrapper(12.3125rem);
+          @include select-wrapper(100%);
 
           select.form-select {
-            @include select-style(12.3125rem);
+            @include select-style(100%);
 
             width: 100%;
           }
