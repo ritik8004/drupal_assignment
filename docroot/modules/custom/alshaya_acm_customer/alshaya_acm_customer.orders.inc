@@ -45,6 +45,13 @@ function alshaya_acm_customer_get_user_orders($email, $search_key = '', $filter_
         if (!isset($order_items[$item['sku']])) {
           $order_items[$item['sku']] = $item;
         }
+        $sku_entity = SKU::loadFromSku(alshaya_acm_customer_clean_sku($item['sku']));
+        if ($sku_entity instanceof SKUInterface) {
+          /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+          $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+          $order_items[$item['sku']]['name'] = $productInfoHelper->getTitle($sku_entity, 'basket');
+        }
+
       }
       $order['items'] = $order_items;
     }
@@ -173,13 +180,6 @@ function alshaya_acm_customer_get_processed_order_summary(array $order) {
 
   // We will display the name of first order item.
   $item = reset($order['items']);
-  $sku = SKU::loadFromSku($item['sku']);
-
-  if ($sku instanceof SKUInterface) {
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $item['name'] = $productInfoHelper->getTitle($sku, 'basket');
-  }
 
   $orderRow['name'] = Unicode::truncate($item['name'], 25, FALSE, TRUE);
 
