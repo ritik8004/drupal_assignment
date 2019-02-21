@@ -6,7 +6,7 @@ $PB_grey_two: #adadad;
 $PB_grey_five: #ebebeb;
 $PB_grey_four: #e5e5e5;
 $PB_white: #f7f7f7;
-$PB_deep_red: #9a0000;
+$PB_deep_red: #900;
 $PB_warning_red: #d0021b;
 $PB_tint_red: #dd8a8a;
 $PB_deep_blue: #0e3e6f;
@@ -50,7 +50,7 @@ $_grey_seventeen: #b4b3b3;
 $content_link_color: $PB_confirmation_blue;
 $primary_link: $PB_confirmation_blue;
 $primary_input_focus_border: $PB_confirmation_blue;
-$secondary_link: $PB_deep_red;
+$secondary_link: $_black_two;
 
 // Errors.
 $content_error_msg_bg: $PB_warning_red;
@@ -141,7 +141,7 @@ $tooltip_link: $PB_confirmation_blue;
 
 // Checkout securely block.
 $checkout_securely_txt: $_black_two;
-$checkout_securely_icon_bg: $PB_deep_red;
+$checkout_securely_icon_bg: $_black_two;
 $checkout_securely_icon_mobile_txt: $_black_two;
 $checkout_securely_icon_txt: $white-two;
 
@@ -195,9 +195,9 @@ $desktop_continue_shopping_btn_bg: $_black_two;
 $desktop_continue_shopping_btn_border: $_black_two;
 
 // User - My account nav & dashboard.
-$my_account_nav_active: $PB_deep_red;
+$my_account_nav_active: $_black_two;
 $user_recent_order_icon: $_black_two;
-$my_account_dashboard_back_link: $PB_deep_red;
+$my_account_dashboard_back_link: $_black_two;
 $my_account_no_order_button_bg: $white-two;
 $my_account_no_order_button_text: $_black_two;
 $my_account_no_order_button_border: $PB_black_one;
@@ -222,14 +222,14 @@ $mm_l2_link: $_black_two;
 $mm_l2_link_mobile_menu: $_black_two;
 $mm_l3_link: $_black_two;
 $mm_l3_link_hover: false;
-$mm_highlight_label: $PB_deep_red;
-$mm_highlight_title: $PB_deep_red;
+$mm_highlight_label: $_black_two;
+$mm_highlight_title: $_black_two;
 $mm_l1_link_hover: $white-two;
-$highlights_subtitle_hover: $PB_deep_red;
+$highlights_subtitle_hover: $_black_two;
 
 // Home page - slider.
-$gallery_arrows_bg: $PB_deep_red;
-$hp_slider_dots: $PB_deep_red;
+$gallery_arrows_bg: $_black_two;
+$hp_slider_dots: $_black_two;
 $slider_arrow_bg: rgba(255, 255, 255, 0.5);
 
 // Delivery banner.
@@ -243,16 +243,16 @@ $deliverybanner_link: $_black_two;
 // Footer Primary.
 $footer_bg: $PB_grey_five;
 $footer_title_h3: $_black_two;
-$footer_link_hover: $PB_deep_red;
+$footer_link_hover: $_black_two;
 $_footer_mobile_accordion_border: $white;
 
 // Our Brands.
 $our_brands_footer_separator: $_grey_seventeen;
 $our_brand_section_title: $_black_two;
 
-// Our Brands.
-$our_brands_footer_separator: $_grey_seventeen;
-$our_brand_section_title: $PB_black_one;
+// Sitemap
+$_sitemap_l1: $_black_two;
+$_sitemap_l3: $PB_grey_one;
 
 // Copyright Footer.
 $copyright_footer_bg: $white-two;
@@ -275,16 +275,16 @@ $newsletter_submit_btn_text: $white;
 $store_finder_header: $PB_black_one;
 $store_finder_header_desktop: $PB_black_one;
 $store_finder_subheader: $PB_black_one;
-$store_finder_text: $PB_deep_red;
+$store_finder_text: $_black_two;
 $store_finder_location_search_text_placeholder: $_gray_two;
 $store_finder_location_search_text_input_border_mobile: $_gray_two;
-$store_finder_icon: $PB_deep_red;
-$store_finder_text_hover: $PB_deep_red;
-$store_finder_border_hover: $PB_deep_red;
+$store_finder_icon: $_black_two;
+$store_finder_text_hover: $_black_two;
+$store_finder_border_hover: $_black_two;
 $store_finder_backbtn: $_black_two;
-$store_finder_search_results_hour_label: $PB_deep_red;
-$store_finder_get_direction_label_color: $PB_deep_red;
-$store_finder_search_results_tile_link: $PB_deep_red;
+$store_finder_search_results_hour_label: $_black_two;
+$store_finder_get_direction_label_color: $_black_two;
+$store_finder_search_results_tile_link: $_black_two;
 $store_finder_search_results_label: $PB_black_one;
 $store_finder_search_results_hour_icon_open: $_black_two;
 
@@ -292,14 +292,14 @@ $store_finder_search_results_hour_icon_open: $_black_two;
 $store_finder_search_results_tile_icon: $_black_two;
 $store_finder_search_results_tile_bg: $PB_white;
 $store_finder_search_results_tile_hover_bg: $PB_white;
-$store_finder_search_results_counter_bg: $PB_deep_red;
+$store_finder_search_results_counter_bg: $_black_two;
 $store_finder_search_results_counter_text: $white-two;
 
 // Store finder - glossary.
 $store_finder_glossary_alphabet: $PB_black_one;
 $store_finder_glossary_text: $PB_grey_one;
 $store_finder_glossary_icon: $_black_two;
-$store_finder_glossary_text_hover: $PB_deep_red;
+$store_finder_glossary_text_hover: $_black_two;
 $store_finder_glossary_text_border: $white;
 $store_finder_glossary_border: $white;
 $store_finder_glossary_link: $PB_grey_one;
@@ -327,6 +327,7 @@ $plp_facet_filter_count: $_black_two;
 $plp_facet_filter_count_background: $PB_confirmation_blue;
 $plp_pager_link: $white-two;
 $plp_pager_btn_bg: $_black_two;
+$plp_promotion_link: $PB_deep_red;
 
 // Sharethis
 $sharethis_icon: $_grey_sixteen;
@@ -339,8 +340,8 @@ $pdp_desc_wrapper_close_bg: $white;
 $pdp_sidebar_desc_overlay_section_border: $PB_grey_one;
 $pdp_delivery_options_subtitle: $PB_grey_two;
 $pdp_cc_form_highlight_txt: $PB_black_one;
-$pdp_cc_top_stores_list_border: $PB_deep_red;
-$pdp_cc_top_stores_list_counter: $PB_deep_red;
+$pdp_cc_top_stores_list_border: $_black_two;
+$pdp_cc_top_stores_list_counter: $_black_two;
 $pdp_cc_btn_bg: $_black_two;
 $pdp_cc_btn_text: $white-two;
 $modal_close_icon: $_black-two;
@@ -357,6 +358,10 @@ $pdp_swatch_disabled: $white;
 $pdp_white_color_attribute: $white-two;
 $pdp_white_color_attribute_hover_border: $_black_two;
 $pdp_white_color_attribute_border: $_black_two;
+$pdp_product_special_price_text: $PB_deep_red;
+$pdp_product_special_price: $PB_deep_red;
+$pdp_product_discount_price: $PB_deep_red;
+$pdp_product_discount_text: $PB_deep_red;
 
 // PDP CS/US
 $pdp_modal_full_prodlink: $PB_grey_one;
@@ -390,7 +395,7 @@ $checkout_delivery_shipping_row_border: $_gray_eleven;
 $checkout_login_btn_bg: $_black_two;
 $checkout_transaction_type_color: $_black_two;
 $checkout_method_choice_tab_title_active: $_black_two;
-$checkout_tab_active_border_mobile: $PB_deep_red;
+$checkout_tab_active_border_mobile: $_black_two;
 
 // Checkout home delivery.
 $checkout_default_address_border: $_black_two;
@@ -400,15 +405,15 @@ $address_button_text: $PB_black_one;
 $address_button_border: $PB_black_one;
 
 // Counters.
-$primary_counter_bg: $PB_deep_red;
+$primary_counter_bg: $_black_two;
 $primary_counter_text: $white-two;
 
 // Checkout tabs.
-$checkout_tab_active_hr: $PB_deep_red;
+$checkout_tab_active_hr: $_black_two;
 $checkout_tab_default_border: $PB_grey_five;
 $checkout_tab_default_title: $PB_grey_one;
 $checkout_tab_active_title: $PB_black_one;
-$checkout_tab_active_description: $PB_deep_red;
+$checkout_tab_active_description: $_black_two;
 $checkout_tab_separator: $PB_black_one;
 
 // Checkout progress.
@@ -425,17 +430,17 @@ $order_summary_address_bg: $PB_white;
 // Checkout login.
 $checkout_login_tab_border: $_gray_eight;
 $checkout_login_tab_text: $PB_grey_one;
-$checkout_login_tab_border_active: $PB_deep_red;
+$checkout_login_tab_border_active: $_black_two;
 $checkout_login_tab_text_active: $PB_black_one;
 
 // Checkout click and collect heading cnc form.
 $checkout_cc_cnc_form_title_border: $white;
-$checkout_cc_near_me_border: $PB_deep_red;
+$checkout_cc_near_me_border: $_black_two;
 $checkout_cc_location_result_label: $_gray_nine;
 $checkout_cc_location_result_label_selected_location: $PB_black_one;
 // Checkout Click & collect.
 $checkout_cc_list_map_link_default: $PB_black_one;
-$checkout_cc_list_map_link_active: $PB_deep_red;
+$checkout_cc_list_map_link_active: $_black_two;
 $checkout_cc_store_name: $PB_black_one;
 $checkout_cc_store_address: $_gray_ten;
 $checkout_cc_list_hours_label: $PB_black_one;
@@ -450,7 +455,7 @@ $checkout_cc_list_change_store_btn_txt: $white-two;
 $checkout_cc_list_select_store_btn_border: $_black_two;
 $checkout_cc_list_select_store_btn_border: $_black_two;
 $checkout_cc_list_delivery_time_label: $PB_black_one;
-$checkout_cc_list_delivery_time: $PB_deep_red;
+$checkout_cc_list_delivery_time: $_black_two;
 $checkout_cc_list_delivery_time_tablet: $PB_black_one;
 $checkout_cc_selected_store_content_border: $_gray_eleven;
 $checkout_cc_selected_store_content_bg: $white-two;
@@ -498,7 +503,7 @@ $maintenance_link_border: $white-two;
 $maintenance_titles: $white-two;
 $maintenance_container_border_top: $_gray_five;
 $maintenance_container_bg: $_gray_five;
-$maintenance_container_border: $PB_deep_red;
+$maintenance_container_border: $_black_two;
 $maintenance_body_text_strong: $_black_three;
 $maintenance_body_text_regular: $_black_two;
 $maintenance_body_text_arabic: $PB_black_one;
@@ -512,7 +517,7 @@ $_promo_panel_CTA_border: $_black_two;
 $_promo_panel_CTA_text: $_black_two;
 
 // Back to top.
-$btt_text: $PB_deep_red;
+$btt_text: $_black_two;
 
 // Order Print
 $order_print_dark_txt: $PB_black_one;
@@ -530,12 +535,12 @@ $order_print_order_details_item_row_details: $PB_grey_two;
 $order_print_delivery_details_price_label: $_black_two;
 
 // Pace progress color
-$progress_loader: $PB_deep_red;
+$progress_loader: $_black_two;
 
 // Department page
-$department_category_list_hover: $PB_deep_red;
+$department_category_list_hover: $_black_two;
 $department_category_accordion_title: $_black_two;
-$department_category_accordion_title_arrow: $PB_deep_red;
+$department_category_accordion_title_arrow: $_black_two;
 
 // gradient holder
 $gradient-holder: $PB_grey_five;
