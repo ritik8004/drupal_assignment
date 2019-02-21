@@ -96,6 +96,7 @@ header {
 
   .main--menu {
     top: 5.625rem;
+    z-index: 10;
 
     ul {
       width: 100%;
@@ -190,7 +191,7 @@ header {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 7;
+    z-index: 10;
   }
 
   .menu--mobile-navigation {
