@@ -391,6 +391,10 @@
         var sizeClear = $('.filter--mobile li.clear-all').clone();
         sizeClear.once('bind-events').insertAfter('#block-sizefacetblock').addClass('shop-by-size-clear-container');
       }
+      else if ($('.filter--mobile .clear-all').length === 0 && $('#block-sizefacetblock').siblings().hasClass('shop-by-size-clear-container')) {
+        // Remove if clear all button is clicked on the filter pane.
+        $('.shop-by-size-clear-container').remove();
+      }
     }
   };
 })(jQuery);
