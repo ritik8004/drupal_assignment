@@ -15,7 +15,7 @@ function alshaya_d_install() {
   \Drupal::service('theme_handler')->install(['debenhams'], TRUE);
   \Drupal::service('theme_handler')->setDefault('debenhams');
 
-  // Disable some default blocks provided by whitelabel_non_transac that we
+  // Disable some default blocks provided by whitelabel that we
   // don't want on debenhams.
   alshaya_block_delete_blocks(['branding']);
 
