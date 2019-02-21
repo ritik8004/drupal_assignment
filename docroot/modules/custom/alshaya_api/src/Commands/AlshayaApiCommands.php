@@ -744,7 +744,7 @@ class AlshayaApiCommands extends DrushCommands {
               // If stock in drupal does not match with stock from merch and
               // live-check is enabled, we get the stock from API to confirm
               // the stock difference.
-              if ($live_check && $data['stock'] != $mskus[$type][$sku]['qty']) {
+              if ($live_check && $data['quantity'] != $mskus[$type][$sku]['qty']) {
                 $mskus[$type][$sku]['qty'] = $this->alshayaApiWrapper->getStock($sku);
               }
 
