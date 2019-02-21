@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c2688ef119a13e0dbf66703eabffe2fc",
+    "content-hash": "b97216ad3a9d61095b68a72d79ca3beb",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3045,6 +3045,10 @@
                     "homepage": "https://www.drupal.org/user/762986"
                 },
                 {
+                    "name": "lcatlett",
+                    "homepage": "https://www.drupal.org/user/855628"
+                },
+                {
                     "name": "nagba",
                     "homepage": "https://www.drupal.org/user/21231"
                 },
@@ -3342,7 +3346,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.3",
-                    "datestamp": "1480507083",
+                    "datestamp": "1547996580",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3357,6 +3361,10 @@
                 {
                     "name": "ANDiTKO",
                     "homepage": "https://www.drupal.org/user/1428124"
+                },
+                {
+                    "name": "andrey.troeglazov",
+                    "homepage": "https://www.drupal.org/user/3145389"
                 },
                 {
                     "name": "realityloop",
@@ -4131,7 +4139,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-rc4",
-                    "datestamp": "1534320480",
+                    "datestamp": "1547893380",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -4629,16 +4637,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.6.7",
+            "version": "8.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "e0a09bda1da7552204464894811a59387608c9f9"
+                "reference": "59568ac02948cf075ee8543e6c6d4386ad8daec1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/e0a09bda1da7552204464894811a59387608c9f9",
-                "reference": "e0a09bda1da7552204464894811a59387608c9f9",
+                "url": "https://api.github.com/repos/drupal/core/zipball/59568ac02948cf075ee8543e6c6d4386ad8daec1",
+                "reference": "59568ac02948cf075ee8543e6c6d4386ad8daec1",
                 "shasum": ""
             },
             "require": {
@@ -4883,7 +4891,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2019-01-16T23:30:03+00:00"
+            "time": "2019-02-20T18:35:01+00:00"
         },
         {
             "name": "drupal/crop",
@@ -6820,20 +6828,20 @@
         },
         {
             "name": "drupal/jsonapi",
-            "version": "1.24.0",
+            "version": "1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/jsonapi",
-                "reference": "8.x-1.24"
+                "reference": "8.x-1.25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.24.zip",
-                "reference": "8.x-1.24",
-                "shasum": "61ff3254b228d41c6a37d3b6e37f30120c0729b7"
+                "url": "https://ftp.drupal.org/files/projects/jsonapi-8.x-1.25.zip",
+                "reference": "8.x-1.25",
+                "shasum": "9f4e8879c139eecf4ca6215c34821c1c85643933"
             },
             "require": {
-                "drupal/core": "^8.4.3"
+                "drupal/core": "^8.5.11"
             },
             "require-dev": {
                 "drupal/schemata": "1.x-dev#8325d172e1d6880aa24073f8f751ef089282cf9a",
@@ -6846,8 +6854,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.24",
-                    "datestamp": "1545243863",
+                    "version": "8.x-1.25",
+                    "datestamp": "1550719990",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8403,17 +8411,17 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/metatag",
-                "reference": "8.x-1.7"
+                "reference": "8.x-1.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.7.zip",
-                "reference": "8.x-1.7",
-                "shasum": "93decaefd053c524918ceae5b5ef05dd77de0857"
+                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.8.zip",
+                "reference": "8.x-1.8",
+                "shasum": "fb5d31aa08c8c2e175f096f9917e9741db152ea8"
             },
             "require": {
                 "drupal/core": "*",
@@ -8435,8 +8443,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.7",
-                    "datestamp": "1535726393",
+                    "version": "8.x-1.8",
+                    "datestamp": "1550692511",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9431,17 +9439,17 @@
         },
         {
             "name": "drupal/paragraphs",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/paragraphs",
-                "reference": "8.x-1.5"
+                "reference": "8.x-1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/paragraphs-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "85ba97dd1c602d33fc5904b6e1df5973312afa94"
+                "url": "https://ftp.drupal.org/files/projects/paragraphs-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "cd93e244f3a78dabdcf362adc31e59aad25b3fae"
             },
             "require": {
                 "drupal/core": "~8",
@@ -9469,8 +9477,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1541009695",
+                    "version": "8.x-1.6",
+                    "datestamp": "1550692525",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9665,7 +9673,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.2",
-                    "datestamp": "1540538580",
+                    "datestamp": "1547893980",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -20578,16 +20586,16 @@
         },
         {
             "name": "webflo/drupal-core-require-dev",
-            "version": "8.6.7",
+            "version": "8.6.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webflo/drupal-core-require-dev.git",
-                "reference": "7a65363ed9d6a0a2030252629f1ed9e76693094e"
+                "reference": "a3ec86723a2d753c020bfa995281c3cefa0cbb89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/7a65363ed9d6a0a2030252629f1ed9e76693094e",
-                "reference": "7a65363ed9d6a0a2030252629f1ed9e76693094e",
+                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/a3ec86723a2d753c020bfa995281c3cefa0cbb89",
+                "reference": "a3ec86723a2d753c020bfa995281c3cefa0cbb89",
                 "shasum": ""
             },
             "require": {
@@ -20595,7 +20603,7 @@
                 "behat/mink-goutte-driver": "^1.2",
                 "behat/mink-selenium2-driver": "1.3.x-dev",
                 "drupal/coder": "^8.2.12",
-                "drupal/core": "8.6.7",
+                "drupal/core": "8.6.10",
                 "jcalderonzumba/gastonjs": "^1.0.2",
                 "jcalderonzumba/mink-phantomjs-driver": "^0.3.1",
                 "mikey179/vfsstream": "^1.2",
@@ -20611,7 +20619,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "require-dev dependencies from drupal/core",
-            "time": "2019-01-17T00:01:35+00:00"
+            "time": "2019-02-20T20:01:42+00:00"
         }
     ],
     "aliases": [],

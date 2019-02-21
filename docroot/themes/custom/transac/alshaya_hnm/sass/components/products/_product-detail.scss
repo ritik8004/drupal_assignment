@@ -552,6 +552,10 @@
       text-transform: uppercase;
       font-size: 0.8125rem;
     }
+
+    input[type="text"] {
+      width: calc(100% - 8.25rem);
+    }
   }
 }
 
