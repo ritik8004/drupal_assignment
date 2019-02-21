@@ -37,6 +37,9 @@ use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\Query\ConditionInterface;
+use Drupal\search_api\Query\ConditionGroupInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -47,6 +50,11 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
     $group = $implementations['alshaya_acm_product_build'];
     unset($implementations['alshaya_acm_product_build']);
     $implementations['alshaya_acm_product_build'] = $group;
+  }
+  elseif ($hook == 'search_api_query_alter') {
+    $group = $implementations['alshaya_acm_product'];
+    unset($implementations['alshaya_acm_product']);
+    $implementations['alshaya_acm_product'] = $group;
   }
 }
 
@@ -79,6 +87,51 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         }
 
         unset($items[$item_id]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ *
+ * Alter query to filter in stock products.
+ */
+function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
+  /** @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper $priceHelper */
+  $priceHelper = \Drupal::service('alshaya_acm_product.price_helper');
+  if ($priceHelper->isPriceModeFromTo()) {
+    // Check for final price condition.
+    // We know it will be inside two levels, we check accordingly.
+    foreach ($query->getConditionGroup()->getConditions() as $conditionLevel1) {
+      if ($conditionLevel1 instanceof ConditionGroupInterface) {
+        foreach ($conditionLevel1->getConditions() as $conditionLevel2) {
+          if ($conditionLevel2 instanceof ConditionGroupInterface) {
+            foreach ($conditionLevel2->getConditions() as $condition) {
+              if ($condition instanceof ConditionInterface && $condition->getField() == 'final_price') {
+                $priceConditionGroup = clone $conditionLevel2;
+                foreach ($priceConditionGroup->getConditions() as $priceCondition) {
+                  $priceCondition->setField('price');
+                }
+                $conditionLevel1->addConditionGroup($priceConditionGroup);
+                break 3;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Check for sorting.
+    $sorts =& $query->getSorts();
+    if (isset($sorts['final_price'])) {
+      if ($sorts['final_price'] === 'DESC') {
+        unset($sorts['final_price']);
+        $sorts['price'] = 'DESC';
+        $sorts['final_price'] = 'DESC';
+      }
+      else {
+        $sorts['price'] = 'ASC';
       }
     }
   }
