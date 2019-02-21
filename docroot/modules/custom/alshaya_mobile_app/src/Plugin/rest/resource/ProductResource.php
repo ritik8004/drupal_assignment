@@ -313,6 +313,9 @@ class ProductResource extends ResourceBase {
         $variant['configurable_values'] = $this->getConfigurableValues($child, $values['attributes']);
         $data['variants'][] = $variant;
       }
+
+      $data['swatch_data'] = $data['swatch_data']?: new \stdClass();
+      $data['cart_combinations'] = $data['cart_combinations']?: new \stdClass();
     }
 
     return $data;
