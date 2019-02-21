@@ -48,3 +48,8 @@ services:
       - '@entity.repository'
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
+  alshaya_mobile_app.stdclass_normalizer:
+    class: Drupal\alshaya_mobile_app\Normalizer\StdClassNormalizer
+    arguments: ['\stdClass']
+    tags:
+      - { name: normalizer, priority: 20 }
