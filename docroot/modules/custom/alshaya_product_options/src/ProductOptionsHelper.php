@@ -375,6 +375,11 @@ class ProductOptionsHelper {
     $sorts = array_flip($sorts);
 
     foreach ($groups as &$attributes) {
+      // We get the attribute names like size_shoe_uk, size_show_eu, etc.
+      // We expect the code to be two characters and as a suffix in the
+      // attribute code. Currently we don't get the order in which we need to
+      // display in frontend so we have added a config where we store the
+      // sequence. Below we sort the attributes based on the sequence in config.
       uksort($attributes, function ($a, $b) use ($sorts) {
         $a_suffix = substr($a, -2);
         $b_suffix = substr($b, -2);
