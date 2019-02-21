@@ -745,6 +745,10 @@ class AlshayaApiCommands extends DrushCommands {
               // live-check is enabled, we get the stock from API to confirm
               // the stock difference.
               if ($live_check && $data['quantity'] != $mskus[$type][$sku]['qty']) {
+                $this->output->writeln(dt("Fetching stock from MDC for SKU:`@sku` for language:@langcode for live check.", [
+                  '@sku' => $sku,
+                  '@langcode' => $language->getId(),
+                ]));
                 $mskus[$type][$sku]['qty'] = $this->alshayaApiWrapper->getStock($sku);
               }
 
@@ -761,6 +765,10 @@ class AlshayaApiCommands extends DrushCommands {
               if ($live_check && (
                   $data['price'] != $mskus[$type][$sku]['price'] || $data['special_price'] != $mskus[$type][$sku]['special_price'])
               ) {
+                $this->output->writeln(dt("Fetching price from MDC for SKU:`@sku` for language:@langcode for live check.", [
+                  '@sku' => $sku,
+                  '@langcode' => $language->getId(),
+                ]));
                 $sku_data = $this->alshayaApiWrapper->getSku($sku);
 
                 if (isset($sku_data['price'])) {
