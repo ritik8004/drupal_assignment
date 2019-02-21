@@ -6,6 +6,10 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_sku\ProductOptionsManager;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\taxonomy\TermInterface;
 
@@ -15,6 +19,8 @@ use Drupal\taxonomy\TermInterface;
  * @package Drupal\alshaya_product_options
  */
 class ProductOptionsHelper {
+
+  const CID_SIZE_GROUP = 'alshaya_size_group';
 
   /**
    * SKU Fields Manager.
@@ -52,6 +58,34 @@ class ProductOptionsHelper {
   protected $swatches;
 
   /**
+   * Language Manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Database Connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
+   * Cache Backend service for product_options.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
@@ -73,6 +107,14 @@ class ProductOptionsHelper {
    *   Alshaya API Wrapper service object.
    * @param \Drupal\alshaya_product_options\SwatchesHelper $swatches
    *   Swatches Helper service object.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language Manager.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database Connection.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache Backend service for product_options.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   Logger.
    */
@@ -81,12 +123,20 @@ class ProductOptionsHelper {
                               ProductOptionsManager $product_options_manager,
                               AlshayaApiWrapper $api_wrapper,
                               SwatchesHelper $swatches,
+                              LanguageManagerInterface $language_manager,
+                              Connection $connection,
+                              CacheBackendInterface $cache,
+                              ConfigFactoryInterface $config_factory,
                               LoggerChannelInterface $logger) {
     $this->skuFieldsManager = $sku_fields_manager;
     $this->i18nHelper = $i18n_helper;
     $this->productOptionsManager = $product_options_manager;
     $this->apiWrapper = $api_wrapper;
     $this->swatches = $swatches;
+    $this->languageManager = $language_manager;
+    $this->connection = $connection;
+    $this->cache = $cache;
+    $this->configFactory = $config_factory;
     $this->logger = $logger;
   }
 
@@ -212,12 +262,140 @@ class ProductOptionsHelper {
    *   Attributes info array received from API.
    */
   public function updateAttributeOptionSize(TermInterface $term, array $attributes_info) {
-    // Reset current values.
-    $term->get('field_attribute_size_chart')->setValue($attributes_info['size_chart']);
-    $term->get('field_attribute_size_chart_label')->setValue($attributes_info['size_chart_label']);
-    $term->get('field_attribute_size_group')->setValue($attributes_info['size_group']);
+    $size_chart = $term->get('field_attribute_size_chart')->getString();
+    $size_chart_label = $term->get('field_attribute_size_chart_label')->getString();
+    $size_group = $term->get('field_attribute_size_group')->getString();
 
-    $term->save();
+    // Size chart is like a flag, if set to zero - we ignore group and label.
+    if (empty($attributes_info['size_chart'])) {
+      $attributes_info['size_chart_label'] = '';
+      $attributes_info['size_group'] = '';
+    }
+
+    if ($size_chart != $attributes_info['size_chart']
+      || $size_chart_label != $attributes_info['size_chart_label']
+      || $size_group != $attributes_info['size_group']) {
+
+      $term->get('field_attribute_size_chart')->setValue($attributes_info['size_chart']);
+      $term->get('field_attribute_size_chart_label')->setValue($attributes_info['size_chart_label']);
+      $term->get('field_attribute_size_group')->setValue($attributes_info['size_group']);
+      $term->save();
+
+      // Delete the cache for size groups mapping, we will re-create it when
+      // accessed again.
+      foreach ($this->languageManager->getLanguages() as $language) {
+        $this->cache->delete(self::CID_SIZE_GROUP . ':' . $language);
+      }
+    }
+  }
+
+  /**
+   * Get alternative attribute codes.
+   *
+   * @param string $attribute_code
+   *   Attribute code to get alternatives for.
+   *
+   * @return array
+   *   Alternative attributes in particular group for an attribute.
+   */
+  public function getSizeGroupAlternateAttributes(string $attribute_code) {
+    $group = $this->getSizeGroup($attribute_code);
+
+    if ($group) {
+      return array_values($group);
+    }
+
+    return [];
+  }
+
+  /**
+   * Get all attributes in particular group.
+   *
+   * @param string $attribute_code
+   *   Attribute code to get group to get all attributes in it.
+   *
+   * @return array
+   *   Attributes for particular group.
+   */
+  public function getSizeGroup(string $attribute_code) {
+    $groups = $this->getSizeGroups();
+
+    foreach ($groups ?? [] as $attributes) {
+      if (isset($attributes[$attribute_code])) {
+        return $attributes;
+      }
+    }
+
+    return [];
+  }
+
+  /**
+   * Wrapper function to get size groups.
+   *
+   * @return array
+   *   Multi-dimensional array with Group names as key and Attribute codes.
+   */
+  private function getSizeGroups() {
+    $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    $cid = self::CID_SIZE_GROUP . ':' . $langcode;
+    $cache = $this->cache->get($cid);
+    if (isset($cache->data)) {
+      return $cache->data;
+    }
+
+    $groups = [];
+
+    $query = $this->connection->select('taxonomy_term__field_sku_attribute_code', 'attribute_code');
+    $query->join('taxonomy_term__field_attribute_size_group', 'size_group', 'attribute_code.entity_id = size_group.entity_id');
+    $query->join(
+      'taxonomy_term__field_attribute_size_chart_label',
+      'size_chart_label',
+      'attribute_code.entity_id = size_chart_label.entity_id AND size_chart_label.langcode = :langcode',
+      [':langcode' => $langcode]
+    );
+    $query->addField('size_group', 'field_attribute_size_group_value', 'size_group');
+    $query->addField('attribute_code', 'field_sku_attribute_code_value', 'attribute_code');
+    $query->addField('size_chart_label', 'field_attribute_size_chart_label_value', 'size_chart_label');
+    $query->groupBy('size_group');
+    $query->groupBy('attribute_code');
+    $query->groupBy('size_chart_label');
+    $query->having('attribute_code IS NOT NULL');
+    $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+    foreach ($result as $row) {
+      $groups[$row['size_group']][$row['attribute_code']] = $row['size_chart_label'];
+    }
+
+    // As discussed in ticket, we are hard coding this for now.
+    // We can change it to config or ask sequence from Magento later
+    // when required.
+    $sorts = $this->configFactory
+      ->get('alshaya_product_options.settings')
+      ->get('group_sequence') ?? [];
+    $sorts = array_flip($sorts);
+
+    foreach ($groups as &$attributes) {
+      // We get the attribute names like size_shoe_uk, size_show_eu, etc.
+      // We expect the code to be two characters and as a suffix in the
+      // attribute code. Currently we don't get the order in which we need to
+      // display in frontend so we have added a config where we store the
+      // sequence. Below we sort the attributes based on the sequence in config.
+      uksort($attributes, function ($a, $b) use ($sorts) {
+        $a_suffix = substr($a, -2);
+        $b_suffix = substr($b, -2);
+
+        // Avoid notices and warnings if we get different attributes.
+        if (!isset($sorts[$a_suffix]) || !isset($sorts[$b_suffix])) {
+          return 0;
+        }
+
+        return $sorts[$a_suffix] > $sorts[$b_suffix] ? 1 : -1;
+      });
+    }
+
+    $this->cache->set($cid, $groups);
+
+    return $groups;
   }
 
 }

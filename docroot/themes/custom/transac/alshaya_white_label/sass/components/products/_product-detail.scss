@@ -224,6 +224,30 @@
     }
   }
 
+  .form-type-configurable-select-group {
+    label {
+      @include u-visibility(none);
+    }
+
+    .ajax-progress-throbber {
+      @include u-visibility(none);
+    }
+
+    .group-wrapper {
+      .group {
+        @include breakpoint($only-mobile) {
+          @include select-wrapper(12.3125rem);
+
+          select.form-select {
+            @include select-style(12.3125rem);
+
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+
   .form-item-configurables-size {
     label {
       @include u-visibility(none);
@@ -300,6 +324,18 @@
 
         min-width: 8.75rem;
         width: 100%;
+      }
+    }
+  }
+
+  .form-type-configurable-select-group {
+    .group-wrapper {
+      .group {
+        display: none;
+
+        &.active {
+          display: block;
+        }
       }
     }
   }

@@ -8,6 +8,21 @@
 /**
  * Implements hook_update_N().
  *
+ * Add config for module settings.
+ */
+function alshaya_product_options_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_product_options.settings'],
+    'alshaya_product_options'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create new fields for product options taxonomy.
  */
 function alshaya_product_options_update_8001() {
