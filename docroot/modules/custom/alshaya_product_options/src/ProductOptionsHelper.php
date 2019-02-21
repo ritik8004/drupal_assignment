@@ -359,7 +359,6 @@ class ProductOptionsHelper {
     $query->groupBy('size_group');
     $query->groupBy('attribute_code');
     $query->groupBy('size_chart_label');
-    $query->having('attribute_code IS NOT NULL');
     $result = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
 
     foreach ($result as $row) {
