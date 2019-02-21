@@ -897,20 +897,12 @@
 
     input[type="text"] {
       float: $left;
-      width: 63%;
+      width: calc(100% - 6.563rem);
       height: 2.188rem;
       padding: 0.3125rem;
       border: solid 1px $primary_border;
       font-size: 0.75rem;
       color: $pdp_cc_storefinder_input;
-
-      @include breakpoint($desktop) {
-        width: 185px;
-      }
-
-      @include breakpoint($only-tablet) {
-        width: 54%;
-      }
 
       &::placeholder {
         color: $pdp_cc_storefinder_input;
