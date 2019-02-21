@@ -285,3 +285,73 @@
     }
   }
 }
+
+// product - labels in magazine gallery
+.magazine-layout-node .gallery-wrapper .pdp-image-0 {
+  position: relative;
+
+  .product-labels {
+    .labels-container {
+      .label {
+        z-index: 4;
+        line-height: 1;
+
+        &.top {
+          &-left {
+            top: 0;
+            left: 0;
+
+            @include breakpoint($only-tablet) {
+              left: 0;
+            }
+
+            @include breakpoint($desktop) {
+              left: 0;
+            }
+          }
+
+          &-right {
+            top: 0;
+            right: 0;
+
+            @include breakpoint($only-tablet) {
+              right: 0;
+            }
+
+            @include breakpoint($desktop) {
+              right: 0;
+            }
+          }
+        }
+
+        &.bottom {
+          &-left {
+            left: 0;
+            bottom: 0;
+
+            @include breakpoint($only-tablet) {
+              left: 0;
+            }
+
+            @include breakpoint($desktop) {
+              left: 0;
+            }
+          }
+
+          &-right {
+            right: 0;
+            bottom: 0;
+
+            @include breakpoint($only-tablet) {
+              right: 0;
+            }
+
+            @include breakpoint($desktop) {
+              right: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
