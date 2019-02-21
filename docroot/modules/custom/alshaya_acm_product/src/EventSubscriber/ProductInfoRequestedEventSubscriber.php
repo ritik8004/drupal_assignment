@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product\EventSubscriber;
 
 use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_acm_product\SkuImagesManager;
+use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\file\FileInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -25,13 +26,23 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $skuImagesManager;
 
   /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuManager
+   */
+  private $skuManager;
+
+  /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU Images Manager.
+   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   SKU Manager.
    */
-  public function __construct(SkuImagesManager $sku_images_manager) {
+  public function __construct(SkuImagesManager $sku_images_manager, SkuManager $skuManager) {
     $this->skuImagesManager = $sku_images_manager;
+    $this->skuManager = $skuManager;
   }
 
   /**
@@ -62,6 +73,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
       case 'swatch':
         $this->processSwatch($event);
+        break;
+
+      case 'title':
+        $this->processTitle($event);
         break;
     }
   }
@@ -123,6 +138,30 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
       $event->getSku(),
       $event->getContext()
     ));
+  }
+
+  /**
+   * Process title for SKU based on brand specific rules.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processTitle(ProductInfoRequestedEvent $event) {
+    // Don't modify again here.
+    if ($event->isValueModified()) {
+      return;
+    }
+
+    $sku = $event->getSku();
+    $title = $event->getValue();
+
+    if ($sku->bundle() == 'simple') {
+      if ($parentSku = $this->skuManager->getParentSkuBySku($sku)) {
+        $title = $parentSku->label();
+      }
+    }
+
+    $event->setValue($title);
   }
 
 }
