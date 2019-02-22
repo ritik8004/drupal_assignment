@@ -756,9 +756,6 @@ class AlshayaApiCommands extends DrushCommands {
               '@count' => count(array_merge(...$total_live_check_api_calls)),
             ]));
           }
-          else {
-            $this->io()->note(dt('Stock/Price difference looks fine. No api request will be made to MDC.'));
-          }
         }
 
         foreach ($languages as $language) {
