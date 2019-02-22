@@ -129,6 +129,7 @@ class AlshayaApiCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->lock = $lock;
     $this->configFactory = $config_factory;
+    parent::__construct();
   }
 
   /**
@@ -730,6 +731,36 @@ class AlshayaApiCommands extends DrushCommands {
       if ($type == 'simple' && $msource == 'report') {
         $checked_skus = [];
 
+        // Get total number of api requests that will be made against magento
+        // on stock/price difference when `live_check' flag is used and inform
+        // the user about it.
+        if ($live_check) {
+          $total_live_check_api_calls = [];
+          $mskus_data = $mskus[$type];
+          foreach ($languages as $lang) {
+            $dskus_data = $dskus[$type][$lang->getId()];
+            $total_live_check_api_calls[] = array_filter($dskus_data, function ($sku_data) use ($mskus_data) {
+              return (
+                !empty($mskus_data[$sku_data['sku']])
+                && (
+                  $sku_data['quantity'] != $mskus_data[$sku_data['sku']]['qty']
+                  || $sku_data['price'] != $mskus_data[$sku_data['sku']]['price']
+                  || $sku_data['special_price'] != $mskus_data[$sku_data['sku']]['special_price']
+                )
+              );
+            });
+          }
+
+          if (!empty($total_live_check_api_calls)) {
+            $this->io()->note(dt('Total:@count API calls will be made to MDC for stock/price difference.', [
+              '@count' => count(array_merge(...$total_live_check_api_calls)),
+            ]));
+          }
+          else {
+            $this->io()->note(dt('Stock/Price difference looks fine. No api request will be made to MDC.'));
+          }
+        }
+
         foreach ($languages as $language) {
           foreach ($dskus[$type][$language->getId()] as $sku => $data) {
             // We will check the stock and price for this SKU only if it exists
@@ -745,10 +776,12 @@ class AlshayaApiCommands extends DrushCommands {
               // live-check is enabled, we get the stock from API to confirm
               // the stock difference.
               if ($live_check && $data['quantity'] != $mskus[$type][$sku]['qty']) {
-                $this->output->writeln(dt("Fetching stock from MDC for SKU:`@sku` for language:@langcode for live check.", [
-                  '@sku' => $sku,
-                  '@langcode' => $language->getId(),
-                ]));
+                if ($debug) {
+                  $this->output->writeln(dt("Fetching stock from MDC for SKU:`@sku` for language:@langcode for live check.", [
+                    '@sku' => $sku,
+                    '@langcode' => $language->getId(),
+                  ]));
+                }
                 $mskus[$type][$sku]['qty'] = $this->alshayaApiWrapper->getStock($sku);
               }
 
@@ -765,10 +798,12 @@ class AlshayaApiCommands extends DrushCommands {
               if ($live_check && (
                   $data['price'] != $mskus[$type][$sku]['price'] || $data['special_price'] != $mskus[$type][$sku]['special_price'])
               ) {
-                $this->output->writeln(dt("Fetching price from MDC for SKU:`@sku` for language:@langcode for live check.", [
-                  '@sku' => $sku,
-                  '@langcode' => $language->getId(),
-                ]));
+                if ($debug) {
+                  $this->output->writeln(dt("Fetching price from MDC for SKU:`@sku` for language:@langcode for live check.", [
+                    '@sku' => $sku,
+                    '@langcode' => $language->getId(),
+                  ]));
+                }
                 $sku_data = $this->alshayaApiWrapper->getSku($sku);
 
                 if (isset($sku_data['price'])) {
