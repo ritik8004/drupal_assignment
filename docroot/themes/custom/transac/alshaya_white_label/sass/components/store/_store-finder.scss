@@ -1329,12 +1329,6 @@
     }
   }
 
-  .scroll-fix {
-    @include breakpoint($desktop) {
-      min-width: 13.0625rem;
-    }
-  }
-
   .hours--label,
   .hours--label::after {
     color: $store_finder_search_results_label;
