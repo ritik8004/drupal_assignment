@@ -21,4 +21,4 @@ domain="$4"
 . $HOME/slack_settings
 
 # Send slack notification when db-update cloud hook was successfully invoked.
-curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Invoked (currently empty) db-update factory hook for environment *$site.$target_env* and domain *$domain*.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
+curl -X POST --data-urlencode "payload={\"username\": \"Acquia Cloud\", \"text\": \"Invoked (currently empty) db-update factory hook for environment *$site.$env* and domain *$domain*.\", \"icon_emoji\": \":acquiacloud:\"}" $SLACK_WEBHOOK_URL -s > /dev/null
