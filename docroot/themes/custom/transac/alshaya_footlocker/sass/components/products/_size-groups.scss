@@ -1,0 +1,32 @@
+.group-anchor-wrapper {
+  a:last-child {
+    margin-#{$right}: 0;
+  }
+
+  @include breakpoint($only-mobile) {
+    display: flex;
+
+    a {
+      width: 100%;
+    }
+  }
+}
+
+.group-wrapper {
+  .select2Option .select-buttons li {
+    a {
+      padding: 0.75rem 0.1875rem;
+      text-transform: uppercase;
+      line-height: normal;
+
+      html[lang=ar] & {
+        line-height: 1.3;
+      }
+
+      &:hover {
+        color: $pdp_size_option_text_hover;
+        background: $pdp_size_option_bg_hover;
+      }
+    }
+  }
+}
