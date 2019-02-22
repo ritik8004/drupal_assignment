@@ -1375,6 +1375,18 @@
   .location-content {
     white-space: normal;
   }
+
+  @include breakpoint($tablet) {
+    width: 15.625rem;
+  }
+}
+
+.gm-style-iw {
+  max-width: none !important;
+
+  > div {
+    max-width: none !important;
+  }
 }
 
 .path--store-finder .store-finder--wrapper .input--wrapper [id^=edit-actions] {
