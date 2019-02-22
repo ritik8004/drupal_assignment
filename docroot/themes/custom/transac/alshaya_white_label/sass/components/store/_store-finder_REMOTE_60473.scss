@@ -1323,12 +1323,6 @@
     margin-bottom: 0.5rem;
   }
 
-  .gm-style-iw {
-    & > div {
-      min-height: 12rem;
-    }
-  }
-
   .hours--label,
   .hours--label::after {
     color: $store_finder_search_results_label;

@@ -1323,12 +1323,21 @@
     margin-bottom: 0.5rem;
   }
 
+<<<<<<< HEAD
   .gm-style-iw {
     & > div {
       min-height: 12rem;
     }
   }
 
+  .scroll-fix {
+    @include breakpoint($desktop) {
+      min-width: 13.0625rem;
+    }
+  }
+
+=======
+>>>>>>> qa
   .hours--label,
   .hours--label::after {
     color: $store_finder_search_results_label;
