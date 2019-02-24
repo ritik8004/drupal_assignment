@@ -169,6 +169,21 @@
       }
     }
   }
+
+  .swatches {
+    margin-top: 0.625rem;
+
+    > a {
+      display: inline-block;
+
+      .swatch-block {
+        display: block;
+        width: 4.5625rem;
+        height: 5.4375rem;
+        margin: 0 0.3125rem;
+      }
+    }
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
