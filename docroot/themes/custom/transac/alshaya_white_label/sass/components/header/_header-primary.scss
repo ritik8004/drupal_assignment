@@ -987,6 +987,9 @@ header {
     }
 
     &.mobile--overlay {
+      position: fixed;
+      width: 100%;
+
       &::before {
         opacity: 1;
         z-index: 6;
