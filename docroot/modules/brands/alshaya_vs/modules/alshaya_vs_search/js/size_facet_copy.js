@@ -160,19 +160,6 @@
         }
       });
 
-      //JS for checking the empty filters.
-      function emptyBrasFilter(element) {
-        if (element.is(':empty')) {
-          element.parent().addClass('empty-bras-filter');
-        }
-        else {
-          element.parent().removeClass('empty-bras-filter');
-        }
-      }
-
-      emptyBrasFilter($('.sfb-letter .sfb-facets-container'));
-      emptyBrasFilter($('.sfb-band-cup .sfb-facets-container'));
-
       var sliderIndex = 0;
 
       if ($('html').attr('dir') == 'rtl') {
@@ -227,6 +214,19 @@
         });
       }
     }
+
+    //JS for checking the empty filters.
+    function emptyBrasFilter(element) {
+      if (element.is(':empty')) {
+        element.parent().addClass('empty-bras-filter');
+      }
+      else {
+        element.parent().removeClass('empty-bras-filter');
+      }
+    }
+
+    emptyBrasFilter($('.sfb-letter .sfb-facets-container'));
+    emptyBrasFilter($('.sfb-band-cup .sfb-facets-container'));
   }
 
   if ($('html').attr('dir') == 'rtl') {

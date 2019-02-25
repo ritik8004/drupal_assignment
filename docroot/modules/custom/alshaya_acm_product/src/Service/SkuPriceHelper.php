@@ -189,14 +189,18 @@ class SkuPriceHelper {
     $child_prices = array_column($prices['children'], 'price');
     $child_final_prices = array_column($prices['children'], 'final_price');
     $discounts = array_column($prices['children'], 'discount');
+    $selling_prices = array_column($prices['children'], 'selling_price');
 
     // We show normal price(no range) only in below conditions.
     // 1. If no variant available.
     // 2. If all variants have same price.
-    // 3. If no discounted variant(price and final_price are same for all).
+    // 3. If all variants have same final_price.
+    // If final_price available but the discount is
+    // zero(discount=price-final_price), in this case we show
+    // range(only when final_prices are not same).
     if (count($prices['children']) <= 1
       || count(array_unique(array_filter($child_prices))) == 1
-      || count(array_unique(array_filter($child_final_prices))) == 0) {
+      || count(array_unique($selling_prices)) == 1) {
 
       return $this->buildPriceBlockSimple($sku);
     }
@@ -211,7 +215,6 @@ class SkuPriceHelper {
       ];
     }
     else {
-      $selling_prices = array_column($prices['children'], 'selling_price');
       $this->build['#price'] = [
         '#markup' => $this->getMinMax($selling_prices),
       ];

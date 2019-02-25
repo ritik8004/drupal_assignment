@@ -48,7 +48,6 @@
         slidesToShow: 3,
         slidesToScroll: 3,
         focusOnSelect: false,
-        variableWidth: true,
         touchThreshold: 1000,
         responsive: [
           {

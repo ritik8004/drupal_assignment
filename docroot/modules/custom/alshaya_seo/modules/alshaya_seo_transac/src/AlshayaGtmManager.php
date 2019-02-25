@@ -349,13 +349,15 @@ class AlshayaGtmManager {
 
     $attributes = [];
     $product_node = $this->skuManager->getDisplayNode($sku);
-    $original_price = (float) $sku->get('price')->getString();
-    $final_price = (float) $sku->get('final_price')->getString();
+    $prices = $this->skuManager->getMinPrices($sku);
+    $original_price = $prices['price'];
+    $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
+      $final_price = $prices['final_price'];
     }
 
     $product_type = 'Regular Product';

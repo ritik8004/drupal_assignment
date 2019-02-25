@@ -203,13 +203,7 @@ class UserRecentOrders extends BlockBase implements ContainerFactoryPluginInterf
 
             // Iterate over each order item.
             foreach ($order['items'] as $key => $item) {
-              $product_node = alshaya_acm_product_get_display_node($item['sku']);
-              if (!empty($product_node)) {
-                $order['item_names'][] = $product_node->getTitle();
-              }
-              else {
-                $order['item_names'][] = $item['name'];
-              }
+              $order['item_names'][] = $item['name'];
 
               // Load the first image.
               $order['items'][$key]['image'] = alshaya_acm_get_product_display_image($item['sku'], '291x288', 'order_detail');

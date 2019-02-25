@@ -278,7 +278,7 @@
           }
         });
 
-        if ($(context).find('.store-sequence')) {
+        if ($(context).find('.store-sequence').length !== 0) {
           window.scrollTo(0, $('#pdp-stores-container h3.c-accordion__title').offset().top);
         }
       }
@@ -323,7 +323,7 @@
         // Move size guide link inside configurable size container.
         sizeTrayButtons.prepend(sizeGuideLink);
 
-        $('.edit-add-to-cart', context).on('mousedown', function () {
+        $('.edit-add-to-cart', context).once().on('mousedown', function () {
           var that = this;
           setTimeout(function () {
             if ($(that).closest('form').hasClass('ajax-submit-prevented')) {

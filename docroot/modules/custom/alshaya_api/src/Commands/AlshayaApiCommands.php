@@ -129,6 +129,7 @@ class AlshayaApiCommands extends DrushCommands {
     $this->entityTypeManager = $entityTypeManager;
     $this->lock = $lock;
     $this->configFactory = $config_factory;
+    parent::__construct();
   }
 
   /**
@@ -730,6 +731,52 @@ class AlshayaApiCommands extends DrushCommands {
       if ($type == 'simple' && $msource == 'report') {
         $checked_skus = [];
 
+        // Variable to hold total requests be made to MDC for live check.
+        $live_check_total_api_request = 0;
+        // Get total number of api requests that will be made against magento
+        // on stock/price difference when `live_check' flag is used and inform
+        // the user about it.
+        if ($live_check) {
+          $total_live_check_api_call_stock = [];
+          $total_live_check_api_call_price = [];
+          $mskus_data = $mskus[$type];
+          foreach ($languages as $lang) {
+            $dskus_data = $dskus[$type][$lang->getId()];
+
+            // Check if stock diff.
+            $total_live_check_api_call_stock[] = array_filter($dskus_data, function ($sku_data) use ($mskus_data) {
+              return (
+                !empty($mskus_data[$sku_data['sku']])
+                && $sku_data['quantity'] != $mskus_data[$sku_data['sku']]['qty']
+              );
+            });
+
+            // Check if price diff.
+            $total_live_check_api_call_price[] = array_filter($dskus_data, function ($sku_data) use ($mskus_data) {
+              return (
+                !empty($mskus_data[$sku_data['sku']])
+                && (
+                  $sku_data['price'] != $mskus_data[$sku_data['sku']]['price']
+                  || $sku_data['special_price'] != $mskus_data[$sku_data['sku']]['special_price']
+                )
+              );
+            });
+          }
+
+          if (!empty($total_live_check_api_call_stock) || !empty($total_live_check_api_call_price)) {
+            $live_check_total_api_request = count(array_merge(...$total_live_check_api_call_stock))
+              + count(array_merge(...$total_live_check_api_call_price));
+            $this->io()->note(dt('Total:@count API calls will be made to MDC for stock/price difference.', [
+              '@count' => $live_check_total_api_request,
+            ]));
+          }
+        }
+
+        // Variable to hold incremental value after each live_check api call.
+        $live_check_api_call_done = 0;
+        // Show live_check api call message after these number of api calls.
+        $live_check_api_call_step = 50;
+
         foreach ($languages as $language) {
           foreach ($dskus[$type][$language->getId()] as $sku => $data) {
             // We will check the stock and price for this SKU only if it exists
@@ -744,7 +791,14 @@ class AlshayaApiCommands extends DrushCommands {
               // If stock in drupal does not match with stock from merch and
               // live-check is enabled, we get the stock from API to confirm
               // the stock difference.
-              if ($live_check && $data['stock'] != $mskus[$type][$sku]['qty']) {
+              if ($live_check && $data['quantity'] != $mskus[$type][$sku]['qty']) {
+                $live_check_api_call_done++;
+                if (($live_check_api_call_done % $live_check_api_call_step) == 0) {
+                  $this->output->writeln(dt("@current/@total Fetching data from Magento's API for stock and price. Please wait ...", [
+                    '@current' => $live_check_api_call_done,
+                    '@total' => $live_check_total_api_request,
+                  ]));
+                }
                 $mskus[$type][$sku]['qty'] = $this->alshayaApiWrapper->getStock($sku);
               }
 
@@ -761,6 +815,13 @@ class AlshayaApiCommands extends DrushCommands {
               if ($live_check && (
                   $data['price'] != $mskus[$type][$sku]['price'] || $data['special_price'] != $mskus[$type][$sku]['special_price'])
               ) {
+                $live_check_api_call_done++;
+                if (($live_check_api_call_done % $live_check_api_call_step) == 0) {
+                  $this->output->writeln(dt("@current/@total Fetching data from Magento's API for stock and price. Please wait ...", [
+                    '@current' => $live_check_api_call_done,
+                    '@total' => $live_check_total_api_request,
+                  ]));
+                }
                 $sku_data = $this->alshayaApiWrapper->getSku($sku);
 
                 if (isset($sku_data['price'])) {
