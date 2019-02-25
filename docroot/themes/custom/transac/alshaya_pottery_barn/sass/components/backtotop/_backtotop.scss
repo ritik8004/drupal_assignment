@@ -1,7 +1,7 @@
 #backtotop {
   font-size: 0;
-  height: 3rem;
-  width: 3rem;
+  height: 2.3125rem;
+  width: 2.3125rem;
   bottom: 1.5rem;
   line-height: normal;
   #{$right}: 0.875rem;
@@ -14,12 +14,12 @@
     #{$right}: 3.5625rem;
   }
 
-  @include icon(chevronup, after) {
-    width: 3rem;
-    height: 3rem;
-    font-size: 3rem;
+  &::after {
+    content: '';
+    background: url(../imgs/icons/back-to-top.svg) no-repeat;
+    background-size: contain;
+    border-radius: 0;
     top: 0;
     #{$right}: 0;
-    #{$left}: 0;
   }
 }
