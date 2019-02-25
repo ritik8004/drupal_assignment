@@ -94,28 +94,32 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 
 /**
  * Implements hook_search_api_query_alter().
- *
- * Alter query to filter in stock products.
  */
 function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
-  /** @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper $priceHelper */
-  $priceHelper = \Drupal::service('alshaya_acm_product.price_helper');
-  if ($priceHelper->isPriceModeFromTo()) {
-    // Check for final price condition.
+  if (_alshaya_acm_product_get_price_helper()->isPriceModeFromTo()) {
+    // Check for special price condition. We change it to price and final_price.
+    // We do separate conditions for price and final_price as between query is
+    // not working as expected in SOLR.
     // We know it will be inside two levels, we check accordingly.
     foreach ($query->getConditionGroup()->getConditions() as $conditionLevel1) {
       if ($conditionLevel1 instanceof ConditionGroupInterface) {
         foreach ($conditionLevel1->getConditions() as $conditionLevel2) {
           if ($conditionLevel2 instanceof ConditionGroupInterface) {
             foreach ($conditionLevel2->getConditions() as $condition) {
-              if ($condition instanceof ConditionInterface && $condition->getField() == 'final_price') {
-                $priceConditionGroup = clone $conditionLevel2;
-                foreach ($priceConditionGroup->getConditions() as $priceCondition) {
-                  $priceCondition->setField('price');
-                }
-                $conditionLevel1->addConditionGroup($priceConditionGroup);
-                break 3;
+              if ($condition instanceof ConditionInterface && $condition->getField() == 'attr_selling_price') {
+                $condition->setField('final_price');
+                $add_price_condition = TRUE;
               }
+            }
+
+            // Add price condition too when filter by selling price.
+            if (isset($add_price_condition)) {
+              $priceConditionGroup = clone $conditionLevel2;
+              foreach ($priceConditionGroup->getConditions() as $priceCondition) {
+                $priceCondition->setField('price');
+              }
+              $conditionLevel1->addConditionGroup($priceConditionGroup);
+              break 2;
             }
           }
         }

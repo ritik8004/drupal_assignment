@@ -2842,13 +2842,16 @@ class SkuManager {
     $item->getField('price')->setValues([$prices['price']]);
     $item->getField('final_price')->setValues([$prices['final_price']]);
 
-    if ($sku->bundle() === 'configurable') {
-      // Use max of selling prices for price in configurable products.
-      if (!empty($prices['children'])) {
-        $selling_prices = array_column($prices['children'], 'selling_price');
-        $item->getField('price')->setValues([max($selling_prices)]);
-      }
+    // Use max of selling prices for price in configurable products.
+    if (!empty($prices['children'])) {
+      $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
+      $item->getField('price')->setValues([max($selling_prices)]);
 
+      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $item->getField('attr_selling_price')->setValues($selling_prices);
+    }
+
+    if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
     }
     elseif ($sku->bundle() == 'simple') {
