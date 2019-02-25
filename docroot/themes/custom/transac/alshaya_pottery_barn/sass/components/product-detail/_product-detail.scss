@@ -223,6 +223,12 @@
   }
 }
 
+.content__title_wrapper {
+  .content--item-code {
+    display: none;
+  }
+}
+
 .select2Option {
   display: block;
 }
