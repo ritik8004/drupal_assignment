@@ -230,6 +230,7 @@
 
       @include breakpoint($only-mobile) {
         @include u-visibility(block);
+
         position: absolute;
         top: -0.1875rem;
       }
