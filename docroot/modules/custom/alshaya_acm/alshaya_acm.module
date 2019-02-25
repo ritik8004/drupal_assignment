@@ -641,10 +641,18 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
   \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
 
+  $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
+
+  // Update the currency code to one required for the site.
+  $currency_code = _alshaya_get_currency_code($country_code, 'en');
+  $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
+  $config->set('currency_code', $currency_code);
+  $config->set('decimal_points', 3);
+  $config->save();
+
   // Translate currency code in config.
-  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
-  $country_code = _alshaya_custom_get_site_level_country_code();
   $currency_code = _alshaya_get_currency_code($country_code, 'ar');
+  $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
   $config->set('currency_code', $currency_code);
   $config->set('currency_code_position', 'after');
   $config->save();
