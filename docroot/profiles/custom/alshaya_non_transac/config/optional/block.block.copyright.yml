@@ -6,9 +6,9 @@ dependencies:
   module:
     - block_content
   theme:
-    - whitelabel_non_transac
+    - whitelabel
 id: copyright
-theme: whitelabel_non_transac
+theme: whitelabel
 region: footer_secondary
 weight: -7
 provider: null

@@ -1323,12 +1323,6 @@
     margin-bottom: 0.5rem;
   }
 
-  .scroll-fix {
-    @include breakpoint($desktop) {
-      min-width: 13.0625rem;
-    }
-  }
-
   .hours--label,
   .hours--label::after {
     color: $store_finder_search_results_label;
@@ -1380,6 +1374,18 @@
 
   .location-content {
     white-space: normal;
+  }
+
+  @include breakpoint($tablet) {
+    width: 15.625rem;
+  }
+}
+
+.gm-style-iw {
+  max-width: none !important;
+
+  > div {
+    max-width: none !important;
   }
 }
 

@@ -10,6 +10,17 @@
           <div data-iframe="{{ thumbs.url }}" class="pdp-video pdp-video-{{ loop.index0 }} vimeo">
             <img width='{{ thumbs.width }}' height='{{ thumbs.height }}' src="{{ thumbs.thumburl }}" alt="{{ thumbs.video_desc }}" title="{{ thumbs.video_title }}" />
           </div>
+        {% elseif loop.first %}
+          <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
+            <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
+              <img src="{{ thumbs.mediumurl }}" alt="{{ thumbs.label }}" title="{{ thumbs.label }}" />
+            </a>
+            {%  if labels|length > 0 %}
+              <div class="product-labels">
+                {{ labels }}
+              </div>
+            {% endif %}
+          </figure>
         {% else %}
           <figure class="pdp-image pdp-image-{{ loop.index0 }} {{ loop.last ? 'last' : ''}}" data-image-index={{ loop.index0 }}>
             <a href="{{ thumbs.zoomurl }}" rel="{{ properties }}" class="cloud-zoom" >
