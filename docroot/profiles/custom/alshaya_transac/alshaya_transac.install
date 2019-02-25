@@ -14,15 +14,6 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Enable alshaya_sitemap module.
- */
-function alshaya_transac_update_8120() {
-  \Drupal::service('module_installer')->install(['alshaya_sitemap']);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Correcting the block positions for promotion banner blocks.
  */
 function alshaya_transac_update_8119() {

@@ -1,7 +1,0 @@
-name: Alshaya Sitemap
-description: This module is used for sitemap customisation.
-core: 8.x
-package: Alshaya
-type: module
-dependencies:
-  - simple_sitemap:simple_sitemap

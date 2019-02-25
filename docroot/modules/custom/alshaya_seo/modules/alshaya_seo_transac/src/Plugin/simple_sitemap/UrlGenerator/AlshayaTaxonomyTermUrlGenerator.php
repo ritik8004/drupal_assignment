@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_sitemap\Plugin\simple_sitemap\UrlGenerator;
+namespace Drupal\alshaya_seo_transac\Plugin\simple_sitemap\UrlGenerator;
 
 use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\EntityUrlGenerator;
 
