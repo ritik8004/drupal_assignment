@@ -38,7 +38,7 @@ function acq_sku_stock_views_data() {
 
   $data['acq_sku_stock']['status'] = [
     'title' => t('Stock Status'),
-    'help' => t('The total number of times the node has been viewed today.'),
+    'help' => t('The explicit stock status in-stock or not.'),
     'field' => [
       'id' => 'boolean',
     ],
