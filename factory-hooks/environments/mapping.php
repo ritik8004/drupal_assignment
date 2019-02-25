@@ -100,6 +100,12 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'hmae_mapp',
       ],
     ],
+    'flsa' => [
+      '01dev2' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flsa_uat',
+      ],
+    ],
   ];
 
   // All 01update should match 01live.
