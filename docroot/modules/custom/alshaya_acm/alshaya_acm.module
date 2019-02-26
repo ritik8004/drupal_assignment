@@ -643,13 +643,6 @@ function alshaya_acm_alshaya_i18n_onetime_translation_add() {
 
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
 
-  // Update the currency code to one required for the site.
-  $currency_code = _alshaya_get_currency_code($country_code, 'en');
-  $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
-  $config->set('currency_code', $currency_code);
-  $config->set('decimal_points', 3);
-  $config->save();
-
   // Translate currency code in config.
   $currency_code = _alshaya_get_currency_code($country_code, 'ar');
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
