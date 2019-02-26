@@ -44,8 +44,8 @@ function acq_sku_stock_update_manged_sku_views() {
     'plugin_id' => 'boolean',
   ];
 
-  $fields['stock_status'] = [
-    'id' => 'stock_status',
+  $fields['stock_quantity'] = [
+    'id' => 'stock_quantity',
     'table' => 'acq_sku_stock',
     'field' => 'quantity',
     'relationship' => 'none',
@@ -56,7 +56,7 @@ function acq_sku_stock_update_manged_sku_views() {
     'entity_type' => 'node',
     'plugin_id' => 'numeric',
   ];
-  $fields[$operations['id']] = $operations['id'];
+  $fields[$operations['id']] = $operations;
   $config->set("display.default.display_options.fields", $fields);
   $config->save(TRUE);
 }
