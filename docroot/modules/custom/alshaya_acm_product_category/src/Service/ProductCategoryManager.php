@@ -183,9 +183,25 @@ class ProductCategoryManager {
    * @return bool
    *   TRUE if product has special price.
    */
-  private function isProductWithSpecialPrice(NodeInterface $node) {
+  public function isProductWithSpecialPrice(NodeInterface $node) {
     $sku = SKU::loadFromSku($node->get('field_skus')->getString());
     $prices = $this->skuManager->getMinPrices($sku);
+
+    // If any children available.
+    if (!empty($prices['children'])) {
+      foreach ($prices['children'] as $child) {
+        // If any child has discount, we don't process further.
+        if ($child['discount']) {
+          return TRUE;
+        }
+      }
+
+      // If no child has any discount.
+      return FALSE;
+    }
+
+    // This is the case for the simple skus. For simple skus, we don't have any
+    // children and thus in this case we use `price` and `final_price`.
     return ($prices['price'] > 0) && ($prices['final_price'] > 0) && ($prices['price'] != $prices['final_price']);
   }
 
