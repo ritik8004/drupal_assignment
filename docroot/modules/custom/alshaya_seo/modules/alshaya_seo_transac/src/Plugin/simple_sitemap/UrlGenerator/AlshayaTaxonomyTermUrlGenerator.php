@@ -51,4 +51,17 @@ class AlshayaTaxonomyTermUrlGenerator extends EntityUrlGenerator {
     return $data_sets;
   }
 
+  /**
+   * Process entity and ignore the term that is status disabled.
+   *
+   * @inheritdoc
+   */
+  protected function processDataSet($entity) {
+    if ($entity->hasField('field_commerce_status') && !$entity->get('field_commerce_status')->value) {
+      return FALSE;
+    }
+
+    return parent::processDataSet($entity);
+  }
+
 }
