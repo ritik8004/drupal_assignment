@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "817a933b546d650cdf8e1db77a8d7760",
+    "content-hash": "ba8f916763a23f0425d278e28aa7d8dd",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11241,7 +11241,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Set login error destination to allow users to redirect back to the origin page on social auth fail.": "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033749-3.patch"
+                    "Set login error destination to allow users to redirect back to the origin page on social auth fail.": "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033749-3.patch",
+                    "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
