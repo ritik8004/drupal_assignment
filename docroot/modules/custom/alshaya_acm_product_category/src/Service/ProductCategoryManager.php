@@ -189,15 +189,7 @@ class ProductCategoryManager {
 
     // If any children available.
     if (!empty($prices['children'])) {
-      foreach ($prices['children'] as $child) {
-        // If any child has discount, we don't process further.
-        if ($child['discount']) {
-          return TRUE;
-        }
-      }
-
-      // If no child has any discount.
-      return FALSE;
+      return max(array_column($prices['children'], 'discount')) > 0;
     }
 
     // This is the case for the simple skus. For simple skus, we don't have any
