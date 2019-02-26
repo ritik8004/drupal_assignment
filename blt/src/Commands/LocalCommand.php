@@ -70,7 +70,7 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $modules_to_enable = 'dblog field_ui views_ui features_ui restui stage_file_proxy';
+    $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
     if ($info['profile'] == 'alshaya_transac') {
       $modules_to_enable .= ' alshaya_search_local_search';
     }
