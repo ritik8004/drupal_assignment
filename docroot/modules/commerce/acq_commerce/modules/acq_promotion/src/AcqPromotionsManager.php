@@ -153,7 +153,7 @@ class AcqPromotionsManager {
     }
 
     // Delete promotions, which are not part of API response.
-    $this->deletePromotions($ids);
+    $this->deletePromotions($types, $ids);
   }
 
   /**
@@ -162,9 +162,10 @@ class AcqPromotionsManager {
    * @param array $validIDs
    *   Valid Rule ID's from API.
    */
-  protected function deletePromotions(array $validIDs = []) {
+  protected function deletePromotions(array $types, array $validIDs = []) {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
+    $query->condition('field_acq_promotion_type', $types, 'IN');
 
     if ($validIDs) {
       $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');

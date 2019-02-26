@@ -73,11 +73,6 @@
     }
   }
 
-  .tooltip::before,
-  .tooltip::after {
-    @extend %tooltip-before-after;
-  }
-
   .tooltip::after {
     @extend %tooltip-after;
 
