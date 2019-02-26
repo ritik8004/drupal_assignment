@@ -470,16 +470,11 @@
           }
 
           #add-address-button {
-            margin-top: 0;
-            width: 100%;
-            font-size: 0.75rem;
             display: block;
             padding: 0.5625rem 1.5625rem;
-            border: 1px solid $secondary_border;
             background: $white-five;
             font-family: $hnm-bold;
             font-weight: normal;
-            color: #000;
             text-transform: uppercase;
             top: -0.3125rem;
 
@@ -494,12 +489,15 @@
 
           #add-address-button {
             @include breakpoint($tablet) {
-              top: -0.625rem;
+              top: -0.125rem;
               width: 40%;
             }
 
             @include breakpoint($desktop) {
               width: 20%;
+              text-decoration: underline;
+              text-align: #{$right};
+              padding: 0.5625rem 0;
             }
           }
         }
