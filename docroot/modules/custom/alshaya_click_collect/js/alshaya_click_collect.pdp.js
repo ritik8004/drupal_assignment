@@ -190,7 +190,6 @@
     $('.click-collect-form').find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
-        console.log('hello');
         Drupal.AlshayaPlacesAutocomplete.handleEnterKeyPress($(this), callbacks, restriction);
       }
     });
@@ -290,6 +289,10 @@
 
               // Custom command function to render map and map markers.
               storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
+                if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+                  $('body').removeClass('magazine-layout-ajax-throbber');
+                }
+
                 if (status === 'success') {
                   if (response.data.alshaya_click_collect.pdp.top_three) {
                     // Show formatted address after ajax for all stores, once we have html elements.
@@ -302,6 +305,12 @@
                   }
                 }
               };
+
+              // When sidebar is sticky for magazine layout.
+              if ($('.content-sidebar-wrapper').hasClass('sidebar-fixed')) {
+                $('body').addClass('magazine-layout-ajax-throbber');
+              }
+
               storeDisplayAjax.execute();
             }
           }
