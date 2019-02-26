@@ -77,7 +77,9 @@
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "2.x-dev",
-        "drupal/social_auth_facebook": "^1.0",
+        "drupal/social_api": "2.x-dev",
+        "drupal/social_auth": "2.x-dev",
+        "drupal/social_auth_facebook": "^2.0",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
@@ -315,6 +317,13 @@
             },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
+            },
+            "drupal/social_auth": {
+                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033749-3.patch",
+                "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
+            },
+            "drupal/social_auth_facebook": {
+                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033751-2.patch"
             }
         },
         "installer-paths": {
