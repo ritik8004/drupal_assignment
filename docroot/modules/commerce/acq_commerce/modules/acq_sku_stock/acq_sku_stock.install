@@ -53,7 +53,6 @@ function acq_sku_stock_update_manged_sku_views() {
     'admin_label' => '',
     'label' => 'Stock Quantity',
     'exclude' => FALSE,
-    'entity_type' => 'node',
     'plugin_id' => 'numeric',
   ];
   $fields[$operations['id']] = $operations;
