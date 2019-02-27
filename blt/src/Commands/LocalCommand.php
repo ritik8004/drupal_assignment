@@ -106,16 +106,7 @@ class LocalCommand extends BltTasks {
       ->drush('cset')
       ->arg('stage_file_proxy.settings')
       ->arg('origin')
-      ->arg($info['origin'])
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->taskDrush()
-      ->drush('cset')
-      ->arg('stage_file_proxy.settings')
-      ->arg('origin_dir')
-      ->arg($info['origin_dir'])
+      ->arg($info['origin'] . '/' . $info['origin_dir'])
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -259,7 +250,7 @@ class LocalCommand extends BltTasks {
     $info['remote']['db_role'] = $this->extractInfo($remote_data, $site, 'db_role');
     $info['remote']['url'] = $this->extractInfo($remote_data, $site, 'url');
 
-    $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'] . '/files/';
+    $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'];
     $info['origin'] = 'https://' . $info['remote']['url'];
 
     if (empty($info['remote']['db_role']) || empty($info['remote']['url'])) {
@@ -336,7 +327,7 @@ class LocalCommand extends BltTasks {
         return $array['name'];
       }
       elseif ($info_required == 'url') {
-        return array_pop($array['domains']);
+        return reset($array['domains']);
       }
     }
 
