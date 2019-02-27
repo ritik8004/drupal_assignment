@@ -284,7 +284,7 @@ class ProductOptionsHelper {
       // Delete the cache for size groups mapping, we will re-create it when
       // accessed again.
       foreach ($this->languageManager->getLanguages() as $language) {
-        $this->cache->delete(self::CID_SIZE_GROUP . ':' . $language);
+        $this->cache->delete(self::CID_SIZE_GROUP . ':' . $language->getId());
       }
     }
   }

@@ -18,7 +18,7 @@
       var that = $(this);
 
       // Hide current select, we will never show it.
-      $(this).hide();
+      $(this).addClass('visually-hidden');
 
       // We will add all groups inside a wrapper to show only one at a time.
       group_wrapper = $('<div class="group-wrapper" />');
