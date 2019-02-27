@@ -164,7 +164,6 @@ switch ($env) {
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'features_ui';
 
     // Increase autologout timeout on local so we are not always logged out.
     $config['autologout.settings']['timeout'] = 86400;
