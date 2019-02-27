@@ -17,6 +17,7 @@ fields:
     facet: 0
     swatch: 1
   size_shoe_eu:
+    configurable: 1
     label: 'Size Shoes'
     cardinality: -1
     index: 1
@@ -32,6 +33,7 @@ fields:
     index: 1
     facet: 0
   size_textile_eu:
+    configurable: 1
     label: 'Size Clothing'
     cardinality: -1
     index: 1
@@ -47,16 +49,19 @@ fields:
     index: 1
     facet: 0
   size_socks:
+    configurable: 1
     label: 'Size Socks'
     cardinality: -1
     index: 1
     facet: 1
   size_bras:
+    configurable: 1
     label: 'Size Bras'
     cardinality: -1
     index: 1
     facet: 1
   size_rest:
+    configurable: 1
     label: 'Size Rest'
     cardinality: -1
     index: 1
