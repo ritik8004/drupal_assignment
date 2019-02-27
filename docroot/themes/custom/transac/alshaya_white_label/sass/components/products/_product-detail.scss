@@ -2001,3 +2001,11 @@ html[lang=ar] {
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .mobilegallery {
+    #product-image-gallery-mobile {
+      min-height: 18rem;
+    }
+  }
+}
