@@ -9,6 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber;
 use Drupal\alshaya_acm_product\Controller\ProductStockController;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
@@ -151,6 +152,9 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
 
   // Prepare the ajax Response.
   $response = ProductStockController::$response;
+  if (!$response instanceof AjaxResponse) {
+    $response = new AjaxResponse();
+  }
   $data['message'] = $output['#theme'] == 'cart_notification' ? 'success' : 'failure';
   $response->addCommand(new InvokeCommand(NULL, 'stopSpinner', [$data]));
 
