@@ -83,11 +83,10 @@ class SkuPriceHelper {
 
     $this->displayMode = $display_settings->get('price_display_mode') ?? self::PRICE_DISPLAY_MODE_SIMPLE;
 
-    $this->decimalPoints = (int) $config_factory
-      ->get('acq_commerce.currency')
-      ->get('decimal_points');
+    $currency_config = $config_factory->get('acq_commerce.currency');
+    $this->decimalPoints = (int) $currency_config->get('decimal_points');
 
-    $this->configCacheTags = $display_settings->getCacheTags();
+    $this->configCacheTags = array_merge($display_settings->getCacheTags(), $currency_config->getCacheTags());
   }
 
   /**
