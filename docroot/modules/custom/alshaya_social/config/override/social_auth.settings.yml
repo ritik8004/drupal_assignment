@@ -1,3 +1,0 @@
-post_login: /user
-disable_admin_login: TRUE
-user_allowed: 'register'

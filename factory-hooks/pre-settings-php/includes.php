@@ -57,8 +57,8 @@ if ($settings['env'] === 'local') {
 
 switch ($env) {
   case 'local':
-    $settings['social_auth_facebook.settings']['app_id'] = '283206035693628';
-    $settings['social_auth_facebook.settings']['app_secret'] = 'd4a9cbd79d2bb27cb743f7fdff0ae408';
+    $settings['social_auth_facebook.settings']['app_id'] = '2140208022890023';
+    $settings['social_auth_facebook.settings']['app_secret'] = '7cde10657c1866f072c56283af920484';
     $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
     break;
 
