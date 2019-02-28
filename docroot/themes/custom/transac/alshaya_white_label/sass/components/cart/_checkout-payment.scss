@@ -555,3 +555,8 @@
     }
   }
 }
+
+.cybersource-ajax-progress-throbber .cybersource-throbber {
+  background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
+  background-size: 5.5rem !important;
+}
