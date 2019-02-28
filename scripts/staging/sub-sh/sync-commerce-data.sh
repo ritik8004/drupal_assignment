@@ -1,7 +1,7 @@
 uri="$1"
 
 echo "Syncing product categories."
-drush --uri=$uri sync-commerce-cats
+drush --uri=$uri sync-commerce-cats -y
 
 echo "Syncing product options."
 drush --uri=$uri sync-options
