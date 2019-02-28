@@ -536,15 +536,16 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // If L3 active item for 'search' page.
     if (count($parent_ids) == 2
+      && isset($parent_ids[0])
       && $context['result']->isActive()
-      && $facet_source_id == 'search_api:views_page__search__page'
-      || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2') {
+      && ($facet_source_id == 'search_api:views_page__search__page'
+      || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2')) {
       // Index 0 will always be the L2 parent.
       $parent_id = $parent_ids[0];
       // Get all children of L2 parent.
       $parent_child_ids = $facet->getHierarchyInstance()->getNestedChildIds($parent_id);
       // If there are more than 1 active children of a L2.
-      if (count(array_intersect($parent_child_ids, $context['active_filters'][$url_alias])) == 1) {
+      if (count(array_intersect($parent_child_ids, (array) $context['active_filters'][$url_alias])) == 1) {
         // Just select L2 parent if there is only 1 L3 active item.
         $filter_params[] = $url_alias . ':' . $parent_id;
       }
@@ -556,10 +557,13 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
  * Helper function to clear all indexed items resave indexes.
  *
  * Since we will add/update lot of attributes, best to re-use the code.
+ *
+ * @param array $indexes
+ *   Indexes to resave.
+ *
+ * @throws \Exception
  */
-function _alshaya_search_resave_indexes() {
-  $indexes = ['product', 'acquia_search_index'];
-
+function _alshaya_search_resave_indexes(array $indexes = ['product', 'acquia_search_index']) {
   foreach ($indexes as $index_name) {
     // Queue items for re-indexing. Required specifically for search_api_db to
     // avoid creating tables with numeric prefixes when indexing content.
@@ -621,10 +625,20 @@ function alshaya_search_acquia_search_get_list_of_possible_cores_alter(&$possibl
 
   if (!empty($use_brand_specific_core)) {
     // @codingStandardsIgnoreLine
-    global $site_code;
+    global $acsf_site_code;
 
     $ah_env = preg_replace('@[^a-zA-Z0-9]+@', '', $core_service->ah_env);
 
-    array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $site_code);
+    array_unshift($possible_core_ids, $core_service->acquia_identifier . '.' . $ah_env . '.' . $acsf_site_code);
+  }
+}
+
+/**
+ * Implements hook_local_tasks_alter().
+ */
+function alshaya_search_local_tasks_alter(&$local_tasks) {
+  // Change config translation local task hierarchy.
+  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_search.srp_sort_settings_form'])) {
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_search.srp_sort_settings_form']['parent_id'] = 'alshaya_search.srp_sort_settings_form';
   }
 }

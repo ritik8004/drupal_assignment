@@ -6,6 +6,7 @@ use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
@@ -16,7 +17,9 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -215,9 +218,10 @@ class CheckoutHelper {
       $this->clearCartHistory($cart->id());
 
       // Add success message in logs.
-      $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id.', [
+      $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
         '@cart_id' => $cart->id(),
         '@order_id' => $order_id,
+        '@method' => $session->get('selected_payment_method'),
       ]);
 
       // While debugging we log the whole cart object.
@@ -240,6 +244,20 @@ class CheckoutHelper {
 
       // Throw the message for calling function too.
       throw $e;
+    }
+  }
+
+  /**
+   * Reset stock cache and Drupal cache of products in cart.
+   *
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   Cart.
+   */
+  public function clearCacheForProductsInCart(CartInterface $cart) {
+    foreach ($cart->items() ?? [] as $item) {
+      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+        $sku_entity->refreshStock();
+      }
     }
   }
 
@@ -436,7 +454,22 @@ class CheckoutHelper {
     $cart->setPaymentMethod($method, $data);
 
     if ($push) {
-      $this->cartStorage->updateCart(FALSE);
+      try {
+        $this->cartStorage->updateCart(FALSE);
+      }
+      catch (\Exception $e) {
+        $this->logger->error('Error while updating cart while setting selected payment method: @message', [
+          '@message' => $e->getMessage(),
+        ]);
+
+        if (_alshaya_acm_is_out_of_stock_exception($e)) {
+          $this->clearCacheForProductsInCart($cart);
+        }
+
+        $response = new RedirectResponse(Url::fromRoute('acq_cart.cart')->toString());
+        $response->send();
+        exit;
+      }
     }
 
     // Save the current selection into cache.

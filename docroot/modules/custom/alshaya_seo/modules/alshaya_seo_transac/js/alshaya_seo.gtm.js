@@ -60,6 +60,36 @@
             platformType: 'desktop',
           });
         }
+
+        if ($(context).filter('article[data-vmode="modal"]').length === 1
+            || $(document).find('article[data-vmode="full"]').length === 1) {
+
+          if ($(document).find('article[data-vmode="full"]').length === 1) {
+            var productContext = $(document).find('article[data-vmode="full"]');
+          }
+          else {
+            var productContext = $(context).filter('article[data-vmode="modal"]');
+          }
+
+          var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
+          product.variant = '';
+          if (currentListName != null && currentListName !== 'PDP-placeholder') {
+            product.list = currentListName;
+            currentListName = null;
+          }
+
+          var data = {
+            event: 'productDetailView',
+            ecommerce: {
+              currencyCode: currencyCode,
+              detail: {
+                products: [product]
+              }
+            }
+          };
+
+          dataLayer.push(data);
+        }
       });
 
       // List of Pages where we need to push out list of product being rendered to GTM.
@@ -121,37 +151,32 @@
 
           if ((noOfResult === 0) || (isNaN(noOfResult))) {
             dataLayer.push({
-              event: 'internalSearch',
-              searchKeyword: keyword,
-              noOfResult: 0
+              event: 'eventTracker',
+              eventCategory: 'Internal Site Search',
+              eventAction: '404 Results',
+              eventLabel: keyword,
+              eventValue: 0,
+              nonInteraction: 0
             });
           }
         });
       }
 
       if ((isRegistrationSuccessPage) && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
+        Drupal.alshaya_seo_gtm_push_signin_type('Registration Success');
       }
 
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
-          dataLayer.push({
-            event: 'User Login & Register',
-            signinType: 'sign-in success'
-          });
-
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
         }
 
         // Fire logout success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
-          dataLayer.push({
-            event: 'User Login & Register',
-            signinType: 'logout success'
-          });
-
+          Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
         }
 
@@ -246,7 +271,7 @@
         }
       }
 
-      $('input[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
         ccPaymentsClicked = true;
       });
 
@@ -504,7 +529,7 @@
             body.addClass('virtualpageview-fired');
           }
 
-          if (($('input.cc-action', context).length > 0) && (context === document)) {
+          if (($('button.cc-action', context).length > 0) && (context === document)) {
             Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
           }
         }
@@ -536,8 +561,9 @@
       // Push purchaseSuccess for Order confirmation page.
       if (orderConfirmationPage.length !== 0 && settings.gtmOrderConfirmation) {
         dataLayer.push({
-          event: 'purchaseSuccess',
-          ecommerce: settings.gtmOrderConfirmation
+          event: settings.gtmOrderConfirmation.event,
+          virtualPageUrl: settings.gtmOrderConfirmation.virtualPageURL,
+          virtualPageTitle: settings.gtmOrderConfirmation.virtualPageTitle
         });
       }
 
@@ -554,36 +580,6 @@
           Drupal.alshaya_seo_gtm_push_product_clicks(that, currencyCode, listName, position);
         });
       });
-
-      if ($(context).filter('article[data-vmode="modal"]').length === 1
-        || $(document).find('article[data-vmode="full"]').length === 1) {
-
-        if ($(document).find('article[data-vmode="full"]').length === 1) {
-          var productContext = $(document).find('article[data-vmode="full"]');
-        }
-        else {
-          var productContext = $(context).filter('article[data-vmode="modal"]');
-        }
-
-        var product = Drupal.alshaya_seo_gtm_get_product_values(productContext);
-        product.variant = '';
-        if (currentListName != null && currentListName !== 'PDP-placeholder') {
-          product.list = currentListName;
-          currentListName = null;
-        }
-
-        var data = {
-          event: 'productDetailView',
-          ecommerce: {
-            currencyCode: currencyCode,
-            detail: {
-              products: [product]
-            }
-          }
-        };
-
-        dataLayer.push(data);
-      }
 
       /**
        * Product click handler for Modals.
@@ -1022,12 +1018,18 @@
   };
 
   /**
-   * Helper funciton to push sign-in type event.
+   * Helper funciton to push Login & Register events.
    *
-   * @param signinType
+   * @param eventAction
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (signinType) {
-    dataLayer.push({event: 'User Login & Register', signinType: signinType});
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+    dataLayer.push({
+      event: 'eventTracker',
+      eventCategory: 'Login & Register',
+      eventAction: eventAction,
+      eventValue: 0,
+      nonInteraction: 0
+    });
   };
 
   /**

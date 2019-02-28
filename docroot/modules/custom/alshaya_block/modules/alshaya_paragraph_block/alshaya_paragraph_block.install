@@ -8,6 +8,24 @@
 /**
  * Implements hook_update_N().
  *
+ * Adding ability to add image + title + subtitle in paragraph blocks.
+ */
+function alshaya_paragraph_block_update_8105() {
+  alshaya_config_install_configs(['field.field.block_content.paragraph_block.field_paragraph_content'], 'alshaya_paragraph_block');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make entity_reference_revisions field translatable: false. Reverts 8102.
+ */
+function alshaya_paragraph_block_update_8104() {
+  alshaya_config_install_configs(['field.field.block_content.paragraph_block.field_paragraph_content'], 'alshaya_paragraph_block');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Make entity_reference_revisions field translatable: false.
  */
 function alshaya_paragraph_block_update_8102() {

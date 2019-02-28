@@ -18,6 +18,7 @@ label: 'Promo Block'
 description: ''
 required: false
 translatable: false
+skip_translation_check: true
 default_value: {  }
 default_value_callback: ''
 settings:

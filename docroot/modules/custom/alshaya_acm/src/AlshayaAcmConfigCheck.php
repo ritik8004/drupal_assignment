@@ -93,11 +93,16 @@ class AlshayaAcmConfigCheck {
    *
    * @param bool $force
    *   Force reset.
+   * @param string $config_reset
+   *   Config that needs to reset.
+   *
+   * @return bool
+   *   Command run fully or not.
    */
-  public function checkConfig($force = FALSE) {
+  public function checkConfig($force = FALSE, string $config_reset = '') {
     // Do this only after installation is done.
     if (empty($this->configFactory->get('alshaya.installed_brand')->get('module'))) {
-      return;
+      return FALSE;
     }
 
     // Get the current env.
@@ -105,20 +110,21 @@ class AlshayaAcmConfigCheck {
 
     // We don't do anything on update envs like 01uatup.
     if (substr($env, -2) === 'up') {
-      return;
+      return FALSE;
     }
 
-    // If we want to force reset, we don't check for other conditions.
+    // If we want to force reset or config is empty, we don't check for
+    // other conditions.
     // We don't do anything on prod.
-    if (!$force && alshaya_is_env_prod()) {
-      return;
+    if (alshaya_is_env_prod() && (!$force || empty($config_reset))) {
+      return FALSE;
     }
 
     $request_time = $this->dateTime->getRequestTime();
 
     // Check if reverting of settings is disabled.
     if (!$force && !empty(Settings::get('disable_config_reset'))) {
-      return;
+      return FALSE;
     }
 
     $flag_var = 'alshaya_acm_config_check.' . $env;
@@ -127,7 +133,7 @@ class AlshayaAcmConfigCheck {
     $reset_time = $this->state->get($flag_var);
 
     if (!$force && !empty($reset_time)) {
-      return;
+      return FALSE;
     }
 
     // Set the first request time in state.
@@ -141,7 +147,17 @@ class AlshayaAcmConfigCheck {
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.settings',
+      'social_auth_facebook.settings',
     ];
+
+    if (!empty($config_reset)) {
+      if (!in_array($config_reset, $reset)) {
+        return FALSE;
+      }
+      else {
+        $reset = [$config_reset];
+      }
+    }
 
     // Reset the settings.
     foreach ($reset as $config_key) {
@@ -195,6 +211,8 @@ class AlshayaAcmConfigCheck {
     if (function_exists('alshaya_performance_reset_log_mode')) {
       alshaya_performance_reset_log_mode();
     }
+
+    return TRUE;
   }
 
   /**
@@ -209,7 +227,7 @@ class AlshayaAcmConfigCheck {
     // If the target country code does not have related country module, that
     // means we are not using a valid country code which may be on purpose so
     // don't do anything.
-    $modules = $this->state->get('system.module.files', []);
+    $modules = system_rebuild_module_data();
     if (!isset($modules['alshaya_' . $expected_country_code])) {
       return;
     }

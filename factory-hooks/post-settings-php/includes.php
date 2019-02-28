@@ -20,20 +20,7 @@ global $acsf_site_code;
 
 // If we are on local environment, the site name has not been detected yet.
 if (empty($acsf_site_name) && $settings['env'] == 'local') {
-  // Get site code from site uri.
-  if (!empty($_SERVER['HTTP_HOST'])) {
-    $hostname_parts = explode('.', $_SERVER['HTTP_HOST']);
-    $host_site_code = str_replace('alshaya-', '', $hostname_parts[1]);
-  }
-  else {
-    foreach ($_SERVER['argv'] as $arg) {
-      preg_match('/[\\S|\\s|\\d|\\D]*local.alshaya-(\\S*).com/', $arg, $matches);
-      if (!empty($matches)) {
-        $host_site_code = $matches[1];
-        break;
-      }
-    }
-  }
+  global $host_site_code;
 
   $data = Yaml::parse(file_get_contents(DRUPAL_ROOT . '/../blt/alshaya_local_sites.yml'));
 
@@ -45,9 +32,18 @@ if (empty($acsf_site_name) && $settings['env'] == 'local') {
   }
 
   // We don't want to interrupt script on default domain, otherwise drush command without --uri parameter would fail
-  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') ) {
+  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') && ($host_site_code) ) {
     print 'Invalid domain';
     die();
+  }
+
+  // We hardcode vsae site for travis Drupal installation.
+  // We must choose some site to test whether Drupal installation works
+  // properly. But it doesn't really matter too much which site we will install
+  // locally, as we only run very simplistic behat tests against it.
+  if ($env == 'travis') {
+    echo "Setting up vsae for travis environment.";
+    $acsf_site_name = 'vsae';
   }
 }
 
@@ -58,6 +54,26 @@ $country_code = substr($acsf_site_name, -2);
 // Country code is based on ISO 3166-1 alpha-2.
 $settings['country_code'] = strtoupper($country_code);
 
+// Filepath for MDC rabbitmq credentials.
+$rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home/alshaya/rabbitmq-creds/' . $settings['env'] . '/';
+
+$settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
+
 // We merge the entire settings with the specific ones.
 include_once DRUPAL_ROOT . '/../factory-hooks/environments/includes.php';
 $settings = array_replace_recursive($settings, alshaya_get_specific_settings($acsf_site_code, $country_code, $settings['env']));
+
+// Allow overriding settings and config to set secret info directly from
+// include files on server which can be per brand or brand country combination.
+$settings_path = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'settings-';
+
+$brand_country_file = $settings_path . $acsf_site_code . $country_code . '.php';
+if (file_exists($brand_country_file)) {
+  include_once $brand_country_file;
+}
+
+$brand_file = $settings_path . $acsf_site_code . '.php';
+
+if (file_exists($brand_file)) {
+  include_once $brand_file;
+}

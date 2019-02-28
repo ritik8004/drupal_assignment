@@ -7,6 +7,51 @@
 
 use Drupal\field\Entity\FieldConfig;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove field field_promo_banner_full_width.
+ */
+function alshaya_advanced_page_update_8007() {
+  $field = FieldConfig::loadByName('node', 'advanced_page', 'field_promo_banner_full_width');
+  if (!empty($field)) {
+    $field->delete();
+  }
+  $field_storage = FieldStorageConfig::loadByName('node', 'field_promo_banner_full_width');
+  if (!empty($field_storage)) {
+    $field_storage->delete();
+  }
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.node.advanced_page.default',
+        'core.entity_view_display.node.advanced_page.default',
+        'core.entity_view_display.node.advanced_page.teaser',
+      ],
+      'alshaya_advanced_page'
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make entity_reference_revisions field translatable: true. Reverting 8005.
+ */
+function alshaya_advanced_page_update_8006() {
+  $configs = [
+    'field.field.node.advanced_page.field_banner',
+    'field.field.node.advanced_page.field_delivery_banner',
+    'field.field.node.advanced_page.field_promo_banner_full_width',
+    'field.field.node.advanced_page.field_promo_blocks',
+    'field.field.node.advanced_page.field_related_info',
+    'field.field.node.advanced_page.field_slider',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_advanced_page');
+}
 
 /**
  * Implements hook_update_N().

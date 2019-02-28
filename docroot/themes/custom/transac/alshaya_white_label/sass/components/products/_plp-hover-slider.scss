@@ -36,7 +36,7 @@
   .slick-prev,
   .slick-next {
     z-index: 99;
-    top: 0.625rem;
+    top: calc(50% - 1rem);
 
     &::before {
       background-color: transparent;

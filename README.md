@@ -86,6 +86,23 @@ To prepare your local env:
 Next builds can be done using: `blt refresh:local:drupal`
 Behat tests can be run using: `vagrant ssh --command='cd /var/www/alshaya ; blt tests:behat'`
 
+### Running behat tests with headless Chrome locally on MacOS
+This reproduces the travis behavior closely (travis is running selected tests from alshaya_behat folder on daily basis), so use this way if your tests behave differently from travis.
+You **do not** need Java/Selenium/BLT/drupalvm installed for this.
+
+* Make sure you have Google Chrome browser installed on your host PC
+* Navigate to your repo root (you will run all commands below from repo root of host PC)
+* Make alias to your chrome browser, e.g. `alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"`
+* Run `chrome --headless --remote-debugging-port=9222 --window-size=1920,1080 http://localhost`
+* Open new terminal window
+* Run `vendor/bin/behat  --format pretty alshaya_behat/features/hmkw/common/sign_in.feature --colors --no-interaction --stop-on-failure --strict --config tests/behat/integration.yml --profile hmkw-uat -v`
+
+Notes:
+* Replace the "sign_in.feature" with other features or folder to run different tests
+* Replace "hmkw-uat" profile with other profiles, see `tests/behat/integration.yml` file for more examples.
+* While headless chrome is running, you can visit http://localhost:9222 to see how the "screen" of the tests looks like.
+* You can also see the screenshots of failed tests in `tests/behat/reports` folder
+
 ### Troubleshooting
 
 * `blt refresh:local` failed in drupal installation with EntityStorageException (...) entity with ID '...' already exists
@@ -159,15 +176,9 @@ In order to perform the private key forwarding, do following:
 
 As mentioned above, you should typically run all the blt and drush commands (except the initial one `blt vm` that initializes your virtual machine) from inside of your vm. This should cover all the typical cases and you can skip this part if you are fully comfortable with that approach. However, for the better convenience, it is sometimes quicker to run some drush commands from host PC. For example, running drush uli from host logs quickly user 1 into the site without need of copy/pasting of login link. PC To make this working follow these steps:
 
-* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (before that, please make sure you don’t need drush 8 for Alshaya anymore, or you archive old drush 8 e.g. under drush8 command - see Transition phase between drush 8 and drush 9 article for more details). Alternatively, you can manually run vendor/drush/drush/drush command if you want to run drush 9 commands without installing Drush launcher
+* Install <a href="https://github.com/drush-ops/drush-launcher">Drush launcher</a> on your host PC (archive old drush8 command somewhere if you want to run it for another projects)
 * To connect to vagrant instances from host pc, use @<site>.vm aliases, e.g. `drush @hmkw.vm status`. These aliases cannot be used to sync databases to local (see Technical details on aliases structure for more information)
 * To connect to remote sites, use standard `drush @<site>.01<env>` form, e.g. `drush @hmkw.01dev3 status`. Note this will only work if the remote site has already deployed blt9 and drush9 (see next topic)
-
-### Transition phase between drush 8 and drush 9
-
-General rule is: drush 8 site aliases can be properly interpreted only with drush 8, drush 9 sites only with drush 9. That brings some challenges when trying to reach the sites with old (drush 8) codebase from the new (already upgraded) drush 9 local environment.
-
-In order to still reach the old drush 8 sites after upgrade with old drush aliases (e.g. `drush @alshaya.01uat status -l ...`), it’s recommended to make the drush 8 command reachable from host PC (either by keeping the old version on host, or by renaming the drush executable to drush8 or by installing it as a separate distribution) and make it reachable with e.g. drush8 command. That way, you can still reach the drush 8 sites by typing e.g. `drush8 @alshaya.01uat -l ... status`. Ensure the drush8 is reaching the proper version by typing drush8 --version.
 
 ### Technical details on drush 9 aliases structure
 
@@ -188,10 +199,76 @@ All site aliases are defined in `drush/sites` folder.
   -  * cd alshaya_behat
   -  * composer install
   -  * npm install --prefix bin chromedriver
-  -  * (In a separate terminal window) java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
-  -  * bin/behat features/hmkw/manual/basket.feature --profile=(hmuat,hmqa,mckwqa,mckwuat)
+
+### Behat execution Process
+
+### Prerequisites for behat.yml before running the scripts
+* Ensure the base url is correct for the profile you are using.
+* Ensure the config product url is valid and is in stock.
+
+Scripts location:
+QA/UAT: sitename/common folder has all scripts that can be executed on QA/UAT envs.
+Production: Scripts starting from Sanity_** are the only ones that should be executed on production.
+
+Execution:
+
+* Navigate to alshaya_behat folder in terminal window
+* Initialise selenium by executing below command
+* (In a separate terminal window) java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
+* (In a separate terminal window) navigate to alshaya_behat folder
+* bin/behat features/mothercare/common/checkout.feature --profile=mcuat
+* The above command will run the checkout.feature script for MC and the profile used should be according to environment.
+* Another way to run: Use tags e.g
+bin/behat --@tagname --profile=mcuat
+
+
     
 ### How to interpret the Behat reports:
-  * When the execution of the feature file is completed, navigate to build directory which is inside your parent directory
+  * When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
   * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
   * In order to share the reports, compress the html directory immediately after every run.
+
+### Test Results analysis:
+* If any scenarios fail, try re-running the script once to discard any network issues.
+* If they still fail, check the scenarios if they are failing due to data issue (some text assertions changed on the site)
+* Check by running the scenario manually if it passes
+* Check by running the scenario individually to see if it passes (use tags)
+
+### Debugging with xdebug
+
+A recommended IDE for debugging is PhpStorm. However, if you use another IDE, you should be able to apply the guidelines below with some tweaks.
+
+#### Browser-based debugging
+
+XDebug debugger is enabled by default. In order to debug your code from browser, do following:
+* In Google Chrome browser, install “Xdebug helper” extension
+* In PhpStorm, select from menu “Run/Start listening for PHP debug connections”
+* Set breakpoint somewhere in the code
+* Refresh the page
+* Debugger should stop at the breakpoint you set
+
+#### CLI Debugging
+
+**CLI debugging is disabled by default.** The reason is significant performance degradation of all php scripts (incl. composer, drush, blt...) inside of vm when xdebug is enabled. However, CLI debugging is important, especially for debugging behat tests or unit tests. To enable CLI debugging, do following:
+
+* Make sure you firstly invoked debugger from browser at least once.
+* In File/Preferences of phpStorm, section Languages & Frameworks / PHP / Servers, write down server name the debugger invoked in previous step (e.g. "local.alshaya-mckw.com")
+* Change variable php_xdebug_cli_disable to "no" in box/config.yml and run vagrant provision. 
+* wait until machine is successfully re-provisioned
+* make sure your PhpStorm is listening to php debug connections
+* vagrant ssh to your guest
+* cd /var/www/alshaya/docroot (your document root on guest)
+* Prefix PHP_IDE_CONFIG="serverName=<server_name>" XDEBUG_CONFIG="remote_host=10.0.2.2" before the command you wish to debug e.g.:
+
+PHP_IDE_CONFIG="serverName=local.alshaya-mckw.com" XDEBUG_CONFIG="remote_host=10.0.2.2" vendor/drush/drush/drush -l local.alshaya-mckw.com status
+
+Specific notes for debugging drush commands:
+* Use full path to drush in vendor folder (vendor/drush/drush/drush) instead of drush command itself (it runs launcher which is typically outside of codebase)
+* You will eventually need to fix path mappings for the commands like drush and point them to your Alshaya codebase in vendor folder
+* Do NOT use drush aliases like @mckw.local for debugging, use always the -l parameter instead (see above for a valid example)
+
+After finishing CLI debuging it's recommended to disable xdebug back again, to increase performance. To debug CLI commands like Drush, Drupal console or PhpUnit, follow these steps:
+
+### Remote debugging from ACSF
+On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging. 
+Follow instructions [here](https://support.acquia.com/hc/en-us/articles/360006231933-How-to-debug-an-Acquia-Cloud-environment-using-PhpStorm-and-Remote-Xdebug) to set up remote debugging on your local PhpStorm to leverage it.

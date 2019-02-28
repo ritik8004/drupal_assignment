@@ -23,17 +23,5 @@ function hook_alshaya_acm_customer_update_account_alter(\Drupal\user\Entity\User
 }
 
 /**
- * Allow other modules to alter order detail build array.
- *
- * @param array $build
- *   Build array.
- * @param array $order
- *   Order array.
- */
-function hook_alshaya_acm_customer_build_order_detail_alter(array &$build, array $order) {
-
-}
-
-/**
  * @} End of "addtogroup hooks".
  */

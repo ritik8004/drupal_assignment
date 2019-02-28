@@ -96,16 +96,15 @@ class ProductCategoryTermId extends ArgumentDefaultPluginBase implements Cacheab
       ($url_object->getRouteName() == 'entity.taxonomy_term.canonical') &&
       ($taxonomy_tid = $url_object->getRouteParameters()['taxonomy_term']) &&
       (($taxonomy_term = Term::load($taxonomy_tid)) instanceof TermInterface)) {
-      $terms = [];
       $storage = $this->entityManager->getStorage('taxonomy_term');
-      $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id(), NULL, TRUE);
-      $terms[] = $taxonomy_term->id();
-      if (!empty($term_items)) {
-        // Loop to get children term names.
-        foreach ($term_items as $term_item) {
-          $terms[] = $term_item->id();
-        }
-      }
+      $term_items = $storage->loadTree($taxonomy_term->getVocabularyId(), $taxonomy_term->id());
+
+      // Get the array of term ids from tree.
+      $terms = $term_items ? array_column($term_items, 'tid') : [];
+
+      // Add the main term on top.
+      array_unshift($terms, $taxonomy_term->id());
+
       return implode('+', $terms);
     }
   }

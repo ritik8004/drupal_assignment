@@ -203,3 +203,16 @@ function create_mapping($name, $description, $site_id, $backend_id, $frontend_id
 
   return invoke_api('config/mapping/create', 'POST', $data);
 }
+
+/**
+ * Function to get the queue count for a given site.
+ *
+ * @param $site_id
+ *   The site id to get the queue count from.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
+ */
+function get_queue_total($site_id) {
+  return invoke_api('config/site/' . $site_id . '/queue/total', 'GET');
+}

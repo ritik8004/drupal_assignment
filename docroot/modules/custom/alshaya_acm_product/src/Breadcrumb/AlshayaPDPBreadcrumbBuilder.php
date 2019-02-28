@@ -253,13 +253,20 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
    *   Root parent term id.
    */
   protected function getRootGroup($tid) {
+    $static = &drupal_static('alshaya_pdp_breadcrumb_builder_get_root_group', []);
+
+    if (isset($static[$tid])) {
+      return $static[$tid];
+    }
+
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $this->connection->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
+      $query = $this->connection->select('taxonomy_term__parent', 'tth');
+      $query->fields('tth', ['parent_target_id']);
+      $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
+        $static[$tid] = $tid;
         return $tid;
       }
 
@@ -281,6 +288,12 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
       return NULL;
     }
 
+    $static = &drupal_static('alshaya_pdp_breadcrumb_builder_get_root_group', []);
+    $term_ids = implode(',', $terms);
+    if (isset($static[$term_ids])) {
+      return $static[$term_ids];
+    }
+
     $current_langcode = $this->languageManager->getCurrentLanguage()->getId();
     $depths = $this->connection->select('taxonomy_term_field_data', 'ttfd')
       ->fields('ttfd', ['tid', 'depth_level'])
@@ -295,6 +308,8 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
     // Get all max values and get first one.
     $max_depth = array_keys($depths, max($depths));
     $most_inner_tid = $max_depth[0];
+
+    $static[$term_ids] = $most_inner_tid;
 
     return $most_inner_tid;
   }

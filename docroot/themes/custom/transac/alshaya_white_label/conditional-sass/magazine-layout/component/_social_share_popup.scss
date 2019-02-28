@@ -1,0 +1,211 @@
+.magazine-layout-node {
+  .modal-share-this {
+    display: block;
+
+    @include breakpoint($tablet) {
+      position: relative;
+      display: none;
+    }
+
+    @include breakpoint($only-mobile) {
+      text-align: $right;
+      margin-#{$right}: 1.125rem;
+      margin-top: -3.25rem;
+    }
+
+    .share-icon {
+      font-size: 0;
+      cursor: pointer;
+
+      @include breakpoint($tablet) {
+        position: absolute;
+        top: -3.5rem;
+        #{$left}: 12.125rem;
+      }
+
+      html[lang=ar] & {
+        @include breakpoint($tablet) {
+          right: 12.5rem;
+        }
+
+        @include breakpoint($desktop) {
+          right: 14.4375rem;
+        }
+      }
+
+      &::before {
+        content: '';
+        background: url('#{$base_theme_img_directory_path}/icons/share.svg') center center no-repeat;
+        width: 1.5625rem;
+        height: 1.5625rem;
+        display: inline-block;
+        background-size: 1.0625rem;
+      }
+    }
+
+    .close-icon,
+    .sharethis-label {
+      display: none;
+    }
+
+    &.social-share-out-of-stock {
+      .share-icon {
+        @include breakpoint($tablet) {
+          top: -2.875rem;
+          #{$left}: 9rem;
+        }
+
+        &::before {
+          cursor: auto;
+          opacity: 0.2;
+        }
+      }
+    }
+  }
+
+  .sharethis-wrapper {
+    display: none;
+  }
+
+  .basic-details-wrapper {
+    span {
+      &.out-of-stock {
+        @include breakpoint($only-tablet) {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .show-sticky-wrapper {
+    .modal-share-this {
+      display: block;
+    }
+  }
+}
+
+.magazine-layout {
+  #backtotop {
+    transition: z-index 0.8s ease-in-out;
+  }
+}
+
+body {
+  &.social-modal-overlay {
+    overflow: hidden;
+
+    .magazine-layout-node {
+      .content__title_wrapper {
+        z-index: 1;
+      }
+    }
+
+    #backtotop {
+      z-index: -1 !important;
+      opacity: 0 !important;
+    }
+
+    .branding__menu {
+      @include breakpoint ($upto-desktop) {
+        border-bottom-color: $header_mobile_menu_overlay;
+        box-shadow: none;
+
+        &::before {
+          background-color: $header_mobile_menu_overlay;
+          position: absolute;
+          z-index: 10;
+          opacity: 1;
+        }
+      }
+    }
+
+    &::before {
+      background-color: rgba(0, 0, 0, 0.48);
+      opacity: 1;
+      z-index: 10;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .modal-share-this {
+      .close-icon,
+      .sharethis-label {
+        display: block;
+      }
+
+      .sharethis-label {
+        font-size: 1.125rem;
+        line-height: 1.22;
+        color: $sharethis-label-color;
+
+        @include breakpoint($only-mobile) {
+          text-align: $left;
+        }
+      }
+    }
+
+    .modal-share-this {
+      .sharethis-wrapper {
+        display: block;
+      }
+    }
+
+    .sharethis-container {
+      position: fixed;
+      top: 0;
+      width: auto;
+      padding: 2rem 1.25rem 1.625rem;
+      z-index: 1001;
+      opacity: 3;
+      background-color: $sharethis-popup-bg;
+      min-width: 17.5rem;
+
+      @include breakpoint($only-mobile) {
+        z-index: 10000;
+      }
+    }
+
+    .sharethis-wrapper {
+      margin-bottom: 0;
+
+      > span {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        font-size: 0.875rem;
+        color: $sharethis-social-displaytext-color;
+        text-transform: capitalize;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &:first-child {
+          margin-top: 1.25rem;
+        }
+
+        &::before {
+          color: $sharethis-icon-bg;
+          margin-#{$right}: 0.875rem;
+        }
+      }
+    }
+
+    .close-icon {
+      font-size: 0;
+      position: absolute;
+      #{$right}: 0;
+      top: 0;
+      cursor: pointer;
+
+      &::before {
+        content: '';
+        background: url('../../../../alshaya_hnm/imgs/icons/ic-close.svg') center center no-repeat;
+        width: 2rem;
+        height: 2rem;
+        display: inline-block;
+        background-size: 1.0625rem;
+        background-color: $sharethis-icon-bg;
+      }
+    }
+  }
+}

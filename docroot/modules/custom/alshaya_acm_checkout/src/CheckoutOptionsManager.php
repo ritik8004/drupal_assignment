@@ -375,9 +375,9 @@ class CheckoutOptionsManager {
    *   Available shipping methods.
    */
   public function loadShippingEstimates($address) {
-    $cart = $this->cartStorage->getCart();
+    $cart = $this->cartStorage->getCart(FALSE);
 
-    if (empty($cart->customerId())) {
+    if (empty($cart) || empty($cart->customerId())) {
       return [];
     }
 

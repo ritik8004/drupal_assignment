@@ -6,8 +6,10 @@ use Drupal\acq_commerce\I18nHelper;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use springimport\magento2\apiv1\ApiFactory;
 use springimport\magento2\apiv1\Configuration;
@@ -69,6 +71,20 @@ class AlshayaApiWrapper {
   private $i18nHelper;
 
   /**
+   * The state factory.
+   *
+   * @var \Drupal\Core\KeyValueStore\StateInterface
+   */
+  protected $state;
+
+  /**
+   * File system object.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs a new AlshayaApiWrapper object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -83,13 +99,19 @@ class AlshayaApiWrapper {
    *   LoggerFactory object.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state factory.
+   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
+   *   The filesystem service.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
                               CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory,
-                              I18nHelper $i18n_helper) {
+                              I18nHelper $i18n_helper,
+                              StateInterface $state,
+                              FileSystemInterface $fileSystem) {
     $this->config = $config_factory->get('alshaya_api.settings');
     $this->logger = $logger_factory->get('alshaya_api');
     $this->languageManager = $language_manager;
@@ -97,6 +119,8 @@ class AlshayaApiWrapper {
     $this->dateTime = $date_time;
     $this->cache = $cache;
     $this->i18nHelper = $i18n_helper;
+    $this->state = $state;
+    $this->fileSystem = $fileSystem;
   }
 
   /**
@@ -141,6 +165,8 @@ class AlshayaApiWrapper {
    *
    * @return string
    *   Token as string.
+   *
+   * @throws \Exception
    */
   private function getToken() {
     if ($this->token) {
@@ -174,7 +200,6 @@ class AlshayaApiWrapper {
       // Calculate the timestamp when we want the cache to expire.
       $expire = $this->dateTime->getRequestTime() + $this->config->get('token_cache_time');
 
-      // Set the stock in cache.
       $this->cache->set($cid, $this->token, $expire);
     }
 
@@ -363,23 +388,45 @@ class AlshayaApiWrapper {
   /**
    * Function to get the merchandising report from Magento.
    *
+   * @param bool $reset
+   *   Either to force download of a fresh merch report.
+   *
    * @return bool|resource
    *   The file opened or FALSE if not accessible.
    */
-  public function getMerchandisingReport() {
+  public function getMerchandisingReport($reset = TRUE) {
     $lang_prefix = explode('_', $this->config->get('magento_lang_prefix'))[0];
 
-    $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+    $path = file_create_url($this->fileSystem->realpath("temporary://"));
+    $filename = 'merchandising-report-' . $lang_prefix . '.csv';
 
-    // We need this to avoid issue with invalid certificate.
-    $context = [
-      'ssl' => [
-        'verify_peer' => FALSE,
-        'verify_peer_name' => FALSE,
-      ],
-    ];
+    $download_time = $this->state->get('alshaya_api.last_report_download');
+    $max_age = $this->config->get('merch_report_max_age') ?? 3600;
 
-    return @fopen($url, 'r', FALSE, stream_context_create($context));
+    // We download a new merch report if asked, if too old or if file does not
+    // exist yet in temporary directory.
+    if ($reset || $download_time < (time() - $max_age) || !file_exists($path . '/' . $filename)) {
+      $url = $this->config->get('magento_host') . '/media/reports/merchandising/merchandising-report-' . $lang_prefix . '.csv';
+
+      // We need this to avoid issue with invalid certificate.
+      $context = [
+        'ssl' => [
+          'verify_peer' => FALSE,
+          'verify_peer_name' => FALSE,
+        ],
+      ];
+      $handle = @fopen($url, 'r', FALSE, stream_context_create($context));
+
+      $fp = fopen($path . '/' . $filename, 'w');
+      while (($data = fgets($handle)) !== FALSE) {
+        fwrite($fp, $data);
+      }
+      fclose($fp);
+
+      $this->state->set('alshaya_api.last_report_download', time());
+    }
+
+    return @fopen($path . '/' . $filename, 'r');
   }
 
   /**
@@ -387,12 +434,14 @@ class AlshayaApiWrapper {
    *
    * @param array|string $types
    *   The SKUs type to get from Magento (simple, configurable).
+   * @param bool $reset
+   *   Force download of a fresh merch report.
    *
    * @return array
    *   An array of SKUs indexed by type.
    */
-  public function getEnabledSkusFromMerchandisingReport($types = ['simple', 'configurable']) {
-    $handle = $this->getMerchandisingReport();
+  public function getEnabledSkusFromMerchandisingReport($types = ['simple', 'configurable'], $reset = TRUE) {
+    $handle = $this->getMerchandisingReport($reset);
 
     $mskus = [];
     foreach ($types as $type) {
@@ -412,9 +461,12 @@ class AlshayaApiWrapper {
       'status' => FALSE,
       'visibility' => FALSE,
       'type' => FALSE,
+      'price' => FALSE,
+      'special_price' => FALSE,
+      'web_qty' => FALSE,
     ];
 
-    if ($data = fgetcsv($handle, 1000, ',')) {
+    if ($data = fgetcsv($handle, 10000, ',')) {
       foreach ($data as $position => $key) {
         foreach ($indexes as $name => $index) {
           if (trim(strtolower($key)) == $name) {
@@ -428,7 +480,12 @@ class AlshayaApiWrapper {
         return $mskus;
       }
 
-      while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+      while (($data = fgetcsv($handle, 10000, ',')) !== FALSE) {
+        // We don't deal with SKUs which we don't have enough information.
+        if (!isset($data[$indexes['status']]) || !isset($data[$indexes['type']])) {
+          continue;
+        }
+
         // We don't deal with disabled SKUs.
         if (trim(strtolower($data[$indexes['status']])) !== 'enabled') {
           continue;
@@ -452,7 +509,12 @@ class AlshayaApiWrapper {
           continue;
         }
 
-        $mskus[$type][] = $data[$indexes['partnum']];
+        $mskus[$type][$data[$indexes['partnum']]] = [
+          'sku' => $data[$indexes['partnum']],
+          'price' => $data[$indexes['price']],
+          'special_price' => $data[$indexes['special_price']],
+          'qty' => (int) $data[$indexes['web_qty']],
+        ];
       }
     }
     fclose($handle);
@@ -461,17 +523,17 @@ class AlshayaApiWrapper {
   }
 
   /**
-   * Function to get all the enabled SKUs from the API.
+   * Function to get enabled SKUs from the API.
    *
-   * @param array|string $types
+   * @param array $types
    *   The SKUs type to get from Magento (simple, configurable).
+   * @param array $skus
+   *   The SKUs to get from Magento.
    *
    * @return array
    *   An array of SKUs indexed by type.
-   *
-   * @TODO: Create appropriate endpoint on conductor and move this to commerce.
    */
-  public function getSkusFromApi($types = ['simple', 'configurable']) {
+  public function getSkus(array $types = ['simple', 'configurable'], array $skus = []) {
     $endpoint = 'products?';
 
     // Query parameters to get all enabled SKUs. We only want the SKUs.
@@ -511,6 +573,14 @@ class AlshayaApiWrapper {
       'fields' => 'items[sku]',
     ];
 
+    foreach ($skus as $index => $sku) {
+      $query['searchCriteria']['filterGroups'][2]['filters'][$index] = [
+        'field' => 'sku',
+        'condition_type' => 'eq',
+        'value' => $sku,
+      ];
+    }
+
     $mskus = [];
     foreach ($types as $type) {
       $mskus[$type] = [];
@@ -533,25 +603,36 @@ class AlshayaApiWrapper {
 
         if ($response && is_string($response)) {
           if ($decode_response = json_decode($response, TRUE)) {
-            $current_page_skus = array_column($decode_response['items'], 'sku');
+            if (!empty($decode_response['items'])) {
+              $current_page_skus = array_column($decode_response['items'], 'sku');
 
-            $skus = array_unique(array_merge($skus, $current_page_skus));
+              $skus = array_unique(array_merge($skus, $current_page_skus));
 
-            // We don't have any way to know we reached the latest page as
-            // Magento keep continue returning the same latest result. For this
-            // we test if there is any SKU in current page which was already
-            // present in previous page. If yes, then we reached the end of
-            // the list.
-            if (!empty(array_diff($current_page_skus, $previous_page_skus))) {
-              $continue = TRUE;
+              // We don't have any way to know we reached the latest page as
+              // Magento keep continue returning the same latest result. For
+              // this we test if there is any SKU in current page which was
+              // already present in previous page. If yes, then we reached the
+              // end of the list.
+              if (!empty(array_diff($current_page_skus, $previous_page_skus))) {
+                $continue = TRUE;
+              }
+
+              $previous_page_skus = $current_page_skus;
             }
-
-            $previous_page_skus = $current_page_skus;
           }
         }
       }
 
-      $mskus[$type] = $skus;
+      if (!empty($skus)) {
+        foreach ($skus as $sku) {
+          $mskus[$type][$sku] = [
+            'sku' => $sku,
+            'price' => 0,
+            'special_price' => 0,
+            'qty' => 0,
+          ];
+        }
+      }
     }
 
     return $mskus;
@@ -727,6 +808,85 @@ class AlshayaApiWrapper {
     }
 
     return $url;
+  }
+
+  /**
+   * Get selected payment method for a cart.
+   *
+   * @param int $cart_id
+   *   Cart ID.
+   *
+   * @return string
+   *   Selected payment method code.
+   */
+  public function getCartPaymentMethod(int $cart_id) {
+    $endpoint = 'carts/' . $cart_id . '/selected-payment-method';
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return '';
+    }
+
+    $response = json_decode($response, TRUE);
+    return $response['method'] ?? '';
+  }
+
+  /**
+   * Get the stock for a sku.
+   *
+   * @param string $sku
+   *   The sku to fetch the stock for.
+   *
+   * @return int
+   *   The returned stock for the sku.
+   */
+  public function getStock(string $sku) : int {
+    $endpoint = 'stockItems/' . urlencode($sku);
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    if (empty($response)) {
+      return 0;
+    }
+
+    $response = json_decode($response, TRUE);
+    return $response['qty'] ?? 0;
+  }
+
+  /**
+   * Get data for a sku.
+   *
+   * @param string $sku
+   *   The sku to fetch the data for.
+   *
+   * @return array
+   *   The sku object from Magento.
+   */
+  public function getSku(string $sku) : array {
+    $endpoint = 'products/' . urlencode($sku);
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $response = json_decode($response, TRUE);
+    return isset($response['message']) ? [] : $response;
+  }
+
+  /**
+   * Get data for all enabled SKUs from Magento.
+   *
+   * @return array
+   *   The SKUs data.
+   */
+  public function getSkusData() : array {
+    $endpoint = 'sanity-check-data';
+    $response = $this->invokeApi($endpoint, [], 'GET');
+
+    $response = json_decode($response, TRUE) ?? [];
+
+    $skus = [];
+    foreach ($response as $data) {
+      $skus[$data['type_id']][$data['sku']] = $data;
+    }
+
+    return $skus;
   }
 
 }

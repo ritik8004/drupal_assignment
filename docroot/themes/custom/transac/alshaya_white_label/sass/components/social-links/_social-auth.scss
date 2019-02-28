@@ -1,0 +1,96 @@
+.alshaya-social {
+  .auth-link {
+    display: flex;
+    align-items: center;
+    width: auto;
+    max-width: 15.4375rem;
+    padding: 0.5rem;
+    margin-top: 1.5rem;
+    border-radius: 0.25rem;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: auto;
+      margin-#{$right}: auto;
+    }
+
+    .social-network-text {
+      margin: 0 auto;
+      color: $social-network-text;
+      text-transform: uppercase;
+      font-family: $alshaya-bold;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.social_auth_facebook {
+  background-color: $social-auth-facebook-bg;
+
+  &::before {
+    content: '';
+    width: 1.5rem;
+    height: 1.5rem;
+    background: url("/themes/custom/transac/alshaya_hnm/imgs/social-icons/facebook-icon.png") no-repeat center;
+    background-size: 1.5rem;
+    display: inline-block;
+  }
+}
+
+.signin-option {
+  font-size: 0.75rem;
+  line-height: 1.33;
+  color: $social-sign-in-option-text;
+  text-transform: capitalize;
+  display: block;
+  margin-top: 1.5rem;
+
+  @include breakpoint($only-mobile) {
+    text-align: center;
+  }
+}
+
+.c-user-login {
+  .social-signup-form {
+    &.user-login-form {
+      > a {
+        bottom: 7rem;
+
+        @include breakpoint($only-mobile) {
+          bottom: 6.25rem;
+        }
+      }
+    }
+  }
+
+  .signin-option {
+    @include breakpoint($only-mobile) {
+      margin-top: 4rem;
+    }
+  }
+}
+
+.c-user-login.user-page {
+  .user-login-form.social-signup-form {
+    #edit-actions {
+      input {
+        @include breakpoint($only-mobile) {
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.path--cart {
+  .multistep-checkout {
+    #edit-checkout-login {
+      &.social-signup-form {
+        .request-password-link {
+          @include breakpoint($tablet) {
+            bottom: 7.5625rem;
+          }
+        }
+      }
+    }
+  }
+}

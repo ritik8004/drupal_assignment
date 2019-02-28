@@ -145,24 +145,72 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    *   Parent product or null if not found.
    */
   public function getParentSku(SKU $sku) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_string = $sku->getSku();
+
+    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
+    // Initialise with empty value.
+    $static[$langcode][$sku_string] = NULL;
+
     $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
-    $query->condition('child_sku.field_configured_skus_value', $sku->getSku());
+    $query->condition('child_sku.field_configured_skus_value', $sku_string);
 
-    $parent_sku = $query->execute()->fetchField();
+    $parent_skus = array_keys($query->execute()->fetchAllAssoc('sku'));
 
-    if (empty($parent_sku)) {
+    if (empty($parent_skus)) {
       return NULL;
     }
 
-    return SKU::loadFromSku($parent_sku, $sku->language()->getId());
+    if (count($parent_skus) > 1) {
+      \Drupal::logger('acq_sku')->warning(
+        'Multiple parents found for SKU: @sku, parents: @parents',
+        [
+          '@parents' => implode(',', $parent_skus),
+          '@sku' => $sku_string,
+        ]
+      );
+    }
+
+    foreach ($parent_skus as $parent_sku) {
+      $parent = SKU::loadFromSku($parent_sku, $langcode);
+      if ($parent instanceof SKU) {
+        $node = $this->getDisplayNode($parent, FALSE, FALSE);
+
+        if ($node instanceof Node) {
+          $static[$langcode][$sku_string] = $parent;
+          break;
+        }
+      }
+    }
+
+    return $static[$langcode][$sku_string];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDisplayNode(SKU $sku, $check_parent = TRUE, $create_translation = FALSE) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_string = $sku->getSku();
+
+    // Do not use static cache during sync when create translation flag is set
+    // to true.
+    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
+    // Initialise with empty value.
+    $static[$langcode][$sku_string] = NULL;
+
     if ($check_parent) {
       if ($parent_sku = $this->getParentSku($sku)) {
         $sku = $parent_sku;
@@ -172,6 +220,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $query = \Drupal::entityQuery('node');
     $query->condition('type', 'acq_product');
     $query->condition('field_skus', $sku->getSku());
+    $query->addTag('get_display_node_for_sku');
 
     $query->range(0, 1);
 
@@ -187,27 +236,29 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     // Check language checks if site is in multilingual mode.
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
-      if ($node->language()->getId() == $sku->language()->getId()) {
+      if ($node->language()->getId() == $langcode) {
         return $node;
       }
 
       // If node has translation, we return the translation.
-      if ($node->hasTranslation($sku->language()->getId())) {
-        return $node->getTranslation($sku->language()->getId());
+      if ($node->hasTranslation($langcode)) {
+        return $node->getTranslation($langcode);
       }
 
       // If translation not available and create_translation flag is true.
       if ($create_translation) {
-        return $node->addTranslation($sku->language()->getId());
+        return $node->addTranslation($langcode);
       }
 
       // Just log the message and continue.
       // Don't want to show any fatal error anywhere.
       \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
         '@sku' => $sku->getSku(),
-        '@langcode' => $sku->language()->getId(),
+        '@langcode' => $langcode,
       ]);
     }
+
+    $static[$langcode][$sku_string] = $node;
 
     return $node;
   }
@@ -215,118 +266,59 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
   /**
    * {@inheritdoc}
    */
-  public function getProcessedStock(SKU $sku, $reset = FALSE) {
-    $stock = &drupal_static('stock_static_cache', []);
+  public function isProductInStock(SKU $sku) {
+    $static = &drupal_static(self::class . '_' . __FUNCTION__, []);
 
-    if (!$reset && isset($stock[$sku->getSku()])) {
-      return $stock[$sku->getSku()];
+    $sku_string = $sku->getSku();
+
+    if (isset($static[$sku_string])) {
+      return $static[$sku_string];
     }
 
-    $stock[$sku->getSku()] = (int) $this->getStock($sku, $reset);
+    $static[$sku_string] = $this->getStockManager()->isProductInStock($sku);
 
-    return $stock[$sku->getSku()];
+    return $static[$sku_string];
   }
 
   /**
-   * Returns the stock for the given sku.
-   *
-   * @param string $sku
-   *   SKU code of the product.
-   * @param bool $reset
-   *   Flag to mention if we should always try to get fresh value.
-   *
-   * @return array|mixed
-   *   Available stock quantity.
+   * {@inheritdoc}
    */
-  protected function getStock($sku, $reset = FALSE) {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
+  public function getStock($sku) {
+    $static = &drupal_static(self::class . '_' . __FUNCTION__, []);
+
     $sku_string = ($sku instanceof SKU) ? $sku->getSku() : $sku;
 
-    if (!$reset) {
-      // Return from Entity field in push mode.
-      if ($stock_mode == 'push') {
-        if ($sku instanceof SKU) {
-          $stock = $sku->get('stock')->getString();
-        }
-        else {
-          $stock = \Drupal::database()->select('acq_sku_field_data', 'asfd')
-            ->fields('asfd', ['stock'])
-            ->condition('asfd.sku', $sku_string)
-            ->execute()
-            ->fetchField();
-        }
-
-        // Fallback to pull mode if no value available for the SKU.
-        if (!($stock === '' || $stock === NULL)) {
-          return (int) $stock;
-        }
-      }
-      // Return from Cache in Pull mode.
-      else {
-        // Cache id.
-        $cid = 'stock:' . $sku_string;
-
-        $cache = \Drupal::cache('stock')->get($cid);
-
-        if (!empty($cache)) {
-          return (int) $cache->data;
-        }
-      }
+    if (isset($static[$sku_string])) {
+      return $static[$sku_string];
     }
 
-    // Either reset is requested or we dont have value in attribute or we dont
-    // have value in cache, we will use the API to get fresh value now.
-    $stock = NULL;
+    $static[$sku_string] = $this->getStockManager()->getStockQuantity($sku_string);
 
-    /** @var \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper */
-    $api_wrapper = \Drupal::service('acq_commerce.api');
+    return $static[$sku_string];
+  }
 
-    try {
-      // Get the stock.
-      $stock_info = $api_wrapper->skuStockCheck($sku_string);
-    }
-    catch (\Exception $e) {
-      // Log the stock error, do not throw error if stock info is missing.
-      \Drupal::logger('acq_sku')->warning('Unable to get the stock for @sku : @message', [
-        '@sku' => $sku_string,
-        '@message' => $e->getMessage(),
-      ]);
+  /**
+   * {@inheritdoc}
+   */
+  public function refreshStock(SKU $sku) {
+    $this->getStockManager()->refreshStock($sku->getSku());
+  }
 
-      // We will cache this also for sometime to reduce load.
-      $stock_info['is_in_stock'] = FALSE;
-    }
+  /**
+   * Get stock manager service instance.
+   *
+   * @return \Drupal\acq_sku\StockManager
+   *   Stock Manager service.
+   */
+  protected function getStockManager() {
+    static $manager;
 
-    // Magento uses additional flag as well for out of stock.
-    if (isset($stock_info['is_in_stock']) && empty($stock_info['is_in_stock'])) {
-      $stock_info['quantity'] = 0;
-    }
-
-    $stock = (int) $stock_info['quantity'];
-
-    // Save the value in SKU if we came here as fallback of push mode.
-    if ($stock_mode == 'push') {
-      if (!$sku instanceof SKU) {
-        $sku = SKU::loadFromSku($sku_string);
-      }
-
-      $sku->get('stock')->setValue($stock);
-      $sku->save();
-    }
-    // Save the value in cache if we are in pull mode.
-    // If cache multiplier is zero we don't cache the stock.
-    elseif ($cache_multiplier = \Drupal::config('acq_sku.settings')->get('stock_cache_multiplier')) {
-      $default_cache_lifetime = $stock ? $stock * $cache_multiplier : $cache_multiplier;
-      $max_cache_lifetime = \Drupal::config('acq_sku.settings')->get('stock_cache_max_lifetime');
-
-      // Calculate the timestamp when we want the cache to expire.
-      $stock_cache_lifetime = min($default_cache_lifetime, $max_cache_lifetime);
-      $expire = $stock_cache_lifetime + \Drupal::time()->getRequestTime();
-
-      // Set the stock in cache.
-      \Drupal::cache('stock')->set($cid, $stock, $expire);
+    if (!isset($manager)) {
+      /** @var \Drupal\acq_sku\StockManager $manager */
+      $manager = \Drupal::service('acq_sku.stock_manager');
     }
 
-    return $stock;
+    return $manager;
   }
 
 }

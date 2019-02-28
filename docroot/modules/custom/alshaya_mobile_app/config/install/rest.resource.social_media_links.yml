@@ -13,4 +13,4 @@ configuration:
     supported_formats:
       - json
     supported_auth:
-      - oauth2
+      - cookie

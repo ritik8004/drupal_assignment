@@ -16,3 +16,9 @@ alshaya_master.loader_settings:
   title: 'Alshaya loader settings'
   description: 'Configure the settings for progress loader.'
   parent: alshaya_master.alshaya_admin
+
+alshaya_master.plp_settings:
+  route_name: alshaya_master.plp_settings
+  title: 'Alshaya PLP settings'
+  description: 'Configure the settings for PLP page.'
+  parent: alshaya_master.alshaya_admin

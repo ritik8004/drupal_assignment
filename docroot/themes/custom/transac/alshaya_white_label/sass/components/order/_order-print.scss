@@ -33,6 +33,28 @@ body {
     border-bottom: 1px solid $primary_border;
     margin-bottom: 0.75rem;
   }
+
+  .user__order--detail {
+    tr.order-item-row {
+      td.blend {
+        @include breakpoint($only-tablet) {
+          padding: 1.375rem 0.9375rem !important;
+        }
+      }
+    }
+
+    .sub-total-row,
+    .delivery-charge-row,
+    .total-row,
+    .discount-row,
+    .surcharge-row {
+      td {
+        @include breakpoint($only-tablet) {
+          padding: 0.625rem 0.9375rem !important;
+        }
+      }
+    }
+  }
 }
 
 .order--print {
@@ -212,13 +234,22 @@ body.path--confirmation.alias--confirmation-print {
 
 .user__order--detail {
   .order-item-row {
-    td:last-child {
-      display: none !important;
-    }
+    td.above-mobile {
+      &.blend {
+        @include breakpoint($only-ptablet) {
+          width: 9rem;
+        }
+      }
 
-    td.above-mobile.blend {
-      @include breakpoint($only-ptablet) {
-        width: 9rem;
+      &.order__details--summary {
+        .light,
+        .currency-code {
+          display: none;
+        }
+      }
+
+      &.empty--cell {
+        display: none;
       }
     }
 

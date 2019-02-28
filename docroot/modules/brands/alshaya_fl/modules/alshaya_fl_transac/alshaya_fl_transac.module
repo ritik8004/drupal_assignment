@@ -14,7 +14,9 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_fl_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {

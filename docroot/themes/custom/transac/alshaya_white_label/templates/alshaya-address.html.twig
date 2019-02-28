@@ -1,0 +1,16 @@
+{% if address.given_name %}
+  <div class="address--name dark">
+    {{ address.given_name }} {{ address.family_name }}
+  </div>
+{% endif %}
+{% for key, item in address|without('given_name', 'family_name') %}
+  {% if item is not empty %}
+    {% if key == 'mobile_number' %}
+      <div class="address--contact">
+        {{ 'Mobile Number' | t }}: <div class="no-direction">{{ item|replace({' ':''}) }}</div>
+      </div>
+    {% else %}
+      <div class="address--content">{{ item }}</div>
+    {% endif %}
+  {% endif %}
+{% endfor %}

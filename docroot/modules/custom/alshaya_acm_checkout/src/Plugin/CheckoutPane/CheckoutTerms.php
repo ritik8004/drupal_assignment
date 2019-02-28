@@ -47,7 +47,7 @@ class CheckoutTerms extends CheckoutPaneBase implements CheckoutPaneInterface {
   public function validatePaneForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     $values = $form_state->getValue($pane_form['#parents']);
     if (empty($values['terms'])) {
-      $form_state->setErrorByName('checkout_terms][terms', $this->t('Please agree to the Terms and Conditions.'));
+      $form_state->setErrorByName('checkout_terms][terms', $this->t('Please agree to the Terms and Conditions.', [], ['context' => 'alshaya_static_text|agree_terms_and_condition']));
     }
   }
 

@@ -309,7 +309,7 @@ class AlshayaGtmManager {
       $product = $product->getTranslation('en');
     }
 
-    $skuId = $product->get('field_skus')->first()->getString();
+    $skuId = $this->skuManager->getSkuForNode($product);
     $skuAttributes = $this->fetchSkuAtttributes($skuId);
 
     $attributes['gtm-type'] = 'gtm-product-link';
@@ -317,7 +317,8 @@ class AlshayaGtmManager {
     $attributes['gtm-container'] = $gtm_container;
     $attributes['gtm-view-mode'] = $view_mode;
     $attributes['gtm-cart-value'] = '';
-    $attributes['gtm-main-sku'] = $product->get('field_skus')->first()->getString();
+
+    $attributes['gtm-main-sku'] = $this->skuManager->getSkuForNode($product);
     $attributes = array_merge($attributes, $skuAttributes);
     return $attributes;
   }
@@ -347,14 +348,16 @@ class AlshayaGtmManager {
     }
 
     $attributes = [];
-    $product_node = alshaya_acm_product_get_display_node($sku);
-    $original_price = (float) $sku->get('price')->getString();
-    $final_price = (float) $sku->get('final_price')->getString();
+    $product_node = $this->skuManager->getDisplayNode($sku);
+    $prices = $this->skuManager->getMinPrices($sku);
+    $original_price = $prices['price'];
+    $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
+      $final_price = $prices['final_price'];
     }
 
     $product_type = 'Regular Product';
@@ -385,7 +388,7 @@ class AlshayaGtmManager {
     }
 
     $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
-    $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
+    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)
@@ -629,7 +632,7 @@ class AlshayaGtmManager {
       $dimension7 = '';
       $dimension8 = '';
 
-      $cartItems = $cart->get('items');
+      $cartItems = $cart->items();
 
       $address = $this->cartHelper->getShipping($cart);
 
@@ -673,13 +676,13 @@ class AlshayaGtmManager {
         $attributes[$skuId] = $this->fetchSkuAtttributes($skuId);
 
         // Fetch product for this sku to get the category.
-        $productNode = alshaya_acm_product_get_display_node($skuId);
+        $productNode = $this->skuManager->getDisplayNode($skuId);
 
         if ($productNode instanceof NodeInterface) {
           // Get product media.
           $attributes[$skuId]['gtm-dimension4'] = count(alshaya_acm_product_get_product_media($productNode->id())) ?: 'image not available';
           $attributes[$skuId]['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
-          $attributes[$skuId]['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
+          $attributes[$skuId]['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
         }
         $attributes[$skuId]['quantity'] = $cartItem['qty'];
 
@@ -786,9 +789,9 @@ class AlshayaGtmManager {
   public function getRootGroup($tid) {
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $this->database->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
+      $query = $this->database->select('taxonomy_term__parent', 'tth');
+      $query->fields('tth', ['parent_target_id']);
+      $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
         return $tid;
@@ -886,10 +889,10 @@ class AlshayaGtmManager {
       if (isset($product['gtm-metric1']) && (!empty($product['gtm-metric1']))) {
         $product['gtm-metric1'] *= $item['ordered'];
       }
-      $productNode = alshaya_acm_product_get_display_node($item['sku']);
+      $productNode = $this->skuManager->getDisplayNode($item['sku']);
       if ($productNode instanceof NodeInterface) {
         $product['gtm-category'] = implode('/', $this->fetchProductCategories($productNode));
-        $product['gtm-main-sku'] = $productNode->get('field_skus')->first()->getString();
+        $product['gtm-main-sku'] = $this->skuManager->getSkuForNode($productNode);
       }
       $productExtras = [
         'quantity' => $item['ordered'],
@@ -987,7 +990,7 @@ class AlshayaGtmManager {
         if ($node->hasTranslation('en')) {
           $node = $node->getTranslation('en');
         }
-        $product_sku = $node->get('field_skus')->getString();
+        $product_sku = $this->skuManager->getSkuForNode($node);
 
         $sku_entity = SKU::loadFromSku($product_sku);
 
@@ -1002,8 +1005,9 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
-        $stock_status = $stock_response ? 'in stock' : 'out of stock';
+        $stock_status = $this->skuManager->isProductInStock($sku_entity)
+          ? 'in stock'
+          : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
@@ -1087,15 +1091,15 @@ class AlshayaGtmManager {
 
         if ($cart) {
           $cart_totals = $cart->totals();
-          $cart_items = $cart->get('items') ?? [];
+          $cart_items = $cart->items() ?? [];
           $productStyleCode = [];
           $productSKU = [];
 
           foreach ($cart_items as $item) {
             $productSKU[] = $item['sku'];
-            $product_node = alshaya_acm_product_get_display_node($item['sku']);
+            $product_node = $this->skuManager->getDisplayNode($item['sku']);
             if ($product_node instanceof NodeInterface) {
-              $productStyleCode[] = $product_node->get('field_skus')->getString();
+              $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
             }
           }
 
@@ -1192,10 +1196,10 @@ class AlshayaGtmManager {
 
         foreach ($orderItems as $orderItem) {
           $productSKU[] = $orderItem['sku'];
-          $product_node = alshaya_acm_product_get_display_node($orderItem['sku']);
+          $product_node = $this->skuManager->getDisplayNode($orderItem['sku']);
 
           if ($product_node instanceof NodeInterface) {
-            $productStyleCode[] = $product_node->get('field_skus')->getString();
+            $productStyleCode[] = $this->skuManager->getSkuForNode($product_node);
           }
         }
 
@@ -1292,7 +1296,7 @@ class AlshayaGtmManager {
     $cart_items_flock = [];
 
     foreach ($items as $item) {
-      $product_node = alshaya_acm_product_get_display_node($item['sku']);
+      $product_node = $this->skuManager->getDisplayNode($item['sku']);
       // Get product media.
       if ($product_node instanceof NodeInterface) {
         $sku_media = alshaya_acm_product_get_product_media($product_node->id(), TRUE) ?: '';

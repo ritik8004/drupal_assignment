@@ -38,6 +38,13 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
   protected $i18nHelper;
 
   /**
+   * Promotion manager.
+   *
+   * @var \Drupal\acq_promotion\AcqPromotionsManager
+   */
+  protected $promotionManager;
+
+  /**
    * AcqPromotionAttachQueue constructor.
    *
    * @param array $configuration
@@ -52,17 +59,21 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
    *   Logger service.
    * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
    *   I18nHelper object.
+   * @param \Drupal\acq_promotion\AcqPromotionsManager $promotion_manager
+   *   Promotion manager.
    */
   public function __construct(array $configuration,
                               $plugin_id,
                               $plugin_definition,
                               IngestAPIWrapper $ingestApiWrapper,
                               LoggerChannelFactory $loggerFactory,
-                              I18nHelper $i18n_helper) {
+                              I18nHelper $i18n_helper,
+                              AcqPromotionsManager $promotion_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->ingestApiWrapper = $ingestApiWrapper;
     $this->logger = $loggerFactory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
+    $this->promotionManager = $promotion_manager;
   }
 
   /**
@@ -87,7 +98,8 @@ abstract class AcqPromotionQueueBase extends QueueWorkerBase implements Containe
       $plugin_definition,
       $container->get('acq_commerce.ingest_api'),
       $container->get('logger.factory'),
-      $container->get('acq_commerce.i18n_helper')
+      $container->get('acq_commerce.i18n_helper'),
+      $container->get('acq_promotion.promotions_manager')
     );
   }
 

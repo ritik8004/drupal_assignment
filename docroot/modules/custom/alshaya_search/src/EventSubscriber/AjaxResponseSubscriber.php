@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
 use Drupal\views\Ajax\ViewAjaxResponse;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -47,6 +48,13 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
   protected $languageManager;
 
   /**
+   * Logger service.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructs a new AjaxResponseSubscriber object.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
@@ -57,15 +65,19 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
    *   Language Manager.
    * @param \Drupal\alshaya_search_api\AlshayaSearchApiHelper $helper
    *   Helper service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   The logger factory.
    */
   public function __construct(RequestStack $request_stack,
                               ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
-                              AlshayaSearchApiHelper $helper) {
+                              AlshayaSearchApiHelper $helper,
+                              LoggerChannelFactoryInterface $logger_factory) {
     $this->requestStack = $request_stack;
     $this->backToListEnabled = (bool) $config_factory->get('alshaya_acm_product.settings')->get('back_to_list');
     $this->languageManager = $language_manager;
     $this->helper = $helper;
+    $this->logger = $logger_factory->get('alshaya_search');
   }
 
   /**
@@ -107,8 +119,19 @@ class AjaxResponseSubscriber implements EventSubscriberInterface {
     else {
       $query_string = [];
       parse_str($request->getQueryString(), $query_string);
+
+      // Query string must have view_path.
+      if (empty($query_string['view_path'])) {
+        // Add the log.
+        $this->logger->notice('Key view_path key is not available in query string for view:@view query_string:@query_string', [
+          '@view' => $view->storage->id(),
+          '@query_string' => $request->getQueryString(),
+        ]);
+        return;
+      }
+
       $view_url_data = $query_string['view_path'];
-      $view_url_data = str_replace('/' . $this->languageManager->getCurrentLanguage()->getId(), '', $view_url_data);
+      $view_url_data = preg_replace('/\/' . $this->languageManager->getCurrentLanguage()->getId() . '/', '', $view_url_data, 1);
       $view_url_data = explode('?', $view_url_data);
       $view_url = reset($view_url_data);
     }

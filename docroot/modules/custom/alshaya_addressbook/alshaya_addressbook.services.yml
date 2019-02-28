@@ -18,7 +18,7 @@ services:
       - '@alshaya_api.api'
       - '@language_manager'
       - '@config.factory'
-      - '@cache.data'
+      - '@cache.addressbook'
       - '@module_handler'
       - '@alshaya_addressbook.area_terms_helper'
       - '@alshaya_acm.cart_helper'
@@ -30,3 +30,9 @@ services:
       - '@language_manager'
       - '@config.factory'
       - '@cache.data'
+  cache.addressbook:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    arguments: [addressbook]
+    factory: cache_factory:get
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }

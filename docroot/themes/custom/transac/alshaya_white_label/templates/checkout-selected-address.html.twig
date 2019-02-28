@@ -1,0 +1,53 @@
+{#
+/**
+ * @file
+ * Template file to be used for showing address info in the same way as address book.
+ *
+ * This is used specifically for showing address for guest users.
+ * Copied from template of profile__address_book.
+ * This template must be updated with every update in source file.
+ */
+#}
+
+<div class="address">
+  <div class="address--data">
+    <div class="address--userinfo">
+      {% if delivery_to is not empty %}
+        <div>
+          <div class="address--label">{{ 'Delivery to' | t }}</div>
+          <div class="address--content">{{ delivery_to }}</div>
+        </div>
+      {% endif %}
+      {% if delivery_address.organization is not empty %}
+        <div class="address--contact">
+          <div class="address--label">{{ 'Email' | t }}</div>
+          <div class="address--content">{{ delivery_address.organization }}</div>
+        </div>
+      {% endif %}
+      {% if contact_no is not empty %}
+        <div class="address--contact">
+          <div class="address--label">{{ 'Contact number' | t }}</div>
+          <div class="address--content">{{ contact_no }}</div>
+        </div>
+      {% endif %}
+    </div>
+    {% if delivery_address is not empty %}
+      <div class="address--delivery">
+        <div class="address--label">{{ 'Delivery address' | t }}</div>
+        {% for item in delivery_address|without('organization', 'family_name', 'given_name', 'mobile_number') %}
+          {% if item is not empty %}
+            <div class="address--content">{{ item }}</div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="address--options">
+    {% if change_address is not empty %}
+      <div class="address--change-address address--controls">
+        {{ change_address }}
+      </div>
+    {% endif %}
+  </div>
+</div>

@@ -5,7 +5,157 @@
  * Install, uninstall, update function for alshaya_pb_transac.
  */
 
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Remove super_category dependence in block for free design services.
+ * Add new sku attribute feature_lhn.
+ */
+function alshaya_pb_transac_update_8010() {
+  $configs = [
+    'block.block.designservices',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+
+  $strings = [
+    'Features' => [
+      'ar' => 'المميزات',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['search_api.index.acquia_search_index', 'search_api.index.product'],
+      'alshaya_pb_transac',
+      'override',
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    );
+  // Resave indexes.
+  _alshaya_search_resave_indexes();
+
+  $configs = [
+    'system.menu.design-services',
+    'block.block.designservices',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+
+  // Enable super category feature.
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
+  $super_category_feature->enableSuperCategory();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Use from_to display mode for price.
+ */
+function alshaya_pb_transac_update_8009() {
+  \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.display_settings')
+    ->set('price_display_mode', SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO)
+    ->save();
+
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable shop by block and enable policies block in footer.
+ * Clear product cache.
+ */
+function alshaya_pb_transac_update_8008() {
+  // Disable shop by block.
+  $configs = [
+    'block.block.shopby',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  $configs = [
+    'block.block.footerstaticlinks',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
+
+  // Clear product cache.
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update search placeholder based configurations.
+ * Update arabic translations for search_field_placeholder.
+ */
+function alshaya_pb_transac_update_8007() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_search.settings'],
+     'alshaya_search'
+  );
+
+  // Add translation for search field placeholder.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_search.settings')
+    ->set('search_field_placeholder', 'بحث')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update arabic translations for fields_labels_n_error.
+ */
+function alshaya_pb_transac_update_8006() {
+  \Drupal::configFactory()->getEditable('alshaya_acm_product.fields_labels_n_error')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Disable hover gallery on PLP for PB.
+ */
+function alshaya_pb_transac_update_8005() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding new menu and block for free design services.
+ */
+function alshaya_pb_transac_update_8004() {
+  $configs = [
+    'system.menu.design-services',
+    'block.block.designservices',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'install');
+}
 
 /**
  * Implements hook_update_N().
@@ -76,7 +226,7 @@ function alshaya_pb_transac_update_8001() {
     [
       'block.block.alshayanewslettersubscription',
       'block.block.sociallinks',
-      'block.block.alshaya_help'
+      'block.block.alshaya_help',
     ],
     'alshaya_pb_transac',
     'override',
@@ -126,7 +276,7 @@ function alshaya_pb_transac_install() {
       'ar' => 'شركتنا',
     ],
     'Connect with us' => [
-      'ar' => 'اتصل بنا'
+      'ar' => 'اتصل بنا',
     ],
     'Customer care' => [
       'ar' => ' خدمة الزبائن ',
@@ -138,13 +288,23 @@ function alshaya_pb_transac_install() {
       'ar' => 'أرغب في استلام عروض حصرية من بوتري بارن',
     ],
     '@group_name/@sku_name' => [
-      'ar' => '@sku_name/@group_name'
-    ]
+      'ar' => '@sku_name/@group_name',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
   // Re-save indexes to ensure config overrides are taken into consideration.
   _alshaya_search_resave_indexes();
+
+  // Enable super category feature.
+  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
+  $super_category_feature->enableSuperCategory();
+
+  // Disable shop by block.
+  alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
+
+  // Enable the Policies block.
+  alshaya_config_install_configs(['block.block.footerstaticlinks'], 'alshaya_pb_transac', 'optional');
 }
 
 /**
@@ -153,6 +313,10 @@ function alshaya_pb_transac_install() {
 function alshaya_pb_transac_update_dependencies() {
   $dependencies['alshaya_pb_transac'][8004] = [
     'alshaya_search' => 8023,
+  ];
+  // Ensure the footer links menu is created first in alshaya_menus.
+  $dependencies['alshaya_pb_transac'][8009] = [
+    'alshaya_menus' => 8001,
   ];
   return $dependencies;
 }

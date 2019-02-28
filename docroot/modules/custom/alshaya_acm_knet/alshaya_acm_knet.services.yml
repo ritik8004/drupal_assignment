@@ -1,0 +1,14 @@
+services:
+  alshaya_acm_knet.helper:
+    class: Drupal\alshaya_acm_knet\KnetHelper
+    arguments:
+      - '@acq_commerce.api'
+      - '@alshaya_api.api'
+      - '@config.factory'
+      - '@state'
+      - '@logger.channel.knet'
+
+  logger.channel.knet:
+    class: Drupal\Core\Logger\LoggerChannel
+    factory: logger.factory:get
+    arguments: ['alshaya_acm_knet']

@@ -16,6 +16,7 @@ use Drupal\node\Entity\Node;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\simple_sitemap\Simplesitemap;
 
 /**
  * Class AlshayaImageSitemapGenerator.
@@ -90,6 +91,13 @@ class AlshayaImageSitemapGenerator {
   protected $configFactory;
 
   /**
+   * Simple Sitemap.
+   *
+   * @var \Drupal\simple_sitemap\Simplesitemap
+   */
+  protected $simpleSitemap;
+
+  /**
    * AlshayaImageSitemapGenerator constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
@@ -112,6 +120,8 @@ class AlshayaImageSitemapGenerator {
    *   SKU Manager service object.
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   Config Factory service.
+   * @param \Drupal\simple_sitemap\Simplesitemap $simple_sitemap
+   *   Simple sitemap.
    */
   public function __construct(Connection $database,
                               StateInterface $state,
@@ -122,7 +132,8 @@ class AlshayaImageSitemapGenerator {
                               LanguageManagerInterface $language_manager,
                               SkuImagesManager $skuImagesManager,
                               SkuManager $sku_manager,
-                              ConfigFactory $configFactory) {
+                              ConfigFactory $configFactory,
+                              Simplesitemap $simple_sitemap) {
     $this->database = $database;
     $this->state = $state;
     $this->fileSystem = $fileSystem;
@@ -133,6 +144,7 @@ class AlshayaImageSitemapGenerator {
     $this->skuImagesManager = $skuImagesManager;
     $this->skuManager = $sku_manager;
     $this->configFactory = $configFactory;
+    $this->simpleSitemap = $simple_sitemap;
   }
 
   /**
@@ -140,7 +152,7 @@ class AlshayaImageSitemapGenerator {
    */
   public function getSitemapReady() {
     $output = '<?xml version="1.0" encoding="UTF-8"?>';
-    $output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
+    $output .= '<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="https://www.w3.org/1999/xhtml" xmlns:image="https://www.google.com/schemas/sitemap-image/1.1">';
     $path = file_create_url($this->fileSystem->realpath(file_default_scheme() . "://alshaya_image_sitemap"));
     if (!is_dir($path)) {
       $this->fileSystem->mkdir($path);
@@ -156,8 +168,11 @@ class AlshayaImageSitemapGenerator {
    */
   public function getNodes() {
     $query = $this->entityTypeManager->getStorage('node')->getQuery();
+
     return $query->condition('type', 'acq_product')
       ->condition('status', NODE_PUBLISHED)
+      // Add tag to ensure this can be altered easily in custom modules.
+      ->addTag('get_display_node_for_sku')
       ->execute();
   }
 
@@ -177,18 +192,26 @@ class AlshayaImageSitemapGenerator {
         // Fetch list of media files for each nid.
         // Load product from id.
         $product = $node_storage->load($nid);
+
+        $sitemap_settings = $this->simpleSitemap->getEntityInstanceSettings($product->getEntityTypeId(), $product->id());
+
+        // Skip all nodes that are marked as not indexable in simple sitemap.
+        if (!empty($sitemap_settings) && empty($sitemap_settings['index'])) {
+          continue;
+        }
+
         $media = [];
         $all_media = [];
         $sku_for_gallery = NULL;
 
         if ($product instanceof Node) {
           // Get SKU from product.
-          $skuId = $product->get('field_skus')->first()->getString();
-          if (isset($skuId)) {
+          $skuId = $this->skuManager->getSkuForNode($product);
+          if (!empty($skuId)) {
             $sku = SKU::loadFromSku($skuId);
             if ($sku instanceof SKU) {
+              $sku_for_gallery = $sku;
               $combinations = $this->skuManager->getConfigurableCombinations($sku);
-              $check_parent_child = TRUE;
               // This code need to be in sync with PDP. The images that
               // are displayed on PDP page should be fetched here.
               if ($sku->bundle() == 'configurable') {
@@ -200,18 +223,16 @@ class AlshayaImageSitemapGenerator {
 
                   // Try to load images first for child to be displayed.
                   try {
-                    $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, $check_parent_child, 'fallback');
+                    $sku_for_gallery = $this->skuImagesManager->getSkuForGallery($sku, TRUE, 'fallback');
                   }
                   catch (\Exception $e) {
-                    $sku_for_gallery = $sku;
+                    // Do nothing.
                   }
                 }
               }
-              else {
-                $sku_for_gallery = $sku;
-              }
+
               if ($sku_for_gallery instanceof SKU) {
-                $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery, $check_parent_child);
+                $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery);
               }
 
               if (!empty($all_media['images'])) {
@@ -223,9 +244,13 @@ class AlshayaImageSitemapGenerator {
         }
 
         if (!empty($media)) {
-          $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE])->toString() . '</loc>';
+          $output .= '<url><loc>' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'https' => TRUE])->toString() . '</loc>';
           foreach ($languages as $language) {
-            $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], ['absolute' => TRUE, 'language' => $language])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
+            $output .= '<xhtml:link rel="alternate" href="' . Url::fromRoute('entity.node.canonical', ['node' => $nid], [
+              'absolute' => TRUE,
+              'https' => TRUE,
+              'language' => $language,
+            ])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
           }
           foreach ($media as $key => $value) {
             if ($key) {

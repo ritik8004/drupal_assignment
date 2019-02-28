@@ -17,6 +17,48 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Database\Database;
 
 /**
+ * Implements hook_acq_sku_sync_categories_delete_alter().
+ */
+function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$result) {
+  if (!empty($result)) {
+    foreach ($result as $tid => $rs) {
+      // Get all advanced department page.
+      $all_dpt_page = alshaya_advanced_page_get_pages();
+      // If department page node exists for the given term, don't delete it.
+      if (!empty($dpt_nid = $all_dpt_page[$tid])) {
+        $dpt_node = Node::load($dpt_nid);
+        if ($dpt_node instanceof Node) {
+          unset($result[$tid]);
+          \Drupal::logger('alshaya_advanced_page')->notice('Extra term having tid @tid with department node @nid exists in drupal but not in magento.', [
+            '@tid' => $tid,
+            '@nid' => $dpt_nid,
+          ]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_position_sync_alter().
+ */
+function alshaya_advanced_page_acq_sku_position_sync_alter(array &$terms) {
+  if (!empty($terms)) {
+    $dpt_pages = alshaya_advanced_page_get_pages();
+    foreach ($terms as $key => $term) {
+      // If category has a department page, skip it from position sync.
+      if (!empty($dpt_pages[$term->tid])) {
+        unset($terms[$key]);
+        \Drupal::logger('alshaya_advanced_page')->notice('Skipping position sync for category id: @cat_id as having department node: @dpt_nid', [
+          '@cat_id' => $term->tid,
+          '@dpt_nid' => $dpt_pages[$term->tid],
+        ]);
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function alshaya_advanced_page_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -90,11 +132,11 @@ function alshaya_advanced_page_node_presave(EntityInterface $entity) {
     // Deleting/Clearing cache on advanced page node save as this will not
     // happen very often.
     \Drupal::cache('data')->delete('advanced_page:terms:nodes');
-  }
 
-  if ($entity->getType() == 'advanced_page' && $entity->get('field_use_as_department_page')->value == 0) {
-    unset($entity->field_show_left_menu);
-    unset($entity->field_product_category);
+    if ($entity->get('field_use_as_department_page')->value == 0) {
+      unset($entity->field_show_left_menu);
+      unset($entity->field_product_category);
+    }
   }
 }
 
@@ -325,4 +367,42 @@ function alshaya_advanced_page_block_access(Block $block, $operation, AccountInt
 
   // No opinion.
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function alshaya_advanced_page_node_insert(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    $term = $node->get('field_product_category')->entity;
+    Cache::invalidateTags(['term:' . $term->id()]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ */
+function alshaya_advanced_page_node_update(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page'
+    && ($node->get('field_use_as_department_page')->value == 1
+      || $node->original->get('field_use_as_department_page')->value == 1)
+  ) {
+    $term = ($node->get('field_use_as_department_page')->value != 1
+    && $node->original->get('field_use_as_department_page')->value == 1)
+    ? $node->original->get('field_product_category')->entity
+    : $node->get('field_product_category')->entity;
+
+    Cache::invalidateTags(['term:' . $term->id()]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for node entities.
+ */
+function alshaya_advanced_page_node_delete(EntityInterface $node) {
+  if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+    $term = $node->get('field_product_category')->entity;
+    Cache::invalidateTags(['term:' . $term->id()]);
+    \Drupal::cache('data')->delete('advanced_page:terms:nodes');
+  }
 }

@@ -1,113 +1,269 @@
-#%RAML 1.0
+#%RAML 0.8
 title: Drupal APIs for mobile apps
 version: v1-dev
 protocols: [ HTTPS ]
-baseUri: https://local.alshaya-hmkw.com/{langcode}
+baseUri: https://{domain}/{langcode}
+baseUriParameters:
+  domain:
+    type: string
+    description: "The domain to run the request against."
+  langcode:
+    type: string
+    enum: [ "en", "ar" ]
+    description: "The langcode to get localized results from the endpoints."
+securitySchemes:
+  - oauth_2_0:
+      description: |
+          OAuth 2.0 implementation.
+      type: OAuth 2.0
+      settings:
+        authorizationUri: https://{domain}/{langcode}/oauth2/authorize
+        accessTokenUri: https://{domain}/{langcode}/oauth2/token
+        authorizationGrants: [ authorization_code, password ]
 mediaType: application/json
 schemas:
-  GetSocialMedias: |
-    {
-      "$schema": "http://json-schema.org/draft-04/schema",
-      "type": "array",
-      "items": {
+  - GetImage: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
         "type": "object",
         "properties": {
-          "media": {
-            "type": "string"
-          },
           "url": {
-            "type": "string"
+            "type": "string",
+            "description": "The path to the image."
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
           }
-        },
-        "required": [ "media", "url" ]
+        }
       }
-    }
-  GetErrorMessages: |
-    {
-      "$schema": "http://json-schema.org/draft-04/schema",
-      "type": "array",
-      "items": {
+  - EmailResponse: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
         "type": "object",
         "properties": {
-          "machine_name": {
-            "type": "string"
+          "success": {
+            "type": "boolean",
+            "description": "true if email sent successfully otherwise false."
           },
           "message": {
-            "type": "string"
-          }
-        },
-        "required": [ "machine_name", "message" ]
-      }
-    }
-  GetDeliveryMethods: |
-    {
-      "$schema": "http://json-schema.org/draft-04/schema",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "order_description": {
-            "type": "string"
-          },
-          "cart_description": {
-            "type": "string"
-          },
-          "codes": {
-            "type": "object",
-            "properties": {
-              "method": {
-                "type": "string"
-              },
-              "carrier": {
-                "type": "string"
-              },
-              "code": {
-                "type": "string"
-              }
-            },
-            "required": [ "method", "carrier", "code" ]
-          }
-        },
-        "required": [ "name", "order_description", "cart_description", "codes" ]
-      }
-    }
-  GetAutocomplete: |
-    {
-      "$schema": "http://json-schema.org/draft-04/schema",
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "string"
-          },
-          "label": {
             "type": "string",
-            "description": "HTML used by Drupal to display the suggestion in the list."
+            "description": "string containing error message if fails to send an email, otherwise nothing."
           }
-        },
-        "required": [ "value", "label" ]
+        }
       }
-    }
-  GetCategories: |
-    {
-      "$schema": "http://json-schema.org/draft-04/schema",
-      "type": "array",
-      "items": {
+  - UserStatus: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "true if user is active, otherwise false."
+          },
+          "email": {
+            "type": "string",
+            "description": "The email of the user if user is active, otherwise nothing."
+          }
+        }
+      }
+  - GetWebformSubmission: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "sid": {
+            "type": "string"
+          }
+        }
+      }
+  - GetOauthToken: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "token_type": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      }
+  - GetSocialMedias: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "media": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [ "media", "url" ]
+        }
+      }
+  - GetStaticTexts: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "machine_name": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [ "machine_name", "message" ]
+        }
+      }
+  - GetDeliveryMethods: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "order_description": {
+              "type": "string"
+            },
+            "cart_description": {
+              "type": "string"
+            },
+            "codes": {
+              "type": "object",
+              "properties": {
+                "method": {
+                  "type": "string"
+                },
+                "carrier": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                }
+              },
+              "required": [ "method", "carrier", "code" ]
+            }
+          },
+          "required": [ "name", "order_description", "cart_description", "codes" ]
+        }
+      }
+  - GetPaymetMethods: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "code": {
+              "type": "string"
+            },
+            "default": {
+              "type": "boolean"
+            }
+          },
+          "required": [ "name", "code", "default" ]
+        }
+      }
+  - GetAutocomplete: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "label": {
+              "type": "string",
+              "description": "HTML used by Drupal to display the suggestion in the list."
+            }
+          },
+          "required": [ "value", "label" ]
+        }
+      }
+  - GetCategories: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "banner": {
+              "schema": "GetImage"
+            },
+            "path": {
+              "type": "string"
+            },
+            "deeplink": {
+              "type": "string"
+            },
+            "include_in_menu": {
+              "type": "boolean"
+            },
+            "child": {
+              "type": "array",
+              "items": {
+                "schema": "GetCategories"
+              }
+            }
+          },
+          "required": [ "id", "name", "path", "deeplink", "include_in_menu" ]
+        }
+      }
+  - GetStores: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+  - GetPageSimple: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
         "type": "object",
         "properties": {
           "id": {
             "type": "integer"
           },
-          "name": {
+          "title": {
             "type": "string"
-          },
-          "promo_banner": {
-            "type": "object",
-            "description": "Structure TBD"
           },
           "path": {
             "type": "string"
@@ -115,164 +271,1835 @@ schemas:
           "deeplink": {
             "type": "string"
           },
-          "include_in_menu": {
-            "type": "boolean"
+          "html": {
+            "type": "string"
           },
-          "child": {
+          "css": {
+            "type": "string"
+          },
+          "js": {
+            "type": "string"
+          },
+          "images": {
             "type": "array",
             "items": {
-              "schema": "GetCategories"
+              "schema": "GetImage"
+            }
+          }
+        }
+      }
+  - GetParagraphs: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [ "block", "body", "promo_block", "product_carousel_category" ]
+            },
+            "item": {
+              "description": "Contains advanced page node body.",
+              "type": "string"
+            },
+            "body": {
+              "description": "Contains body of block.",
+              "type": "string"
+            },
+            "label": {
+              "description": "Contains label of block.",
+              "type": "string"
+            },
+            "label_display": {
+              "description": "Contains label display settings to dispaly label or not.",
+              "type": "boolean"
+            },
+            "title": {
+              "description": "Part of product_carousel_category type.",
+              "type": "string"
+            },
+            "image": {
+              "schema": "GetImage"
+            },
+            "url": {
+              "type": "string"
+            },
+            "deeplink": {
+              "type": "string"
+            },
+            "margin": {
+              "description": "Part of promo_block type.",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Part of product_carousel_category type.",
+              "type": "integer"
+            },
+            "accordion": {
+              "description": "Part of product_carousel_category type.",
+              "type": "boolean"
+            },
+            "products": {
+              "description": "Part of product_carousel_category type, when accordion set to 'false' and the key is 'items'.",
+              "type": "array",
+              "items": {
+                "schema": "LightProduct"
+              }
+            },
+            "categories": {
+              "description": "Part of product_carousel_category paragraph type, when accordion set to 'true' and the key is 'items'.",
+              "type": "array",
+              "items": {
+                "schema": "GetCategories"
+              }
+            }
+          },
+          "required": [ "type" ]
+        }
+      }
+  - GetPageAdvanced: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "deeplink": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": "array",
+            "items": {
+              "schema": "GetParagraphs"
+            }
+          }
+        }
+      }
+  - GetPromotions: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "label": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string",
+              "description": "The URL on Drupal site."
+            },
+            "deeplink": {
+              "type": "string",
+              "description": "The endpoint to invoke to build the promotion product list page."
+            },
+            "commerce_id": {
+              "type": "integer",
+              "description": "The promotion rule_id."
+            },
+            "promote": {
+              "type": "boolean",
+              "description": "Determine if the promotion should be promoted on the basket page."
+            }
+          }
+        }
+      }
+  - Filter: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The filter key to be used in query. Please note that not all sorts are available on all product listing pages.",
+            "enum": [ "plp_category_facet", "skus_sku_reference_final_price", "plp_product_collection", "plp_color",  "plp_concept", "plp_size", "category", "final_price", "product_collection", "color", "concept", "size" ]
+          },
+          "label": {
+            "type": "string",
+            "description": "The filter label to be displayed as block title."
+          },
+          "options": {
+            "type": "array",
+            "description": "The filter options which can be selected.",
+            "items": {
+              "schema": "FilterOption"
             }
           }
         },
-        "required": [ "id", "name", "path", "deeplink", "include_in_menu" ]
+        "required": [ "key", "label", "options" ]
       }
-    }
-/search_api_autocomplete:
+  - FilterOption: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The filter option key to be used in query."
+          },
+          "label": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "description": "The number of product matching the filter option."
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "schema": "FilterOption"
+            }
+          }
+        },
+        "required": [ "key", "label", "count" ]
+      }
+  - LightProduct: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "description": "Limited set of attributes to display a product in a list.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "deeplink": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "original_price": {
+            "type": "string"
+          },
+          "final_price": {
+            "type": "string",
+            "description": "Final/discounted price, either from PIMS or catalogue price rule."
+          },
+          "in_stock": {
+            "type": "boolean",
+            "description": "Whether the product is in stock or not."
+          },
+          "promo": {
+            "type": "array",
+            "items": {
+              "text": {
+                "type": "string"
+              }
+            }
+          },
+          "medias": {
+            "type": "object",
+            "properties": {
+              "images": {
+                "type": "array",
+                "items": {
+                  "url": {
+                    "type": "string",
+                    "description": "The LiquidPixel url to the image."
+                  },
+                  "image_type": {
+                    "type": "string",
+                    "description": "The image type to determine model vs product.",
+                    "enum": [ "image", "Lookbook", "Environmental", "CreativeDetail", "DescriptiveStillLife", "Pictogram", "DescriptiveDetail", "MODEL_IMAGE", "STILL_LIFE_FRONT_URL", "DETAIL_IMAGE" ]
+                  }
+                }
+              },
+              "videos": {
+                "type": "array",
+                "items": {
+                  "description": "Structure TBD, not in use on H&M."
+                }
+              }
+            }
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "description": "Structure TBD, not in use on H&M."
+            }
+          },
+          "swatches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "integer"
+                },
+                "color_code": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "color": {
+            "type": "string",
+            "description": "Color value"
+          }
+        }
+      }
+  - Sort: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The sorting option key to be used in query. Please note that not all sorts are available on all product listing pages.",
+            "enum": [ "nid ASC", "name_1 ASC", "name_1 DESC", "final_price DESC", "final_price ASC", "created DESC", "search_api_relevance DESC", "title ASC", "title DESC" ]
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [ "key", "label" ]
+      }
+  - Message: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "description": "Messages that are passed to the user.",
+        "type": "object",
+        "properties": {
+          "spellcheck": {
+            "type": "array",
+            "items": {
+              "description": "Suggestions for the word, if no results found."
+            }
+          }
+        }
+      }
+  - GetSearch: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "description": "The total number of products matching the criterias."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "schema": "Filter"
+            }
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "schema": "Sort"
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "schema": "LightProduct"
+            }
+          },
+          "message": {
+            "type": "array",
+            "items": {
+              "schema": "Message"
+            }
+          }
+        }
+      }
+  - GetProductsList: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "description": "The URL on Drupal site."
+          },
+          "deeplink": {
+            "type": "string",
+            "description": "The endpoint to invoke to build the promotion product list page."
+          },
+          "banner": {
+            "schema": "GetImage"
+          },
+          "description": {
+            "type": "string"
+          },
+          "total": {
+            "type": "number",
+            "description": "The total number of products matching the criterias."
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "schema": "Filter"
+            }
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "schema": "Sort"
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "schema": "LightProduct"
+            }
+          }
+        }
+      }
+  - KnetInitRequest: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "state_key": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      }
+  - KnetFinalizeRequest: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "payment_id": {
+            "type": "string"
+          },
+          "result": {
+            "type": "string"
+          },
+          "post_date": {
+            "type": "string"
+          },
+          "transaction_id": {
+            "type": "string"
+          },
+          "auth_code": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "tracking_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "customer_id": {
+            "type": "string"
+          },
+          "quote_id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
+  - GetProductMedia: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "images": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The LiquidPixel url to the image."
+                  },
+                  "image_type": {
+                    "type": "string",
+                    "description": "The image type to determine model vs product.",
+                    "enum": [ "image", "Lookbook", "Environmental", "CreativeDetail", "DescriptiveStillLife", "Pictogram", "DescriptiveDetail", "MODEL_IMAGE", "STILL_LIFE_FRONT_URL", "DETAIL_IMAGE" ]
+                  }
+                }
+              }
+            ]
+          },
+          "videos": {
+            "type": "array",
+            "items": {
+              "description": "Structure TBD, not in use on H&M."
+            }
+          }
+        }
+      }
+  - GetProduct: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "SKU Entity id of Drupal."
+          },
+          "sku": {
+            "type": "string",
+            "description": "SKU - Unique value for products."
+          },
+          "parent_sku": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "SKU of parent for child SKU's, otherwise null."
+          },
+          "title": {
+            "type": "string"
+          },
+          "original_price": {
+            "type": "string"
+          },
+          "final_price": {
+            "type": "string",
+            "description": "Final/discounted price, either from PIMS or catalogue price rule."
+          },
+          "stock": {
+            "type": "integer",
+            "description": "Stock of this SKU, will be 0 for configurables."
+          },
+          "in_stock": {
+            "type": "boolean",
+            "description": "Status of product in stock."
+          },
+          "link": {
+            "type": "string"
+          },
+          "delivery_options": {
+            "type": "object",
+            "description": "Delivery options home delivery and click and collect config.",
+            "properties": {
+              "home_delivery": {
+                "type": "object",
+                "description": "Home delivery configs.",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "standard_title": {
+                    "type": "string"
+                  },
+                  "standard_subtitle": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "click_and_collect": {
+                "type": "object",
+                "description": "Click and collect configs.",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "subtitle": {
+                    "type": "string"
+                  },
+                  "unavailable": {
+                    "type": "string"
+                  },
+                  "title_price": {
+                    "type": "number"
+                  },
+                  "help_text": {
+                    "type": "string"
+                  },
+                  "select_option_text": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "linked": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
+                "properties": {
+                  "link_type": {
+                    "type": "string"
+                  },
+                  "skus": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "schema": "LightProduct"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "media": {
+            "type": "array",
+            "description": "Images and videos for galleries.",
+            "items": [
+              {
+                "schema": "GetProductMedia"
+              }
+            ]
+          },
+          "labels": {
+            "type": "array",
+            "description": "Labels to be displayed in gallery.",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "context": {
+                    "type": "string",
+                    "enum": [
+                     "detail",
+                     "listing"
+                    ]
+                  },
+                  "labels": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "image": {
+                            "type": "string"
+                          },
+                          "position": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "attributes": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string"
+                  },
+                  "key": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "promotions": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "deeplink": {
+                    "type": "string"
+                  }
+                },
+                "required": [ "text" ]
+              }
+            ]
+          },
+          "swatch_data": {
+            "type": "object",
+            "properties": {
+              "attribute_code": {
+                "type": "string"
+              },
+              "swatches": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "display_value": {
+                        "type": "string"
+                      },
+                      "display_label": {
+                        "type": "string"
+                      },
+                      "swatch_type": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "cart_combinations": {
+            "type": "object",
+            "properties": {
+              "by_sku": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "sku": {
+                        "type": "string"
+                      },
+                      "attributes": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "attribute_code": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "integer"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "attribute_sku": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "attribute_code": {
+                        "type": "string"
+                      },
+                      "values": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "value": {
+                                "type": "integer"
+                              },
+                              "skus": {
+                                "type": "array",
+                                "items": [
+                                  {
+                                    "type": "string"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "variants": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "SKU Entity id of Drupal."
+                  },
+                  "sku": {
+                    "type": "string",
+                    "description": "String - SKU, unique value for products."
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "original_price": {
+                    "type": "string"
+                  },
+                  "final_price": {
+                    "type": "string",
+                    "description": "Final/discounted price, either from PIMS or catalogue price rule."
+                  },
+                  "stock": {
+                    "type": "integer",
+                    "description": "Stock of this SKU, will be 0 for configurables."
+                  },
+                  "in_stock": {
+                    "type": "boolean",
+                    "description": "Status of product in stock."
+                  },
+                  "delivery_options": {
+                    "type": "object",
+                    "description": "Delivery options home delivery and click and collect config.",
+                    "properties": {
+                      "home_delivery": {
+                        "type": "object",
+                        "description": "Home delivery configs.",
+                        "properties": {
+                          "status": {
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "click_and_collect": {
+                        "type": "object",
+                        "description": "Click and collect configs.",
+                        "properties": {
+                          "status": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "linked": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "description": "Contains linked skus for particular type, related/upsell/crosssell/etc.",
+                        "properties": {
+                          "link_type": {
+                            "type": "string"
+                          },
+                          "skus": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "string"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "media": {
+                    "type": "array",
+                    "description": "Images and videos for galleries.",
+                    "items": [
+                      {
+                        "schema": "GetProductMedia"
+                      }
+                    ]
+                  },
+                  "labels": {
+                    "type": "array",
+                    "description": "Labels to be displayed in gallery.",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "context": {
+                            "type": "string",
+                            "enum": [
+                              "detail",
+                              "listing"
+                            ]
+                          },
+                          "labels": {
+                            "type": "array",
+                            "items": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "attributes": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string"
+                          },
+                          "key": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "promotions": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "text": {
+                            "type": "string"
+                          },
+                          "deeplink": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [ "text" ]
+                      }
+                    ]
+                  },
+                  "configurable_values": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "label": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "attribute_code": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+/search_api_autocomplete/search:
+  get:
+    description: Get a list of suggestion based on a given string.
+    queryParameters:
+      filter:
+        type: string
+        default: keywords
+      q:
+        type: string
+        description: The searched text.
+    responses:
+      200:
+        body:
+          application/json:
+            schema: GetAutocomplete
+            example: |
+              [
+                {
+                  "value": "dress",
+                  "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">s</span></div>\n"
+                },
+                {
+                  "value": "dresses",
+                  "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">ses</span></div>\n"
+                },
+                {
+                  "value": "dressing",
+                  "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">sing</span></div>\n"
+                }
+              ]
+/rest/v1:
   /search:
     get:
-      description: Get a list of suggestion based on a given string.
+      description: "Get the data to build the search result page."
       queryParameters:
-        filter:
+        q?:
           type: string
-          default: keywords
-        q:
+          description: "The searched keyword."
+          example: |
+            "dress"
+        f?:
           type: string
-          description: The searched text.
+          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
+          example: |
+            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
+        sort?:
+          type: string
+          description: "A sorting option to apply."
+          example: |
+            "final_price DESC"
+        limit?:
+          type: string
+          description: "The offset to apply."
+          example: |
+            "10,20"
       responses:
         200:
           body:
             application/json:
-              schema: GetAutocomplete
+              schema: GetSearch
+              example: |
+                {
+                  "filters": [],
+                  "sorting": [],
+                  "products": [],
+                  "total": 10,
+                  "message": { "spellcheck": [] }
+                }
+  /promotion/all:
+    get:
+      description: "Get all the promotions with their relevant information."
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetPromotions
               example: |
                 [
                   {
-                    "value": "dress",
-                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">s</span></div>\n"
+                    "id": 1234,
+                    "name": "Buy 1 Get 1 Free",
+                    "path": "/promotions/buy-1-get-1-free",
+                    "deeplink": "/rest/v1/promotion/1234/product-list",
+                    "commerce_id": 700,
+                    "promote": true
                   },
                   {
-                    "value": "dresses",
-                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">ses</span></div>\n"
-                  },
-                  {
-                    "value": "dressing",
-                    "label": "  <div class=\"search-api-autocomplete-suggestion\">\n<span class=\"autocomplete-suggestion-user-input\">dres</span><span class=\"autocomplete-suggestion-suggestion-suffix\">sing</span></div>\n"
+                    "id": 4567,
+                    "name": "Body Care Minis for AED 19",
+                    "path": "/promotions/body-care-minis-for-aed-19",
+                    "deeplink": "/rest/v1/promotion/4567/product-list",
+                    "commerce_id": 700,
+                    "promote": false
                   }
                 ]
-/rest:
-  /v1:
-    /category:
-      /all:
+  /promotion/{id}/product-list:
+    uriParameters:
+      id:
+        type: string
+        description: "The promotion ID to get the related products."
+    get:
+      description: "Get the data to build the promotion product list."
+      queryParameters:
+        f?:
+          type: string
+          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
+          example: |
+            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
+        sort?:
+          type: string
+          description: "A sorting option to apply."
+          example: |
+            "final_price DESC"
+        limit?:
+          type: string
+          description: "The offset to apply."
+          example: |
+            "10,20"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetProductsList
+              example: |
+                {
+                  "id": 1234,
+                  "label": "Buy 1 Get 1 Free",
+                  "path": "/promotions/buy-1-get-1-free",
+                  "deeplink": "/rest/v1/promotion/1234/product-list",
+                  "banner": {
+                    "url": "https://kw.hm.com/en/sites/g/files/bnd578/files/2018-09/buy-1-get-1-free-offer.png",
+                    "width": 840,
+                    "height": 742
+                  },
+                  "description": "",
+                  "total": 123,
+                  "filters": [],
+                  "sorting": [],
+                  "products": []
+                }
+  /page/simple:
+    get:
+      description: "Get a simple page from its url."
+      queryParameters:
+        url:
+          type: string
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetPageSimple
+              example: |
+                {
+                  "id": 1234,
+                  "name": "FAQ",
+                  "path": "/faq",
+                  "deeplink": "/rest/v1/page/simple?url=faq",
+                  "html": "<h1>FAQs</h1><h3>What delivery options do you offer?</h3><p>We offer a Home Delivery option as well as a Click and collect service for selected stores. Times and cost for deliveries will vary depending on the location. For more information, please see our <a href='https://kw.hm.com/en/delivery-information'>delivery information</a> page.</p><h3>What time does H&amp;M customer care team operate, and how can I get in contact?</h3><p>You can contact our customer care team on the following number: 92000-2482. We are open from 10am to 10pm 7 days a week (including Public holidays). You can also <a href='https://kw.hm.com/en/contact'>contact us</a> using our quick form and our team will get back to you as soon as possible.&nbsp;</p>",
+                  "css": ".staticPage h1{ color: #000; font-size: 20px; padding-bottom: 5px; margin-bottom: 10px; border-bottom: 1px solid #ddd; text-transform: uppercase;} .staticPage h3{ color: #333; font-size: 14px; padding-bottom: 5px; line-height: 24px; font-weight: 600;} .staticPage p, .staticPage ul{ color: #666; font-size: 13px; line-height: 24px; padding-bottom: 15px;}",
+                  "js": "document.body.onload = openPopup; function openPopup() { var popuphide = localStorage.getItem('popuphide'); localStorage.setItem('popuphide', 'true'); dataLayer.push({'event' : 'leads', 'leadType' : 'popup'});}",
+                  "images": [
+                    {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-23082018-shine-on-en-m.jpg",
+                      "width": 638,
+                      "height": 430
+                    },
+                    {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-08/hp-ladies-h-kwt-w35-v1-26082018-shine-on-en-d.jpg",
+                      "width": 638,
+                      "height": 430
+                    },
+                  ]
+                }
+  /page/advanced:
+    get:
+      "description": "Get an advanced page from its url."
+      queryParameters:
+        url:
+          type: string
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetPageAdvanced
+              example: |
+                {
+                  "id": 1234,
+                  "name": "Ladies",
+                  "path": "/ladies",
+                  "deeplink": "/rest/v1/page/advanced?url=ladies",
+                  "blocks": [
+                    {
+                      "type": "block",
+                      "body": "<p>Shop the latest fashion online.</p>\r\n"
+                    },
+                    {
+                      "type": "body",
+                      "item": "<p>Body of the page.</p>\r\n"
+                    },
+                    {
+                      "type": "promo_block",
+                      "image": {
+                        "url": "https://hmsa.dev2-alshaya.acsitefactory.com/sites/g/files/bndsjb361/files/2018-10/dp-b1-uae-w42-v1-10102018-pre-autumn-favourites-m-en.jpg",
+                        "width": 638,
+                        "height": 426
+                      },
+                      "url": "/en/ladies/selected/pre-autumn-favourites",
+                      "deeplink": "/rest/v1/category/59036/product-list"
+                    },
+                    {
+                      "type": "product_carousel_category",
+                      "title": "TOP SELLERS",
+                      "limit": "12",
+                      "accordion": false,
+                      "items": [
+                        {
+                          "id": 380221,
+                          "title": "2 pairs hoop earrings",
+                          "sku": "0536358",
+                          "deeplink": "/rest/v1/product/0536358",
+                          "original_price": "69",
+                          "final_price": "69",
+                          "in_stock": true,
+                          "promo": [],
+                          "medias": {
+                            "images": [
+                                {
+                                  "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/7a/4d/7a4d3efcd5721737afbe967710330faac158e32b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B1%5D",
+                                  "image_type": "DescriptiveStillLife"
+                                }
+                            ],
+                            "videos": []
+                          },
+                          "labels": [],
+                          "swatches": [
+                            {
+                              "key": 578406,
+                              "color_code": "#DFDEDE"
+                            },
+                            {
+                              "key": 380216,
+                              "color_code": "#B1A646"
+                            }
+                          ]
+                        },
+                        {
+                          "id": 365836,
+                          "title": "2-pack push-up bras",
+                          "sku": "0595435",
+                          "deeplink": "/rest/v1/product/0595435",
+                          "original_price": "99",
+                          "final_price": "40",
+                          "in_stock": true,
+                          "promo": [
+                            {
+                              "text": "save 60%"
+                            }
+                          ],
+                          "medias": {
+                            "images": [
+                              {
+                                "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/32/3f/323f65f00b4ba5713610bd13998716dac75bd4a5.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B1%5D",
+                                "image_type": "DescriptiveStillLife"
+                              },
+                              {
+                                "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/6d/e8/6de85e733c22082c55656d15bc50af0675ec4ddd.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B1%5D",
+                                "image_type": "DescriptiveStillLife"
+                              }
+                            ],
+                            "videos": []
+                          },
+                          "labels": [],
+                          "swatches": [
+                            {
+                              "key": 433176,
+                              "color_code": "#83838F"
+                            }
+                          ]
+                        },
+                      ]
+                    },
+                    {
+                      "type": "promo_block",
+                      "image": {
+                        "url": "https://hmsa.dev2-alshaya.acsitefactory.com/sites/g/files/bndsjb361/files/2018-10/banner_0.png",
+                        "width": 638,
+                        "height": 426
+                      },
+                      "margin": "10px 10px 10px 10px"
+                    },
+                    {
+                      "type": "block",
+                      "body": "body text of a block",
+                      "image": ""
+                    },
+                    {
+                      "type": "promo_block",
+                      "url": "/en/buy-1-get-1-free",
+                      "deeplink": "/rest/v1/promotion/197601/product-list",
+                      "margin": "10px 10x 10px 10px"
+                    }
+                  ]
+                }
+  /store/search/{lat}/{lng}:
+    uriParameters:
+      lat:
+        type: number
+        description: "The latitude."
+      lng:
+        type: number
+        description: "The longitude."
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetStores
+              example: |
+                [
+                  "RB2-1886-HEN",
+                  "RB2-1957-HEN",
+                  "RB2-1988-HEN"
+                ]
+  /category/all:
+    get:
+      description: "Get all the categories with their relevant information. It will return a hierarchical structure reflecting the category tree."
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetCategories
+              example: |
+                [
+                  {
+                    "id": 1234,
+                    "name": "Ladies",
+                    "description": "<p>Discover H&amp;M's fantastic range of women clothing!</p>",
+                    "path": "/ladies",
+                    "deeplink": "/rest/v1/page/advanced/4567",
+                    "include_in_menu": true,
+                    "banner": {
+                      "url": "https://local.alshaya-hmkw.com/sites/g/files/alshaya-hmkw/2018-09/black.png",
+                      "width": 638,
+                      "height": 430
+                    },
+                    "child":
+                    [
+                      {
+                        "id": 1567,
+                        "name": "Dresses",
+                        "description": "",
+                        "path": "/dresses",
+                        "deeplink": "/rest/v1/category/1567/product-list",
+                        "include_in_menu": true
+                      },
+                      {
+                        "id": 1579,
+                        "name": "Shoes",
+                        "description": "",
+                        "path": "/shoes",
+                        "deeplink": "/rest/v1/category/1579/product-list",
+                        "include_in_menu": true
+                      }
+                    ]
+                  },
+                  {
+                    "id": 1789,
+                    "name": "Men",
+                    "description": "",
+                    "path": "/men",
+                    "deeplink": "/rest/v1/page/advanced/4578",
+                    "include_in_menu": true
+
+                  }
+                ]
+  /category/{id}/product-list:
+    uriParameters:
+      id:
+        type: string
+        description: "The category ID to get the related products."
+    get:
+      description: "Get the data to build the product list page."
+      queryParameters:
+        f?:
+          type: string
+          description: "A list of applied filters. Please note it is defined as a string but is actually an array."
+          example: |
+            "f[0]=plp_size:M&f[1]=skus_sku_reference_final_price:0"
+        sort?:
+          type: string
+          description: "A sorting option to apply."
+          example: |
+            "final_price DESC"
+        limit?:
+          type: string
+          description: "The offset to apply."
+          example: |
+            "10,20"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetProductsList
+              example: |
+                {
+                  "id": 1234,
+                  "label": "Ladies",
+                  "path": "/ladies",
+                  "deeplink": "/rest/v1/category/1234/product-list",
+                  "banner": {
+                    "url": "https://local.alshaya-hmkw.com/sites/g/files/hmkw/2018-12/Drupal-8-Service-Decorators-b-v2.jpg",
+                    "width": 1385,
+                    "height": 742
+                  },
+                  "description": "",
+                  "total": 123,
+                  "filters": [],
+                  "sorting": [],
+                  "products": []
+                }
+  /social-media-links:
+    get:
+      description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetSocialMedias
+              example: |
+                [
+                  {
+                    "media": "facebook",
+                    "url": "https://www.facebook.com/hm"
+                  },
+                  {
+                    "media": "instagram",
+                    "url": "https://www.instagram.com/hm/"
+                  }
+                ]
+  /get-static-texts:
+    get:
+      description: Get the static texts to be displayed on the frontend.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetStaticTexts
+              example: |
+                [
+                  {
+                    "machine_name": "email_address_invalid",
+                    "message": "The email address you entered is invalid."
+                  },
+                  {
+                    "machine_name": "email_address_already_used",
+                    "message": "You already have an account. Please login!"
+                  }
+                ]
+  /delivery-methods:
+    get:
+      description: Get the data related to delivery methods.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetDeliveryMethods
+              example: |
+                [
+                  {
+                    "name": "Alshaya Standard Delivery",
+                    "order_description": "Your order will be delivered at the following address",
+                    "cart_description": "Standard delivery in 1-2 days",
+                    "codes":
+                      {
+                        "method": "deliverymatrix",
+                        "carrier": "alshayadelivery",
+                        "code": "alshayadelivery_deliverymatrix"
+                      }
+                  },
+                  {
+                    "name": "Click and Collect",
+                    "order_description": "Your order will be available for pickup at the following store",
+                    "cart_description": "Click and Collect",
+                    "codes":
+                      {
+                        "method": "click_and_collect",
+                        "carrier": "click_and_collect",
+                        "code": "click_and_collect_click_and_collect"
+                      }
+                  }
+                ]
+  /payment-methods:
+    get:
+      description: Get the data related to payment methods.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: GetPaymentMethods
+              example: |
+                [
+                  {
+                    "name": "Credit Card",
+                    "description": null,
+                    "code": "authorizenet_directpost",
+                    "default": false
+                  },
+                  {
+                    "name": "Check/Money Order",
+                    "description": null,
+                    "code": "checkmo",
+                    "default": false
+                  },
+                ]
+  /product:
+    /{sku}:
+      get:
+        description: "Get product by SKU."
+        responses:
+          200:
+            body:
+              application/json:
+                schema: GetProduct
+                example: |
+                  {
+                    "id": 301,
+                    "sku": "0189691",
+                    "parent_sku": null,
+                    "title": "Sweatshirt",
+                    "original_price": "5.90",
+                    "final_price": "5.90",
+                    "stock": 0,
+                    "delivery_options": {
+                      "home_delivery": {
+                        "title": "Home Delivery",
+                        "subtitle": "FREE DELIVERY on all orders over KD 9",
+                        "standard_title": "Standard Delivery",
+                        "standard_subtitle": "(within 1-2 working days)",
+                        "status": true
+                      },
+                      "click_and_collect": {
+                        "title": "Click and Collect",
+                        "subtitle": "Collect the order from store in 1-2 days",
+                        "unavailable": "Click & collect in-store is not available",
+                        "title_price": 0,
+                        "help_text": "<p>This service is <strong>FREE</strong> of charge.</p>\r\n",
+                        "select_option_text": "<p><span class=\"highlight\">Select a size</span> to check stock availability near to you</p>\r\n",
+                        "status": true
+                      }
+                    },
+                    "linked": [
+                      {
+                        "link_type": "related",
+                        "skus": [],
+                      },
+                      {
+                        "link_type": "upsell",
+                        "skus": [],
+                      },
+                      {
+                        "link_type": "crosssell",
+                        "skus": [
+                          {
+                            "id": 66,
+                            "title": "Suit trousers Slim fit_test",
+                            "sku": "0391750",
+                            "deeplink": "/rest/v1/product/0391750",
+                            "original_price": "8.00",
+                            "final_price": "8.00",
+                            "in_stock": true,
+                            "promo": [],
+                            "medias": {
+                              "images": [],
+                              "videos": []
+                            },
+                            "labels": [],
+                            "swatches": [
+                              {
+                                "key": 356,
+                                "color_code": "#494C4F"
+                              }
+                            ]
+                          },
+                        ]
+                      }
+                    ],
+                    "media": [
+                      {
+                        "context": "detail",
+                        "media": {
+                          "images": [
+                            {
+                              "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/c4/59/c45947c35dd906682817ca8f9615a9f3e6f8178b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B2%5D",
+                              "image_type": "DescriptiveStillLife"
+                            }
+                          ],
+                          "videos": []
+                        }
+                      },
+                      {
+                        "context": "listing",
+                        "media": {
+                          "images": [
+                            {
+                              "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/c4/59/c45947c35dd906682817ca8f9615a9f3e6f8178b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B2%5D",
+                              "image_type": "DescriptiveStillLife"
+                            }
+                          ],
+                          "videos": []
+                        }
+                      },
+                      {
+                        "context": "teaser",
+                        "media": {
+                          "images": [
+                            {
+                              "url": "https://lp2.hm.com/hmgoepprod?set=source%5B/c4/59/c45947c35dd906682817ca8f9615a9f3e6f8178b.jpg%5D%2Corigin%5Bdam%5D%2Ctype%5BDescriptiveStillLife%5D%2Chmver%5B2%5D",
+                              "image_type": "DescriptiveStillLife"
+                            }
+                          ],
+                          "videos": []
+                        }
+                      }
+                    ],
+                    "labels":[],
+                    "attributes":[
+                      {
+                        "value": "Long-sleeved top in sweatshirt fabric with ribbing at the cuffs and hem.",
+                        "key": "description"
+                      },
+                      {
+                        "value": "CAROLINA SWEATER (1)",
+                        "key": "short_description"
+                      },
+                      {
+                        "value": "DIVIDED",
+                        "key": "concept"
+                      },
+                      {
+                        "value": "machinewash40",
+                        "key": "washing_instructions"
+                      },
+                      {
+                        "value": "HEN-YG-D-D15-1643",
+                        "key": "aims_department"
+                      },
+                      {
+                        "value": "HEN",
+                        "key": "product_brand"
+                      },
+                      {
+                        "value": "1",
+                        "key": "ship_to_store"
+                      },
+                      {
+                        "value": "1",
+                        "key": "reserve_and_collect"
+                      },
+                      {
+                        "value": "1",
+                        "key": "is_buyable"
+                      }
+                    ],
+                    "promotions":[],
+                    "configurable_values":[],
+                    "swatch_data": {
+                      "attribute_code": "article_castor_id",
+                      "swatches": [
+                        {
+                          "display_value": "#A5A5A5",
+                          "display_label": "Grey marl",
+                          "swatch_type": "RGB",
+                          "value": 1052
+                        }
+                      ]
+                    },
+                    "cart_combinations": {},
+                    "variants": []
+                  }
+  /knet:
+    /init:
+      /{cart_id}:
         get:
-          description: "Get all the categories with their relevant information. It will return a hierarchical structure reflecting the category tree."
+          description: "K-Net init request and get URL."
           responses:
             200:
               body:
                 application/json:
-                  schema: GetCategories
+                  schema: KnetInitRequest
                   example: |
-                    [
-                      {
-                        "id": 1234,
-                        "name": "Ladies",
-                        "path": "/ladies",
-                        "deeplink": "/rest/v1/page/advanced/4567",
-                        "include_in_menu": true,
-                        "child":
-                        [
-                          {
-                            "id": 1567,
-                            "name": "Dresses",
-                            "path": "/dresses",
-                            "deeplink": "/rest/v1/category/1567/product-list",
-                            "include_in_menu": true
-                          },
-                          {
-                            "id": 1579,
-                            "name": "Shoes",
-                            "path": "/shoes",
-                            "deeplink": "/rest/v1/category/1579/product-list",
-                            "include_in_menu": true
-                          }
-                        ]
-                      },
-                      {
-                        "id": 1789,
-                        "name": "Men",
-                        "path": "/men",
-                        "deeplink": "/rest/v1/page/advanced/4578",
-                        "include_in_menu": true
-
-                      }
-                    ]
-    /social-medias:
-      get:
-        description: Get the social media urls. It will return the urls indexed by social media type as contributed in Drupal footer.
-        responses:
-          200:
-            body:
-              application/json:
-                schema: GetSocialMedias
-                example: |
-                  [
-                    {
-                      "media": "facebook",
-                      "url": "https://www.facebook.com/hm"
-                    },
-                    {
-                      "media": "instagram",
-                      "url": "https://www.instagram.com/hm/"
-                    }
-                  ]
-    /error-messages:
-      get:
-        description: Get the error messages to be displayed on the frontend after validation.
-        responses:
-          200:
-            body:
-              application/json:
-                schema: GetErrorMessages
-                example: |
-                  [
-                    {
-                      "machine_name": "email_address_invalid",
-                      "message": "The email address you entered is invalid."
-                    },
-                    {
-                      "machine_name": "email_address_already_used",
-                      "message": "You already have an account. Please login!"
-                    }
-                  ]
-    /delivery-methods:
-      get:
-        description: Get the data related to delivery methods.
-        responses:
-          200:
-            body:
-              application/json:
-                schema: GetDeliveryMethods
-                example: |
-                  [
-                    {
-                      "name": "Alshaya Standard Delivery",
-                      "order_description": "Your order will be delivered at the following address",
-                      "cart_description": "Standard delivery in 1-2 days",
-                      "codes":
-                        {
-                          "method": "deliverymatrix",
-                          "carrier": "alshayadelivery",
-                          "code": "alshayadelivery_deliverymatrix"
-                        }
-                    },
-                    {
-                      "name": "Click and Collect",
-                      "order_description": "Your order will be available for pickup at the following store",
-                      "cart_description": "Click and Collect",
-                      "codes":
-                        {
-                          "method": "click_and_collect",
-                          "carrier": "click_and_collect",
-                          "code": "click_and_collect_click_and_collect"
-                        }
-                    }
-                  ]
+                    {"state_key":"f1c1b706d29cf7a5c07b9de09b47bb4a","url":"https:\/\/www.knetpaytest.com.kw:443\/CGW302\/hppaction?formAction=com.aciworldwide.commerce.gateway.payment.action.HostedPaymentPageAction\u0026\u0026PaymentID=5385266411682950"}
+    /finalize:
+      /{state_key}:
+        get:
+          description: "K-Net get final status and data of transaction."
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: KnetFinalizeRequest
+                  example: |
+                    {"payment_id":"5339950131882960","result":"CAPTURED","post_date":"1024","transaction_id":"1571958141882960","auth_code":"188519","ref":"829618580773","tracking_id":"HMKWHDE0000812","user_id":"0","customer_id":"158","quote_id":"2871","amount":2.5,"status":"success"}
+  /user/send-registration-email:
+    post:
+      description: |
+        Post request to send email notification for registration.
+      body:
+        application/json:
+          formParameters:
+            email:
+              description: "The user's email id."
+              required: true
+              type: string
+              example: |
+                "randomuser@gmail.com"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: EmailResponse
+              example: |
+                {
+                  "success": false,
+                  "message": "User with email randomuser@gmail.com does not exist.",
+                }
+  /user/forgot-password-email:
+    post:
+      description: |
+        Post request for forgot password email.
+      body:
+        application/json:
+          formParameters:
+            email:
+              description: "The user's email id."
+              required: true
+              type: string
+              example: |
+                "randomuser@gmail.com"
+      responses:
+        200:
+          body:
+            application/json:
+              schema: EmailResponse
+              example: |
+                {
+                  "success": false,
+                  "message": "User with email randomuser@gmail.com does not exist.",
+                }
+  /user/get-status/{email}:
+    uriParameters:
+      email:
+        type: string
+        description: "The email ID of the user."
+    get:
+      description: "Get the status of a particular user."
+      responses:
+        200:
+          body:
+            application/json:
+              schema: UserStatus
+              example: |
+                {
+                  "status": true,
+                  "email": "randomuser@gmail.com",
+                }
+/oauth/token:
+  description: "Get the token for mobile app consumer."
+  post:
+    description: |
+      Get bearer token for given user.
+      Use the "multipart-form/data" to submit data to get token
+    body:
+      multipart/formdata:
+        formParameters:
+          grant_type:
+            description: "The token grant type."
+            required: true
+            type: string
+            enum: [ "password", "code", "referesh_token" ]
+          client_id:
+            description: "The client uuid."
+            required: true
+            type: string
+            example: |
+              "ac73dcc7-6918-4e14-8b48-86b5cd17f4d2"
+          client_secret:
+            description: "The client password."
+            required: true
+            type: string
+            example: |
+              "anyRandomString"
+          username:
+            description: "The username for which we need to generate token."
+            required: true
+            type: string
+            example: |
+              "my_username"
+          password:
+            description: "The password of the user for which we need to generate token."
+            required: true
+            type: string
+            example: |
+              "password"
+    responses:
+      200:
+        body:
+          application/json:
+            schema: GetOauthToken
+            example: |
+              {
+                "token_type": "Bearer",
+                "expires_in": 300,
+                "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjEzMDU4YzE5ZWNjZGJiMTliZGMyZTRkNWM1OGNhMWYwM2Y3NTY0Njk3MTM4MjM1MDYzODZjYTMxMWI0ZjU2YzMzNTZkODZhZDAyZDhhOTg3In0.eyJhdWQiOiJhYzczZGNjNy02OTE4LTRlMTQtOGI0OC04NmI1Y2QxN2Y0ZDIiLCJqdGkiOiIxMzA1OGMxOWVjY2RiYjE5YmRjMmU0ZDVjNThjYTFmMDNmNzU2NDY5NzEzODIzNTA2Mzg2Y2EzMTFiNGY1NmMzMzU2ZDg2YWQwMmQ4YTk4NyIsImlhdCI6MTU0Mjk2NzM4MiwibmJmIjoxNTQyOTY3MzgyLCJleHAiOjE1NDI5OTczODIsInN1YiI6IjUzNzM5Iiwic2NvcGVzIjpbImF1dGhlbnRpY2F0ZWQiLCJtb2JpbGVfYXBwX2NvbnN1bWVyIl19.FxdexdbanLuhuAR_Wf",
+                "refresh_token": "def502007eca0d3f91a3b6597f010e5f8ae1503ccf586de59cd3a4fe5f6d095d4e8e03fa619333887bc340269d47f53a1b2b7c1350c0cc40bd21ad4380640e71bbe1657bcb611dc26c2d9100339f29692396393e606ff721e4f2e1526e"
+              }
+/webform_rest/submit:
+  description: "Submit alshaya_contact webform data as a mobile app consumer."
+  post:
+    description: |
+      Use the "multipart-form/data" to submit data to get token
+    securedBy: [oauth_2_0]
+    body:
+     application/json:
+        formParameters:
+          webform_id:
+            description: "The webform id."
+            required: true
+            type: string
+            example: |
+              "alshaya_contact"
+          select_your_preference_of_channel_of_communication:
+            description: "The Preference of channel of communication."
+            required: true
+            type: string
+            enum: [ "Email", "Mobile"]
+            example: |
+              "Email"
+          first_name:
+            description: "The first name of user."
+            required: true
+            type: string
+            example: |
+              "nicolas"
+          last_name:
+            description: "The last name of user."
+            required: true
+            type: string
+            example: |
+              "tesla"
+          mobile_number:
+            description: "The user's mobile number."
+            required: true
+            type: string
+            example: |
+              "+96555591411"
+          email:
+            description: "The user's email id."
+            required: true
+            type: string
+            example: |
+              "no-reply@alshaya.com"
+          message:
+            description: "The msg that user want to add."
+            required: true
+            type: string
+            example: |
+              "any random msg string"
+    responses:
+      200:
+        body:
+          application/json:
+            schema: GetWebformSubmission
+            example: |
+              {
+                "sid": "1234"
+              }

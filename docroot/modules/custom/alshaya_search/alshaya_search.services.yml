@@ -37,5 +37,6 @@ services:
       - '@config.factory'
       - '@language_manager'
       - '@alshaya_search_api.helper'
+      - '@logger.factory'
     tags:
       - { name: event_subscriber }

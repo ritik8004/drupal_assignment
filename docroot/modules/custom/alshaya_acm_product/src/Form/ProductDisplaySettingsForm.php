@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\Form;
 
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
@@ -34,6 +35,7 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
     $config->set('color_swatches_hover', $form_state->getValue('color_swatches_hover'));
     $config->set('short_desc_characters', $form_state->getValue('short_desc_characters'));
     $config->set('short_desc_text_summary', $form_state->getValue('short_desc_text_summary'));
+    $config->set('price_display_mode', $form_state->getValue('price_display_mode'));
     $config->save();
 
     return parent::submitForm($form, $form_state);
@@ -63,6 +65,16 @@ class ProductDisplaySettingsForm extends ConfigFormBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Apply hover effect on color swatches.'),
       '#default_value' => $config->get('color_swatches_hover'),
+    ];
+
+    $form['price_display_mode'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Price display mode'),
+      '#default_value' => $config->get('price_display_mode') ?? SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE,
+      '#options' => [
+        SkuPriceHelper::PRICE_DISPLAY_MODE_SIMPLE => $this->t('Simple / Default'),
+        SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO => $this->t('From - To'),
+      ],
     ];
 
     $form['short_desc'] = [

@@ -42,10 +42,11 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
   }
   try {
     if (isset($data_layer['cartItemsFlocktory'])) {
+      /** @var \Drupal\acq_cart\CartSessionStorage $cart_storage */
       $cart_storage = \Drupal::service('acq_cart.cart_storage');
       $cart = $cart_storage->getCart(FALSE);
       if ($cart) {
-        $cart_items = $cart->get('items');
+        $cart_items = $cart->items();
         if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images')) {
           foreach ($cart_items as $key => $item) {
             $sku = SKU::loadFromSku($item['sku']);
@@ -96,9 +97,11 @@ function alshaya_hm_gtm_pdp_attributes_alter($sku, &$attributes) {
  *   Return the array of images or empty array.
  */
 function alshaya_hm_get_product_images(NodeInterface $product) {
-  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') &&
-    !empty($product_field_sku = $product->get('field_skus')->first())) {
-    $skuId = $product_field_sku->getString();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  $skuId = $skuManager->getSkuForNode($product);
+
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_hm_images') && !empty($skuId)) {
     return alshaya_hm_get_sku_images($skuId);
   }
   return [];
@@ -140,11 +143,11 @@ function alshaya_hm_module_implements_alter(&$implementations, $hook) {
  */
 function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
-    $sku_entity = SKU::loadFromSku($sku);
-
     /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
+    $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_hm_get_product_description($sku_entity);
@@ -300,4 +303,12 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
 
     $sku->set('attr_composition', NULL);
   }
+}
+
+/**
+ * Implements hook_alshaya_get_currency_code().
+ */
+function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
+  // Updated UAE currency code.
+  $currency['ae']['en'] = 'DHS';
 }

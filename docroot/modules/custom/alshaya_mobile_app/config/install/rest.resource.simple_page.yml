@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - serialization
+    - alshaya_mobile_app
+    - simple_oauth
+id: simple_page
+plugin_id: simple_page
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

@@ -5,6 +5,7 @@ namespace Drupal\alshaya_config;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -71,6 +72,13 @@ class AlshayaConfigManager {
   protected $themeManager;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new AlshayaConfigManager object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -79,13 +87,17 @@ class AlshayaConfigManager {
    *   Entity Type Manager.
    * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
    *   Theme Manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ThemeManagerInterface $theme_manager) {
+                              ThemeManagerInterface $theme_manager,
+                              ModuleHandlerInterface $module_handler) {
     $this->configFactory = $config_factory;
     $this->entityTypeManager = $entity_type_manager;
     $this->themeManager = $theme_manager;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -104,6 +116,11 @@ class AlshayaConfigManager {
    */
   public function updateConfigs(array $configs, $module_name, $path = 'install', $mode = self::MODE_REPLACE, array $options = []) {
     if (empty($configs)) {
+      return;
+    }
+
+    // Skip updating configs for modules currently not installed.
+    if (!($this->moduleHandler->moduleExists($module_name))) {
       return;
     }
 

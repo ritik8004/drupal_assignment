@@ -10,6 +10,9 @@ use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\acq_commerce\SKUInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -60,6 +63,31 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 }
 
 /**
+ * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
+ */
+function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
+  // Update title of parent product based on selected sku if available.
+  if ($selected_sku instanceof SKUInterface) {
+    $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($selected_sku);
+
+    $response->addCommand(
+      new InvokeCommand(
+        'article[gtm-type="gtm-product-link"]',
+        'attr',
+        ['gtm-product-sku', $selected_sku->getSku()]
+      )
+    );
+    $response->addCommand(
+      new InvokeCommand(
+        'article[gtm-type="gtm-product-link"]',
+        'attr',
+        ['gtm-price', _alshaya_acm_format_price_with_decimal((float) $prices['final_price'])]
+      )
+    );
+  }
+}
+
+/**
  * Adding google rich snippet to product.
  *
  * @param array $snippet
@@ -80,8 +108,11 @@ function _alshaya_seo_transac_pdp_rich_snippet(array $snippet = []) {
     $node = $route_match->getParameter('node');
     // If 'product' node.
     if ($node && $node->getType() == 'acq_product') {
-      if ($sku_field = $node->get('field_skus')) {
-        $sku_id = $sku_field->first()->getString();
+      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+      $sku_id = $skuManager->getSkuForNode($node);
+      if ($sku_id) {
         $sku_entity = SKU::loadFromSku($sku_id);
 
         if (empty($sku_entity)) {
@@ -194,6 +225,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             case 'delivery':
               if (!empty($data_layer['deliveryArea'])) {
                 $step = 3;
+                $page_type = 'checkout sub-delivery page';
               }
               else {
                 // For logged in users, we show delivery methods only when
@@ -212,6 +244,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
           }
 
           $data_layer_cart = [
+            'event' => 'checkout',
             'ecommerce' => [
               'currencyCode' => $gtm_manager->getGtmCurrency(),
               'checkout' => [
@@ -245,6 +278,7 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
             $data_layer['privilegeOrder'] = $attributes['privilegeCustomer'] ? 'order with privilege club' : 'order without privilege club';
 
+            $data_layer['event'] = 'purchaseSuccess';
             $data_layer['ecommerce'] = [
               'currencyCode' => $gtm_manager->getGtmCurrency(),
               'purchase' => [
@@ -252,14 +286,6 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
                 'products' => $attributes['products'],
               ],
             ];
-
-            /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
-            $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
-            if ($attributes['general']['deliveryOption'] === $checkout_options_manager->getClickandColectShippingMethod()) {
-              $data_layer['event'] = 'VirtualPageView';
-              $data_layer['virtualPageUrl'] = '/virtualpv/click-and-collect/step4/order-success';
-              $data_layer['virtualPageTitle'] = 'C&C Step 4 – Order Success';
-            }
 
             user_cookie_save([$cookie_key => 1]);
           }
@@ -343,13 +369,15 @@ function alshaya_seo_transac_page_attachments(array &$attachments) {
       // Send order complete confirmation data only once.
       if ($already_visited !== 1) {
         $attributes = $gtm_manager->fetchCompletedOrderAttributes($order);
-        $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
-          'currencyCode' => $gtm_manager->getGtmCurrency(),
-          'purchase' => [
-            'actionField' => $attributes['actionField'],
-            'products' => $attributes['products'],
-          ],
-        ];
+        /** @var \Drupal\alshaya_acm_checkout\CheckoutOptionsManager $checkout_options_manager */
+        $checkout_options_manager = \Drupal::service('alshaya_acm_checkout.options_manager');
+        if ($attributes['general']['deliveryOption'] === $checkout_options_manager->getClickandColectShippingMethod()) {
+          $attachments['#attached']['drupalSettings']['gtmOrderConfirmation'] = [
+            'event' => 'VirtualPageView',
+            'virtualPageUrl' => '/virtualpv/click-and-collect/step4/order-success',
+            'virtualPageTitle' => 'C&C Step 4 – Order Success',
+          ];
+        }
       }
     }
   }
@@ -377,7 +405,10 @@ function alshaya_seo_transac_preprocess_alshaya_cart_product_name(&$variables) {
 
   if ($product_node instanceof NodeInterface) {
     $sku_attributes['gtm-category'] = implode('/', $gtm_manager->fetchProductCategories($product_node));
-    $sku_attributes['gtm-main-sku'] = $product_node->get('field_skus')->first()->getString();
+
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku_attributes['gtm-main-sku'] = $skuManager->getSkuForNode($product_node);
   }
 
   $sku_attributes['gtm-type'] = 'gtm-remove-cart-wrapper';
@@ -452,7 +483,10 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
   $gtm_disabled_vars = \Drupal::config('alshaya_seo.disabled_gtm_vars')
     ->get('disabled_vars');
   if ($entity->bundle() == 'acq_product' && $view_mode == 'full' && !in_array('dimension6', $gtm_disabled_vars)) {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $sku = $skuManager->getSkuForNode($entity);
     if (!empty($sku)) {
       // Always load the en values for GTM.
       $sku_entity = SKU::loadFromSku($sku);

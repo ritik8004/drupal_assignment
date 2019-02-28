@@ -1,122 +1,124 @@
-@import "../../alshaya_white_label/sass/config/_fonts.scss";
+@import "../../../alshaya_white_label/sass/config/_fonts.scss";
 
 // Define Fonts
+$base_theme_fonts_directory_path: '/themes/custom/transac/alshaya_hnm/fonts';
+
 @font-face {
   font-family: 'Ampersand_bold';
-  src: url('../fonts/HMAmpersand-Bold.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.eot');
   src:
-    url('../fonts/HMAmpersand-Bold.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/HMAmpersand-Bold.woff2') format('woff2'),
-    url('../fonts/HMAmpersand-Bold.woff') format('woff'),
-    url('../fonts/HMAmpersand-Bold.ttf') format('truetype'),
-    url('../fonts/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Bold.svg#HMAmpersand-Bold') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Amperserif_regular';
-  src: url('../fonts/HMAmperserif-Regular.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.eot');
   src:
-    url('../fonts/HMAmperserif-Regular.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/HMAmperserif-Regular.woff2') format('woff2'),
-    url('../fonts/HMAmperserif-Regular.woff') format('woff'),
-    url('../fonts/HMAmperserif-Regular.ttf') format('truetype'),
-    url('../fonts/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmperserif-Regular.svg#HMAmperserif-Regular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Ampersand_regular';
-  src: url('../fonts/HMAmpersand-Regular.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.eot');
   src:
-    url('../fonts/HMAmpersand-Regular.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/HMAmpersand-Regular.woff2') format('woff2'),
-    url('../fonts/HMAmpersand-Regular.woff') format('woff'),
-    url('../fonts/HMAmpersand-Regular.ttf') format('truetype'),
-    url('../fonts/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-Regular.svg#HMAmpersand-Regular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Ampersand_demibold';
-  src: url('../fonts/HMAmpersand-DemiBold.eot');
+  src: url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.eot');
   src:
-    url('../fonts/HMAmpersand-DemiBold.eot?#iefix') format('embedded-opentype'),
-    url('../fonts/HMAmpersand-DemiBold.woff2') format('woff2'),
-    url('../fonts/HMAmpersand-DemiBold.woff') format('woff'),
-    url('../fonts/HMAmpersand-DemiBold.ttf') format('truetype'),
-    url('../fonts/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/HMAmpersand-DemiBold.svg#HMAmpersand-DemiBold') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GESSTwoMedium-Medium";
-  src: url("../fonts/GESSTwoMedium.eot");
+  src: url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.eot");
   src:
-    url("../fonts/GESSTwoMedium.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/GESSTwoMedium.otf") format("opentype"),
-    url("../fonts/GESSTwoMedium.svg") format("svg"),
-    url("../fonts/GESSTwoMedium.ttf") format("truetype"),
-    url("../fonts/GESSTwoMedium.woff") format("woff"),
-    url("../fonts/GESSTwoMedium.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoMedium.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GESSTwoLight-Light";
-  src: url("../fonts/GESSTwoLight.eot");
+  src: url("#{$base_theme_fonts_directory_path}/GESSTwoLight.eot");
   src:
-    url("../fonts/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/GESSTwoLight.otf") format("opentype"),
-    url("../fonts/GESSTwoLight.svg") format("svg"),
-    url("../fonts/GESSTwoLight.ttf") format("truetype"),
-    url("../fonts/GESSTwoLight.woff") format("woff"),
-    url("../fonts/GESSTwoLight.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoLight.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GESSTwoBold-Bold";
-  src: url("../fonts/GESSTwoBold.eot");
+  src: url("#{$base_theme_fonts_directory_path}/GESSTwoBold.eot");
   src:
-    url("../fonts/GESSTwoBold.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/GESSTwoBold.otf") format("opentype"),
-    url("../fonts/GESSTwoBold.svg") format("svg"),
-    url("../fonts/GESSTwoBold.ttf") format("truetype"),
-    url("../fonts/GESSTwoBold.woff") format("woff"),
-    url("../fonts/GESSTwoBold.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GESSTwoBold.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GEDinarTwo-Medium";
-  src: url("../fonts/GEDinarTwoMedium.eot");
+  src: url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.eot");
   src:
-    url("../fonts/GEDinarTwoMedium.eot?#iefix") format("embedded-opentype"),
-    url("../fonts/GEDinarTwoMedium.otf") format("opentype"),
-    url("../fonts/GEDinarTwoMedium.svg") format("svg"),
-    url("../fonts/GEDinarTwoMedium.ttf") format("truetype"),
-    url("../fonts/GEDinarTwoMedium.woff") format("woff"),
-    url("../fonts/GEDinarTwoMedium.woff2") format("woff2");
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/GEDinarTwoMedium.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'hnm-icons';
-  src: url('../fonts/alshaya-icons.eot?yy6ec9');
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?yy6ec9');
   src:
-    url('../fonts/alshaya-icons.eot?yy6ec9#iefix') format('embedded-opentype'),
-    url('../fonts/alshaya-icons.ttf?yy6ec9') format('truetype'),
-    url('../fonts/alshaya-icons.woff?yy6ec9') format('woff'),
-    url('../fonts/alshaya-icons.svg?yy6ec9#alshaya-icons') format('svg');
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.eot?yy6ec9#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.ttf?yy6ec9') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.woff?yy6ec9') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-icons.svg?yy6ec9#alshaya-icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -160,6 +162,24 @@ $alshaya-bold: $hnm-bold;
 $alshaya-arabic-bold: $hnm-arabic-bold;
 $alshaya-thin: $hnm-regular;
 $alshaya-arabic-thin: $hnm-arabic-regular;
+
+// Campaign-plp-style-1 font family.
+@font-face {
+  font-family: 'Sunrise';
+  src: url("#{$base_theme_fonts_directory_path}/Sunrise.eot");
+  src:
+    url("#{$base_theme_fonts_directory_path}/Sunrise.eot?#iefix") format("embedded-opentype"),
+    url("#{$base_theme_fonts_directory_path}/Sunrise.otf") format("opentype"),
+    url("#{$base_theme_fonts_directory_path}/Sunrise.svg") format("svg"),
+    url("#{$base_theme_fonts_directory_path}/Sunrise.ttf") format("truetype"),
+    url("#{$base_theme_fonts_directory_path}/Sunrise.woff") format("woff"),
+    url("#{$base_theme_fonts_directory_path}/Sunrise.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+$campaign-plp-style-1-font: 'Sunrise', 'GESSTwoMedium-Medium';
+$campaign-plp-style-1-arabic-font: 'Sunrise', 'GESSTwoMedium-Medium';
 
 // Icon Fonts
 $icons: (

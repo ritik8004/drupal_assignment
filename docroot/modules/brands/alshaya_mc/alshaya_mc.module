@@ -14,7 +14,9 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
@@ -32,6 +34,15 @@ function alshaya_mc_node_view(array &$build, EntityInterface $entity, EntityView
         }
       }
 
+      // Trim the short description.
+      /* @var \Drupal\alshaya_acm_product\ProductHelper $product_helper*/
+      $product_helper = \Drupal::service('alshaya_acm_product.helper');
+      $short_desc = $product_helper->createShortDescription($return['short_desc']['value']['#markup']);
+      // If there is 'readmore' available only then process.
+      if (!empty($short_desc['read_more'])) {
+        $short_desc['html'] = $product_helper->processShortDescEllipsis($short_desc['html']);
+      }
+      $return['short_desc']['value']['#markup'] = $short_desc['html'];
       $build['short_desc'] = $return['short_desc'];
       $build['description'] = $return['description'];
     }

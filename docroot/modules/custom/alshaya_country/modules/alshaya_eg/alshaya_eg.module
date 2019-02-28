@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Module file for alshaya_eg.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_eg_element_info_alter(array &$info) {
+  if (isset($info['address']['#process'])) {
+    $info['address']['#process'][] = '_alshaya_eg_country_process';
+  }
+}
+
+/**
+ * Processor for the country in address field.
+ */
+function _alshaya_eg_country_process(array &$element, FormStateInterface $form_state) {
+  // Validation for postal code.
+  $element['postal_code']['#element_validate'][] = '_alshaya_eg_postalcode_validate';
+  return $element;
+}
+
+/**
+ * Adding validation for the postal code.
+ */
+function _alshaya_eg_postalcode_validate($element, FormStateInterface $form_state) {
+  if (!empty($element['#default_value']) && !preg_match('/^[0-9]{5}$/', $element['#default_value'])) {
+    $form_state->setError($element, t('%name field is not in the right format.', ['%name' => t('Postal code')]));
+  }
+}

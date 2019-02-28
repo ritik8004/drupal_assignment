@@ -17,24 +17,12 @@ dependencies:
   - drupal:syslog
   - twig_tweak:twig_tweak
   - drupal:restrict_role_login_by_ip
+  - drupal:memory_limit_policy
+  - drupal:memory_limit_policy_path
 
 themes:
   - bartik
   - seven
   - whitelabel
 
-base profile:
-  name: lightning
-  excluded_dependencies:
-    - dblog
-    - help
-    - history
-    - lightning_landing_page
-    - lightning_layout
-    - lightning_media_instagram
-    - lightning_media_twitter
-    - lightning_media_video
-    - lightning_search
-    - shortcut
-    - views_ui
-    - lightning_scheduler
+base profile: lightning

@@ -1,0 +1,54 @@
+services:
+  alshaya_mobile_app.utility:
+    class: Drupal\alshaya_mobile_app\Service\MobileAppUtility
+    arguments:
+      - '@cache.data'
+      - '@language_manager'
+      - '@request_stack'
+      - '@path.alias_manager'
+      - '@entity_type.manager'
+      - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@module_handler'
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@config.factory'
+      - '@acq_commerce.api'
+  alshaya_mobile_app.utility.paragraphs:
+    class: Drupal\alshaya_mobile_app\Service\MobileAppUtilityParagraphs
+    decorates: alshaya_mobile_app.utility
+    decoration_priority: 9
+    public: false
+    arguments:
+      - '@alshaya_mobile_app.utility.paragraphs.inner'
+      - '@serializer'
+      - '@renderer'
+      - '@entity_field.manager'
+      - '@cache.data'
+      - '@language_manager'
+      - '@request_stack'
+      - '@path.alias_manager'
+      - '@entity_type.manager'
+      - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@module_handler'
+      - '@alshaya_acm_product_category.product_category_tree'
+      - '@config.factory'
+      - '@acq_commerce.api'
+  alshaya_mobile_app.alshaya_search_api_query_execute:
+    class: Drupal\alshaya_mobile_app\Service\AlshayaSearchApiQueryExecute
+    arguments:
+      - '@request_stack'
+      - '@facets.manager'
+      - '@language_manager'
+      - '@plugin.manager.facets.query_type'
+      - '@alshaya_mobile_app.utility'
+      - '@entity.repository'
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+  alshaya_mobile_app.stdclass_normalizer:
+    class: Drupal\alshaya_mobile_app\Normalizer\StdClassNormalizer
+    arguments: ['\stdClass']
+    tags:
+      - { name: normalizer, priority: 20 }

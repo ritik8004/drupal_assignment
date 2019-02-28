@@ -10,6 +10,16 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Grant "access taxonomy overview" permissions to the webmaster.
+ */
+function alshaya_permissions_update_8019() {
+  // Update role permissions from the config.
+  _alshaya_permissions_update_role_from_config(['webmaster']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Grant media browser and image browser permissions to the webmaster.
  */
 function alshaya_permissions_update_8018() {

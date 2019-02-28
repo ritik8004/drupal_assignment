@@ -3,7 +3,6 @@
 namespace Drupal\acq_cart;
 
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Class Cart.
@@ -180,11 +179,8 @@ class Cart implements CartInterface {
           '@cart_id' => $this->id(),
         ]);
 
-        // Disabled items are removed from cart in MDC. Refresh cart object to
-        // remove the item from cart session storage & update price. Invalidate
-        // cache tag fro current cart id to load correct status on minicart.
-        \Drupal::service('acq_cart.cart_storage')->restoreCart($this->id());
-        Cache::invalidateTags(['cart:' . $this->id()]);
+        // Remove the item from cart in session.
+        unset($items[$key]);
 
         // Continue to next item, this item is removed in call above.
         continue;
@@ -197,6 +193,20 @@ class Cart implements CartInterface {
     }
 
     return $items;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasItem(string $sku) {
+    $items = $this->items();
+
+    if (empty($items)) {
+      return FALSE;
+    }
+
+    $skus = array_column($items, 'sku');
+    return in_array($sku, $skus);
   }
 
   /**

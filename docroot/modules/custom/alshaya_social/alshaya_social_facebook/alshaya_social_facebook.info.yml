@@ -1,0 +1,6 @@
+name: 'Alshaya Social Facebook login'
+type: module
+core: 8.x
+dependencies:
+  - alshaya_social:alshaya_social
+  - social_auth_facebook:social_auth_facebook

@@ -46,12 +46,6 @@
       height: 2.5rem !important;
     }
   }
-
-  @include breakpoint($tablet) {
-    .form-type-checkbox .option::before {
-      font-size: 1.125rem;
-    }
-  }
 }
 
 .user-login-form {
@@ -107,6 +101,38 @@
         @include breakpoint($tablet) {
           min-width: 9.125rem;
         }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .path--user {
+    .ui-dialog {
+      .ui-dialog-buttonpane {
+        button {
+          &.dialog-cancel {
+            display: block;
+          }
+        }
+      }
+
+      .ui-dialog-content {
+        padding-#{$right}: 1rem;
+      }
+    }
+
+    .profile-address-book-delete-form {
+      a {
+        &.dialog-cancel {
+          &.button {
+            display: none !important;
+          }
+        }
+      }
+
+      .button--primary {
+        width: 100%;
       }
     }
   }

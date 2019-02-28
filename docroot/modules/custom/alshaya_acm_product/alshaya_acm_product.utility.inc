@@ -121,16 +121,14 @@ function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
  *
  * @param mixed $sku
  *   SKU name or full sku object.
- * @param string $langcode
- *   Language code.
  *
  * @return object
  *   Loaded node object.
  */
-function alshaya_acm_product_get_display_node($sku, $langcode = '') {
+function alshaya_acm_product_get_display_node($sku) {
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  return $skuManager->getDisplayNode($sku, $langcode);
+  return $skuManager->getDisplayNode($sku);
 }
 
 /**

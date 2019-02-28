@@ -108,7 +108,7 @@
 
       if (context === document) {
         // Toggle for Product description.
-        $('.read-more-description-link').on('click', function () {
+        $('.read-more-description-link').once('readmore').on('click', function () {
           // Close click and collect all stores wrapper if open.
           if ($('.click-collect-all-stores').hasClass('desc-open')) {
             $('.click-collect-all-stores').toggleClass('desc-open');
@@ -135,7 +135,7 @@
           });
         });
 
-        $('.close').on('click', function () {
+        $('.close').once('readmore').on('click', function () {
           $('.c-pdp .description-wrapper').toggleClass('desc-open');
         });
 
@@ -176,10 +176,12 @@
           if ($(this).find('ul').length > 0) {
             Drupal.convertIntoAccordion($(this));
           }
-
           else {
             $(this).addClass('empty-accordion-delivery-options');
           }
+          // Add class on parent of c-accordion-delivery-options so we can hide
+          // the paragraph with margin in desktop.
+          $(this).parents('.c-promo__item').addClass('c-accordion-delivery-option-parent');
         });
       }
 

@@ -14,7 +14,6 @@ if (!empty($_ENV['AH_SITE_GROUP']) && !empty($_ENV['AH_SITE_ENVIRONMENT']) && fu
 
   // A user who gets here is trying to visit a site that is not yet registered
   // with either the Site Factory or Hosting.
-
   // Don't run any of this code if we are drush or a CLI script.
   if (function_exists('drush_main') || PHP_SAPI === 'cli') {
     if (!function_exists('drush_main')) {

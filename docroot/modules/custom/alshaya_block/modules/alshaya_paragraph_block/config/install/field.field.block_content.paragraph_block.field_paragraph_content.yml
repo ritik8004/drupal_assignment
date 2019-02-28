@@ -6,6 +6,7 @@ dependencies:
     - field.storage.block_content.field_paragraph_content
     - paragraphs.paragraphs_type.offers_bordered
     - paragraphs.paragraphs_type.slug_banner
+    - paragraphs.paragraphs_type.image_title_subtitle
   module:
     - entity_reference_revisions
 id: block_content.paragraph_block.field_paragraph_content
@@ -16,6 +17,7 @@ label: 'Paragraph Content'
 description: ''
 required: false
 translatable: false
+skip_translation_check: true
 default_value: {  }
 default_value_callback: ''
 settings:
@@ -25,6 +27,7 @@ settings:
     target_bundles:
       offers_bordered: offers_bordered
       slug_banner: slug_banner
+      image_title_subtitle: image_title_subtitle
     target_bundles_drag_drop:
       1_row_1st_col_2_row_2nd_col:
         weight: 20
@@ -68,9 +71,6 @@ settings:
       block_reference:
         weight: 32
         enabled: false
-      image_title_subtitle:
-        weight: 33
-        enabled: false
       offers_bordered:
         enabled: true
         weight: 34
@@ -103,5 +103,8 @@ settings:
         enabled: false
       slug_banner:
         weight: 50
+        enabled: true
+      image_title_subtitle:
+        weight: 51
         enabled: true
 field_type: entity_reference_revisions

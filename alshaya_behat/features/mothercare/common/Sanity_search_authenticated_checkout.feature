@@ -3,10 +3,11 @@ Feature: to verify search functionality , basket and checkout
 
   Scenario: As a Guest user
   I should be able to search, verify filter,footer, header and sort on results page
-    Given I am on homepage
+    Given I am on the homepage
     And I wait for the page to load
     When I close the popup
     And I wait for the page to load
+    And I follow "English"
     Then I should be able to see the header
     And I should be able to see the footer
     When I fill in "edit-keywords" with "randomtext"
@@ -40,7 +41,7 @@ Feature: to verify search functionality , basket and checkout
   Scenario: As an authenticated user
   I should be able to search product, add product to basket
   and verify the fields on basket
-    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
+    Given I am logged in as an authenticated user "karnika.jain+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "green t shirtt"
     And I press "Search"
@@ -67,7 +68,7 @@ Feature: to verify search functionality , basket and checkout
     And I should see "Add a promotional code"
     When I hover over tooltip "p.home-delivery.tooltip--head"
     And I wait 2 seconds
-    Then I should see "Home delivery in 1-2 days for just KWD 1"
+    Then I should see "Free Delivery in 1-2 days on orders over kwd 20"
     When I hover over tooltip "p.click-collect.tooltip--head"
     And I wait 2 seconds
     Then I should see "Collect the order in store within 1-2 days"
@@ -86,7 +87,7 @@ Feature: to verify search functionality , basket and checkout
   I should be able to search for a product
   and add it to the cart, select Home Delivery and see COD, KNET and Cybersource
   Payment methods
-    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
+    Given I am logged in as an authenticated user "karnika.jain+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
@@ -134,7 +135,7 @@ Feature: to verify search functionality , basket and checkout
   I should be able to search for a product
   and add it to the cart, select Click & Collect and see  KNET and Cybersource
   Payment methods
-    Given I am logged in as an authenticated user "kanchan.patil+test@qed42.com" with password "Password@1"
+    Given I am logged in as an authenticated user "karnika.jain+test@qed42.com" with password "Password@1"
     And I wait for the page to load
     When I fill in "edit-keywords" with "green t shirt"
     And I press "Search"
@@ -178,6 +179,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     And I press "CancelAction_id"
 
+
   Scenario: As a returning customer
   I should be able to place an order for HD - COD, KNET and Cybersource
     Given I am on a configurable product
@@ -189,7 +191,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    Then I fill in "edit-checkout-login-name" with "karnika.jain+test@qed42.com"
     And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load
@@ -216,10 +218,10 @@ Feature: to verify search functionality , basket and checkout
     Then I should see "I confirm that I have read and accept the"
     And I accept terms and conditions
     And I wait for the page to load
-    Then I accept terms and conditions
     And I press "place order"
     And I wait for the page to load
     And I press "CancelAction_id"
+
 
   Scenario: As a returning customer
   I should be able to place an order for CC - KNET & Cybersource
@@ -231,7 +233,7 @@ Feature: to verify search functionality , basket and checkout
     And I wait for the page to load
     When I press "checkout securely"
     And I wait for the page to load
-    Then I fill in "edit-checkout-login-name" with "kanchan.patil+test@qed42.com"
+    Then I fill in "edit-checkout-login-name" with "karnika.jain+test@qed42.com"
     And I fill in "edit-checkout-login-pass" with "Password@1"
     When I press "sign in"
     And I wait for the page to load

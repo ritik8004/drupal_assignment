@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "delivery_methods",
  *   label = @Translation("Delivery Methods"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/delivery_options"
+ *     "canonical" = "/rest/v1/delivery-methods"
  *   }
  * )
  */

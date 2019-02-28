@@ -1,33 +1,59 @@
+/**
+ * Animation: Ripple
+ * --------------------------------------------------
+ */
+
+@mixin link-ripple {
+  overflow: hidden;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 1s;
+  }
+
+  &:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+  }
+}
+
 %button-wide,
 .button-wide {
   background-color: $primary_btn_bg;
   color: $primary_btn_text;
   display: inline-block;
-  font-size: 12px;
-  min-width: 162px;
-  padding: 11px;
+  font-size: 0.75rem;
+  min-width: 10.125rem;
+  padding: 0.6875rem;
   text-align: center;
 
-  @include breakpoint($desktop) {
-    &:hover {
-      opacity: 0.75;
-    }
-  }
+  @include link-ripple;
 }
 
 %button-brand,
 .brand-button {
   border: 1px solid $primary_brand_button;
   color: $primary_brand_button_text;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: bold;
-  padding: 10px 20px 9px;
+  padding: 0.625rem 1.25rem 0.5625rem;
 
-  @include breakpoint($desktop) {
-    &:hover {
-      opacity: 0.75;
-    }
-  }
+  @include link-ripple;
 }
 
 .button {
@@ -37,18 +63,20 @@
   &.status-processing,
   &.status-returned {
     font-family: $arial;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: bold;
     text-align: center;
     color: $primary_btn_text;
-    height: 23px;
-    line-height: 23px;
-    width: 106px;
+    height: 1.875rem;
+    line-height: 1.875rem;
+    width: 6.625rem;
+
+    @include link-ripple;
 
     @include breakpoint($desktop) {
       font-size: 0.75rem;
       height: 2.1875rem;
-      padding: 0.375rem 0;
+      line-height: 2.1875rem;
     }
   }
 
@@ -89,14 +117,15 @@
     border: 1px solid $primary_brand_button;
     padding: 0.563rem 4.12rem;
     font-family: $arial;
+
+    @include link-ripple;
   }
 }
 
+#cart_notification a,
+#coupon-button,
+a.select-store,
 button[type="submit"],
 .button {
-  @include breakpoint($desktop) {
-    &:hover {
-      opacity: 0.75;
-    }
-  }
+  @include link-ripple;
 }

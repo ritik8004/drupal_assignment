@@ -21,24 +21,32 @@ function alshaya_contact_alshaya_i18n_onetime_translation_add() {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
-function alshaya_contact_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  if ($form_id == 'webform_submission_alshaya_contact_add_form') {
+function alshaya_contact_form_webform_submission_alshaya_contact_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['#attributes']['class'][] = 'webform-submission-alshaya-contact-form';
 
-    $form['#attributes']['class'][] = 'webform-submission-alshaya-contact-form';
+  $form['elements']['first_name']['#attributes']['specialchar'] = 'specialchar';
+  $form['elements']['last_name']['#attributes']['specialchar'] = 'specialchar';
+  $form['elements']['first_name']['#maxlength'] = 50;
+  $form['elements']['last_name']['#maxlength'] = 50;
+  // Override mail validation pattern.
+  $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 
-    $form['elements']['first_name']['#attributes']['specialchar'] = 'specialchar';
-    $form['elements']['last_name']['#attributes']['specialchar'] = 'specialchar';
-    $form['elements']['first_name']['#maxlength'] = 50;
-    $form['elements']['last_name']['#maxlength'] = 50;
+  // Custom validation for contact form.
+  $form['#validate'][] = '_alshaya_contact_alshaya_contact_form_validate';
+}
 
-    // Override mail validation pattern.
-    $form['#attached']['library'][] = 'alshaya_user/email_validator_override';
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_contact_form_webform_submission_alshaya_contact_edit_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $entity = $form_state->getFormObject()->getEntity();
+  $mobile_number = $entity->getData()['mobile_number'];
 
-    // Custom validation for contact form.
-    $form['#validate'][] = '_alshaya_contact_alshaya_contact_form_validate';
-  }
+  $form['elements']['mobile_number']['#default_value'] = [
+    'value' => $mobile_number,
+  ];
 }
 
 /**

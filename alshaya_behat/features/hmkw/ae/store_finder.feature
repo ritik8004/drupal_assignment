@@ -1,5 +1,5 @@
-@javascript 
-
+@javascript
+Feature: Test Store finder page
   Background:
     Given I am on homepage
     And I wait for the page to load

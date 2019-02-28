@@ -33,13 +33,11 @@
     @include breakpoint($only-mobile) {
       top: 0;
     }
-
-    @include breakpoint($tablet) {
-      font-size: 1.25rem;
-    }
   }
 
-  .item-list__checkbox {
+  .item-list__checkbox,
+  .item-list__range_checkbox,
+  .item-list__swatch_list {
     max-height: 18.375rem;
   }
 }

@@ -12,12 +12,12 @@ matrix:
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   - php: 7.1
     env:
-    - INSTALL_TYPE=install
-    - PROFILE=alshaya_non_transac
-    if: type = pull_request
+      - INSTALL_TYPE=install
+      - PROFILE=alshaya_non_transac
+    if: type IN (pull_request, cron)
   #- php: 7.1
   #  env:
   #  - INSTALL_TYPE=update
@@ -79,6 +79,7 @@ before_install:
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
+  - chmod 600 ${BUILD_DIR}/private/travis_acm.pub
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
@@ -90,62 +91,21 @@ install:
   - cd ${BUILD_DIR}
 
 script:
-# Changing path to disable behat test on Travis.
-# - source $BLT_DIR/scripts/travis/run_tests
+  # Changing path to disable behat test on Travis.
+  # - source $BLT_DIR/scripts/travis/run_tests
   - source ${BUILD_DIR}/blt/scripts/run_tests
 
 deploy:
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: develop
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: acm-v2-ps
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: CORE-5280
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: travis
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: mobile-api
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: qa
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: uat
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_branch"
-     skip_cleanup: true
-     on:
-       branch: master
-       php: 7.1
-   - provider: script
-     script: "$BLT_DIR/scripts/travis/deploy_tag"
-     skip_cleanup: true
-     on:
-       tags: true
-       php: 7.1
+  - provider: script
+    script: ${BUILD_DIR}/blt/scripts/deploy_branch.sh
+    skip_cleanup: true
+    on:
+      all_branches: true
+      tags: false
+      php: 7.1
+  - provider: script
+    script: "$BLT_DIR/scripts/travis/deploy_tag"
+    skip_cleanup: true
+    on:
+      tags: true
+      php: 7.1

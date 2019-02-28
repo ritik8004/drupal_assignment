@@ -1,0 +1,313 @@
+.campaign-plp-style-1-plp-layout {
+  .c-sidebar-first__region {
+    .c-facet__label {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+
+  .c-content__region {
+    position: relative;
+
+    .campaign-plp-style-1-layout-submenu-icon {
+      position: absolute;
+      #{$right}: 0;
+      top: -0.5rem;
+      display: inline-flex;
+      align-items: center;
+      z-index: 1;
+
+      .plp-icon {
+        display: inline-block;
+        max-width: 5.3125rem;
+        max-height: 3.8125rem;
+      }
+
+      .sub-menu-btn {
+        display: inline-block;
+        background: url(#{$base_theme_img_directory_path}/icons/campaign-plp-style-1-sub-menu.svg) no-repeat center center;
+        width: 2.3125rem;
+        height: 2.3125rem;
+        cursor: pointer;
+        margin-#{$left}: 1.5rem;
+        transition: transform 0.55s ease-in-out;
+
+        @include breakpoint($desktop) {
+          &:hover {
+            transform: rotate(360deg) scale(1.3);
+          }
+        }
+      }
+    }
+
+    .c-accordion__title.ui-state-active {
+      .field--name-field-heading-link {
+        a {
+          @include breakpoint($upto-desktop) {
+            color: $plp-sub-menu-heading-link-active;
+          }
+        }
+      }
+    }
+
+    .c-accordion__content {
+      padding-bottom: 0.75rem;
+      margin-#{$left}: 0.625rem;
+      padding-top: 0.6875rem;
+      line-height: 1.25;
+    }
+
+    .campaign-plp-style-1-sub-menu-content {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      #{$left}: 0;
+      #{$right}: 0;
+      background: $plp-sub-menu-background-overlay;
+      z-index: 999;
+      padding-#{$left}: 1.4375rem;
+      // Hide for now, so we can animate on opacity.
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+
+      @include breakpoint($desktop) {
+        padding-top: 74%;
+        padding-#{$left}: 8.0625rem;
+        height: 100%;
+      }
+
+      @include breakpoint($only-tablet) {
+        padding-#{$left}: 6.0625rem;
+      }
+
+      @include breakpoint($upto-desktop) {
+        padding-bottom: 0 !important;
+        padding-top: 0 !important;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      > .field--name-field-plp-menu {
+        &.active-menu {
+          .field--name-field-heading-link {
+            a {
+              @include breakpoint($desktop) {
+                color: $plp-sub-menu-heading-link-active;
+              }
+            }
+          }
+        }
+      }
+
+      .c-accordion,
+      .c-accordion__title {
+        border: none;
+      }
+
+      .c-accordion__title {
+        height: auto;
+        line-height: 1;
+
+        @include breakpoint($desktop) {
+          min-width: 25rem;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+
+      .field--name-field-heading-link {
+        a {
+          font-size: 5.75rem;
+          color: $plp-sub-menu-heading-link;
+          text-decoration: none;
+          cursor: pointer;
+          display: inline-block;
+          transition: color 0.3s ease-out;
+          letter-spacing: normal;
+          text-transform: uppercase;
+          font-family: $campaign-plp-style-1-font;
+
+          @include breakpoint($only-mobile) {
+            font-size: 2.5625rem;
+          }
+
+          &:hover {
+            color: $plp-sub-menu-heading-link-active;
+          }
+
+          html[lang=ar] & {
+            @include breakpoint($tablet) {
+              font-size: 4.375rem;
+            }
+          }
+        }
+      }
+
+      .field--name-field-sub-link {
+        a {
+          color: $plp-sub-menu-child-link;
+          font-size: 2.125rem;
+          transform-origin: right center;
+          transition: color 0.3s ease-out;
+          cursor: pointer;
+          text-transform: uppercase;
+          font-family: $campaign-plp-style-1-font;
+          line-height: 1.1;
+
+          html[lang=ar] & {
+            @include breakpoint($desktop) {
+              line-height: 1.3;
+            }
+          }
+
+          @include breakpoint($only-mobile) {
+            font-size: 1.25rem;
+          }
+
+          @include breakpoint($upto-desktop) {
+            font-size: 1.25rem;
+            padding: 0.375rem 0;
+            display: inline-block;
+            line-height: 1.1875rem;
+          }
+
+          @include breakpoint($only-tablet) {
+            line-height: 1.75rem;
+            font-size: 1.75rem;
+          }
+
+          &:hover {
+            color: $plp-sub-menu-child-link-active !important;
+          }
+        }
+      }
+
+      .mos-menu-sublink {
+        @include breakpoint($desktop) {
+          display: none !important;
+        }
+      }
+
+      .l2-links-wrapper {
+        position: absolute;
+        top: 37%;
+        #{$left}: 52%;
+        width: 100%;
+        transform-origin: $right center;
+
+        @include breakpoint($upto-desktop) {
+          display: none;
+        }
+
+        html[lang=ar] & {
+          #{$left}: 58%;
+        }
+
+        > .field--name-field-sub-link .field--name-field-sub-link {
+          @include breakpoint($desktop) {
+            transform: translateX(-150px);
+            transform-origin: $right center;
+            transition: transform 0.6s ease-out, opacity 0.6s ease-out;
+            opacity: 0;
+
+            &.animate {
+              transform: none;
+              opacity: 1;
+            }
+          }
+        }
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 1.25rem;
+        #{$left}: 1.25rem;
+        cursor: pointer;
+
+        @include icon('close') {
+          font-size: 2.1875rem;
+          background: $plp-sub-menu-cls-btn-bg;
+          border-radius: 50%;
+          color: $plp-sub-menu-cls-btn-txt;
+          padding: 0.3125rem;
+        }
+      }
+
+      > .field--name-field-plp-menu {
+        position: relative;
+
+        @include breakpoint($desktop) {
+          float: $left;
+          clear: both;
+        }
+
+        .mos-menu-heading {
+          transform: translateX(-24rem) scale(1.9);
+          transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+          transform-origin: $right center;
+
+          html[lang=ar] & {
+            transform: translateX(24rem) scale(1.9);
+          }
+        }
+
+        > .mos-menu-item {
+          @include breakpoint($desktop) {
+            position: relative;
+            display: inline-block;
+            padding-#{$right}: 7.8125rem;
+            margin: 0;
+          }
+
+          @include breakpoint($upto-desktop) {
+            margin: 0;
+          }
+        }
+      }
+
+      &.visible {
+        opacity: 1;
+        visibility: visible;
+
+        @include breakpoint($upto-desktop) {
+          overflow-y: auto;
+        }
+
+        > .field--name-field-plp-menu .mos-menu-heading {
+          transform: none;
+
+          html[lang=ar] & {
+            transform: none;
+          }
+        }
+      }
+    }
+  }
+
+  .region__content {
+    .filter--mobile {
+      .c-facet__blocks__wrapper--mobile {
+        @include breakpoint($only-mobile) {
+          float: none;
+          width: calc(100% - 2.1875rem) !important;
+        }
+      }
+    }
+  }
+
+  .campaign-plp-style-1-modal-link.use-ajax {
+    + .ajax-progress-throbber {
+      @include fullPageLoader();
+    }
+  }
+
+  .plp-video {
+    width: 100% !important;
+  }
+}

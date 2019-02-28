@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.advanced_page.field_delivery_banner
     - field.field.node.advanced_page.field_meta_tags
     - field.field.node.advanced_page.field_product_category
-    - field.field.node.advanced_page.field_promo_banner_full_width
     - field.field.node.advanced_page.field_promo_blocks
     - field.field.node.advanced_page.field_related_info
     - field.field.node.advanced_page.field_show_left_menu
@@ -69,25 +68,6 @@ third_party_settings:
         classes: ''
         open: false
         required_fields: true
-      region: content
-    group_promo_banner_full_width:
-      children:
-        - field_promo_banner_full_width
-      parent_name: ''
-      weight: 15
-      label: 'Promo Banner full width'
-      format_type: details
-      format_settings:
-        element: div
-        show_label: false
-        label_element: h3
-        effect: none
-        speed: fast
-        attributes: ''
-        classes: ''
-        id: ''
-        required_fields: true
-        open: false
       region: content
     group_promo_blocks:
       children:
@@ -188,18 +168,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_promo_banner_full_width:
-    type: entity_reference_paragraphs
-    weight: 9
-    settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: ''
-    third_party_settings: {  }
-    region: content
   field_promo_blocks:
     type: entity_reference_paragraphs
     weight: 13

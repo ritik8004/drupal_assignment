@@ -193,28 +193,25 @@ class KnetController extends ControllerBase {
 
     $result_url = 'REDIRECT=';
 
-    if ($response['result'] == 'CAPTURED') {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.success', ['state_key' => $state_key], $url_options)->toString();
-
-      $this->logger->info('KNET update for @quote_id: Redirect: @result_url Response: @message Cart: @cart State: @state', [
-        '@quote_id' => $response['quote_id'],
-        '@result_url' => $result_url,
-        '@message' => json_encode($response),
-        '@state' => json_encode($state_data),
-        '@cart' => $cartToLog,
-      ]);
+    if (isset($state_data['context']) && $state_data['context'] === 'mobile') {
+      $route = 'alshaya_acm_knet.mobile_complete';
+    }
+    elseif ($response['result'] == 'CAPTURED') {
+      $route = 'alshaya_acm_knet.success';
     }
     else {
-      $result_url .= Url::fromRoute('alshaya_acm_knet.failed', ['state_key' => $state_key], $url_options)->toString();
-
-      $this->logger->info('KNET update for @quote_id: Redirect: @result_url Response: @message Cart: @cart State: @state', [
-        '@quote_id' => $response['quote_id'],
-        '@result_url' => $result_url,
-        '@message' => json_encode($response),
-        '@state' => json_encode($state_data),
-        '@cart' => $cartToLog,
-      ]);
+      $route = 'alshaya_acm_knet.failed';
     }
+
+    $result_url .= Url::fromRoute($route, ['state_key' => $state_key], $url_options)->toString();
+
+    $this->logger->info('KNET update for @quote_id: Redirect: @result_url Response: @message Cart: @cart State: @state', [
+      '@quote_id' => $response['quote_id'],
+      '@result_url' => $result_url,
+      '@message' => json_encode($response),
+      '@state' => json_encode($state_data),
+      '@cart' => $cartToLog,
+    ]);
 
     print $result_url;
     exit;
@@ -285,8 +282,9 @@ class KnetController extends ControllerBase {
         $this->apiWrapper->placeOrder($cart->id());
 
         // Add success message in logs.
-        $this->logger->info('Placed order. Cart: @cart.', [
+        $this->logger->info('Placed order. Cart: @cart. Payment method @method.', [
           '@cart' => $this->cartHelper->getCleanCartToLog($cart),
+          '@method' => 'knet',
         ]);
       }
       else {
@@ -408,6 +406,68 @@ class KnetController extends ControllerBase {
     ]), 'error');
 
     return $this->redirect('acq_checkout.form', ['step' => 'payment']);
+  }
+
+  /**
+   * Get control back from knet on error.
+   *
+   * @param string $state_key
+   *   Statue Key.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to final page.
+   */
+  public function mobileError(string $state_key) {
+    $data = $this->state()->get($state_key);
+
+    if (empty($data)) {
+      $this->logger->warning('KNET mobile error page requested with invalid state_key: @state_key', [
+        '@state_key' => $state_key,
+      ]);
+
+      throw new AccessDeniedHttpException();
+    }
+
+    $data['status'] = 'error';
+
+    $this->state()->set($state_key, $data);
+
+    return $this->redirect('alshaya_acm_knet.mobile_final');
+  }
+
+  /**
+   * Get control back from knet on successful transaction flow.
+   *
+   * And update status in state variable based on success or failure of payment.
+   *
+   * @param string $state_key
+   *   State Key.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   *   Redirect to final page.
+   */
+  public function mobileComplete(string $state_key) {
+    $data = $this->state()->get($state_key);
+
+    if (empty($data)) {
+      $this->logger->warning('KNET mobile finalize page requested with invalid state_key: @state_key', [
+        '@state_key' => $state_key,
+      ]);
+
+      throw new AccessDeniedHttpException();
+    }
+
+    $data['status'] = ($data['result'] == 'CAPTURED') ? 'success' : 'failed';
+    $this->state()->set($state_key, $data);
+
+    return $this->redirect('alshaya_acm_knet.mobile_final');
+  }
+
+  /**
+   * Empty controller for mobile to get controller back.
+   */
+  public function mobileFinal() {
+    exit;
   }
 
 }

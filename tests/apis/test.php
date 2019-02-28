@@ -29,12 +29,12 @@ function invoke_api($api, $method = 'GET', array $data = [], $store_id = 1) {
   // Update this from envs available in conductor.php file.
   $env = 'hm_dev';
 
-  $conductor_data = alshaya_get_conductor_host_data();
+  // @codingStandardsIgnoreLine
+  global $conductors;
 
-  $data = $conductor_data[$env];
-  $endpoint = $data['url'] . 'v1/' . $api;
+  $endpoint = $conductors[$env]['url'] . $conductors[$env]['api_version'] . '/' . $api;
 
-  $key = new Key($data['hmac_id'], base64_encode($data['hmac_secret']));
+  $key = new Key($conductors[$env]['hmac_id'], base64_encode($conductors[$env]['hmac_secret']));
   $middleware = new HmacAuthMiddleware($key);
 
   // Register the middleware.
@@ -44,6 +44,9 @@ function invoke_api($api, $method = 'GET', array $data = [], $store_id = 1) {
   // Create a client.
   $client = new Client([
     'handler' => $stack,
+    'headers' => [
+      'X-ACM-UUID' => $store_id,
+    ],
   ]);
 
   $options = [];

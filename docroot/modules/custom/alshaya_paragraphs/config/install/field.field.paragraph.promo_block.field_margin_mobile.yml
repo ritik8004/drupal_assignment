@@ -11,7 +11,7 @@ bundle: promo_block
 label: 'Margin Mobile'
 description: 'Margin in short format: top right bottom left. ex: 10px 10px 10px 10px'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

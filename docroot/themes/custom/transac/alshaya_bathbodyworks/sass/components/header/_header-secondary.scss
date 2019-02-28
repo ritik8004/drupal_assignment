@@ -71,7 +71,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    height: 3rem;
+    height: 3.375rem;
     box-shadow: initial;
     border-bottom: 2px solid $header_border;
 

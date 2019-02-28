@@ -3,12 +3,50 @@
     {{ address.given_name }} {{ address.family_name }}
   </div>
 {% endif %}
-{% for item in address %}
-  {% if item == 'telephone' %}
-    <div class="address--contact">
-      {{ 'Mobile Number' | t }}: <div class="no-direction">{{ item|replace({' ':''}) }}</div>
-    </div>
-  {% elseif item is not empty %}
-    <div class="address--content">{{ item }}</div>
+
+{% if address.address_line2 is not empty %}
+  <div class="address--content">{{ address.address_line2 }}</div>
+{% endif %}
+{% if address.dependent_locality is not empty %}
+  <div class="address--content">{{ address.dependent_locality }}</div>
+{% endif %}
+{% if address.address_line1 is not empty %}
+  <div class="address--content">{{ address.address_line1 }}</div>
+{% endif %}
+{% if address.administrative_area is not empty %}
+  {% if address.administrative_area_display is not empty %}
+    {% autoescape false %}
+      <div class="address--content">{{ address.administrative_area_display }}</div>
+    {% endautoescape %}
+  {% else %}
+    {% autoescape false %}
+      <div class="address--content">{{ address.administrative_area }}</div>
+    {% endautoescape %}
   {% endif %}
-{% endfor %}
+{% endif %}
+{% if address.area_parent is not empty %}
+  {% if address.area_parent_display is not empty %}
+    <div class="address--content">{{ address.area_parent_display }}</div>
+  {% else %}
+    <div class="address--content">{{ address.area_parent }}</div>
+  {% endif %}
+{% endif %}
+{% if address.locality is not empty %}
+  {% if address.locality_display is not empty %}
+    <div class="address--content">{{ address.locality_display }}</div>
+  {% else %}
+    <div class="address--content">{{ address.locality }}</div>
+  {% endif %}
+{% endif %}
+{% if address.country is not empty %}
+  <div class="address--content">{{ address.country }}</div>
+{% endif %}
+{% if address.postal_code is not empty %}
+  <div class="address--content">{{ address.postal_code }}</div>
+{% endif %}
+
+{% if address.telephone %}
+  <div class="address--contact">
+    {{ 'Mobile Number' | t }}: <div class="no-direction">{{ address.telephone|replace({' ':''}) }}</div>
+  </div>
+{% endif %}

@@ -105,6 +105,12 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     $pane_form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
     $pane_form['request_password']['#weight'] = 101;
 
+    // Constructor of parent class "CheckoutPaneBase" has
+    // "CheckoutFlowInterface" injected this object, but couldn't find a
+    // service/plugin service that can be used with "static create" method to
+    // be injected in this class, even if we implement
+    // ContainerFactoryPluginInterface.
+    \Drupal::moduleHandler()->alter('checkout_login', $pane_form, $form_state, $complete_form);
     $complete_form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 
     return $pane_form;
@@ -143,8 +149,8 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
           user_login_finalize($account);
         }
         else {
-          drupal_set_message($this->t('Your account has not been activated or is blocked.'), 'error');
-          $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.'));
+          drupal_set_message($this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']), 'error');
+          $form_state->setErrorByName('custom', $this->t('Your account has not been activated or is blocked.', [], ['context' => 'alshaya_static_text|account_already_exists']));
         }
       }
       else {

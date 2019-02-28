@@ -340,9 +340,7 @@
       margin-bottom: 2rem;
       padding: 0.625rem 1.5rem;
 
-      &:hover {
-        opacity: 0.75;
-      }
+      @include link-ripple();
 
       @include breakpoint($desktop) {
         margin: 0.5em 0;

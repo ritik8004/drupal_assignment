@@ -13,6 +13,72 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Enable jquery_minicolors module.
+ */
+function alshaya_paragraphs_update_8125() {
+  // Install jquery-minicolors module.
+  if (!\Drupal::moduleHandler()->moduleExists('jquery_minicolors')) {
+    \Drupal::service('module_installer')->install(['jquery_minicolors'], TRUE);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update cardinality of promo block paragraph field.
+ */
+function alshaya_paragraphs_update_8124() {
+  $configs = [
+    'field.storage.paragraph.field_promo_block',
+    'field.storage.paragraph.field_1_row_promo_block',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ *  Update the text link paragraph type.
+ */
+function alshaya_paragraphs_update_8123() {
+  $configs = [
+    'core.entity_view_display.paragraph.text_links.default',
+    'core.entity_form_display.paragraph.text_links.default',
+    'language.content_settings.paragraph.text_links',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Make entity_reference_revisions field translatable: true. Reverting 8120.
+ */
+function alshaya_paragraphs_update_8122() {
+  $configs = [
+    'field.field.paragraph.1_row_1_col.field_promo_block',
+    'field.field.paragraph.1_row_1_col_dept.field_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_1st_col_promo_block',
+    'field.field.paragraph.1_row_1st_col_2_row_2nd_col.field_2nd_col_promo_block',
+    'field.field.paragraph.1_row_2_col.field_1_row_2_col',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_1_2_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_1',
+    'field.field.paragraph.1_row_2_col_2_1_dept.field_1_row_2_col_2',
+    'field.field.paragraph.1_row_2_col_dept.field_1_row_2_col',
+    'field.field.paragraph.1_row_3_col.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_dept.field_1_row_promo_block',
+    'field.field.paragraph.1_row_3_col_text.field_promo_block',
+    'field.field.paragraph.banner.field_promo_block_button',
+    'field.field.paragraph.promo_block.field_promo_block_button',
+    'field.field.paragraph.banner.field_mobile_banner_image',
+  ];
+  alshaya_config_install_configs($configs, 'alshaya_paragraphs');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new field 'Mobile Banner Image' for paragraph type 'banner'.
  */
 function alshaya_paragraphs_update_8121() {
@@ -76,7 +142,6 @@ function alshaya_paragraphs_update_8119() {
     'core.entity_form_display.paragraph.slug_banner.default',
     'core.entity_view_display.paragraph.slug_banner.default',
     'core.base_field_override.paragraph.slug_banner.created',
-    'core.base_field_override.paragraph.slug_banner.moderation_state',
     'core.base_field_override.paragraph.slug_banner.status',
     'core.base_field_override.paragraph.slug_banner.uid',
     'language.content_settings.paragraph.slug_banner',

@@ -7,8 +7,6 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
@@ -17,24 +15,14 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   if ($entity->bundle() == 'acq_product') {
-    $sku = $entity->get('field_skus')->first()->getString();
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
 
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
-
-      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-      $variant = $sku_manager->getSelectedVariant($sku_entity);
-
-      if ($variant instanceof SKUInterface) {
-        /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-        $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-        $build['title'] = [
-          '#markup' => $productInfoHelper->getTitle($variant, 'pdp'),
-        ];
-      }
 
       $description = [];
 
@@ -46,6 +34,10 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['description'][] = $description;
 
         $productHelper->updateShortDescription($build, $body[0]['value']);
+
+        if (!empty($build['short_desc'])) {
+          $build['short_desc']['value']['#markup'] = $productHelper->processShortDescEllipsis($build['short_desc']['value']['#markup']);
+        }
       }
 
       $product_info = $sku_entity->get('attr_short_description')->getValue();
@@ -53,6 +45,7 @@ function alshaya_pb_transac_node_view(array &$build, EntityInterface $entity, En
         $build['dimensions_and_care'] = [
           '#theme' => 'pdp_description_accordion',
           '#title' => t('Dimensions and Care'),
+          '#class' => 'dimensions-and-care',
           '#text' => [
             '#markup' => $product_info[0]['value'],
           ],
@@ -105,49 +98,6 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
 }
 
 /**
- * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
- */
-function alshaya_pb_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKU $sku, SKUInterface $selected_sku = NULL) {
-  if ($sku->bundle() != 'configurable') {
-    return;
-  }
-
-  // Update title of parent product based on selected sku if available.
-  if ($selected_sku instanceof SKUInterface) {
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $title = $productInfoHelper->getTitle($selected_sku, 'pdp');
-
-    if ($title) {
-      // For modal and teaser it will be h2, for main product h1.
-      $selector = 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h1,';
-      $selector .= 'article[data-sku="' . $sku->getSku() . '"]:visible .content__title_wrapper h2';
-      $response->addCommand(new HtmlCommand($selector, $title));
-    }
-  }
-}
-
-/**
- * Implements hook_alshaya_acm_customer_build_order_detail_alter().
- */
-function hook_alshaya_acm_customer_build_order_detail_alter(array &$build, array $order) {
-  foreach ($build['#products'] as &$product) {
-    $sku = SKU::loadFromSku($product['sku']);
-
-    if (!($sku instanceof SKUInterface)) {
-      continue;
-    }
-
-    /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
-    $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
-    $title = $productInfoHelper->getTitle($sku, 'basket');
-    if ($title) {
-      $product['name'] = $title;
-    }
-  }
-}
-
-/**
  * Implements hook_alshaya_acm_product_build_alter().
  */
 function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
@@ -158,13 +108,16 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
 
     $swatches_display_status = $settings->get('color_swatches');
 
-    // Display swatches only if enabled in configuration.
-    if ($swatches_display_status) {
+    // We do not display swatches for color nodes.
+    $color = $build['#color'] ?? '';
+
+    // Display swatches only if enabled in configuration and not color node.
+    if ($swatches_display_status && empty($color)) {
       /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
       $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
       // Get swatches for this product from media.
-      $swatches = $sku_manager->getSwatches($sku, $settings->get('swatches')['pdp']);
+      $swatches = $sku_manager->getSwatches($sku);
       if ($swatches) {
         // Show only first 'X' swatches as defined in configuration.
         $swatch_plp_limit = $settings->get('swatch_plp_limit');
@@ -175,4 +128,15 @@ function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterfac
       }
     }
   }
+}
+
+/**
+ * Implements hook_alshaya_search_facet_price_alter().
+ */
+function alshaya_pb_transac_alshaya_search_facet_price_alter($range, &$displayValue) {
+  // Fetch the config.
+  $config = \Drupal::configFactory()->get('acq_commerce.currency');
+
+  // Remove decimal points from price block filter.
+  $displayValue = str_replace('.' . str_repeat('0', $config->get('decimal_points')), '', $displayValue);
 }

@@ -1,0 +1,50 @@
+.campaign-plp-style-1-plp-layout {
+  .ui-dialog.campaign-plp-style-1-modal {
+    #{$left}: 0 !important;
+    #{$right}: 0 !important;
+    top: 0 !important;
+    bottom: 0;
+    width: 100% !important;
+    background: $plp-machino-modal-content-bg;
+    z-index: 999;
+
+    .ui-dialog-content {
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      color: $plp-machino-modal-content;
+    }
+
+    .ui-dialog-title {
+      font-size: 2.25rem;
+      font-family: $campaign-plp-style-1-font;
+      text-align: center;
+      height: 3.375rem;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      color: $plp-machino-modal-content-title;
+
+      @include breakpoint($only-mobile) {
+        background-size: 3rem;
+        font-size: 1.25rem;
+      }
+    }
+
+    .ui-dialog-titlebar-close {
+      #{$right}: auto;
+      #{$left}: 1rem;
+      top: 0.75rem;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+
+      &::before {
+        #{$right}: 0.3125rem;
+        top: 0.3125rem;
+      }
+    }
+  }
+}

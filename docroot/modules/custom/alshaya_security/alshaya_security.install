@@ -8,6 +8,17 @@
 use Drupal\Core\Site\Settings;
 
 /**
+ * Implements hook_update_n().
+ *
+ * Add arabic translation for autologout inactivity message.
+ */
+function alshaya_security_update_8001() {
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'autologout.settings')
+    ->set('inactivity_message', "لقد تم تسجيل الخروج بسبب عدم النشاط")
+    ->save();
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_security_install() {
@@ -24,4 +35,8 @@ function alshaya_security_install() {
   $config_factory->set('no_dialog', TRUE);
   $config_factory->set('enforce_admin', TRUE);
   $config_factory->save();
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'autologout.settings')
+    ->set('inactivity_message', "لقد تم تسجيل الخروج بسبب عدم النشاط")
+    ->save();
 }

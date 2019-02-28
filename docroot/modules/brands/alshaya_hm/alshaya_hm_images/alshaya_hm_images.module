@@ -129,7 +129,9 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
   if ($context == 'search') {
     $swatches_display_status = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
 
-    if ($swatches_display_status) {
+    // We do not display swatches for color nodes.
+    $color = $build['#color'] ?? '';
+    if ($swatches_display_status && empty($color)) {
       $swatches = array_filter($sku_assets_manager->getColorsForSku($sku));
       if ($swatches) {
         $swatch_plp_limit = \Drupal::config('alshaya_hm_images.settings')->get('swatch_plp_limit');
@@ -140,13 +142,11 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
       }
     }
   }
-  elseif (in_array($context, ['teaser', 'product_category_carousel']) && empty($build['image'])) {
+  elseif (in_array($context, ['teaser', 'product_category_carousel'])) {
     /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
     $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
-    $check_parent_child = TRUE;
-
     try {
-      $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku, $check_parent_child);
+      $sku_for_gallery = $skuImagesManager->getSkuForGallery($sku);
     }
     catch (\Exception $e) {
       return;
@@ -193,16 +193,6 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
   if (empty($main_image) && ($sku instanceof SKU)) {
     /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $color = \Drupal::request()->query->get('color');
-
-    // If we have color attribute available from query params & the SKU being
-    // rendered is configurable, lookup for a simple SKU with that color.
-    // Fallback for the same in case of not a valid color is the parent SKU.
-    if (($color) &&
-      ($sku->bundle() === 'configurable') &&
-      (($sku_color = $sku_assets_manager->getChildSkuFromColor($sku, $color)) instanceof SKU)) {
-      $sku = $sku_color;
-    }
 
     if ($sku instanceof SKU) {
       $pdp_images = $sku_assets_manager->getImagesForSku($sku, 'pdp',
@@ -268,7 +258,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
 
     // If the form has color config attribute available.
     if (isset($form['ajax']['configurables']['article_castor_id'])) {
-      $options = $form['ajax']['configurables']['article_castor_id']['#options'];
+      $options = &$form['ajax']['configurables']['article_castor_id']['#options'];
       $form['ajax']['configurables']['article_castor_id']['#title'] = t('Color');
       $form['ajax']['configurables']['article_castor_id']['#attributes']['data-default-title'] = t('Color');
 
@@ -277,7 +267,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
       foreach ($options as $key => $option) {
         if (isset($tree['options']['article_castor_id:' . $key])) {
           $sku_options = $tree['options']['article_castor_id:' . $key];
-
+          $sku_entity = NULL;
           foreach ($sku_options as $key_option => $sku) {
             if ($key_option === '#available_config') {
               continue;
@@ -293,11 +283,13 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
               $assets = $sku_asset_manager->getSkuAssets($sku_entity, 'swatch', ['swatch'], $swatch_type, FALSE);
             }
 
+            $options[$key] = $sku_entity->get('attr_color_label')->getString();
+
             // If swatch type is not miniature_image or assets were missing from
             // sku, use rgb color code instead.
             $sku_configurable_options_color[$key] = [
               'display_value' => empty($assets) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $assets[0]['url']->toString() . '">',
-              'display_label' => $sku_entity->get('attr_color_label')->getString(),
+              'display_label' => $options[$key],
               'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
           }
@@ -338,4 +330,27 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
     'configurable' => 1,
     'label' => 'Color',
   ]);
+}
+
+/**
+ * Implements hook_alshaya_mobile_app_light_product_data_alter().
+ */
+function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku, array &$data) {
+  $data['swatches'] = [];
+
+  if (!empty($data['color'])) {
+    return;
+  }
+
+  /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
+  $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
+  // Get colors for the SKU.
+  $colors = $sku_assets_manager->getColorsForSku($sku);
+
+  foreach ($colors as $key => $color) {
+    $data['swatches'][] = [
+      'key' => $key,
+      'color_code' => $color,
+    ];
+  }
 }

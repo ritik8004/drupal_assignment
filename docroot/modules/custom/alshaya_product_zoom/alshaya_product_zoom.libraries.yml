@@ -26,6 +26,17 @@ cloud_zoom_common:
     - core/jquery.ui.draggable
     - alshaya_white_label/slick
     - alshaya_white_label/utils
+    - alshaya_product_zoom/instagram_dots
+
+instagram_dots:
+  version: 1.x
+  css:
+    theme:
+      css/instagram_dots.css: {}
+  js:
+    js/instagram_dots.js: {}
+  dependencies:
+    - alshaya_white_label/slick
 
 cloud_zoom_pdp_gallery:
   version: 1.x
@@ -34,3 +45,12 @@ cloud_zoom_pdp_gallery:
   dependencies:
     - core/drupalSettings
     - alshaya_product_zoom/cloud_zoom_common
+
+magazine_gallery:
+  version: 1.x
+  js:
+    js/magazine_gallery.js: {}
+    js/doubletap/directive.js: {}
+  dependencies:
+  - core/drupalSettings
+  - alshaya_white_label/slick

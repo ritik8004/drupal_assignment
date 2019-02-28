@@ -1,17 +1,32 @@
 services:
-    alshaya_acm_product_category.product_category_tree:
-        class: Drupal\alshaya_acm_product_category\ProductCategoryTree
-        arguments: ['@entity_type.manager', '@language_manager', '@cache.product_category_tree', '@current_route_match', '@database']
+  alshaya_acm_product_category.product_category_tree:
+    class: Drupal\alshaya_acm_product_category\ProductCategoryTree
+    arguments: ['@entity_type.manager', '@language_manager', '@cache.product_category_tree', '@current_route_match', '@database', '@alshaya_acm_product.breadcrumb']
 
-    cache.product_category_tree:
-        class: Drupal\Core\Cache\CacheBackendInterface
-        tags:
-          - { name: cache.bin, default_backend: cache.backend.permanent_database }
-        factory: cache_factory:get
-        arguments: [product_category_tree]
+  cache.product_category_tree:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [product_category_tree]
 
-    alshaya_acm_product_category.event_subscriber:
-      class: Drupal\alshaya_acm_product_category\EventSubscriber\ProductCategoryRequestSubscriber
-      arguments: ['@current_route_match']
-      tags:
-        - { name: event_subscriber }
+  alshaya_acm_product_category.event_subscriber:
+    class: Drupal\alshaya_acm_product_category\EventSubscriber\ProductCategoryRequestSubscriber
+    arguments: ['@current_route_match']
+    tags:
+      - { name: event_subscriber }
+
+  alshaya_acm_product_category.product_updated_event:
+    class: Drupal\alshaya_acm_product_category\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+      - '@alshaya_acm_product_category.sales_category_manager'
+    tags:
+      - { name: 'event_subscriber' }
+
+  alshaya_acm_product_category.sales_category_manager:
+    class: Drupal\alshaya_acm_product_category\Service\ProductCategoryManager
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@cache.product_category_tree'

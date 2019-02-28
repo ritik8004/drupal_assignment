@@ -1,3 +1,7 @@
+:root {
+  --menuTiming: 0ms;
+}
+
 @include breakpoint($desktop) {
   .no--desktop,
   .toggle--sign.no--desktop {
@@ -604,6 +608,50 @@ header {
       margin: 0;
       background: $mm_bg;
       padding: 0 calc((100% - 1284px) / 2);
+
+      .menu-backdrop {
+        display: none;
+
+        @include breakpoint($desktop) {
+          display: block;
+          padding-top: 9px;
+          border-bottom: 1px solid $mm_l1_border;
+          position: absolute;
+          width: 100%;
+          top: 100%;
+          #{$left}: 0;
+          #{$right}: 0;
+          z-index: -1;
+          opacity: 0;
+          visibility: hidden;
+          overflow: hidden;
+          background: #fff;
+          transition-delay: 0s;
+          transition-duration: var(--menuTiming);
+          transition-timing-function: ease-in;
+        }
+      }
+
+      &:hover {
+        .menu-backdrop {
+          @include breakpoint($desktop) {
+            visibility: visible;
+            opacity: 1;
+            z-index: 1;
+            transition-delay: 0.3s;
+            transition-duration: var(--menuTiming);
+            transition-timing-function: ease-in;
+          }
+        }
+      }
+
+      &.active--menu--without__child {
+        .menu-backdrop {
+          @include breakpoint($desktop) {
+            display: none;
+          }
+        }
+      }
     }
 
     li.menu--one__list-item {
@@ -641,7 +689,9 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          transform: translateY(-2rem);
+          transition-delay: 0.3s;
+          transition-duration: var(--menuTiming);
+          transition-timing-function: ease-in;
         }
       }
 
@@ -667,19 +717,18 @@ header {
 
       ul.menu--two__list {
         max-width: 80.25rem;
-        left: 0;
-        right: 0;
         margin: auto;
         visibility: hidden;
         opacity: 0;
         position: absolute;
         top: 100%;
         #{$left}: 0;
+        #{$right}: 0;
         width: 100%;
-        transform: translateY(-3.625rem);
         z-index: -1;
-        transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
-        border-top: 3rem solid transparent;
+        transition-delay: 0s;
+        transition-duration: var(--menuTiming);
+        transition-timing-function: ease-in;
       }
     }
 
@@ -717,7 +766,6 @@ header {
     width: 100%;
     text-align: $left;
     top: 2.5625rem;
-    #{$left}: 0;
     #{$left}: 0;
     background: $mm_bg;
     z-index: 10;
@@ -851,17 +899,33 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .overlay::before {
-    content: '';
-    position: fixed;
-    width: 100%;
-    height: 100;
-    top: 0;
-    #{$left}: 0;
-    bottom: 0;
-    #{$left}: 0;
-    background-color: $mm_body_overlay;
-    z-index: 5;
+  body {
+    &::before {
+      content: '';
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      #{$left}: 0;
+      bottom: 0;
+      #{$left}: 0;
+      opacity: 0;
+      z-index: -1;
+      background-color: rgba(0, 0, 0, 0.48);
+      transition-delay: 0s;
+      transition-duration: var(--menuTiming);
+      transition-timing-function: ease-in;
+    }
+
+    &.overlay {
+      &::before {
+        opacity: 1;
+        z-index: 1;
+        transition-delay: 0.3s;
+        transition-duration: var(--menuTiming);
+        transition-timing-function: ease-in;
+      }
+    }
   }
 
   .menu--four__list {
@@ -970,19 +1034,37 @@ header {
     display: none;
   }
 
-  .mobile--overlay {
+  body {
     &::before {
       content: '';
       position: fixed;
-      z-index: 6;
       width: 100%;
       height: 100%;
       top: 0;
       #{$left}: 0;
       bottom: -6rem;
-      #{$right}: 0;
-      transform: translate3d(0, 0, 0);
-      background-color: $mm_body_overlay;
+      #{$left}: 0;
+      opacity: 0;
+      z-index: -1;
+      background-color: transparent;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+
+    &.mobile--overlay {
+      position: fixed;
+      width: 100%;
+
+      .branding__menu {
+        border-bottom-color: $header_mobile_menu_overlay;
+        box-shadow: none;
+      }
+
+      &::before {
+        opacity: 1;
+        z-index: 10;
+        transform: translate3d(0, 0, 0);
+        background-color: $header_mobile_menu_overlay;
+      }
     }
   }
 
@@ -1104,7 +1186,7 @@ header {
   }
 
   .menu__back {
-    background: url('../imgs/icons/ic-chevronleft.svg') no-repeat;
+    background: url('#{$base_theme_img_directory_path}/icons/ic-chevronleft.svg') no-repeat;
     margin-#{$right}: 0.4rem;
     margin-#{$left}: 0.375rem;
     vertical-align: middle;
@@ -1132,7 +1214,6 @@ header {
   .menu--three__list,
   .menu--four__list {
     will-change: $left;
-    // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
     #{$left}: -100%;
     transition: $left 0.5s ease-in-out;
     position: absolute;
@@ -1194,7 +1275,7 @@ header {
   #{$left}: -100%;
   width: 35px;
   height: 1.9375rem;
-  z-index: 12;
+  z-index: 9;
   text-align: center;
   padding-top: 0.25rem;
   will-change: $left;

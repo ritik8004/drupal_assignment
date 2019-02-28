@@ -5,9 +5,28 @@
  * Module file.
  */
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_acm_product_category_module_implements_alter(&$implementations, $hook) {
+  // To call the alshaya_acm_product_category_acq_sku_product_node_alter first.
+  // We want to categorise first before creating color nodes.
+  if ($hook == 'acq_sku_product_node_alter') {
+    $group = $implementations['alshaya_acm_product_category'];
+    unset($implementations['alshaya_acm_product_category']);
+    $implementations = ['alshaya_acm_product_category' => $group] + $implementations;
+  }
+}
 
 /**
  * Implements hook_theme().
@@ -114,4 +133,125 @@ function alshaya_acm_product_category_child_terms($tid) {
     ];
   }
   return $data;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_acm_product_category_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (($form['#id'] === 'views-exposed-form-alshaya-product-list-block-1') ||
+    ($form['#id'] === 'views-exposed-form-alshaya-product-list-block-2')) {
+    // Hide sort options on campaign-plp-style-1.
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value == ProductCategoryTree::PLP_LAYOUT_1) {
+      $form['sort_bef_combine']['#type'] = 'hidden';
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_field_access_alter().
+ */
+function alshaya_acm_product_category_entity_field_access_alter(array &$grants, array $context) {
+  if ($context['operation'] === 'view' && $context['field_definition']->getTargetEntityTypeId() === 'taxonomy_term' && $context['field_definition']->getname() === 'field_plp_menu') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_plp_layout')->value != ProductCategoryTree::PLP_LAYOUT_1) {
+      // Do not show this field on pages that are not campaign-plp-style-1.
+      $grants[':default'] = AccessResult::forbidden()->inheritCacheability($grants[':default'])->addCacheableDependency($context['items']->getEntity());
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function alshaya_acm_product_category_field_widget_link_default_form_alter(&$element, FormStateInterface $form_state, $context) {
+  if (($context['items']->getName() == 'field_plp_video_links')) {
+    $element['uri']['#description'] = t('Please enter the link of the video. It could be a youtube/vimeo video or a custom video that you have uploaded to the site. To upload a video, use the Upload Video field below and then add the link here.');
+  }
+}
+
+/**
+ * Implements allowed values callback for PLP layout.
+ */
+function alshaya_acm_product_category_plp_layout_values() {
+  $config = \Drupal::config('alshaya_master.plp_settings');
+  // Prepare PDP layout select options.
+  $plp_layout_options = [];
+  $plp_layout_options += $config->get('all_plp_layouts');
+  return $plp_layout_options;
+}
+
+/**
+ * Implements hook_link_attributes_plugin_alter().
+ */
+function alshaya_acm_product_category_link_attributes_plugin_alter(array &$definitions) {
+  $definitions['class']['description'] = t('Select how the link should be displayed.');
+  $definitions['class']['type'] = 'select';
+  $definitions['class']['options'] = [
+    '' => 'None',
+    'campaign-plp-style-1-modal-link use-ajax' => 'Campaign PLP Style 1 Modal',
+  ];
+  $definitions['class']['default_value'] = '';
+}
+
+/**
+ * Implements hook_acq_sku_product_node_alter().
+ */
+function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $node, $product) {
+  // Set the category from ACM field to our backup field.
+  $node->get('field_category_original')->setValue($node->get('field_category')->getValue());
+
+  /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
+  $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
+  $manager->processSalesCategoryCheckForNode($node);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function alshaya_acm_product_category_taxonomy_term_insert(TermInterface $term) {
+  if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+    _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for taxonomy_term entities.
+ */
+function alshaya_acm_product_category_taxonomy_term_update(TermInterface $term) {
+  if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+    _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_acm_product_category_taxonomy_term_delete(TermInterface $term) {
+  if ($term->bundle() == ProductCategoryTree::VOCABULARY_ID) {
+    _alshaya_acm_product_category_taxonomy_term_updated_operation($term);
+  }
+}
+
+/**
+ * Act on insert/update/delete of category term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   Category term.
+ */
+function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInterface $term) {
+  /** @var \Drupal\taxonomy\TermStorage $termStorage */
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $parents = $termStorage->loadAllParents($term->id());
+  $term_ids = $parents ? array_keys($parents) : [$term->id()];
+
+  /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
+  $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
+  $sale_ids = $manager->getSalesCategoryIds();
+
+  // Invalidate cache if term or it's parent are part of sales category tree.
+  if (array_intersect($sale_ids, $term_ids)) {
+    Cache::invalidateTags([ProductCategoryManager::SALES_CATEGORY_IDS_CACHE_TAG]);
+  }
 }

@@ -142,7 +142,7 @@ class ProductOptionsManager {
    *   Term object or null.
    */
   public function createProductOption($langcode, $option_id, $option_value, $attribute_id, $attribute_code, $weight) {
-    if (empty($option_value)) {
+    if (strlen($option_value) == 0) {
       $this->logger->warning('Got empty value while syncing production options: @data', [
         '@data' => json_encode([
           'langcode' => $langcode,
@@ -221,7 +221,9 @@ class ProductOptionsManager {
       }
     }
 
-    $this->deleteUnavailableOptions($options_available);
+    if ($options_available) {
+      $this->deleteUnavailableOptions($options_available);
+    }
   }
 
   /**

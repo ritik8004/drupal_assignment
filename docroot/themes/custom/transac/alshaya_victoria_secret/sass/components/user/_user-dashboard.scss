@@ -101,3 +101,18 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .path--user {
+    .button {
+      &.status-pending,
+      &.status-delivered,
+      &.status-complete,
+      &.status-processing,
+      &.status-returned {
+        height: 1.875rem;
+        line-height: 1.875rem;
+      }
+    }
+  }
+}

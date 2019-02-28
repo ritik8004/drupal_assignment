@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_eg.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_eg_install() {
+  // Country code and timezone for Saudi Arabia.
+  alshaya_country_set_default_regional_info('EG');
+
+  // Store finder search placeholder for Saudi Arabia.
+  alshaya_country_set_default_store_search_placeholder('e.g. Cairo', 'القاهرة');
+
+  // Postal code error message.
+  $strings = [
+    '%name field is not in the right format.' => [
+      'ar' => 'حقل %name ليس بالتنسيق الصحيح.',
+    ],
+  ];
+
+  // Save the translation.
+  alshaya_i18n_save_translations($strings);
+}

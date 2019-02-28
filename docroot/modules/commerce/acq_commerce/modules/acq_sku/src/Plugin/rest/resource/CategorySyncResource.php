@@ -84,7 +84,7 @@ class CategorySyncResource extends ResourceBase {
       $plugin_id,
       $plugin_definition,
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('acq_commerce'),
+      $container->get('logger.factory')->get(self::class),
       $container->get('acq_sku.category_manager')
     );
   }
@@ -107,7 +107,7 @@ class CategorySyncResource extends ResourceBase {
       $categories
     );
 
-    $response['success'] = (bool) (($response['created'] > 0) || ($response['updated'] > 0));
+    $response['success'] = (bool) ((count($response['created']) > 0) || (count($response['updated']) > 0));
 
     return (new ModifiedResourceResponse($response));
   }

@@ -1,0 +1,6 @@
+services:
+  alshaya_hm_temp_skus_filter.event_subscriber:
+    class: Drupal\alshaya_hm_temp_skus_filter\EventSubscriber\AlshayaHnmSkuValidator
+    arguments: [ '@logger.factory', '@config.factory' ]
+    tags:
+      - { name: event_subscriber }

@@ -14,11 +14,9 @@
  * Get commerce third party settings for specific site + environment combination.
  */
 function alshaya_get_commerce_third_party_settings($site_code, $country_code, $env) {
-  $site = $site_code . $country_code;
-
   // From the given site and environment, get the magento and conductor
   // environments keys.
-  $env_keys = alshaya_get_env_keys($site, $env);
+  $env_keys = alshaya_get_env_keys($site_code, $country_code, $env);
 
   include_once DRUPAL_ROOT . '/../factory-hooks/environments/magento.php';
   global $magentos;
@@ -50,297 +48,66 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
  * Get the Conductor and Magento names to use for this specific
  * site + environment combination.
  */
-function alshaya_get_env_keys($site, $env) {
+function alshaya_get_env_keys($site_code, $country_code, $env) {
+  $site = $site_code . $country_code;
+
+  // Default mapping is following:
+  // dev, dev2, dev3, test, qa2: QA/Test.
+  // uat: UAT.
+  // pprod/live: Prod.
+  // To override this default behavior, define the specific mapping in the
+  // $mapping array following this structure:
+  // '<site-code>' => [
+  //   '01<env>' => [
+  //     'magento' => '<magento-key>',
+  //     'conductor' => '<conductor-key>'
+  //   ]
+  // ]
+  // <site-code> is the ACSF site id (mckw, hmsa, bbwae, ...).
+  // <env> is the ACSF environment name (dev, dev2, qa, pprod, ...).
+  // <magento-key> is a MDC environment listed in magento.php.
+  // <conductor-key> is an ACM instance listed in conductor.php.
+
+  $default = [
+    '01dev' => 'qa',
+    '01dev2' => 'qa',
+    '01dev3' => 'qa',
+    '01test' => 'qa',
+    '01qa2' => 'qa',
+    '01uat' => 'uat',
+    '01pprod' => 'prod',
+    '01live' => 'prod',
+    'local' => 'qa',
+    'travis' => 'qa'
+  ];
+
+  // Fill this variable to override the default mapping.
   $mapping = [
-    // Mothercare Kuwait.
-    'mckw' => [
-      '01uat' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mckw_uat',
-      ],
-      '01pprod' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mckw_pprod',
-      ],
-      '01live' => [
-        'magento' => 'mc_prod',
-        'conductor' => 'mckw_prod',
-      ],
-      'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mckw_test',
-      ],
-    ],
-    // Mothercare SA.
-    'mcsa' => [
-      '01uat' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcsa_uat',
-      ],
-      '01pprod' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcsa_pprod',
-      ],
-      '01live' => [
-        'magento' => 'mc_prod',
-        'conductor' => 'mcsa_prod',
-      ],
-      'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mcsa_test',
-      ],
-    ],
-    // Mothercare UAE.
-    'mcae' => [
-      '01uat' => [
-        'magento' => 'mc_uat',
-        'conductor' => 'mcae_uat',
-      ],
-      '01live' => [
-        'magento' => 'mc_prod',
-        'conductor' => 'mcae_prod',
-      ],
-      'default' => [
-        'magento' => 'mc_qa',
-        'conductor' => 'mcae_test',
-      ],
-    ],
-    // H&M Kuwait.
     'hmkw' => [
-      '01uat' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmkw_uat'
-      ],
-      '01pprod' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmkw_pprod'
-      ],
-      '01live' => [
-        'magento' => 'hm_prod',
-        'conductor' => 'hmkw_prod'
-      ],
-      'default' => [
-        'magento' => 'hm_qa',
-        'conductor' => 'hmkw_test',
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmkw_mapp',
       ],
     ],
-    // H&M SA.
     'hmsa' => [
-      'default' => [
-        'magento' => 'hm_qa',
-        'conductor' => 'hmsa_test',
-      ],
-      '01uat' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmsa_uat',
-      ],
-      '01live' => [
-        'magento' => 'hm_prod',
-        'conductor' => 'hmsa_prod'
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmsa_mapp',
       ],
     ],
-    // H&M AE.
     'hmae' => [
-      'default' => [
-        'magento' => 'hm_qa',
-        'conductor' => 'hmae_test',
-      ],
-      '01uat' => [
-        'magento' => 'hm_uat',
-        'conductor' => 'hmae_uat',
-      ],
-      '01live' => [
-        'magento' => 'hm_prod',
-        'conductor' => 'hmae_prod'
-      ],
-    ],
-    // BathBodyWorks KW.
-    'bbwkw' => [
-      'default' => [
-        'magento' => 'bbw_qa',
-        'conductor' => 'bbwkw_test',
-      ],
-      '01uat' => [
-        'magento' => 'bbw_uat',
-        'conductor' => 'bbwkw_uat',
-      ],
-      '01live' => [
-        'magento' => 'bbw_prod',
-        'conductor' => 'bbwkw_prod'
-      ],
-    ],
-    // BathBodyWorks SA.
-    'bbwsa' => [
-      'default' => [
-        'magento' => 'bbw_qa',
-        'conductor' => 'bbwsa_test',
-      ],
-      '01uat' => [
-        'magento' => 'bbw_uat',
-        'conductor' => 'bbwsa_uat',
-      ],
-      '01live' => [
-        'magento' => 'bbw_prod',
-        'conductor' => 'bbwsa_prod'
-      ],
-    ],
-    // BathBodyWorks AE.
-    'bbwae' => [
-      'default' => [
-        'magento' => 'bbw_qa',
-        'conductor' => 'bbwae_test',
-      ],
-      '01uat' => [
-        'magento' => 'bbw_uat',
-        'conductor' => 'bbwae_uat',
-      ],
-      '01live' => [
-        'magento' => 'bbw_prod',
-        'conductor' => 'bbwae_prod',
-      ],
-    ],
-    // Pottery Barn KW.
-    'pbkw' => [
-      '01dev2' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbkw_dev2',
-      ],
-      'default' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbkw_test',
-      ],
-      '01uat' => [
-        'magento' => 'pb_uat',
-        'conductor' => 'pbkw_uat',
-      ],
-      '01live' => [
-        'magento' => 'pb_prod',
-        'conductor' => 'pbkw_prod',
-      ],
-    ],
-    // Pottery Barn SA.
-    'pbsa' => [
-      '01dev2' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbsa_dev2',
-      ],
-      'default' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbsa_test',
-      ],
-      '01uat' => [
-        'magento' => 'pb_uat',
-        'conductor' => 'pbsa_uat',
-      ],
-      '01live' => [
-        'magento' => 'pb_prod',
-        'conductor' => 'pbsa_prod',
-      ],
-    ],
-    // Pottery Barn AE.
-    'pbae' => [
-      '01dev2' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbae_dev2',
-      ],
-      'default' => [
-        'magento' => 'pb_qa',
-        'conductor' => 'pbae_test',
-      ],
-      '01uat' => [
-        'magento' => 'pb_uat',
-        'conductor' => 'pbae_uat',
-      ],
-      '01live' => [
-        'magento' => 'pb_prod',
-        'conductor' => 'pbae_prod',
-      ],
-    ],
-    // Victoria Secret KW.
-    'vskw' => [
-      '01live' => [
-        'magento' => 'vs_prod',
-        'conductor' => 'vskw_prod',
-      ],
-      '01uat' => [
-        'magento' => 'vs_uat',
-        'conductor' => 'vskw_uat',
-      ],
-      'default' => [
-        'magento' => 'vs_qa',
-        'conductor' => 'vskw_test',
-      ],
-    ],
-    // Victoria Secret SA.
-    'vssa' => [
-      '01live' => [
-        'magento' => 'vs_prod',
-        'conductor' => 'vssa_prod',
-      ],
-      '01uat' => [
-        'magento' => 'vs_uat',
-        'conductor' => 'vssa_uat',
-      ],
-      'default' => [
-        'magento' => 'vs_qa',
-        'conductor' => 'vssa_test',
-      ],
-    ],
-    // Victoria Secret AE.
-    'vsae' => [
-      '01live' => [
-        'magento' => 'vs_prod',
-        'conductor' => 'vsae_prod',
-      ],
-      '01uat' => [
-        'magento' => 'vs_uat',
-        'conductor' => 'vsae_uat',
-      ],
-      'default' => [
-        'magento' => 'vs_qa',
-        'conductor' => 'vsae_test',
-      ],
-    ],
-    // Foot Locker KW.
-    'flkw' => [
-      '01uat' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flkw_uat',
-      ],
-      'default' => [
-        'magento' => 'fl_qa',
-        'conductor' => 'flkw_test',
-      ],
-    ],
-    // Foot Locker SA.
-    'flsa' => [
-      '01uat' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flsa_uat',
-      ],
-      'default' => [
-        'magento' => 'fl_qa',
-        'conductor' => 'flsa_test',
-      ],
-    ],
-    // Foot Locker AE.
-    'flae' => [
-      '01uat' => [
-        'magento' => 'fl_uat',
-        'conductor' => 'flae_uat',
-      ],
-      'default' => [
-        'magento' => 'fl_qa',
-        'conductor' => 'flae_test',
+      '01dev3' => [
+        'magento' => 'hm_mapp',
+        'conductor' => 'hmae_mapp',
       ],
     ],
   ];
 
   // All 01update should match 01live.
   // Update array to set 01update if 01live is set.
-  foreach ($mapping as $site_code => $envs) {
-    if (isset($mapping[$site_code]['01live'])) {
-      $mapping[$site_code]['01update'] = $mapping[$site_code]['01live'];
+  foreach ($mapping as $key => $value) {
+    if (isset($mapping[$key]['01live'])) {
+      $mapping[$key]['01update'] = $mapping[$key]['01live'];
     }
   }
 
@@ -358,6 +125,15 @@ function alshaya_get_env_keys($site, $env) {
   }
   elseif (isset($mapping['default']['default'])) {
     $map = $mapping['default']['default'];
+  }
+
+  // If MDC or Conductor mapping is not defined, use the default mapping
+  // pattern.
+  if (empty($map['magento'])) {
+    $map['magento'] = $site_code . '_' . $default[$env];
+  }
+  if (empty($map['conductor'])) {
+    $map['conductor'] = $site_code . $country_code . '_' . $default[$env];
   }
 
   return $map;

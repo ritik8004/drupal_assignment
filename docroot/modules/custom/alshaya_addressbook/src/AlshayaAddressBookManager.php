@@ -87,7 +87,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   protected $configFactory;
 
   /**
-   * Cache Backend object for "cache.data".
+   * Cache Backend object for "cache.addressbook".
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
@@ -134,7 +134,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend object for "cache.data".
+   *   Cache Backend object for "cache.addressbook".
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
@@ -519,6 +519,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $address['administrative_area'] = '';
       $address['locality'] = '';
       $address['dependent_locality'] = '';
+      $address['sorting_code'] = '';
+      $address['additional_name'] = '';
+      $address['postal_code'] = '';
 
       if (isset($magento_address['extension']) && is_array($magento_address['extension'])) {
         if (isset($magento_address['extension']['address_apartment_segment'])) {
@@ -535,6 +538,18 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
 
         if (isset($magento_address['extension']['address_building_segment'])) {
           $address['dependent_locality'] = $magento_address['extension']['address_building_segment'];
+        }
+
+        if (isset($magento_address['extension']['landmark'])) {
+          $address['sorting_code'] = $magento_address['extension']['landmark'];
+        }
+
+        if (isset($magento_address['extension']['apartment'])) {
+          $address['additional_name'] = $magento_address['extension']['apartment'];
+        }
+
+        if (isset($magento_address['extension']['postcode'])) {
+          $address['postal_code'] = $magento_address['extension']['postcode'];
         }
       }
 
@@ -660,6 +675,9 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
       $magento_address['extension']['address_apartment_segment'] = (string) $address['address_line2'];
       $magento_address['extension']['address_area_segment'] = (string) $address['administrative_area'];
       $magento_address['extension']['address_building_segment'] = (string) $address['dependent_locality'];
+      $magento_address['extension']['landmark'] = (string) $address['sorting_code'];
+      $magento_address['extension']['apartment'] = (string) $address['additional_name'];
+      $magento_address['extension']['postcode'] = (string) $address['postal_code'];
       $magento_address['extension']['address_block_segment'] = (string) $address['locality'];
       $magento_address['country_id'] = $address['country_code'];
     }
@@ -946,7 +964,6 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         }
         return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
       });
-
       $this->cache->set($cid, $magento_form);
     }
     catch (\Exception $e) {
@@ -1143,11 +1160,23 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    *   Address array.
    */
   public function decorateAddressDispaly(array $address) {
+    $address = array_filter($address);
+
+    if (!isset($address['country'])) {
+      $country_list = \Drupal::service('address.country_repository')->getList();
+      $address['country'] = $country_list[$address['country_code']];
+    }
+
     $prefix_settings = $this->configFactory->get('alshaya_addressbook.settings')->get('prefix_settings');
     $mapping = $this->getMagentoFieldMappings();
     $form_fields = $this->getMagentoFormFields();
+
     // Rearrange mapping array according to $form_fields.
     $mapping = array_merge(array_flip(array_keys($form_fields)), array_flip($mapping));
+    // Remove any additional keys, which are associated as index id.
+    $mapping = array_filter($mapping, function ($value) use ($address) {
+      return (!is_numeric($value) && in_array($value, array_keys($address))) || strpos($value, 'country') !== FALSE;
+    });
 
     // Reverse the string for rtl language.
     $language = $this->languageManager->getCurrentLanguage();
@@ -1174,6 +1203,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
         ]);
       }
     }
+
     // Remove keys from array.
     $address = array_diff_key($address, array_flip($remove_keys));
     // Rearrange address fields based on mapping array.

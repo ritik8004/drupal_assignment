@@ -6,7 +6,6 @@
  */
 
 use Drupal\acq_cart\CartInterface;
-use Drupal\alshaya_acm_knet\E24PaymentPipe;
 use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -24,8 +23,6 @@ function alshaya_acm_knet_alshaya_i18n_onetime_translation_add() {
  * Implements hook_alshaya_acm_checkout_pre_place_order().
  */
 function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
-  $knet_settings = \Drupal::config('alshaya_acm_knet.settings');
-
   $session = \Drupal::request()->getSession();
   $selected_payment = $session->get('selected_payment_method');
 
@@ -34,70 +31,22 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     return;
   }
 
+  /** @var \Drupal\alshaya_acm_knet\KnetHelper $knetHelper */
+  $knetHelper = \Drupal::service('alshaya_acm_knet.helper');
+
   $order_id = $cart->getExtension('real_reserved_order_id');
-
-  $pipe = new E24PaymentPipe();
-
-  $pipe->setCurrency($knet_settings->get('knet_currency_code'));
-  $pipe->setLanguage($knet_settings->get('knet_language_code'));
-
-  $https = (bool) $knet_settings->get('use_secure_response_url');
-  $pipe->setResponseUrl(Url::fromRoute('alshaya_acm_knet.response', [], ['absolute' => TRUE, 'https' => $https])->toString());
-  $pipe->setErrorUrl(Url::fromRoute('alshaya_acm_knet.error', ['quote_id' => $cart->id()], ['absolute' => TRUE])->toString());
-
   $totals = $cart->totals();
-  $pipe->setAmt($totals['grand']);
-
-  // Set resource path.
-  $pipe->setResourcePath($knet_settings->get('resource_path'));
-
-  // Set your alias name here.
-  $pipe->setAlias($knet_settings->get('alias'));
-
-  $pipe->setTrackId($order_id);
-
-  $pipe->setUdf1(\Drupal::currentUser()->id());
-  $pipe->setUdf2($cart->customerId());
-  $pipe->setUdf3($cart->id());
-
-  // We store the cart id as cart id here and change it to quote id in response
-  // so noone can directly use the state key from URL in error and use it for
-  // success page.
-  $state_data = [
-    'cart_id' => $cart->id(),
-    'order_id' => $order_id,
-  ];
-
-  // This is just to have the key unique for state data.
-  $state_key = md5(json_encode($state_data));
-  $pipe->setUdf4($state_key);
-
-  $udf5_prefix = $knet_settings->get('knet_udf5_prefix');
-  $pipe->setUdf5($udf5_prefix . ' ' . $order_id);
 
   try {
-    $pipe->performPaymentInitialization();
+    $request = $knetHelper->initKnetRequest(
+      $cart->id(),
+      \Drupal::currentUser()->id(),
+      $cart->customerId(),
+      $order_id,
+      $totals['grand']
+    );
 
-    // Check again once if there is any error.
-    if ($error = $pipe->getErrorMsg()) {
-      throw new \RuntimeException($error);
-    }
-
-    \Drupal::logger('alshaya_acm_knet')->info('Payment info for quote id @quote_id is @payment_id. Reserved order id is @order_id. State key: @state_key', [
-      '@order_id' => $order_id,
-      '@quote_id' => $cart->id(),
-      '@payment_id' => $pipe->getPaymentId(),
-      '@state_key' => $state_key,
-    ]);
-
-    $state_data['payment_id'] = $pipe->getPaymentId();
-    $state_data['amount'] = $totals['grand'];
-
-    // We store the data in state here to ensure we can use it back and avoid
-    // security issues.
-    \Drupal::state()->set($state_key, $state_data);
-
-    $response = new RedirectResponse($pipe->getRedirectUrl());
+    $response = new RedirectResponse($request['url']);
     $response->send();
     exit;
   }

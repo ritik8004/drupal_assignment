@@ -81,7 +81,7 @@ function whitelabel_preprocess_block(&$variables) {
       break;
   }
 
-  $elements_id = $variables['elements']['#id'];
+  $elements_id = $variables['elements']['#id'] ?? '';
   if (strpos($elements_id, 'block_content') !== FALSE) {
     $block_content = $variables['content']['#block_content'];
     $machine_name = $block_content->get('machine_name')->value;
@@ -217,6 +217,10 @@ function whitelabel_preprocess_node(&$variables) {
  * Implements hook_theme_suggestions_block_alter().
  */
 function whitelabel_theme_suggestions_block_alter(array &$suggestions, array $variables) {
+  if (!isset($variables['elements']['#id'])) {
+    return;
+  }
+
   $machine_name = $variables['elements']['#id'];
   $base_plugin_id = $variables['elements']['#base_plugin_id'];
   $suggestions[] = 'block__' . $machine_name;

@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_mobile_app
+    - serialization
+    - simple_oauth
+    - alshaya_stores_finder
+id: stores_finder
+plugin_id: stores_finder
+granularity: method
+configuration:
+  GET:
+    supported_formats:
+      - json
+    supported_auth:
+      - cookie

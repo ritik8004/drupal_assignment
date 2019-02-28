@@ -497,16 +497,16 @@
       display: inline-block;
 
       .price {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
         .price-currency {
           @include breakpoint($only-tablet) {
             margin-right: 0.4rem;
           }
 
           margin-right: 1rem;
-        }
-
-        .price-amount {
-          float: $right;
         }
       }
     }
@@ -515,12 +515,12 @@
   .order-total {
     font-weight: bold;
     color: $total_order_total_txt;
-    margin-top: 10px;
+    margin-top: 0.625rem;
   }
 
   .status {
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 0.75rem;
+    margin-top: 0.3125rem;
   }
 }
 
@@ -680,6 +680,7 @@ body.alias--cart {
         &.price {
           @include breakpoint($only-tablet) {
             width: 7.2rem;
+            padding: 1rem 0.5rem;
           }
 
           @include breakpoint($desktop) {
@@ -711,6 +712,7 @@ body.alias--cart {
           display: block;
           width: auto;
           padding-bottom: 0;
+          padding-top: 1.5rem;
         }
 
         div.image {
@@ -757,9 +759,9 @@ body.alias--cart {
         }
 
         @include breakpoint($only-tablet) {
-          width: 7rem;
-          min-width: 7rem;
-          padding: 1rem 0.7rem;
+          width: 7.07rem;
+          min-width: 7.07rem;
+          padding: 1rem 0.5rem;
         }
 
         @include breakpoint($desktop) {
@@ -869,12 +871,7 @@ body.alias--cart {
           }
 
           .throbber {
-            background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-            background-position: $right center !important;
-            background-repeat: no-repeat !important;
-            background-size: 1.5rem;
-            padding-left: 0.625rem;
-            padding-right: 0.625rem;
+            @include throbberLoader();
           }
 
           @include breakpoint($only-mobile) {
@@ -1041,7 +1038,7 @@ body.alias--cart {
 
       @include breakpoint($only-tablet) {
         width: 7.07rem;
-        padding: 1rem 0.7rem;
+        padding: 1rem 0.5rem;
       }
 
       @include breakpoint($desktop) {
@@ -1186,11 +1183,7 @@ body.alias--cart {
       max-height: 2.188rem;
       line-height: 2.7;
 
-      @include breakpoint($desktop) {
-        &:hover {
-          opacity: 0.75;
-        }
-      }
+      @include link-ripple();
 
       &.disabled {
         &:hover {

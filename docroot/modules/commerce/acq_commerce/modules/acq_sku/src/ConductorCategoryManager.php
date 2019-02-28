@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\acq_commerce\Conductor\ClientFactory;
+use Drupal\Core\Database\Connection;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -76,6 +77,13 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   private $modulehandler;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  private $connection;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -92,8 +100,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   I18nHelper object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler service.
+   * @param \Drupal\Core\Database\Connection $conneciton
+   *   Database connection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
     $this->clientFactory = $client_factory;
@@ -102,6 +112,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     $this->logger = $logger_factory->get('acq_sku');
     $this->i18nHelper = $i18n_helper;
     $this->modulehandler = $moduleHandler;
+    $this->connection = $connection;
   }
 
   /**
@@ -257,9 +268,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    */
   private function resetResults() {
     $this->results = [
-      'created' => 0,
-      'updated' => 0,
-      'failed'  => 0,
+      'created' => [],
+      'updated' => [],
+      'failed'  => [],
     ];
   }
 
@@ -274,7 +285,8 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   Parent Category.
    */
   private function syncCategory(array $categories, $parent = NULL) {
-    $lock = \Drupal::lock();
+    /** @var \Drupal\Core\Lock\PersistentDatabaseLockBackend $lock */
+    $lock = \Drupal::service('lock.persistent');
 
     // Remove top level item (Default Category) from the categories, if its set
     // in configuration and category is with no parent.
@@ -284,9 +296,9 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     }
 
     foreach ($categories as $category) {
-      if (!isset($category['category_id']) || !isset($category['name'])) {
+      if (!isset($category['category_id']) || empty($category['name'])) {
         $this->logger->error('Invalid / missing category ID or name.');
-        $this->results['failed']++;
+        $this->results['failed'][] = $category['category_id'];
         continue;
       }
 
@@ -342,14 +354,24 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         // Break child relationships.
         $children = $this->termStorage->loadChildren($term->id(), $this->vocabulary->id());
         if (count($children)) {
-          $child_ids = array_map(function ($child) {
-            return ($child->id());
+          $child_ids = array_map(function ($child) use ($category) {
+            // If term having commerce id, means its sync from magento and
+            // thus we process. Term not having commerce id means its created
+            // only on Drupal and thus we skip processing.
+            if ($commerce_id = $child->get('field_commerce_id')->first()) {
+              // We check if the child exists in the response get from magento.
+              foreach ($category['children'] as $sync_cat_child) {
+                if ($commerce_id->getString() == $sync_cat_child['category_id']) {
+                  return $child->id();
+                }
+              }
+            }
           }, $children);
 
           $this->termStorage->deleteTermHierarchy($child_ids);
         }
 
-        $this->results['updated']++;
+        $this->results['updated'][] = $category['category_id'];
       }
       else {
         // Create the term entity.
@@ -362,7 +384,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
           'langcode' => $langcode,
         ]);
 
-        $this->results['created']++;
+        $this->results['created'][] = $category['category_id'];
       }
 
       // Store status of category.
@@ -451,6 +473,32 @@ class ConductorCategoryManager implements CategoryManagerInterface {
     }
 
     return $term;
+  }
+
+  /**
+   * Identify the categories which are not in commerce backend anymore and must
+   * be deleted.
+   *
+   * @param array $sync_categories
+   *   Sync categories.
+   *
+   * @return array
+   *   Orphan categories.
+   */
+  public function getOrphanCategories(array $sync_categories) {
+    // Get all category terms with commerce id.
+    $query = $this->connection->select('taxonomy_term_field_data', 'ttd');
+    $query->fields('ttd', ['tid', 'name']);
+    $query->leftJoin('taxonomy_term__field_commerce_id', 'tcid', 'ttd.tid=tcid.entity_id');
+    $query->fields('tcid', ['field_commerce_id_value']);
+    $query->condition('ttd.vid', 'acq_product_category');
+    $result = $query->execute()->fetchAllAssoc('tid', \PDO::FETCH_ASSOC);
+
+    $affected_terms = array_unique(array_merge($sync_categories['created'], $sync_categories['updated']));
+    // Filter terms which are not in sync response.
+    return $result = array_filter($result, function ($val) use ($affected_terms) {
+      return !in_array($val['field_commerce_id_value'], $affected_terms);
+    });
   }
 
 }

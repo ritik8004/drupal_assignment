@@ -25,6 +25,10 @@ sites:
     module: alshaya_hm
     type: alshaya_transac
     country: ae
+  hmeg:
+    module: alshaya_hm
+    type: alshaya_transac
+    country: eg
   bbwkw:
     module: alshaya_bbw
     type: alshaya_transac
@@ -67,6 +71,9 @@ sites:
     module: alshaya_pb
     type: alshaya_transac
     country: ae
+  pbnontransacae:
+    module: alshaya_pb
+    type: alshaya_non_transac
   flsa:
     module: alshaya_fl
     type: alshaya_transac

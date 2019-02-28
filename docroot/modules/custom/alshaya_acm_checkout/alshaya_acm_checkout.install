@@ -26,7 +26,7 @@ function alshaya_acm_checkout_update_8003() {
 /**
  * Implements hook_update_N().
  *
- * Remove/hide tax info for MCKW (all trans sites).
+ * Update config to remove/hide tax info.
  */
 function alshaya_acm_checkout_update_8002() {
   // Remove/hide tax config.
@@ -38,7 +38,7 @@ function alshaya_acm_checkout_update_8002() {
 /**
  * Implements hook_update_N().
  *
- * Add config for show tax info.
+ * Add config to show tax info.
  */
 function alshaya_acm_checkout_update_8001() {
   // Show tax config to all sites.

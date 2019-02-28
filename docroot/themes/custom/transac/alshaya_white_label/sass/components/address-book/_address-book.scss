@@ -734,14 +734,7 @@
 // Replacing the throbber for delete address form on addressbook
 .profile-address-book-delete-form {
   .ajax-progress-throbber {
-    .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
-    }
+    @include fullPageLoader();
   }
 }
 
@@ -786,9 +779,21 @@
   }
 
   .form-item-guest-delivery-home-address-shipping-address-line2,
+  .form-item-guest-delivery-home-address-shipping-sorting-code,
+  .form-item-guest-delivery-home-address-shipping-postal-code,
+  .form-item-guest-delivery-home-address-shipping-additional-name,
   .form-item-billing-address-address-billing-address-line2,
+  .form-item-billing-address-address-billing-sorting-code,
+  .form-item-billing-address-address-billing-postal-code,
+  .form-item-billing-address-address-billing-additional-name,
   .form-item-field-address-0-address-address-line2,
-  .form-item-member-delivery-home-address-form-form-address-line2 {
+  .form-item-field-address-0-address-postal-code,
+  .form-item-field-address-0-address-sorting-code,
+  .form-item-field-address-0-address-additional-name,
+  .form-item-member-delivery-home-address-form-form-address-line2,
+  .form-item-member-delivery-home-address-form-form-additional-name,
+  .form-item-member-delivery-home-address-form-form-sorting-code,
+  .form-item-member-delivery-home-address-form-form-postal-code {
     input[type=text] ~ label:not(.active-label) {
       font-size: 1rem !important;
       color: $primary_input_label !important;

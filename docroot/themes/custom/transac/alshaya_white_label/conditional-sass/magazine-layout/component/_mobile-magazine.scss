@@ -1,0 +1,308 @@
+.magazine-layout-node {
+  .acq-content-product {
+    .gallery-wrapper {
+      @include breakpoint($tablet) {
+        padding-bottom: 0;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto auto;
+      grid-gap: 0 1rem;
+    }
+  }
+
+  .content__main {
+    @include breakpoint($tablet) {
+      grid-column: 1 / 3;
+      width: auto;
+      float: none;
+    }
+  }
+
+  .horizontal-upell,
+  .horizontal-related,
+  .horizontal-crossell {
+    @include breakpoint($tablet) {
+      grid-column: 1 / 3;
+    }
+  }
+
+  .content-sidebar-wrapper {
+    @include breakpoint($tablet) {
+      grid-column: 3 / -1;
+      grid-row: 1 / 2;
+
+      .content__title_wrapper {
+        width: 100%;
+        float: none;
+        margin: 0;
+      }
+
+      .content__sidebar {
+        width: 100%;
+        float: none;
+        margin: 0.625rem 0 0;
+      }
+
+      &.sidebar-fixed {
+        position: fixed;
+        top: 5rem;
+        width: calc((100vw - 5rem) / 3);
+        #{$right}: 1.5rem;
+
+        &.contain {
+          position: absolute;
+          bottom: 0;
+          top: auto;
+          #{$right}: 0 !important;
+
+          .click-collect-all-stores {
+            &.inline-modal-wrapper {
+              @include breakpoint($tablet) {
+                top: auto;
+                bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .content__title_wrapper {
+      border-bottom: none;
+
+      @include breakpoint($only-mobile) {
+        visibility: hidden;
+
+        &.show-sticky-wrapper {
+          visibility: visible;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      &.sidebar-fixed {
+        top: 8.125rem;
+        width: calc((30 * 71.5rem) / 100);
+        #{$right}: calc((100vw - 66.375rem) / 2);
+      }
+    }
+
+    .click-collect-all-stores {
+      &.inline-modal-wrapper {
+        @include breakpoint($tablet) {
+          width: calc((33 * 44rem) / 100);
+        }
+
+        @include breakpoint($desktop) {
+          width: calc((33 * 66.375rem) / 100);
+        }
+      }
+    }
+  }
+
+  .content__sidebar .mobile-content-wrapper {
+    @include breakpoint($only-mobile) {
+      padding: 1rem;
+
+      .delivery-options-wrapper {
+        .field__label {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .content__title_wrapper {
+    @include breakpoint($only-mobile) {
+      padding: 1rem;
+
+      &.fixed {
+        position: fixed;
+        bottom: 0;
+        z-index: 9;
+        width: 100%;
+        background: $primary_bg;
+        box-shadow: 0.0625rem 0.125rem 0.625rem $mothercare-black;
+        transition: z-index 0.5s ease-in-out;
+
+        h1 {
+          span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      .price-block,
+      .promotions,
+      .content--item-code,
+      .basic-details-wrapper,
+      h1 {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  .size-tray {
+    &.tray-open {
+      opacity: 1;
+      z-index: 12;
+    }
+  }
+
+  .basic-details-wrapper {
+    .sku-base-form {
+      @include breakpoint($tablet) {
+        display: grid;
+        grid-column: 3 / -1;
+        grid-row: 1 / 2;
+        width: 100%;
+
+        button[type="submit"] {
+          width: 100%;
+          max-width: 11.125rem;
+
+          html[lang=ar] & {
+            max-width: 13.7rem;
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        button[type="submit"] {
+          html[lang=ar] & {
+            padding: 0.5rem 1.875rem 0.5rem 0.5rem;
+            max-width: 11.75rem;
+
+            &::before {
+              right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      min-height: 3rem;
+
+      .field--name-field-skus {
+        min-height: inherit;
+
+        .field__item {
+          display: block;
+          padding: 0;
+          min-height: inherit;
+        }
+      }
+
+      .sku-base-form {
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+        grid-gap: 0 1rem;
+
+        .js-form-wrapper {
+          grid-column: 1 / -1;
+        }
+
+        .size-tray-link {
+          @include icon(dropdown-expand, after);
+
+          position: relative;
+          display: flex;
+          justify-content: $left;
+          align-items: center;
+          height: 3rem;
+          border: 2px solid $primary_empty_btn_border;
+          padding: 0.65rem;
+          color: $primary_empty_btn;
+          cursor: pointer;
+          grid-column: 1 / 2;
+
+          &::after {
+            position: absolute;
+            #{$right}: 0;
+            font-size: 2.125rem;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          &.selected-text {
+            justify-content: center;
+          }
+        }
+
+        .edit-add-to-cart {
+          height: 3rem !important;
+          cursor: pointer;
+          grid-column: 2 / -1;
+        }
+      }
+    }
+  }
+}
+
+.social-modal-overlay {
+  .magazine-layout-node {
+    .content-sidebar-wrapper {
+      &.sidebar-fixed {
+        position: static;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  body {
+    &.mobile--overlay {
+      .magazine-layout-node {
+        .content__title_wrapper {
+          &.fixed {
+            z-index: 1;
+          }
+        }
+      }
+    }
+
+    &.tray-overlay,
+    &.open-tray-without-selection {
+      overflow: hidden;
+    }
+  }
+
+  .magazine-layout {
+    article[gtm-sku-type="simple"] {
+      .content__title_wrapper {
+        .sku-base-form {
+          display: block;
+        }
+      }
+    }
+
+    article {
+      &.product-out-of-stock {
+        .basic-details-wrapper {
+          min-height: 2.5rem;
+
+          span {
+            &.out-of-stock {
+              position: relative;
+              box-shadow: none;
+              border: none;
+              height: 2.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -19,3 +19,16 @@ services:
     class: Drupal\alshaya_search_api\AlshayaSearchApiHelper
     arguments:
       - '@entity_type.manager'
+      - '@module_handler'
+
+  alshaya_search_api.product_updated_event:
+    class: Drupal\alshaya_search_api\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+    - '@alshaya_acm_product.skumanager'
+    tags:
+    - { name: 'event_subscriber' }
+
+  alshaya_search_api.listing_settings_subscriber:
+    class: Drupal\alshaya_search_api\EventSubscriber\ProductListingSettingsSubscriber
+    tags:
+      - { name: 'event_subscriber' }

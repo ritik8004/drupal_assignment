@@ -1,6 +1,11 @@
 dependencies:
    config:
      - field.field.taxonomy_term.acq_product_category.field_swatch_type
+third_party_settings:
+  field_group:
+    group_configuration:
+      children:
+        - field_swatch_type
 content:
   field_swatch_type:
     type: string_textfield

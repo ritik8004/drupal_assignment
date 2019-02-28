@@ -20,6 +20,7 @@ function alshaya_main_menu_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-main-menu-level1',
       'variables' => [
         'term_tree' => NULL,
+        'settings' => [],
       ],
     ],
     'alshaya_main_menu_level2' => [
@@ -80,7 +81,10 @@ function template_preprocess_alshaya_main_menu_level1(array &$variables) {
 function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $parent_id, array $context) {
   $max_depth = \Drupal::config('alshaya_main_menu.settings')->get('mobile_main_menu_max_depth');
   if ($max_depth > 0) {
-    $max_depth += $context['depth_offset'];
+    // When super category status is enabled, We render the main menu items
+    // from second level terms. Add depth_offset to max_depth to adjust
+    // max_depth accordingly.
+    $max_depth += $context['depth_offset'] ?? 0;
     _alshaya_main_menu_process_max_depth($term_tree, $max_depth);
   }
 }
@@ -95,9 +99,6 @@ function alshaya_main_menu_alshaya_main_menu_links_alter(array &$term_tree, $par
  */
 function _alshaya_main_menu_process_max_depth(array &$data, int $max_depth) {
   foreach ($data as &$item) {
-    // We render the main menu items from second level terms, When super
-    // category status is enabled. Deduct 1 from the actual depth to get the
-    // currect term level for main menu items.
     if ($item['depth'] == $max_depth) {
       $item['class'] = 'max-depth';
     }

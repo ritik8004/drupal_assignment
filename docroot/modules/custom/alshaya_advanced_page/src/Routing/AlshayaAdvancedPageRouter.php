@@ -22,12 +22,17 @@ class AlshayaAdvancedPageRouter extends Router {
    * {@inheritdoc}
    */
   public function match($pathinfo) {
-    $request = Request::create($pathinfo);
+    $static = &drupal_static('alshaya_advanced_page_router_match', []);
 
-    // This is to uniquely identify the sub-request.
-    $this->isSubRequest = TRUE;
+    if (!isset($static[$pathinfo])) {
+      // This is to uniquely identify the sub-request.
+      $this->isSubRequest = TRUE;
 
-    return $this->matchRequest($request);
+      $request = Request::create($pathinfo);
+      $static[$pathinfo] = $this->matchRequest($request);
+    }
+
+    return $static[$pathinfo];
   }
 
   /**

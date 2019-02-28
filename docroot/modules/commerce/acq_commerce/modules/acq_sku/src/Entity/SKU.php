@@ -381,6 +381,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
    *   Found SKU
    */
   public static function loadFromSku($sku, $langcode = '', $log_not_found = TRUE, $create_translation = FALSE) {
+    if (empty($sku)) {
+      // Simply log for debugging later on why this function is called
+      // with empty sku.
+      \Drupal::logger('acq_sku')->error('SKU::loadFromSku invoked with empty sku string: @trace.', [
+        '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
+      ]);
+
+      return NULL;
+    }
+
     $skus_static_cache = &drupal_static(__FUNCTION__, []);
 
     $is_multilingual = \Drupal::languageManager()->isMultilingual();
@@ -591,21 +601,10 @@ class SKU extends ContentEntityBase implements SKUInterface {
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['stock'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Stock'))
-      ->setDescription(t('Stock quantity.'))
-      ->setTranslatable(FALSE)
-      ->setDisplayOptions('form', [
-        'type' => 'number',
-        'weight' => -10,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Display Price'))
       ->setDescription(t('Display Price of this SKU.'))
-      ->setTranslatable(TRUE)
+      ->setTranslatable(FALSE)
       ->setDisplayOptions('view', [
         'label' => 'above',
         'type' => 'string',
@@ -621,14 +620,14 @@ class SKU extends ContentEntityBase implements SKUInterface {
     $fields['special_price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Special Price'))
       ->setDescription(t('Special Price of this SKU.'))
-      ->setTranslatable(TRUE)
+      ->setTranslatable(FALSE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['final_price'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Final Price'))
       ->setDescription(t('Final Price of this SKU.'))
-      ->setTranslatable(TRUE)
+      ->setTranslatable(FALSE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
@@ -805,30 +804,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
   }
 
   /**
-   * Helper function to clear stock cache for particular sku.
-   */
-  public function clearStockCache() {
-    $stock_mode = \Drupal::config('acq_sku.settings')->get('stock_mode');
-
-    // Clear product and forms related to sku.
-    Cache::invalidateTags(['acq_sku:' . $this->id()]);
-
-    if ($stock_mode == 'push') {
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
-      $plugin = $this->getPluginInstance();
-
-      // Reset the stock value.
-      $plugin->getProcessedStock($this, TRUE);
-    }
-    else {
-      $stock_cid = 'stock:' . $this->getSku();
-
-      // Clear stock cache.
-      \Drupal::cache('stock')->invalidate($stock_cid);
-    }
-  }
-
-  /**
    * {@inheritdoc}
    */
   public static function postDelete(EntityStorageInterface $storage, array $entities) {
@@ -860,6 +835,16 @@ class SKU extends ContentEntityBase implements SKUInterface {
     // This is done by default when using entity storage.
     // We don't use entity storage and use custom code for static cache.
     drupal_static_reset('loadFromSku');
+    drupal_static_reset('getParentSku');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function refreshStock() {
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $this->getPluginInstance();
+    $plugin->refreshStock($this);
   }
 
 }

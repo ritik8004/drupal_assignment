@@ -214,7 +214,7 @@
           var progress_element = $('<div class="ajax-progress ajax-progress-fullscreen">&nbsp;</div>');
           $('body').after(progress_element);
           setTimeout(function () {
-            storeFinder.find('input[id^="edit-submit-stores-finder"]').trigger('click');
+            storeFinder.find('[id^="edit-submit-stores-finder"]').trigger('click');
             $(progress_element).remove();
           }, 500);
         });

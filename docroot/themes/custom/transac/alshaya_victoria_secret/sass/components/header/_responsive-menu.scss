@@ -86,7 +86,7 @@ header {
 @include breakpoint($upto-desktop) {
   .logged-in .mobile--close,
   .mobile--close {
-    top: 3.7rem;
+    top: 2.8125rem;
   }
 
   .logged-in .toggle--sign,
@@ -96,6 +96,7 @@ header {
 
   .main--menu {
     top: 5.625rem;
+    z-index: 10;
 
     ul {
       width: 100%;
@@ -113,6 +114,8 @@ header {
   }
 
   .main--menu ul.menu--one__list {
+    padding-bottom: 6.0625rem;
+
     .menu__link {
       text-transform: uppercase;
       font-size: 0.875rem;
@@ -188,7 +191,7 @@ header {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 7;
+    z-index: 10;
   }
 
   .menu--mobile-navigation {
@@ -249,6 +252,20 @@ header {
 .main--menu ul.menu--one__list {
   @include breakpoint($only-mobile) {
     width: calc(100% - 2.8125rem);
+  }
+}
+
+.toggle--sign {
+  .shop,
+  .account {
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        padding: 0 0.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 }
 

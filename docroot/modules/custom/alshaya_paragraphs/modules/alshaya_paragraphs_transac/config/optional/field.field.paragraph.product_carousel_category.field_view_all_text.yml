@@ -11,7 +11,7 @@ bundle: product_carousel_category
 label: 'View all text'
 description: ''
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

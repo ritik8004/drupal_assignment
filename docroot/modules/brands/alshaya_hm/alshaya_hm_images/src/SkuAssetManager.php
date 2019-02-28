@@ -124,59 +124,52 @@ class SkuAssetManager {
    *   Array of urls to sku assets.
    */
   public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE, array $avoid_assets = []) {
-    $sku = $sku instanceof SKU ? $sku->getSku() : $sku;
+    $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
+    $sku = $skuEntity->getSku();
 
-    $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
-    $sku_property_values = $this->skuManager->getSkuPropertyValue($sku, ['attr_assets__value']);
+    $assets_data = $skuEntity->get('attr_assets')->getValue();
 
-    if (($sku_property_values) &&
-      !empty($unserialized_assets = unserialize($sku_property_values->attr_assets__value))) {
-      $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+    if ($assets_data && isset($assets_data[0], $assets_data[0]['value'])) {
+      $unserialized_assets = unserialize($assets_data[0]['value']);
+
+      if ($unserialized_assets) {
+        $assets = $this->sortSkuAssets($sku, $page_type, $unserialized_assets);
+      }
     }
-
-    $asset_variant_urls = [];
-    $asset_urls = [];
 
     if (empty($assets)) {
       return [];
     }
 
+    $asset_variant_urls = [];
+    $asset_urls = [];
+    $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
+
     foreach ($location_images as $location_image) {
       $asset_urls = [];
       foreach ($assets as $asset) {
-        if (!empty($avoid_assets) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
+        if (!empty($avoid_assets) && isset($asset['Data']['AssetId']) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
           continue;
         }
+
         list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
 
-        // Prepare query options for image url.
-        if (isset($set['url'])) {
-          $url_parts = parse_url(urldecode($set['url']));
-          if (!empty($url_parts['query'])) {
-            parse_str($url_parts['query'], $query_options);
-            // Overwrite the product style coming from season 5 image url with
-            // the one based on context in which the image is being rendered.
-            $query_options['call'] = 'url[' . $image_location_identifier . ']';
-            $options = [
-              'query' => $query_options,
-            ];
-          }
-        }
-        else {
-          $options = [
-            'query' => [
-              'set' => implode(',', $set),
-              'call' => 'url[' . $image_location_identifier . ']',
-            ],
-          ];
-        }
+        $query_options = $this->getAssetQueryString($set, $image_location_identifier);
 
-        $asset_urls[] = [
-          'url' => Url::fromUri($base_url, $options),
+        $asset_url = [
+          'url' => Url::fromUri($base_url, ['query' => $query_options]),
           'sortAssetType' => $asset['sortAssetType'],
           'sortFacingType' => $asset['sortFacingType'],
-          'Data' => $asset['Data'] ?? NULL,
+          'Data' => $asset['Data'] ?? [],
         ];
+
+        // Prepare raw url without res and call.
+        unset($set['res']);
+        $raw_query_options = $this->getAssetQueryString($set, $image_location_identifier);
+        unset($raw_query_options['call']);
+        $asset_url['raw_url'] = Url::fromUri($base_url, ['query' => $raw_query_options]);
+
+        $asset_urls[] = $asset_url;
 
         if ($first_image_only) {
           return $asset_urls;
@@ -202,6 +195,38 @@ class SkuAssetManager {
     }
 
     return $asset_variant_urls;
+  }
+
+  /**
+   * Prepare query string for assets.
+   *
+   * @param array $set
+   *   Set data.
+   * @param string $image_location_identifier
+   *   Image location identifier.
+   *
+   * @return array
+   *   Query string.
+   */
+  private function getAssetQueryString(array $set, string $image_location_identifier): array {
+    // Prepare query options for image url.
+    if (isset($set['url'])) {
+      $url_parts = parse_url(urldecode($set['url']));
+      if (!empty($url_parts['query'])) {
+        parse_str($url_parts['query'], $query_options);
+        // Overwrite the product style coming from season 5 image url with
+        // the one based on context in which the image is being rendered.
+        $query_options['call'] = 'url[' . $image_location_identifier . ']';
+      }
+    }
+    else {
+      $query_options = [
+        'set' => implode(',', $set),
+        'call' => 'url[' . $image_location_identifier . ']',
+      ];
+    }
+
+    return $query_options;
   }
 
   /**
@@ -236,10 +261,10 @@ class SkuAssetManager {
       $set['type'] = "type[" . $asset['sortAssetType'] . "]";
       $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
 
-      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] ."]";
+      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
       $detect = new MobileDetect();
       if ($detect->isMobile()) {
-        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] ."]";
+        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] . "]";
       }
 
       // Check for overrides for style identifiers & dimensions.
@@ -252,7 +277,7 @@ class SkuAssetManager {
         }
 
         if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['desktop'])) {
-          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] ."]";
+          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] . "]";
         }
 
         $detect = new MobileDetect();
@@ -279,12 +304,20 @@ class SkuAssetManager {
    *   Overridden config in context of the category product belongs to.
    */
   public function overrideConfig($sku, $page_type) {
+    // @TODO: Check and remove this include.
     $this->moduleHandler->loadInclude('alshaya_acm_product', 'inc', 'alshaya_acm_product.utility');
+
+    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
+    $overrides = $alshaya_hm_images_settings->get('overrides');
+
+    // No further processing if overrides is empty.
+    if (empty($overrides)) {
+      return [];
+    }
 
     $currentRoute['route_name'] = $this->currentRouteMatch->getRouteName();
     $currentRoute['route_params'] = $this->currentRouteMatch->getParameters()->all();
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $overrides = $alshaya_hm_images_settings->get('overrides');
+
     $tid = NULL;
 
     // Identify the category for the product being displayed.
@@ -300,7 +333,7 @@ class SkuAssetManager {
       case 'teaser':
       case 'swatch':
         $sku = !($sku instanceof SKU) ? SKU::loadFromSku($sku) : $sku;
-        $product_node = alshaya_acm_product_get_display_node($sku);
+        $product_node = $this->skuManager->getDisplayNode($sku);
         if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
           // Use the first term found with an override for
           // location identifier.
@@ -358,12 +391,11 @@ class SkuAssetManager {
       foreach ($grouped_assets as $key => $asset) {
         if (!empty($asset)) {
           $sort_angle_weights = array_flip($sort_angle_weights);
-          uasort($asset, function ($a, $b) use ($sort_angle_weights, $key) {
+          uasort($asset, function ($a, $b) use ($key) {
             // Different rules for LookBook and reset.
             if ($key != 'Lookbook') {
               // For non-lookbook first check packaging in/out.
               // packaging=false first.
-
               // IsMultiPack didn't help, we check Facing now.
               $a_packaging = isset($a['Data']['Angle']['Packaging'])
                 ? (float) $a['Data']['Angle']['Packaging']
@@ -503,7 +535,7 @@ class SkuAssetManager {
    */
   public function getSkuSwatchType(SKU $sku) {
     $swatch_type = self::LP_SWATCH_DEFAULT;
-    $product_node = alshaya_acm_product_get_display_node($sku);
+    $product_node = $this->skuManager->getDisplayNode($sku);
 
     if (($product_node) && ($terms = $product_node->get('field_category')->getValue())) {
       if (!empty($terms)) {
@@ -545,7 +577,7 @@ class SkuAssetManager {
     }
 
     $article_castor_ids = [];
-    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $article_castor_id => $skus) {
+    foreach ($combinations['attribute_sku']['article_castor_id'] ?? [] as $skus) {
       $child_sku_entity = NULL;
       $color_attributes = [];
 
@@ -554,7 +586,7 @@ class SkuAssetManager {
         // Show only for colors for which we have stock.
         $child_sku_entity = SKU::loadFromSku($child_sku);
 
-        if ($child_sku_entity instanceof SKUInterface && alshaya_acm_get_stock_from_sku($child_sku_entity)) {
+        if ($child_sku_entity instanceof SKUInterface && $this->skuManager->isProductInStock($child_sku_entity)) {
           $color_attributes = $this->getColorAttributesFromSku($child_sku_entity->id());
           if ($color_attributes) {
             break;
@@ -570,32 +602,6 @@ class SkuAssetManager {
     $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
 
     return $article_castor_ids;
-  }
-
-  /**
-   * Helper function to get SKU based on Castor Id.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $parent_sku
-   *   Parent Sku.
-   * @param int $rgb_color_label
-   *   Castor id for which child sku needs to be fetched.
-   *
-   * @return array|SKU
-   *   Array of SKUs or single SKU object matching the castor id.
-   */
-  public function getChildSkuFromColor(SKU $parent_sku, $rgb_color_label) {
-    $child_skus = $this->skuManager->getChildrenSkuIds($parent_sku);
-
-    if (empty($child_skus)) {
-      return NULL;
-    }
-
-    foreach ($child_skus as $child_sku) {
-      if (!empty($sku_attributes = $this->skuManager->getSkuPropertyValue($child_sku, ['attr_color_label'])) &&
-        ($sku_attributes->attr_color_label == $rgb_color_label)) {
-        return $child_sku;
-      }
-    }
   }
 
   /**

@@ -13,7 +13,7 @@ bundle: promo_block
 label: 'Promo block SEO title'
 description: 'This field allows adding title for the text under promo block images. This text is for SEO only purposes and will be visible only on mobile resolutions.'
 required: false
-translatable: false
+translatable: true
 default_value: {  }
 default_value_callback: ''
 settings: {  }

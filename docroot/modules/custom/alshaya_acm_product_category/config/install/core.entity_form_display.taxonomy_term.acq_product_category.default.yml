@@ -2,66 +2,242 @@ langcode: en
 status: true
 dependencies:
   config:
-  - field.field.taxonomy_term.acq_product_category.field_category_image
-  - field.field.taxonomy_term.acq_product_category.field_category_include_menu
-  - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
-  - field.field.taxonomy_term.acq_product_category.field_commerce_id
-  - field.field.taxonomy_term.acq_product_category.field_commerce_status
-  - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
-  - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
-  - field.field.taxonomy_term.acq_product_category.field_image_text_font_color
-  - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
-  - field.field.taxonomy_term.acq_product_category.field_meta_tags
-  - field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
-  - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
-  - field.field.taxonomy_term.acq_product_category.field_promotion_banner
-  - field.field.taxonomy_term.acq_product_category.field_pdp_layout
-  - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
-  - field.field.taxonomy_term.acq_product_category.field_size_guide_anchor
-  - field.field.taxonomy_term.acq_product_category.field_term_background_color
-  - field.field.taxonomy_term.acq_product_category.field_term_font_color
-  - image.style.thumbnail
-  - taxonomy.vocabulary.acq_product_category
-  - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
+    - entity_browser.browser.image_browser
+    - field.field.taxonomy_term.acq_product_category.field_category_image
+    - field.field.taxonomy_term.acq_product_category.field_category_include_menu
+    - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
+    - field.field.taxonomy_term.acq_product_category.field_commerce_id
+    - field.field.taxonomy_term.acq_product_category.field_commerce_status
+    - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
+    - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
+    - field.field.taxonomy_term.acq_product_category.field_image_text_font_color
+    - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight
+    - field.field.taxonomy_term.acq_product_category.field_meta_tags
+    - field.field.taxonomy_term.acq_product_category.field_mobile_only_dpt_page_link
+    - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
+    - field.field.taxonomy_term.acq_product_category.field_plp_menu
+    - field.field.taxonomy_term.acq_product_category.field_plp_layout
+    - field.field.taxonomy_term.acq_product_category.field_plp_upload_video
+    - field.field.taxonomy_term.acq_product_category.field_plp_video_links
+    - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
+    - field.field.taxonomy_term.acq_product_category.field_promotion_banner
+    - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
+    - field.field.taxonomy_term.acq_product_category.field_term_background_color
+    - field.field.taxonomy_term.acq_product_category.field_term_font_color
+    - image.style.thumbnail
+    - taxonomy.vocabulary.acq_product_category
+    - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
+    - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
   module:
-  - field_group
-  - image
-  - jquery_minicolors
-  - metatag
-  - paragraphs
-  - path
-  - text
+    - entity_browser
+    - field_group
+    - file
+    - image
+    - jquery_minicolors
+    - link
+    - metatag
+    - paragraphs
+    - path
+    - text
 third_party_settings:
   field_group:
     group_category_image:
       children:
-      - field_category_image
-      - field_image_text_bg_color
-      - field_image_text_font_color
-      parent_name: ''
-      weight: 12
+        - field_category_image
+        - field_image_text_bg_color
+        - field_image_text_font_color
+      parent_name: group_mega_menu_content
+      weight: 13
       format_type: details
       format_settings:
         id: ''
         classes: ''
         open: false
         required_fields: true
+        formatter: closed
+        description: ''
       label: 'Category image'
       region: content
     group_mobile_only_quick_links:
       children:
-      - field_category_quicklink_plp_mob
-      - field_mobile_only_dpt_page_link
-      parent_name: ''
-      weight: 13
-      format_type: fieldset
+        - field_category_quicklink_plp_mob
+        - field_mobile_only_dpt_page_link
+      parent_name: group_link_configuration_on_inte
+      weight: 1
+      format_type: details
       format_settings:
         label: 'Quick links'
         description: ''
         required_fields: true
         id: ''
         classes: ''
+        open: false
       label: 'Quick links'
+      region: content
+    group_configuration:
+      children:
+        - name
+        - langcode
+        - field_commerce_status
+        - field_pdp_layout
+        - description
+        - field_pdp_image_slider_position
+        - path
+        - translation
+        - field_meta_tags
+      parent_name: group_taxonomy_fields
+      weight: 0
+      format_type: tab
+      format_settings:
+        id: ''
+        classes: ''
+        direction: horizontal
+        formatter: closed
+        description: ''
+        required_fields: true
+      label: Configuration
+      region: content
+    group_mega_menu_content:
+      children:
+        - field_display_as_clickable_link
+        - field_category_include_menu
+        - group_promo_block
+        - group_menu_item_colors
+        - group_category_image
+      parent_name: group_taxonomy_fields
+      weight: 1
+      format_type: tab
+      format_settings:
+        label: 'Mega menu content'
+        direction: horizontal
+        id: ''
+        classes: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+      label: 'Mega menu content'
+      region: content
+    group_link_configuration_on_inte:
+      children:
+        - field_size_guide_anchor
+        - group_mobile_only_quick_links
+      parent_name: group_taxonomy_fields
+      weight: 2
+      format_type: tab
+      format_settings:
+        id: ''
+        classes: ''
+        direction: horizontal
+        formatter: closed
+        description: ''
+        required_fields: true
+      label: 'Link configuration on internal pages'
+      region: content
+    group_plp_content:
+      children:
+        - field_plp_layout
+        - group_promotion_
+        - group_right_side_menu
+        - group_videos
+      parent_name: group_taxonomy_fields
+      weight: 4
+      format_type: tab
+      format_settings:
+        id: ''
+        classes: ''
+        direction: horizontal
+        formatter: closed
+        description: ''
+        required_fields: true
+      label: 'PLP content'
+      region: content
+    group_taxonomy_fields:
+      children:
+        - group_configuration
+        - group_mega_menu_content
+        - group_link_configuration_on_inte
+        - group_plp_content
+      parent_name: ''
+      weight: 0
+      format_type: tabs
+      format_settings:
+        label: 'Taxonomy Tabs'
+        direction: horizontal
+        id: ''
+        classes: ''
+      label: 'Taxonomy Tabs'
+      region: content
+    group_menu_item_colors:
+      children:
+        - field_term_font_color
+        - field_term_background_color
+      parent_name: group_mega_menu_content
+      weight: 12
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        required_fields: true
+        open: false
+      label: 'Menu item colors'
+      region: content
+    group_promo_block:
+      children:
+        - field_main_menu_highlight
+      parent_name: group_mega_menu_content
+      weight: 11
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Promo Block'
+      region: content
+    group_promotion_:
+      children:
+        - field_promo_banner_for_mobile
+        - field_promotion_banner
+        - field_promotion_banner_mobile
+      parent_name: group_plp_content
+      weight: 20
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Promotion Banner'
+      region: content
+    group_videos:
+      children:
+        - field_plp_video_links
+        - field_mobile_plp_video_links
+        - field_plp_upload_video
+      parent_name: group_plp_content
+      weight: 24
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: Videos
+      region: content
+    group_right_side_menu:
+      children:
+        - field_plp_menu
+        - field_plp_menu_icon
+      parent_name: group_plp_content
+      weight: 20
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Right side menu'
       region: content
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
@@ -69,11 +245,11 @@ bundle: acq_product_category
 mode: default
 content:
   description:
-    type: text_textfield
-    weight: 0
+    type: text_textarea
+    weight: 5
     settings:
-      size: 60
       placeholder: ''
+      rows: 5
     third_party_settings: {  }
     region: content
   field_category_image:
@@ -88,27 +264,27 @@ content:
         file_links: true
         remove_button: true
   field_category_include_menu:
-    weight: 5
+    weight: 10
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_category_quicklink_plp_mob:
-    weight: 14
+    weight: 1
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
     region: content
   field_commerce_status:
-    weight: 16
+    weight: 3
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_display_as_clickable_link:
-    weight: 20
+    weight: 9
     settings:
       display_label: true
     third_party_settings: {  }
@@ -137,7 +313,7 @@ content:
     type: jquery_minicolors_widget
     region: content
   field_image_text_font_color:
-    weight: 17
+    weight: 18
     settings:
       size: '10'
       placeholder: ''
@@ -160,7 +336,7 @@ content:
     region: content
   field_main_menu_highlight:
     type: entity_reference_paragraphs
-    weight: 4
+    weight: 8
     settings:
       title: Paragraph
       title_plural: Paragraphs
@@ -171,34 +347,100 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 9
+    weight: 10
     settings: {  }
     third_party_settings: {  }
     type: metatag_firehose
     region: content
   field_mobile_only_dpt_page_link:
-    weight: 15
+    weight: 2
     settings:
       display_label: true
     third_party_settings: {  }
     type: boolean_checkbox
+    region: content
+  field_mobile_plp_video_links:
+    weight: 26
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
     region: content
   field_pdp_image_slider_position:
     weight: 21
     settings:
       size: 60
       placeholder: ''
+    type: string_textfield
+    region: content
+    third_party_settings: {  }
+  field_plp_menu_icon:
+    type: entity_browser_file
+    weight: 30
+    settings:
+      entity_browser: image_browser
+      field_widget_edit: true
+      field_widget_remove: true
+      view_mode: default
+      preview_image_style: thumbnail
+      open: true
+      selection_mode: selection_append
+    region: content
+    third_party_settings: {  }
+  field_plp_menu:
+    type: entity_reference_paragraphs
+    weight: 29
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_plp_paragraph:
+    type: entity_reference_paragraphs
+    weight: 28
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: open
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: ''
+    third_party_settings: {  }
+    region: content
+  field_plp_layout:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_plp_upload_video:
+    weight: 26
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    type: file_generic
+    region: content
+  field_plp_video_links:
+    weight: 25
+    settings:
+      placeholder_url: ''
+      placeholder_title: 'Please enter provider - youtube, vimeo or custom'
     third_party_settings: {  }
     type: string_textfield
     region: content
   field_pdp_layout:
-    weight: 22
+    weight: 4
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_promo_banner_for_mobile:
-    weight: 8
+    weight: 22
     settings:
       display_label: true
     third_party_settings: {  }
@@ -206,7 +448,7 @@ content:
     region: content
   field_promotion_banner:
     type: image_image
-    weight: 6
+    weight: 23
     settings:
       preview_image_style: thumbnail
       progress_indicator: throbber
@@ -214,22 +456,22 @@ content:
     region: content
   field_promotion_banner_mobile:
     type: image_image
-    weight: 15
+    weight: 24
     settings:
       preview_image_style: thumbnail
       progress_indicator: throbber
     region: content
     third_party_settings: {  }
   field_size_guide_anchor:
-    weight: 21
+    type: string_textfield
+    weight: 0
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_term_background_color:
-    weight: 11
+    weight: 9
     settings:
       size: '10'
       placeholder: ''
@@ -251,7 +493,7 @@ content:
     type: jquery_minicolors_widget
     region: content
   field_term_font_color:
-    weight: 10
+    weight: 7
     settings:
       size: '10'
       placeholder: ''
@@ -275,7 +517,8 @@ content:
   langcode:
     type: language_select
     weight: 2
-    settings: {  }
+    settings:
+      include_locked: true
     third_party_settings: {  }
     region: content
   name:
@@ -288,12 +531,14 @@ content:
     region: content
   path:
     type: path
-    weight: 3
+    weight: 7
     settings: {  }
     third_party_settings: {  }
     region: content
   translation:
-    weight: 7
+    weight: 9
     region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   field_commerce_id: true

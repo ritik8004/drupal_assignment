@@ -18,15 +18,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\node\Entity\Node;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
-/**
- * Implements hook_drush_command_alter().
- */
-function alshaya_acm_drush_command_alter(&$command) {
-  \Drupal::service('alshaya_acm.config_check')->checkConfig();
-}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -644,50 +636,6 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
 }
 
 /**
- * Get stock quantity for a SKU.
- *
- * @param \Drupal\acq_sku\Entity\SKU $sku_entity
- *   The Sku entity object.
- * @param bool $reset
- *   Flag to reset cache and get fresh stock.
- *
- * @return int
- *   Return quantity of stock.
- */
-function alshaya_acm_get_stock_from_sku(SKU $sku_entity, $reset = FALSE) {
-  static $stock = [];
-
-  if (isset($stock[$sku_entity->getSku()])) {
-    return $stock[$sku_entity->getSku()];
-  }
-
-  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginInterface $plugin */
-  $plugin = $sku_entity->getPluginInstance();
-  $stock[$sku_entity->getSku()] = $plugin->getProcessedStock($sku_entity, $reset);
-
-  return $stock[$sku_entity->getSku()];
-}
-
-/**
- * Get the stock of product node.
- *
- * @param \Drupal\node\Entity\Node $node
- *   Node object.
- *
- * @return bool|mixed
- *   Stock of the product.
- */
-function alshaya_acm_get_stock_from_product(Node $node) {
-  $sku_entity_id = $node->get('field_skus')->first()->getString();
-  $sku = SKU::loadFromSku($sku_entity_id);
-  if ($sku) {
-    return alshaya_acm_get_stock_from_sku($sku);
-  }
-
-  return FALSE;
-}
-
-/**
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
@@ -767,7 +715,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     ];
 
     // Set the cache.
-    \Drupal::cache()->set($sku_cart_data_cid, $data, ['acq_sku:' . $sku_entity->id()]);
+    \Drupal::cache()->set($sku_cart_data_cid, $data, Cache::PERMANENT, ['acq_sku:' . $sku_entity->id()]);
   }
 
   $name = [];
@@ -852,7 +800,10 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
   ];
   if (!empty($item_cart_price['discount'])) {
     $total_price['#discount'] = $item_cart_price['discount'];
-    $total_price['#final_price'] = number_format($item_cart_price['final_price'] * $item['quantity']['#default_value'], 3);
+    // Remove comma if there in final price as this causes problem and comma
+    // will be added again by the `number_format()`.
+    $item_cart_price['final_price'] = str_replace(',', '', $item_cart_price['final_price']);
+    $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
   }
 
   // Extract free gift promotions & Add sku title, entity id to the promotions
@@ -937,8 +888,11 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
   $item_stock_error = '';
   $selected_quantity = $item['quantity']['#default_value'];
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   // If item is not available in stock.
-  if ($quantity = alshaya_acm_get_stock_from_sku($sku_entity)) {
+  if ($quantity = $skuManager->getStockQuantity($sku_entity)) {
     if ($selected_quantity > $quantity) {
       Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
       $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
@@ -952,8 +906,6 @@ function _alshaya_acm_check_cart_item_stock(SKU $sku_entity, array &$item, &$out
     }
   }
   else {
-    Cache::invalidateTags(['acq_sku:' . $sku_entity->id()]);
-
     $out_of_stock_message = t('Sorry, one or more products in your basket are no longer available. Please review your basket in order to checkout securely.');
     $item_stock_error = t('This product is out of stock. Please remove to proceed.');
 
@@ -994,13 +946,15 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
   /** @var \Drupal\Core\Access\CsrfTokenGenerator $csrf_token_generator */
   $csrf_token_generator = \Drupal::service('csrf_token');
 
-  $token = $csrf_token_generator->get($cart->id() . '/' . $sku->getSku());
+  // We use encoded string to handle cases like "MHHW0629 1 6/7Y".
+  $sku_text = base64_encode($sku->getSku());
+  $token = $csrf_token_generator->get($cart->id() . '/' . $sku_text);
 
   // Add remove link as suffix of quantity.
   $remove_url = Url::fromRoute('alshaya_acm.cart_remove_sku',
     [
       'js' => 'nojs',
-      'sku' => $sku->getSku(),
+      'sku' => $sku_text,
       'token' => $token,
       'coupon' => 'nochange',
     ],
@@ -1017,4 +971,83 @@ function alshaya_acm_get_remove_from_basket_link(CartInterface $cart, SKU $sku) 
   return $remove_url
     ? Link::fromTextAndUrl(t('Remove'), $remove_url)->toString()
     : NULL;
+}
+
+/**
+ * Check if Exception from API response is for OOS products in cart.
+ *
+ * @param \Exception $e
+ *   Exception to check.
+ *
+ * @return bool
+ *   TRUE if exception matches OOS criteria.
+ */
+function _alshaya_acm_is_out_of_stock_exception(\Exception $e) {
+  // We are RELYING ON ERROR MESSAGE FROM MAGENTO.
+  // We use t() to match translated message.
+  // It is contributor's responsibility to add the translation in Magento
+  // and in Drupal.
+  $oos_messages = [
+    t('This product is out of stock.')->render(),
+    t('Some of the products are out of stock.')->render(),
+    t('Not all of your products are available in the requested quantity.')->render(),
+    t("We don't have as many")->render(),
+  ];
+
+  foreach ($oos_messages as $message) {
+    if (strpos($e->getMessage(), $message) !== FALSE) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Format the price with decimal.
+ *
+ * @param float $price
+ *   Price to format.
+ * @param string $dec_point
+ *   Decimal point.
+ * @param string $thousands_sep
+ *   Thousand separator.
+ *
+ * @return string
+ *   Formatted price with decimal.
+ */
+function _alshaya_acm_format_price_with_decimal(float $price, string $dec_point = '.', string $thousands_sep = ',') {
+  $decimals = \Drupal::config('acq_commerce.currency')->get('decimal_points');
+  return number_format($price, $decimals, $dec_point, $thousands_sep);
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_acm_modules_installed($modules) {
+  if (in_array('shield', $modules)) {
+    _alshaya_acm_exclude_sync_from_shield();
+  }
+}
+
+/**
+ * Wrapper function to exclude sync requests from shield.
+ */
+function _alshaya_acm_exclude_sync_from_shield() {
+  if (\Drupal::moduleHandler()->moduleExists('shield')) {
+    // This list contains all the api urls used to post data to Drupal.
+    $paths = [
+      '/productsync',
+      '/productstocksync',
+      '/categorysync',
+      '/customer/delete',
+      '/oauth/token',
+      '/rest/session/token',
+    ];
+
+    \Drupal::getContainer()->get('config.factory')
+      ->getEditable('shield.settings')
+      ->set('paths', implode(PHP_EOL, $paths))
+      ->save();
+  }
 }

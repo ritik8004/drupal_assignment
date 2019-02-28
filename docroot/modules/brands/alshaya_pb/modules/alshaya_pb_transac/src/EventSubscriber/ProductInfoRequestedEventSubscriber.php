@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_pb_transac\EventSubscriber;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
+use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -16,6 +18,23 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   use StringTranslationTrait;
 
   /**
+   * SKU Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  private $skuImagesManager;
+
+  /**
+   * ProductInfoRequestedEventSubscriber constructor.
+   *
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU Manager.
+   */
+  public function __construct(SkuImagesManager $sku_images_manager) {
+    $this->skuImagesManager = $sku_images_manager;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
@@ -24,6 +43,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $events[ProductInfoRequestedEvent::EVENT_NAME][] = [
       'onProductInfoRequested',
       800,
+    ];
+
+    $events[ProductInfoRequestedEvent::EVENT_NAME][] = [
+      'onProductMediaRequested',
+      100,
     ];
 
     return $events;
@@ -54,23 +78,55 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $sku = $event->getSku();
     $title = $event->getValue();
 
-    $group_name = $sku->get('attr_group_name')->getString();
     $sku_name = $sku->get('attr_sku_name')->getString();
 
-    if ($group_name && $sku_name) {
-      $title = $this->t('@group_name/@sku_name', [
-        '@group_name' => $group_name,
-        '@sku_name' => $sku_name,
-      ]);
-    }
-    elseif ($group_name) {
-      $title = $group_name;
-    }
-    elseif ($sku_name) {
+    if ($sku_name) {
       $title = $sku_name;
     }
 
     $event->setValue($title);
+  }
+
+  /**
+   * Subscriber Callback for processing media after media is processed in CORE.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function onProductMediaRequested(ProductInfoRequestedEvent $event) {
+    switch ($event->getFieldCode()) {
+      case 'media':
+        $this->processMedia($event);
+        break;
+    }
+  }
+
+  /**
+   * Process media for SKU based on brand specific rules.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function processMedia(ProductInfoRequestedEvent $event): void {
+    $sku = $event->getSku();
+
+    // We want to add parent images to child in PB.
+    if ($sku->bundle() === 'configurable') {
+      return;
+    }
+
+    $media = $event->getValue();
+
+    /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+    $plugin = $sku->getPluginInstance();
+    $parent = $plugin->getParentSku($sku);
+
+    if ($parent instanceof SKUInterface) {
+      $parent_media = $this->skuImagesManager->getSkuMediaItems($parent);
+      $media = array_merge_recursive($media, $parent_media);
+    }
+
+    $event->setValue($media);
   }
 
 }

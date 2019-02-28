@@ -4,7 +4,7 @@ Feature: As a guest user I should be able to
   Select a product from PLP and proceed to checkout
 
   Background:
-    Given I am on "/baby-clothing/baby-newborn-18m/bodysuits"
+    Given I am on "/en/baby-clothing/baby-newborn-18-months/bodysuits"
     And I wait for the page to load
 
   Scenario: As a Guest user

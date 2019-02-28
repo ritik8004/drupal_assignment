@@ -26,6 +26,19 @@
       text-transform: uppercase;
     }
   }
+
+  [role="navigation"] {
+    @include breakpoint($desktop) {
+      display: inline-block;
+      height: 1.5rem;
+
+      ul.menu li {
+        a.design-services {
+          @include icon(deliveryservice);
+        }
+      }
+    }
+  }
 }
 
 .header--wrapper.navbar-fixed-top {

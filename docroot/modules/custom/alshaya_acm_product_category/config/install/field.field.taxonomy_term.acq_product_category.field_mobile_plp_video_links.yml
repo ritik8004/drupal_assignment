@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_mobile_plp_video_links
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - link
+id: taxonomy_term.acq_product_category.field_mobile_plp_video_links
+field_name: field_mobile_plp_video_links
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Mobile PLP video links'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

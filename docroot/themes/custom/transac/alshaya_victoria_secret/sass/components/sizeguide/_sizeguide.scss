@@ -56,3 +56,14 @@
     }
   }
 }
+
+.sizeguide-modal-overlay,
+#block-sizefacetblock {
+  .size-guide-link {
+    + .ajax-progress-throbber {
+      .throbber {
+        background-position: center !important;
+      }
+    }
+  }
+}

@@ -5,6 +5,7 @@
  * Contains install, update, uninstall hooks for alshaya_acm module.
  */
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\lightning_core\ConfigHelper;
@@ -23,6 +24,29 @@ function alshaya_acm_update_dependencies() {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Correct price info in local.
+ */
+function alshaya_acm_update_8010() {
+  $db = \Drupal::database();
+
+  $query = $db->query('select distinct(en.sku) from acq_sku_field_data en inner join acq_sku_field_data ar on en.sku = ar.sku where en.price != ar.price OR en.final_price != ar.final_price');
+  $result = $query->fetchAllAssoc('sku');
+
+  foreach ($result as $row) {
+    $sku = SKU::loadFromSku($row->sku, 'en');
+    if ($sku instanceof SKU && $sku->hasTranslation('ar')) {
+      $translation = $sku->getTranslation('ar');
+      $translation->price = $sku->price;
+      $translation->special_price = $sku->special_price;
+      $translation->final_price = $sku->final_price;
+      $translation->save();
+    }
+  }
 }
 
 /**
@@ -216,6 +240,8 @@ function alshaya_acm_install() {
   // Delete default store node.
   _alshaya_acm_delete_default_store_node();
 
+  // Exclude sync requests from shield.
+  _alshaya_acm_exclude_sync_from_shield();
 }
 
 /**

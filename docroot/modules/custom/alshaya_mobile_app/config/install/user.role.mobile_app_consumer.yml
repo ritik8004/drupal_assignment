@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_core
+third_party_settings:
+  lightning_core:
+    description: ''
+id: mobile_app_consumer
+label: 'Mobile App Consumer'
+weight: 20
+is_admin: null
+permissions:
+  - 'restful post webform_rest_submit'
+  - 'restful post user_registration_mail'
+  - 'restful post user_forgot_password_mail'
+  - 'restful get user_get_status'

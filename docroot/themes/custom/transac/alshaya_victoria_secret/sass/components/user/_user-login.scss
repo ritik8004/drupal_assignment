@@ -19,10 +19,6 @@
         font-size: 0.875rem;
         font-weight: normal;
 
-        @include breakpoint($only-mobile) {
-          bottom: -3em;
-        }
-
         @include breakpoint($tablet) {
           #{$left}: 9.875rem;
         }

@@ -30,3 +30,11 @@ alshaya_master.loader_settings:
     _title: 'Alshaya progress loader settings'
   requirements:
     _permission: 'administer site configuration'
+
+alshaya_master.plp_settings:
+  path: '/admin/config/alshaya/plp-settings'
+  defaults:
+    _form: '\Drupal\alshaya_master\Form\PlpConfigForm'
+    _title: 'Alshaya PLP settings'
+  requirements:
+    _permission: 'administer site configuration'

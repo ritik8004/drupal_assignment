@@ -96,5 +96,15 @@ function hook_acq_sku_clean_synced_data_alter(&$context) {
 }
 
 /**
+ * Alter old categories data that needs to be deleted after category sync.
+ *
+ * @param array $result
+ *
+ */
+function hook_acq_sku_sync_categories_delete_alter(array &$result) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

@@ -6,9 +6,34 @@
 (function ($) {
   'use strict';
 
+  var replaceState;
+
   $.fn.updateWindowLocation = function (data) {
-    history.replaceState({'back_to_list': true}, document.title, data);
+    replaceState = data;
   };
+
+  $(window).on('beforeunload pagehide', function () {
+    if (typeof replaceState !== 'undefined') {
+      history.replaceState({'back_to_list': true}, document.title, replaceState);
+    }
+  });
+
+  function returnRefinedURL(key, url) {
+    return url.replace(new RegExp(key + "=\\w+"), "").replace("?&", "?").replace("&&", "&");
+  }
+
+  // For RTL, we have some code to mess with page scroll.
+  // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
+  $(window).on('pageshow', function () {
+    if (window.location.search.indexOf('show_on_load') > -1) {
+      replaceState = window.location.href;
+      var url = returnRefinedURL('show_on_load', window.location.href);
+      url = url.replace(/&$/g, "");
+      history.replaceState({}, document.title, url);
+    }
+
+    setTimeout(Drupal.processBackToList, 10);
+  });
 
   /**
    * Get the storage values.
@@ -16,8 +41,9 @@
    * @returns {null}
    */
   function getStorageValues() {
-    if (localStorage.getItem(window.location.href)) {
-      return JSON.parse(localStorage.getItem(window.location.href));
+    let value = localStorage.getItem(window.location.pathname);
+    if (typeof value !== 'undefined' && value !== null) {
+      return JSON.parse(value);
     }
 
     return null;
@@ -41,9 +67,6 @@
         scrollTop: ($(first_visible_product).offset().top - $('.branding__menu').height())
       }, 400);
     }
-
-    // Once scroll to product, clear the storage.
-    localStorage.removeItem(window.location.href);
   }
 
   /**
@@ -64,12 +87,6 @@
 
     return elementTop >= viewportTop && elementBottom <= viewportBottom;
   }
-
-  // For RTL, we have some code to mess with page scroll.
-  // @see docroot/themes/custom/transac/alshaya_white_label/js/custom.js file.
-  $(window).on('pageshow', function () {
-    setTimeout('Drupal.processBackToList()', 10);
-  });
 
   Drupal.processBackToList = function () {
     // On page load, apply filter/sort if any.
@@ -96,7 +113,7 @@
         };
 
         // As local storage only supports string key/value pair.
-        localStorage.setItem(window.location.href, JSON.stringify(storage_details));
+        localStorage.setItem(window.location.pathname, JSON.stringify(storage_details));
       });
     }
   };

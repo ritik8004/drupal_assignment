@@ -5,9 +5,25 @@
  * Contains install, update, uninstall hooks for alshaya_api module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\consumers\Entity\Consumer;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adds new config key for ignoring categories in diff in sanity-check command.
+ */
+function alshaya_api_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_api.settings'],
+    'alshaya_api',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING);
+}
 
 /**
  * Implements hook_update_N().

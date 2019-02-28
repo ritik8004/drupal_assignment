@@ -5,9 +5,196 @@
  * Install, update and uninstall functions for the alshaya_mobile_app module.
  */
 
+use Drupal\consumers\Entity\Consumer;
+use Drupal\Core\Site\Settings;
+use Drupal\user\Entity\User;
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Rework error message endpoint to static texts.
+ * Update payment-methods endpoint to use cookie.
+ * Add user get status endpoint.
+ */
+function alshaya_mobile_app_update_8005() {
+  // Delete config so that plugin not found error is not thrown.
+  \Drupal::configFactory()->getEditable('rest.resource.alshaya_error_messages')->delete();
+
+  // Install new config.
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.alshaya_static_texts',
+        'rest.resource.payment_methods',
+        'rest.resource.user_get_status',
+      ],
+      'alshaya_mobile_app',
+      'install'
+    );
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['user.role.mobile_app_consumer'],
+      'alshaya_mobile_app',
+      'install',
+      AlshayaConfigManager::MODE_REPLACE_KEY,
+      ['replace_keys' => ['permissions']]
+    );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update all GET endpoints to use cookie instead of oauth.
+ */
+function alshaya_mobile_app_update_8004() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $configManager = \Drupal::service('alshaya_config.manager');
+
+  $configManager->updateConfigs(
+      [
+        'rest.resource.advanced_page',
+        'rest.resource.categories',
+        'rest.resource.category_product_list',
+        'rest.resource.deeplink',
+        'rest.resource.delivery_methods',
+        'rest.resource.product',
+        'rest.resource.promotion_product_list',
+        'rest.resource.promotions',
+        'rest.resource.search_page_product_list',
+        'rest.resource.simple_page',
+        'rest.resource.social_media_links',
+        'rest.resource.stores_finder',
+      ],
+      'alshaya_mobile_app'
+    );
+
+  $configManager->updateConfigs(
+    [
+      'rest.resource.knet_finalize_request',
+      'rest.resource.knet_init_request',
+    ],
+    'alshaya_mobile_app',
+    'optional'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add rest end point for payment-methods.
+ */
+function alshaya_mobile_app_update_8003() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['rest.resource.payment_methods'],
+      'alshaya_mobile_app',
+      'install'
+    );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Grant Get permissions to authenticated users.
+ */
+function alshaya_mobile_app_update_8002() {
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Create webform submit, user_registration_mail and user_forgot_password_mail
+ * end points.
+ */
+function alshaya_mobile_app_update_8001() {
+  \Drupal::service('module_installer')->install(['webform_rest']);
+
+  _alshaya_mobile_app_create_user();
+  _alshaya_mobile_app_create_consumer();
+
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'rest.resource.webform_rest_submit',
+        'rest.resource.user_registration_mail',
+        'rest.resource.user_forgot_password_mail',
+        'user.role.mobile_app_consumer',
+      ],
+      'alshaya_mobile_app'
+    );
+
+  // Resave config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+}
+
 /**
  * Implements hook_install().
  */
 function alshaya_mobile_app_install() {
   \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+
+  _alshaya_mobile_app_create_user();
+  _alshaya_mobile_app_create_consumer();
+}
+
+/**
+ * Wrapper function create mobile app user if not exists.
+ */
+function _alshaya_mobile_app_create_user() {
+  $user = user_load_by_name(Settings::get('alshaya_mobile_app_user_username'));
+
+  if ($user instanceof User) {
+    \Drupal::logger('alshaya_mobile_app')->warning('User already created with name @name.', [
+      '@name' => Settings::get('alshaya_mobile_app_user_username'),
+    ]);
+    return;
+  }
+
+  // Create a user that will be used by Mobile APP Consumers.
+  $user = User::create();
+  $user->setPassword(Settings::get('alshaya_mobile_app_user_password'));
+  $user->enforceIsNew();
+  $user->setEmail(Settings::get('alshaya_mobile_app_user_email'));
+  $user->setUsername(Settings::get('alshaya_mobile_app_user_username'));
+  $user->activate();
+  $user->addRole('mobile_app_consumer');
+  $user->save();
+}
+
+/**
+ * Wrapper function create alshaya mobile app consumer if not exists.
+ */
+function _alshaya_mobile_app_create_consumer() {
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $repository */
+  $repository = \Drupal::service('entity.repository');
+  $consumer = $repository->loadEntityByUuid('consumer', Settings::get('alshaya_mobile_app_soauth_client_uuid'));
+
+  if ($consumer instanceof Consumer) {
+    \Drupal::logger('alshaya_mobile_app')->warning('Consumer already created for uuid @uuid.', [
+      '@uuid' => Settings::get('alshaya_mobile_app_soauth_client_uuid'),
+    ]);
+    return;
+  }
+
+  // Add Simple Oauth - Consumer client.
+  $client = Consumer::create([
+    'uuid' => Settings::get('alshaya_mobile_app_soauth_client_uuid'),
+    'label' => 'Alshaya Mobile App Consumer',
+    'secret' => Settings::get('alshaya_mobile_app_soauth_client_secret'),
+    'roles' => ['mobile_app_consumer'],
+  ]);
+  $client->save();
 }

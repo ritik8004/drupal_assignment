@@ -36,6 +36,17 @@ services:
       - '@acq_sku.fields_manager'
       - '@alshaya_acm_product.breadcrumb'
       - '@http_client'
+      - '@renderer'
+      - '@simple_sitemap.generator'
+      - '@acq_sku.product_info_helper'
+
+  alshaya_acm_product.price_helper:
+    class: Drupal\alshaya_acm_product\Service\SkuPriceHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
+      - '@renderer'
+
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
@@ -43,6 +54,7 @@ services:
       - '@config.factory'
       - '@entity_type.manager'
       - '@alshaya_acm_product.skumanager'
+      - '@acq_sku.product_info_helper'
       - '@cache.data'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
@@ -67,3 +79,29 @@ services:
     arguments:
       - '@config.factory'
       - '@language_manager'
+  alshaya_acm_product.product_info_requested_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.sku_images_manager'
+      - '@alshaya_acm_product.skumanager'
+    tags:
+      - { name: 'event_subscriber' }
+  alshaya_acm_product.product_updated_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+    - '@alshaya_acm_product.skumanager'
+    tags:
+    - { name: 'event_subscriber' }
+  alshaya_acm_product.process_finish_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+    tags:
+      - { name: 'event_subscriber' }
+  alshaya_acm_product.acq_sku_validate_event:
+    class: Drupal\alshaya_acm_product\EventSubscriber\AlshayaAcmProductAcqSkuValidateEventSubscriber
+    arguments:
+      - '@logger.factory'
+    tags:
+      - { name: event_subscriber }

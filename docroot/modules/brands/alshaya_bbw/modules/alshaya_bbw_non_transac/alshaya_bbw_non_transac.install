@@ -15,7 +15,7 @@ function alshaya_bbw_non_transac_install() {
   \Drupal::service('theme_handler')->install(['bath_body_works'], TRUE);
   \Drupal::service('theme_handler')->setDefault('bath_body_works');
 
-  // Disable some default blocks provided by whitelabel_non_transac that we
+  // Disable some default blocks provided by whitelabel that we
   // don't want on bath_body_works.
   alshaya_block_delete_blocks(['branding']);
 

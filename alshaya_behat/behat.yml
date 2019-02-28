@@ -90,7 +90,7 @@ mcuat:
   extensions:
     Behat\MinkExtension:
       base_url: 'https://mckw-uat.factory.alshaya.com/'
-      files_path: "%paths.base%/features/mothercare/media"
+      files_path: "%paths.base%/images"
 
 mcprod:
   autoload:
@@ -104,13 +104,13 @@ mcprod:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: 'lights-and-sounds-musical-buggy-bar'
+              simpleurl: '/lights-and-sounds-musical-buggy-bar?selected=180731'
               simpletitle: 'Lights And Sounds Musical Buggy Bar'
               simpletitlear: 'لوحة الموسيقى لعربة الأطفال Lights and Sounds'
-              configurl: '/home-bodysuits-5-pack'
+              configurl: '/home-bodysuits-5-pack?selected=404716'
               configtitle: 'home bodysuits - 5 pack'
               configtitlear: 'لباس عادي برسمة المنزل - عبوة من 5 قطع'
-              configvariant: '0-3 Months'
+              configvariant: '2-3 Years'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -119,7 +119,7 @@ mcprod:
         output_path: %paths.base%/features/mothercare/reports/html/behat
   extensions:
     Behat\MinkExtension:
-      base_url: 'https://www.mothercare.com.kw/en'
+      base_url: 'https://www.mothercare.com.kw'
       files_path: "%paths.base%/images"
 
 mcae:
@@ -247,13 +247,13 @@ hmprod:
       contexts:
         - FeatureContext:
             parameters:
-              simpleurl: '/aq-product1'
-              simpletitle: '[AQ]-Product_1'
-              simpletitlear: '[AQ]-Product_1'
-              configurl: '/cotton-t-shirt-16'
-              configtitle: 'Cotton T-shirt'
-              configtitlear: 'تي-شيرت من القطن'
-              configvariant: 'XS'
+              simpleurl: '/sunglasses-33?selected=588761'
+              simpletitle: 'Sunglasses'
+              simpletitlear: 'نظارات شمسية'
+              configurl: '/sports-swimsuit-3?selected=168546'
+              configtitle: 'Sports swimsuit'
+              configtitlear: 'لباس سباحة رياضي'
+              configvariant: '8-10Y'
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MessageContext

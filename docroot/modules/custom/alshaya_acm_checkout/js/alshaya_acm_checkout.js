@@ -245,6 +245,9 @@
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line1"]').val(data.address_line1);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-dependent-locality"]').val(data.dependent_locality);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-address-line2"]').val(data.address_line2);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-sorting-code"]').val(data.sorting_code);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-additional-name"]').val(data.additional_name);
+    $('[data-drupal-selector="edit-member-delivery-home-address-form-form-postal-code"]').val(data.postal_code);
     $('[data-drupal-selector="edit-member-delivery-home-address-form-form-mobile-number-mobile"]').val(data.mobile);
 
     // Select value and trigger change to ensure js dropdown shows proper value.
@@ -307,9 +310,16 @@
     }
   };
 
-  // Show loader every-time we are reloading page.
-  $(window).on('beforeunload', function () {
+  // Show loader every-time we are moving to a different page.
+  // Do this on specific selectors only.
+  var addLoaderTargets = '.tab-home-delivery, .tab-click-collect, .back-link, .tab-new-customer a, .tab-returning-customer a, button.cc-action, button.delivery-home-next, .checkout-payment .multistep-checkout .form-actions button.form-submit';
+  $(addLoaderTargets).on('click', function () {
     $(this).showCheckoutLoader();
+  });
+
+  // As a precaution stop loader when the page is fully loaded.
+  $(window).on('load', function () {
+    $('.checkout-ajax-progress-throbber').remove();
   });
 
 })(jQuery, Drupal);

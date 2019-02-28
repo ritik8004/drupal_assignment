@@ -3,5 +3,6 @@ type: module
 core: 8.x
 description: 'Mobile application related code.'
 dependencies:
-- drupal:rest
+  - drupal:rest
+  - webform:webform_rest
 package: Alshaya

@@ -7,9 +7,11 @@
 
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\search_api\Query\ConditionInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
@@ -17,27 +19,69 @@ use Drupal\Views\ViewExecutable;
  * Implements hook_search_api_db_query_alter().
  */
 function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface &$db_query, QueryInterface $query) {
-  if ($query->hasTag('views_alshaya_product_list')) {
+  if ($query->hasTag('views_alshaya_product_list') || $query->hasTag('category_product_list')) {
     $sorts =& $query->getSorts();
 
-    // Get the default sort which is always the first config value.
-    $default_sort = current(_alshaya_acm_product_position_get_config());
-    // This to check if user has selected sort from drop down or the page load.
-    $exposed_input = !empty($_POST['sort_bef_combine']) ? $_POST['sort_bef_combine'] : NULL;
-    // If position(nid) is set as the default sort.
-    if ($default_sort != 'nid' && empty($exposed_input)) {
-      // Removing the nid default sort as coming from views config.
-      unset($sorts['nid']);
-      // Get and set sort order from the views config.
-      $views_storage = Views::getView('alshaya_product_list')->storage;
-      $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
+    // Get and set sort order from the views config.
+    $views_storage = Views::getView('alshaya_product_list')->storage;
+    $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
 
-      $sorts[$default_sort] = $views_sort[$default_sort]['order'];
-      return;
+    // Get all available sorting options as per sorting done by admin
+    // (intersection of sort options in views and sort options from config).
+    $sort_options = _alshaya_acm_product_position_sorted_available_options($views_sort);
+
+    // Get default sort option, first one from available sorted sort options.
+    $default_sort = reset($sort_options);
+    list ($default_sort_key, $default_sort_order) = explode(' ', $default_sort);
+
+    // Prepare flag to check if default sort option is sort by position or not.
+    $default_sort_is_nid = ($default_sort_key == 'nid');
+
+    // For the rest endpoint.
+    // Tag added in CategoryProductListResource::prepareAndExecuteQuery().
+    if ($query->hasTag('category_product_list')) {
+      // @TODO: Find a way to use the class constant here.
+      // Module alshaya_mobile_app is not dependency of current one.
+      // Get requested sort option for mobile app.
+      $exposed_input = $_REQUEST['sort'] ?? '';
+
+      // If no sorting option provided, we add the default sort here.
+      // Case where sort by position is default, it will be handled below.
+      if (empty($exposed_input) && !$default_sort_is_nid) {
+        $sorts[$default_sort_key] = $default_sort_order;
+      }
+    }
+    // For web get the requested sort option.
+    else {
+      $exposed_input = $_REQUEST['sort_bef_combine'] ?? '';
     }
 
-    // Check if nid is there in sorts, we are using it for position.
-    if (!isset($sorts['nid'])) {
+    $sort_by_position = FALSE;
+
+    // If requested sort option is position, set the flag to TRUE.
+    if (strpos($exposed_input, 'nid') === 0) {
+      $sort_by_position = TRUE;
+    }
+    // If no sort option requested and default sorting is by position, set the
+    // flag to TRUE.
+    elseif (empty($exposed_input) && $default_sort_is_nid) {
+      $sort_by_position = TRUE;
+    }
+
+    // Check if sort by position flag is true. If not we don't want to do
+    // execute any code after this condition.
+    if (!$sort_by_position) {
+      // For mobile app add sorts at the end to remove duplicates.
+      // This is done in views for web.
+      if ($query->hasTag('category_product_list')) {
+        if (empty($sorts['name_1'])) {
+          $sorts['name_1'] = QueryInterface::SORT_ASC;
+        }
+
+        $sorts['original_nid'] = QueryInterface::SORT_DESC;
+        $sorts['nid'] = QueryInterface::SORT_ASC;
+      }
+
       return;
     }
 
@@ -49,9 +93,11 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     $conditions = $query->getConditionGroup()->getConditions();
     foreach ($conditions as $condition) {
       if ($condition) {
-        $query_conditions = $condition->getConditions();
-        if ($query_conditions[0]->getField() == 'tid') {
-          $tid = $query_conditions[0]->getValue();
+        $query_conditions = $condition instanceof ConditionGroupInterface
+          ? $condition->getConditions()[0]
+          : $condition;
+        if ($query_conditions instanceof ConditionInterface && $query_conditions->getField() == 'tid') {
+          $tid = $query_conditions->getValue();
           // First tid in the array is always the current tid.
           $tid = is_array($tid) ? $tid[0] : $tid;
           break;
@@ -60,7 +106,7 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
 
     if ($tid) {
-      $db_query->leftJoin('acq_sku_position', 'acq_sku_position', '(t.nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)', [
+      $db_query->leftJoin('acq_sku_position', 'acq_sku_position', '(t.original_nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)', [
         ':tid' => $tid,
         ':position_type' => 'position',
       ]);
@@ -76,6 +122,12 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
 
       // Order by name if two products have same position (to avoid duplicity).
       $db_query->orderBy('t.name_1', QueryInterface::SORT_ASC);
+
+      // Order by original nid desc (last in first) and then by nid (which will
+      // have different values for split listing) for products with same name to
+      // avoid random results.
+      $db_query->orderBy('t.original_nid', QueryInterface::SORT_DESC);
+      $db_query->orderBy('t.nid', QueryInterface::SORT_ASC);
     }
   }
 }
@@ -90,24 +142,14 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
 
   $filters = $view->getExposedInput();
   if (empty($filters['sort_bef_combine'])) {
-    // Get sorts.
-    if (is_array($view->sort) && !empty($sorts = array_keys($view->sort))) {
-      $enabled_sorts = _alshaya_acm_product_position_get_config();
-      if ($enabled_sorts) {
-        $default_sort = FALSE;
-        foreach ($sorts as $sort) {
-          if (isset($enabled_sorts[$sort])) {
-            $default_sort = $sort . ' ASC';
-            break;
-          }
-        }
-
-        if ($default_sort) {
-          $filters['sort_bef_combine'] = $default_sort;
-        }
-
-        $view->setExposedInput($filters);
-      }
+    // We allow administrators to override the order of sorting options.
+    // Here we try to set the default sort order based on config when there
+    // is nothing in exposed input.
+    if (is_array($view->sort) && !empty($view->sort)) {
+      $sorts = $view->sort;
+      $sort_options = _alshaya_acm_product_position_sorted_available_options($sorts);
+      $filters['sort_bef_combine'] = reset($sort_options);
+      $view->setExposedInput($filters);
     }
   }
 
@@ -240,4 +282,38 @@ function _alshaya_acm_product_position_get_config($label = FALSE) {
     return AlshayaDynamicConfigValueBase::schemaArrayToKeyValue((array) $position->get('sort_options_labels'));
   }
   return $position->get('sort_options');
+}
+
+/**
+ * Wrapper function to get sorted and enabled + available sort options.
+ *
+ * @param array $sorts
+ *   Sort options in views.
+ *
+ * @return array
+ *   Sorted and enabled + available sort options.
+ */
+function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
+  $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
+
+  // Remove the ones not enabled in view's sorting options.
+  foreach ($labels as $key => $sort_option) {
+    $sort_field = explode(' ', $key)[0];
+    if (!isset($sorts[$sort_field])) {
+      unset($labels[$key]);
+    }
+  }
+
+  $labels = _alshaya_acm_product_position_sorted_options($labels);
+  return array_keys($labels);
+}
+
+/**
+ * Implements hook_local_tasks_alter().
+ */
+function alshaya_acm_product_position_local_tasks_alter(&$local_tasks) {
+  // Change config translation local task hierarchy.
+  if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form'])) {
+    $local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form']['parent_id'] = 'alshaya_acm_product_position.plp_sort_settings_admin_form';
+  }
 }

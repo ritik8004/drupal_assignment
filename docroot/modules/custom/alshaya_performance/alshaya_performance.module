@@ -21,6 +21,22 @@ function alshaya_performance_node_presave(EntityInterface $entity) {
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function alshaya_performance_taxonomy_term_presave(EntityInterface $entity) {
+  // Used for address book area list.
+  Cache::invalidateTags(['taxonomy_term:' . $entity->bundle()]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function alshaya_performance_taxonomy_term_delete(EntityInterface $entity) {
+  // Used for address book area list.
+  Cache::invalidateTags(['taxonomy_term:' . $entity->bundle()]);
+}
+
+/**
  * Helper function to set log mode from settings.
  */
 function alshaya_performance_reset_log_mode() {
@@ -37,23 +53,23 @@ function alshaya_performance_reset_log_mode() {
 }
 
 /**
- * Implements hook_logs_http_event_alter().
+ * Lighter version of drupal_flush_all_caches() function.
+ *
+ * This function clears frontend caches (css, js and twig) only.
+ *
+ * @see drupal_flush_all_caches()
  */
-function alshaya_performance_logs_http_event_alter(&$event) {
-  $allowed_uris = \Drupal::config('alshaya_performance.settings')->get('loggly_allowed_routes');
+function alshaya_performance_flush_frontend_caches() {
+  // Frontend data can remain in the rendered bins, so we need to empty them
+  // as well.
+  Cache::invalidateTags(['rendered']);
 
-  // By default, don't send the event.
-  $event['send'] = FALSE;
+  // Flush asset file caches.
+  \Drupal::service('asset.css.collection_optimizer')->deleteAll();
+  \Drupal::service('asset.js.collection_optimizer')->deleteAll();
+  _drupal_flush_css_js();
 
-  if (!empty($allowed_uris)) {
-    // Send the event only for allowed uris.
-    /** @var \Drupal\Core\Path\PathMatcherInterface $path_matcher */
-    $path_matcher = \Drupal::service('path.matcher');
-    $current_path = \Drupal::service('path.current');
-    $request = \Drupal::request();
-    $uri = rtrim($current_path->getPath($request), '/');
-    if ($path_matcher->matchPath($uri, $allowed_uris)) {
-      $event['send'] = TRUE;
-    }
-  }
+  // Wipe the Twig PHP Storage cache.
+  \Drupal::service('twig')->invalidate();
+
 }

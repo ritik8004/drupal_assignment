@@ -18,17 +18,17 @@ slack=""
 ## script so it can be checked later in case an issue is discovered.
 rm $HOME/site-install.log
 
-cd `drush8 sa | grep root | cut -d"'" -f4`
+cd `drush sa | grep root | cut -d"'" -f4`
 
 ## Log the arguments and site status.
 echo "Starting post-install operation on $site with $brand_code brand code and $country_code country code." &>> $HOME/site-install.log
-drush8 -l $site status &>> $HOME/site-install.log
+drush -l $site status &>> $HOME/site-install.log
 
 ## Enable brand and country modules.
-drush8 -l $site apdi --brand_module="alshaya_$brand_code" --country_code="$country_code" &>> $HOME/site-install.log
+drush -l $site apdi --brand_module="alshaya_$brand_code" --country_code="$country_code" &>> $HOME/site-install.log
 
 # Get the installed profile on the given site.
-profile="$(drush8 -l $site php-eval 'echo drupal_get_profile();')"
+profile="$(drush -l $site php-eval 'echo \Drupal::installProfile();')"
 
 # Next operations are for transac sites only.
 if [ $profile = "alshaya_transac" ]; then
@@ -36,38 +36,38 @@ if [ $profile = "alshaya_transac" ]; then
   ## Next operations are not done on production.
   if [ $target_env != "01live" -o $target_env != "01update" ]; then
     ## Create default users (not on production).
-    drush8 -l $site upwd "Site factory admin" --password="AlShAyAU1@123" &>> $HOME/site-install.log
+    drush -l $site upwd "Site factory admin" "AlShAyAU1@123" &>> $HOME/site-install.log
 
-    drush8 -l $site user-create siteadmin --mail="user3+admin@example.com" --password=AlShAyAU1admin &>> $HOME/site-install.log
-    drush8 -l $site user-add-role "administrator" --name=siteadmin &>> $HOME/site-install.log
+    drush -l $site user-create siteadmin --mail="user3+admin@example.com" --password="AlShAyAU1admin" &>> $HOME/site-install.log
+    drush -l $site user-add-role "administrator" siteadmin &>> $HOME/site-install.log
 
-    drush8 -l $site user-create webmaster --mail="user3+webmaster@example.com" --password=AlShAyAU1webmaster &>> $HOME/site-install.log
-    drush8 -l $site user-add-role "webmaster" --name=webmaster &>> $HOME/site-install.log
+    drush -l $site user-create webmaster --mail="user3+webmaster@example.com" --password="AlShAyAU1webmaster" &>> $HOME/site-install.log
+    drush -l $site user-add-role "webmaster" webmaster &>> $HOME/site-install.log
 
-    drush8 -l $site cr &>> $HOME/site-install.log
+    drush -l $site cr &>> $HOME/site-install.log
 
     ## Remove shield.
-    drush8 -l $site pm-uninstall shield -y &>> $HOME/site-install.log
+    drush -l $site pm-uninstall shield -y &>> $HOME/site-install.log
 
     ## Synchronize commerce data.
-    conductor=$(drush8 -l $site cget acq_commerce.conductor url --format=string)
+    conductor=$(drush -l $site cget acq_commerce.conductor url --format=string)
 
     if [ ! -z "$conductor" ]; then
       echo "Synchronizing commerce data." &>> $HOME/site-install.log
-      drush8 -l $site sync-commerce-product-options &>> $HOME/site-install.log
-      drush8 -l $site sync-commerce-cats &>> $HOME/site-install.log
+      drush -l $site sync-commerce-product-options &>> $HOME/site-install.log
+      drush -l $site sync-commerce-cats &>> $HOME/site-install.log
 
-      drush8 -l $site sync-areas &>> $HOME/site-install.log
+      drush -l $site sync-areas &>> $HOME/site-install.log
 
-      drush8 -l $site sync-stores &>> $HOME/site-install.log
+      drush -l $site sync-stores &>> $HOME/site-install.log
 
       ## Synchronize products.
-      drush8 -l $site acdsp 1000 &>> $HOME/site-install.log
+      drush -l $site acdsp 1000 &>> $HOME/site-install.log
 
       ## Synchronize promotions.
-      drush8 -l $site acspm &>> $HOME/site-install.log
-      drush8 -l $site queue-run acq_promotion_attach_queue &>> $HOME/site-install.log
-      drush8 -l $site queue-run acq_promotion_detach_queue &>> $HOME/site-install.log
+      drush -l $site acspm &>> $HOME/site-install.log
+      drush -l $site queue-run acq_promotion_attach_queue &>> $HOME/site-install.log
+      drush -l $site queue-run acq_promotion_detach_queue &>> $HOME/site-install.log
     else
       echo "Commerce data sync have been by-passed given the conductor settings are not set." &>> $HOME/site-install.log
       slack="$slack \n*Commerce data sync have been by-passed given the conductor settings are not set.*"

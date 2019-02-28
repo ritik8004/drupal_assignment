@@ -63,8 +63,8 @@ $magentos = [
     'magento_secrets' => [
       'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
       'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
-      'access_token' => 'qs0ywgu8fftblkesenhda9k86m5tglqi',
-      'access_token_secret' => 'd463hg1osdl3hpkysebnh7l0co3sw575',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
     ],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 2],
@@ -74,6 +74,9 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
   'hm_uat' => [
@@ -86,6 +89,9 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 14, 'ar' => 11],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 19, 'ar' => 16],
     ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
@@ -105,6 +111,27 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 17, 'ar' => 23],
+    ],
+  ],
+  'hm_mapp' => [
+    'url' => 'https://mapp-hjuuq7a-zbrr3sobrsb3o.eu.magentosite.cloud',
+    'magento_secrets' => [
+      'consumer_key' => '5ud3vh5cqkc2k3uxyfpkuehi2eik11xg',
+      'consumer_secret' => '7krmuncsf3c1rabxqhy5rfnpdvubocmi',
+      'access_token' => 'wuxd59ghyt7qwprhd86gs6cd3t1y6cyn',
+      'access_token_secret' => 'agpwx3guekmh6843nh5oaxonfjxy00ls',
+    ],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 2],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 3, 'ar' => 4],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 6, 'ar' => 5],
+    ],
+    'eg' => [
+      'store_id' => ['en' => 8, 'ar' => 7],
     ],
   ],
   // Pottery Barn.
@@ -312,10 +339,11 @@ $magentos = [
         'ar' => 'are_ar',
       ],
     ],
+    'eg' => [
+      'magento_lang_prefix' => [
+        'en' => 'egy_en',
+        'ar' => 'egy_ar',
+      ],
+    ],
   ],
 ];
-
-$magento_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/magento.php';
-if (file_exists($magento_settings_file)) {
-  require_once $magento_settings_file;
-}

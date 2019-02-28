@@ -66,18 +66,30 @@
   </div>
   {% endblock %}
 
-  <!-- ______________________ BREADCRUMB _______________________ -->
+  {% if show_videos %}
+    <!-- Video -->
+    <div class = "plp-video">
+      <video id="plp-video-player" class="video-js vjs-16-9 vjs-big-play-centered" preload="auto"
+        {% if autoplay_attributes %} {{ autoplay_attributes }} {% endif %} loop controls
+             data-setup='{"techOrder":["html5", "youtube", "vimeo"], "sources": [] }'
+      >
+      </video>
+    </div>
+    <!-- /video -->
+  {% else %}
+    <!-- ______________________ BREADCRUMB _______________________ -->
 
-  {% if page.breadcrumb %}
-    <div class="c-breadcrumb">
-      <div class="l-container">
-        <div class="c-breadcrumb__region">
-          {{ page.breadcrumb }}
+    {% if page.breadcrumb %}
+      <div class="c-breadcrumb">
+        <div class="l-container">
+          <div class="c-breadcrumb__region">
+            {{ page.breadcrumb }}
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
+    <!-- /breadcrumb -->
   {% endif %}
-  <!-- /breadcrumb -->
 
   <!-- ______________________ HERO CONTENT _______________________ -->
 
@@ -148,6 +160,12 @@
 
         <div class="c-content">
           <div class="c-content__region show-content-loading-throbber">
+            {% if plp_layout is defined and plp_layout is constant('Drupal\\alshaya_acm_product_category\\ProductCategoryTree::PLP_LAYOUT_1') %}
+            <div class="campaign-plp-style-1-layout-submenu-icon">
+              <span class="plp-icon"><img src="{{ file_url(plp_icon) }}"></span>
+              <span class="sub-menu-btn"></span>
+            </div>
+            {% endif %}
             {{ page.content }}
 
             {% if category_term_description %}

@@ -47,9 +47,11 @@ class CustomCommand extends BltTasks {
   public function createDefaultSettingsFiles() {
     // Default site directory.
     $default_multisite_dir = $this->getConfigValue('docroot') . "/sites/default";
+
     // Generate local.settings.php from file provided by blt.
     $default_local_settings_file = $default_multisite_dir . '/settings/default.local.settings.php';
     $local_settings_file = "$default_multisite_dir/settings/local.settings.php";
+
     // Generate local.drush.yml.
     $default_local_drush_file = "$default_multisite_dir/default.local.drush.yml";
     $local_drush_file = "$default_multisite_dir/local.drush.yml";
@@ -239,13 +241,11 @@ class CustomCommand extends BltTasks {
     $uri = "local.alshaya-$site.com";
     $profile_name = $sites[$site]['type'];
     $brand = $sites[$site]['module'];
-    $this->invokeCommand('local:reset-local-settings');
+
     $this->invokeCommand('local:drupal:install', [
       'uri' => $uri,
       'profile' => $profile_name,
     ]);
-
-    $this->invokeCommand('local:reset-settings-file');
 
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
@@ -290,13 +290,11 @@ class CustomCommand extends BltTasks {
 
     $this->invokeCommand('setup:composer:install');
     $this->invokeCommand('frontend:build');
-    $this->invokeCommand('local:reset-local-settings');
+
     $this->invokeCommand('local:drupal:install', [
       'uri' => $uri,
       'profile' => $profile_name,
     ]);
-    $this->invokeCommand('setup:toggle-modules');
-    $this->invokeCommand('local:reset-settings-file');
 
     $this->invokeCommand('local:post-install', [
       'uri' => $uri,
@@ -321,6 +319,22 @@ class CustomCommand extends BltTasks {
    *   The `drush site-install` command result.
    */
   public function localDrupalInstall($uri, $profile) {
+    // Drop existing DB before installing again, any failed install
+    // may have left some tables.
+    $drush_alias = $this->getConfigValue('drush.alias');
+    $this->taskDrush()
+      ->stopOnFail()
+      ->alias($drush_alias)
+      ->drush('sql-drop')
+      ->verbose(TRUE)
+      ->uri($uri)
+      ->run();
+
+    $this->invokeCommand('local:reset-local-settings');
+
+    // Restart memcache to avoid issues because of old configs.
+    $this->_exec('sudo service memcached restart');
+
     /** @var \Acquia\Blt\Robo\Tasks\DrushTask $task */
     $task = $this->taskDrush()
       ->drush("site-install")
@@ -348,7 +362,46 @@ class CustomCommand extends BltTasks {
       $this->getConfig()->set('state.drupal.installed', TRUE);
     }
 
+    $this->invokeCommand('local:reset-settings-file');
+
+    // Avoid file not writable issues after Drupal install.
+    $this->_exec('sudo chmod -R 777 /var/www/alshaya/docroot/sites/g/files');
+    $this->_exec('sudo chmod -R 777 /var/www/alshaya/files-private');
+
     return $result;
+  }
+
+  /**
+   * Executes YAML validator against paragraph files.
+   *
+   * Paragraph field config yml files should have 'translatable=false' and
+   * 'skip_translation_check=true'. If these values not exist in yml, then
+   * invalidate/inform user/developer to add them.
+   *
+   * @param string $file_list
+   *   A list of files to scan, separated by \n.
+   *
+   * @command tests:yaml:lint:files:paragraph
+   * @aliases tylfp
+   */
+  public function lintFileList($file_list) {
+    $this->say("Linting Paragraph Field YAML files...");
+    $files = explode("\n", $file_list);
+    $paragraph_ymls = array_filter($files, function ($paragraph_yml) {
+      // Only fot the field config ymls.
+      if (strpos($paragraph_yml, 'field.field.')) {
+        $yaml_parsed = Yaml::parse(file_get_contents($paragraph_yml));
+        return ($yaml_parsed['field_type'] == 'entity_reference_revisions'
+        && (empty($yaml_parsed['skip_translation_check']) || !empty($yaml_parsed['translatable'])));
+      }
+    });
+
+    // If there are any field config ymls not have proper translation config.
+    if (!empty($paragraph_ymls)) {
+      $this->say('Paragraph field yml file ' . $paragraph_ymls[0] . ' should have translatable=false and skip_translation_check=true');
+      // Exit with a status of 1.
+      return 1;
+    }
   }
 
 }

@@ -21,7 +21,7 @@
             else {
               // Close the menu if it is open.
               if ($('.filter--mobile .c-facet__blocks').is(':visible')) {
-                $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu, .c-footer')
+                $('.page-wrapper, .header--wrapper, .c-pre-content, .plp-video, .c-breadcrumb, .branding__menu, .c-footer')
                   .toggleClass('show-overlay');
                 $('.filter--mobile .c-facet__blocks').toggle();
                 $('body').toggleClass('filter-open-no-scroll');
@@ -226,21 +226,26 @@
       }
 
       function processSoftLiniks(element) {
-        var softLink = element.find('a.facets-soft-limit-link');
-        var blockPlugin = element.attr('data-block-plugin-id');
-        var facet_id = blockPlugin.replace('facet_block:', '');
-        var softLimitSettings = settings.facets.softLimit;
-        var softItemsLimit = softLimitSettings[facet_id] - 1;
-        if (!isNaN(parseInt(softItemsLimit))) {
-          // Facets module would hide all instances of list items in the
-          // second instance of the facet block. This is to support same
-          // facet block twice on a page.
-          element.find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
-          element.find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
-          softLink.insertAfter(element.find('ul'));
+        try {
+          var softLink = element.find('a.facets-soft-limit-link');
+          var blockPlugin = element.attr('data-block-plugin-id');
+          var facet_id = blockPlugin.replace('facet_block:', '');
+          var softLimitSettings = settings.facets.softLimit;
+
+          var softItemsLimit = softLimitSettings[facet_id] - 1;
+          if (!isNaN(parseInt(softItemsLimit))) {
+            // Facets module would hide all instances of list items in the
+            // second instance of the facet block. This is to support same
+            // facet block twice on a page.
+            element.find('ul li:lt(' + (parseInt(softItemsLimit) + 1) + ')').show();
+            element.find('ul li:gt(' + parseInt(softItemsLimit) + ')').hide();
+            softLink.insertAfter(element.find('ul'));
+          }
+        }
+        catch (e) {
+          // Do nothing.
         }
       }
-
       if (context === document) {
         if ($('.c-facet__blocks__wrapper').length) {
           var facetBlockWrapper = $('.c-facet__blocks__wrapper')
@@ -277,7 +282,7 @@
           }
 
           facetLabel.on('click', function () {
-            $('.page-wrapper, .header--wrapper, .c-pre-content, .c-breadcrumb, .branding__menu, .c-footer')
+            $('.page-wrapper, .header--wrapper, .c-pre-content, .plp-video, .c-breadcrumb, .branding__menu, .c-footer')
               .toggleClass('show-overlay');
             facetLabel.toggleClass('is-active');
             $('body').toggleClass('filter-open-no-scroll');
@@ -371,14 +376,24 @@
         closeFilterView();
       });
 
-      // Process facet checbox softlimits on page load.
+      // Process facet checkbox softlimits on page load.
       $('.block-facet--checkbox, .block-facet--range-checkbox', context).each(function () {
         processSoftLiniks($(this));
       });
 
-      // Process facet checbox softlimits while rebuilding facets post AJAX.
+      // Process facet checkbox softlimits while rebuilding facets post AJAX.
       if ($(context).hasClass('block-facet--checkbox')) {
         processSoftLiniks($(context));
+      }
+
+      if ($(window).width() < 768 && $('.filter--mobile .clear-all').length > 0 && !$('#block-sizefacetblock').siblings().hasClass('shop-by-size-clear-container')) {
+        // Show clear all button below to Bras size filter after facets block gets loaded.
+        var sizeClear = $('.filter--mobile li.clear-all').clone();
+        sizeClear.once('bind-events').insertAfter('#block-sizefacetblock').addClass('shop-by-size-clear-container');
+      }
+      else if ($('.filter--mobile .clear-all').length === 0 && $('#block-sizefacetblock').siblings().hasClass('shop-by-size-clear-container')) {
+        // Remove if clear all button is clicked on the filter pane.
+        $('.shop-by-size-clear-container').remove();
       }
     }
   };

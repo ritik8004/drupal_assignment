@@ -22,12 +22,7 @@
         }
 
         .throbber {
-          background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-          background-position: center center !important;
-          background-repeat: no-repeat !important;
-          background-size: 1.5rem;
-          padding-left: 0.625rem;
-          padding-right: 0.625rem;
+          @include throbberLoader();
         }
 
         @include breakpoint($only-mobile) {
@@ -152,6 +147,10 @@
     display: block;
     font-size: 0.875rem;
     margin-bottom: 0.187rem;
+
+    &.simple-price--wrapper {
+      display: inline-block;
+    }
   }
 
   .owl-prev {
@@ -434,7 +433,8 @@
 .price--discount span,
 .special--price .price-amount,
 .special--price .price-currency,
-.special--price .price-wrapper {
+.special--price .price-wrapper,
+.special--price {
   color: $pdp_product_special_price_text !important;
 }
 

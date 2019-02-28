@@ -8,3 +8,14 @@ block.settings.alshaya_shop_by_block:
     level:
       type: integer
       label: 'Starting level'
+
+alshaya_acm_product_category.settings:
+  type: config_object
+  label: 'Alshaya ACM Product Category Settings'
+  mapping:
+    sale_category_ids:
+      type: sequence
+      label: 'Sale Category IDs'
+      sequence:
+        type: integer
+        label: 'Taxonomy term ids'

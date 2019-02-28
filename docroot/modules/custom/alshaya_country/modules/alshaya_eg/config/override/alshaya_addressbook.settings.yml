@@ -1,0 +1,8 @@
+mapping:
+  area_parent: 'address_region_segment'
+  administrative_area: 'address_city_segment'
+  sorting_code: 'address_landmark_segment'
+  additional_name: 'address_apartment_segment'
+  postal_code: 'postcode'
+  address_line2: 'address_floor_segment'
+  locality: ''

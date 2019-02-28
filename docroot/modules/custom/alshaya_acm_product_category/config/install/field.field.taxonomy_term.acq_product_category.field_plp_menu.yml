@@ -1,0 +1,118 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_plp_menu
+    - paragraphs.paragraphs_type.text_links
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - entity_reference_revisions
+id: taxonomy_term.acq_product_category.field_plp_menu
+field_name: field_plp_menu
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'PLP Menu'
+description: ''
+required: false
+translatable: false
+skip_translation_check: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    negate: 0
+    target_bundles:
+      text_links: text_links
+    target_bundles_drag_drop:
+      1_row_1st_col_2_row_2nd_col:
+        weight: 31
+        enabled: false
+      1_row_1_col:
+        weight: 32
+        enabled: false
+      1_row_1_col_dept:
+        weight: 33
+        enabled: false
+      1_row_2_col:
+        weight: 34
+        enabled: false
+      1_row_2_col_1_2_dept:
+        weight: 35
+        enabled: false
+      1_row_2_col_2_1_dept:
+        weight: 36
+        enabled: false
+      1_row_2_col_dept:
+        weight: 37
+        enabled: false
+      1_row_3_col:
+        weight: 38
+        enabled: false
+      1_row_3_col_delivery_banner:
+        weight: 39
+        enabled: false
+      1_row_3_col_dept:
+        weight: 40
+        enabled: false
+      1_row_3_col_text:
+        weight: 41
+        enabled: false
+      banner:
+        weight: 42
+        enabled: false
+      banner_full_width:
+        weight: 43
+        enabled: false
+      block_reference:
+        weight: 44
+        enabled: false
+      delivery_usp_block:
+        weight: 45
+        enabled: false
+      image_title_subtitle:
+        weight: 46
+        enabled: false
+      item_of_category_campaign_menu:
+        weight: 47
+        enabled: false
+      main_menu_highlight:
+        weight: 48
+        enabled: false
+      offers_bordered:
+        weight: 49
+        enabled: false
+      product_carousel_category:
+        weight: 50
+        enabled: false
+      promo_block:
+        weight: 51
+        enabled: false
+      promo_block_button:
+        weight: 52
+        enabled: false
+      promo_block_text:
+        weight: 53
+        enabled: false
+      related_info_one_column:
+        weight: 54
+        enabled: false
+      section_divider:
+        weight: 55
+        enabled: false
+      slug_banner:
+        weight: 56
+        enabled: false
+      text_links:
+        enabled: true
+        weight: 57
+      title_textarea:
+        weight: 58
+        enabled: false
+      video:
+        weight: 59
+        enabled: false
+      views_reference:
+        weight: 60
+        enabled: false
+field_type: entity_reference_revisions

@@ -89,4 +89,44 @@
       background-size: 1.5rem;
     }
   }
+
+  .st_whatsapp_custom {
+    &::before {
+      content: '';
+      background: url("../imgs/social-icons/pdp/ic-whatsapp-share.svg") no-repeat center;
+      width: 1.5625rem;
+      height: 1.5625rem;
+      float: $left;
+      line-height: 1;
+      margin-top: 0.5rem;
+    }
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-whatsapp-sharehover.svg") no-repeat center;
+    }
+
+    @include breakpoint($tablet) {
+      display: none;
+    }
+  }
+
+  .st_email_custom {
+    &::before {
+      content: '';
+      background: url("../imgs/social-icons/pdp/ic-email-share.svg") no-repeat center;
+      width: 1.5625rem;
+      height: 1.5625rem;
+      float: $left;
+      line-height: 1;
+      margin-top: 0.5rem;
+    }
+
+    &:hover::before {
+      background: url("../imgs/social-icons/pdp/ic-email-sharehover.svg") no-repeat center;
+    }
+  }
+}
+
+.modal-share-this {
+  display: none;
 }

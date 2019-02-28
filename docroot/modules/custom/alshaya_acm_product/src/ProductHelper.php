@@ -82,15 +82,57 @@ class ProductHelper {
     }
     else {
       $desc = ($this->useTextSummary)
-        ? text_summary($html, NULL, $this->shortDescMaxLength)
+        ? text_summary($html, NULL, $limit)
         : Unicode::truncate($desc_stripped, $limit, TRUE, FALSE);
 
       $return = [
-        'html' => $desc . ' ...',
+        'html' => $desc . '...',
         'read_more' => TRUE,
       ];
     }
     return $return;
+  }
+
+  /**
+   * Process short description for ellipsis.
+   *
+   * Process the short description array and add the ellipses in the last html
+   * tag so that its not rendered in the second line.
+   *
+   * @param string $short_desc
+   *   Short description.
+   *
+   * @return string
+   *   Short description.
+   */
+  public function processShortDescEllipsis(string $short_desc) {
+    // If normal string without any html tag.
+    if (strip_tags($short_desc) == $short_desc) {
+      return $short_desc;
+    }
+
+    // Remove the ellipses appended at last if there any.
+    if (Unicode::substr($short_desc, -3) == '...') {
+      $short_desc = Unicode::substr($short_desc, 0, -3);
+    }
+
+    // To suppress errors by the DomDocument.
+    libxml_use_internal_errors(TRUE);
+    $dom = new \DOMDocument();
+    $dom->loadHTML(mb_convert_encoding($short_desc, 'HTML-ENTITIES', 'UTF-8'));
+    $last_child = &$dom->lastChild;
+    // Iterate recursively until we reach the last child element.
+    while ($last_child) {
+      if (!$last_child->lastChild) {
+        // Append ellipsis on last child element content.
+        $last_child->textContent .= '...';
+      }
+      $last_child = &$last_child->lastChild;
+    }
+
+    $short_desc = trim($dom->saveHTML());
+
+    return $short_desc;
   }
 
 }

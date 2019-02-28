@@ -284,3 +284,38 @@ Feature: Test Checkout feature
     When I follow "Back to bag"
     Then I should see the button "checkout securely"
     And the url should match "/cart"
+
+  @tc
+  Scenario:  As a Guest,
+  I should see the error message when terms and condition unchecked
+    When I follow "Home delivery"
+    And I wait for the page to load
+    And I should not see the link "create an account"
+    And I should not see the link "Sign in"
+    And I should not see the link "Find Store"
+    And I should not see "عربية"
+ #And I remove promo panel from delivery page
+    And I wait for AJAX to finish
+    And I scroll to x "200" y "700" coordinates of page
+    And I fill in "edit-guest-delivery-home-address-shipping-given-name" with "Test"
+    And I fill in "edit-guest-delivery-home-address-shipping-family-name" with "Test"
+    When I enter a valid Email ID in field "edit-guest-delivery-home-address-shipping-organization"
+    And I fill in "edit-guest-delivery-home-address-shipping-mobile-number-mobile" with "554044555"
+    And I select "Dubai" from "edit-guest-delivery-home-address-shipping-area-parent"
+    And I wait for AJAX to finish
+    And I select "Abu Hail" from "edit-guest-delivery-home-address-shipping-administrative-area"
+    And I fill in "edit-guest-delivery-home-address-shipping-address-line1" with "Street B"
+    And I fill in "edit-guest-delivery-home-address-shipping-dependent-locality" with "Builing C"
+    Then I scroll to the "#edit-actions" element
+    And I press "deliver to this address"
+    And I wait for AJAX to finish
+    When I check the "member_delivery_home[address][shipping_methods]" radio button with "Standard Delivery" value
+    And I wait for AJAX to finish
+    And I press "proceed to payment"
+    And I wait for the page to load
+    When I select a payment option "payment_method_title_cashondelivery"
+    And I wait 10 seconds
+ # By default terms and condition is unchecked.
+    And I press "place order"
+    And I wait for the page to load
+    Then I should see text matching "Please agree to the Terms and Conditions."

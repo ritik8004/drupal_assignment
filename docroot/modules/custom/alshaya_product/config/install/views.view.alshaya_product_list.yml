@@ -484,6 +484,42 @@ display:
           expose:
             label: Price
           plugin_id: search_api
+        name_1_1:
+          id: name_1_1
+          table: search_api_index_product
+          field: name_1
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        original_nid:
+          id: original_nid
+          table: search_api_index_product
+          field: original_nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        nid_1:
+          id: nid_1
+          table: search_api_index_product
+          field: nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
       title: ''
       header:
         result:
@@ -609,6 +645,42 @@ display:
           expose:
             label: Price
           plugin_id: search_api
+        name_1_1:
+          id: name_1_1
+          table: search_api_index_product
+          field: name_1
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        original_nid:
+          id: original_nid
+          table: search_api_index_product
+          field: original_nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+        nid_1:
+          id: nid_1
+          table: search_api_index_product
+          field: nid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
     cache_metadata:
       max-age: -1
       contexts:
@@ -626,7 +698,9 @@ display:
     display_title: 'Promotional Products'
     position: 2
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        views_ajax_get:
+          ajax_get: 1
       arguments:
         promotion_nid:
           id: promotion_nid

@@ -1,4 +1,4 @@
-@import "../../alshaya_white_label/sass/config/_colors.scss";
+@import "../../../alshaya_white_label/sass/config/_colors.scss";
 
 /* *********Steps to add colors for new brand ************ */
 
@@ -58,9 +58,6 @@ $hnm-grey: #f3f3f3;
 $returned: #797979;
 $whisper-light-59: rgba(235, 235, 235, 0.59);
 $white-four-70: rgba(247, 247, 247, 0.7);
-$hnm-grey-light: #dee6f0;
-$hnm-grey-light-two: #d7e1ec;
-$hnm-grey-light-three: #e6e6e6;
 $_white-four: #f7f7f7;
 $_grey_11: #f2f2f2;
 
@@ -218,13 +215,13 @@ $price_default: $cherry;
 
 // Promo Blocks
 $promo_title: $hnm-red;
-$promo_sub_title: $grey-ash;
 $promo_bordered_title: $hnm-black-two;
 $promo_bordered_border: $grey-ash;
 
 // Copyright
 $copyright_footer_bg: $hnm-black;
 $copyright_footer_text: $grey5;
+$copyright_footer_link: $white-five;
 
 //3. Footer
 $footer_bg: $hnm-black;
@@ -237,7 +234,6 @@ $footer_submit_text: $hnm-black-two;
 $footer_submit_bg: $white-five;
 $footer_input_text: $white-five;
 $footer_input_placeholder: $grey5;
-$footer_input_bg: $hnm-black;
 
 // language Switcher
 $lang_switch_firsttime_border: $white-smoke-border;
@@ -338,7 +334,6 @@ $myaccountneedhelp_text: $white-five;
 
 //block-youllbeableto
 $user_block_title: $black-three;
-$user_block_text: $grey-ash;
 $user_block_link: $hnm-black-two;
 
 // Basket
@@ -372,13 +367,11 @@ $order_summary_title: $hnm-black-two;
 $order_summary_link: $hnm-black-two;
 $order_summary_product_price: $hnm-black-two;
 $order_summary_product_price_discount: $error;
-$order_summary_order_total: $black-two;
 $order_detail_table_head: $grey9;
 $order_detail_th_color: $hnm-black-two;
 $order_detail_tr_color: $hnm-black-two;
 $order_detail_tr_quantity: $hnm-black-two;
 $order_detail_total_tr_row_price_td: $_grey_11;
-$order_detail_total_tr_row_price_td_bg: $white-five;
 $order_details_table_total_bg: $whisper-light;
 $order_details_table_total_price: $hnm-black-two;
 $order_actions_checkout: $white-five;
@@ -426,7 +419,6 @@ $order_print_item_row: $white-five;
 $order_print_item_row_blend: $grey9;
 $order_print_label: $hnm-black-two;
 $order_print_right_label: $grey7;
-$order_detail_dark_price: $black;
 $order_detail_total_white: $whisper-light;
 $order_detail_total_vat: $white-five;
 $order_detail_total_border: $white;
@@ -434,13 +426,10 @@ $order_detail_total_bg: $white-five;
 $order_detail_total: $black-two;
 $order_detail_blend_row: $white-four;
 $order_detail_blend_row_tablet: $white-smoke-light;
-$order_detail_item_row_border: $white;
-$order_detail_item_row_bg: $white-four-70;
 $order_detail_item_row: $info-19;
 $order_detail_item_row_text: $grey8;
 $order_detail_item_row_address_name: $black-two;
 $order_detail_item_row_blend: $info-30;
-$order_detail_item_row_dark: $grey8;
 $order_detail_item_row_warm_white: $white-three;
 $user_order_detail_bg: $white-five;
 $user_order_detail_dark: $light-greyish;
@@ -463,10 +452,6 @@ $checkout_guest_summary: $grey-ash;
 
 // Checkout Layout
 $checkout_layout_summary_block_method: $grey7;
-$secure_checkout_block: $black-two;
-$secure_checkout_block_label: $hnm-black-four;
-$login_icon_bg: $hnm-red;
-$login_icon: $white-five;
 $block_acm_customer_txt: $hnm-black;
 $block_acm_customer_title_bg: $white-five;
 $delivery_tab_active_bg: $hnm-grey;
@@ -480,18 +465,12 @@ $delivery_form_radio_odd: $white-five;
 $delivery_form_radio_selected: $hnm-grey;
 $delivery_payment_wrapper_border: $grey4;
 $delivery_payment_selected_bg: $hnm-grey;
-$delivery_add_address_bg: $white-five;
 $delivery_selected_address_border: $grey4;
 $delivery_selected_address_bg: $hnm-grey;
 
 // Delivery details
-$order_detail_thankyou_border: $grey4;
-$order_detail_sitebrand_border: $white;
 $order_print_order_details_row_bg: $grey2-19;
 $order_print_order_details_row_blend: $grey4-30;
-$order_print_product_count_bg: $hnm-grey;
-$order_print_customer_service_border: $hnm-black;
-$order_print_customer_service_bg: $grey1;
 $order_print_accordion_summary_bg: $whisper-light-59;
 $order_customer_search_label_bg: $white-five;
 
@@ -508,10 +487,8 @@ $store_finder_open_hours: $grey7;
 $store_finder_current_location: $scarlet-three;
 $store_finder_current_location_tablet: $hnm-red;
 $store_finder_search_results_counter_bg: $hnm-red;
-$individual_store_bg: $white-five;
 $individual_store_open_hours: $grey7;
 $individual_store_address: $grey7;
-$individual_store_hours_label: $black;
 $individual_store_hours_label_border: $white;
 
 // VAT text
@@ -542,3 +519,9 @@ $department_category_accordion_title: $hnm-black-two;
 
 // Pace progress color
 $progress_loader: $hnm-black-two;
+
+// PLP campaign-plp-style-1.
+$plp-machino-modal-content: $hnm-black-two;
+
+// Magazine-layout
+$magazine-pdp-description: $grey8;
