@@ -454,8 +454,8 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(
       new OpenModalDialogCommand(
         $this->t('Location access denied'),
-        $this->t('This page does not have location permission. Please allow location permission to see near by stores.'),
-        ['height' => 200, 'width' => 500]
+        $this->t('We need permission to locate your nearest stores. You can enable location services in your settings.'),
+        ['height' => 'auto', 'width' => 'auto']
       )
     );
     return $response;
