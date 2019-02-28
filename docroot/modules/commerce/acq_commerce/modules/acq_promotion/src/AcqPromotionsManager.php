@@ -179,7 +179,8 @@ class AcqPromotionsManager {
 
       if ($node instanceof Node) {
         $node->delete();
-        $this->logger->notice('Deleted orphan promotion node @promotion having rule_id:@rule_id.', [
+        $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
+          '@nid' => $node->id(),
           '@promotion' => $node->label(),
           '@rule_id' => $node->get('field_acq_promotion_rule_id')->first()->getString(),
         ]);
