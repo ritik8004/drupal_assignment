@@ -70,17 +70,17 @@
           }
         }
 
-        &::before {
-          @include breakpoint($upto-desktop) {
-            margin-#{$right}: 0;
-          }
-        }
-
-        .payment-method-name {
-          @include breakpoint($upto-desktop) {
-            width: 90%;
-          }
-        }
+        //&::before {
+        //  @include breakpoint($upto-desktop) {
+        //    margin-#{$right}: 0;
+        //  }
+        //}
+        //
+        //.payment-method-name {
+        //  @include breakpoint($upto-desktop) {
+        //    width: 90%;
+        //  }
+        //}
       }
 
       &:first-child {
@@ -117,8 +117,6 @@
     .card-type {
       opacity: 0.3;
       background-size: 100% 100% !important;
-      height: 1.75rem;
-      width: 2.5rem;
       margin-#{$left}: 0.25rem;
 
       &.active {
@@ -135,7 +133,6 @@
 
       &.card-type-diners-club {
         background: url('../imgs/cards/dinersclub-active.svg') no-repeat;
-        width: 2.6875rem;
       }
     }
   }
