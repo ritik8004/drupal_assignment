@@ -382,7 +382,7 @@ class AlshayaSearchApiQueryExecute {
     // Fill facets with the result data.
     $facet_build = [];
     foreach ($facets as $facet) {
-      $facet_result = $results->getExtraData('search_api_facets')[$facet->id()];
+      $facet_result = $results->getExtraData('search_api_facets')[$facet->id()] ?? [];
       $data = [];
       foreach ($facet_result as $result) {
         // Prepare the result item object.
@@ -427,7 +427,9 @@ class AlshayaSearchApiQueryExecute {
     // Process the price facet for special handling.
     foreach ($facet_result as &$facet) {
       // If price facet.
-      if ($facet['key'] == $this->getPriceFacetKey()) {
+      if ($facet['key'] == $this->getPriceFacetKey()
+        && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$this->getPriceFacetKey()])
+      ) {
         $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$this->getPriceFacetKey()]);
       }
     }
@@ -646,6 +648,7 @@ class AlshayaSearchApiQueryExecute {
   public function processPriceFacet(array $price_facet_result) {
     /* @var \Drupal\alshaya_search\Plugin\facets\query_type\AlshayaSearchGranular $alshaya_search_granular */
     $alshaya_search_granular = $this->queryTypePluginManager->createInstance('alshaya_search_granular', [
+      'query' => NULL,
       'facet' => $this->priceFacet,
       'results' => $price_facet_result,
     ]);
@@ -712,10 +715,10 @@ class AlshayaSearchApiQueryExecute {
       $asc_key = 0;
       $desc_key = 0;
       foreach ($lines as $line_key => $line_val) {
-        if (strpos($line_val, $sort_config_labels[$key . ' ASC']) !== FALSE) {
+        if (isset($sort_config_labels[$key . ' ASC']) && strpos($line_val, $sort_config_labels[$key . ' ASC']) !== FALSE) {
           $asc_key = $line_key;
         }
-        if (strpos($line_val, $sort_config_labels[$key . ' DESC']) !== FALSE) {
+        if (isset($sort_config_labels[$key . ' DESC']) && strpos($line_val, $sort_config_labels[$key . ' DESC']) !== FALSE) {
           $desc_key = $line_key;
         }
       }

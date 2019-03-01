@@ -132,8 +132,15 @@ class AlshayaMainMenuBlock extends BlockBase implements ContainerFactoryPluginIn
     // Allow other module to alter links.
     $this->moduleHandler->alter('alshaya_main_menu_links', $term_data, $parent_id, $context);
 
+    $desktop_main_menu_highlight_timing = (int) $this->configFactory
+      ->get('alshaya_main_menu.settings')
+      ->get('desktop_main_menu_highlight_timing');
+
     return [
       '#theme' => 'alshaya_main_menu_level1',
+      '#settings' => [
+        'desktop_main_menu_highlight_timing' => $desktop_main_menu_highlight_timing,
+      ],
       '#term_tree' => $term_data,
     ];
   }

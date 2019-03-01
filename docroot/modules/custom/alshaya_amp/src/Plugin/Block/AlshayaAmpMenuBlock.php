@@ -108,7 +108,7 @@ class AlshayaAmpMenuBlock extends BlockBase implements ContainerFactoryPluginInt
 
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['tid', 'name']);
-    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid=tfd.tid');
+    $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id=tfd.tid');
 
     // @TODO: Make this condition more cleaner.
     // We don't have include_in_menu flag in all profiles.
