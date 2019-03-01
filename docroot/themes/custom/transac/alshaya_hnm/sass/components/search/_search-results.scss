@@ -41,7 +41,6 @@
 
     a {
       font-family: $hnm-regular;
-      color: $autocomplete_text;
     }
   }
 }
@@ -100,10 +99,6 @@
       padding: 0.4375rem 0.78125rem 0.4375rem 0.84375rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
-
-      span {
-        color: $plp_filterbar_clearall_text;
-      }
     }
   }
 }

@@ -73,12 +73,6 @@
       }
     }
   }
-
-  .block-language-blocklanguage-interface {
-    .is-active {
-      @include u-visibility(none);
-    }
-  }
 }
 
 .c-my-account-nav {
@@ -238,14 +232,6 @@ html[lang='ar'] {
   #block-account-menu {
     ul {
       background-color: $white-five;
-    }
-  }
-}
-
-.block-alshaya-main-menu .active--menu--links {
-  li.menu--one__list-item ul.menu--two__list {
-    @include breakpoint($desktop) {
-      transition: all ease 0s;
     }
   }
 }

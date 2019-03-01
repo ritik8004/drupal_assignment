@@ -10,7 +10,7 @@ id: taxonomy_term.acq_product_category.field_promotion_banner_mobile
 field_name: field_promotion_banner_mobile
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Promotion banner mobile'
+label: 'Promotion banner (Mobile)'
 description: ''
 required: false
 translatable: true

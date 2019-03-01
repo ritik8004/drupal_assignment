@@ -78,6 +78,7 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
     '01pprod' => 'prod',
     '01live' => 'prod',
     'local' => 'qa',
+    'travis' => 'qa'
   ];
 
   // Fill this variable to override the default mapping.

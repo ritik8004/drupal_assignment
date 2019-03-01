@@ -8,6 +8,7 @@ $white-three: #dadada;
 $lipstick: #e81931;
 $white-four: #ebebeb;
 $tomato: #e6591b;
+$grey-ash: #666;
 $warm-grey: #777;
 $black: #333;
 $dark-red: #e2193a;
@@ -156,6 +157,7 @@ $footer_border_top: $purplish-brown;
 //newsletter
 $newsletter_input_border: $secondary_border;
 $newsletter_submit_btn: $black;
+$newsletter_block_text: $grey-ash;
 
 //my-account
 $user_pwd_unmask: $black;
@@ -315,6 +317,10 @@ $checkout_method_choice_tab_title_active: $purplish-brown;
 
 // Address book
 $address_book_change_link: $black;
+$address_button_border: $secondary_border;
+$checkout_address_edit_link: $purplish-brown;
+$checkout_default_address_bg: $white-two;
+$checkout_deliver_address_hover_text: $purplish-brown;
 $checkout_cc_store_address_mobile_border: $primary_border;
 $checkout_login_guest_email_text: $purplish-brown;
 $checkout_login_guest_email_text_mobile: $purplish-brown;
@@ -325,6 +331,8 @@ $address_form_radio: $black;
 $address_pp_delete_closebtn: $black;
 $address_pp_delete_closebtn_cross: $white-two;
 $user_ui_dialog_border: $primary_border;
+$checkout_deliver_address_btn_txt: $purplish-brown;
+$checkout_default_address_border: $purplish-brown;
 
 // Checkout tabs & form.
 $checkout_tab_default_border: $secondary_border;
