@@ -10,17 +10,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class StoresFinderResource.
+ * Class StoresFinderResourceCollection.
  *
  * @RestResource(
- *   id = "stores_finder",
- *   label = @Translation("Stores Finder"),
+ *   id = "stores_finder_collection",
+ *   label = @Translation("Stores Finder Collection"),
  *   uri_paths = {
- *     "canonical" = "/rest/v1/store/search/{lat}/{lng}",
+ *     "canonical" = "/rest/v1/store/search",
  *   }
  * )
  */
-class StoresFinderResource extends ResourceBase {
+class StoresFinderCollectionResource extends ResourceBase {
 
   /**
    * The mobile app utility service.
@@ -30,7 +30,14 @@ class StoresFinderResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
-   * StoresFinderResource constructor.
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * StoresFinderCollectionResource constructor.
    *
    * @param array $configuration
    *   Configuration array.
@@ -79,8 +86,8 @@ class StoresFinderResource extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse
    *   The response containing store id's data.
    */
-  public function get($lat, $lng) {
-    $response_data = $this->mobileAppUtility->getStores($lat, $lng);
+  public function get() {
+    $response_data = $this->mobileAppUtility->getStores();
 
     if ($response_data['data']) {
       $response = new ResourceResponse($response_data['data']);
