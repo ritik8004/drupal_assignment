@@ -26,6 +26,21 @@ function alshaya_vs_transac_update_8005() {
 /**
  * Implements hook_update_N().
  *
+ * Enable WhatsApp and Email in Sharethis.
+ */
+function alshaya_vs_transac_update_8005() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Clear product cache.
  */
 function alshaya_vs_transac_update_8004() {
@@ -182,4 +197,12 @@ function alshaya_vs_transac_install() {
   /* @var \Drupal\alshaya_super_category\AlshayaSuperCategoryManager $super_category_feature*/
   $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
   $super_category_feature->enableSuperCategory();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }
