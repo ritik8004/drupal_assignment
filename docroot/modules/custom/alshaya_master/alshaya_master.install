@@ -1581,6 +1581,9 @@ function alshaya_master_install() {
     'View less colours' => [
       'ar' => 'عرض أقل الألوان',
     ],
+    'save upto x%' => [
+      'ar' => '%X وفّر لغاية',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
