@@ -68,8 +68,14 @@
   padding: 0;
   padding-#{$left}: 1.37rem;
 
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
   h3 {
     text-transform: uppercase;
+    font-family: $alshaya-bold;
+    font-size: 0.75rem;
   }
 
   p {

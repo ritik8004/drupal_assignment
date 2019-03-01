@@ -96,6 +96,24 @@
         }
       }
 
+      &.tab-home-delivery,
+      &.tab-click-collect {
+        position: relative;
+        min-height: 5.4375rem;
+
+        a {
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          #{$left}: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+
+      &.tab-separator {
+        font-size: 1rem;
+      }
+
       &.tab-home-delivery {
         &:not(.active--tab--head) {
           margin-#{$left}: -1px;
@@ -264,4 +282,5 @@
 .cnc-collect-from {
   font-family: $alshaya-thin;
   text-transform: capitalize;
+  letter-spacing: normal;
 }

@@ -115,7 +115,7 @@ function alshaya_click_collect_node_view_alter(array &$build, EntityInterface $e
       '#sku' => $sku,
       '#type' => $sku_entity->bundle(),
       '#title' => $config['title'],
-      '#title_price' => alshaya_acm_price_get_formatted_price($config['price']),
+      '#title_price' => alshaya_acm_price_get_formatted_price($config['title_price']),
       '#subtitle' => $state ? $config['subtitle'] : $config['unavailable'],
       '#help_text' => $config['help_text'],
       '#select_option_text' => $config['select_option_text'],
