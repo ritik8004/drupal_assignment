@@ -79,7 +79,7 @@ third_party_settings:
         - name
         - langcode
         - field_commerce_status
-        - field_plp_layout
+        - field_pdp_layout
         - description
         - field_pdp_image_slider_position
         - path
@@ -135,6 +135,7 @@ third_party_settings:
       region: content
     group_plp_content:
       children:
+        - field_plp_layout
         - group_promotion_
         - group_right_side_menu
         - group_videos
@@ -433,7 +434,7 @@ content:
     type: string_textfield
     region: content
   field_pdp_layout:
-    weight: 22
+    weight: 4
     settings: {  }
     third_party_settings: {  }
     type: options_select

@@ -210,3 +210,16 @@ At the current time warnings are displayed for graceful-fs and lodash, these are
 
 [graceful-fs warning](https://github.com/gulpjs/gulp/issues/1571)
 [lodash warning](https://github.com/gulpjs/gulp/issues/1485)
+
+## Inheritance
+
+In our project we have used the inheritance approach so that whenever a new brand theme will get created we will have whitelabel theme ready for that brand.
+
+## Color Inheritance
+We have defined the colour variable inside alshaya_whitelabel theme (config/_colors.scss) for each and every attributes needed. Now while creating a new theme will need to replace the variable color value as per brand need.
+
+### how to override colour variables in brand theme.
+* Copy the color variables by going to Zeplin > Styleguide.
+* Paste them under section 1 under brand colors.
+* Copy the variables from section 2 onwards from alshaya_white_label > _color.scss file.
+* Map the variables copied from whitelabel with the color variables copied in section #1.

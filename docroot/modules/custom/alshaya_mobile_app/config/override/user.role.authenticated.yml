@@ -9,6 +9,7 @@ permissions:
   - 'restful get category_product_list'
   - 'restful get product'
   - 'restful get stores_finder'
+  - 'restful get stores_finder_collection'
   - 'restful get promotion_product_list'
   - 'restful get search_page_product_list'
   - 'restful get knet_init_request'

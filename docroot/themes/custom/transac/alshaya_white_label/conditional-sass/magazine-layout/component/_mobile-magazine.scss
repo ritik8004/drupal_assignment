@@ -123,10 +123,11 @@
       &.fixed {
         position: fixed;
         bottom: 0;
-        z-index: 99;
+        z-index: 9;
         width: 100%;
         background: $primary_bg;
         box-shadow: 0.0625rem 0.125rem 0.625rem $mothercare-black;
+        transition: z-index 0.5s ease-in-out;
 
         h1 {
           span {
@@ -149,10 +150,9 @@
   }
 
   .size-tray {
-    display: none;
-
     &.tray-open {
-      display: block;
+      opacity: 1;
+      z-index: 12;
     }
   }
 

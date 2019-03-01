@@ -149,7 +149,6 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
       $sorts = $view->sort;
       $sort_options = _alshaya_acm_product_position_sorted_available_options($sorts);
       $filters['sort_bef_combine'] = reset($sort_options);
-
       $view->setExposedInput($filters);
     }
   }

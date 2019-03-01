@@ -6,6 +6,7 @@ use Drupal\Core\Config\CachedStorage;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -81,6 +82,13 @@ class AlshayaMasterCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
+   * Module Extension List Manager.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  private $moduleExtensionList;
+
+  /**
    * AlshayaMasterCommands constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -99,6 +107,8 @@ class AlshayaMasterCommands extends DrushCommands {
    *   Entity query factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   Module Extension List Manager.
    */
   public function __construct(StateInterface $state,
                               ConfigFactoryInterface $configFactory,
@@ -107,7 +117,8 @@ class AlshayaMasterCommands extends DrushCommands {
                               CachedStorage $configStorage,
                               LanguageManagerInterface $languageManager,
                               QueryFactory $queryFactory,
-                              EntityTypeManagerInterface $entityTypeManager) {
+                              EntityTypeManagerInterface $entityTypeManager,
+                              ModuleExtensionList $module_extension_list) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
@@ -116,6 +127,7 @@ class AlshayaMasterCommands extends DrushCommands {
     $this->languageManager = $languageManager;
     $this->queryFactory = $queryFactory;
     $this->entityTypeManager = $entityTypeManager;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**

@@ -467,6 +467,21 @@ class SkuManager {
       $children = array_keys($combinations['by_sku']);
     }
 
+    if (empty($combinations['by_sku'])) {
+      $children = [];
+    }
+    elseif ($color) {
+      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+        if (isset($combinations['attribute_sku'][$attribute_code])) {
+          $children = $combinations['attribute_sku'][$attribute_code][$color];
+          break;
+        }
+      }
+    }
+    else {
+      $children = array_keys($combinations['by_sku']);
+    }
+
     foreach ($children ?? [] as $child_sku_code) {
       try {
         $child_sku_entity = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());

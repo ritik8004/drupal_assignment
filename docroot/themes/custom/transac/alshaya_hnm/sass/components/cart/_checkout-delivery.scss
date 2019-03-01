@@ -124,8 +124,6 @@
 
       @include breakpoint($tablet) {
         &.active--tab--head {
-          position: relative;
-          z-index: 2;
           border-width: 1px;
           border-color: $secondary_border;
           background: $hnm-grey;
@@ -133,20 +131,6 @@
 
         &.tab-home-delivery {
           margin-#{$left}: -1px;
-
-          &.active--tab--head {
-            margin-#{$left}: 0;
-            border-#{$left}: none;
-          }
-        }
-
-        &.tab-click-collect {
-          margin-#{$right}: -3px;
-
-          &.active--tab--head {
-            margin-#{$right}: 0;
-            border-#{$right}: none;
-          }
         }
       }
 
@@ -192,13 +176,7 @@
     }
 
     @include breakpoint($upto-tablet) {
-      hr {
-        display: none;
-      }
-
       .tab {
-        display: none;
-
         &.active--tab--head {
           display: block;
           background-color: $delivery_tab_active_bg;
@@ -241,9 +219,6 @@
     label {
       &.option {
         &::before {
-          display: block;
-          float: $left;
-          margin-#{$right}: 1rem;
           top: -0.25rem;
           background: transparent;
         }
@@ -317,11 +292,6 @@
   }
 
   > .form-wrapper {
-    cursor: pointer;
-    margin-top: 0;
-    width: 100%;
-    float: $left;
-
     #payment_method_cybersource {
       #payment_method_title_cybersource {
         border-bottom: none;
@@ -350,13 +320,7 @@
       }
 
       &.has-description.plugin-selected {
-        @include breakpoint($tablet) {
-          padding: 0.9375rem 1.375rem;
-        }
-
         &::before {
-          top: 0.5625rem;
-
           @include breakpoint($only-mobile) {
             top: 0.9375rem;
           }
@@ -386,10 +350,6 @@
         padding: 1.5rem 1.375rem;
       }
 
-      width: 100%;
-      float: $left;
-      margin: 0;
-      padding: 1.5rem 0.5rem;
       border-top: 1px solid $delivery_payment_wrapper_border;
       border-#{$left}: 1px solid $delivery_payment_wrapper_border;
       border-#{$right}: 1px solid $delivery_payment_wrapper_border;
@@ -404,14 +364,8 @@
 
       .method {
         &-title {
-          font-size: 0.875rem;
-          font-weight: normal;
           font-family: $hnm-demibold;
           color: $title;
-
-          @include breakpoint($only-mobile) {
-            font-size: 0.75rem;
-          }
         }
       }
     }
@@ -534,8 +488,6 @@
     .tabs--content {
       @include breakpoint($tablet) {
         border: 1px solid $secondary_border;
-        border-top: none;
-        margin-top: 0.4375rem;
       }
     }
   }
