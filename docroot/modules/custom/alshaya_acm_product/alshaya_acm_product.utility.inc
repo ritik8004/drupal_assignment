@@ -191,69 +191,6 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
 }
 
 /**
- * Helper function to get child skus for a configurable sku from tree.
- *
- * @param array $tree
- *   Tree containing configurable options and SKU objects.
- * @param array $configurables
- *   Configurable values array.
- *
- * @return null|SKU
- *   Null or SKU instance.
- */
-function alshaya_acm_product_get_selected_option_sku(array $tree, array $configurables) {
-  $tree_pointer = &$tree['options'];
-
-  foreach ($configurables as $key => $value) {
-    if (empty($value)) {
-      continue;
-    }
-
-    // Move the tree pointer if the selection is valid.
-    if (isset($tree_pointer["$key:$value"])) {
-      return $tree_pointer["$key:$value"];
-    }
-  }
-
-  return NULL;
-}
-
-/**
- * Helper function to get product tree based on the conf attributes values.
- *
- * @param array $tree
- *   Config product tree.
- * @param array $configurables
- *   Config values keyed by the attributec code as selected by the end-users.
- *
- * @return array
- *   Array pointing to the tree state based on the options selected.
- */
-function alshaya_acm_product_fetch_selected_option_tree(array $tree, array $configurables) {
-  $tree_pointer = $tree['options'];
-  $tree_config_options = [];
-  foreach ($configurables as $key => $value) {
-    if (($value) && ($tree_pointer["$key:$value"])) {
-      $tree_pointer = $tree_pointer["$key:$value"];
-    }
-  }
-
-  if ($tree_pointer instanceof SKU) {
-    $tree_config_options["$key:$value"] = $tree_pointer;
-  }
-  else {
-    // Filter out all non-empty config attributes from the list.
-    foreach ($tree_pointer as $key => $value) {
-      if (!empty($value) && ($key !== '#available_config')) {
-        $tree_config_options[$key] = $value;
-      }
-    }
-  }
-
-  return $tree_config_options;
-}
-
-/**
  * Utility function to check if product is available for home delivery.
  *
  * @param mixed $sku
