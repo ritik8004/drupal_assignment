@@ -1,4 +1,4 @@
-# Alshaya sub theme Setup
+# Alshaya New Brand Sub Theme Setup
 
 ## Changes needed after copying
 
@@ -11,4 +11,14 @@
 
 ## After renaming
 
-* change the `screenshot.png`, `logo.svg` and `favicon.ico` as per the requirements.
+* change the `screenshot.png`, `logo.svg` and `favicon.ico` as per the
+requirements.
+
+## Colors & Theme inheritance
+
+* We use color variables which can be overriden inside brand themes inside
+`_colors.scss`
+* This way without writing any CSS you can override colors for components coming
+ from base theme.
+* Maximum emphasis should be given to reuse from base theme and override what is
+ necessary rather than duplicating.

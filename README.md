@@ -118,21 +118,52 @@ installation profile will enable all the modules required for an a site with
 commercial features and integration with Conductor/Magento. `non_transac`
 profile is a light/static site without any commercial feature.`
 
-* Create a new theme for your site. See `docroot/themes/custom/README.md` for
-more information on how to create a custom theme.
-* Create a custom module in `docroot/modules/brands`. This module goal is to
+* Create a custom module in `docroot/modules/brands`. This module's goal is to
 enable the appropriate theme, place the blocks in the theme's regions and
 install the specific configuration. See existing brand modules for example.
+* Install the new theme for the respective brand inside this brand module.
+* See "Create a new theme for the site." for specific instructions on creating a new theme.
 * Add a new brand support:
   * Add DB and Alias in `box/config.yml`
   * Add site in `blt/alshaya_local_sites.yml` with proper values (check existing sites for example)
   * Add drush aliases to the site into `drush/sites` folder with proper values (check existing sites for example)
-  * (For transact site) Add proper settings for the new site in 
+  * (For transact site) Add proper settings for the new site in
     * factory-hooks/environments/magento.php
     * factory-hooks/environments/settings.php
     * factory-hooks/environments/conductor.php
 * `vagrant reload --provision`
 * Run `blt refresh:local` commands and enter appropriate site code when asked.
+
+### Create a new theme for the site.
+
+#### Overview.
+* There are three three different theme types, transac theme, non transac theme and amp theme.
+* You will find this under `themes/custom/transac`, `themes/custom/non_transac` and `themes/custom/amp`.
+* We heavily rely on theme inheritance, so each theme type has a alshaya specific base theme to spped up the theme creation process.
+* Transac theme is for trnasactional sites, and `alshaya_white_label` is used as a base theme by default for transac installation profile.
+* Non-Transac theme is for non transactional sites, which are usually a placeholder sites until the transactional sites are launched. `whitelabel` is used as a base theme by default for non transac installation profile.
+* AMP themes use "Accelerated Mobile Pages" specifications for certain pages on the site, AMP theme is by default enabled for all profiles. `alshaya_amp_white_label` is the base AMP theme.
+* Also see `docroot/themes/custom/README.md` for some additional steps related to CI applicable to all themes.
+
+#### Transac theme.
+* `alshaya_example_subtheme` is designed as a copy paste starter kit for new brands.
+* Check `docroot/themes/custom/transac/alshaya_example_subtheme/README.md` for steps to create a new transac theme.
+* Use standard Drupal practices to override anything that is coming from base theme.
+* Use any of the existing brand themes as an example for reference.
+
+#### Non Transac theme.
+* Duplicate any of the brand themes inside `non_transac` directory.
+* Change the info file, directory name and hook names in approprite files.
+* Non transac themes use patternlab with all the components inherited from base theme.
+* Remove any scss files inside sass directory from the duplicated themed.
+* You should have a clean non transac theme with all styles inherited from base theme.
+* Override what is necessary.
+
+#### AMP theme.
+* AMP as a spec provides limited customization.
+* If any custom work is needed for a brand on AMP pages, copy paste any of the brand amp themes.
+* Change the name of the theme in appropriate files.
+* Override what is necessary, follow other brand AMP themes as reference.
 
 ### Update local site from cloud.
 Script is created to download db from cloud env and configure local env
@@ -143,7 +174,7 @@ in local as and when required. All required changes are done.
 * Enable dblog and other ui modules
 * Allows hooking into the script, we can create scripts/install-site-dev.sh
 which is already added to .gitignore and add any code we want to execute post
-this script (for instance command to shout loud in mac - `say installation 
+this script (for instance command to shout loud in mac - `say installation
 done`). One argument - site code will be passed to this script.
 
 Script usage:
@@ -222,7 +253,7 @@ Execution:
 bin/behat --@tagname --profile=mcuat
 
 
-    
+
 ### How to interpret the Behat reports:
   * When the execution of the feature file is completed, navigate to site folder directory which is inside your parent directory. e.g (hmkw)
   * Open html->behat->index.html. This has your test execution details for the last run only. This gets overwritten with new execution.
@@ -253,7 +284,7 @@ XDebug debugger is enabled by default. In order to debug your code from browser,
 
 * Make sure you firstly invoked debugger from browser at least once.
 * In File/Preferences of phpStorm, section Languages & Frameworks / PHP / Servers, write down server name the debugger invoked in previous step (e.g. "local.alshaya-mckw.com")
-* Change variable php_xdebug_cli_disable to "no" in box/config.yml and run vagrant provision. 
+* Change variable php_xdebug_cli_disable to "no" in box/config.yml and run vagrant provision.
 * wait until machine is successfully re-provisioned
 * make sure your PhpStorm is listening to php debug connections
 * vagrant ssh to your guest
@@ -270,5 +301,5 @@ Specific notes for debugging drush commands:
 After finishing CLI debuging it's recommended to disable xdebug back again, to increase performance. To debug CLI commands like Drush, Drupal console or PhpUnit, follow these steps:
 
 ### Remote debugging from ACSF
-On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging. 
+On ACSF dev, dev2 and dev3 environments, xdebug is enabled for remote debugging.
 Follow instructions [here](https://support.acquia.com/hc/en-us/articles/360006231933-How-to-debug-an-Acquia-Cloud-environment-using-PhpStorm-and-Remote-Xdebug) to set up remote debugging on your local PhpStorm to leverage it.
