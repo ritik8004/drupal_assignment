@@ -40,6 +40,14 @@
         }
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
+        mobilegallery.on('swipe', function (event, slick) {
+          if ($('.slick-current .mobileplayer-wrapper iframe').length > 0) {
+            $('.mobilegallery .product-labels').hide();
+          }
+          else {
+            $('.mobilegallery .product-labels').show();
+          }
+        });
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
@@ -69,6 +77,9 @@
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
           }
+          if ($('.cloudzoom__video_main iframe').length > 0) {
+            $('.cloudzoom__herocontainer .product-labels').hide();
+          }
         });
 
         // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
@@ -78,6 +89,10 @@
           if (playerIframe.length > 0) {
             playerIframe.remove();
             $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').show();
+          }
+
+          if ($('.cloudzoom__video_main iframe').length === 0) {
+            $('.cloudzoom__herocontainer .product-labels').show();
           }
         });
 
