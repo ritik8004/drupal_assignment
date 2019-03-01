@@ -6,7 +6,11 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\acq_sku\CategoryManagerInterface;
+use Drupal\acq_commerce\I18nHelper;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drush\Commands\DrushCommands;
+use Drush\Exceptions\UserAbortException;
 
 /**
  * Class AcqSkuPositionCommands.
@@ -44,34 +48,73 @@ class AcqSkuPositionCommands extends DrushCommands {
   protected $logger;
 
   /**
+   * Category manager.
+   *
+   * @var \Drupal\acq_sku\CategoryManagerInterface
+   */
+  private $categoryManager;
+
+  /**
+   * I18n Helper.
+   *
+   * @var \Drupal\acq_commerce\I18nHelper
+   */
+  private $i18nHelper;
+
+  /**
+   * Config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  private $configFactory;
+
+  /**
    * AcqSkuPositionCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   Looger Factory.
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $APIWrapper
+   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   Commerce Api Wrapper.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database Connection object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service.
+   * @param \Drupal\acq_sku\CategoryManagerInterface $categoryManager
+   *   Category manager.
+   * @param \Drupal\acq_commerce\I18nHelper $i18n_helper
+   *   I18nHelper object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factory.
    */
   public function __construct(LoggerChannelFactoryInterface $logger,
-                              APIWrapper $APIWrapper,
+                              APIWrapper $api_wrapper,
                               Connection $connection,
-                              ModuleHandlerInterface $moduleHandler) {
+                              ModuleHandlerInterface $moduleHandler,
+                              CategoryManagerInterface $categoryManager,
+                              I18nHelper $i18n_helper,
+                              ConfigFactoryInterface $configFactory) {
     $this->logger = $logger->get('acq_sku_position_position');
-    $this->apiWrapper = $APIWrapper;
+    $this->apiWrapper = $api_wrapper;
     $this->connection = $connection;
     $this->moduleHandler = $moduleHandler;
+    $this->categoryManager = $categoryManager;
+    $this->i18nHelper = $i18n_helper;
+    $this->configFactory = $configFactory;
+    parent::__construct();
   }
 
   /**
    * Drush command to sync sku product position based on category.
    *
-   * @command acq_sku_position:position-sync
-   *
    * @param string $position_type
    *   Name of the position type.
+   * @param array $options
+   *   Command options.
+   *
+   * @command acq_sku_position:position-sync
+   *
+   * @option category-source
+   *   Source from where category to be fetched and run position sync.
    *
    * @aliases aapps,position-sync
    *
@@ -79,20 +122,24 @@ class AcqSkuPositionCommands extends DrushCommands {
    *   Sync product position based on category, by default "position".
    * @usage drush aapps myargument
    *   Sync product position based on category, by "myargument".
+   * @usage drush aapps myargument --category-source=magento
+   *   Sync product position with magento as source of categories.
+   *
+   * @throws \Drush\Exceptions\UserAbortException
    */
-  public function syncPositions($position_type = 'position') {
+  public function syncPositions($position_type = 'position', array $options = ['category-source' => 'magento']) {
     $this->logger->notice('Product position sync in progress...');
 
-    // SQL query to fetch categories from DB.
-    $sql_query = 'SELECT tc.entity_id as tid, tc.field_commerce_id_value as commerce_id, td.name
-                  FROM taxonomy_term__field_commerce_id tc
-                  INNER JOIN taxonomy_term_field_data td
-                  ON td.tid=tc.entity_id AND td.langcode=tc.langcode';
+    // If invalid option for category source.
+    if (!in_array($options['category-source'], ['drupal', 'magento'])) {
+      $this->io()->error(dt('Invalid category-source. It can only be `magento` or `drupal`'));
+      throw new UserAbortException();
+    }
 
-    // Get all product category terms.
-    $query = $this->connection->query($sql_query);
-    $query->execute();
-    $terms = $query->fetchAll();
+    // Get category data from `drupal` or `magento` as per source option.
+    $terms = $options['category-source'] == 'drupal'
+      ? $this->getCategoriesFromDrupal()
+      : $this->getCategoriesFromMagento();
 
     // Allow other modules to skip terms from position sync.
     $this->moduleHandler->alter('acq_sku_position_sync', $terms);
@@ -124,7 +171,7 @@ class AcqSkuPositionCommands extends DrushCommands {
           continue;
         }
 
-        // Skip sync if error is found in the response for a particular category.
+        // Skip sync if error found in the response for a particular category.
         if (is_array($response) && isset($response['message'])) {
           $this->logger->error(dt('Error in position sync for @name (tid: @tid). Response: @message', [
             '@name' => $term->name,
@@ -198,6 +245,83 @@ class AcqSkuPositionCommands extends DrushCommands {
     $this->moduleHandler->invokeAll('acq_sku_position_sync_finished');
 
     $this->logger->notice(dt('Product position sync completed!'));
+  }
+
+  /**
+   * Fetch categories data from Magento for position sync.
+   *
+   * @return array
+   *   Categories data.
+   */
+  protected function getCategoriesFromMagento() {
+    $cat_data = [];
+    // Get all terms data from drupal.
+    $drupal_cat_data = $this->getCategoriesFromDrupal();
+    foreach ($this->i18nHelper->getStoreLanguageMapping() as $store_id) {
+      if ($store_id) {
+        // Load Conductor Category data.
+        $categories = [$this->categoryManager->loadCategoryData($store_id)];
+        // Filter/Remove top level root category.
+        $filter_root_category = $this->configFactory->get('acq_commerce.conductor')->get('filter_root_category');
+        if ($filter_root_category && !empty($categories)) {
+          $categories = $categories[0]['children'];
+        }
+
+        // Recursively prepare category data from children.
+        // @codingStandardsIgnoreLine giving warning for anonymous function.
+        $cat_recur_data = function ($cats) use (&$cat_recur_data, &$cat_data, $drupal_cat_data) {
+          foreach ($cats as $cat) {
+            if (!isset($cat['category_id']) || empty($cat['name'])) {
+              continue;
+            }
+
+            // If langcode not available, means no mapping of store and
+            // language.
+            if (!$this->i18nHelper->getLangcodeFromStoreId($cat['store_id'])) {
+              continue;
+            }
+
+            // If term exists in drupal, only then we consider or we won't have
+            // the term id and thus no reason to sync position.
+            if (isset($drupal_cat_data[$cat['category_id']])) {
+              $cat_data[$cat['category_id']] = (object) [
+                'commerce_id' => $cat['category_id'],
+                'name' => $drupal_cat_data[$cat['category_id']]->name,
+                'tid' => $drupal_cat_data[$cat['category_id']]->tid,
+              ];
+            }
+
+            // If there are children for the term.
+            if (!empty($cat['children'])) {
+              // @codingStandardsIgnoreLine giving warning for anonymous function.
+              $cat_recur_data($cat['children']);
+            }
+          }
+        };
+
+        $cat_recur_data($categories);
+      }
+    }
+
+    return $cat_data;
+  }
+
+  /**
+   * Fetch categories data from Drupal for position sync.
+   *
+   * @return array
+   *   Categories data.
+   */
+  protected function getCategoriesFromDrupal() {
+    $sql_query = 'SELECT tc.entity_id as tid, tc.field_commerce_id_value as commerce_id, td.name
+                  FROM taxonomy_term__field_commerce_id tc
+                  INNER JOIN taxonomy_term_field_data td
+                  ON td.tid=tc.entity_id AND td.langcode=tc.langcode';
+
+    // Get all product category terms.
+    $query = $this->connection->query($sql_query);
+    $query->execute();
+    return $query->fetchAllAssoc('commerce_id');
   }
 
 }
