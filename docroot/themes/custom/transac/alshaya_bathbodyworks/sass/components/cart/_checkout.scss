@@ -316,6 +316,10 @@
     padding: 1rem 0 0.3125rem;
     border-bottom: 1px solid $checkout_order_summary_title_border;
 
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
     .title {
       font-family: $alshaya-bold;
     }
@@ -328,6 +332,10 @@
   .content-head {
     color: $checkout_order_summary_no_of_items;
     padding: 1rem 0;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
 
     @include icon(chevrondown, after) {
       #{$right}: 0;
@@ -401,6 +409,10 @@
   .totals {
     padding: 0.75rem 0 0.5rem;
     border-bottom: 1px solid $order_summary_section_border;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
 
     .sub-total {
       color: $order_summary_subtotal;
