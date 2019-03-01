@@ -1,10 +1,55 @@
+.nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
+  @include breakpoint($tablet) {
+    padding: calc((100vh - 37.5rem) / 2) calc((100vw - 45rem) / 2);
+  }
+
+  @include breakpoint($desktop) {
+    padding: calc((100vh - 33.5rem) / 2) calc((100vw - 45.5625rem) / 2);
+  }
+}
+
 #product-image-gallery-container {
+  @include breakpoint($tablet) {
+    height: 38rem !important;
+  }
+
+  @include breakpoint($desktop) {
+    height: 30.875rem !important;
+    padding: 2rem;
+  }
+
+  .button__wrapper {
+    .zoomout,
+    .zoomin {
+      border-radius: 0;
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    .zoomout {
+      background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomout.svg) no-repeat;
+    }
+
+    .zoomin {
+      background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomin.svg) no-repeat;
+    }
+  }
+
   .imagegallery__wrapper {
     #product-image-gallery {
       @include breakpoint($desktop) {
         width: 6.5rem !important;
         margin-#{$right}: 0;
         margin-#{$left}: 0;
+      }
+    }
+
+    & > .imagegallery__full {
+      height: 27.875rem !important;
+
+      @include breakpoint($desktop) {
+        width: 80% !important;
+        width: calc(100% - (9.75rem)) !important;
       }
     }
   }

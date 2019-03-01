@@ -250,6 +250,10 @@
           margin-#{$left}: 0;
         }
       }
+
+      &.ar a {
+        font-family: $alshaya-bold;
+      }
     }
   }
 }
@@ -278,13 +282,14 @@
         display: inline-block;
         padding: 0.875rem 0;
         line-height: 0.875rem;
-        margin: 0 0.625rem 0 0;
+        margin: 0 0.875rem 0 0;
         text-transform: uppercase !important;
         text-decoration: none;
+        background-color: $lang_switch_active;
 
         &.is-active {
           background-color: $lang_switch_active;
-          margin: 0 0.625rem 0 0;
+          margin: 0 0.5rem 0 0;
         }
       }
 
@@ -302,6 +307,7 @@
     width: 2.5rem;
     #{$right}: 0;
     top: 0;
+    background-color: $lang_switch_close_bg;
 
     @include icon(close, after) {
       line-height: 2.5rem;

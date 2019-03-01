@@ -49,8 +49,6 @@ class SkuManager {
 
   use StringTranslationTrait;
 
-  const NOT_REQUIRED_ATTRIBUTE_OPTION = 'Not Required';
-
   const FREE_GIFT_PRICE = 0.01;
 
   const PDP_LAYOUT_INHERIT_KEY = 'inherit';
@@ -2134,7 +2132,7 @@ class SkuManager {
       if ($sku->get($fieldKey)->getString()) {
         $value = $sku->get($fieldKey)->getString();
 
-        if ($remove_not_required_option && $this->isAttributeOptionNotRequired($value)) {
+        if ($remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
           continue;
         }
 
@@ -2191,16 +2189,16 @@ class SkuManager {
   }
 
   /**
-   * Wrapper function to check if value is matches not required value.
+   * Wrapper function to check if value matches options value to exclude.
    *
    * @param string $value
    *   Attribute option value to check.
    *
    * @return bool
-   *   TRUE if value matches not required value.
+   *   TRUE if value matches options value to exclude.
    */
-  public function isAttributeOptionNotRequired($value) {
-    return $value === self::NOT_REQUIRED_ATTRIBUTE_OPTION;
+  public function isAttributeOptionToExclude($value) {
+    return in_array($value, $this->configFactory->get('alshaya_acm_product.settings')->get('excluded_attribute_options'));
   }
 
   /**
@@ -2216,7 +2214,7 @@ class SkuManager {
     $availableOptions = [];
     $notRequiredValue = NULL;
     foreach ($configurable['#options'] as $id => $value) {
-      if ($this->isAttributeOptionNotRequired($value)) {
+      if ($this->isAttributeOptionToExclude($value)) {
         $configurable['#options_attributes'][$id]['class'][] = 'hidden';
         $configurable['#options_attributes'][$id]['class'][] = 'visually-hidden';
         $notRequiredValue = $id;
