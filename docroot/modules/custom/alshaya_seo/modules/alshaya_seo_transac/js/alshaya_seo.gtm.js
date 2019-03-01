@@ -163,28 +163,20 @@
       }
 
       if ((isRegistrationSuccessPage) && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
+        Drupal.alshaya_seo_gtm_push_signin_type('Registration Success');
       }
 
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
-          dataLayer.push({
-            event: 'User Login & Register',
-            signinType: 'sign-in success'
-          });
-
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
         }
 
         // Fire logout success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
-          dataLayer.push({
-            event: 'User Login & Register',
-            signinType: 'logout success'
-          });
-
+          Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
         }
 
@@ -569,8 +561,9 @@
       // Push purchaseSuccess for Order confirmation page.
       if (orderConfirmationPage.length !== 0 && settings.gtmOrderConfirmation) {
         dataLayer.push({
-          event: 'purchaseSuccess',
-          ecommerce: settings.gtmOrderConfirmation
+          event: settings.gtmOrderConfirmation.event,
+          virtualPageUrl: settings.gtmOrderConfirmation.virtualPageURL,
+          virtualPageTitle: settings.gtmOrderConfirmation.virtualPageTitle
         });
       }
 
@@ -1025,12 +1018,18 @@
   };
 
   /**
-   * Helper funciton to push sign-in type event.
+   * Helper funciton to push Login & Register events.
    *
-   * @param signinType
+   * @param eventAction
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (signinType) {
-    dataLayer.push({event: 'User Login & Register', signinType: signinType});
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+    dataLayer.push({
+      event: 'eventTracker',
+      eventCategory: 'Login & Register',
+      eventAction: eventAction,
+      eventValue: 0,
+      nonInteraction: 0
+    });
   };
 
   /**

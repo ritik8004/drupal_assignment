@@ -267,7 +267,7 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
       foreach ($options as $key => $option) {
         if (isset($tree['options']['article_castor_id:' . $key])) {
           $sku_options = $tree['options']['article_castor_id:' . $key];
-
+          $sku_entity = NULL;
           foreach ($sku_options as $key_option => $sku) {
             if ($key_option === '#available_config') {
               continue;

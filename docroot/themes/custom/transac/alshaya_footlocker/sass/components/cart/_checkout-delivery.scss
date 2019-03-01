@@ -173,6 +173,8 @@
               width: auto;
               position: absolute;
               #{$right}: 0;
+              text-transform: capitalize !important;
+              font-size: 0.75rem !important;
             }
           }
         }

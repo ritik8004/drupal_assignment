@@ -7,3 +7,6 @@ alshaya_main_menu.settings:
     mobile_main_menu_max_depth:
       type: integer
       label: 'Main menu maximum depth for mobile'
+    desktop_main_menu_highlight_timing:
+      type: integer
+      label: 'Main menu transition timing for desktop'

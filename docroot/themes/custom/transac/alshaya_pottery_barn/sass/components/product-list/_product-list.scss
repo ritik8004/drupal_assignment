@@ -8,6 +8,12 @@
           color: $plp_sort_by_label;
           text-transform: none;
         }
+
+        select {
+          @include breakpoint($upto-desktop) {
+            color: $plp_facet_label_text_color;
+          }
+        }
       }
 
       .c-facet__blocks__wrapper--mobile {
@@ -182,6 +188,12 @@
     .c-facet__label {
       border-color: $plp_facet_label_border_mobile;
       background: $plp_facet_label_bg_mobile;
+      border: 1px solid $plp_facet_label_border_mobile;
+      border-#{$right}: 0 !important;
+      text-transform: capitalize;
+      color: $plp_facet_label_text_color;
+      display: inline-flex;
+      align-items: center;
 
       &.is-active {
         &::after {
@@ -190,10 +202,12 @@
       }
 
       &::after {
-        border-#{$left}: 1px solid $primary_dropdown_arrow_left_border;
+        border: 1px solid $plp_facet_label_border_mobile;
+        background: $plp_facet_label_bg_mobile;
         color: $primary_dropdown_arrow_icon;
         font-size: 1.75rem;
         line-height: 1.23;
+        border-#{$left}: 0;
       }
     }
   }

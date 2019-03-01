@@ -8,19 +8,17 @@
  * This happens on staging, not on site duplication.
  */
 
-use Drupal\Component\FileCache\FileCacheFactory;
-use Drupal\Core\Database\Database;
-use Drupal\Core\Extension\ExtensionDiscovery;
-use Drupal\Core\Site\Settings;
-
 if (empty($argv[3])) {
   echo "Error: Not enough arguments.\n";
   exit(1);
 }
 
-$site    = $argv[1]; // AH site group.
-$env     = $argv[2]; // AH site env.
-$db_role = $argv[3]; // Database name.
+// AH site group.
+$site = $argv[1];
+// AH site env.
+$env = $argv[2];
+// Database name.
+$db_role = $argv[3];
 
 $docroot = sprintf('/var/www/html/%s.%s/docroot', $site, $env);
 
@@ -67,9 +65,9 @@ $command = sprintf(
 fwrite(STDERR, "Executing: $command;\n");
 
 $result = 0;
-$output = array();
+$output = [];
 exec($command, $output, $result);
-print join("\n", $output);
+print implode("\n", $output);
 
 // Clean up the drush cache directory.
 shell_exec(sprintf('rm -rf %s', escapeshellarg($cache_directory)));
