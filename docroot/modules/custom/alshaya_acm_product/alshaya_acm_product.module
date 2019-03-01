@@ -235,6 +235,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'price' => NULL,
       'currency_format' => '',
       'currency_code_position' => '',
+      'show_currency' => TRUE,
     ],
   ];
 
