@@ -9,6 +9,22 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable WhatsApp and Email in Sharethis.
+ */
+function alshaya_vs_transac_update_8006() {
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services .= ",'WhatsApp:whatsapp','Email:email'";
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
+}
+
 /**
  * Implements hook_update_N().
  *
@@ -21,21 +37,6 @@ function alshaya_vs_transac_update_8005() {
       ->set('currency_code', 'DHS')
       ->save();
   }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Enable WhatsApp and Email in Sharethis.
- */
-function alshaya_vs_transac_update_8005() {
-  // Configure ShareThis defaults.
-  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-  $services = $configFactory->get('service_option');
-  $services .= ",'WhatsApp:whatsapp','Email:email'";
-  $configFactory->set('service_option', $services);
-  // Save the changes.
-  $configFactory->save();
 }
 
 /**
