@@ -532,6 +532,7 @@
       &__content {
         overflow: auto;
         height: 30.125rem;
+        padding-bottom: 2.5rem;
       }
     }
   }
@@ -2040,6 +2041,14 @@ html[lang=ar] {
       .select2-dropdown {
         z-index: 1001;
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .mobilegallery {
+    #product-image-gallery-mobile {
+      min-height: 18rem;
     }
   }
 }
