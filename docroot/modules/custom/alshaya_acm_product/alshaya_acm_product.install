@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Add config to exclude attribute option.
  */
-function alshaya_acm_product_update_8039() {
+function alshaya_acm_product_update_8040() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -23,6 +23,21 @@ function alshaya_acm_product_update_8039() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding AR translation for "save upto x%".
+ */
+function alshaya_acm_product_update_8039() {
+  $string = [
+    'save upto x%' => [
+      'ar' => '%X وفّر لغاية',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($string);
 }
 
 /**
