@@ -13,6 +13,31 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Enable module for app links.
+ */
+function alshaya_mobile_app_update_8008() {
+  \Drupal::service('module_installer')->install(['mobile_app_links']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new resource to return all the stores.
+ */
+function alshaya_mobile_app_update_8007() {
+  \Drupal::service('alshaya_config.manager')->updateConfigs(
+    ['rest.resource.stores_finder_collection'],
+    'alshaya_mobile_app'
+  );
+
+  // Re-save config to import override config with updated permissions.
+  \Drupal::configFactory()->getEditable('user.role.anonymous')->save();
+  \Drupal::configFactory()->getEditable('user.role.authenticated')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Rework error message endpoint to static texts.
  * Update payment-methods endpoint to use cookie.
  * Add user get status endpoint.
