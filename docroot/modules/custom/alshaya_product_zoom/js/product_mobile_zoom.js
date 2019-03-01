@@ -91,6 +91,12 @@
               if (!($(image).attr('data-scale') === 1 || $(image).attr('data-translate-x') === 0 || $(image).attr('data-translate-y') === 0)) {
                 resetZoomTransforms($(image));
               }
+              if ($('.slick-current .mobileplayer-wrapper iframe').length > 0) {
+                $('.mob-imagegallery__wrapper .product-labels').hide();
+              }
+              else {
+                $('.mob-imagegallery__wrapper .product-labels').show();
+              }
             });
 
             $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
