@@ -15,6 +15,8 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  * Implements hook_update_N().
  *
  * Rename fields and rearrange taxonomy term edit form.
+ * Update alshaya menu view blocks to use taxonomy_term__parent as per
+ * Drupal 8.6.
  */
 function alshaya_acm_product_category_update_8027() {
   $manager = \Drupal::service('alshaya_config.manager');
@@ -23,6 +25,16 @@ function alshaya_acm_product_category_update_8027() {
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile',
     'field.field.taxonomy_term.acq_product_category.field_promotion_banner',
+  ];
+  $manager->updateConfigs(
+    $configs,
+    'alshaya_acm_product_category',
+    'install'
+  );
+
+  $configs = [
+    'views.view.product_category_level_2_3',
+    'views.view.product_category_level_3',
   ];
   $manager->updateConfigs(
     $configs,
@@ -135,26 +147,6 @@ function alshaya_acm_product_category_update_8024() {
     \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')
       ->save();
   }
-}
-
-/**
- * Implements hook_update_N().
- *
- * Update alshaya menu view blocks to use taxonomy_term__parent as per
- * Drupal 8.6.
- */
-function alshaya_acm_product_category_update_8022() {
-  $manager = \Drupal::service('alshaya_config.manager');
-  $configs = [
-    'views.view.product_category_level_2_3',
-    'views.view.product_category_level_3',
-  ];
-
-  $manager->updateConfigs(
-    $configs,
-    'alshaya_acm_product_category',
-    'install'
-  );
 }
 
 /**
