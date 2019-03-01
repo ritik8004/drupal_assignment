@@ -36,7 +36,7 @@
           var video_url = $('li', lightSlider).attr('data-iframe');
           appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), video_url);
           // Hiding the main image container to correct position of video iframe.
-          $('.acq-content-product #cloud-zoom-wrap').hide();
+          $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').hide();
         }
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
@@ -65,7 +65,7 @@
             var URL = $(this).attr('data-iframe');
             $('.acq-content-product .cloudzoom__video_main iframe').remove();
             appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
-            $('.acq-content-product #cloud-zoom-wrap').hide();
+            $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').hide();
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
           }
@@ -77,7 +77,7 @@
           // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
           if (playerIframe.length > 0) {
             playerIframe.remove();
-            $('.acq-content-product #cloud-zoom-wrap').show();
+            $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').show();
           }
         });
 
