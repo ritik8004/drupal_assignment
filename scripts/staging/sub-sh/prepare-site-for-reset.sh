@@ -8,7 +8,7 @@ drush --uri=$uri cr
 
 # Enable developer modules, we are going to use this script only on non-prod envs.
 echo "Enabling developer modules."
-drush  --uri=$uri pm:enable -y dblog views_ui features_ui restui
+drush  --uri=$uri pm:enable -y dblog views_ui restui
 
 # Disable shield for product push to work.
 echo "Disabling shield."

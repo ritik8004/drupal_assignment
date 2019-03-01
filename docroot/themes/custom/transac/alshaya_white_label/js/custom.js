@@ -3,6 +3,8 @@
  * Custom js file.
  */
 
+/* global debounce */
+
 (function ($, Drupal) {
   'use strict';
 
@@ -163,7 +165,7 @@
         });
       });
 
-      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay', 'social-modal-overlay'];
+      var modal_overlay_class = ['pdp-modal-overlay', 'sizeguide-modal-overlay', 'free-gifts-modal-overlay'];
 
       $(document).on('keyup', function (evt) {
         // Remove class when esc button is used to remove the overlay.
@@ -214,15 +216,34 @@
   };
 
   // Add class to footer region when our brands block is present.
-  Drupal.behaviors.slugBannerModal = {
+  Drupal.behaviors.ourBrandsBlock = {
     attach: function (context, settings) {
-      // Check if our brands block is present in the footer to re-adjust the margin.
-      if ($('.c-our-brands').length) {
-        $('.c-footer, .c-post-content').addClass('our-brand-processed');
+
+      /**
+       * Place the Our brands block as per resolution.
+       */
+      function placeOurBrandsBlock() {
         // In mobile move the block after footer--menu.
         if ($(window).width() < 768) {
           $('footer .c-our-brands').insertAfter('.footer--menu');
         }
+        // In desktop the block is above footer.
+        if ($(window).width() > 1024) {
+          $('footer .c-our-brands').insertBefore('.c-footer-primary');
+        }
+        // In tablet the correct position is inside the default footer region wrapper.
+        if ($(window).width() > 767 && $(window).width() < 1025) {
+          $('.region__footer-primary').append($('footer .c-our-brands'));
+        }
+      }
+
+      // Check if our brands block is present in the footer to re-adjust the position.
+      if ($('.c-our-brands').length) {
+        placeOurBrandsBlock();
+        // Limiting via debounce to 200ms.
+        $(window).on('resize', debounce(function () {
+          placeOurBrandsBlock();
+        }, 200));
       }
     }
   };

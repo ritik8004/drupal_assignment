@@ -497,16 +497,16 @@
       display: inline-block;
 
       .price {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+
         .price-currency {
           @include breakpoint($only-tablet) {
             margin-right: 0.4rem;
           }
 
           margin-right: 1rem;
-        }
-
-        .price-amount {
-          float: $right;
         }
       }
     }

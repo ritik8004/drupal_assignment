@@ -97,35 +97,11 @@ script:
 
 deploy:
   - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
+    script: ${BUILD_DIR}/blt/scripts/deploy_branch.sh
     skip_cleanup: true
     on:
-      branch: develop
-      php: 7.1
-      condition: $TRAVIS_EVENT_TYPE != cron
-  - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
-    skip_cleanup: true
-    on:
-      branch: pb-colleague
-      php: 7.1
-  - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
-    skip_cleanup: true
-    on:
-      branch: qa
-      php: 7.1
-  - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
-    skip_cleanup: true
-    on:
-      branch: uat
-      php: 7.1
-  - provider: script
-    script: "$BLT_DIR/scripts/travis/deploy_branch"
-    skip_cleanup: true
-    on:
-      branch: master
+      all_branches: true
+      tags: false
       php: 7.1
   - provider: script
     script: "$BLT_DIR/scripts/travis/deploy_tag"

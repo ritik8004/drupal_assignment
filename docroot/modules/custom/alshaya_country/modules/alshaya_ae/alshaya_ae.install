@@ -5,9 +5,21 @@
  * Install file for alshaya_uae.
  */
 
- /**
-  * Implements hook_update_N().
-  */
+/**
+ * Implements hook_update_N().
+ *
+ * Update the currency_code for Arabic on all the AE sites.
+ */
+function alshaya_ae_update_8004() {
+  // Reset currency code - AR.
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency')
+    ->set('currency_code', 'د٠إ٠')
+    ->save();
+}
+
+/**
+ * Implements hook_update_N().
+ */
 function alshaya_ae_update_8003() {
   // Install Customer rights logo menu for UAE.
   alshaya_config_install_configs(['system.menu.customer-rights-logo'], 'alshaya_ae');

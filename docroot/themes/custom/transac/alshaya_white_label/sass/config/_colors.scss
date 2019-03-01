@@ -77,6 +77,7 @@ $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
+$_instagram_dots_default: #e3e3e3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -275,6 +276,10 @@ $gallery_zoombtn_disabled: $light-ash;
 $hp_slider_dots: $marine-blue-two;
 $hp_slider_arrows_dark: $mothercare-black;
 
+// Instragram slider dots.
+$instagram_dots_default: $_instagram_dots_default;
+// Active color same as $hp_slider_dots;
+
 // Sharethis
 $sharethis_icon: $marine-blue-two;
 $sharethis_icon_hover: transparent;
@@ -316,7 +321,7 @@ $header_mobile_menu_arrow: $marine-blue-two;
 $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $white-five;
 $header_mobile_menu_close: $black;
-$header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+$header_mobile_menu_overlay: rgba(0, 0, 0, 0.48);
 
 // Branding menu mobile.
 $header_branding_shadow: $greyish;

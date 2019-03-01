@@ -4,6 +4,7 @@ show_child_images_after_selecting: 'one'
 show_parent_images_in_child: false
 color_swatches: false
 color_swatches_hover: false
+color_swatches_show_product_image: false
 show_configurable_boxes_after: 767
 plp_slider:
   item: 4
@@ -16,3 +17,4 @@ short_desc_characters: 160
 short_desc_text_summary: true
 hide_not_required_option: false
 listing_display_mode: 'aggregated'
+price_display_mode: 'simple'

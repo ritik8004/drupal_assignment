@@ -58,6 +58,11 @@
               display: inline-flex;
               align-items: center;
               justify-content: center;
+
+              .price-type__wrapper {
+                display: inline-block;
+                padding: 0 0.125rem;
+              }
             }
           }
 
@@ -72,6 +77,8 @@
   }
 
   ul.js-pager__items {
+    margin-top: 2rem;
+
     a {
       background-color: $plp_pager_btn_bg;
       border: none;
@@ -92,6 +99,29 @@
   }
 
   .c-products__item {
+    margin-bottom: 3.75rem;
+
+    &:nth-child(3n+2) {
+      @include breakpoint($only-tablet) {
+        margin-bottom: 3.75rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .price-wrapper {
+        font-size: 0.875rem;
+      }
+
+      .price-block {
+        font-size: 0;
+
+        > div {
+          line-height: 1.75;
+          font-size: 0.6875rem;
+        }
+      }
+    }
+
     @include breakpoint($desktop) {
       width: 32%;
       margin-#{$right}: 0.75rem;
@@ -106,12 +136,20 @@
       }
     }
 
+    .promotions .sku-promotion-link {
+      color: $plp_promotion_link;
+    }
+
     .alshaya_search_gallery {
       max-height: 18rem;
 
       .alshaya_search_mainimage {
         height: auto;
         min-height: auto;
+
+        @include breakpoint($desktop) {
+          min-height: 16.57625rem;
+        }
       }
     }
   }
@@ -179,6 +217,20 @@
   .apply-fake {
     .fake-apply-button {
       text-transform: uppercase;
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .c-plp {
+    .swatches {
+      > a {
+        .swatch-block {
+          padding: 0 0.1875rem;
+          margin: 0;
+          width: 1.875rem;
+        }
+      }
     }
   }
 }

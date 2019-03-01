@@ -153,7 +153,7 @@ class AcqPromotionsManager {
     }
 
     // Delete promotions, which are not part of API response.
-    $this->deletePromotions($ids);
+    $this->deletePromotions($types, $ids);
   }
 
   /**
@@ -162,9 +162,10 @@ class AcqPromotionsManager {
    * @param array $validIDs
    *   Valid Rule ID's from API.
    */
-  protected function deletePromotions(array $validIDs = []) {
+  protected function deletePromotions(array $types, array $validIDs = []) {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
+    $query->condition('field_acq_promotion_type', $types, 'IN');
 
     if ($validIDs) {
       $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
@@ -178,7 +179,8 @@ class AcqPromotionsManager {
 
       if ($node instanceof Node) {
         $node->delete();
-        $this->logger->notice('Deleted orphan promotion node @promotion having rule_id:@rule_id.', [
+        $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
+          '@nid' => $node->id(),
           '@promotion' => $node->label(),
           '@rule_id' => $node->get('field_acq_promotion_rule_id')->first()->getString(),
         ]);
@@ -340,7 +342,7 @@ class AcqPromotionsManager {
       return $promotion_node;
     }
     else {
-      $this->logger->critical('Error occured while creating Promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
+      $this->logger->critical('An error occurred while creating promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
       return NULL;
     }
   }

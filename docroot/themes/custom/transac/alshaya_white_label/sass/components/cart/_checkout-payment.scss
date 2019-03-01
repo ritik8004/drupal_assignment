@@ -532,3 +532,31 @@
     }
   }
 }
+
+.checkout-payment {
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: 2px solid $checkout_payment_form_border;
+        display: block;
+
+        .messages {
+          margin: 0;
+        }
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: 1px solid $checkout_payment_option_border;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.cybersource-ajax-progress-throbber .cybersource-throbber {
+  background: url(#{$base_theme_loader_img_directory_path}) center no-repeat !important;
+  background-size: 5.5rem !important;
+}

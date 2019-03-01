@@ -222,7 +222,7 @@
       var menuBackdrop = $('.menu-backdrop');
 
       function setMenuHeight() {
-        if (menuLevel2.length > 0 && windowWidth > 767) {
+        if (menuLevel2.length > 0 && windowWidth > 1024) {
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
@@ -244,6 +244,15 @@
 
       var menuTiming = $('.main--menu').attr('data-menu-timing');
       $(':root').css({'--menuTiming': menuTiming + 'ms'});
+
+      // Adding Class to parent on hover of a menu-item without child.
+      if ($(window).width() > 1023) {
+        $('.block-alshaya-main-menu li.menu--one__list-item:not(.has-child)').hover(function () {
+          $(this).parent().addClass('active--menu--without__child');
+        }, function () {
+          $(this).parent().removeClass('active--menu--without__child');
+        });
+      }
     }
   };
 

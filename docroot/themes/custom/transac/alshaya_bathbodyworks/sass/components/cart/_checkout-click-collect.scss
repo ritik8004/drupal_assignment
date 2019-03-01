@@ -20,6 +20,8 @@
         font-size: 0.875rem;
         padding: 0.625rem 0.3125rem 0.3125rem;
       }
+
+      font-size: 0.875rem;
     }
 
     #click-and-collect-list-view {
@@ -35,6 +37,26 @@
                 color: $checkout_cc_list_hours_label;
                 font-weight: bold;
               }
+
+              @include breakpoint($only-mobile) {
+                font-size: 0.875rem;
+              }
+
+              &::after {
+                @include breakpoint($only-mobile) {
+                  #{$left}: inherit;
+                  #{$right}: 0;
+                  top: -0.5rem;
+                  font-size: 1.875rem;
+                }
+              }
+            }
+          }
+
+          .store-name-and-address,
+          .label--delivery-time {
+            @include breakpoint($only-mobile) {
+              font-size: 0.875rem;
             }
           }
 

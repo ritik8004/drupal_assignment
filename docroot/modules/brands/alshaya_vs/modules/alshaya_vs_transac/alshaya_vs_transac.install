@@ -7,6 +7,32 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
+use Drupal\Component\Utility\Unicode;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update the currency_code to DHS.
+ */
+function alshaya_vs_transac_update_8005() {
+  $country_code = Unicode::strtolower(Settings::get('country_code'));
+  if ($country_code === 'ae') {
+    \Drupal::configFactory()->getEditable('acq_commerce.currency')
+      ->set('currency_code', 'DHS')
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Clear product cache.
+ */
+function alshaya_vs_transac_update_8004() {
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
 
 /**
  * Implements hook_update_N().

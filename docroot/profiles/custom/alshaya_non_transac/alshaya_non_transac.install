@@ -114,8 +114,8 @@ function alshaya_non_transac_install() {
   if (isset($_ENV['AH_SITE_NAME'])) {
     \Drupal::service('module_installer')->install(['acquia_connector']);
   }
-  // Set whitelabel_non_transac as the default theme.
-  \Drupal::service('theme_handler')->setDefault('whitelabel_non_transac');
+  // Set whitelabel as the default theme.
+  \Drupal::service('theme_handler')->setDefault('whitelabel');
 
   // Set registration to administrator only.
   $config = \Drupal::configFactory()->getEditable('user.settings');

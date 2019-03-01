@@ -50,9 +50,9 @@
           var $value = $(this).attr('data-facet-item-value');
           $('.facet-item a[data-drupal-facet-item-value="' + $value + '"]', $wrapper).closest('.facet-item').trigger('click');
         });
-
-        applyFilterSlider();
       });
+
+      applyFilterSlider();
     }
   };
 
@@ -214,6 +214,19 @@
         });
       }
     }
+
+    //JS for checking the empty filters.
+    function emptyBrasFilter(element) {
+      if (element.is(':empty')) {
+        element.parent().addClass('empty-bras-filter');
+      }
+      else {
+        element.parent().removeClass('empty-bras-filter');
+      }
+    }
+
+    emptyBrasFilter($('.sfb-letter .sfb-facets-container'));
+    emptyBrasFilter($('.sfb-band-cup .sfb-facets-container'));
   }
 
   if ($('html').attr('dir') == 'rtl') {

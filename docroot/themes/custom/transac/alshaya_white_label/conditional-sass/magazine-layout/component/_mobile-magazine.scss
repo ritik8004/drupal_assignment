@@ -1,5 +1,11 @@
 .magazine-layout-node {
   .acq-content-product {
+    .gallery-wrapper {
+      @include breakpoint($tablet) {
+        padding-bottom: 0;
+      }
+    }
+
     @include breakpoint($tablet) {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -44,27 +50,56 @@
       &.sidebar-fixed {
         position: fixed;
         top: 5rem;
-        #{$right}: calc((100vw - 45rem) / 2);
-        width: calc((40 * 35.5rem) / 100);
+        width: calc((100vw - 5rem) / 3);
+        #{$right}: 1.5rem;
 
         &.contain {
           position: absolute;
           bottom: 0;
           top: auto;
-          #{$right}: 0;
+          #{$right}: 0 !important;
+
+          .click-collect-all-stores {
+            &.inline-modal-wrapper {
+              @include breakpoint($tablet) {
+                top: auto;
+                bottom: 0;
+              }
+            }
+          }
         }
       }
     }
 
     .content__title_wrapper {
       border-bottom: none;
+
+      @include breakpoint($only-mobile) {
+        visibility: hidden;
+
+        &.show-sticky-wrapper {
+          visibility: visible;
+        }
+      }
     }
 
     @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
-        #{$right}: calc((100vw - 67.25rem) / 2);
         width: calc((30 * 71.5rem) / 100);
+        #{$right}: calc((100vw - 66.375rem) / 2);
+      }
+    }
+
+    .click-collect-all-stores {
+      &.inline-modal-wrapper {
+        @include breakpoint($tablet) {
+          width: calc((33 * 44rem) / 100);
+        }
+
+        @include breakpoint($desktop) {
+          width: calc((33 * 66.375rem) / 100);
+        }
       }
     }
   }
@@ -88,10 +123,20 @@
       &.fixed {
         position: fixed;
         bottom: 0;
-        z-index: 99;
+        z-index: 9;
         width: 100%;
         background: $primary_bg;
         box-shadow: 0.0625rem 0.125rem 0.625rem $mothercare-black;
+        transition: z-index 0.5s ease-in-out;
+
+        h1 {
+          span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
       }
 
       .price-block,
@@ -105,10 +150,9 @@
   }
 
   .size-tray {
-    display: none;
-
     &.tray-open {
-      display: block;
+      opacity: 1;
+      z-index: 12;
     }
   }
 
@@ -126,6 +170,19 @@
 
           html[lang=ar] & {
             max-width: 13.7rem;
+          }
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        button[type="submit"] {
+          html[lang=ar] & {
+            padding: 0.5rem 1.875rem 0.5rem 0.5rem;
+            max-width: 11.75rem;
+
+            &::before {
+              right: 0.5rem;
+            }
           }
         }
       }
@@ -172,6 +229,8 @@
             position: absolute;
             #{$right}: 0;
             font-size: 2.125rem;
+            top: 50%;
+            transform: translateY(-50%);
           }
 
           &.selected-text {
@@ -214,6 +273,36 @@
     &.tray-overlay,
     &.open-tray-without-selection {
       overflow: hidden;
+    }
+  }
+
+  .magazine-layout {
+    article[gtm-sku-type="simple"] {
+      .content__title_wrapper {
+        .sku-base-form {
+          display: block;
+        }
+      }
+    }
+
+    article {
+      &.product-out-of-stock {
+        .basic-details-wrapper {
+          min-height: 2.5rem;
+
+          span {
+            &.out-of-stock {
+              position: relative;
+              box-shadow: none;
+              border: none;
+              height: 2.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+      }
     }
   }
 }

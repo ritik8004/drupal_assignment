@@ -151,7 +151,6 @@
   function mobileColors(context) {
     // Moving color swatches from sidebar to main content in between the gallery after
     // first image as per design.
-
     var sku_swatch = $('.configurable-swatch', context).clone();
     $('.magazine-swatch-placeholder').html(sku_swatch);
     $('.magazine-swatch-placeholder').addClass('configurable-swatch form-item-configurables-article-castor-id');
@@ -198,19 +197,32 @@
     }
 
     if ($('.content__title_wrapper').find('.size-tray-link').length < 1) {
-      $('<div class="size-tray-link">' + Drupal.t('Select Size') + '</div>').insertBefore('.edit-add-to-cart');
+      var sizeTraylinkText = Drupal.t('Select Size');
+      // If size is default selected.
+      if ($('.size-tray .select2Option .list-title .selected-text').text().length > 0) {
+        sizeTraylinkText = $('.size-tray .select2Option .list-title .selected-text').text();
+      }
+
+      // Add Size link only with product having size.
+      if ($('.form-item-configurables-size').length > 0) {
+        $('<div class="size-tray-link">' + sizeTraylinkText + '</div>').insertBefore('.edit-add-to-cart');
+      }
     }
 
     $('.size-tray-link', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
-      $('body').addClass('tray-overlay');
+      $('.size-tray').addClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      $('body').addClass('tray-overlay mobile--overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray').toggleClass('tray-open');
-      $('body').removeClass('tray-overlay');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400, function () {
+        $('.size-tray').removeClass('tray-open');
+      });
+      $('body').removeClass('tray-overlay mobile--overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
         $('body').removeClass('open-tray-without-selection');
+        $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
       }
     });
 
@@ -240,7 +252,11 @@
       select.trigger('change');
 
       // Closing the tray after selection.
-      $('.size-tray').toggleClass('tray-open');
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
+      // Close with a delay allowing time for sliding animation to finish.
+      setTimeout(function () {
+        $('.size-tray').removeClass('tray-open');
+      }, 400);
       $('body').removeClass('tray-overlay');
     });
   }
@@ -268,6 +284,10 @@
             stickyDiv.removeClass('fixed');
           }
         });
+
+        if ($(context).find('.store-sequence').length !== 0) {
+          window.scrollTo(0, $('#pdp-stores-container h3.c-accordion__title').offset().top);
+        }
       }
     }
   };
@@ -310,12 +330,14 @@
         // Move size guide link inside configurable size container.
         sizeTrayButtons.prepend(sizeGuideLink);
 
-        $('.edit-add-to-cart', context).on('mousedown', function () {
+        $('.edit-add-to-cart', context).once().on('mousedown', function () {
           var that = this;
           setTimeout(function () {
             if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
-              $('.size-tray').toggleClass('tray-open');
+              $('.size-tray').addClass('tray-open');
+              $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
               $('body').addClass('open-tray-without-selection');
+              $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('submit');
             }
           }, 10);
         });
@@ -326,7 +348,8 @@
           if ((settings.hasOwnProperty('extraData')) &&
             ((settings.extraData._triggering_element_name.indexOf('configurables') >= 0)) &&
             $('body').hasClass('open-tray-without-selection')) {
-            $('.edit-add-to-cart').mousedown();
+            $('body').removeClass('open-tray-without-selection');
+            $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
           }
         });
 

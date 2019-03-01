@@ -147,6 +147,10 @@
     display: block;
     font-size: 0.875rem;
     margin-bottom: 0.187rem;
+
+    &.simple-price--wrapper {
+      display: inline-block;
+    }
   }
 
   .owl-prev {
@@ -429,7 +433,8 @@
 .price--discount span,
 .special--price .price-amount,
 .special--price .price-currency,
-.special--price .price-wrapper {
+.special--price .price-wrapper,
+.special--price {
   color: $pdp_product_special_price_text !important;
 }
 

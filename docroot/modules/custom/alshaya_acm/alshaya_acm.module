@@ -606,20 +606,6 @@ function alshaya_acm_price_get_formatted_price($price) {
 }
 
 /**
- * Helper function to format price upto configured decimal points.
- *
- * @param float $price
- *   The price value.
- *
- * @return float
- *   Return formatted price with decimal points.
- */
-function alshaya_acm_format_raw_price(float $price): float {
-  $decimal_points = \Drupal::configFactory()->get('acq_commerce.currency')->get('decimal_points');
-  return (float) number_format($price, $decimal_points, '.', '');
-}
-
-/**
  * Helper function to get cart quantity options.
  *
  * @param int|null $max
@@ -817,7 +803,7 @@ function _alshaya_acm_update_product_name(SKU $sku_entity, array $item, array $c
     // Remove comma if there in final price as this causes problem and comma
     // will be added again by the `number_format()`.
     $item_cart_price['final_price'] = str_replace(',', '', $item_cart_price['final_price']);
-    $total_price['#final_price'] = number_format($item_cart_price['final_price'] * $item['quantity']['#default_value'], 3);
+    $total_price['#final_price'] = _alshaya_acm_format_price_with_decimal($item_cart_price['final_price'] * $item['quantity']['#default_value']);
   }
 
   // Extract free gift promotions & Add sku title, entity id to the promotions
@@ -1015,4 +1001,53 @@ function _alshaya_acm_is_out_of_stock_exception(\Exception $e) {
   }
 
   return FALSE;
+}
+
+/**
+ * Format the price with decimal.
+ *
+ * @param float $price
+ *   Price to format.
+ * @param string $dec_point
+ *   Decimal point.
+ * @param string $thousands_sep
+ *   Thousand separator.
+ *
+ * @return string
+ *   Formatted price with decimal.
+ */
+function _alshaya_acm_format_price_with_decimal(float $price, string $dec_point = '.', string $thousands_sep = ',') {
+  $decimals = \Drupal::config('acq_commerce.currency')->get('decimal_points');
+  return number_format($price, $decimals, $dec_point, $thousands_sep);
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_acm_modules_installed($modules) {
+  if (in_array('shield', $modules)) {
+    _alshaya_acm_exclude_sync_from_shield();
+  }
+}
+
+/**
+ * Wrapper function to exclude sync requests from shield.
+ */
+function _alshaya_acm_exclude_sync_from_shield() {
+  if (\Drupal::moduleHandler()->moduleExists('shield')) {
+    // This list contains all the api urls used to post data to Drupal.
+    $paths = [
+      '/productsync',
+      '/productstocksync',
+      '/categorysync',
+      '/customer/delete',
+      '/oauth/token',
+      '/rest/session/token',
+    ];
+
+    \Drupal::getContainer()->get('config.factory')
+      ->getEditable('shield.settings')
+      ->set('paths', implode(PHP_EOL, $paths))
+      ->save();
+  }
 }
