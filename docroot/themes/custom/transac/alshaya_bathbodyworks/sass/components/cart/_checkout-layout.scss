@@ -55,9 +55,7 @@
       }
 
       .l-container {
-        margin-#{$left}: auto;
-        margin-#{$right}: 0;
-        max-width: 88%;
+        max-width: 77rem;
       }
     }
   }
@@ -65,8 +63,11 @@
 
 .block-customer-service-block {
   font-family: $alshaya-thin;
-  padding: 0;
-  padding-#{$left}: 1.37rem;
+
+  @include breakpoint($desktop) {
+    padding: 0;
+    padding-#{$left}: 1.37rem;
+  }
 
   @include breakpoint($only-mobile) {
     font-size: 0.875rem;
