@@ -1062,6 +1062,57 @@ class SkuImagesManager {
   }
 
   /**
+   * Get thumbnails of product along with all it's variants.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   variants image.
+   */
+  public function getAllVariantThumbnails(SKUInterface $sku): array {
+    $plp_main_image = $variants_image = [];
+
+    if ($sku->bundle() == 'simple') {
+      $plugin = $sku->getPluginInstance();
+      $sku = $plugin->getParentSku($sku);
+    }
+
+    $children = $this->skuManager->getChildSkus($sku);
+    $duplicates = [];
+    foreach ($children as $child) {
+      $value = $this->skuManager->getPdpSwatchValue($child);
+      if (empty($value) || isset($duplicates[$value])) {
+        continue;
+      }
+
+      // Do not show OOS products.
+      if (!$this->skuManager->isProductInStock($child)) {
+        continue;
+      }
+
+      $product_image = $child->getThumbnail();
+
+      if (empty($product_image) || !($product_image['file'] instanceof FileInterface)) {
+        continue;
+      }
+
+      $duplicates[$value] = 1;
+      if (empty($plp_main_image)) {
+        $plp_main_image = $this->skuManager->getSkuImage($product_image, '291x288');
+      }
+
+      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image, '291x288', '291x288');
+    }
+
+    return [
+      'mainImage' => $plp_main_image,
+      'thumbnails' => $variants_image,
+    ];
+
+  }
+
+  /**
    * Get thumbnails for gallery from media array.
    *
    * @param array $media
