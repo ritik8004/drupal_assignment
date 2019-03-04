@@ -12,6 +12,8 @@ use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
@@ -316,4 +318,106 @@ function alshaya_acm_product_position_local_tasks_alter(&$local_tasks) {
   if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form'])) {
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form']['parent_id'] = 'alshaya_acm_product_position.plp_sort_settings_admin_form';
   }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Get entity from form state object.
+  $taxonomy_term = $form_state->getFormObject()->getEntity();
+
+  // Check if the current form is menu link form of configured menu types.
+  if (!$taxonomy_term instanceof Term) {
+    return;
+  }
+
+  $form['field_sorting_options']['widget']['#ajax'] = [
+    'callback' => '_alshaya_acm_product_position_get_sort_table',
+    'progress' => [
+      'type' => 'throbber',
+      'message' => NULL,
+    ],
+    'wrapper' => 'plp-sorting-options-wrapper',
+  ];
+
+  $form['sort_options_wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'id' => ['plp-sorting-options-wrapper'],
+    ],
+  ];
+  // Disable caching on this form.
+  $form_state->setCached(FALSE);
+  if (!empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override') {
+    $build = \Drupal::formBuilder()->getForm('Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm');
+    $form['sort_options_wrapper']['sort_options'] = $build['sort_options'];
+  }
+
+  // Form submit handler.
+  $form['#validate'][] = 'alshaya_acm_product_position_term_validate';
+}
+
+/**
+ * Ajax callback to update sort_options_wrapper.
+ */
+function _alshaya_acm_product_position_get_sort_table(&$form, FormStateInterface $form_state) {
+  return $form['sort_options_wrapper'];
+}
+
+/**
+ * Submit function for menu add / edit form to save category root term.
+ */
+function alshaya_acm_product_position_term_validate(&$form, FormStateInterface $form_state) {
+  /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
+  if (!empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override') {
+    $sort_options = $form_state->getValue('sort_options');
+    if (!empty($sort_options)) {
+
+      // Sort the options based on weight.
+      uasort($sort_options, ['Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm', 'weightArraySort']);
+      $result = [];
+      // Prepare sort option array for saving in config.
+      foreach ($sort_options as $key => $sort_option) {
+        $result[$key] = $sort_option['enable'] ? $key : 0;
+      }
+
+      $form_state->setValue('field_sorting_order', [['value' => serialize($result)]]);
+    }
+  }
+}
+
+/**
+ * Get plp sort option setting from parent term of the given term.
+ *
+ * @param \Drupal\taxonomy\TermInterface $taxonomy_term
+ *   The taxonomy term object.
+ *
+ * @return array
+ *   Return array value.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+ */
+function alshaya_acm_product_position_get_plp_sort_options(TermInterface $taxonomy_term) : array {
+  $anchor = $taxonomy_term->get('field_size_guide_anchor');
+  $query_string = [];
+  if (!empty($anchor) && !empty($anchor->first())) {
+    foreach (explode(',', $anchor->first()->getString()) as $string) {
+      list($key, $value) = explode('=', trim($string));
+      $query_string[trim($key)] = trim($value);
+    }
+  }
+
+  // Get size guide link from parent term.
+  $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+  $term = reset($parent_terms);
+  if ($term instanceof TermInterface) {
+    $query_string = alshaya_acm_product_get_size_guide_anchor($term, $query_string);
+    if (!empty($query_string)) {
+      return $query_string;
+    }
+  }
+  return $query_string;
 }
