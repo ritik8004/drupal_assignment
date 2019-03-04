@@ -74,7 +74,15 @@ sites:
   pbnontransacae:
     module: alshaya_pb
     type: alshaya_non_transac
+  flkw:
+    module: alshaya_fl
+    type: alshaya_transac
+    country: sa
   flsa:
+    module: alshaya_fl
+    type: alshaya_transac
+    country: sa
+  flae:
     module: alshaya_fl
     type: alshaya_transac
     country: sa
