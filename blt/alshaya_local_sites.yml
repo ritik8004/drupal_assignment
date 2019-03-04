@@ -77,7 +77,7 @@ sites:
   flkw:
     module: alshaya_fl
     type: alshaya_transac
-    country: sa
+    country: kw
   flsa:
     module: alshaya_fl
     type: alshaya_transac
@@ -85,4 +85,4 @@ sites:
   flae:
     module: alshaya_fl
     type: alshaya_transac
-    country: sa
+    country: ae
