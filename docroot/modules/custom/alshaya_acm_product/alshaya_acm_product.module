@@ -157,6 +157,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'stock_placeholder' => NULL,
       'swatches' => NULL,
       'swatch_more_text' => NULL,
+      'swatch_color_count' => NULL,
     ],
   ];
 

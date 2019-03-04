@@ -39,6 +39,11 @@
         {% if swatch_more_text %}
           <a class="swatch-more-link" href="{{ product_url }}">{{ swatch_more_text }}</a>
         {% endif %}
+        {% if swatch_color_count %}
+          <div class="swatch-color-count">
+            <a class="swatch-color-count" href="{{ product_url }}">{{ swatch_color_count }}</a>
+          </div>
+        {% endif %}
       </div>
     {% endif %}
   {% endblock %}
