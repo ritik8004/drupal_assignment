@@ -33,3 +33,9 @@ alshaya_acm_product.sku_export:
   parent: 'acq_commerce.admin_commerce'
   description: 'Export SKU Data.'
   weight: 11
+alshaya_acm_product.sku_export_category:
+  title: 'Export SKU Data with Category'
+  route_name: alshaya_acm_product.product_sku_export_category
+  parent: 'acq_commerce.admin_commerce'
+  description: 'Export SKU Data with category.'
+  weight: 12

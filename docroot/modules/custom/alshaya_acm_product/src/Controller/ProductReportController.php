@@ -123,4 +123,46 @@ class ProductReportController extends ControllerBase {
     return $response;
   }
 
+  /**
+   * Controller to download Product Report with category id and name.
+   */
+  public function downloadProductReportWithCategory() {
+    $path = file_create_url($this->fileSystem->realpath("temporary://"));
+    // @codingStandardsIgnoreLine
+    global $acsf_site_name;
+    $time_format = $this->dateFormatter->format($this->currentTime->getRequestTime(), 'custom', 'Ymd');
+    $filename = 'product-report-' . $acsf_site_name . '-with-cat-' . $time_format . '.csv';
+
+    $fp = fopen($path . '/' . $filename, 'w');
+    fwrite($fp, 'SKU, Category Id, Category Name' . PHP_EOL);
+
+    $select = $this->database->select('node__field_skus', 'nfs');
+    $select->fields('nfs', ['field_skus_value']);
+    $select->join('node__field_category', 'nfc', 'nfs.entity_id = nfc.entity_id');
+    $select->addExpression("GROUP_CONCAT(field_category_target_id,'')", "TermId");
+    $select->join('taxonomy_term_field_data', 'ttfd', 'ttfd.tid = nfc.field_category_target_id');
+    $select->addExpression("GROUP_CONCAT(name,'')", "TermName");
+    $select->condition('ttfd.langcode', 'en');
+    $select->groupBy('nfs.field_skus_value');
+    $result = $select->execute();
+
+    while (($sku = $result->fetchAssoc()) !== FALSE) {
+      $sku_id = $sku['field_skus_value'];
+      $term_id = str_replace(',', '  ', $sku['TermId']);
+      $term_name = str_replace(',', '   ', $sku['TermName']);
+      fwrite($fp, "$sku_id, $term_id, $term_name" . PHP_EOL);
+    }
+
+    fclose($fp);
+
+    $response = new BinaryFileResponse($path . '/' . $filename);
+
+    $disposition = $response->headers->makeDisposition(
+      ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+      $filename
+    );
+    $response->headers->set('Content-Disposition', $disposition);
+    return $response;
+  }
+
 }
