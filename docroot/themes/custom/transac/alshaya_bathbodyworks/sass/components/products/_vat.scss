@@ -12,15 +12,3 @@
 .vat-text-footer {
   font-size: 0.75rem;
 }
-
-.vat-container {
-  .vat-text-footer {
-    @include breakpoint($desktop) {
-      padding: 0 0 1.5rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      margin: 1.5rem 0.5rem 0;
-    }
-  }
-}
