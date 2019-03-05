@@ -65,9 +65,9 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
           {% if content.field_banner or content.field_promotion_image_mobile %}
             <div class="picture-tag">
               <picture>
-                <source media="(min-width: 768px)" srcset="{{ file_url(desktop_image) }}">
-                <source media="(max-width: 767px)" srcset="{{ file_url(mobile_image) }}">
-                <img src="{{ file_url(promo_default_image) }}"/>
+                <source media="(min-width: 768px)" data-srcset="{{ file_url(desktop_image) }}">
+                <source media="(max-width: 767px)" data-srcset="{{ file_url(mobile_image) }}">
+                <img class="lazyload" src="data:image/jpg; base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wgARCAADAAUDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//aAAwDAQACEAMQAAABlgb/AP/EABYQAQEBAAAAAAAAAAAAAAAAAAQDEv/aAAgBAQABBQKrla//xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAgBAwEBPwGv/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPwF//8QAFxAAAwEAAAAAAAAAAAAAAAAAAAEzof/aAAgBAQAGPwKuI//EABgQAAIDAAAAAAAAAAAAAAAAAAAhMUHw/9oACAEBAAE/Ib7Gkf/aAAwDAQACAAMAAAAQ9//EABYRAAMAAAAAAAAAAAAAAAAAAAARUf/aAAgBAwEBPxBqf//EABYRAAMAAAAAAAAAAAAAAAAAAAABEf/aAAgBAgEBPxCI/8QAFRABAQAAAAAAAAAAAAAAAAAAAQD/2gAIAQEAAT8QeKD/2Q==" data-src="{{ file_url(promo_default_image) }}"/>
               </picture>
             </div>
           {% endif %}
@@ -77,9 +77,9 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
         {% if content.field_banner or content.field_promotion_image_mobile %}
           <div class="picture-tag">
             <picture>
-              <source media="(min-width: 768px)" srcset="{{ file_url(desktop_image) }}">
-              <source media="(max-width: 767px)" srcset="{{ file_url(mobile_image) }}">
-              <img src="{{ file_url(promo_default_image) }}"/>
+              <source media="(min-width: 768px)" data-srcset="{{ file_url(desktop_image) }}">
+              <source media="(max-width: 767px)" data-srcset="{{ file_url(mobile_image) }}">
+              <img class="lazyload" src="data:image/jpg; base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wgARCAADAAUDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//aAAwDAQACEAMQAAABlgb/AP/EABYQAQEBAAAAAAAAAAAAAAAAAAQDEv/aAAgBAQABBQKrla//xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAgBAwEBPwGv/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPwF//8QAFxAAAwEAAAAAAAAAAAAAAAAAAAEzof/aAAgBAQAGPwKuI//EABgQAAIDAAAAAAAAAAAAAAAAAAAhMUHw/9oACAEBAAE/Ib7Gkf/aAAwDAQACAAMAAAAQ9//EABYRAAMAAAAAAAAAAAAAAAAAAAARUf/aAAgBAwEBPxBqf//EABYRAAMAAAAAAAAAAAAAAAAAAAABEf/aAAgBAgEBPxCI/8QAFRABAQAAAAAAAAAAAAAAAAAAAQD/2gAIAQEAAT8QeKD/2Q==" data-src="{{ file_url(promo_default_image) }}"/>
             </picture>
           </div>
         {% endif %}
