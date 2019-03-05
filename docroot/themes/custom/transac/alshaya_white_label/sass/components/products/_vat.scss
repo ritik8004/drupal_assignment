@@ -14,21 +14,20 @@
 }
 
 .vat-container {
-  @include container(77.25rem);
+  @include container(80.25rem);
+
+  display: flex;
 
   .vat-text-footer {
+    width: 100%;
+    padding: 0 1.5rem 1.5rem;
+
     @include breakpoint($tablet) {
       text-align: $left;
-      padding: 0.3125rem 1.5rem;
-    }
-
-    @include breakpoint($desktop) {
-      padding: 1rem 0;
     }
 
     @include breakpoint($only-mobile) {
       text-align: center;
-      margin: 0.3125rem 0.5rem 1.875rem;
     }
   }
 
