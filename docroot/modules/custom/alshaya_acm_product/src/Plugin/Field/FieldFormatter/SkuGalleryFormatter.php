@@ -154,7 +154,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
-    if ($entity_adapter instanceof EntityAdapter) {
+    if (($entity_adapter instanceof EntityAdapter) &&
+      ($this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode') === SkuManager::NON_AGGREGATED_LISTING)) {
       $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
 
       /** @var \Drupal\node\NodeInterface $colorNode */

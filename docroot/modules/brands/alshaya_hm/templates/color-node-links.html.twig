@@ -1,0 +1,5 @@
+{% for color_node in color_nodes %}
+  <span class="color-block" style="background:{{ color_node.attr_rgb_color }}">
+    <a href="{{ path('entity.node.canonical', {'node': color_node.entity_id}) }}">{{ color_node.attr_color_label }}</a>
+  </span>
+{% endfor %}

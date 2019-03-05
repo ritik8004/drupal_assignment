@@ -2722,7 +2722,9 @@ class SkuManager {
    */
   public function getSkuForNode(NodeInterface $node, $no_color_node = FALSE) {
     $sku_string = $node->get('field_skus')->getString();
-    $product_color = $node->get('field_product_color')->getString();
+    $listing_mode = $this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
+
+    $product_color = ($listing_mode === self::NON_AGGREGATED_LISTING) ? $node->get('field_product_color')->getString() : '';
 
     if ($no_color_node && $product_color) {
       return '';
@@ -2850,8 +2852,10 @@ class SkuManager {
     if ($nid_field) {
       $nid_field->setValues([$original->id()]);
     }
-
-    $product_color = $node->get('field_product_color')->getString();
+    $product_color = '';
+    if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode') === SkuManager::NON_AGGREGATED_LISTING) {
+      $product_color = $node->get('field_product_color')->getString();
+    }
 
     $prices = $this->getMinPrices($sku, $product_color);
     $price = empty($prices['final_price'])
@@ -3069,6 +3073,45 @@ class SkuManager {
     $query->condition('nc.field_category_target_id', $tid);
     $query->distinct();
     return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
+  /**
+   * Helper function to check if SKU entity has style code attribute or not.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity for which the style code needs to be fetched.
+   *
+   * @return bool|mixed
+   *   Style code value if field & value exist, FALSE otherwise.
+   */
+  public function fetchStyleCode(SKU $sku) {
+    if ($sku->hasField('attr_style_code') &&
+      $style_code = $sku->get('attr_style_code')->getString()) {
+      return $style_code;
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Helper function to return nids having same style_code attribute.
+   *
+   * @param string $style_code
+   *   String Style code to be looked up for while fetching nodes.
+   *
+   * @return array
+   *   array of nids with linked SKUs having style code passed as param.
+   */
+  public function fetchColorNodes($style_code) {
+    $query = $this->connection->select('acq_sku_field_data', 'asfd');
+    $query->join('node__field_skus', 'nfs', 'asfd.sku = nfs.field_skus_value');
+    $query->condition('asfd.attr_style_code', $style_code);
+    $query->fields('nfs', ['entity_id']);
+    $query->fields('asfd', ['attr_rgb_color', 'attr_color_label']);
+
+    $nids = $query->execute()->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
+
+    return $nids;
   }
 
 }

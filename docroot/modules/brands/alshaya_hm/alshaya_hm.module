@@ -152,6 +152,14 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_hm_get_product_description($sku_entity);
       $build['description'] = $return['description'];
+
+      if ($style_code = $skuManager->fetchStyleCode($sku_entity)) {
+        $color_nodes = $skuManager->fetchColorNodes($style_code);
+        $build['color_node_links'] = [
+          '#theme' => 'color_node_links',
+          '#color_nodes' => $color_nodes,
+        ];
+      }
     }
   }
 }
@@ -311,4 +319,26 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
 function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
+  if ($product['style_code']) {
+    $sku->attr_style_code = $product['style_code'];
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_hm_theme($existing, $type, $theme, $path) {
+  return [
+    'color_node_links' => [
+      'variables' => [
+        'color_nodes' => NULL,
+      ],
+    ],
+  ];
 }

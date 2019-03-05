@@ -13,6 +13,23 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Delete fields & related config for all non-aggregation.
+ */
+function alshaya_hm_update_8032() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshaya_config_manager */
+  $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
+
+  // Hide product color field from Form display.
+  $alshaya_config_manager->updateConfigs(['core.entity_form_display.node.acq_product.default'], 'acq_sku');
+
+  // Add style code attribute to SKU entity.
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Mark all indexed data for re-indexation to get the price data indexed again.
  */
 function alshaya_hm_update_8031() {
