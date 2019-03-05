@@ -5,6 +5,7 @@
  * Module file for Alshaya ACM Product Position.
  */
 
+use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\search_api\Query\ConditionInterface;
@@ -180,6 +181,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
   ];
 
   if (isset($form['#id']) && in_array($form['#id'], $plp_forms)) {
+    $form['#cache']['tags'][] = 'views-exposed-form-alshaya-product-list';
     // Best seller descending option removed.
     if (isset($form['sort_bef_combine']['#options']['nid DESC'])) {
       unset($form['sort_bef_combine']['#options']['nid DESC']);
@@ -238,7 +240,19 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
  *   Re-ordered options of the sort.
  */
 function _alshaya_acm_product_position_sorted_options(array $options) {
-  $config_sort_options = array_keys(array_filter(_alshaya_acm_product_position_get_config()));
+
+  $route_match = \Drupal::service('current_route_match');
+  $route_name = $route_match->getRouteName();
+
+  $config_values = _alshaya_acm_product_position_get_config();
+  // If /taxonomy/term/tid page.
+  if ($route_name == 'entity.taxonomy_term.canonical') {
+    /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
+    $term = $route_match->getParameter('taxonomy_term');
+    $config_values = alshaya_acm_product_position_get_plp_sort_options($term);
+  }
+
+  $config_sort_options = array_keys(array_filter($config_values));
   // If there are at least any sort option enabled.
   if (!empty($config_sort_options)) {
     $new_sort_options = [];
@@ -347,35 +361,63 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
       'id' => ['plp-sorting-options-wrapper'],
     ],
   ];
-  // Disable caching on this form.
-  $form_state->setCached(FALSE);
-  if (!empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override') {
-    $build = \Drupal::formBuilder()->getForm('Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm');
-    $form['sort_options_wrapper']['sort_options'] = $build['sort_options'];
+
+  // Display sort options table only when the sorting option value is override.
+  $ajax_value = !empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override';
+  $term_value = !empty($taxonomy_term->get('field_sorting_options')->getValue()) && $taxonomy_term->get('field_sorting_options')->getString() == 'override';
+
+  $form['sort_options_wrapper']['sort_options'] = [];
+  if (($term_value && empty($form_state->getValues())) || (!empty($form_state->getValues()) && $ajax_value)) {
+    $form['sort_options_wrapper']['sort_options'] = [
+      '#type' => 'table',
+      '#header' => [
+        t('Enable/Disable'),
+        t('Name'),
+        t('Weight'),
+      ],
+      '#tabledrag' => [
+        [
+          'action' => 'order',
+          'relationship' => 'sibling',
+          'group' => 'plp_sort_options-order-weight',
+        ],
+      ],
+    ];
+
+    // Get the sort options and arrange it by weight.
+    $sort_options = !empty($taxonomy_term->get('field_sorting_order')->getString())
+      ? unserialize($taxonomy_term->get('field_sorting_order')->getString())
+      : \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
+
+    AlshayaPlpSortSettingsForm::arrangeOptionsByWeight(
+      $form['sort_options_wrapper']['sort_options'],
+      $sort_options
+    );
   }
 
   // Form submit handler.
   $form['#validate'][] = 'alshaya_acm_product_position_term_validate';
+  $form['#submit'][] = 'alshaya_acm_product_position_term_submit';
 }
 
 /**
  * Ajax callback to update sort_options_wrapper.
  */
-function _alshaya_acm_product_position_get_sort_table(&$form, FormStateInterface $form_state) {
+function _alshaya_acm_product_position_get_sort_table(array &$form, FormStateInterface $form_state) {
   return $form['sort_options_wrapper'];
 }
 
 /**
- * Submit function for menu add / edit form to save category root term.
+ * Validation function for term add / edit form.
  */
-function alshaya_acm_product_position_term_validate(&$form, FormStateInterface $form_state) {
+function alshaya_acm_product_position_term_validate(array &$form, FormStateInterface $form_state) {
   /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
   if (!empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override') {
     $sort_options = $form_state->getValue('sort_options');
     if (!empty($sort_options)) {
 
       // Sort the options based on weight.
-      uasort($sort_options, ['Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm', 'weightArraySort']);
+      uasort($sort_options, [AlshayaPlpSortSettingsForm::class, 'weightArraySort']);
       $result = [];
       // Prepare sort option array for saving in config.
       foreach ($sort_options as $key => $sort_option) {
@@ -385,6 +427,21 @@ function alshaya_acm_product_position_term_validate(&$form, FormStateInterface $
       $form_state->setValue('field_sorting_order', [['value' => serialize($result)]]);
     }
   }
+  else {
+    $form_state->setValue('field_sorting_order', [['value' => '']]);
+  }
+}
+
+/**
+ * Submit callback to invalidate tags.
+ */
+function alshaya_acm_product_position_term_submit(array &$form, FormStateInterface $form_state) {
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'search_api_list:product',
+    'config:block.block.exposedformalshaya_product_listblock_1',
+    'config:block.block.exposedformalshaya_product_listblock_2',
+    'views-exposed-form-alshaya-product-list',
+  ]);
 }
 
 /**
@@ -401,23 +458,17 @@ function alshaya_acm_product_position_term_validate(&$form, FormStateInterface $
  * @throws \Drupal\Core\TypedData\Exception\MissingDataException
  */
 function alshaya_acm_product_position_get_plp_sort_options(TermInterface $taxonomy_term) : array {
-  $anchor = $taxonomy_term->get('field_size_guide_anchor');
-  $query_string = [];
-  if (!empty($anchor) && !empty($anchor->first())) {
-    foreach (explode(',', $anchor->first()->getString()) as $string) {
-      list($key, $value) = explode('=', trim($string));
-      $query_string[trim($key)] = trim($value);
-    }
+  $sorting_options = $taxonomy_term->get('field_sorting_options')->getString();
+  if ($sorting_options == 'override') {
+    return unserialize($taxonomy_term->get('field_sorting_order')->getString());
   }
-
-  // Get size guide link from parent term.
-  $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
-  $term = reset($parent_terms);
-  if ($term instanceof TermInterface) {
-    $query_string = alshaya_acm_product_get_size_guide_anchor($term, $query_string);
-    if (!empty($query_string)) {
-      return $query_string;
-    }
+  elseif ($sorting_options == 'inherit_category') {
+    // Get size guide link from parent term.
+    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
+    $term = reset($parent_terms);
+    return alshaya_acm_product_position_get_plp_sort_options($term);
   }
-  return $query_string;
+  else {
+    return _alshaya_acm_product_position_get_config();
+  }
 }
