@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 use Drupal\search_api\Entity\Index;
 use Drupal\Component\Utility\Unicode;
@@ -14,6 +15,7 @@ use Drupal\Component\Utility\Unicode;
  * Implements hook_update_N().
  *
  * Delete fields & related config for all non-aggregation.
+ * Update pathauto configuration for product nodes.
  */
 function alshaya_hm_update_8032() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshaya_config_manager */
@@ -25,6 +27,9 @@ function alshaya_hm_update_8032() {
   // Add style code attribute to SKU entity.
   alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  $alshaya_config_manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_hm');
+  $alshaya_config_manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm', 'install', AlshayaConfigManager::MODE_REPLACE);
 }
 
 /**

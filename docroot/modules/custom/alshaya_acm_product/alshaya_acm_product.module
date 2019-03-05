@@ -2025,3 +2025,32 @@ function _alshaya_acm_product_configurable_option_value_callback(&$element, $inp
 
   return $input;
 }
+
+/**
+ * Implements hook_token_info().
+ */
+function alshaya_acm_product_token_info() {
+  $info = [];
+  $info['tokens']['node']['sku-color'][] = 'Token to fetch color label for the SKU connected with the Product node.';
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function alshaya_acm_product_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if (($type == 'node') && (isset($tokens['sku-color']))) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+    $color_label = '';
+    if ($config_sku = $sku_manager->getSkuForNode($data['node'])) {
+      $sku = SKU::loadFromSku($config_sku);
+      $color_label = $sku->get('attr_color')->getString();
+    }
+    $replacements[$tokens['sku-color']] = $color_label;
+  }
+
+  return $replacements;
+}
