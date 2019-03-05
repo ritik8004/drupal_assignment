@@ -488,6 +488,7 @@
     .tabs--content {
       @include breakpoint($tablet) {
         border: 1px solid $secondary_border;
+        border-top: none;
       }
     }
   }
