@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ViewExecutable;
@@ -248,7 +249,11 @@ function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $co
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  $tree = $form_state->get('tree');
+  $tree = [];
+  if ($tree_sku = $form_state->get('tree_sku')) {
+    $sku = SKU::loadFromSku($tree_sku);
+    $tree = Configurable::deriveProductTree($sku);
+  }
 
   // Check if the product is configurable.
   if (!empty($tree['parent'])) {
