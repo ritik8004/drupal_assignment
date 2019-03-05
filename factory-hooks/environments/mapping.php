@@ -101,10 +101,22 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'hmae_mapp',
       ],
     ],
+    'flkw' => [
+      '01dev2' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flkw_uat',
+      ],
+    ],
     'flsa' => [
       '01dev2' => [
         'magento' => 'fl_uat',
         'conductor' => 'flsa_uat',
+      ],
+    ],
+    'flae' => [
+      '01dev2' => [
+        'magento' => 'fl_uat',
+        'conductor' => 'flae_uat',
       ],
     ],
   ];
