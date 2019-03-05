@@ -30,7 +30,7 @@ class Configurable extends SKUPluginBase {
       return $form;
     }
 
-    $form_state->set('tree', $this->deriveProductTree($sku));
+    $form_state->set('tree_sku', $sku->getSku());
 
     $form['ajax'] = [
       '#type' => 'container',
@@ -136,18 +136,13 @@ class Configurable extends SKUPluginBase {
     $dynamic_parts = &$form['ajax'];
 
     $configurables = $form_state->getValue('configurables');
-    $tree = $form_state->get('tree');
-    $tree_pointer = &$tree['options'];
+    $sku = SKU::loadFromSku($form_state->get('tree_sku'));
+    $tree = self::deriveProductTree($sku);
+    $combination = self::getSelectedCombination($configurables);
 
-    foreach ($configurables as $key => $value) {
-      if (empty($value)) {
-        continue;
-      }
-
-      // Move the tree pointer if the selection is valid.
-      if (isset($tree_pointer["$key:$value"])) {
-        $tree_pointer = &$tree_pointer["$key:$value"];
-      }
+    $tree_pointer = NULL;
+    if (!empty($tree['combinations']['by_attribute'][$combination])) {
+      $tree_pointer = SKU::loadFromSku($tree['combinations']['by_attribute'][$combination]);
     }
 
     if ($tree_pointer instanceof SKU) {
@@ -161,6 +156,8 @@ class Configurable extends SKUPluginBase {
       $dynamic_parts['add_to_cart'] = [
         'entity_render' => ['#markup' => render($view)],
       ];
+
+      $form_state->set('variant_sku', $tree_pointer->getSku());
     }
     else {
       $available_config = $tree_pointer['#available_config'];
@@ -203,18 +200,14 @@ class Configurable extends SKUPluginBase {
   public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
     $quantity = $form_state->getValue('quantity');
     $configurables = $form_state->getValue('configurables');
-    $tree = $form_state->get('tree');
-    $tree_pointer = &$tree['options'];
 
-    foreach ($configurables as $key => $value) {
-      if (empty($value)) {
-        continue;
-      }
+    $sku = SKU::loadFromSku($form_state->get('tree_sku'));
+    $tree = self::deriveProductTree($sku);
+    $combination = self::getSelectedCombination($configurables);
 
-      // Move the tree pointer if the selection is valid.
-      if (isset($tree_pointer["$key:$value"])) {
-        $tree_pointer = &$tree_pointer["$key:$value"];
-      }
+    $tree_pointer = NULL;
+    if (!empty($tree['combinations']['by_attribute'][$combination])) {
+      $tree_pointer = SKU::loadFromSku($tree['combinations']['by_attribute'][$combination]);
     }
 
     if ($tree_pointer instanceof SKU) {
@@ -364,7 +357,7 @@ class Configurable extends SKUPluginBase {
    * @return array
    *   Configurables tree.
    */
-  public function deriveProductTree(SKU $sku) {
+  public static function deriveProductTree(SKU $sku) {
     static $cache = [];
 
     if (isset($cache[$sku->language()->getId()], $cache[$sku->language()->getId()][$sku->id()])) {
@@ -375,13 +368,15 @@ class Configurable extends SKUPluginBase {
       'parent' => $sku,
       'products' => self::getChildren($sku),
       'combinations' => [],
+      'configurables' => [],
     ];
+
+    $combinations =& $tree['combinations'];
 
     $configurables = unserialize(
       $sku->get('field_configurable_attributes')->getString()
     );
 
-    $tree['configurables'] = [];
     foreach ($configurables ?? [] as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
@@ -398,106 +393,87 @@ class Configurable extends SKUPluginBase {
           continue;
         }
 
-        $tree['combinations']['by_sku'][$sku_code][$code] = $value;
+        $combinations['by_sku'][$sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
     }
 
     /** @var \Drupal\acq_sku\CartFormHelper $helper */
     $helper = \Drupal::service('acq_sku.cart_form_helper');
 
-    $configurable_weights = $helper->getConfigurableAttributeWeights(
-      $sku->get('attribute_set')->getString()
-    );
+    // Sort the values in attribute_sku so we can use it later.
+    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
+      if ($helper->isAttributeSortable($code)) {
+        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
 
-    // Sort configurables based on the config.
-    uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
-      // We may keep getting new configurable options not defined in config.
-      // Use default values for them and keep their sequence as is.
-      // Still move the ones defined in our config as per weight in config.
-      $a = $configurable_weights[$a['code']] ?? -50;
-      $b = $configurable_weights[$b['code']] ?? 50;
-      return $a - $b;
-    });
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
+      }
+    }
 
-    $tree['options'] = Configurable::recursiveConfigurableTree(
-      $tree,
-      $tree['configurables']
-    );
+    // Sort the values in attribute_sku so we can use it later.
+    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
+      if ($helper->isAttributeSortable($code)) {
+        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
+
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
+      }
+    }
+
+    // Prepare combinations array grouped by attributes to check later which
+    // combination is possible using isset().
+    $combinations['by_attribute'] = [];
+
+    foreach ($combinations['by_sku'] ?? [] as $sku_string => $combination) {
+      $combination_string = self::getSelectedCombination($combination);
+      $combinations['by_attribute'][$combination_string] = $sku_string;
+    }
 
     $cache[$sku->language()->getId()][$sku->id()] = $tree;
 
-    return $tree;
+    return $cache[$sku->language()->getId()][$sku->id()];
   }
 
-  /**
-   * Creates subtrees based on available config.
-   *
-   * @param array $tree
-   *   Tree of products.
-   * @param array $available_config
-   *   Available configs.
-   * @param array $current_config
-   *   Config of current product.
-   *
-   * @return array
-   *   Subtree.
-   */
-  public static function recursiveConfigurableTree(array &$tree, array $available_config, array $current_config = []) {
-    $subtree = ['#available_config' => $available_config];
+  public static function getSelectedCombination(array $configurables) {
+    $combination = '';
 
-    foreach ($available_config as $id => $config) {
-      $subtree_available_config = $available_config;
-      unset($subtree_available_config[$id]);
-
-      foreach ($config['values'] as $option) {
-        $value = $option['value_id'];
-        $subtree_current_config = array_merge($current_config, [$id => $value]);
-
-        if (count($subtree_available_config) > 0) {
-          $subtree["$id:$value"] = Configurable::recursiveConfigurableTree(
-            $tree,
-            $subtree_available_config,
-            $subtree_current_config
-          );
-        }
-        else {
-          $subtree["$id:$value"] = Configurable::findProductInTreeWithConfig(
-            $tree,
-            $subtree_current_config
-          );
-        }
+    foreach ($configurables as $key => $value) {
+      if (empty($value)) {
+        continue;
       }
+      $combination .= $key . '|' . $value . '||';
     }
 
-    return $subtree;
-  }
-
-  /**
-   * Finds product in tree base on config.
-   *
-   * @param array $tree
-   *   The whole configurable tree.
-   * @param array $config
-   *   Config for the product.
-   *
-   * @return \Drupal\acq_sku\Entity\SKU
-   *   Reference to SKU in existing tree.
-   */
-  public static function findProductInTreeWithConfig(array $tree, array $config) {
-    if (isset($tree['products'])) {
-      $attributes = [];
-      foreach ($config as $key => $value) {
-        $attributes[$key] = $value;
-      }
-
-      foreach ($tree['combinations']['by_sku'] ?? [] as $sku => $sku_attributes) {
-        if (count(array_intersect_assoc($sku_attributes, $attributes)) === count($sku_attributes)) {
-          return $tree['products'][$sku];
-        }
-      }
-    }
-
-    return NULL;
+    return $combination;
   }
 
   /**
