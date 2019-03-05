@@ -176,3 +176,8 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+
+
+lazysizes:
+  js:
+    vendor/js/lazysizes.min.js: {}
