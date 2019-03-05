@@ -242,7 +242,7 @@ $conductors = [
     'hmac_secret' => 'M2RlMTc3YTgtZDA4OS00',
   ],
   // FootLocker AE.
-  'flae_test' => [
+  'flae_qa' => [
     'hmac_id' => '61f09f6fe1474ce68cc8057f97188d2f',
     'hmac_secret' => 'MjU3YzZiOGEtNmI1Yi00',
   ],
