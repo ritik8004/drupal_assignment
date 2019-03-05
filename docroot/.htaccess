@@ -69,6 +69,15 @@ AddEncoding gzip svgz
 <IfModule mod_rewrite.c>
   RewriteEngine on
 
+  #add maintenance page
+  RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+  RewriteCond %{DOCUMENT_ROOT}/.maintenance -f
+  RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+  RewriteRule ^.*$ /maintenance.html [R=503,L]
+  ErrorDocument 503 /maintenance.html
+  Header Set Cache-Control "max-age=0, no-store"
+  #end of adding maintenance page
+
   # Rewrite rule to remove .html and remove kwt-* from url.
   RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
 
