@@ -21,6 +21,17 @@ function alshaya_acm_product_position_update_8003() {
     'field.field.taxonomy_term.acq_product_category.field_sorting_order',
   ];
   alshaya_config_install_configs($configs, 'alshaya_acm_product_position');
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.taxonomy_term.acq_product_category.default',
+        'core.entity_view_display.taxonomy_term.acq_product_category.default',
+      ],
+      'alshaya_acm_product_position',
+      'override',
+      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+    );
 }
 
 /**
