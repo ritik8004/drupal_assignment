@@ -35,6 +35,9 @@
             .hours--label {
               @include breakpoint($tablet) {
                 color: $checkout_cc_list_hours_label;
+              }
+
+              @include breakpoint($desktop) {
                 font-weight: bold;
               }
 
@@ -55,9 +58,7 @@
 
           .store-name-and-address,
           .label--delivery-time {
-            @include breakpoint($only-mobile) {
-              font-size: 0.875rem;
-            }
+            font-size: 0.875rem;
           }
 
           .store-actions {
