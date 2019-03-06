@@ -10,7 +10,7 @@ id: taxonomy_term.acq_product_category.field_sorting_options
 field_name: field_sorting_options
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'sorting options'
+label: 'Sorting options'
 description: ''
 required: false
 translatable: false
