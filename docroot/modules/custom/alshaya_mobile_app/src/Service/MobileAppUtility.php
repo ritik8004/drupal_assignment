@@ -764,7 +764,7 @@ class MobileAppUtility {
     }
 
     // Get the prices.
-    $prices = $this->skuManager->getMinPrices($sku);
+    $prices = $this->skuManager->getMinPrices($sku, $color);
 
     // Get the promotion data.
     $promotions = $this->getPromotions($sku);
