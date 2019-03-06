@@ -45,9 +45,10 @@
   .block-system > a {
     text-transform: uppercase;
     margin-bottom: 1rem;
+    padding: 0.875rem 2.625rem 0.5rem;
 
     @include breakpoint($only-tablet) {
-      top: -1.625rem;
+      top: -1rem;
     }
   }
 }
