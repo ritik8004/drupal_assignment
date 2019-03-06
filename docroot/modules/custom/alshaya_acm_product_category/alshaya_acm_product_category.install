@@ -14,6 +14,28 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 /**
  * Implements hook_update_N().
  *
+ * Remove hide_facet_condition_moschino plugin from blocks.
+ */
+function alshaya_acm_product_category_update_8028() {
+  $block_configs = [
+    'block.block.plppromotions',
+    'block.block.plpsize',
+    'block.block.plpproductbrand',
+    'block.block.plpproductcollection',
+    'block.block.plpcolor',
+    'block.block.skusskureferencefinalprice',
+    'block.block.plpconcept',
+  ];
+
+  foreach ($block_configs as $block) {
+    \Drupal::configFactory()->getEditable($block)->clear('visibility.hide_facet_condition_moschino')
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Rename fields and rearrange taxonomy term edit form.
  * Update alshaya menu view blocks to use taxonomy_term__parent as per
  * Drupal 8.6.
