@@ -6,8 +6,6 @@ use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\acq_commerce\Response\NeedsRedirectException;
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm\CartHelper;
 use Drupal\alshaya_acm_customer\OrdersManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
@@ -18,7 +16,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\Core\Url;
 use Drupal\profile\Entity\Profile;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -253,12 +250,8 @@ class CheckoutHelper {
    * @param \Drupal\acq_cart\CartInterface $cart
    *   Cart.
    */
-  public function clearCacheForProductsInCart(CartInterface $cart) {
-    foreach ($cart->items() ?? [] as $item) {
-      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
-        $sku_entity->refreshStock();
-      }
-    }
+  public function refreshStockForProductsInCart(CartInterface $cart) {
+    $this->cartHelper->refreshStockForProductsInCart($cart);
   }
 
   /**
@@ -633,31 +626,7 @@ class CheckoutHelper {
    * @throws \Drupal\acq_commerce\Response\NeedsRedirectException
    */
   public function updateCartWrapper(string $function) {
-    $cart = $this->cartStorage->getCart(FALSE);
-
-    if (empty($cart)) {
-      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
-    }
-
-    try {
-      $this->cartStorage->updateCart(FALSE);
-    }
-    catch (\Exception $e) {
-      $this->logger->error('Error while updating cart @cart_id, invoked from @function, exception: @message', [
-        '@message' => $e->getMessage(),
-        '@cart_id' => $cart->id(),
-        '@function' => $function,
-      ]);
-
-      if (_alshaya_acm_is_out_of_stock_exception($e)) {
-        if ($cart = $this->cartStorage->getCart(FALSE)) {
-          $this->clearCacheForProductsInCart($cart);
-          $cart->setCheckoutStep('');
-        }
-      }
-
-      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
-    }
+    $this->cartHelper->updateCartWrapper($function);
   }
 
 }
