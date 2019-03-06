@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -21,6 +22,42 @@ use Drupal\node\Entity\Node;
  * )
  */
 class Configurable extends SKUPluginBase {
+
+  /**
+   * Get sorted configurable options.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Sorted configurable options.
+   */
+  public static function getSortedConfigurableAttributes(SKUInterface $sku): array {
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+
+    if (empty($configurables) || !is_array($configurables)) {
+      return [];
+    }
+
+    /** @var \Drupal\acq_sku\CartFormHelper $helper */
+    $helper = \Drupal::service('acq_sku.cart_form_helper');
+
+    $configurable_weights = $helper->getConfigurableAttributeWeights(
+      $sku->get('attribute_set')->getString()
+    );
+
+    // Sort configurables based on the config.
+    uasort($configurables, function ($a, $b) use ($configurable_weights) {
+      // We may keep getting new configurable options not defined in config.
+      // Use default values for them and keep their sequence as is.
+      // Still move the ones defined in our config as per weight in config.
+      $a = $configurable_weights[$a['code']] ?? -50;
+      $b = $configurable_weights[$b['code']] ?? 50;
+      return $a - $b;
+    });
+
+    return $configurables;
+  }
 
   /**
    * {@inheritdoc}
@@ -43,24 +80,10 @@ class Configurable extends SKUPluginBase {
       '#tree' => TRUE,
     ];
 
-    $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $configurables = self::getSortedConfigurableAttributes($sku);
 
     /** @var \Drupal\acq_sku\CartFormHelper $helper */
     $helper = \Drupal::service('acq_sku.cart_form_helper');
-
-    $configurable_weights = $helper->getConfigurableAttributeWeights(
-      $sku->get('attribute_set')->getString()
-    );
-
-    // Sort configurables based on the config.
-    uasort($configurables, function ($a, $b) use ($configurable_weights) {
-      // We may keep getting new configurable options not defined in config.
-      // Use default values for them and keep their sequence as is.
-      // Still move the ones defined in our config as per weight in config.
-      $a = $configurable_weights[$a['code']] ?? -50;
-      $b = $configurable_weights[$b['code']] ?? 50;
-      return $a - $b;
-    });
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -377,9 +400,7 @@ class Configurable extends SKUPluginBase {
 
     $combinations =& $tree['combinations'];
 
-    $configurables = unserialize(
-      $sku->get('field_configurable_attributes')->getString()
-    );
+    $configurables = self::getSortedConfigurableAttributes($sku);
 
     foreach ($configurables ?? [] as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
