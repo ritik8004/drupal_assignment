@@ -94,7 +94,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
    *
    * @option default_parent Default parent term id to render main menu
    *
-   * @aliases ascs,alshaya-super-category-switch
+   * @aliases alshaya-super-category-switch
    */
   public function enableDisableSuperCategory(
     array $options = ['default_parent' => 0]
