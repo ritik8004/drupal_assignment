@@ -183,7 +183,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
    *
    * @command alshaya_super_category:product-alias
    *
-   * @aliases ascs-pa,alshaya-super-category-product-alias
+   * @aliases alshaya-super-category-product-alias
    */
   public function generateProductAlias() {
     $config = $this->configFactory->getEditable('alshaya_super_category.settings');
