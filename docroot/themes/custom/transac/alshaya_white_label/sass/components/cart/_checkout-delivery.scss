@@ -210,6 +210,16 @@
     font-size: 0;
     position: relative;
 
+    .tab {
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        flex-direction: column;
+      }
+    }
+
     @include breakpoint($upto-tablet) {
       hr {
         display: none;
@@ -223,7 +233,6 @@
           background-color: $checkout_tab_active_bg;
           border-width: 2px;
           border-color: $checkout_tab_active_border_2;
-          padding: 5px;
         }
       }
     }
@@ -267,6 +276,18 @@
       background: $checkout_tab_bg;
       font-family: $alshaya-bold;
       font-weight: normal;
+      height: 4.5625rem;
+      padding: 0;
+
+      @include breakpoint($only-mobile) {
+        &:not(.tab-separator) {
+          height: 3.4375rem;
+
+          html[lang=ar] & {
+            height: 3.75rem;
+          }
+        }
+      }
 
       h2 {
         font-weight: normal;
@@ -288,7 +309,6 @@
       @include breakpoint($tablet) {
         border-bottom: 0;
         display: inline-block;
-        padding: 0.5rem 0;
         width: 46.81%;
         width: calc(50% - 14px);
       }
@@ -298,7 +318,6 @@
       }
 
       @include breakpoint($desktop) {
-        padding: 1.0625rem 0;
         width: 47.05%;
 
         &.tab-home-delivery {
@@ -313,6 +332,8 @@
       }
 
       @include breakpoint($only-tablet) {
+        height: 4.0625rem;
+
         &.tab-click-collect {
           margin-#{$left}: 2px;
 
@@ -408,9 +429,13 @@
       border: none;
       pointer-events: none;
       color: $checkout_tab_separator;
+      height: auto;
 
       @include breakpoint($tablet) {
         width: 6.2%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       @include breakpoint($desktop) {
@@ -436,7 +461,6 @@
           background-color: $checkout_tab_mob_active_bg;
           border-width: 2px;
           border-color: $checkout_tab_mob_active_border;
-          padding: 5px;
         }
       }
     }
@@ -1109,7 +1133,6 @@
     .tab-home-delivery {
       border-color: $checkout_method_choice_tab_border_default !important;
       border-width: 1px !important;
-      padding: 0.5rem 0 !important;
       display: block !important;
 
       a p {
