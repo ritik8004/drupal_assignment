@@ -10,6 +10,21 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - OOS items removal message.
+ */
+function alshaya_master_update_8024() {
+  $strings = [
+    'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
+      'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable link_attributes module globally.
  * Also uninstalls some modules that should not be enabled on any site.
  */
@@ -1583,6 +1598,9 @@ function alshaya_master_install() {
     ],
     'save upto x%' => [
       'ar' => '%X وفّر لغاية',
+    ],
+    'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
+      'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
     ],
   ];
 
