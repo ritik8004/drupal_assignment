@@ -249,6 +249,14 @@ function _alshaya_acm_product_position_sorted_options(array $options) {
   if ($route_name == 'entity.taxonomy_term.canonical') {
     /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
     $term = $route_match->getParameter('taxonomy_term');
+  }
+  elseif ($route_name == 'rest.category_product_list.GET') {
+    // In case of rest resource.
+    $term_id = $route_match->getParameter('id');
+    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
+  }
+
+  if (!empty($term) && $term instanceof Term) {
     $config_values = alshaya_acm_product_position_get_plp_sort_options($term);
   }
 
