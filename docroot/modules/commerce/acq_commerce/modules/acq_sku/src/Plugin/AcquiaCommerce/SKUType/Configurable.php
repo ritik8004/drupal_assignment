@@ -138,7 +138,9 @@ class Configurable extends SKUPluginBase {
     $configurables = $form_state->getValue('configurables');
     $sku = SKU::loadFromSku($form_state->get('tree_sku'));
     $tree = self::deriveProductTree($sku);
-    $combination = self::getSelectedCombination($configurables);
+
+    $configurable_codes = array_keys($tree['configurables']);
+    $combination = self::getSelectedCombination($configurables, $configurable_codes);
 
     $tree_pointer = NULL;
     if (!empty($tree['combinations']['by_attribute'][$combination])) {
@@ -203,7 +205,9 @@ class Configurable extends SKUPluginBase {
 
     $sku = SKU::loadFromSku($form_state->get('tree_sku'));
     $tree = self::deriveProductTree($sku);
-    $combination = self::getSelectedCombination($configurables);
+
+    $configurable_codes = array_keys($tree['configurables']);
+    $combination = self::getSelectedCombination($configurables, $configurable_codes);
 
     $tree_pointer = NULL;
     if (!empty($tree['combinations']['by_attribute'][$combination])) {
@@ -425,30 +429,6 @@ class Configurable extends SKUPluginBase {
       }
     }
 
-    // Sort the values in attribute_sku so we can use it later.
-    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
-      if ($helper->isAttributeSortable($code)) {
-        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
-      }
-      else {
-        // Sort from field_configurable_attributes.
-        $configurable_attribute = [];
-        foreach ($configurables as $configurable) {
-          if ($configurable['code'] === $code) {
-            $configurable_attribute = $configurable['values'];
-            break;
-          }
-        }
-
-        if ($configurable_attribute) {
-          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
-          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
-            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
-          });
-        }
-      }
-    }
-
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
     $combinations['by_attribute'] = [];
@@ -463,7 +443,28 @@ class Configurable extends SKUPluginBase {
     return $cache[$sku->language()->getId()][$sku->id()];
   }
 
-  public static function getSelectedCombination(array $configurables) {
+  /**
+   * Get combination for selected configurable values.
+   *
+   * @param array $configurables
+   *   Configurable values to build the combination string from.
+   * @param array $configurable_codes
+   *   Codes to use for sorting the values array.
+   *
+   * @return string
+   *   Combination string.
+   */
+  public static function getSelectedCombination(array $configurables, array $configurable_codes = []) {
+    if ($configurable_codes) {
+      $selected = [];
+      foreach ($configurable_codes as $code) {
+        if (isset($configurables[$code])) {
+          $selected[$code] = $configurables[$code];
+        }
+      }
+      $configurables = $selected;
+    }
+
     $combination = '';
 
     foreach ($configurables as $key => $value) {
@@ -568,7 +569,7 @@ class Configurable extends SKUPluginBase {
    * @return array
    *   Array of options sorted based on term weight.
    */
-  public static function sortConfigOptions($options, $attribute_code) {
+  public static function sortConfigOptions(array $options, $attribute_code) {
     $sorted_options = [];
 
     $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
@@ -583,7 +584,7 @@ class Configurable extends SKUPluginBase {
     $query->orderBy('weight', 'ASC');
     $tids = $query->execute()->fetchAllAssoc('tid');
 
-    foreach ($tids as $tid => $values) {
+    foreach ($tids as $values) {
       $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
     }
 
