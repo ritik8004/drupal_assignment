@@ -346,6 +346,8 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
     return;
   }
 
+  $form['field_sorting_options']['#weight'] = -100;
+  $form['field_sorting_options']['widget']['#weight'] = -100;
   $form['field_sorting_options']['widget']['#ajax'] = [
     'callback' => '_alshaya_acm_product_position_get_sort_table',
     'progress' => [
@@ -366,7 +368,9 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
   $ajax_value = !empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override';
   $term_value = !empty($taxonomy_term->get('field_sorting_options')->getValue()) && $taxonomy_term->get('field_sorting_options')->getString() == 'override';
 
-  $form['sort_options_wrapper']['sort_options'] = [];
+  $form['sort_options_wrapper']['sort_options'] = [
+    '#weight' => 99,
+  ];
   if (($term_value && empty($form_state->getValues())) || (!empty($form_state->getValues()) && $ajax_value)) {
     $form['sort_options_wrapper']['sort_options'] = [
       '#type' => 'table',
@@ -382,6 +386,7 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
           'group' => 'plp_sort_options-order-weight',
         ],
       ],
+      '#weight' => 99,
     ];
 
     // Get the sort options and arrange it by weight.
@@ -398,6 +403,19 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
   // Form submit handler.
   $form['#validate'][] = 'alshaya_acm_product_position_term_validate';
   $form['#submit'][] = 'alshaya_acm_product_position_term_submit';
+}
+
+/**
+ * Implements hook_field_group_build_pre_render_alter().
+ */
+function alshaya_acm_product_position_field_group_build_pre_render_alter(&$element) {
+  // Arrange custom field sort_options_wrapper inside group_plp_sorting_options.
+  if (!empty($element) && $element['vid']['#value'] == 'acq_product_category') {
+    $element['#group_children']['sort_options_wrapper'] = 'group_plp_sorting_options';
+    $element["group_taxonomy_fields"]['group_plp_content']['group_plp_sorting_options']['sort_options_wrapper'] = $element['sort_options_wrapper'];
+    $element['#group_children']['group_plp_sorting_options']->children[] = 'sort_options_wrapper';
+    unset($element['sort_options_wrapper']);
+  }
 }
 
 /**
