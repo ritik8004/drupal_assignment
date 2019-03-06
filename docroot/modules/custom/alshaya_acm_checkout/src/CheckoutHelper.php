@@ -250,8 +250,8 @@ class CheckoutHelper {
    * @param \Drupal\acq_cart\CartInterface $cart
    *   Cart.
    */
-  public function clearCacheForProductsInCart(CartInterface $cart) {
-    $this->cartHelper->clearCacheForProductsInCart($cart);
+  public function refreshStockForProductsInCart(CartInterface $cart) {
+    $this->cartHelper->refreshStockForProductsInCart($cart);
   }
 
   /**

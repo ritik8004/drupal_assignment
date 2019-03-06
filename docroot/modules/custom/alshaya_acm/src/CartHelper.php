@@ -139,13 +139,17 @@ class CartHelper {
 
   /**
    * Remove out of stock items from cart (in session only).
+   *
+   * @return bool
+   *   TRUE if any item removed.
    */
-  public function removeOutOfStockItemsFromCart() {
+  public function removeOutOfStockItemsFromCart(): bool {
+    $removed = FALSE;
     $cart = $this->cartStorage->getCart(FALSE);
 
     // Sanity check.
     if (empty($cart)) {
-      return;
+      return $removed;
     }
 
     $items = $cart->items();
@@ -154,11 +158,16 @@ class CartHelper {
       $sku = SKU::loadFromSku($item['sku']);
       $plugin = $sku->getPluginInstance();
       if (!$plugin->isProductInStock($sku)) {
+        $removed = TRUE;
         unset($items[$index]);
       }
     }
 
-    $cart->setItemsInCart($items);
+    if ($removed) {
+      $cart->setItemsInCart($items);
+    }
+
+    return $removed;
   }
 
   /**
@@ -180,15 +189,15 @@ class CartHelper {
     }
     catch (\Exception $e) {
       // Try to remove again (only once) after removing OOS items.
-      $this->removeOutOfStockItemsFromCart();
+      if ($this->removeOutOfStockItemsFromCart()) {
+        $cart = $this->cartStorage->getCart(FALSE);
+        $cart->removeItemFromCart($sku);
+        $this->updateCartWrapper(__METHOD__);
 
-      $cart = $this->cartStorage->getCart(FALSE);
-      $cart->removeItemFromCart($sku);
-      $this->updateCartWrapper(__METHOD__);
-
-      // Operation was successful after second try, show the error message still
-      // for user to know about the updates user didn't ask for.
-      $this->messenger()->addError($this->t('Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.'));
+        // Operation was successful after second try, show the error message
+        // for user to know about the updates user didn't ask for.
+        $this->messenger()->addError($this->t('Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.'));
+      }
     }
   }
 
@@ -219,7 +228,7 @@ class CartHelper {
 
       if (_alshaya_acm_is_out_of_stock_exception($e)) {
         if ($cart = $this->cartStorage->getCart(FALSE)) {
-          $this->clearCacheForProductsInCart($cart);
+          $this->refreshStockForProductsInCart($cart);
           $cart->setCheckoutStep('');
         }
       }
@@ -229,12 +238,21 @@ class CartHelper {
   }
 
   /**
-   * Reset stock cache and Drupal cache of products in cart.
+   * Refresh stock cache and Drupal cache of products in cart.
    *
-   * @param \Drupal\acq_cart\CartInterface $cart
+   * @param \Drupal\acq_cart\CartInterface|null $cart
    *   Cart.
    */
-  public function clearCacheForProductsInCart(CartInterface $cart) {
+  public function refreshStockForProductsInCart(CartInterface $cart = NULL) {
+    if (empty($cart)) {
+      $cart = $this->cartStorage->getCart(FALSE);
+    }
+
+    // Still if empty, simply return.
+    if (empty($cart)) {
+      return;
+    }
+
     foreach ($cart->items() ?? [] as $item) {
       if ($sku_entity = SKU::loadFromSku($item['sku'])) {
         $sku_entity->refreshStock();
