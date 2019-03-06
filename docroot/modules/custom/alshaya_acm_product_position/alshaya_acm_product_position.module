@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\taxonomy\TermInterface;
 use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
@@ -208,13 +207,14 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
         }
       }
 
-      $labels = _alshaya_acm_product_position_get_config(TRUE);
+      $plp_sort = \Drupal::service('alshaya_acm_product_position.sort_options');
+      $labels = $plp_sort->getSortOptionsLabels();
       array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
         $value = !empty($labels[$key]) ? $labels[$key] : $value;
       });
 
       // Re-order select options based on the config position.
-      $form['sort_bef_combine']['#options'] = _alshaya_acm_product_position_sorted_options($form['sort_bef_combine']['#options']);
+      $form['sort_bef_combine']['#options'] = $plp_sort->sortGivenOptions($form['sort_bef_combine']['#options']);
 
       // Set the first option as the default value.
       $default_sort_option = key($form['sort_bef_combine']['#options']);
@@ -228,67 +228,6 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $form['sort_bef_combine']['#value'] = !empty($sort_bef_combine) && isset($form['sort_bef_combine']['#options'][$sort_bef_combine]) ? $sort_bef_combine : $default_sort_option;
     }
   }
-}
-
-/**
- * Re-order the plp sort options based on the config values position.
- *
- * @param array $options
- *   Options to re-order.
- *
- * @return array
- *   Re-ordered options of the sort.
- */
-function _alshaya_acm_product_position_sorted_options(array $options) {
-
-  $route_match = \Drupal::service('current_route_match');
-  $route_name = $route_match->getRouteName();
-
-  $config_values = _alshaya_acm_product_position_get_config();
-  // If /taxonomy/term/tid page.
-  if ($route_name == 'entity.taxonomy_term.canonical') {
-    /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-    $term = $route_match->getParameter('taxonomy_term');
-  }
-  elseif ($route_name == 'rest.category_product_list.GET') {
-    // In case of rest resource.
-    $term_id = $route_match->getParameter('id');
-    $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($term_id);
-  }
-
-  if (!empty($term) && $term instanceof Term) {
-    $config_values = alshaya_acm_product_position_get_plp_sort_options($term);
-  }
-
-  $config_sort_options = array_keys(array_filter($config_values));
-  // If there are at least any sort option enabled.
-  if (!empty($config_sort_options)) {
-    $new_sort_options = [];
-
-    // Get the default sorting for options from views config.
-    $views_storage = Views::getView('alshaya_product_list')->storage;
-    $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
-
-    // Iterate over config sort options to prepare new sorted array for form
-    // value option.
-    foreach ($config_sort_options as $sort_options) {
-      // Set default sort option ASC/DESC from the views config/sort order.
-      $default_sort_order = $views_sort[$sort_options]['order'];
-      $secondary_sort_order = $views_sort[$sort_options]['order'] == 'ASC' ? 'DESC' : 'ASC';
-      if (isset($options[$sort_options . ' ' . $default_sort_order])) {
-        $new_sort_options[$sort_options . ' ' . $default_sort_order] = $options[$sort_options . ' ' . $default_sort_order];
-      }
-      if (isset($options[$sort_options . ' ' . $secondary_sort_order])) {
-        $new_sort_options[$sort_options . ' ' . $secondary_sort_order] = $options[$sort_options . ' ' . $secondary_sort_order];
-      }
-    }
-
-    if (!empty($new_sort_options)) {
-      return $new_sort_options;
-    }
-  }
-
-  return $options;
 }
 
 /**
@@ -318,7 +257,8 @@ function _alshaya_acm_product_position_get_config($label = FALSE) {
  *   Sorted and enabled + available sort options.
  */
 function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
-  $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
+  $plp_sort = \Drupal::service('alshaya_acm_product_position.sort_options');
+  $labels = $plp_sort->getSortOptionsLabels();
 
   // Remove the ones not enabled in view's sorting options.
   foreach ($labels as $key => $sort_option) {
@@ -328,7 +268,7 @@ function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
     }
   }
 
-  $labels = _alshaya_acm_product_position_sorted_options($labels);
+  $labels = $plp_sort->sortGivenOptions($labels);
   return array_keys($labels);
 }
 
@@ -463,38 +403,10 @@ function alshaya_acm_product_position_term_validate(array &$form, FormStateInter
  */
 function alshaya_acm_product_position_term_submit(array &$form, FormStateInterface $form_state) {
   \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'search_api_list:product:sort_position',
     'search_api_list:product',
     'config:block.block.exposedformalshaya_product_listblock_1',
     'config:block.block.exposedformalshaya_product_listblock_2',
     'views-exposed-form-alshaya-product-list',
   ]);
-}
-
-/**
- * Get plp sort option setting from parent term of the given term.
- *
- * @param \Drupal\taxonomy\TermInterface $taxonomy_term
- *   The taxonomy term object.
- *
- * @return array
- *   Return array value.
- *
- * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
- * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
- * @throws \Drupal\Core\TypedData\Exception\MissingDataException
- */
-function alshaya_acm_product_position_get_plp_sort_options(TermInterface $taxonomy_term) : array {
-  $sorting_options = $taxonomy_term->get('field_sorting_options')->getString();
-  if ($sorting_options == 'override') {
-    return unserialize($taxonomy_term->get('field_sorting_order')->getString());
-  }
-  elseif ($sorting_options == 'inherit_category') {
-    // Get size guide link from parent term.
-    $parent_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadParents($taxonomy_term->id());
-    $term = reset($parent_terms);
-    return alshaya_acm_product_position_get_plp_sort_options($term);
-  }
-  else {
-    return _alshaya_acm_product_position_get_config();
-  }
 }
