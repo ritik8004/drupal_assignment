@@ -76,6 +76,12 @@ set classes = [
               {{ content.free_gift_promotions }}
             </div>
           {% endif %}
+
+          {% if content.color_node_links %}
+            <div class="color-node-links">
+              {{ content.color_node_links }}
+            </div>
+          {% endif %}
         </div>
       {% endblock %}
 

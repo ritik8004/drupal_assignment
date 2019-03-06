@@ -23,13 +23,13 @@ function alshaya_acm_product_token_info() {
 function alshaya_acm_product_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
   $replacements = [];
 
-  if (($type == 'node') && (isset($tokens['sku-color']))) {
+  if (isset($data['entity_type']) && ($data['entity_type'] == 'node') && (isset($tokens['sku-color']))) {
     /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
     $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
     $color_label = '';
-    if ($config_sku = $sku_manager->getSkuForNode($data['node'])) {
+    if ($config_sku = $sku_manager->getSkuForNode($data['entity'])) {
       $sku = SKU::loadFromSku($config_sku);
-      $color_label = $sku->get('attr_color')->getString();
+      $color_label = $sku->get('attr_color_label')->getString();
     }
     $replacements[$tokens['sku-color']] = $color_label;
   }
