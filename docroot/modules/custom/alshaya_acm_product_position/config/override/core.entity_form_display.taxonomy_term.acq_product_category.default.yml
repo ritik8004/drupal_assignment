@@ -18,7 +18,7 @@ third_party_settings:
         classes: ''
         open: false
         required_fields: true
-      label: 'PLP sorting options'
+      label: 'Sorting options'
       region: content
 content:
   field_sorting_options:
