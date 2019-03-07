@@ -7,6 +7,7 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
 use Drupal\acq_commerce\Response\NeedsRedirectException;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
@@ -27,13 +28,24 @@ class CartHelper {
   protected $cartStorage;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
+   *   Logger Factory.
    */
-  public function __construct(CartStorageInterface $cart_storage) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              LoggerChannelFactoryInterface $logger_channel) {
     $this->cartStorage = $cart_storage;
+    $this->logger = $logger_channel->get('CartHelper');
   }
 
   /**
