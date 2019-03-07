@@ -32,8 +32,8 @@ function alshaya_acm_product_update_8040() {
  */
 function alshaya_acm_product_update_8039() {
   $string = [
-    'save upto x%' => [
-      'ar' => '%X وفّر لغاية',
+    'Save upto @discount%' => [
+      'ar' => '%@discount وفّر لغاية',
     ],
   ];
 
