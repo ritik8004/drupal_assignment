@@ -626,10 +626,8 @@ header {
           visibility: hidden;
           overflow: hidden;
           background: #fff;
-          transition-delay: 0.3s;
-          transition-property: opacity;
-          transition-duration: var(--menuTiming);
-          transition-timing-function: ease-in;
+          // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+          transition: opacity var(--menuTiming) ease-in 0.3s;
         }
       }
 
@@ -639,10 +637,8 @@ header {
             visibility: visible;
             opacity: 1;
             z-index: 1;
-            transition-delay: 0.3s;
-            transition-property: opacity;
-            transition-duration: var(--menuTiming);
-            transition-timing-function: ease-in;
+            // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+            transition: opacity var(--menuTiming) ease-in 0.3s;
           }
         }
       }
@@ -703,10 +699,8 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          transition-delay: 0.3s;
-          transition-property: opacity;
-          transition-duration: var(--menuTiming);
-          transition-timing-function: ease-in;
+          // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+          transition: opacity var(--menuTiming) ease-in 0.3s;
         }
       }
 
@@ -741,10 +735,8 @@ header {
         #{$right}: 0;
         width: 100%;
         z-index: -1;
-        transition-delay: 0.3s;
-        transition-property: opacity;
-        transition-duration: var(--menuTiming);
-        transition-timing-function: ease-in;
+        // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+        transition: opacity var(--menuTiming) ease-in 0.3s;
       }
     }
 
@@ -918,19 +910,15 @@ header {
       opacity: 0;
       z-index: 1;
       background-color: rgba(0, 0, 0, 0.48);
-      transition-delay: 0.3s;
-      transition-property: opacity;
-      transition-duration: var(--menuTiming);
-      transition-timing-function: ease-in;
+      // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+      transition: opacity var(--menuTiming) ease-in 0.3s;
     }
 
     &.overlay {
       &::before {
         opacity: 1;
-        transition-delay: 0.3s;
-        transition-property: opacity;
-        transition-duration: var(--menuTiming);
-        transition-timing-function: ease-in;
+        // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+        transition: opacity var(--menuTiming) ease-in 0.3s;
       }
     }
   }

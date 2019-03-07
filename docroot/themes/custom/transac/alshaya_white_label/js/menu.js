@@ -243,7 +243,7 @@
       }, 250));
 
       var menuTiming = $('.main--menu').attr('data-menu-timing');
-      if (menuTiming !== undefined) {
+      if (menuTiming !== 'undefined') {
         $(':root').css({'--menuTiming': menuTiming + 'ms'});
       }
 
