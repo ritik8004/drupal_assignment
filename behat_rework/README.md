@@ -126,7 +126,7 @@ templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml
 ```
 
 ### IMPORTANT Variable: 
-Following file and variable is must for any given environment.
+Following file and variable is must, for any given environment.
 *For each enabled languages* (If a site has two language EN and AR):
 - *`templates/variables/brands/{brand}/env/uat/markets/kw/languages/en.yml`*
 - *`templates/variables/brands/{brand}/env/uat/markets/kw/languages/ar.yml`*
@@ -144,7 +144,7 @@ specific brand and env.**
 - `.yml` files contains `variables`, `tests` and `tags` keys. `variables` are 
 used to replace token, Which we wrote in feature files with curly braces 
 (i.e. `{var_userame}`), inside `template/features/*/*.feature` files.
-**_variables must start with `var_` prefix. (to avoid conflict in name.)_**
+**_variables must start with `var_` prefix._**
 
 Here's an example of a sample `*.yml` file.
 ```yaml
@@ -161,8 +161,7 @@ tags:              # list of tags that you want to replace with {@tags}
 ```
 -  `Languages` folder is used to store language specific urls and variables.
 like: page url, currency etc...
-
-- variables inside `languages` folder must start with `lang_` or `url_`.
+**_variables must start with `lang_` or `url_` prefix._**
 
 Here's an examples of a sample `*.yml` file inside languages folder.
 
@@ -318,8 +317,8 @@ Here's the directory structure:
 ## Local Setup
 
 - check if `jdk` is installed and running on your machine.
-- `java --version`
-If not installed it via brew or from java: 
+- `java --version` To check the java is installed.
+Otherwise install it via brew or from java: 
 [https://www.java.com/en/download/help/index_installing.xml](https://www.java.com/en/download/help/index_installing.xml)
 
 1. `cd behat_rework`
