@@ -33,6 +33,16 @@ class Configurable extends SKUPluginBase {
    *   Sorted configurable options.
    */
   public static function getSortedConfigurableAttributes(SKUInterface $sku): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_code = $sku->getSku();
+
+    // Do not process the same thing again and again.
+    if (isset($static[$langcode][$sku_code])) {
+      return $static[$langcode][$sku_code];
+    }
+
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
     if (empty($configurables) || !is_array($configurables)) {
@@ -55,6 +65,8 @@ class Configurable extends SKUPluginBase {
       $b = $configurable_weights[$b['code']] ?? 50;
       return $a - $b;
     });
+
+    $static[$langcode][$sku_code] = $configurables;
 
     return $configurables;
   }
