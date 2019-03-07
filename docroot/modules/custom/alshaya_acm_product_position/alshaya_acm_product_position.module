@@ -361,7 +361,7 @@ function alshaya_acm_product_position_field_group_build_pre_render_alter(&$eleme
   if (!empty($element) && $element['vid']['#value'] == 'acq_product_category') {
     $element['#group_children']['sort_options_wrapper'] = 'group_plp_sorting_options';
     $element["group_taxonomy_fields"]['group_plp_content']['group_plp_sorting_options']['sort_options_wrapper'] = $element['sort_options_wrapper'];
-    $element['#group_children']['group_plp_sorting_options']->children[] = 'sort_options_wrapper';
+    $element['#fieldgroups']['group_plp_sorting_options']->children[] = 'sort_options_wrapper';
     unset($element['sort_options_wrapper']);
   }
 }
