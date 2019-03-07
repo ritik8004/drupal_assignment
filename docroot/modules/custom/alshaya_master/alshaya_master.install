@@ -1581,8 +1581,8 @@ function alshaya_master_install() {
     'View less colours' => [
       'ar' => 'عرض أقل الألوان',
     ],
-    'save upto x%' => [
-      'ar' => '%X وفّر لغاية',
+    'Save upto @discount%' => [
+      'ar' => 'وفّر لغاية %@discount',
     ],
   ];
 
