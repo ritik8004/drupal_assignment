@@ -181,9 +181,7 @@
         var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
 
         $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
-          setTimeout(function () {
-            $(parent).parent().addClass('active--menu--links');
-          }, 500);
+          $(parent).parent().addClass('active--menu--links');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
