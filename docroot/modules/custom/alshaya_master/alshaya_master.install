@@ -1582,7 +1582,7 @@ function alshaya_master_install() {
       'ar' => 'عرض أقل الألوان',
     ],
     'Save upto @discount%' => [
-      'ar' => 'وفّر لغاية %@discount',
+      'ar' => '%@discount وفّر لغاية',
     ],
   ];
 

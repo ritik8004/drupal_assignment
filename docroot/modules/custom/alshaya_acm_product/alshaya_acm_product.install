@@ -17,7 +17,7 @@ use Drupal\node\Entity\Node;
 function alshaya_acm_product_update_8039() {
   $string = [
     'Save upto @discount%' => [
-      'ar' => 'وفّر لغاية %@discount',
+      'ar' => '%@discount وفّر لغاية',
     ],
   ];
 
