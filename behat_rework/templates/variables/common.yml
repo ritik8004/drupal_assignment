@@ -4,3 +4,4 @@ variables:
 tests:
   - 'login'
   - 'breadcrumb'
+  - 'add-to-cart-label'

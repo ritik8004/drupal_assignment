@@ -1,4 +1,5 @@
 variables:
+  lang_add_to_cart_label: 'أضف إلى حقيبة التسوق'
   lang_breadcrumb_examples:
     1:
       - page

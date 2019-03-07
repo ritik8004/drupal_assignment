@@ -1,0 +1,5 @@
+variables:
+  var_base_url: 'vsae-uat.factory.alshaya.com'
+  var_username: 'akanksha@axelerant.com'
+  var_password: 'Alshaya@2017'
+  url_product_page: '/node/225451?selected=981'
