@@ -268,7 +268,7 @@
       .tooltip {
         &::before {
           @include breakpoint($desktop) {
-            border-#{$right}: 8px solid $tooltip_border_2;
+            border-#{$right}: 8px solid $tooltip_border;
           }
         }
       }
