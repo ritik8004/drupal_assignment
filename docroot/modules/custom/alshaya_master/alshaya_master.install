@@ -1596,8 +1596,8 @@ function alshaya_master_install() {
     'View less colours' => [
       'ar' => 'عرض أقل الألوان',
     ],
-    'save upto x%' => [
-      'ar' => '%X وفّر لغاية',
+    'Save upto @discount%' => [
+      'ar' => '%@discount وفّر لغاية',
     ],
     'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
       'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
