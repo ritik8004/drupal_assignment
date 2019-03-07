@@ -126,7 +126,7 @@ templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml
 ```
 
 ### IMPORTANT Variable: 
-Following file and variable is must for any given environment.
+Following file and variable is must, for any given environment.
 *For each enabled languages* (If a site has two language EN and AR):
 - *`templates/variables/brands/{brand}/env/uat/markets/kw/languages/en.yml`*
 - *`templates/variables/brands/{brand}/env/uat/markets/kw/languages/ar.yml`*
@@ -318,8 +318,8 @@ Here's the directory structure:
 ## Local Setup
 
 - check if `jdk` is installed and running on your machine.
-- `java --version`
-If not installed it via brew or from java: 
+- `java --version` To check the java is installed.
+Otherwise install it via brew or from java: 
 [https://www.java.com/en/download/help/index_installing.xml](https://www.java.com/en/download/help/index_installing.xml)
 
 1. `cd behat_rework`
