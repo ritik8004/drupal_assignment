@@ -1585,12 +1585,14 @@ class SkuManager {
       return [];
     }
 
-    if ($cache = $this->getProductCachedData($sku, 'combinations')) {
-      // @TODO: Condition to be removed in: CORE-5271.
-      // Do additional check for cached data.
-      if (isset($cache['by_sku'])) {
-        return $cache;
-      }
+    $static = &drupal_static(__METHOD__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_code = $sku->getSku();
+
+    // Do not process the same thing again and again.
+    if (isset($static[$langcode][$sku_code])) {
+      return $static[$langcode][$sku_code];
     }
 
     /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin */
@@ -1603,13 +1605,13 @@ class SkuManager {
     $combinations = [];
 
     // Prepare array to get all combinations available grouped by SKU.
-    foreach ($tree['products'] ?? [] as $sku_code => $sku_entity) {
-      if (!($sku_entity instanceof SKU)) {
+    foreach ($tree['products'] ?? [] as $child_sku_code => $child_sku) {
+      if (!($child_sku instanceof SKU)) {
         continue;
       }
 
       // Dot not display free gifts.
-      if ($this->isSkuFreeGift($sku_entity)) {
+      if ($this->isSkuFreeGift($child_sku)) {
         continue;
       }
 
@@ -1618,11 +1620,11 @@ class SkuManager {
       // dependency.
       /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $childPlugin */
       $childPlugin = $sku->getPluginInstance();
-      if (!$childPlugin->isProductInStock($sku_entity)) {
+      if (!$childPlugin->isProductInStock($child_sku)) {
         continue;
       }
 
-      $attributes = $sku_entity->get('attributes')->getValue();
+      $attributes = $child_sku->get('attributes')->getValue();
       $attributes = array_column($attributes, 'value', 'key');
       foreach ($configurable_codes as $code) {
         $value = $attributes[$code] ?? '';
@@ -1631,8 +1633,8 @@ class SkuManager {
           continue;
         }
 
-        $combinations['by_sku'][$sku_code][$code] = $value;
-        $combinations['attribute_sku'][$code][$value][] = $sku_code;
+        $combinations['by_sku'][$child_sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $child_sku_code;
       }
     }
 
@@ -1646,8 +1648,8 @@ class SkuManager {
       if ($plugin->isProductInStock($sku)) {
         // Log message here to allow debugging further.
         $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
-          '@sku' => $sku->getSku(),
-          '@langcode' => $sku->language()->getId(),
+          '@sku' => $sku_code,
+          '@langcode' => $langcode,
           '@trace' => json_encode(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)),
           '@page' => $this->currentRequest->getRequestUri(),
         ]));
@@ -1656,7 +1658,7 @@ class SkuManager {
       return [];
     }
 
-    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+    $configurables = Configurable::getSortedConfigurableAttributes($sku);
 
     // Sort the values in attribute_sku so we can use it later.
     foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
@@ -1697,7 +1699,7 @@ class SkuManager {
       }
     }
 
-    $this->setProductCachedData($sku, 'combinations', $combinations);
+    $static[$langcode][$sku_code] = $combinations;
 
     return $combinations;
   }
