@@ -1,3 +1,9 @@
+# New Behat Architecture
+
+ - [Local setup](#local-setup)
+ - [Important file and variable](#important-variable)
+ - [Guide lines for using variables format](#guide-lines-for-using-variables-format)
+
 # Alshaya Behat Architecture
 
 The idea behind this custom architecture is to avoid duplication of feature
@@ -5,6 +11,7 @@ files and maintaining feature files for multi-sites.
 
 ## Directory Structure
 
+Inside `behat_rework` directory:
 ```text
 
     ├── bin
@@ -102,12 +109,6 @@ inside that folder `hm.yml, mc.yml` files respectively.
         - `languages` folder contains files as described in fourth step.
         - `markets` folder contains files as described in third step.
 
-> `Languages` folder is used to store language specific urls and variables.
-like a page url, currency etc..
-
-> variable inside `languages` folder must start with `lang_` or `url_` and other
- variables must start with `var_` prefix. (to avoid conflict in name.)
-
 So, for example: `hm-kw-uat-en` site these files picked up in following order:
 
 ```text
@@ -124,15 +125,26 @@ templates/variables/brands/hm/env/uat/markets/kw/kw.yml
 templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml
 ```
 
-**IMPORANT NOTICE: This file is must for any given environment.**
-> `templates/variables/brands/hm/env/uat/markets/kw/languages/en.yml`
-> And this file must contain base url inside `variables:`. i.e.
-> `url_base_uri: 'https://hmkw-uat.factory.alshaya.com/ar'` > `en.yml`
-> `url_base_uri: 'https://hmkw-uat.factory.alshaya.com/ar'` > `ar.yml`
+### IMPORTANT Variable: 
+Following file and variable is must for any given environment.
+*For each enabled languages* (If a site has two language EN and AR):
+- *`templates/variables/brands/{brand}/env/uat/markets/kw/languages/en.yml`*
+- *`templates/variables/brands/{brand}/env/uat/markets/kw/languages/ar.yml`*
 
-Contains `.yml` files with `variables` and `tests` keys. `variables` are used 
-to replace token, Which we wrote in feature files with curly braces 
-(i.e. `{userame}`), inside `template/features/*/*.feature` files.
+And these files must contain `url_base_uri` inside `variables:`. i.e.
+```yaml
+variables:
+  url_base_uri: 'https://hmkw-uat.factory.alshaya.com/en'
+```
+**Without this variable it won't generate profile and feature files for that
+specific brand and env.**
+
+
+#### Guide lines for using variables format:
+- `.yml` files contains `variables`, `tests` and `tags` keys. `variables` are 
+used to replace token, Which we wrote in feature files with curly braces 
+(i.e. `{var_userame}`), inside `template/features/*/*.feature` files.
+**_variables must start with `var_` prefix. (to avoid conflict in name.)_**
 
 Here's an example of a sample `*.yml` file.
 ```yaml
@@ -147,6 +159,10 @@ tags:              # list of tags that you want to replace with {@tags}
   - 'kw'
   - 'uat'
 ```
+-  `Languages` folder is used to store language specific urls and variables.
+like: page url, currency etc...
+
+- variables inside `languages` folder must start with `lang_` or `url_`.
 
 Here's an examples of a sample `*.yml` file inside languages folder.
 
@@ -155,15 +171,15 @@ Here's an examples of a sample `*.yml` file inside languages folder.
 > variables:
 >   lang_sing_in_txt: 'sign in'
 >   lang_sing_in_btn: 'Sign In'
->   url_login_link: '/user/login'
->   url_product_link: '/product/any-dummy-product'
+>   url_login_link: '/user/login'  # without language prefix
+>   url_product_link: '/product/any-dummy-product' # without language prefix
 > ```
 > `ar.yml`
 > ```yaml
 > variables:
 >  lang_sing_in_txt: 'تسجيل الدخول'
 >  lang_sing_in_btn: 'تسجيل الدخول'
->  url_login_link: '/user/login'
+>  url_login_link: '/user/login' # without language prefix
 >  url_product_link: '/حلمات--من-تدفق-متوسط-عبوة-من-قطعتين'
 > ```
 
@@ -301,6 +317,11 @@ Here's the directory structure:
 
 ## Local Setup
 
+- check if `jdk` is installed and running on your machine.
+- `java --version`
+If not installed it via brew or from java: 
+[https://www.java.com/en/download/help/index_installing.xml](https://www.java.com/en/download/help/index_installing.xml)
+
 1. `cd behat_rework`
 2. `composer install`
 3. `npm install --prefix bin chromedriver`
@@ -315,8 +336,8 @@ Here's the directory structure:
       - brand + market: `--site=hm-kw,hm-sa`
       - brand + market + env: `--site=hm-kw-uat,hm-sa-uat`
       - brand + market + env + lang: `--site=hm-kw-uat-en,hm-sa-uat-ar`  
-    
-5. (In a separate terminal window)
+5. (In a separate terminal window) 
+  - `cd behat_rework`
 ```bash
 java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
 ```
