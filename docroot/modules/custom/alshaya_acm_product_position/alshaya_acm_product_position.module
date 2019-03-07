@@ -294,8 +294,6 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
     return;
   }
 
-  $form['field_sorting_options']['#weight'] = -100;
-  $form['field_sorting_options']['widget']['#weight'] = -100;
   $form['field_sorting_options']['widget']['#ajax'] = [
     'callback' => '_alshaya_acm_product_position_get_sort_table',
     'progress' => [
@@ -310,15 +308,13 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
     '#attributes' => [
       'id' => ['plp-sorting-options-wrapper'],
     ],
+    '#weight' => 9,
   ];
 
   // Display sort options table only when the sorting option value is override.
   $ajax_value = !empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override';
   $term_value = !empty($taxonomy_term->get('field_sorting_options')->getValue()) && $taxonomy_term->get('field_sorting_options')->getString() == 'override';
 
-  $form['sort_options_wrapper']['sort_options'] = [
-    '#weight' => 99,
-  ];
   if (($term_value && empty($form_state->getValues())) || (!empty($form_state->getValues()) && $ajax_value)) {
     $form['sort_options_wrapper']['sort_options'] = [
       '#type' => 'table',
@@ -334,7 +330,6 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
           'group' => 'plp_sort_options-order-weight',
         ],
       ],
-      '#weight' => 99,
     ];
 
     // Get the sort options and arrange it by weight.
@@ -350,7 +345,7 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
 
   // Form submit handler.
   $form['#validate'][] = 'alshaya_acm_product_position_term_validate';
-  $form['#submit'][] = 'alshaya_acm_product_position_term_submit';
+  $form['actions']['submit']['#submit'][] = 'alshaya_acm_product_position_term_submit';
 }
 
 /**
@@ -403,10 +398,7 @@ function alshaya_acm_product_position_term_validate(array &$form, FormStateInter
  */
 function alshaya_acm_product_position_term_submit(array &$form, FormStateInterface $form_state) {
   \Drupal::service('cache_tags.invalidator')->invalidateTags([
-    'search_api_list:product:sort_position',
     'search_api_list:product',
     'config:block.block.exposedformalshaya_product_listblock_1',
-    'config:block.block.exposedformalshaya_product_listblock_2',
-    'views-exposed-form-alshaya-product-list',
   ]);
 }
