@@ -1,4 +1,3 @@
 variables:
-  var_base_url: 'mckw-uat.factory.alshaya.com'
   var_username: 'mitesh@axelerant.com'
   var_password: 'Alshaya@2017'
