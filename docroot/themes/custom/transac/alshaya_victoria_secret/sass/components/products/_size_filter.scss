@@ -80,8 +80,7 @@
 }
 
 .sfb-facets-container {
-  overflow: hidden;
-  -ms-overflow-style: none;
+  overflow-x: scroll;
   width: 90.75%;
   max-width: 62.4375rem;
   position: relative;

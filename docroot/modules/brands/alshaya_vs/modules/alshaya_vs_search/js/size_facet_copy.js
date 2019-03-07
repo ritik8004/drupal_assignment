@@ -102,7 +102,6 @@
         // Get the distance of different cup size wrapper from starting point to check the slider required or not.
         Cupsizewrapperwidth += $(this).outerWidth() + 16;
         widthOfsCupsizewrapper.push(Cupsizewrapperwidth);
-
       });
 
       // Compare the last element value with the max width of the wrapper.
@@ -129,9 +128,6 @@
         menuWrapperSize = getMenuWrapperSize();
       }, 500));
 
-      // Size of the visible part of the menu is equal as the wrapper size.
-      var menuVisibleSize = menuWrapperSize;
-
       var menuSize = getMenuSize();
       // Get how much of menu is invisible.
       var menuInvisibleSize = menuSize - menuWrapperSize;
@@ -143,7 +139,6 @@
         menuInvisibleSize = menuSize - menuWrapperSize;
         // Get how much have we scrolled so far.
         var menuPosition = getMenuPosition();
-        var menuEndOffset = menuInvisibleSize;
 
         // Show & hide the paddles depending on scroll position.
         if (menuPosition <= 0) {
@@ -163,35 +158,23 @@
       var sliderIndex = 0;
 
       if ($('html').attr('dir') == 'rtl') {
+        // Three block will be always visible on desktop.
+        sliderIndex = DifferenceOfsCupsizewrapper.length - 4;
 
         $(leftPaddle).once().on('click', function () {
-          // Fixing edge case when we have only right paddle.
-          if (sliderIndex == 2) {
-            sliderIndex = 0;
-            $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-            sliderIndex--;
-          }
-          else if (sliderIndex < 0 || sliderIndex == 1) {
+          sliderIndex--;
+          if (sliderIndex < 0) {
             $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
-            sliderIndex++;
           }
           else {
             $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-            sliderIndex--;
           }
-
         });
 
         // Scroll to right.
         $(rightPaddle).once().on('click', function () {
-          if (sliderIndex < 0) {
-            sliderIndex++;
-            $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex + 1] + DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-          }
-          else {
-            $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-            sliderIndex++;
-          }
+          sliderIndex++;
+          $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
         });
       }
       else {
@@ -209,7 +192,7 @@
           }
           else {
             // scroll by a single size wrapper.
-            $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex] - DifferenceOfsCupsizewrapper[sliderIndex - 1])}, scrollDuration);
+            $('.sfb-facets-container').animate({scrollLeft: (DifferenceOfsCupsizewrapper[sliderIndex-1])}, scrollDuration);
           }
         });
       }
