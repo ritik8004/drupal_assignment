@@ -1,7 +1,9 @@
 services:
   alshaya_acm.add_to_cart_error_event:
     class: Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber
-    arguments: ['@logger.factory']
+    arguments:
+      - '@alshaya_acm.cart_helper'
+      - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
 
