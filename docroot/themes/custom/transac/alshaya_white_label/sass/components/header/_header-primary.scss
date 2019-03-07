@@ -1,5 +1,5 @@
 :root {
-  --menuTiming: 0ms;
+  --menuTiming: 250ms;
 }
 
 @include breakpoint($desktop) {
@@ -626,7 +626,8 @@ header {
           visibility: hidden;
           overflow: hidden;
           background: #fff;
-          transition-delay: 0s;
+          transition-delay: 0.3s;
+          transition-property: opacity;
           transition-duration: var(--menuTiming);
           transition-timing-function: ease-in;
         }
@@ -639,6 +640,7 @@ header {
             opacity: 1;
             z-index: 1;
             transition-delay: 0.3s;
+            transition-property: opacity;
             transition-duration: var(--menuTiming);
             transition-timing-function: ease-in;
           }
@@ -649,6 +651,18 @@ header {
         .menu-backdrop {
           @include breakpoint($desktop) {
             display: none;
+          }
+        }
+      }
+
+      &.active--menu--links {
+        &:hover {
+          li.menu--one__list-item {
+            &:hover {
+              ul.menu--two__list {
+                transition: none;
+              }
+            }
           }
         }
       }
@@ -690,6 +704,7 @@ header {
           opacity: 1;
           z-index: 1;
           transition-delay: 0.3s;
+          transition-property: opacity;
           transition-duration: var(--menuTiming);
           transition-timing-function: ease-in;
         }
@@ -726,19 +741,10 @@ header {
         #{$right}: 0;
         width: 100%;
         z-index: -1;
-        transition-delay: 0s;
+        transition-delay: 0.3s;
+        transition-property: opacity;
         transition-duration: var(--menuTiming);
         transition-timing-function: ease-in;
-      }
-    }
-
-    .active--menu--links {
-      &:hover {
-        li.menu--one__list-item {
-          .menu--one__link {
-            border-bottom: 1px solid $mm_l1_border;
-          }
-        }
       }
     }
 
@@ -910,9 +916,10 @@ header {
       bottom: 0;
       #{$left}: 0;
       opacity: 0;
-      z-index: -1;
+      z-index: 1;
       background-color: rgba(0, 0, 0, 0.48);
-      transition-delay: 0s;
+      transition-delay: 0.3s;
+      transition-property: opacity;
       transition-duration: var(--menuTiming);
       transition-timing-function: ease-in;
     }
@@ -920,8 +927,8 @@ header {
     &.overlay {
       &::before {
         opacity: 1;
-        z-index: 1;
         transition-delay: 0.3s;
+        transition-property: opacity;
         transition-duration: var(--menuTiming);
         transition-timing-function: ease-in;
       }

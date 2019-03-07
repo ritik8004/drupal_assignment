@@ -243,7 +243,9 @@
       }, 250));
 
       var menuTiming = $('.main--menu').attr('data-menu-timing');
-      $(':root').css({'--menuTiming': menuTiming + 'ms'});
+      if (menuTiming !== undefined) {
+        $(':root').css({'--menuTiming': menuTiming + 'ms'});
+      }
 
       // Adding Class to parent on hover of a menu-item without child.
       if ($(window).width() > 1023) {
