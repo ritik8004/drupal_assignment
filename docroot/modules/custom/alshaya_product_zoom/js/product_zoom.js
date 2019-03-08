@@ -36,18 +36,15 @@
           var video_url = $('li', lightSlider).attr('data-iframe');
           appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), video_url);
           // Hiding the main image container to correct position of video iframe.
-          $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').hide();
+          $('.acq-content-product #cloud-zoom-wrap').hide();
         }
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
-        mobilegallery.on('swipe', function (event, slick) {
-          if ($('.slick-current .mobileplayer-wrapper iframe').length > 0) {
-            $('.mobilegallery .product-labels').hide();
-          }
-          else {
-            $('.mobilegallery .product-labels').show();
-          }
+        mobilegallery.on('afterChange', function (event, slick) {
+          // Hide Labels on video slides.
+          Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
         });
+
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
@@ -73,13 +70,12 @@
             var URL = $(this).attr('data-iframe');
             $('.acq-content-product .cloudzoom__video_main iframe').remove();
             appendVideoIframe($('.acq-content-product .cloudzoom__video_main'), URL);
-            $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').hide();
+            $('.acq-content-product #cloud-zoom-wrap').hide();
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
           }
-          if ($('.cloudzoom__video_main iframe').length > 0) {
-            $('.cloudzoom__herocontainer .product-labels').hide();
-          }
+          // Hide Product labels on video slides.
+          Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
         });
 
         // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
@@ -88,11 +84,7 @@
           // Check if there is a youtube video playing, if yes stop it and destroy the iframe.
           if (playerIframe.length > 0) {
             playerIframe.remove();
-            $('.acq-content-product #cloud-zoom-wrap, .cloudzoom__herocontainer .product-labels').show();
-          }
-
-          if ($('.cloudzoom__video_main iframe').length === 0) {
-            $('.cloudzoom__herocontainer .product-labels').show();
+            $('.acq-content-product #cloud-zoom-wrap').show();
           }
         });
 
@@ -104,6 +96,8 @@
           }
           $(this).parent().siblings('.slick-slide').removeClass('slick-current');
           $(this).parent().addClass('slick-current');
+          // Show Product labels on image slides.
+          Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
         });
       }
 
@@ -132,6 +126,9 @@
           $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
           $('.acq-content-product-modal #cloud-zoom-wrap').show();
+
+          // Show product labels.
+          Drupal.hideProductLabelOnVideo(modalLightSlider, 'cloudzoom__thumbnails__video', false);
         });
 
         $('li', modalLightSlider).once('bind-js').on('click', function () {
@@ -143,6 +140,8 @@
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
           }
+          // Hide product labels.
+          Drupal.hideProductLabelOnVideo(modalLightSlider, 'cloudzoom__thumbnails__video', false);
         });
       }
 
@@ -483,6 +482,35 @@
       });
     }
   }
+
+  /**
+   * Hide product labels on video slides in a slick slider.
+   *
+   * @param {*} gallery
+   *   The slick slider. Preferrably with content.
+   * @param {*} videoSlideClass
+   *   The class on the slide to indetify a video slide.
+   * @param {*} mobileGalleryFlag
+   *   Boolean to indicate if slider is a mobile gallery
+   */
+  Drupal.hideProductLabelOnVideo = function (gallery, videoSlideClass, mobileGalleryFlag) {
+    if (mobileGalleryFlag === true) {
+      if (gallery.find('.slick-current').hasClass(videoSlideClass)) {
+        gallery.siblings('.product-labels').hide();
+      }
+      else {
+        gallery.siblings('.product-labels').show();
+      }
+    }
+    else {
+      if (gallery.find('.slick-current').hasClass(videoSlideClass)) {
+        gallery.parents('.cloudzoom__thumbnails').siblings('.cloudzoom__herocontainer').find('.product-labels').hide();
+      }
+      else {
+        gallery.parents('.cloudzoom__thumbnails').siblings('.cloudzoom__herocontainer').find('.product-labels').show();
+      }
+    }
+  };
 
   // Slider - 3 For Mobile - Image Gallery.
   var slickMobileOptions = {
