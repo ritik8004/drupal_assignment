@@ -193,7 +193,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
           // Do not add selected param if we are using parent sku itself for
           // gallery. This is normal for PB, MC, etc.
-          if ($sku_for_gallery->id() != $sku->id()) {
+          if (($sku_for_gallery->id() != $sku->id()) &&
+            ($this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode') === SkuManager::NON_AGGREGATED_LISTING)) {
             $product_url .= '?selected=' . $sku_for_gallery->id();
           }
         }

@@ -3110,9 +3110,12 @@ class SkuManager {
 
     $skus_color_map = $query->execute()->fetchAllAssoc('attr_color_label', \PDO::FETCH_ASSOC);
 
-    foreach ($skus_color_map as &$sku_color_map) {
+    foreach ($skus_color_map as $key => &$sku_color_map) {
       if (($node_entity = $this->getDisplayNode($sku_color_map['sku'])) instanceof NodeInterface) {
         $sku_color_map['entity_id'] = $node_entity->id();
+      }
+      else {
+        unset($skus_color_map[$key]);
       }
     }
 
