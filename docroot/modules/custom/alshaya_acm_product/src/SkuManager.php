@@ -3104,14 +3104,19 @@ class SkuManager {
    */
   public function fetchColorNodes($style_code) {
     $query = $this->connection->select('acq_sku_field_data', 'asfd');
-    $query->join('node__field_skus', 'nfs', 'asfd.sku = nfs.field_skus_value');
     $query->condition('asfd.attr_style_code', $style_code);
-    $query->fields('nfs', ['entity_id']);
-    $query->fields('asfd', ['attr_rgb_color', 'attr_color_label']);
+    $query->condition('type', 'simple');
+    $query->fields('asfd', ['sku', 'attr_rgb_color', 'attr_color_label']);
 
-    $nids = $query->execute()->fetchAllAssoc('entity_id', \PDO::FETCH_ASSOC);
+    $skus_color_map = $query->execute()->fetchAllAssoc('attr_color_label', \PDO::FETCH_ASSOC);
 
-    return $nids;
+    foreach ($skus_color_map as &$sku_color_map) {
+      if (($node_entity = $this->getDisplayNode($sku_color_map['sku'])) instanceof NodeInterface) {
+        $sku_color_map['entity_id'] = $node_entity->id();
+      }
+    }
+
+    return $skus_color_map;
   }
 
 }
