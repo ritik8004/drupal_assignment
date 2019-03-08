@@ -123,10 +123,6 @@ class SkuPriceHelper {
         break;
     }
 
-    if (!empty($options['with_vat'])) {
-      $this->build['#vat_text'] = $this->skuManager->getVatText();
-    }
-
     return $this->build;
   }
 
