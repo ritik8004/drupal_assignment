@@ -96,12 +96,12 @@ class SkuPriceHelper {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Product sku for which we want the price block.
    * @param array $options
-   *   Additional flags like vat text is required or not.
+   *   Additional flags like color.
    *
    * @return array
    *   Build array.
    */
-  public function getPriceBlockForSku(SKU $sku, array $options = ['with_vat' => 1]):array {
+  public function getPriceBlockForSku(SKU $sku, array $options = []):array {
     $this->build = [
       '#theme' => 'product_price_block',
       '#cache' => ['tags' => $this->configCacheTags],
