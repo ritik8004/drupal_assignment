@@ -106,7 +106,9 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     if ($parent = $plugin->getParentSku($entity)) {
       // Update color nodes on save of each child.
       $node = $this->skuManager->getDisplayNode($parent, FALSE);
-      if ($node instanceof NodeInterface) {
+      $listing_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
+      if (($node instanceof NodeInterface) &&
+        ($listing_mode === SkuManager::AGGREGATED_LISTING)) {
         $this->skuManager->processColorNodesForConfigurable($node);
       }
     }

@@ -110,7 +110,10 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $skuManager->processColorNodesForConfigurable($node);
+  $listing_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
+  if ($listing_mode === SkuManager::NON_AGGREGATED_LISTING) {
+    $skuManager->processColorNodesForConfigurable($node);
+  }
 }
 
 /**
