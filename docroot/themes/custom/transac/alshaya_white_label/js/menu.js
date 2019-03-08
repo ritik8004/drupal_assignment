@@ -181,9 +181,7 @@
         var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
 
         $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
-          setTimeout(function () {
-            $(parent).parent().addClass('active--menu--links');
-          }, 500);
+          $(parent).parent().addClass('active--menu--links');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
@@ -243,7 +241,9 @@
       }, 250));
 
       var menuTiming = $('.main--menu').attr('data-menu-timing');
-      $(':root').css({'--menuTiming': menuTiming + 'ms'});
+      if (menuTiming !== 'undefined') {
+        $(':root').css({'--menuTiming': menuTiming + 'ms'});
+      }
 
       // Adding Class to parent on hover of a menu-item without child.
       if ($(window).width() > 1023) {

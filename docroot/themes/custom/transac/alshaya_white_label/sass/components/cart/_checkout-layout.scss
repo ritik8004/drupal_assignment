@@ -197,7 +197,6 @@
   text-transform: lowercase;
   font-size: 0.6875rem;
   padding: 1.375rem 1.5rem;
-  padding-#{$right}: 1rem;
 
   p {
     color: $checkout_footer_txt;
@@ -209,6 +208,8 @@
   }
 
   p:last-child {
+    margin-bottom: 0;
+
     .light {
       font-family: $alshaya-bold;
       font-weight: normal;
@@ -236,6 +237,7 @@
 
   @include breakpoint($only-mobile) {
     text-align: center;
+    padding: 1rem;
   }
 }
 
