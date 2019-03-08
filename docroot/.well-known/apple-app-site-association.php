@@ -2,7 +2,6 @@
 
 /**
  * @file
- * Contains install, update, uninstall hooks for alshaya_acm_product module.
  */
 
 // Set the variable as false initially so
