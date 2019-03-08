@@ -29,7 +29,10 @@ function alshaya_acm_product_tokens($type, $tokens, array $data, array $options,
     $color_label = '';
     if ($config_sku = $sku_manager->getSkuForNode($data['entity'])) {
       $sku = SKU::loadFromSku($config_sku);
-      $color_label = $sku->get('attr_color_label')->getString();
+      $first_child = $sku_manager->getChildSkus($sku, TRUE);
+      if ($first_child instanceof SKU) {
+        $color_label = $first_child->get('attr_color_label')->getString();
+      }
     }
     $replacements[$tokens['sku-color']] = $color_label;
   }
