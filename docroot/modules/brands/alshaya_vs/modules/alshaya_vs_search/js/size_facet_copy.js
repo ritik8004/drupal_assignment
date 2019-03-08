@@ -114,10 +114,27 @@
         }
       }
 
+      var sliderIndex;
+      var counter = 0;
+      var sliderIndexidentifier;
       if ($('html').attr('dir') == 'rtl') {
         DifferenceOfsCupsizewrapper.reverse();
         for (var i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
           DifferenceOfsCupsizewrapper[i] = DifferenceOfsCupsizewrapper[i] + DifferenceOfsCupsizewrapper[i - 1];
+          if (DifferenceOfsCupsizewrapper[i] > $('.sfb-facets-container').width() && counter == 0) {
+            sliderIndex = DifferenceOfsCupsizewrapper.length - i - 1;
+            sliderIndexidentifier = DifferenceOfsCupsizewrapper.length - i;
+            counter++;
+          }
+        }
+      }
+      else {
+        sliderIndex = 0;
+        for (var i = 1; i < DifferenceOfsCupsizewrapper.length; i++) {
+          if (DifferenceOfsCupsizewrapper[i] > $('.sfb-facets-container').width() && counter == 0) {
+            sliderIndexidentifier = DifferenceOfsCupsizewrapper.length - i;
+            counter++;
+          }
         }
       }
 
@@ -155,16 +172,12 @@
         }
       });
 
-      var sliderIndex = 0;
-
       if ($('html').attr('dir') == 'rtl') {
-        // Three block will be always visible on desktop.
-        sliderIndex = DifferenceOfsCupsizewrapper.length - 4;
-
         $(leftPaddle).once().on('click', function () {
           sliderIndex--;
-          if (sliderIndex < 0) {
+          if (sliderIndex <= 0) {
             $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
+            sliderIndex = 0;
           }
           else {
             $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
@@ -173,21 +186,33 @@
 
         // Scroll to right.
         $(rightPaddle).once().on('click', function () {
-          sliderIndex++;
+          // After reaching the end of slide if we scroll using mouse then index should be same as last one.
+          if (sliderIndex >= sliderIndexidentifier - 1) {
+            sliderIndex = sliderIndexidentifier - 1;
+          }
+          else {
+            sliderIndex++;
+          }
           $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
         });
       }
       else {
         // Scroll to left.
         $(rightPaddle).once().on('click', function () {
-          $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex]}, scrollDuration);
-          sliderIndex++;
+          if (sliderIndex >= sliderIndexidentifier - 1) {
+            sliderIndex = sliderIndexidentifier - 1;
+          }
+          else {
+            sliderIndex++;
+          }
+          $('.sfb-facets-container').animate({scrollLeft: DifferenceOfsCupsizewrapper[sliderIndex - 1]}, scrollDuration);
         });
 
         // Scroll to right.
         $(leftPaddle).once().on('click', function () {
           sliderIndex--;
-          if (sliderIndex == 0) {
+          if (sliderIndex <= 0) {
+            sliderIndex = 0;
             $('.sfb-facets-container').animate({scrollLeft: 0}, scrollDuration);
           }
           else {
