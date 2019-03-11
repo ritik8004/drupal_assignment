@@ -271,11 +271,8 @@ class ProductSyncResource extends ResourceBase {
           ]);
         }
 
-        // Configurable SKUs need to have configurable options. Except in case
-        // of H&M where we have 1 configurable product per color.
-        if ($product['type'] == 'configurable' &&
-          empty($product['extension']['configurable_product_options']) &&
-          (!$product['style_code'])) {
+        // Configurable SKUs need to have configurable options.
+        if ($product['type'] == 'configurable' && empty($product['extension']['configurable_product_options'])) {
           // We mark the status to disabled so product is deleted if available.
           $product['status'] = 0;
 
