@@ -75,7 +75,7 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    if (\Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode') == SkuManager::NON_AGGREGATED_LISTING) {
+    if ($this->skuManager->isListingModeNonAggregated()) {
       $this->processSkuColorNodes();
     }
   }
@@ -87,7 +87,7 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function postDrushCommand(Event $event) {
-    if (\Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode') == SkuManager::NON_AGGREGATED_LISTING) {
+    if ($this->skuManager->isListingModeNonAggregated()) {
       $this->processSkuColorNodes();
     }
   }

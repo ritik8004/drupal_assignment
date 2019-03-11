@@ -2722,9 +2722,8 @@ class SkuManager {
    */
   public function getSkuForNode(NodeInterface $node, $no_color_node = FALSE) {
     $sku_string = $node->get('field_skus')->getString();
-    $listing_mode = $this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
 
-    $product_color = ($listing_mode === self::NON_AGGREGATED_LISTING) ? $node->get('field_product_color')->getString() : '';
+    $product_color = ($this->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     if ($no_color_node && $product_color) {
       return '';
@@ -2742,9 +2741,7 @@ class SkuManager {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function processColorNodesForConfigurable(NodeInterface $node) {
-    $mode = $this->getListingDisplayMode();
-
-    if ($mode != self::NON_AGGREGATED_LISTING) {
+    if (!$this->isListingModeNonAggregated()) {
       return;
     }
 
@@ -2853,7 +2850,7 @@ class SkuManager {
       $nid_field->setValues([$original->id()]);
     }
     $product_color = '';
-    if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('listing_display_mode') === SkuManager::NON_AGGREGATED_LISTING) {
+    if ($this->isListingModeNonAggregated()) {
       $product_color = $node->get('field_product_color')->getString();
     }
 
@@ -3073,6 +3070,16 @@ class SkuManager {
     $query->condition('nc.field_category_target_id', $tid);
     $query->distinct();
     return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
+  /**
+   * Check if listing mode is non-aggregated.
+   *
+   * @return bool
+   *   TRUE if listing mode is set to non-aggregated.
+   */
+  public function isListingModeNonAggregated() {
+    return $this->getListingDisplayMode() == self::NON_AGGREGATED_LISTING;
   }
 
   /**

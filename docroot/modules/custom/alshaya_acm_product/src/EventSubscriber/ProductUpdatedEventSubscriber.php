@@ -98,6 +98,11 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdatedProcessColor(ProductUpdatedEvent $event) {
+    // Do nothing when listing display mode is not non-aggregated.
+    if (!$this->skuManager->isListingModeNonAggregated()) {
+      return;
+    }
+
     $entity = $event->getSku();
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
@@ -106,9 +111,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     if ($parent = $plugin->getParentSku($entity)) {
       // Update color nodes on save of each child.
       $node = $this->skuManager->getDisplayNode($parent, FALSE);
-      $listing_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
-      if (($node instanceof NodeInterface) &&
-        ($listing_mode === SkuManager::NON_AGGREGATED_LISTING)) {
+      if ($node instanceof NodeInterface) {
         $this->skuManager->processColorNodesForConfigurable($node);
       }
     }

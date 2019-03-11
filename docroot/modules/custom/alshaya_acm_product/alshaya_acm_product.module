@@ -110,8 +110,7 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $listing_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
-  if ($listing_mode === SkuManager::NON_AGGREGATED_LISTING) {
+  if ($skuManager->isListingModeNonAggregated()) {
     $skuManager->processColorNodesForConfigurable($node);
   }
 }
@@ -309,15 +308,14 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_node_delete(NodeInterface $node) {
   if ($node->bundle() == 'acq_product') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $node->get('field_skus')->getString();
-    $listing_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
-    $color = ($listing_mode === SkuManager::NON_AGGREGATED_LISTING) ? $node->get('field_product_color')->getString() : NULL;
+    $color = ($skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : NULL;
 
     // Delete the color nodes available in system for this particular product.
     // Do nothing when deleting color node itself.
     if ($sku && empty($color)) {
-      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $nids = $skuManager->getColorNodeIds($sku);
 
       if ($nids) {
@@ -1928,8 +1926,9 @@ function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInter
   // For Alshaya we have developed a feature to display one entry per color
   // on listing pages. For this we need extra nodes. To avoid affecting original
   // functionality we add conditions below.
-  $listing_display_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
-  if ($listing_display_mode === SkuManager::NON_AGGREGATED_LISTING) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  if ($skuManager->isListingModeNonAggregated()) {
     $query->addJoin('left', 'node__field_product_color', 'color', 'node_field_data.vid = color.revision_id');
     $query->isNull('field_product_color_value');
   }

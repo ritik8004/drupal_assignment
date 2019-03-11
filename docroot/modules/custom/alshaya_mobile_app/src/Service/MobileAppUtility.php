@@ -219,7 +219,6 @@ class MobileAppUtility {
     $this->currencyConfig = $config_factory->get('acq_commerce.currency');
     $this->apiWrapper = $api_wrapper;
     $this->renderer = $renderer;
-    $this->listingConfig = $config_factory->get('alshaya_acm_product.display_settings');
   }
 
   /**
@@ -743,7 +742,7 @@ class MobileAppUtility {
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
 
-    $color = ($this->listingConfig->get('listing_display_mode') === SkuManager::NON_AGGREGATED_LISTING) ? $node->get('field_product_color')->getString() : NULL;
+    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : NULL;
 
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);
