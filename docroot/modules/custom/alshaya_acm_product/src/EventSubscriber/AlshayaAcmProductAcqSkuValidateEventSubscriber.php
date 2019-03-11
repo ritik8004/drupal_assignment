@@ -71,7 +71,7 @@ class AlshayaAcmProductAcqSkuValidateEventSubscriber implements EventSubscriberI
    */
   private function validateConfigurableProduct(array $product) {
     // We only deal with the configurable skus.
-    if (($product['type'] != 'configurable') || ($product['style_code'])) {
+    if ($product['type'] != 'configurable') {
       return TRUE;
     }
 
