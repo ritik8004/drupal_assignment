@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ViewExecutable;
@@ -248,7 +249,11 @@ function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $co
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
-  $tree = $form_state->get('tree');
+  $tree = [];
+  if ($tree_sku = $form_state->get('tree_sku')) {
+    $sku = SKU::loadFromSku($tree_sku);
+    $tree = Configurable::deriveProductTree($sku);
+  }
 
   // Check if the product is configurable.
   if (!empty($tree['parent'])) {
@@ -265,33 +270,30 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
       // Translate color attribute option values to the rgb color values &
       // expose the same in Drupal settings to javascript.
       foreach ($options as $key => $option) {
-        if (isset($tree['options']['article_castor_id:' . $key])) {
-          $sku_options = $tree['options']['article_castor_id:' . $key];
-          $sku_entity = NULL;
-          foreach ($sku_options as $key_option => $sku) {
-            if ($key_option === '#available_config') {
+        if (isset($tree['combinations']['attribute_sku']['article_castor_id'][$key])) {
+          foreach ($tree['combinations']['attribute_sku']['article_castor_id'][$key] as $variant_sku_code) {
+            $variant_sku = SKU::loadFromSku($variant_sku_code);
+
+            if (!($variant_sku instanceof SKU)) {
               continue;
             }
-            if (!empty($sku)) {
-              $sku_entity = $sku;
-              break;
-            }
-          }
 
-          if ($sku_entity instanceof SKU) {
+            $assets = [];
             if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-              $assets = $sku_asset_manager->getSkuAssets($sku_entity, 'swatch', ['swatch'], $swatch_type, FALSE);
+              $assets = $sku_asset_manager->getSkuAssets($variant_sku, 'swatch', ['swatch'], $swatch_type, FALSE);
             }
 
-            $options[$key] = $sku_entity->get('attr_color_label')->getString();
+            $options[$key] = $variant_sku->get('attr_color_label')->getString();
 
             // If swatch type is not miniature_image or assets were missing from
             // sku, use rgb color code instead.
             $sku_configurable_options_color[$key] = [
-              'display_value' => empty($assets) ? $sku_entity->get('attr_rgb_color')->value : '<img src="' . $assets[0]['url']->toString() . '">',
+              'display_value' => empty($assets) ? $variant_sku->get('attr_rgb_color')->getString() : '<img src="' . $assets[0]['url']->toString() . '">',
               'display_label' => $options[$key],
               'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
+
+            break;
           }
         }
       }
