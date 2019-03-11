@@ -3,4 +3,4 @@ configurable_use_parent_images: 'never'
 swatches:
   pdp:
     - article_castor_id
-listing_display_mode: 'non_aggregated'
+listing_display_mode: 'aggregated'
