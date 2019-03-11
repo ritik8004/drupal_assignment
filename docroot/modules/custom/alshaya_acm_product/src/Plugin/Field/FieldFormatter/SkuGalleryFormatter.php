@@ -155,7 +155,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
     if (($entity_adapter instanceof EntityAdapter) &&
-      ($this->skuManager->isListingModeNonAggregated()) {
+      ($this->skuManager->isListingModeNonAggregated())) {
       $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
 
       /** @var \Drupal\node\NodeInterface $colorNode */
@@ -194,7 +194,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
           // Do not add selected param if we are using parent sku itself for
           // gallery. This is normal for PB, MC, etc.
           if (($sku_for_gallery->id() != $sku->id()) &&
-            ($this->skuManager->isListingModeNonAggregated()) {
+            ($this->skuManager->isListingModeNonAggregated())) {
             $product_url .= '?selected=' . $sku_for_gallery->id();
           }
         }
