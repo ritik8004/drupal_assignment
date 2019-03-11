@@ -3,3 +3,5 @@ cross_up_sell_items_settings:
   basket_carousel_items_size: 5
 pdp_slider_items_settings:
   pdp_slider_items_number_cs_us: 4
+product_carousel_items_settings:
+  hp_product_carousel_items_number: 4

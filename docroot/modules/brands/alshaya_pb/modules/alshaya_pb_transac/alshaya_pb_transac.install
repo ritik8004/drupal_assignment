@@ -12,6 +12,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Change number of items in Product Carousel for PB.
+ */
+function alshaya_pb_transac_update_8011() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove super_category dependence in block for free design services.
  * Add new sku attribute feature_lhn.
  */
