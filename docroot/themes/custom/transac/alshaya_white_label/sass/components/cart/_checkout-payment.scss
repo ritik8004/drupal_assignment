@@ -207,7 +207,7 @@
   }
 
   .form-item-acm-payment-methods-payment-details-wrapper-payment-method-cybersource-payment-details-cc-number {
-    width: 12.5rem;
+    width: 13.5rem;
 
     label {
       width: 100%;
@@ -335,8 +335,8 @@
 
     .card-type {
       display: inline-block;
-      height: 2rem;
-      width: 3rem;
+      height: 1.75rem;
+      width: 2rem;
       background: $checkout_payment_method_icon_bg;
       margin-#{$left}: 0.5625rem;
 
@@ -422,7 +422,7 @@
     @include breakpoint($only-mobile) {
       display: block;
       position: absolute;
-      top: 0;
+      top: 0.25rem;
       #{$left}: 11.5rem;
 
       html[lang=ar] & {
