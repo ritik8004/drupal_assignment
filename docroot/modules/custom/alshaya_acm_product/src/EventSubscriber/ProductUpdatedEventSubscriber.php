@@ -108,7 +108,7 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
       $node = $this->skuManager->getDisplayNode($parent, FALSE);
       $listing_mode = \Drupal::configFactory()->get('alshaya_acm_product.display_settings')->get('listing_display_mode');
       if (($node instanceof NodeInterface) &&
-        ($listing_mode === SkuManager::AGGREGATED_LISTING)) {
+        ($listing_mode === SkuManager::NON_AGGREGATED_LISTING)) {
         $this->skuManager->processColorNodesForConfigurable($node);
       }
     }
