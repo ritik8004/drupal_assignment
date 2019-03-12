@@ -108,9 +108,10 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
    *   The default sort order by which it needs to be arranged.
    */
   public static function arrangeOptionsByWeight(array &$element, array $default_order) {
+    // Remove empty options.
+    $default_order = array_filter($default_order);
     // Sort options.
     $options = self::getPlpSortOptions();
-
     // Sort the form options based on the config.
     $options = array_replace(array_flip($default_order), $options);
 
