@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_fl_transac\Plugin\facets\processor;
+namespace Drupal\alshaya_search_api\Plugin\facets\processor;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\facets\Plugin\facets\processor\ExcludeSpecifiedItemsProcessor;
