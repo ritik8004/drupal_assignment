@@ -195,7 +195,23 @@ class CustomCommand extends BltTasks {
       ->drush('sync-stores')
       ->uri($uri)
       ->run();
+  }
 
+  /**
+   * Sync Areas.
+   *
+   * @command sync:areas
+   * @description Sync the areas.
+   */
+  public function syncAreas($uri) {
+    $this->say('Sync the areas');
+    $drush_alias = $this->getConfigValue('drush.alias');
+    $this->taskDrush()
+      ->stopOnFail()
+      ->alias($drush_alias)
+      ->drush('sync-areas')
+      ->uri($uri)
+      ->run();
   }
 
   /**
@@ -257,6 +273,7 @@ class CustomCommand extends BltTasks {
     if ($profile_name == 'alshaya_transac') {
       $this->invokeCommand('sync:products', ['uri' => $uri]);
       $this->invokeCommand('sync:promotions', ['uri' => $uri]);
+      $this->invokeCommand('sync:areas', ['uri' => $uri]);
       $this->invokeCommand('sync:stores', ['uri' => $uri]);
     }
   }
@@ -306,6 +323,7 @@ class CustomCommand extends BltTasks {
     if ($profile_name == 'alshaya_transac') {
       $this->invokeCommand('sync:products', ['uri' => $uri]);
       $this->invokeCommand('sync:promotions', ['uri' => $uri]);
+      $this->invokeCommand('sync-areas', ['uri' => $uri]);
       $this->invokeCommand('sync:stores', ['uri' => $uri]);
     }
   }
