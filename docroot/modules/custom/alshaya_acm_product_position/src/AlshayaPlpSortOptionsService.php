@@ -171,7 +171,7 @@ class AlshayaPlpSortOptionsService {
       $parent_terms = $this->termStorage->loadParents($taxonomy_term->id());
       $term = reset($parent_terms);
       if (!$term instanceof Term) {
-        return NULL;
+        return $this->configSortOptions->get('sort_options');
       }
       return $this->getPlpSortOptionsForTerm($term);
     }
