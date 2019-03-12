@@ -364,7 +364,8 @@
       title: store.name,
       infoWindowContent: locationEle.html(),
       infoWindowSolitary: true,
-      label: (index).toString()
+      label: (index).toString(),
+      zIndex: index + 1
     };
 
     if (typeof mapObj.bounds !== 'undefined') {
