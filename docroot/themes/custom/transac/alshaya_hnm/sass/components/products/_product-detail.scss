@@ -193,7 +193,7 @@
 
   .form-item-configurables-size {
     @include breakpoint($only-mobile) {
-      @include select-wrapper(12.3125rem);
+      padding: 0;
 
       &::after {
         top: 0.875rem;
