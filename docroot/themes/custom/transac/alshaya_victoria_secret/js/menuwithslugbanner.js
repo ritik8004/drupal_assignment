@@ -10,16 +10,12 @@
     attach: function (context, settings) {
       if ($(window).width() < 1025) {
         $('.hamburger--menu').once().on('click', function () {
-          if ($('body').hasClass('header--fixed')) {
-            $('.toggle--sign, .mobile--close').css('top', $('.block-alshaya-super-category-menu').outerHeight());
-            $('.menu--one__list').css('top', $('.block-alshaya-super-category-menu').outerHeight() + $('.toggle--sign').outerHeight());
+          var SlugBannerHeight = 0;
+          if (!$('body').hasClass('header--fixed')) {
+            SlugBannerHeight = $('.mobile-slug-banner').outerHeight();
           }
-          else {
-            var TopHeight = $('.block-alshaya-super-category-menu').outerHeight() + $('.mobile-slug-banner').outerHeight();
-
-            $('.toggle--sign, .mobile--close').css('top', TopHeight);
-            $('.menu--one__list').css('top', TopHeight + $('.toggle--sign').outerHeight());
-          }
+          $('.toggle--sign, .mobile--close').css('top', $('.block-alshaya-super-category-menu').outerHeight() + SlugBannerHeight);
+          $('.menu--one__list').css('top', $('.block-alshaya-super-category-menu').outerHeight() + $('.toggle--sign').outerHeight() + SlugBannerHeight);
         });
       }
     }
