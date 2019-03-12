@@ -35,7 +35,14 @@
       showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
 
-    if (!$(context).hasClass('modal-content')) {
+    // Adding class when we click on slider item to open the modal.
+    if ($(window).width() > 767) {
+      $('.nodetype--acq_product .view-id-product_slider .use-ajax').once().on('click', function (e) {
+        $('body').addClass('magazine-layout-overlay');
+      });
+    }
+
+    if (!$(context).hasClass('modal-content') && !$('body').hasClass('magazine-layout-overlay')) {
       // JS function to show less/more for colour swatches.
       Drupal.magazine_swatches_count();
     }
@@ -96,9 +103,11 @@
 
     if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
       $('.show-less-color').show();
+      $('.configurable-swatch').addClass('swatch-toggle');
     }
     else if ($('.content__title_wrapper').hasClass('show-less-swatch')) {
       $('.show-more-color').show();
+      $('.configurable-swatch').removeClass('swatch-toggle');
     }
 
     if ($(window).width() > 767) {
@@ -129,7 +138,7 @@
       }
     }
 
-    $('.show-more-color').on('click', function (e) {
+    $('.show-more-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
         $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
@@ -142,7 +151,7 @@
       $('.show-less-color').show();
     });
 
-    $('.show-less-color').on('click', function (e) {
+    $('.show-less-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
         $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
@@ -417,6 +426,7 @@
             if ($('body').hasClass('magazine-layout-ajax-throbber')) {
               $('body').removeClass('magazine-layout-ajax-throbber');
             }
+            $('body').removeClass('magazine-layout-overlay');
           });
         }, 10);
       }
