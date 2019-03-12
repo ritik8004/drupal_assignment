@@ -196,6 +196,10 @@ header.c-header {
   .block-alshaya-main-menu {
     max-width: 76.75rem;
 
+    ul.menu--one__list {
+      width: auto;
+    }
+
     li.menu--one__list-item {
       display: inline-block;
       text-transform: uppercase;
