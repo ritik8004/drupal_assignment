@@ -291,19 +291,10 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
   // Get entity from form state object.
   $taxonomy_term = $form_state->getFormObject()->getEntity();
 
-  // Check if the current form is menu link form of configured menu types.
+  // Check if the current form is term form.
   if (!$taxonomy_term instanceof Term) {
     return;
   }
-
-  $form['field_sorting_options']['widget']['#ajax'] = [
-    'callback' => '_alshaya_acm_product_position_get_sort_table',
-    'progress' => [
-      'type' => 'throbber',
-      'message' => NULL,
-    ],
-    'wrapper' => 'plp-sorting-options-wrapper',
-  ];
 
   $form['sort_options_wrapper'] = [
     '#type' => 'container',
@@ -314,36 +305,36 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
   ];
 
   // Display sort options table only when the sorting option value is override.
-  $ajax_value = !empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override';
-  $term_value = !empty($taxonomy_term->get('field_sorting_options')->getValue()) && $taxonomy_term->get('field_sorting_options')->getString() == 'override';
-
-  if (($term_value && empty($form_state->getValues())) || (!empty($form_state->getValues()) && $ajax_value)) {
-    $form['sort_options_wrapper']['sort_options'] = [
-      '#type' => 'table',
-      '#header' => [
-        t('Enable/Disable'),
-        t('Name'),
-        t('Weight'),
+  $form['sort_options_wrapper']['sort_options'] = [
+    '#type' => 'table',
+    '#header' => [
+      t('Enable/Disable'),
+      t('Name'),
+      t('Weight'),
+    ],
+    '#tabledrag' => [
+      [
+        'action' => 'order',
+        'relationship' => 'sibling',
+        'group' => 'plp_sort_options-order-weight',
       ],
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'plp_sort_options-order-weight',
-        ],
+    ],
+    '#states' => [
+      'visible' => [
+        'select[name="field_sorting_options"]' => ['value' => 'override'],
       ],
-    ];
+    ],
+  ];
 
-    // Get the sort options and arrange it by weight.
-    $sort_options = !empty($taxonomy_term->get('field_sorting_order')->getString())
-      ? unserialize($taxonomy_term->get('field_sorting_order')->getString())
-      : \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
+  // Get the sort options and arrange it by weight.
+  $sort_options = !empty($taxonomy_term->get('field_sorting_order')->getString())
+    ? unserialize($taxonomy_term->get('field_sorting_order')->getString())
+    : \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
 
-    AlshayaPlpSortSettingsForm::arrangeOptionsByWeight(
-      $form['sort_options_wrapper']['sort_options'],
-      $sort_options
-    );
-  }
+  AlshayaPlpSortSettingsForm::arrangeOptionsByWeight(
+    $form['sort_options_wrapper']['sort_options'],
+    $sort_options
+  );
 
   // Form submit handler.
   $form['#validate'][] = 'alshaya_acm_product_position_term_validate';
@@ -364,13 +355,6 @@ function alshaya_acm_product_position_field_group_build_pre_render_alter(&$eleme
     $element['#fieldgroups']['group_plp_sorting_options']->children[] = 'sort_options_wrapper';
     unset($element['sort_options_wrapper']);
   }
-}
-
-/**
- * Ajax callback to update sort_options_wrapper.
- */
-function _alshaya_acm_product_position_get_sort_table(array &$form, FormStateInterface $form_state) {
-  return $form['sort_options_wrapper'];
 }
 
 /**
