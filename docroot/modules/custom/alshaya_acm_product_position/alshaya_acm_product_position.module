@@ -8,12 +8,14 @@
 use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
@@ -404,4 +406,23 @@ function alshaya_acm_product_position_term_submit(array &$form, FormStateInterfa
     'search_api_list:product',
     'config:block.block.exposedformalshaya_product_listblock_1',
   ]);
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterface $term, array &$category, $parent) {
+  // Save field_sorting_options default value for all existing & new terms that
+  // are being created programmatically.
+  $temp_store = \Drupal::service('tempstore.private')->get('alshaya_commerce_category_sync');
+  $field_sorting_options_default_value = $temp_store->get('field_sorting_options');
+  if (empty($field_sorting_options_default_value)) {
+    $field = FieldConfig::loadByName('taxonomy_term', 'acq_product_category', 'field_sorting_options');
+    $field_sorting_options_default_value = $field->getDefaultValue($term);
+    $temp_store->set('field_sorting_options', $field->getDefaultValue($term));
+  }
+
+  if (!empty($field_sorting_options_default_value)) {
+    $term->set('field_sorting_options', $field_sorting_options_default_value);
+  }
 }
