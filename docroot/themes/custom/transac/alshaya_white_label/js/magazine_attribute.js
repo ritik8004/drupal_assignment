@@ -103,9 +103,11 @@
 
     if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
       $('.show-less-color').show();
+      $('.configurable-swatch').addClass('swatch-toggle');
     }
     else if ($('.content__title_wrapper').hasClass('show-less-swatch')) {
       $('.show-more-color').show();
+      $('.configurable-swatch').removeClass('swatch-toggle');
     }
 
     if ($(window).width() > 767) {
