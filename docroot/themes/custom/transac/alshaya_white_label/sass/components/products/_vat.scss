@@ -28,6 +28,7 @@
 
     @include breakpoint($only-mobile) {
       text-align: center;
+      margin: 0 0.5rem 1.5rem;
     }
   }
 
