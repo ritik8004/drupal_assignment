@@ -2000,8 +2000,11 @@ html[lang=ar] {
       }
     }
   }
+}
 
-  .c-pdp {
+.nodetype--acq_product,
+.acq-content-product-modal {
+  .content__title_wrapper {
     .vat-text,
     .content--item-code {
       display: inline-block;
