@@ -65,8 +65,8 @@ addons:
 
 # @see https://docs.travis-ci.com/user/notifications
 notifications:
-# - hipchat: [api token]@[room id or name]
-# - slack: '<account>:<token>#[channel]'
+  slack:
+    secure: "O66I/UH/twgBygarmAR7uiclqSxAXggDIUTkZvuDfIQ2+6pzuxQ7a5xDttFHbXumLyvBPAbUBzM2U5SwKkxDFoDV90BYdOG0Ed95YScRf6IgQSVbqcnyFdiQgnIXdbyP1VExhBLwejlMFRX3gHx3J0mjHtwBckb2lQWiIA7GbLgPs9WY3pynB8/kJC5h2id6rPbSUw5mYhd84UWkAL02SVx3D4MQIQ+E96rGCZJna14yZHZmzaV1luYwxTD1j2IRX0cp1KEINMWBgZs6xt+KgK1IM9CR/x6NXYhWddscWPFYH3cmlO8DyS73qxzasR5wbGEV1EaMh1qJEatwSlxYTzC2rO8yXfxg+qSpkk3/zgNKnLV0jWAINCftD+9ZtiUsLjlVjaBbKILBIsLEs2XBUUbxrD2hwq4Z9Yz8+OHTxug3Q17Xko293Sd4htfajoNmbFKmAVU1ld5z/4DocaejIqXV2JVGbdfppi6QnyLZ0ABa0AOso5srlUNw4HM/ahvIZwdXKy/vxBQRNuD2bAlPZdjQ2xYlWoC2qQg/VT60sDZ9HTq6houpb/cfNa4criJIXMWWf5LS/uitOPqj5d3clF+2XvpfISuCHJd0r1YTvfhLA//fXtNhWOqCltcaHFGCPwTg2IIM+PStAKSbv/jrbbnxEdY/RvMI/lqzzK1trio="
 
 before_install:
   # Disable xdebug.
