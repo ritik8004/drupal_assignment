@@ -398,12 +398,15 @@ function alshaya_acm_product_position_term_submit(array &$form, FormStateInterfa
 function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterface $term, array &$category, $parent) {
   // Save field_sorting_options default value for all existing & new terms that
   // are being created programmatically.
+  if (!empty($term->get('field_sorting_options')->getString())) {
+    return;
+  }
+
   $temp_store = \Drupal::service('tempstore.private')->get('alshaya_commerce_category_sync');
   $field_sorting_options_default_value = $temp_store->get('field_sorting_options');
   if (empty($field_sorting_options_default_value)) {
     $field = FieldConfig::loadByName('taxonomy_term', 'acq_product_category', 'field_sorting_options');
     $field_sorting_options_default_value = $field->getDefaultValue($term);
-    $temp_store->set('field_sorting_options', $field->getDefaultValue($term));
   }
 
   if (!empty($field_sorting_options_default_value)) {
