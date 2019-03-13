@@ -283,13 +283,6 @@ function alshaya_pb_transac_install() {
   ];
   alshaya_i18n_save_translations($strings);
 
-  // Re-save indexes to ensure config overrides are taken into consideration.
-  _alshaya_search_resave_indexes();
-
-  // Enable super category feature.
-  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
-  $super_category_feature->enableSuperCategory();
-
   // Disable shop by block.
   alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
 
