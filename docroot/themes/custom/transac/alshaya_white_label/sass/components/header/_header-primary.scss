@@ -734,6 +734,7 @@ header {
         #{$left}: 0;
         #{$right}: 0;
         width: 100%;
+        font-size: 0;
         z-index: -1;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
         transition: opacity var(--menuTiming) ease-in 0.3s;
@@ -917,7 +918,7 @@ header {
     &.overlay {
       &::before {
         opacity: 1;
-        z-index: 3;
+        z-index: 5;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
         transition: opacity var(--menuTiming) ease-in 0.3s, z-index 0 ease-in 0.3s;
       }
