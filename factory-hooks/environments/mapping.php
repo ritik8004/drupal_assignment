@@ -135,6 +135,15 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
   if (isset($mapping[$site][$env])) {
     $map = $mapping[$site][$env];
   }
+  elseif (isset($mapping[$site]['default'])) {
+    $map = $mapping[$site]['default'];
+  }
+  elseif (isset($mapping['default'][$env])) {
+    $map = $mapping['default'][$env];
+  }
+  elseif (isset($mapping['default']['default'])) {
+    $map = $mapping['default']['default'];
+  }
 
   // If MDC or Conductor mapping is not defined, use the default mapping
   // pattern.
