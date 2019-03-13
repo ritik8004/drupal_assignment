@@ -35,7 +35,7 @@ class CustomerDeleteResource extends ResourceBase {
    * @return \Drupal\rest\ResourceResponse
    *   HTTP Response.
    */
-  public function post(array $data = []) {
+  public function post(array $data) {
     // If 'email' key is not available.
     if (!$data['email']) {
       $this->logger->error('Invalid data to delete customer.');
