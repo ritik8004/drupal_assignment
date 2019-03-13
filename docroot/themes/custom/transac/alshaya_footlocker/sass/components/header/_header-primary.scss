@@ -312,6 +312,17 @@ header.c-header {
       }
     }
 
+    .search-active {
+      .mobile--search {
+        &::before {
+          background: url(#{$fl_theme_img_directory_path}/assets/search-selected.svg) no-repeat;
+          background-size: cover;
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+      }
+    }
+
     .store {
       font-size: 0;
       position: absolute;
