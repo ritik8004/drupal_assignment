@@ -1,6 +1,5 @@
 variables:
   lang_product_url: '/en-hm/product/1'
-  lang_add_to_cart_label: 'add to basket'
   lang_breadcrumb_examples:
     1:
       - page
