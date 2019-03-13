@@ -734,6 +734,7 @@ header {
         #{$left}: 0;
         #{$right}: 0;
         width: 100%;
+        font-size: 0;
         z-index: -1;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
         transition: opacity var(--menuTiming) ease-in 0.3s;
