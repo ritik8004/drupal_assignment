@@ -86,7 +86,7 @@
         $('body').addClass('notification--on');
         $('#cart_notification').addClass('has--notification');
         // If magazine layout is enabled.
-        if ($('.magazine-layout').length > 0) {
+        if ($(window).width() < 768 && $('.magazine-layout').length > 0) {
           $('#cart_notification').addClass('cart-notification-animate');
         }
         else {
