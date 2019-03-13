@@ -92,7 +92,8 @@
     z-index: 11 !important;
   }
 
-  .menu--mobile-navigation {
+  .menu--mobile-navigation,
+  .block-alshaya-super-category-menu {
     @include breakpoint($only-tablet) {
       &::before {
         content: '';
