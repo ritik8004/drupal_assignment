@@ -190,6 +190,10 @@
           transform: translate(#{negate-value(-3.7)}rem, 0);
         }
 
+        @include breakpoint($only-mobile) {
+          z-index: auto;
+        }
+
         .c-facet__blocks {
           padding: 0.9rem 1rem;
 
@@ -740,6 +744,7 @@
       width: 100%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+      z-index: 12;
 
       .filter-close {
         float: $right;
