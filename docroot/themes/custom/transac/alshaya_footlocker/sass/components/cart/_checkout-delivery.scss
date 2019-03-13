@@ -10,6 +10,12 @@
 
           &.back-to-basket {
             float: $left;
+            padding: 0.625rem 0;
+
+            @include breakpoint($only-mobile) {
+              width: 100%;
+              margin: 0.625rem 0;
+            }
           }
         }
       }
