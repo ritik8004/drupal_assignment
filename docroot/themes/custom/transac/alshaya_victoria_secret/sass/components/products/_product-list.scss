@@ -259,14 +259,6 @@
       }
 
       .c-facet__blocks__wrapper--mobile {
-        @include breakpoint($only-mobile) {
-          z-index: auto;
-
-          .c-facet__blocks {
-            z-index: 8;
-          }
-        }
-
         .c-facet__blocks {
           li {
             &.clear-all {
