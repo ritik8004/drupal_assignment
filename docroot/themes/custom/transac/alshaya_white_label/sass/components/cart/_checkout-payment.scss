@@ -518,7 +518,7 @@
             content: "";
             height: 2rem;
             width: 3rem;
-            background: $checkout_payment_CVV_tooltip_image_bg url(../imgs/cards/back-card.png) no-repeat;
+            background: $checkout_payment_CVV_tooltip_image_bg url(#{$base_theme_img_directory_path}/cards/back-card.png) no-repeat;
             background-size: 100%;
             margin-#{$right}: 0.5rem;
             position: absolute;
