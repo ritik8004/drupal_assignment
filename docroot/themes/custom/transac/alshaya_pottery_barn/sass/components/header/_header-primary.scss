@@ -237,3 +237,13 @@ body {
     margin-#{$right}: 1.375rem;
   }
 }
+
+.block-alshaya-main-menu {
+  ul.menu--one__list {
+    .menu-backdrop {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+    }
+  }
+}
