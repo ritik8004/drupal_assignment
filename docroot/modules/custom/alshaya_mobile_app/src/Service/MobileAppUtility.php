@@ -3,14 +3,18 @@
 namespace Drupal\alshaya_mobile_app\Service;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Render\RenderContext;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\taxonomy\TermInterface;
 use Drupal\node\NodeInterface;
 use Drupal\file\FileInterface;
+use Drupal\views\Views;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -27,7 +31,7 @@ use Drupal\rest\ResourceResponse;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 
 /**
- * Utilty Class.
+ * MobileAppUtility Class.
  */
 class MobileAppUtility {
 
@@ -144,7 +148,14 @@ class MobileAppUtility {
   protected $apiWrapper;
 
   /**
-   * Utility constructor.
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
+   * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend instance to use.
@@ -170,21 +181,22 @@ class MobileAppUtility {
    *   The factory for configuration objects.
    * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
    *   The ApiWrapper object.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   The renderer.
    */
-  public function __construct(
-    CacheBackendInterface $cache,
-    LanguageManagerInterface $language_manager,
-    RequestStack $request_stack,
-    AliasManagerInterface $alias_manager,
-    EntityTypeManagerInterface $entity_type_manager,
-    EntityRepositoryInterface $entity_repository,
-    SkuManager $sku_manager,
-    SkuImagesManager $sku_images_manager,
-    ModuleHandlerInterface $module_handler,
-    ProductCategoryTreeInterface $product_category_tree,
-    ConfigFactoryInterface $config_factory,
-    APIWrapper $api_wrapper
-  ) {
+  public function __construct(CacheBackendInterface $cache,
+                              LanguageManagerInterface $language_manager,
+                              RequestStack $request_stack,
+                              AliasManagerInterface $alias_manager,
+                              EntityTypeManagerInterface $entity_type_manager,
+                              EntityRepositoryInterface $entity_repository,
+                              SkuManager $sku_manager,
+                              SkuImagesManager $sku_images_manager,
+                              ModuleHandlerInterface $module_handler,
+                              ProductCategoryTreeInterface $product_category_tree,
+                              ConfigFactoryInterface $config_factory,
+                              APIWrapper $api_wrapper,
+                              RendererInterface $renderer) {
     $this->cache = $cache;
     $this->languageManager = $language_manager;
     $this->requestStack = $request_stack->getCurrentRequest();
@@ -199,6 +211,7 @@ class MobileAppUtility {
     $this->currentLanguage = $this->languageManager->getCurrentLanguage()->getId();
     $this->currencyConfig = $config_factory->get('acq_commerce.currency');
     $this->apiWrapper = $api_wrapper;
+    $this->renderer = $renderer;
   }
 
   /**
@@ -738,20 +751,20 @@ class MobileAppUtility {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
-   * @param string|null $color
+   * @param string $color
    *   Color value.
    *
    * @return array
    *   Light Product.
    */
-  public function getLightProduct(SKUInterface $sku, $color = NULL): array {
+  public function getLightProduct(SKUInterface $sku, string $color = ''): array {
     $node = $this->skuManager->getDisplayNode($sku);
-    if (!($node instanceof NodeInterface)) {
+    if (!($node instanceof NodeInterface) || !($node->hasTranslation($this->currentLanguage()))) {
       return [];
     }
 
     // Get the prices.
-    $prices = $this->skuManager->getMinPrices($sku);
+    $prices = $this->skuManager->getMinPrices($sku, $color);
 
     // Get the promotion data.
     $promotions = $this->getPromotions($sku);
@@ -791,8 +804,7 @@ class MobileAppUtility {
     ];
 
     if ($color) {
-      // Keep data type consistent here.
-      $data['color'] = (string) $color;
+      $data['color'] = $color;
     }
 
     // Allow other modules to alter light product data.
@@ -819,7 +831,9 @@ class MobileAppUtility {
 
     foreach (array_keys($linkedSkus) as $linkedSku) {
       $linkedSkuEntity = SKU::loadFromSku($linkedSku);
-      $return[] = $this->getLightProduct($linkedSkuEntity);
+      if ($lightProduct = $this->getLightProduct($linkedSkuEntity)) {
+        $return[] = $lightProduct;
+      }
     }
 
     return $return;
@@ -910,6 +924,64 @@ class MobileAppUtility {
     }
 
     return $user;
+  }
+
+  /**
+   * Get all the stores.
+   *
+   * If specified, return only around the specified area.
+   *
+   * @param string $lat
+   *   Latitude.
+   * @param string $lng
+   *   Longitude.
+   *
+   * @return array
+   *   Array containing stores and cacheable metadata.
+   */
+  public function getStores(string $lat = '', string $lng = '') {
+    $response_data = [];
+    $cacheable_metadata = NULL;
+
+    // Get store finder view.
+    $view = Views::getView('stores_finder');
+    if (!empty($view)) {
+      // Set the view display to page_1.
+      $view->setDisplay('page_1');
+      $proximity_handler = $view->getHandler('page_1', 'filter', 'field_latitude_longitude_proximity');
+
+      if ($lat || $lng) {
+        $input = [
+          'field_latitude_longitude_proximity-lat' => $lat,
+          'field_latitude_longitude_proximity-lng' => $lng,
+          'field_latitude_longitude_proximity' => $proximity_handler['value']['value'] ?: 5,
+        ];
+
+        // Set exposed form input values.
+        $view->setExposedInput($input);
+      }
+
+      $view_render_array = NULL;
+      $rendered_view = NULL;
+
+      $this->renderer->executeInRenderContext(new RenderContext(),
+        function () use ($view, &$view_render_array, &$rendered_view) {
+          $view_render_array = $view->render();
+          $rendered_view = render($view_render_array);
+        }
+      );
+
+      $cacheable_metadata = CacheableMetadata::createFromRenderArray($view_render_array);
+
+      foreach ($view->result as $row) {
+        $response_data[] = $row->_entity->get('field_store_locator_id')->getValue()[0]['value'];
+      }
+    }
+
+    return [
+      'data' => $response_data,
+      'cacheable_metadata' => $cacheable_metadata,
+    ];
   }
 
 }

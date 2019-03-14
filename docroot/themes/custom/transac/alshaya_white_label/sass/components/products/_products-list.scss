@@ -27,6 +27,16 @@
       }
     }
 
+    .block-views-blockalshaya-product-list-block-1 + .block-views-blockalshaya-term-description-block-1 {
+      .c-page-title__description {
+        width: 100%;
+
+        @include breakpoint($only-tablet) {
+          max-width: 100%;
+        }
+      }
+    }
+
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
       @include breakpoint($only-mobile) {
         border: none;
@@ -178,6 +188,10 @@
 
         @include breakpoint($tablet) {
           transform: translate(#{negate-value(-3.7)}rem, 0);
+        }
+
+        @include breakpoint($only-mobile) {
+          z-index: auto;
         }
 
         .c-facet__blocks {
@@ -393,7 +407,6 @@
     width: 65%;
     font-size: 1rem;
     font-weight: normal;
-    text-transform: lowercase;
     color: $plp_promotion_description;
     margin-top: 0.45rem;
     font-family: $alshaya-thin;
@@ -440,6 +453,7 @@
     @include breakpoint($mobile) {
       width: calc(50% - 0.5rem);
       margin-bottom: 1rem;
+      min-height: 18rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -452,8 +466,13 @@
       }
     }
 
+    @include breakpoint($tablet) {
+      min-height: 20rem;
+    }
+
     @include breakpoint($desktop) {
       width: 33%;
+      min-height: 25rem;
     }
 
     .alshaya_search_gallery {
@@ -725,6 +744,7 @@
       width: 100%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+      z-index: 12;
 
       .filter-close {
         float: $right;

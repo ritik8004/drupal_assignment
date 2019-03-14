@@ -96,6 +96,16 @@
         }
       }
 
+      &.tab-home-delivery,
+      &.tab-click-collect {
+        position: relative;
+        min-height: 5.4375rem;
+      }
+
+      &.tab-separator {
+        font-size: 1rem;
+      }
+
       &.tab-home-delivery {
         &:not(.active--tab--head) {
           margin-#{$left}: -1px;
@@ -264,4 +274,5 @@
 .cnc-collect-from {
   font-family: $alshaya-thin;
   text-transform: capitalize;
+  letter-spacing: normal;
 }

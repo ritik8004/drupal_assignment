@@ -33,6 +33,7 @@ class SimpleRestCreds {
     $this->password = $password;
     $this->url = $url;
   }
+
 }
 
 /**
@@ -101,10 +102,10 @@ class SimpleRestMessage {
     if ($method != 'GET' && !empty($parameters)) {
       $data_string = json_encode($parameters);
       curl_setopt($curl, CURLOPT_POSTFIELDS, $data_string);
-      curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+      curl_setopt($curl, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
         'Content-Length: ' . strlen($data_string),
-      ));
+      ]);
     }
 
     $full_url = sprintf('%s/%s%s', $creds->url, $endpoint, $query_string);
@@ -129,7 +130,7 @@ class SimpleRestMessage {
     $response_body = json_decode($response, TRUE);
 
     if (!is_array($response_body)) {
-      $response_body = array();
+      $response_body = [];
     }
 
     curl_close($curl);
@@ -181,4 +182,5 @@ class SimpleRestResponse {
     $this->code = $response_code;
     $this->body = $response_body;
   }
+
 }

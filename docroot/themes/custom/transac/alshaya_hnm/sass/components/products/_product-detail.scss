@@ -193,14 +193,7 @@
 
   .form-item-configurables-size {
     @include breakpoint($only-mobile) {
-      @include select-wrapper(12.3125rem);
-
       padding: 0;
-      margin-top: 0.5em;
-      position: relative;
-      z-index: 3;
-      width: 100%;
-      min-height: 2.188rem;
 
       &::after {
         top: 0.875rem;
@@ -208,18 +201,7 @@
       }
 
       label {
-        position: absolute;
         top: -0.625rem;
-        font-size: 0.6875rem;
-        padding: 0.3125rem 0;
-        padding-#{$right}: 1.25rem;
-        #{$left}: 0;
-      }
-
-      select.form-select {
-        @include select-style(12.3125rem);
-
-        width: 100%;
       }
     }
 
@@ -240,13 +222,6 @@
 
       label {
         @include u-visibility(none);
-
-        position: absolute;
-        top: -1rem;
-        font-size: 0.6875rem;
-        padding: 0.3125rem 0;
-        padding-#{$right}: 1.25rem;
-        #{$left}: 0;
       }
 
       select.form-select {
@@ -669,12 +644,6 @@
       border-bottom: none;
     }
 
-    @include breakpoint($only-mobile) {
-      .basic-details-wrapper & {
-        height: auto;
-      }
-    }
-
     .sku-base-form > div,
     .sku-base-form > .js-form-wrapper {
       @include breakpoint($mobile) {
@@ -732,9 +701,6 @@
   }
 
   h4 {
-    margin: 0;
-    font-size: 0.6875rem;
-    font-weight: 100;
     color: $pdp_desc_wrapper;
   }
 

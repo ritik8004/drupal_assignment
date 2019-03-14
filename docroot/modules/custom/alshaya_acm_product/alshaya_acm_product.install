@@ -12,6 +12,21 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Adding AR translation for "save upto x%".
+ */
+function alshaya_acm_product_update_8039() {
+  $string = [
+    'Save upto @discount%' => [
+      'ar' => '%@discount وفّر لغاية',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($string);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config for display of price (simple / from_to).
  */
 function alshaya_acm_product_update_8038() {
