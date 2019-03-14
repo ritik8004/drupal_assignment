@@ -2,8 +2,8 @@ fields:
   color:
     configurable: 1
     cardinality: 1
-    index: 1
-    facet: 1
+    index: 0
+    facet: 0
   size:
     configurable: 1
     cardinality: 1
@@ -13,8 +13,8 @@ fields:
     label: 'Color'
     type: 'string'
     cardinality: -1
-    index: 0
-    facet: 0
+    index: 1
+    facet: 1
     swatch: 1
   size_shoe_eu:
     configurable: 1
