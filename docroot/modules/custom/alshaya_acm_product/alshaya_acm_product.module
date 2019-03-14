@@ -15,7 +15,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Ajax\BaseCommand;
-use Drupal\Core\Ajax\InsertCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Ajax\SettingsCommand;
 use Drupal\Core\Form\FormStateInterface;
@@ -1562,8 +1561,19 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
       $cross_sell_markup_desktop = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell above-mobile-block">', '#suffix' => '</div>']);
       $cross_sell_markup_mobile = array_merge($cross_sell_markup, ['#prefix' => '<div class="horizontal-crossell mobile-only-block">', '#suffix' => '</div>']);
 
-      $response->addCommand(new InsertCommand('.horizontal-crossell.mobile-only-block', $cross_sell_markup_mobile));
-      $response->addCommand(new InsertCommand('.horizontal-crossell.above-mobile-block', $cross_sell_markup_desktop));
+      $renderer = \Drupal::service('renderer');
+      $response->addCommand(
+        new InvokeCommand(
+          NULL,
+          'updateCrossSell',
+          [
+            $form_state->getBuildInfo()['form_id'],
+            $renderer->renderRoot($cross_sell_markup_mobile),
+            $renderer->renderRoot($cross_sell_markup_desktop),
+          ]
+        )
+      );
+
     }
 
     // React for click & collect if stock is available.
