@@ -57,18 +57,18 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
     else {
       if (is_array($data)) {
         $options['query'] = $data;
-      }
 
-      // To allow hmac sign to be verified properly we need them in asc order.
-      ksort($options['query']);
+        // To allow hmac sign to be verified properly we need them in asc order.
+        ksort($options['query']);
+      }
 
       $result = $client->get($endpoint, $options);
     }
   }
   catch (Exception $e) {
-    echo $e->getMessage();
-    var_dump($options);
-    exit;
+    error_log($e->getMessage());
+
+    return new stdClass();
   }
 
   $data = json_decode($result->getBody());
@@ -102,6 +102,56 @@ function create_site($name, $description, $org_id = NULL) {
   ];
 
   return invoke_api('config/site/create', 'POST', $data);
+}
+
+/**
+ * Function to return a site configuration from ACM.
+ *
+ * @param int $site_id
+ *   Id of the site to fetch.
+ *
+ * @return \stdClass
+ *   The data returned by the API.
+ */
+function get_site(int $site_id) {
+  return invoke_api('config/site/' . $site_id, 'GET');
+}
+
+/**
+ * Function to get total number of sites for current org on ACM.
+ *
+ * There is no way from ACM API to get a list of sites in current org so the
+ * only way is to test all ids one by one. Given there is also no way to know
+ * this is the last site, we need a mechanism to stop the process hence this is
+ * the purpose of $max_gap variable. It will stop browsing after this amount of
+ * invalid ids.
+ *
+ * @param int $max_gap
+ *   Number of invalid ids before we decide we tested enough.
+ *
+ * @return int
+ *   The total number of sites.
+ */
+function get_sites($max_gap = 50) {
+  $id = 1;
+  $count = 0;
+  $gap = $max_gap;
+
+  while ($gap > 0) {
+    $site = get_site($id);
+
+    if (isset($site->name)) {
+      $count++;
+      $gap = $max_gap;
+    }
+    else {
+      $gap--;
+    }
+
+    $id++;
+  }
+
+  return $count;
 }
 
 /**
