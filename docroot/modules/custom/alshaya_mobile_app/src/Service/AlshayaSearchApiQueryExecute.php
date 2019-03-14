@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
+use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -168,6 +169,13 @@ class AlshayaSearchApiQueryExecute {
   protected $entityTypeManager;
 
   /**
+   * PLP sort option service.
+   *
+   * @var \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService
+   */
+  protected $plpSortOptions;
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -186,15 +194,20 @@ class AlshayaSearchApiQueryExecute {
    *   SKU manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $sort_option_service
+   *   Plp Sort options service.
    */
-  public function __construct(RequestStack $requestStack,
-                              DefaultFacetManager $facet_manager,
-                              LanguageManagerInterface $language_manager,
-                              QueryTypePluginManager $query_type_manager,
-                              MobileAppUtility $mobile_app_utility,
-                              EntityRepositoryInterface $entity_repository,
-                              SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    RequestStack $requestStack,
+    DefaultFacetManager $facet_manager,
+    LanguageManagerInterface $language_manager,
+    QueryTypePluginManager $query_type_manager,
+    MobileAppUtility $mobile_app_utility,
+    EntityRepositoryInterface $entity_repository,
+    SkuManager $sku_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    AlshayaPlpSortOptionsService $sort_option_service
+  ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->facetManager = $facet_manager;
     $this->languageManager = $language_manager;
@@ -203,6 +216,7 @@ class AlshayaSearchApiQueryExecute {
     $this->entityRepository = $entity_repository;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->plpSortOptions = $sort_option_service;
   }
 
   /**
@@ -609,12 +623,10 @@ class AlshayaSearchApiQueryExecute {
       }
       else {
         // Get sort config.
-        $sort_config = _alshaya_acm_product_position_get_config(TRUE);
-        // Remove empty label items.
-        $sort_config = array_filter($sort_config);
+        $sort_config = $this->plpSortOptions->getSortOptionsLabels();
 
         // Sorted sort data.
-        $sort_config = _alshaya_acm_product_position_sorted_options($sort_config);
+        $sort_config = $this->plpSortOptions->sortGivenOptions($sort_config);
         foreach ($sort_config as $key => $label) {
           $sort_data[] = [
             'key' => $key,

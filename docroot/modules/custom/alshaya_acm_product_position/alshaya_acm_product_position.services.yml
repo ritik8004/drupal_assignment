@@ -1,0 +1,7 @@
+services:
+  alshaya_acm_product_position.sort_options:
+    class: Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService
+    arguments:
+      - '@config.factory'
+      - '@current_route_match'
+      - '@entity_type.manager'
