@@ -33,12 +33,6 @@
       }
     }
   }
-
-  .c-footer-primary {
-    @include breakpoint($only-mobile) {
-      margin-top: 1.5rem;
-    }
-  }
 }
 
 .acq-content-product {
