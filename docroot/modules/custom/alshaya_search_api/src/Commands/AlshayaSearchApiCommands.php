@@ -81,9 +81,9 @@ class AlshayaSearchApiCommands extends DrushCommands {
    */
   public function correctIndexData() {
     // 1. Delete items from search_api which are no longer available in system.
-    $query = $this->connection->query("SELECT item_id
-      FROM search_api_item
-      WHERE REPLACE(REPLACE(REPLACE(item_id, 'entity:node/', ''), ':en', ''), ':ar', '') NOT IN (SELECT nid FROM node)");
+    $query = $this->connection->query("SELECT sai.item_id FROM search_api_item sai
+      LEFT JOIN node n ON n.nid = SUBSTR(SUBSTR(sai.item_id, 1, LENGTH(sai.item_id) - 3), 13)
+      WHERE n.nid IS NULL");
 
     $item_ids = $query->fetchAll();
     $indexes = ['acquia_search_index', 'product'];
