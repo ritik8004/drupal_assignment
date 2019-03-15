@@ -83,22 +83,22 @@ function invoke_api($endpoint, $method = 'GET', array $data = []) {
  *   Name of the site to create.
  * @param string $description
  *   Description of the site to create.
- * @param int $org_id
+ * @param int $org_uuid
  *   The organization id to create the site into.
  *
  * @return \stdClass
  *   The data returned by the API.
  */
-function create_site($name, $description, $org_id = NULL) {
-  if (empty($org_id)) {
+function create_site($name, $description, $org_uuid = NULL) {
+  if (empty($org_uuid)) {
     global $config;
-    $org_id = $config['org_id'];
+    $org_uuid = $config['org_uuid'];
   }
 
   $data = [
     'name' => $name,
     'description' => $description,
-    'org_id' => $org_id,
+    'org_uuid' => $org_uuid,
   ];
 
   return invoke_api('config/site/create', 'POST', $data);
