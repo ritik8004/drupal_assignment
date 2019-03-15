@@ -70,11 +70,11 @@ AddEncoding gzip svgz
   RewriteEngine on
 
   #add maintenance page
-  RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/%{HTTP_HOST}/maintenance.html -f
   RewriteCond %{DOCUMENT_ROOT}/.maintenance -f
   RewriteCond %{SCRIPT_FILENAME} !maintenance.html
-  RewriteRule ^.*$ /maintenance.html [R=503,L]
-  ErrorDocument 503 /maintenance.html
+  RewriteRule ^.*$ /sites/g/files/%{HTTP_HOST}/maintenance.html [R=503,L]
+  ErrorDocument 503 /sites/g/files/%{HTTP_HOST}/maintenance.html
   Header Set Cache-Control "max-age=0, no-store"
   #end of adding maintenance page
 
