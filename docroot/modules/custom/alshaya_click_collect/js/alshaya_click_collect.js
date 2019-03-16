@@ -25,13 +25,22 @@
 
   // Error callback.
   Drupal.click_collect.LocationError = function (error) {
-    Drupal.ajax({
-      url: Drupal.url('location-access-blocked-warning'),
-      element: $('#store-finder-wrapper').get(0),
-      base: false,
-      progress: {type: 'throbber'},
-      submit: {js: true}
-    }).execute();
+    // Display dialog when location access is blocked from browser.
+    let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your settings.');
+    let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
+      modal: true,
+      width: "auto",
+      height: "auto",
+      title: Drupal.t('Location access denied'),
+      dialogClass: 'location-disabled-notice',
+      resizable: false,
+      closeOnEscape: true,
+      close: function close(event) {
+        $(event.target).remove();
+      }
+    });
+
+    locationErrorDialog.showModal();
     // Display search store form if conditions matched.
     Drupal.click_collect.LocationAccessError(drupalSettings);
   };

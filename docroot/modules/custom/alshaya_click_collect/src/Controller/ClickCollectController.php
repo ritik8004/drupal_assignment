@@ -20,7 +20,6 @@ use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\Core\Ajax\OpenModalDialogCommand;
 
 /**
  * Class ClickCollectController.
@@ -440,28 +439,6 @@ class ClickCollectController extends ControllerBase {
     $response->addCommand(new StoreDisplayFillCommand($settings));
     $response->addCommand(new SettingsCommand($settings, TRUE), TRUE);
 
-    return $response;
-  }
-
-  /**
-   * Display dialog when location access is blocked from browser.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   Return Ajax response with commands.
-   */
-  public function locationAccessBlockWarningModal() {
-    $response = new AjaxResponse();
-    $response->addCommand(
-      new OpenModalDialogCommand(
-        $this->t('Location access denied'),
-        $this->t('We need permission to locate your nearest stores. You can enable location services in your settings.'),
-        [
-          'height' => 'auto',
-          'width' => 'auto',
-          'dialogClass' => 'location-disabled-notice',
-        ]
-      )
-    );
     return $response;
   }
 
