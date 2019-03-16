@@ -37,6 +37,6 @@ alshaya_click_collect.configuration:
 alshaya_click_collect.location_access_blocked_warning:
   path: '/location-access-blocked-warning'
   defaults:
-    _controller: '\Drupal\alshaya_click_collect\Controller\ClickCollectController::locationAccessBlockWaringModal'
+    _controller: '\Drupal\alshaya_click_collect\Controller\ClickCollectController::locationAccessBlockWarningModal'
   requirements:
     _permission: 'access content'

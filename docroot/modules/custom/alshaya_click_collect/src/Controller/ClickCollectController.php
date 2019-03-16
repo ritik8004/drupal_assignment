@@ -449,7 +449,7 @@ class ClickCollectController extends ControllerBase {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   Return Ajax response with commands.
    */
-  public function locationAccessBlockWaringModal() {
+  public function locationAccessBlockWarningModal() {
     $response = new AjaxResponse();
     $response->addCommand(
       new OpenModalDialogCommand(

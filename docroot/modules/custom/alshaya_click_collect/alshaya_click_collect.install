@@ -18,7 +18,7 @@ function alshaya_click_collect_update_8001() {
  * Implements hook_install().
  */
 function alshaya_click_collect_install() {
-  // Add string translation for - location permission.
+  // Add string translation for location permission.
   alshaya_click_collect_string_translations();
 }
 
