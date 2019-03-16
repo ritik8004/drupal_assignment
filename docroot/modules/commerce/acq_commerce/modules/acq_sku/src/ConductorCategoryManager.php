@@ -100,7 +100,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    *   I18nHelper object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler service.
-   * @param \Drupal\Core\Database\Connection $conneciton
+   * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, ClientFactory $client_factory, APIWrapper $api_wrapper, QueryFactory $query_factory, LoggerChannelFactory $logger_factory, I18nHelper $i18n_helper, ModuleHandlerInterface $moduleHandler, Connection $connection) {
@@ -229,7 +229,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
    * @return array
    *   Array of categories.
    */
-  private function loadCategoryData($store_id) {
+  public function loadCategoryData($store_id) {
     $this->apiWrapper->updateStoreContext($store_id);
     return $this->apiWrapper->getCategories();
   }
@@ -422,10 +422,10 @@ class ConductorCategoryManager implements CategoryManagerInterface {
         }
       }
       catch (\Exception $e) {
-        $this->logger->warning('Failed saving category term @name [@magento_id] for @langcode',[
+        $this->logger->warning('Failed saving category term @name [@magento_id] for @langcode', [
           '@name' => $category['name'],
           '@langcode' => $langcode,
-          '@magento_id' => $category['category_id']
+          '@magento_id' => $category['category_id'],
         ]);
 
         // Release the lock.
@@ -476,8 +476,7 @@ class ConductorCategoryManager implements CategoryManagerInterface {
   }
 
   /**
-   * Identify the categories which are not in commerce backend anymore and must
-   * be deleted.
+   * Identify categories which not in commerce backend and must be deleted.
    *
    * @param array $sync_categories
    *   Sync categories.

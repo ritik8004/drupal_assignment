@@ -1,5 +1,5 @@
 :root {
-  --menuTiming: 0ms;
+  --menuTiming: 250ms;
 }
 
 @include breakpoint($desktop) {
@@ -626,9 +626,8 @@ header {
           visibility: hidden;
           overflow: hidden;
           background: #fff;
-          transition-delay: 0s;
-          transition-duration: var(--menuTiming);
-          transition-timing-function: ease-in;
+          // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+          transition: opacity var(--menuTiming) ease-in 0.3s;
         }
       }
 
@@ -638,9 +637,8 @@ header {
             visibility: visible;
             opacity: 1;
             z-index: 1;
-            transition-delay: 0.3s;
-            transition-duration: var(--menuTiming);
-            transition-timing-function: ease-in;
+            // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+            transition: opacity var(--menuTiming) ease-in 0.3s;
           }
         }
       }
@@ -649,6 +647,18 @@ header {
         .menu-backdrop {
           @include breakpoint($desktop) {
             display: none;
+          }
+        }
+      }
+
+      &.active--menu--links {
+        &:hover {
+          li.menu--one__list-item {
+            &:hover {
+              ul.menu--two__list {
+                transition: none;
+              }
+            }
           }
         }
       }
@@ -689,9 +699,8 @@ header {
           visibility: visible;
           opacity: 1;
           z-index: 1;
-          transition-delay: 0.3s;
-          transition-duration: var(--menuTiming);
-          transition-timing-function: ease-in;
+          // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+          transition: opacity var(--menuTiming) ease-in 0.3s;
         }
       }
 
@@ -725,20 +734,10 @@ header {
         #{$left}: 0;
         #{$right}: 0;
         width: 100%;
+        font-size: 0;
         z-index: -1;
-        transition-delay: 0s;
-        transition-duration: var(--menuTiming);
-        transition-timing-function: ease-in;
-      }
-    }
-
-    .active--menu--links {
-      &:hover {
-        li.menu--one__list-item {
-          .menu--one__link {
-            border-bottom: 1px solid $mm_l1_border;
-          }
-        }
+        // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+        transition: opacity var(--menuTiming) ease-in 0.3s;
       }
     }
 
@@ -912,18 +911,16 @@ header {
       opacity: 0;
       z-index: -1;
       background-color: rgba(0, 0, 0, 0.48);
-      transition-delay: 0s;
-      transition-duration: var(--menuTiming);
-      transition-timing-function: ease-in;
+      // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+      transition: opacity var(--menuTiming) ease-in 0.3s, z-index 0 ease-in 0.3s;
     }
 
     &.overlay {
       &::before {
         opacity: 1;
-        z-index: 1;
-        transition-delay: 0.3s;
-        transition-duration: var(--menuTiming);
-        transition-timing-function: ease-in;
+        z-index: 5;
+        // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
+        transition: opacity var(--menuTiming) ease-in 0.3s, z-index 0 ease-in 0.3s;
       }
     }
   }
@@ -1051,9 +1048,6 @@ header {
     }
 
     &.mobile--overlay {
-      position: fixed;
-      width: 100%;
-
       .branding__menu {
         border-bottom-color: $header_mobile_menu_overlay;
         box-shadow: none;

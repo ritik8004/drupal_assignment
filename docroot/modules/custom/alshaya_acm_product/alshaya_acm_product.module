@@ -7,6 +7,7 @@
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_acm_product\Controller\ProductStockController;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\block\Entity\Block;
@@ -235,6 +236,7 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'price' => NULL,
       'currency_format' => '',
       'currency_code_position' => '',
+      'show_currency' => TRUE,
     ],
   ];
 
@@ -1140,7 +1142,8 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
     // Hide the form on page load, we want to allow all JS to be applied first.
     $form['#attributes']['class'][] = 'visually-hidden';
 
-    $product_tree = $form_state->get('tree');
+    $sku = SKU::loadFromSku($form_state->get('tree_sku'));
+    $product_tree = Configurable::deriveProductTree($sku);
     $configurable_codes = array_keys($product_tree['configurables']);
 
     // Do first to disable for level one or only configurable options.
@@ -1289,45 +1292,31 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
       $sku_manager->processAttribute($configurable);
     }
 
-    // Process stock now.
-    if (!empty($selected)) {
-      // Get all child SKUs possible for the selected root attribute to do a
-      // stock check on visible child attributes that belong to the child
-      // SKUs.
-      $variations = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
+    $variation = NULL;
+    $combination = Configurable::getSelectedCombination($selected);
+    if (!empty($product_tree['combinations']['by_attribute'][$combination])) {
+      $variation = SKU::loadFromSku($product_tree['combinations']['by_attribute'][$combination]);
+    }
 
-      // Check stock for variations & update options.
-      foreach ($variations as $key => $variation) {
-        if ($key === '#available_config') {
-          continue;
-        }
+    // Check stock for variations & update options.
+    if ($variation instanceof SKU) {
+      $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options(
+        $sku_manager->getStockQuantity($variation)
+      );
 
-        if ($variation instanceof SKU) {
-          $attribute_parts = explode(':', $key);
-
-          $quantity = $sku_manager->getStockQuantity($variation);
-          if ($quantity > 0) {
-            // Set the dropdown quantity options only for selected option.
-            if (isset($selected[$attribute_parts[0]]) && $selected[$attribute_parts[0]] == $attribute_parts[1]) {
-              $form['quantity']['#options'] = _alshaya_acm_get_cart_quantity_options($quantity);
-            }
-          }
-
-          // If we already have the selected variant based on selections done
-          // automatically or by user, add that in form so JS can use it to do
-          // operations like getting Click n Collect stores for that variant.
-          $form['selected_variant_sku'] = [
-            '#type' => 'hidden',
-            '#attributes' => [
-              'class' => [
-                'selected-variant-sku',
-                'selected-variant-sku-' . $sku_identifier,
-              ],
-            ],
-            '#value' => $variation->getSku(),
-          ];
-        }
-      }
+      // If we already have the selected variant based on selections done
+      // automatically or by user, add that in form so JS can use it to do
+      // operations like getting Click n Collect stores for that variant.
+      $form['selected_variant_sku'] = [
+        '#type' => 'hidden',
+        '#attributes' => [
+          'class' => [
+            'selected-variant-sku',
+            'selected-variant-sku-' . $sku_identifier,
+          ],
+        ],
+        '#value' => $variation->getSku(),
+      ];
     }
 
     // Fetch product for this sku to get the category.
@@ -1400,9 +1389,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
   $sku = $form_state->getTemporaryValue('sku');
 
-  // Configurable product tree keyed with possible config tree, whose leaf items
-  // contain the SKUs depending on the tree path traversed.
-  $product_tree = $form_state->get('tree');
+  $product_tree = Configurable::deriveProductTree($sku);
 
   // List of attributes selected by end-users on the form.
   $selected = $form_state->getValue('configurables');
@@ -1421,19 +1408,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
   // in case of multiple config attributes with a product.
   if (count($product_tree['configurables']) > 1) {
     $skuManager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
-
-    // Traverse the product tree till the point where config attributes have a
-    // value.
-    $tree_pointer = alshaya_acm_product_fetch_selected_option_tree($product_tree, $selected);
-
-    // If there is only one item returned back,
-    // it implies we have reached to the leaf most SKU in the tree.
-    if (count($tree_pointer) === 1) {
-      $tree_pointer = array_shift($tree_pointer);
-    }
   }
-  else {
-    $tree_pointer = alshaya_acm_product_get_selected_option_sku($form_state->get('tree'), $form_state->getValue('configurables'));
+
+  if ($variant_sku = $form_state->get('variant_sku')) {
+    $tree_pointer = SKU::loadFromSku($variant_sku);
   }
 
   if ($tree_pointer instanceof SKU) {

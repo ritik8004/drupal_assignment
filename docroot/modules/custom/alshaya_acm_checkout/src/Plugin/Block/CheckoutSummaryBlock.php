@@ -399,6 +399,9 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
           if (!empty($shipping_address['area_parent_display'])) {
             $line2[] = $shipping_address['area_parent_display'] . $comma;
           }
+          elseif (!empty($shipping_address['area_parent'])) {
+            $line2[] = $shipping_address['area_parent'] . $comma;
+          }
 
           if (!empty($shipping_address['administrative_area_display'])) {
             $line2[] = $this->t('@area Area', ['@area' => $shipping_address['administrative_area_display']]);
