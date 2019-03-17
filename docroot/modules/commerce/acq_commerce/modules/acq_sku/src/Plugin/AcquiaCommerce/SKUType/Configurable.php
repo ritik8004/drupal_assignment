@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -21,6 +22,54 @@ use Drupal\node\Entity\Node;
  * )
  */
 class Configurable extends SKUPluginBase {
+
+  /**
+   * Get sorted configurable options.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Sorted configurable options.
+   */
+  public static function getSortedConfigurableAttributes(SKUInterface $sku): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_code = $sku->getSku();
+
+    // Do not process the same thing again and again.
+    if (isset($static[$langcode][$sku_code])) {
+      return $static[$langcode][$sku_code];
+    }
+
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
+
+    if (empty($configurables) || !is_array($configurables)) {
+      return [];
+    }
+
+    /** @var \Drupal\acq_sku\CartFormHelper $helper */
+    $helper = \Drupal::service('acq_sku.cart_form_helper');
+
+    $configurable_weights = $helper->getConfigurableAttributeWeights(
+      $sku->get('attribute_set')->getString()
+    );
+
+    // Sort configurables based on the config.
+    uasort($configurables, function ($a, $b) use ($configurable_weights) {
+      // We may keep getting new configurable options not defined in config.
+      // Use default values for them and keep their sequence as is.
+      // Still move the ones defined in our config as per weight in config.
+      $a = $configurable_weights[$a['code']] ?? -50;
+      $b = $configurable_weights[$b['code']] ?? 50;
+      return $a - $b;
+    });
+
+    $static[$langcode][$sku_code] = $configurables;
+
+    return $configurables;
+  }
 
   /**
    * {@inheritdoc}
@@ -43,24 +92,10 @@ class Configurable extends SKUPluginBase {
       '#tree' => TRUE,
     ];
 
-    $configurables = unserialize($sku->field_configurable_attributes->getString());
+    $configurables = self::getSortedConfigurableAttributes($sku);
 
     /** @var \Drupal\acq_sku\CartFormHelper $helper */
     $helper = \Drupal::service('acq_sku.cart_form_helper');
-
-    $configurable_weights = $helper->getConfigurableAttributeWeights(
-      $sku->get('attribute_set')->getString()
-    );
-
-    // Sort configurables based on the config.
-    uasort($configurables, function ($a, $b) use ($configurable_weights) {
-      // We may keep getting new configurable options not defined in config.
-      // Use default values for them and keep their sequence as is.
-      // Still move the ones defined in our config as per weight in config.
-      $a = $configurable_weights[$a['code']] ?? -50;
-      $b = $configurable_weights[$b['code']] ?? 50;
-      return $a - $b;
-    });
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -138,7 +173,9 @@ class Configurable extends SKUPluginBase {
     $configurables = $form_state->getValue('configurables');
     $sku = SKU::loadFromSku($form_state->get('tree_sku'));
     $tree = self::deriveProductTree($sku);
-    $combination = self::getSelectedCombination($configurables);
+
+    $configurable_codes = array_keys($tree['configurables']);
+    $combination = self::getSelectedCombination($configurables, $configurable_codes);
 
     $tree_pointer = NULL;
     if (!empty($tree['combinations']['by_attribute'][$combination])) {
@@ -203,7 +240,9 @@ class Configurable extends SKUPluginBase {
 
     $sku = SKU::loadFromSku($form_state->get('tree_sku'));
     $tree = self::deriveProductTree($sku);
-    $combination = self::getSelectedCombination($configurables);
+
+    $configurable_codes = array_keys($tree['configurables']);
+    $combination = self::getSelectedCombination($configurables, $configurable_codes);
 
     $tree_pointer = NULL;
     if (!empty($tree['combinations']['by_attribute'][$combination])) {
@@ -373,9 +412,7 @@ class Configurable extends SKUPluginBase {
 
     $combinations =& $tree['combinations'];
 
-    $configurables = unserialize(
-      $sku->get('field_configurable_attributes')->getString()
-    );
+    $configurables = self::getSortedConfigurableAttributes($sku);
 
     foreach ($configurables ?? [] as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
@@ -425,30 +462,6 @@ class Configurable extends SKUPluginBase {
       }
     }
 
-    // Sort the values in attribute_sku so we can use it later.
-    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
-      if ($helper->isAttributeSortable($code)) {
-        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
-      }
-      else {
-        // Sort from field_configurable_attributes.
-        $configurable_attribute = [];
-        foreach ($configurables as $configurable) {
-          if ($configurable['code'] === $code) {
-            $configurable_attribute = $configurable['values'];
-            break;
-          }
-        }
-
-        if ($configurable_attribute) {
-          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
-          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
-            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
-          });
-        }
-      }
-    }
-
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
     $combinations['by_attribute'] = [];
@@ -463,7 +476,28 @@ class Configurable extends SKUPluginBase {
     return $cache[$sku->language()->getId()][$sku->id()];
   }
 
-  public static function getSelectedCombination(array $configurables) {
+  /**
+   * Get combination for selected configurable values.
+   *
+   * @param array $configurables
+   *   Configurable values to build the combination string from.
+   * @param array $configurable_codes
+   *   Codes to use for sorting the values array.
+   *
+   * @return string
+   *   Combination string.
+   */
+  public static function getSelectedCombination(array $configurables, array $configurable_codes = []) {
+    if ($configurable_codes) {
+      $selected = [];
+      foreach ($configurable_codes as $code) {
+        if (isset($configurables[$code])) {
+          $selected[$code] = $configurables[$code];
+        }
+      }
+      $configurables = $selected;
+    }
+
     $combination = '';
 
     foreach ($configurables as $key => $value) {
@@ -568,7 +602,7 @@ class Configurable extends SKUPluginBase {
    * @return array
    *   Array of options sorted based on term weight.
    */
-  public static function sortConfigOptions($options, $attribute_code) {
+  public static function sortConfigOptions(array $options, $attribute_code) {
     $sorted_options = [];
 
     $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
@@ -583,7 +617,7 @@ class Configurable extends SKUPluginBase {
     $query->orderBy('weight', 'ASC');
     $tids = $query->execute()->fetchAllAssoc('tid');
 
-    foreach ($tids as $tid => $values) {
+    foreach ($tids as $values) {
       $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
     }
 
