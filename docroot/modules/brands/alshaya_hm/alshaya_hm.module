@@ -152,14 +152,6 @@ function alshaya_hm_node_view(array &$build, EntityInterface $entity, EntityView
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       $return = _alshaya_hm_get_product_description($sku_entity);
       $build['description'] = $return['description'];
-
-      if ($style_code = $skuManager->fetchStyleCode($sku_entity)) {
-        $color_nodes = $skuManager->fetchColorNodes($style_code);
-        $build['color_node_links'] = [
-          '#theme' => 'color_node_links',
-          '#color_nodes' => $color_nodes,
-        ];
-      }
     }
   }
 }

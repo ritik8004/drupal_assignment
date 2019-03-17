@@ -3102,33 +3102,4 @@ class SkuManager {
     return FALSE;
   }
 
-  /**
-   * Helper function to return nids having same style_code attribute.
-   *
-   * @param string $style_code
-   *   String Style code to be looked up for while fetching nodes.
-   *
-   * @return array
-   *   array of nids with linked SKUs having style code passed as param.
-   */
-  public function fetchColorNodes($style_code) {
-    $query = $this->connection->select('acq_sku_field_data', 'asfd');
-    $query->condition('asfd.attr_style_code', $style_code);
-    $query->condition('type', 'simple');
-    $query->fields('asfd', ['sku', 'attr_rgb_color', 'attr_color_label']);
-
-    $skus_color_map = $query->execute()->fetchAllAssoc('attr_color_label', \PDO::FETCH_ASSOC);
-
-    foreach ($skus_color_map as $key => &$sku_color_map) {
-      if (($node_entity = $this->getDisplayNode($sku_color_map['sku'])) instanceof NodeInterface) {
-        $sku_color_map['entity_id'] = $node_entity->id();
-      }
-      else {
-        unset($skus_color_map[$key]);
-      }
-    }
-
-    return $skus_color_map;
-  }
-
 }
