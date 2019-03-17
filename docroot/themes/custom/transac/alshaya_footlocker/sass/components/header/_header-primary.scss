@@ -199,13 +199,14 @@ header.c-header {
     li.menu--one__list-item {
       display: inline-block;
       text-transform: uppercase;
-      padding-#{$right}: 0.625rem;
+      text-align: center;
       height: 2.5rem;
 
       .menu--one__link {
         border-bottom: 0;
         height: auto;
         font-size: 0.875rem;
+        padding: .625rem 1.5rem;
       }
 
       &:hover {
