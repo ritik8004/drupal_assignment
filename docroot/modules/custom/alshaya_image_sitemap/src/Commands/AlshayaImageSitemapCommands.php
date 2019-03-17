@@ -51,14 +51,24 @@ class AlshayaImageSitemapCommands extends DrushCommands {
   /**
    * Create Image Sitemap.
    *
+   * @param array $options
+   *   (optional) An array of options.
+   *
    * @command alshaya_image_sitemap:generate
    *
    * @aliases cis,create-img-sitemap
    *
+   * @option batch-size
+   *   The number of items to generate/process per batch run. If batch size is
+   *   not provided, then default `image_sitemap_batch_chunk_size` from
+   *   `alshaya_image_sitemap.settings` config will be used.
+   *
    * @usage drush create-img-sitemap
    *   Create image sitemap.
+   * @usage drush create-img-sitemap --batch-size=200
+   *   Generate image site map with batch of 200.
    */
-  public function generateImageSitemap() {
+  public function generateImageSitemap(array $options = ['batch-size' => NULL]) {
     $this->output->writeln('Creating image sitemap.');
 
     $this->alshayaImageSitemapGenerator->getSitemapReady();
@@ -73,7 +83,7 @@ class AlshayaImageSitemapCommands extends DrushCommands {
     ];
 
     $nids = $this->alshayaImageSitemapGenerator->getNodes();
-    $batch_size = $this->configFactory->get('image_sitemap_batch_chunk_size');
+    $batch_size = $options['batch-size'] ?? $this->configFactory->get('image_sitemap_batch_chunk_size');
 
     $nid_chunks = array_chunk($nids, $batch_size);
     foreach ($nid_chunks as $nid_chunk) {
