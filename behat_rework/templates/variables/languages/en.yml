@@ -5,3 +5,4 @@ variables:
   lang_txt_arabic: "Arabic"
   lang_txt_sign_in: "sign in"
   lang_txt_sign_in_caps: "Sign in"
+  lang_add_to_cart_label: 'add to basket'

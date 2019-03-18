@@ -5,3 +5,4 @@ variables:
   lang_txt_arabic: "عربية"
   lang_txt_sign_in: "تسجيل الدخول"
   lang_txt_sign_in_caps: "تسجيل الدخول"
+  lang_add_to_cart_label: 'أضف إلى حقيبة التسوق'
