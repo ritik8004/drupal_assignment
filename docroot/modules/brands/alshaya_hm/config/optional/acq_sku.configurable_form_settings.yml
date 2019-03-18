@@ -6,3 +6,9 @@ show_quantity: FALSE
 sortable_options:
   - size
   - color
+additional_configurables:
+  article_castor_id:
+    attribute_id: 143
+    code: 'article_castor_id'
+    label: 'Article Castor Id'
+    position: 0

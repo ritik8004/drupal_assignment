@@ -124,14 +124,7 @@ class CartFormHelper {
    */
   public function fetchAdditionalConfigurables(SKUInterface $sku, array &$configurables) {
     // @TODO: Figure out a way to identify additional configurable attributes.
-    $additional_configurables = [
-      'article_castor_id' => [
-        'attribute_id' => 143,
-        'code' => 'article_castor_id',
-        'label' => 'Article Castor Id',
-        'position' => 0,
-      ],
-    ];
+    $additional_configurables = $this->config->get('additional_configurables');
 
     foreach ($additional_configurables as $configurable_code => $configurable) {
       $configurables[] = array_merge($configurable, ['values' => $this->fetchAdditionConfigurableValues($configurable_code, $sku)]);
