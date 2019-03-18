@@ -13,12 +13,15 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 
 /**
  * Class AcqPromotionsManager.
  */
 class AcqPromotionsManager {
+
+  use StringTranslationTrait;
 
   /**
    * Language Manager service.
@@ -159,6 +162,8 @@ class AcqPromotionsManager {
   /**
    * Delete Promotion nodes, not part of API Response.
    *
+   * @param array $types
+   *   Promotion types.
    * @param array $validIDs
    *   Valid Rule ID's from API.
    */
@@ -339,6 +344,10 @@ class AcqPromotionsManager {
     }
 
     if ($status) {
+      $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully.', [
+        '@node' => $promotion_node->getTitle(),
+        '@rule_id' => $promotion['rule_id'],
+      ]));
       return $promotion_node;
     }
     else {
@@ -413,6 +422,11 @@ class AcqPromotionsManager {
 
         // Create a queue for removing promotions from skus.
         if (!empty($detach_promotion_skus)) {
+          $this->logger->notice($this->t('SKUs added to dettach-queue for promotion:`@node` having rule:@rule_id - @skus', [
+            '@node' => $promotion_node->getTitle(),
+            '@rule_id' => $promotion['rule_id'],
+            '@skus' => implode(',', array_keys($detach_promotion_skus)),
+          ]));
           $chunks = array_chunk($detach_promotion_skus, $acq_promotion_attach_batch_size);
           foreach ($chunks as $chunk) {
             $data['promotion'] = $promotion_nid;
@@ -436,6 +450,11 @@ class AcqPromotionsManager {
       // Attach promotions to skus.
       if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
         $data['promotion'] = $promotion_node->id();
+        $this->logger->notice($this->t('SKUs added to attach-queue for promotion:`@node` having rule:@rule_id - @skus', [
+          '@node' => $promotion_node->getTitle(),
+          '@rule_id' => $promotion['rule_id'],
+          '@skus' => implode(',', array_keys($fetched_promotion_sku_attach_data)),
+        ]));
         $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
         foreach ($chunks as $chunk) {
           $data['skus'] = $chunk;
