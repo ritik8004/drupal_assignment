@@ -394,7 +394,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
             $line2[] = $shipping_address['locality'] . $comma;
           }
 
-          $line2[] = $shipping_address['address_line1'];
+          $line2[] = $shipping_address['address_line1'] . $comma;
 
           if (!empty($shipping_address['area_parent_display'])) {
             $line2[] = $shipping_address['area_parent_display'] . $comma;
