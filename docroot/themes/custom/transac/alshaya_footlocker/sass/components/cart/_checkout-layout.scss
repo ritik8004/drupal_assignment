@@ -58,7 +58,7 @@
         }
 
         @include breakpoint($desktop) {
-          #{$left}: 17rem;
+          #{$left}: 16.5rem;
         }
       }
     }
