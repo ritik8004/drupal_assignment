@@ -4,6 +4,8 @@
  * @file
  */
 
+include_once '../sites/g/sites.inc';
+
 // Set the variable as false initially so
 // that file cannot be accessed till server is verified.
 $security_check = FALSE;
