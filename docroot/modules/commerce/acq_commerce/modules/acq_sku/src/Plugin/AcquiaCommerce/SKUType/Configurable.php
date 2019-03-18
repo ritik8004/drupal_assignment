@@ -38,6 +38,9 @@ class Configurable extends SKUPluginBase {
     $langcode = $sku->language()->getId();
     $sku_code = $sku->getSku();
 
+    /** @var \Drupal\acq_sku\CartFormHelper $helper */
+    $helper = \Drupal::service('acq_sku.cart_form_helper');
+
     // Do not process the same thing again and again.
     if (isset($static[$langcode][$sku_code])) {
       return $static[$langcode][$sku_code];
@@ -45,12 +48,16 @@ class Configurable extends SKUPluginBase {
 
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
+    // If style code attribute is available with the SKU, its possible there are
+    // additional configurable attribtues whose information is not supplied with
+    // Parent SKU's configurable attributes.
+    if ($helper->getStyleCode($sku)) {
+      $helper->fetchAdditionalConfigurables($sku, $configurables);
+    }
+
     if (empty($configurables) || !is_array($configurables)) {
       return [];
     }
-
-    /** @var \Drupal\acq_sku\CartFormHelper $helper */
-    $helper = \Drupal::service('acq_sku.cart_form_helper');
 
     $configurable_weights = $helper->getConfigurableAttributeWeights(
       $sku->get('attribute_set')->getString()
@@ -399,13 +406,16 @@ class Configurable extends SKUPluginBase {
   public static function deriveProductTree(SKU $sku) {
     static $cache = [];
 
+    /** @var \Drupal\acq_sku\CartFormHelper $helper */
+    $helper = \Drupal::service('acq_sku.cart_form_helper');
+
     if (isset($cache[$sku->language()->getId()], $cache[$sku->language()->getId()][$sku->id()])) {
       return $cache[$sku->language()->getId()][$sku->id()];
     }
 
     $tree = [
       'parent' => $sku,
-      'products' => self::getChildren($sku),
+      'products' => $helper->getStyleCode($sku) ? $helper->getStyleCodeChildren($sku) : self::getChildren($sku),
       'combinations' => [],
       'configurables' => [],
     ];
@@ -434,9 +444,6 @@ class Configurable extends SKUPluginBase {
         $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
     }
-
-    /** @var \Drupal\acq_sku\CartFormHelper $helper */
-    $helper = \Drupal::service('acq_sku.cart_form_helper');
 
     // Sort the values in attribute_sku so we can use it later.
     foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {

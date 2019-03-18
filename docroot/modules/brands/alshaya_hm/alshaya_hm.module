@@ -312,3 +312,25 @@ function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
 }
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
+  if ($product['style_code']) {
+    $sku->get('attr_style_code')->setValue($product['style_code']);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_hm_theme($existing, $type, $theme, $path) {
+  return [
+    'color_node_links' => [
+      'variables' => [
+        'color_nodes' => NULL,
+      ],
+    ],
+  ];
+}
