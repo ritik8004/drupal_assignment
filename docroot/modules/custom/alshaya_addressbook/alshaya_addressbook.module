@@ -339,13 +339,14 @@ function _alshaya_addressbook_set_optional_field(array &$element, FormStateInter
     }
   }
 
-  // Disable the fields which we couldn't map.
+  // Hide all the fields which we couldn't map.
   $field_unmapped = array_diff($mapping, $fields_mapped);
   foreach ($field_unmapped as $field_code) {
     $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
-    $element['#field_overrides'][$field_code] = FieldOverride::OPTIONAL;
+    $element['#field_overrides'][$field_code] = FieldOverride::HIDDEN;
   }
 
+  // Hide all disabled fields.
   $fields_disabled = $address_book_manager->getMagentoDisabledFields();
   foreach ($fields_disabled as $field_code => $magento_field_code) {
     $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
