@@ -111,6 +111,25 @@ class CartFormHelper {
       }
     }
 
+    // Sort all child SKU list by their parent. Make sure the children for the
+    // current SKU are at the top of the list. This helps selecting the right
+    // color & displaying the color associated with the current SKU as the
+    // first one in the list.
+    uasort($child_skus, function (SKU $a, SKU $b) use ($sku) {
+      /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin_a */
+      $plugin_a = $a->getPluginInstance();
+      /** @var \Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable $plugin_b */
+      $plugin_b = $b->getPluginInstance();
+
+      $parent_a = $plugin_a->getParentSku($a);
+      $parent_b = $plugin_b->getParentSku($b);
+
+      $weight_a = $parent_a->getSku() == $sku->getSku() ? -1 : 0;
+      $weight_b = $parent_b->getSku() == $sku->getSku() ? -1 : 0;
+
+      return $weight_a - $weight_b;
+    });
+
     return $child_skus;
   }
 
@@ -124,14 +143,7 @@ class CartFormHelper {
    */
   public function fetchAdditionalConfigurables(SKUInterface $sku, array &$configurables) {
     // @TODO: Figure out a way to identify additional configurable attributes.
-    $additional_configurables = [
-      'article_castor_id' => [
-        'attribute_id' => 143,
-        'code' => 'article_castor_id',
-        'label' => 'Article Castor Id',
-        'position' => 0,
-      ],
-    ];
+    $additional_configurables = $this->config->get('additional_configurables');
 
     foreach ($additional_configurables as $configurable_code => $configurable) {
       $configurables[] = array_merge($configurable, ['values' => $this->fetchAdditionConfigurableValues($configurable_code, $sku)]);
@@ -156,14 +168,17 @@ class CartFormHelper {
     foreach ($child_skus as $child_sku) {
       if ($child_sku instanceof SKU) {
         $plugin = $sku->getPluginInstance();
-        $child_sku_attributes[] = [
+        $configurable_attribute_value = $plugin->getAttributeValue($child_sku->id(), $configurable_code);
+
+        // Avoid duplicate by indexing array using the config attribute's value.
+        $child_sku_attributes[$configurable_attribute_value] = [
           'label' => $plugin->getAttributeValue($child_sku->id(), 'color_label'),
-          'value_id' => $plugin->getAttributeValue($child_sku->id(), $configurable_code),
+          'value_id' => $configurable_attribute_value,
         ];
       }
     }
 
-    return $child_sku_attributes;
+    return array_values($child_sku_attributes);
   }
 
   /**

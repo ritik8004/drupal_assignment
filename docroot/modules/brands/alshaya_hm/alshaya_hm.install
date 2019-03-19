@@ -30,6 +30,9 @@ function alshaya_hm_update_8032() {
 
   $alshaya_config_manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_hm');
   $alshaya_config_manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm', 'install', AlshayaConfigManager::MODE_REPLACE);
+
+  // Set Additional attributes for H&M.
+  $alshaya_config_manager->updateConfigs(['acq_sku.configurable_form_settings'], 'alshaya_hm', 'optional');
 }
 
 /**
