@@ -23,7 +23,6 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -1992,69 +1991,6 @@ class SkuManager {
     }
 
     return NULL;
-  }
-
-  /**
-   * Get all the swatch images with sku text as key.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   Parent SKU.
-   *
-   * @return array
-   *   Swatches array.
-   */
-  public function getSwatches(SKUInterface $sku) {
-    $swatches = $this->getProductCachedData($sku, 'swatches');
-
-    // We may have nothing for an SKU, we should not keep processing for it.
-    // If value is not set, function returns NULL above so we check for array.
-    if (is_array($swatches)) {
-      return $swatches;
-    }
-
-    $swatches = [];
-    $duplicates = [];
-    $children = $this->getChildSkus($sku);
-
-    foreach ($children as $child) {
-      $value = $this->getPdpSwatchValue($child);
-
-      if (empty($value) || isset($duplicates[$value])) {
-        continue;
-      }
-
-      // Do not show OOS swatches.
-      if (!$this->isProductInStock($child)) {
-        continue;
-      }
-
-      $swatch_item = $child->getSwatchImage();
-
-      if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
-        $swatch_product_image = $child->getThumbnail();
-
-        // If we have image for the product.
-        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
-          $uri = $swatch_product_image['file']->getFileUri();
-          $url = file_create_url($uri);
-          $swatch_product_image_url = file_url_transform_relative($url);
-        }
-      }
-
-      if (empty($swatch_item) || !($swatch_item['file'] instanceof FileInterface)) {
-        continue;
-      }
-
-      $duplicates[$value] = 1;
-      $swatches[$child->id()] = [
-        'swatch_url' => $swatch_item['file']->url(),
-        'swatch_product_url' => $swatch_product_image_url ?? '',
-      ];
-    }
-
-    $this->setProductCachedData($sku, 'swatches', $swatches);
-
-    return $swatches;
   }
 
   /**

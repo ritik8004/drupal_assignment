@@ -29,7 +29,6 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\taxonomy\TermInterface;
@@ -1060,6 +1059,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
   /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
   $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
 
+  /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
+  $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
+
   /** @var \Drupal\alshaya_product_options\ProductOptionsHelper $productOptionsHelper */
   $productOptionsHelper = \Drupal::service('alshaya_product_options.helper');
 
@@ -1275,10 +1277,9 @@ function alshaya_acm_product_form_sku_base_form_alter(&$form, FormStateInterface
             );
 
             if ($swatch_sku instanceof SKU) {
-              $image = $swatch_sku->getSwatchImage();
-              if (isset($image['file']) && $image['file'] instanceof FileInterface) {
-                $swatch_image_url = file_url_transform_relative(file_create_url($image['file']->url()));
-                $configurable['#options_attributes'][$value]['swatch-image'] = $swatch_image_url;
+              $swatch_image_url = $skuImagesManager->getPdpSwatchImageUrl($swatch_sku);
+              if ($swatch_image_url) {
+                $configurable['#options_attributes'][$value]['swatch-image'] = file_url_transform_relative($swatch_image_url);
               }
             }
 

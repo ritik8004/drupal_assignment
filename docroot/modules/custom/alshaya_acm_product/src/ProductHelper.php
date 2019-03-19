@@ -31,6 +31,13 @@ class ProductHelper {
   protected $skuManager;
 
   /**
+   * SKU images manager.
+   *
+   * @var \Drupal\alshaya_acm_product\SkuImagesManager
+   */
+  protected $skuImagesManager;
+
+  /**
    * Product display settings (alshaya_acm_product.display_settings).
    *
    * @var \Drupal\Core\Config\ImmutableConfig
@@ -44,11 +51,15 @@ class ProductHelper {
    *   Config Factory service object.
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager service object.
+   * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_images_manager
+   *   SKU images manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
-                              SkuManager $sku_manager) {
+                              SkuManager $sku_manager,
+                              SkuImagesManager $sku_images_manager) {
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
+    $this->skuImagesManager = $sku_images_manager;
     $this->productDisplaySettings = $this->configFactory->get('alshaya_acm_product.display_settings');
   }
 
