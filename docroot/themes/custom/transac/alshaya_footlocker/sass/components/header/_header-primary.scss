@@ -64,6 +64,18 @@ header.c-header {
       .form-item-keywords {
         display: block;
       }
+
+      .form-text {
+        height: 2.5rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      top: 3.125rem;
+
+      html[lang=ar] & {
+        top: 3.125rem;
+      }
     }
 
     .form--inline {
@@ -91,8 +103,6 @@ header.c-header {
   .block-views-exposed-filter-blocksearch-page {
     form {
       @include breakpoint($only-mobile) {
-        margin-top: 0.5rem;
-
         .form-text {
           &::placeholder {
             font-size: 0.875rem;
@@ -306,6 +316,17 @@ header.c-header {
       }
     }
 
+    .search-active {
+      .mobile--search {
+        &::before {
+          background: url(#{$fl_theme_img_directory_path}/assets/search-selected.svg) no-repeat;
+          background-size: cover;
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+      }
+    }
+
     .store {
       font-size: 0;
       position: absolute;
@@ -350,9 +371,7 @@ header.c-header {
   li .mobile--search {
     &::before {
       @include breakpoint($only-mobile) {
-        font-size: 1.75rem;
-        background: unset;
-        background-size: cover;
+        font-size: 0;
         width: 1.75rem;
         height: 1.75rem;
         margin-#{$right}: 0;
