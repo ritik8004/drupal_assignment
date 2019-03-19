@@ -4,6 +4,10 @@
     .label-store-location {
       font-weight: normal;
       text-transform: none;
+
+      @include breakpoint($upto-desktop) {
+        margin-bottom: 0.3125rem !important;
+      }
     }
 
     #click-and-collect-list-view {
@@ -40,10 +44,13 @@
               font-family: $alshaya-thin;
               text-transform: uppercase;
               font-size: 0.875rem;
-              padding-top: 0.3125rem;
 
               @include breakpoint($desktop) {
-                min-width: 13.125rem;
+                min-width: 15.875rem;
+              }
+
+              @include breakpoint($only-mobile) {
+                height: 2.5rem;
               }
             }
 
@@ -51,6 +58,7 @@
             .store-on-map {
               @include breakpoint($tablet) {
                 height: 2.5rem;
+                margin-top: 0.625rem;
               }
 
               @include breakpoint($only-tablet) {
@@ -77,7 +85,7 @@
 
             .store-open-hours {
               width: 35%;
-              padding-#{$left}: 2.625rem;
+              padding-#{$left}: 3.625rem;
             }
           }
         }
@@ -133,6 +141,8 @@
         padding-#{$left}: 1.875rem;
 
         .store-name {
+          font-size: 0.875rem;
+
           @include icon(shoppingbag, before) {
             color: $checkout_cc_map_hours_icon;
             font-size: 2rem;
@@ -140,6 +150,10 @@
             top: -0.1875rem;
             #{$left}: -0.1875rem;
           }
+        }
+
+        .store-address {
+          font-size: 0.875rem;
         }
       }
     }
@@ -221,7 +235,7 @@
 
         .store-open-hours {
           width: 35%;
-          padding-#{$left}: 2.625rem;
+          padding-#{$left}: 3.625rem;
         }
       }
     }
@@ -268,14 +282,16 @@
       .stores-map-view {
         height: 2.5rem;
         vertical-align: middle;
-        line-height: 1.6;
         padding: 0.625rem;
         text-transform: uppercase;
+
+        html[lang=en] & {
+          line-height: normal;
+        }
 
         &::before {
           font-size: 1.875rem;
           line-height: 0.6;
-          vertical-align: top;
 
           @include breakpoint($only-tablet) {
             #{$left}: 1.125rem;
