@@ -60,10 +60,7 @@
                 margin-#{$right}: 0;
                 text-transform: capitalize;
                 height: 2.5rem;
-
-                @include breakpoint($tablet) {
-                  line-height: 1.5;
-                }
+                line-height: 1.3;
               }
 
               &.js-facet-deactivate {
@@ -122,6 +119,14 @@
 
       .form-type-select {
         text-transform: initial;
+
+        select {
+          html[lang=ar] & {
+            @include select-style(100%);
+
+            line-height: 1;
+          }
+        }
       }
 
       .c-facet__blocks__wrapper--mobile {
@@ -141,6 +146,7 @@
             li.clear-all {
               border: 2px solid $plp_facet_clear_border_mobile;
               text-transform: uppercase;
+              line-height: 1.5;
             }
           }
 
@@ -152,7 +158,7 @@
 
             &.active-filter-count {
               .filter-count {
-                padding-top: 0.25rem;
+                line-height: normal;
               }
             }
           }
@@ -259,7 +265,7 @@
     .apply-fake .fake-apply-button {
       font-family: $alshaya-thin;
       text-transform: uppercase;
-      padding-top: 0.7rem;
+      line-height: 2;
     }
   }
 
