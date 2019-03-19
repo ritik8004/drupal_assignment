@@ -169,6 +169,23 @@
       }
     }
   }
+
+  ul.js-pager__items {
+    a {
+      font-family: $alshaya-thin;
+      font-size: 0.875rem;
+      background-color: $plp_pager_bg;
+      text-transform: uppercase;
+      line-height: 1.4;
+      min-height: 40px;
+
+      @include breakpoint($tablet) {
+        width: 13.125rem;
+        padding-#{$left}: 2.5rem;
+        padding-#{$right}: 2.5rem;
+      }
+    }
+  }
 }
 
 .c-facet__blocks__wrapper--mobile {
