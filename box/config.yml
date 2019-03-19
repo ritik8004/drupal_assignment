@@ -16,7 +16,6 @@ vagrant_synced_folders:
     # Set the destination to the Acquia Cloud subscription machine name.
     destination: /var/www/alshaya
     type: nfs
-    mount_options: ['actimeo=2']
 
 drupal_build_composer_project: false
 # Toggling this to `true` would invoke `composer install` with the
