@@ -1,0 +1,31 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_sorting_options
+    - field.field.taxonomy_term.acq_product_category.field_sorting_order
+third_party_settings:
+  field_group:
+    group_plp_content:
+      children:
+        - group_plp_sorting_options
+    group_plp_sorting_options:
+      children:
+        - field_sorting_options
+      parent_name: group_plp_content
+      weight: 8
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Sorting options'
+      region: content
+content:
+  field_sorting_options:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+hidden:
+  field_sorting_order: true
