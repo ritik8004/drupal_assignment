@@ -3,6 +3,7 @@ sort_options:
   name_1: name_1
   final_price: final_price
   created: created
+  stock: stock
 sort_options_labels:
   -
     value: 'nid ASC'
@@ -28,3 +29,9 @@ sort_options_labels:
   -
     value: 'created DESC'
     label: 'New In'
+  -
+    value: 'stock ASC'
+    label: ''
+  -
+    value: 'stock DESC'
+    label: 'Recommended'

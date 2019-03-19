@@ -11,6 +11,21 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Add new fields for plp sorting order for category.
+ */
+function alshaya_acm_product_position_update_8004() {
+  \Drupal::service('alshaya_config.manager')
+   ->updateConfigs(
+     ['alshaya_acm_product_position.settings'],
+     'alshaya_acm_product_position',
+     'install',
+     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+   );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Create new fields for plp sorting order for category.
  */
 function alshaya_acm_product_position_update_8003() {
