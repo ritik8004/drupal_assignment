@@ -6,6 +6,7 @@ show_parent_images_in_child: true
 swatches:
   pdp:
     - color
+  plp:
     - color_family
 hide_not_required_option: true
 plp_slider:
