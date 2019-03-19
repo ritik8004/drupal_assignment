@@ -164,7 +164,14 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           $breadcrumb->addCacheableDependency($term);
 
           // Add term to breadcrumb.
-          $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+          if (empty($term->get('field_display_as_clickable_link')->getString())) {
+            // Make term link non-clickable.
+            $breadcrumb->addLink(Link::createFromRoute($term->getName(), '<none>'));
+          }
+          else {
+            // Make term link clickable.
+            $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+          }
         }
       }
     }
