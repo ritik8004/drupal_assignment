@@ -98,6 +98,16 @@ class SkuPriceHelper {
   }
 
   /**
+   * Wrapper function to check if price mode is from to.
+   *
+   * @return bool
+   *   TRUE if price mode is set to from to.
+   */
+  public function isPriceModeFromTo() {
+    return $this->displayMode === self::PRICE_DISPLAY_MODE_FROM_TO;
+  }
+
+  /**
    * Get price block for specific sku.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku

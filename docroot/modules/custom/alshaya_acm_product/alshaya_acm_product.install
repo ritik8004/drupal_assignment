@@ -12,6 +12,31 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Index selling_price along with final_price.
+ */
+function alshaya_acm_product_update_8040() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Updating cardinality config for the attribute.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->addFields();
+
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding AR translation for "save upto x%".
  */
 function alshaya_acm_product_update_8039() {
