@@ -104,7 +104,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $form['alshaya_options_on_off'] = [
       '#type' => 'checkbox',
       '#default_value' => $config->get('alshaya_options_on_off'),
-      '#title' => $this->t('Enable alshaya options page on site.'),
+      '#title' => $this->t('Enable options page on site.'),
     ];
 
     $form['alshaya_options_page_url'] = [
@@ -117,7 +117,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#type' => 'checkboxes',
       '#options' => $this->getAttributeCodeOptions(),
       '#default_value' => !empty($attribute_options) ? $attribute_options : [],
-      '#title' => $this->t('Attribute that should be used for options page.'),
+      '#title' => $this->t('The attribute to list on the options page.'),
     ];
 
     return $form;
@@ -142,7 +142,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     }
 
     // Add a slash, if the alias, does not contain a trailing slash.
-    if (isset($alias[0]) && $alias[0] != "/") {
+    if (isset($alias[0]) && $alias[0] != '/') {
       $alias = '/' . $alias;
     }
     $this->aliasStorage->save($path, $alias, LanguageInterface::LANGCODE_NOT_SPECIFIED, $pid);
