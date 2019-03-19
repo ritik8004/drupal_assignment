@@ -1,0 +1,22 @@
+<div class = 'options-page-content' >
+        <div class='fragrance-category'>
+            <div class='attribute-title'>
+                {{ 'BY CATEGORY'|t }}
+            </div>
+        {% for value in options_list.fragrance_category %}
+            <div class = 'title'>
+                <a href={{ value.url }}> {{ value.title }} </a>
+            </div>
+        {% endfor %}
+        </div>
+    <div class='fragrance-name'>
+        <div class='attribute-title'>
+            {{ 'BY NAME'|t }}
+        </div>
+        {% for value in options_list.fragrance_name %}
+            <div class = 'title'>
+                <a href={{ value.url }}> {{ value.title }} </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<div class = 'options-page-content' >
+    {% for key,attribute in options_list %}
+    <div class={{ key }}>
+        {% for value in attribute %}
+        <div class="title">
+            <a href={{ value.url }}> {{ value.title }} </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>

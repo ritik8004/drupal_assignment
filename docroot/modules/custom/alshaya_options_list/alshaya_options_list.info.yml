@@ -1,0 +1,5 @@
+name: 'Alshaya options list'
+type: module
+description: 'Page for magento attributes.'
+package: Alshaya
+core: 8.x

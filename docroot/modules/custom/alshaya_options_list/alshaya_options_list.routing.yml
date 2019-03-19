@@ -1,0 +1,16 @@
+alshaya_options_list.options_admin_form:
+  path: '/admin/config/alshaya/alshaya-options-list/admin-form'
+  defaults:
+    _form: '\Drupal\alshaya_options_list\Form\AlshayaOptionsListForm'
+    _title: 'Alshaya options settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+alshaya_options_list.options_page:
+  path: '/shop-by'
+  defaults:
+    _controller: '\Drupal\alshaya_options_list\Controller\AlshayaOptionsPageController::optionsPage'
+    _title: 'Alshaya options page'
+  requirements:
+  # Options page should be accessible without any restriction.
+    _access: 'TRUE'
