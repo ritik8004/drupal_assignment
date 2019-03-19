@@ -36,6 +36,12 @@
       font-family: $alshaya-thin;
     }
   }
+
+  .tab.tab-returning-customer {
+    span {
+      text-transform: none;
+    }
+  }
 }
 
 .multistep-checkout {
