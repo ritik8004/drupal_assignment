@@ -483,6 +483,7 @@ header.c-header {
   .menu__back {
     width: 0.9375rem;
     margin-#{$left}: 0.625rem;
+    background: none;
 
     @include icon(chevron#{$left}) {
       width: 1rem;
