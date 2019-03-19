@@ -65,7 +65,7 @@ function alshaya_seo_transac_preprocess_node(&$variables) {
 /**
  * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
  */
-function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
+function alshaya_seo_transac_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStateInterface $form_state, AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
   // Update title of parent product based on selected sku if available.
   if ($selected_sku instanceof SKUInterface) {
     $prices = \Drupal::service('alshaya_acm_product.skumanager')->getMinPrices($selected_sku);

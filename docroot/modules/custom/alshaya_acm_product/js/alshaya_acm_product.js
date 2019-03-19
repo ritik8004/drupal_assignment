@@ -61,4 +61,8 @@
       }, 50);
     }
   };
+
+  $.fn.updatePdpUrl = function (data) {
+    window.history.pushState(data, data.display_node_title, data.display_node_url);
+  };
 })(jQuery, Drupal);
