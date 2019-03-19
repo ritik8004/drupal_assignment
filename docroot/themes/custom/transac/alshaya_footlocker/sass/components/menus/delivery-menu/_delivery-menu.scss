@@ -3,6 +3,10 @@
   box-shadow: none;
   background-color: $delivery_menu_bg;
 
+  html[lang='ar'] & {
+    padding: 0.1875rem 0;
+  }
+
   .field--name-field-title {
     text-transform: uppercase;
   }
