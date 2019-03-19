@@ -6,7 +6,6 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Component\Utility\Unicode;
 use Drupal\acq_commerce\SKUInterface;
-use Detection\MobileDetect;
 
 /**
  * Class ProductHelper.
@@ -158,13 +157,12 @@ class ProductHelper {
       if (!empty($swatches)) {
         // Display the colors count for mobile only if different variants images
         // being shown in gallery on PLP.
-        $detect = new MobileDetect();
-        if ($detect->isMobile() && $this->productDisplaySettings->get('show_variants_thumbnail_plp_gallery')) {
+        if ($this->productDisplaySettings->get('show_variants_thumbnail_plp_gallery')) {
           $build['#swatch_color_count'] = count($swatches) > 1
             ? t('@swatch_count colors', ['@swatch_count' => count($swatches)])
             : t('@swatch_count color', ['@swatch_count' => count($swatches)]);
         }
-        elseif (!$this->productDisplaySettings->get('show_variants_thumbnail_plp_gallery')) {
+        else {
           // Show only first 'X' swatches as defined in configuration.
           $swatch_plp_limit = $this->productDisplaySettings->get('swatch_plp_limit');
           $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);
