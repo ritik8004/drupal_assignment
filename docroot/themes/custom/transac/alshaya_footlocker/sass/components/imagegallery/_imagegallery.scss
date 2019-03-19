@@ -15,41 +15,31 @@
 
   @include breakpoint($desktop) {
     height: 30.875rem !important;
-    padding: 2rem;
+    padding: 1.5rem;
   }
 
   .button__wrapper {
     .zoomout,
     .zoomin {
       border-radius: 0;
-      height: 1.5rem;
-      width: 1.5rem;
+      height: 2.125rem;
+      width: 2.125rem;
+      padding: 0.3125rem;
     }
 
     .zoomout {
-      background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomout.svg) no-repeat;
+      background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomout.svg) center no-repeat;
     }
 
     .zoomin {
-      background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomin.svg) no-repeat;
+      background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomin.svg) center no-repeat;
     }
   }
 
   .imagegallery__wrapper {
-    #product-image-gallery {
-      @include breakpoint($desktop) {
-        width: 6.5rem !important;
-        margin-#{$right}: 0;
-        margin-#{$left}: 0;
-      }
-    }
-
     & > .imagegallery__full {
-      height: 27.875rem !important;
-
-      @include breakpoint($desktop) {
-        width: 80% !important;
-        width: calc(100% - (9.75rem)) !important;
+      @include breakpoint($tablet) {
+        height: 27.5rem !important;
       }
     }
   }
