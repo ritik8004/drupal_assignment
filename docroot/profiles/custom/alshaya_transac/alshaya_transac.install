@@ -16,7 +16,7 @@ use Drupal\taxonomy\Entity\Term;
  *
  * Enable alshaya options list module.
  */
-function alshaya_transac_update_8118() {
+function alshaya_transac_update_8120() {
   \Drupal::service('module_installer')->install(['alshaya_options_list']);
 }
 
