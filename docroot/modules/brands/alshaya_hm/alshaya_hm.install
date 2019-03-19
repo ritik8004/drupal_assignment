@@ -35,7 +35,7 @@ function alshaya_hm_update_8032() {
   $alshaya_config_manager->updateConfigs(['alshaya_hm.settings'], 'alshaya_hm');
 
   // Set Additional attributes for H&M.
-  $alshaya_config_manager->updateConfigs(['acq_sku.configurable_form_settings'], 'acq_sku');
+  $alshaya_config_manager->updateConfigs(['acq_sku.configurable_form_settings'], 'alshaya_hm', 'optional');
 }
 
 /**
