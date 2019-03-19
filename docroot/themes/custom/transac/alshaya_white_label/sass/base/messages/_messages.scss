@@ -69,11 +69,6 @@
     justify-content: flex-start;
     align-items: center;
 
-    @include breakpoint($upto-tablet) {
-      text-indent: -2.725rem;
-      line-height: 1;
-    }
-
     &::before {
       content: '';
       width: 2.125rem;

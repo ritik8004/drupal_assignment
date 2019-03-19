@@ -46,6 +46,15 @@ do
     `drush -l $site.$env-alshaya.acsitefactory.com sql-connect` < ~/backup/$target_env/post-stage/$site.sql
     rm ~/backup/$target_env/post-stage/$site.sql
 
+    # Clean commerce data to refresh ones from dump.
+    drush -l $site.$env-alshaya.acsitefactory.com sync-commerce-cats -y
+    drush -l $site.$env-alshaya.acsitefactory.com sync-options
+    drush -l $site.$env-alshaya.acsitefactory.com sync-stores
+    drush -l $site.$env-alshaya.acsitefactory.com sync-commerce-promotions
+    drush -l $site.$env-alshaya.acsitefactory.com queue-run acq_promotion_attach_queue
+    drush -l $site.$env-alshaya.acsitefactory.com queue-run acq_promotion_detach_queue
+    drush -l $site.$env-alshaya.acsitefactory.com sapi-i
+
     ## Clearing cache before running updb to the site.
     drush -l $site.$env-alshaya.acsitefactory.com cr
   fi

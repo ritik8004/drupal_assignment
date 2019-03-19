@@ -64,6 +64,22 @@
 
   .c-footer-primary__region {
     min-height: 14.25rem;
+
+    @include breakpoint($only-tablet) {
+      .footer--menu {
+        width: 58%;
+      }
+
+      .footer--categories,
+      .footer--abouthelp,
+      .footer--static-links {
+        width: 45%;
+      }
+
+      .footer--static-links {
+        margin: 0 1.25rem;
+      }
+    }
   }
 
   .c-footer-menu--category {

@@ -35,8 +35,17 @@
       showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
     }
 
-    // JS function to show less/more for colour swatches.
-    Drupal.magazine_swatches_count();
+    // Adding class when we click on slider item to open the modal.
+    if ($(window).width() > 767) {
+      $('.nodetype--acq_product .view-id-product_slider .use-ajax').once().on('click', function (e) {
+        $('body').addClass('magazine-layout-overlay');
+      });
+    }
+
+    if (!$(context).hasClass('modal-content') && !$('body').hasClass('magazine-layout-overlay')) {
+      // JS function to show less/more for colour swatches.
+      Drupal.magazine_swatches_count();
+    }
   };
 
   /**
@@ -92,36 +101,65 @@
       swatch_items_to_show = colour_swatches;
     }
 
-    if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show) {
-      if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-        $('.configurable-swatch').addClass('swatch-toggle');
-      }
-      $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
-      $('.show-more-color').show();
+    if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
+      $('.show-less-color').show();
+      $('.configurable-swatch').addClass('swatch-toggle');
     }
-    else {
-      $('.configurable-swatch, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
+    else if ($('.content__title_wrapper').hasClass('show-less-swatch')) {
+      $('.show-more-color').show();
+      $('.configurable-swatch').removeClass('swatch-toggle');
     }
 
-    $('.show-more-color').on('click', function (e) {
+    if ($(window).width() > 767) {
+      if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show && !$('.content__title_wrapper').hasClass('show-all-swatch')) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').hide();
+        $('.configurable-swatch').addClass('swatch-toggle');
+        $('.show-more-color').show();
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+      }
+
+      else {
+        $('.configurable-swatch').addClass('simple-swatch-effect');
+      }
+    }
+    else {
+      if ($('.magazine-swatch-placeholder .select-buttons li').length > swatch_items_to_show && !$('.content__title_wrapper').hasClass('show-all-swatch')) {
+        $('.show-more-color').show();
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+        $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+      }
+
+      else if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
+        $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+      }
+
+      else {
+        $('.magazine-swatch-placeholder').addClass('simple-swatch-effect');
+      }
+    }
+
+    $('.show-more-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
         $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
         $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-toggle');
       }
+      $('.content__title_wrapper').addClass('show-all-swatch');
+      $('.content__title_wrapper').removeClass('show-less-swatch');
       $(this).hide();
       $('.show-less-color').show();
     });
 
-    $('.show-less-color').on('click', function (e) {
+    $('.show-less-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
         $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
         $('.configurable-swatch, .magazine-swatch-placeholder').removeClass('swatch-toggle');
       }
+      $('.content__title_wrapper').removeClass('show-all-swatch');
+      $('.content__title_wrapper').addClass('show-less-swatch');
       $(this).hide();
       $('.show-more-color').show();
     });
@@ -221,7 +259,7 @@
       });
       $('body').removeClass('tray-overlay mobile--overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
-        $('body').removeClass('open-tray-without-selection');
+        $('body').removeClass('open-tray-without-selection mobile--overlay');
         $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
       }
     });
@@ -257,7 +295,7 @@
       setTimeout(function () {
         $('.size-tray').removeClass('tray-open');
       }, 400);
-      $('body').removeClass('tray-overlay');
+      $('body').removeClass('tray-overlay mobile--overlay');
     });
   }
 
@@ -316,7 +354,9 @@
 
         // JS function to move mobile colors to bellow of PDP main image in
         // product description section.
-        mobileColors(context);
+        if (!$(context).hasClass('modal-content')) {
+          mobileColors(context);
+        }
 
         // JS function to move mobile size div to size-tray.
         mobileSize(context);
@@ -386,6 +426,7 @@
             if ($('body').hasClass('magazine-layout-ajax-throbber')) {
               $('body').removeClass('magazine-layout-ajax-throbber');
             }
+            $('body').removeClass('magazine-layout-overlay');
           });
         }, 10);
       }

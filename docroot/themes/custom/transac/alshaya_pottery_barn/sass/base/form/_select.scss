@@ -88,3 +88,32 @@
     }
   }
 }
+
+@mixin select-style($select-width) {
+  appearance: none;
+  border: 1px solid $primary_dropdown_border;
+  border-radius: 0;
+  background-color: $primary_dropdown_bg;
+  padding-#{$left}: 0.35rem;
+  padding-#{$right}: 1.5rem;
+  width: $select-width;
+  height: 2.1875rem;
+  font-size: 0.75rem;
+  outline: none;
+  direction: $dir;
+
+  @include breakpoint($tablet) {
+    background-color: $primary_dropdown_bg;
+    position: relative;
+    z-index: 3;
+  }
+
+  @include breakpoint($only-mobile) {
+    font-size: 0.875rem;
+  }
+
+  // Arabic font is longer so it gets clipped from bottom.
+  html[lang=ar] & {
+    line-height: 1.5;
+  }
+}
