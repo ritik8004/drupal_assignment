@@ -13,12 +13,15 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 
 /**
  * Class AcqPromotionsManager.
  */
 class AcqPromotionsManager {
+
+  use StringTranslationTrait;
 
   /**
    * Language Manager service.
@@ -159,6 +162,8 @@ class AcqPromotionsManager {
   /**
    * Delete Promotion nodes, not part of API Response.
    *
+   * @param array $types
+   *   Promotion types.
    * @param array $validIDs
    *   Valid Rule ID's from API.
    */
@@ -449,6 +454,13 @@ class AcqPromotionsManager {
           );
         }
       }
+
+      $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue and @detach items in detach queue.', [
+        '@node' => $promotion_node->getTitle(),
+        '@rule_id' => $promotion['rule_id'],
+        '@attach' => !empty($fetched_promotion_sku_attach_data) ? count($fetched_promotion_sku_attach_data) : 0,
+        '@detach' => !empty($detach_promotion_skus) ? count($detach_promotion_skus) : 0,
+      ]));
     }
 
     return $output;
