@@ -1207,16 +1207,3 @@ body {
     z-index: 4;
   }
 }
-
-@include breakpoint($only-mobile) {
-  .swatch-color-count {
-    &.mobile-only-block {
-      margin-top: 0.625rem;
-
-      a {
-        width: auto;
-        color: $plp-swatch-color-count;
-      }
-    }
-  }
-}
