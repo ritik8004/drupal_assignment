@@ -61,11 +61,17 @@
   @extend %list-clear;
 
   @include breakpoint($tablet) {
-    width: 70%;
+    width: 90%;
   }
 
   a {
     text-transform: capitalize;
+
+    @include breakpoint($tablet) {
+      line-height: 1.5;
+      margin: 0.3125rem 0;
+      display: inline-block;
+    }
 
     &:hover {
       text-decoration: none;
