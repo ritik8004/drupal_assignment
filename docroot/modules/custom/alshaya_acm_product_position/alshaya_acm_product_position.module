@@ -5,13 +5,17 @@
  * Module file for Alshaya ACM Product Position.
  */
 
+use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\TermInterface;
 use Drupal\views\Views;
 use Drupal\Views\ViewExecutable;
 
@@ -178,6 +182,7 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
   ];
 
   if (isset($form['#id']) && in_array($form['#id'], $plp_forms)) {
+    $form['#cache']['tags'][] = 'views-exposed-form-alshaya-product-list';
     // Best seller descending option removed.
     if (isset($form['sort_bef_combine']['#options']['nid DESC'])) {
       unset($form['sort_bef_combine']['#options']['nid DESC']);
@@ -204,13 +209,14 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
         }
       }
 
-      $labels = _alshaya_acm_product_position_get_config(TRUE);
+      $plp_sort = \Drupal::service('alshaya_acm_product_position.sort_options');
+      $labels = $plp_sort->getSortOptionsLabels();
       array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
         $value = !empty($labels[$key]) ? $labels[$key] : $value;
       });
 
       // Re-order select options based on the config position.
-      $form['sort_bef_combine']['#options'] = _alshaya_acm_product_position_sorted_options($form['sort_bef_combine']['#options']);
+      $form['sort_bef_combine']['#options'] = $plp_sort->sortGivenOptions($form['sort_bef_combine']['#options']);
 
       // Set the first option as the default value.
       $default_sort_option = key($form['sort_bef_combine']['#options']);
@@ -224,47 +230,6 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $form['sort_bef_combine']['#value'] = !empty($sort_bef_combine) && isset($form['sort_bef_combine']['#options'][$sort_bef_combine]) ? $sort_bef_combine : $default_sort_option;
     }
   }
-}
-
-/**
- * Re-order the plp sort options based on the config values position.
- *
- * @param array $options
- *   Options to re-order.
- *
- * @return array
- *   Re-ordered options of the sort.
- */
-function _alshaya_acm_product_position_sorted_options(array $options) {
-  $config_sort_options = array_keys(array_filter(_alshaya_acm_product_position_get_config()));
-  // If there are at least any sort option enabled.
-  if (!empty($config_sort_options)) {
-    $new_sort_options = [];
-
-    // Get the default sorting for options from views config.
-    $views_storage = Views::getView('alshaya_product_list')->storage;
-    $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
-
-    // Iterate over config sort options to prepare new sorted array for form
-    // value option.
-    foreach ($config_sort_options as $sort_options) {
-      // Set default sort option ASC/DESC from the views config/sort order.
-      $default_sort_order = $views_sort[$sort_options]['order'];
-      $secondary_sort_order = $views_sort[$sort_options]['order'] == 'ASC' ? 'DESC' : 'ASC';
-      if (isset($options[$sort_options . ' ' . $default_sort_order])) {
-        $new_sort_options[$sort_options . ' ' . $default_sort_order] = $options[$sort_options . ' ' . $default_sort_order];
-      }
-      if (isset($options[$sort_options . ' ' . $secondary_sort_order])) {
-        $new_sort_options[$sort_options . ' ' . $secondary_sort_order] = $options[$sort_options . ' ' . $secondary_sort_order];
-      }
-    }
-
-    if (!empty($new_sort_options)) {
-      return $new_sort_options;
-    }
-  }
-
-  return $options;
 }
 
 /**
@@ -294,7 +259,8 @@ function _alshaya_acm_product_position_get_config($label = FALSE) {
  *   Sorted and enabled + available sort options.
  */
 function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
-  $labels = array_filter(_alshaya_acm_product_position_get_config(TRUE));
+  $plp_sort = \Drupal::service('alshaya_acm_product_position.sort_options');
+  $labels = $plp_sort->getSortOptionsLabels();
 
   // Remove the ones not enabled in view's sorting options.
   foreach ($labels as $key => $sort_option) {
@@ -304,7 +270,7 @@ function _alshaya_acm_product_position_sorted_available_options(array $sorts) {
     }
   }
 
-  $labels = _alshaya_acm_product_position_sorted_options($labels);
+  $labels = $plp_sort->sortGivenOptions($labels);
   return array_keys($labels);
 }
 
@@ -315,5 +281,135 @@ function alshaya_acm_product_position_local_tasks_alter(&$local_tasks) {
   // Change config translation local task hierarchy.
   if (isset($local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form'])) {
     $local_tasks['config_translation.local_tasks:config_translation.item.overview.alshaya_acm_product_position.plp_sort_settings_admin_form']['parent_id'] = 'alshaya_acm_product_position.plp_sort_settings_admin_form';
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // Get entity from form state object.
+  $taxonomy_term = $form_state->getFormObject()->getEntity();
+
+  // Check if the current form is term form.
+  if (!$taxonomy_term instanceof Term) {
+    return;
+  }
+
+  $form['sort_options_wrapper'] = [
+    '#type' => 'container',
+    '#attributes' => [
+      'id' => ['plp-sorting-options-wrapper'],
+    ],
+    '#weight' => 9,
+  ];
+
+  // Display sort options table only when the sorting option value is override.
+  $form['sort_options_wrapper']['sort_options'] = [
+    '#type' => 'table',
+    '#header' => [
+      t('Enable/Disable'),
+      t('Name'),
+      t('Weight'),
+    ],
+    '#tabledrag' => [
+      [
+        'action' => 'order',
+        'relationship' => 'sibling',
+        'group' => 'plp_sort_options-order-weight',
+      ],
+    ],
+    '#states' => [
+      'visible' => [
+        'select[name="field_sorting_options"]' => ['value' => 'override'],
+      ],
+    ],
+  ];
+
+  // Get the sort options and arrange it by weight.
+  $sort_options = !empty($taxonomy_term->get('field_sorting_order')->getString())
+    ? unserialize($taxonomy_term->get('field_sorting_order')->getString())
+    : \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
+
+  AlshayaPlpSortSettingsForm::arrangeOptionsByWeight(
+    $form['sort_options_wrapper']['sort_options'],
+    $sort_options
+  );
+
+  // Form submit handler.
+  $form['#validate'][] = 'alshaya_acm_product_position_term_validate';
+  $form['actions']['submit']['#submit'][] = 'alshaya_acm_product_position_term_submit';
+}
+
+/**
+ * Implements hook_field_group_build_pre_render_alter().
+ */
+function alshaya_acm_product_position_field_group_build_pre_render_alter(&$element) {
+  // Arrange custom field sort_options_wrapper inside group_plp_sorting_options.
+  if (!empty($element)
+      && $element['#entity_type'] == 'taxonomy_term'
+      && $element['vid']['#value'] == 'acq_product_category'
+  ) {
+    $element['#group_children']['sort_options_wrapper'] = 'group_plp_sorting_options';
+    $element["group_taxonomy_fields"]['group_plp_content']['group_plp_sorting_options']['sort_options_wrapper'] = $element['sort_options_wrapper'];
+    $element['#fieldgroups']['group_plp_sorting_options']->children[] = 'sort_options_wrapper';
+    unset($element['sort_options_wrapper']);
+  }
+}
+
+/**
+ * Validation function for term add / edit form.
+ */
+function alshaya_acm_product_position_term_validate(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $menu_link */
+  if (!empty($form_state->getValue('field_sorting_options')) && $form_state->getValue('field_sorting_options')[0]['value'] == 'override') {
+    $sort_options = $form_state->getValue('sort_options');
+    if (!empty($sort_options)) {
+
+      // Sort the options based on weight.
+      uasort($sort_options, [AlshayaPlpSortSettingsForm::class, 'weightArraySort']);
+      $result = [];
+      // Prepare sort option array for saving in config.
+      foreach ($sort_options as $key => $sort_option) {
+        $result[$key] = $sort_option['enable'] ? $key : 0;
+      }
+
+      $form_state->setValue('field_sorting_order', [['value' => serialize($result)]]);
+    }
+  }
+  else {
+    $form_state->setValue('field_sorting_order', [['value' => '']]);
+  }
+}
+
+/**
+ * Submit callback to invalidate tags.
+ */
+function alshaya_acm_product_position_term_submit(array &$form, FormStateInterface $form_state) {
+  \Drupal::service('cache_tags.invalidator')->invalidateTags([
+    'search_api_list:product',
+    'config:block.block.exposedformalshaya_product_listblock_1',
+  ]);
+}
+
+/**
+ * Implements hook_acq_sku_commerce_category_alter().
+ */
+function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterface $term, array &$category, $parent) {
+  // Save field_sorting_options default value for all existing & new terms that
+  // are being created programmatically.
+  if (!empty($term->get('field_sorting_options')->getString())) {
+    return;
+  }
+
+  $temp_store = \Drupal::service('tempstore.private')->get('alshaya_commerce_category_sync');
+  $field_sorting_options_default_value = $temp_store->get('field_sorting_options');
+  if (empty($field_sorting_options_default_value)) {
+    $field = FieldConfig::loadByName('taxonomy_term', 'acq_product_category', 'field_sorting_options');
+    $field_sorting_options_default_value = $field->getDefaultValue($term);
+  }
+
+  if (!empty($field_sorting_options_default_value)) {
+    $term->set('field_sorting_options', $field_sorting_options_default_value);
   }
 }

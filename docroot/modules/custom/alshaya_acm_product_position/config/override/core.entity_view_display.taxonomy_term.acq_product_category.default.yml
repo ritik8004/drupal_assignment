@@ -1,0 +1,7 @@
+dependencies:
+  config:
+    - field.field.taxonomy_term.acq_product_category.field_sorting_options
+    - field.field.taxonomy_term.acq_product_category.field_sorting_order
+hidden:
+  field_sorting_options: true
+  field_sorting_order: true

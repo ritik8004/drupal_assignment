@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_sorting_options
+field_name: field_sorting_options
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: inherit_site
+      label: 'Inherit site'
+    -
+      value: inherit_category
+      label: 'Inherit parent category'
+    -
+      value: override
+      label: Override
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
