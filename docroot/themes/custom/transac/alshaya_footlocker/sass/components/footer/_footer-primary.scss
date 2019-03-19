@@ -321,12 +321,6 @@
   }
 }
 
-.c-footer {
-  @include breakpoint($only-mobile) {
-    padding-top: 0;
-  }
-}
-
 .alshaya-newsletter-subscribe {
   h3 {
     font-size: 0.75rem;
