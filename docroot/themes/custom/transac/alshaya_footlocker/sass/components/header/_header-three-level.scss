@@ -7,6 +7,12 @@
         }
       }
     }
+
+    .menu__links__wrapper {
+      @include breakpoint($desktop) {
+        padding-top: 1.125rem;
+      }
+    }
   }
 
   .menu--three__list-item {
