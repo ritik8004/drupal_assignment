@@ -344,10 +344,6 @@ class AcqPromotionsManager {
     }
 
     if ($status) {
-      $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully.', [
-        '@node' => $promotion_node->getTitle(),
-        '@rule_id' => $promotion['rule_id'],
-      ]));
       return $promotion_node;
     }
     else {
@@ -386,6 +382,9 @@ class AcqPromotionsManager {
       $fetched_promotion_skus = [];
       $fetched_promotion_sku_attach_data = [];
 
+      $attach_sku_count = 0;
+      $detach_sku_count = 0;
+
       // Extract list of sku text attached with the promotion passed.
       $products = $promotion['products'];
 
@@ -423,6 +422,7 @@ class AcqPromotionsManager {
         // Create a queue for removing promotions from skus.
         if (!empty($detach_promotion_skus)) {
           $chunks = array_chunk($detach_promotion_skus, $acq_promotion_attach_batch_size);
+          $detach_sku_count = count($chunks);
           foreach ($chunks as $chunk) {
             $data['promotion'] = $promotion_nid;
             $data['skus'] = $chunk;
@@ -446,6 +446,7 @@ class AcqPromotionsManager {
       if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
         $data['promotion'] = $promotion_node->id();
         $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
+        $attach_sku_count = count($chunks);
         foreach ($chunks as $chunk) {
           $data['skus'] = $chunk;
           $promotion_attach_queue->createItem($data);
@@ -458,6 +459,13 @@ class AcqPromotionsManager {
           );
         }
       }
+
+      $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue and @detach items in detach queue.', [
+        '@node' => $promotion_node->getTitle(),
+        '@rule_id' => $promotion['rule_id'],
+        '@attach' => $attach_sku_count,
+        '@detach' => $detach_sku_count,
+      ]));
     }
 
     return $output;
