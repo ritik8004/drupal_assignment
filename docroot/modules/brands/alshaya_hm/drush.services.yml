@@ -1,6 +1,6 @@
 services:
   alshaya_hm.commands:
     class: Drupal\alshaya_hm\Commands\AlshayaHmCommands
-    arguments: [ '@database', '@alshaya_acm_product.skumanager', '@path.alias_manager', '@config.factory' ]
+    arguments: [ '@database', '@alshaya_acm_product.skumanager', '@path.alias_manager', '@config.factory', '@state' ]
     tags:
       - { name: drush.command }
