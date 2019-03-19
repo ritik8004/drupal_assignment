@@ -44,3 +44,19 @@
     margin: auto;
   }
 }
+
+.cloudzoom {
+  #cloud-zoom-big {
+    width: 19.875rem !important;
+  }
+}
+
+#cloud-zoom-big {
+  @include if-rtl {
+    right: 126.1% !important;
+  }
+
+  @include if-ltr {
+    left: 126.1% !important;
+  }
+}
