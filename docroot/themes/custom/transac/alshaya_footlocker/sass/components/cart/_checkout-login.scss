@@ -45,4 +45,19 @@
       font-family: $alshaya-thin;
     }
   }
+
+  #edit-checkout-login {
+    .request-password-link {
+      font-size: 0.875rem;
+      font-weight: normal;
+    }
+  }
+
+  .fieldset-wrapper {
+    .form-type-password {
+      #unmask_password {
+        top: 0.25rem;
+      }
+    }
+  }
 }
