@@ -340,6 +340,34 @@ function alshaya_hm_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_hm_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  $selected = $form_state->getValue('configurables');
+
+  if (!empty($selected['article_castor_id'])) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    // Load SKU entity.
+    $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
+
+    $product_tree = Configurable::deriveProductTree($sku_entity);
+    if (!empty($product_tree['combinations']['attribute_sku']['article_castor_id'][$selected['article_castor_id']])) {
+      $article_castor_id_child_sku_code = $product_tree['combinations']['attribute_sku']['article_castor_id'][$selected['article_castor_id']][0];
+
+      if (($article_castor_id_child_sku = SKU::loadFromSku($article_castor_id_child_sku_code)) &&
+        ($article_castor_id_child_sku instanceof SKU)) {
+        $parent_sku = $sku_manager->getParentSkuBySku($article_castor_id_child_sku);
+        // Set SKU tree to the parent based on color chosen. This is used while
+        // submitting the data back to MDC.
+        $form_state->set('tree_sku', $parent_sku->getSku());
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
  */
 function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStateInterface $form_state, AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
