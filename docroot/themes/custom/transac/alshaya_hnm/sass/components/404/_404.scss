@@ -15,23 +15,15 @@
   }
 
   .not-found__body {
-    width: 620px;
-    text-align: center;
-    font-size: 1.5625rem;
     font-family: $hnm-regular;
     margin: 0 auto;
     margin-top: 10%;
-    color: $maintenance_body_bg;
     padding-bottom: 2.5rem;
     position: relative;
     right: unset;
     bottom: unset;
     height: auto;
     display: block;
-
-    a {
-      color: $maintenance_link;
-    }
 
     .maintenance-page & {
       font-family: $hnm-regular;
@@ -81,47 +73,11 @@
 }
 
 @media screen and (max-width: 1024px) {
-  .not-found__image {
-    display: none;
-  }
-
   .not-found {
-    position: relative;
-    min-height: auto;
-
     &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: -1px;
-      left: 0;
-      right: 0;
       background: $maintenance_mobile_body_bg;
-      z-index: -1;
       border: solid 1px $maintenance_container_border;
     }
-
-    .not-found__body {
-      position: relative;
-      margin: auto;
-      left: 0;
-      right: 0;
-      width: 80%;
-    }
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .not-found .not-found__body {
-    font-size: 1rem;
-
-    & .arabic {
-      font-size: 1rem;
-    }
-  }
-
-  .not-found .not-found__body h2 {
-    font-size: 1.125rem;
   }
 }
 
@@ -133,13 +89,11 @@
 
     @include breakpoint($upto-desktop) {
       text-align: center;
-      margin: 2rem 1rem;
     }
 
     @include breakpoint($desktop) {
       float: none;
       text-align: center;
-      margin-right: 2rem;
     }
   }
 }

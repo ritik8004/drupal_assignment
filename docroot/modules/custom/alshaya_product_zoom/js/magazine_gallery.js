@@ -1,6 +1,6 @@
 /**
  * @file
- * Magazine Gallery
+ * Magazine Gallery.
  */
 
 /* global isRTL */
@@ -83,7 +83,7 @@
       gallery.slick('slickGoTo', currentSlide);
     }
 
-    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="'+ currentSlide +'"]');
+    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="' + currentSlide + '"]');
     var bigImgUrl = defaultMainImage.children('a').attr('href');
     $('#full-image-wrapper img').attr('src', bigImgUrl);
     $('#full-image-wrapper img').css('transform', 'scale(1)');
@@ -92,6 +92,8 @@
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
       var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      // Closing modal window before slick library gets removed.
+      $(this).click();
       productGallery.slick('unslick');
       $('body').removeClass('pdp-modal-overlay');
     });

@@ -40,6 +40,11 @@
         }
 
         var mobilegallery = $('#product-image-gallery-mobile', context);
+        mobilegallery.on('afterChange', function (event, slick) {
+          // Hide Labels on video slides.
+          Drupal.hideProductLabelOnVideo($(this), 'mobilegallery__thumbnails__video', true);
+        });
+
         Drupal.productZoomApplyRtl(mobilegallery, slickMobileOptions, context);
         if (!mobilegallery.find('ul.slick-dots').hasClass('i-dots')) {
           // Do initial setup again for slick dots.
@@ -69,6 +74,8 @@
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
           }
+          // Hide Product labels on video slides.
+          Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
         });
 
         // For Desktop slider, we remove the video iframe if user clicks on image thumbnail..
@@ -89,6 +96,8 @@
           }
           $(this).parent().siblings('.slick-slide').removeClass('slick-current');
           $(this).parent().addClass('slick-current');
+          // Show Product labels on image slides.
+          Drupal.hideProductLabelOnVideo(lightSlider, 'cloudzoom__thumbnails__video', false);
         });
       }
 
@@ -117,6 +126,9 @@
           $('.acq-content-product-modal #cloud-zoom-wrap img').css('transform', 'scale(1)');
           $('.acq-content-product-modal .cloudzoom__video_main iframe').remove();
           $('.acq-content-product-modal #cloud-zoom-wrap').show();
+
+          // Show product labels.
+          Drupal.hideProductLabelOnVideo(modalLightSlider, 'cloudzoom__thumbnails__video', false);
         });
 
         $('li', modalLightSlider).once('bind-js').on('click', function () {
@@ -128,6 +140,8 @@
             $(this).siblings('.slick-slide').removeClass('slick-current');
             $(this).addClass('slick-current');
           }
+          // Hide product labels.
+          Drupal.hideProductLabelOnVideo(modalLightSlider, 'cloudzoom__thumbnails__video', false);
         });
       }
 
@@ -331,6 +345,8 @@
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
       var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      // Closing modal window before slick library gets removed.
+      $(this).click();
       productGallery.slick('unslick');
       $('body').removeClass('pdp-modal-overlay');
     });
@@ -468,6 +484,35 @@
       });
     }
   }
+
+  /**
+   * Hide product labels on video slides in a slick slider.
+   *
+   * @param {*} gallery
+   *   The slick slider. Preferrably with content.
+   * @param {*} videoSlideClass
+   *   The class on the slide to indetify a video slide.
+   * @param {*} mobileGalleryFlag
+   *   Boolean to indicate if slider is a mobile gallery
+   */
+  Drupal.hideProductLabelOnVideo = function (gallery, videoSlideClass, mobileGalleryFlag) {
+    if (mobileGalleryFlag === true) {
+      if (gallery.find('.slick-current').hasClass(videoSlideClass)) {
+        gallery.siblings('.product-labels').hide();
+      }
+      else {
+        gallery.siblings('.product-labels').show();
+      }
+    }
+    else {
+      if (gallery.find('.slick-current').hasClass(videoSlideClass)) {
+        gallery.parents('.cloudzoom__thumbnails').siblings('.cloudzoom__herocontainer').find('.product-labels').hide();
+      }
+      else {
+        gallery.parents('.cloudzoom__thumbnails').siblings('.cloudzoom__herocontainer').find('.product-labels').show();
+      }
+    }
+  };
 
   // Slider - 3 For Mobile - Image Gallery.
   var slickMobileOptions = {

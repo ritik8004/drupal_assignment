@@ -34,10 +34,6 @@ libraries-override:
     js:
       js/convert_to_select2.js: js/convert_to_select2.js
 
-  alshaya_white_label/attribute:
-    js:
-      js/select2Option.js: js/select2Option.js
-
   alshaya_white_label/magazine_attribute:
     css:
       theme:

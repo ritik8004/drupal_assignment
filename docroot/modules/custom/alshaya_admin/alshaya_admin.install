@@ -35,7 +35,7 @@ function alshaya_admin_update_8004() {
 /**
  * Implements hook_update_N().
  *
- * Update hook to re-run missed steps from 8002.
+ * Update hook to re-run missed steps from 8002 around workflow.
  */
 function alshaya_admin_update_8003() {
   // Wbm2cm has created a workflow with random machine name during migration.

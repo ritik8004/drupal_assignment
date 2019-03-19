@@ -63,14 +63,6 @@
   }
 }
 
-[class^="c-footer__logo--"] {
-  @include u-image-replacement;
-
-  display: inline-block;
-  vertical-align: middle;
-  pointer-events: none;
-}
-
 .c-footer__logo {
   &--mastercard {
     background: url("../imgs/cards/master-card-secure-code-white.svg") no-repeat center;
@@ -113,5 +105,11 @@
 .menu--customer-rights-logo {
   @include breakpoint($mobile) {
     float: none;
+  }
+}
+
+#block-copyright {
+  a {
+    color: $copyright_footer_link;
   }
 }

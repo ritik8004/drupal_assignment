@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.design-services
+  module:
+    - system
+  theme:
+    - alshaya_pottery_barn
+id: designservices
+theme: alshaya_pottery_barn
+region: menu_secondary
+weight: -43
+provider: null
+plugin: 'system_menu_block:design-services'
+settings:
+  id: 'system_menu_block:design-services'
+  label: 'Design Services'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+visibility: {  }

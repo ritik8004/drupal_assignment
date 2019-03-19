@@ -96,6 +96,7 @@ header {
 
   .main--menu {
     top: 5.625rem;
+    z-index: 10;
 
     ul {
       width: 100%;
@@ -113,6 +114,8 @@ header {
   }
 
   .main--menu ul.menu--one__list {
+    padding-bottom: 6.0625rem;
+
     .menu__link {
       text-transform: uppercase;
       font-size: 0.875rem;
@@ -188,7 +191,7 @@ header {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 7;
+    z-index: 10;
   }
 
   .menu--mobile-navigation {
@@ -309,12 +312,6 @@ header {
   &.navbar-fixed-top {
     @include breakpoint($upto-desktop) {
       position: static;
-    }
-  }
-
-  &.show-overlay::before {
-    @include breakpoint($upto-desktop) {
-      content: none;
     }
   }
 }

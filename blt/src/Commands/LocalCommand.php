@@ -70,7 +70,7 @@ class LocalCommand extends BltTasks {
       ->uri($info['local']['url'])
       ->run();
 
-    $modules_to_enable = 'dblog field_ui views_ui features_ui restui stage_file_proxy';
+    $modules_to_enable = 'dblog field_ui views_ui restui stage_file_proxy';
     if ($info['profile'] == 'alshaya_transac') {
       $modules_to_enable .= ' alshaya_search_local_search';
     }
@@ -101,51 +101,12 @@ class LocalCommand extends BltTasks {
         ->run();
     }
 
-    $this->say('Reset super admin account');
-    $this->taskDrush()
-      ->drush('sqlq')
-      ->arg('update users_field_data set name = "user1", mail = "no-reply@acquia.com" where uid = 1')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->taskDrush()
-      ->drush('user-password')
-      ->arg('user1')
-      ->arg('admin')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->taskDrush()
-      ->drush('user-unblock')
-      ->arg('user1')
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
     $this->say('Configure stage_file_proxy');
     $this->taskDrush()
       ->drush('cset')
       ->arg('stage_file_proxy.settings')
       ->arg('origin')
-      ->arg($info['origin'])
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->taskDrush()
-      ->drush('cset')
-      ->arg('stage_file_proxy.settings')
-      ->arg('origin_dir')
-      ->arg($info['origin_dir'])
-      ->alias($info['local']['alias'])
-      ->uri($info['local']['url'])
-      ->run();
-
-    $this->say('Finally clear cache once');
-    $this->taskDrush()
-      ->drush('cr')
+      ->arg($info['origin'] . '/' . $info['origin_dir'])
       ->alias($info['local']['alias'])
       ->uri($info['local']['url'])
       ->run();
@@ -289,7 +250,7 @@ class LocalCommand extends BltTasks {
     $info['remote']['db_role'] = $this->extractInfo($remote_data, $site, 'db_role');
     $info['remote']['url'] = $this->extractInfo($remote_data, $site, 'url');
 
-    $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'] . '/files/';
+    $info['origin_dir'] = 'sites/g/files/' . $info['remote']['db_role'];
     $info['origin'] = 'https://' . $info['remote']['url'];
 
     if (empty($info['remote']['db_role']) || empty($info['remote']['url'])) {
@@ -366,7 +327,7 @@ class LocalCommand extends BltTasks {
         return $array['name'];
       }
       elseif ($info_required == 'url') {
-        return array_pop($array['domains']);
+        return reset($array['domains']);
       }
     }
 

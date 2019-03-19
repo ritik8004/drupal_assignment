@@ -45,13 +45,13 @@
         }
         else {
           // Get the permission track the user location.
-          Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
           $('#pdp-stores-container').on('click', function () {
             // Try again if we were not able to get location on page load.
             if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
               $('#pdp-stores-container').data('second-try', 'done');
-              Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+              Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
             }
           });
         }
@@ -133,18 +133,15 @@
   };
 
   // Error callback.
-  Drupal.pdp.LocationError = function (error) {
+  Drupal.click_collect.LocationAccessError = function (drupalSettings) {
     geoPerm = false;
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
 
   // Success callback.
-  Drupal.pdp.LocationSuccess = function (position) {
-    asCoords = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
+  Drupal.click_collect.LocationAccessSuccess = function (coords) {
+    asCoords = coords;
     geoPerm = true;
     Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
   };
@@ -190,7 +187,6 @@
     $('.click-collect-form').find('input[name="store-location"]').once('trigger-enter').on('keypress', function (e) {
       var keyCode = e.keyCode || e.which;
       if (keyCode === 13) {
-        console.log('hello');
         Drupal.AlshayaPlacesAutocomplete.handleEnterKeyPress($(this), callbacks, restriction);
       }
     });
@@ -290,6 +286,10 @@
 
               // Custom command function to render map and map markers.
               storeDisplayAjax.commands.storeDisplayFill = function (ajax, response, status) {
+                if ($('body').hasClass('magazine-layout-ajax-throbber')) {
+                  $('body').removeClass('magazine-layout-ajax-throbber');
+                }
+
                 if (status === 'success') {
                   if (response.data.alshaya_click_collect.pdp.top_three) {
                     // Show formatted address after ajax for all stores, once we have html elements.
@@ -302,6 +302,12 @@
                   }
                 }
               };
+
+              // When sidebar is sticky for magazine layout.
+              if ($('.content-sidebar-wrapper').hasClass('sidebar-fixed')) {
+                $('body').addClass('magazine-layout-ajax-throbber');
+              }
+
               storeDisplayAjax.execute();
             }
           }

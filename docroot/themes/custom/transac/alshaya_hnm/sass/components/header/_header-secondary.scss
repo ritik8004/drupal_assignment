@@ -73,12 +73,6 @@
       }
     }
   }
-
-  .block-language-blocklanguage-interface {
-    .is-active {
-      @include u-visibility(none);
-    }
-  }
 }
 
 .c-my-account-nav {
@@ -134,6 +128,10 @@
 }
 
 .branding__menu {
+  @include breakpoint($desktop) {
+    z-index: 6;
+  }
+
   @include breakpoint($only-tablet) {
     height: 4.5rem;
 
@@ -238,14 +236,6 @@ html[lang='ar'] {
   #block-account-menu {
     ul {
       background-color: $white-five;
-    }
-  }
-}
-
-.block-alshaya-main-menu .active--menu--links {
-  li.menu--one__list-item ul.menu--two__list {
-    @include breakpoint($desktop) {
-      transition: all ease 0s;
     }
   }
 }

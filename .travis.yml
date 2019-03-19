@@ -12,12 +12,12 @@ matrix:
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   - php: 7.1
     env:
       - INSTALL_TYPE=install
       - PROFILE=alshaya_non_transac
-    if: type = pull_request
+    if: type IN (pull_request, cron)
   #- php: 7.1
   #  env:
   #  - INSTALL_TYPE=update
@@ -65,8 +65,8 @@ addons:
 
 # @see https://docs.travis-ci.com/user/notifications
 notifications:
-# - hipchat: [api token]@[room id or name]
-# - slack: '<account>:<token>#[channel]'
+  slack:
+    secure: "QW/vcMfCY0FtGTzNJrtnG32uOgmOfrgaFeo68inAcrMQaesAWpppJVG5C4guOwHiYMoaZR3wbQA0cecho7XYTUILrFCEuWRQ/+T7zMs+lg69AYj2HGvq3Ef+Wn16TkdSZFShKZwFd9cPjqCaPVPJ994HEKxWqw5p1q0xzLme10y4Fk7TphpnhqW+6Z8JADY9WQ/YgtCOsrwOMuSsgsP7uKFJFCIVwLcg2o7JukBjY67hOceFfhxpC1gC/b7ohHlDZfn8owbzZazRCTKEEJM1KBc3s0APXBwjqh/l4laGRqB6PGCSR2TwhvfD2z9ZF6woicOZNT9kbK1iWQ0gT824gmM6FiEG9I+Skwnvc0QkavIccYEuwV4yOtzk2Eh3vcBNrPItN3g05nNL1zk+S2eTNG7olB0/fG18rHiqaUozIIRabbPr2FVBc7jQeLzSJ3oi7zPQRPFG39tkRncvDnj9S4V6gQE+BKFGHhXRCMK8/UASLhK5IASuO+4OPwZMxXtLUZsOD+bNSsZFhtG2J35dGl3PrBWJ1gGY1wBiEzEErmH3bgi79XNSNQONrJ2wFffriP+4cRuZGJ8w/+AwZYvDnpfCIKfKlASmJ4vHx1ILCPKXlAWnuobekHyCukEElvKkfiFgkjVIYpfINz5QpCkcWln8Hu4sifAkfPNf2oq8hn4="
 
 before_install:
   # Disable xdebug.
@@ -79,6 +79,7 @@ before_install:
 
 install:
   - source ${BLT_DIR}/scripts/travis/setup_environment
+  - chmod 600 ${BUILD_DIR}/private/travis_acm.pub
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project

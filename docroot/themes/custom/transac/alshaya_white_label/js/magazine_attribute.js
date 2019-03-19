@@ -7,7 +7,7 @@
   'use strict';
 
   /**
-   * JS to convert to select2Option to transform into boxes from select list.
+   * Js to convert to select2Option to transform into boxes from select list.
    *
    *  @param {context} context on ajax update.
    */
@@ -24,8 +24,28 @@
 
     Drupal.convertSelectListtoUnformattedList($('.form-item-configurable-swatch', context));
 
-    // JS function to show less/more for colour swatches.
-    Drupal.magazine_swatches_count();
+    // Markup for show more/less color swatches.
+    var showMoreHtml = $('<div class="show-more-color">' + Drupal.t('View all colours') + '</div>');
+    var showLessHtml = $('<div class="show-less-color">' + Drupal.t('View less colours') + '</div>');
+
+    if ($('.show-more-color').length === 0) {
+      showMoreHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
+    }
+    if ($('.show-less-color').length === 0) {
+      showLessHtml.insertAfter($('.configurable-swatch .select-buttons')).hide();
+    }
+
+    // Adding class when we click on slider item to open the modal.
+    if ($(window).width() > 767) {
+      $('.nodetype--acq_product .view-id-product_slider .use-ajax').once().on('click', function (e) {
+        $('body').addClass('magazine-layout-overlay');
+      });
+    }
+
+    if (!$(context).hasClass('modal-content') && !$('body').hasClass('magazine-layout-overlay')) {
+      // JS function to show less/more for colour swatches.
+      Drupal.magazine_swatches_count();
+    }
   };
 
   /**
@@ -44,7 +64,7 @@
       var clickedOption = $('select option:selected', that);
       if (!clickedOption.is(':disabled')) {
         $('.select2Option', that).find('.list-title .selected-text').html(clickedOption.text());
-        Drupal.alshaya_hm_images_update_selected_label();
+        Drupal.alshaya_color_swatch_update_selected_label();
       }
     });
   };
@@ -53,11 +73,11 @@
    * Implementation of view more/less colour for swatches.
    */
   Drupal.magazine_swatches_count = function () {
-    if ($('.form-item-configurables-article-castor-id .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
-      $('.form-item-configurables-article-castor-id').addClass('product-swatch');
+    if ($('.configurable-swatch .select-buttons li:nth-child(2) a').attr('data-swatch-type') === 'Details') {
+      $('.configurable-swatch').addClass('product-swatch');
     }
     else {
-      $('.form-item-configurables-article-castor-id').addClass('colour-swatch');
+      $('.configurable-swatch').addClass('colour-swatch');
     }
 
     var colour_swatches = drupalSettings.colour_swatch_items_mob;
@@ -81,38 +101,65 @@
       swatch_items_to_show = colour_swatches;
     }
 
-    $('.configurable-swatch').each(function () {
-      if ($(this).find('.select-buttons li').length > swatch_items_to_show + 1) {
-        if ($(window).width() > 767) {
-          $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
-          $('.form-item-configurables-article-castor-id').addClass('swatch-toggle');
-        }
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-effect');
-        $('.show-more-color').show();
-      }
-      else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('simple-swatch-effect');
-      }
-    });
+    if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
+      $('.show-less-color').show();
+      $('.configurable-swatch').addClass('swatch-toggle');
+    }
+    else if ($('.content__title_wrapper').hasClass('show-less-swatch')) {
+      $('.show-more-color').show();
+      $('.configurable-swatch').removeClass('swatch-toggle');
+    }
 
-    $('.show-more-color').on('click', function (e) {
+    if ($(window).width() > 767) {
+      if ($('.configurable-swatch .select-buttons li').length > swatch_items_to_show && !$('.content__title_wrapper').hasClass('show-all-swatch')) {
+        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').hide();
+        $('.configurable-swatch').addClass('swatch-toggle');
+        $('.show-more-color').show();
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+      }
+
+      else {
+        $('.configurable-swatch').addClass('simple-swatch-effect');
+      }
+    }
+    else {
+      if ($('.magazine-swatch-placeholder .select-buttons li').length > swatch_items_to_show && !$('.content__title_wrapper').hasClass('show-all-swatch')) {
+        $('.show-more-color').show();
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
+        $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+      }
+
+      else if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
+        $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+      }
+
+      else {
+        $('.magazine-swatch-placeholder').addClass('simple-swatch-effect');
+      }
+    }
+
+    $('.show-more-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').addClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-toggle');
       }
+      $('.content__title_wrapper').addClass('show-all-swatch');
+      $('.content__title_wrapper').removeClass('show-less-swatch');
       $(this).hide();
       $('.show-less-color').show();
     });
 
-    $('.show-less-color').on('click', function (e) {
+    $('.show-less-color').once().on('click', function (e) {
       if ($(window).width() > 767) {
-        $('.form-item-configurables-article-castor-id .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
+        $('.configurable-swatch .select-buttons li:gt(" ' + swatch_items_to_show + ' ")').slideToggle();
       }
       else {
-        $('.form-item-configurables-article-castor-id, .magazine-swatch-placeholder').removeClass('swatch-toggle');
+        $('.configurable-swatch, .magazine-swatch-placeholder').removeClass('swatch-toggle');
       }
+      $('.content__title_wrapper').removeClass('show-all-swatch');
+      $('.content__title_wrapper').addClass('show-less-swatch');
       $(this).hide();
       $('.show-more-color').show();
     });
@@ -135,7 +182,7 @@
   };
 
   /**
-   * Move mobile colors to bellow of PDP main image.
+   * JS function to move mobile colors to bellow of PDP main image in product description section.
    *
    * @param {context} context on ajax update.
    */
@@ -203,18 +250,16 @@
     $('.size-tray-link', context).once().on('click', function () {
       $('.size-tray').addClass('tray-open');
       $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-      $('body').addClass('tray-overlay');
+      $('body').addClass('tray-overlay mobile--overlay');
     });
 
     $('.size-tray-close', context).once().on('click', function () {
-      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
-      // Close with a delay allowing time for sliding animation to finish.
-      setTimeout(function () {
+      $('.size-tray > div').toggle('slide', {direction: 'down'}, 400, function () {
         $('.size-tray').removeClass('tray-open');
-      }, 400);
-      $('body').removeClass('tray-overlay');
+      });
+      $('body').removeClass('tray-overlay mobile--overlay');
       if ($('body').hasClass('open-tray-without-selection')) {
-        $('body').removeClass('open-tray-without-selection');
+        $('body').removeClass('open-tray-without-selection mobile--overlay');
         $('.nodetype--acq_product .magazine-layout-node input.hidden-context').val('');
       }
     });
@@ -250,7 +295,7 @@
       setTimeout(function () {
         $('.size-tray').removeClass('tray-open');
       }, 400);
-      $('body').removeClass('tray-overlay');
+      $('body').removeClass('tray-overlay mobile--overlay');
     });
   }
 
@@ -309,7 +354,9 @@
 
         // JS function to move mobile colors to bellow of PDP main image in
         // product description section.
-        mobileColors(context);
+        if (!$(context).hasClass('modal-content')) {
+          mobileColors(context);
+        }
 
         // JS function to move mobile size div to size-tray.
         mobileSize(context);
@@ -379,6 +426,7 @@
             if ($('body').hasClass('magazine-layout-ajax-throbber')) {
               $('body').removeClass('magazine-layout-ajax-throbber');
             }
+            $('body').removeClass('magazine-layout-overlay');
           });
         }, 10);
       }

@@ -33,10 +33,6 @@
     @include breakpoint($only-mobile) {
       top: 0;
     }
-
-    @include breakpoint($tablet) {
-      font-size: 1.25rem;
-    }
   }
 
   .item-list__checkbox,

@@ -93,6 +93,11 @@
               }
             });
 
+            gallery.on('afterChange', function (event, slick) {
+              // Hide Labels on video slides.
+              Drupal.hideProductLabelOnVideo(gallery, 'mob-imagegallery__thumbnails__video', true);
+            });
+
             $('.dialog-product-image-gallery-container-mobile button.ui-dialog-titlebar-close').on('mousedown', function () {
               var productGallery = $('#product-image-gallery-mob', $(this).closest('.dialog-product-image-gallery-container-mobile'));
               $('body').removeClass('pdp-modal-overlay');

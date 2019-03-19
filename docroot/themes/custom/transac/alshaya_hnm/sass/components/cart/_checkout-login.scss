@@ -1,7 +1,4 @@
 .user-page.checkout-login {
-  border: 0;
-  margin: 0 auto 1em;
-
   @include breakpoint($desktop) {
     margin: 0.38rem auto 4.8rem;
   }
@@ -50,8 +47,6 @@
     @inlcude arabic-letter-spacing;
 
     padding: 0.5rem 2rem;
-    border: none;
-    display: inline-block;
 
     span {
       font-family: $hnm-demibold;
@@ -130,12 +125,6 @@
     }
 
     .fieldset-wrapper {
-      margin-top: 0.5625rem;
-
-      @include breakpoint($tablet) {
-        margin-top: 0.5rem;
-      }
-
       @include breakpoint($desktop) {
         margin-top: 0.9375rem;
         font-size: 0.75rem;
@@ -147,15 +136,10 @@
   #edit-checkout-guest {
     a {
       background: $primary_dark_color;
-      display: inline-block;
-      margin: 1em 0;
-      margin-bottom: 2rem;
-      padding: 0.625rem 1.5rem;
       line-height: 1.14;
 
       @include breakpoint($desktop) {
         margin-top: 0.75rem;
-        margin-bottom: 2rem;
       }
     }
   }
@@ -176,7 +160,6 @@
 
       @include breakpoint($tablet) {
         color: $primary_dark_color;
-        width: 80%;
       }
     }
   }

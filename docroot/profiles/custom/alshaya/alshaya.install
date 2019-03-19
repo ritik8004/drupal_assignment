@@ -56,7 +56,7 @@ function alshaya_update_8010() {
     'field.field.paragraph.promo_block.field_promotion_image_mobile',
     'field.field.paragraph.section_divider.field_section_divider_text',
     'field.field.paragraph.offers_bordered.field_banner',
-    'field.field.paragraph.image_title_subtitle.field_banner'
+    'field.field.paragraph.image_title_subtitle.field_banner',
   ];
 
   $manager->updateConfigs($configs, 'alshaya_paragraphs');

@@ -832,10 +832,13 @@ class SkuImagesManager {
           $pdp_image_slider_position = $this->skuManager->getImageSliderPosition($sku);
 
           $library_array = [
-            'alshaya_product_zoom/cloud_zoom',
             'alshaya_product_zoom/cloud_zoom_pdp_gallery',
             'alshaya_product_zoom/product.cloud_zoom',
           ];
+
+          if ($context == 'pdp') {
+            $library_array[] = 'alshaya_product_zoom/cloud_zoom';
+          }
 
           if ($context == 'modal-magazine') {
             $library_array[] = 'alshaya_product_zoom/magazine_gallery';

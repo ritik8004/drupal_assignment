@@ -4,18 +4,71 @@
     .label-store-location {
       font-weight: normal;
       text-transform: none;
+
+      &::before {
+        @include breakpoint($desktop) {
+          color: $checkout_cc_search_icon;
+        }
+      }
+
+      .alias--cart-checkout-delivery & {
+        font-size: 0.875rem;
+        margin: 0.875rem 0 0.375rem;
+
+        @include breakpoint($tablet) {
+          margin-#{$left}: 1rem;
+        }
+      }
+    }
+
+    .form-item-store-location {
+      .store-location-input {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.3125rem 0.3125rem;
+
+        @include breakpoint($only-mobile) {
+          background: url(#{$bbw_theme_img_directory_path}/icons/ic-search-store.svg) $right 0.5rem center no-repeat;
+        }
+      }
+
+      font-size: 0.875rem;
     }
 
     #click-and-collect-list-view {
+      font-size: 0.875rem;
+
       ul {
         li {
+          padding-#{$right}: 0;
+
           .store-open-hours {
             .hours--label {
               @include breakpoint($tablet) {
                 color: $checkout_cc_list_hours_label;
+              }
+
+              @include breakpoint($desktop) {
                 font-weight: bold;
               }
+
+              @include breakpoint($only-mobile) {
+                font-size: 0.875rem;
+              }
+
+              &::after {
+                @include breakpoint($only-mobile) {
+                  #{$left}: inherit;
+                  #{$right}: 0;
+                  top: -0.5rem;
+                  font-size: 1.875rem;
+                }
+              }
             }
+          }
+
+          .store-name-and-address,
+          .label--delivery-time {
+            font-size: 0.875rem;
           }
 
           .store-actions {
@@ -33,6 +86,11 @@
               @include breakpoint($tablet) {
                 height: 2.5rem;
               }
+
+              @include breakpoint($desktop) {
+                width: 16rem;
+                min-width: 15.875rem;
+              }
             }
 
             .store-on-map,
@@ -43,6 +101,10 @@
 
               html[lang=ar] & {
                 padding: 0.3125rem 0;
+              }
+
+              @include breakpoint($only-tablet) {
+                margin-top: 1rem;
               }
             }
           }

@@ -1,11 +1,18 @@
+click-and-collect.common:
+  js:
+    js/alshaya_click_collect.js: {}
+  dependencies:
+    - alshaya_geolocation/places-api-autocomplete
+    - core/drupal.dialog.ajax
+
 click-and-collect.checkout:
   js:
     js/alshaya_click_collect.checkout.js: {}
   dependencies:
-    - alshaya_geolocation/places-api-autocomplete
+    - alshaya_click_collect/click-and-collect.common
 
 click-and-collect.pdp:
   js:
     js/alshaya_click_collect.pdp.js: {}
   dependencies:
-    - alshaya_geolocation/places-api-autocomplete
+    - alshaya_click_collect/click-and-collect.common

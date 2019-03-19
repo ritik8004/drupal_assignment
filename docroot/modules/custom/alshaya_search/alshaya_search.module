@@ -536,6 +536,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
 
     // If L3 active item for 'search' page.
     if (count($parent_ids) == 2
+      && isset($parent_ids[0])
       && $context['result']->isActive()
       && ($facet_source_id == 'search_api:views_page__search__page'
       || $facet_source_id == 'search_api:views_block__alshaya_product_list__block_2')) {
@@ -544,7 +545,7 @@ function alshaya_search_facets_query_string_alter(ParameterBag $result_get_param
       // Get all children of L2 parent.
       $parent_child_ids = $facet->getHierarchyInstance()->getNestedChildIds($parent_id);
       // If there are more than 1 active children of a L2.
-      if (count(array_intersect($parent_child_ids, $context['active_filters'][$url_alias])) == 1) {
+      if (count(array_intersect($parent_child_ids, (array) $context['active_filters'][$url_alias])) == 1) {
         // Just select L2 parent if there is only 1 L3 active item.
         $filter_params[] = $url_alias . ':' . $parent_id;
       }

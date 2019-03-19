@@ -16,10 +16,6 @@
     @include breakpoint($desktop) {
       top: 1px;
     }
-
-    .download-invoice {
-      color: $content_link_color;
-    }
   }
 
   .user__order--detail {
@@ -60,8 +56,6 @@
     background: $order_detail_total_bg;
 
     td {
-      padding: 0.625rem 1.375rem;
-
       @include breakpoint($only-tablet) {
         padding: 0.625rem 1.375rem 0.625rem 0.75rem;
       }
@@ -70,8 +64,6 @@
 
   .discount-row {
     td {
-      padding: 0.625rem 1.375rem;
-
       @include breakpoint($only-tablet) {
         padding: 0.625rem 0.125rem 0.625rem 0.75rem;
       }

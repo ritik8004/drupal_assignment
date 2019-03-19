@@ -16,7 +16,6 @@ vagrant_synced_folders:
     # Set the destination to the Acquia Cloud subscription machine name.
     destination: /var/www/alshaya
     type: nfs
-    mount_options: ['actimeo=2']
 
 drupal_build_composer_project: false
 # Toggling this to `true` would invoke `composer install` with the
@@ -62,8 +61,7 @@ installed_extras:
   - pimpmylog
   - drupalconsole
 
-# PHP 5.6 (PHP 7.1 is being tested, see: https://docs.acquia.com/node/25726).
-php_version: "7.1"
+php_version: '7.2'
 php_packages_extra:
   - "php{{ php_version }}-bz2"
   - "php{{ php_version }}-bcmath"
@@ -87,7 +85,7 @@ php_xdebug_remote_connect_back: 1
 php_xdebug_idekey: PHPSTORM
 php_xdebug_max_nesting_level: 256
 php_xdebug_remote_port: "9000"
-php_memory_limit: "512M"
+php_memory_limit: "256M"
 
 post_provision_tasks_dir: "../../../acquia/blt/scripts/drupal-vm/post-provision.yml"
 post_provision_scripts:

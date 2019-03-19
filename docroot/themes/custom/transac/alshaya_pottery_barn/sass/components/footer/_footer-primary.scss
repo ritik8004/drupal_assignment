@@ -53,11 +53,33 @@
         color: $footer_link_hover;
         text-decoration: underline;
       }
+
+      @include breakpoint($tablet) {
+        display: inline-block;
+        line-height: 1.2;
+        margin: 0.4375rem 0;
+      }
     }
   }
 
   .c-footer-primary__region {
     min-height: 14.25rem;
+
+    @include breakpoint($only-tablet) {
+      .footer--menu {
+        width: 58%;
+      }
+
+      .footer--categories,
+      .footer--abouthelp,
+      .footer--static-links {
+        width: 45%;
+      }
+
+      .footer--static-links {
+        margin: 0 1.25rem;
+      }
+    }
   }
 
   .c-footer-menu--category {
@@ -89,13 +111,13 @@
 
   .footer--categories {
     @include breakpoint($desktop) {
-      width: 38.2%;
+      width: 43.2%;
     }
   }
 
   .footer--abouthelp {
     @include breakpoint($desktop) {
-      width: 58.7%;
+      width: 54.7%;
     }
   }
 }
