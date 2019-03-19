@@ -33,6 +33,9 @@ function alshaya_hm_update_8032() {
 
   // Set Additional attributes for H&M.
   $alshaya_config_manager->updateConfigs(['acq_sku.configurable_form_settings'], 'alshaya_hm', 'optional');
+
+  // Update alshaya display settings to hide swatches.
+  $alshaya_config_manager->updateConfigs(['alshaya_acm_product.display_settings'], 'alshaya_acm_product');
 }
 
 /**
