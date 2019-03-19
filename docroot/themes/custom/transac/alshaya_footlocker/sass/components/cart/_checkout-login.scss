@@ -25,6 +25,19 @@
       }
     }
   }
+
+  a.back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevronleft, before) {
+        top: -0.3125rem;
+        transform: rotate(0deg);
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
 }
 
 .alias--cart-checkout-login {
