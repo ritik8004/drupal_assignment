@@ -54,13 +54,13 @@
 
       $('body').once('get-location').each(function () {
         // Get the permission track the user location.
-        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+        Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
       });
 
       $('#edit-store-location').once('bind-js').on('focusin', function () {
         if (geoPerm === false && typeof $(this).data('second-try') === 'undefined') {
           $(this).data('second-try', 'done');
-          Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.locationError);
         }
       });
 
@@ -68,7 +68,7 @@
       $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
         // Start the loader.
         $(this).showCheckoutLoader();
-        Drupal.click_collect.getCurrentPosition(Drupal.checkoutClickCollect.locationSuccess, Drupal.checkoutClickCollect.locationError);
+        Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.locationError);
         return false;
       });
 
@@ -223,11 +223,8 @@
   };
 
   // Success callback.
-  Drupal.checkoutClickCollect.locationSuccess = function (position) {
-    ascoords = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
+  Drupal.click_collect.LocationAccessSuccess = function (coords) {
+    ascoords = coords;
     geoPerm = true;
     if (typeof ascoords !== 'undefined' && !$.isEmptyObject(ascoords)) {
       Drupal.checkoutClickCollect.storeListAll(ascoords);
@@ -235,7 +232,7 @@
   };
 
   // Error callback.
-  Drupal.checkoutClickCollect.locationError = function (error) {
+  Drupal.click_collect.LocationAccessError = function (error) {
     // Do nothing, we already have the search form displayed by default.
     geoPerm = false;
   };

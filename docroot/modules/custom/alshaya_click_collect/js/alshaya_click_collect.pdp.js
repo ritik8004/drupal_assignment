@@ -45,13 +45,13 @@
         }
         else {
           // Get the permission track the user location.
-          Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
 
           $('#pdp-stores-container').on('click', function () {
             // Try again if we were not able to get location on page load.
             if (geoPerm === false && typeof $('#pdp-stores-container').data('second-try') === 'undefined') {
               $('#pdp-stores-container').data('second-try', 'done');
-              Drupal.click_collect.getCurrentPosition(Drupal.pdp.LocationSuccess, Drupal.pdp.LocationError);
+              Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
             }
           });
         }
@@ -133,18 +133,15 @@
   };
 
   // Error callback.
-  Drupal.pdp.LocationError = function (error) {
+  Drupal.click_collect.LocationAccessError = function (drupalSettings) {
     geoPerm = false;
     // Display search store form if conditions matched.
     Drupal.pdp.InvokeSearchStoreFormDisplay(drupalSettings);
   };
 
   // Success callback.
-  Drupal.pdp.LocationSuccess = function (position) {
-    asCoords = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    };
+  Drupal.click_collect.LocationAccessSuccess = function (coords) {
+    asCoords = coords;
     geoPerm = true;
     Drupal.pdp.storesDisplay(asCoords, $('.click-collect-form'));
   };
