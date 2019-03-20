@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Path\AliasStorage;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
+use Drupal\Core\Routing\RouteBuilderInterface;
 
 /**
  * Class AlshayaOptionsListForm.
@@ -44,6 +45,13 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   protected $skuFieldsManager;
 
   /**
+   * The router builder.
+   *
+   * @var \Drupal\Core\Routing\RouteBuilderInterface
+   */
+  protected $routerBuilder;
+
+  /**
    * AlshayaOptionsListForm constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -54,15 +62,19 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    *   The alias manager service.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
+   * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
+   *   The router builder service.
    */
   public function __construct(Connection $connection,
                               AliasStorage $alias_storage,
                               AliasManagerInterface $alias_manager,
-                              SKUFieldsManager $sku_fields_manager) {
+                              SKUFieldsManager $sku_fields_manager,
+                              RouteBuilderInterface $router_builder) {
     $this->connection = $connection;
     $this->aliasStorage = $alias_storage;
     $this->aliasManager = $alias_manager;
     $this->skuFieldsManager = $sku_fields_manager;
+    $this->routerBuilder = $router_builder;
   }
 
   /**
@@ -73,7 +85,8 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       $container->get('database'),
       $container->get('path.alias_storage'),
       $container->get('path.alias_manager'),
-      $container->get('acq_sku.fields_manager')
+      $container->get('acq_sku.fields_manager'),
+      $container->get('router.builder')
     );
   }
 
@@ -226,6 +239,9 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     }
 
     $config->save();
+
+    // Rebuild routes so that new routes get added.
+    $this->routerBuilder->rebuild();
 
     return parent::submitForm($form, $form_state);
   }
