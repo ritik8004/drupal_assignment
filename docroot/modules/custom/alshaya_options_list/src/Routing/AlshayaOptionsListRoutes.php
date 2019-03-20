@@ -49,18 +49,20 @@ class AlshayaOptionsListRoutes implements ContainerInjectionInterface {
     $route_collection = new RouteCollection();
     $pages = $this->config->get('alshaya_options_pages');
 
-    foreach ($pages as $page) {
-      $route = new Route(
-        '/' . $page['url'],
-        [
-          '_controller' => '\Drupal\alshaya_options_list\Controller\AlshayaOptionsPageController::optionsPage',
-        ],
-        [
-          '_access' => 'TRUE',
-        ]
-      );
-      $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
-      $route_collection->add($route_name, $route);
+    if (!empty($pages)) {
+      foreach ($pages as $page) {
+        $route = new Route(
+          '/' . $page['url'],
+          [
+            '_controller' => '\Drupal\alshaya_options_list\Controller\AlshayaOptionsPageController::optionsPage',
+          ],
+          [
+            '_access' => 'TRUE',
+          ]
+        );
+        $route_name = 'alshaya_options_list.options_page' . str_replace('/', '-', $page['url']);
+        $route_collection->add($route_name, $route);
+      }
     }
 
     return $route_collection;

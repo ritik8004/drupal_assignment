@@ -112,6 +112,11 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#title' => $this->t('Options Page Settings'),
       '#prefix' => '<div id="options-fieldset-wrapper">',
       '#suffix' => '</div>',
+      '#states' => [
+        'visible' => [
+          ':input[name="alshaya_options_on_off"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     if (count($attribute_options) == 0) {
@@ -121,23 +126,25 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       $temp_count = $form_state->get('temp_count');
     }
 
-    foreach ($attribute_options as $key => $attribute_option) {
-      $form['alshaya_options_page'][$key] = [
-        '#type' => 'fieldset',
-        '#Collapsible' => TRUE,
-      ];
-      $form['alshaya_options_page'][$key]['alshaya_options_page_url'] = [
-        '#type' => 'textfield',
-        '#default_value' => $attribute_option['url'],
-        '#title' => $this->t('Page url on which options should be displayed.'),
-      ];
+    if (!empty($attribute_options)) {
+      foreach ($attribute_options as $key => $attribute_option) {
+        $form['alshaya_options_page'][$key] = [
+          '#type' => 'fieldset',
+          '#Collapsible' => TRUE,
+        ];
+        $form['alshaya_options_page'][$key]['alshaya_options_page_url'] = [
+          '#type' => 'textfield',
+          '#default_value' => $attribute_option['url'],
+          '#title' => $this->t('Page url on which options should be displayed.'),
+        ];
 
-      $form['alshaya_options_page'][$key]['alshaya_options_attributes'] = [
-        '#type' => 'checkboxes',
-        '#options' => $this->getAttributeCodeOptions(),
-        '#default_value' => !empty($attribute_option['attributes']) ? $attribute_option['attributes'] : [],
-        '#title' => $this->t('The attribute to list on the options page.'),
-      ];
+        $form['alshaya_options_page'][$key]['alshaya_options_attributes'] = [
+          '#type' => 'checkboxes',
+          '#options' => $this->getAttributeCodeOptions(),
+          '#default_value' => !empty($attribute_option['attributes']) ? $attribute_option['attributes'] : [],
+          '#title' => $this->t('The attribute to list on the options page.'),
+        ];
+      }
     }
 
     if ($temp_count > 0) {
