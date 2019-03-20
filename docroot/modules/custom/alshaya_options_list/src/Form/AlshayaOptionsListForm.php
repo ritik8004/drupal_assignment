@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Path\AliasStorage;
 use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
-use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Class AlshayaOptionsListForm.
@@ -99,7 +98,7 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $form = parent::buildForm($form, $form_state);
 
     $config = $this->config('alshaya_options_list.admin_settings');
-    $attribute_options = $config->get('alshaya_options_attributes');
+    $attribute_options = $config->get('alshaya_options_pages');
 
     $form['alshaya_options_on_off'] = [
       '#type' => 'checkbox',
@@ -107,17 +106,76 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       '#title' => $this->t('Enable options page on site.'),
     ];
 
-    $form['alshaya_options_page_url'] = [
-      '#type' => 'textfield',
-      '#default_value' => $config->get('alshaya_options_page_url'),
-      '#title' => $this->t('Page url on which options should be displayed.'),
+    $form['#tree'] = TRUE;
+    $form['alshaya_options_page'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Options Page Settings'),
+      '#prefix' => '<div id="options-fieldset-wrapper">',
+      '#suffix' => '</div>',
     ];
 
-    $form['alshaya_options_attributes'] = [
-      '#type' => 'checkboxes',
-      '#options' => $this->getAttributeCodeOptions(),
-      '#default_value' => !empty($attribute_options) ? $attribute_options : [],
-      '#title' => $this->t('The attribute to list on the options page.'),
+    if (count($attribute_options) == 0) {
+      $temp_count = $form_state->get('temp_count') + 1;
+    }
+    else {
+      $temp_count = $form_state->get('temp_count');
+    }
+
+    foreach ($attribute_options as $key => $attribute_option) {
+      $form['alshaya_options_page'][$key] = [
+        '#type' => 'fieldset',
+        '#Collapsible' => TRUE,
+      ];
+      $form['alshaya_options_page'][$key]['alshaya_options_page_url'] = [
+        '#type' => 'textfield',
+        '#default_value' => $attribute_option['url'],
+        '#title' => $this->t('Page url on which options should be displayed.'),
+      ];
+
+      $form['alshaya_options_page'][$key]['alshaya_options_attributes'] = [
+        '#type' => 'checkboxes',
+        '#options' => $this->getAttributeCodeOptions(),
+        '#default_value' => !empty($attribute_option['attributes']) ? $attribute_option['attributes'] : [],
+        '#title' => $this->t('The attribute to list on the options page.'),
+      ];
+    }
+
+    if ($temp_count > 0) {
+      for ($i = 0; $i < $temp_count; $i++) {
+        $form['alshaya_options_page'][$i] = [
+          '#type' => 'fieldset',
+          '#Collapsible' => TRUE,
+        ];
+        $form['alshaya_options_page'][$i]['alshaya_options_page_url'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('Page url on which options should be displayed.'),
+        ];
+
+        $form['alshaya_options_page'][$i]['alshaya_options_attributes'] = [
+          '#type' => 'checkboxes',
+          '#options' => $this->getAttributeCodeOptions(),
+          '#title' => $this->t('The attribute to list on the options page.'),
+        ];
+      }
+    }
+
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
+    $form['alshaya_options_page']['actions']['add_name'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Add More'),
+      '#submit' => ['::addOne'],
+      '#ajax' => [
+        'callback' => '::addmoreCallback',
+        'wrapper' => 'options-fieldset-wrapper',
+      ],
+    ];
+
+    $form_state->setCached(FALSE);
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
     ];
 
     return $form;
@@ -126,26 +184,41 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function addOne(array &$form, FormStateInterface $form_state) {
+    $options_field = $form_state->get('temp_count') ?? 0;
+    $add_button = $options_field + 1;
+    $form_state->set('temp_count', $add_button);
+    $form_state->setRebuild();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addmoreCallback(array &$form, FormStateInterface $form_state) {
+    return $form['alshaya_options_page'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_options_list.admin_settings');
-    $alias = $form_state->getValue('alshaya_options_page_url');
     $config->set('alshaya_options_on_off', $form_state->getValue('alshaya_options_on_off'));
-    $config->set('alshaya_options_page_url', $alias);
-    $config->set('alshaya_options_attributes', $form_state->getValue('alshaya_options_attributes'));
+    $values = $form_state->getValue('alshaya_options_page');
+    foreach ($values as $value) {
+      $url = ltrim($value['alshaya_options_page_url'], '/');
+      $attributes = $value['alshaya_options_attributes'];
+      if (empty($url) || empty($attributes)) {
+        continue;
+      }
+      $options_page = [
+        'url' => $url,
+        'attributes' => $attributes,
+      ];
+      $config->set('alshaya_options_pages.' . str_replace('/', '-', $url), $options_page);
+    }
+
     $config->save();
-
-    // If an alias already exists for the path, load the pid.
-    $path = '/shop-by';
-    $pid = NULL;
-    if ($existing_path = $this->aliasStorage->load(['source' => $path])) {
-      $pid = $existing_path['pid'];
-    }
-
-    // Add a slash, if the alias, does not contain a trailing slash.
-    if (isset($alias[0]) && $alias[0] != '/') {
-      $alias = '/' . $alias;
-    }
-    $this->aliasStorage->save($path, $alias, LanguageInterface::LANGCODE_NOT_SPECIFIED, $pid);
 
     return parent::submitForm($form, $form_state);
   }

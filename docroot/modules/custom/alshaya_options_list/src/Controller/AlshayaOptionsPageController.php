@@ -10,6 +10,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Controller to add options list page.
@@ -38,6 +39,13 @@ class AlshayaOptionsPageController extends ControllerBase {
   protected $cache;
 
   /**
+   * Request stack.
+   *
+   * @var Symfony\Component\HttpFoundation\RequestStack
+   */
+  private $requestStack;
+
+  /**
    * AlshayaOptionsPageController constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -46,13 +54,17 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   The language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
+   * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
    */
   public function __construct(Connection $connection,
                               LanguageManagerInterface $language_manager,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              RequestStack $request_stack) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->cache = $cache;
+    $this->requestStack = $request_stack;
   }
 
   /**
@@ -60,10 +72,10 @@ class AlshayaOptionsPageController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('facets.manager'),
       $container->get('database'),
       $container->get('language_manager'),
-      $container->get('cache.default')
+      $container->get('cache.default'),
+      $container->get('request_stack')
     );
   }
 
@@ -80,7 +92,10 @@ class AlshayaOptionsPageController extends ControllerBase {
       throw new NotFoundHttpException();
     }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $attributeCodes = array_filter($config->get('alshaya_options_attributes'));
+    $request = $this->requestStack->getCurrentRequest()->getRequestUri();
+    $request = substr($request, 4);
+    $attribute_options = $config->get('alshaya_options_pages');
+    $attributeCodes = array_filter($attribute_options[$request]['attributes']);
     foreach ($attributeCodes as $attributeCode) {
       // Check for cache first.
       $cid = 'alshaya_options_page:' . $attributeCode . ':' . $langcode;
@@ -88,18 +103,20 @@ class AlshayaOptionsPageController extends ControllerBase {
         $data = $cache->data;
         // If cache hit.
         if (!empty($data)) {
-          return $data;
+          $options_list[$attributeCode] = $data;
         }
       }
-
-      $options_list[$attributeCode] = $this->fetchAllTermsForAttribute($attributeCode);
-      $this->cache->set($cid, $options_list[$attributeCode], Cache::PERMANENT);
+      else {
+        $options_list[$attributeCode] = $this->fetchAllTermsForAttribute($attributeCode);
+        $this->cache->set($cid, $options_list[$attributeCode], Cache::PERMANENT);
+      }
     }
 
     $options_list = [
       '#theme' => 'alshaya_options_page',
       '#options_list' => $options_list,
     ];
+
     return $options_list;
   }
 
