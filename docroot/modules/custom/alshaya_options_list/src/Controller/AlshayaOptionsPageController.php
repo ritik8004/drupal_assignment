@@ -107,18 +107,22 @@ class AlshayaOptionsPageController extends ControllerBase {
         $data = $cache->data;
         // If cache hit.
         if (!empty($data)) {
-          $options_list[$attributeCode] = $data;
+          $options_list[$attributeCode]['terms'] = $data;
         }
       }
       else {
-        $options_list[$attributeCode] = $this->fetchAllTermsForAttribute($attributeCode);
-        $this->cache->set($cid, $options_list[$attributeCode], Cache::PERMANENT);
+        $options_list[$attributeCode]['terms'] = $this->fetchAllTermsForAttribute($attributeCode);
+        $this->cache->set($cid, $options_list[$attributeCode]['terms'], Cache::PERMANENT, ['alshaya-options-page']);
       }
+
+      $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
+      $options_list[$attributeCode]['class'] = $attribute_options[$request]['attribute_details'][$attributeCode]['class'];
     }
 
     $options_list = [
       '#theme' => 'alshaya_options_page',
       '#options_list' => $options_list,
+      '#title' => $attribute_options[$request]['title'],
     ];
 
     return $options_list;

@@ -6,8 +6,6 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Database\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Path\AliasStorage;
-use Drupal\Core\Path\AliasManagerInterface;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\Core\Routing\RouteBuilderInterface;
 
@@ -22,20 +20,6 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    * @var \Drupal\Core\Database\Connection
    */
   protected $connection;
-
-  /**
-   * The alias storage.
-   *
-   * @var \Drupal\Core\Path\AliasStorage
-   */
-  protected $aliasStorage;
-
-  /**
-   * The alias manager interface.
-   *
-   * @var \Drupal\Core\Path\AliasManagerInterface
-   */
-  protected $aliasManager;
 
   /**
    * SKU Fields Manager.
@@ -56,23 +40,15 @@ class AlshayaOptionsListForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection service object.
-   * @param \Drupal\Core\Path\AliasStorage $alias_storage
-   *   The alias storage service.
-   * @param \Drupal\Core\Path\AliasManagerInterface $alias_manager
-   *   The alias manager service.
    * @param \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager
    *   SKU Fields Manager.
    * @param \Drupal\Core\Routing\RouteBuilderInterface $router_builder
    *   The router builder service.
    */
   public function __construct(Connection $connection,
-                              AliasStorage $alias_storage,
-                              AliasManagerInterface $alias_manager,
                               SKUFieldsManager $sku_fields_manager,
                               RouteBuilderInterface $router_builder) {
     $this->connection = $connection;
-    $this->aliasStorage = $alias_storage;
-    $this->aliasManager = $alias_manager;
     $this->skuFieldsManager = $sku_fields_manager;
     $this->routerBuilder = $router_builder;
   }
@@ -83,8 +59,6 @@ class AlshayaOptionsListForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('database'),
-      $container->get('path.alias_storage'),
-      $container->get('path.alias_manager'),
       $container->get('acq_sku.fields_manager'),
       $container->get('router.builder')
     );
