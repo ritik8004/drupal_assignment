@@ -1,0 +1,51 @@
+.location-disabled-notice.ui-dialog {
+  .ui-dialog-title {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    margin-#{$left}: 1.5rem;
+    padding-top: 1.125rem;
+    border-bottom: 1px solid $primary_border;
+    padding-bottom: 0.5rem;
+  }
+
+  .ui-dialog-titlebar {
+    .nodetype--acq_product & {
+      @include breakpoint($only-tablet) {
+        margin: 0;
+        width: auto !important;
+
+        .ui-dialog-titlebar-close {
+          #{$right}: 0;
+        }
+      }
+    }
+  }
+
+  #drupal-modal {
+    .nodetype--acq_product & {
+      @include breakpoint($desktop) {
+        height: 8.75rem !important;
+        padding-top: 3.5rem;
+        padding-#{$left}: 1.5rem;
+      }
+
+      @include breakpoint($mobile) {
+        height: 8.75rem !important;
+        padding-top: 3.5rem;
+        padding-#{$left}: 1.5rem;
+      }
+    }
+  }
+
+  @include breakpoint($mobile) {
+    color: $primary_text;
+    font-size: 0.875rem;
+    padding: calc((100vh - 8.75rem) / 2) calc((100vw - 29.13rem) / 2) !important;
+  }
+
+  @include breakpoint($only-mobile) {
+    padding: calc((100vh - 8.75rem) / 2) calc((100vw - 22.13rem) / 2) !important;
+  }
+}
