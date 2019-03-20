@@ -7,10 +7,10 @@ use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\AliasManager;
 use Drupal\Core\State\StateInterface;
-use Drupal\redirect\Entity\Redirect;
 use Drush\Commands\DrushCommands;
 use Drupal\Core\Database\Connection;
 use Drupal\node\NodeInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AlshayaHmCommands.
@@ -57,6 +57,13 @@ class AlshayaHmCommands extends DrushCommands {
   protected $state;
 
   /**
+   * Request stack object.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request|null
+   */
+  protected $request;
+
+  /**
    * AlshayaHmCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -69,17 +76,21 @@ class AlshayaHmCommands extends DrushCommands {
    *   Config Factory service.
    * @param \Drupal\Core\State\StateInterface $state
    *   State Manager service.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   *   Request stack object.
    */
   public function __construct(Connection $connection,
                               SkuManager $skuManager,
                               AliasManager $aliasManager,
                               ConfigFactoryInterface $configFactory,
-                              StateInterface $state) {
+                              StateInterface $state,
+                              RequestStack $requestStack) {
     $this->connection = $connection;
     $this->skuManager = $skuManager;
     $this->aliasManager = $aliasManager;
     $this->configFactory = $configFactory;
     $this->state = $state;
+    $this->request = $requestStack->getCurrentRequest();
   }
 
   /**
@@ -110,15 +121,15 @@ class AlshayaHmCommands extends DrushCommands {
   /**
    * Helper function to create mapping between alias & color code.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity for which mapping needs to be derived.
+   * @param string $sku
+   *   SKU code for which mapping needs to be derived.
    * @param string $langcode
    *   Langcode of the SKU entity.
    *
    * @return array
    *   Returns mapping array between color code & alias.
    */
-  protected function fetchAliasColorCodeMapping(SKU $sku, $langcode) {
+  protected function fetchAliasColorCodeMapping($sku, $langcode) {
     $sku_entity = SKU::loadFromSku($sku, $langcode);
 
     if (($node = $this->skuManager->getDisplayNode($sku, FALSE)) &&
@@ -160,17 +171,21 @@ class AlshayaHmCommands extends DrushCommands {
    */
   public function addAliasRedirects() {
     $mapping = unserialize($this->state->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY));
+    $host = $this->request->getHost();
+    $redirect_map = [];
 
     if ($mapping) {
       foreach ($mapping as $map) {
-        Redirect::create([
-          'redirect_source' => $map['alias'],
-          'redirect_redirect' => $map['alias'] . '-' . $map['color_code'],
-          'language' => $map['langcode'],
-          'status_code' => '301',
-        ])->save();
+        $sub_path = '/' . $map['langcode'] . $map['alias'];
+        $host_key = str_replace('.', ':', $host);
+        $redirect_map[$host_key][] = [
+          'sub_path' => $sub_path,
+          'destination' => $host . $sub_path . '-' . $map['color_code'],
+        ];
       }
     }
+
+    $this->configFactory->getEditable('redirect_domain.domains')->set('domain_redirects', $redirect_map)->save();
   }
 
 }
