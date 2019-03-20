@@ -10,17 +10,6 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Add config string translation for  "Back to top" text.
- */
-function alshaya_master_update_8025() {
-  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'back_to_top.settings')
-    ->set('back_to_top_button_text', 'أعلى الصفحة')
-    ->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Add string translation for - OOS items removal message.
  */
 function alshaya_master_update_8024() {
