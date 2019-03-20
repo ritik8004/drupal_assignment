@@ -1,21 +1,19 @@
 diff --git a/docroot/.htaccess b/docroot/.htaccess
-index d20700cc1..306ad2ae8 100644
+index d20700cc1..f43b97a7c 100644
 --- a/docroot/.htaccess
 +++ b/docroot/.htaccess
-@@ -69,6 +69,17 @@ AddEncoding gzip svgz
+@@ -69,6 +69,15 @@ AddEncoding gzip svgz
  <IfModule mod_rewrite.c>
    RewriteEngine on
  
 +  # Add maintenance page.
-+  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/%{HTTP_HOST}/maintenance.html -f
-+  RewriteCond %{DOCUMENT_ROOT}/.maintenance -f
-+  RewriteRule ^.*$ /sites/g/files/%{HTTP_HOST}/maintenance.html [R=503,L]
-+  ErrorDocument 503 /sites/g/files/%{HTTP_HOST}/maintenance.html
++  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/%{HTTP_HOST}/.maintenance -f [OR]
++  RewriteCond %{DOCUMENT_ROOT}/sites/g/files/.maintenance -f
++  RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
++  RewriteCond %{SCRIPT_FILENAME} !maintenance.html
++  RewriteRule ^.*$ /maintenance.html [R=503,L]
++  ErrorDocument 503 /maintenance.html
 +  Header Set Cache-Control "max-age=0, no-store"
-+
-+  RewriteCond %{DOCUMENT_ROOT}/.maintenance !-f
-+  RewriteCond %{REQUEST_URI} /maintenance.html
-+  RewriteRule ^ index.php [L,E=internal_redirect:true]
 +
    # Rewrite rule to remove .html and remove kwt-* from url.
    RewriteRule ^kwt-([a-z]{2})/(.*).html$ /$1/$2 [R=301,L]
