@@ -213,8 +213,8 @@ class AlshayaOptionsListForm extends ConfigFormBase {
     $config->set('alshaya_options_on_off', $form_state->getValue('alshaya_options_on_off'));
     $values = $form_state->getValue('alshaya_options_page');
     foreach ($values as $value) {
-      $url = ltrim($value['alshaya_options_page_url'], '/');
-      $attributes = $value['alshaya_options_attributes'];
+      $url = ltrim($value['alshaya_options_page_url'] ?? '', '/');
+      $attributes = $value['alshaya_options_attributes'] ?? '';
       if (empty($url) || empty($attributes)) {
         continue;
       }
