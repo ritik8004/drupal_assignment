@@ -314,12 +314,6 @@ header {
       position: static;
     }
   }
-
-  &.show-overlay::before {
-    @include breakpoint($upto-desktop) {
-      content: none;
-    }
-  }
 }
 
 .c-my-account-nav {

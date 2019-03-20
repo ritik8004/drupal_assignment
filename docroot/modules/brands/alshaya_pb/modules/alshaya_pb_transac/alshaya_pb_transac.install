@@ -33,7 +33,9 @@ function alshaya_pb_transac_update_8011() {
 function alshaya_pb_transac_update_8010() {
   $configs = [
     'block.block.designservices',
+    'system.menu.design-services',
   ];
+
   alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
 
   $strings = [
@@ -41,6 +43,7 @@ function alshaya_pb_transac_update_8010() {
       'ar' => 'المميزات',
     ],
   ];
+
   alshaya_i18n_save_translations($strings);
 
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
@@ -52,25 +55,12 @@ function alshaya_pb_transac_update_8010() {
 
   \Drupal::service('acq_sku.fields_manager')->addFields();
 
-  \Drupal::service('alshaya_config.manager')
-    ->updateConfigs(
-      ['search_api.index.acquia_search_index', 'search_api.index.product'],
-      'alshaya_pb_transac',
-      'override',
-      AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
-    );
-  // Resave indexes.
+  // Re-save indexe configs to apply overrides.
+  \Drupal::configFactory()->getEditable('search_api.index.acquia_search_index')->save();
+  \Drupal::configFactory()->getEditable('search_api.index.product')->save();
+
+  // Re-save indexes.
   _alshaya_search_resave_indexes();
-
-  $configs = [
-    'system.menu.design-services',
-    'block.block.designservices',
-  ];
-  alshaya_config_install_configs($configs, 'alshaya_pb_transac', 'optional');
-
-  // Enable super category feature.
-  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
-  $super_category_feature->enableSuperCategory();
 }
 
 /**
@@ -307,13 +297,6 @@ function alshaya_pb_transac_install() {
     ],
   ];
   alshaya_i18n_save_translations($strings);
-
-  // Re-save indexes to ensure config overrides are taken into consideration.
-  _alshaya_search_resave_indexes();
-
-  // Enable super category feature.
-  $super_category_feature = \Drupal::service('alshaya_super_category.super_category_feature_manager');
-  $super_category_feature->enableSuperCategory();
 
   // Disable shop by block.
   alshaya_config_install_configs(['block.block.shopby'], 'alshaya_transac', 'optional');
