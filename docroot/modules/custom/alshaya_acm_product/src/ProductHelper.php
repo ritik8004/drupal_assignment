@@ -164,7 +164,7 @@ class ProductHelper {
     // Display swatches only if enabled in configuration and not color node.
     if ($this->productDisplaySettings->get('color_swatches') && empty($color)) {
       // Get swatches for this product from media.
-      $swatches = $this->skuManager->getSwatches($sku);
+      $swatches = $this->skuImagesManager->getSwatches($sku);
       if (!empty($swatches)) {
         // Display the colors count for mobile only if different variants images
         // being shown in gallery on PLP.
