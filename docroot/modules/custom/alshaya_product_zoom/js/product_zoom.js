@@ -345,6 +345,8 @@
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
       var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      // Closing modal window before slick library gets removed.
+      $(this).click();
       productGallery.slick('unslick');
       $('body').removeClass('pdp-modal-overlay');
     });
