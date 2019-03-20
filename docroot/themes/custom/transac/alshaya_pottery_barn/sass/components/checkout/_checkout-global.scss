@@ -28,6 +28,7 @@
 .alias--cart-checkout-confirmation {
   .site-brand-wrapper {
     border-bottom: none;
+    text-align: center;
 
     @include breakpoint($desktop) {
       border-top: 1.5rem solid $checkout_header_border-top;
