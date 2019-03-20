@@ -92,8 +92,12 @@ class AlshayaOptionsPageController extends ControllerBase {
       throw new NotFoundHttpException();
     }
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    // Get current request uri.
     $request = $this->requestStack->getCurrentRequest()->getRequestUri();
-    $request = substr($request, 4);
+    // Remove query parameters.
+    $request = explode('?', $request);
+    // Remove langcode.
+    $request = substr($request[0], 4);
     $attribute_options = $config->get('alshaya_options_pages');
     $attributeCodes = array_filter($attribute_options[$request]['attributes']);
     foreach ($attributeCodes as $attributeCode) {
