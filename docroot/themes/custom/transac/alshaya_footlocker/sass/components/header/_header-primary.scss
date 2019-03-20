@@ -95,7 +95,13 @@ header.c-header {
       background-color: transparent;
       border: 1px solid $primary_search_border;
       border-#{$left}: 0;
-      background-position: 0;
+      background-position: -0.3125rem;
+      background-size: cover;
+      width: 2.125rem;
+
+      html[lang=ar] & {
+        background-position: 0.3125rem;
+      }
     }
   }
 
@@ -130,7 +136,7 @@ header.c-header {
           width: 100%;
           font-size: 0.875rem;
           padding-#{$right}: 2.1875rem;
-          max-width: 14.375rem;
+          max-width: 15.5rem;
         }
       }
 
@@ -365,11 +371,15 @@ header {
 
     .search-active {
       .mobile--search {
+        @include icon_img('#{$fl_theme_img_directory_path}/assets/search-selected.svg', 2rem, 2rem);
+
         &::before {
-          background: url(#{$fl_theme_img_directory_path}/assets/search-selected.svg) no-repeat;
-          background-size: cover;
-          width: 1.75rem;
-          height: 1.75rem;
+          @include breakpoint($only-mobile) {
+            top: -0.125rem;
+            height: 1.75rem;
+            width: 1.625rem;
+            #{$left}: -0.3125rem;
+          }
         }
       }
     }
@@ -386,8 +396,8 @@ header {
 
   @include breakpoint($only-mobile) {
     .mobile--menu {
-      margin-#{$left}: 0;
-      top: 0.5rem;
+      margin-#{$left}: -0.125rem;
+      top: 0.6875rem;
     }
 
     .store {
@@ -575,7 +585,7 @@ header {
   .c-menu-primary {
     .hamburger--menu {
       @include breakpoint($only-mobile) {
-        padding: 0.5rem 0.1875rem;
+        padding: 0.3125rem 0.25rem;
       }
     }
   }
