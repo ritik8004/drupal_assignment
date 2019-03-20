@@ -97,7 +97,7 @@ class AlshayaOptionsPageController extends ControllerBase {
     // Remove query parameters.
     $request = explode('?', $request);
     // Remove langcode.
-    $request = substr($request[0], 4);
+    $request = str_replace('/' . $langcode . '/', '', $request[0]);
     $attribute_options = $config->get('alshaya_options_pages');
     $attributeCodes = array_filter($attribute_options[$request]['attributes']);
     foreach ($attributeCodes as $attributeCode) {
