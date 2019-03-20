@@ -6,7 +6,6 @@ use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\file\FileInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -108,13 +107,13 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function processSwatch(ProductInfoRequestedEvent $event): void {
     $sku = $event->getSku();
 
-    $image = $this->skuImagesManager->getPdpSwatchImageUrl();
-    if (empty($image['file']) || !($image['file'] instanceof FileInterface)) {
+    $image = $this->skuImagesManager->getPdpSwatchImageUrl($sku);
+    if (empty($image)) {
       return;
     }
 
     $swatch = [
-      'image_url' => file_create_url($image['file']->url()),
+      'image_url' => $image,
       'display_label' => $sku->get('attr_' . $event->getContext())->getString(),
       'swatch_type' => 'image',
     ];
