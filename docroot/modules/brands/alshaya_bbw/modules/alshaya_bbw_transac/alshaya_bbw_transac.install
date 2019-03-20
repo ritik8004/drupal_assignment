@@ -26,21 +26,6 @@ function alshaya_bbw_transac_update_8006() {
 /**
  * Implements hook_update_N().
  *
- * Enable WhatsApp and Email in Sharethis.
- */
-function alshaya_bbw_transac_update_8006() {
-  // Configure ShareThis defaults.
-  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
-  $services = $configFactory->get('service_option');
-  $services .= ",'WhatsApp:whatsapp','Email:email'";
-  $configFactory->set('service_option', $services);
-  // Save the changes.
-  $configFactory->save();
-}
-
-/**
- * Implements hook_update_N().
- *
  * Re-create all facets and facet blocks.
  */
 function alshaya_bbw_transac_update_8005() {
