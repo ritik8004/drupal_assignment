@@ -108,6 +108,17 @@
 
 .alias--cart-checkout-delivery,
 .alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation,
+.alias--cart-checkout-login {
+  .site-brand-home {
+    @include breakpoint($only-mobile) {
+      text-align: center;
+    }
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment,
 .alias--cart-checkout-confirmation {
   .block-page-title-block {
     @include breakpoint($tablet) {
