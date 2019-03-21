@@ -159,6 +159,16 @@
               nonInteraction: 0
             });
           }
+          else {
+            dataLayer.push({
+              event: 'eventTracker',
+              eventCategory: 'Internal Site Search',
+              eventAction: 'Successful Search',
+              eventLabel: keyword,
+              eventValue: noOfResult,
+              nonInteraction: 1,
+            });
+          }
         });
       }
 
