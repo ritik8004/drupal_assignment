@@ -1,0 +1,12 @@
+<div class='options-page-content'>
+  {% for option in options_list %}
+    <div class= {{ option.class }}>
+      <div class='attribute-title'> {{ option.title }} </div>
+      {% for value in option.terms %}
+        <div class='title'>
+          <a href={{ value.url }}> {{ value.title }} </a>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>

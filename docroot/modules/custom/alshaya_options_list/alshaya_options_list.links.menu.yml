@@ -1,0 +1,5 @@
+alshaya_options_list.admin:
+  route_name: alshaya_options_list.settings
+  title: 'Create a page for configurable attributes'
+  description: 'Administer settings for the attribute page. Set the page url and the attribute to be displayed.'
+  parent: alshaya_master.alshaya_admin

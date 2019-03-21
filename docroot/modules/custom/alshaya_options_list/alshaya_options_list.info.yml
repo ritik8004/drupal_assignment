@@ -1,0 +1,5 @@
+name: 'Alshaya options list'
+type: module
+description: 'Create a page for configurable attributes.'
+package: Alshaya
+core: 8.x

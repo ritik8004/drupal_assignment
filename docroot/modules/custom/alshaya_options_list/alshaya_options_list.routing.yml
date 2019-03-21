@@ -1,0 +1,18 @@
+alshaya_options_list.settings:
+  path: '/admin/config/alshaya/alshaya-options-list/settings'
+  defaults:
+    _form: '\Drupal\alshaya_options_list\Form\AlshayaOptionsListForm'
+    _title: 'Alshaya options settings'
+  requirements:
+    _permission: 'administer alshaya options list'
+
+alshaya_options_list.page_settings:
+  path: '/admin/config/alshaya/alshaya-options-list/settings/page-settings'
+  defaults:
+    _form: '\Drupal\alshaya_options_list\Form\AlshayaOptionsPageForm'
+    _title: 'Alshaya options page settings'
+  requirements:
+    _permission: 'administer alshaya options list'
+
+route_callbacks:
+  - '\Drupal\alshaya_options_list\Routing\AlshayaOptionsListRoutes::routes'
