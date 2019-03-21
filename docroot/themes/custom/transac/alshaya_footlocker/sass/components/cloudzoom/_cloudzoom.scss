@@ -9,7 +9,8 @@
     .slick-slide {
       @include breakpoint($only-tablet) {
         display: inline-block;
-        margin: 0 0.5rem;
+        margin-#{$right}: 0;
+        margin-#{$left}: 0.5rem;
       }
     }
 
@@ -24,6 +25,10 @@
 
 #product-image-gallery-container {
   #product-image-gallery {
+    @include breakpoint($desktop) {
+      height: 31.5rem;
+    }
+
     .slick-arrow {
       background: none;
     }
@@ -38,6 +43,12 @@
       @include breakpoint($only-tablet) {
         height: 6.5rem;
         overflow: hidden;
+      }
+
+      @include breakpoint($desktop) {
+        height: 27.125rem;
+        overflow: hidden;
+        width: 100% !important;
       }
     }
   }

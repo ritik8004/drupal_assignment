@@ -1,23 +1,31 @@
 .nodetype--acq_product .ui-dialog.dialog-product-image-gallery-container {
-  @include breakpoint($tablet) {
-    padding: calc((100vh - 37.5rem) / 2) calc((100vw - 45rem) / 2);
-  }
+  #product-image-gallery {
+    .pager-yes {
+      .slick-list {
+        margin-top: 10px;
+      }
+    }
 
-  @include breakpoint($desktop) {
-    padding: calc((100vh - 33.5rem) / 2) calc((100vw - 45.5625rem) / 2);
+    .slick-list {
+      margin-top: 5px;
+    }
+  }
+}
+
+.content__main {
+  .gallery-wrapper {
+    @include breakpoint($only-mobile) {
+      min-height: auto;
+    }
+
+    @include breakpoint($desktop) {
+      margin-#{$right}: 1.5rem;
+      margin-bottom: 3rem;
+    }
   }
 }
 
 #product-image-gallery-container {
-  @include breakpoint($tablet) {
-    height: 38rem !important;
-  }
-
-  @include breakpoint($desktop) {
-    height: 30.875rem !important;
-    padding: 1.5rem;
-  }
-
   .button__wrapper {
     .zoomout,
     .zoomin {
@@ -33,14 +41,6 @@
 
     .zoomin {
       background: $pdp_gallary-icon-bg url(#{$fl_theme_img_directory_path}/assets/zoomin.svg) center no-repeat;
-    }
-  }
-
-  .imagegallery__wrapper {
-    & > .imagegallery__full {
-      @include breakpoint($tablet) {
-        height: 27.5rem !important;
-      }
     }
   }
 }
