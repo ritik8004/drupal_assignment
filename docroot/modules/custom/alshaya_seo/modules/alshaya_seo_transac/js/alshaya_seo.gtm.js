@@ -78,6 +78,9 @@
             currentListName = null;
           }
 
+          // Product position should not be displayed on PDP.
+          delete product.position;
+
           var data = {
             event: 'productDetailView',
             ecommerce: {
