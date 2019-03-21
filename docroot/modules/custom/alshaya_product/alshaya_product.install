@@ -13,6 +13,21 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update views to add stock sorting filter.
+ */
+function alshaya_product_update_8023() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.alshaya_product_list'],
+    'alshaya_product',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating database search index to run on cron and content update/create.
  */
 function alshaya_product_update_8022() {
