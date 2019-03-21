@@ -85,11 +85,11 @@ class AlshayaHmCommands extends DrushCommands {
   /**
    * Store url alias of all config products in the system before deleting them.
    *
-   * @command alshaya_hm:store_temp_alias
+   * @command alshaya_hm:store_old_alias_sku_map
    *
    * @validate-module-enabled alshaya_hm
    *
-   * @aliases alshaya_hm_store_temp_alias
+   * @aliases alshaya_hm_store_old_alias_sku_map
    */
   public function storeTempAlias() {
     $mappings = [];
@@ -98,8 +98,9 @@ class AlshayaHmCommands extends DrushCommands {
     $query->fields('asfd', ['sku', 'langcode']);
     $rows = $query->execute()->fetchAll();
 
+    // Fetch Alias - first child sku mapping for all configurable products.
     foreach ($rows as $row) {
-      if (!empty($color_mapping = $this->fetchAliasColorCodeMapping($row->sku, $row->langcode))) {
+      if (!empty($color_mapping = $this->fetchAliasFirstChildSkuMapping($row->sku, $row->langcode))) {
         $mappings[] = $color_mapping;
       }
     }
@@ -108,17 +109,17 @@ class AlshayaHmCommands extends DrushCommands {
   }
 
   /**
-   * Helper function to create mapping between alias & color code.
+   * Helper function to create mapping between alias & first child sku.
    *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity for which mapping needs to be derived.
+   * @param string $sku
+   *   SKU code for which mapping needs to be derived.
    * @param string $langcode
    *   Langcode of the SKU entity.
    *
    * @return array
    *   Returns mapping array between color code & alias.
    */
-  protected function fetchAliasColorCodeMapping(SKU $sku, $langcode) {
+  protected function fetchAliasFirstChildSkuMapping($sku, $langcode) {
     $sku_entity = SKU::loadFromSku($sku, $langcode);
 
     if (($node = $this->skuManager->getDisplayNode($sku, FALSE)) &&
@@ -133,14 +134,12 @@ class AlshayaHmCommands extends DrushCommands {
       }
 
       // Fetch first child SKU from the parent SKU & store its color attribute.
-      // Do the same for both languages. Skip this condition for child SKUs
-      // without a color label value.
+      // Do the same for both languages.
       if (($firt_child_sku = $this->skuManager->getFirstChildForSku($sku_entity, 'article_castor_id')) &&
-        ($firt_child_sku instanceof SKU) &&
-        ($color_code = $firt_child_sku->get('attr_color_label')->getString())) {
+        ($firt_child_sku instanceof SKU)) {
         return [
           'alias' => $this->aliasManager->getAliasByPath('/node/' . $node->id(), $node->language()->getId()),
-          'color_code' => $color_code,
+          'child_sku' => $firt_child_sku->getSku(),
           'langcode' => $node->language()->getId(),
         ];
       }
@@ -156,21 +155,23 @@ class AlshayaHmCommands extends DrushCommands {
    *
    * @validate-module-enabled alshaya_hm
    *
-   * @aliases alshaya_hm_store_set_redirects
+   * @aliases alshaya_hm_set_redirects
    */
   public function addAliasRedirects() {
     $mapping = unserialize($this->state->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY));
 
-    if ($mapping) {
-      foreach ($mapping as $map) {
-        Redirect::create([
-          'redirect_source' => $map['alias'],
-          'redirect_redirect' => $map['alias'] . '-' . $map['color_code'],
-          'language' => $map['langcode'],
-          'status_code' => '301',
-        ])->save();
-      }
+    foreach ($mapping as $map) {
+      $node = $this->skuManager->getDisplayNode($map['child_sku']);
+
+      // Create redirect from old alias to new nodes.
+      Redirect::create([
+        'redirect_source' => $map['alias'],
+        'redirect_redirect' => '/node/' . $node->id(),
+        'language' => $map['langcode'],
+        'status_code' => '301',
+      ])->save();
     }
+
   }
 
 }
