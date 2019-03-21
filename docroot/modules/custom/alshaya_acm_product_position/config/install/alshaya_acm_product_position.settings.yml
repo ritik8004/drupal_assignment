@@ -1,3 +1,9 @@
+available_sort_options:
+  nid: 'Position'
+  name_1: 'Name'
+  final_price: 'Final Price'
+  created: 'New IN'
+  stock: 'Recommended'
 sort_options:
   nid: nid
   name_1: name_1
