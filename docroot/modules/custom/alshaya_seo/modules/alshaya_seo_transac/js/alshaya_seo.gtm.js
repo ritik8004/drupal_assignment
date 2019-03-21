@@ -446,7 +446,7 @@
           var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
 
           // Set product quantity to the number of items selected for quantity.
-          product.quantity = $(this).closest('tr').find('td.quantity select').val();
+          product.quantity = parseInt($(this).closest('tr').find('td.quantity select').val());
 
           // Set selected size as dimension6.
           if (!$.inArray('dimension6', settings.gtm.disabled_vars) && removeItem.attr('gtm-size')) {
