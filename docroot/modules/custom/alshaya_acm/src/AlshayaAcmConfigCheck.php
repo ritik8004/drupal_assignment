@@ -171,13 +171,6 @@ class AlshayaAcmConfigCheck {
       $config->save();
     }
 
-    // Re-configure facebook application keys.
-    $facebook_settings = Settings::get('social_auth_facebook.settings');
-    $config = $this->configFactory->getEditable('social_auth_facebook.settings');
-    $config->set('app_id', $facebook_settings['app_id']);
-    $config->set('app_secret', $facebook_settings['app_secret']);
-    $config->save();
-
     // Re-configure Simple Oauth.
     $config = $this->configFactory->getEditable('simple_oauth.settings');
     $config->set('public_key', Settings::get('alshaya_acm_soauth_public_key'));
