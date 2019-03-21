@@ -53,6 +53,7 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               autosubmit: true
+              autosubmit_exclude_textfield: false
               autosubmit_hide: true
             sort:
               bef_format: default
@@ -60,7 +61,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Position Asc|Position\nNew In Desc|New In\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
+                combine_rewrite: "Position Asc|Position\r\nStock Desc|Recommended\r\nNew In Desc|New In\r\nName Asc|Name A to Z\r\nName Desc|Name Z to A\r\nPrice Desc|Price High to Low\r\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false
@@ -588,7 +589,7 @@ display:
     display_options:
       display_extenders:
         views_ajax_get:
-          ajax_get: 1
+          ajax_get: true
       cache:
         type: search_api_tag
         options: {  }
@@ -681,6 +682,18 @@ display:
           expose:
             label: ''
           plugin_id: search_api
+        stock:
+          id: stock
+          table: search_api_index_product
+          field: stock
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: true
+          expose:
+            label: Stock
+          plugin_id: search_api
     cache_metadata:
       max-age: -1
       contexts:
@@ -700,7 +713,7 @@ display:
     display_options:
       display_extenders:
         views_ajax_get:
-          ajax_get: 1
+          ajax_get: true
       arguments:
         promotion_nid:
           id: promotion_nid
