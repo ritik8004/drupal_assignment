@@ -772,7 +772,6 @@
       price: parseFloat(product.attr('gtm-price')),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
-      position: 1,
       dimension2: product.attr('gtm-sku-type'),
       dimension3: product.attr('gtm-dimension3'),
       dimension4: mediaCount
