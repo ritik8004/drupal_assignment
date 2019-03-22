@@ -742,7 +742,7 @@ class MobileAppUtility {
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
 
-    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : NULL;
+    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);
