@@ -922,6 +922,7 @@
           (fileName.indexOf('oth') === 0)
         )) {
           var promotion = {
+            creative: creative.replace(/\/en\/|\/ar\//, ''),
             id: fileName,
             name: gtmPageType,
             position: 'slot' + position
