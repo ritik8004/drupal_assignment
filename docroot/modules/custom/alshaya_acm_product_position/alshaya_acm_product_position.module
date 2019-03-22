@@ -415,3 +415,13 @@ function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterf
     $term->set('field_sorting_options', $field_sorting_options_default_value);
   }
 }
+
+/**
+ * Get All available plp sort options.
+ *
+ * @return array
+ *   Return array of default values.
+ */
+function alshaya_acm_product_position_available_options(): array {
+  return \Drupal::config('alshaya_acm_product_position.settings')->get('available_sort_options');
+}
