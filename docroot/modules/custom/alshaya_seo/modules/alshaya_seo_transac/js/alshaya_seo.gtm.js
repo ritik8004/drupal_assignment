@@ -884,7 +884,7 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if (gtmPageType === 'home page') {
+      else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
         if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
