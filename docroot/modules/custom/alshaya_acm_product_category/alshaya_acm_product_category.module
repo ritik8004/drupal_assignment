@@ -39,6 +39,13 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'term_tree' => NULL,
       ],
     ],
+    'alshaya_lhn_tree' => [
+      'template' => 'alshaya-lhn',
+      'variables' => [
+        'lhn_cat_tree' => NULL,
+        'current_term' => NULL,
+      ],
+    ],
   ];
 }
 

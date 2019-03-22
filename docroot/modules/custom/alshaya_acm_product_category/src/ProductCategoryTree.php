@@ -29,6 +29,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   const PLP_LAYOUT_1 = 'campaign-plp-style-1';
 
   /**
+   * This will be used whether include_in_menu used or not.
+   *
+   * @var bool
+   */
+  protected $excludeNotInMenu = TRUE;
+
+  /**
    * Term storage object.
    *
    * @var \Drupal\taxonomy\TermStorageInterface
@@ -197,8 +204,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   public function getCategoryTree($langcode, $parent_tid = 0, $highlight_paragraph = TRUE, $child = TRUE) {
     $data = [];
 
+    $exclude_not_in_menu = $this->getExcludeNotInMenu();
+
     // Get all child terms for the given parent.
-    $terms = $this->allChildTerms($langcode, $parent_tid);
+    $terms = $this->allChildTerms($langcode, $parent_tid, $exclude_not_in_menu);
 
     if (empty($terms)) {
       return [];
@@ -655,6 +664,62 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return $tid;
+  }
+
+  /**
+   * Get the complete category tree.
+   *
+   * @param mixed $langcode
+   *   (Optional) Language code.
+   *
+   * @return array
+   *   Term tree.
+   */
+  public function getCategoryTreeWithIncludeInMenu($langcode = NULL) {
+    // This to not consider `include_in_menu` check.
+    $this->setExcludeNotInMenu(FALSE);
+    if (!$langcode) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    // This will be like - `category_tree_en`.
+    $cid = 'category_tree_' . $langcode;
+
+    // If exists in cache.
+    if ($cache = $this->cache->get($cid)) {
+      $term_data = $cache->data;
+    }
+    else {
+      // Child terms of given parent term id.
+      $term_data = $this->getCategoryTree($langcode, 0);
+      $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
+    }
+
+    return $term_data;
+  }
+
+  /**
+   * Sets whether include in menu to consider or not.
+   *
+   * @param bool $exclude_not_in_menu
+   *   Include in menu.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setExcludeNotInMenu(bool $exclude_not_in_menu) {
+    $this->excludeNotInMenu = $exclude_not_in_menu;
+    return $this;
+  }
+
+  /**
+   * Get the include in menu to skip or not.
+   *
+   * @return mixed
+   *   exclude in menu or not.
+   */
+  public function getExcludeNotInMenu() {
+    return $this->excludeNotInMenu;
   }
 
 }
