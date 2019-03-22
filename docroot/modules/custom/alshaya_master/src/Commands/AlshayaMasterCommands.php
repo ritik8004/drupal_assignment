@@ -304,7 +304,7 @@ class AlshayaMasterCommands extends DrushCommands {
     $url = parse_url($uri);
 
     // If the uri does not have a scheme add https.
-    if (!$url['scheme']) {
+    if (!isset($url['scheme'])) {
       $self->set('uri', "https://$uri");
     }
     elseif ($url['scheme'] == 'http') {

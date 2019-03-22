@@ -15,11 +15,11 @@ drush acsf-tools-ml --profiles=alshaya_transac acspm "'--types=category'" --verb
 
 attachQueueTime=`date`
 echo "Running attach queue on" ${attachQueueTime} &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
-drush acsf-tools-ml queue-run acq_promotion_attach_queue --verbose &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
+drush acsf-tools-ml --profiles=alshaya_transac queue-run acq_promotion_attach_queue --verbose &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
 
 detachQueueTime=`date`
 echo "Running detach queue on" ${detachQueueTime} &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
-drush acsf-tools-ml queue-run acq_promotion_detach_queue --verbose &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
+drush acsf-tools-ml --profiles=alshaya_transac queue-run acq_promotion_detach_queue --verbose &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
 
 promoProcessEndTime=`date`
 echo "Promo sync and queue processing is completed on" ${promoProcessEndTime} &>> /var/log/sites/${AH_SITE_NAME}/logs/$(hostname -s)/alshaya-promo-sync.log
