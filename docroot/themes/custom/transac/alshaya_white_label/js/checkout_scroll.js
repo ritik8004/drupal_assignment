@@ -15,11 +15,16 @@
         }
       });
 
-      $('.store-actions .select-store').on('click', function () {
+      var counter;
+      $('.store-actions .select-store').once().on('click', function () {
+        counter = 0;
         $(document).ajaxComplete(function () {
-          $('html,body').animate({
-            scrollTop: $('#selected-store-wrapper').offset().top
-          }, 'slow');
+          if (counter === 0) {
+            $('html,body').animate({
+              scrollTop: $('#selected-store-wrapper').offset().top
+            }, 'slow');
+            counter++;
+          }
         });
       });
 
