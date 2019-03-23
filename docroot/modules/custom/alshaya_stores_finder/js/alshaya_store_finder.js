@@ -102,6 +102,7 @@
 
       // Error callback.
       var errorCallback = function (error) {
+        Drupal.AlshayaPlacesAutocomplete.LocationError(error);
         // Close the overlay.
         $('body').removeClass('modal-overlay--spinner');
       };
