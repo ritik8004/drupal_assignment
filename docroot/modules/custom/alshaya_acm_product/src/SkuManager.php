@@ -484,6 +484,14 @@ class SkuManager {
       $children = array_keys($combinations['by_sku']);
     }
 
+    // Skip children that are not a part of the parent SKU. Product tree &
+    // combinations have been altered to have all children products linked via
+    // style code as a part of it.
+    if ($this->fetchStyleCode($sku_entity)) {
+      $sku_children = $this->getChildrenSkuIds($sku_entity);
+      $children = array_intersect($sku_children, $children);
+    }
+
     foreach ($children ?? [] as $child_sku_code) {
       try {
         $child_sku_entity = SKU::loadFromSku($child_sku_code, $sku_entity->language()->getId());
