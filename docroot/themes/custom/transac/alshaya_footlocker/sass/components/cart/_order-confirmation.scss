@@ -41,6 +41,14 @@
   .user__order--detail {
     td div {
       margin-bottom: 0;
+
+      .address--content {
+        &:last-of-type {
+          @include breakpoint($only-mobile) {
+            margin-bottom: 1.25rem;
+          }
+        }
+      }
     }
 
     .price {
