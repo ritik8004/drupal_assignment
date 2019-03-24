@@ -77,5 +77,11 @@
   }
 }
 
+@mixin ellipsis-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 $fl_theme_img_directory_path: '/themes/custom/transac/alshaya_footlocker/imgs';
 $base_theme_loader_img_directory_path: '/themes/custom/transac/alshaya_footlocker/imgs/icons/FL-loader.svg';
