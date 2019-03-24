@@ -1,6 +1,18 @@
 .group-anchor-wrapper {
-  a:last-child {
-    margin-#{$right}: 0;
+  a {
+    @include breakpoint($desktop) {
+      &:hover:not(.active) {
+        background: $pdp_thumbimage_hover_bg;
+      }
+    }
+
+    &:last-child {
+      margin-#{$right}: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      min-width: 4.75rem;
+    }
   }
 
   @include breakpoint($only-mobile) {
@@ -23,9 +35,17 @@
         line-height: 1.3;
       }
 
-      &:hover {
-        color: $pdp_size_option_text_hover;
-        background: $pdp_size_option_bg_hover;
+      @include breakpoint($desktop) {
+        &.picked {
+          &:hover {
+            color: $pdp_size_option_text_hover;
+            background: $pdp_size_option_bg_hover;
+          }
+        }
+
+        &:hover {
+          background: $pdp_thumbimage_hover_bg;
+        }
       }
     }
   }
