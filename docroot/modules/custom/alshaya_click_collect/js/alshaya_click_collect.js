@@ -25,24 +25,7 @@
 
   // Error callback.
   Drupal.click_collect.LocationError = function (error) {
-    if (error.code == error.PERMISSION_DENIED) {
-      // Display dialog when location access is blocked from browser.
-      let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your settings.');
-      let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
-        modal: true,
-        width: "auto",
-        height: "auto",
-        title: Drupal.t('Location access denied'),
-        dialogClass: 'location-disabled-notice',
-        resizable: false,
-        closeOnEscape: true,
-        close: function close(event) {
-          Drupal.dialog(event.target).close();
-        }
-      });
-
-      locationErrorDialog.showModal();
-    }
+    // CORE-4627: we won't show location access denied notification.
     // Display search store form if conditions matched.
     Drupal.click_collect.LocationAccessError(drupalSettings);
   };
