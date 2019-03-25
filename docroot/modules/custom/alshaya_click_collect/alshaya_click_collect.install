@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_click_collect.
+ */
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add string translation for - location permission.
+ */
+function alshaya_click_collect_update_8001() {
+  alshaya_click_collect_string_translations();
+}
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_click_collect_install() {
+  // Add string translation for location permission.
+  alshaya_click_collect_string_translations();
+}
+
+/**
+ * Helper function that stores string translations.
+ */
+function alshaya_click_collect_string_translations() {
+  $strings = [
+    'We need permission to locate your nearest stores. You can enable location services in your browser settings.' => [
+      'ar' => 'لنتمكن لتحديد أقرب محل إليك، يجب أن تفعل خدمات تحديد الموقع من إعدادات المتصفح الخاص بك.',
+    ],
+    'Location access denied' => [
+      'ar' => 'رفض الوصول إلى الموقع',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
