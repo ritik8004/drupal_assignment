@@ -36,6 +36,12 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
           </div>
         {% endif %}
 
+        {% if vat_text %}
+          <div class="vat-text">
+            {{ vat_text }}
+          </div>
+        {% endif %}
+
         <div class="content--item-code">
           <span class="field__label">{{ 'Item Code'|t }}:</span>
           {{ content.item_code }}

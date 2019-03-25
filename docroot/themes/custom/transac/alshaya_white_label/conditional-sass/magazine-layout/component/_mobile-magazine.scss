@@ -76,6 +76,7 @@
 
       @include breakpoint($only-mobile) {
         visibility: hidden;
+        margin-bottom: 0;
 
         &.show-sticky-wrapper {
           visibility: visible;
