@@ -91,3 +91,15 @@
     }
   }
 }
+
+.user-register-form {
+  .form-type-password {
+    input.error {
+      ~ .password-tooltip {
+        ul {
+          color: $_password_tooltip_list_error;
+        }
+      }
+    }
+  }
+}
