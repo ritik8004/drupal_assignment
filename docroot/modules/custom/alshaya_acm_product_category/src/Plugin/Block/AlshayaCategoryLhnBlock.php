@@ -26,11 +26,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Cache id for LHN category tree.
-   */
-  const CACHE_ID = 'product_category_lhn_tree';
-
-  /**
    * Stores the configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
