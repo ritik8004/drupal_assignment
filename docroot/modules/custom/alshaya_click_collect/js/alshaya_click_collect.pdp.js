@@ -36,6 +36,11 @@
         });
       }
 
+      // location search google autocomplete fix
+      $(window).on('scroll', function () {
+        $('.pac-container:visible').hide();
+      });
+
       $('#pdp-stores-container', context).once('initiate-stores').each(function () {
         // Check if we have to show the block as disabled. Since accordion classes
         // are added in JS, this is handled in JS.

@@ -217,11 +217,6 @@
    */
   Drupal.behaviors.autocomplete = {
     attach: function (context) {
-      // location search google autocomplete fix
-      $(window).on('scroll', function () {
-        $('.pac-container:visible').hide();
-      });
-
       // Act on textfields with the "form-autocomplete" class.
       var $autocomplete = $(context).find('input.form-autocomplete').once('autocomplete');
       if ($autocomplete.length) {
