@@ -148,17 +148,19 @@
         $('.c-header #edit-keywords').once('internalsearch').each(function () {
           var keyword = Drupal.getQueryVariable('keywords');
           var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
+          noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
 
-          if ((noOfResult === 0) || (isNaN(noOfResult))) {
-            dataLayer.push({
-              event: 'eventTracker',
-              eventCategory: 'Internal Site Search',
-              eventAction: '404 Results',
-              eventLabel: keyword,
-              eventValue: 0,
-              nonInteraction: 0
-            });
-          }
+          var action = noOfResult === 0 ? '404 Results' : 'Successful Search';
+          var interaction = noOfResult === 0 ? noOfResult : 1;
+
+          dataLayer.push({
+            event: 'eventTracker',
+            eventCategory: 'Internal Site Search',
+            eventAction: action,
+            eventLabel: keyword,
+            eventValue: noOfResult,
+            nonInteraction: interaction,
+          });
         });
       }
 
@@ -446,7 +448,7 @@
           var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
 
           // Set product quantity to the number of items selected for quantity.
-          product.quantity = $(this).closest('tr').find('td.quantity select').val();
+          product.quantity = parseInt($(this).closest('tr').find('td.quantity select').val());
 
           // Set selected size as dimension6.
           if (!$.inArray('dimension6', settings.gtm.disabled_vars) && removeItem.attr('gtm-size')) {
@@ -772,7 +774,6 @@
       price: parseFloat(product.attr('gtm-price')),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
-      position: 1,
       dimension2: product.attr('gtm-sku-type'),
       dimension3: product.attr('gtm-dimension3'),
       dimension4: mediaCount
@@ -883,7 +884,7 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if (gtmPageType === 'home page') {
+      else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
         if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
@@ -921,6 +922,7 @@
           (fileName.indexOf('oth') === 0)
         )) {
           var promotion = {
+            creative: creative.replace(/\/en\/|\/ar\//, ''),
             id: fileName,
             name: gtmPageType,
             position: 'slot' + position
