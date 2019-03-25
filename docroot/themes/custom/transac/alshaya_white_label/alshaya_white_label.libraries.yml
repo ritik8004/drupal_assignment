@@ -2,6 +2,7 @@ global_styles:
   css:
     theme:
       css/colors.css: {}
+      css/conditional-sass/fragrance-filter/fragrance-filter.ltr.css: {}
   js:
     vendor/js/calc.min.js: {}
     js/back_to_top.js: {}
@@ -27,6 +28,7 @@ global_styles:
     - mobile_number/element
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
+    - alshaya_white_label/fragrance-filter
 
 ltr_styles:
   css:
@@ -176,3 +178,8 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+
+fragrance-filter:
+  css:
+    theme:
+      css/conditional-sass/fragrance-filter/fragrance-filter.ltr.css: {}
