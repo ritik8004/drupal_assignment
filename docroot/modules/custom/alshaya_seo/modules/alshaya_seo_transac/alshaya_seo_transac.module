@@ -185,19 +185,6 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
 
     $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
     switch ($current_route['route_name']) {
-      case 'entity.node.canonical':
-        if (isset($current_route['route_params'], $current_route['route_params']['node'])) {
-          /** @var \Drupal\node\Entity\Node $node */
-          $node = $current_route['route_params']['node'];
-          if ($node->bundle() === 'acq_product') {
-            $attributes = $gtm_manager->fetchProductGtmAttributes($node, 'full');
-            $processed_attributes = $gtm_manager->processAttributesForPdp($attributes);
-            $data_layer = array_merge($data_layer, $processed_attributes);
-            $data_layer['pageType'] = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
-          }
-        }
-        break;
-
       case 'acq_checkout.form':
         if (in_array($current_route['route_params']['step'],
           ['login', 'delivery', 'payment'], TRUE)) {

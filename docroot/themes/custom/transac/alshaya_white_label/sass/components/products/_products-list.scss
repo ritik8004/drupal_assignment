@@ -98,6 +98,13 @@
                 div {
                   display: inline;
                 }
+
+                .price-wrapper {
+                  .price {
+                    padding: 0 0.125rem;
+                    display: inline-block;
+                  }
+                }
               }
 
               &.facet-item__count {
