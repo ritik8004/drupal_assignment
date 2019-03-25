@@ -12,10 +12,13 @@
         &.c-page-title__description {
           display: block;
         }
+      }
+    }
 
-        .c-page-title {
-          display: none;
-        }
+    .block-page-title-block {
+      @include breakpoint($desktop) {
+        max-width: 64.125rem;
+        margin: 0 auto;
       }
     }
 
@@ -33,10 +36,6 @@
     border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
-  }
-
-  .c-page-title__description {
-    display: none;
   }
 
   .content {
