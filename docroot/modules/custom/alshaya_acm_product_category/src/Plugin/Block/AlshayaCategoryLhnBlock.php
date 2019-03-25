@@ -12,6 +12,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -58,7 +59,14 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
   protected $routeMatch;
 
   /**
-   * AlshayaShopByBlock constructor.
+   * Module Handler service object.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * AlshayaCategoryLhnBlock constructor.
    *
    * @param array $configuration
    *   The configuration.
@@ -74,6 +82,8 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
    *   Language manager.
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   Route match service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Module Handler service object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -81,12 +91,14 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
                               ConfigFactoryInterface $config_factory,
                               ProductCategoryTree $product_category_tree,
                               LanguageManagerInterface $language_manager,
-                              RouteMatchInterface $route_match) {
+                              RouteMatchInterface $route_match,
+                              ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->configFactory = $config_factory;
     $this->productCategoryTree = $product_category_tree;
     $this->languageManager = $language_manager;
     $this->routeMatch = $route_match;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -100,7 +112,8 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       $container->get('config.factory'),
       $container->get('alshaya_acm_product_category.product_category_tree'),
       $container->get('language_manager'),
-      $container->get('current_route_match')
+      $container->get('current_route_match'),
+      $container->get('module_handler')
     );
   }
 
@@ -116,8 +129,23 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
 
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
 
+    $parent_id = 0;
+
+    $context = [
+      'block' => $this->getBaseId(),
+      'term' => $term,
+      'depth_offset' => 0,
+    ];
+    // Invoke the alter hook to allow all modules to update parent_id.
+    $this->moduleHandler->alter('product_category_parent', $parent_id, $context);
+
     // Get the term tree.
-    $term_data = $this->productCategoryTree->getCategoryTreeWithIncludeInMenu($langcode);
+    $term_data = $this->productCategoryTree->getCategoryTreeWithIncludeInMenu($langcode, $parent_id);
+
+    // If super category feature enabled.
+    if (!empty($context['depth_offset'])) {
+      $term_data = $term_data[$parent_id]['child'] ?? [];
+    }
 
     // If no data, no need to render the block.
     if (empty($term_data)) {
@@ -130,9 +158,10 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
     if ($term instanceof TermInterface) {
       $parents = $this->productCategoryTree->getCategoryTermParents($term);
 
-      // If parent exists for the current term. Here doing `-1` as $parents
-      // array contains the current term as well.
-      if ((count($parents) - 1) > 0) {
+      // If parent exists for the current term. Here doing
+      // `$context['depth_offset'] + 1` as $parents array contains the current
+      // term as well and to handle the super category feature.
+      if ((count($parents) - ($context['depth_offset'] + 1)) > 0) {
         // Get root parent term.
         /* @var \Drupal\taxonomy\Entity\Term $root_parent_term*/
         $root_parent_term = array_pop($parents);
@@ -148,6 +177,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       '#theme' => 'alshaya_lhn_tree',
       '#lhn_cat_tree' => $lhn_tree,
       '#current_term' => $term->id(),
+      '#depth_offset' => $context['depth_offset'],
     ];
   }
 

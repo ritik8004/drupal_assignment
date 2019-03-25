@@ -671,11 +671,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *
    * @param mixed $langcode
    *   (Optional) Language code.
+   * @param mixed $parent_id
+   *   (Optional) Parent id.
    *
    * @return array
    *   Term tree.
    */
-  public function getCategoryTreeWithIncludeInMenu($langcode = NULL) {
+  public function getCategoryTreeWithIncludeInMenu($langcode = NULL, $parent_id = 0) {
     // This to not consider `include_in_menu` check.
     $this->setExcludeNotInMenu(FALSE);
     if (!$langcode) {
@@ -691,7 +693,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
     else {
       // Child terms of given parent term id.
-      $term_data = $this->getCategoryTree($langcode, 0);
+      $term_data = $this->getCategoryTree($langcode, $parent_id);
       $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
     }
 
