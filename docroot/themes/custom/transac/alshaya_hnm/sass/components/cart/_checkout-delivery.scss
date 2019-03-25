@@ -441,11 +441,11 @@
           #add-address-button {
             @include breakpoint($tablet) {
               top: -0.125rem;
-              width: 40%;
+              width: 44%;
             }
 
             @include breakpoint($desktop) {
-              width: 20%;
+              width: 22%;
               text-decoration: underline;
               text-align: #{$right};
               padding: 0.5625rem 0;
