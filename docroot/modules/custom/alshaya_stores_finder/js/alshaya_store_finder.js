@@ -90,9 +90,6 @@
       });
 
       $('.current-location').once('location-init').on('click', function () {
-        // Start overlay here.
-        $('body').addClass('modal-overlay--spinner');
-
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
         }
@@ -102,8 +99,7 @@
 
       // Error callback.
       var errorCallback = function (error) {
-        // Close the overlay.
-        $('body').removeClass('modal-overlay--spinner');
+        Drupal.AlshayaPlacesAutocomplete.LocationError(error);
       };
 
       // Success callback.
@@ -114,6 +110,8 @@
       };
 
       function displayLocation(latitude, longitude) {
+        // Start overlay here.
+        $('body').addClass('modal-overlay--spinner');
         var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
 
         var componentRestrictions = {};
