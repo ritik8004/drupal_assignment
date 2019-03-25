@@ -22,6 +22,7 @@ $primary_text: $black;
 $primary_link: $warm-grey;
 $primary_link-hover: $purplish-brown;
 $primary_link-active: $purplish-brown;
+$primary_bg: $white-two;
 $secondary_btn_bg: $dark-red;
 $secondary_border: $white-three;
 $content_link_color: $black;
@@ -396,6 +397,10 @@ $order_print_order_details_item_row_details: $warm-grey;
 $order_print_order_details_row_label: $black;
 $order_summary_product_img_border: $secondary_border;
 $order_detail_td_light_content: $warm-grey;
+$order_search_form_icon: false;
+$order_search_form_label_active: $white-two;
+$order_search_form_label_mobile_active: $black;
+$order_search_form_input_mobile_border: $white-three;
 
 //Checkout Confirmation
 $checkout_confirm_order_summary_row: $info-blue;

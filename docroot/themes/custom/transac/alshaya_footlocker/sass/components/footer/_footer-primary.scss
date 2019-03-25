@@ -159,9 +159,8 @@
     }
 
     @include breakpoint($only-tablet) {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      @include ellipsis-text;
+
       padding-right: 40% !important;
     }
 
