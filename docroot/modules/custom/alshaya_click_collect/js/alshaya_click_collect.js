@@ -25,7 +25,7 @@
 
   // Error callback.
   Drupal.click_collect.LocationError = function (error) {
-    Drupal.AlshayaPlacesAutocomplete.LocationError(error);
+    // CORE-4627: we won't show location access denied notification.
     // Display search store form if conditions matched.
     Drupal.click_collect.LocationAccessError(drupalSettings);
   };
