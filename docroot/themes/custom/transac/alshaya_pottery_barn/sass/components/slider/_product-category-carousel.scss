@@ -1,51 +1,5 @@
 .paragraph--type--product-carousel-category {
   .view-product-slider {
-    @include breakpoint($upto-desktop) {
-      padding: 0;
-    }
-
-    @include breakpoint($desktop) {
-      width: 64.125rem;
-      margin: 0 auto;
-      padding: 0 1.5625rem;
-    }
-
-    .owl-carousel {
-      @include breakpoint($upto-desktop) {
-        font-size: 0;
-      }
-
-      .views-row {
-        @include breakpoint($tablet) {
-          max-width: 100%;
-          width: 100%;
-        }
-
-        @include breakpoint($only-tablet) {
-          max-width: 12.5rem;
-          padding: 0;
-          margin-#{$right}: 0.5rem !important;
-        }
-
-        @include breakpoint($only-mobile) {
-          max-width: 8.25rem;
-        }
-      }
-
-      .owl-item {
-        img {
-          @include breakpoint($desktop) {
-            max-width: 100%;
-          }
-        }
-
-        @include breakpoint ($tablet) {
-          width: 14.875rem !important;
-          margin: 0 3px !important;
-        }
-      }
-    }
-
     .owl-prev,
     .owl-next {
       &::before {
@@ -54,6 +8,26 @@
 
       @include breakpoint($tablet) {
         top: 32%;
+      }
+    }
+
+    .owl-carousel {
+      @include breakpoint($upto-desktop) {
+        font-size: 0;
+      }
+
+      .views-row {
+        @include breakpoint($only-tablet) {
+          max-width: 12.5rem;
+          padding: 0;
+          margin-#{$right}: 0.5rem !important;
+          width: 100%;
+        }
+
+        @include breakpoint($only-mobile) {
+          max-width: 8.25rem;
+          width: 40%;
+        }
       }
     }
   }
@@ -70,6 +44,76 @@
     @include breakpoint($only-mobile) {
       font-size: 1.25rem;
       letter-spacing: 0.91px;
+    }
+  }
+
+  a {
+    &.category-carousel-view-all {
+      color: $_category_carosel_title_color;
+    }
+  }
+}
+
+.l-one--w,
+.advanced-page-only,
+.frontpage {
+  .paragraph--type--product-carousel-category {
+    .view-product-slider {
+      @include breakpoint($desktop) {
+        width: 64.125rem;
+        margin: 0 auto;
+        padding: 0 1.5625rem;
+      }
+
+      .owl-carousel {
+        .views-row {
+          @include breakpoint($desktop) {
+            max-width: 100%;
+            width: 100%;
+          }
+        }
+
+        .owl-item {
+          img {
+            @include breakpoint($desktop) {
+              max-width: 100%;
+            }
+          }
+        }
+
+        .owl-item {
+          @include breakpoint ($tablet) {
+            width: 14.875rem !important;
+            margin: 0 0.1875rem !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.l-two--sf {
+  .paragraph--type--product-carousel-category {
+    .view-product-slider {
+      @include breakpoint($upto-desktop) {
+        padding: 0;
+      }
+
+      @include breakpoint($desktop) {
+        width: 100%;
+      }
+
+      .owl-carousel {
+        .owl-item {
+          .views-row {
+            width: calc(100% - 0.375rem);
+
+            img {
+              max-width: 100%;
+            }
+          }
+        }
+      }
     }
   }
 }
