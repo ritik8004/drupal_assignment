@@ -137,11 +137,6 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term tree.
     $term_data = $this->productCategoryTree->getCategoryTreeWithIncludeInMenu($langcode, $parent_id);
 
-    // If super category feature enabled.
-    if (!empty($context['depth_offset'])) {
-      $term_data = $term_data[$parent_id]['child'] ?? [];
-    }
-
     // If no data, no need to render the block.
     if (empty($term_data)) {
       return [];
@@ -163,8 +158,13 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
         $lhn_tree = $term_data[$root_parent_term->id()]['child'];
       }
       else {
-        // If no parent, it's a L1 term.
-        $lhn_tree = $term_data[$term->id()]['child'];
+        // If super category feature enabled.
+        if (!empty($context['depth_offset'])) {
+          $lhn_tree = count($parents) == 1 ? $term_data : $term_data[key($parents)]['child'];
+        }
+        else {
+          $lhn_tree = count($parents) == 1 ? $term_data[key($parents)]['child'] : [];
+        }
       }
     }
 

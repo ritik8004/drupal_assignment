@@ -684,8 +684,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $langcode = $this->languageManager->getCurrentLanguage()->getId();
     }
 
-    // This will be like - `category_tree_en`.
-    $cid = 'category_tree_' . $langcode;
+    // This will be like - `category_tree_0_en`.
+    $cid = 'category_tree_' . $parent_id . '_' . $langcode;
 
     // If exists in cache.
     if ($cache = $this->cache->get($cid)) {
