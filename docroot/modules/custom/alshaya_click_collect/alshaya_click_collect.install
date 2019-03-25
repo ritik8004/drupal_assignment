@@ -28,7 +28,10 @@ function alshaya_click_collect_install() {
 function alshaya_click_collect_string_translations() {
   $strings = [
     'We need permission to locate your nearest stores. You can enable location services in your browser settings.' => [
-      'ar' => 'لنتمكن من تحديد أقرب المحلات إلى مكانك الحالي، يرجى تشغيل خدمة تحديد الموقع من إعدادات المتصفح جهازك.',
+      'ar' => 'لنتمكن لتحديد أقرب محل إليك، يجب أن تفعل خدمات تحديد الموقع من إعدادات المتصفح الخاص بك.',
+    ],
+    'Location access denied' => [
+      'ar' => 'رفض الوصول إلى الموقع',
     ],
   ];
   alshaya_i18n_save_translations($strings);
