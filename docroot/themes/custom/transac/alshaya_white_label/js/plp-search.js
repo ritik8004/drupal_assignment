@@ -204,7 +204,8 @@
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
-          selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1';
+          //selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1';
+          selector = '.c-content__region .total-result-count'
         }
         viewHeader.addClass('search-count');
         var searchCount = $('.c-content__region .search-count');
@@ -214,7 +215,8 @@
           searchCount.removeClass('tablet');
           if (viewHeader.length) {
             searchCount.remove();
-            viewHeader.insertBefore(selector);
+            //viewHeader.insertBefore(selector);
+            viewHeader.appendChild(selector);
           }
           searchCount.addClass('only-mobile');
         }
