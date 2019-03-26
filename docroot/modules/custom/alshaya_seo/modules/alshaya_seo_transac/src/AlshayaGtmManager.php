@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -613,6 +614,11 @@ class AlshayaGtmManager {
       }
     }
 
+    // If list cookie is set, set the list variable.
+    if (isset($_COOKIE['product-list'])) {
+      $listValues = Json::decode($_COOKIE['product-list']);
+      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    }
     return $product_details;
   }
 
@@ -634,19 +640,9 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->items();
 
-      $address = $this->cartHelper->getShipping($cart);
-
-      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
-        // For CC we always use step 2.
+      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page' || $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout delivery page') {
+        // For delivery we always use step 2.
         $attributes['step'] = 2;
-      }
-      // We receive address id in case of authenticated users & address as an
-      // extension attribute for anonymous.
-      elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['area']))) &&
-        ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
-        // For HD we use step 3 if we have address saved.
-        $attributes['step'] = 3;
       }
 
       if ($cart_delivery_method = $cart->getShippingMethodAsString()) {
