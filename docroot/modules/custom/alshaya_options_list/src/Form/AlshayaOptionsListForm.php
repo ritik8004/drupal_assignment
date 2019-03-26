@@ -125,6 +125,12 @@ class AlshayaOptionsListForm extends ConfigFormBase {
           '#title' => $this->t('Page url on which options should be displayed.'),
         ];
 
+        $form['alshaya_options_page'][$key]['alshaya_options_page_title'] = [
+          '#type' => 'textfield',
+          '#default_value' => $attribute_option['title'],
+          '#title' => $this->t('The title for this options page.'),
+        ];
+
         $form['alshaya_options_page'][$key]['alshaya_options_attributes'] = [
           '#type' => 'checkboxes',
           '#options' => $this->getAttributeCodeOptions(),
@@ -143,6 +149,11 @@ class AlshayaOptionsListForm extends ConfigFormBase {
         $form['alshaya_options_page'][$i]['alshaya_options_page_url'] = [
           '#type' => 'textfield',
           '#title' => $this->t('Page url on which options should be displayed.'),
+        ];
+
+        $form['alshaya_options_page'][$i]['alshaya_options_page_title'] = [
+          '#type' => 'textfield',
+          '#title' => $this->t('The title for this options page.'),
         ];
 
         $form['alshaya_options_page'][$i]['alshaya_options_attributes'] = [
@@ -205,11 +216,10 @@ class AlshayaOptionsListForm extends ConfigFormBase {
       if (empty($url) || empty($attributes)) {
         continue;
       }
-      $options_page = [
-        'url' => $url,
-        'attributes' => $attributes,
-      ];
-      $config->set('alshaya_options_pages.' . str_replace('/', '-', $url), $options_page);
+      $config_key = 'alshaya_options_pages.' . str_replace('/', '-', $url);
+      $config->set($config_key . '.title', $value['alshaya_options_page_title'] ?? '');
+      $config->set($config_key . '.url', $url);
+      $config->set($config_key . '.attributes', $attributes);
     }
 
     $config->save();

@@ -13,7 +13,8 @@ function alshaya_options_list_theme($existing, $type, $theme, $path) {
     'alshaya_options_page' => [
       'variables' => [
         'options_list' => NULL,
-        'title' => '',
+        'page-title' => '',
+        'description' => '',
       ],
     ],
   ];

@@ -111,18 +111,19 @@ class AlshayaOptionsPageController extends ControllerBase {
         }
       }
       else {
-        $options_list[$attributeCode]['terms'] = $this->fetchAllTermsForAttribute($attributeCode);
+        $options_list[$attributeCode]['terms'] = $this->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
         $this->cache->set($cid, $options_list[$attributeCode]['terms'], Cache::PERMANENT, ['alshaya-options-page']);
       }
 
       $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
-      $options_list[$attributeCode]['class'] = $attribute_options[$request]['attribute_details'][$attributeCode]['class'];
+      $options_list[$attributeCode]['description'] = $attribute_options[$request]['attribute_details'][$attributeCode]['description'];
     }
 
     $options_list = [
       '#theme' => 'alshaya_options_page',
       '#options_list' => $options_list,
-      '#title' => $attribute_options[$request]['title'],
+      '#page-title' => $attribute_options[$request]['title'],
+      '#description' => $attribute_options[$request]['description'],
     ];
 
     return $options_list;
@@ -133,19 +134,30 @@ class AlshayaOptionsPageController extends ControllerBase {
    *
    * @param string $attributeCode
    *   Attribute code.
+   * @param bool $showImages
+   *   Whether images should be shown with the attribute.
+   * @param bool $group
+   *   Whether the attribute should be grouped alphabetically or not.
    *
    * @return array
    *   All term names array.
    */
-  public function fetchAllTermsForAttribute($attributeCode) {
+  public function fetchAllTermsForAttribute($attributeCode, $showImages = FALSE, $group = FALSE) {
     $return = [];
     $langcode = $this->languageManager->getCurrentLanguage()->getId();
     $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
     $query->fields('tfd', ['name', 'tid']);
     $query->innerJoin('taxonomy_term__field_sku_attribute_code', 'tfa', 'tfd.tid = tfa.entity_id');
-    $query->orderBy('tfd.name');
     $query->condition('tfa.field_sku_attribute_code_value', $attributeCode);
     $query->condition('tfd.langcode', $langcode);
+    if ($showImages) {
+      $query->fields('tfs', ['field_attribute_swatch_image_target_id']);
+      $query->innerJoin('taxonomy_term__field_attribute_swatch_image', 'tfs', 'tfa.entity_id = tfs.entity_id');
+    }
+    if ($group) {
+      $query->orderBy('tfd.name');
+      $query->groupBy('tfd.name');
+    }
     $options = $query->execute()->fetchAllKeyed(1, 0);
     foreach ($options as $option) {
       $list_object['title'] = $option;
