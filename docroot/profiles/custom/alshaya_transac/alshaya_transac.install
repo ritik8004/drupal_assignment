@@ -33,13 +33,13 @@ function alshaya_transac_update_8120() {
   }
 
   $plp_facet_blocks = [
-    'plpcategoryfacet' => -31,
+    'plpcategoryfacet' => -32,
     'skusskureferencefinalprice' => -31,
-    'plpproductcollection' => -31,
-    'plpcolor' => -31,
-    'plpconcept' => -31,
-    'plppromotions' => -31,
-    'plpsize' => -31,
+    'plpproductcollection' => -30,
+    'plpcolor' => -30,
+    'plpconcept' => -30,
+    'plppromotions' => -30,
+    'plpsize' => -30,
   ];
 
   foreach ($plp_facet_blocks as $block_id => $weight) {
