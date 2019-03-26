@@ -492,7 +492,7 @@
       /**
        * Fire checkoutOption on cart page.
        */
-      if (gtmPageType === 'cart page') {
+      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
         Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
       }
 
