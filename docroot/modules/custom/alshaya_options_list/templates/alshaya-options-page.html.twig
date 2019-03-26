@@ -1,20 +1,24 @@
 <div class='options-page-content'>
-  {% for option in options_list %}
-    <div class='demo'>
+  <div class='options-page-header'>
+  <div class='options-page-title'>
+    {{ page-title }}
+</div>
+  <div class='options-page-description'>
+    {{ description }}
+  </div>
+  </div>
+  {% for key,option in options_list %}
+    <div class= {{ key }}>
       <div class='attribute-title'> {{ option.title }} </div>
-      <div class='attribute-description'> {{ option.class }} </div>
-      <div class='attribute-filter-option'>
-        <ul class='attribute-filter-name-list'>
-          {% for value in option.terms %}
-            <li class='title'>
-              <a href={{ value.url }}> {{ value.title }} </a>
-            </li>
-          {% endfor %}
-        </ul>
+      <div class='attribute-description'> {{ option.description }} </div>
+      {% for value in option.terms %}
+        <div class='title'>
+          <a href={{ value.url }}> {{ value.title }} </a>
+        </div>
+      {% endfor %}
+      <div class='divider'>
+        <span>{{ 'or' |t }} </span>
       </div>
-    </div>
-    <div class='divider'>
-      <span>{{ 'or' |t }} </span>
     </div>
   {% endfor %}
 </div>

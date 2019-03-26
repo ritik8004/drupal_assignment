@@ -53,21 +53,36 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           '#default_value' => $attribute_options[$key]['title'],
           '#title' => $this->t('The title for this options page.'),
         ];
+        $form['alshaya_options_page_settings'][$key]['alshaya_options_page_description'] = [
+          '#type' => 'textfield',
+          '#default_value' => $attribute_options[$key]['description'],
+          '#title' => $this->t('The description for this options page.'),
+        ];
         foreach (array_filter($attribute_option['attributes']) as $selected_attribute) {
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute] = [
             '#type' => 'fieldset',
             '#Collapsible' => TRUE,
             '#title' => 'Settings for ' . $selected_attribute,
           ];
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-images'] = [
+            '#type' => 'checkbox',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-images'],
+            '#title' => $this->t('Show images for %attribute', ['%attribute' => $selected_attribute]),
+          ];
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['group'] = [
+            '#type' => 'checkbox',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['group'],
+            '#title' => $this->t('Group %attribute alphabetically.', ['%attribute' => $selected_attribute]),
+          ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['title'] = [
             '#type' => 'textfield',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['title'],
             '#title' => $this->t('Title for %attribute', ['%attribute' => $selected_attribute]),
           ];
-          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['class'] = [
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['description'] = [
             '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['class'],
-            '#title' => $this->t('Class for %attribute', ['%attribute' => $selected_attribute]),
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['description'],
+            '#title' => $this->t('Description for %attribute', ['%attribute' => $selected_attribute]),
           ];
         }
 
@@ -86,6 +101,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
     $values = $form_state->getValue('alshaya_options_page_settings');
     foreach ($values as $key => $value) {
       $options_pages[$key]['title'] = $value['alshaya_options_page_title'] ?? '';
+      $options_pages[$key]['description'] = $value['alshaya_options_page_description'] ?? '';
       foreach ($value['alshaya_options_page_attributes'] as $attribute_title => $attributes) {
         $options_pages[$key]['attribute_details'][$attribute_title] = $attributes;
       }
