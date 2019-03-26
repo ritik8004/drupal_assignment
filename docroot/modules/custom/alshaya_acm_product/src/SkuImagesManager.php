@@ -239,7 +239,7 @@ class SkuImagesManager {
     $return = [
       'images' => [],
       'videos' => [],
-      'media_items' => [],
+      'media_items' => $media,
     ];
 
     // Process CORE media files.
