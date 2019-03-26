@@ -22,6 +22,7 @@ use Drupal\Component\Utility\Unicode;
  */
 class SkuImagesManager {
 
+  const BASE_IMAGE_ROLE = 'image';
   const SWATCH_IMAGE_ROLE = 'swatch_image';
 
   /**
@@ -205,6 +206,12 @@ class SkuImagesManager {
 
       // Check for roles only if available.
       if (!isset($media_item['roles'])) {
+        continue;
+      }
+
+      // If the image has base image role, we show it even if it is swatch
+      // or thumbnail.
+      if (in_array(self::BASE_IMAGE_ROLE, $media_item['roles'])) {
         continue;
       }
 
