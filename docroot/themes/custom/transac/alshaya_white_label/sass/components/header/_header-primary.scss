@@ -621,13 +621,13 @@ header {
           top: 100%;
           #{$left}: 0;
           #{$right}: 0;
-          z-index: -1;
+          z-index: 1;
           opacity: 0;
           visibility: hidden;
           overflow: hidden;
           background: #fff;
           // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
-          transition: opacity var(--menuTiming) ease-in 0.3s;
+          transition: all var(--menuTiming) ease-in 0.3s;
         }
       }
 
@@ -636,9 +636,8 @@ header {
           @include breakpoint($desktop) {
             visibility: visible;
             opacity: 1;
-            z-index: 1;
             // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
-            transition: opacity var(--menuTiming) ease-in 0.3s;
+            transition: all var(--menuTiming) ease-in 0.3s;
           }
         }
       }
@@ -647,18 +646,6 @@ header {
         .menu-backdrop {
           @include breakpoint($desktop) {
             display: none;
-          }
-        }
-      }
-
-      &.active--menu--links {
-        &:hover {
-          li.menu--one__list-item {
-            &:hover {
-              ul.menu--two__list {
-                transition: none;
-              }
-            }
           }
         }
       }
@@ -698,9 +685,8 @@ header {
         & > ul.menu--two__list {
           visibility: visible;
           opacity: 1;
-          z-index: 1;
           // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
-          transition: opacity var(--menuTiming) ease-in 0.3s;
+          transition: all var(--menuTiming) ease-in 0.3s;
         }
       }
 
@@ -735,9 +721,9 @@ header {
         #{$right}: 0;
         width: 100%;
         font-size: 0;
-        z-index: -1;
+        z-index: 1;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
-        transition: opacity var(--menuTiming) ease-in 0.3s;
+        transition: all var(--menuTiming) ease-in 0.3s;
       }
     }
 
@@ -902,25 +888,21 @@ header {
     &::before {
       content: '';
       position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      #{$left}: 0;
-      bottom: 0;
-      #{$left}: 0;
+      width: 100vw;
+      box-shadow: 0 9999px 0 9995px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
       opacity: 0;
-      z-index: -1;
+      z-index: 5;
       background-color: rgba(0, 0, 0, 0.48);
       // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
-      transition: opacity var(--menuTiming) ease-in 0.3s, z-index 0 ease-in 0.3s;
+      transition: opacity var(--menuTiming) ease-in 0.3s;
     }
 
     &.overlay {
       &::before {
         opacity: 1;
-        z-index: 5;
         // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
-        transition: opacity var(--menuTiming) ease-in 0.3s, z-index 0 ease-in 0.3s;
+        transition: opacity var(--menuTiming) ease-in 0.3s;
       }
     }
   }
