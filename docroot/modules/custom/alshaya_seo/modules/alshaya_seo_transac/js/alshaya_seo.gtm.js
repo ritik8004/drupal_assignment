@@ -175,14 +175,12 @@
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
           Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
-          $.cookie('alshaya_logged_in_user', 1, {path: '/'});
         }
 
         // Fire logout success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
           Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
-          $.removeCookie('alshaya_logged_in_user', {path: '/'});
         }
 
         // Fire lead tracking on registration success/ user update.
@@ -494,7 +492,7 @@
       /**
        * Fire checkoutOption on cart page.
        */
-      if (gtmPageType === 'cart page' && $.cookie('alshaya_logged_in_user') === 1) {
+      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
         Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
       }
 
