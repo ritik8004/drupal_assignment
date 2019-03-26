@@ -158,7 +158,6 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
         $lhn_tree = $term_data[$root_parent_term->id()]['child'];
       }
       else {
-        // If super category feature enabled.
         if (!empty($context['depth_offset'])) {
           $lhn_tree = count($parents) == 1 ? $term_data : $term_data[key($parents)]['child'];
         }
