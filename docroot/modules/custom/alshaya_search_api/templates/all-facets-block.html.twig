@@ -1,18 +1,8 @@
-{{ attach_library('alshaya_search_api/facets_all_slider') }}
-
 {% if facet_blocks %}
-{% if show_all %}
-  <div class="show-all-filters">{{ 'All Filters'|t }}</div>
-{% endif %}
-<div class='all-filters' style='display: none;'>
-  <div class='facet-all-back' style='display: none;'>back button</div>
-  <div class='filter-sort-title'>{{ 'Filter & Sort'|t }}</div>
-  <div class='facet-all-apply'>Close button</div>
     {% for facet_block in facet_blocks %}
-      {{ facet_block }}
+        {{ facet_block }}
     {% endfor %}
-  <div class='facet-all-count'></div>
-  <div class='facet-all-clear'></div>
-  <div class='facet-all-apply'>{{ 'Apply Filter'|t }}</div>
-</div>
 {% endif %}
+
+{#Adding search result count#}
+<div class="total-result-count"></div>
