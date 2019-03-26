@@ -40,6 +40,27 @@
       font-family: $alshaya-bold;
       line-height: 1.29;
     }
+
+    .out-of-stock span {
+      @extend %btn;
+
+      height: 2.5rem;
+      padding-top: 0.75rem;
+      margin-top: 1.25rem;
+
+      html[lang=ar] & {
+        padding-top: 0.3125rem;
+      }
+
+      @include breakpoint($tablet) {
+        min-width: 12.8125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+    }
   }
 
   .region__content {
