@@ -93,9 +93,15 @@ class AlshayaPlpFacetsBlock extends BlockBase implements ContainerFactoryPluginI
       array_unshift($facet_blocks, $block_view);
     }
 
+    $show_all = TRUE;
+    if (count($facet_blocks) <= 4) {
+      $show_all = FALSE;
+    }
+
     return [
       '#theme' => 'all_facets_block',
       '#facet_blocks' => $facet_blocks,
+      '#show_all' => $show_all,
     ];
   }
 
