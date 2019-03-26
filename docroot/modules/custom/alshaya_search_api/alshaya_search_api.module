@@ -20,6 +20,7 @@ function alshaya_search_api_theme($existing, $type, $theme, $path) {
     'template' => 'all-facets-block',
     'variables' => [
       'facet_blocks' => [],
+      'show_all' => NULL,
     ],
   ];
 
