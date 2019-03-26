@@ -216,7 +216,7 @@
           if (viewHeader.length) {
             searchCount.remove();
             //viewHeader.insertBefore(selector);
-            selector.append(viewHeader);
+            selector.html(viewHeader);
           }
           searchCount.addClass('only-mobile');
         }
@@ -227,10 +227,22 @@
           if (viewHeader.length) {
             //searchCount.remove();
             //viewHeader.appendChild(selector);
-            selector.append(viewHeader);
+            selector.html(viewHeader);
           }
           searchCount.addClass('tablet');
         }
+      }
+
+      /**
+       * Show only 4 facets by default and hide others.
+       */
+      function showOnlyFewFacets () {
+        var facets = $('.c-content__region .region__content > div.block-facets-ajax');
+        facets.each( function ( index ) {
+          if (index > 3) {
+            $( this ).addClass('hide-facet');
+          }
+        });
       }
 
       function processSoftLiniks(element) {
@@ -367,6 +379,8 @@
         mobileFilterMenu();
         placeSearchCount();
       });
+
+      showOnlyFewFacets();
 
       // Toggle the filter menu when click on the label.
       $('.filter-menu-label .label').once().on('click', function () {
