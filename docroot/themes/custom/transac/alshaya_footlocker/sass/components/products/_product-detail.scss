@@ -26,7 +26,7 @@
 .delivery-options-wrapper {
   .field {
     &__label {
-      font-size: 0.875rem;
+      // font-size: 0.875rem;
       font-weight: normal;
     }
 
@@ -48,6 +48,7 @@
   .read-more-description-link,
   .read-more-description-link-gift {
     font-weight: normal;
+    margin-bottom: 0.625rem;
   }
 }
 
@@ -207,5 +208,23 @@
         }
       }
     }
+  }
+}
+
+.description-wrapper {
+  .close {
+    width: 2.125rem;
+    height: 2.125rem;
+    font-size: 2.5rem;
+
+    &::before {
+      position: absolute;
+      #{$left}: -0.1875rem;
+      top: -0.25rem;
+    }
+  }
+
+  .desc-wrapper {
+    margin-top: 0.5rem;
   }
 }
