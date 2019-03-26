@@ -196,15 +196,16 @@ class SkuImagesManager {
 
     $media = $sku->getMedia(TRUE, FALSE, $default_label);
 
-    // Remove thumbnails from media items.
-    // @TODO: This is added for CORE-5026 and will be reworked in CORE-5208.
     foreach ($media ?? [] as $index => $media_item) {
       if (!isset($media_item['media_type'])) {
         continue;
       }
 
+      // Remove thumbnails only if it is not base image.
       if (isset($media_item['roles'])
+        && !in_array('image', $media_item['roles'])
         && in_array('thumbnail', $media_item['roles'])) {
+
         unset($media[$index]);
       }
     }
@@ -278,14 +279,14 @@ class SkuImagesManager {
 
     $media = $sku->getMedia(TRUE, FALSE, $default_label);
 
-    // Remove thumbnails from media items.
-    // @TODO: This is added for CORE-5026 and will be reworked in CORE-5208.
     foreach ($media ?? [] as $index => $media_item) {
       if (!isset($media_item['media_type'])) {
         continue;
       }
 
+      // Remove thumbnails only if it is not base image.
       if (isset($media_item['roles'])
+        && !in_array('image', $media_item['roles'])
         && in_array('thumbnail', $media_item['roles'])) {
         unset($media[$index]);
       }
