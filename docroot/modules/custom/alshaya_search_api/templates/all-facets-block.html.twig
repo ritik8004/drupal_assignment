@@ -1,3 +1,7 @@
+{% if show_all %}
+    <div>{{ 'All Filters'|t }}</div>
+{% endif %}
+
 {% if facet_blocks %}
     {% for facet_block in facet_blocks %}
         {{ facet_block }}
