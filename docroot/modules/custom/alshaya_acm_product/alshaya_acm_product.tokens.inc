@@ -33,7 +33,7 @@ function alshaya_acm_product_tokens($type, $tokens, array $data, array $options,
       $sku = SKU::loadFromSku($config_sku);
 
       // Apply this token only in case the SKU has style code attribute.
-      if ($sku_manager->fetchStyleCode($config_sku)) {
+      if ($sku_manager->fetchStyleCode($sku)) {
         $first_child = $sku_manager->getChildSkus($sku, TRUE);
         if ($first_child instanceof SKU) {
           $color_label = $first_child->get('attr_color_label')->getString();
