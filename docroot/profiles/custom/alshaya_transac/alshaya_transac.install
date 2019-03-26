@@ -14,6 +14,55 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Change the regions and weight of facet blocks.
+ */
+function alshaya_transac_update_8120() {
+  $plp_facets = [
+    'facets.facet.skus_sku_reference_final_price',
+    'facets.facet.plp_promotions',
+    'facets.facet.plp_product_brand',
+    'facets.facet.plp_product_collection',
+    'facets.facet.plp_color',
+    'facets.facet.plp_concept',
+    'facets.facet.plp_size',
+  ];
+
+  // Mark `soft_limit` to 0 for PLP facets as now we show all facet links.
+  foreach ($plp_facets as $plp_facet) {
+    \Drupal::configFactory()->getEditable($plp_facet)->set('widget.config.soft_limit', 0)->save();
+  }
+
+  $plp_facet_blocks = [
+    'plpcategoryfacet' => -31,
+    'skusskureferencefinalprice' => -31,
+    'plpproductcollection' => -31,
+    'plpcolor' => -31,
+    'plpconcept' => -31,
+    'plppromotions' => -31,
+    'plpsize' => -31,
+  ];
+
+  foreach ($plp_facet_blocks as $block_id => $weight) {
+    /* @var \Drupal\block\Entity\Block $facet_block*/
+    $facet_block = \Drupal::entityTypeManager()->getStorage('block')->load($block_id);
+    $facet_block->setRegion('content');
+    $facet_block->setWeight($weight);
+    $facet_block->save();
+  }
+
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // New `All facets` block for PLP.
+  $manager->updateConfigs(
+    ['block.block.alshaya_plp_facets_block_all'],
+    'alshaya_search_api',
+    'install'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Correcting the block positions for promotion banner blocks.
  */
 function alshaya_transac_update_8119() {
