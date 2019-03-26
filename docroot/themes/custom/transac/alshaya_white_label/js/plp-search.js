@@ -205,7 +205,7 @@
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
           //selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-1';
-          selector = '.c-content__region .total-result-count'
+          selector = $('.c-content__region .total-result-count');
         }
         viewHeader.addClass('search-count');
         var searchCount = $('.c-content__region .search-count');
@@ -216,7 +216,7 @@
           if (viewHeader.length) {
             searchCount.remove();
             //viewHeader.insertBefore(selector);
-            viewHeader.appendChild(selector);
+            selector.append(viewHeader);
           }
           searchCount.addClass('only-mobile');
         }
@@ -225,8 +225,9 @@
           $('.block-page-title-block').removeClass('mobile');
           searchCount.removeClass('only-mobile');
           if (viewHeader.length) {
-            searchCount.remove();
-            viewHeader.insertBefore(selector);
+            //searchCount.remove();
+            //viewHeader.appendChild(selector);
+            selector.append(viewHeader);
           }
           searchCount.addClass('tablet');
         }
