@@ -78,7 +78,6 @@
             product.list = currentListName;
             currentListName = null;
           }
-
           var data = {
             event: 'productDetailView',
             ecommerce: {
@@ -431,6 +430,8 @@
           };
 
           if (event === 'removeFromCart') {
+            // Delete list from cookie.
+            $.removeCookie(product.id, {path: '/'});
             data.ecommerce.remove = {
               products: [
                 product
@@ -808,6 +809,11 @@
       productData.dimension5 = product.attr('gtm-dimension5');
     }
 
+    // If list variable is set in cookie, retrieve it.
+    if ($.cookie(productData.id) !== undefined) {
+      productData.list = $.cookie(productData.id);
+    }
+
     return productData;
   };
 
@@ -1006,6 +1012,9 @@
     }
 
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+
+    // On productClick, add list variable to cookie.
+    $.cookie(product.id, listName, {path: '/'});
     product.variant = '';
     if (position) {
       product.position = position;

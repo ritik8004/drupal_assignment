@@ -613,6 +613,10 @@ class AlshayaGtmManager {
       }
     }
 
+    // If list cookie is set, set the list variable.
+    if (isset($_COOKIE[$product_details['id']])) {
+      $product_details['list'] = $_COOKIE[$product_details['id']];
+    }
     return $product_details;
   }
 
