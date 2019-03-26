@@ -186,8 +186,9 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
     $page_type = $gtm_manager->convertCurrentRouteToGtmPageName($gtm_manager->getGtmContainer());
     switch ($current_route['route_name']) {
       case 'acq_checkout.form':
-        if (in_array($current_route['route_params']['step'],
-          ['login', 'delivery', 'payment'], TRUE)) {
+      case 'acq_cart.cart':
+        if ((isset($current_route['route_params']['step']) && in_array($current_route['route_params']['step'],
+          ['delivery', 'payment'], TRUE)) || $current_route['route_name'] == 'acq_cart.cart') {
 
           $cart_item_attributes = $gtm_manager->fetchCartItemAttributes();
 
@@ -203,30 +204,18 @@ function alshaya_seo_transac_datalayer_alter(&$data_layer) {
             $products[] = $product;
           }
 
-          // Set the correct step id.
-          switch ($current_route['route_params']['step']) {
-            case 'login':
-              $step = 1;
-              break;
+          if ($current_route['route_name'] == 'acq_cart.cart') {
+            $step = 1;
+          }
 
+          // Set the correct step id.
+          switch ($current_route['route_params']['step'] ?? '') {
             case 'delivery':
-              if (!empty($data_layer['deliveryArea'])) {
-                $step = 3;
-                $page_type = 'checkout sub-delivery page';
-              }
-              else {
-                // For logged in users, we show delivery methods only when
-                // click on 'Deliver this address' and thus will always be
-                // step 2.
-                if (\Drupal::currentUser()->isAuthenticated()) {
-                  $step = 2;
-                }
-              }
-              $step = !empty($step) ? $step : 2;
+              $step = 2;
               break;
 
             case 'payment':
-              $step = 4;
+              $step = 3;
               break;
           }
 
