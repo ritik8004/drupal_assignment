@@ -340,5 +340,5 @@ Otherwise install it via brew or from java:
 ```bash
 java -Dwebdriver.chrome.driver=bin/node_modules/chromedriver/bin/chromedriver -jar vendor/se/selenium-server-standalone/bin/selenium-server-standalone.jar
 ```
-6. `bin/behat --profile=hm-kw-uat`
-
+6. The script that we ran on point 4, Has generated different profiles for each site with brand, env and language specific. i.e. = mc-sa-qa-ar, mc-sa-qa-en, hm-kw-dev-en etc..
+to Run behat test cases for any specific site - `bin/behat --profile=hm-kw-uat-en`
