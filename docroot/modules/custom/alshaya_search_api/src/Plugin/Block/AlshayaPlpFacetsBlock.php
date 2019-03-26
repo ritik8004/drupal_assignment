@@ -4,6 +4,10 @@ namespace Drupal\alshaya_search_api\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\block\BlockInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a custom block which contains/renders all facet blocks for PLP.
@@ -13,45 +17,85 @@ use Drupal\block\BlockInterface;
  *  admin_label = @Translation("Alshaya all facet block - PLP"),
  * )
  */
-class AlshayaPlpFacetsBlock extends BlockBase {
+class AlshayaPlpFacetsBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * Facet source.
    */
   const FACET_SOURCE = 'search_api:views_block__alshaya_product_list__block_1';
 
+  /**
+   * Exposed sort block.
+   */
   const PLP_EXPOSED_SORT_BLOCK = 'exposedformalshaya_product_listblock_1';
+
+  /**
+   * Alshaya facet manager.
+   *
+   * @var \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager
+   */
+  protected $alshayaFacetManager;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * AlshayaPlpFacetsBlock constructor.
+   *
+   * @param array $configuration
+   *   Configuration array.
+   * @param string $plugin_id
+   *   Plugin id.
+   * @param mixed $plugin_definition
+   *   Plugin defination.
+   * @param \Drupal\alshaya_search_api\AlshayaSearchApiFacetsManager $alshaya_facet_manager
+   *   Facet manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
+   */
+  public function __construct(array $configuration,
+                              $plugin_id,
+                              $plugin_definition,
+                              AlshayaSearchApiFacetsManager $alshaya_facet_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->entityTypeManager = $entity_type_manager;
+    $this->alshayaFacetManager = $alshaya_facet_manager;
+
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('alshaya_search_api.facets_manager'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    /* @var \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager*/
-    $facet_manager = \Drupal::service('facets.manager');
-    // Get all facets of the given source.
-    $facets = $facet_manager->getFacetsByFacetSourceId(self::FACET_SOURCE);
-    $blocks = [];
-    if (!empty($facets)) {
-      foreach ($facets as $facet) {
-        $block_id = str_replace('_', '', $facet->id());
-        /* @var \Drupal\block\Entity\Block $block*/
-        $block = \Drupal::entityTypeManager()->getStorage('block')->load($block_id);
-        // If block is enabled.
-        if ($block instanceof BlockInterface && $block->status()) {
-          $blocks[] = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
-        }
-      }
-    }
-
-    $block = \Drupal::entityTypeManager()->getStorage('block')->load(self::PLP_EXPOSED_SORT_BLOCK);
+    // Get all sorted facet blocks.
+    $facet_blocks = $this->alshayaFacetManager->getBlocksForFacets(self::FACET_SOURCE);
+    $block = $this->entityTypeManager->getStorage('block')->load(self::PLP_EXPOSED_SORT_BLOCK);
     if ($block instanceof BlockInterface) {
-      $block_view = \Drupal::entityTypeManager()->getViewBuilder('block')->view($block);
-      array_unshift($blocks, $block_view);
+      $block_view = $this->entityTypeManager->getViewBuilder('block')->view($block);
+      array_unshift($facet_blocks, $block_view);
     }
 
     return [
-      '#theme' => 'plp_all_facets_html',
-      '#facet_blocks' => $blocks,
+      '#theme' => 'all_facets_block',
+      '#facet_blocks' => $facet_blocks,
     ];
   }
 
