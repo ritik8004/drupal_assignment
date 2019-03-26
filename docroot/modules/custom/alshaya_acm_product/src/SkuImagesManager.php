@@ -185,6 +185,18 @@ class SkuImagesManager {
    *   Media items array.
    */
   public function getSkuMediaItems(SKUInterface $sku, ?string $default_label = ''): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $static_id = implode(':', [
+      $sku->getSku(),
+      $sku->language()->getId(),
+      $default_label,
+    ]);
+
+    if (isset($static[$static_id])) {
+      return $static[$static_id];
+    }
+
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $plugin = $sku->getPluginInstance();
 
@@ -247,6 +259,8 @@ class SkuImagesManager {
       }
     }
 
+    $static[$static_id] = $return;
+
     return $return;
   }
 
@@ -291,26 +305,7 @@ class SkuImagesManager {
       }
     }
 
-    $media = $sku->getMedia(TRUE, FALSE, $default_label);
-
-    foreach ($media ?? [] as $index => $media_item) {
-      if (!isset($media_item['media_type'])) {
-        continue;
-      }
-
-      // Check for roles only if available.
-      if (!isset($media_item['roles'])) {
-        continue;
-      }
-
-      // Loop through all the roles we need to hide from gallery.
-      foreach ($this->getImageRolesToHide() as $role_to_hide) {
-        if (in_array($role_to_hide, $media_item['roles'])) {
-          unset($media[$index]);
-          break;
-        }
-      }
-    }
+    $media = $this->getSkuMediaItems($sku, $default_label)['media_items'];
 
     $return = [
       'images' => [],
