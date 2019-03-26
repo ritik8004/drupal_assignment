@@ -355,6 +355,8 @@
         placeSearchCount();
       });
 
+      showOnlyFewFacets();
+
       // Toggle the filter menu when click on the label.
       $('.filter-menu-label .label').once().on('click', function () {
         $('.c-facet__blocks__wrapper .c-facet__label').parent().siblings('.view-filters').toggleClass('low-zindex');
