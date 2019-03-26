@@ -78,7 +78,6 @@
             product.list = currentListName;
             currentListName = null;
           }
-
           var data = {
             event: 'productDetailView',
             ecommerce: {
@@ -431,6 +430,13 @@
           };
 
           if (event === 'removeFromCart') {
+            // Delete list from cookie.
+            var listValues = {};
+            if ($.cookie('product-list') !== undefined) {
+              listValues = JSON.parse($.cookie('product-list'));
+            }
+            delete listValues[product.id];
+            $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
             data.ecommerce.remove = {
               products: [
                 product
@@ -808,6 +814,14 @@
       productData.dimension5 = product.attr('gtm-dimension5');
     }
 
+    // If list variable is set in cookie, retrieve it.
+    if ($.cookie('product-list') !== undefined) {
+      var listValues = JSON.parse($.cookie('product-list'));
+      if (listValues[productData.id]) {
+        productData.list = listValues[productData.id]
+      }
+    }
+
     return productData;
   };
 
@@ -1006,6 +1020,14 @@
     }
 
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+
+    // On productClick, add list variable to cookie.
+    var listValues = {};
+    if ($.cookie('product-list') !== undefined) {
+      listValues = JSON.parse($.cookie('product-list'));
+    }
+    listValues[product.id] = listName;
+    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
       product.position = position;

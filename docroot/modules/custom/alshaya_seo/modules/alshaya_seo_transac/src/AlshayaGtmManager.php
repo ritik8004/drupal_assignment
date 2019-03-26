@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -613,6 +614,11 @@ class AlshayaGtmManager {
       }
     }
 
+    // If list cookie is set, set the list variable.
+    if (isset($_COOKIE['product-list'])) {
+      $listValues = Json::decode($_COOKIE['product-list']);
+      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    }
     return $product_details;
   }
 
