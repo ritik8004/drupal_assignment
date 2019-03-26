@@ -11,6 +11,22 @@ use Drupal\views\ViewExecutable;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_search_api_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['plp_all_facets_html'] = [
+    'template' => 'plp-all-facets',
+    'variables' => [
+      'facet_blocks' => [],
+    ],
+  ];
+
+  return $items;
+}
+
+/**
  * Wrapper function, removes a field from Index and trigger re-index.
  *
  * @param string $field_code
