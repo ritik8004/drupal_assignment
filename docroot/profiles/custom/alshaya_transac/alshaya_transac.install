@@ -17,47 +17,95 @@ use Drupal\taxonomy\Entity\Term;
  * Change the regions and weight of facet blocks.
  */
 function alshaya_transac_update_8120() {
-  $plp_facets = [
-    'facets.facet.skus_sku_reference_final_price',
-    'facets.facet.plp_promotions',
-    'facets.facet.plp_product_brand',
-    'facets.facet.plp_product_collection',
-    'facets.facet.plp_color',
-    'facets.facet.plp_concept',
-    'facets.facet.plp_size',
-  ];
+  // For the PLP.
+  $weight = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('exposedformalshaya_product_listblock_1')->getWeight();
+  _alshaya_transac_reposition_all_facet_blocks('search_api:views_block__alshaya_product_list__block_1', 'exposedformalshaya_product_listblock_1', $weight);
 
-  // Mark `soft_limit` to 0 for PLP facets as now we show all facet links.
-  foreach ($plp_facets as $plp_facet) {
-    \Drupal::configFactory()->getEditable($plp_facet)->set('widget.config.soft_limit', 0)->save();
+  // For the promo.
+  $weight = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('exposedformalshaya_product_listblock_2')->getWeight();
+  _alshaya_transac_reposition_all_facet_blocks('search_api:views_block__alshaya_product_list__block_2', 'exposedformalshaya_product_listblock_2', $weight);
+
+  // For the SRP.
+  $weight = \Drupal::entityTypeManager()->getStorage('block')
+    ->load('exposedformsearchpage_3')->getWeight();
+  _alshaya_transac_reposition_all_facet_blocks('search_api:views_page__search__page', 'exposedformsearchpage_3', $weight);
+}
+
+/**
+ * Update and re-assign all facet blocks in `content` region.
+ *
+ * @param $facet_source
+ *   Facet source.
+ * @param $source_block
+ *   Source block.
+ * @param $weight
+ *   Source block weight.
+ */
+function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_block, $weight) {
+  // Get active theme.
+  $active_theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+  // Get all block of `content` region with active theme.
+  $all_content_region_blocks = \Drupal::entityTypeManager()->getStorage('block')
+    ->loadByProperties(['region' => 'content', 'theme' => $active_theme]);
+
+  /* @var \Drupal\facets\FacetInterface[] $facets */
+  $facets = \Drupal::service('facets.manager')->getEnabledFacets();
+  $facet_blocks = [];
+  if (!empty($facets)) {
+    foreach ($facets as $facet) {
+      $facet_id = $facet->id();
+      if ($facet->getFacetSourceId() == $facet_source) {
+        // Mark `soft_limit` to 0 for PLP facets as now we show all facet links.
+        \Drupal::configFactory()->getEditable('facets.facet.' . $facet_id)
+          ->set('widget.config.soft_limit', 0)
+          ->save();
+        $block_id = str_replace('_', '', $facet->id());
+        $facet_blocks[] = \Drupal::entityTypeManager()->getStorage('block')->load($block_id);
+      }
+    }
   }
 
-  $plp_facet_blocks = [
-    'plpcategoryfacet' => -32,
-    'skusskureferencefinalprice' => -31,
-    'plpproductcollection' => -30,
-    'plpcolor' => -30,
-    'plpconcept' => -30,
-    'plppromotions' => -30,
-    'plpsize' => -30,
-  ];
+  $alshaya_facet_manager = \Drupal::service('alshaya_search_api.facets_manager');
+  // Sort the facet blocks.
+  uasort($facet_blocks, [$alshaya_facet_manager, 'sortBlocksByWeight']);
 
-  foreach ($plp_facet_blocks as $block_id => $weight) {
-    /* @var \Drupal\block\Entity\Block $facet_block*/
-    $facet_block = \Drupal::entityTypeManager()->getStorage('block')->load($block_id);
-    $facet_block->setRegion('content');
-    $facet_block->setWeight($weight);
-    $facet_block->save();
+  $temp_weight = $weight;
+  if (!empty($facet_blocks)) {
+    foreach ($facet_blocks as $facet_block) {
+      $facet_block->setRegion('content');
+      $temp_weight += 1;
+      $facet_block->setWeight($temp_weight);
+      $facet_block->save();
+    }
+
+    $manager = \Drupal::service('alshaya_config.manager');
+
+    // For PLP, add and then update the weight of `All Filters` block.
+    if ($source_block == 'exposedformalshaya_product_listblock_1') {
+      // Adding new `All facets` block for PLP.
+      $manager->updateConfigs(
+        ['block.block.alshaya_plp_facets_block_all'],
+        'alshaya_search_api',
+        'install'
+      );
+
+      // Updating the weight with new weight adjustment.
+      \Drupal::configFactory()->getEditable('block.block.alshaya_plp_facets_block_all')
+        ->set('weight', $temp_weight + 1)
+        ->save();
+    }
+
+    // Now update blocks in content region with appropriate weight.
+    foreach ($all_content_region_blocks as $all_block) {
+      if (($all_block->getWeight() >= $weight) && $all_block->id() != $source_block) {
+        $all_block_weight = $all_block->getWeight() + count($facet_blocks) + 2;
+        $all_block->setWeight($all_block_weight);
+        $all_block->save();
+      }
+    }
   }
-
-  $manager = \Drupal::service('alshaya_config.manager');
-
-  // New `All facets` block for PLP.
-  $manager->updateConfigs(
-    ['block.block.alshaya_plp_facets_block_all'],
-    'alshaya_search_api',
-    'install'
-  );
 }
 
 /**

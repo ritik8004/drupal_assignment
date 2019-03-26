@@ -282,7 +282,7 @@ class AlshayaSearchApiFacetsManager {
    * @return int
    *   Sort value.
    */
-  protected function sortBlocksByWeight(BlockInterface $a, BlockInterface $b) {
+  public function sortBlocksByWeight(BlockInterface $a, BlockInterface $b) {
     $a_weight = $a->getWeight();
     $b_weight = $b->getWeight();
 
