@@ -103,6 +103,12 @@
                   .price {
                     padding: 0 0.125rem;
                     display: inline-block;
+                    font-size: 0;
+
+                    .price-currency,
+                    .price-amount {
+                      font-size: 0.875rem;
+                    }
                   }
                 }
               }
