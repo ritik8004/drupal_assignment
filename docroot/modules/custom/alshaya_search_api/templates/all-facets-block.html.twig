@@ -4,16 +4,18 @@
 {% if show_all %}
   <div class="show-all-filters">{{ 'All Filters'|t }}</div>
 {% endif %}
-<div class="all-filters" style="display: none;">
-  <div class="filter-sort-title">{{ 'Filter & Sort'|t }}</div>
+<div class='all-filters' style='display: none;'>
+  <div class='facet-all-back' style='display: none;'>back button</div>
+  <div class='filter-sort-title'>{{ 'Filter & Sort'|t }}</div>
+  <div class='facet-all-apply'>Close button</div>
     {% for facet_block in facet_blocks %}
       {{ facet_block }}
     {% endfor %}
-  <div class="facet-all-count"></div>
-  <div class="facet-all-clear">{{ 'Clear All'|t }}</div>
-  <div class="facet-all-apply">{{ 'Apply Filter'|t }}</div>
+  <div class='facet-all-count'></div>
+  <div class='facet-all-clear'>{{ 'Clear All'|t }}</div>
+  <div class='facet-all-apply'>{{ 'Apply Filter'|t }}</div>
 </div>
 {% endif %}
 
 {#Adding search result count#}
-<div class="total-result-count"></div>
+<div class='total-result-count'></div>
