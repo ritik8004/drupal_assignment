@@ -196,11 +196,11 @@
         var selector = null;
         if ($('body').hasClass('path--search')) {
           viewHeader = $('.c-search .view-search .view-header');
-          selector = '.c-content__region .block-views-exposed-filter-blocksearch-page';
+          selector = $('.c-content__region .total-result-count, .facet-all-count');
         }
         else if ($('body').hasClass('nodetype--acq_promotion')) {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
-          selector = '.c-content__region .total-result-count';
+          selector = $('.c-content__region .total-result-count, .facet-all-count');
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
