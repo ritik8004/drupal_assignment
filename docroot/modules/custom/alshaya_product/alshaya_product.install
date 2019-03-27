@@ -19,7 +19,7 @@ function alshaya_product_update_8023() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
-    ['views.view.alshaya_product_list'],
+    ['views.view.alshaya_product_list', 'search_api.index.product'],
     'alshaya_product',
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
