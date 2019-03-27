@@ -90,7 +90,7 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
 
     $manager = \Drupal::service('alshaya_config.manager');
 
-    // Add and then update the weight of `All Filters` block.
+    // Add and then update the weight of `All Filters` block for PLP.
     if ($source_block == 'exposedformalshaya_product_listblock_1') {
       // Adding new `All facets` block for PLP.
       $manager->updateConfigs(
@@ -101,6 +101,36 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
 
       // Updating the weight with new weight adjustment.
       \Drupal::configFactory()->getEditable('block.block.alshaya_plp_facets_block_all')
+        ->set('weight', $temp_weight + 1)
+        ->save();
+    }
+
+    // Add and then update the weight of `All Filters` block for Promo.
+    if ($source_block == 'exposedformalshaya_product_listblock_2') {
+      // Adding new `All facets` block for PLP.
+      $manager->updateConfigs(
+        ['block.block.alshaya_promo_facets_block_all'],
+        'alshaya_search_api',
+        'install'
+      );
+
+      // Updating the weight with new weight adjustment.
+      \Drupal::configFactory()->getEditable('block.block.alshaya_promo_facets_block_all')
+        ->set('weight', $temp_weight + 1)
+        ->save();
+    }
+
+    // Add and then update the weight of `All Filters` block for Search.
+    if ($source_block == 'exposedformsearchpage_3') {
+      // Adding new `All facets` block for PLP.
+      $manager->updateConfigs(
+        ['block.block.alshaya_search_facets_block_all'],
+        'alshaya_search_api',
+        'install'
+      );
+
+      // Updating the weight with new weight adjustment.
+      \Drupal::configFactory()->getEditable('block.block.alshaya_search_facets_block_all')
         ->set('weight', $temp_weight + 1)
         ->save();
     }
