@@ -204,7 +204,7 @@
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
-          selector = $('.c-content__region .total-result-count');
+          selector = $('.c-content__region .total-result-count, .facet-all-count');
         }
         viewHeader.addClass('search-count');
         var searchCount = $('.c-content__region .search-count');
