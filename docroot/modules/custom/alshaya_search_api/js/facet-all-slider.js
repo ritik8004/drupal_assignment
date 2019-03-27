@@ -16,7 +16,18 @@
         // Only show current facet and hide all others.
         $('.all-filters .block-facets-ajax').removeClass('show-facet');
         $('.all-filters .block-facets-ajax').addClass('hide-facet');
+        $(this).removeClass('hide-facet');
         $(this).addClass('show-facet');
+
+        $('.facet-all-back').show();
+      });
+
+      $('.facet-all-back').on('click', function() {
+        $(this).hide();
+        $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
+        $('.all-filters .block-facets-ajax').removeClass('show-facet');
+        $('.all-filters .block-facets-ajax').addClass('hide-facet');
+
       });
 
       $('.show-all-filters').on('click', function() {
