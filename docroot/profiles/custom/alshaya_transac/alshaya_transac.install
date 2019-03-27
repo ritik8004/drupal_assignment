@@ -14,33 +14,41 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Change the regions and weight of facet blocks.
+ * Move facet blocks for left sidebar region to content region for
+ * PLP/SRP/Promo pages. Blocks should be placed after block exposed form block
+ * of sort.
  */
 function alshaya_transac_update_8120() {
   // For the PLP.
+  $facet_source = 'search_api:views_block__alshaya_product_list__block_1';
+  $source_block = 'exposedformalshaya_product_listblock_1';
   $weight = \Drupal::entityTypeManager()->getStorage('block')
     ->load('exposedformalshaya_product_listblock_1')->getWeight();
-  _alshaya_transac_reposition_all_facet_blocks('search_api:views_block__alshaya_product_list__block_1', 'exposedformalshaya_product_listblock_1', $weight);
+  _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_block, $weight);
 
   // For the promo.
+  $facet_source = 'search_api:views_block__alshaya_product_list__block_2';
+  $source_block = 'exposedformalshaya_product_listblock_2';
   $weight = \Drupal::entityTypeManager()->getStorage('block')
     ->load('exposedformalshaya_product_listblock_2')->getWeight();
-  _alshaya_transac_reposition_all_facet_blocks('search_api:views_block__alshaya_product_list__block_2', 'exposedformalshaya_product_listblock_2', $weight);
+  _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_block, $weight);
 
   // For the SRP.
+  $facet_source = 'search_api:views_page__search__page';
+  $source_block = 'exposedformsearchpage_3';
   $weight = \Drupal::entityTypeManager()->getStorage('block')
     ->load('exposedformsearchpage_3')->getWeight();
-  _alshaya_transac_reposition_all_facet_blocks('search_api:views_page__search__page', 'exposedformsearchpage_3', $weight);
+  _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_block, $weight);
 }
 
 /**
  * Update and re-assign all facet blocks in `content` region.
  *
- * @param $facet_source
+ * @param string $facet_source
  *   Facet source.
- * @param $source_block
+ * @param string $source_block
  *   Source block.
- * @param $weight
+ * @param mixed $weight
  *   Source block weight.
  */
 function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_block, $weight) {
@@ -82,7 +90,7 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
 
     $manager = \Drupal::service('alshaya_config.manager');
 
-    // For PLP, add and then update the weight of `All Filters` block.
+    // Add and then update the weight of `All Filters` block.
     if ($source_block == 'exposedformalshaya_product_listblock_1') {
       // Adding new `All facets` block for PLP.
       $manager->updateConfigs(
