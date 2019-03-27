@@ -243,6 +243,12 @@
           height: 3rem !important;
           cursor: pointer;
           grid-column: 2 / -1;
+
+          &::before {
+            top: 0.75rem;
+            position: absolute;
+            #{$left}: 23%;
+          }
         }
       }
     }
