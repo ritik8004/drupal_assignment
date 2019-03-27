@@ -57,8 +57,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        padding-left: 1.25rem;
-        padding-right: 1.25rem;
+        padding: 0 1.25rem;
       }
     }
   }
