@@ -235,11 +235,21 @@
        */
       function showOnlyFewFacets () {
         var facets = $('.c-content__region .region__content > div.block-facets-ajax');
-        facets.each( function ( index ) {
-          if (index > 3) {
-            $( this ).addClass('hide-facet');
+        if (facets.length > 0) {
+          // By deafult only show 4 facets.
+          var show_only_facets = 4;
+          var plugin_id = facets[0].getAttribute('data-block-plugin-id');
+          // If block plugin id contains `category`, means its category facet.
+          if (plugin_id.indexOf('category') != -1) {
+            // If category facet present. then index check increases.
+            show_only_facets = 5;
           }
-        });
+          facets.each( function ( index ) {
+            if (index >= show_only_facets) {
+              $( this ).addClass('hidden-important');
+            }
+          });
+        }
       }
 
       function processSoftLiniks(element) {
