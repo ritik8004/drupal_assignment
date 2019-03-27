@@ -292,12 +292,7 @@
               .insertBefore('.view-filters.is-filter');
           }
           else if ($('body').hasClass('nodetype--acq_promotion')) {
-            mainBlock.before(facetBlockWrapper);
-            var promoFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-2');
-            promoFilter.wrapAll('<div class="view-filters is-filter">');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
-            $('.region__content .c-facet__blocks__wrapper')
-              .insertBefore('.view-filters.is-filter');
+            // Do Nothing for now.
           }
           else {
             mainBlock.before(facetBlockWrapper);
