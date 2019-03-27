@@ -3,3 +3,9 @@ facets_language_switcher:
     js/facets-language-switcher.js: {}
   dependencies:
     - core/jquery
+
+facets_all_slider:
+  js:
+    js/facet-all-slider.js: {}
+  dependencies:
+    - core/jquery
