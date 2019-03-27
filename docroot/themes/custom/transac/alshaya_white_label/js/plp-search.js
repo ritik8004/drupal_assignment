@@ -200,7 +200,7 @@
         }
         else if ($('body').hasClass('nodetype--acq_promotion')) {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
-          selector = '.c-content__region .block-views-exposed-filter-blockalshaya-product-list-block-2';
+          selector = '.c-content__region .total-result-count';
         }
         else {
           viewHeader = $('.c-plp .view-alshaya-product-list .view-header');
