@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_search_api
+  theme:
+    - alshaya_white_label
+id: alshaya_search_facets_block_all
+theme: alshaya_white_label
+region: content
+weight: -24
+provider: null
+plugin: alshaya_search_facets_block_all
+settings:
+  id: alshaya_search_facets_block_all
+  label: 'Alshaya all facet block - Search'
+  provider: alshaya_search_api
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /search
+    negate: false
+    context_mapping: {  }
