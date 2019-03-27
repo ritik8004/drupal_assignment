@@ -99,14 +99,6 @@
   }
 
   .c-products__item {
-    margin-bottom: 3.75rem;
-
-    &:nth-child(3n+2) {
-      @include breakpoint($only-tablet) {
-        margin-bottom: 3.75rem;
-      }
-    }
-
     @include breakpoint($only-mobile) {
       .price-wrapper {
         font-size: 0.875rem;
@@ -123,9 +115,6 @@
     }
 
     @include breakpoint($desktop) {
-      width: 32%;
-      margin-#{$right}: 0.75rem;
-
       article:hover {
         &::after {
           left: -0.6875rem;

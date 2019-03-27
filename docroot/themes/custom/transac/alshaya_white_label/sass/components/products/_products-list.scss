@@ -1,6 +1,11 @@
 .c-plp {
   padding-top: 1rem;
 
+  @include breakpoint($only-mobile) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   > .c-sidebar-first {
     @include breakpoint($desktop) {
       .c-facet__label,
@@ -12,6 +17,18 @@
     .c-accordion {
       display: table;
       width: 100%;
+    }
+
+    @include breakpoint($desktop) {
+      width: 17%;
+      max-width: 209px;
+    }
+  }
+
+  main {
+    @include breakpoint($desktop) {
+      width: 81.1%;
+      max-width: 1002px;
     }
   }
 
@@ -446,6 +463,64 @@
         display: none;
       }
     }
+
+    &.product-large {
+      .c-products__item {
+        @include breakpoint($desktop) {
+          width: calc(100% / 3 - 2% - -2% / 3 - 0.01px);
+          margin: 0 0 2% 2%;
+
+          &:nth-child(3n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          width: calc(100% / 2 - 2% - -2% / 2 - 5px);
+          margin: 0 0 2% 3.334%;
+
+          &:nth-child(2n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          margin: 0 0 2%;
+        }
+      }
+    }
+
+    &.product-small {
+      .c-products__item {
+        @include breakpoint($desktop) {
+          width: calc(100% / 4 - 1.797% - -1.797% / 4 - 0.01px);
+          margin: 0 0 2% 1.797%;
+
+          &:nth-child(4n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($only-tablet) {
+          width: calc(100% / 3 - 2% - -2% / 3 + 2px);
+          margin: 0 0 2% 1.528%;
+
+          &:nth-child(3n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+
+        @include breakpoint($only-mobile) {
+          width: calc(100% / 2 - 1.875% - -1.875% / 2);
+          margin: 0 0 2% 1.875%;
+
+          &:nth-child(2n+1) {
+            margin-#{$left}: 0;
+          }
+        }
+      }
+    }
   }
 
   .c-products__item {
@@ -458,8 +533,6 @@
     float: #{$left};
 
     @include breakpoint($mobile) {
-      width: calc(50% - 0.5rem);
-      margin-bottom: 1rem;
       min-height: 18rem;
     }
 
@@ -478,7 +551,6 @@
     }
 
     @include breakpoint($desktop) {
-      width: 33%;
       min-height: 25rem;
     }
 
@@ -1192,8 +1264,6 @@ html[lang=ar] {
     }
 
     .c-products__item {
-      width: calc((100% - 3rem) / 3);
-
       &:nth-child(3n+2) {
         margin: 0 1.5rem 1rem;
       }

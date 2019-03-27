@@ -184,20 +184,6 @@
   }
 
   .c-products__item {
-    @include breakpoint($only-tablet) {
-      &:nth-child(3n+2) {
-        margin: 0 0 1rem;
-      }
-    }
-
-    @include breakpoint($tablet) {
-      width: 25%;
-    }
-
-    @include breakpoint($desktop) {
-      width: 25%;
-    }
-
     .out-of-stock span {
       height: 2.5rem;
       line-height: 2.1;
