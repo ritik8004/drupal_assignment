@@ -1,0 +1,147 @@
+// Cross sell and up sell theming.
+
+.paragraph--type--product-carousel-category,
+.horizontal-upell,
+.horizontal-related,
+.horizontal-crossell,
+.block-basket-horizontal-recommendation {
+  .mobile--only--sell {
+    min-height: auto;
+
+    .sell--image {
+      @include breakpoint($only-mobile) {
+        min-height: auto;
+      }
+    }
+  }
+
+  .view-product-slider {
+    @include breakpoint($desktop) {
+      margin-bottom: 5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      .owl-carousel {
+        .views-row {
+          width: 37%;
+          margin-#{$left}: 0;
+          margin-#{$right}: 0.625rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      padding: 0 12%;
+
+      .owl-carousel {
+        .views-row {
+          width: 50%;
+          padding-#{$left}: 0;
+          padding-#{$right}: 0.375rem;
+        }
+      }
+    }
+  }
+}
+
+.path--cart,
+.nodetype--acq_product {
+  .ui-dialog {
+    @include breakpoint($tablet) {
+      padding: calc((100vh - 43rem) / 2) calc((100vw - 64.13rem) / 2);
+    }
+
+    .cloudzoom__image {
+      .img-wrap {
+        @include breakpoint($tablet) {
+          height: 24.25rem;
+        }
+
+        @include breakpoint($desktop) {
+          height: 30rem;
+        }
+      }
+    }
+
+    #drupal-modal {
+      overflow-y: auto;
+
+      @include breakpoint($tablet) {
+        height: 43.5rem !important;
+      }
+
+      #lightSlider {
+        &.pager-yes {
+          .slick-slide {
+            @include breakpoint($only-tablet) {
+              width: 6.75rem !important;
+              margin: 0 0.25rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.acq-content-product-modal {
+  .slider-position-bottom {
+    .cloudzoom {
+      .cloudzoom__thumbnails {
+        #lightSlider {
+          #drupal-modal & {
+            margin-#{$right}: 0;
+
+            .slick-slide {
+              @include breakpoint($desktop) {
+                margin: 0.3125rem 0.25rem;
+                width: 7rem !important;
+                height: 6.375rem !important;
+              }
+
+              @include breakpoint($only-tablet) {
+                height: auto !important;
+
+                img {
+                  width: 100%;
+                  height: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      #cloud-zoom-wrap {
+        img {
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  .c-products__item__label {
+    font-size: 1rem;
+    text-transform: capitalize;
+  }
+
+  .vat-text {
+    margin: 0.5rem 0;
+  }
+
+  .full-prod-link {
+    font-weight: normal;
+  }
+
+  .sku-base-form > #configurable_ajax ~ button {
+    @include breakpoint($only-tablet) {
+      margin-top: 1.375rem;
+    }
+  }
+
+  .form-type-configurable-select-group {
+    @include breakpoint($desktop) {
+      max-width: 85%;
+    }
+  }
+}
