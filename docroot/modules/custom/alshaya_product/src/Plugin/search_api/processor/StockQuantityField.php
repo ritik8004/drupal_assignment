@@ -18,7 +18,7 @@ use Drupal\alshaya_acm_product\SkuImagesManager;
  *
  * @SearchApiProcessor(
  *   id = "stock_quantity",
- *   label = @Translation("Stock Quantity"),
+ *   label = @Translation("Stock quantity"),
  *   description = @Translation("Add customized stock quantity field to the index."),
  *   stages = {
  *     "add_properties" = 20,
@@ -37,14 +37,14 @@ class StockQuantityField extends ProcessorPluginBase {
   protected $database;
 
   /**
-   * Stock Manager.
+   * Stock manager.
    *
    * @var \Drupal\acq_sku\StockManager
    */
   protected $acqSkuStockManager;
 
   /**
-   * SKU Images Manager service object.
+   * SKU images manager service object.
    *
    * @var \Drupal\alshaya_acm_product\SkuImagesManager
    */
@@ -89,7 +89,7 @@ class StockQuantityField extends ProcessorPluginBase {
   }
 
   /**
-   * Sets SKU Images Manager service.
+   * Sets SKU images manager service.
    *
    * @param \Drupal\alshaya_acm_product\SkuImagesManager $sku_image_manager
    *   The new stock manager.
@@ -122,7 +122,7 @@ class StockQuantityField extends ProcessorPluginBase {
   }
 
   /**
-   * Retrieves the SKU Images Manager.
+   * Retrieves the SKU images manager.
    *
    * @return \Drupal\alshaya_acm_product\SkuImagesManager
    *   The sku images manager.
@@ -143,8 +143,8 @@ class StockQuantityField extends ProcessorPluginBase {
 
     if ($datasource->getEntityTypeId() == 'node' && in_array('acq_product', array_keys($datasource->getBundles()))) {
       $definition = [
-        'label' => $this->t('Stock Quantity'),
-        'description' => $this->t("Alshaya custom stock quantity."),
+        'label' => $this->t('Stock quantity'),
+        'description' => $this->t('Alshaya custom stock quantity.'),
         'type' => "integer",
         'processor_id' => $this->getPluginId(),
       ];

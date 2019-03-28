@@ -91,7 +91,7 @@ field_settings:
     property_path: sticky
     type: integer
   stock_quantity:
-    label: 'Stock Quantity'
+    label: 'Stock quantity'
     datasource_id: 'entity:node'
     property_path: stock_quantity
     type: integer
