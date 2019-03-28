@@ -2,7 +2,6 @@ global_styles:
   css:
     theme:
       css/colors.css: {}
-      css/conditional-sass/fragrance-filter/fragrance-filter.ltr.css: {}
   js:
     vendor/js/calc.min.js: {}
     js/back_to_top.js: {}
@@ -180,6 +179,8 @@ plp-swatch-hover:
     js/plp-swatch-hover.js: {}
 
 fragrance-filter:
+  js:
+    js/fragrance_filter.js: {}
   css:
     theme:
       css/conditional-sass/fragrance-filter/fragrance-filter.ltr.css: {}
