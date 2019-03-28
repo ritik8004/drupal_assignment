@@ -81,6 +81,7 @@ class AlshayaGtmManager {
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
     'alshaya_master.home' => 'home page',
+    'entity.node.canonical:department_page' => 'department page',
   ];
 
   /**
