@@ -162,7 +162,7 @@ class AlshayaOptionsPageController extends ControllerBase {
     $query->condition('tfd.langcode', $langcode);
     if ($showImages) {
       $query->fields('tfs', ['field_attribute_swatch_image_target_id']);
-      $query->innerJoin('taxonomy_term__field_attribute_swatch_image', 'tfs', 'tfa.entity_id = tfs.entity_id');
+      $query->leftJoin('taxonomy_term__field_attribute_swatch_image', 'tfs', 'tfa.entity_id = tfs.entity_id');
     }
     if ($group) {
       $query->orderBy('tfd.name');
