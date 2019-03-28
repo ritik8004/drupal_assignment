@@ -24,6 +24,9 @@ function alshaya_product_update_8023() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
+
+  $index = Index::load('product');
+  $index->save();
 }
 
 /**

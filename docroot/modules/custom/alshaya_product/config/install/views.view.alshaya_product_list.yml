@@ -645,6 +645,18 @@ display:
           expose:
             label: Price
           plugin_id: search_api
+        stock_quantity:
+          id: stock_quantity
+          table: search_api_index_product
+          field: stock_quantity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: true
+          expose:
+            label: Stock
+          plugin_id: search_api
         name_1_1:
           id: name_1_1
           table: search_api_index_product
@@ -680,18 +692,6 @@ display:
           exposed: false
           expose:
             label: ''
-          plugin_id: search_api
-        stock_quantity:
-          id: stock_quantity
-          table: search_api_index_product
-          field: stock_quantity
-          relationship: none
-          group_type: group
-          admin_label: ''
-          order: DESC
-          exposed: true
-          expose:
-            label: 'Stock Quantity'
           plugin_id: search_api
     cache_metadata:
       max-age: -1
