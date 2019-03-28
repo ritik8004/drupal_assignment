@@ -88,7 +88,11 @@ class SortAttributesResultProcessor extends ProcessorPluginBase implements Build
     $order = $this->getAttributesOrder($facet);
 
     usort($results, function ($a, $b) use ($order) {
-      return ($order[$a->getRawValue()] < $order[$b->getRawValue()]) ? -1 : 1;
+      // If it is simply an ID for which we don't have taxonomy term
+      // lets display that in bottom.
+      $order_a = $order[$a->getRawValue()] ?? 9999999;
+      $order_b = $order[$b->getRawValue()] ?? 9999999;
+      return ($order_a < $order_b) ? -1 : 1;
     });
 
     $facet->setResults($results);
