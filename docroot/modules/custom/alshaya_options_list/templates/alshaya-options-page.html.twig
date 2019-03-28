@@ -1,14 +1,10 @@
 <div class='options-page-content'>
   <div class='options-page-header'>
-  <div class='options-page-title'>
-    {{ page_title }}
-</div>
-  <div class='options-page-description'>
-    {{ description }}
-  </div>
+    <div class='options-page-title'>{{ page-title }}</div>
+    <div class='options-page-description'>{{ description }}</div>
   </div>
   {% for key,option in options_list %}
-    <div class= {{ key }}>
+    <div class= 'attribute-option {{ key }}'>
       <div class='attribute-title'> {{ option.title }} </div>
       <div class='attribute-description'> {{ option.description }} </div>
       {% if option.search_form %}
@@ -37,6 +33,9 @@
       <div class='divider'>
         <span>{{ 'or' |t }} </span>
       </div>
+    </div>
+    <div class='divider'>
+      <span>{{ 'or' |t }} </span>
     </div>
   {% endfor %}
 </div>

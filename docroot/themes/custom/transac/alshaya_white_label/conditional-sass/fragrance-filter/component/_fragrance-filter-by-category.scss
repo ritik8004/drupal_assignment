@@ -1,22 +1,30 @@
 .alias--fragrance {
   .c-page-title {
-    text-align: center;
     margin-top: 50px;
     font-size: 36px;
     line-height: 0.89;
     text-align: center;
-    color: #333333;
+    color: #333;
     font-family: $alshaya-bold;
   }
 
+  .options-page-description {
+    font-family: $alshaya-thin;
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1.14;
+    text-align: center;
+    color: #333;
+  }
+
   .attribute-title,
-  .divider span {
+  .divider span,
+  .attribute-detail-link {
     font-family: $alshaya-bold;
     font-size: 18px;
     line-height: 1.22;
     text-align: center;
-    color: #333333;
-
+    color: #333;
     position: relative;
     background: $section_divider_bg;
     z-index: 2;
@@ -28,26 +36,33 @@
     font-size: 16px;
     line-height: 1.25;
     text-align: center;
-    color: #777777;
+    color: #777;
     margin-top: 27px;
   }
 
   .region__content {
     max-width: 1280px;
     margin: 0 auto;
+
+    @include breakpoint($only-mobile) {
+      margin: 0 8px;
+    }
   }
 
-  .demo,
+  .attribute-option,
   .divider {
     border: 1px solid #e5e5e5;
     border-top: 0;
-    margin-top:66px;
-
+    margin-top: 66px;
     position: relative;
     display: flex;
     flex-flow: row wrap;
     align-items: center;
     justify-content: center;
+
+    @include breakpoint($only-mobile) {
+      border: none;
+    }
 
     &::before {
       content: '';
@@ -69,6 +84,16 @@
     }
   }
 
+  .attribute-option {
+    ul {
+      padding: 0;
+    }
+
+    li {
+      list-style: none;
+    }
+  }
+
   .divider {
     border: none;
 
@@ -76,5 +101,78 @@
       top: 11px;
       border-top-color: #333;
     }
+
+    &:last-child {
+      display: none;
+    }
+  }
+
+  .attribute-detail-link {
+    color: #fff;
+    background-color: #333;
+    padding: 10px 0;
+    margin-top: 23px;
+    cursor: pointer;
+    margin-bottom: 68px;
+  }
+
+  .fragrance_name {
+    .attribute-filter-option {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+}
+
+.fragrance-filter-overlay {
+  overflow: hidden;
+
+  .fragrance_name {
+    .attribute-filter-option {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      z-index: 12;
+      background: #fff;
+      padding: 0 8px;
+    }
+  }
+
+  .branding__menu {
+    &.navbar-fixed-top {
+      z-index: 11;
+    }
+  }
+
+  .fragrance-overlay-close-icon {
+    #{$left}: auto;
+    #{$right}: 0.5rem;
+  }
+
+  .attribute-filter-block-title {
+    font-family: $alshaya-thin;
+    font-size: 14px;
+    line-height: 1.29;
+    color: #005699;
+    text-transform: uppercase;
+  }
+
+  .attribute-filter-header {
+    position: fixed;
+    height: 46px;
+    background: #fff;
+    width: 100%;
+    padding: 14px 0;
+  }
+
+  .attribute-filter-name-list {
+    margin-top: 56px;
   }
 }
