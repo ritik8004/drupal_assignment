@@ -9,6 +9,10 @@
           text-align: center;
         }
       }
+
+      @include breakpoint($only-mobile) {
+        line-height: 3;
+      }
     }
   }
 

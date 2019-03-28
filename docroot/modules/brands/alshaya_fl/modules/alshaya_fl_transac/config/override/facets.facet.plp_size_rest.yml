@@ -1,0 +1,3 @@
+processor_configs:
+  alshaya_exclude_attribute_options:
+    processor_id: alshaya_exclude_attribute_options

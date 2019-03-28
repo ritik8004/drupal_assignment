@@ -238,6 +238,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
+          $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->configFactory->get('alshaya_acm_product.display_settings')->get('show_variants_thumbnail_plp_gallery');
         }
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';
