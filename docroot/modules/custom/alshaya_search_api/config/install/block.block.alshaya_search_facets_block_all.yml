@@ -15,7 +15,7 @@ settings:
   id: alshaya_search_facets_block_all
   label: 'Alshaya all facet block - Search'
   provider: alshaya_search_api
-  label_display: visible
+  label_display: '0'
 visibility:
   request_path:
     id: request_path
