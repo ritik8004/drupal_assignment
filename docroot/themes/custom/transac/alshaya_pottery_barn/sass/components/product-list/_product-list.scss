@@ -143,6 +143,24 @@
     }
   }
 
+  .c-products-list.product-large {
+    @include breakpoint($only-tablet) {
+      .alshaya_search_gallery {
+        max-height: 20rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .alshaya_search_gallery {
+        max-height: 21rem;
+
+        .alshaya_search_mainimage {
+          height: 21rem;
+        }
+      }
+    }
+  }
+
   .swatches {
     display: flex;
     align-items: center;

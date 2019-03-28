@@ -73,6 +73,48 @@
     }
   }
 
+  .c-products-list.product-small {
+    .alshaya_search_gallery {
+      .alshaya_search_mainimage {
+        @include breakpoint($desktop) {
+          height: 20.5rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          height: 15.125rem;
+        }
+      }
+    }
+  }
+
+  .c-products-list.product-large {
+    @include breakpoint($desktop) {
+      .alshaya_search_gallery {
+        max-height: 26.5rem;
+
+        .alshaya_search_mainimage {
+          height: 26.5rem;
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      .alshaya_search_gallery {
+        max-height: 29.125rem;
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      .alshaya_search_gallery {
+        max-height: 31.125rem;
+
+        .alshaya_search_mainimage {
+          height: 31.125rem;
+        }
+      }
+    }
+  }
+
   .region__content {
     .bef-exposed-form {
       position: relative;

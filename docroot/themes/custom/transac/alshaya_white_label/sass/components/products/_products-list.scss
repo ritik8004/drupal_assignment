@@ -521,6 +521,20 @@
         }
       }
     }
+
+    @include breakpoint($only-mobile) {
+      &.product-small {
+        .alshaya_search_gallery .alshaya_search_mainimage {
+          height: 13.125rem;
+        }
+      }
+
+      &.product-large {
+        .alshaya_search_gallery .alshaya_search_mainimage {
+          height: 17.125rem;
+        }
+      }
+    }
   }
 
   .c-products__item {
@@ -560,7 +574,7 @@
 
       .alshaya_search_mainimage {
         z-index: 5;
-        height: 15.125rem;
+        height: 18.125rem;
         overflow: hidden;
 
         @include breakpoint($tablet) {

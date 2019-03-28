@@ -181,6 +181,42 @@
         width: 100%;
       }
     }
+
+    &.product-small {
+      @include breakpoint($only-tablet) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            min-height: 19.5rem;
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: 15.5rem;
+          }
+        }
+      }
+    }
+
+    &.product-large {
+      @include breakpoint($only-tablet) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: 19.5rem;
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: 19.125rem;
+          }
+        }
+      }
+    }
   }
 
   .c-products__item {

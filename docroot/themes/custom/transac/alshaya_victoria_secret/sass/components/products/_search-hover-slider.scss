@@ -2,6 +2,10 @@
   // Need this in px for JS consistency for slider.
   width: 242px;
 
+  .product-small & {
+    width: 197px;
+  }
+
   .slick-slider {
     li {
       &.slick-slide {
@@ -17,6 +21,11 @@
           max-width: 4.75rem;
           height: auto;
           max-height: 6.3125rem;
+
+          .product-small & {
+            width: 3.75rem;
+            height: auto;
+          }
         }
       }
     }
