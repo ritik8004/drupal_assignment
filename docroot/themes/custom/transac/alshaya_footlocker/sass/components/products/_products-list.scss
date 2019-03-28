@@ -12,17 +12,6 @@
   .c-products__item {
     font-size: 0.875rem;
 
-    @include breakpoint($desktop) {
-      width: 31.6%;
-      max-width: 18.1875rem;
-      margin-#{$right}: 2.5%;
-      margin-bottom: 2rem;
-
-      &:nth-child(3n) {
-        margin-#{$right}: 0;
-      }
-    }
-
     @include breakpoint($tablet) {
       article {
         &:hover::after {
