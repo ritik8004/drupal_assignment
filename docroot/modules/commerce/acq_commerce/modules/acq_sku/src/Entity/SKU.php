@@ -3,7 +3,6 @@
 namespace Drupal\acq_sku\Entity;
 
 use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\ContentEntityBase;
@@ -59,21 +58,12 @@ use GuzzleHttp\Exception\RequestException;
  */
 class SKU extends ContentEntityBase implements SKUInterface {
 
-  const SWATCH_IMAGE_ROLE = 'swatch_image';
-
   /**
    * Processed media array.
    *
    * @var array
    */
   protected $mediaData = [];
-
-  /**
-   * Processed swatch media item array.
-   *
-   * @var array
-   */
-  protected $swatchData = [];
 
   /**
    * {@inheritdoc}
@@ -135,10 +125,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
           continue;
         }
 
-        if (isset($data['roles']) && in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
-          continue;
-        }
-
         $this->mediaData[] = $this->processMediaItem($update_sku, $data, $download_media, $default_label);
       }
 
@@ -149,60 +135,6 @@ class SKU extends ContentEntityBase implements SKUInterface {
     }
 
     return $this->mediaData;
-  }
-
-  /**
-   * Function to return swatch media item for a SKU.
-   *
-   * @param bool $download
-   *   Whether to download media or not.
-   * @param bool $reset
-   *   Flag to reset cache and generate array again from serialized string.
-   * @param string $default_label
-   *   Default value for alt/title.
-   *
-   * @return array
-   *   Array containing media item.
-   */
-  public function getSwatchImage($download = TRUE, $reset = FALSE, $default_label = '') {
-    if (!$reset && !empty($this->swatchData)) {
-      return $this->swatchData;
-    }
-
-    if ($media_data = $this->get('media')->getString()) {
-      $update_sku = FALSE;
-
-      $media_data = unserialize($media_data);
-
-      if (empty($media_data)) {
-        return [];
-      }
-
-      foreach ($media_data as &$data) {
-        // We don't want to show disabled images.
-        if (isset($data['disabled']) && $data['disabled']) {
-          continue;
-        }
-
-        if (empty($data['roles']) || !in_array(self::SWATCH_IMAGE_ROLE, $data['roles'])) {
-          continue;
-        }
-
-        $media_item = $this->processMediaItem($update_sku, $data, $download, $default_label);
-
-        if ($media_item) {
-          $this->swatchData = $media_item;
-          break;
-        }
-      }
-
-      if ($update_sku) {
-        $this->get('media')->setValue(serialize($media_data));
-        $this->save();
-      }
-    }
-
-    return $this->swatchData;
   }
 
   /**
@@ -811,16 +743,11 @@ class SKU extends ContentEntityBase implements SKUInterface {
 
     // Delete media files.
     foreach ($entities as $entity) {
-      /** @var \Drupal\acq_sku\Entity\SKU $entity  */
+      /** @var \Drupal\acq_sku\Entity\SKU $entity */
       foreach ($entity->getMedia(FALSE) as $media) {
         if ($media['file'] instanceof FileInterface) {
           $media['file']->delete();
         }
-      }
-
-      $swatch = $entity->getSwatchImage(FALSE);
-      if ($swatch && $swatch['file'] instanceof FileInterface) {
-        $swatch['file']->delete();
       }
     }
   }
