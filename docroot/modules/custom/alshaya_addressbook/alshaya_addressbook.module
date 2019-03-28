@@ -324,30 +324,14 @@ function _alshaya_addressbook_set_optional_field(array &$element, FormStateInter
   $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
   $element['#magento_form'] = $address_book_manager->getMagentoFormFields();
 
-  $fields_mapped = [];
-  $mapping = $address_book_manager->getMagentoFieldMappings();
-  $mapping = array_flip($mapping);
-
-  foreach ($element['#magento_form'] as $form_item) {
-    if (empty($form_item['attribute_code'])) {
-      continue;
-    }
-
-    if (isset($mapping[$form_item['attribute_code']])) {
-      $field_code = $mapping[$form_item['attribute_code']];
-      $fields_mapped[$form_item['attribute_code']] = $field_code;
-    }
-  }
-
-  // Disable the fields which we couldn't map.
-  $field_unmapped = array_diff($mapping, $fields_mapped);
-  foreach ($field_unmapped as $field_code) {
+  // Hide all the fields which we couldn't map.
+  foreach ($address_book_manager->getMagentoUnmappedFields() as $field_code) {
     $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
-    $element['#field_overrides'][$field_code] = FieldOverride::OPTIONAL;
+    $element['#field_overrides'][$field_code] = FieldOverride::HIDDEN;
   }
 
-  $fields_disabled = $address_book_manager->getMagentoDisabledFields();
-  foreach ($fields_disabled as $field_code => $magento_field_code) {
+  // Hide all disabled fields.
+  foreach ($address_book_manager->getMagentoDisabledFields() as $field_code => $magento_field_code) {
     $field_code = lcfirst(str_replace('_', '', ucwords($field_code, '_')));
     $element['#field_overrides'][$field_code] = FieldOverride::HIDDEN;
   }

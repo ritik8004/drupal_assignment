@@ -250,7 +250,9 @@
   }
 
   button[type="submit"] {
-    @extend %button-wide;
+    &:not(.edit-newsletter) {
+      @extend %button-wide;
+    }
   }
 
   .page-standard.l-container {

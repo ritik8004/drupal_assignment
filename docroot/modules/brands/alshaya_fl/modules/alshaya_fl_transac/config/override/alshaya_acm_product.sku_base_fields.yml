@@ -1,42 +1,69 @@
 fields:
-  size_shoe_uk:
+  color:
     configurable: 1
+    cardinality: 1
+    index: 0
+    facet: 0
+  size:
+    configurable: 1
+    cardinality: 1
+    index: 0
+    facet: 0
+  color_family:
+    label: 'Color'
+    type: 'string'
+    cardinality: -1
     index: 1
     facet: 1
+    swatch: 1
   size_shoe_eu:
     configurable: 1
+    label: 'Size Shoes'
+    cardinality: -1
     index: 1
     facet: 1
+  size_shoe_uk:
+    label: 'Size Shoes'
+    cardinality: -1
+    index: 1
+    facet: 0
   size_shoe_us:
+    label: 'Size Shoes'
+    cardinality: -1
+    index: 1
+    facet: 0
+  size_textile_eu:
     configurable: 1
+    label: 'Size Clothing'
+    cardinality: -1
     index: 1
     facet: 1
   size_textile_uk:
-    configurable: 1
+    label: 'Size Clothing'
+    cardinality: -1
     index: 1
-    facet: 1
-  size_textile_eu:
-    configurable: 1
-    index: 1
-    facet: 1
+    facet: 0
   size_textile_us:
-    configurable: 1
+    label: 'Size Clothing'
+    cardinality: -1
     index: 1
-    facet: 1
+    facet: 0
   size_socks:
     configurable: 1
+    label: 'Size Socks'
+    cardinality: -1
     index: 1
     facet: 1
   size_bras:
     configurable: 1
+    label: 'Size Bras'
+    cardinality: -1
     index: 1
     facet: 1
   size_rest:
     configurable: 1
-    index: 1
-    facet: 1
-  color_family:
-    configurable: 1
+    label: 'Size Rest'
+    cardinality: -1
     index: 1
     facet: 1
   product_brand:
