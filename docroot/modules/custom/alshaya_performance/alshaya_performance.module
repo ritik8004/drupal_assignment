@@ -64,8 +64,8 @@ function alshaya_performance_flush_frontend_caches() {
   // as well.
   Cache::invalidateTags(['rendered']);
 
-  // Frontend data can remain in these bins, so we need to empty them as well
-  foreach (Cache::getBins() as $service_id => $cache_backend) {
+  // Frontend data can remain in these bins, so we need to empty them as well.
+  foreach (Cache::getBins() as $cache_backend) {
     $cache_backend->deleteAll();
   }
 
