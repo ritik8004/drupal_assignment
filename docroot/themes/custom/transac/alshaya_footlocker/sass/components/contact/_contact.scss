@@ -1,0 +1,23 @@
+.webform-submission-alshaya-contact-add-form {
+  .form-item {
+    &.form-type-textfield,
+    &.form-type-textarea,
+    &.form-type-email {
+      label {
+        &:last-of-type {
+          text-transform: none;
+        }
+      }
+    }
+  }
+
+  .mobile-number-field {
+    label {
+      text-transform: none;
+    }
+  }
+
+  .form-submit {
+    @extend %btn;
+  }
+}

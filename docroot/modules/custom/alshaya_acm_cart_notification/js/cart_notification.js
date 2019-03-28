@@ -67,7 +67,7 @@
         }
       });
 
-      $('.form-item-configurable-select, .form-item-configurable-swatch').on('change', function () {
+      $('#configurable_ajax .form-select').once('bind-spinner-js').on('change', function () {
         // Start loading.
         spinner_start();
       });
