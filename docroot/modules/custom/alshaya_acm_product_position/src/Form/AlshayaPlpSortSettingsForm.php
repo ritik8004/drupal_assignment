@@ -95,8 +95,8 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
   public static function arrangeOptionsByWeight(array &$element, array $default_order) {
     // Remove empty options.
     $default_order = array_filter($default_order);
-    // All available Sort Options.
-    $options = alshaya_acm_product_position_available_options();
+    // All available sort options.
+    $options = \Drupal::config('alshaya_acm_product_position.settings')->get('available_sort_options');
     // Sort the form options based on the config.
     $options = array_replace(array_flip($default_order), $options);
 
