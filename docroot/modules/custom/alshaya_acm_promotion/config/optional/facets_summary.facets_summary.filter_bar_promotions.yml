@@ -21,6 +21,12 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
+  category_facet_promo:
+    checked: true
+    label: 'Promo Category'
+    separator: ', '
+    show_count: true
+    weight: 0
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_2'
 processor_configs:
   reset_facets:
