@@ -103,6 +103,7 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: 'field_skus:entity:attr_color'
     type: string
+    boost: 0.5
     dependencies:
       config:
         - field.storage.node.field_skus

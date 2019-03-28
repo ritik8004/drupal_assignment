@@ -4,6 +4,7 @@ dependencies:
   config:
     - search_api.index.product
   module:
+    - alshaya_acm_product_position
     - better_exposed_filters
     - search_api
     - user
@@ -52,7 +53,6 @@ display:
               allow_secondary: false
               secondary_label: 'Advanced options'
               autosubmit: true
-              autosubmit_exclude_textfield: false
               autosubmit_hide: true
             sort:
               bef_format: default
@@ -60,7 +60,7 @@ display:
                 collapsible: false
                 collapsible_label: 'Sort options'
                 combine: true
-                combine_rewrite: "Position Asc|Position\r\nNew In Desc|New In\r\nName Asc|Name A to Z\r\nName Desc|Name Z to A\r\nPrice Desc|Price High to Low\r\nPrice Asc|Price Low to High\r\nStock Quantity Desc|Recommended"
+                combine_rewrite: "Position Asc|Position\nNew In Desc|New In\nName Asc|Name A to Z\nName Desc|Name Z to A\nPrice Desc|Price High to Low\nPrice Asc|Price Low to High"
                 reset: false
                 reset_label: ''
                 is_secondary: false
