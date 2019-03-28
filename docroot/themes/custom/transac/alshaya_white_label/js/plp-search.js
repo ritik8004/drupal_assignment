@@ -284,12 +284,7 @@
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile')
             .addClass('is-filter');
           if ($('body').hasClass('path--search')) {
-            mainBlock.before(facetBlockWrapper);
-            var searchFilter = $('.c-plp #views-exposed-form-search-page');
-            searchFilter.wrapAll('<div class="view-filters is-filter">');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
-            $('.region__content .block-views-exposed-filter-blocksearch-page .c-facet__blocks__wrapper')
-              .insertBefore('.view-filters.is-filter');
+            // Do nothing.
           }
           else if ($('body').hasClass('nodetype--acq_promotion')) {
             // Do Nothing for now.
