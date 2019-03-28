@@ -14,5 +14,12 @@ alshaya_options_list.page_settings:
   requirements:
     _permission: 'administer alshaya options list'
 
+alshaya_options_list.autocomplete:
+  path: '/options-list/autocomplete/{param}'
+  defaults:
+    controller: '\Drupal\alshaya_options_list\AlshayaOptionsPageController::searchAutocomplete'
+  requirements:
+    _permission: 'access content'
+
 route_callbacks:
   - '\Drupal\alshaya_options_list\Routing\AlshayaOptionsListRoutes::routes'

@@ -64,6 +64,11 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             '#Collapsible' => TRUE,
             '#title' => 'Settings for ' . $selected_attribute,
           ];
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-search'] = [
+            '#type' => 'checkbox',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-search'],
+            '#title' => $this->t('Enable search for %attribute', ['%attribute' => $selected_attribute]),
+          ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-images'] = [
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-images'],

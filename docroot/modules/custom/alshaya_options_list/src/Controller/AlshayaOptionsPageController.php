@@ -114,6 +114,16 @@ class AlshayaOptionsPageController extends ControllerBase {
         $options_list[$attributeCode]['terms'] = $this->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
         $this->cache->set($cid, $options_list[$attributeCode]['terms'], Cache::PERMANENT, ['alshaya-options-page']);
       }
+      if ($attribute_options[$request]['attribute_details'][$attributeCode]['show-search']) {
+        $search_form = $this->formBuilder()
+          ->getForm('\Drupal\alshaya_options_list\Form\AlshayaOptionsListAutocompleteForm');
+        $options_list[$attributeCode]['search_form'] = $search_form;
+      }
+
+      if ($attribute_options[$request]['attribute_details'][$attributeCode]['group']) {
+        $options_list[$attributeCode]['group'] = TRUE;
+        $options_list[$attributeCode]['terms'] = $this->groupAlphabetically($options_list[$attributeCode]['terms']);
+      }
 
       $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
       $options_list[$attributeCode]['description'] = $attribute_options[$request]['attribute_details'][$attributeCode]['description'];
@@ -122,7 +132,7 @@ class AlshayaOptionsPageController extends ControllerBase {
     $options_list = [
       '#theme' => 'alshaya_options_page',
       '#options_list' => $options_list,
-      '#page-title' => $attribute_options[$request]['title'],
+      '#page_title' => $attribute_options[$request]['title'],
       '#description' => $attribute_options[$request]['description'],
     ];
 
@@ -156,7 +166,6 @@ class AlshayaOptionsPageController extends ControllerBase {
     }
     if ($group) {
       $query->orderBy('tfd.name');
-      $query->groupBy('tfd.name');
     }
     $options = $query->execute()->fetchAllKeyed(1, 0);
     foreach ($options as $option) {
@@ -173,6 +182,25 @@ class AlshayaOptionsPageController extends ControllerBase {
       $return[] = $list_object;
     }
     return $return;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupAlphabetically($options_array) {
+    $return_array = [];
+    foreach ($options_array as $option) {
+      $char = strtolower($option['title'][0]);
+      $return_array[$char][] = $option;
+    }
+    return $return_array;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function searchAutocomplete($keyword) {
+    return new JsonResponse(['key' => 'value']);
   }
 
 }
