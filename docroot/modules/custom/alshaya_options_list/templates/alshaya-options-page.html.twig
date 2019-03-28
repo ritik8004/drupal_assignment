@@ -1,7 +1,7 @@
 <div class='options-page-content'>
   <div class='options-page-header'>
   <div class='options-page-title'>
-    {{ page-title }}
+    {{ page_title }}
 </div>
   <div class='options-page-description'>
     {{ description }}
@@ -11,11 +11,29 @@
     <div class= {{ key }}>
       <div class='attribute-title'> {{ option.title }} </div>
       <div class='attribute-description'> {{ option.description }} </div>
-      {% for value in option.terms %}
-        <div class='title'>
-          <a href={{ value.url }}> {{ value.title }} </a>
+      {% if option.search_form %}
+        <div class='attribute-search-form'>
+        {{ option.search_form }}
         </div>
+      {% endif %}
+      {% if group %}
+        {% for key,array_terms in option.terms %}
+          <div class ='group-heading'>
+            {{ key }}
+          </div>
+      {% for value in array_terms %}
+          <div class='title'>
+            <a href={{ value.url }}> {{ value.title }} </a>
+          </div>
+        {% endfor %}
       {% endfor %}
+      {% else %}
+        {% for value in option.terms %}
+          <div class='title'>
+            <a href={{ value.url }}> {{ value.title }} </a>
+          </div>
+        {% endfor %}
+      {% endif %}
       <div class='divider'>
         <span>{{ 'or' |t }} </span>
       </div>

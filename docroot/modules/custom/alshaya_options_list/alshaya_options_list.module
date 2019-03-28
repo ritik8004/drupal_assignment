@@ -11,9 +11,10 @@
 function alshaya_options_list_theme($existing, $type, $theme, $path) {
   return [
     'alshaya_options_page' => [
+      'render element' => 'form',
       'variables' => [
         'options_list' => NULL,
-        'page-title' => '',
+        'page_title' => '',
         'description' => '',
       ],
     ],
