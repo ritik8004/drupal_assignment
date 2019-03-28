@@ -1,5 +1,12 @@
-.alias--fragrance {
-  .c-page-title {
+.options-page-content {
+  max-width: 1280px;
+  margin: 0 auto;
+
+  @include breakpoint($only-mobile) {
+    margin: 0 8px;
+  }
+
+  .options-page-title {
     margin-top: 50px;
     font-size: 36px;
     line-height: 0.89;
@@ -38,14 +45,10 @@
     text-align: center;
     color: #777;
     margin-top: 27px;
-  }
-
-  .region__content {
-    max-width: 1280px;
-    margin: 0 auto;
 
     @include breakpoint($only-mobile) {
-      margin: 0 8px;
+      font-size: 14px;
+      margin: 0 26px;
     }
   }
 
@@ -85,10 +88,6 @@
   }
 
   .attribute-option {
-    ul {
-      padding: 0;
-    }
-
     li {
       list-style: none;
     }
@@ -174,5 +173,85 @@
 
   .attribute-filter-name-list {
     margin-top: 56px;
+  }
+}
+
+@include breakpoint($tablet) {
+  .attribute-filter-name-list {
+    -webkit-column-count: 4;
+    column-count: 4;
+    -webkit-column-gap: 16px;
+    column-gap: 16px;
+    margin-top: 36px;
+    padding: 0 48px;
+
+    li {
+      box-sizing: border-box;
+      line-height: 1;
+    }
+
+    .level-1 {
+      -webkit-column-break-inside: avoid;
+      break-inside: avoid;
+
+      ul {
+        padding: 0;
+        margin-bottom: 0;
+
+        li {
+          margin-bottom: 15px;
+        }
+      }
+    }
+
+    .group-heading {
+      color: #333;
+      background: transparent;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 0 0 6px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+}
+
+.alshaya-options-list-autocomplete-form {
+  margin-top: 26px;
+
+  .form-item-alshaya-options-list-autocomplete-form {
+    display: block;
+    max-width: 444px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+
+    &::after {
+      content: '';
+      background: url('../../../imgs/icons/store-search.svg') no-repeat center;
+      width: 20px;
+      height: 25px;
+      padding: 0;
+      background-size: contain;
+      position: absolute;
+      #{$right}: 8px;
+      top: 0.5rem;
+    }
+
+    input {
+      box-sizing: border-box;
+      outline: transparent;
+      height: 2.5rem;
+      border: 1px solid #dadada !important;
+      padding: 0 0.5rem !important;
+      background: transparent;
+    }
+
+    label {
+      display: none;
+    }
   }
 }

@@ -2,6 +2,7 @@ global_styles:
   css:
     theme:
       css/colors.css: {}
+      css/conditional-sass/fragrance-filter/fragrance-filter.ltr.css: {}
   js:
     vendor/js/calc.min.js: {}
     js/back_to_top.js: {}
@@ -12,6 +13,7 @@ global_styles:
     js/address_book.js: {}
     js/one_time_language_slider.js: {}
     js/footer-space-filler.js: {}
+    js/fragrance_filter.js: {}
     js/banner_margin_override.js: {}
     vendor/js/details-polyfill.js: {}
     /libraries/mobile-detect/mobile-detect.js: {}
@@ -178,7 +180,7 @@ plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
 
-fragrance-filter:
+fragrance_filter:
   js:
     js/fragrance_filter.js: {}
   css:
