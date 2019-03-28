@@ -15,7 +15,7 @@ settings:
   id: alshaya_promo_facets_block_all
   label: 'Alshaya all facet block - Promo'
   provider: alshaya_search_api
-  label_display: visible
+  label_display: '0'
 visibility:
   'entity_bundle:node':
     id: 'entity_bundle:node'

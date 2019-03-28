@@ -8,6 +8,8 @@
 
   Drupal.behaviors.alshayaFacetAllSlide = {
     attach: function (context, settings) {
+
+      // On clicking facet block title, update the title of block.
       $('.all-filters .block-facets-ajax').on('click', function() {
         // Update the title on click of facet.
         var facet_title = $(this).find('h3.c-facet__title').html();
@@ -19,9 +21,12 @@
         $(this).removeClass('hide-facet');
         $(this).addClass('show-facet');
 
+        // Show the back button.
         $('.facet-all-back').show();
       });
 
+      // On clicking on back button, reset the block title and add class so
+      // that facet blocks can be closed.
       $('.facet-all-back').on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
@@ -30,17 +35,25 @@
 
       });
 
+      // Show all filters blocks.
       $('.show-all-filters').on('click', function() {
         $('.all-filters').show();
       });
 
+      // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply').on('click', function() {
         $('.all-filters').hide();
       });
 
-      $('.facet-all-clear').on('click', function() {
-        $('.clear-all a').trigger('click');
+      $('.three-col-grid').on('click', function() {
+        $('.c-products-list').removeClass('product-small').addClass('product-large');
+        $('.search-lightSlider').slick('refresh');
       });
+      $('.four-col-grid').on('click', function() {
+        $('.c-products-list').removeClass('product-large').addClass('product-small');
+        $('.search-lightSlider').slick('refresh');
+      });
+
     }
   };
 
