@@ -3,7 +3,9 @@
 namespace Drupal\alshaya_hm\Commands;
 
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Path\AliasManager;
 use Drupal\Core\State\StateInterface;
@@ -57,6 +59,20 @@ class AlshayaHmCommands extends DrushCommands {
   protected $state;
 
   /**
+   * Alshaya config Manager.
+   *
+   * @var \Drupal\alshaya_config\AlshayaConfigManager
+   */
+  protected $alshayaConfigManager;
+
+  /**
+   * SKU fields manager.
+   *
+   * @var \Drupal\acq_sku\SKUFieldsManager
+   */
+  protected $skuFieldsManager;
+
+  /**
    * AlshayaHmCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -69,17 +85,53 @@ class AlshayaHmCommands extends DrushCommands {
    *   Config Factory service.
    * @param \Drupal\Core\State\StateInterface $state
    *   State Manager service.
+   * @param \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager
+   *   Alshaya config manager.
+   * @param \Drupal\acq_sku\SKUFieldsManager $skuFieldsManager
+   *   SKU fields manager.
    */
   public function __construct(Connection $connection,
                               SkuManager $skuManager,
                               AliasManager $aliasManager,
                               ConfigFactoryInterface $configFactory,
-                              StateInterface $state) {
+                              StateInterface $state,
+                              AlshayaConfigManager $alshayaConfigManager,
+                              SKUFieldsManager $skuFieldsManager) {
     $this->connection = $connection;
     $this->skuManager = $skuManager;
     $this->aliasManager = $aliasManager;
     $this->configFactory = $configFactory;
     $this->state = $state;
+    $this->alshayaConfigManager = $alshayaConfigManager;
+    $this->skuFieldsManager = $skuFieldsManager;
+  }
+
+  /**
+   * Add configurations needed for catalog restructuring.
+   *
+   * @command alshaya_hm:enable_catalog_restructure
+   *
+   * @validate-module-enabled alshaya_hm
+   *
+   * @aliases alshaya_hm_enable_catalog_restructure
+   */
+  public function enableCatalogRestructure() {
+    // Hide product color field from Form display.
+    $this->alshayaConfigManager->updateConfigs(['core.entity_form_display.node.acq_product.default'], 'acq_sku');
+
+    // Add style code attribute to SKU entity.
+    alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+    $this->skuFieldsManager->addFields();
+
+    // Update url alias for product nodes to append color label as suffix.
+    $this->alshayaConfigManager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_hm');
+    $this->alshayaConfigManager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm', 'install', AlshayaConfigManager::MODE_REPLACE);
+
+    // Set Additional configurable attribute for H&M.
+    $this->alshayaConfigManager->updateConfigs(['acq_sku.configurable_form_settings'], 'alshaya_hm', 'optional');
+
+    // Update Alshaya display settings to hide swatches.
+    $this->alshayaConfigManager->updateConfigs(['alshaya_acm_product.display_settings'], 'alshaya_acm_product');
   }
 
   /**
