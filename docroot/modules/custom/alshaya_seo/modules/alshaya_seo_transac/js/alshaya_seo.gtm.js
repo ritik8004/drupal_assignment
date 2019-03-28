@@ -274,17 +274,17 @@
       }
 
       // CheckoutOption event for delivery page.
-      $('[data-drupal-selector="edit-actions-get-shipping-methods"]').mousedown(function () {
+      $('[data-drupal-selector="edit-actions-get-shipping-methods"]').once('js-event').on('mousedown', function () {
         Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
       });
 
-      $('[data-drupal-selector="edit-actions-next"]').mousedown(function () {
+      $('button.delivery-home-next').once('js-event').on('mousedown', function () {
         if (gtmPageType == 'checkout delivery page') {
-          Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
+          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery - subdelivery ', 2);
         }
       });
 
-      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      $('[data-drupal-selector="edit-actions-ccnext"]').once('js-event').on('mousedown', function () {
         ccPaymentsClicked = true;
         Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
       });
@@ -512,7 +512,7 @@
       /**
        * Tracking Returning customers.
        */
-      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
+        cartCheckoutLoginSelector.find('button[gtm-type="checkout-signin"]').once('js-event').on('mousedown', function () {
         Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
       });
 
@@ -526,20 +526,6 @@
           deliveryType = 'Home Delivery';
         }
       }
-
-      subDeliveryOptionSelector.find('.form-type-radio').each(function () {
-        // Push default selected sub-delivery option to GTM.
-        if ($(this).find('input[checked="checked"]').length > 0) {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          deliveryType = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-        }
-
-        // Attach change event listener to shipping method radio buttons.
-        $(this).change(function () {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          deliveryType = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-        });
-      });
 
       /**
        * GTM virtual page tracking for click & collect journey.
@@ -577,7 +563,7 @@
           if (drupalSettings.path.currentLanguage === 'ar') {
             preselectedMethodLabel = drupalSettings.alshaya_payment_options_translations[preselectedMethodLabel];
           }
-          $('[data-drupal-selector="edit-actions-next"]').mousedown(function () {
+          $('[data-drupal-selector="edit-actions-next"]').once('js-event').on('mousedown', function () {
             Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 3);
           });
         }
