@@ -1,4 +1,10 @@
 .c-footer-primary {
+  @include breakpoint($only-mobile) {
+    html[lang=en] & {
+      padding-top: 0.625rem;
+    }
+  }
+
   .primary--footer--right {
     @include breakpoint($only-tablet) {
       padding-#{$left}: 5%;
@@ -6,12 +12,12 @@
 
     @include breakpoint($tablet) {
       float: $right;
-      width: 35%;
+      width: 38%;
       margin-top: 0.75rem;
     }
 
     @include breakpoint($desktop) {
-      width: 25%;
+      width: 27%;
     }
   }
 
@@ -30,7 +36,7 @@
   @include breakpoint($desktop) {
     .footer--categories {
       float: $left;
-      width: 35%;
+      width: 30%;
       padding-#{$right}: 5%;
     }
 
@@ -48,11 +54,11 @@
 
   .footer--menu {
     @include breakpoint($tablet) {
-      width: 65%;
+      width: 62%;
     }
 
     @include breakpoint($desktop) {
-      width: 75%;
+      width: 72%;
     }
   }
 }
@@ -61,11 +67,17 @@
   @extend %list-clear;
 
   @include breakpoint($tablet) {
-    width: 70%;
+    width: 90%;
   }
 
   a {
     text-transform: capitalize;
+
+    @include breakpoint($tablet) {
+      line-height: 1.5;
+      margin: 0.3125rem 0;
+      display: inline-block;
+    }
 
     &:hover {
       text-decoration: none;
@@ -86,16 +98,12 @@
 .c-footer-menu--category {
   h3 {
     font-size: 0.75rem;
-
-    @include breakpoint($tablet) {
-      text-transform: uppercase;
-    }
+    text-transform: uppercase;
 
     @include breakpoint($only-mobile) {
       padding: 1.1rem 0 0.84rem;
       font-family: $alshaya-thin;
       font-size: 0.875rem;
-      text-transform: capitalize;
 
       @include icon(chevrondown, after) {
         color: $accordion_arrow;
@@ -138,16 +146,6 @@
 
   @include breakpoint($desktop) {
     max-width: 100%;
-
-    .newsletter-block-label {
-      font-family: $alshaya-thin;
-    }
-  }
-
-  .form-item {
-    @include breakpoint($tablet) {
-      max-width: 16rem;
-    }
   }
 
   #edit-email {
@@ -157,11 +155,17 @@
     height: 2.5rem;
 
     @include breakpoint($tablet) {
-      margin-top: 0.75rem;
+      margin-top: 0;
+    }
+
+    @include breakpoint($only-tablet) {
+      @include ellipsis-text;
+
+      padding-right: 40% !important;
     }
 
     @include breakpoint($only-mobile) {
-      margin-top: 1rem;
+      margin-top: 0;
     }
   }
 
@@ -191,6 +195,7 @@
 .c-footer-menu--help {
   @include breakpoint($only-mobile) {
     border-bottom: 1px solid $accordion_border;
+    margin-bottom: 1.875rem;
   }
 
   @include breakpoint($only-tablet) {
@@ -202,6 +207,7 @@
   @include breakpoint($desktop) {
     margin-#{$left}: 0;
     padding-#{$right}: 5%;
+    width: 49% !important;
   }
 
   @include breakpoint($tablet) {
@@ -211,19 +217,20 @@
 }
 
 .newsletter-block-label {
-  font-family: $alshaya-thin;
-  color: $newsletter_block_text;
-  text-transform: initial;
-
-  @include breakpoint($only-mobile) {
-    width: 85%;
-    margin: auto;
-  }
+  display: none;
 }
 
 .language--switcher {
+  @include breakpoint($tablet) {
+    margin-top: 1.75rem;
+  }
+
   @include breakpoint($only-mobile) {
     padding: 0 0.875rem 0.875rem;
+
+    html[lang=en] & {
+      padding-bottom: 0.5rem;
+    }
   }
 }
 
@@ -249,6 +256,10 @@
         @include breakpoint($only-tablet) {
           margin-#{$left}: 0;
         }
+      }
+
+      &.ar a {
+        font-family: $alshaya-thin;
       }
     }
   }
@@ -278,13 +289,14 @@
         display: inline-block;
         padding: 0.875rem 0;
         line-height: 0.875rem;
-        margin: 0 0.625rem 0 0;
+        margin: 0 0.875rem 0 0;
         text-transform: uppercase !important;
         text-decoration: none;
+        background-color: $lang_switch_active;
 
         &.is-active {
           background-color: $lang_switch_active;
-          margin: 0 0.625rem 0 0;
+          margin: 0 0.5rem 0 0;
         }
       }
 
@@ -302,6 +314,7 @@
     width: 2.5rem;
     #{$right}: 0;
     top: 0;
+    background-color: $lang_switch_close_bg;
 
     @include icon(close, after) {
       line-height: 2.5rem;
@@ -309,25 +322,37 @@
   }
 }
 
-.c-footer {
-  @include breakpoint($only-mobile) {
-    padding-top: 0;
-  }
-}
-
 .alshaya-newsletter-subscribe {
   h3 {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     text-transform: uppercase;
     margin-top: 0;
+    margin-bottom: 1.125rem;
     font-family: $alshaya-bold;
   }
 }
 
 .footer--social {
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+  }
+
   .c-social-links {
     @include breakpoint($desktop) {
       margin-#{$left}: 0;
+      margin-top: 3.125rem;
+    }
+
+    @include breakpoint($tablet) {
+      padding-#{$left}: 0;
+
+      li:not(:last-child) {
+        margin-#{$right}: 0.875rem;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      margin-top: -0.75rem;
     }
 
     h3 {
@@ -336,9 +361,9 @@
       font-size: 0.75rem;
 
       @include breakpoint($only-mobile) {
-        margin-top: 2.1875rem;
+        margin-top: 2.375rem;
+        margin-bottom: 1.25rem;
         text-align: center;
-        font-size: 0.875rem;
         font-family: $alshaya-bold;
       }
     }

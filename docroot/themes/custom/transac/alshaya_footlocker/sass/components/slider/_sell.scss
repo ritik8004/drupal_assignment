@@ -1,6 +1,10 @@
 .subtitle.crossell-title {
   font-family: $alshaya-thin;
   text-transform: capitalize;
+
+  @include breakpoint($tablet) {
+    margin-top: 2.8125rem;
+  }
 }
 
 .view-product-slider {
