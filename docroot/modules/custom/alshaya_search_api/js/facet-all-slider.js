@@ -37,6 +37,10 @@
       $('.facet-all-apply').on('click', function() {
         $('.all-filters').hide();
       });
+
+      $('.facet-all-clear').on('click', function() {
+        $('.clear-all a').trigger('click');
+      });
     }
   };
 
