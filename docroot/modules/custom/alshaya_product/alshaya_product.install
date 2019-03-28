@@ -24,7 +24,7 @@ function alshaya_product_update_8023() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
-
+  // Save product index to flag all products for re-index.
   $index = Index::load('product');
   $index->save();
 }
