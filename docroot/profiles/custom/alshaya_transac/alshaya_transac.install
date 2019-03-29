@@ -23,7 +23,7 @@ function alshaya_transac_update_8120() {
   /* @var \Drupal\alshaya_config\AlshayaConfigManager $manager*/
   $manager = \Drupal::service('alshaya_config.manager');
   // New category facet/facet_summary for plp.
-  $manager->updateConfigs(['facets.facet.category_facet_plp'], 'alshaya_product', 'install');
+  $manager->updateConfigs(['facets.facet.category_facet_plp'], 'alshaya_product', 'optional');
   $manager->updateConfigs(['facets_summary.facets_summary.filter_bar_plp'], 'alshaya_product', 'optional', AlshayaConfigManager::MODE_MERGE);
 
   // New category facet/facet_summary for promo.
