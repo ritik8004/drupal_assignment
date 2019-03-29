@@ -124,8 +124,8 @@ class CartFormHelper {
       $parent_a = $plugin_a->getParentSku($a);
       $parent_b = $plugin_b->getParentSku($b);
 
-      $weight_a = $parent_a->getSku() == $sku->getSku() ? -1 : 0;
-      $weight_b = $parent_b->getSku() == $sku->getSku() ? -1 : 0;
+      $weight_a = ($parent_a instanceof SKU && $parent_a->getSku()) == $sku->getSku() ? -1 : 0;
+      $weight_b = ($parent_b instanceof SKU && $parent_b->getSku()) == $sku->getSku() ? -1 : 0;
 
       return $weight_a - $weight_b;
     });
