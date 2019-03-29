@@ -149,7 +149,7 @@ class AlshayaHmCommands extends DrushCommands {
         // its translation.
         if (($node->language()->getId() !== $row->langcode) &&
           ($node->hasTranslation($row->langcode) &&
-            ($node_translation = $node->getTranslation($row->langcode)))) {
+          ($node_translation = $node->getTranslation($row->langcode)))) {
           $node = $node_translation;
         }
 
