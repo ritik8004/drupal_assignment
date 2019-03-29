@@ -85,21 +85,6 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
   }
 
   /**
-   * Get All available plp sort options.
-   *
-   * @return array
-   *   Return array of default values.
-   */
-  public static function getPlpSortOptions(): array {
-    return [
-      'nid' => t('Position'),
-      'created' => t('New IN'),
-      'name_1' => t('Name'),
-      'final_price' => t('Final Price'),
-    ];
-  }
-
-  /**
    * Arrange given element by given order.
    *
    * @param array $element
@@ -110,8 +95,8 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
   public static function arrangeOptionsByWeight(array &$element, array $default_order) {
     // Remove empty options.
     $default_order = array_filter($default_order);
-    // Sort options.
-    $options = self::getPlpSortOptions();
+    // All available sort options.
+    $options = \Drupal::config('alshaya_acm_product_position.settings')->get('available_sort_options');
     // Sort the form options based on the config.
     $options = array_replace(array_flip($default_order), $options);
 

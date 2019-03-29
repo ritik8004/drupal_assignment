@@ -212,8 +212,10 @@ function alshaya_acm_product_position_form_alter(&$form, FormStateInterface $for
       $plp_sort = \Drupal::service('alshaya_acm_product_position.sort_options');
       $labels = $plp_sort->getSortOptionsLabels();
       array_walk($form['sort_bef_combine']['#options'], function (&$value, $key) use ($labels) {
-        $value = !empty($labels[$key]) ? $labels[$key] : $value;
+        $value = !empty($labels[$key]) ? $labels[$key] : '';
       });
+
+      $form['sort_bef_combine']['#options'] = array_filter($form['sort_bef_combine']['#options']);
 
       // Re-order select options based on the config position.
       $form['sort_bef_combine']['#options'] = $plp_sort->sortGivenOptions($form['sort_bef_combine']['#options']);
