@@ -105,11 +105,12 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->deleteItems($indexes, $item_ids);
 
     // 3. Re-index items that are missing in DB index.
-    $query = $this->connection->query("SELECT node.nid, node.langcode 
-      FROM node 
-      LEFT JOIN search_api_db_product item ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode) 
-      WHERE item.item_id IS NULL AND node.type = :node_type", [
+    $query = $this->connection->query("SELECT node.nid, node.langcode
+      FROM node
+      LEFT JOIN search_api_item item ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode)
+      WHERE item.item_id IS NULL AND node.type = :node_type AND index_id = :index_id", [
         ':node_type' => 'acq_product',
+        ':index_id' => 'product',
       ]
     );
 
