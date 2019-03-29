@@ -1,46 +1,78 @@
-@include breakpoint($desktop) {
-  #product-image-gallery,
-  #lightSlider {
+#product-image-gallery-container {
+  .imagegallery__wrapper {
+    @include breakpoint($only-tablet) {
+      padding: 0 2rem;
+    }
+  }
+
+  .imagegallery__thumbnails {
     .slick-slide {
-      width: 6.5rem !important;
-      height: 7.75rem !important;
+      @include breakpoint($only-tablet) {
+        display: inline-block;
+        margin-#{$right}: 0;
+        margin-#{$left}: 0.5rem;
+      }
+    }
+
+    .slick-track {
+      @include breakpoint($only-tablet) {
+        text-align: center;
+        margin: 0 auto;
+      }
     }
   }
+}
 
-  .cloudzoom {
-    .cloudzoom__thumbnails {
-      width: 6.5rem;
-      margin-#{$right}: 0;
+#product-image-gallery-container {
+  #product-image-gallery {
+    @include breakpoint($desktop) {
+      height: 31.5rem;
     }
-  }
 
-  .content__main {
-    .gallery-wrapper {
-      margin-#{$right}: 1.5rem;
-      margin-bottom: 3rem;
+    .slick-arrow {
+      background: none;
+    }
+
+    .slick-slide {
+      @include breakpoint($desktop) {
+        margin: 0.1875rem 0;
+      }
+    }
+
+    .slick-track {
+      @include breakpoint($only-tablet) {
+        height: 6.5rem;
+        overflow: hidden;
+      }
+
+      @include breakpoint($desktop) {
+        height: 27.125rem;
+        overflow: hidden;
+        width: 100% !important;
+      }
     }
   }
 }
 
 #lightSlider {
-  &.pager-no {
-    @include breakpoint($only-tablet) {
-      padding-#{$left}: 2em;
-      padding-#{$right}: 2rem;
-    }
-  }
-
-  .cloudzoom__thumbnails__video {
-    position: relative;
-
-    &::before {
-      #{$left}: 0;
-    }
+  @include breakpoint($only-tablet) {
+    padding-#{$left}: 2rem;
+    padding-#{$right}: 2rem;
   }
 }
 
-.yt-vi-container {
-  &.cloudzoom__video_main {
-    margin: auto;
+.cloudzoom {
+  #cloud-zoom-big {
+    width: 19.875rem !important;
+  }
+}
+
+#cloud-zoom-big {
+  @include if-rtl {
+    right: 126.1% !important;
+  }
+
+  @include if-ltr {
+    left: 126.1% !important;
   }
 }

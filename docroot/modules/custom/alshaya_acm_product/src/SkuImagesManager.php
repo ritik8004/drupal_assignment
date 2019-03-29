@@ -22,6 +22,9 @@ use Drupal\Component\Utility\Unicode;
  */
 class SkuImagesManager {
 
+  const BASE_IMAGE_ROLE = 'image';
+  const SWATCH_IMAGE_ROLE = 'swatch_image';
+
   /**
    * Module Handler service object.
    *
@@ -169,7 +172,7 @@ class SkuImagesManager {
   }
 
   /**
-   * Get media items for particlar SKU.
+   * Get media items for particular SKU.
    *
    * This is CORE implementation to get media items from media array in SKU.
    *
@@ -182,6 +185,18 @@ class SkuImagesManager {
    *   Media items array.
    */
   public function getSkuMediaItems(SKUInterface $sku, ?string $default_label = ''): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $static_id = implode(':', [
+      $sku->getSku(),
+      $sku->language()->getId(),
+      $default_label,
+    ]);
+
+    if (isset($static[$static_id])) {
+      return $static[$static_id];
+    }
+
     /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $plugin = $sku->getPluginInstance();
 
@@ -201,19 +216,30 @@ class SkuImagesManager {
         continue;
       }
 
-      // Remove thumbnails only if it is not base image.
-      if (isset($media_item['roles'])
-        && !in_array('image', $media_item['roles'])
-        && in_array('thumbnail', $media_item['roles'])) {
+      // Check for roles only if available.
+      if (!isset($media_item['roles'])) {
+        continue;
+      }
 
-        unset($media[$index]);
+      // If the image has base image role, we show it even if it is swatch
+      // or thumbnail.
+      if (in_array(self::BASE_IMAGE_ROLE, $media_item['roles'])) {
+        continue;
+      }
+
+      // Loop through all the roles we need to hide from gallery.
+      foreach ($this->getImageRolesToHide() as $role_to_hide) {
+        if (in_array($role_to_hide, $media_item['roles'])) {
+          unset($media[$index]);
+          break;
+        }
       }
     }
 
     $return = [
       'images' => [],
       'videos' => [],
-      'media_items' => [],
+      'media_items' => $media,
     ];
 
     // Process CORE media files.
@@ -232,6 +258,8 @@ class SkuImagesManager {
         }
       }
     }
+
+    $static[$static_id] = $return;
 
     return $return;
   }
@@ -277,20 +305,7 @@ class SkuImagesManager {
       }
     }
 
-    $media = $sku->getMedia(TRUE, FALSE, $default_label);
-
-    foreach ($media ?? [] as $index => $media_item) {
-      if (!isset($media_item['media_type'])) {
-        continue;
-      }
-
-      // Remove thumbnails only if it is not base image.
-      if (isset($media_item['roles'])
-        && !in_array('image', $media_item['roles'])
-        && in_array('thumbnail', $media_item['roles'])) {
-        unset($media[$index]);
-      }
-    }
+    $media = $this->getSkuMediaItems($sku, $default_label)['media_items'];
 
     $return = [
       'images' => [],
@@ -1019,6 +1034,35 @@ class SkuImagesManager {
   }
 
   /**
+   * Get Swatch Image url for PDP.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return string|null
+   *   URL of swatch image or null
+   */
+  public function getPdpSwatchImageUrl(SKU $sku) {
+    $media = $sku->getMedia(TRUE, FALSE);
+
+    $static = &drupal_static(__FUNCTION__, NULL);
+    $static[$sku->getSku()] = NULL;
+
+    foreach ($media as $item) {
+      if (isset($item['roles'])
+        && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])
+        && isset($item['file'])
+        && $item['file'] instanceof FileInterface) {
+
+        $static[$sku->getSku()] = file_create_url($item['file']->url());
+        break;
+      }
+    }
+
+    return $static[$sku->getSku()];
+  }
+
+  /**
    * Get Swatches Data for particular configurable sku.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
@@ -1029,7 +1073,7 @@ class SkuImagesManager {
    */
   public function getSwatchData(SKUInterface $sku): array {
     $swatches = [];
-    $swatch_attributes = $this->configFactory->get('alshaya_acm_product.display_settings')->get('swatches')['pdp'];
+    $swatch_attributes = $this->skuManager->getPdpSwatchAttributes();
 
     $combinations = $this->skuManager->getConfigurableCombinations($sku);
     foreach ($combinations['attribute_sku'] ?? [] as $attribute_code => $attribute_data) {
@@ -1060,6 +1104,57 @@ class SkuImagesManager {
     }
 
     return $swatches;
+  }
+
+  /**
+   * Get thumbnails of product along with all it's variants.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   variants image.
+   */
+  public function getAllVariantThumbnails(SKUInterface $sku): array {
+    $plp_main_image = $variants_image = [];
+
+    if ($sku->bundle() == 'simple') {
+      $plugin = $sku->getPluginInstance();
+      $sku = $plugin->getParentSku($sku);
+    }
+
+    $children = $this->skuManager->getChildSkus($sku);
+    $duplicates = [];
+    foreach ($children as $child) {
+      $value = $this->skuManager->getPdpSwatchValue($child);
+      if (empty($value) || isset($duplicates[$value])) {
+        continue;
+      }
+
+      // Do not show OOS products.
+      if (!$this->skuManager->isProductInStock($child)) {
+        continue;
+      }
+
+      $product_image = $child->getThumbnail();
+
+      if (empty($product_image) || !($product_image['file'] instanceof FileInterface)) {
+        continue;
+      }
+
+      $duplicates[$value] = 1;
+      if (empty($plp_main_image)) {
+        $plp_main_image = $this->skuManager->getSkuImage($product_image, '291x288');
+      }
+
+      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image, '291x288', '291x288');
+    }
+
+    return [
+      'mainImage' => $plp_main_image,
+      'thumbnails' => $variants_image,
+    ];
+
   }
 
   /**
@@ -1138,6 +1233,85 @@ class SkuImagesManager {
     }
 
     return $return;
+  }
+
+  /**
+   * Get image roles to hide as array from config.
+   *
+   * @return array
+   *   Roles to hide.
+   */
+  public function getImageRolesToHide() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $roles_to_hide = $this->productDisplaySettings->get('media_roles_to_hide_in_gallery');
+      $static = explode(',', $roles_to_hide);
+    }
+
+    return $static;
+  }
+
+  /**
+   * Get all the swatch images with sku text as key.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   Parent SKU.
+   *
+   * @return array
+   *   Swatches array.
+   */
+  public function getSwatches(SKUInterface $sku) {
+    $swatches = $this->skuManager->getProductCachedData($sku, 'swatches');
+
+    // We may have nothing for an SKU, we should not keep processing for it.
+    // If value is not set, function returns NULL above so we check for array.
+    if (is_array($swatches)) {
+      return $swatches;
+    }
+
+    $swatches = [];
+    $duplicates = [];
+    $children = $this->skuManager->getChildSkus($sku);
+
+    foreach ($children as $child) {
+      $value = $this->skuManager->getPdpSwatchValue($child);
+
+      if (empty($value) || isset($duplicates[$value])) {
+        continue;
+      }
+
+      // Do not show OOS swatches.
+      if (!$this->skuManager->isProductInStock($child)) {
+        continue;
+      }
+
+      $swatch_image = $this->getPdpSwatchImageUrl($child);
+
+      if (empty($swatch_image)) {
+        continue;
+      }
+
+      if ($this->productDisplaySettings->get('color_swatches_show_product_image')) {
+        $swatch_product_image = $child->getThumbnail();
+
+        // If we have image for the product.
+        if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
+          $url = file_create_url($swatch_product_image['file']->getFileUri());
+          $swatch_product_image_url = file_url_transform_relative($url);
+        }
+      }
+
+      $duplicates[$value] = 1;
+      $swatches[$child->id()] = [
+        'swatch_url' => file_url_transform_relative($swatch_image),
+        'swatch_product_url' => $swatch_product_image_url ?? '',
+      ];
+    }
+
+    $this->skuManager->setProductCachedData($sku, 'swatches', $swatches);
+
+    return $swatches;
   }
 
 }
