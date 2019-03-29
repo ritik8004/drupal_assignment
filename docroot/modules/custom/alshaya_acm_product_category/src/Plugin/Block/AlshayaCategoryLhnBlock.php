@@ -26,6 +26,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * Config to enable/disable the lhn category tree.
+   */
+  const ENABLE_DISABLE_CONFIG = 'alshaya_acm_product_category.settings';
+
+  /**
    * Stores the configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
@@ -189,17 +194,25 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
   public function access(AccountInterface $account, $return_as_object = FALSE) {
     $term = $this->routeMatch->getParameter('taxonomy_term');
     $department_pages = alshaya_advanced_page_get_pages();
-    // Not allow if department page exists for category.
-    return AccessResult::allowedif(empty($department_pages[$term->id()]));
+    $config = $this->configFactory->get(self::ENABLE_DISABLE_CONFIG);
+    // Not allow if department page exists for category or lhn is disabled.
+    return AccessResult::allowedif(empty($department_pages[$term->id()]) && $config->get('enable_lhn_tree'));
   }
 
   /**
    * {@inheritdoc}
    */
   public function getCacheTags() {
+    // Get cache tags of enable/disable lhn block config.
+    $config_cache_tags = $this->configFactory
+      ->get(self::ENABLE_DISABLE_CONFIG)
+      ->getCacheTags();
+
+    $cache_tags = array_merge($config_cache_tags, [ProductCategoryTree::CACHE_TAG]);
+
     return Cache::mergeTags(
       parent::getCacheTags(),
-      [ProductCategoryTree::CACHE_TAG]
+      $cache_tags
     );
   }
 

@@ -14,22 +14,6 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
- * Enable the `category_lhn_block` block.
- */
-function alshaya_transac_update_8120() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
-  $manager = \Drupal::service('alshaya_config.manager');
-  // Place block in correct region for all sites.
-  $manager->updateConfigs(
-    ['block.block.categorylhnblock'],
-    'alshaya_transac',
-    'optional'
-  );
-}
-
-/**
- * Implements hook_update_N().
- *
  * Correcting the block positions for promotion banner blocks.
  */
 function alshaya_transac_update_8119() {
