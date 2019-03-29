@@ -21,14 +21,14 @@
 
     @include breakpoint($desktop) {
       width: 17%;
-      max-width: 209px;
+      max-width: 13.0625rem;
     }
   }
 
   main {
     @include breakpoint($desktop) {
       width: 81.1%;
-      max-width: 1002px;
+      max-width: 62.625rem;
     }
   }
 
