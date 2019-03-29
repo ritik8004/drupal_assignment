@@ -42,6 +42,11 @@ processor_configs:
     weights:
       build: 10
     settings: {  }
+  alshaya_show_direct_child_terms:
+    processor_id: alshaya_show_direct_child_terms
+    weights:
+      build: 50
+    settings: {  }
   hide_taxonomy_not_in_menu:
     processor_id: hide_taxonomy_not_in_menu
     weights:
