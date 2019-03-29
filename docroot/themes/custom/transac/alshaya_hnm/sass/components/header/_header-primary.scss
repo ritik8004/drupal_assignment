@@ -996,7 +996,9 @@ html[lang=ar] {
 }
 
 .branding__menu {
-  border-bottom: 1px solid $header_branding_shadow;
+  @include breakpoint($upto-desktop) {
+    border-bottom: 1px solid $header_branding_shadow;
+  }
 }
 
 html[lang='ar'] {
