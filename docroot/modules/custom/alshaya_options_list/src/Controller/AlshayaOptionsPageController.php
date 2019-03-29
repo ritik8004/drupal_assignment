@@ -5,6 +5,7 @@ namespace Drupal\alshaya_options_list\Controller;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -46,6 +47,13 @@ class AlshayaOptionsPageController extends ControllerBase {
   private $requestStack;
 
   /**
+   * File storage.
+   *
+   * @var \Drupal\file\FileStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
    * AlshayaOptionsPageController constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -56,15 +64,19 @@ class AlshayaOptionsPageController extends ControllerBase {
    *   Cache Backend service for alshaya.
    * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    */
   public function __construct(Connection $connection,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
-                              RequestStack $request_stack) {
+                              RequestStack $request_stack,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->connection = $connection;
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->requestStack = $request_stack;
+    $this->fileStorage = $entity_type_manager->getStorage('file');
   }
 
   /**
@@ -161,24 +173,29 @@ class AlshayaOptionsPageController extends ControllerBase {
     $query->condition('tfa.field_sku_attribute_code_value', $attributeCode);
     $query->condition('tfd.langcode', $langcode);
     if ($showImages) {
-      $query->fields('tfs', ['field_attribute_swatch_image_target_id']);
-      $query->innerJoin('taxonomy_term__field_attribute_swatch_image', 'tfs', 'tfa.entity_id = tfs.entity_id');
+      $query->addField('tfs', 'field_attribute_swatch_image_target_id', 'image');
+      $query->leftJoin('taxonomy_term__field_attribute_swatch_image', 'tfs', 'tfa.entity_id = tfs.entity_id');
     }
     if ($group) {
       $query->orderBy('tfd.name');
     }
-    $options = $query->execute()->fetchAllKeyed(1, 0);
+    $options = $query->execute()->fetchAllAssoc('tid');
     foreach ($options as $option) {
-      $list_object['title'] = $option;
-      $option = [
+      $list_object['title'] = $option->name;
+      $url = [
         'query' => [
-          'f[0]' => $attributeCode . ':' . $option,
+          'f[0]' => $attributeCode . ':' . $option->name,
           'sort_bef_combine' => 'search_api_relevance DESC',
           'show_on_load' => '12',
         ],
       ];
-      $url = Url::fromUri('internal:/search', $option);
-      $list_object['url'] = $url;
+      $list_object['url'] = Url::fromUri('internal:/search', $url);
+      if ($showImages && !empty($option->image)) {
+        $file = $this->fileStorage->load($option->image);
+        if ($file instanceof FileInterface) {
+          $list_object['image_url'] = $file->getFileUri();
+        }
+      }
       $return[] = $list_object;
     }
     return $return;
