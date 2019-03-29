@@ -13,6 +13,7 @@
     text-align: center;
     color: #333;
     font-family: $alshaya-bold;
+    text-transform: uppercase;
   }
 
   .options-page-description {
@@ -22,6 +23,7 @@
     line-height: 1.14;
     text-align: center;
     color: #333;
+    margin-top: 10px;
   }
 
   .attribute-title,
@@ -140,7 +142,6 @@
       -webkit-overflow-scrolling: touch;
       z-index: 12;
       background: #fff;
-      padding: 0 8px;
     }
   }
 
@@ -163,16 +164,57 @@
     text-transform: uppercase;
   }
 
-  .attribute-filter-header {
+  .attribute-filter-header-container {
     position: fixed;
+    width: calc(100% - 16px);
+
+    > div {
+      position: fixed;
+      background: #fff;
+    }
+  }
+
+  .attribute-filter-header {
     height: 46px;
-    background: #fff;
-    width: 100%;
-    padding: 14px 0;
+    width: calc(100% - 16px);
+    padding: 14px 8px;
   }
 
   .attribute-filter-name-list {
-    margin-top: 56px;
+    margin-top: 112px;
+    padding: 0;
+    //
+    //ul {
+    //  padding: 0;
+    //}
+
+    .level-1 {
+      ul {
+        padding: 0 16px;
+      }
+    }
+
+    .group-heading {
+      background-color: #f2f2f2;
+      padding: 11px 16px;
+      border-bottom: none;
+    }
+  }
+
+  .attribute-search-form {
+    top: 46px;
+
+    .alshaya-options-list-autocomplete-form {
+      display: block;
+      margin-top: 0;
+      padding: 8px;
+      background-color: #f2f2f2;
+      box-shadow: 0 1px 0 0 rgba(51, 51, 51, 0.2);
+
+      input {
+        background: #fff;
+      }
+    }
   }
 }
 
@@ -181,13 +223,20 @@
     -webkit-column-count: 4;
     column-count: 4;
     -webkit-column-gap: 16px;
-    column-gap: 16px;
+    column-gap: 30px;
     margin-top: 36px;
     padding: 0 48px;
 
     li {
       box-sizing: border-box;
       line-height: 1;
+
+      //a {
+      //  font-family: $alshaya-thin;
+      //  font-size: 14px;
+      //  line-height: 2.29;
+      //  color: #333333;
+      //}
     }
 
     .level-1 {
@@ -203,24 +252,42 @@
         }
       }
     }
+  }
+}
 
-    .group-heading {
-      color: #333;
-      background: transparent;
-      border-bottom: 1px solid #e5e5e5;
-      padding: 0 0 6px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
+.attribute-filter-name-list {
+  a {
+    font-family: $alshaya-thin;
+    font-size: 14px;
+    line-height: 2.29;
+    color: #333333;
+  }
+}
 
-      &:empty {
-        display: none;
-      }
-    }
+.group-heading {
+  color: #333;
+  background: transparent;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 0 6px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-size: 16px;
+
+  @include breakpoint($only-mobile) {
+    font-size: 14px;
+  }
+
+  &:empty {
+    display: none;
   }
 }
 
 .alshaya-options-list-autocomplete-form {
   margin-top: 26px;
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
 
   .form-item-alshaya-options-list-autocomplete-form {
     display: block;

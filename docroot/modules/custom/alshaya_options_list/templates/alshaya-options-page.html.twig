@@ -17,11 +17,18 @@
       {% endif %}
       <div class='attribute-filter-option'>
         {% if key == 'fragrance_name' %}
-          <div class='attribute-filter-header'>
-            <div class='attribute-filter-block-title mobile-only-block'> {{ 'shop by fragrance name' |t }} </div>
-            <div class='fragrance-overlay-close-icon mobile--close mobile-only-block'>
-              <span></span>
+          <div class='attribute-filter-header-container'>
+            <div class='attribute-filter-header'>
+              <div class='attribute-filter-block-title mobile-only-block'> {{ 'shop by fragrance name' |t }} </div>
+              <div class='fragrance-overlay-close-icon mobile--close mobile-only-block'>
+                <span></span>
+              </div>
             </div>
+            {% if option.search_form %}
+              <div class='attribute-search-form mobile-only-block'>
+                {{ option.search_form }}
+              </div>
+            {% endif %}
           </div>
         {% endif %}
         <ul class='attribute-filter-name-list'>
