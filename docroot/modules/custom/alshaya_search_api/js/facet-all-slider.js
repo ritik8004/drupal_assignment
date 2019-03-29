@@ -54,6 +54,18 @@
         $('.search-lightSlider').slick('refresh');
       });
 
+      if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
+        var clearAll = $('.c-content__region .region__content  > div.block-facets-summary').clone();
+        // Remove all `li` except last.
+        $(clearAll).find('li:not(:last)').remove();
+        $('.facet-all-clear').html(clearAll);
+        $('.facet-all-clear').addClass('has-link');
+      }
+      else {
+        $('.facet-all-clear').html(Drupal.t('Clear All'));
+        $('.facet-all-clear').removeClass('has-link');
+      }
+
       showOnlyFewFacets();
 
       /**
