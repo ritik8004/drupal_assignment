@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_hm\Commands;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
@@ -137,31 +138,30 @@ class AlshayaHmCommands extends DrushCommands {
     $mappings = [];
 
     foreach ($rows as $row) {
-      if ($row->sku) {
-        $sku_entity = SKU::loadFromSku($row->sku, $row->langcode);
+      $sku_entity = SKU::loadFromSku($row->sku, $row->langcode);
 
-        if (($node = $sku_manager->getDisplayNode($sku_entity, FALSE)) &&
-          ($node instanceof NodeInterface)) {
+      if (($sku_entity instanceof SKUInterface) &&
+        ($node = $sku_manager->getDisplayNode($sku_entity, FALSE)) &&
+        ($node instanceof NodeInterface)) {
 
-          // If the display node fetched belongs to a different language
-          // compared to the langcode SKU is in, replace the node object with
-          // its translation.
-          if (($node->language()->getId() !== $row->langcode) &&
-            ($node->hasTranslation($row->langcode) &&
-              ($node_translation = $node->getTranslation($row->langcode)))) {
-            $node = $node_translation;
-          }
+        // If the display node fetched belongs to a different language
+        // compared to the langcode SKU is in, replace the node object with
+        // its translation.
+        if (($node->language()->getId() !== $row->langcode) &&
+          ($node->hasTranslation($row->langcode) &&
+            ($node_translation = $node->getTranslation($row->langcode)))) {
+          $node = $node_translation;
+        }
 
-          // Fetch first child SKU from the parent SKU & store its color
-          // attribute. Do the same for both languages.
-          if (($firt_child_sku = $sku_manager->getFirstChildForSku($sku_entity, 'article_castor_id')) &&
-            ($firt_child_sku instanceof SKU)) {
-            $mappings[] = [
-              'alias' => $alias_manager->getAliasByPath('/node/' . $node->id(), $node->language()->getId()),
-              'child_sku' => $firt_child_sku->getSku(),
-              'langcode' => $node->language()->getId(),
-            ];
-          }
+        // Fetch first child SKU from the parent SKU & store its color
+        // attribute. Do the same for both languages.
+        if (($firt_child_sku = $sku_manager->getFirstChildForSku($sku_entity, 'article_castor_id')) &&
+          ($firt_child_sku instanceof SKU)) {
+          $mappings[] = [
+            'alias' => $alias_manager->getAliasByPath('/node/' . $node->id(), $node->language()->getId()),
+            'child_sku' => $firt_child_sku->getSku(),
+            'langcode' => $node->language()->getId(),
+          ];
         }
       }
     }
