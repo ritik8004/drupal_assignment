@@ -159,6 +159,17 @@
 
   .basic-details-wrapper {
     .sku-base-form {
+      button[type="submit"] {
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
+
+        &::before {
+          position: static;
+          vertical-align: text-bottom;
+          padding-#{$right}: 5px;
+        }
+      }
+
       @include breakpoint($tablet) {
         display: grid;
         grid-column: 3 / -1;
