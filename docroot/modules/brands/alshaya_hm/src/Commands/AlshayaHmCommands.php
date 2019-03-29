@@ -2,16 +2,12 @@
 
 namespace Drupal\alshaya_hm\Commands;
 
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
-use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
-use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Path\AliasManager;
-use Drupal\Core\State\StateInterface;
 use Drupal\redirect\Entity\Redirect;
 use Drush\Commands\DrushCommands;
-use Drupal\Core\Database\Connection;
 use Drupal\node\NodeInterface;
 
 /**
@@ -22,41 +18,6 @@ use Drupal\node\NodeInterface;
 class AlshayaHmCommands extends DrushCommands {
 
   const TEMP_ALIAS_COLOR_MAPPING_STATE_KEY = 'temp_alias_color_mapping';
-
-  /**
-   * Database connection service.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
-   * Sku Manager service.
-   *
-   * @var \Drupal\alshaya_acm_product\SkuManager
-   */
-  protected $skuManager;
-
-  /**
-   * Alias Manager service.
-   *
-   * @var \Drupal\Core\Path\AliasManager
-   */
-  protected $aliasManager;
-
-  /**
-   * Config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
-
-  /**
-   * State service.
-   *
-   * @var \Drupal\Core\State\StateInterface
-   */
-  protected $state;
 
   /**
    * Alshaya config Manager.
@@ -75,33 +36,13 @@ class AlshayaHmCommands extends DrushCommands {
   /**
    * AlshayaHmCommands constructor.
    *
-   * @param \Drupal\Core\Database\Connection $connection
-   *   Database connection service.
-   * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
-   *   Sku Manager service.
-   * @param \Drupal\Core\Path\AliasManager $aliasManager
-   *   Alias Manager service.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   *   Config Factory service.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   State Manager service.
    * @param \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager
    *   Alshaya config manager.
    * @param \Drupal\acq_sku\SKUFieldsManager $skuFieldsManager
    *   SKU fields manager.
    */
-  public function __construct(Connection $connection,
-                              SkuManager $skuManager,
-                              AliasManager $aliasManager,
-                              ConfigFactoryInterface $configFactory,
-                              StateInterface $state,
-                              AlshayaConfigManager $alshayaConfigManager,
+  public function __construct(AlshayaConfigManager $alshayaConfigManager,
                               SKUFieldsManager $skuFieldsManager) {
-    $this->connection = $connection;
-    $this->skuManager = $skuManager;
-    $this->aliasManager = $aliasManager;
-    $this->configFactory = $configFactory;
-    $this->state = $state;
     $this->alshayaConfigManager = $alshayaConfigManager;
     $this->skuFieldsManager = $skuFieldsManager;
   }
@@ -144,60 +85,95 @@ class AlshayaHmCommands extends DrushCommands {
    * @aliases alshaya_hm_store_old_alias_sku_map
    */
   public function storeTempAlias() {
-    $mappings = [];
-    $query = $this->connection->select('acq_sku_field_data', 'asfd');
-    $query->condition('asfd.type', 'configurable');
-    $query->fields('asfd', ['sku', 'langcode']);
-    $rows = $query->execute()->fetchAll();
+    $batch = [
+      'title' => 'Add temporary alias sku mapping',
+      'init_message' => 'Processing SKUs & adding mapping for their alias...',
+      'progress_message' => 'Processed @current out of @total.',
+      'error_message' => 'Error occurred while processing SKUs, please check logs.',
+      'operations' => [
+        [[__CLASS__, 'storeAliasFirstChildSkuMapping'], []],
+      ],
+    ];
 
-    // Fetch Alias - first child sku mapping for all configurable products.
-    foreach ($rows as $row) {
-      if (!empty($color_mapping = $this->fetchAliasFirstChildSkuMapping($row->sku, $row->langcode))) {
-        $mappings[] = $color_mapping;
-      }
-    }
+    batch_set($batch);
 
-    $this->state->set(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY, serialize($mappings));
+    // Process the batch.
+    drush_backend_batch_process();
+
+    $message = 'Added mapping for all SKUs & their alias to state variable: ' . self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY;
+    $this->logger->info($message);
+    $this->say($message);
   }
 
   /**
-   * Helper function to create mapping between alias & first child sku.
+   * Batch process callback for storing Alias & child sku mapping.
    *
-   * @param string $sku
-   *   SKU code for which mapping needs to be derived.
-   * @param string $langcode
-   *   Langcode of the SKU entity.
-   *
-   * @return array
-   *   Returns mapping array between color code & alias.
+   * @param mixed $context
+   *   Batch context.
    */
-  protected function fetchAliasFirstChildSkuMapping($sku, $langcode) {
-    $sku_entity = SKU::loadFromSku($sku, $langcode);
+  public static function storeAliasFirstChildSkuMapping(&$context) {
+    $connection = \Drupal::database();
 
-    if (($node = $this->skuManager->getDisplayNode($sku, FALSE)) &&
-      ($node instanceof NodeInterface)) {
+    if (empty($context['sandbox'])) {
+      $query = $connection->select('acq_sku_field_data', 'asfd');
+      $query->condition('asfd.type', 'configurable');
+      $query->fields('asfd', ['sku', 'langcode']);
+      $context['sandbox']['result'] = array_chunk($query->execute()->fetchAll(), 100);
+      $context['sandbox']['max'] = count($context['sandbox']['result']);
+      $context['sandbox']['current'] = 0;
+    }
 
-      // If the display node fetched belongs to a different language compared to
-      // the langcode SKU is in, replace the node object with its translation.
-      if (($node->language()->getId() !== $langcode) &&
-        ($node->hasTranslation($langcode) &&
-          ($node_translation = $node->getTranslation($langcode)))) {
-        $node = $node_translation;
-      }
+    if (empty($context['sandbox']['result'])) {
+      $context['finished'] = 1;
+      return;
+    }
 
-      // Fetch first child SKU from the parent SKU & store its color attribute.
-      // Do the same for both languages.
-      if (($firt_child_sku = $this->skuManager->getFirstChildForSku($sku_entity, 'article_castor_id')) &&
-        ($firt_child_sku instanceof SKU)) {
-        return [
-          'alias' => $this->aliasManager->getAliasByPath('/node/' . $node->id(), $node->language()->getId()),
-          'child_sku' => $firt_child_sku->getSku(),
-          'langcode' => $node->language()->getId(),
-        ];
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    /** @var \Drupal\Core\Path\AliasManager $alias_manager */
+    $alias_manager = \Drupal::service('path.alias_manager');
+
+    $rows = array_shift($context['sandbox']['result']);
+    $mappings = [];
+
+    foreach ($rows as $row) {
+      $sku_entity = SKU::loadFromSku($row->sku, $row->langcode);
+
+      if (($sku_entity instanceof SKUInterface) &&
+        ($node = $sku_manager->getDisplayNode($sku_entity, FALSE)) &&
+        ($node instanceof NodeInterface)) {
+
+        // If the display node fetched belongs to a different language
+        // compared to the langcode SKU is in, replace the node object with
+        // its translation.
+        if (($node->language()->getId() !== $row->langcode) &&
+          ($node->hasTranslation($row->langcode) &&
+          ($node_translation = $node->getTranslation($row->langcode)))) {
+          $node = $node_translation;
+        }
+
+        // Fetch first child SKU from the parent SKU & store its color
+        // attribute. Do the same for both languages.
+        if (($firt_child_sku = $sku_manager->getFirstChildForSku($sku_entity, 'article_castor_id')) &&
+          ($firt_child_sku instanceof SKU)) {
+          $mappings[] = [
+            'alias' => $alias_manager->getAliasByPath('/node/' . $node->id(), $node->language()->getId()),
+            'child_sku' => $firt_child_sku->getSku(),
+            'langcode' => $node->language()->getId(),
+          ];
+        }
       }
     }
 
-    return [];
+    $existing_mapping = \Drupal::state()->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY, []);
+    $merged_mapping = array_merge($existing_mapping, $mappings);
+
+    // Set updated temp store mapping in state variable.
+    \Drupal::state()->set(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY, $merged_mapping);
+
+    $context['sandbox']['current']++;
+    $context['finished'] = $context['sandbox']['current'] / $context['sandbox']['max'];
   }
 
   /**
@@ -210,10 +186,52 @@ class AlshayaHmCommands extends DrushCommands {
    * @aliases alshaya_hm_set_redirects
    */
   public function addAliasRedirects() {
-    $mapping = unserialize($this->state->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY));
+    $batch = [
+      'title' => 'Add redirects based on the temporary data stored.',
+      'init_message' => 'Processing state data & adding redirects.',
+      'progress_message' => 'Processed @current out of @total.',
+      'error_message' => 'Error occurred while adding redirects, please check logs.',
+      'operations' => [
+        [[__CLASS__, 'addRedirectsFromTempstore'], []],
+      ],
+    ];
 
-    foreach ($mapping as $map) {
-      $node = $this->skuManager->getDisplayNode($map['child_sku']);
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+
+    $message = 'Added redirects for all the mappings store in state variable: ' . self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY;
+    $this->logger->info($message);
+    $this->say($message);
+  }
+
+  /**
+   * Batch process callback for adding redirects based on temp store.
+   *
+   * @param mixed $context
+   *   Batch Context.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public static function addRedirectsFromTempstore(&$context) {
+    $mapping = \Drupal::state()->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY);
+
+    $context['sandbox']['result'] = array_chunk($mapping, 100);
+    $context['sandbox']['max'] = count($context['sandbox']['result']);
+    $context['sandbox']['current'] = 0;
+
+    if (empty($context['sandbox']['result'])) {
+      $context['finished'] = 1;
+      return;
+    }
+
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    $map_chunk = array_shift($context['sandbox']['result']);
+    foreach ($map_chunk as $map) {
+      $node = $sku_manager->getDisplayNode($map['child_sku']);
 
       // Create redirect from old alias to new nodes.
       Redirect::create([
@@ -224,6 +242,8 @@ class AlshayaHmCommands extends DrushCommands {
       ])->save();
     }
 
+    $context['sandbox']['current']++;
+    $context['finished'] = $context['sandbox']['current'] / $context['sandbox']['max'];
   }
 
 }
