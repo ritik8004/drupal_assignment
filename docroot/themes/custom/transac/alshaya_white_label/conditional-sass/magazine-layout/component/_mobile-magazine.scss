@@ -166,7 +166,7 @@
         &::before {
           position: static;
           vertical-align: text-bottom;
-          padding-#{$right}: 5px;
+          padding-#{$right}: 0.25rem;
         }
       }
 
