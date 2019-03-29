@@ -64,6 +64,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_acm_product_category.settings')
       ->set('sale_category_ids', $form_state->getValue('sale_category_ids'))
+      ->set('enable_lhn_tree', $form_state->getValue('enable_lhn_tree'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -86,6 +87,13 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#options' => $options,
       '#size' => count($options) + 1,
       '#default_value' => $config->get('sale_category_ids'),
+    ];
+
+    $form['enable_lhn_tree'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable LHN'),
+      '#description' => $this->t('Enables the LHN for the site.'),
+      '#default_value' => $config->get('enable_lhn_tree'),
     ];
 
     return parent::buildForm($form, $form_state);
