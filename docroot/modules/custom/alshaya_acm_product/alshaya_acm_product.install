@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Index selling_price along with final_price.
  */
-function alshaya_acm_product_update_8040() {
+function alshaya_acm_product_update_8042() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   // Updating cardinality config for the attribute.
@@ -32,6 +32,38 @@ function alshaya_acm_product_update_8040() {
   alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
   alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
   _alshaya_search_resave_indexes();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config for image roles to hide in gallery.
+ */
+function alshaya_acm_product_update_8041() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add config to exclude attribute option.
+ */
+function alshaya_acm_product_update_8040() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
 }
 
 /**

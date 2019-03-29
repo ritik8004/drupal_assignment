@@ -80,7 +80,8 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
-    'alshaya_master.home' => 'home page',
+    'alshaya_master.home' => 'HP-ProductCarrousel',
+    'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
   ];
 
   /**
@@ -549,7 +550,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 

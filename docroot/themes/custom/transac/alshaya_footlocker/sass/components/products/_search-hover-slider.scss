@@ -1,0 +1,31 @@
+.alshaya_search_slider {
+  // Need this in px for JS consistency for slider.
+  width: 242px;
+
+  .slick-slider {
+    li {
+      &.slick-slide {
+        &:hover {
+          &::after {
+            #{$left}: -1px;
+            #{$right}: -1px;
+          }
+        }
+
+        img {
+          width: 4.9375rem;
+          max-width: 4.9375rem;
+          height: 5.4375rem;
+        }
+      }
+    }
+
+    .slick-prev {
+      left: -1.8125rem;
+    }
+
+    .slick-next {
+      right: -1.8125rem;
+    }
+  }
+}

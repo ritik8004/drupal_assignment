@@ -45,4 +45,12 @@ function alshaya_fl_transac_install() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 0)
     ->save();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = str_replace('Pinterest:pinterest', 'Instagram:instagram', $services);
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }
