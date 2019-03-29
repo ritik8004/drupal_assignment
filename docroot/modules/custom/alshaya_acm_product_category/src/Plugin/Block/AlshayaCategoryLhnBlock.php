@@ -165,6 +165,9 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       else {
         if (!empty($context['depth_offset'])) {
           $lhn_tree = count($parents) == 1 ? $term_data : $term_data[key($parents)]['child'];
+          if (count($parents) == 1) {
+            $context['depth_offset'] = 2;
+          }
         }
         else {
           $lhn_tree = count($parents) == 1 ? $term_data[key($parents)]['child'] : [];
