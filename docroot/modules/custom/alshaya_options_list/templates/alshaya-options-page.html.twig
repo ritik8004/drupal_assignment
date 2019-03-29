@@ -48,6 +48,9 @@
           {% else %}
             {% for value in option.terms %}
               <li class='title'>
+                {% if value.image_url %}
+                  {{ value.image_url }}
+                {% endif %}
                 <a href={{ value.url }}> {{ value.title }} </a>
               </li>
             {% endfor %}

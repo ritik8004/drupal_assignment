@@ -87,7 +87,8 @@ class AlshayaOptionsPageController extends ControllerBase {
       $container->get('database'),
       $container->get('language_manager'),
       $container->get('cache.default'),
-      $container->get('request_stack')
+      $container->get('request_stack'),
+      $container->get('entity_type.manager')
     );
   }
 
