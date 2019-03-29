@@ -278,7 +278,7 @@
         Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
       });
 
-      $('button.delivery-home-next').once('js-event').on('mousedown', function () {
+      $('button.delivery-home-next, [data-drupal-selector="edit-member-delivery-home-address-form-save"]').once('js-event').on('mousedown', function () {
         if (gtmPageType == 'checkout delivery page') {
           Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery - subdelivery ', 2);
         }
