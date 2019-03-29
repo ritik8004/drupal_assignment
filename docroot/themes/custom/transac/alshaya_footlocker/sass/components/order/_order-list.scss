@@ -17,3 +17,90 @@
     }
   }
 }
+
+.c-order-list {
+  .order-search-form {
+    @include breakpoint($only-tablet) {
+      top: 0.9375rem;
+    }
+  }
+
+  .subtitle {
+    font-size: 1.125rem;
+    font-family: $alshaya-thin;
+    text-transform: capitalize;
+  }
+}
+
+.no--orders {
+  font-weight: normal;
+}
+
+.alshaya-acm-customer-order-list-search {
+  font-size: 0.875rem;
+
+  .form-submit {
+    height: 2.5rem;
+  }
+
+  .form-actions {
+    &::after {
+      border-#{$left}: 0;
+      height: 2.5rem;
+      padding-top: 0.625rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .form-item-search {
+      height: 2.5rem;
+
+      label {
+        @include ellipsis-text;
+
+        padding: 0 0.3125rem;
+        text-align: center;
+        height: 2.5rem;
+        line-height: 2.5;
+      }
+
+      input {
+        border-color: $order_search_form_input_mobile_border;
+      }
+    }
+
+    &.active--search {
+      .form-item-search {
+        label {
+          color: $order_search_form_label_active;
+          background-color: $order_search_form_label_mobile_active;
+          border-color: $order_search_form_label_mobile_active;
+        }
+      }
+    }
+  }
+
+  .form-item {
+    @include breakpoint($tablet) {
+      label {
+        display: none;
+      }
+
+      &.form-item-search input {
+        border-#{$right}: 0;
+      }
+    }
+
+    input,
+    select {
+      height: 2.5rem;
+      text-transform: capitalize;
+    }
+  }
+
+  @include breakpoint($desktop) {
+    .form-type-select {
+      width: 11.63rem;
+    }
+  }
+}

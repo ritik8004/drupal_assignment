@@ -569,11 +569,6 @@ function alshaya_hm_install() {
   $checkout_customer_service->set('checkout_customer_service.value', $customer_service_text);
   $checkout_customer_service->save();
 
-  // Disable loyalty.
-  \Drupal::configFactory()->getEditable('alshaya_loyalty.settings')
-    ->set('enable_disable_loyalty', FALSE)
-    ->save();
-
   // Set initial translation strings.
   $strings = [
     'view cart' => [
