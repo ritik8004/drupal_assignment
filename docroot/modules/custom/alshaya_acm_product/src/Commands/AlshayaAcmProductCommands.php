@@ -292,8 +292,9 @@ class AlshayaAcmProductCommands extends DrushCommands {
 
     foreach ($nids as $nid) {
       try {
-        $node = $storage->load($nid);
-        $node->delete();
+        if (($node = $storage->load($nid)) && ($node instanceof NodeInterface)) {
+          $node->delete();
+        }
       }
       catch (\Exception $e) {
         \Drupal::logger('alshaya_acm_product')->error('Error while deleting color node: @nid Message: @message in method: @method', [
