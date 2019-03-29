@@ -467,7 +467,7 @@
     &.product-large {
       .c-products__item {
         @include breakpoint($desktop) {
-          width: calc(100% / 3 - 2% - -2% / 3 - 0.01px);
+          width: calc(100% / 3 - 2% + 2% / 3 - 0.01px);
           margin: 0 0 2% 2%;
 
           &:nth-child(3n+1) {
@@ -476,7 +476,7 @@
         }
 
         @include breakpoint($only-tablet) {
-          width: calc(100% / 2 - 2% - -2% / 2 - 5px);
+          width: calc(100% / 2 - 2% + 2% / 2 - 5px);
           margin: 0 0 2% 3.334%;
 
           &:nth-child(2n+1) {
@@ -494,7 +494,7 @@
     &.product-small {
       .c-products__item {
         @include breakpoint($desktop) {
-          width: calc(100% / 4 - 1.797% - -1.797% / 4 - 0.01px);
+          width: calc(100% / 4 - 1.797% + 1.797% / 4 - 0.01px);
           margin: 0 0 2% 1.797%;
 
           &:nth-child(4n+1) {
@@ -503,7 +503,7 @@
         }
 
         @include breakpoint($only-tablet) {
-          width: calc(100% / 3 - 2% - -2% / 3 + 2px);
+          width: calc(100% / 3 - 2% + 2% / 3 + 2px);
           margin: 0 0 2% 1.528%;
 
           &:nth-child(3n+1) {
@@ -512,7 +512,7 @@
         }
 
         @include breakpoint($only-mobile) {
-          width: calc(100% / 2 - 1.875% - -1.875% / 2);
+          width: calc(100% / 2 - 1.875% + 1.875% / 2);
           margin: 0 0 2% 1.875%;
 
           &:nth-child(2n+1) {
