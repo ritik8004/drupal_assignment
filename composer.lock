@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fdc90fc64a3984d8f44d32c5f023523",
+    "content-hash": "e19db6344662b5d53fd4d2e6e50c4fa5",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -3673,6 +3673,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
