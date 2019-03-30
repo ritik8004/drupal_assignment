@@ -403,6 +403,7 @@ function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStat
         $display_node = $sku_manager->getDisplayNode($article_castor_id_child_sku);
         $data['display_node_url'] = $display_node->toUrl()->toString();
         $data['display_node_title'] = $display_node->getTitle();
+        $data['parent_sku_id'] = $sku->id();
 
         $response->addCommand(new InvokeCommand('', 'updatePdpUrl', [$data]));
       }
