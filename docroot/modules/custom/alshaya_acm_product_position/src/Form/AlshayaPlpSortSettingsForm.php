@@ -78,6 +78,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
     // Sort options from config by weight.
     self::arrangeOptionsByWeight(
       $form['sort_options'],
+      $this->config('alshaya_acm_product_position.settings')->get('available_sort_options'),
       $this->config('alshaya_acm_product_position.settings')->get('sort_options')
     );
 
@@ -89,16 +90,16 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
    *
    * @param array $element
    *   The array of elements.
+   * @param array $available_sort_options
+   *   The list of all available sort options.
    * @param array $default_order
    *   The default sort order by which it needs to be arranged.
    */
-  public static function arrangeOptionsByWeight(array &$element, array $default_order) {
+  public static function arrangeOptionsByWeight(array &$element, array $available_sort_options, array $default_order) {
     // Remove empty options.
     $default_order = array_filter($default_order);
-    // All available sort options.
-    $options = \Drupal::config('alshaya_acm_product_position.settings')->get('available_sort_options');
-    // Sort the form options based on the config.
-    $options = array_replace(array_flip($default_order), $options);
+    // Sort the form options based on available_sort_options.
+    $options = array_replace(array_flip($default_order), $available_sort_options);
 
     // Maintaining the weight.
     $weight = 0;

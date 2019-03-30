@@ -2,8 +2,6 @@
 
 namespace Drupal\alshaya_acm_product_position;
 
-use Drupal\views\Views;
-
 /**
  * Class AlshayaPlpSortOptionsService.
  */
@@ -23,28 +21,17 @@ class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   public function sortGivenOptions(array $options): array {
-    $config_values = $this->getCurrentPagePlpSortOptions();
-
-    $config_sort_options = array_keys($config_values);
-    // If there are at least any sort option enabled.
-    if (!empty($config_sort_options)) {
+    if ($config_sort_options = array_keys($this->getCurrentPagePlpSortOptions())) {
+      // If there are at least any sort option enabled.
       $new_sort_options = [];
-
-      // Get the default sorting for options from views config.
-      $views_storage = Views::getView('alshaya_product_list')->storage;
-      $views_sort = $views_storage->getDisplay('block_1')['display_options']['sorts'];
-
       // Iterate over config sort options to prepare new sorted array for form
       // value option.
       foreach ($config_sort_options as $sort_options) {
-        // Set default sort option ASC/DESC from the views config/sort order.
-        $default_sort_order = $views_sort[$sort_options]['order'];
-        $secondary_sort_order = $views_sort[$sort_options]['order'] == 'ASC' ? 'DESC' : 'ASC';
-        if (isset($options[$sort_options . ' ' . $default_sort_order])) {
-          $new_sort_options[$sort_options . ' ' . $default_sort_order] = $options[$sort_options . ' ' . $default_sort_order];
-        }
-        if (isset($options[$sort_options . ' ' . $secondary_sort_order])) {
-          $new_sort_options[$sort_options . ' ' . $secondary_sort_order] = $options[$sort_options . ' ' . $secondary_sort_order];
+        // Set labels for sort option ASC/DESC.
+        foreach (['DESC', 'ASC'] as $sort_order) {
+          if (isset($options[$sort_options . ' ' . $sort_order])) {
+            $new_sort_options[$sort_options . ' ' . $sort_order] = $options[$sort_options . ' ' . $sort_order];
+          }
         }
       }
 
@@ -67,7 +54,9 @@ class AlshayaPlpSortOptionsService extends AlshayaPlpSortOptionsBase {
    * @throws \Drupal\Core\TypedData\Exception\MissingDataException
    */
   protected function getCurrentPagePlpSortOptions():array {
-    if (($term = $this->getTermForRoute()) && $options = $this->getPlpSortConfigForTerm($term, 'options')) {
+    if (($term = $this->getTermForRoute())
+        && $options = $this->getPlpSortConfigForTerm($term, 'options')
+    ) {
       return array_filter($options);
     }
 

@@ -26,6 +26,14 @@ class AlshayaPlpSortOptionsBase {
   const VOCABULARY_ID = 'acq_product_category';
 
   /**
+   * Mapping for route name and parameter.
+   */
+  const TERM_ROUTE_PARAM = [
+    'entity.taxonomy_term.canonical' => 'taxonomy_term',
+    'rest.category_product_list.GET' => 'id',
+  ];
+
+  /**
    * Mapping for fields for options and label to get settings.
    */
   const SORT_OPTIONS_SETTINGS = [
@@ -61,7 +69,7 @@ class AlshayaPlpSortOptionsBase {
   protected $routeMatch;
 
   /**
-   * AlshayaPlpSortOptionsService constructor.
+   * AlshayaPlpSortOptionsBase constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
@@ -69,6 +77,9 @@ class AlshayaPlpSortOptionsBase {
    *   Route match service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
@@ -87,32 +98,21 @@ class AlshayaPlpSortOptionsBase {
    *   Return taxonomy term object when available else null.
    */
   protected function getTermForRoute() {
-    $route_name = $this->routeMatch->getRouteName();
+    if (($route_name = $this->routeMatch->getRouteName())
+      && in_array($route_name, ['entity.taxonomy_term.canonical', 'rest.category_product_list.GET'])
+    ) {
 
-    if (!in_array($route_name, ['entity.taxonomy_term.canonical', 'rest.category_product_list.GET'])) {
-      return NULL;
-    }
-
-    // If /taxonomy/term/tid page.
-    if ($route_name == 'entity.taxonomy_term.canonical') {
       /* @var \Drupal\taxonomy\TermInterface $route_parameter_value */
-      $term = $this->routeMatch->getParameter('taxonomy_term');
-    }
-    elseif ($route_name == 'rest.category_product_list.GET') {
-      // In case of rest resource.
-      $term_id = $this->routeMatch->getParameter('id');
-      $term = $this->termStorage->load($term_id);
-    }
+      $term = $this->routeMatch->getParameter(self::TERM_ROUTE_PARAM[$route_name]);
+      if (is_numeric($term)) {
+        $term = $this->termStorage->load($term);
+      }
 
-    if (empty($term) || !$term instanceof Term) {
-      return NULL;
+      if ($term instanceof Term && $term->bundle() == self::VOCABULARY_ID) {
+        return $term;
+      }
     }
-
-    if ($term->bundle() !== self::VOCABULARY_ID) {
-      return NULL;
-    }
-
-    return $term;
+    return NULL;
   }
 
   /**
@@ -132,21 +132,20 @@ class AlshayaPlpSortOptionsBase {
    */
   protected function getPlpSortConfigForTerm(TermInterface $taxonomy_term, $type = 'options') : ?array {
     $sorting_options = $taxonomy_term->get(self::SORT_OPTIONS_SETTINGS[$type]['type'])->getString();
-    if ($sorting_options == 'inherit_site') {
-      return NULL;
-    }
 
-    if ($sorting_options == 'override' && $sorting_options = $taxonomy_term->get(self::SORT_OPTIONS_SETTINGS[$type]['value'])->getString()) {
+    if ($sorting_options == 'override'
+        && $sorting_options = $taxonomy_term->get(self::SORT_OPTIONS_SETTINGS[$type]['value'])->getString()
+    ) {
       return unserialize($sorting_options);
     }
     elseif ($sorting_options == 'inherit_category') {
-      // Get size guide link from parent term.
+      // Get parent term to inherit sort config.
       $parent_terms = $this->termStorage->loadParents($taxonomy_term->id());
       $term = reset($parent_terms);
-      if (!$term instanceof Term) {
-        return NULL;
+      if ($term instanceof Term) {
+        return $this->getPlpSortConfigForTerm($term, $type);
       }
-      return $this->getPlpSortConfigForTerm($term, $type);
+      return NULL;
     }
     return NULL;
   }

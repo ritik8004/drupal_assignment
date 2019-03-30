@@ -331,13 +331,15 @@ function alshaya_acm_product_position_form_taxonomy_term_acq_product_category_fo
     ],
   ];
 
+  $config = \Drupal::config('alshaya_acm_product_position.settings');
   // Get the sort options and arrange it by weight.
   $sort_options = !empty($taxonomy_term->get('field_sorting_order')->getString())
     ? unserialize($taxonomy_term->get('field_sorting_order')->getString())
-    : \Drupal::config('alshaya_acm_product_position.settings')->get('sort_options');
+    : $config->get('sort_options');
 
   AlshayaPlpSortSettingsForm::arrangeOptionsByWeight(
     $form['sort_options_wrapper']['sort_options'],
+    $config->get('available_sort_options'),
     $sort_options
   );
 
