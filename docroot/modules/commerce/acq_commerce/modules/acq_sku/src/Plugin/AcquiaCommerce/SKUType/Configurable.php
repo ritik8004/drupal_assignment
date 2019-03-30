@@ -304,6 +304,19 @@ class Configurable extends SKUPluginBase {
           ]
       ));
 
+      // Skip additional configurables from options being passed to ACM for
+      // updatecart call.
+      $config_additional_configurable = array_shift(\Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('additional_configurables'));
+      if ($config_additional_configurable) {
+        $options = array_filter($options, function ($option) use ($config_additional_configurable) {
+          if ($option['option_id'] == $config_additional_configurable['attribute_id']) {
+            return FALSE;
+          }
+
+          return TRUE;
+        });
+      }
+
       // Check if item already in cart.
       // @TODO: This needs to be fixed further to handle multiple parent
       // products for a child SKU. To be done as part of CORE-7003.
