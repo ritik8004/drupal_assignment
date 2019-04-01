@@ -108,9 +108,8 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $query = $this->connection->query("SELECT node.nid, node.langcode
       FROM node
       LEFT JOIN search_api_item item ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode)
-      WHERE item.item_id IS NULL AND node.type = :node_type AND index_id = :index_id", [
+      WHERE item.item_id IS NULL AND node.type = :node_type", [
         ':node_type' => 'acq_product',
-        ':index_id' => 'product',
       ]
     );
 
