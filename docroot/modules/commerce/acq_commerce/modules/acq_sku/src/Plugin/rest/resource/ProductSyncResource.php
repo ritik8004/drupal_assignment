@@ -529,6 +529,11 @@ class ProductSyncResource extends ResourceBase {
             // Delete if node available.
             if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
               $node->delete();
+              $this->logger->info('Node @nid deleted for SKU @sku for @langcode.', [
+                '@nid' => $node->id(),
+                '@sku' => $sku->getSku(),
+                '@langcode' => $langcode,
+              ]);
             }
           }
           catch (\Exception $e) {
