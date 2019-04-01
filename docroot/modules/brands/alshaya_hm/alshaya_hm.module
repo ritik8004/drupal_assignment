@@ -397,7 +397,7 @@ function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStat
         $item_code['#prefix'] = '<span class="field__value">';
         $item_code['#suffix'] = '</span>';
 
-        $response->addCommand(new ReplaceCommand('.content--item-code .field__value', $item_code));
+        $response->addCommand(new ReplaceCommand('article[data-sku="' . $sku->getSku() . '"] .content--item-code .field__value', $item_code));
 
         // Fetch display node based on the castor Id selected.
         $display_node = $sku_manager->getDisplayNode($article_castor_id_child_sku);
