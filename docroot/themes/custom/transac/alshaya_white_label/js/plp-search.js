@@ -58,41 +58,6 @@
       }
 
       /**
-       * Place the facet count, in the mobile filter view.
-       */
-      function placeFilterCount() {
-        // Mobile filter block selector.
-        var mobileFilterBarSelector = getFilterBarSelector();
-
-        var countFilters = $(mobileFilterBarSelector + ' ul li').length;
-        if (countFilters === 0 && $.trim($(mobileFilterBarSelector).html()).length === 0) {
-          $(mobileFilterBarSelector).addClass('empty');
-        }
-
-        else {
-          if (countFilters > 0) {
-            // Removing the element before adding again.
-            $(mobileFilterBarSelector + ' > h3').remove();
-            // We need to minus one count as the facets also include clear all link.
-            countFilters = countFilters - 1;
-            // If there are filters applied, we need to show the count next to the label.
-            $('<h3 class="applied-filter-count c-accordion__title ui-state-active">' + Drupal.t('applied filters')
-              + ' (' + countFilters + ')</h3>')
-              .insertBefore(mobileFilterBarSelector + ' ul')
-              .off()
-              .on('click', function (e) {
-                Drupal.alshayaAccordion(this);
-              });
-          }
-        }
-
-        if (countFilters === 0) {
-          // Removing the filter count added next to the label.
-          $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').removeClass('active-filter-count').html(Drupal.t('Filter'));
-        }
-      }
-
-      /**
        * Close the mobile filter view screen.
        */
       function closeFilterView() {
@@ -162,17 +127,6 @@
               closeFilterView();
             });
           }
-
-          if ($(mobileFilterBarSelector).length === 0) {
-            // Clone the filter block from region content.
-            var blockFilterBar = $(filterBarSelector).clone();
-
-            // Place the cloned bar before other facets in the region content's sidebar first.
-            $(blockFilterBar)
-              .insertBefore('.region__content .c-facet__blocks .region__sidebar-first > div:first-child');
-          }
-
-          placeFilterCount();
 
           var countFilters = $(mobileFilterBarSelector + ' ul li').length - 1;
           if (countFilters > 0) {
@@ -366,12 +320,6 @@
         });
       });
 
-      $('.c-facet').each(function () {
-        if ($(this).hasClass('facet-active')) {
-          $(this).find('.c-accordion__title').addClass('ui-state-active');
-        }
-      });
-
       // Close button to close the mobile filter view.
       $('span.filter-close', context).stop().on('click', function () {
         closeFilterView();
@@ -396,6 +344,10 @@
         // Remove if clear all button is clicked on the filter pane.
         $('.shop-by-size-clear-container').remove();
       }
+
+      $('.c-facet__title.c-accordion__title').once().on('click', function () {
+        $(this).toggleClass('active');
+      });
     }
   };
 })(jQuery);
