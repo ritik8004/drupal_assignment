@@ -127,6 +127,11 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      border-bottom: 1px solid $pdp_product_itemcode_border;
+      margin-bottom: 0.75rem;
+    }
+
     .brand-logo-wrapper {
       float: #{$right};
       width: 25%;
@@ -157,14 +162,9 @@
     }
 
     .content--item-code {
-      font-size: 0.6875rem;
+      font-size: 0.625rem;
       color: $pdp_product_itemcode;
       margin-bottom: 0.75rem;
-
-      @include breakpoint($only-mobile) {
-        border-bottom: 1px solid $pdp_product_itemcode_border;
-        padding-bottom: 0.75rem;
-      }
     }
 
     .has--special--price,
@@ -2035,6 +2035,22 @@ html[lang=ar] {
       .select2-dropdown {
         z-index: 1001;
       }
+    }
+  }
+}
+
+.nodetype--acq_product,
+.acq-content-product-modal {
+  .content__title_wrapper {
+    .vat-text,
+    .content--item-code {
+      display: inline-block;
+      margin-top: 0;
+    }
+
+    .vat-text {
+      font-size: 0.625rem;
+      margin-#{$right}: 0.375rem;
     }
   }
 }
