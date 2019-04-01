@@ -346,7 +346,13 @@
       }
 
       $('.c-facet__title.c-accordion__title').once().on('click', function () {
-        $(this).toggleClass('active');
+        if ($(this).hasClass('active')) {
+          $(this).removeClass('active');
+        }
+        else {
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+          $(this).addClass('active');
+        }
       });
     }
   };
