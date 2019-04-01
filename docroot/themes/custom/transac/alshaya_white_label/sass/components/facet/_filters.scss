@@ -1,17 +1,55 @@
 .c-facet.c-accordion {
   .c-accordion__title {
     border: none;
+    font-size: 12px;
 
     &.active {
       + ul {
         display: block;
+        position: absolute;
+        top: 56px;
+        background: #fff;
+        z-index: 9;
+        min-width: 248px;
+        padding: 18px 0;
+        border: 1px solid #ddd
       }
+    }
+
+    &::after {
+      #{$right}: -22px;
+      top: 49%;
     }
   }
 
-  ul {
+  ul,
+  &.hide-facet-block {
     display: none;
   }
 
+  ul li {
+    span {
+      font-size: 12px;
+      line-height: 2;
+      margin-#{$left}: 0;
+    }
+
+    label {
+      &::before {
+        display: none;
+      }
+    }
+
+    padding-#{$left}: 18px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: auto;
+  }
+
+  float: $left;
+  margin-#{$right}: 36px;
+}
+
+.block-views-exposed-filter-blockalshaya-product-list-block-1 {
   float: $left;
 }
