@@ -10,6 +10,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Cross sell modal product thumbnail count and basket page carousel count.
+ */
+function alshaya_fl_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * PDP gallery slider position.
  */
 function alshaya_fl_transac_update_8001() {
