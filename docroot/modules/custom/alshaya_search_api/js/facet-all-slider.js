@@ -84,7 +84,7 @@
           }
           facets.each( function (index) {
             if (index >= show_only_facets) {
-              $(this).addClass('hidden-important');
+              $(this).addClass('hide-facet-block');
             }
           });
         }
