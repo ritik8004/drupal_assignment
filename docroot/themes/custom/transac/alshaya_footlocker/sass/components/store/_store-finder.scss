@@ -163,6 +163,10 @@
     line-height: 2.5;
 
     @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        width: 25% !important;
+      }
+
       &::before {
         #{$left}: 0.5rem;
         bottom: 0.6875rem;
@@ -174,15 +178,19 @@
       margin-bottom: 0.5rem;
       margin-top: 0.5rem;
       text-transform: uppercase;
+      height: 2.5rem;
     }
 
     &::before {
-      margin-#{$right}: 0;
+      margin-#{$right}: 0.5rem;
     }
 
     @include breakpoint($desktop) {
       html[lang=ar] & {
         padding-top: 0.25rem;
+        width: 16%;
+        text-indent: 0;
+        padding-#{$left}: 0.625rem;
       }
     }
   }
@@ -211,7 +219,7 @@
     }
 
     @include breakpoint($tablet) {
-      margin-right: 0.625rem;
+      margin-#{$right}: 0.625rem;
 
       html[lang=ar] & {
         margin-right: 0;
@@ -221,7 +229,7 @@
 
     @include breakpoint($only-tablet) {
       html[lang=ar] & {
-        margin-right: -0.5rem;
+        margin-right: 0.5rem;
       }
     }
 
@@ -260,7 +268,6 @@
     @include breakpoint($only-tablet) {
       padding-#{$right}: 0;
       padding-#{$left}: 1rem;
-      text-indent: 0;
 
       html[lang=ar] & {
         margin-right: 0.625rem;
@@ -285,11 +292,15 @@
 
     .block-store-finder-form__form__label__wrapper {
       float: $right;
+
+      @include breakpoint($only-tablet) {
+        display: none;
+      }
     }
   }
 
   .map-view-link {
-    margin-left: 0.75rem;
+    margin-#{$left}: 0.75rem;
 
     @include breakpoint($only-tablet) {
       html[lang=ar] & {
@@ -327,9 +338,11 @@
         height: 1.9375rem;
         width: 2rem;
         margin-top: -0.25rem;
+      }
 
+      html[lang=ar] & {
         @include breakpoint($only-mobile) {
-          margin-top: 0.125rem;
+          padding-#{$right}: 0.625rem;
         }
       }
 
@@ -338,8 +351,8 @@
         padding: 0.125rem 0.4375rem;
 
         html[lang=ar] & {
-          padding: 0.25rem 3.3125rem 0.25rem 0.25rem;
-          line-height: 2.4;
+          line-height: 2.7;
+          text-indent: 0.125rem;
 
           @include breakpoint($only-mobile) {
             padding: 0.25rem 0;
@@ -407,16 +420,16 @@
       width: 45%;
 
       html[lang=ar] & {
-        width: 46%;
+        width: 36%;
       }
 
       .block-store-finder-form__input__wrapper {
         .form-item-field-latitude-longitude-boundary-geolocation-geocoder-google-places-api,
         .form-item-geolocation-geocoder-google-places-api {
-          width: 60% !important;
+          width: 94.5% !important;
 
           html[lang=ar] & {
-            width: 62% !important;
+            width: 77% !important;
           }
         }
       }
@@ -500,6 +513,16 @@
     @include breakpoint($desktop) {
       width: 66%;
       max-width: 100%;
+
+      html[lang=ar] & {
+        width: 61%;
+      }
+    }
+
+    @include breakpoint($tablet) {
+      .block-store-finder-form__input__wrapper {
+        overflow: hidden;
+      }
     }
 
     .block-store-finder-form__input__wrapper {
@@ -511,7 +534,7 @@
           padding-#{$left}: 0;
 
           html[lang=ar] & {
-            width: 72% !important;
+            width: 75% !important;
           }
         }
       }
@@ -535,25 +558,6 @@
     @include breakpoint($only-tablet) {
       #{$left}: 16%;
       width: 47% !important;
-    }
-
-    html[lang=ar] & {
-      right: 12%;
-
-      @include breakpoint($desktop) {
-        width: 64% !important;
-      }
-
-      @include breakpoint($only-tablet) {
-        right: 14%;
-        width: 49% !important;
-      }
-
-      @include breakpoint($only-mobile) {
-        right: 0;
-        width: 100%;
-        position: relative;
-      }
     }
   }
 }
