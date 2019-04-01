@@ -1,4 +1,12 @@
 .order-confirmation {
+  main {
+    .user-register-form {
+      .form-submit {
+        padding: 0.625rem 3.5rem;
+      }
+    }
+  }
+
   .product--count {
     border-top: none;
   }
@@ -33,6 +41,14 @@
   .user__order--detail {
     td div {
       margin-bottom: 0;
+
+      .address--content {
+        &:last-of-type {
+          @include breakpoint($only-mobile) {
+            margin-bottom: 1.25rem;
+          }
+        }
+      }
     }
 
     .price {

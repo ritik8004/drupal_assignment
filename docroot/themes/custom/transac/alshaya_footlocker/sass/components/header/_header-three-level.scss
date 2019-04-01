@@ -7,6 +7,12 @@
         }
       }
     }
+
+    .menu__links__wrapper {
+      @include breakpoint($desktop) {
+        padding-top: 1.125rem;
+      }
+    }
   }
 
   .menu--three__list-item {
@@ -15,6 +21,15 @@
         font-size: 0.875rem !important;
         text-transform: capitalize;
       }
+    }
+  }
+}
+
+.block-alshaya-main-menu {
+  li.menu--one__list-item {
+    @include breakpoint($desktop) {
+      height: 2.25rem;
+      vertical-align: middle;
     }
   }
 }

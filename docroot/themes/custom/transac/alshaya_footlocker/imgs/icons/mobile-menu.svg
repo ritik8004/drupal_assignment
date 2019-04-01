@@ -8,7 +8,7 @@
         <mask id="b" fill="#fff">
             <use xlink:href="#a"/>
         </mask>
-        <use fill="#0ABB76" fill-rule="nonzero" xlink:href="#a"/>
+        <use fill="#353132" fill-rule="nonzero" xlink:href="#a"/>
         <g fill="#353132" mask="url(#b)">
             <path d="M0 0h28v28H0z"/>
         </g>
