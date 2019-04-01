@@ -33,6 +33,12 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     </div>
   {% endif %}
 
+  {% if vat_text %}
+    <div class="vat-text">
+      {{ vat_text }}
+    </div>
+  {% endif %}
+
   {% if content.stock_placeholder %}
     <div class="above-mobile-block">
       {{ content.stock_placeholder }}

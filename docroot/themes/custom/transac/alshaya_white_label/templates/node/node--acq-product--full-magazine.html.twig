@@ -49,6 +49,12 @@
 
         <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
+        {% if vat_text %}
+          <div class="vat-text">
+            {{ vat_text }}
+          </div>
+        {% endif %}
+
         <div class="content--item-code">
           <span class="field__label">{{ 'Item Code'|t }}:</span>
           {{ content.item_code }}
