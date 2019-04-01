@@ -17,6 +17,9 @@ do
   fi
 done
 
+echo "Clearing permanent cache for products to avoid issues with same SKUs in different environments."
+drush --uri=$uri pcbf alshaya_product
+
 echo "Enable the search api indexes again."
 drush --uri=$uri search-api-enable-all
 
