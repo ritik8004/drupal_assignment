@@ -66,6 +66,25 @@
         $('.facet-all-clear').removeClass('has-link');
       }
 
+      // On change of outer `sort by`, update the 'all filter' sort by as well.
+      $('.c-content .c-content__region #edit-sort-bef-combine').first().on('change', function() {
+        $('.all-filters #edit-sort-bef-combine').val($(this).val());
+      });
+
+      // Sort result on change of sort in `All filters`.
+      $('.all-filters [data-bef-auto-submit-click]').on('click', function (e) {
+        // Get the value.
+        var sort_value = $('.all-filters #edit-sort-bef-combine').val();
+        // Set the value of original `sort by` (outside all filters).
+        $('#edit-sort-bef-combine').val(sort_value);
+        // Trigger click of button.
+        var idd = $('.c-content .c-content__region [data-bef-auto-submit-click]').first().attr('id');
+        $('#' + idd).trigger('click');
+        // Stopping other propagation.
+        e.preventDefault();
+        e.stopPropagation();
+      })
+
       showOnlyFewFacets();
 
       /**
