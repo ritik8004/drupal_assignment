@@ -10,7 +10,7 @@ dependencies:
     - alshaya_white_label
 id: plpcategoryfacet
 theme: alshaya_white_label
-region: sidebar_first
+region: content
 weight: -36
 provider: null
 plugin: 'facet_block:plp_category_facet'
