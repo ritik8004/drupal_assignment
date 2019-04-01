@@ -17,7 +17,8 @@ do
   fi
 done
 
-echo "Clearing permanent cache for products to avoid issues with same SKUs in different environments."
+# Clear permanent cache for products to avoid issues with same SKUs on prod.
+echo "Clear product permanent cache."
 drush --uri=$uri pcbf alshaya_product
 
 echo "Enable the search api indexes again."
