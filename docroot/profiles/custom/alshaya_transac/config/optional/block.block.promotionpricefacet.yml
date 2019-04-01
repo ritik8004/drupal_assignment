@@ -10,7 +10,7 @@ dependencies:
     - alshaya_white_label
 id: promotionpricefacet
 theme: alshaya_white_label
-region: sidebar_first
+region: content
 weight: -23
 provider: null
 plugin: 'facet_block:promotion_price_facet'
