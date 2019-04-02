@@ -567,12 +567,33 @@ class AlshayaSearchApiQueryExecute {
    *   Facet block object.
    */
   public function getFacetBlock(string $facet_id) {
+    $new_category_facet = [
+      'category_facet_plp',
+      'category_facet_romo',
+      'category_facet_search',
+    ];
+    $old_category_facets = [
+      'category',
+      'plp_category_facet',
+      'promotion_category_facet',
+    ];
+    // For mobile app, we still use old category facet. Thus we do not return
+    // new category facet in response.
+    // @Todo: Remove code to skip new category facet for mobile app in future.
+    if (in_array($facet_id, $new_category_facet)) {
+      return NULL;
+    }
+
     // Block id will be same as facet id with no underscore.
     // Example - plp_category_facet => plpcategoryfacet.
     $block_id = str_replace('_', '', $facet_id);
     // Load facet block to get title.
     $block = $this->entityTypeManager->getStorage('block')->load($block_id);
     if ($block instanceof Block) {
+      // @Todo: Remove code to use old category facet for mobile app.
+      if (in_array($facet_id, $old_category_facets)) {
+        $block->setStatus(TRUE);
+      }
       return $block;
     }
 

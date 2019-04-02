@@ -250,18 +250,6 @@ header,
   }
 }
 
-ul.item-list__checkbox,
-.block-facets > ul {
-  display: none;
-}
-
-.facet-active {
-  ul.item-list__checkbox,
-  &.block-facets > ul {
-    display: block;
-  }
-}
-
 .ajax-progress.ajax-progress-fullscreen {
   background-image: url(#{$base_theme_loader_img_directory_path}) !important;
   background-repeat: no-repeat !important;

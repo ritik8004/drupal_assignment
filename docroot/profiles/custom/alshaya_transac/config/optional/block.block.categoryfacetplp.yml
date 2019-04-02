@@ -1,21 +1,21 @@
 langcode: en
-status: false
+status: true
 dependencies:
   config:
-    - facets.facet.plp_category_facet
+    - facets.facet.category_facet_plp
   module:
     - facets
     - system
   theme:
     - alshaya_white_label
-id: plpcategoryfacet
+id: categoryfacetplp
 theme: alshaya_white_label
 region: content
-weight: -36
+weight: -18
 provider: null
-plugin: 'facet_block:plp_category_facet'
+plugin: 'facet_block:category_facet_plp'
 settings:
-  id: 'facet_block:plp_category_facet'
+  id: 'facet_block:category_facet_plp'
   label: Category
   provider: facets
   label_display: visible

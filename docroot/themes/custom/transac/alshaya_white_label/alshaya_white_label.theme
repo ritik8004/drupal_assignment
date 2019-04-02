@@ -11,6 +11,7 @@ use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\Core\Template\Attribute;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
@@ -1431,5 +1432,19 @@ function alshaya_white_label_preprocess_alshaya_address(&$variables) {
   if (isset($variables['address']['country'])) {
     $variables['address']['country_code'] = $variables['address']['country'];
     unset($variables['address']['country']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  foreach ($variables['items'] as $key => $item) {
+    if (isset($item['value']['#attributes']['class'])
+      && in_array('is-active', $item['value']['#attributes']['class'])) {
+      if ($variables['items'][$key]['attributes'] instanceof Attribute) {
+        $variables['items'][$key]['attributes']->addClass('is-active');
+      }
+    }
   }
 }

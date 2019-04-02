@@ -1,21 +1,23 @@
 langcode: en
 status: true
 dependencies:
-  config: {  }
+  config:
+    - facets.facet.category_facet_promo
   module:
     - facets
+    - ctools
     - system
   theme:
     - alshaya_white_label
-id: brand
+id: categoryfacetpromo
 theme: alshaya_white_label
 region: content
-weight: -20
+weight: -41
 provider: null
-plugin: 'facet_block:field'
+plugin: 'facet_block:category_facet_promo'
 settings:
-  id: 'facet_block:field'
-  label: Label
+  id: 'facet_block:category_facet_promo'
+  label: Category
   provider: facets
   label_display: visible
 visibility:

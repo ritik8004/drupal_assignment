@@ -1,27 +1,27 @@
 langcode: en
-status: false
+status: true
 dependencies:
   config:
-    - facets.facet.plp_category_facet
+    - facets.facet.category_facet_search
   module:
     - facets
     - system
   theme:
     - alshaya_white_label
-id: plpcategoryfacet
+id: categoryfacetsearch
 theme: alshaya_white_label
 region: content
-weight: -36
+weight: -32
 provider: null
-plugin: 'facet_block:plp_category_facet'
+plugin: 'facet_block:category_facet_search'
 settings:
-  id: 'facet_block:plp_category_facet'
+  id: 'facet_block:category_facet_search'
   label: Category
   provider: facets
   label_display: visible
 visibility:
   request_path:
     id: request_path
-    pages: '/taxonomy/term/*'
+    pages: /search
     negate: false
     context_mapping: {  }
