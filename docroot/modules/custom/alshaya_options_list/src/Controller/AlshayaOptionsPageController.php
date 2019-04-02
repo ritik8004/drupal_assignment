@@ -5,26 +5,16 @@ namespace Drupal\alshaya_options_list\Controller;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\file\Entity\File;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Url;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_options_list\AlshayaOptionsListService;
 
 /**
  * Controller to add options list page.
  */
 class AlshayaOptionsPageController extends ControllerBase {
-
-  /**
-   * Database connection service object.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
 
   /**
    * The language manager.
@@ -48,36 +38,32 @@ class AlshayaOptionsPageController extends ControllerBase {
   private $requestStack;
 
   /**
-   * File storage.
+   * Alshaya Options List Service.
    *
-   * @var \Drupal\file\FileStorageInterface
+   * @var Drupal\alshaya_options_list\AlshayaOptionsListService
    */
-  protected $fileStorage;
+  private $alshayaOptionsService;
 
   /**
    * AlshayaOptionsPageController constructor.
    *
-   * @param \Drupal\Core\Database\Connection $connection
-   *   Database connection service object.
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend service for alshaya.
    * @param Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   Request stack.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
+   * @param Drupal\alshaya_options_list\AlshayaOptionsListService $alshaya_options_service
+   *   Alshaya options service.
    */
-  public function __construct(Connection $connection,
-                              LanguageManagerInterface $language_manager,
+  public function __construct(LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RequestStack $request_stack,
-                              EntityTypeManagerInterface $entity_type_manager) {
-    $this->connection = $connection;
+                              AlshayaOptionsListService $alshaya_options_service) {
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->requestStack = $request_stack;
-    $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->alshayaOptionsService = $alshaya_options_service;
   }
 
   /**
@@ -85,11 +71,10 @@ class AlshayaOptionsPageController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('database'),
       $container->get('language_manager'),
       $container->get('cache.default'),
       $container->get('request_stack'),
-      $container->get('entity_type.manager')
+      $container->get('alshaya_options_list.alshaya_options_service')
     );
   }
 
@@ -115,32 +100,46 @@ class AlshayaOptionsPageController extends ControllerBase {
     $attribute_options = $config->get('alshaya_options_pages');
     $attributeCodes = array_filter($attribute_options[$request]['attributes']);
     foreach ($attributeCodes as $attributeCode) {
+      $option = [];
       // Check for cache first.
       $cid = 'alshaya_options_page:' . $attributeCode . ':' . $langcode;
       if ($cache = $this->cache->get($cid)) {
         $data = $cache->data;
         // If cache hit.
         if (!empty($data)) {
-          $options_list[$attributeCode]['terms'] = $data;
+          $option['terms'] = $data;
         }
       }
       else {
-        $options_list[$attributeCode]['terms'] = $this->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
-        $this->cache->set($cid, $options_list[$attributeCode]['terms'], Cache::PERMANENT, ['alshaya-options-page']);
+        $option['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attributeCode, $attribute_options[$request]['attribute_details'][$attributeCode]['show-images'], $attribute_options[$request]['attribute_details'][$attributeCode]['group']);
+        $this->cache->set($cid, $option['terms'], Cache::PERMANENT, ['alshaya-options-page']);
       }
       if ($attribute_options[$request]['attribute_details'][$attributeCode]['show-search']) {
         $search_form = $this->formBuilder()
-          ->getForm('\Drupal\alshaya_options_list\Form\AlshayaOptionsListAutocompleteForm');
+          ->getForm('\Drupal\alshaya_options_list\Form\AlshayaOptionsListAutocompleteForm', [
+            'page_code' => $request,
+            'attribute_code' => $attributeCode,
+          ]);
         $options_list[$attributeCode]['search_form'] = $search_form;
       }
 
       if ($attribute_options[$request]['attribute_details'][$attributeCode]['group']) {
-        $options_list[$attributeCode]['group'] = TRUE;
-        $options_list[$attributeCode]['terms'] = $this->groupAlphabetically($options_list[$attributeCode]['terms']);
+        $option['group'] = TRUE;
+        $option['terms'] = $this->alshayaOptionsService->groupAlphabetically($option['terms']);
       }
+
+      $options_list[$attributeCode]['options_markup'] = [
+        '#theme' => 'alshaya_options_attribute',
+        '#option' => $option,
+        '#attribute_code' => $attributeCode,
+      ];
 
       $options_list[$attributeCode]['title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['title'];
       $options_list[$attributeCode]['description'] = $attribute_options[$request]['attribute_details'][$attributeCode]['description'];
+
+      if ($attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title_toggle']) {
+        $options_list[$attributeCode]['mobile_title'] = $attribute_options[$request]['attribute_details'][$attributeCode]['mobile_title'];
+      }
     }
 
     $options_list = [
@@ -156,80 +155,6 @@ class AlshayaOptionsPageController extends ControllerBase {
     ];
 
     return $options_list;
-  }
-
-  /**
-   * Returns the build for options page.
-   *
-   * @param string $attributeCode
-   *   Attribute code.
-   * @param bool $showImages
-   *   Whether images should be shown with the attribute.
-   * @param bool $group
-   *   Whether the attribute should be grouped alphabetically or not.
-   *
-   * @return array
-   *   All term names array.
-   */
-  public function fetchAllTermsForAttribute($attributeCode, $showImages = FALSE, $group = FALSE) {
-    $return = [];
-    $langcode = $this->languageManager->getCurrentLanguage()->getId();
-    $query = $this->connection->select('taxonomy_term_field_data', 'tfd');
-    $query->fields('tfd', ['name', 'tid']);
-    $query->innerJoin('taxonomy_term__field_sku_attribute_code', 'tfa', 'tfd.tid = tfa.entity_id');
-    $query->condition('tfa.field_sku_attribute_code_value', $attributeCode);
-    $query->condition('tfd.langcode', $langcode);
-    if ($showImages) {
-      $query->addField('tfs', 'field_attribute_swatch_image_target_id', 'image');
-      $query->leftJoin('taxonomy_term__field_attribute_swatch_image', 'tfs', 'tfa.entity_id = tfs.entity_id');
-    }
-    if ($group) {
-      $query->orderBy('tfd.name');
-    }
-    $options = $query->execute()->fetchAllAssoc('tid');
-    foreach ($options as $option) {
-      if (!empty($option->name)) {
-        $list_object['title'] = $option->name;
-        $url = [
-          'query' => [
-            'f[0]' => $attributeCode . ':' . $option->name,
-            'sort_bef_combine' => 'search_api_relevance DESC',
-            'show_on_load' => '12',
-          ],
-        ];
-        $list_object['url'] = Url::fromUri('internal:/search', $url);
-        if ($showImages) {
-          $list_object['image_url'] = '';
-          if (!empty($option->image)) {
-            $file = $this->fileStorage->load($option->image);
-            if ($file instanceof File) {
-              $list_object['image_url'] = $file->getFileUri();
-            }
-          }
-        }
-        $return[] = $list_object;
-      }
-    }
-    return $return;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function groupAlphabetically($options_array) {
-    $return_array = [];
-    foreach ($options_array as $option) {
-      $char = strtolower($option['title'][0]);
-      $return_array[$char][] = $option;
-    }
-    return $return_array;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function searchAutocomplete($keyword) {
-    return new JsonResponse(['key' => 'value']);
   }
 
 }

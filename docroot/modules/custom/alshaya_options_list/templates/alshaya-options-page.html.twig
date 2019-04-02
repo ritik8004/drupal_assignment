@@ -4,68 +4,42 @@
     <div class='options-page-description'>{{ description }}</div>
   </div>
   {% for key,option in options_list %}
-    <div class= 'attribute-option {{ key }}'>
-      <div class='attribute-title'> {{ option.title }} </div>
-      {% if option.search_form %}
-        <div class='attribute-search-form'>
-          {{ option.search_form }}
+  <div class='attribute-option {{ key }}'>
+    <div class='attribute-title'> {{ option.title }} </div>
+    {% if option.search_form %}
+      <div class='attribute-search-form'>
+        {{ option.search_form }}
+      </div>
+    {% endif %}
+    <div class='attribute-description'> {{ option.description }} </div>
+    {% if option.mobile_title %}
+      <div
+        class='attribute-detail-link mobile-only-block'> {{ option.mobile_title }} </div>
+    {% endif %}
+    <div class='attribute-filter-option'>
+      {% if option.mobile_title %}
+        <div class='attribute-filter-header-container'>
+          <div class='attribute-filter-header'>
+            <div
+              class='attribute-filter-block-title mobile-only-block'> {{ option.mobile_title }}  </div>
+            <div
+              class='attribute-overlay-close-icon mobile--close mobile-only-block'>
+              <span></span>
+            </div>
+          </div>
+          {% if option.search_form %}
+            <div class='attribute-search-form mobile-only-block'>
+              {{ option.search_form }}
+            </div>
+          {% endif %}
         </div>
       {% endif %}
-      <div class='attribute-description'> {{ option.description }} </div>
-      {% if key == 'fragrance_name' %}
-        <div class='attribute-detail-link mobile-only-block'> {{ 'shop by fragrance name' |t }} </div>
-      {% endif %}
-      <div class='attribute-filter-option'>
-        {% if key == 'fragrance_name' %}
-          <div class='attribute-filter-header-container'>
-            <div class='attribute-filter-header'>
-              <div class='attribute-filter-block-title mobile-only-block'> {{ 'shop by fragrance name' |t }} </div>
-              <div class='attribute-overlay-close-icon mobile--close mobile-only-block'>
-                <span></span>
-              </div>
-            </div>
-            {% if option.search_form %}
-              <div class='attribute-search-form mobile-only-block'>
-                {{ option.search_form }}
-              </div>
-            {% endif %}
-          </div>
-        {% endif %}
-        <ul class='attribute-filter-name-list'>
-          {% if option.group %}
-            {% for key,array_terms in option.terms %}
-              {% if key|trim|length > 0 %}
-                <li class='level-1'>
-                  <div class ='group-heading'>{{key}}</div>
-                  <ul class='list'>
-                    {% for value in array_terms %}
-                      <li class='title'>
-                        <a href={{ value.url }}> {{ value.title }} </a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </li>
-              {% endif %}
-            {% endfor %}
-          {% else %}
-            {% for value in option.terms %}
-              {% if value.title|trim|length > 0 %}
-                <li class='title'>
-                  <a href={{ value.url }}>
-                    {% if value.image_url %}
-                      <img src="{{ file_url(value.image_url) }}"/>
-                    {% endif %}
-                    <span class='swatch-title'> {{ value.title }} </span>
-                  </a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-        </ul>
-      </div>
+      {{ option.options_markup }}
     </div>
-    <div class='divider'>
-      <span>{{ 'or' |t }} </span>
-    </div>
-  {% endfor %}
+  </div>
+</div>
+<div class='divider'>
+  <span>{{ 'or' |t }} </span>
+</div>
+{% endfor %}
 </div>
