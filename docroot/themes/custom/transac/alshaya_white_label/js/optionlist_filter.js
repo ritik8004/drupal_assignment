@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.configurableoxes = {
+  Drupal.behaviors.OptionlistFilter = {
     attach: function (context, settings) {
       if ($(window).width() < 768) {
         $('.fragrance_name .attribute-detail-link ').once().on('click', function (e) {

@@ -6,6 +6,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\file\Entity\File;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -147,6 +148,11 @@ class AlshayaOptionsPageController extends ControllerBase {
       '#options_list' => $options_list,
       '#page_title' => $attribute_options[$request]['title'],
       '#description' => $attribute_options[$request]['description'],
+      '#attached' => [
+        'library' => [
+          'alshaya_white_label/optionlist_filter',
+        ],
+      ],
     ];
 
     return $options_list;
@@ -193,7 +199,7 @@ class AlshayaOptionsPageController extends ControllerBase {
       $list_object['url'] = Url::fromUri('internal:/search', $url);
       if ($showImages && !empty($option->image)) {
         $file = $this->fileStorage->load($option->image);
-        if ($file instanceof FileInterface) {
+        if ($file instanceof File) {
           $list_object['image_url'] = $file->getFileUri();
         }
       }
