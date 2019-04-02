@@ -354,6 +354,19 @@
           $(this).addClass('active');
         }
       });
+
+      // Grid switch for PLP and Search pages.
+      $('.small-col-grid').once().on('click', function () {
+        $('.large-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('.c-products-list').removeClass('product-large').addClass('product-small');
+      });
+
+      $('.large-col-grid').once().on('click', function () {
+        $('.small-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('.c-products-list').removeClass('product-small').addClass('product-large');
+      });
     }
   };
 })(jQuery);
