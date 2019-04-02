@@ -41,6 +41,7 @@
       var promotionImpressionSubnavFired = false;
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
+      var deliveryType = 'Home Delivery';
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
@@ -77,7 +78,6 @@
             product.list = currentListName;
             currentListName = null;
           }
-
           var data = {
             event: 'productDetailView',
             ecommerce: {
@@ -273,8 +273,24 @@
         }
       }
 
-      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      // CheckoutOption event for delivery page.
+      $('[data-drupal-selector="edit-actions-get-shipping-methods"]').once('js-event').on('mousedown', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
+      });
+
+      $('div.address--deliver-to-this-address.address--controls a').once('js-event').on('click', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
+      });
+
+      $('button.delivery-home-next, [data-drupal-selector="edit-member-delivery-home-address-form-save"]').once('js-event').on('mousedown', function () {
+        if (gtmPageType == 'checkout delivery page') {
+          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery - subdelivery ', 2);
+        }
+      });
+
+      $('[data-drupal-selector="edit-actions-ccnext"]').once('js-event').on('mousedown', function () {
         ccPaymentsClicked = true;
+        Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
@@ -418,6 +434,13 @@
           };
 
           if (event === 'removeFromCart') {
+            // Delete list from cookie.
+            var listValues = {};
+            if ($.cookie('product-list') !== undefined) {
+              listValues = JSON.parse($.cookie('product-list'));
+            }
+            delete listValues[product.id];
+            $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
             data.ecommerce.remove = {
               products: [
                 product
@@ -477,17 +500,24 @@
       });
 
       /**
+       * Fire checkoutOption on cart page.
+       */
+      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
+        Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
+      }
+
+      /**
        * Tracking New customers.
        */
       cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('checkout as guest');
+        Drupal.alshaya_seo_gtm_push_checkout_option('Guest Login', 1);
       });
 
       /**
        * Tracking Returning customers.
        */
-      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
+        cartCheckoutLoginSelector.find('button[gtm-type="checkout-signin"]').once('js-event').on('mousedown', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
       });
 
       /**
@@ -497,25 +527,9 @@
         (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
+          deliveryType = 'Home Delivery';
         }
       }
-
-      subDeliveryOptionSelector.find('.form-type-radio').each(function () {
-        // Push default selected sub-delivery option to GTM.
-        if ($(this).find('input[checked="checked"]').length > 0) {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        }
-
-        // Attach change event listener to shipping method radio buttons.
-        $(this).change(function () {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        });
-      });
 
       /**
        * GTM virtual page tracking for click & collect journey.
@@ -531,9 +545,6 @@
             body.addClass('virtualpageview-fired');
           }
 
-          if (($('button.cc-action', context).length > 0) && (context === document)) {
-            Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
-          }
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
@@ -556,7 +567,9 @@
           if (drupalSettings.path.currentLanguage === 'ar') {
             preselectedMethodLabel = drupalSettings.alshaya_payment_options_translations[preselectedMethodLabel];
           }
-          Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
+          $('[data-drupal-selector="edit-actions-next"]').once('js-event').on('mousedown', function () {
+            Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 3);
+          });
         }
       }
 
@@ -791,6 +804,14 @@
       productData.dimension5 = product.attr('gtm-dimension5');
     }
 
+    // If list variable is set in cookie, retrieve it.
+    if ($.cookie('product-list') !== undefined) {
+      var listValues = JSON.parse($.cookie('product-list'));
+      if (listValues[productData.id]) {
+        productData.list = listValues[productData.id]
+      }
+    }
+
     return productData;
   };
 
@@ -989,6 +1010,14 @@
     }
 
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+
+    // On productClick, add list variable to cookie.
+    var listValues = {};
+    if ($.cookie('product-list') !== undefined) {
+      listValues = JSON.parse($.cookie('product-list'));
+    }
+    listValues[product.id] = listName;
+    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
       product.position = position;
