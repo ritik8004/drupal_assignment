@@ -217,6 +217,8 @@ class AlshayaHmCommands extends DrushCommands {
   public static function addRedirectsFromTempstore(&$context) {
     $mapping = \Drupal::state()->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY);
 
+    /** @var \Drupal\redirect\RedirectRepository $redirect_repository */
+    $redirect_repository = \Drupal::service('redirect.repository');
     $context['sandbox']['result'] = array_chunk($mapping, 100);
     $context['sandbox']['max'] = count($context['sandbox']['result']);
     $context['sandbox']['current'] = 0;
@@ -231,15 +233,34 @@ class AlshayaHmCommands extends DrushCommands {
 
     $map_chunk = array_shift($context['sandbox']['result']);
     foreach ($map_chunk as $map) {
+      /** @var \Drupal\node\NodeInterface $node */
       $node = $sku_manager->getDisplayNode($map['child_sku']);
 
-      // Create redirect from old alias to new nodes.
-      Redirect::create([
-        'redirect_source' => $map['alias'],
-        'redirect_redirect' => '/node/' . $node->id(),
-        'language' => $map['langcode'],
-        'status_code' => '301',
-      ])->save();
+      // Add redirect only if the child SKU is available & has style code
+      // attribute.
+      if (($child_sku = SKU::loadFromSku($map['child_sku'])) &&
+        ($child_sku instanceof SKU) &&
+        ($child_sku->hasField('attr_style_code')) &&
+        ($child_sku->get('attr_style_code')->getString())) {
+        $redirect = $redirect_repository->findMatchingRedirect($map['alias'], [], $map['langcode']);
+
+        // Create redirect from old alias to new nodes. Avoid errors if the
+        // redirect already exists.
+        if (!$redirect instanceof Redirect) {
+          Redirect::create([
+            'redirect_source' => $map['alias'],
+            'redirect_redirect' => '/node/' . $node->id(),
+            'language' => $map['langcode'],
+            'status_code' => '301',
+          ])->save();
+        }
+        else {
+          \Drupal::logger('alshaya_hm')->alert('Skipping adding redirect. Redirect already found for the source: @alias', ['@alias' => $map['alias']]);
+        }
+      }
+      else {
+        \Drupal::logger('alshaya_hm')->alert('Skipping adding redirect. SKU @sku not found or is missing style code.', ['@sku' => $map['child_sku']]);
+      }
     }
 
     $context['sandbox']['current']++;
