@@ -129,7 +129,6 @@
       color: $plp_search_count;
       padding-bottom: 0.75rem;
       font-family: $hnm-regular;
-      border-bottom: 1px solid $content_pagetitle_border;
 
       @include breakpoint($only-mobile) {
         margin-top: 0.75rem;
