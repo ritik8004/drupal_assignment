@@ -1,4 +1,9 @@
 .c-facet {
+  a {
+    text-transform: none;
+    font-weight: normal;
+  }
+
   ul {
     @include breakpoint($desktop) {
       padding-top: 0;
