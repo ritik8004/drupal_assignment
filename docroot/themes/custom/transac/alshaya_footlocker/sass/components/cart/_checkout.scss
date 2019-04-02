@@ -59,6 +59,16 @@
             }
           }
 
+          &.delivery-option {
+            @include breakpoint($desktop) {
+              padding-#{$left}: 5.2%;
+
+              html[lang=ar] & {
+                padding-#{$left}: 2%;
+              }
+            }
+          }
+
           html[lang=ar] & {
             @include breakpoint ($tablet) {
               padding: 1rem;
