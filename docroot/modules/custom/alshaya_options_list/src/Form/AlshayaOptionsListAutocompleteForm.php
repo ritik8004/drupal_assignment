@@ -94,7 +94,10 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
       '#value' => $form_arg['page_code'] ?? '',
     ];
 
-    $form['#attributes'] = ['onsubmit' => 'return false'];
+    $form['#attributes'] = [
+      'class' => 'alshaya-options-list-autocomplete-form',
+      'onsubmit' => 'return false',
+    ];
     $form['#attached']['library'][] = 'alshaya_options_list/alshaya_options_list_search';
     return $form;
   }
