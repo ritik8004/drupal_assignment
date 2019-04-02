@@ -55,7 +55,7 @@ display:
               autosubmit: true
               autosubmit_hide: true
             sort:
-              bef_format: default
+              bef_format: bef
               advanced:
                 collapsible: false
                 collapsible_label: 'Sort options'

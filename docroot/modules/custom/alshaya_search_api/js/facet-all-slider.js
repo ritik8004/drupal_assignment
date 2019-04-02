@@ -93,16 +93,17 @@
       }
 
       // On change of outer `sort by`, update the 'all filter' sort by as well.
-      $('.c-content .c-content__region #edit-sort-bef-combine').first().on('change', function() {
-        $('.all-filters #edit-sort-bef-combine').val($(this).val());
+      $('.c-content .c-content__region #edit-sort-bef-combine input:radio').on('click', function() {
+        var idd = $(this).attr('id');
+        $('.all-filters #edit-sort-bef-combine input:radio').attr('checked', false);
+        $('.all-filters #edit-sort-bef-combine #' + idd).attr('checked', true);
       });
 
       // Sort result on change of sort in `All filters`.
-      $('.all-filters [data-bef-auto-submit-click]').on('click', function (e) {
-        // Get the value.
-        var sort_value = $('.all-filters #edit-sort-bef-combine').val();
-        // Set the value of original `sort by` (outside all filters).
-        $('#edit-sort-bef-combine').val(sort_value);
+      $('.all-filters #edit-sort-bef-combine input:radio').on('click', function (e) {
+        // Get ID.
+        var idd = $(this).attr('id');
+        $('.c-content .c-content__region #edit-sort-bef-combine #' + idd).attr('checked', true);
         // Trigger click of button.
         var idd = $('.c-content .c-content__region [data-bef-auto-submit-click]').first().attr('id');
         $('#' + idd).trigger('click');
