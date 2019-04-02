@@ -60,18 +60,29 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $form_arg = NULL) {
+    $config = $this->config('alshaya_options_list.admin_settings');
+    $attribute_options = $config->get('alshaya_options_pages');
+    $placeholder = $attribute_options[$form_arg['page_code']]['attribute_details'][$form_arg['attribute_code']]['search-placeholder'];
+
     $form['alshaya_options_list_autocomplete_form'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Search'),
       '#attributes' => [
         'placeholder' => [
-          $this->t('Search for a fragrance...'),
+          $placeholder,
         ],
+        'class' => [
+          'delayed-search-submit',
+        ],
+        'data-delay' => '500',
       ],
       '#ajax' => [
-        'callback' => '::ajaxSearchCallback',
-        'event' => 'keyup',
+        'callback' => [$this, 'ajaxSearchCallback'],
+        'event' => 'endTyping',
         'wrapper' => 'ajax-' . $form_arg['attribute_code'],
+        'progress' => [
+          'type' => 'none',
+        ],
       ],
     ];
     $form['attribute_code'] = [
@@ -83,19 +94,16 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
       '#value' => $form_arg['page_code'] ?? '',
     ];
 
+    $form['#attributes'] = ['onsubmit' => 'return false'];
+    $form['#attached']['library'][] = 'alshaya_options_list/alshaya_options_list_search';
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function ajaxSearchCallback(array &$form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
     $options_list = [];
     $search_string = $form_state->getValue('alshaya_options_list_autocomplete_form');
     $page_code = $form_state->getValue('page_code');
@@ -104,8 +112,11 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
     $attribute_options = $config->get('alshaya_options_pages');
     $group = $attribute_options[$page_code]['attribute_details'][$attribute_code]['group'];
     $show_images = $attribute_options[$page_code]['attribute_details'][$attribute_code]['show-images'];
-    $options_list['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attribute_code, $show_images, $group, $search_string);
-    if ($group) {
+    $options_list['terms'] = $this->alshayaOptionsService->fetchAllTermsForAttribute($attribute_code, $show_images, $group, $search_string) ?? NULL;
+    if (empty($options_list['terms'])) {
+      $options_list['no_results'] = $this->t('No results found.');
+    }
+    elseif ($group) {
       $options_list['group'] = TRUE;
       $options_list['terms'] = $this->alshayaOptionsService->groupAlphabetically($options_list['terms']);
     }
@@ -116,7 +127,6 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
       '#attribute_code' => $attribute_code,
     ];
 
-    $response = new AjaxResponse();
     $response->addCommand(new ReplaceCommand('.ajax-' . $attribute_code, $attribute_markup));
     return $response;
   }
