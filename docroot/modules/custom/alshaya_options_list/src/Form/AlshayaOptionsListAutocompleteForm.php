@@ -63,14 +63,15 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
     $form['alshaya_options_list_autocomplete_form'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Search'),
+      '#attributes' => [
+        'placeholder' => [
+          $this->t('Search for a fragrance...'),
+        ],
+      ],
       '#ajax' => [
         'callback' => '::ajaxSearchCallback',
         'event' => 'keyup',
         'wrapper' => 'ajax-' . $form_arg['attribute_code'],
-        'progress' => [
-          'type' => 'throbber',
-          'message' => '',
-        ],
       ],
     ];
     $form['attribute_code'] = [

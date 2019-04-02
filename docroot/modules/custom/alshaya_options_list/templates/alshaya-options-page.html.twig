@@ -4,42 +4,41 @@
     <div class='options-page-description'>{{ description }}</div>
   </div>
   {% for key,option in options_list %}
-  <div class='attribute-option {{ key }}'>
-    <div class='attribute-title'> {{ option.title }} </div>
-    {% if option.search_form %}
-      <div class='attribute-search-form'>
-        {{ option.search_form }}
-      </div>
-    {% endif %}
-    <div class='attribute-description'> {{ option.description }} </div>
-    {% if option.mobile_title %}
-      <div
-        class='attribute-detail-link mobile-only-block'> {{ option.mobile_title }} </div>
-    {% endif %}
-    <div class='attribute-filter-option'>
-      {% if option.mobile_title %}
-        <div class='attribute-filter-header-container'>
-          <div class='attribute-filter-header'>
-            <div
-              class='attribute-filter-block-title mobile-only-block'> {{ option.mobile_title }}  </div>
-            <div
-              class='attribute-overlay-close-icon mobile--close mobile-only-block'>
-              <span></span>
-            </div>
-          </div>
-          {% if option.search_form %}
-            <div class='attribute-search-form mobile-only-block'>
-              {{ option.search_form }}
-            </div>
-          {% endif %}
+    <div class='attribute-option {{ key }}'>
+      <div class='attribute-title'> {{ option.title }} </div>
+      {% if option.search_form %}
+        <div class='attribute-search-form'>
+          {{ option.search_form }}
         </div>
       {% endif %}
-      {{ option.options_markup }}
+      <div class='attribute-description'> {{ option.description }} </div>
+      {% if option.mobile_title %}
+        <div
+          class='attribute-detail-link mobile-only-block'> {{ option.mobile_title }} </div>
+      {% endif %}
+      <div class='attribute-filter-option'>
+        {% if option.mobile_title %}
+          <div class='attribute-filter-header-container'>
+            <div class='attribute-filter-header'>
+              <div
+                class='attribute-filter-block-title mobile-only-block'> {{ option.mobile_title }}  </div>
+              <div
+                class='attribute-overlay-close-icon mobile--close mobile-only-block'>
+                <span></span>
+              </div>
+            </div>
+            {% if option.search_form %}
+              <div class='attribute-search-form mobile-only-block'>
+                {{ option.search_form }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+        {{ option.options_markup }}
+      </div>
     </div>
-  </div>
-</div>
-<div class='divider'>
-  <span>{{ 'or' |t }} </span>
-</div>
-{% endfor %}
+    <div class='divider'>
+      <span>{{ 'or' |t }} </span>
+    </div>
+  {% endfor %}
 </div>

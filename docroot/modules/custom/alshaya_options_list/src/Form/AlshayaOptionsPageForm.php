@@ -88,7 +88,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title_toggle'] = [
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title_toggle'],
-            '#title' => $this->t('Show different title on mobile.'),
+            '#title' => $this->t('Show button on mobile.'),
             '#attributes' => ['class' => ['mobile-title-toggle']],
           ];
 
@@ -96,7 +96,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title'] = [
             '#type' => 'textfield',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title'],
-            '#title' => $this->t('The mobile title for this options page.'),
+            '#title' => $this->t('Mobile button title.'),
             '#prefix' => '<div id="options-mobile-title">',
             '#suffix' => '</div>',
             '#states' => [
