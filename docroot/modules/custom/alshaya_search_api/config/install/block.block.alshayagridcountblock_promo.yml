@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_search_api
+    - system
+  theme:
+    - alshaya_white_label
+id: alshayagridcountblock_promo
+theme: alshaya_white_label
+region: content
+weight: -35
+provider: null
+plugin: alshaya_grid_count_block
+settings:
+  id: alshaya_grid_count_block
+  label: 'Alshaya Grid/Count block - Promo'
+  provider: alshaya_search_api
+  label_display: '0'
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      acq_promotion: acq_promotion
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+  request_path:
+    id: request_path
+    pages: '/node/*'
+    negate: false
+    context_mapping: {  }
