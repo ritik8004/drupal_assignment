@@ -1,7 +1,7 @@
 .c-facet.c-accordion {
   .c-accordion__title {
     border: none;
-    font-size: 12px;
+    font-size: 11px;
 
     &.active {
       + ul {
@@ -52,4 +52,22 @@
 
 .block-views-exposed-filter-blockalshaya-product-list-block-1 {
   float: $left;
+}
+
+.show-all-filters {
+  font-size: 11px;
+  position: relative;
+  display: inline-block;
+  padding-#{$left}: 30px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: calc(50% - 6px);
+    left: 0;
+    width: 16px;
+    height: 16px;
+    background-image: url(#{$base_theme_img_directory_path}/icons/filter-icon.svg);
+    background-repeat: no-repeat;
+  }
 }
