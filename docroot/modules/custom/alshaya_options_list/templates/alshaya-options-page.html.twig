@@ -12,16 +12,16 @@
       </div>
     {% endif %}
     <div class='attribute-description'> {{ option.description }} </div>
-    {% if key == 'fragrance_name' %}
+    {% if option.mobile_title %}
       <div
-        class='attribute-detail-link mobile-only-block'> {{ 'shop by fragrance name' |t }} </div>
+        class='attribute-detail-link mobile-only-block'> {{ option.mobile_title }} </div>
     {% endif %}
     <div class='attribute-filter-option'>
-      {% if key == 'fragrance_name' %}
+      {% if option.mobile_title %}
         <div class='attribute-filter-header-container'>
           <div class='attribute-filter-header'>
             <div
-              class='attribute-filter-block-title mobile-only-block'> {{ 'shop by fragrance name' |t }} </div>
+              class='attribute-filter-block-title mobile-only-block'> {{ option.mobile_title }}  </div>
             <div
               class='attribute-overlay-close-icon mobile--close mobile-only-block'>
               <span></span>
