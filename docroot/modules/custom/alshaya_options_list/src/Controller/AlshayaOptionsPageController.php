@@ -188,22 +188,27 @@ class AlshayaOptionsPageController extends ControllerBase {
     }
     $options = $query->execute()->fetchAllAssoc('tid');
     foreach ($options as $option) {
-      $list_object['title'] = $option->name;
-      $url = [
-        'query' => [
-          'f[0]' => $attributeCode . ':' . $option->name,
-          'sort_bef_combine' => 'search_api_relevance DESC',
-          'show_on_load' => '12',
-        ],
-      ];
-      $list_object['url'] = Url::fromUri('internal:/search', $url);
-      if ($showImages && !empty($option->image)) {
-        $file = $this->fileStorage->load($option->image);
-        if ($file instanceof File) {
-          $list_object['image_url'] = $file->getFileUri();
+      if (!empty($option->name)) {
+        $list_object['title'] = $option->name;
+        $url = [
+          'query' => [
+            'f[0]' => $attributeCode . ':' . $option->name,
+            'sort_bef_combine' => 'search_api_relevance DESC',
+            'show_on_load' => '12',
+          ],
+        ];
+        $list_object['url'] = Url::fromUri('internal:/search', $url);
+        if ($showImages) {
+          $list_object['image_url'] = '';
+          if (!empty($option->image)) {
+            $file = $this->fileStorage->load($option->image);
+            if ($file instanceof File) {
+              $list_object['image_url'] = $file->getFileUri();
+            }
+          }
         }
+        $return[] = $list_object;
       }
-      $return[] = $list_object;
     }
     return $return;
   }
