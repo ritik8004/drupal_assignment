@@ -1,0 +1,33 @@
+<div class = {{ "ajax-#{attribute_code}" }} >
+<ul class='attribute-filter-name-list'>
+  {% if option.group %}
+    {% for key,array_terms in option.terms %}
+      {% if key|trim|length > 0 %}
+        <li class='level-1'>
+          <div class ='group-heading'>{{key}}</div>
+          <ul class='list'>
+            {% for value in array_terms %}
+              <li class='title'>
+                <a href={{ value.url }}> {{ value.title }} </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% for value in option.terms %}
+      {% if value.title|trim|length > 0 %}
+        <li class='title'>
+          <a href={{ value.url }}>
+            {% if value.image_url %}
+              <img src="{{ file_url(value.image_url) }}"/>
+            {% endif %}
+            <span class='swatch-title'> {{ value.title }} </span>
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</ul>
+</div>

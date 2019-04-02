@@ -9,14 +9,23 @@
  * Implements hook_theme().
  */
 function alshaya_options_list_theme($existing, $type, $theme, $path) {
-  return [
-    'alshaya_options_page' => [
-      'render element' => 'form',
-      'variables' => [
-        'options_list' => NULL,
-        'page_title' => '',
-        'description' => '',
-      ],
+  $items = [];
+
+  $items['alshaya_options_page'] = [
+    'render element' => 'form',
+    'variables' => [
+      'options_list' => NULL,
+      'page_title' => '',
+      'description' => '',
     ],
   ];
+
+  $items['alshaya_options_attribute'] = [
+    'variables' => [
+      'option' => NULL,
+      'attribute_code' => NULL,
+    ],
+  ];
+
+  return $items;
 }

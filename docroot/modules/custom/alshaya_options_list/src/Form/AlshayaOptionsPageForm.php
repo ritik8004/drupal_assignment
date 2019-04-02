@@ -53,6 +53,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           '#default_value' => $attribute_options[$key]['title'],
           '#title' => $this->t('The title for this options page.'),
         ];
+
         $form['alshaya_options_page_settings'][$key]['alshaya_options_page_description'] = [
           '#type' => 'textfield',
           '#default_value' => $attribute_options[$key]['description'],
@@ -83,6 +84,29 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             '#type' => 'textfield',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['title'],
             '#title' => $this->t('Title for %attribute', ['%attribute' => $selected_attribute]),
+          ];
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title_toggle'] = [
+            '#type' => 'checkbox',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title_toggle'],
+            '#title' => $this->t('Show different title on mobile.'),
+            '#attributes' => ['class' => ['mobile-title-toggle']],
+          ];
+
+          $name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][mobile_title_toggle]';
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title'] = [
+            '#type' => 'textfield',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title'],
+            '#title' => $this->t('The mobile title for this options page.'),
+            '#prefix' => '<div id="options-mobile-title">',
+            '#suffix' => '</div>',
+            '#states' => [
+              'visible' => [
+                ':input[name="' . $name . '"]' => ['checked' => TRUE],
+              ],
+              'required' => [
+                ':input[name="' . $name . '"]' => ['checked' => TRUE],
+              ],
+            ],
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['description'] = [
             '#type' => 'textfield',
