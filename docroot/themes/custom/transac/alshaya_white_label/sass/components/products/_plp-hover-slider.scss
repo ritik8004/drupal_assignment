@@ -1,9 +1,13 @@
 .alshaya_search_slider {
   // Need this in px for JS consistency for slider.
-  width: 251px;
+  width: 15.6875rem;
   margin: 0 auto;
   position: relative;
   margin-top: 0.625rem;
+
+  .product-small & {
+    width: 12.5rem;
+  }
 
   .slick-slider {
     padding-#{$left}: 0;
@@ -16,6 +20,10 @@
         height: 3.75rem;
         margin: 0 auto;
         max-width: 3.6875rem;
+
+        .product-small & {
+          height: 2.5rem;
+        }
       }
 
       &:hover {
@@ -45,10 +53,18 @@
 
   .slick-prev {
     left: -2rem;
+
+    .product-small & {
+      left: -1.8125rem;
+    }
   }
 
   .slick-next {
     right: -2rem;
+
+    .product-small & {
+      right: -1.8125rem;
+    }
   }
 
   // Center non slider thumbnails.

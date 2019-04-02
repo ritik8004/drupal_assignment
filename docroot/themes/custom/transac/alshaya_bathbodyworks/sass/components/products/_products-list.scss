@@ -181,23 +181,45 @@
         width: 100%;
       }
     }
-  }
 
-  .c-products__item {
-    @include breakpoint($only-tablet) {
-      &:nth-child(3n+2) {
-        margin: 0 0 1rem;
+    &.product-small {
+      @include breakpoint($only-tablet) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            min-height: 19.5rem;
+          }
+        }
+      }
+
+      @include breakpoint($only-mobile) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: 15.5rem;
+          }
+        }
       }
     }
 
-    @include breakpoint($tablet) {
-      width: 25%;
-    }
+    &.product-large {
+      @include breakpoint($only-tablet) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: 19.5rem;
+          }
+        }
+      }
 
-    @include breakpoint($desktop) {
-      width: 25%;
+      @include breakpoint($only-mobile) {
+        .alshaya_search_gallery {
+          .alshaya_search_mainimage {
+            height: 19.125rem;
+          }
+        }
+      }
     }
+  }
 
+  .c-products__item {
     .out-of-stock span {
       height: 2.5rem;
       line-height: 2.1;

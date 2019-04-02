@@ -1,6 +1,9 @@
 .alshaya_search_slider {
-  // Need this in px for JS consistency for slider.
-  width: 242px;
+  width: 15.125rem;
+
+  .product-small & {
+    width: 12.3125rem;
+  }
 
   .slick-slider {
     li {
@@ -17,6 +20,11 @@
           max-width: 4.75rem;
           height: auto;
           max-height: 6.3125rem;
+
+          .product-small & {
+            width: 3.75rem;
+            height: auto;
+          }
         }
       }
     }
