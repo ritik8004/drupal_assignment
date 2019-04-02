@@ -102,6 +102,12 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function ajaxSearchCallback(array &$form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
     $options_list = [];
