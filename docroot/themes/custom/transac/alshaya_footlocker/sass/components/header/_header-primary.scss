@@ -12,12 +12,26 @@
     html[lang='ar'] & {
       width: auto;
 
+      @include breakpoint($only-mobile) {
+        margin-#{$left}: 1.6875rem;
+      }
+
       img {
-        width: 17rem;
+        width: 13rem;
+        margin-top: -0.3125rem;
+
+        @include breakpoint($desktop) {
+          margin-#{$left}: 0.1875rem;
+        }
 
         @include breakpoint($only-tablet) {
-          max-width: 13rem;
+          max-width: 9rem;
           height: auto;
+          margin-top: 0;
+        }
+
+        @include breakpoint($only-mobile) {
+          width: 6.5rem;
         }
       }
     }
@@ -25,6 +39,12 @@
     a {
       max-width: 17.75rem;
       margin: auto 0;
+
+      html[lang='ar'] & {
+        @include breakpoint($tablet) {
+          max-width: 12.75rem;
+        }
+      }
 
       @include breakpoint($upto-desktop) {
         margin: 0.25rem auto 0;
@@ -34,7 +54,14 @@
         max-width: 8.5rem;
 
         html[lang=ar] & {
-          margin-top: 0.4375rem;
+          max-width: 6.5rem;
+          margin-top: 0.625rem;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        html[lang='ar'] & {
+          max-width: 9rem;
         }
       }
     }
@@ -165,14 +192,19 @@ header.c-header {
 
       @include breakpoint($only-tablet) {
         margin-#{$left}: 16%;
+
+        html[lang=ar] & {
+          margin-bottom: -1.4375rem;
+        }
       }
 
       @include breakpoint($only-mobile) {
         height: 2rem;
         width: 1.5rem;
+        margin-#{$right}: -0.125rem;
 
         html[lang=ar] & {
-          margin-top: 0;
+          margin-top: -0.0625rem;
         }
       }
     }
@@ -413,6 +445,12 @@ header {
     &::before {
       font-size: 1.5rem;
       top: -0.25rem;
+
+      html[lang=ar] & {
+        @include breakpoint($only-mobile) {
+          #{$left}: 0;
+        }
+      }
 
       @include breakpoint($tablet) {
         font-size: 1.75rem;
