@@ -74,7 +74,7 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
         'class' => [
           'delayed-search-submit',
         ],
-        'data-delay' => '500',
+        'data-delay' => '300',
       ],
       '#ajax' => [
         'callback' => [$this, 'ajaxSearchCallback'],
@@ -97,6 +97,12 @@ class AlshayaOptionsListAutocompleteForm extends FormBase {
     $form['#attributes'] = ['onsubmit' => 'return false'];
     $form['#attached']['library'][] = 'alshaya_options_list/alshaya_options_list_search';
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
   }
 
   /**
