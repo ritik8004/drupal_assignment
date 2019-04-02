@@ -12,6 +12,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Adding class to search product list view.
+ */
+function alshaya_search_update_8026() {
+  alshaya_config_install_configs(['views.view.search'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating solr search index to run on cron and content update/create.
  */
 function alshaya_search_update_8025() {

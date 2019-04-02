@@ -13,6 +13,16 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Adding class to product list view.
+ */
+function alshaya_product_update_8023() {
+  alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
+}
+
+
+/**
+ * Implements hook_update_N().
+ *
  * Updating database search index to run on cron and content update/create.
  */
 function alshaya_product_update_8022() {
@@ -240,7 +250,7 @@ function alshaya_product_update_8011() {
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 جديدنا تنازلي|جديدنا
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
 
@@ -421,7 +431,7 @@ function alshaya_product_update_8002() {
 
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
 

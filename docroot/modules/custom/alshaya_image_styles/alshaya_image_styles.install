@@ -10,6 +10,16 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Update the the height for 291x288 image style.
+ */
+function alshaya_image_styles_update_8104() {
+  // Re-install the config for image style.
+  alshaya_config_install_configs(['image.style.291x288'], 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the the w304 image style to 2x width.
  */
 function alshaya_image_styles_update_8103() {
