@@ -9,6 +9,32 @@
   Drupal.behaviors.alshayaFacetAllSlide = {
     attach: function (context, settings) {
 
+      // Add active classes on facet dropdown content.
+      $('.c-facet__title.c-accordion__title').once().on('click', function () {
+        if ($(this).hasClass('active')) {
+          $(this).removeClass('active');
+        }
+        else {
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+          $(this).addClass('active');
+        }
+      });
+      $('.block-views-exposed-filter-blockalshaya-product-list-block-1 legend').once().on('click', function () {
+        $(this).toggleClass('active');
+      });
+
+      // Grid switch for PLP and Search pages.
+      $('.small-col-grid').once().on('click', function () {
+        $('.large-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('.c-products-list').removeClass('product-large').addClass('product-small');
+      });
+      $('.large-col-grid').once().on('click', function () {
+        $('.small-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('.c-products-list').removeClass('product-small').addClass('product-large');
+      });
+
       // On clicking facet block title, update the title of block.
       $('.all-filters .block-facets-ajax').on('click', function() {
         // Update the title on click of facet.

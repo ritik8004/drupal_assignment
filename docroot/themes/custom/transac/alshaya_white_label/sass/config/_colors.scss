@@ -78,6 +78,7 @@ $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
 $_instagram_dots_default: #e3e3e3;
+$_plp_filter_active_drodpwon_item: #f0f7ff;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -466,6 +467,7 @@ $plp-swatch-color-count: $black;
 $plp_filterbar_clearall_border: $cerulean-two;
 $plp_filterbar_clearall_text: $cerulean-two;
 $plp_search_count: $black;
+$plp_filter_active_item: $_plp_filter_active_drodpwon_item;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;
