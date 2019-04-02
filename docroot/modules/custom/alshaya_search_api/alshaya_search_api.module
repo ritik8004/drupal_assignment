@@ -24,6 +24,11 @@ function alshaya_search_api_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['grid_count_block'] = [
+    'template' => 'grid-count-block',
+    'variables' => [],
+  ];
+
   return $items;
 }
 
