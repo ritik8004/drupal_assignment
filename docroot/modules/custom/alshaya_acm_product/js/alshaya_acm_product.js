@@ -62,6 +62,11 @@
     }
   };
 
+  // Force reload on click of browser back button.
+  $(window).on('popstate', function(event) {
+    location.reload(true);
+  });
+
   $.fn.updatePdpUrl = function (data) {
     // Avoid triggering url update if the SKU for which the change was triggered
     // is in a modal window.

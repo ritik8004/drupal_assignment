@@ -4,3 +4,4 @@ additional_configurables:
     code: 'article_castor_id'
     label: 'Article Castor Id'
     position: 0
+common_identifier_attribute: 'attr_style_code'
