@@ -344,29 +344,6 @@
         // Remove if clear all button is clicked on the filter pane.
         $('.shop-by-size-clear-container').remove();
       }
-
-      $('.c-facet__title.c-accordion__title').once().on('click', function () {
-        if ($(this).hasClass('active')) {
-          $(this).removeClass('active');
-        }
-        else {
-          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
-          $(this).addClass('active');
-        }
-      });
-
-      // Grid switch for PLP and Search pages.
-      $('.small-col-grid').once().on('click', function () {
-        $('.large-col-grid').removeClass('active');
-        $(this).addClass('active');
-        $('.c-products-list').removeClass('product-large').addClass('product-small');
-      });
-
-      $('.large-col-grid').once().on('click', function () {
-        $('.small-col-grid').removeClass('active');
-        $(this).addClass('active');
-        $('.c-products-list').removeClass('product-small').addClass('product-large');
-      });
     }
   };
 })(jQuery);
