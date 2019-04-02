@@ -1,5 +1,10 @@
 <div class = {{ "ajax-#{attribute_code}" }} >
 <ul class='attribute-filter-name-list'>
+  {% if option.no_results %}
+    <div class='no-results'>
+      {{ option.no_results }}
+    </div>
+  {% endif %}
   {% if option.group %}
     {% for key,array_terms in option.terms %}
       {% if key|trim|length > 0 %}

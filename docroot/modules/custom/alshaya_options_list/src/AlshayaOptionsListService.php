@@ -90,6 +90,11 @@ class AlshayaOptionsListService {
       $query->condition('tfd.name', "%" . $this->connection->escapeLike($searchString) . "%", 'LIKE');
     }
     $options = $query->execute()->fetchAllAssoc('tid');
+
+    if (empty($options)) {
+      return $return;
+    }
+
     foreach ($options as $option) {
       if (!empty($option->name)) {
         $list_object['title'] = $option->name;

@@ -70,6 +70,22 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-search'],
             '#title' => $this->t('Enable search for %attribute', ['%attribute' => $selected_attribute]),
           ];
+          $search_name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][show-search]';
+          $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['search-placeholder'] = [
+            '#type' => 'textfield',
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['search-placeholder'],
+            '#title' => $this->t('Search placeholder for %attribute', ['%attribute' => $selected_attribute]),
+            '#prefix' => '<div id="options-search-placeholder">',
+            '#suffix' => '</div>',
+            '#states' => [
+              'visible' => [
+                ':input[name="' . $search_name . '"]' => ['checked' => TRUE],
+              ],
+              'required' => [
+                ':input[name="' . $search_name . '"]' => ['checked' => TRUE],
+              ],
+            ],
+          ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-images'] = [
             '#type' => 'checkbox',
             '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-images'],
