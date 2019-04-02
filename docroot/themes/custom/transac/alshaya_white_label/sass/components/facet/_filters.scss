@@ -5,13 +5,162 @@
     &.active {
       + ul {
         display: block;
+        position: absolute;
+        top: 3.5rem;
+        background: #fff;
+        z-index: 9;
+        min-width: 15.5rem;
+        padding: 1.125rem 0;
+        border: 1px solid #ddd
+      }
+    }
+
+    &::after {
+      #{$right}: -1.375rem;
+      top: 49%;
+    }
+  }
+
+  ul,
+  &.hide-facet-block {
+    display: none;
+  }
+
+  ul li {
+    span {
+      font-size: 0.75rem;
+      line-height: 2;
+      margin-#{$left}: 0;
+    }
+
+    label {
+      &::before {
+        display: none;
+      }
+    }
+
+    padding-#{$left}: 1.125rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: auto;
+    position: relative;
+
+    &.is-active {
+      background: $plp_filter_active_item;
+
+      &::after {
+        background-image: url(#{$base_theme_img_directory_path}/icons/tick.svg);
+        background-repeat: no-repeat;
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 0.625rem;
+        height: 0.625rem;
+        transform: translateY(-50%);
+        #{$right}: 1rem;
       }
     }
   }
 
-  ul {
+  float: $left;
+  margin-#{$right}: 2.25rem;
+}
+
+.block-views-exposed-filter-blockalshaya-product-list-block-1 {
+  float: $left;
+
+  .fieldset-wrapper {
     display: none;
+    position: absolute;
+    top: 3.5rem;
+    background: #fff;
+    z-index: 9;
+    min-width: 15.5rem;
+    padding: 1.125rem 0;
+    border: 1px solid #ddd;
+
+    .form-type-radio {
+      display: block;
+
+      label {
+        color: #1a1a1a;
+        padding-#{$left}: 3rem;
+        font-size: 0.75rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+        display: inline-block;
+
+        &::before {
+          position: absolute;
+          top: -3px;
+          #{$left}: 1.125rem;
+          font-size: 1.875rem;
+        }
+      }
+
+      input[checked='checked'] ~ label {
+        font-family: $alshaya-bold;
+      }
+    }
   }
 
-  float: $left;
+  legend {
+    font-size: 0.6875rem;
+    height: 2.9375rem;
+    line-height: 2.9375rem;
+    position: relative;
+    margin-#{$right}: 2.25rem;
+
+    @include icon(chevrondown, after) {
+      font-size: 1.1875rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &.active {
+      + .fieldset-wrapper {
+        display: block;
+      }
+    }
+  }
+}
+
+.show-all-filters {
+  font-size: 0.6875rem;
+  position: relative;
+  display: inline-block;
+  padding-#{$left}: 1.875rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: calc(50% - 6px);
+    left: 0;
+    width: 1rem;
+    height: 1rem;
+    background-image: url(#{$base_theme_img_directory_path}/icons/filter-icon.svg);
+    background-repeat: no-repeat;
+  }
+}
+
+.block-alshaya-plp-facets-block-all {
+  float: $right;
+
+  .total-result-count,
+  .grid-buttons {
+    display: inline-block;
+  }
+}
+
+.c-plp {
+  .block-facets-summary {
+    clear: both;
+  }
+
+  .region__content {
+    .view-header.search-count {
+      font-size: 0.8125rem !important;
+    }
+  }
 }

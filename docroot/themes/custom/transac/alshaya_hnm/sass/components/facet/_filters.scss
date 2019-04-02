@@ -1,0 +1,37 @@
+.c-facet.c-accordion {
+  .c-accordion__title {
+    font-family: $hnm-demibold;
+    color: $plp_facet_title;
+  }
+}
+
+.show-all-filters {
+  font-family: $hnm-demibold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $plp_facet_title;
+}
+
+.block-views-exposed-filter-blockalshaya-product-list-block-1 {
+  legend {
+    text-transform: uppercase;
+    font-family: $hnm-demibold;
+    color: $plp_facet_title;
+    letter-spacing: 1px;
+
+    @include icon(dropdown-expand, after) {
+      position: absolute;
+      font-size: 2.25rem;
+      width: 1.75rem;
+      #{$right}: -1.3125rem;
+    }
+  }
+
+  .fieldset-wrapper {
+    .form-type-radio {
+      input[checked='checked'] ~ label {
+        font-family: $hnm-demibold;
+      }
+    }
+  }
+}

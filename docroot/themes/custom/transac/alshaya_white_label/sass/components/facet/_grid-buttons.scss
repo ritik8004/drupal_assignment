@@ -1,0 +1,54 @@
+.large-col-grid,
+.small-col-grid {
+  display: inline-block;
+}
+
+.large-col-grid {
+  &.active {
+    svg .grid {
+      fill: #1a1a1a;
+    }
+  }
+
+  .g2,
+  .g1 {
+    display: none;
+  }
+
+  @include breakpoint($tablet) {
+    .g2 {
+      display: inline-block;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .g1 {
+      display: inline-block;
+    }
+  }
+}
+
+.small-col-grid {
+  &.active {
+    svg .grid {
+      fill: #1a1a1a;
+    }
+  }
+
+  .g3,
+  .g2 {
+    display: none;
+  }
+
+  @include breakpoint($tablet) {
+    .g3 {
+      display: inline-block;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .g2 {
+      display: inline-block;
+    }
+  }
+}
