@@ -102,6 +102,7 @@ class CartFormHelper {
       $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
       $query->condition('asfd.' . $common_identifier_attribute, $style_code);
       $query->condition('type', 'simple');
+      $query->join('acq_sku__field_configured_skus', 'acs', 'acs.field_configured_skus_value = asfd.sku');
       $query->fields('asfd', ['sku']);
       $results = $query->execute()->fetchAll();
 
