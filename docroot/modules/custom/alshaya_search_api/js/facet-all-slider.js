@@ -23,6 +23,19 @@
         $(this).toggleClass('active');
       });
 
+      // Close the sort and facets on click outside of them.
+      document.addEventListener('click', function(event) {
+        var sortBy = $('.c-content .c-content__region .bef-exposed-form');
+        if ($(sortBy).find(event.target).length == 0) {
+          $(sortBy).find('legend').removeClass('active');
+        }
+
+        var facet_block = $('.c-content .region__content > div.block-facets-ajax');
+        if ($(facet_block).find(event.target).length == 0) {
+          $(facet_block).find('.c-facet__title').removeClass('active');
+        }
+      });
+
       // Grid switch for PLP and Search pages.
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
@@ -133,6 +146,13 @@
               $(this).addClass('hide-facet-block');
             }
           });
+
+          if (facets.length <= show_only_facets) {
+            $('.show-all-filters').hide();
+          }
+          else {
+            $('.show-all-filters').show();
+          }
         }
       }
 
