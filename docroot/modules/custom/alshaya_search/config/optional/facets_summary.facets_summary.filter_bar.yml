@@ -39,4 +39,4 @@ processor_configs:
     weights:
       build: '-10'
     settings:
-      link_text: 'clear all'
+      link_text: 'clear filters'
