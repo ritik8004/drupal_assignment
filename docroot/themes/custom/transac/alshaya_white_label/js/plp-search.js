@@ -344,10 +344,6 @@
         // Remove if clear all button is clicked on the filter pane.
         $('.shop-by-size-clear-container').remove();
       }
-
-      $('.c-facet__title.c-accordion__title').once().on('click', function () {
-        $(this).toggleClass('active');
-      });
     }
   };
 })(jQuery);
