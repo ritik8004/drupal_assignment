@@ -205,7 +205,7 @@
   overflow: hidden;
 
   .fragrance_name {
-    .attribute-filter-option {
+    &.attribute-filter-option {
       display: block;
       position: fixed;
       top: 0;
@@ -217,6 +217,12 @@
       -webkit-overflow-scrolling: touch;
       z-index: 12;
       background: $attribute-filter-option-background;
+      margin-top: 0;
+    }
+
+    .attribute-title,
+    .attribute-description {
+      display: none;
     }
   }
 
@@ -274,6 +280,7 @@
 
   .attribute-search-form {
     top: 2.875rem;
+    position: fixed;
 
     .alshaya-options-list-autocomplete-form {
       display: block;
@@ -465,6 +472,14 @@
       img + span {
         color: $attribute-swatch-title-text;
       }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .attribute-filter-option {
+    &.fragrance_name {
+      display: none;
     }
   }
 }

@@ -12,6 +12,7 @@
           timeout = setTimeout(function () {
             $self.trigger(triggerEvent);
           }, delay);
+          this.focus();
         });
       });
     }
