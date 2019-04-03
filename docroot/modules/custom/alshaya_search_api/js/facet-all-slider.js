@@ -37,12 +37,14 @@
 
       // Show all filters blocks.
       $('.show-all-filters').on('click', function() {
-        $('.all-filters').show();
+        $('.all-filters').toggleClass('active');
+        $('body').toggleClass('modal-overlay');
       });
 
       // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply').on('click', function() {
-        $('.all-filters').hide();
+        $('.all-filters').toggleClass('active');
+        $('body').toggleClass('modal-overlay');
       });
 
       $('.three-col-grid').on('click', function() {

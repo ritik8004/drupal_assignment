@@ -1,0 +1,107 @@
+// Css for filters on products listing page and search page.
+.c-plp {
+  .hide-facet-block {
+    display: none;
+  }
+
+  // Main all filters div theming.
+  .all-filters {
+    max-width: 500px;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1005;
+    position: fixed;
+    overflow-y: auto;
+    #{$right}: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #fff;
+    transition: transform 200ms cubic-bezier(0.4,0,1,1);
+    transform: translateX(100%);
+    display: flex;
+    flex-direction: column;
+
+    &.active {
+      transition: transform 400ms cubic-bezier(0,0,0.2,1);
+      transform: translateX(0);
+    }
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  // Filter Head
+  .filter {
+    &__head {
+      border-bottom: 1px solid #e8e8e8;
+      padding: 3.125rem;
+      position: relative;
+
+      // Back Button
+      .facet-all-back {
+        @include icon(chevron#{$left}, before) {
+          color: $header_my_account_icon;
+          font-size: 1.313rem;
+          cursor: pointer;
+          pointer-events: none;
+          position: absolute;
+          #{$left}: 0;
+        }
+      }
+
+      // Close button
+      .facet-all-apply {
+        float: $right;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+
+        @include icon('close') {
+          font-size: 2rem;
+          position: absolute;
+          #{$right}: 0.9375rem;
+        }
+      }
+    }
+
+    &__inner {
+      // Temporary
+      #block-exposedformalshaya-product-listblock-1 {
+        display: none;
+      }
+    }
+
+    &__foot {
+      padding: 1.25rem 3.125rem 2.1875rem 2.1875rem;
+      text-align: center;
+      box-shadow: 0 -0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+      display: flex;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      flex-wrap: wrap;
+
+      .facet-all-count {
+        width: 100%;
+
+        .view-header.search-count {
+          border-bottom: none;
+        }
+      }
+
+      .facet-all-clear {
+        @extend %button-brand;
+
+        width:48%;
+      }
+      .facet-all-apply {
+        @extend %button-wide;
+
+        width:48%;
+        border: 1px solid $primary_brand_button;
+      }
+
+    }
+  }
+}
