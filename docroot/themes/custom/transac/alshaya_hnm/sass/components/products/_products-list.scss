@@ -2,7 +2,7 @@
   padding-top: 1.5rem;
 
   @include breakpoint($only-mobile) {
-    padding-top: 0.75rem;
+    padding-top: 0;
   }
 
   .region__content {
@@ -12,7 +12,6 @@
       ul {
         @include breakpoint($tablet) {
           margin-bottom: 0;
-          margin-top: 0.75rem;
           border-bottom: none;
         }
 
@@ -141,7 +140,6 @@
 
   .c-page-title__description,
   .field--name-field-acq-promotion-description {
-    color: $plp_category_desc;
     margin-top: 0.3125rem;
     font-family: $hnm-regular;
     line-height: 1.56;
@@ -152,6 +150,22 @@
       display: flex;
       align-items: stretch;
       flex-wrap: wrap;
+    }
+
+    &.product-large {
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: 32.125rem;
+        }
+      }
+    }
+
+    &.product-small {
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: 16.125rem;
+        }
+      }
     }
   }
 

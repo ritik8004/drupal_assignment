@@ -12,7 +12,9 @@
   color: $plp_facet_title;
 }
 
-.block-views-exposed-filter-blockalshaya-product-list-block-1 {
+.block-views-exposed-filter-blockalshaya-product-list-block-1,
+.block-views-exposed-filter-blockalshaya-product-list-block-2,
+.block-views-exposed-filter-blocksearch-page {
   legend {
     text-transform: uppercase;
     font-family: $hnm-demibold;
@@ -32,6 +34,16 @@
       input[checked='checked'] ~ label {
         font-family: $hnm-demibold;
       }
+    }
+  }
+}
+
+.c-plp {
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp,
+  .block-facets-summary-blockfilter-bar {
+    .filter-list-label {
+      font-family: $hnm-demibold;
     }
   }
 }
