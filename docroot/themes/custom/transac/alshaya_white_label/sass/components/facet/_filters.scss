@@ -20,6 +20,10 @@
       #{$right}: -1.375rem;
       top: 49%;
     }
+
+    @include breakpoint($upto-desktop) {
+      display: none;
+    }
   }
 
   ul,
@@ -65,6 +69,18 @@
 
   float: $left;
   margin-#{$right}: 2.25rem;
+
+  &.block-facet-blockcategory-facet-plp {
+    @include breakpoint($desktop) {
+      display: none;
+    }
+
+    @include breakpoint($upto-desktop) {
+      .c-accordion__title {
+        display: block;
+      }
+    }
+  }
 }
 
 .block-views-exposed-filter-blockalshaya-product-list-block-1 {
@@ -130,14 +146,14 @@
 .show-all-filters {
   font-size: 0.6875rem;
   position: relative;
-  display: inline-block;
   padding-#{$left}: 1.875rem;
 
   &::before {
     content: '';
     position: absolute;
-    top: calc(50% - 6px);
-    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    #{$left}: 0;
     width: 1rem;
     height: 1rem;
     background-image: url(#{$base_theme_img_directory_path}/icons/filter-icon.svg);
@@ -146,11 +162,25 @@
 }
 
 .block-alshaya-plp-facets-block-all {
+  float: $left;
+  height: 2.9375rem;
+  line-height: 2.9375rem;
+  margin-#{$left}: 1rem;
+}
+
+.block-alshaya-grid-count-block {
   float: $right;
+  height: 2.9375rem;
+  line-height: 2.9375rem;
+  width: 20%;
 
   .total-result-count,
   .grid-buttons {
     display: inline-block;
+  }
+
+  .grid-buttons {
+    float: $right;
   }
 }
 
@@ -162,6 +192,8 @@
   .region__content {
     .view-header.search-count {
       font-size: 0.8125rem !important;
+      padding-bottom: 0 !important;
+      margin: 0 !important;
     }
   }
 }
