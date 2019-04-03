@@ -703,6 +703,9 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $this->cache->set($cid, $term_data, Cache::PERMANENT, [self::CACHE_TAG]);
     }
 
+    // Reset `$excludeNotInMenu` to default value.
+    $this->setExcludeNotInMenu(TRUE);
+
     return $term_data;
   }
 
