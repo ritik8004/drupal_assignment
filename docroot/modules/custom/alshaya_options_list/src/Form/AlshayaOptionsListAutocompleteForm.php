@@ -17,18 +17,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class AlshayaOptionsListAutocompleteForm extends FormBase {
 
   /**
-   * The entity repository service.
-   *
-   * @var \Drupal\Core\Entity\EntityRepositoryInterface
-   */
-  protected $entityRepository;
-
-  /**
    * Alshaya Options List Service.
    *
    * @var Drupal\alshaya_options_list\AlshayaOptionsListService
    */
-  private $alshayaOptionsService;
+  protected $alshayaOptionsService;
 
   /**
    * Constructs a ContentEntityForm object.
