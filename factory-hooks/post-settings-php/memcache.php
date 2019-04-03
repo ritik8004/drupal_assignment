@@ -69,6 +69,10 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
 
     // Override default fastchained backend for static bins.
     // @see https://www.drupal.org/node/2754947
+    // We have a way of setting values in $settings from include
+    // files per brand, we might set it to different value from
+    // there. To avoid overriding we have added this check.
+    // @see factory-hooks/post-settings-php/includes.php.
     if (!isset($settings['cache']['bins'])) {
       $settings['cache']['bins']['bootstrap'] = 'cache.backend.memcache';
       $settings['cache']['bins']['discovery'] = 'cache.backend.memcache';
