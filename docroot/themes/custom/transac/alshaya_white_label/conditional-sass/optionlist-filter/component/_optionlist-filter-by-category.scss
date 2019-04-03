@@ -331,6 +331,11 @@
     line-height: 2.29;
     color: $attribute-filter-name-list-text;
   }
+
+  &.no-result-container {
+    column-count: 1;
+    text-align: center;
+  }
 }
 
 .group-heading {
