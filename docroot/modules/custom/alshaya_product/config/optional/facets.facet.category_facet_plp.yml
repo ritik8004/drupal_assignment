@@ -16,7 +16,7 @@ name: 'PLP Category'
 url_alias: category_facet_plp
 weight: 0
 min_count: 1
-show_only_one_result: false
+show_only_one_result: true
 field_identifier: field_category
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 widget:
@@ -32,6 +32,11 @@ hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: true
 processor_configs:
+  alshaya_facet_all_option:
+    processor_id: alshaya_facet_all_option
+    weights:
+      build: 50
+    settings: {  }
   alshaya_remove_current_term:
     processor_id: alshaya_remove_current_term
     weights:
