@@ -6128,7 +6128,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/external_hreflang.git",
-                "reference": "c6ba1169734c3ed1d648e6e1eefc12916aaf5560"
+                "reference": "8702d41c3e2df7e865c257bf78921755e5fc73c6"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -6142,7 +6142,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1553264884",
+                    "datestamp": "1553265485",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -6171,7 +6171,7 @@
                 "source": "https://cgit.drupalcode.org/external_hreflang",
                 "issues": "https://drupal.org/project/issues/external_hreflang"
             },
-            "time": "2019-03-22T14:33:07+00:00"
+            "time": "2019-04-03T19:30:40+00:00"
         },
         {
             "name": "drupal/facets",
@@ -19731,7 +19731,7 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://git.drupal.org/project/logs_http",
+                "url": "https://git.drupalcode.org/project/logs_http.git",
                 "reference": "8.x-1.0"
             },
             "dist": {
@@ -19787,7 +19787,7 @@
             "version": "1.0.0-alpha3",
             "source": {
                 "type": "git",
-                "url": "https://git.drupal.org/project/stage_file_proxy",
+                "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
                 "reference": "8.x-1.0-alpha3"
             },
             "dist": {
