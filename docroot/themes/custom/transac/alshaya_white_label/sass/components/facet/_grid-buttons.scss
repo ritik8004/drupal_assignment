@@ -2,6 +2,10 @@
 .small-col-grid {
   display: inline-block;
   margin-#{$left}: 1rem;
+
+  @include breakpoint($only-mobile) {
+    margin-#{$left}: 0.75rem;
+  }
 }
 
 .large-col-grid {
@@ -51,5 +55,37 @@
     .g2 {
       display: inline-block;
     }
+  }
+}
+
+.block-alshaya-grid-count-block {
+  float: $right;
+  height: 2.9375rem;
+  line-height: 2.9375rem;
+  width: 20%;
+
+  .total-result-count,
+  .grid-buttons {
+    display: inline-block;
+  }
+
+  .grid-buttons {
+    float: $right;
+
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 1.25rem;
+    }
+  }
+
+  .total-result-count {
+    @include breakpoint($only-mobile) {
+      > div {
+        padding-top: 0 !important;
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    text-align: $right;
   }
 }
