@@ -4,6 +4,10 @@
   grid-template-rows: auto auto;
   grid-gap: 1rem;
 
+  @include breakpoint($only-mobile) {
+    grid-gap: 0.5rem;
+  }
+
   .ie & {
     display: block;
 
