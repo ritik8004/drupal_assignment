@@ -13,6 +13,7 @@ use Drupal\node\Entity\Node;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\alshaya_acm\ApiHelper;
 
 /**
  * Provides a resource to init k-net request and get url.
@@ -64,6 +65,13 @@ class CartPromotionsResource extends ResourceBase {
   protected $entityTypeManager;
 
   /**
+   * API Helper object.
+   *
+   * @var \Drupal\alshaya_acm\ApiHelper
+   */
+  protected $apiHelper;
+
+  /**
    * KnetFinalizeRequestResource constructor.
    *
    * @param array $configuration
@@ -86,6 +94,8 @@ class CartPromotionsResource extends ResourceBase {
    *   The language manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\alshaya_acm\ApiHelper $api_helper
+   *   API Helper object.
    */
   public function __construct(array $configuration,
                               $plugin_id,
@@ -96,13 +106,15 @@ class CartPromotionsResource extends ResourceBase {
                               AlshayaPromotionsManager $alshaya_acm_promotion_manager,
                               EntityRepository $entityRepository,
                               LanguageManager $languageManager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              EntityTypeManagerInterface $entity_type_manager,
+                              ApiHelper $api_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->mobileAppUtility = $mobile_app_utility;
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->languageManager = $languageManager;
     $this->entityRepository = $entityRepository;
     $this->entityTypeManager = $entity_type_manager;
+    $this->apiHelper = $api_helper;
   }
 
   /**
@@ -133,6 +145,9 @@ class CartPromotionsResource extends ResourceBase {
    *
    * @return \Drupal\rest\ModifiedResourceResponse
    *   Non-cacheable response object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function get(string $cart_id) {
     $cart_id = (int) $cart_id;
@@ -169,7 +184,7 @@ class CartPromotionsResource extends ResourceBase {
       }
     }
 
-    $cart = $this->mobileAppUtility->getCart($cart_id);
+    $cart = $this->apiHelper->getCart($cart_id);
 
     // Get all the rules applied in cart.
     $cartRulesApplied = $cart->get('cart_rules');
