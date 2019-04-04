@@ -1,5 +1,5 @@
 // Css for filters on products listing page and search page.
-.c-plp {
+.c-plp .c-content__region {
   .hide-facet-block {
     display: none;
   }
@@ -35,7 +35,7 @@
   }
 
   // Filter Head
-  .filter {
+  .all-filters .filter {
     &__head {
       border-bottom: 1px solid $plp_all_filter_head_border;
       padding: 2.5rem 1rem;
@@ -76,6 +76,75 @@
     &__inner {
       padding-bottom: 9.375rem;
 
+      .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+        margin-#{$left}: 0;
+        margin-#{$right}: 0;
+        float: none;
+
+        fieldset.form-wrapper {
+          margin-#{$left}: 0;
+          margin-#{$right}: 0;
+          float: none;
+          width: 100%;
+
+          legend {
+            width: 100%;
+
+            &::after {
+              display: none;
+            }
+          }
+
+          .fieldset-legend {
+            display: block;
+            text-transform: capitalize;
+            padding: 1.125rem 2rem;
+            height: auto;
+            line-height: 1;
+            border-bottom: 1px solid $plp_all_filter_item_border;
+
+            @include icon(chevron#{$right}, after) {
+              color: #000;
+              font-size: 1.5rem;
+              width: 2rem;
+              cursor: pointer;
+              pointer-events: none;
+              position: absolute;
+              #{$right}: 0.625rem;
+              top: 0.625rem;
+            }
+          }
+
+          .fieldset-wrapper {
+            position: static;
+            z-index: 9;
+            min-width: auto;
+            padding: 0;
+            border: none;
+
+            .form-item {
+              padding: 0 !important;
+              margin-bottom: 0;
+              border-bottom: 1px solid $plp_all_filter_item_border;
+            }
+
+            .form-type-radio:first-child {
+              margin-#{$right}: 0;
+            }
+          }
+        }
+
+        &.show-facet {
+          fieldset.form-wrapper {
+            legend.active,
+            .fieldset-legend {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .views-exposed-form,
       .c-facet {
         &.show-facet {
           display: block !important;
@@ -101,7 +170,24 @@
           float: none;
 
           ul {
-            padding-top: 0;
+            position: static;
+            z-index: 9;
+            min-width: auto;
+            padding: 0;
+            border: none;
+
+            li {
+              label {
+                &::before {
+                  display: block;
+                }
+              }
+
+              span.facet-item__value {
+                line-height: 1;
+                margin-left: 0.5rem;
+              }
+            }
           }
 
           .c-accordion__title {
@@ -117,6 +203,8 @@
               width: 2rem;
               cursor: pointer;
               pointer-events: none;
+              position: absolute;
+              #{$right}: 0.625rem;
             }
 
             &.active {
@@ -159,6 +247,7 @@
 
       .facet-all-count {
         width: 100%;
+        line-height: 4;
 
         .view-header.search-count {
           border-bottom: none;
@@ -169,12 +258,14 @@
         @extend %button-brand;
 
         width: 48%;
+        line-height: 1.5;
       }
 
       .facet-all-apply {
         @extend %button-wide;
 
         width: 48%;
+        line-height: 1.5;
         border: 1px solid $plp_all_filter_button_color;
       }
     }

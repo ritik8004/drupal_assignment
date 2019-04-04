@@ -49,14 +49,16 @@
       });
 
       // On clicking facet block title, update the title of block.
-      $('.all-filters .block-facets-ajax').on('click', function() {
+      var allFiltersFacets = '.all-filters .block-facets-ajax, .all-filters .block-views-exposed-filter-blockalshaya-product-list-block-1';
+      $(allFiltersFacets).on('click', function() {
         // Update the title on click of facet.
         var facet_title = $(this).find('h3.c-facet__title').html();
         $('.filter-sort-title').html(facet_title);
 
         // Only show current facet and hide all others.
-        $('.all-filters .block-facets-ajax').removeClass('show-facet');
+        $(allFiltersFacets).removeClass('show-facet');
         $('.all-filters .block-facets-ajax').hide();
+        $('.all-filters .block-views-exposed-filter-blockalshaya-product-list-block-1:visible').hide();
         $(this).addClass('show-facet');
 
         // Show the back button.
@@ -68,7 +70,8 @@
       $('.facet-all-back').on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
-        $('.all-filters .block-facets-ajax').removeClass('show-facet');
+        $(allFiltersFacets).removeClass('show-facet');
+        $('.all-filters .block-views-exposed-filter-blockalshaya-product-list-block-1:hidden').show();
         $('.all-filters .block-facets-ajax').show();
       });
 
@@ -146,13 +149,6 @@
               $(this).addClass('hide-facet-block');
             }
           });
-
-          if (facets.length <= show_only_facets) {
-            $('.show-all-filters').hide();
-          }
-          else {
-            $('.show-all-filters').show();
-          }
         }
       }
 
