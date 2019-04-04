@@ -63,6 +63,7 @@
   height: 2.9375rem;
   line-height: 2.9375rem;
   width: 20%;
+  text-align: $right;
 
   .total-result-count,
   .grid-buttons {
@@ -70,8 +71,6 @@
   }
 
   .grid-buttons {
-    float: $right;
-
     @include breakpoint($only-mobile) {
       margin-#{$right}: 1.25rem;
     }
@@ -83,9 +82,5 @@
         padding-top: 0 !important;
       }
     }
-  }
-
-  @include breakpoint($only-mobile) {
-    text-align: $right;
   }
 }
