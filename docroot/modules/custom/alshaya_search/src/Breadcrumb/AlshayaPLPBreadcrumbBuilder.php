@@ -79,8 +79,19 @@ class AlshayaPLPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
 
       // Add the term to cache dependency.
       $breadcrumb->addCacheableDependency($term);
+
+      $options = [];
+      if (empty($term->get('field_display_as_clickable_link')->getString())) {
+        // Make term link non-clickable.
+        $options = [
+          'attributes' => [
+            'class' => ['no-link'],
+          ],
+        ];
+      }
+
       // Add term to breadcrumb.
-      $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()]));
+      $breadcrumb->addLink(Link::createFromRoute($term->getName(), 'entity.taxonomy_term.canonical', ['taxonomy_term' => $term->id()], $options));
     }
 
     // Add the current route context in cache.
