@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -79,7 +80,8 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
-    'alshaya_master.home' => 'home page',
+    'alshaya_master.home' => 'HP-ProductCarrousel',
+    'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
   ];
 
   /**
@@ -548,7 +550,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -613,6 +620,11 @@ class AlshayaGtmManager {
       }
     }
 
+    // If list cookie is set, set the list variable.
+    if (isset($_COOKIE['product-list'])) {
+      $listValues = Json::decode($_COOKIE['product-list']);
+      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    }
     return $product_details;
   }
 
@@ -634,19 +646,9 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->items();
 
-      $address = $this->cartHelper->getShipping($cart);
-
-      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
-        // For CC we always use step 2.
+      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page' || $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout delivery page') {
+        // For delivery we always use step 2.
         $attributes['step'] = 2;
-      }
-      // We receive address id in case of authenticated users & address as an
-      // extension attribute for anonymous.
-      elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['area']))) &&
-        ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
-        // For HD we use step 3 if we have address saved.
-        $attributes['step'] = 3;
       }
 
       if ($cart_delivery_method = $cart->getShippingMethodAsString()) {

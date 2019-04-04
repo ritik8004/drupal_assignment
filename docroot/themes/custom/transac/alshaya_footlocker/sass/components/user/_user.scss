@@ -68,13 +68,20 @@
 
 .user-login-form {
   & > a {
+    font-size: 0.875rem;
+    font-weight: normal;
+
     @include breakpoint($tablet) {
-      #{$left}: 10rem;
+      #{$left}: 9.75rem;
+
+      html[lang='ar'] & {
+        #{$left}: 10rem;
+      }
     }
 
     @include breakpoint($desktop) {
       html[lang='ar'] & {
-        right: 10rem;
+        #{$left}: 10rem;
       }
     }
   }
@@ -100,4 +107,27 @@
       }
     }
   }
+}
+
+.user-page {
+  .user-form,
+  .user-login-form,
+  .user-pass,
+  .multistep-checkout {
+    .form-submit {
+      padding-#{$left}: 3rem;
+      padding-#{$right}: 3rem;
+
+      html[lang='ar'] & {
+        padding-#{$left}: 2rem;
+        padding-#{$right}: 2rem;
+      }
+    }
+  }
+}
+
+#unmask_password {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  top: 0.5rem;
 }
