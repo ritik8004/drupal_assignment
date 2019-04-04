@@ -202,14 +202,18 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $langcode = $sku->language()->getId();
     $sku_string = $sku->getSku();
 
+    // Key to fetch display node of the sku from static cache based on whether
+    // parent sku needs to consider or not.
+    $check_parent_key = (int) $check_parent;
+
     // Do not use static cache during sync when create translation flag is set
     // to true.
-    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
+    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$check_parent_key])) {
+      return $static[$langcode][$sku_string][$check_parent_key];
     }
 
     // Initialise with empty value.
-    $static[$langcode][$sku_string] = NULL;
+    $static[$langcode][$sku_string][$check_parent_key] = NULL;
 
     if ($check_parent) {
       if ($parent_sku = $this->getParentSku($sku)) {
@@ -258,7 +262,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
       ]);
     }
 
-    $static[$langcode][$sku_string] = $node;
+    $static[$langcode][$sku_string][$check_parent_key] = $node;
 
     return $node;
   }

@@ -74,4 +74,22 @@
       window.history.pushState(data, data.display_node_title, data.display_node_url);
     }
   };
+
+  /**
+   * Update cross sell block, when current product form is not opened in modal.
+   *
+   * @param form_id
+   *   The current form id.
+   * @param mobile_markup
+   *   The mobile cross sell markup.
+   * @param desktop_markup
+   *   The desktop cross sell markup.
+   */
+  $.fn.updateCrossSell = function (form_id, mobile_markup, desktop_markup) {
+    if ($('input[value="'+form_id+'"]').parents('#drupal-modal').length == 0) {
+      $('.horizontal-crossell.mobile-only-block').replaceWith(mobile_markup);
+      $('.horizontal-crossell.above-mobile-block').replaceWith(desktop_markup);
+    }
+  };
+
 })(jQuery, Drupal);

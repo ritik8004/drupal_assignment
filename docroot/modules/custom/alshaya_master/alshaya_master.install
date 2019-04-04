@@ -1730,4 +1730,8 @@ function alshaya_master_install() {
     'seckit',
     'install'
   );
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'back_to_top.settings')
+    ->set('back_to_top_button_text', 'أعلى الصفحة')
+    ->save();
 }
