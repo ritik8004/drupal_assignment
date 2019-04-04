@@ -992,4 +992,17 @@ class MobileAppUtility {
     ];
   }
 
+  /**
+   * Get cart from cart id.
+   *
+   * @param int $cart_id
+   *   The cart id.
+   *
+   * @return array
+   *   Return cart id.
+   */
+  public function getCart($cart_id) {
+    return $this->apiWrapper->getCart($cart_id);
+  }
+
 }
