@@ -6,6 +6,12 @@
   }
 
   .region__content {
+    .block-page-title-block {
+      h1 {
+        font-family: $hnm-bold;
+      }
+    }
+
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
@@ -51,6 +57,7 @@
               color: $plp_facet_filter_link;
               font-family: $hnm-demibold;
               text-transform: uppercase;
+              letter-spacing: 1px;
             }
           }
         }
