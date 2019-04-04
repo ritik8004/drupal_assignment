@@ -118,6 +118,13 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
         'install'
       );
 
+      // Adding new `Grid/Count` block for PLP.
+      $manager->updateConfigs(
+        ['block.block.alshayagridcountblock_plp'],
+        'alshaya_search_api',
+        'install'
+      );
+
       // Adding new category facet block for plp.
       $manager->updateConfigs(
         ['block.block.categoryfacetplp'],
@@ -129,6 +136,12 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
       // block for plp.
       \Drupal::configFactory()->getEditable('block.block.alshaya_plp_facets_block_all')
         ->set('weight', $temp_weight + 1)
+        ->save();
+
+      // Updating the weight with new weight adjustment for new 'Grid/Count'
+      // block for plp.
+      \Drupal::configFactory()->getEditable('block.block.alshayagridcountblock_plp')
+        ->set('weight', $temp_weight + 2)
         ->save();
 
       // Update/Adjust weight of new category facet block for plp.
@@ -152,6 +165,13 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
         'install'
       );
 
+      // Adding new `Grid/Count` block for Promo.
+      $manager->updateConfigs(
+        ['block.block.alshayagridcountblock_promo'],
+        'alshaya_search_api',
+        'install'
+      );
+
       // New category facet block for promo.
       $manager->updateConfigs(
         ['block.block.categoryfacetpromo'],
@@ -162,6 +182,12 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
       // Updating the weight with new weight adjustment for promo.
       \Drupal::configFactory()->getEditable('block.block.alshaya_promo_facets_block_all')
         ->set('weight', $temp_weight + 1)
+        ->save();
+
+      // Updating the weight with new weight adjustment for new 'Grid/Count'
+      // block for promo.
+      \Drupal::configFactory()->getEditable('block.block.alshayagridcountblock_promo')
+        ->set('weight', $temp_weight + 2)
         ->save();
 
       // Update/Adjust weight of new category facet block for promo.
@@ -184,6 +210,13 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
         'install'
       );
 
+      // Adding new `Grid/Count` block for Search.
+      $manager->updateConfigs(
+        ['block.block.alshayagridcountblock_search'],
+        'alshaya_search_api',
+        'install'
+      );
+
       // New category facet block for search.
       $manager->updateConfigs(
         ['block.block.categoryfacetsearch'],
@@ -194,6 +227,12 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
       // Updating the weight with new weight adjustment for search.
       \Drupal::configFactory()->getEditable('block.block.alshaya_search_facets_block_all')
         ->set('weight', $temp_weight + 1)
+        ->save();
+
+      // Updating the weight with new weight adjustment for new 'Grid/Count'
+      // block for search.
+      \Drupal::configFactory()->getEditable('block.block.alshayagridcountblock_search')
+        ->set('weight', $temp_weight + 2)
         ->save();
 
       // Update/Adjust weight of new category facet block for search.
@@ -210,7 +249,7 @@ function _alshaya_transac_reposition_all_facet_blocks($facet_source, $source_blo
     // Now update blocks in content region with appropriate weight.
     foreach ($all_content_region_blocks as $all_block) {
       if (($all_block->getWeight() >= $weight) && $all_block->id() != $source_block) {
-        $all_block_weight = $all_block->getWeight() + count($facet_blocks) + 3;
+        $all_block_weight = $all_block->getWeight() + count($facet_blocks) + 4;
         $all_block->setWeight($all_block_weight);
         $all_block->save();
       }

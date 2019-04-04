@@ -9,6 +9,45 @@
   Drupal.behaviors.alshayaFacetAllSlide = {
     attach: function (context, settings) {
 
+      // Add active classes on facet dropdown content.
+      $('.c-facet__title.c-accordion__title').once().on('click', function () {
+        if ($(this).hasClass('active')) {
+          $(this).removeClass('active');
+        }
+        else {
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+          $(this).addClass('active');
+        }
+      });
+      $('.block-views-exposed-filter-blockalshaya-product-list-block-1 legend').once().on('click', function () {
+        $(this).toggleClass('active');
+      });
+
+      // Close the sort and facets on click outside of them.
+      document.addEventListener('click', function(event) {
+        var sortBy = $('.c-content .c-content__region .bef-exposed-form');
+        if ($(sortBy).find(event.target).length == 0) {
+          $(sortBy).find('legend').removeClass('active');
+        }
+
+        var facet_block = $('.c-content .region__content > div.block-facets-ajax');
+        if ($(facet_block).find(event.target).length == 0) {
+          $(facet_block).find('.c-facet__title').removeClass('active');
+        }
+      });
+
+      // Grid switch for PLP and Search pages.
+      $('.small-col-grid').once().on('click', function () {
+        $('.large-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('.c-products-list').removeClass('product-large').addClass('product-small');
+      });
+      $('.large-col-grid').once().on('click', function () {
+        $('.small-col-grid').removeClass('active');
+        $(this).addClass('active');
+        $('.c-products-list').removeClass('product-small').addClass('product-large');
+      });
+
       // On clicking facet block title, update the title of block.
       $('.all-filters .block-facets-ajax').on('click', function() {
         // Update the title on click of facet.
@@ -67,16 +106,17 @@
       }
 
       // On change of outer `sort by`, update the 'all filter' sort by as well.
-      $('.c-content .c-content__region #edit-sort-bef-combine').first().on('change', function() {
-        $('.all-filters #edit-sort-bef-combine').val($(this).val());
+      $('.c-content .c-content__region #edit-sort-bef-combine input:radio').on('click', function() {
+        var idd = $(this).attr('id');
+        $('.all-filters #edit-sort-bef-combine input:radio').attr('checked', false);
+        $('.all-filters #edit-sort-bef-combine #' + idd).attr('checked', true);
       });
 
       // Sort result on change of sort in `All filters`.
-      $('.all-filters [data-bef-auto-submit-click]').on('click', function (e) {
-        // Get the value.
-        var sort_value = $('.all-filters #edit-sort-bef-combine').val();
-        // Set the value of original `sort by` (outside all filters).
-        $('#edit-sort-bef-combine').val(sort_value);
+      $('.all-filters #edit-sort-bef-combine input:radio').on('click', function (e) {
+        // Get ID.
+        var idd = $(this).attr('id');
+        $('.c-content .c-content__region #edit-sort-bef-combine #' + idd).attr('checked', true);
         // Trigger click of button.
         var idd = $('.c-content .c-content__region [data-bef-auto-submit-click]').first().attr('id');
         $('#' + idd).trigger('click');
@@ -106,6 +146,13 @@
               $(this).addClass('hide-facet-block');
             }
           });
+
+          if (facets.length <= show_only_facets) {
+            $('.show-all-filters').hide();
+          }
+          else {
+            $('.show-all-filters').show();
+          }
         }
       }
 

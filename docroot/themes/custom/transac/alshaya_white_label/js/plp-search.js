@@ -132,9 +132,6 @@
           if (countFilters > 0) {
             $('.c-facet__blocks__wrapper--mobile h3.c-facet__label').addClass('active-filter-count').html(Drupal.t('Filter') + ' <span class="filter-count"> ' + countFilters + '</span>');
           }
-
-          // Hide the filter block in mobile.
-          $(filterBarSelector).hide();
         }
         else {
           // Show the filter block in the content region for tablet and desktop.
@@ -344,10 +341,6 @@
         // Remove if clear all button is clicked on the filter pane.
         $('.shop-by-size-clear-container').remove();
       }
-
-      $('.c-facet__title.c-accordion__title').once().on('click', function () {
-        $(this).toggleClass('active');
-      });
     }
   };
 })(jQuery);
