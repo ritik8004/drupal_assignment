@@ -1185,9 +1185,7 @@ html[lang=ar] {
 @include breakpoint($only-mobile) {
   .c-plp {
     .region__content {
-      display: flex;
-      flex-flow: row wrap;
-      flex-direction: column;
+      display: block;
 
       > div {
         width: 100%;
