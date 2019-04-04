@@ -79,12 +79,16 @@
       $('.show-all-filters').on('click', function() {
         $('.all-filters').toggleClass('filters-active');
         $('body').toggleClass('modal-overlay');
+
+        $('.all-filters').show();
       });
 
       // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply').on('click', function() {
         $('.all-filters').toggleClass('filters-active');
         $('body').toggleClass('modal-overlay');
+
+        $('.all-filters').hide();
       });
 
       $('.three-col-grid').on('click', function() {
