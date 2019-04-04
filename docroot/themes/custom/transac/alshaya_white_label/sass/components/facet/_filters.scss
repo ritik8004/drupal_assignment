@@ -23,10 +23,18 @@
     &::after {
       #{$right}: -1.375rem;
       top: 49%;
+
+      @include breakpoint($only-mobile) {
+        #{$right}: 1.25rem;
+      }
     }
 
     @include breakpoint($upto-desktop) {
       display: none;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
     }
   }
 
@@ -76,8 +84,35 @@
       display: none;
     }
 
+    .c-accordion__title.active + ul {
+      @include breakpoint($only-mobile) {
+        width: 100vw;
+        border-left: 0;
+        border-right: 0;
+      }
+
+      top: 100%;
+      padding-top: 0;
+      padding-bottom: 0;
+
+      > li {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+        border-bottom: 1px solid $plp_mobile_separator;
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+
     @include breakpoint($only-mobile) {
-      display: none;
+      width: 50%;
+      float: $left;
+      display: block;
+      margin: 0;
+      border-bottom: 1px solid $plp_mobile_separator;
+      border-#{$right}: 1px solid $plp_mobile_separator;
     }
 
     @include breakpoint($only-tablet) {
@@ -90,71 +125,78 @@
       }
     }
   }
+
+  @include breakpoint($only-mobile) {
+    display: none;
+  }
 }
 
-.block-views-exposed-filter-blockalshaya-product-list-block-1,
-.block-views-exposed-filter-blockalshaya-product-list-block-2,
-.block-views-exposed-filter-blocksearch-page {
-  float: $left;
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    float: $left;
+    position: relative;
 
-  .fieldset-wrapper {
-    display: none;
-    position: absolute;
-    top: 3.5rem;
-    background: #fff;
-    z-index: 9;
-    min-width: 15.5rem;
-    padding: 1.125rem 0;
-    border: 1px solid #ddd;
+    .fieldset-wrapper {
+      display: none;
+      position: absolute;
+      top: 2.5rem;
+      background: #fff;
+      z-index: 9;
+      min-width: 15.5rem;
+      padding: 1.125rem 0;
+      border: 1px solid #ddd;
 
-    .form-type-radio {
-      display: block;
+      .form-type-radio {
+        display: block;
 
-      label {
-        color: #1a1a1a;
-        padding-#{$left}: 3rem;
-        font-size: 0.75rem;
-        height: 1.5rem;
-        line-height: 1.5rem;
-        display: inline-block;
+        label {
+          color: #1a1a1a;
+          padding-#{$left}: 3rem;
+          font-size: 0.75rem;
+          height: 1.5rem;
+          line-height: 1.5rem;
+          display: inline-block;
 
-        &::before {
-          position: absolute;
-          top: -3px;
-          #{$left}: 1.125rem;
-          font-size: 1.875rem;
+          &::before {
+            position: absolute;
+            top: -3px;
+            #{$left}: 1.125rem;
+            font-size: 1.875rem;
+          }
+        }
+
+        input[checked='checked'] ~ label {
+          font-family: $alshaya-bold;
         }
       }
+    }
 
-      input[checked='checked'] ~ label {
-        font-family: $alshaya-bold;
+    legend {
+      font-size: 0.6875rem;
+      height: 2.9375rem;
+      line-height: 2.9375rem;
+      position: relative;
+      margin-#{$right}: 2.25rem;
+
+      @include icon(chevrondown, after) {
+        font-size: 1.1875rem;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &.active {
+        + .fieldset-wrapper {
+          display: block;
+        }
       }
     }
-  }
 
-  legend {
-    font-size: 0.6875rem;
-    height: 2.9375rem;
-    line-height: 2.9375rem;
-    position: relative;
-    margin-#{$right}: 2.25rem;
-
-    @include icon(chevrondown, after) {
-      font-size: 1.1875rem;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+    @include breakpoint($upto-desktop) {
+      display: none;
     }
-
-    &.active {
-      + .fieldset-wrapper {
-        display: block;
-      }
-    }
-  }
-
-  @include breakpoint($upto-desktop) {
-    display: none;
   }
 }
 
@@ -198,6 +240,8 @@
 
   @include breakpoint($only-mobile) {
     margin-#{$left}: 0;
+    width: 50% !important;
+    float: $left;
   }
 }
 
@@ -244,5 +288,11 @@
       padding-bottom: 0 !important;
       margin: 0 !important;
     }
+  }
+}
+
+.block-facet-blockplp-product-collection {
+  input[type=text] {
+    display: none;
   }
 }
