@@ -147,6 +147,20 @@
         }
       }
 
+      // Function to call in ajax command on facet refresh.
+      // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
+      $.fn.refreshListGridClass = function () {
+        if ($('.grid-buttons .large-col-grid').hasClass('active')) {
+          $('.c-products-list').removeClass('product-small');
+          $('.c-products-list').addClass('product-large');
+        }
+        else {
+          $('.c-products-list').removeClass('product-large');
+          $('.c-products-list').addClass('product-small');
+        }
+
+      };
+
     }
   };
 
