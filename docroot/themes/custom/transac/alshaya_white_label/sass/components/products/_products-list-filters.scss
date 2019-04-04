@@ -133,14 +133,14 @@
         }
       }
 
-      .js-facets-checkbox-links  {
+      .js-facets-checkbox-links {
         .facet-item {
           padding: 1.125rem 1.5rem !important;
           margin-bottom: 0;
           border-bottom: 1px solid #e8e8e8;
 
           input[type=checkbox] {
-            &~label {
+            & ~ label {
               &::before {
                 font-size: 1.3125rem;
               }
@@ -148,7 +148,6 @@
           }
         }
       }
-
     }
 
     &__foot {
@@ -174,15 +173,15 @@
       .facet-all-clear {
         @extend %button-brand;
 
-        width:48%;
+        width: 48%;
       }
+
       .facet-all-apply {
         @extend %button-wide;
 
-        width:48%;
+        width: 48%;
         border: 1px solid $primary_brand_button;
       }
-
     }
   }
 }
