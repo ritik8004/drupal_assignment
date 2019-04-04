@@ -5,7 +5,6 @@ dependencies:
     - alshaya_mobile_app
     - serialization
     - simple_oauth
-    - alshaya_acm_knet
 id: cart_promotions
 plugin_id: cart_promotions
 granularity: method

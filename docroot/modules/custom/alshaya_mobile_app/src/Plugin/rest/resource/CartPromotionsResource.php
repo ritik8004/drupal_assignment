@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
-use Drupal\alshaya_acm_knet\KnetHelper;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -27,13 +26,6 @@ use Drupal\node\NodeInterface;
  * )
  */
 class CartPromotionsResource extends ResourceBase {
-
-  /**
-   * K-Net Helper.
-   *
-   * @var \Drupal\alshaya_acm_knet\KnetHelper
-   */
-  private $knetHelper;
 
   /**
    * The mobile app utility service.
@@ -84,8 +76,6 @@ class CartPromotionsResource extends ResourceBase {
    *   Serializer formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
-   * @param \Drupal\alshaya_acm_knet\KnetHelper $knet_helper
-   *   K-Net Helper.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
    * @param \Drupal\alshaya_acm_promotion\AlshayaPromotionsManager $alshaya_acm_promotion_manager
@@ -102,14 +92,12 @@ class CartPromotionsResource extends ResourceBase {
                               $plugin_definition,
                               array $serializer_formats,
                               LoggerInterface $logger,
-                              KnetHelper $knet_helper,
                               MobileAppUtility $mobile_app_utility,
                               AlshayaPromotionsManager $alshaya_acm_promotion_manager,
                               EntityRepository $entityRepository,
                               LanguageManager $languageManager,
                               EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->knetHelper = $knet_helper;
     $this->mobileAppUtility = $mobile_app_utility;
     $this->alshayaAcmPromotionManager = $alshaya_acm_promotion_manager;
     $this->languageManager = $languageManager;
@@ -127,7 +115,6 @@ class CartPromotionsResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('alshaya_acm_knet.helper'),
       $container->get('alshaya_mobile_app.utility'),
       $container->get('alshaya_acm_promotion.manager'),
       $container->get('entity.repository'),
@@ -151,7 +138,7 @@ class CartPromotionsResource extends ResourceBase {
     $cart_id = (int) $cart_id;
     $promotions = [];
 
-    if (empty($cart_id) || !$this->knetHelper->validateCart($cart_id)) {
+    if (empty($cart_id)) {
       $this->mobileAppUtility->throwException();
     }
 
