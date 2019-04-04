@@ -11,18 +11,17 @@
     box-sizing: border-box;
     z-index: 1005;
     position: fixed;
-    overflow-y: auto;
     #{$right}: 0;
     top: 0;
     bottom: 0;
     background-color: #fff;
-    transition: transform 200ms cubic-bezier(0.4,0,1,1);
+    transition: transform 200ms cubic-bezier(0.4, 0, 1, 1);
     transform: translateX(100%);
     display: flex;
     flex-direction: column;
 
-    &.active {
-      transition: transform 400ms cubic-bezier(0,0,0.2,1);
+    &.filters-active {
+      transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
       transform: translateX(0);
     }
 
@@ -35,45 +34,121 @@
   .filter {
     &__head {
       border-bottom: 1px solid #e8e8e8;
-      padding: 3.125rem;
+      padding: 2.5rem 2.1875rem;
       position: relative;
+      display: flex;
+      justify-content: space-between;
 
       // Back Button
       .facet-all-back {
         @include icon(chevron#{$left}, before) {
-          color: $header_my_account_icon;
-          font-size: 1.313rem;
+          color: #000;
+          font-size: 2rem;
+          width: 2rem;
           cursor: pointer;
           pointer-events: none;
-          position: absolute;
-          #{$left}: 0;
         }
+      }
+
+      .filter-sort-title {
+        text-transform: uppercase;
+        color: $page_title;
+        text-align: center;
+        width: 100%;
+        line-height: 1.5;
       }
 
       // Close button
       .facet-all-apply {
-        float: $right;
-        display: inline-block;
-        vertical-align: middle;
-        text-align: center;
-
         @include icon('close') {
-          font-size: 2rem;
-          position: absolute;
-          #{$right}: 0.9375rem;
+          font-size: 1.5rem;
+          line-height: 1.5rem;
+          width: 2rem;
+          color: #000;
         }
       }
     }
 
     &__inner {
+      padding-bottom: 9.375rem;
+
       // Temporary
       #block-exposedformalshaya-product-listblock-1 {
         display: none;
       }
+
+      .c-facet {
+        &.show-facet {
+          display: block !important;
+
+          ul {
+            display: block;
+          }
+
+          .c-accordion__title {
+            display: none;
+
+            &.active {
+              & + ul {
+                display: block !important;
+              }
+            }
+          }
+        }
+
+        &.c-accordion {
+          margin-#{$left}: 0;
+          margin-#{$right}: 0;
+          float: none;
+
+          ul {
+            padding-top: 0;
+          }
+
+          .c-accordion__title {
+            text-transform: capitalize;
+            padding: 1.125rem 2rem;
+            height: auto;
+            line-height: 1;
+            border-bottom: 1px solid #e8e8e8;
+
+            @include icon(chevron#{$right}, after) {
+              color: #000;
+              font-size: 1.5rem;
+              width: 2rem;
+              cursor: pointer;
+              pointer-events: none;
+            }
+
+            &.active {
+              & + ul {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+
+      .js-facets-checkbox-links  {
+        .facet-item {
+          padding: 1.125rem 1.5rem !important;
+          margin-bottom: 0;
+          border-bottom: 1px solid #e8e8e8;
+
+          input[type=checkbox] {
+            &~label {
+              &::before {
+                font-size: 1.3125rem;
+              }
+            }
+          }
+        }
+      }
+
     }
 
     &__foot {
-      padding: 1.25rem 3.125rem 2.1875rem 2.1875rem;
+      padding: 1.25rem 1.5rem;
       text-align: center;
       box-shadow: 0 -0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
       display: flex;
@@ -81,6 +156,8 @@
       position: absolute;
       bottom: 0;
       flex-wrap: wrap;
+      justify-content: space-between;
+      background: $primary_bg;
 
       .facet-all-count {
         width: 100%;

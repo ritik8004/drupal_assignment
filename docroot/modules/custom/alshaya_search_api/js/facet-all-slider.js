@@ -17,8 +17,7 @@
 
         // Only show current facet and hide all others.
         $('.all-filters .block-facets-ajax').removeClass('show-facet');
-        $('.all-filters .block-facets-ajax').addClass('hide-facet');
-        $(this).removeClass('hide-facet');
+        $('.all-filters .block-facets-ajax').hide();
         $(this).addClass('show-facet');
 
         // Show the back button.
@@ -31,19 +30,18 @@
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
         $('.all-filters .block-facets-ajax').removeClass('show-facet');
-        $('.all-filters .block-facets-ajax').addClass('hide-facet');
-
+        $('.all-filters .block-facets-ajax').show();
       });
 
       // Show all filters blocks.
       $('.show-all-filters').on('click', function() {
-        $('.all-filters').toggleClass('active');
+        $('.all-filters').toggleClass('filters-active');
         $('body').toggleClass('modal-overlay');
       });
 
       // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply').on('click', function() {
-        $('.all-filters').toggleClass('active');
+        $('.all-filters').toggleClass('filters-active');
         $('body').toggleClass('modal-overlay');
       });
 
