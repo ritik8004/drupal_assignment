@@ -237,6 +237,7 @@ class AlshayaHmCommands extends DrushCommands {
 
     $map_chunk = array_shift($context['sandbox']['result']);
     foreach ($map_chunk as $map) {
+      /** @var \Drupal\node\NodeInterface $node */
       $node = $sku_manager->getDisplayNode($map['child_sku']);
 
       // Skip adding redirect if the old child SKU is not linked with a node

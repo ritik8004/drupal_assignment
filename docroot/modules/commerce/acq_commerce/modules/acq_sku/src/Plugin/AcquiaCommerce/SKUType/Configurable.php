@@ -48,11 +48,14 @@ class Configurable extends SKUPluginBase {
 
     $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
+    $common_identifier_attribute = \Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('common_identifier_attribute');
     // If style code attribute is available with the SKU, its possible there are
     // additional configurable attribtues whose information is not supplied with
     // Parent SKU's configurable attributes.
-    if ($helper->getStyleCode($sku)) {
-      $helper->fetchAdditionalConfigurables($sku, $configurables);
+    if (($common_identifier_attribute) &&
+      ($attr_style_code = $helper->getSkuAttribute($sku, $common_identifier_attribute)) &&
+      ($helper->getAdditionalConfigurables())) {
+      $helper->updateAdditionalConfigurables($sku, $configurables);
     }
 
     if (empty($configurables) || !is_array($configurables)) {
@@ -305,9 +308,16 @@ class Configurable extends SKUPluginBase {
       ));
 
       // Skip additional configurables from options being passed to ACM for
-      // updatecart call.
-      $config_additional_configurable = array_shift(\Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('additional_configurables'));
-      if ($config_additional_configurable) {
+      // updatecart call. This needs to happen only for products which have
+      // style code attribute & hence were appended with an additional attribute
+      // while building the cart form. But, since MDC doesn't know about this
+      // attribute anymore as a config attribute passing this will throw errors.
+      $tree_sku = $form_state->get('tree_sku');
+      if (($tree_sku = SKU::loadFromSku($tree_sku)) &&
+        ($tree_sku instanceof SKU) &&
+        ($tree_sku->hasField('attr_style_code')) &&
+        ($tree_sku->get('attr_style_code')->getString())) {
+        $config_additional_configurable = array_shift(\Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('additional_configurables'));
         $options = array_filter($options, function ($option) use ($config_additional_configurable) {
           if ($option['option_id'] == $config_additional_configurable['attribute_id']) {
             return FALSE;
@@ -426,9 +436,11 @@ class Configurable extends SKUPluginBase {
       return $cache[$sku->language()->getId()][$sku->id()];
     }
 
+    $common_identifier_attibute = \Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('common_identifier_attribute');
+
     $tree = [
       'parent' => $sku,
-      'products' => $helper->getStyleCode($sku) ? $helper->getStyleCodeChildren($sku) : self::getChildren($sku),
+      'products' => ($common_identifier_attibute && $helper->getSkuAttribute($sku, $common_identifier_attibute)) ? $helper->getChildrenByCommonAttribute($sku) : self::getChildren($sku),
       'combinations' => [],
       'configurables' => [],
     ];

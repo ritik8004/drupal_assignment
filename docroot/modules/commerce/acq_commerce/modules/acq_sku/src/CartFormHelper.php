@@ -95,13 +95,14 @@ class CartFormHelper {
    * @return array
    *   List of child SKU objected keyed by SKU code.
    */
-  public function getStyleCodeChildren(SKUInterface $sku) {
+  public function getChildrenByCommonAttribute(SKUInterface $sku) {
     $child_skus = [];
-
-    if ($style_code = $this->getStyleCode($sku)) {
+    $common_identifier_attribute = $this->config->get('common_identifier_attribute');
+    if ($style_code = $this->getSkuAttribute($sku, $common_identifier_attribute)) {
       $query = \Drupal::database()->select('acq_sku_field_data', 'asfd');
-      $query->condition('asfd.attr_style_code', $style_code);
+      $query->condition('asfd.' . $common_identifier_attribute, $style_code);
       $query->condition('type', 'simple');
+      $query->join('acq_sku__field_configured_skus', 'acs', 'acs.field_configured_skus_value = asfd.sku');
       $query->fields('asfd', ['sku']);
       $results = $query->execute()->fetchAll();
 
@@ -141,12 +142,12 @@ class CartFormHelper {
    * @param array $configurables
    *   Refernece variable to the original set of configurable attributes.
    */
-  public function fetchAdditionalConfigurables(SKUInterface $sku, array &$configurables) {
-    // @TODO: Figure out a way to identify additional configurable attributes.
-    $additional_configurables = $this->config->get('additional_configurables');
-
-    foreach ($additional_configurables as $configurable_code => $configurable) {
-      $configurables[] = array_merge($configurable, ['values' => $this->fetchAdditionConfigurableValues($configurable_code, $sku)]);
+  public function updateAdditionalConfigurables(SKUInterface $sku, array &$configurables) {
+    // @todo: Figure out a way to identify additional configurable attributes.
+    if ($additional_configurables = $this->getAdditionalConfigurables()) {
+      foreach ($additional_configurables as $configurable_code => $configurable) {
+        $configurables[] = array_merge($configurable, ['values' => $this->fetchAdditionConfigurableValues($configurable_code, $sku)]);
+      }
     }
   }
 
@@ -162,7 +163,7 @@ class CartFormHelper {
    *   Array kof attribute value & their labels.
    */
   public function fetchAdditionConfigurableValues($configurable_code, SKUInterface $sku) {
-    $child_skus = $this->getStyleCodeChildren($sku);
+    $child_skus = $this->getChildrenByCommonAttribute($sku);
     $child_sku_attributes = [];
 
     foreach ($child_skus as $child_sku) {
@@ -185,18 +186,30 @@ class CartFormHelper {
    * Helper function to test if the SKU has style code attribute.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU entity for which want to test for style code attribute.
+   *   SKU entity for which want to test style code attribute.
+   * @param string $attribute_name
+   *   Attribute whose value needs to be fetched.
    *
    * @return bool|string
    *   Return style code value if the SKU has one, else FALSE.
    */
-  public function getStyleCode(SKUInterface $sku) {
-    if ($sku->hasField('attr_style_code') &&
-      ($style_code = $sku->get('attr_style_code')->getString())) {
+  public function getSkuAttribute(SKUInterface $sku, $attribute_name) {
+    if ($sku->hasField($attribute_name) &&
+      ($style_code = $sku->get($attribute_name)->getString())) {
       return $style_code;
     }
 
     return FALSE;
+  }
+
+  /**
+   * Helper function to test if additional configurables are setup.
+   *
+   * @return array|bool
+   *   TRUE if there are additional configurables.
+   */
+  public function getAdditionalConfigurables() {
+    return $this->config->get('additional_configurables') ?: FALSE;
   }
 
 }
