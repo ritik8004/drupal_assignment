@@ -161,6 +161,7 @@ class AlshayaHmCommands extends DrushCommands {
             'alias' => $alias_manager->getAliasByPath('/node/' . $node->id(), $node->language()->getId()),
             'child_sku' => $firt_child_sku->getSku(),
             'langcode' => $node->language()->getId(),
+            'parent_sku' => $sku_entity->getSku(),
           ];
         }
       }
@@ -215,13 +216,16 @@ class AlshayaHmCommands extends DrushCommands {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public static function addRedirectsFromTempstore(&$context) {
-    $mapping = \Drupal::state()->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY);
-
     /** @var \Drupal\redirect\RedirectRepository $redirect_repository */
     $redirect_repository = \Drupal::service('redirect.repository');
-    $context['sandbox']['result'] = array_chunk($mapping, 100);
-    $context['sandbox']['max'] = count($context['sandbox']['result']);
-    $context['sandbox']['current'] = 0;
+
+    if (empty($context['sandbox'])) {
+      $mapping = \Drupal::state()->get(self::TEMP_ALIAS_COLOR_MAPPING_STATE_KEY);
+
+      $context['sandbox']['result'] = array_chunk($mapping, 100);
+      $context['sandbox']['max'] = count($context['sandbox']['result']);
+      $context['sandbox']['current'] = 0;
+    }
 
     if (empty($context['sandbox']['result'])) {
       $context['finished'] = 1;
@@ -236,13 +240,26 @@ class AlshayaHmCommands extends DrushCommands {
       /** @var \Drupal\node\NodeInterface $node */
       $node = $sku_manager->getDisplayNode($map['child_sku']);
 
-      // Add redirect only if the child SKU is available & has style code
-      // attribute.
-      if (($child_sku = SKU::loadFromSku($map['child_sku'])) &&
-        ($child_sku instanceof SKU) &&
-        ($child_sku->hasField('attr_style_code')) &&
-        ($child_sku->get('attr_style_code')->getString())) {
-        $redirect = $redirect_repository->findMatchingRedirect($map['alias'], [], $map['langcode']);
+      // Skip adding redirect if the old child SKU is not linked with a node
+      // yet.
+      if (!$node instanceof NodeInterface) {
+        \Drupal::logger('alshaya_hm')->alert('Display node not found for SKU @sku.', ['@sku' => $map['child_sku']]);
+        continue;
+      }
+
+      // Skip adding redirect for cases where the old style level SKU exists.
+      // Migration is supposed to disable the old style level SKU on MDC.
+      if (($style_parent_sku = SKU::loadFromSku($map['parent_sku'])) &&
+      ($style_parent_sku instanceof SKU)) {
+        \Drupal::logger('alshaya_hm')->alert('SKU has not been migrated yet. Skipping adding redirect for @sku.', ['@sku' => $map['child_sku']]);
+        continue;
+      }
+
+      // Add redirect only if the child SKU is available & old style level
+      // parent SKU is not available i.e., disabled after migration on MDC.
+      if (($child_sku = SKU::loadFromSku($map['child_sku'], $map['langcode'])) &&
+        ($child_sku instanceof SKU)) {
+        $redirect = $redirect_repository->findMatchingRegdirect($map['alias'], [], $map['langcode']);
 
         // Create redirect from old alias to new nodes. Avoid errors if the
         // redirect already exists.

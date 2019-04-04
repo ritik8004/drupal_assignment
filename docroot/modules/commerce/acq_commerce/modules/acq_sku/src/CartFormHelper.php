@@ -186,8 +186,8 @@ class CartFormHelper {
    * Helper function to test if the SKU has style code attribute.
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU entity for which want to test forgetAdditionalConfigurables style code attribute.
-   * @param $attribute_name
+   *   SKU entity for which want to test style code attribute.
+   * @param string $attribute_name
    *   Attribute whose value needs to be fetched.
    *
    * @return bool|string
