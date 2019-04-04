@@ -76,28 +76,19 @@
       });
 
       // Show all filters blocks.
-      $('.show-all-filters').on('click', function() {
-        $('.all-filters').toggleClass('filters-active');
-        $('body').toggleClass('modal-overlay');
+      $('.show-all-filters').once().on('click', function() {
+        $('.all-filters').addClass('filters-active');
+        $('body').addClass('modal-overlay');
 
         $('.all-filters').show();
       });
 
       // Fake facet apply button to close the `all filter`.
-      $('.facet-all-apply').on('click', function() {
-        $('.all-filters').toggleClass('filters-active');
-        $('body').toggleClass('modal-overlay');
+      $('.facet-all-apply').once().on('click', function() {
+        $('.all-filters').removeClass('filters-active');
+        $('body').removeClass('modal-overlay');
 
         $('.all-filters').hide();
-      });
-
-      $('.three-col-grid').on('click', function() {
-        $('.c-products-list').removeClass('product-small').addClass('product-large');
-        $('.search-lightSlider').slick('refresh');
-      });
-      $('.four-col-grid').on('click', function() {
-        $('.c-products-list').removeClass('product-large').addClass('product-small');
-        $('.search-lightSlider').slick('refresh');
       });
 
       if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {

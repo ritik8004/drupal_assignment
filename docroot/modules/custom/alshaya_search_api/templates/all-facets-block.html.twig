@@ -2,7 +2,10 @@
 
 {% if facet_blocks %}
   {% if show_all %}
-    <div class="show-all-filters">{{ 'All Filters'|t }}</div>
+    <div class="show-all-filters">
+      <span class="desktop">{{ 'All Filters'|t }}</span>
+      <span class="upto-desktop">{{ 'Filter & Sort'|t }}</span>
+    </div>
   {% endif %}
   <div class='all-filters'>
     <div class='filter__head'>

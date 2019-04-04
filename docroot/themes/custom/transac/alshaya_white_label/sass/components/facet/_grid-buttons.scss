@@ -68,6 +68,7 @@
   .total-result-count,
   .grid-buttons {
     display: inline-block;
+    cursor: pointer;
   }
 
   .grid-buttons {
@@ -78,6 +79,9 @@
 
   .total-result-count {
     @include breakpoint($only-mobile) {
+      float: $left;
+      padding-#{$left}: 1.25rem;
+
       > div {
         padding-top: 0 !important;
       }

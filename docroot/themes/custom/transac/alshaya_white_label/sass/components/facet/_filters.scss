@@ -11,7 +11,7 @@
       + ul {
         display: block;
         position: absolute;
-        top: 2.5rem;
+        top: 2.25rem;
         background: $plp_facet_active_bg;
         z-index: 9;
         min-width: 15.5rem;
@@ -94,9 +94,9 @@
         width: 100vw;
         border-left: 0;
         border-right: 0;
+        top: 100%;
       }
 
-      top: 100%;
       padding-top: 0;
       padding-bottom: 0;
 
@@ -146,7 +146,7 @@
     .fieldset-wrapper {
       display: none;
       position: absolute;
-      top: 2.5rem;
+      top: 2.25rem;
       background: $plp_facet_active_bg;
       z-index: 9;
       min-width: 15.5rem;
@@ -184,6 +184,7 @@
       line-height: 2.9375rem;
       position: relative;
       margin-#{$right}: 2.25rem;
+      cursor: pointer;
 
       @include icon(chevrondown, after) {
         font-size: 1.1875rem;
@@ -209,6 +210,27 @@
   font-size: 0.6875rem;
   position: relative;
   padding-#{$left}: 1.875rem;
+  cursor: pointer;
+
+  @include breakpoint($desktop) {
+    .desktop {
+      display: inline;
+    }
+
+    .upto-desktop {
+      display: none;
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .desktop {
+      display: none;
+    }
+
+    .upto-desktop {
+      display: inline;
+    }
+  }
 
   @include breakpoint($only-mobile) {
     padding-#{$left}: 1.25rem;
