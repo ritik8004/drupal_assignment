@@ -353,6 +353,9 @@ function alshaya_super_category_product_category_parent_alter(&$parent_id, &$con
   // Set the default parent from settings.
   $parent_id = alshaya_super_category_get_default_term();
 
+  // Use this to know that depth changed, means super category feature enabled.
+  $context['depth_offset'] = 1;
+
   // Get the term id from the current path, and display only the related
   // second level child terms.
   if ($context['term'] instanceof TermInterface

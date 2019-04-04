@@ -22,6 +22,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_promo_banner_for_mobile
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner
     - field.field.taxonomy_term.acq_product_category.field_promotion_banner_mobile
+    - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
     - field.field.taxonomy_term.acq_product_category.field_term_background_color
     - field.field.taxonomy_term.acq_product_category.field_term_font_color
     - image.style.thumbnail
@@ -101,6 +102,7 @@ third_party_settings:
       children:
         - field_display_as_clickable_link
         - field_category_include_menu
+        - field_show_in_lhn
         - group_promo_block
         - group_menu_item_colors
         - group_category_image
@@ -462,6 +464,15 @@ content:
       progress_indicator: throbber
     region: content
     third_party_settings: {  }
+  field_show_in_lhn:
+    type: boolean_checkbox
+    weight: 11
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
   field_size_guide_anchor:
     type: string_textfield
     weight: 0

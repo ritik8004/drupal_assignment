@@ -1436,15 +1436,50 @@ function alshaya_white_label_preprocess_alshaya_address(&$variables) {
 }
 
 /**
+ * Implements hook_preprocess_breadcrumb().
+ */
+function alshaya_white_label_preprocess_breadcrumb(&$variables) {
+  $variables['breadcrumb'] = [];
+  /** @var \Drupal\Core\Link $link */
+  foreach ($variables['links'] as $key => $link) {
+    $class = 'brdcrb-nav';
+    if (!empty($attributes = $link->getUrl()->getOption('attributes'))
+      && !empty($attributes['class'])) {
+      $class .= ' ' . implode(' ', $attributes['class']);
+    }
+
+    $variables['breadcrumb'][$key] = [
+      'text' => $link->getText(),
+      'url' => $link->getUrl()->toString(),
+      'class' => $class,
+    ];
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  // Flag to determine if category facet has active item.
+  $category_active_facet = FALSE;
+  // If category facet.
+  $is_category_facet = (strpos($variables['attributes']['data-drupal-facet-id'], 'category') !== FALSE);
   foreach ($variables['items'] as $key => $item) {
     if (isset($item['value']['#attributes']['class'])
       && in_array('is-active', $item['value']['#attributes']['class'])) {
       if ($variables['items'][$key]['attributes'] instanceof Attribute) {
         $variables['items'][$key]['attributes']->addClass('is-active');
+
+        // Update flag as there is active category facet.
+        if ($is_category_facet) {
+          $category_active_facet = TRUE;
+        }
       }
     }
+  }
+
+  // If its category facet and it has no active item, then mark `All` active.
+  if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0])) {
+    $variables['items'][0]['attributes']->addClass('is-active');
   }
 }

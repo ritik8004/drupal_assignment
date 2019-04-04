@@ -14,6 +14,45 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 /**
  * Implements hook_update_N().
  *
+ * Adding new field `Show in lhn` and enabling the `category_lhn_block` block.
+ */
+function alshaya_acm_product_category_update_8029() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  // Add new field `Show in lhn` to the `acq_product_category`.
+  $fields = [
+    'field.storage.taxonomy_term.field_show_in_lhn',
+    'field.field.taxonomy_term.acq_product_category.field_show_in_lhn',
+    'core.entity_form_display.taxonomy_term.acq_product_category.default',
+    'core.entity_view_display.taxonomy_term.acq_product_category.default',
+  ];
+  $manager->updateConfigs(
+    $fields,
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+
+  // Create and enable the new category lhn block.
+  $manager->updateConfigs(
+    ['block.block.categorylhnblock'],
+    'alshaya_transac',
+    'optional'
+  );
+
+  // Global config for show/hide the lhn block.
+  $manager->updateConfigs(
+    ['alshaya_acm_product_category.settings'],
+    'alshaya_acm_product_category',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove hide_facet_condition_moschino plugin from blocks.
  */
 function alshaya_acm_product_category_update_8028() {

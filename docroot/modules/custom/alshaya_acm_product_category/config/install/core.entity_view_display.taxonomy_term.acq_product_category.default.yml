@@ -17,6 +17,7 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_term_background_color
   - field.field.taxonomy_term.acq_product_category.field_term_font_color
   - taxonomy.vocabulary.acq_product_category
+  - field.field.taxonomy_term.acq_product_category.field_show_in_lhn
   - field.field.taxonomy_term.acq_product_category.field_category_quicklink_plp_mob
   - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
   - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
@@ -60,6 +61,7 @@ hidden:
   field_promo_banner_for_mobile: true
   field_promotion_banner: true
   field_promotion_banner_mobile: true
+  field_show_in_lhn: true
   field_size_guide_anchor: true
   field_term_background_color: true
   field_term_font_color: true
