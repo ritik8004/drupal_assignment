@@ -48,6 +48,11 @@
       font-size: 0.75rem;
       line-height: 2;
       margin-#{$left}: 0;
+
+      &.facet-item__count {
+        color: #7d7d7d;
+        padding-#{$left}: 8px;
+      }
     }
 
     label {
@@ -279,6 +284,27 @@
 
       padding-left: 1.25rem;
       padding-right: 1.25rem;
+    }
+
+    ul {
+      li.clear-all {
+        a {
+          font-size: 0.675rem !important;
+        }
+      }
+
+      li {
+        a {
+          span.facet-item__value {
+            .price-wrapper .price {
+              .price-amount,
+              .price-currency {
+                font-size: 0.75rem !important;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
