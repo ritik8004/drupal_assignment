@@ -42,7 +42,7 @@ display:
           submit_button: Search
           reset_button: false
           reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          exposed_sorts_label: 'sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -356,7 +356,7 @@ display:
       arguments: {  }
       display_extenders: {  }
       title: Search
-      css_class: 'c-products-list product-small'
+      css_class: ''
       use_ajax: true
     cache_metadata:
       max-age: -1

@@ -179,6 +179,18 @@
           }
           searchCount.addClass('tablet');
         }
+
+        // For the count in the `All` category facet item.
+        if ($('body #total_result_count').length === 0) {
+          var total_count = $('.total-result-count .view-header').html();
+          $('<input>').attr({
+            type: 'hidden',
+            id: 'total_result_count',
+            value: total_count
+          }).appendTo('body');
+        }
+        var count = $('#total_result_count').val().trim().split(' ')[0];
+        $('li.category-all .facet-item__count').html('(' + count + ')');
       }
 
       function processSoftLiniks(element) {
@@ -211,7 +223,6 @@
 
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile')
             .addClass('is-filter');
-
           facetLabel.on('click', function () {
             if ($(window).width() >= 768) {
               $('.page-wrapper, .header--wrapper, .c-pre-content, .plp-video, .c-breadcrumb, .region__banner-top, .branding__menu, .c-footer')
