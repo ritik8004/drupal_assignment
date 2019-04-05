@@ -31,7 +31,7 @@ function alshaya_acm_product_category_update_8029() {
     $fields,
     'alshaya_acm_product_category',
     'install',
-    AlshayaConfigManager::MODE_ADD_MISSING
+    AlshayaConfigManager::MODE_MERGE
   );
 
   // Create and enable the new category lhn block.
