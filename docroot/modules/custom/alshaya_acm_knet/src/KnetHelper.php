@@ -110,7 +110,7 @@ class KnetHelper {
   }
 
   /**
-   * Initialise knet request.
+   * Initialize knet request.
    *
    * @param int|string $cart_id
    *   Cart ID.
