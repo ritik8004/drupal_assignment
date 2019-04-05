@@ -1,0 +1,6 @@
+name: 'Alshaya Free Design Services'
+type: module
+core: 8.x
+dependencies:
+  - webform:webform
+  - alshaya_addressbook:alshaya_addressbook

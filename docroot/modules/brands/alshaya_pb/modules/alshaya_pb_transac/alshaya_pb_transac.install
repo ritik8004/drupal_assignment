@@ -12,6 +12,15 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Enable free design services module.
+ */
+function alshaya_pb_transac_update_8011() {
+  \Drupal::service('module_installer')->install(['alshaya_free_design_services']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove super_category dependence in block for free design services.
  * Add new sku attribute feature_lhn.
  */
