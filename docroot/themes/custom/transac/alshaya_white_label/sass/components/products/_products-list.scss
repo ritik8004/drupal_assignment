@@ -85,7 +85,6 @@
         margin: 0;
 
         @include breakpoint($tablet) {
-          border-bottom: 1px solid $plp_facet_input_border;
           display: inline-block;
           margin-bottom: 1.125rem;
           width: 100%;
@@ -102,7 +101,7 @@
             font-size: 0.75rem;
 
             @include breakpoint($only-mobile) {
-              font-size: 0.875rem;
+              font-size: 0.75rem;
             }
 
             span {
@@ -145,6 +144,7 @@
                   #{$left}: 50%;
                   transform: translateX(-50%) translateY(-50%);
                   color: $plp_facet_summary_filter_icon;
+                  font-size: 1.25rem;
                 }
 
                 color: transparent;

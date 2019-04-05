@@ -210,7 +210,6 @@
       }
 
       ul li {
-        height: 2.5rem;
         margin-bottom: 0.75rem;
         padding-bottom: 0;
         border: 1px solid $plp_facet_clear_border;
@@ -220,35 +219,20 @@
         }
 
         &.clear-all {
-          height: 2.5rem;
           padding: 0;
           text-transform: uppercase;
           font-family: $vs-bold;
-          border-width: 1px;
+          border: none;
 
           a {
-            padding: 0.75rem 1.45rem;
             display: block;
           }
         }
 
         a {
-          font-size: 0.875rem;
-
           span {
             &.facet-item__value {
               text-transform: none;
-              padding: 0.75rem 1rem;
-              height: 2.5rem;
-              line-height: 1.2;
-            }
-
-            &.facet-item__status {
-              height: 2.5rem;
-
-              &::after {
-                top: 0.125rem;
-              }
             }
           }
         }

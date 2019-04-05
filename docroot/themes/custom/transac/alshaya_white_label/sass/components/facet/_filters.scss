@@ -23,6 +23,7 @@
     &::after {
       #{$right}: -1.375rem;
       top: 49%;
+      font-size: 1.1875rem;
 
       @include breakpoint($only-mobile) {
         #{$right}: 1.25rem;
@@ -38,6 +39,10 @@
     }
   }
 
+  input[type=text] {
+    display: none;
+  }
+
   ul,
   &.hide-facet-block {
     display: none;
@@ -50,8 +55,8 @@
       margin-#{$left}: 0;
 
       &.facet-item__count {
-        color: #7d7d7d;
-        padding-#{$left}: 8px;
+        color: $plp_facet_count_number;
+        padding-#{$left}: 0.5rem;
       }
     }
 
@@ -157,7 +162,7 @@
         display: block;
 
         label {
-          color: #1a1a1a;
+          color: $plp_sort_by_options;
           padding-#{$left}: 3rem;
           font-size: 0.75rem;
           height: 1.5rem;
@@ -166,7 +171,8 @@
 
           &::before {
             position: absolute;
-            top: -3px;
+            top: 50%;
+            transform: translateY(-50%);
             #{$left}: 1.125rem;
             font-size: 1.875rem;
           }
@@ -191,6 +197,7 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        #{$right}: -1.3125rem;
       }
 
       &.active {
@@ -280,9 +287,9 @@
 
     .filter-list-label {
       float: $left;
-      width: 100px;
+      width: 6.25rem;
       font-size: 0.75rem;
-      color: #555;
+      color: $plp_selected_filter_label_text;
       display: inline-flex;
       align-items: center;
       justify-content: $left;
@@ -336,11 +343,5 @@
       padding-bottom: 0 !important;
       margin: 0 !important;
     }
-  }
-}
-
-.block-facet-blockplp-product-collection {
-  input[type=text] {
-    display: none;
   }
 }
