@@ -1671,6 +1671,20 @@ class SkuManager {
   }
 
   /**
+   * Get configurable attribute codes.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Configurable attribute codes for SKU.
+   */
+  public function getConfigurableAttributes(SKU $sku) {
+    $combinations = $this->getConfigurableCombinations($sku);
+    return $combinations ? array_keys($combinations['attribute_sku']) : [];
+  }
+
+  /**
    * Disable configurable options not available in the system.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -1976,12 +1990,15 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity.
+   * @param array $configurable_attributes
+   *   Configurable attributes used in the product.
    *
    * @return string|null
    *   Attribute value if found for the SKU.
    */
-  public function getPdpSwatchValue(SKU $sku) {
-    foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+  public function getPdpSwatchValue(SKU $sku, array $configurable_attributes) {
+    $swatch_attributes = array_intersect($this->getPdpSwatchAttributes(), $configurable_attributes);
+    foreach ($swatch_attributes as $attribute_code) {
       $attributes = $sku->get('attributes')->getValue();
       $attributes = array_column($attributes, 'value', 'key');
       if (isset($attributes[$attribute_code]) && !empty($attributes[$attribute_code])) {
@@ -2098,17 +2115,40 @@ class SkuManager {
   public function getConfigurableValues(SKUInterface $sku): array {
     $configurableFieldValues = [];
 
+    if ($sku->bundle() == 'configurable') {
+      $configurable_attributes = $this->getConfigurableAttributes($sku);
+    }
+    else {
+      $parent = $this->getParentSkuBySku($sku);
+      if ($parent instanceof SKU) {
+        $configurable_attributes = $this->getConfigurableAttributes($parent);
+      }
+    }
+
+    if (empty($configurable_attributes)) {
+      return $configurableFieldValues;
+    }
+
     $fields = $this->skuFieldsManager->getFieldAdditions();
-    $configurableFields = array_filter($fields, function ($field) {
-      return (bool) $field['configurable'];
+    $configurableFieldReplacements = array_filter($fields, function ($field) {
+      return !empty($field['display_configurable_for']);
     });
+
+    // For some fields we display from different attribute.
+    // For instance for article_castor_id we display from color_label.
+    foreach ($configurableFieldReplacements as $code => $field) {
+      $index = array_search($field['display_configurable_for'], $configurable_attributes);
+      if ($index !== 'false') {
+        $configurable_attributes[$index] = $code;
+      }
+    }
 
     $remove_not_required_option = $this->isNotRequiredOptionsToBeRemoved();
 
-    foreach ($configurableFields as $key => $field) {
-      $fieldKey = 'attr_' . $key;
+    foreach ($configurable_attributes as $code) {
+      $fieldKey = 'attr_' . $code;
 
-      if ($sku->get($fieldKey)->getString()) {
+      if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
 
         if ($remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
@@ -2739,8 +2779,9 @@ class SkuManager {
     $nids = array_flip($this->getColorNodeIds($sku->getSku()));
 
     $colors = [];
+    $configurable_attributes = $this->getConfigurableAttributes($sku);
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
-      $child_color = $this->getPdpSwatchValue($child);
+      $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
 
       if (!empty($child_color) && !isset($colors[$child_color])) {
         // Create the node if not available.
@@ -2922,8 +2963,9 @@ class SkuManager {
     $has_color_data = FALSE;
 
     // Gather data from children to set in parent.
+    $configurable_attributes = $this->getConfigurableAttributes($sku);
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
-      $child_color = $this->getPdpSwatchValue($child);
+      $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
 
       // Need to have a flag to avoid indexing main node when it has colors.
       // For nodes not having swatch/color attribute, we still need to index it.

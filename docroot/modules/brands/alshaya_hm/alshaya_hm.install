@@ -13,6 +13,20 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Add new sku_base_fields config field - display_configurable_for.
+ */
+function alshaya_hm_update_8033() {
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $field = $config->get('color_label');
+  $field['display_configurable_for'] = 'article_castor_id';
+  $config->set('color_label', $field);
+  $config->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add index for attr_style_code in acq_sku_field_data.
  */
 function alshaya_hm_update_8032() {

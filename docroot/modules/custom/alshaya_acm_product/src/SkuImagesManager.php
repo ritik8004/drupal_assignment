@@ -1121,9 +1121,10 @@ class SkuImagesManager {
     }
 
     $children = $this->skuManager->getChildSkus($sku);
+    $configurable_attributes = $this->skuManager->getConfigurableAttributes($sku);
     $duplicates = [];
     foreach ($children as $child) {
-      $value = $this->skuManager->getPdpSwatchValue($child);
+      $value = $this->skuManager->getPdpSwatchValue($child, $configurable_attributes);
       if (empty($value) || isset($duplicates[$value])) {
         continue;
       }
@@ -1270,9 +1271,10 @@ class SkuImagesManager {
     $swatches = [];
     $duplicates = [];
     $children = $this->skuManager->getChildSkus($sku);
+    $configurable_attributes = $this->skuManager->getConfigurableAttributes($sku);
 
     foreach ($children as $child) {
-      $value = $this->skuManager->getPdpSwatchValue($child);
+      $value = $this->skuManager->getPdpSwatchValue($child, $configurable_attributes);
 
       if (empty($value) || isset($duplicates[$value])) {
         continue;
