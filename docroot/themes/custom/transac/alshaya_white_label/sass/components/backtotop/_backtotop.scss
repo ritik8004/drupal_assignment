@@ -54,8 +54,8 @@
   #backtotop {
     &.backtotop-nofooter,
     &.backtotop-withfooter {
-      @include breakpoint($only-mobile) {
-        bottom: 3.25rem;
+      @include breakpoint($upto-desktop) {
+        bottom: 3.625rem;
       }
     }
   }
