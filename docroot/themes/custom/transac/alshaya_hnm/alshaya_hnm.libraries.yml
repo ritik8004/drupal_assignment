@@ -4,7 +4,6 @@ global_styles:
       css/colors.css: {}
   js:
     vendor/js/calc.min.js: {}
-    js/back_to_top.js: {}
     js/form.js: {}
     js/custom_overrides.js: {}
     vendor/js/details-polyfill.js: {}
