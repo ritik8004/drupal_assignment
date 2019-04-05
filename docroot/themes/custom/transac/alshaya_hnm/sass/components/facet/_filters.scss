@@ -2,6 +2,10 @@
   .c-accordion__title {
     font-family: $hnm-demibold;
     color: $plp_facet_title;
+
+    &::after {
+      font-size: 2.25rem;
+    }
   }
 }
 
@@ -35,7 +39,6 @@
           position: absolute;
           font-size: 2.25rem;
           width: 1.75rem;
-          #{$right}: -1.3125rem;
         }
       }
 
@@ -43,6 +46,13 @@
         .form-type-radio {
           input[checked='checked'] ~ label {
             font-family: $hnm-demibold;
+          }
+
+          label {
+            &::before {
+              top: -3px;
+              transform: translateY(0);
+            }
           }
         }
       }
