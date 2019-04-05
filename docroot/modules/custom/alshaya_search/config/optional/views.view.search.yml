@@ -356,7 +356,7 @@ display:
       arguments: {  }
       display_extenders: {  }
       title: Search
-      css_class: 'c-products-list product-small'
+      css_class: ''
       use_ajax: true
     cache_metadata:
       max-age: -1

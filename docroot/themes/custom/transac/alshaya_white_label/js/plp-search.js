@@ -224,21 +224,6 @@
 
           facetBlockWrapper.addClass('c-facet__blocks__wrapper--mobile')
             .addClass('is-filter');
-          if ($('body').hasClass('path--search')) {
-            // Do nothing.
-          }
-          else if ($('body').hasClass('nodetype--acq_promotion')) {
-            // Do Nothing for now.
-          }
-          else {
-            mainBlock.before(facetBlockWrapper);
-            var plpFilter = $('.c-plp #views-exposed-form-alshaya-product-list-block-1');
-            plpFilter.wrapAll('<div class="view-filters is-filter">');
-            $('.is-filter').wrapAll('<div class="filter--mobile clearfix">');
-            $('.region__content .c-facet__blocks__wrapper')
-              .insertBefore('.view-filters.is-filter');
-          }
-
           facetLabel.on('click', function () {
             if ($(window).width() >= 768) {
               $('.page-wrapper, .header--wrapper, .c-pre-content, .plp-video, .c-breadcrumb, .region__banner-top, .branding__menu, .c-footer')

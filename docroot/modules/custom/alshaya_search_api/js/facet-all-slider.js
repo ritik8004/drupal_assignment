@@ -25,7 +25,7 @@
 
       // Close the sort and facets on click outside of them.
       document.addEventListener('click', function(event) {
-        var sortBy = $('.c-content .c-content__region .bef-exposed-form');
+        var sortBy = $('.c-content .c-content__region .bef-exposed-form').first();
         if ($(sortBy).find(event.target).length == 0) {
           $(sortBy).find('legend').removeClass('active');
         }
@@ -91,6 +91,7 @@
         $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').show();
+        $('.all-filters .bef-exposed-form legend').removeClass('active');
         // Reset the hidden field value.
         $('#all-filter-active-facet-sort').val('');
       });
