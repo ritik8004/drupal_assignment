@@ -79,7 +79,7 @@ class KnetHelper {
   }
 
   /**
-   * Validate if cart is good enough to initiate k-net request.
+   * Validate if cart is good enough to initiate knet request.
    *
    * @param int $cart_id
    *   Cart ID.
@@ -89,7 +89,7 @@ class KnetHelper {
    */
   public function validateCart(int $cart_id): bool {
     try {
-      // Check if payment method is set to k-net.
+      // Check if payment method is set to knet.
       $method = $this->alshayaApi->getCartPaymentMethod($cart_id);
 
       if ($method !== 'knet') {
@@ -110,7 +110,7 @@ class KnetHelper {
   }
 
   /**
-   * Initialise k-net request.
+   * Initialise knet request.
    *
    * @param int|string $cart_id
    *   Cart ID.
