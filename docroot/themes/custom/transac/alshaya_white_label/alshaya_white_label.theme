@@ -1482,4 +1482,8 @@ function alshaya_white_label_preprocess_facets_item_list(&$variables) {
   if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0])) {
     $variables['items'][0]['attributes']->addClass('is-active');
   }
+
+  if ($is_category_facet) {
+    $variables['items'][0]['attributes']->addClass('category-all');
+  }
 }

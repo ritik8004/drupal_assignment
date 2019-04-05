@@ -48,21 +48,40 @@
         $('.c-products-list').removeClass('product-small').addClass('product-large');
       });
 
-      // On clicking facet block title, update the title of block.
-      var allFiltersFacets = '.all-filters .block-facets-ajax, .all-filters .block-views-exposed-filter-blockalshaya-product-list-block-1';
-      $(allFiltersFacets).on('click', function() {
+      // On clicking facet block title, update the title of block and hide
+      // other facets.
+      $('.all-filters .block-facets-ajax').on('click', function() {
         // Update the title on click of facet.
         var facet_title = $(this).find('h3.c-facet__title').html();
         $('.filter-sort-title').html(facet_title);
 
         // Only show current facet and hide all others.
-        $(allFiltersFacets).removeClass('show-facet');
+        $(this).removeClass('show-facet');
         $('.all-filters .block-facets-ajax').hide();
-        $('.all-filters .block-views-exposed-filter-blockalshaya-product-list-block-1:visible').hide();
+        $('.all-filters .bef-exposed-form').hide();
         $(this).addClass('show-facet');
 
         // Show the back button.
         $('.facet-all-back').show();
+        // Update the the hidden field with the id of selected facet.
+        $('#all-filter-active-facet-sort').val($(this).attr('id'));
+      });
+
+      // On clicking of sort option, update title
+      $('.all-filters .bef-exposed-form').on('click', function() {
+        // Update the title on click of facet.
+        var facet_title = $(this).find('span.fieldset-legend').html();
+        $('.filter-sort-title').html(facet_title);
+
+        // Only show current facet and hide all others.
+        $(this).removeClass('show-facet');
+        $('.all-filters .block-facets-ajax').hide();
+        $(this).addClass('show-facet');
+
+        // Show the back button.
+        $('.facet-all-back').show();
+        // Update the the hidden field with the id of sort block.
+        $('#all-filter-active-facet-sort').val($(this).attr('id'));
       });
 
       // On clicking on back button, reset the block title and add class so
@@ -70,9 +89,10 @@
       $('.facet-all-back').on('click', function() {
         $(this).hide();
         $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
-        $(allFiltersFacets).removeClass('show-facet');
-        $('.all-filters .block-views-exposed-filter-blockalshaya-product-list-block-1:hidden').show();
-        $('.all-filters .block-facets-ajax').show();
+        $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
+        $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').show();
+        // Reset the hidden field value.
+        $('#all-filter-active-facet-sort').val('');
       });
 
       // Show all filters blocks.
@@ -80,6 +100,14 @@
         $('.all-filters').addClass('filters-active');
         $('body').addClass('modal-overlay');
 
+        $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
+
+        var active_filter_sort = $('#all-filter-active-facet-sort').val();
+        // On clicking `all` filters, check if there was filter which selected last.
+        if (active_filter_sort.length > 0) {
+          $('.all-filters #' + active_filter_sort).show();
+          $('.all-filters #' + active_filter_sort).addClass('show-facet');
+        }
         $('.all-filters').show();
       });
 
@@ -104,17 +132,17 @@
       }
 
       // On change of outer `sort by`, update the 'all filter' sort by as well.
-      $('.c-content .c-content__region #edit-sort-bef-combine input:radio').on('click', function() {
+      $('.c-content .c-content__region .bef-exposed-form input:radio').on('click', function() {
         var idd = $(this).attr('id');
-        $('.all-filters #edit-sort-bef-combine input:radio').attr('checked', false);
-        $('.all-filters #edit-sort-bef-combine #' + idd).attr('checked', true);
+        $('.all-filters .bef-exposed-form input:radio').attr('checked', false);
+        $('.all-filters .bef-exposed-form #' + idd).attr('checked', true);
       });
 
       // Sort result on change of sort in `All filters`.
-      $('.all-filters #edit-sort-bef-combine input:radio').on('click', function (e) {
+      $('.all-filters .bef-exposed-form input:radio').on('click', function (e) {
         // Get ID.
         var idd = $(this).attr('id');
-        $('.c-content .c-content__region #edit-sort-bef-combine #' + idd).attr('checked', true);
+        $('.c-content .c-content__region .bef-exposed-form #' + idd).attr('checked', true);
         // Trigger click of button.
         var idd = $('.c-content .c-content__region [data-bef-auto-submit-click]').first().attr('id');
         $('#' + idd).trigger('click');
@@ -157,6 +185,14 @@
         else {
           $('.c-products-list').removeClass('product-large');
           $('.c-products-list').addClass('product-small');
+        }
+
+        var active_facet_sort = $('#all-filter-active-facet-sort').val();
+        $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
+        if (active_facet_sort.length > 0) {
+          $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').hide();
+          $('.all-filters #' + active_facet_sort).addClass('show-facet');
+          $('.all-filters #' + active_facet_sort).show();
         }
 
       };

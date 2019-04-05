@@ -138,7 +138,6 @@ class AlshayaSearchAjaxController extends FacetBlockAjaxController {
     if (!empty($parameters['f'])) {
       $last_selected_facet_block_plugin_id = 'facet_block:' . substr(end($parameters['f']), 0, strpos(end($parameters['f']), ':'));
       $response->addCommand(new InvokeCommand('[data-block-plugin-id="' . $last_selected_facet_block_plugin_id . '"]', 'addClass', ['current-active-facet show-facet']));
-      $response->addCommand(new InvokeCommand('.all-filters .filter__inner .block-facets-ajax:not(.current-active-facet)', 'hide'));
       // Refresh/Re-add the class on list views as selected by grid.
       $response->addCommand(new InvokeCommand(NULL, 'refreshListGridClass'));
     }
