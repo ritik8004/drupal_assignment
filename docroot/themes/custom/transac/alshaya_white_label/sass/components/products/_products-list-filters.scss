@@ -1,9 +1,5 @@
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
-  .hide-facet-block {
-    display: none;
-  }
-
   // Main all filters div theming.
   .all-filters {
     max-width: 31.25rem;
@@ -31,6 +27,17 @@
 
     &:focus {
       outline: 0;
+    }
+
+    .hide-facet-block,
+    .c-facet__title.c-accordion__title {
+      display: block;
+    }
+
+    .c-facet.c-accordion {
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
     }
   }
 
@@ -76,7 +83,9 @@
     &__inner {
       padding-bottom: 9.375rem;
 
-      .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+      .block-views-exposed-filter-blockalshaya-product-list-block-1,
+      .block-views-exposed-filter-blockalshaya-product-list-block-2,
+      .block-views-exposed-filter-blocksearch-page {
         margin-#{$left}: 0;
         margin-#{$right}: 0;
         float: none;
@@ -144,6 +153,16 @@
         }
       }
 
+      .c-facet.c-accordion.block-facet-blockcategory-facet-plp {
+        display: block;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          border-bottom: none;
+          border-#{$right}: none;
+        }
+      }
+
       .views-exposed-form,
       .c-facet {
         &.show-facet {
@@ -159,6 +178,8 @@
             &.active {
               & + ul {
                 display: block !important;
+                overflow-y: auto;
+                height: 73vh;
               }
             }
           }
@@ -184,8 +205,12 @@
               }
 
               span.facet-item__value {
-                line-height: 1;
+                line-height: unset;
                 margin-left: 0.5rem;
+
+                .facet-item__count {
+                  line-height: unset;
+                }
               }
             }
           }
