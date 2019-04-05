@@ -10,6 +10,33 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translations.
+ */
+function alshaya_master_update_8025() {
+  $strings = [
+    'All Filters' => [
+      'ar' => 'All Filters ar',
+    ],
+    'Filter & Sort' => [
+      'ar' => 'Filter & Sort ar',
+    ],
+    'Apply Filter' => [
+      'ar' => 'Apply Filter ar',
+    ],
+    'Selected filter' => [
+      'ar' => 'Selected filter ar',
+    ],
+    'All' => [
+      'ar' => 'All ar',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - OOS items removal message.
  */
 function alshaya_master_update_8024() {
@@ -1601,6 +1628,21 @@ function alshaya_master_install() {
     ],
     'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
       'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
+    ],
+    'All Filters' => [
+      'ar' => 'All Filters ar',
+    ],
+    'Filter & Sort' => [
+      'ar' => 'Filter & Sort ar',
+    ],
+    'Apply Filter' => [
+      'ar' => 'Apply Filter ar',
+    ],
+    'Selected filter' => [
+      'ar' => 'Selected filter ar',
+    ],
+    'All' => [
+      'ar' => 'All ar',
     ],
   ];
 
