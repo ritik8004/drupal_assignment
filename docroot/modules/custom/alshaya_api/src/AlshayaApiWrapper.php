@@ -866,7 +866,10 @@ class AlshayaApiWrapper {
     $response = $this->invokeApi($endpoint, [], 'GET');
 
     $response = json_decode($response, TRUE);
-    return isset($response['message']) ? [] : $response;
+
+    if (!empty($response)) {
+      return isset($response['message']) ? [] : $response;
+    }
   }
 
   /**
