@@ -19,7 +19,9 @@
           $(this).addClass('active');
         }
       });
-      $('.block-views-exposed-filter-blockalshaya-product-list-block-1 legend').once().on('click', function () {
+
+      var sortSelector = '.c-content__region .region__content .bef-exposed-form legend';
+      $(sortSelector).once().on('click', function () {
         $(this).toggleClass('active');
       });
 
