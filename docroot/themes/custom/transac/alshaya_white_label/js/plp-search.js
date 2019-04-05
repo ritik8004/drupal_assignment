@@ -181,7 +181,7 @@
         }
 
         // For the count in the `All` category facet item.
-        if ($('body #total_result_count').length == 0) {
+        if ($('body #total_result_count').length === 0) {
           var total_count = $('.total-result-count .view-header').html();
           $('<input>').attr({
             type: 'hidden',
@@ -218,7 +218,6 @@
         if ($('.c-facet__blocks__wrapper').length) {
           var facetBlockWrapper = $('.c-facet__blocks__wrapper')
             .clone(true, true);
-          var mainBlock = $('.block-system-main-block');
           var facetLabel = facetBlockWrapper.find('.c-facet__label');
           var facetBlock = facetBlockWrapper.find('.c-facet__blocks');
 
