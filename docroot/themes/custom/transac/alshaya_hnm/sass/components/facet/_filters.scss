@@ -24,6 +24,12 @@
       .filter-list-label {
         font-family: $hnm-demibold;
       }
+
+      ul li a {
+        span.js-facet-deactivate::after {
+          font-size: 1rem;
+        }
+      }
     }
 
     .block-views-exposed-filter-blockalshaya-product-list-block-1,
