@@ -248,7 +248,7 @@
     }
 
     @include breakpoint($desktop) {
-      margin-#{$right}: 7.5rem !important;
+      margin-#{$right}: 5.625rem !important;
     }
   }
 
@@ -284,6 +284,16 @@
       .desktop-only {
         @include breakpoint($only-tablet) {
           display: block;
+        }
+      }
+
+      .total-row:not(.price-row) {
+        &.vat-row {
+          .warm--white {
+            @include breakpoint($only-mobile) {
+              #{$left}: 0;
+            }
+          }
         }
       }
     }
