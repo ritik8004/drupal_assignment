@@ -1,6 +1,6 @@
 /**
  * @file
- * Magazine Gallery
+ * Magazine Gallery.
  */
 
 /* global isRTL */
@@ -21,6 +21,10 @@
       var mobileDialog = Drupal.dialog(mobileElement, mobiledialogsettings);
 
       if ($(window).width() < 768) {
+        $('#product-zoom-container .pdp-image a').on('click', function (e) {
+          e.preventDefault()
+        });
+
         $('.pdp-image').off().on('click', function () {
           $('body').addClass('pdp-modal-overlay');
           $(this).siblings('.clicked').removeClass('clicked');
@@ -32,7 +36,7 @@
       else {
         var items = $('.magazine__gallery--container .cloud-zoom:not(cloud-zoom-processed)');
         if (items.length) {
-          items.addClass('cloud-zoom-processed').once('bind-events').CloudZoom();
+          items.addClass('cloud-zoom-processed').CloudZoom();
         }
 
         $('.pdp-image').off().on('click', function (e) {
@@ -45,6 +49,21 @@
       }
     }
   };
+
+  $(document).once('bind-slick-nav').on('click', '.slick-prev, .slick-next', function () {
+    var slider = $(this).closest('.slick-slider');
+    setTimeout(function () {
+      var currentSlide = slider.find('li.slick-current');
+      // If the new slide is video thubnail,
+      // we trigger click on slide to render video.
+      if (currentSlide.hasClass('cloudzoom__thumbnails__video') || currentSlide.hasClass('imagegallery__thumbnails__video')) {
+        currentSlide.trigger('click');
+      }
+      else {
+        slider.find('li.slick-current a').trigger('click');
+      }
+    }, 1);
+  });
 
   /**
    * Zoom modal dialog.
@@ -64,7 +83,7 @@
       gallery.slick('slickGoTo', currentSlide);
     }
 
-    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="'+ currentSlide +'"]');
+    var defaultMainImage = $('#product-image-gallery-container li[data-slick-index="' + currentSlide + '"]');
     var bigImgUrl = defaultMainImage.children('a').attr('href');
     $('#full-image-wrapper img').attr('src', bigImgUrl);
     $('#full-image-wrapper img').css('transform', 'scale(1)');
@@ -73,6 +92,8 @@
 
     $('.dialog-product-image-gallery-container button.ui-dialog-titlebar-close').on('mousedown', function () {
       var productGallery = $('#product-image-gallery', $(this).closest('.dialog-product-image-gallery-container'));
+      // Closing modal window before slick library gets removed.
+      $(this).click();
       productGallery.slick('unslick');
       $('body').removeClass('pdp-modal-overlay');
     });
@@ -261,7 +282,7 @@
   };
 
   var slickModalOptions = {
-    slidesToShow: 5,
+    slidesToShow: 3,
     vertical: true,
     arrows: true,
     infinite: false,

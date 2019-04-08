@@ -52,7 +52,6 @@
     }
 
     label.option {
-      top: 0;
       padding-#{$left}: 2.5rem;
       font-size: 0.875rem;
 
@@ -88,12 +87,7 @@
 
   .form-type-checkbox {
     .option {
-      top: 0;
-
       &::before {
-        margin-#{$right}: 0.9rem;
-        top: 0;
-        float: $left;
         position: absolute;
         #{$left}: 0;
 
@@ -199,6 +193,22 @@
       .option::before {
         @include breakpoint($upto-tablet) {
           #{$left}: 0;
+        }
+      }
+    }
+  }
+
+  form.multistep-checkout {
+    .messages__wrapper {
+      @include breakpoint($tablet) {
+        border-top: none;
+
+        + #edit-acm-payment-methods {
+          #payment_details_wrapper {
+            > div:first-child {
+              border-top: none;
+            }
+          }
         }
       }
     }

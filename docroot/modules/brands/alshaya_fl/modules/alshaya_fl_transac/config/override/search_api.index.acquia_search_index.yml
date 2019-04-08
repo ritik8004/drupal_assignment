@@ -1,0 +1,61 @@
+field_settings:
+  attr_color_family:
+    label: 'Color'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_color_family
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
+  attr_size_shoe_eu:
+    label: 'Shoe Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_size_shoe_eu
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_size_textile_eu:
+    label: 'Clothes Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_size_textile_eu
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_size_socks:
+    label: 'Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_size_socks
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_size_bras:
+    label: 'Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_size_bras
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku
+  attr_size_rest:
+    label: 'Size'
+    datasource_id: entity:node
+    property_path: field_skus:entity:attr_size_rest
+    type: string
+    dependencies:
+      config:
+      - field.storage.node.field_skus
+      module:
+      - acq_sku

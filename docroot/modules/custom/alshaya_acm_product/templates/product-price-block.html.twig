@@ -11,13 +11,9 @@
     {{ final_price }}
   </div>
 
-  <div class="price--discount">
-    ({{ discount }})
-  </div>
-{% endif %}
-
-{% if vat_text %}
-  <div class="vat-text">
-    {{ vat_text }}
-  </div>
+  {% if discount|render is not empty %}
+    <div class="price--discount">
+      ({{ discount }})
+    </div>
+  {% endif %}
 {% endif %}

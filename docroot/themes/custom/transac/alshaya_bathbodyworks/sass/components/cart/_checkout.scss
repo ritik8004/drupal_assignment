@@ -214,6 +214,54 @@
   }
 
   #table-cart-totals {
+    #edit-totals {
+      tr[data-drupal-selector="edit-totals-discount"] {
+        .price-type__wrapper .cart-promotions {
+          position: absolute;
+          #{$right}: -1.25rem;
+          top: -0.1875rem;
+
+          @include breakpoint($only-tablet) {
+            #{$right}: -0.4375rem;
+            top: -0.3125rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            #{$right}: -0.75rem;
+
+            html[lang=ar] & {
+              #{$right}: -2.1875rem;
+              top: -0.5rem;
+            }
+          }
+
+          .contains--tooltip {
+            position: relative;
+
+            .tooltip--head::after {
+              position: static;
+            }
+
+            .tooltip {
+              #{$left}: 2.5rem;
+              top: -0.125rem;
+              position: absolute;
+
+              @include breakpoint($only-tablet) {
+                #{$left}: -9.0625rem;
+                top: 2rem;
+              }
+
+              @include breakpoint($only-mobile) {
+                #{$left}: -8.375rem;
+                top: 2rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
     tr[data-drupal-selector="edit-totals-grand"] > td:first-child {
       text-transform: uppercase;
       font-family: $alshaya-bold;
@@ -240,8 +288,18 @@
   #edit-continue-shopping,
   #edit-continue-shopping-mobile,
   .edit-continue-shopping-mobile {
-    color: $basket_continue_shopping_link;
     font-size: 0.875rem;
+    border: 0;
+    margin-top: 0.625rem;
+    font-weight: normal;
+
+    &::first-letter {
+      text-transform: capitalize;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .empty-cart-wrapper {
@@ -268,6 +326,10 @@
     padding: 1rem 0 0.3125rem;
     border-bottom: 1px solid $checkout_order_summary_title_border;
 
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
+
     .title {
       font-family: $alshaya-bold;
     }
@@ -280,6 +342,10 @@
   .content-head {
     color: $checkout_order_summary_no_of_items;
     padding: 1rem 0;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
 
     @include icon(chevrondown, after) {
       #{$right}: 0;
@@ -353,6 +419,10 @@
   .totals {
     padding: 0.75rem 0 0.5rem;
     border-bottom: 1px solid $order_summary_section_border;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 0.875rem;
+    }
 
     .sub-total {
       color: $order_summary_subtotal;

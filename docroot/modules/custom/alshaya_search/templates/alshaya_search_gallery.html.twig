@@ -3,14 +3,14 @@
 {% else %}
 <div class="alshaya_search_gallery">
 {% endif %}
-  <div class="alshaya_search_mainimage">
+  <div class="alshaya_search_mainimage" data-sku-image="{{ file_url(mainImage['#uri']) }}">
     {{ mainImage }}
   </div>
   {% if thumbnails|length > 0 %}
   <div class="alshaya_search_slider">
     <ul class="search-lightSlider">
-      {% for thumbs in thumbnails %}
-        <li>
+      {% for key,thumbs in thumbnails %}
+        <li data-sku-id="{{ key }}">
           {{ thumbs }}
         </li>
       {% endfor %}

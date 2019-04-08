@@ -8,11 +8,26 @@
 
   .c-content__region {
     @include breakpoint($tablet) {
-      flex-direction: column-reverse;
-      display: flex;
+      .term-description-mobile-only {
+        &.c-page-title__description {
+          display: block;
+        }
+      }
+    }
 
-      .term-description-mobile-only.c-page-title__description {
-        display: block;
+    .block-page-title-block {
+      @include breakpoint($desktop) {
+        max-width: 64.125rem;
+        margin: 0 auto;
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .term-description-mobile-only {
+        .nodetype--advanced_page & {
+          max-width: 64.125rem;
+          padding: 0;
+        }
       }
     }
   }
@@ -21,10 +36,6 @@
     border-bottom: 1px solid $content_pagetitle_border;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
-  }
-
-  .c-page-title__description {
-    display: none;
   }
 
   .content {

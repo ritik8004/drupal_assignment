@@ -3,6 +3,7 @@
 namespace Drupal\alshaya_seo_transac;
 
 use Drupal\alshaya_acm\CartHelper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Html;
 use Drupal\node\NodeInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -79,7 +80,8 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
-    'alshaya_master.home' => 'home page',
+    'alshaya_master.home' => 'HP-ProductCarrousel',
+    'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
   ];
 
   /**
@@ -349,13 +351,15 @@ class AlshayaGtmManager {
 
     $attributes = [];
     $product_node = $this->skuManager->getDisplayNode($sku);
-    $original_price = (float) $sku->get('price')->getString();
-    $final_price = (float) $sku->get('final_price')->getString();
+    $prices = $this->skuManager->getMinPrices($sku);
+    $original_price = $prices['price'];
+    $final_price = $prices['final_price'];
     $gtm_disabled_vars = $this->configFactory->get('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
 
     if ($sku->bundle() == 'configurable') {
       $prices = $this->skuManager->getMinPrices($sku);
       $original_price = $prices['price'];
+      $final_price = $prices['final_price'];
     }
 
     $product_type = 'Regular Product';
@@ -386,7 +390,7 @@ class AlshayaGtmManager {
     }
 
     $attributes['gtm-dimension4'] = ($product_node instanceof NodeInterface) ? (count(alshaya_acm_product_get_product_media($product_node->id())) ?: 'image not available') : 'image not available';
-    $attributes['gtm-price'] = (float) number_format((float) $final_price, 3, '.', '');
+    $attributes['gtm-price'] = (float) _alshaya_acm_format_price_with_decimal((float) $final_price, '.', '');
 
     if ($final_price
       && ($original_price !== $final_price)
@@ -546,7 +550,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -611,6 +620,11 @@ class AlshayaGtmManager {
       }
     }
 
+    // If list cookie is set, set the list variable.
+    if (isset($_COOKIE['product-list'])) {
+      $listValues = Json::decode($_COOKIE['product-list']);
+      $product_details['list'] = $listValues[$product_details['id']] ?? '';
+    }
     return $product_details;
   }
 
@@ -632,19 +646,9 @@ class AlshayaGtmManager {
 
       $cartItems = $cart->items();
 
-      $address = $this->cartHelper->getShipping($cart);
-
-      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page') {
-        // For CC we always use step 2.
+      if ($this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout click and collect page' || $this->convertCurrentRouteToGtmPageName($this->getGtmContainer()) == 'checkout delivery page') {
+        // For delivery we always use step 2.
         $attributes['step'] = 2;
-      }
-      // We receive address id in case of authenticated users & address as an
-      // extension attribute for anonymous.
-      elseif (((isset($address['customer_address_id']) && (!empty($address['customer_address_id']))) ||
-        (isset($address['extension'], $address['extension']['area']))) &&
-        ($cart->getShippingMethodAsString() !== $this->checkoutOptionsManager->getClickandColectShippingMethod())) {
-        // For HD we use step 3 if we have address saved.
-        $attributes['step'] = 3;
       }
 
       if ($cart_delivery_method = $cart->getShippingMethodAsString()) {
@@ -787,9 +791,9 @@ class AlshayaGtmManager {
   public function getRootGroup($tid) {
     // Recursive call to get parent root parent tid.
     while ($tid > 0) {
-      $query = $this->database->select('taxonomy_term_hierarchy', 'tth');
-      $query->fields('tth', ['parent']);
-      $query->condition('tth.tid', $tid);
+      $query = $this->database->select('taxonomy_term__parent', 'tth');
+      $query->fields('tth', ['parent_target_id']);
+      $query->condition('tth.entity_id', $tid);
       $parent = $query->execute()->fetchField();
       if ($parent == 0) {
         return $tid;
@@ -1003,8 +1007,9 @@ class AlshayaGtmManager {
         $sku_attributes = $this->fetchSkuAtttributes($product_sku);
 
         // Check if this product is in stock.
-        $stock_response = alshaya_acm_get_stock_from_sku($sku_entity);
-        $stock_status = $stock_response ? 'in stock' : 'out of stock';
+        $stock_status = $this->skuManager->isProductInStock($sku_entity)
+          ? 'in stock'
+          : 'out of stock';
         $product_terms = $this->fetchProductCategories($node);
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);

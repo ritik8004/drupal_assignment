@@ -5,6 +5,24 @@
  * Install, update and uninstall functions for the alshaya_main_menu module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new setting in alshaya_main_menu - desktop_main_menu_highlight_timing.
+ */
+function alshaya_main_menu_update_8403() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_main_menu.settings'],
+    'alshaya_main_menu',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

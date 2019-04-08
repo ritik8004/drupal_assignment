@@ -4,10 +4,18 @@
 
   &:first-child {
     margin-#{$left}: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$left}: 1.25rem;
+    }
   }
 
   &:last-child {
     margin-#{$right}: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 1.25rem;
+    }
   }
 
   > div {
@@ -72,9 +80,7 @@
 }
 
 .sfb-facets-container {
-  overflow: auto;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
   -ms-overflow-style: none;
   width: 90.75%;
   max-width: 62.4375rem;
@@ -84,38 +90,9 @@
   white-space: nowrap;
   padding: 0.75rem 0 1.625rem;
 
-  .slick-list {
-    padding: 0 !important;
-    margin: 0 36px;
-
-    .slick-slide {
-      width: auto !important;
-    }
-  }
-
-  &.slick-slider {
-    .slick-arrow {
-      top: 1.5625rem !important;
-
-      &:hover {
-        &::before {
-          color: $bra_size_active_filter_box_bg;
-        }
-      }
-
-      &::before {
-        background: transparent;
-        color: $bra_size_filter_slider_arrow_color;
-      }
-    }
-
-    .slick-next {
-      right: 0;
-    }
-
-    .slick-prev {
-      left: 0;
-    }
+  @include breakpoint($upto-desktop) {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   &::-webkit-scrollbar {
@@ -123,9 +100,8 @@
   }
 
   @include breakpoint($only-mobile) {
-    width: calc(100% - 1.25rem);
+    width: 100%;
     margin: 0;
-    margin-#{$left}: 1.25rem;
   }
 }
 
@@ -187,6 +163,11 @@
   .sfb-facets-container {
     padding-top: 0.75rem;
     padding-bottom: 0;
+
+    @include breakpoint($only-mobile) {
+      padding-#{$right}: 1.25rem;
+      padding-#{$left}: 1.25rem;
+    }
   }
 
   .shop-by-size-letter {
@@ -313,13 +294,12 @@
     }
   }
 
-  .sfb-facets-container {
-    &.slick-slider {
-      .slick-arrow {
-        &:hover {
-          &::before {
-            color: $bra_size_active_filter_box_bg_pink;
-          }
+  .shop-by-size-paddle-nav {
+    .paddle_next,
+    .paddle_prev {
+      &:hover {
+        &::after {
+          color: $bra_size_active_filter_box_bg_pink;
         }
       }
     }
@@ -355,15 +335,90 @@
     }
   }
 
-  .sfb-facets-container {
-    &.slick-slider {
-      .slick-arrow {
-        &:hover {
-          &::before {
-            color: $bra_size_active_filter_box_bg_sport;
-          }
+  .shop-by-size-paddle-nav {
+    .paddle_next,
+    .paddle_prev {
+      &:hover {
+        &::after {
+          color: $bra_size_active_filter_box_bg_sport;
         }
       }
+    }
+  }
+}
+
+@include breakpoint($desktop) {
+  .shop-by-size-paddle-nav {
+    max-width: 62.4375rem;
+    width: 82.75%;
+    position: absolute;
+    left: 50%;
+    bottom: 3.625rem;
+    display: flex;
+    align-items: center;
+    transform: translateX(-50%);
+  }
+
+  .paddle_next,
+  .paddle_prev {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 2.1875rem;
+    height: 4.125rem;
+    cursor: pointer;
+
+    &.hidden {
+      display: none;
+    }
+
+    &:hover {
+      &::after {
+        color: $bra_size_active_filter_box_bg;
+      }
+    }
+  }
+
+  .paddle_next {
+    @include icon(chevronright, after) {
+      font-size: 2.125rem;
+      color: $bra_shop_by_size_title;
+    }
+
+    right: -2.3125rem;
+  }
+
+  .paddle_prev {
+    @include icon(chevronleft, after) {
+      font-size: 2.125rem;
+      color: $bra_shop_by_size_title;
+    }
+
+    left: -2.3125rem;
+  }
+}
+
+.empty-bras-filter {
+  display: none;
+}
+
+@include breakpoint($only-mobile) {
+  .shop-by-size-clear-container {
+    list-style: none;
+    text-align: center;
+    border: 1px solid $bra_shop_by_size_title;
+    display: block;
+    font-family: $vs-bentonsanscomp-medium;
+    width: 11.3125rem;
+    margin: 1.25rem auto;
+    padding: 0.5rem 0;
+
+    a {
+      color: $bra_shop_by_size_title;
+      font-size: 0.8125rem;
+      letter-spacing: 1.78px;
+      text-transform: uppercase;
     }
   }
 }

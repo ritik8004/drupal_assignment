@@ -10,6 +10,72 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Add string translation for - OOS items removal message.
+ */
+function alshaya_master_update_8024() {
+  $strings = [
+    'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
+      'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable link_attributes module globally.
+ * Also uninstalls some modules that should not be enabled on any site.
+ */
+function alshaya_master_update_8023() {
+  // Install link_attributes module.
+  if (!\Drupal::moduleHandler()->moduleExists('link_attributes')) {
+    \Drupal::service('module_installer')->install(['link_attributes'], TRUE);
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('update')) {
+    \Drupal::service('module_installer')->uninstall(['update']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add string translation for - View more/less colours.
+ */
+function alshaya_master_update_8022() {
+  $strings = [
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
+    ],
+  ];
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update context for strings.
+ */
+function alshaya_master_update_8021() {
+  $strings = [
+    'Please select a payment option to continue.' => 'alshaya_static_text|empty_payment_option',
+    'Please agree to the Terms and Conditions.' => 'alshaya_static_text|agree_terms_and_condition',
+    'Your account has not been activated or is blocked.' => 'alshaya_static_text|account_already_exists',
+    'Customers also bought' => 'alshaya_static_text|pdp_crosssell_title',
+    'You may also like' => 'alshaya_static_text|pdp_upsell_title',
+    'Related' => 'alshaya_static_text|pdp_related_title',
+  ];
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Turning off the seckit referrer policy.
  */
 function alshaya_master_update_8020() {
@@ -1524,6 +1590,18 @@ function alshaya_master_install() {
     "We're sorry, the entered credit card is not supported. Please use a different credit card to proceed." => [
       'ar' => 'نأسف، البطاقة الائتمانية المستخدمة غير مدعومة. يرجى ادخال بطاقة ائتمانية أخرى للمتابعة.',
     ],
+    'View more colours' => [
+      'ar' => 'عرض المزيد من الألوانً',
+    ],
+    'View less colours' => [
+      'ar' => 'عرض أقل الألوان',
+    ],
+    'Save upto @discount%' => [
+      'ar' => '%@discount وفّر لغاية',
+    ],
+    'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
+      'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1652,4 +1730,8 @@ function alshaya_master_install() {
     'seckit',
     'install'
   );
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'back_to_top.settings')
+    ->set('back_to_top_button_text', 'أعلى الصفحة')
+    ->save();
 }

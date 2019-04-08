@@ -6,6 +6,7 @@ use Drupal\Core\Config\CachedStorage;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
@@ -15,6 +16,9 @@ use Drupal\lightning_core\ConfigHelper;
 use Drupal\locale\Locale;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
+use Symfony\Component\Console\Input\InputInterface;
+use Consolidation\AnnotatedCommand\AnnotationData;
+use Drush\Drush;
 
 /**
  * AlshayaMasterCommands class.
@@ -78,6 +82,13 @@ class AlshayaMasterCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
+   * Module Extension List Manager.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  private $moduleExtensionList;
+
+  /**
    * AlshayaMasterCommands constructor.
    *
    * @param \Drupal\Core\State\StateInterface $state
@@ -96,6 +107,8 @@ class AlshayaMasterCommands extends DrushCommands {
    *   Entity query factory.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   Entity type manager.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   Module Extension List Manager.
    */
   public function __construct(StateInterface $state,
                               ConfigFactoryInterface $configFactory,
@@ -104,7 +117,8 @@ class AlshayaMasterCommands extends DrushCommands {
                               CachedStorage $configStorage,
                               LanguageManagerInterface $languageManager,
                               QueryFactory $queryFactory,
-                              EntityTypeManagerInterface $entityTypeManager) {
+                              EntityTypeManagerInterface $entityTypeManager,
+                              ModuleExtensionList $module_extension_list) {
     $this->state = $state;
     $this->configFactory = $configFactory;
     $this->moduleInstaller = $moduleInstaller;
@@ -113,6 +127,7 @@ class AlshayaMasterCommands extends DrushCommands {
     $this->languageManager = $languageManager;
     $this->queryFactory = $queryFactory;
     $this->entityTypeManager = $entityTypeManager;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**
@@ -129,7 +144,7 @@ class AlshayaMasterCommands extends DrushCommands {
    */
   public function postDrupalinstall($options = ['brand_module' => self::REQ, 'country_code' => self::REQ]) {
     $post_install_status = $this->state->get('alshaya_master_post_drupal_install', 'not done');
-    $modules = $this->state->get('system.module.files', []);
+    $modules = system_rebuild_module_data();
 
     // Determine which country module to install.
     $country_code = $options['country_code'];
@@ -273,6 +288,28 @@ class AlshayaMasterCommands extends DrushCommands {
     }
     else {
       $this->output()->writeln(dt('No matching users found to be deleted.'));
+    }
+  }
+
+  /**
+   * Alter the uri to use https.
+   *
+   * @hook pre-init *
+   */
+  public function alter(InputInterface $input, AnnotationData $annotationData) {
+    // We could also use DI once this is released
+    // https://github.com/drush-ops/drush/commit/fc6205aeb93099e91ca5f395cea958c3f0290b3e#diff-45719e337c3fa71a41f373a69e9a0c92.
+    $self = Drush::aliasManager()->getSelf();
+    $uri = $self->get('uri');
+    $url = parse_url($uri);
+
+    // If the uri does not have a scheme add https.
+    if (!isset($url['scheme'])) {
+      $self->set('uri', "https://$uri");
+    }
+    elseif ($url['scheme'] == 'http') {
+      $uri = substr($uri, 4);
+      $self->set('uri', "https$uri");
     }
   }
 

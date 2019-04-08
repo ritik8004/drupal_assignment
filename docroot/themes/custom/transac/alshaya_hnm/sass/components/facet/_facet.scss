@@ -2,7 +2,6 @@
   a {
     font-family: $hnm-regular;
     line-height: 1.83;
-    color: $plp_facet_filter;
     font-weight: normal;
   }
 
@@ -10,14 +9,9 @@
   ul[data-drupal-facet-id=promotion_category_facet],
   ul[data-drupal-facet-id=plp_category_facet] {
     a {
-      font-weight: normal;
-      line-height: 2;
       margin: 0.25rem;
-      display: inline-block;
       text-transform: capitalize;
-      font-size: 0.875rem;
       color: $plp_facet_filter;
-      position: relative;
     }
   }
 
@@ -57,7 +51,6 @@
       text-transform: capitalize;
       line-height: 1.57;
       vertical-align: middle;
-      margin-top: 0.125rem;
       display: inline-block;
     }
 
@@ -131,8 +124,6 @@ ul[data-drupal-facet-id=promotion_category_facet] {
         > label {
           @include icon(check-box-empty);
 
-          color: $primary_checkbox_empty;
-
           .facet-item__value {
             margin-#{$left}: 0.5rem;
           }
@@ -160,7 +151,7 @@ ul[data-drupal-facet-id=promotion_category_facet] {
         font-size: 1.5rem;
 
         @include breakpoint($tablet) {
-          font-size: 1rem;
+          font-size: 1.125rem;
         }
       }
 

@@ -169,7 +169,7 @@ class ProductSyncResource extends ResourceBase {
       $plugin_definition,
       $container->get('entity_type.manager'),
       $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('acq_commerce'),
+      $container->get('logger.factory')->get(self::class),
       $container->get('config.factory'),
       $container->get('entity.query'),
       $container->get('acq_sku.category_repo'),
@@ -415,20 +415,6 @@ class ProductSyncResource extends ResourceBase {
           'format' => 'rich_text',
         ]);
 
-        // Set default value of stock to 0.
-        $stock = 0;
-
-        if (isset($product['extension']['stock_item'],
-            $product['extension']['stock_item']['is_in_stock'],
-            $product['extension']['stock_item']['qty'])
-          && $product['extension']['stock_item']['is_in_stock']) {
-
-          // Store stock value in sku.
-          $stock = $product['extension']['stock_item']['qty'];
-        }
-
-        $sku->get('stock')->setValue($stock);
-
         // Update product media to set proper position.
         $sku->media = $this->getProcessedMedia($product, $sku->media->value);
 
@@ -543,6 +529,11 @@ class ProductSyncResource extends ResourceBase {
             // Delete if node available.
             if ($node = $plugin->getDisplayNode($sku, FALSE, FALSE)) {
               $node->delete();
+              $this->logger->info('Node @nid deleted for SKU @sku for @langcode.', [
+                '@nid' => $node->id(),
+                '@sku' => $sku->getSku(),
+                '@langcode' => $langcode,
+              ]);
             }
           }
           catch (\Exception $e) {
@@ -771,14 +762,15 @@ class ProductSyncResource extends ResourceBase {
       switch ($field['type']) {
         case 'attribute':
           $value = $field['cardinality'] != 1 ? explode(',', $value) : [$value];
-          foreach ($value as $index => $val) {
+          $attribute_values = [];
+
+          foreach ($value as $val) {
             if ($term = $this->productOptionsManager->loadProductOptionByOptionId($source, $val, $sku->language()->getId())) {
-              $sku->{$field_key}->set($index, $term->getName());
-            }
-            else {
-              $sku->{$field_key}->set($index, $val);
+              $attribute_values[] = $term->getName();
             }
           }
+
+          $sku->{$field_key}->setValue($attribute_values);
           break;
 
         case 'string':

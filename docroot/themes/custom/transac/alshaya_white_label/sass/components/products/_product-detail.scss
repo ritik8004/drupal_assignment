@@ -33,12 +33,6 @@
       }
     }
   }
-
-  .c-footer-primary {
-    @include breakpoint($only-mobile) {
-      margin-top: 1.5rem;
-    }
-  }
 }
 
 .acq-content-product {
@@ -133,6 +127,11 @@
 // Title wrapper
 .content {
   &__title_wrapper {
+    @include breakpoint($only-mobile) {
+      border-bottom: 1px solid $pdp_product_itemcode_border;
+      margin-bottom: 0.75rem;
+    }
+
     .brand-logo-wrapper {
       float: #{$right};
       width: 25%;
@@ -163,14 +162,9 @@
     }
 
     .content--item-code {
-      font-size: 0.6875rem;
+      font-size: 0.625rem;
       color: $pdp_product_itemcode;
       margin-bottom: 0.75rem;
-
-      @include breakpoint($only-mobile) {
-        border-bottom: 1px solid $pdp_product_itemcode_border;
-        padding-bottom: 0.75rem;
-      }
     }
 
     .has--special--price,
@@ -221,6 +215,37 @@
       border-radius: 0;
       padding: 0.3125rem 0.625rem;
       appearance: none;
+    }
+  }
+
+  .form-type-configurable-select-group {
+    label {
+      @include u-visibility(none);
+
+      @include breakpoint($only-mobile) {
+        @include u-visibility(block);
+
+        position: absolute;
+        top: -0.1875rem;
+      }
+    }
+
+    .ajax-progress-throbber {
+      @include u-visibility(none);
+    }
+
+    .group-wrapper {
+      .group {
+        @include breakpoint($only-mobile) {
+          @include select-wrapper(100%);
+
+          select.form-select {
+            @include select-style(100%);
+
+            width: 100%;
+          }
+        }
+      }
     }
   }
 
@@ -300,6 +325,18 @@
 
         min-width: 8.75rem;
         width: 100%;
+      }
+    }
+  }
+
+  .form-type-configurable-select-group {
+    .group-wrapper {
+      .group {
+        display: none;
+
+        &.active {
+          display: block;
+        }
       }
     }
   }
@@ -489,6 +526,7 @@
       &__content {
         overflow: auto;
         height: 30.125rem;
+        padding-bottom: 2.5rem;
       }
     }
   }
@@ -861,20 +899,12 @@
 
     input[type="text"] {
       float: $left;
-      width: 63%;
+      width: calc(100% - 6.563rem);
       height: 2.188rem;
       padding: 0.3125rem;
       border: solid 1px $primary_border;
       font-size: 0.75rem;
       color: $pdp_cc_storefinder_input;
-
-      @include breakpoint($desktop) {
-        width: 185px;
-      }
-
-      @include breakpoint($only-tablet) {
-        width: 54%;
-      }
 
       &::placeholder {
         color: $pdp_cc_storefinder_input;
@@ -957,7 +987,7 @@
     @include clearfix;
 
     .change-store-location {
-      width: 10rem;
+      width: 11.5625rem;
       height: 2.1875rem;
       font-size: 0.75rem;
       border: 1px solid $pdp_cc_changelocation;
@@ -1117,12 +1147,7 @@
     }
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
+      @include throbberLoader();
     }
 
     @include breakpoint($only-mobile) {
@@ -1157,12 +1182,7 @@
     }
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
-      background-size: 1.5rem;
-      padding-left: 0.625rem;
-      padding-right: 0.625rem;
+      @include throbberLoader();
     }
   }
 }
@@ -1175,7 +1195,7 @@
       display: block;
       position: absolute;
       top: 0;
-      #{$right}: -100%;
+      #{$right}: -99999rem;
       transition: #{$right} 1s ease;
       height: 33.75rem;
       border: 1px solid $pdp_all_stores_modal_border;
@@ -1382,12 +1402,7 @@
         }
 
         .throbber {
-          background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-          background-position: $right center !important;
-          background-repeat: no-repeat !important;
-          background-size: 1.5rem;
-          padding-left: 0.625rem;
-          padding-right: 0.625rem;
+          @include throbberLoader();
         }
       }
     }
@@ -1596,6 +1611,7 @@
         padding: 0.75rem;
         font-size: 0.875rem;
         color: $pdp_size_option_text;
+        line-height: 1;
 
         &.picked,
         &:hover {
@@ -2003,6 +2019,46 @@ html[lang=ar] {
 
     ul {
       font-size: 0.75rem;
+    }
+  }
+}
+
+.nodetype--acq_product {
+  .select2-container--open {
+    .select2-dropdown {
+      z-index: 1;
+    }
+  }
+
+  &.pdp-modal-overlay {
+    .select2-container--open {
+      .select2-dropdown {
+        z-index: 1001;
+      }
+    }
+  }
+}
+
+.nodetype--acq_product,
+.acq-content-product-modal {
+  .content__title_wrapper {
+    .vat-text,
+    .content--item-code {
+      display: inline-block;
+      margin-top: 0;
+    }
+
+    .vat-text {
+      font-size: 0.625rem;
+      margin-#{$right}: 0.375rem;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .mobilegallery {
+    #product-image-gallery-mobile {
+      min-height: 18rem;
     }
   }
 }

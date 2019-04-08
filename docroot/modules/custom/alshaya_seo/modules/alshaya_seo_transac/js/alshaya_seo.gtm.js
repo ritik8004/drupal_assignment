@@ -41,6 +41,7 @@
       var promotionImpressionSubnavFired = false;
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
+      var deliveryType = 'Home Delivery';
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
@@ -77,7 +78,6 @@
             product.list = currentListName;
             currentListName = null;
           }
-
           var data = {
             event: 'productDetailView',
             ecommerce: {
@@ -148,40 +148,37 @@
         $('.c-header #edit-keywords').once('internalsearch').each(function () {
           var keyword = Drupal.getQueryVariable('keywords');
           var noOfResult = parseInt($('.view-header', context).text().replace(Drupal.t('items'), '').trim());
+          noOfResult = isNaN(noOfResult) ? 0 : noOfResult;
 
-          if ((noOfResult === 0) || (isNaN(noOfResult))) {
-            dataLayer.push({
-              event: 'internalSearch',
-              searchKeyword: keyword,
-              noOfResult: 0
-            });
-          }
+          var action = noOfResult === 0 ? '404 Results' : 'Successful Search';
+          var interaction = noOfResult === 0 ? noOfResult : 1;
+
+          dataLayer.push({
+            event: 'eventTracker',
+            eventCategory: 'Internal Site Search',
+            eventAction: action,
+            eventLabel: keyword,
+            eventValue: noOfResult,
+            nonInteraction: interaction,
+          });
         });
       }
 
       if ((isRegistrationSuccessPage) && (context === document)) {
-        Drupal.alshaya_seo_gtm_push_signin_type('registration success');
+        Drupal.alshaya_seo_gtm_push_signin_type('Registration Success');
       }
 
       // Cookie based events, only to be processed once on page load.
       $(document).once('gtm-onetime').each(function () {
         // Fire sign-in success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_in') !== undefined) {
-          dataLayer.push({
-            event: 'User Login & Register',
-            signinType: 'sign-in success'
-          });
-
+          Drupal.alshaya_seo_gtm_push_signin_type('Login Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_in', {path: '/'});
         }
 
         // Fire logout success event on successful sign-in.
         if ($.cookie('Drupal.visitor.alshaya_gtm_user_logged_out') !== undefined) {
-          dataLayer.push({
-            event: 'User Login & Register',
-            signinType: 'logout success'
-          });
-
+          Drupal.alshaya_seo_gtm_push_signin_type('Logout Success');
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_logged_out', {path: '/'});
         }
 
@@ -276,8 +273,24 @@
         }
       }
 
-      $('[data-drupal-selector="edit-actions-ccnext"]').mousedown(function () {
+      // CheckoutOption event for delivery page.
+      $('[data-drupal-selector="edit-actions-get-shipping-methods"]').once('js-event').on('mousedown', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option(deliveryType, 2);
+      });
+
+      $('div.address--deliver-to-this-address.address--controls a').once('js-event').on('click', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
+      });
+
+      $('button.delivery-home-next, [data-drupal-selector="edit-member-delivery-home-address-form-save"]').once('js-event').on('mousedown', function () {
+        if (gtmPageType == 'checkout delivery page') {
+          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery - subdelivery ', 2);
+        }
+      });
+
+      $('[data-drupal-selector="edit-actions-ccnext"]').once('js-event').on('mousedown', function () {
         ccPaymentsClicked = true;
+        Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
@@ -421,6 +434,13 @@
           };
 
           if (event === 'removeFromCart') {
+            // Delete list from cookie.
+            var listValues = {};
+            if ($.cookie('product-list') !== undefined) {
+              listValues = JSON.parse($.cookie('product-list'));
+            }
+            delete listValues[product.id];
+            $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
             data.ecommerce.remove = {
               products: [
                 product
@@ -451,7 +471,7 @@
           var product = Drupal.alshaya_seo_gtm_get_product_values(removeItem);
 
           // Set product quantity to the number of items selected for quantity.
-          product.quantity = $(this).closest('tr').find('td.quantity select').val();
+          product.quantity = parseInt($(this).closest('tr').find('td.quantity select').val());
 
           // Set selected size as dimension6.
           if (!$.inArray('dimension6', settings.gtm.disabled_vars) && removeItem.attr('gtm-size')) {
@@ -480,17 +500,24 @@
       });
 
       /**
+       * Fire checkoutOption on cart page.
+       */
+      if (gtmPageType === 'cart page' && drupalSettings.user.uid !== 0) {
+        Drupal.alshaya_seo_gtm_push_checkout_option('Logged In', 1);
+      }
+
+      /**
        * Tracking New customers.
        */
       cartCheckoutLoginSelector.find('a[gtm-type="checkout-as-guest"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('checkout as guest');
+        Drupal.alshaya_seo_gtm_push_checkout_option('Guest Login', 1);
       });
 
       /**
        * Tracking Returning customers.
        */
-      cartCheckoutLoginSelector.find('input[gtm-type="checkout-signin"]').once('js-event').on('click', function () {
-        Drupal.alshaya_seo_gtm_push_customer_type('registered customer');
+        cartCheckoutLoginSelector.find('button[gtm-type="checkout-signin"]').once('js-event').on('mousedown', function () {
+        Drupal.alshaya_seo_gtm_push_checkout_option('New Login', 1);
       });
 
       /**
@@ -500,25 +527,9 @@
         (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          Drupal.alshaya_seo_gtm_push_checkout_option('Home Delivery', 2);
+          deliveryType = 'Home Delivery';
         }
       }
-
-      subDeliveryOptionSelector.find('.form-type-radio').each(function () {
-        // Push default selected sub-delivery option to GTM.
-        if ($(this).find('input[checked="checked"]').length > 0) {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        }
-
-        // Attach change event listener to shipping method radio buttons.
-        $(this).change(function () {
-          var selectedMethodLabel = $(this).find('.shipping-method-title').text();
-          selectedMethodLabel = Drupal.alshaya_seo_translate_shipping_method(selectedMethodLabel);
-          Drupal.alshaya_seo_gtm_push_checkout_option(selectedMethodLabel, 3);
-        });
-      });
 
       /**
        * GTM virtual page tracking for click & collect journey.
@@ -534,9 +545,6 @@
             body.addClass('virtualpageview-fired');
           }
 
-          if (($('button.cc-action', context).length > 0) && (context === document)) {
-            Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
-          }
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
@@ -559,15 +567,18 @@
           if (drupalSettings.path.currentLanguage === 'ar') {
             preselectedMethodLabel = drupalSettings.alshaya_payment_options_translations[preselectedMethodLabel];
           }
-          Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 4);
+          $('[data-drupal-selector="edit-actions-next"]').once('js-event').on('mousedown', function () {
+            Drupal.alshaya_seo_gtm_push_checkout_option(preselectedMethodLabel, 3);
+          });
         }
       }
 
       // Push purchaseSuccess for Order confirmation page.
       if (orderConfirmationPage.length !== 0 && settings.gtmOrderConfirmation) {
         dataLayer.push({
-          event: 'purchaseSuccess',
-          ecommerce: settings.gtmOrderConfirmation
+          event: settings.gtmOrderConfirmation.event,
+          virtualPageUrl: settings.gtmOrderConfirmation.virtualPageURL,
+          virtualPageTitle: settings.gtmOrderConfirmation.virtualPageTitle
         });
       }
 
@@ -776,7 +787,6 @@
       price: parseFloat(product.attr('gtm-price')),
       category: product.attr('gtm-category'),
       variant: product.attr('gtm-product-sku'),
-      position: 1,
       dimension2: product.attr('gtm-sku-type'),
       dimension3: product.attr('gtm-dimension3'),
       dimension4: mediaCount
@@ -792,6 +802,14 @@
 
     if (product.attr('gtm-dimension5')) {
       productData.dimension5 = product.attr('gtm-dimension5');
+    }
+
+    // If list variable is set in cookie, retrieve it.
+    if ($.cookie('product-list') !== undefined) {
+      var listValues = JSON.parse($.cookie('product-list'));
+      if (listValues[productData.id]) {
+        productData.list = listValues[productData.id]
+      }
     }
 
     return productData;
@@ -887,7 +905,7 @@
         creative = Drupal.url($(highlight).find('.field-content img').attr('src'));
         position = 1;
       }
-      else if (gtmPageType === 'home page') {
+      else if (gtmPageType === 'home page' || gtmPageType === 'department page') {
         var imgSrc = $(highlight).find('picture img').attr('src');
         if (typeof imgSrc === 'undefined') {
           imgSrc = $(highlight).find('img').attr('src');
@@ -925,6 +943,7 @@
           (fileName.indexOf('oth') === 0)
         )) {
           var promotion = {
+            creative: creative.replace(/\/en\/|\/ar\//, ''),
             id: fileName,
             name: gtmPageType,
             position: 'slot' + position
@@ -991,6 +1010,14 @@
     }
 
     var product = Drupal.alshaya_seo_gtm_get_product_values(element);
+
+    // On productClick, add list variable to cookie.
+    var listValues = {};
+    if ($.cookie('product-list') !== undefined) {
+      listValues = JSON.parse($.cookie('product-list'));
+    }
+    listValues[product.id] = listName;
+    $.cookie('product-list', JSON.stringify(listValues), {path: '/'});
     product.variant = '';
     if (position) {
       product.position = position;
@@ -1022,12 +1049,18 @@
   };
 
   /**
-   * Helper funciton to push sign-in type event.
+   * Helper funciton to push Login & Register events.
    *
-   * @param signinType
+   * @param eventAction
    */
-  Drupal.alshaya_seo_gtm_push_signin_type = function (signinType) {
-    dataLayer.push({event: 'User Login & Register', signinType: signinType});
+  Drupal.alshaya_seo_gtm_push_signin_type = function (eventAction) {
+    dataLayer.push({
+      event: 'eventTracker',
+      eventCategory: 'Login & Register',
+      eventAction: eventAction,
+      eventValue: 0,
+      nonInteraction: 0
+    });
   };
 
   /**

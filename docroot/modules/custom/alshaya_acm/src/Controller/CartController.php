@@ -2,11 +2,13 @@
 
 namespace Drupal\alshaya_acm\Controller;
 
+use Drupal\alshaya_acm\CartHelper;
 use Drupal\Core\Access\CsrfTokenGenerator;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\acq_cart\CartInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\acq_cart\CartStorageInterface;
@@ -39,17 +41,29 @@ class CartController extends ControllerBase {
   protected $csrfTokenGenerator;
 
   /**
+   * Cart Helper.
+   *
+   * @var \Drupal\alshaya_acm\CartHelper
+   */
+  private $cartHelper;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   The cart storage.
    * @param \Drupal\Core\Access\CsrfTokenGenerator $csrf_token
    *   CSRF Token generator object.
+   * @param \Drupal\alshaya_acm\CartHelper $cart_helper
+   *   Cart Helper.
    */
-  public function __construct(CartStorageInterface $cart_storage, CsrfTokenGenerator $csrf_token) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              CsrfTokenGenerator $csrf_token,
+                              CartHelper $cart_helper) {
     $this->cartStorage = $cart_storage;
     $this->cart = $this->cartStorage->getCart();
     $this->csrfTokenGenerator = $csrf_token;
+    $this->cartHelper = $cart_helper;
   }
 
   /**
@@ -58,7 +72,8 @@ class CartController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('acq_cart.cart_storage'),
-      $container->get('csrf_token')
+      $container->get('csrf_token'),
+      $container->get('alshaya_acm.cart_helper')
     );
   }
 
@@ -66,7 +81,7 @@ class CartController extends ControllerBase {
    * Handler for cart/remove/{sku}.
    */
   public function cartRemoveSku($sku, $token, $js, $coupon) {
-    if (!empty($sku)) {
+    if (!empty($sku) && $this->cart instanceof CartInterface) {
       $token_value = $this->cart->id() . '/' . $sku;
       if (!$this->csrfTokenGenerator->validate($token, $token_value)) {
         throw new AccessDeniedHttpException();
@@ -82,26 +97,22 @@ class CartController extends ControllerBase {
           // Remove coupon.
           $this->cart->setCoupon('');
         }
-      }
-
-      // Remove the item from cart.
-      $this->cart->removeItemFromCart($sku);
-
-      if ($coupon === 'remove') {
-        $this->cart->setCoupon('');
+        elseif ($coupon === 'remove') {
+          $this->cart->setCoupon('');
+        }
       }
 
       try {
-        // Update cart, after the item has been removed.
-        $this->cartStorage->updateCart();
+        // Remove the item from cart.
+        $this->cartHelper->removeItemFromCart($sku);
+
+        // Removal was successful in first/second try. We show success message.
+        $this->messenger()->addStatus($this->t('The product has been removed from your cart.'));
       }
       catch (\Exception $e) {
-        // Do nothing, product may have become out of stock.
-        // We will let restoreCart() handle this properly (already called in
-        // updateCart().
+        // Do nothing, we have stored logs for the failure and we will display
+        // nothing (no-change) to the user.
       }
-
-      drupal_set_message($this->t('The product has been removed from your cart.'), 'status');
 
       if ($js === 'ajax') {
         $response = new AjaxResponse();

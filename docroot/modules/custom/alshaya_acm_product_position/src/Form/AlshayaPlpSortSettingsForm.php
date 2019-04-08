@@ -75,36 +75,65 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       ],
     ];
 
-    // Sort options from config.
-    $sort_options = $this->config('alshaya_acm_product_position.settings')->get('sort_options');
+    // Sort options from config by weight.
+    self::arrangeOptionsByWeight(
+      $form['sort_options'],
+      $this->config('alshaya_acm_product_position.settings')->get('sort_options')
+    );
 
-    // Sort options.
-    $options = [
-      'nid' => $this->t('Position'),
-      'created' => $this->t('New IN'),
-      'name_1' => $this->t('Name'),
-      'final_price' => $this->t('Final Price'),
+    return $form;
+  }
+
+  /**
+   * Get All available plp sort options.
+   *
+   * @return array
+   *   Return array of default values.
+   */
+  public static function getPlpSortOptions(): array {
+    return [
+      'nid' => t('Position'),
+      'created' => t('New IN'),
+      'name_1' => t('Name'),
+      'final_price' => t('Final Price'),
     ];
+  }
+
+  /**
+   * Arrange given element by given order.
+   *
+   * @param array $element
+   *   The array of elements.
+   * @param array $default_order
+   *   The default sort order by which it needs to be arranged.
+   */
+  public static function arrangeOptionsByWeight(array &$element, array $default_order) {
+    // Remove empty options.
+    $default_order = array_filter($default_order);
+    // Sort options.
+    $options = self::getPlpSortOptions();
+    // Sort the form options based on the config.
+    $options = array_replace(array_flip($default_order), $options);
 
     // Maintaining the weight.
     $weight = 0;
     foreach ($options as $id => $title) {
-      $option = isset($sort_options[$id]) ? $sort_options[$id] : 0;
-      $form['sort_options'][$id]['#attributes']['class'][] = 'draggable';
-      $form['sort_options'][$id]['#weight'] = $weight;
+      $option = isset($default_order[$id]) ? $default_order[$id] : 0;
+      $element[$id]['#attributes']['class'][] = 'draggable';
+      $element[$id]['#weight'] = $weight;
 
-      $form['sort_options'][$id]['enable'] = [
+      $element[$id]['enable'] = [
         '#type' => 'checkbox',
         '#default_value' => (bool) $option,
       ];
 
-      $form['sort_options'][$id]['label'] = [
+      $element[$id]['label'] = [
         '#plain_text' => $title,
       ];
 
-      $form['sort_options'][$id]['weight'] = [
+      $element[$id]['weight'] = [
         '#type' => 'weight',
-        '#title' => $this->t('Weight for @title', ['@title' => $title]),
+        '#title' => t('Weight for @title', ['@title' => $title]),
         '#title_display' => 'invisible',
         '#default_value' => $weight,
         '#attributes' => ['class' => ['plp_sort_options-order-weight']],
@@ -113,8 +142,6 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
       // Increase the weight.
       $weight++;
     }
-
-    return $form;
   }
 
   /**
@@ -128,7 +155,7 @@ class AlshayaPlpSortSettingsForm extends ConfigFormBase {
    * @return int
    *   Sort status.
    */
-  protected function weightArraySort($a, $b) {
+  public static function weightArraySort($a, $b) {
     if (isset($a['weight']) && isset($b['weight'])) {
       return $a['weight'] < $b['weight'] ? -1 : 1;
     }

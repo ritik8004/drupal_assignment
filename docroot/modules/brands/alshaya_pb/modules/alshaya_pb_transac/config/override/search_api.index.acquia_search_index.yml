@@ -9,6 +9,16 @@ field_settings:
         - field.storage.node.field_skus
       module:
         - acq_sku
+  attr_feature_lhn:
+    label: 'SKU Feature'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:attr_feature_lhn'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+      module:
+        - acq_sku
   attr_finish_lhn:
     label: 'Finish'
     datasource_id: entity:node

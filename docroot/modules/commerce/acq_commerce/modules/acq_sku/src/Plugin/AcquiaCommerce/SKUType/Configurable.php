@@ -3,6 +3,7 @@
 namespace Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
+use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -23,27 +24,30 @@ use Drupal\node\Entity\Node;
 class Configurable extends SKUPluginBase {
 
   /**
-   * {@inheritdoc}
+   * Get sorted configurable options.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Sorted configurable options.
    */
-  public function addToCartForm(array $form, FormStateInterface $form_state, SKU $sku = NULL) {
-    if (empty($sku)) {
-      return $form;
+  public static function getSortedConfigurableAttributes(SKUInterface $sku): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $langcode = $sku->language()->getId();
+    $sku_code = $sku->getSku();
+
+    // Do not process the same thing again and again.
+    if (isset($static[$langcode][$sku_code])) {
+      return $static[$langcode][$sku_code];
     }
 
-    $form_state->set('tree', $this->deriveProductTree($sku));
+    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
 
-    $form['ajax'] = [
-      '#type' => 'container',
-      '#attributes' => [
-        'id' => ['configurable_ajax'],
-      ],
-    ];
-
-    $form['ajax']['configurables'] = [
-      '#tree' => TRUE,
-    ];
-
-    $configurables = unserialize($sku->field_configurable_attributes->getString());
+    if (empty($configurables) || !is_array($configurables)) {
+      return [];
+    }
 
     /** @var \Drupal\acq_sku\CartFormHelper $helper */
     $helper = \Drupal::service('acq_sku.cart_form_helper');
@@ -61,6 +65,37 @@ class Configurable extends SKUPluginBase {
       $b = $configurable_weights[$b['code']] ?? 50;
       return $a - $b;
     });
+
+    $static[$langcode][$sku_code] = $configurables;
+
+    return $configurables;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addToCartForm(array $form, FormStateInterface $form_state, SKU $sku = NULL) {
+    if (empty($sku)) {
+      return $form;
+    }
+
+    $form_state->set('tree_sku', $sku->getSku());
+
+    $form['ajax'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => ['configurable_ajax'],
+      ],
+    ];
+
+    $form['ajax']['configurables'] = [
+      '#tree' => TRUE,
+    ];
+
+    $configurables = self::getSortedConfigurableAttributes($sku);
+
+    /** @var \Drupal\acq_sku\CartFormHelper $helper */
+    $helper = \Drupal::service('acq_sku.cart_form_helper');
 
     foreach ($configurables as $configurable) {
       $attribute_code = $configurable['code'];
@@ -136,18 +171,15 @@ class Configurable extends SKUPluginBase {
     $dynamic_parts = &$form['ajax'];
 
     $configurables = $form_state->getValue('configurables');
-    $tree = $form_state->get('tree');
-    $tree_pointer = &$tree['options'];
+    $sku = SKU::loadFromSku($form_state->get('tree_sku'));
+    $tree = self::deriveProductTree($sku);
 
-    foreach ($configurables as $key => $value) {
-      if (empty($value)) {
-        continue;
-      }
+    $configurable_codes = array_keys($tree['configurables']);
+    $combination = self::getSelectedCombination($configurables, $configurable_codes);
 
-      // Move the tree pointer if the selection is valid.
-      if (isset($tree_pointer["$key:$value"])) {
-        $tree_pointer = &$tree_pointer["$key:$value"];
-      }
+    $tree_pointer = NULL;
+    if (!empty($tree['combinations']['by_attribute'][$combination])) {
+      $tree_pointer = SKU::loadFromSku($tree['combinations']['by_attribute'][$combination]);
     }
 
     if ($tree_pointer instanceof SKU) {
@@ -161,6 +193,8 @@ class Configurable extends SKUPluginBase {
       $dynamic_parts['add_to_cart'] = [
         'entity_render' => ['#markup' => render($view)],
       ];
+
+      $form_state->set('variant_sku', $tree_pointer->getSku());
     }
     else {
       $available_config = $tree_pointer['#available_config'];
@@ -203,21 +237,20 @@ class Configurable extends SKUPluginBase {
   public function addToCartSubmit(array &$form, FormStateInterface $form_state) {
     $quantity = $form_state->getValue('quantity');
     $configurables = $form_state->getValue('configurables');
-    $tree = $form_state->get('tree');
-    $tree_pointer = &$tree['options'];
 
-    foreach ($configurables as $key => $value) {
-      if (empty($value)) {
-        continue;
-      }
+    $sku = SKU::loadFromSku($form_state->get('tree_sku'));
+    $tree = self::deriveProductTree($sku);
 
-      // Move the tree pointer if the selection is valid.
-      if (isset($tree_pointer["$key:$value"])) {
-        $tree_pointer = &$tree_pointer["$key:$value"];
-      }
+    $configurable_codes = array_keys($tree['configurables']);
+    $combination = self::getSelectedCombination($configurables, $configurable_codes);
+
+    $tree_pointer = NULL;
+    if (!empty($tree['combinations']['by_attribute'][$combination])) {
+      $tree_pointer = SKU::loadFromSku($tree['combinations']['by_attribute'][$combination]);
     }
 
     if ($tree_pointer instanceof SKU) {
+      /** @var \Drupal\acq_cart\Cart $cart */
       $cart = \Drupal::service('acq_cart.cart_storage')->getCart();
 
       // Cart here can be empty only if APIs aren't working.
@@ -264,14 +297,22 @@ class Configurable extends SKUPluginBase {
           ]
       ));
 
-      $cart->addRawItemToCart([
-        'name' => $label,
-        'sku' => $tree['parent']->getSKU(),
-        'qty' => $quantity,
-        'options' => [
-          'configurable_item_options' => $options,
-        ],
-      ]);
+      // Check if item already in cart.
+      // @TODO: This needs to be fixed further to handle multiple parent
+      // products for a child SKU. To be done as part of CORE-7003.
+      if ($cart->hasItem($tree_pointer->getSku())) {
+        $cart->addItemToCart($tree_pointer->getSku(), $quantity);
+      }
+      else {
+        $cart->addRawItemToCart([
+          'name' => $label,
+          'sku' => $tree['parent']->getSKU(),
+          'qty' => $quantity,
+          'options' => [
+            'configurable_item_options' => $options,
+          ],
+        ]);
+      }
 
       // Add child SKU to form state to allow other modules to use it.
       $form_state->setTemporaryValue('child_sku', $tree_pointer->getSKU());
@@ -280,8 +321,7 @@ class Configurable extends SKUPluginBase {
         \Drupal::service('acq_cart.cart_storage')->updateCart();
       }
       catch (\Exception $e) {
-        // Clear stock cache.
-        $tree_pointer->clearStockCache();
+        $this->refreshStock($tree_pointer);
 
         // Dispatch event so action can be taken.
         $dispatcher = \Drupal::service('event_dispatcher');
@@ -356,7 +396,7 @@ class Configurable extends SKUPluginBase {
    * @return array
    *   Configurables tree.
    */
-  public function deriveProductTree(SKU $sku) {
+  public static function deriveProductTree(SKU $sku) {
     static $cache = [];
 
     if (isset($cache[$sku->language()->getId()], $cache[$sku->language()->getId()][$sku->id()])) {
@@ -367,13 +407,13 @@ class Configurable extends SKUPluginBase {
       'parent' => $sku,
       'products' => self::getChildren($sku),
       'combinations' => [],
+      'configurables' => [],
     ];
 
-    $configurables = unserialize(
-      $sku->get('field_configurable_attributes')->getString()
-    );
+    $combinations =& $tree['combinations'];
 
-    $tree['configurables'] = [];
+    $configurables = self::getSortedConfigurableAttributes($sku);
+
     foreach ($configurables ?? [] as $configurable) {
       $tree['configurables'][$configurable['code']] = $configurable;
     }
@@ -390,106 +430,84 @@ class Configurable extends SKUPluginBase {
           continue;
         }
 
-        $tree['combinations']['by_sku'][$sku_code][$code] = $value;
+        $combinations['by_sku'][$sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $sku_code;
       }
     }
 
     /** @var \Drupal\acq_sku\CartFormHelper $helper */
     $helper = \Drupal::service('acq_sku.cart_form_helper');
 
-    $configurable_weights = $helper->getConfigurableAttributeWeights(
-      $sku->get('attribute_set')->getString()
-    );
+    // Sort the values in attribute_sku so we can use it later.
+    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
+      if ($helper->isAttributeSortable($code)) {
+        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
+      }
+      else {
+        // Sort from field_configurable_attributes.
+        $configurable_attribute = [];
+        foreach ($configurables as $configurable) {
+          if ($configurable['code'] === $code) {
+            $configurable_attribute = $configurable['values'];
+            break;
+          }
+        }
 
-    // Sort configurables based on the config.
-    uasort($tree['configurables'], function ($a, $b) use ($configurable_weights) {
-      // We may keep getting new configurable options not defined in config.
-      // Use default values for them and keep their sequence as is.
-      // Still move the ones defined in our config as per weight in config.
-      $a = $configurable_weights[$a['code']] ?? -50;
-      $b = $configurable_weights[$b['code']] ?? 50;
-      return $a - $b;
-    });
+        if ($configurable_attribute) {
+          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
+          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
+            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
+          });
+        }
+      }
+    }
 
-    $tree['options'] = Configurable::recursiveConfigurableTree(
-      $tree,
-      $tree['configurables']
-    );
+    // Prepare combinations array grouped by attributes to check later which
+    // combination is possible using isset().
+    $combinations['by_attribute'] = [];
+
+    foreach ($combinations['by_sku'] ?? [] as $sku_string => $combination) {
+      $combination_string = self::getSelectedCombination($combination);
+      $combinations['by_attribute'][$combination_string] = $sku_string;
+    }
 
     $cache[$sku->language()->getId()][$sku->id()] = $tree;
 
-    return $tree;
+    return $cache[$sku->language()->getId()][$sku->id()];
   }
 
   /**
-   * Creates subtrees based on available config.
+   * Get combination for selected configurable values.
    *
-   * @param array $tree
-   *   Tree of products.
-   * @param array $available_config
-   *   Available configs.
-   * @param array $current_config
-   *   Config of current product.
+   * @param array $configurables
+   *   Configurable values to build the combination string from.
+   * @param array $configurable_codes
+   *   Codes to use for sorting the values array.
    *
-   * @return array
-   *   Subtree.
+   * @return string
+   *   Combination string.
    */
-  public static function recursiveConfigurableTree(array &$tree, array $available_config, array $current_config = []) {
-    $subtree = ['#available_config' => $available_config];
-
-    foreach ($available_config as $id => $config) {
-      $subtree_available_config = $available_config;
-      unset($subtree_available_config[$id]);
-
-      foreach ($config['values'] as $option) {
-        $value = $option['value_id'];
-        $subtree_current_config = array_merge($current_config, [$id => $value]);
-
-        if (count($subtree_available_config) > 0) {
-          $subtree["$id:$value"] = Configurable::recursiveConfigurableTree(
-            $tree,
-            $subtree_available_config,
-            $subtree_current_config
-          );
-        }
-        else {
-          $subtree["$id:$value"] = Configurable::findProductInTreeWithConfig(
-            $tree,
-            $subtree_current_config
-          );
+  public static function getSelectedCombination(array $configurables, array $configurable_codes = []) {
+    if ($configurable_codes) {
+      $selected = [];
+      foreach ($configurable_codes as $code) {
+        if (isset($configurables[$code])) {
+          $selected[$code] = $configurables[$code];
         }
       }
+      $configurables = $selected;
     }
 
-    return $subtree;
-  }
+    $combination = '';
 
-  /**
-   * Finds product in tree base on config.
-   *
-   * @param array $tree
-   *   The whole configurable tree.
-   * @param array $config
-   *   Config for the product.
-   *
-   * @return \Drupal\acq_sku\Entity\SKU
-   *   Reference to SKU in existing tree.
-   */
-  public static function findProductInTreeWithConfig(array $tree, array $config) {
-    if (isset($tree['products'])) {
-      $attributes = [];
-      foreach ($config as $key => $value) {
-        $attributes[$key] = $value;
+    foreach ($configurables as $key => $value) {
+      if (empty($value)) {
+        continue;
       }
-
-      foreach ($tree['combinations']['by_sku'] ?? [] as $sku => $sku_attributes) {
-        if (count(array_intersect_assoc($sku_attributes, $attributes)) === count($sku_attributes)) {
-          return $tree['products'][$sku];
-        }
-      }
+      $combination .= $key . '|' . $value . '||';
     }
 
-    return NULL;
+    return $combination;
   }
 
   /**
@@ -574,35 +592,6 @@ class Configurable extends SKUPluginBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getProcessedStock(SKU $sku, $reset = FALSE) {
-    $stock = &drupal_static('stock_static_cache', []);
-
-    if (!$reset && isset($stock[$sku->getSku()])) {
-      return $stock[$sku->getSku()];
-    }
-
-    $quantities = [];
-
-    foreach ($sku->get('field_configured_skus') as $child_sku) {
-      try {
-        $child_sku = $child_sku->getString();
-        $child_stock = (int) $this->getStock($child_sku, $reset);
-        $quantities[$child_sku] = $child_stock;
-      }
-      catch (\Exception $e) {
-        // Child SKU might be deleted or translation not available.
-        // Log messages are already set in previous functions.
-      }
-    }
-
-    $stock[$sku->getSku()] = empty($quantities) ? 0 : max($quantities);
-
-    return $stock[$sku->getSku()];
-  }
-
-  /**
    * Helper function to sort config options based on taxonomy term weight.
    *
    * @param array $options
@@ -613,7 +602,7 @@ class Configurable extends SKUPluginBase {
    * @return array
    *   Array of options sorted based on term weight.
    */
-  public static function sortConfigOptions($options, $attribute_code) {
+  public static function sortConfigOptions(array $options, $attribute_code) {
     $sorted_options = [];
 
     $query = \Drupal::database()->select('taxonomy_term_field_data', 'ttfd');
@@ -628,7 +617,7 @@ class Configurable extends SKUPluginBase {
     $query->orderBy('weight', 'ASC');
     $tids = $query->execute()->fetchAllAssoc('tid');
 
-    foreach ($tids as $tid => $values) {
+    foreach ($tids as $values) {
       $sorted_options[$values->field_sku_option_id_value] = $options[$values->field_sku_option_id_value];
     }
 

@@ -11,6 +11,7 @@ use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder;
 
 /**
  * Class ProductCategoryTree.
@@ -105,6 +106,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   protected $termsImagesAndColors = [];
 
   /**
+   * PDP Breadcrumb service.
+   *
+   * @var \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder
+   */
+  protected $pdpBreadcrumbBuiler;
+
+  /**
    * ProductCategoryTree constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -117,18 +125,22 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Route match service.
    * @param \Drupal\Core\Database\Connection $connection
    *   Database connection.
+   * @param \Drupal\alshaya_acm_product\Breadcrumb\AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler
+   *   PDP Breadcrumb service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               LanguageManagerInterface $language_manager,
                               CacheBackendInterface $cache,
                               RouteMatchInterface $route_match,
-                              Connection $connection) {
+                              Connection $connection,
+                              AlshayaPDPBreadcrumbBuilder $pdpBreadcrumbBuiler) {
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->languageManager = $language_manager;
     $this->cache = $cache;
     $this->routeMatch = $route_match;
     $this->connection = $connection;
+    $this->pdpBreadcrumbBuiler = $pdpBreadcrumbBuiler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
   }
 
@@ -430,7 +442,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
-    $query->innerJoin('taxonomy_term_hierarchy', 'tth', 'tth.tid = tfd.tid');
+    $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
@@ -442,7 +454,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
       $query->condition('ttmo.field_mobile_only_dpt_page_link_value', 1);
     }
     $query->condition('ttcs.field_commerce_status_value', 1);
-    $query->condition('tth.parent', $parent_tid);
+    $query->condition('tth.parent_target_id', $parent_tid);
     $query->condition('tfd.langcode', $langcode);
     $query->condition('tfd.vid', $vid);
     $query->orderBy('tfd.weight', 'ASC');
@@ -618,6 +630,31 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     }
 
     return [];
+  }
+
+  /**
+   * Get the innermost term id for a product from current route.
+   *
+   * @return int|null
+   *   Return the taxonomy term ID if found else NULL.
+   */
+  public function getProductInnermostCategoryIdFromRoute() {
+    $route_name = $this->routeMatch->getRouteName();
+    $tid = NULL;
+
+    if ($route_name == 'entity.node.canonical') {
+      $node = $this->routeMatch->getParameter('node');
+      $terms = [];
+      if ($node->bundle() == 'acq_product') {
+        $terms = $node->get('field_category')->getValue();
+      }
+
+      if (count($terms) > 0) {
+        $tid = $this->pdpBreadcrumbBuiler->termTreeGroup($terms);
+      }
+    }
+
+    return $tid;
   }
 
 }

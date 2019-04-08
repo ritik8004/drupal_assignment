@@ -10,6 +10,12 @@
 
           &.back-to-basket {
             float: $left;
+            padding: 0.625rem 0;
+
+            @include breakpoint($only-mobile) {
+              width: 100%;
+              margin: 0.625rem 0;
+            }
           }
         }
       }
@@ -20,18 +26,19 @@
     .tab {
       font-family: $alshaya-thin;
 
-      @include breakpoint($tablet) {
-        &.active--tab--head {
-          border-width: 1px;
+      &.active--tab--head {
+        border-width: 1px;
+
+        @include breakpoint($tablet) {
           background-color: $delivery_tab_active_bg;
 
           h2 {
             font-family: $alshaya-bold;
           }
+        }
 
-          &::after {
-            display: none;
-          }
+        &::after {
+          display: none;
         }
       }
 
@@ -96,6 +103,27 @@
       &.tab-home-delivery {
         &:not(.active--tab--head) {
           margin-#{$left}: -1px;
+        }
+      }
+
+      &.tab-home-delivery,
+      &.tab-click-collect {
+        position: relative;
+
+        @include breakpoint($tablet) {
+          min-height: 5.4375rem;
+        }
+
+        a {
+          position: absolute;
+          top: 50%;
+          width: 100%;
+          #{$left}: 50%;
+          transform: translate(-50%, -50%);
+
+          html[lang=ar] & {
+            transform: translate(50%, -50%);
+          }
         }
       }
     }
@@ -173,6 +201,8 @@
               width: auto;
               position: absolute;
               #{$right}: 0;
+              text-transform: capitalize !important;
+              font-size: 0.75rem !important;
             }
           }
         }

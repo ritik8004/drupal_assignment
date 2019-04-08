@@ -457,18 +457,6 @@
   }
 }
 
-.c-search {
-  .facet-item {
-    input[type=checkbox] ~ label {
-      &::before {
-        @include breakpoint($tablet) {
-          top: 0.125rem;
-        }
-      }
-    }
-  }
-}
-
 .alshaya_search_hoverimage {
   position: absolute;
   top: 0;
@@ -511,12 +499,6 @@
 
   .js-pager__items.visually-hidden {
     position: static !important;
-  }
-
-  .ajax-progress-throbber {
-    .throbber {
-      background-image: url(../imgs/icons/ic-loader.svg) !important;
-    }
   }
 }
 

@@ -87,7 +87,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   protected $configFactory;
 
   /**
-   * Cache Backend object for "cache.data".
+   * Cache Backend object for "cache.addressbook".
    *
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
@@ -134,7 +134,7 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   Cache Backend object for "cache.data".
+   *   Cache Backend object for "cache.addressbook".
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.
    * @param \Drupal\alshaya_addressbook\AddressBookAreasTermsHelper $areas_terms_helper
@@ -989,6 +989,36 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
     }
 
     return $mapping;
+  }
+
+  /**
+   * Function to get field mapping between magento form and address fields.
+   *
+   * @return array
+   *   Mapping Address field <-> Magento form field.
+   */
+  public function getMagentoUnmappedFields() {
+    static $field_unmapped = NULL;
+
+    if (!is_array($field_unmapped)) {
+      $mapping = array_flip($this->getMagentoFieldMappings());
+      $form_fields = $this->getMagentoFormFields();
+
+      foreach ($form_fields as $form_item) {
+        if (empty($form_item['attribute_code'])) {
+          continue;
+        }
+
+        if (isset($mapping[$form_item['attribute_code']])) {
+          $field_code = $mapping[$form_item['attribute_code']];
+          $fields_mapped[$form_item['attribute_code']] = $field_code;
+        }
+      }
+
+      $field_unmapped = array_diff($mapping, $fields_mapped);
+    }
+
+    return $field_unmapped;
   }
 
   /**

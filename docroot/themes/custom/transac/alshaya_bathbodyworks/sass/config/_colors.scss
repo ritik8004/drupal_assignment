@@ -116,9 +116,6 @@ $gallery_zoombtn_disabled: $gallary-icon-bg;
 $oos_btn_bg: $error-red;
 $oos_pdp_text: $white;
 
-// VAT text
-$vat: $warm-grey-one;
-
 // Autocomplete
 $autocomplete_border: $warm-grey-two;
 $autocomplete_border_last: $warm-grey-two;
@@ -231,6 +228,7 @@ $checkout_tab_active_border: $peacock-blue;
 $delivery_tab_active_bg: $warm-grey-four;
 $checkout_tab_description: $black;
 $checkout_section_titles: $black;
+$checkout_tab_separator: $black;
 $secure_checkout_back_link: $peacock-blue;
 $checkout_transaction_type_color: $peacock-blue;
 $checkout_form_actions_footer: $warm-grey-four;
@@ -419,6 +417,7 @@ $checkout_cc_cnc_form_title_border: $warm-grey-one;
 $checkout_cc_list_hours_label: $black;
 $checkout_cc_list_hours_label_icon: $peacock-blue;
 $checkout_cc_list_delivery_time: $warm-grey-one;
+$checkout_cc_list_delivery_time_tablet: $warm-grey-one;
 $checkout_cc_store_address: $warm-grey-one;
 $checkout_cc_list_select_store_btn_txt: $peacock-blue;
 $checkout_cc_list_select_store_btn_border: $peacock-blue;
@@ -429,6 +428,7 @@ $checkout_cc_store_location_input_label_mobile_color: $black;
 $checkout_cc_selected_store_content_bg: $white;
 $checkout_cc_individual_store_hours_label_border: $warm-grey-two;
 $checkout_cc_map_hours_icon: $peacock-blue;
+$checkout_cc_search_icon: $peacock-blue;
 
 // Tables.
 $primary_th_bg: $warm-grey-three;
@@ -471,7 +471,8 @@ $privilege_earn_icon: $peacock-blue;
 $user_order_help_bg: $info-blue;
 $user_order_help_text : $white;
 $user_order_help_text_links: $user_order_help_text;
-$password_tooltip_list: $error-red;
+$password_tooltip_list: $peacock-blue;
+$_password_tooltip_list_error: $error-red;
 
 // Checkout order summary block.
 $checkout_order_summary_title_border: $warm-grey-two;

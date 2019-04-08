@@ -29,29 +29,19 @@ $dark-sand: #ac8e54;
 $peacock-blue: #0060aa;
 $windows-blue: #3680cb;
 $dark-blue: #4267b2;
-$very-light-blue: #d9efff;
 $marine-blue: #003773;
 $grey-shade: #c1c1c1;
 $grey-light: #777;
+$grey-light-two: #f3f3f3;
 // Mothercare
-$warm-grey: #9b9b9b;
 $warm-grey-two: #dadada;
 $black: #333;
 $pumpkin-orange: #ff6d22;
 $tealish: #3ad6c5;
-$twilight-blue: #0e3e6f;
-$cobalt-blue: #001b96;
-$soft-blue: #6aade4;
 $scarlet: #d0021b;
-$off-blue: #5482ab;
-$deep-pink: #c90062;
-$maize: #f3cf45;
 $rosy-pink: #f36682;
-$slime-green: #94d400;
 $cerulean: #0080ce;
-$deep-red: #9a0000;
 $scarlet-two: #d0011b;
-$pinkish-tan: #dd8a8a;
 $pale-grey: #e8eff5;
 $tomato: #e6591a;
 $medium-green: #3ab549;
@@ -79,7 +69,6 @@ $light-ash: #9c9c9c;
 $alice-blue: #f0f6fc;
 $shadow: #dae7ee;
 $breadcrumb-active: #262626;
-$blue-two: #03295e;
 $blue-three: #032760;
 $faun: #f9f8f6;
 $message-info: #ffee9c;
@@ -88,11 +77,11 @@ $ladda-disabled: #999;
 $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
+$_instagram_dots_default: #e3e3e3;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
 $primary_bg: $white-five;
-$body_bg: $primary_bg;
 $content_pagetitle: $marine-blue;
 $content_pagetitle_border: $white;
 $primary_text: $grey-ash;
@@ -140,12 +129,8 @@ $primary_radiobtn_filled: $cerulean-two;
 
 // Tables.
 $primary_th_bg: $whisper-light;
-$primary_th_bg_highlight: $white-two;
-$primary_td_highlight2: $whisper-light; // used on order total (basket).
 $primary_td_highlight3: $white-four; // used on blend class.
-$primary_th_bg_order_highlight: $pale-grey;
 $primary_td_bg_highlight: $white-smoke-light;
-$primary_td_bg: $white-five;
 $primary_tr_hover: rgba(247, 247, 247, 0.72);
 $primary_table_border: $white;
 $primary_full_page_overlay_bg: rgba(255, 255, 255, 0.7);
@@ -181,30 +166,21 @@ $modal_close_bg: $marine-blue;
 $modal_close_icon: $white-two;
 
 // VAT text
-$vat: $grey-ash;
+$vat: $grey-light;
 $vat_dark: $whisper-light;
 
 /* ------- 3. Secondary color  ----- */
 // Global elements.
-$secondary_text: $black;
-$secondary_btn_text: $marine-blue;
-$secondary_btn_border: $marine-blue;
-$secondary_border: $black;
 $secondary_link: $marine-blue;
 
 /* ------- 4. Tertiary Colors ------- */
 $tertiary_btn_text: $white-five;
-$tertiary_btn_border: $cerulean-two;
 
 /* ------- 5. Components --------------- */
 // Counters.
 $primary_counter_bg: $marine-blue;
 $primary_counter_text: $white-five;
 $secondary_counter_bg: $cerulean-two;
-$secondary_counter_text: $white-five;
-$tertiary_counter_bg: $marine-blue;
-$tertiary_counter_text: $white-five;
-$tertiary_counter_border: $greyish;
 
 // Titles.
 $page_title: $marine-blue;
@@ -219,7 +195,6 @@ $user_sidebar_block_title: $marine-blue;
 $default_msg_text: $white-five;
 $default_msg_bg: $tealish;
 $default_msg_info_bg: $message-info;
-$default_msg_info_text: $black;
 $content_error_msg_bg: $cherry;
 $content_error_msg_txt: $white-five;
 $content_error_input_border: $cherry;
@@ -293,7 +268,6 @@ $gallery_arrows: $black;
 $gallery_arrows_border: $black;
 $gallery_arrows_disabled: $white;
 $gallery_pager_border: $marine-blue-two;
-$gallery_pager_bg: $white-five;
 $gallery_pager_active_bg: $marine-blue-two;
 $gallery_zoombtn_bg: $white;
 $gallery_zoombtn_disabled: $light-ash;
@@ -301,6 +275,10 @@ $gallery_zoombtn_disabled: $light-ash;
 // Homepage Slider
 $hp_slider_dots: $marine-blue-two;
 $hp_slider_arrows_dark: $mothercare-black;
+
+// Instragram slider dots.
+$instagram_dots_default: $_instagram_dots_default;
+// Active color same as $hp_slider_dots;
 
 // Sharethis
 $sharethis_icon: $marine-blue-two;
@@ -317,29 +295,24 @@ $autocomplete_text: $grey-ash;
 // Header.
 $header_bg: $white-five;
 $header_top_bg: $white-four;
-$header_search_block_bg: $white-five;
 $header_border: $white;
 $header_super_category_bg: $white-five;
 
 // Header mobile search.
 $header_search_border_mobile: $marine-blue-two;
 $header_search_active_bg: $marine-blue;
-$header_search_active_text: $white-five;
 
 // Header - Search.
-$primary_search_btn: $marine-blue;
 $primary_search_bg: $white-five;
 $primary_search_btn_icon: $marine-blue;
 $primary_search_input: $grey-ash;
 $primary_search_input_placeholder: $grey-ash;
 $primary_search_border: $white;
-$primary_search_result_hover: $white-smoke-light;
 $primary_search_autocomplete_text: $grey-ash;
 
 // C-menu primary i:e Mobile and tablet header menu links.
 $header_c_menu_text: $brownish-grey;
 $header_c_menu_icon_color: $marine-blue-two;
-$header_c_menu_icon_text: $white-five;
 $header_c_menu_search_active_icon: $pumpkin-orange;
 $header_toggle_sign_default: $white;
 $header_toggle_sign_active_tab: $marine-blue;
@@ -348,7 +321,7 @@ $header_mobile_menu_arrow: $marine-blue-two;
 $header_mobile_menu_active: $white-five;
 $header_mobile_menu_close_bg: $white-five;
 $header_mobile_menu_close: $black;
-$header_mobile_menu_overlay: rgba(133, 133, 133, 0.27);
+$header_mobile_menu_overlay: rgba(0, 0, 0, 0.48);
 
 // Branding menu mobile.
 $header_branding_shadow: $greyish;
@@ -406,7 +379,6 @@ $desktop_continue_shopping_btn_border: $marine-blue-two;
 $minicart_notification_bg: $white-five;
 $minicart_notification_border: $pumpkin-orange;
 $minicart_notification_shadow: $white-two;
-$minicart_notification_name: $grey-ash;
 $minicart_notification_text: $pumpkin-orange;
 $minicart_notification_btn_bg: $pumpkin-orange;
 $minicart_notification_btn_text: $white-five;
@@ -437,6 +409,9 @@ $primary_footer_input_label: $greyish;
 $footer_link_mobile: $black;
 $footer_link: $grey-ash;
 $footer_link_hover: $cerulean-two;
+$our_brands_footer_separator: $peacock-blue;
+$our_brand_section_title: $marine-blue;
+$our_brand_link: $grey-ash;
 
 // Social links.
 $social_links: $marine-blue-two;
@@ -448,18 +423,11 @@ $copyright_footer_text: $black;
 $copyright_footer_paragraph: $grey-ash;
 
 //7. Newsletter-signup
-$newsletter_title_h3: $marine-blue-two;
-$newsletter_block_text: $grey-ash;
-$newsletter_input_placeholder: $greyish;
-$newsletter_input_border: $marine-blue-two;
 $newsletter_submit_btn: $marine-blue-two;
-$newsletter_submit_btn_text: $white-five;
 $newsletter_success: $windows-blue;
 
 // Checkout Progress.
 $checkout_seperator: $greyish;
-$checkout_progress_complete: $cerulean-two;
-$checkout_progress_complete_text: $cerulean-two;
 $checkout_progress_text: $greyish;
 $checkout_progress_current_text: $black;
 $checkout_progress_next_bg: $white-five;
@@ -468,7 +436,6 @@ $checkout_progress_next_txt: $brownish-grey;
 
 /* ------- 7. Pages ----- */
 // Product listing page and search page.
-$plp_category_desc: $cerulean-two;
 $plp_search_count: $black;
 $color_facet_active_border: $cerulean-two;
 $plp_facet_filter: $windows-blue;
@@ -485,7 +452,6 @@ $plp_facet_dropdown_bg: $white-two;
 $plp_facet_label_border_mobile: $white-two;
 $plp_facet_active_bg: $white-five;
 $plp_facet_filter_label: $black;
-$plp_facet_title: $grey-ash;
 $plp_facet_border: $white;
 $plp_facet_summary_filter_icon: $white-four;
 $plp_item_label: $grey-ash;
@@ -494,11 +460,9 @@ $plp_promotion_link: $cherry;
 $plp_facet_filter_count_background: $pumpkin-orange;
 $plp_facet_filter_count_text: $white-five;
 $plp_facet_white_color_attribute: $white;
+$plp-swatch-color-count: $black;
 
 // PLP Filter bar.
-$plp_filterbar_filter_bg: $cerulean-two;
-$plp_filterbar_filter_text: $white-five;
-$plp_filterbar_filter_clear: $white-five;
 $plp_filterbar_clearall_border: $cerulean-two;
 $plp_filterbar_clearall_text: $cerulean-two;
 $plp_search_count: $black;
@@ -507,23 +471,17 @@ $plp_search_count: $black;
 $plp_tile_product_text: $black;
 $plp_tile_product_title: $grey-ash;
 $plp_tile_product_title_hover: $cerulean-two;
-$plp_tile_product_price: $black;
 $plp_tile_product_special_price: $scarlet;
-$plp_tile_product_discount_label: $scarlet;
 $plp_tile_product_hover_border: $greyish;
 $plp_tile_product_hover_shadow: $whisper-light;
 $plp_tile_product_hover_bg: $white-five;
 
 // PLP Product title hover.
-$plp_tile_hover_slider_hover: $grey-ash;
 $plp_tile_hover_slider_nav: $grey-ash;
-$plp_tile_hover_slider_nav_hover: $grey-ash;
-$plp_tile_hover_slider_arrows: $black;
 $plp_pager_link: $marine-blue;
 $plp_pager_link_border: $marine-blue;
 
 // Product detail page.
-$pdp_product_title: $grey-ash;
 $pdp_product_price: $black;
 $pdp_product_special_price: $special-price;
 $pdp_product_special_price_text: $scarlet;
@@ -537,6 +495,7 @@ $pdp_sell_title: $grey-ash;
 $pdp_white_color_attribute: $white-five;
 $pdp_white_color_attribute_hover_border: $black;
 $pdp_white_color_attribute_border: $black;
+$pdp_swatch_selected_border: $black;
 
 // Product modal
 $pdp_modal_full_prodlink: $marine-blue;
@@ -544,15 +503,12 @@ $pdp_modal_full_prodlink_border: $white;
 
 // Product Add to cart form.
 $pdp_sizeguide_link: $windows-blue;
-$pdp_form_item_label: $windows-blue;
 $pdp_size_selected_text: $black;
-$pdp_size_option_bg: $marine-blue;
 $pdp_size_option_border: $marine-blue;
 $pdp_size_option_text: $marine-blue;
 $pdp_size_option_selected_text: $white-five;
 $pdp_size_option_selected_bg: $marine-blue;
 $pdp_size_option_text_hover : $white-five;
-$pdp_size_option_bg_hover: $marine-blue;
 $pdp_sidebar_label: $marine-blue;
 $pdp_sidebar_link: $windows-blue;
 $pdp_desc_wrapper: $white-five;
@@ -578,17 +534,13 @@ $pdp_cc_other_stores: $marine-blue;
 $pdp_cc_other_stores_mobile: $cerulean-two;
 $pdp_all_stores_modal_bg: $white-five;
 $pdp_all_stores_modal_border: $marine-blue;
-$pdp_all_stores_name: $breadcrumb-active;
 $pdp_all_stores_modal_close_icon: $white-two;
 $pdp_all_stores_modal_close_bg: $marine-blue;
 $pdp_all_stores_modal_text: $grey-ash;
-$pdp_all_stores_modal_strong: $black;
-$pdp_all_stores_modal_link: $windows-blue;
 $pdp_all_stores_modal_list_border: $black;
 $pdp_all_stores_modal_list_name: $blue-three;
 $pdp_all_stores_modal_list_time: $black;
 $pdp_skus_border: $whisper-dark;
-$pdp_field_label: $peacock-blue;
 $pdp_basic_wrapper_border: $white-five;
 $pdp_error_text: $white-four;
 $fake_apply_btn: $white-four;
@@ -598,11 +550,6 @@ $clear_btn_text: $whisper-dark;
 $not_buyable_msg: $marine-blue;
 $not_buyable_help: $cerulean-two;
 $pdp_form_selection_error_text: $scarlet;
-
-// Cross sell and Up Sell
-$sell_list_label: $grey-ash;
-$sell_owl_dots: $greyish;
-$sell_owl_dots_bg: $whisper-light;
 
 // Department page
 $department_category_list_hover: $cerulean-two;
@@ -630,7 +577,6 @@ $store_finder_subheader: $marine-blue;
 $store_finder_backbtn: $marine-blue-two;
 $store_finder_icon: $cerulean-two;
 $store_finder_text: $cerulean-two;
-$store_finder_border: $cerulean-two;
 $store_finder_text_hover: $marine-blue;
 $store_finder_border_hover: $marine-blue;
 $store_finder_search_label: $grey-ash;
@@ -646,7 +592,6 @@ $store_finder_glossary_icon: $black;
 $store_finder_glossary_text_hover: $cerulean-two;
 $store_finder_glossary_text_border: $white;
 $store_finder_glossary_border: $greyish;
-$store_finder_glossary_link: $marine-blue;
 // Store finder search results.
 $store_finder_search_results_label: $black;
 $store_finder_search_results_counter_bg: $cerulean-two;
@@ -658,7 +603,6 @@ $store_finder_search_results_tile_link: $cerulean-two;
 $store_finder_search_results_tile_icon: $cerulean-two;
 $store_finder_search_results_hour_label: $cerulean-two;
 $store_finder_search_results_hour_icon_open: $marine-blue-two;
-$store_finder_storewrapper_bg: $white-four;
 
 // Checkout Pages & order summary block.
 $order_summary_border: $greyish;
@@ -680,7 +624,6 @@ $checkout_footer_border-top: $marine-blue-two;
 $checkout_footer_txt: $black;
 $checkout_footer_light_txt: $grey-ash;
 $checkout_header_border-bottom: $white-three;
-$checkout_pri_txt: $grey-ash;
 $checkout_section_border: $greyish;
 $checkout_section_titles: $marine-blue-two;
 $checkout_section_title_border: $white;
@@ -698,18 +641,8 @@ $checkout_out_fieldset_legend: $peacock-blue;
 $checkout_out_fieldset_legend_bottom_border: $greyish;
 $checkout_out_btn: $white-four;
 
-// Checkout securely block.
-$checkout_securely_txt: $marine-blue;
-$checkout_securely_icon_bg: $pumpkin-orange;
-$checkout_securely_icon_mobile_txt: $black;
-$checkout_securely_icon_txt: $white-five;
-
 // Checkout Login page.
 $checkout_login_footer_actions_bg: $white-four;
-$checkout_login_tab_border: false; // remove.
-$checkout_login_tab_text: false; // remove.
-$checkout_login_tab_border_active: false; // remove.
-$checkout_login_tab_text_active: false; // remove.
 $checkout_login_content_mobile: $black;
 $checkout_login_guest_email_text: $grey-ash;
 $checkout_login_guest_email_text_mobile: $light-ash;
@@ -717,10 +650,6 @@ $checkout_login_guest_email_text_mobile: $light-ash;
 $checkout_login_btn_bg: $primary_btn_bg;
 $checkout_login_btn_txt: $primary_btn_text;
 $checkout_login_returning_customer_btn_bg: $white-smoke-light;
-
-//  Checkout Confirmation.
-$checkout_confirmation_delivery_details: $white-smoke-light;
-$checkout_confirmation_table_pm_highlight: $solitude;
 
 // Checkout Click & collect.
 $checkout_cc_list_map_link_default: $cerulean-two;
@@ -815,7 +744,6 @@ $checkout_mobile_back_link_icon: $black;
 
 // Checkout order confirmation.
 $checkout_confirm_discount_row: $white-five;
-$checkout_confirm_discount_row_td_4th_child: $white-smoke-light;
 $checkout_confirm_continue_shopping_bg: $white-five;
 $checkout_confirm_continue_shopping_border: $marine-blue;
 $checkout_confirm_order_summary_row: $pale-grey;
@@ -835,7 +763,6 @@ $address_book_border: $white;
 $user_ui_dialog_border: $white;
 $address_book_delete_cancel: #3381d0;
 $address_book_delete_close: $black;
-$address_book_delete_close_bg: $white;
 $address_area_select: $grey-ash;
 
 //My Account pages
@@ -869,18 +796,14 @@ $my_account_nav_hover: $content_link_color;
 $user_form_layout_divider_color: $white;
 
 //block-myaccountneedhelp
-$myaccountneedhelp_bg: $pale-grey;
 $myaccountneedhelp_text: $windows-blue;
 
 //block-youllbeableto
-$user_block_title: $marine-blue;
-$user_block_text: $grey-ash;
 $user_block_link: $cerulean-two;
 
 // joinclubblock
 $joinclubblock_title: $dark-sand;
 $joinclubblock_text: $grey-ash;
-$joinclubblock_link: $cerulean-two;
 
 // Privilege Card
 $privilege_card_title: $dark-sand;
@@ -893,15 +816,7 @@ $privilege_card_form_input_placeholder: $grey-shade;
 $privilege_card_form_error: $scarlet-two;
 
 //Address book
-$address_tile_bg: $white-five;
-$address_tile_selected_bg: $white-four;
-$address_tile_label: $grey-ash;
-$address_tile_content: $black;
-$address_tile_radio_label: $black;
-$address_tile_selected_radio_label: $grey-ash;
-$address_pp_delete_title: $marine-blue;
 $address_pp_delete_closebtn: $white;
-$address_pp_delete_closebtn_icon: $black;
 
 // Basket
 $basket_page_title: $marine-blue-two;
@@ -940,8 +855,6 @@ $basket_vat_price_bg: $white-five;
 $webform_contact_legend: $marine-blue-two;
 
 // Order detail, recent orders, order list page.
-$order_product_title_elipsis_bg: $white-smoke;
-$order_recent_orders_product_title_elipsis_bg: $white-five;
 $order_recent_orders_product_title_elipsis_bg_hover: $white-smoke;
 $order_detail_table_bg: $white-four;
 $order_detail_td_light_content: $greyish;
@@ -1019,6 +932,10 @@ $social-sign-in-option-text: $black;
 
 // PDP Magazine layput
 $colour-swatches-show-list-button: $mothercare-black;
+$colour-swatches-simple-effect-bg: $grey-light-two;
+$sizeguide-text: $mothercare-black;
+$magazine-pdp-label: $mothercare-black;
+$magazine-pdp-description: $grey-light;
 
 // PLP Maschino layout.
 $plp-sub-menu-background-overlay: rgba(0, 0, 0, 0.5);
@@ -1031,3 +948,9 @@ $plp-sub-menu-cls-btn-bg: $white-five;
 $plp-machino-modal-content-bg: $white-five;
 $plp-machino-modal-content: $black;
 $plp-machino-modal-content-title: $mothercare-black;
+
+// PDP Magazine layout social share popup
+$sharethis-popup-bg: $white-five;
+$sharethis-icon-bg: $mothercare-black;
+$sharethis-label-color: $mothercare-black;
+$sharethis-social-displaytext-color: rgba(0, 0, 0, 0.87);

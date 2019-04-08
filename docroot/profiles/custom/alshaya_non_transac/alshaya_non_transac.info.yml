@@ -10,9 +10,24 @@ dependencies:
   - menu_link_modal:menu_link_modal
 
 themes:
-  - whitelabel_non_transac
+  - whitelabel
   - bartik
   - seven
 
-base profile:
-  name: alshaya
+base profile: alshaya
+
+exclude:
+  - help
+  - history
+  - lightning_landing_page
+  - lightning_layout
+  - lightning_media_instagram
+  - lightning_media_twitter
+  - lightning_media_video
+  - lightning_media_audio
+  - lightning_media_slideshow
+  - lightning_search
+  - shortcut
+  - lightning_scheduler
+  - moderation_sidebar
+  - update

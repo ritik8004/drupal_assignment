@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_promotion;
 
+use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Config\ConfigFactory;
@@ -12,12 +13,15 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
 
 /**
  * Class AcqPromotionsManager.
  */
 class AcqPromotionsManager {
+
+  use StringTranslationTrait;
 
   /**
    * Language Manager service.
@@ -139,7 +143,7 @@ class AcqPromotionsManager {
     foreach ($types as $type) {
       $promotions = $this->apiWrapper->getPromotions($type);
 
-      foreach ($promotions as $key => $promotion) {
+      foreach ($promotions as $promotion) {
         // Add type to $promotion array, to be saved later.
         $promotion['promotion_type'] = $type;
         $fetched_promotions[] = $promotion;
@@ -151,19 +155,22 @@ class AcqPromotionsManager {
       $this->processPromotions($fetched_promotions);
     }
 
-    // Unpublish promotions, which are not part of API response.
-    $this->unpublishPromotions($ids);
+    // Delete promotions, which are not part of API response.
+    $this->deletePromotions($types, $ids);
   }
 
   /**
-   * Unpublish Promotion nodes, not part of API Response.
+   * Delete Promotion nodes, not part of API Response.
    *
+   * @param array $types
+   *   Promotion types.
    * @param array $validIDs
    *   Valid Rule ID's from API.
    */
-  protected function unpublishPromotions(array $validIDs = []) {
+  protected function deletePromotions(array $types, array $validIDs = []) {
     $query = $this->nodeStorage->getQuery();
     $query->condition('type', 'acq_promotion');
+    $query->condition('field_acq_promotion_type', $types, 'IN');
 
     if ($validIDs) {
       $query->condition('field_acq_promotion_rule_id', $validIDs, 'NOT IN');
@@ -171,35 +178,17 @@ class AcqPromotionsManager {
 
     $nids = $query->execute();
 
-    $acq_promotion_attach_batch_size = $this->configFactory
-      ->get('acq_promotion.settings')
-      ->get('promotion_attach_batch_size');
-
     foreach ($nids as $nid) {
       /* @var $node \Drupal\node\Entity\Node */
       $node = $this->nodeStorage->load($nid);
 
-      // Unpublish all translations of the current node as well.
-      $translation_languages = $node->getTranslationLanguages();
-
-      foreach ($translation_languages as $langcode => $lang_obj) {
-        $node_translation = $node->getTranslation($langcode);
-        $node_translation->setPublished(Node::NOT_PUBLISHED);
-        $node_translation->save();
-      }
-
-      // Detach promotion from all skus.
-      $attached_promotion_skus = $this->getSkusForPromotion($node);
-
-      if (!empty($attached_promotion_skus)) {
-        $chunks = array_chunk($attached_promotion_skus, $acq_promotion_attach_batch_size);
-        foreach ($chunks as $chunk) {
-          $data['skus'] = $chunk;
-          $data['promotion'] = $nid;
-          $data['promotion_type'] = $node->get('field_acq_promotion_type')->getString();
-          $acq_promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
-          $acq_promotion_detach_queue->createItem($data);
-        }
+      if ($node instanceof Node) {
+        $node->delete();
+        $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
+          '@nid' => $node->id(),
+          '@promotion' => $node->label(),
+          '@rule_id' => $node->get('field_acq_promotion_rule_id')->first()->getString(),
+        ]);
       }
     }
   }
@@ -358,7 +347,7 @@ class AcqPromotionsManager {
       return $promotion_node;
     }
     else {
-      $this->logger->critical('Error occured while creating Promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
+      $this->logger->critical('An error occurred while creating promotion node for rule id: @rule_id.', ['@rule_id' => $promotion['rule_id']]);
       return NULL;
     }
   }
@@ -465,9 +454,47 @@ class AcqPromotionsManager {
           );
         }
       }
+
+      $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue and @detach items in detach queue.', [
+        '@node' => $promotion_node->getTitle(),
+        '@rule_id' => $promotion['rule_id'],
+        '@attach' => !empty($fetched_promotion_sku_attach_data) ? count($fetched_promotion_sku_attach_data) : 0,
+        '@detach' => !empty($detach_promotion_skus) ? count($detach_promotion_skus) : 0,
+      ]));
     }
 
     return $output;
+  }
+
+  /**
+   * Removes the given promotion from SKU entity.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param int $nid
+   *   Promotion node id.
+   */
+  public function removeOrphanPromotionFromSku(SKU $sku, int $nid) {
+    $promotion_detach_item[] = ['target_id' => $nid];
+    $sku_promotions = $sku->get('field_acq_sku_promotions')->getValue();
+
+    $sku_promotions = array_udiff($sku_promotions, $promotion_detach_item, function ($array1, $array2) {
+      return $array1['target_id'] - $array2['target_id'];
+    });
+
+    $sku->get('field_acq_sku_promotions')->setValue($sku_promotions);
+    $sku->save();
+
+    // Update Sku Translations.
+    $translation_languages = $sku->getTranslationLanguages(TRUE);
+
+    if (!empty($translation_languages)) {
+      foreach ($translation_languages as $langcode => $language) {
+        $sku_entity_translation = $sku->getTranslation($langcode);
+        $sku_entity_translation->get('field_acq_sku_promotions')->setValue($sku_promotions);
+        $sku_entity_translation->save();
+      }
+    }
   }
 
 }

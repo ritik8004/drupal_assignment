@@ -151,9 +151,6 @@ header {
   .block-cart-mini-block {
     @include arabic-letter-spacing;
 
-    font-size: 0.875rem;
-    text-align: $right;
-    color: $primary_minicart_text;
     letter-spacing: 0.5px;
 
     @include breakpoint($only-tablet) {
@@ -179,27 +176,21 @@ header {
         color: $cart_icon_hover;
       }
 
-      display: inline-block;
       width: 1.375rem;
       height: 1.375rem;
-      position: relative;
-      margin-bottom: -2px;
       vertical-align: middle;
       background: none;
     }
 
     .cart-link-total {
       color: $primary_minicart_text2;
-      float: $left;
       margin-top: 0.3125rem;
       margin-#{$right}: 0.125rem;
-      padding-#{$right}: 1rem;
     }
 
     .quantity {
       font-size: 0.75rem;
       font-family: $hnm-regular-nodir;
-      background: $primary_minicart_quantity_bg;
       bottom: -0.625rem;
       line-height: 1.25rem;
     }
@@ -207,7 +198,6 @@ header {
 
   @include breakpoint($only-tablet) {
     #mini-cart-wrapper {
-      float: $right;
       margin-top: -0.4375rem;
 
       .cart-link-total {
@@ -227,14 +217,6 @@ header {
   }
 
   .region__menu-primary {
-    margin-top: 0.9375rem;
-    margin-bottom: 0.9375rem;
-
-    @include breakpoint($only-mobile) {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-
     @include breakpoint($only-tablet) {
       margin: 0;
     }
@@ -247,27 +229,13 @@ header {
   }
 
   .block-system-menublock {
-    ul {
-      padding: 0;
-    }
-
     li {
-      list-style: none;
-      z-index: 4;
       position: static;
 
       @include breakpoint($only-mobile) {
         background: none;
       }
-
-      .notification--on & {
-        z-index: 3;
-      }
     }
-  }
-
-  .form-item-sort-bef-combine {
-    display: none;
   }
 }
 
@@ -280,19 +248,6 @@ header {
     @include breakpoint($only-mobile) {
       border: 0.5rem solid $header_blocksearch_border;
       box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
-
-      .form-item {
-        display: block;
-
-        input {
-          max-width: none;
-          width: 100%;
-        }
-      }
-
-      .form-actions {
-        display: none;
-      }
     }
   }
 
@@ -304,8 +259,6 @@ header {
 }
 
 .c-menu-primary {
-  display: none;
-
   #block-exposedformsearchpage,
   .block-views-exposed-filter-blocksearch-page {
     display: none;
@@ -355,8 +308,6 @@ header {
   }
 
   @include breakpoint($upto-desktop) {
-    display: block;
-
     a {
       @include arabic-letter-spacing;
 
@@ -367,13 +318,6 @@ header {
       display: block;
       text-transform: capitalize;
       font-family: $hnm-regular;
-
-      &::before {
-        content: ' ';
-        display: inline-block;
-        vertical-align: middle;
-        margin-#{$right}: 0.625rem;
-      }
     }
 
     .store {
@@ -486,23 +430,9 @@ header {
       html[lang=ar] & {
         font-size: 1px;
       }
-
-      &::before {
-        margin-#{$right}: 0.3125rem;
-      }
-    }
-
-    ul.menu {
-      display: table;
-      width: 100%;
-      margin: 0;
     }
 
     li {
-      &:hover {
-        background: none;
-      }
-
       &.search-active {
         .mobile--search {
           &::before {
@@ -531,6 +461,7 @@ header {
 .main--menu {
   @include breakpoint($desktop) {
     display: block !important;
+    position: relative;
   }
 
   @include breakpoint($upto-desktop) {
@@ -538,46 +469,22 @@ header {
       padding: 0;
     }
   }
-
-  li {
-    list-style: none;
-  }
 }
 
 @include breakpoint($desktop) {
   .block-alshaya-main-menu {
-    position: relative;
-    z-index: 3;
-    max-width: 80.25rem;
-    margin: 0 auto;
-
-    @include breakpoint($upto-desktop) {
-      .main--menu {
-        display: none;
-      }
-    }
-
-    li {
-      list-style: none;
-    }
-
     ul.menu--one__list {
-      display: block !important;
-      text-align: center;
-      width: 100%;
-      margin: 0;
-      font-size: 0;
-      background: $mm_bg;
-      padding: 0 calc((100% - 1284px) / 2);
+      display: table !important;
+      width: auto;
+      margin: 0 auto;
+
+      .menu-backdrop {
+        border-bottom: 4px solid $mm_l2_hover_border;
+      }
     }
 
     li.menu--one__list-item {
       display: inline-block;
-      vertical-align: top;
-      list-style: none;
-      text-align: center;
-      text-transform: lowercase;
-      height: 2.6875rem;
 
       .menu__link-wrapper {
         .menu--one__link {
@@ -632,12 +539,6 @@ header {
 
       &:hover {
         & > ul.menu--two__list {
-          visibility: visible;
-          opacity: 1;
-          z-index: 1;
-          border-top: none;
-          transform: none;
-
           &::after {
             content: '';
             height: 1px;
@@ -651,33 +552,8 @@ header {
         }
       }
 
-      .menu__link {
-        font-size: 0.75rem;
-        color: $mm_l1_link;
-        text-decoration: none;
-      }
-
-      ul ul {
-        display: none;
-      }
-
       ul.menu--two__list {
-        max-width: 80.25rem;
-        left: 0;
-        right: 0;
-        margin: auto;
-        top: 100%;
-        #{$left}: 0;
-        width: 100%;
-        z-index: -1;
-        position: absolute;
-        display: block;
-        opacity: 0;
-        visibility: hidden;
         overflow: hidden;
-        transition: all 0.25s ease-in 0s, visibility 0.15s linear 0.4s, z-index 0s linear 0.1s;
-        transform: none;
-        border-top: none;
         border-bottom: 4px solid $mm_l2_hover_border;
       }
     }
@@ -701,18 +577,7 @@ header {
   }
 
   .menu--two__list {
-    position: absolute;
-    width: 100%;
-    text-align: $left;
-    top: 2.5625rem;
-    #{$left}: 0;
-    #{$left}: 0;
     background: $mm_l2_bg;
-    z-index: 10;
-    padding-top: 0.5625rem;
-    padding-#{$left}: 0;
-    padding-#{$right}: calc((100% - 1284px) / 2);
-    min-height: 22.125rem;
 
     a {
       color: $mm_l2_link;
@@ -723,18 +588,9 @@ header {
     }
 
     .menu--two__list-item {
-      line-height: 1;
-      max-width: 13.13rem;
-
       > .menu-two__link-wrapper {
         font-family: $hnm-bold;
-        font-weight: normal;
-        display: inline-block;
-        padding: 1.5rem 1.563rem;
         width: 13.125rem;
-        position: relative;
-        vertical-align: top;
-        z-index: 10;
 
         .menu__link {
           @include arabic-letter-spacing;
@@ -771,13 +627,7 @@ header {
         }
 
         &::after {
-          content: '';
           background: url('../imgs/icons/icon-chevron-next.svg');
-          width: 8px;
-          height: 17px;
-          position: absolute;
-          #{$right}: 0.625rem;
-          top: 39%;
         }
 
         &:hover {
@@ -793,38 +643,14 @@ header {
         }
       }
 
-      &:hover {
-        ul.menu--three__list {
-          display: block;
-        }
-      }
-
       .menu--three__list {
-        width: 100%;
-        max-width: 80.25rem;
-        min-height: 100%;
-        vertical-align: top;
         position: absolute;
-        background: $mm_l3_link_bg;
-        top: 0;
-        padding-#{$left}: 16rem;
-        padding-top: 1.5625rem;
-
-        p {
-          display: none;
-        }
 
         li {
           padding: 0.19rem 0;
-          vertical-align: top;
-          width: 12rem;
 
           a {
             color: $mm_l2_p;
-
-            &:hover {
-              text-decoration: underline;
-            }
           }
         }
       }
@@ -833,19 +659,6 @@ header {
 }
 
 @include breakpoint($desktop) {
-  .overlay::before {
-    content: '';
-    position: fixed;
-    width: 100%;
-    height: 100;
-    top: 0;
-    #{$left}: 0;
-    bottom: 0;
-    #{$left}: 0;
-    background-color: rgba(0, 0, 0, 0.48);
-    z-index: 5;
-  }
-
   .menu--four__list {
     display: block !important;
     padding-#{$left}: 0;
@@ -855,21 +668,9 @@ header {
   .level--three {
     font-size: 14px !important;
     color: $mm_l3_link !important;
-    margin-bottom: 0.5rem;
-  }
-
-  .menu__in,
-  .back--link {
-    display: none;
   }
 
   .menu--three__list-item {
-    min-width: 9rem;
-    max-width: 10rem;
-    display: inline-block;
-    margin-#{$right}: 2rem;
-    margin-bottom: 1.5rem;
-
     > .menu-two__link-wrapper .menu__link {
       font-family: $hnm-bold !important;
       font-size: 0.875rem !important;
@@ -879,68 +680,24 @@ header {
   }
 
   .highlights {
-    vertical-align: top;
-    display: inline-block;
-
     > div:nth-child(1) {
       margin-#{$right}: 0.625rem;
     }
 
     .highlighted {
-      display: inline-block;
-      vertical-align: top;
       margin: 0 0.625rem;
     }
-  }
-
-  .level-three__wrapper {
-    width: 58%;
-    display: inline-block;
   }
 }
 
 @include breakpoint($upto-desktop) {
-  .highlights {
-    display: none;
-  }
-
   .mobile--overlay {
     overflow: hidden;
-
-    &::before {
-      content: '';
-      position: fixed;
-      z-index: 6;
-      width: 100%;
-      height: 100;
-      top: 0;
-      #{$left}: 0;
-      bottom: -6rem;
-      #{$right}: 0;
-      transform: translate3d(0, 0, 0);
-      background-color: rgba(0, 0, 0, 0.48);
-    }
-
-    .branding__menu {
-      border-bottom: 0;
-    }
   }
 
   .main--menu {
-    display: none;
-
     ul.menu--one__list {
       background: $mm_l2_bg;
-      width: 84.375%;
-      height: 100%;
-      position: fixed;
-      top: 2.9rem;
-      bottom: 0;
-      z-index: 20;
-      overflow-y: auto;
-      margin-top: 0;
-      padding-bottom: 3.125rem;
-      transform: translate3d(0, 0, 0);
 
       @include breakpoint ($only-tablet) {
         width: 20rem;
@@ -963,42 +720,20 @@ header {
     @include arabic-letter-spacing;
 
     border-bottom: 1px solid $white;
-    margin-#{$left}: 0.625rem;
-    margin-#{$right}: 0.625rem;
     font-family: $hnm-regular;
     text-transform: uppercase;
-    font-weight: normal;
     color: $hnm-black-four;
-    display: block;
     font-size: 0.875rem;
     letter-spacing: 1px;
-    padding: 0;
-
-    a {
-      padding: 1rem 0;
-      padding-bottom: 0.9375rem;
-      padding-#{$right}: 1.4rem;
-    }
   }
 
   .back--link {
     @extend .menu__list-item;
 
     font-family: $hnm-bold;
-    padding: 1rem 0;
-    padding-#{$right}: 0.25rem;
-  }
-
-  .menu--one__list-item {
-    p {
-      display: none;
-    }
   }
 
   .menu--two__list-item {
-    padding: 0;
-    border: 0;
-
     > .menu-two__link-wrapper {
       border-bottom: 1px solid $mm_border;
 
@@ -1006,16 +741,6 @@ header {
         padding-top: 0.9375rem;
         padding-bottom: 0.9375rem;
       }
-    }
-
-    .menu__in {
-      margin-top: -34px;
-      margin-#{$right}: 0;
-    }
-
-    .menu--three__list-item {
-      padding: 0;
-      border: none;
     }
   }
 
@@ -1030,22 +755,7 @@ header {
     }
   }
 
-  .menu--three__list-item,
-  .menu--four__list-item {
-    margin-#{$left}: 0;
-    margin-#{$right}: 0;
-  }
-
   .menu__in {
-    float: $right;
-    margin-top: -2.0625rem;
-    width: 1.3125rem;
-    height: 1.3125rem;
-    position: relative;
-    #{$right}: 0;
-    display: inline-block;
-    pointer-events: none;
-
     @include icon(chevron#{$right}, after) {
       color: $mm_mobile_icon;
       font-size: 1.313rem;
@@ -1079,29 +789,14 @@ header {
     }
   }
 
-  .menu__back {
-    width: 7px;
-    height: 11px;
-    display: inline-block;
-    pointer-events: none;
-  }
-
   .menu__list--active {
-    position: absolute;
-    top: 0;
     background: white;
-    display: block !important;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
   }
 
   .menu--two__list,
   .menu--three__list,
   .menu--four__list {
     will-change: $left;
-    // transform: translate(#{negate-value(100)+'%'}, 0); /* stylelint-disable-line */
     #{$left}: -100%;
     transition: $left 0.5s ease-in-out;
     position: absolute;
@@ -1111,8 +806,6 @@ header {
     z-index: 1000;
     height: auto !important;
     background: $mm_bg;
-    padding-bottom: 4em !important;
-    overflow-y: auto;
 
     @include breakpoint ($only-tablet) {
       width: 20rem;
@@ -1122,58 +815,10 @@ header {
   .menu-two__link-wrapper.contains-sublink .menu--three__link {
     color: $mm_l2_wrapper_link;
   }
-
-  .menu--two__list.menu__list--active {
-    span.back--link {
-      display: block;
-    }
-
-    .menu--three__list.menu__list--active {
-      span.back--link {
-        display: block !important;
-      }
-
-      .menu--three__list-item .menu__in {
-        margin-#{$right}: 0.625rem;
-      }
-
-      .menu--four__list {
-        span.back--link {
-          display: none;
-        }
-      }
-    }
-
-    .menu--three__list {
-      span.back--link {
-        display: none !important;
-      }
-
-      &.menu__list--active {
-        .menu--four__list-item,
-        .menu-two__link-wrapper {
-          margin-#{$left}: 0.625rem;
-          margin-#{$right}: 0.625rem;
-        }
-      }
-    }
-  }
 }
 
 .mobile--close {
   background: $mm_mobile_icon;
-
-  span {
-    @include icon(close) {
-      width: 1.563rem;
-      height: 1.563rem;
-      font-size: 2.5rem;
-      position: absolute;
-      top: -0.3125rem;
-      #{$left}: -2px;
-      color: $mm_bg;
-    }
-  }
 }
 
 .toggle--sign {
@@ -1183,14 +828,6 @@ header {
     color: $header_toggle_sign_default_mobile;
   }
 
-  position: fixed;
-  top: 0;
-  background: $header_toggle_sign_default;
-  z-index: 10;
-  transition: #{$left 0.5s ease-in-out};
-  -moz-transform: translateZ(0);
-  #{$left}: -100%;
-  width: 84.375%;
   font-size: 0.875rem;
   font-family: $hnm-demibold;
   font-weight: normal;
@@ -1232,7 +869,6 @@ header {
     }
 
     padding: 0.9rem 0;
-    display: inline-block;
     vertical-align: middle;
     text-align: center;
     height: 2.9375rem;
@@ -1245,25 +881,6 @@ header {
 
       @include breakpoint ($only-tablet) {
         width: 6.4375rem;
-      }
-    }
-  }
-
-  .active {
-    color: $header_toggle_sign_active_tab;
-    background: $header_toggle_sign_active_tab_bg;
-    text-align: center;
-  }
-
-  .account {
-    @include breakpoint($only-mobile) {
-      html[lang=ar] & {
-        padding: 0.9rem 0;
-        font-size: 0.8125rem;
-
-        &.active {
-          font-size: 0.75rem;
-        }
       }
     }
   }
@@ -1294,109 +911,22 @@ header {
   }
 }
 
-// Toggle between Accounts
-@include breakpoint($upto-desktop) {
-  .remove--toggle {
-    display: none !important;
-  }
-}
-
-.logged-out {
-  .account--logged_in {
-    display: none;
-  }
-}
-
 .logged-in {
-  .account {
-    display: none;
-  }
-
   .c-menu-primary {
     @include breakpoint($only-mobile) {
-      .my-account-nav a {
-        padding: 0;
-      }
-
       .hamburger--menu {
         padding: 0.625rem 0.5rem;
       }
     }
   }
-
-  &.toolbar-horizontal {
-    .toggle--sign {
-      top: 79px;
-    }
-
-    ul.menu--one__list {
-      top: 129px;
-    }
-
-    .mobile--close {
-      top: 89px;
-    }
-  }
-
-  &.toolbar-vertical {
-    .toggle--sign {
-      top: 40px;
-    }
-
-    ul.menu--one__list {
-      top: 86px;
-    }
-
-    .mobile--close {
-      top: 50px;
-    }
-
-    .c-my-account-nav {
-      top: 86px;
-    }
-  }
-
-  .toggle--sign {
-    top: 0;
-  }
-
-  ul.menu--one__list {
-    top: 2.9rem;
-  }
-
-  .mobile--close {
-    top: 10px;
-  }
-
-  @include breakpoint($desktop) {
-    .block-alshayamyaccountlinks {
-      display: none;
-    }
-  }
-}
-
-//Highlights fix
-.highlighted {
-  @media only screen and (min-device-width: 1195px) and (max-device-width: 1275px) {
-    max-width: 10.5rem;
-  }
-
-  @media only screen and (min-device-width: 1020px) and (max-device-width: 1195px) {
-    max-width: 9.5rem;
-  }
 }
 
 .site-brand-home {
-  margin: 0;
-
   @include breakpoint($only-mobile) {
     max-width: 10rem;
   }
 
   a {
-    display: block;
-    font-size: 2rem;
-
     @include breakpoint($upto-desktop) {
       margin-#{$left}: 2.5rem;
       width: 2.5rem;
@@ -1442,19 +972,16 @@ html[lang=ar] {
     top: 0;
     width: 100%;
     height: 100%;
-    // transition: transform 0.5s ease-in-out;
     -moz-transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     transition: #{$left 0.5s ease-in-out}; /* stylelint-disable-line */
     -moz-transform: translateZ(0);
     #{$left}: -100%;
-    // transform: translate(#{negate-value(-100)+'%'}, 0); /* stylelint-disable-line */
     will-change: $left;
     z-index: 9;
   }
 
   .menu--active,
   .menu__list--active {
-    // transform: translate(0, 0) !important;
     #{$left}: 0;
   }
 }
@@ -1472,17 +999,7 @@ html[lang=ar] {
 }
 
 html[lang='ar'] {
-  .cart-link-total .price-currency.suffix {
-    padding-right: 0.5rem;
-  }
-
   .block-system-branding-block {
-    .site-brand-home {
-      @include breakpoint($only-tablet) {
-        width: 13rem;
-      }
-    }
-
     .site-brand-home {
       a {
         @include breakpoint($only-mobile) {
@@ -1509,53 +1026,17 @@ html[lang='ar'] {
   }
 }
 
-.main--menu .not-active {
-  @include breakpoint($upto-desktop) {
-    display: none;
-  }
-}
-
-.main--menu .active-menu.not-active {
-  @include breakpoint($upto-desktop) {
-    display: block;
-  }
-}
-
 .c-header .block-views-exposed-filter-blocksearch-page {
   @include breakpoint($desktop) {
     position: relative;
     top: -0.125rem;
     left: 0;
-
-    html[lang=ar] & {
-      right: 10px;
-      top: -3px;
-    }
   }
-}
-
-// Remove tap background from ios mobile and tablet devices.
-html {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 #block-cartminiblock {
-  position: relative;
-
   @include breakpoint($desktop) {
     top: -0.25rem;
-  }
-}
-
-@include breakpoint($only-tablet) {
-  .mobile--overlay {
-    .block-views-exposed-filter-blocksearch-page {
-      .form-text {
-        &::placeholder {
-          color: transparent;
-        }
-      }
-    }
   }
 }
 

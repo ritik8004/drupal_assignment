@@ -23,3 +23,9 @@ regions:
 libraries:
   - alshaya_example_subtheme/global_styles
   - alshaya_white_label/ucfix
+
+libraries-override:
+  alshaya_white_label/magazine_attribute:
+    css:
+      theme:
+        css/conditional-sass/magazine-layout/magazine-layout.ltr.css: css/conditional-sass/example-feature/example-feature.ltr.css

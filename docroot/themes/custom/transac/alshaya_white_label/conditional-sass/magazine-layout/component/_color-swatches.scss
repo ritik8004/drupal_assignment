@@ -1,6 +1,15 @@
 .magazine-layout {
+  .magazine-swatch-placeholder,
   .form-item-configurables-article-castor-id {
+    @include breakpoint($only-mobile) {
+      background: transparent !important;
+    }
+
     .select2Option {
+      @include breakpoint($only-mobile) {
+        margin-top: 1.6875rem;
+      }
+
       .show-less-color,
       .show-more-color,
       .selected-text {
@@ -9,33 +18,158 @@
         line-height: 1.33;
         letter-spacing: 0.6px;
         color: $colour-swatches-show-list-button;
+
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
+
+        @include breakpoint($only-mobile) {
+          display: block;
+          text-align: center;
+        }
       }
 
       .selected-text {
         letter-spacing: 1.5px;
         font-weight: normal;
+
+        html[lang=ar] & {
+          letter-spacing: normal;
+        }
       }
 
       .show-less-color,
       .show-more-color {
         margin-top: 0.3125rem;
         margin-bottom: 1.125rem;
+        text-decoration: underline;
         cursor: pointer;
       }
 
       .list-title {
         margin-bottom: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          margin-bottom: 1.625rem;
+        }
+
+        span {
+          &:first-child {
+            display: none;
+          }
+        }
       }
 
       .select-buttons {
+        @include breakpoint($only-mobile) {
+          text-align: center;
+          white-space: nowrap;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          display: block !important;
+          margin-#{$left}: 0.5rem;
+        }
+
         li,
         span {
           a:not([data-swatch-type=RGB]) {
+            width: 4.5rem;
+            margin: 0 0 0.5rem;
+            margin-#{$right}: 0.5rem;
+            border: none;
+            max-height: inherit;
+            min-width: inherit;
+            line-height: 0;
+            padding: 0;
+            position: relative;
+
+            &.picked {
+              background: none;
+
+              &::before {
+                content: '';
+                border: 1px solid $pdp_swatch_selected_border;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+              }
+            }
+
             @include breakpoint($tablet) {
               width: 2.9375rem;
             }
           }
         }
+      }
+    }
+
+    &.swatch-toggle {
+      .select2Option {
+        .select-buttons {
+          @include breakpoint($only-mobile) {
+            margin: 0 1rem;
+            white-space: inherit;
+          }
+
+          li {
+            @include breakpoint($only-mobile) {
+              display: inline-flex;
+            }
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-mobile) {
+      &.simple-swatch-effect {
+        margin-bottom: 0.625rem;
+
+        .select2Option {
+          .select-buttons {
+            background-color: $colour-swatches-simple-effect-bg;
+            margin-left: -0.5rem;
+            padding-left: 0.5rem !important;
+
+            li,
+            span {
+              a:not([data-swatch-type=RGB]) {
+                margin-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .select2Option {
+      display: block;
+    }
+  }
+
+  .basic-details-wrapper {
+    .field--name-field-skus {
+      .form-item-configurables-size {
+        label {
+          display: none;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.magazine-layout {
+  .magazine-swatch-placeholder {
+    .configurable-swatch {
+      > label {
+        display: none;
       }
     }
   }

@@ -16,17 +16,12 @@
     @include breakpoint($desktop) {
       top: 1px;
     }
-
-    .download-invoice {
-      color: $content_link_color;
-    }
   }
 
   .user__order--detail {
     .total-row .dark .price {
       color: $black;
       font-family: $hnm-demibold;
-      font-size: 0.875rem;
 
       @include breakpoint($only-mobile) {
         font-size: 0.75rem;
@@ -61,8 +56,6 @@
     background: $order_detail_total_bg;
 
     td {
-      padding: 0.625rem 1.375rem;
-
       @include breakpoint($only-tablet) {
         padding: 0.625rem 1.375rem 0.625rem 0.75rem;
       }
@@ -71,8 +64,6 @@
 
   .discount-row {
     td {
-      padding: 0.625rem 1.375rem;
-
       @include breakpoint($only-tablet) {
         padding: 0.625rem 0.125rem 0.625rem 0.75rem;
       }
@@ -250,7 +241,6 @@
 
   .dark {
     color: $user_order_detail_dark;
-    line-height: 1.125rem;
     font-weight: normal;
     font-family: $hnm-regular;
   }

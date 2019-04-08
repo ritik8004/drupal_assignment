@@ -1,0 +1,17 @@
+.subtitle.crossell-title {
+  font-family: $alshaya-thin;
+  text-transform: capitalize;
+
+  @include breakpoint($tablet) {
+    margin-top: 2.8125rem;
+  }
+}
+
+.view-product-slider {
+  .c-products__item__label {
+    font-size: 0.875rem;
+    font-weight: bold;
+    line-height: 1.3;
+    text-transform: capitalize;
+  }
+}

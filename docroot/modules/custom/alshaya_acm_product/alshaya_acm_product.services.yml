@@ -16,6 +16,8 @@ services:
     class: Drupal\alshaya_acm_product\ProductHelper
     arguments:
       - '@config.factory'
+      - '@alshaya_acm_product.skumanager'
+      - '@alshaya_acm_product.sku_images_manager'
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
     arguments:
@@ -38,6 +40,15 @@ services:
       - '@http_client'
       - '@renderer'
       - '@simple_sitemap.generator'
+      - '@acq_sku.product_info_helper'
+
+  alshaya_acm_product.price_helper:
+    class: Drupal\alshaya_acm_product\Service\SkuPriceHelper
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@config.factory'
+      - '@renderer'
+
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
@@ -74,6 +85,7 @@ services:
     class: Drupal\alshaya_acm_product\EventSubscriber\ProductInfoRequestedEventSubscriber
     arguments:
       - '@alshaya_acm_product.sku_images_manager'
+      - '@alshaya_acm_product.skumanager'
     tags:
       - { name: 'event_subscriber' }
   alshaya_acm_product.product_updated_event:

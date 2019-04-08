@@ -1,7 +1,9 @@
 services:
   alshaya_acm.add_to_cart_error_event:
     class: Drupal\alshaya_acm\EventSubscriber\AddToCartErrorEventSubscriber
-    arguments: ['@logger.factory']
+    arguments:
+      - '@alshaya_acm.cart_helper'
+      - '@logger.factory'
     tags:
       - { name: 'event_subscriber' }
 
@@ -35,6 +37,7 @@ services:
     class: Drupal\alshaya_acm\CartHelper
     arguments:
       - '@acq_cart.cart_storage'
+      - '@logger.factory'
 
   alshaya_acm.config_check:
     class: Drupal\alshaya_acm\AlshayaAcmConfigCheck
@@ -46,3 +49,10 @@ services:
       - { name: cache.bin }
     factory: cache_factory:get
     arguments: [alshaya_api]
+
+  alshaya_acm.mdc_queue_manager:
+    class: 'Drupal\alshaya_acm\AlshayaMdcQueueManager'
+    arguments:
+      - '@http_client_factory'
+      - '@config.factory'
+      - '@logger.factory'

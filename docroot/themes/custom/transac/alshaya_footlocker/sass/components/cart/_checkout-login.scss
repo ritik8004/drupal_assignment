@@ -25,6 +25,19 @@
       }
     }
   }
+
+  a.back-link {
+    @include breakpoint($only-mobile) {
+      @include icon(chevronleft, before) {
+        top: -0.3125rem;
+        transform: rotate(0deg);
+
+        html[lang=ar] & {
+          transform: rotate(180deg);
+        }
+      }
+    }
+  }
 }
 
 .alias--cart-checkout-login {
@@ -36,6 +49,12 @@
       font-family: $alshaya-thin;
     }
   }
+
+  .tab.tab-returning-customer {
+    span {
+      text-transform: none;
+    }
+  }
 }
 
 .multistep-checkout {
@@ -43,6 +62,21 @@
     span {
       font-size: 1rem;
       font-family: $alshaya-thin;
+    }
+  }
+
+  #edit-checkout-login {
+    .request-password-link {
+      font-size: 0.875rem;
+      font-weight: normal;
+    }
+  }
+
+  .fieldset-wrapper {
+    .form-type-password {
+      #unmask_password {
+        top: 0.25rem;
+      }
     }
   }
 }

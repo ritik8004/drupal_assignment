@@ -1323,6 +1323,12 @@
     margin-bottom: 0.5rem;
   }
 
+  .gm-style-iw {
+    & > div {
+      min-height: 12rem;
+    }
+  }
+
   .scroll-fix {
     @include breakpoint($desktop) {
       min-width: 13.0625rem;
@@ -1380,6 +1386,18 @@
 
   .location-content {
     white-space: normal;
+  }
+
+  @include breakpoint($tablet) {
+    width: 15.625rem;
+  }
+}
+
+.gm-style-iw {
+  max-width: none !important;
+
+  > div {
+    max-width: none !important;
   }
 }
 

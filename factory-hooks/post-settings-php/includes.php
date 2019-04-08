@@ -32,9 +32,18 @@ if (empty($acsf_site_name) && $settings['env'] == 'local') {
   }
 
   // We don't want to interrupt script on default domain, otherwise drush command without --uri parameter would fail
-  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') ) {
+  if ( (empty($acsf_site_name)) && ($host_site_code != 'default_local') && ($host_site_code) ) {
     print 'Invalid domain';
     die();
+  }
+
+  // We hardcode vsae site for travis Drupal installation.
+  // We must choose some site to test whether Drupal installation works
+  // properly. But it doesn't really matter too much which site we will install
+  // locally, as we only run very simplistic behat tests against it.
+  if ($env == 'travis') {
+    echo "Setting up vsae for travis environment.";
+    $acsf_site_name = 'vsae';
   }
 }
 
@@ -47,6 +56,7 @@ $settings['country_code'] = strtoupper($country_code);
 
 // Filepath for MDC rabbitmq credentials.
 $rabbitmq_creds_dir = $env == 'local' ? '/home/vagrant/rabbitmq-creds/' : '/home/alshaya/rabbitmq-creds/' . $settings['env'] . '/';
+
 $settings['alshaya_api.settings']['rabbitmq_credentials_directory'] = $rabbitmq_creds_dir;
 
 // We merge the entire settings with the specific ones.

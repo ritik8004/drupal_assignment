@@ -226,20 +226,11 @@ function alshaya_acm_install() {
 
   $config->save();
 
-  $country_code = _alshaya_custom_get_site_level_country_code();
-
-  \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
-  $currency_code = _alshaya_get_currency_code($country_code, 'en');
-
-  // Update the currency code to one required for the site.
-  $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
-  $config->set('currency_code', $currency_code);
-  $config->set('decimal_points', 3);
-  $config->save();
-
   // Delete default store node.
   _alshaya_acm_delete_default_store_node();
 
+  // Exclude sync requests from shield.
+  _alshaya_acm_exclude_sync_from_shield();
 }
 
 /**

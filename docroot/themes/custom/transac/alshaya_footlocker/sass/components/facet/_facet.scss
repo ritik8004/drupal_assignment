@@ -1,4 +1,9 @@
 .c-facet {
+  a {
+    text-transform: none;
+    font-weight: normal;
+  }
+
   ul {
     @include breakpoint($desktop) {
       padding-top: 0;
@@ -32,6 +37,13 @@
     .facet-item__value,
     .facet-item__count {
       display: inline-block;
+      text-transform: capitalize;
+
+      @include breakpoint($only-mobile) {
+        html[lang=en] & {
+          margin-top: 0;
+        }
+      }
     }
   }
 }

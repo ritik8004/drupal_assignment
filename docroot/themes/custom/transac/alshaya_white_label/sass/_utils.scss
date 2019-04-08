@@ -86,9 +86,17 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
       bottom: 0;
       right: 0;
       left: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1;
+      background-color: $header_mobile_menu_overlay !important;
+      z-index: 1 !important;
+      transition: none !important;
+      opacity: 1 !important;
     }
+  }
+}
+
+.no-animate {
+  &::before {
+    transition: none !important;
   }
 }
 
@@ -232,4 +240,15 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     width: 100%;
     height: auto;
   }
+}
+
+// Mixin to add a spinner.
+// Can be used anywhere when you need a loader
+@mixin throbberLoader() {
+  background-image: url(#{$base_theme_loader_img_directory_path}) !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5rem;
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
 }

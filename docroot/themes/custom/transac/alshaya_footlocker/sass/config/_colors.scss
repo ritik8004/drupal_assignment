@@ -8,6 +8,7 @@ $white-three: #dadada;
 $lipstick: #e81931;
 $white-four: #ebebeb;
 $tomato: #e6591b;
+$grey-ash: #666;
 $warm-grey: #777;
 $black: #333;
 $dark-red: #e2193a;
@@ -21,6 +22,7 @@ $primary_text: $black;
 $primary_link: $warm-grey;
 $primary_link-hover: $purplish-brown;
 $primary_link-active: $purplish-brown;
+$primary_bg: $white-two;
 $secondary_btn_bg: $dark-red;
 $secondary_border: $white-three;
 $content_link_color: $black;
@@ -77,7 +79,7 @@ $header_toggle_sign_active_tab: $black;
 $header_secondary_menu_link_mobile: $black;
 
 // Header my account nav.
-$header_my_account_bg: $white;
+$header_my_account_bg: $white-two;
 $header_my_account_link_hover: $purplish-brown;
 $header_my_account_icon: $purplish-brown;
 $header_my_account_h3_title: $purplish-brown;
@@ -133,12 +135,18 @@ $hp_slider_dots: $purplish-brown;
 
 // Language Switcher
 $lang_switch: $black;
+$lang_switch_list: $white-two;
+$lang_switch_active: $black;
+$lang_switch_firsttime_bg: $black;
+$lang_switch_firsttime_border: $white-two;
+$lang_switch_close_bg: $black;
+$lang_switch_close_icon: $white-two;
 
 // Accordion
 $accordion_border: $secondary_border;
 $accordion_title: $black;
 $accordion_sub_title: $warm-grey;
-$accordion_title_disabled: $white;
+$accordion_title_disabled: $white-three;
 $accordion_arrow: $black;
 
 //footer
@@ -150,6 +158,7 @@ $footer_border_top: $purplish-brown;
 //newsletter
 $newsletter_input_border: $secondary_border;
 $newsletter_submit_btn: $black;
+$newsletter_block_text: $grey-ash;
 
 //my-account
 $user_pwd_unmask: $black;
@@ -184,6 +193,7 @@ $title: $black;
 $sub_title: $black;
 $label_black: $black;
 $user_sidebar_block_title: $black;
+$webform_contact_legend: $page_title;
 
 // Breadcrumb
 $breadcrumb_link: $black;
@@ -199,6 +209,7 @@ $plp_facet_dropdown_icon: $purplish-brown;
 $plp_facet_label_border_mobile: $secondary_border;
 $plp_facet_border: $primary_border;
 $plp_promotion_description: $warm-grey;
+$plp_facet_filter: $purplish-brown;
 $plp_facet_filter_bg: $purplish-brown;
 $plp_facet_clear_border: $purplish-brown;
 $plp_facet_clear_border_mobile: $purplish-brown;
@@ -206,6 +217,9 @@ $plp_facet_clear_text: $purplish-brown;
 $plp_facet_filter_count: $black;
 $plp_facet_filter_count_background: $purplish-brown;
 $plp_tile_product_hover_border: $purplish-brown;
+$plp_pager_link: $white-two;
+$plp_pager_bg: $black;
+$plp_pager_link_border: $black;
 
 // Facet
 $category_facet_active_icon: $black;
@@ -221,6 +235,19 @@ $pdp_sidebar_label: $purplish-brown;
 $pdp_cc_btn_bg: $primary_btn_bg;
 $pdp_sidebar_link: $purplish-brown;
 $pdp_desc_wrapper_border: $primary_border;
+$pdp_sell_title: $black;
+$pdp_gallary-icon-bg: rgba(242, 242, 242, 0.9);
+$pdp_sidebar_selected_text: $black;
+$pdp_size_option_border: $black;
+$pdp_size_option_text: $black;
+$pdp_size_option_selected_text: $white-two;
+$pdp_size_option_selected_bg: $black;
+$pdp_swatch_disabled: $white;
+$pdp_size_option_text_hover : $white-two;
+$pdp_size_option_bg_hover: $black;
+$pdp_modal_full_prodlink: $black;
+$pdp_thumbimage_hover_bg: rgba(51, 51, 51, 0.06);
+$pdp_desc_wrapper_close_bg: $black;
 
 // Tooltip
 $tooltip_link: $black;
@@ -238,6 +265,8 @@ $mobile_continue_shopping_btn_border: $black;
 $desktop_continue_shopping_btn_text: $white-two;
 $desktop_continue_shopping_btn_bg: $black;
 $desktop_continue_shopping_btn_border: $black;
+$basket_header_promo_bg: $info-blue;
+$basket_sell_hover_link: $black;
 
 // Store finder page.
 // Store finder header form.
@@ -299,6 +328,10 @@ $checkout_method_choice_tab_title_active: $purplish-brown;
 
 // Address book
 $address_book_change_link: $black;
+$address_button_border: $secondary_border;
+$checkout_address_edit_link: $purplish-brown;
+$checkout_default_address_bg: $white-two;
+$checkout_deliver_address_hover_text: $purplish-brown;
 $checkout_cc_store_address_mobile_border: $primary_border;
 $checkout_login_guest_email_text: $purplish-brown;
 $checkout_login_guest_email_text_mobile: $purplish-brown;
@@ -309,6 +342,8 @@ $address_form_radio: $black;
 $address_pp_delete_closebtn: $black;
 $address_pp_delete_closebtn_cross: $white-two;
 $user_ui_dialog_border: $primary_border;
+$checkout_deliver_address_btn_txt: $purplish-brown;
+$checkout_default_address_border: $purplish-brown;
 
 // Checkout tabs & form.
 $checkout_tab_default_border: $secondary_border;
@@ -366,6 +401,10 @@ $order_print_order_details_item_row_details: $warm-grey;
 $order_print_order_details_row_label: $black;
 $order_summary_product_img_border: $secondary_border;
 $order_detail_td_light_content: $warm-grey;
+$order_search_form_icon: false;
+$order_search_form_label_active: $white-two;
+$order_search_form_label_mobile_active: $black;
+$order_search_form_input_mobile_border: $white-three;
 
 //Checkout Confirmation
 $checkout_confirm_order_summary_row: $info-blue;

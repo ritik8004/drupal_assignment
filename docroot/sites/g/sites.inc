@@ -37,7 +37,6 @@ define('GARDENS_SITE_DATA_NOT_FOUND_TTL', 60);
 // sites be unreachable for too long.
 define('GARDENS_SITE_DATA_READ_FAILURE_TTL', 60);
 // Note: a nonexistent sites.json leads to no caching at all.
-
 // The path (template) to the lock file that should be checked when sites.json
 // is unreadable. Sitegroup + env need to be filled.
 define('GARDENS_SITE_JSON_ALERT_LOCK_TEMPLATE', '/mnt/tmp/%s.%s/.sites-json-alert');
@@ -136,18 +135,18 @@ function gardens_site_data_build_data(array $site, array $map) {
 
   $private_files_directory = gardens_site_data_get_private_files_directory($db_name);
 
-  return array(
+  return [
     'dir' => "g/files/{$site['name']}",
     // Put some settings into a global used in settings.php.
-    'gardens_site_settings' => array(
+    'gardens_site_settings' => [
       'site' => $map['cloud']['site'],
       'env' => $map['cloud']['env'],
       'memcache_inc' => !empty($map["memcache_inc"]) ? $map["memcache_inc"] : '',
-      'flags' => !empty($site['flags']) ? $site['flags'] : array(),
-      'conf' => !empty($site['conf']) ? $site['conf'] : array(),
+      'flags' => !empty($site['flags']) ? $site['flags'] : [],
+      'conf' => !empty($site['conf']) ? $site['conf'] : [],
       'file_private_path' => file_exists($private_files_directory) ? $private_files_directory : NULL,
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -184,7 +183,7 @@ function gardens_site_data_get_site_from_file($domain) {
  *   if a sites.json read failure was encountered.
  */
 function gardens_site_data_refresh_one($domain) {
-  $data = gardens_site_data_refresh_domains(array($domain));
+  $data = gardens_site_data_refresh_domains([$domain]);
   return isset($data[$domain]) ? $data[$domain] : NULL;
 }
 
@@ -203,7 +202,7 @@ function gardens_site_data_refresh_one($domain) {
  */
 function gardens_site_data_refresh_domains(array $domains) {
   $location = gardens_site_data_get_filepath();
-  $data = array();
+  $data = [];
   foreach ($domains as $domain) {
     $domain = trim($domain);
     // Below code expects the JSON file to contain newlines such that
@@ -242,7 +241,7 @@ function gardens_site_data_refresh_domains(array $domains) {
       // the begin and end anchors can match the beginning and end of any one of
       // those lines, rather than having to match the entire string from
       // beginning to end (which fails if there is more than 1 line of results).
-      $matches = array();
+      $matches = [];
       $pattern = '@^\s*"' . preg_quote($domain, '@') . '": ({.+}),?$@m';
       if (preg_match($pattern, $result, $matches)) {
         $found_site = json_decode($matches[1], TRUE);
@@ -262,7 +261,7 @@ function gardens_site_data_refresh_domains(array $domains) {
         // format of the file has changed such that the grep-based single-line
         // parsing no longer works.
         if (class_exists('Drupal') && \Drupal::hasService('logger.factory')) {
-          \Drupal::logger('acsf')->alert('Unable to extract site data for site @site from sites.json line "@line".', array('@site' => $domain, '@line' => $result));
+          \Drupal::logger('acsf')->alert('Unable to extract site data for site @site from sites.json line "@line".', ['@site' => $domain, '@line' => $result]);
         }
         elseif (function_exists('syslog')) {
           syslog(LOG_ERR, sprintf('Unable to extract site data for site %s from sites.json line "%s".', $domain, $result));
@@ -379,7 +378,7 @@ function gardens_site_data_cache_get($domain) {
 }
 
 /**
- * (Re)checks for a fatal issue with the sites.json file.
+ * Re-checks for a fatal issue with the sites.json file.
  *
  * This function is not the only location where issues are determined; it's used
  * to doublecheck the exact type of issue / doublecheck for a race condition,
@@ -405,8 +404,10 @@ function gardens_site_data_sites_json_issue_type_get() {
       // we get back if it fails. There is a fail which we need to ignore: when
       // the sites.json is being rewritten for a short period of time the
       // following error will be returned:
-      //   head: cannot open `/mnt/files/balazs.01live/files-private/sites.json'
-      //   for reading: Structure needs cleaning
+      //
+      // head: cannot open `/mnt/files/balazs.01live/files-private/sites.json'
+      // for reading: Structure needs cleaning
+      //
       // To make sure we are only triggering an alert in case of a Gluster split
       // brain, redirect the stderr to stdout and look for the indicator
       // message: 'Input/output error'.
@@ -603,16 +604,16 @@ function gardens_site_data_alert_send($scope, $issue_type) {
   $webnode = gethostname();
 
   try {
-    $parameters = array(
+    $parameters = [
       'scope' => $scope,
-      'data' => array(
+      'data' => [
         'issue_type' => $issue_type,
         'site_group' => $site,
         'site_env' => $env,
         'server' => $webnode,
         'timestamp' => REQUEST_TIME,
-      ),
-    );
+      ],
+    ];
     $creds = gardens_site_data_shared_creds_get($site, $env);
     $message = new Acquia\SimpleRest\SimpleRestMessage($site, $env);
     $response = $message->send('POST', $endpoint, $parameters, $creds);
@@ -620,7 +621,7 @@ function gardens_site_data_alert_send($scope, $issue_type) {
   catch (Exception $e) {
     $error_message = sprintf('Sending alert to Site Factory failed: %s', $e->getMessage());
     syslog(LOG_ERR, $error_message);
-    $response = new Acquia\SimpleRest\SimpleRestResponse($endpoint, 500, array('message' => $error_message));
+    $response = new Acquia\SimpleRest\SimpleRestResponse($endpoint, 500, ['message' => $error_message]);
   }
 
   return $response;

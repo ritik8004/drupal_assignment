@@ -1,3 +1,11 @@
 alshaya create user:
   title: 'Create User'
   description: 'Allow to create users.'
+
+alshaya edit language field on acq_product_category:
+  title: 'Edit the language field on acq_product_category terms'
+  description: 'Allow to edit language field on acq_product_category term edit form.'
+
+alshaya edit translation field on acq_product_category:
+  title: 'Edit the translation field on acq_product_category terms'
+  description: 'Allow to edit translation field on acq_product_category term edit form.'

@@ -26,9 +26,8 @@ if ($settings['env'] === 'local') {
   // For Drush and other CLI commands increase the memory limit to 512 MB.
   // We do this only for local env, for cloud envs it is already done.
   // This is as suggested in https://support.acquia.com/hc/en-us/articles/360004542293-Conditionally-increasing-memory-limits
-  if (PHP_SAPI === 'cli') {
-    ini_set('memory_limit', '512M');
-  }
+  $memory_limit = PHP_SAPI === 'cli' ? '512M' : '128M';
+  ini_set('memory_limit', $memory_limit);
 
   global $host_site_code;
 
@@ -50,6 +49,10 @@ if ($settings['env'] === 'local') {
   // Set private files directory for local, it is not set in
   // '/../vendor/acquia/blt/settings/filesystem.settings.php' file.
   $settings['file_private_path'] = '/var/www/alshaya/files-private/' . $host_site_code;
+
+  // Set config of stage file proxy to ignore invalid ssl errors.
+  $config['stage_file_proxy.settings']['verify'] = FALSE;
+  $config['stage_file_proxy.settings']['origin_dir'] = 'files';
 }
 
 switch ($env) {
@@ -157,10 +160,10 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 // ################################################################
 switch ($env) {
   case 'local':
+  case 'travis':
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
-    $settings['additional_modules'][] = 'features_ui';
 
     // Increase autologout timeout on local so we are not always logged out.
     $config['autologout.settings']['timeout'] = 86400;
@@ -170,13 +173,6 @@ switch ($env) {
 
     // Log debug messages too.
     $settings['alshaya_performance_log_mode'] = 'developer';
-
-  // Please note there is no "break" at the end of "local" case so "travis"
-  // settings are applied both on "local" and on "travis" environments.
-  case 'travis':
-    // Disable stock check.
-    global $_alshaya_acm_disable_stock_check;
-    $_alshaya_acm_disable_stock_check = TRUE;
     break;
 
   case '01dev':

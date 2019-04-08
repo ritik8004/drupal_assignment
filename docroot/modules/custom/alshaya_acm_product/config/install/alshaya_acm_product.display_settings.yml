@@ -1,9 +1,12 @@
 image_thumb_gallery: false
 configurable_use_parent_images: 'always'
+media_roles_to_hide_in_gallery: 'thumbnail,swatch_image'
 show_child_images_after_selecting: 'one'
 show_parent_images_in_child: false
 color_swatches: false
 color_swatches_hover: false
+color_swatches_show_product_image: false
+show_variants_thumbnail_plp_gallery: false
 show_configurable_boxes_after: 767
 plp_slider:
   item: 4
@@ -16,3 +19,5 @@ short_desc_characters: 160
 short_desc_text_summary: true
 hide_not_required_option: false
 listing_display_mode: 'aggregated'
+price_display_mode: 'simple'
+show_currency_on_second_price: false

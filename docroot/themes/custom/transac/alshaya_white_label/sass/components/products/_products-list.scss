@@ -27,6 +27,16 @@
       }
     }
 
+    .block-views-blockalshaya-product-list-block-1 + .block-views-blockalshaya-term-description-block-1 {
+      .c-page-title__description {
+        width: 100%;
+
+        @include breakpoint($only-tablet) {
+          max-width: 100%;
+        }
+      }
+    }
+
     .block-views-exposed-filter-blocksearch-page form.views-exposed-form-search-page {
       @include breakpoint($only-mobile) {
         border: none;
@@ -88,6 +98,19 @@
                 div {
                   display: inline;
                 }
+
+                .price-wrapper {
+                  .price {
+                    padding: 0 0.125rem;
+                    display: inline-block;
+                    font-size: 0;
+
+                    .price-currency,
+                    .price-amount {
+                      font-size: 0.875rem;
+                    }
+                  }
+                }
               }
 
               &.facet-item__count {
@@ -143,7 +166,7 @@
       }
 
       @include breakpoint($tablet) {
-        top: 1rem;
+        top: 0.25rem;
 
         html[lang=ar] & {
           top: 0.75rem;
@@ -178,6 +201,10 @@
 
         @include breakpoint($tablet) {
           transform: translate(#{negate-value(-3.7)}rem, 0);
+        }
+
+        @include breakpoint($only-mobile) {
+          z-index: auto;
         }
 
         .c-facet__blocks {
@@ -298,9 +325,8 @@
           }
 
           .throbber {
-            background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-            background-position: $right center !important;
-            background-repeat: no-repeat !important;
+            @include throbberLoader();
+
             background-size: 2rem;
             padding: 1rem;
 
@@ -394,7 +420,6 @@
     width: 65%;
     font-size: 1rem;
     font-weight: normal;
-    text-transform: lowercase;
     color: $plp_promotion_description;
     margin-top: 0.45rem;
     font-family: $alshaya-thin;
@@ -441,6 +466,7 @@
     @include breakpoint($mobile) {
       width: calc(50% - 0.5rem);
       margin-bottom: 1rem;
+      min-height: 18rem;
     }
 
     @include breakpoint($only-mobile) {
@@ -453,8 +479,13 @@
       }
     }
 
+    @include breakpoint($tablet) {
+      min-height: 20rem;
+    }
+
     @include breakpoint($desktop) {
       width: 33%;
+      min-height: 25rem;
     }
 
     .alshaya_search_gallery {
@@ -726,6 +757,7 @@
       width: 100%;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
+      z-index: 12;
 
       .filter-close {
         float: $right;
@@ -1073,7 +1105,8 @@ html[lang=ar] {
         }
       }
 
-      .block-views-exposed-filter-blockalshaya-product-list-block-1 {
+      .block-views-exposed-filter-blockalshaya-product-list-block-1,
+      .block-views-exposed-filter-blockalshaya-product-list-block-2 {
         padding-top: 0.9rem;
         border-top: 1px solid $mm_l1_border;
       }
@@ -1137,9 +1170,8 @@ html[lang=ar] {
     }
 
     .throbber {
-      background-image: url(#{$base_theme_loader_img_directory_path}) !important;
-      background-position: $right center !important;
-      background-repeat: no-repeat !important;
+      @include throbberLoader();
+
       background-size: 2.5rem;
       padding: 1rem;
 
@@ -1186,5 +1218,16 @@ body {
 .nodetype--acq_promotion {
   .select2-container--open {
     z-index: 4;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .swatch-color-count-wrapper {
+    margin-top: 0.625rem;
+
+    a {
+      width: auto;
+      color: $plp-swatch-color-count;
+    }
   }
 }

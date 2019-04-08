@@ -13,7 +13,19 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- *  Update cardinality of promo block paragraph field.
+ * Enable jquery_minicolors module.
+ */
+function alshaya_paragraphs_update_8125() {
+  // Install jquery-minicolors module.
+  if (!\Drupal::moduleHandler()->moduleExists('jquery_minicolors')) {
+    \Drupal::service('module_installer')->install(['jquery_minicolors'], TRUE);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update cardinality of promo block paragraph field.
  */
 function alshaya_paragraphs_update_8124() {
   $configs = [

@@ -24,6 +24,10 @@
         }
 
         .store {
+          &::before {
+            margin-top: -0.0625rem;
+          }
+
           &:hover {
             background-color: transparent;
           }
@@ -38,8 +42,9 @@
         .mobile--search {
           @include icon(search) {
             color: $header_c_menu_search_icon;
-            font-size: 2.0625rem;
+            font-size: 2.1875rem;
             line-height: 1;
+            margin-top: -0.25rem;
           }
         }
       }
@@ -104,6 +109,18 @@
 
   .one {
     text-transform: uppercase;
+  }
+
+  .shop,
+  .account {
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        padding: 0 0.25rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 }
 

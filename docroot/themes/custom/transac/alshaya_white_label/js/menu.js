@@ -103,22 +103,6 @@
         event.stopPropagation();
       });
 
-      $('.menu--one__list-item.has-child').each(function () {
-        $('.menu--one__list-item.has-child').mouseenter(function () {
-          $('.menu--two__list li:first', this).addClass('first--child_open');
-        });
-      });
-
-      $('.menu--one__list-item.has-child').each(function () {
-        $('.menu--one__list-item.has-child').mouseleave(function () {
-          $('.menu--two__list li:first', this).removeClass('first--child_open');
-        });
-      });
-
-      $('.menu--two__list-item .menu-two__link-wrapper').hover(function () {
-        $('.menu--two__list-item').removeClass('first--child_open');
-      });
-
       // @TODO: Refactor to reduce complexity.
       $('.mobile--close').on('click', function (e) {
         $('.main--menu').removeClass('menu--active');
@@ -136,8 +120,10 @@
 
       $('.branding__menu .has-child .menu--one__link, .branding__menu .has-child .menu--two__list').hover(function () {
         $('body').addClass('overlay');
+        $('.menu--two__list li:first', this).addClass('first--child_open');
       }, function () {
         $('body').removeClass('overlay');
+        $('.menu--two__list li:first', this).removeClass('first--child_open');
       });
 
       // Close mobile menu when clicked outside the menu.
@@ -190,20 +176,18 @@
       /**
        * Add active state to the menu.
        */
-
+      var menuHovered = 0;
       if ($('.block-alshaya-main-menu').length) {
         var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
 
         $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
-          setTimeout(function () {
-            $(parent).parent().addClass('active--menu--links');
-          }, 500);
-          $(parent).children('.menu--two__list').css('transition-delay', '0.3s');
+          menuHovered = 1;
+          $(parent).parent().addClass('active--menu--links');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
           $(parent).parent().removeClass('active--menu--links');
-          $(parent).children('.menu--two__list').css('transition-delay', '0s');
+          menuHovered = 0;
         });
       }
 
@@ -229,15 +213,34 @@
         });
       }
 
+      $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseenter(function () {
+        if (menuHovered === 1) {
+          $('ul.menu--two__list').css('transition', 'none');
+          $('.menu-backdrop').css('transition', 'none');
+        }
+        else {
+          $('ul.menu--two__list').css('transition', 'all var(--menuTiming) ease-in 300ms');
+          $('.menu-backdrop').css('transition', 'all var(--menuTiming) ease-in 300ms');
+        }
+      });
+
+      $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseleave(function () {
+        if (menuHovered === 1) {
+          $('ul.menu--two__list').css('transition', 'all var(--menuTiming) ease-in 300ms');
+          $('.menu-backdrop').css('transition', 'all var(--menuTiming) ease-in 300ms');
+        }
+      });
+
       // Add class for three level navigation.
       $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
 
       // Set menu level2 height on desktop and tablet.
       var windowWidth = $(window).width();
       var menuLevel2 = $('.menu--two__list');
+      var menuBackdrop = $('.menu-backdrop');
 
       function setMenuHeight() {
-        if (menuLevel2.length > 0 && windowWidth > 767) {
+        if (menuLevel2.length > 0 && windowWidth > 1024) {
           var maxHeight = menuLevel2.map(function () {
             return $(this).height();
           })
@@ -246,6 +249,7 @@
                 return Math.max(first, second);
               });
 
+          menuBackdrop.height(maxHeight);
           menuLevel2.each(function () {
             $(this).height(maxHeight);
           });
@@ -255,6 +259,20 @@
       $(window).resize(debounce(function () {
         setMenuHeight();
       }, 250));
+
+      var menuTiming = $('.main--menu').attr('data-menu-timing');
+      if (menuTiming !== 'undefined') {
+        $(':root').css({'--menuTiming': menuTiming + 'ms'});
+      }
+
+      // Adding Class to parent on hover of a menu-item without child.
+      if ($(window).width() > 1023) {
+        $('.block-alshaya-main-menu li.menu--one__list-item:not(.has-child)').hover(function () {
+          $(this).parent().addClass('active--menu--without__child');
+        }, function () {
+          $(this).parent().removeClass('active--menu--without__child');
+        });
+      }
     }
   };
 
