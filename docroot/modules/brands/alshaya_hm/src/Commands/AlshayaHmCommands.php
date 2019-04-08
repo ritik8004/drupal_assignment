@@ -216,6 +216,8 @@ class AlshayaHmCommands extends DrushCommands {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public static function addRedirectsFromTempstore(&$context) {
+    $logger = \Drupal::logger('AlshayaHmCommands');
+
     /** @var \Drupal\redirect\RedirectRepository $redirect_repository */
     $redirect_repository = \Drupal::service('redirect.repository');
 
@@ -243,40 +245,53 @@ class AlshayaHmCommands extends DrushCommands {
       // Skip adding redirect if the old child SKU is not linked with a node
       // yet.
       if (!$node instanceof NodeInterface) {
-        \Drupal::logger('alshaya_hm')->alert('Display node not found for SKU @sku.', ['@sku' => $map['child_sku']]);
+        $logger->alert('Display node not found for SKU @sku.', ['@sku' => $map['child_sku']]);
         continue;
       }
 
       // Skip adding redirect for cases where the old style level SKU exists.
       // Migration is supposed to disable the old style level SKU on MDC.
-      if (($style_parent_sku = SKU::loadFromSku($map['parent_sku'])) &&
-      ($style_parent_sku instanceof SKU)) {
-        \Drupal::logger('alshaya_hm')->alert('SKU has not been migrated yet. Skipping adding redirect for @sku.', ['@sku' => $map['child_sku']]);
+      $style_parent_sku = SKU::loadFromSku($map['parent_sku']);
+      if ($style_parent_sku instanceof SKU) {
+        $logger->notice('SKU has not been migrated yet. Skipping adding redirect for @sku.', ['@sku' => $map['child_sku']]);
         continue;
       }
 
       // Add redirect only if the child SKU is available & old style level
       // parent SKU is not available i.e., disabled after migration on MDC.
-      if (($child_sku = SKU::loadFromSku($map['child_sku'], $map['langcode'])) &&
-        ($child_sku instanceof SKU)) {
+      $child_sku = SKU::loadFromSku($map['child_sku'], $map['langcode']);
+      if ($child_sku instanceof SKU && $child_sku->language()->getId() == $map['langcode']) {
         $redirect = $redirect_repository->findMatchingRedirect($map['alias'], [], $map['langcode']);
 
         // Create redirect from old alias to new nodes. Avoid errors if the
         // redirect already exists.
         if (!$redirect instanceof Redirect) {
-          Redirect::create([
-            'redirect_source' => $map['alias'],
-            'redirect_redirect' => '/node/' . $node->id(),
-            'language' => $map['langcode'],
-            'status_code' => '301',
-          ])->save();
+          try {
+            $redirect = Redirect::create();
+            $redirect->setStatusCode(301);
+            $redirect->setLanguage($map['langcode']);
+            $redirect->setSource($map['alias']);
+            $redirect->setRedirect('/node/' . $node->id());
+            $redirect->save();
+
+            $logger->notice('Redirect successfully added for @map', ['@map' => json_encode($map)]);
+          }
+          catch (\Exception $e) {
+            $logger->alert('Failed to create redirect for @map, message @message.', [
+              '@map' => json_encode($map),
+              '@message' => $e->getMessage(),
+            ]);
+          }
         }
         else {
-          \Drupal::logger('alshaya_hm')->alert('Skipping adding redirect. Redirect already found for the source: @alias', ['@alias' => $map['alias']]);
+          $logger->notice('Skipping adding redirect. Redirect already found for the source: @alias', ['@alias' => $map['alias']]);
         }
       }
       else {
-        \Drupal::logger('alshaya_hm')->alert('Skipping adding redirect. SKU @sku not found or is missing style code.', ['@sku' => $map['child_sku']]);
+        $logger->warning('Skipping adding redirect. SKU @sku not found in language @langcode or is missing style code.', [
+          '@sku' => $map['child_sku'],
+          '@langcode' => $map['langcode'],
+        ]);
       }
     }
 
