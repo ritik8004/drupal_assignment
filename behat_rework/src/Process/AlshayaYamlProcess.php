@@ -385,7 +385,7 @@ class AlshayaYamlProcess {
     if (!file_exists($new_file_path)) {
       $pathinfo = pathinfo($new_file_path);
       if (!is_dir($pathinfo['dirname'])) {
-        mkdir($pathinfo['dirname']);
+        mkdir($pathinfo['dirname'], 0777, TRUE);
       }
     }
 
