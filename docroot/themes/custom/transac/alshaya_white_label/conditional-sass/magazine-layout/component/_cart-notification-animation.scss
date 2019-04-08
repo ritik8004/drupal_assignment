@@ -16,66 +16,6 @@
   }
 }
 
-@include breakpoint($tablet) {
-  @keyframes cart-notification-animation {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-      top: calc((100vh - 10rem) / 2);
-      #{$right}: calc((100% - 17.5rem) / 2);
-      #{$left}: 0;
-    }
-
-    100% {
-      opacity: 0;
-      transform: scale(0);
-      top: 2rem;
-      #{$right}: 1.5rem;
-      #{$left}: calc(100% - 17.5rem);
-    }
-  }
-}
-
-@include breakpoint($desktop) {
-  @keyframes cart-notification-animation {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-      top: calc((100vh - 10rem) / 2);
-      #{$right}: calc((100% - 17.5rem) / 2);
-      #{$left}: 0;
-    }
-
-    100% {
-      opacity: 0;
-      transform: scale(0);
-      top: 2.25rem;
-      #{$right}: 1.5rem;
-      #{$left}: calc(100% - 17.5rem);
-    }
-  }
-}
-
-@include breakpoint($desktop-wide) {
-  @keyframes cart-notification-animation {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-      top: calc((100vh - 10rem) / 2);
-      #{$right}: calc((100% - 17.5rem) / 2);
-      #{$left}: 0;
-    }
-
-    100% {
-      opacity: 0;
-      transform: scale(0);
-      top: 2.25rem;
-      #{$right}: calc((100% - 77.25rem) / 2);
-      #{$left}: calc(100% - 17.5rem);
-    }
-  }
-}
-
 #cart_notification {
   &.cart-notification-animate {
     position: fixed;

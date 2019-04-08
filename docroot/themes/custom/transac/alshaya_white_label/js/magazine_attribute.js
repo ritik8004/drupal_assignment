@@ -131,6 +131,7 @@
 
       else if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
         $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
       }
 
       else {
