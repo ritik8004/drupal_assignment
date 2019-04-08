@@ -259,7 +259,7 @@ class AlshayaHmCommands extends DrushCommands {
       // parent SKU is not available i.e., disabled after migration on MDC.
       if (($child_sku = SKU::loadFromSku($map['child_sku'], $map['langcode'])) &&
         ($child_sku instanceof SKU)) {
-        $redirect = $redirect_repository->findMatchingRegdirect($map['alias'], [], $map['langcode']);
+        $redirect = $redirect_repository->findMatchingRedirect($map['alias'], [], $map['langcode']);
 
         // Create redirect from old alias to new nodes. Avoid errors if the
         // redirect already exists.
