@@ -1,0 +1,90 @@
+.large-col-grid,
+.small-col-grid {
+  display: inline-block;
+  margin-#{$left}: 1rem;
+
+  @include breakpoint($only-mobile) {
+    margin-#{$left}: 0.75rem;
+  }
+}
+
+.large-col-grid {
+  &.active {
+    svg .grid {
+      fill: $plp_grid_active_color;
+    }
+  }
+
+  .g2,
+  .g1 {
+    display: none;
+  }
+
+  @include breakpoint($tablet) {
+    .g2 {
+      display: inline-block;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .g1 {
+      display: inline-block;
+    }
+  }
+}
+
+.small-col-grid {
+  &.active {
+    svg .grid {
+      fill: $plp_grid_active_color;
+    }
+  }
+
+  .g3,
+  .g2 {
+    display: none;
+  }
+
+  @include breakpoint($tablet) {
+    .g3 {
+      display: inline-block;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    .g2 {
+      display: inline-block;
+    }
+  }
+}
+
+.block-alshaya-grid-count-block {
+  float: $right;
+  height: 2.9375rem;
+  line-height: 2.9375rem;
+  width: 20%;
+  text-align: $right;
+
+  .total-result-count,
+  .grid-buttons {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .grid-buttons {
+    @include breakpoint($only-mobile) {
+      margin-#{$right}: 1.25rem;
+    }
+  }
+
+  .total-result-count {
+    @include breakpoint($only-mobile) {
+      float: $left;
+      padding-#{$left}: 1.25rem;
+
+      > div {
+        padding-top: 0 !important;
+      }
+    }
+  }
+}

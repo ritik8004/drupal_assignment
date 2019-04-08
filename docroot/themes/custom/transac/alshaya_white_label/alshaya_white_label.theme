@@ -11,6 +11,7 @@ use Drupal\file\Plugin\Field\FieldType\FileFieldItemList;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\Core\Url;
+use Drupal\Core\Template\Attribute;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\TermInterface;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
@@ -309,6 +310,16 @@ function alshaya_white_label_preprocess_block(&$variables) {
   if (isset($variables['elements'], $variables['elements']['#id']) && $variables['elements']['#id'] === 'branding') {
     $mobile_logo = alshaya_master_get_mobile_logo();
     $variables['mobile_site_logo'] = $mobile_logo['logo_url'] ?? '';
+  }
+
+  $listing_pages_plugin_id = [
+    'views_block:alshaya_product_list-block_1',
+    'views_block:alshaya_product_list-block_2',
+    'views_exposed_filter_block:search-page',
+  ];
+  if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
+    $variables['attributes']['class'][] = 'c-products-list';
+    $variables['attributes']['class'][] = 'product-small';
   }
 }
 
@@ -1452,5 +1463,37 @@ function alshaya_white_label_preprocess_breadcrumb(&$variables) {
       'url' => $link->getUrl()->toString(),
       'class' => $class,
     ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function alshaya_white_label_preprocess_facets_item_list(&$variables) {
+  // Flag to determine if category facet has active item.
+  $category_active_facet = FALSE;
+  // If category facet.
+  $is_category_facet = (strpos($variables['attributes']['data-drupal-facet-id'], 'category') !== FALSE);
+  foreach ($variables['items'] as $key => $item) {
+    if (isset($item['value']['#attributes']['class'])
+      && in_array('is-active', $item['value']['#attributes']['class'])) {
+      if ($variables['items'][$key]['attributes'] instanceof Attribute) {
+        $variables['items'][$key]['attributes']->addClass('is-active');
+
+        // Update flag as there is active category facet.
+        if ($is_category_facet) {
+          $category_active_facet = TRUE;
+        }
+      }
+    }
+  }
+
+  // If its category facet and it has no active item, then mark `All` active.
+  if ($is_category_facet && !$category_active_facet && !empty($variables['items'][0])) {
+    $variables['items'][0]['attributes']->addClass('is-active');
+  }
+
+  if ($is_category_facet) {
+    $variables['items'][0]['attributes']->addClass('category-all');
   }
 }

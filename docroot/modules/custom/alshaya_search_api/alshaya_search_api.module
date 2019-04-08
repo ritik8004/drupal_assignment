@@ -11,6 +11,28 @@ use Drupal\views\ViewExecutable;
 use Drupal\search_api\Query\QueryInterface;
 
 /**
+ * Implements hook_theme().
+ */
+function alshaya_search_api_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['all_facets_block'] = [
+    'template' => 'all-facets-block',
+    'variables' => [
+      'facet_blocks' => [],
+      'show_all' => NULL,
+    ],
+  ];
+
+  $items['grid_count_block'] = [
+    'template' => 'grid-count-block',
+    'variables' => [],
+  ];
+
+  return $items;
+}
+
+/**
  * Wrapper function, removes a field from Index and trigger re-index.
  *
  * @param string $field_code

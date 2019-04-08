@@ -10,7 +10,7 @@ dependencies:
     - alshaya_white_label
 id: skusskureferencefinalprice
 theme: alshaya_white_label
-region: sidebar_first
+region: content
 weight: -26
 provider: null
 plugin: 'facet_block:skus_sku_reference_final_price'

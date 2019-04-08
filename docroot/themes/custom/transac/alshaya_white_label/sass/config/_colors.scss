@@ -78,6 +78,10 @@ $mothercare-black: #000;
 $sticky-btn: rgba(0, 0, 0, 0.07);
 $_campaign-plp-style-1-menu-link: #b7b8b7;
 $_instagram_dots_default: #e3e3e3;
+$_plp_filter_active_drodpwon_item: #f0f7ff;
+$_plp_facet_count_color: #7d7d7d;
+$_plp_sort_by_options: $brownish-grey;
+$_plp_selected_filter_text: #555;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -436,7 +440,6 @@ $checkout_progress_next_txt: $brownish-grey;
 
 /* ------- 7. Pages ----- */
 // Product listing page and search page.
-$plp_search_count: $black;
 $color_facet_active_border: $cerulean-two;
 $plp_facet_filter: $windows-blue;
 $plp_facet_filter_bg: $cerulean-two;
@@ -461,11 +464,24 @@ $plp_facet_filter_count_background: $pumpkin-orange;
 $plp_facet_filter_count_text: $white-five;
 $plp_facet_white_color_attribute: $white;
 $plp-swatch-color-count: $black;
+$plp_mobile_separator: $warm-grey-two;
+$plp_facet_count_number: $_plp_facet_count_color;
+$plp_sort_by_options: $_plp_sort_by_options;
+$plp_selected_filter_label_text: $_plp_selected_filter_text;
+$plp_grid_active_color: $marine-blue-two;
+
+// PLP All filter colors
+$plp_all_filter_bg: $white-five;
+$plp_all_filter_head_border: $white-two;
+$plp_all_filter_title: $page_title;
+$plp_all_filter_item_border: $white-two;
+$plp_all_filter_button_color: $primary_brand_button;
 
 // PLP Filter bar.
 $plp_filterbar_clearall_border: $cerulean-two;
 $plp_filterbar_clearall_text: $cerulean-two;
-$plp_search_count: $black;
+$plp_search_count: $_plp_selected_filter_text;
+$plp_filter_active_item: $_plp_filter_active_drodpwon_item;
 
 // PLP Product tile.
 $plp_tile_product_text: $black;

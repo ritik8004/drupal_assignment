@@ -6,7 +6,7 @@
   }
 
   @include breakpoint($only-mobile) {
-    padding-top: 0.625rem;
+    padding-top: 0;
   }
 
   .region__content {
@@ -28,16 +28,6 @@
               &.facet-item__value {
                 margin-#{$right}: 0;
                 text-transform: capitalize;
-                height: 2.5rem;
-                line-height: 1.7;
-              }
-
-              &.js-facet-deactivate {
-                @include icon(close, after) {
-                  top: 5.15%;
-                }
-
-                height: 2.5rem;
               }
             }
           }
@@ -50,7 +40,8 @@
             border-color: $primary_brand_button;
 
             a {
-              font-size: 0.875rem;
+              font-size: 0.75rem;
+              letter-spacing: 1px;
               color: $primary_brand_button;
             }
 
@@ -268,8 +259,8 @@
     line-height: 1.5;
 
     @include breakpoint($only-mobile) {
-      height: 1.25rem;
-      line-height: 1.25;
+      height: auto;
+      line-height: 1;
     }
   }
 }

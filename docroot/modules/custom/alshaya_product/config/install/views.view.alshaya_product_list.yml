@@ -42,7 +42,7 @@ display:
           submit_button: Apply
           reset_button: false
           reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          exposed_sorts_label: 'sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -55,7 +55,7 @@ display:
               autosubmit: true
               autosubmit_hide: true
             sort:
-              bef_format: default
+              bef_format: bef
               advanced:
                 collapsible: false
                 collapsible_label: 'Sort options'
@@ -567,7 +567,7 @@ display:
           not: false
           plugin_id: search_api
       display_extenders: {  }
-      css_class: 'c-products-list product-small'
+      css_class: ''
       use_ajax: true
     cache_metadata:
       max-age: -1

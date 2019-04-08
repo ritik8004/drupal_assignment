@@ -317,7 +317,7 @@ $plp_facet_filter_bg: $PB_grey_one;
 $plp_facet_filter_link: $PB_white;
 $plp_facet_clear_border: $_black_two;
 $plp_facet_clear_bg: $_black_two;
-$plp_facet_clear_text: $white-two;
+$plp_facet_clear_text: $_black_two;
 $plp_facet_label_border_mobile: $_black_two;
 $plp_facet_label_bg_mobile: $white-two;
 $plp_facet_label_text_color: $_black_two;
@@ -327,6 +327,7 @@ $plp_facet_filter_count_background: $PB_confirmation_blue;
 $plp_pager_link: $white-two;
 $plp_pager_btn_bg: $_black_two;
 $plp_promotion_link: $PB_deep_red;
+$plp_grid_active_color: $PB_deep_red;
 
 // Sharethis
 $sharethis_icon: $_grey_sixteen;

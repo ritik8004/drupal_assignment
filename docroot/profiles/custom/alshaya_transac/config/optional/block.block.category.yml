@@ -1,5 +1,5 @@
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - facets.facet.category
@@ -10,7 +10,7 @@ dependencies:
     - alshaya_white_label
 id: category
 theme: alshaya_white_label
-region: sidebar_first
+region: content
 weight: -38
 provider: null
 plugin: 'facet_block:category'

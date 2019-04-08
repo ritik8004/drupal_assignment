@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_search_api
+    - system
+  theme:
+    - alshaya_white_label
+id: alshayagridcountblock_plp
+theme: alshaya_white_label
+region: content
+weight: -11
+provider: null
+plugin: alshaya_grid_count_block
+settings:
+  id: alshaya_grid_count_block
+  label: 'Alshaya Grid/Count block - PLP'
+  provider: alshaya_search_api
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }

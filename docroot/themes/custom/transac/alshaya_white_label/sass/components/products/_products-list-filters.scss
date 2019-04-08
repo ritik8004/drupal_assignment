@@ -1,0 +1,298 @@
+// Css for filters on products listing page and search page.
+.c-plp .c-content__region {
+  // Main all filters div theming.
+  .all-filters {
+    max-width: 31.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1005;
+    position: fixed;
+    #{$right}: 0;
+    top: 0;
+    bottom: 0;
+    background-color: $plp_all_filter_bg;
+    transition: transform 200ms cubic-bezier(0.4, 0, 1, 1);
+    transform: translateX(100%);
+    display: flex;
+    flex-direction: column;
+
+    html[lang='ar'] & {
+      transform: translateX(-100%);
+    }
+
+    &.filters-active {
+      transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+      transform: translateX(0) !important;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    .hide-facet-block,
+    .c-facet__title.c-accordion__title {
+      display: block;
+    }
+
+    .c-facet.c-accordion {
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
+  }
+
+  // Filter Head
+  .all-filters .filter {
+    &__head {
+      border-bottom: 1px solid $plp_all_filter_head_border;
+      padding: 2.5rem 1rem;
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+
+      // Back Button
+      .facet-all-back {
+        @include icon(chevron#{$left}, before) {
+          color: #000;
+          font-size: 2rem;
+          width: 2rem;
+          cursor: pointer;
+          pointer-events: none;
+        }
+      }
+
+      .filter-sort-title {
+        text-transform: uppercase;
+        color: $plp_all_filter_title;
+        text-align: center;
+        width: 100%;
+        line-height: 1.5;
+      }
+
+      // Close button
+      .facet-all-apply {
+        @include icon('close') {
+          font-size: 1.5rem;
+          line-height: 1.5rem;
+          width: 2rem;
+          color: #000;
+        }
+      }
+    }
+
+    &__inner {
+      padding-bottom: 9.375rem;
+
+      .block-views-exposed-filter-blockalshaya-product-list-block-1,
+      .block-views-exposed-filter-blockalshaya-product-list-block-2,
+      .block-views-exposed-filter-blocksearch-page {
+        margin-#{$left}: 0;
+        margin-#{$right}: 0;
+        float: none;
+
+        fieldset.form-wrapper {
+          margin-#{$left}: 0;
+          margin-#{$right}: 0;
+          float: none;
+          width: 100%;
+
+          legend {
+            width: 100%;
+
+            &::after {
+              display: none;
+            }
+          }
+
+          .fieldset-legend {
+            display: block;
+            text-transform: capitalize;
+            padding: 1.125rem 2rem;
+            height: auto;
+            line-height: 1;
+            border-bottom: 1px solid $plp_all_filter_item_border;
+
+            @include icon(chevron#{$right}, after) {
+              color: #000;
+              font-size: 1.5rem;
+              width: 2rem;
+              cursor: pointer;
+              pointer-events: none;
+              position: absolute;
+              #{$right}: 0.625rem;
+              top: 0.625rem;
+            }
+          }
+
+          .fieldset-wrapper {
+            position: static;
+            z-index: 9;
+            min-width: auto;
+            padding: 0;
+            border: none;
+
+            .form-item {
+              padding: 0 !important;
+              margin-bottom: 0;
+              border-bottom: 1px solid $plp_all_filter_item_border;
+            }
+
+            .form-type-radio:first-child {
+              margin-#{$right}: 0;
+            }
+          }
+        }
+
+        &.show-facet {
+          fieldset.form-wrapper {
+            legend.active,
+            .fieldset-legend {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .c-facet.c-accordion.block-facet-blockcategory-facet-plp {
+        display: block;
+
+        @include breakpoint($only-mobile) {
+          width: 100%;
+          border-bottom: none;
+          border-#{$right}: none;
+        }
+      }
+
+      .views-exposed-form,
+      .c-facet {
+        &.show-facet {
+          display: block !important;
+
+          ul {
+            display: block;
+          }
+
+          .c-accordion__title {
+            display: none;
+
+            &.active {
+              & + ul {
+                display: block !important;
+                overflow-y: auto;
+                height: 73vh;
+              }
+            }
+          }
+        }
+
+        &.c-accordion {
+          margin-#{$left}: 0;
+          margin-#{$right}: 0;
+          float: none;
+
+          ul {
+            position: static;
+            z-index: 9;
+            min-width: auto;
+            padding: 0;
+            border: none;
+
+            li {
+              label {
+                &::before {
+                  display: block;
+                }
+              }
+
+              span.facet-item__value {
+                line-height: unset;
+                margin-left: 0.5rem;
+
+                .facet-item__count {
+                  line-height: unset;
+                }
+              }
+            }
+          }
+
+          .c-accordion__title {
+            text-transform: capitalize;
+            padding: 1.125rem 2rem;
+            height: auto;
+            line-height: 1;
+            border-bottom: 1px solid $plp_all_filter_item_border;
+
+            @include icon(chevron#{$right}, after) {
+              color: #000;
+              font-size: 1.5rem;
+              width: 2rem;
+              cursor: pointer;
+              pointer-events: none;
+              position: absolute;
+              #{$right}: 0.625rem;
+            }
+
+            &.active {
+              & + ul {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+
+      .js-facets-checkbox-links {
+        .facet-item {
+          padding: 1.125rem 1.5rem !important;
+          margin-bottom: 0;
+          border-bottom: 1px solid $plp_all_filter_item_border;
+
+          input[type=checkbox] {
+            & ~ label {
+              &::before {
+                font-size: 1.3125rem;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &__foot {
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 -0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
+      display: flex;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      background: $plp_all_filter_bg;
+
+      .facet-all-count {
+        width: 100%;
+        line-height: 4;
+
+        .view-header.search-count {
+          border-bottom: none;
+        }
+      }
+
+      .facet-all-clear {
+        @extend %button-brand;
+
+        width: 48%;
+        line-height: 1.5;
+      }
+
+      .facet-all-apply {
+        @extend %button-wide;
+
+        width: 48%;
+        line-height: 1.5;
+        border: 1px solid $plp_all_filter_button_color;
+      }
+    }
+  }
+}

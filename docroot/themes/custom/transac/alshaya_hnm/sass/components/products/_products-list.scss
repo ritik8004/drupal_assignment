@@ -2,28 +2,32 @@
   padding-top: 1.5rem;
 
   @include breakpoint($only-mobile) {
-    padding-top: 0.75rem;
+    padding-top: 0;
   }
 
   .region__content {
+    .block-page-title-block {
+      h1 {
+        font-family: $hnm-bold;
+      }
+    }
+
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       ul {
         @include breakpoint($tablet) {
           margin-bottom: 0;
-          margin-top: 0.75rem;
           border-bottom: none;
         }
 
         li {
           a {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
 
             span {
               &.facet-item__value {
                 background: $plp_facet_label;
-                display: inline;
                 vertical-align: top;
                 line-height: 1;
                 text-transform: capitalize;
@@ -49,13 +53,11 @@
           }
 
           &.clear-all {
-            border: 2px solid $plp_facet_clear_border;
-            line-height: 1;
-
             a {
-              color: $plp_facet_label;
-              font-family: $hnm-bold;
+              color: $plp_facet_filter_link;
+              font-family: $hnm-demibold;
               text-transform: uppercase;
+              letter-spacing: 1px;
             }
           }
         }
@@ -129,7 +131,6 @@
       color: $plp_search_count;
       padding-bottom: 0.75rem;
       font-family: $hnm-regular;
-      border-bottom: 1px solid $content_pagetitle_border;
 
       @include breakpoint($only-mobile) {
         margin-top: 0.75rem;
@@ -146,7 +147,6 @@
 
   .c-page-title__description,
   .field--name-field-acq-promotion-description {
-    color: $plp_category_desc;
     margin-top: 0.3125rem;
     font-family: $hnm-regular;
     line-height: 1.56;
@@ -157,6 +157,22 @@
       display: flex;
       align-items: stretch;
       flex-wrap: wrap;
+    }
+
+    &.product-large {
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: 32.125rem;
+        }
+      }
+    }
+
+    &.product-small {
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: 16.125rem;
+        }
+      }
     }
   }
 

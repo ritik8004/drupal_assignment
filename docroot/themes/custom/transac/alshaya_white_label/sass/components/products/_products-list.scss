@@ -4,6 +4,11 @@
   @include breakpoint($only-mobile) {
     padding-left: 0;
     padding-right: 0;
+    padding-top: 0;
+  }
+
+  .block-views-blockproduct-category-level-3-block-2 {
+    display: none;
   }
 
   > .c-sidebar-first {
@@ -80,7 +85,6 @@
         margin: 0;
 
         @include breakpoint($tablet) {
-          border-bottom: 1px solid $plp_facet_input_border;
           display: inline-block;
           margin-bottom: 1.125rem;
           width: 100%;
@@ -97,20 +101,19 @@
             font-size: 0.75rem;
 
             @include breakpoint($only-mobile) {
-              font-size: 0.875rem;
+              font-size: 0.75rem;
             }
 
             span {
               &.facet-item__value {
                 float: $left;
-                margin-#{$right}: 1px;
                 text-transform: lowercase;
                 background: $plp_facet_filter_bg;
-                display: inline-block;
-                padding: 0.657rem 17px;
-                text-align: center;
-                vertical-align: middle;
-                height: 35px;
+                padding: 0 0 0 1.0625rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 2rem;
 
                 div {
                   display: inline;
@@ -137,20 +140,21 @@
               &.js-facet-deactivate {
                 @include icon(close, after) {
                   position: absolute;
-                  top: 2.15%;
-                  #{$left}: 3.5%;
+                  top: 50%;
+                  #{$left}: 50%;
+                  transform: translateX(-50%) translateY(-50%);
                   color: $plp_facet_summary_filter_icon;
+                  font-size: 1.25rem;
                 }
 
                 color: transparent;
-                font-size: 2.09rem;
-                width: 35px;
-                height: 35px;
+                font-size: 1rem;
+                width: 2rem;
+                height: 2rem;
                 position: relative;
-                float: $right;
                 background: $plp_facet_filter_bg;
                 display: inline-block;
-                padding: 0.657rem 17px;
+                padding: 0 1.0625rem;
                 text-align: center;
                 vertical-align: middle;
               }
@@ -158,10 +162,14 @@
           }
 
           &.clear-all {
-            border: 2px solid $plp_facet_clear_border;
-            padding: 0.407rem 1.5rem;
             text-transform: lowercase;
-            height: 2.188rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-#{$right}: 0;
+            padding-bottom: 0;
+            float: $right;
 
             @include breakpoint($desktop) {
               &:hover {
@@ -371,19 +379,27 @@
 
     .block-page-title-block {
       @include breakpoint($tablet) {
-        width: 73%;
+        width: 100%;
         padding-top: 0.75rem;
+        margin-bottom: 1.875rem;
       }
 
       &.mobile {
         + .view-header.search-count {
-          margin-top: 5px;
+          margin-top: 0.3125rem;
         }
 
         h1 {
           border-bottom: 0;
           margin-bottom: 0;
           padding-bottom: 0;
+
+          @include breakpoint($only-mobile) {
+            font-size: 1.25rem;
+            text-align: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid $plp_mobile_separator;
+          }
         }
       }
     }
@@ -393,8 +409,7 @@
       margin-bottom: 0.75rem;
       font-size: 0.875rem;
       color: $plp_search_count;
-      padding-bottom: 9px;
-      border-bottom: 1px solid $plp_facet_border;
+      padding-bottom: 0.5625rem;
       font-family: $alshaya-thin;
     }
 
@@ -429,16 +444,17 @@
     }
 
     @include breakpoint($only-tablet) {
-      max-width: 50%;
-      font-size: 0.875rem;
+      width: 100%;
+      font-size: 0.75rem;
       margin-top: 0.75rem;
+      margin-bottom: 1rem;
     }
 
-    width: 65%;
-    font-size: 1rem;
+    width: 73%;
+    font-size: 0.75rem;
     font-weight: normal;
     color: $plp_promotion_description;
-    margin-top: 0.45rem;
+    margin-bottom: 1rem;
     font-family: $alshaya-thin;
 
     p {
@@ -1169,9 +1185,7 @@ html[lang=ar] {
 @include breakpoint($only-mobile) {
   .c-plp {
     .region__content {
-      display: flex;
-      flex-flow: row wrap;
-      flex-direction: column;
+      display: block;
 
       > div {
         width: 100%;

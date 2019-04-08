@@ -1,0 +1,67 @@
+.c-facet.c-accordion {
+  .c-accordion__title {
+    font-family: $hnm-demibold;
+    color: $plp_facet_title;
+
+    &::after {
+      font-size: 2.25rem;
+    }
+  }
+}
+
+.show-all-filters {
+  font-family: $hnm-demibold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $plp_facet_title;
+}
+
+.c-plp {
+  .c-content__region {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      .filter-list-label {
+        font-family: $hnm-demibold;
+      }
+
+      ul li a {
+        span.js-facet-deactivate::after {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .block-views-exposed-filter-blockalshaya-product-list-block-1,
+    .block-views-exposed-filter-blockalshaya-product-list-block-2,
+    .block-views-exposed-filter-blocksearch-page {
+      legend {
+        text-transform: uppercase;
+        font-family: $hnm-demibold;
+        color: $plp_facet_title;
+        letter-spacing: 1px;
+
+        @include icon(dropdown-expand, after) {
+          position: absolute;
+          font-size: 2.25rem;
+          width: 1.75rem;
+        }
+      }
+
+      .fieldset-wrapper {
+        .form-type-radio {
+          input[checked='checked'] ~ label {
+            font-family: $hnm-demibold;
+          }
+
+          label {
+            &::before {
+              top: -3px;
+              transform: translateY(0);
+            }
+          }
+        }
+      }
+    }
+  }
+}
