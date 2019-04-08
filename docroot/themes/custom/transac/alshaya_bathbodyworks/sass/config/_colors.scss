@@ -116,9 +116,6 @@ $gallery_zoombtn_disabled: $gallary-icon-bg;
 $oos_btn_bg: $error-red;
 $oos_pdp_text: $white;
 
-// VAT text
-$vat: $warm-grey-one;
-
 // Autocomplete
 $autocomplete_border: $warm-grey-two;
 $autocomplete_border_last: $warm-grey-two;
@@ -474,7 +471,8 @@ $privilege_earn_icon: $peacock-blue;
 $user_order_help_bg: $info-blue;
 $user_order_help_text : $white;
 $user_order_help_text_links: $user_order_help_text;
-$password_tooltip_list: $error-red;
+$password_tooltip_list: $peacock-blue;
+$_password_tooltip_list_error: $error-red;
 
 // Checkout order summary block.
 $checkout_order_summary_title_border: $warm-grey-two;

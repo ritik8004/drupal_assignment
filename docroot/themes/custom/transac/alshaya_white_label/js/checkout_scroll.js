@@ -15,11 +15,16 @@
         }
       });
 
-      $('.store-actions .select-store').on('click', function () {
+      var counter;
+      $('.store-actions .select-store').once().on('click', function () {
+        counter = 0;
         $(document).ajaxComplete(function () {
-          $('html,body').animate({
-            scrollTop: $('#selected-store-wrapper').offset().top
-          }, 'slow');
+          if (counter === 0) {
+            $('html,body').animate({
+              scrollTop: $('#selected-store-wrapper').offset().top
+            }, 'slow');
+            counter++;
+          }
         });
       });
 
@@ -40,10 +45,13 @@
       else {
         // Scroll the checkout delivery page to 'Delivery to' section.
         if ($('.multistep-checkout').hasClass('show-form')) {
-          if ($('#edit-member-delivery-home').length || $('#edit-guest-delivery-home').length) {
-            $('html, body').animate({
-              scrollTop: $('#edit-member-delivery-home, #edit-guest-delivery-home').offset().top
-            }, 'slow');
+          var selectedTab = $('.multistep-checkout').find('input#selected-tab').val();
+          if (selectedTab === 'checkout-home-delivery') {
+            if ($('#edit-member-delivery-home').length || $('#edit-guest-delivery-home').length) {
+              $('html, body').animate({
+                scrollTop: $('#edit-member-delivery-home, #edit-guest-delivery-home').offset().top
+              }, 'slow');
+            }
           }
         }
       }

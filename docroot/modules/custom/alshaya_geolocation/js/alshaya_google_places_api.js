@@ -11,7 +11,6 @@
   /**
    * @namespace
    */
-  Drupal.click_collect = Drupal.click_collect || {};
   Drupal.geolocation = Drupal.geolocation || {};
 
   // Global var for no result found html.
@@ -194,38 +193,9 @@
     return coords;
   };
 
-  // Get formatted address from geocode.
-  Drupal.click_collect.getFormattedAddress = function (coords, $target, type) {
-    var geocoder = Drupal.AlshayaPlacesAutocomplete.getGeocoder();
-    var latlng = {lat: parseFloat(coords.lat), lng: parseFloat(coords.lng)};
-    geocoder.geocode({location: latlng}, function (results, status) {
-      if (status === 'OK') {
-        if (type === 'val') {
-            $target.val(results[2].formatted_address);
-        }
-        else {
-            $target.html(results[2].formatted_address);
-        }
-      }
-    });
-  };
-
-  // Ask for location permission.
-  Drupal.click_collect.getCurrentPosition = function (successCall, ErrorCall) {
-    // Get the permission track the user location.
-    try {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(successCall, ErrorCall, {timeout: 10000});
-      }
-    }
-    catch (e) {
-      // Empty.
-    }
-  };
-
   // Function to check and remove no results message or keep checking
   // for results to arrive.
-  Drupal.click_collect.locationAutocompleteCheckNoResultsCase = function () {
+  Drupal.AlshayaPlacesAutocomplete.locationAutocompleteCheckNoResultsCase = function () {
     $('.pac-container').find('.pac-not-found').remove();
 
     if ($('.pac-container').find('.pac-item').length <= 0) {
@@ -233,7 +203,28 @@
       $('.pac-container').show();
 
       // We still check every 100ms as we are not sure when we will get the result.
-      location_autocomplete_no_result_checked = setTimeout(Drupal.click_collect.locationAutocompleteCheckNoResultsCase, 100);
+      location_autocomplete_no_result_checked = setTimeout(Drupal.AlshayaPlacesAutocomplete.locationAutocompleteCheckNoResultsCase, 100);
+    }
+  };
+
+  // Error callback.
+  Drupal.AlshayaPlacesAutocomplete.LocationError = function (error) {
+    if (error.code == error.PERMISSION_DENIED) {
+      // Display dialog when location access is blocked from browser.
+      let message = Drupal.t('We need permission to locate your nearest stores. You can enable location services in your browser settings.');
+      let locationErrorDialog = Drupal.dialog('<div id="drupal-modal">' + message + '</div>', {
+        modal: true,
+        width: "auto",
+        height: "auto",
+        title: Drupal.t('Location access denied'),
+        dialogClass: 'location-disabled-notice',
+        resizable: false,
+        closeOnEscape: true,
+        close: function close(event) {
+          Drupal.dialog(event.target).close();
+        }
+      });
+      locationErrorDialog.showModal();
     }
   };
 

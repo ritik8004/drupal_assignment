@@ -312,7 +312,7 @@
 
   // Show loader every-time we are moving to a different page.
   // Do this on specific selectors only.
-  var addLoaderTargets = '.tab-home-delivery, .tab-click-collect, .back-link, .tab-new-customer a, .tab-returning-customer a, button.cc-action, button.delivery-home-next';
+  var addLoaderTargets = '.tab-home-delivery:not(.disabled--tab--head), .tab-click-collect:not(.disabled--tab--head), .back-link, .tab-new-customer a, .tab-returning-customer a, button.cc-action, button.delivery-home-next';
   $(addLoaderTargets).on('click', function () {
     $(this).showCheckoutLoader();
   });

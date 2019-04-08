@@ -81,10 +81,9 @@ class AlshayaSearchApiCommands extends DrushCommands {
    */
   public function correctIndexData() {
     // 1. Delete items from search_api which are no longer available in system.
-    $query = $this->connection->query("SELECT item.item_id 
-      FROM search_api_item item 
-      LEFT JOIN node ON item.item_id LIKE CONCAT('entity:node/', node.nid, ':%') 
-      WHERE node.nid IS NULL");
+    $query = $this->connection->query("SELECT sai.item_id FROM search_api_item sai
+      LEFT JOIN node n ON n.nid = SUBSTR(SUBSTR(sai.item_id, 1, LENGTH(sai.item_id) - 3), 13)
+      WHERE n.nid IS NULL");
 
     $item_ids = $query->fetchAll();
     $indexes = ['acquia_search_index', 'product'];
@@ -106,9 +105,11 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->deleteItems($indexes, $item_ids);
 
     // 3. Re-index items that are missing in DB index.
-    $query = $this->connection->query("SELECT node.nid, node.langcode 
-      FROM node 
-      LEFT JOIN search_api_db_product item ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode) 
+    $query = $this->connection->query("SELECT node.nid, node.langcode
+      FROM node
+      LEFT JOIN search_api_item item ON 
+        node.nid = SUBSTR(SUBSTR(item.item_id, 1, LENGTH(item.item_id) - 3), 13) 
+        AND node.langcode = SUBSTR(item.item_id, -2, 2)
       WHERE item.item_id IS NULL AND node.type = :node_type", [
         ':node_type' => 'acq_product',
       ]
@@ -138,7 +139,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     // OR sku is OOS and index data says in stock.
     $query = $this->connection->query("SELECT sku.sku, sku.langcode, db.nid, db.stock 
       FROM {acq_sku_field_data} sku 
-      LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.item_id LIKE CONCAT('%:', sku.langcode)
+      LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.search_api_language = sku.langcode
       WHERE db.nid IS NOT NULL");
 
     // Above query will return all the products in system.
