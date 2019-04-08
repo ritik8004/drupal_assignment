@@ -3,6 +3,10 @@
   .field--name-field-acq-promotion-description {
     width: 75%;
 
+    p {
+      line-height: 1.29;
+    }
+
     @include breakpoint($upto-desktop) {
       max-width: 100%;
       width: 100%;
@@ -25,9 +29,27 @@
       }
     }
 
+    @include breakpoint($only-mobile) {
+      width: calc(50% - 0.3125rem);
+      margin-bottom: 2.125rem;
+
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        min-height: 10.875rem;
+        height: 100%;
+      }
+    }
+
     .field--name-name {
       font-family: $alshaya-bold;
       line-height: 1.29;
+
+      @include breakpoint($only-mobile) {
+        padding: 0 0.625rem;
+      }
+
+      a {
+        text-transform: capitalize;
+      }
     }
 
     .out-of-stock span {
@@ -46,7 +68,7 @@
       }
 
       @include breakpoint($only-mobile) {
-        padding: 0 1.25rem;
+        padding: 0.75rem 1.25rem;
       }
     }
   }
@@ -168,6 +190,10 @@
       margin-top: 1.5rem;
       border-bottom-color: $primary_border;
 
+      @include breakpoint($only-tablet) {
+        margin-top: 2.5rem;
+      }
+
       &.only-mobile {
         margin-top: 0;
         padding-bottom: 0.5rem;
@@ -177,6 +203,12 @@
   }
 
   ul.js-pager__items {
+    margin-top: 3.5rem;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 2.3125rem;
+    }
+
     a {
       font-family: $alshaya-thin;
       font-size: 0.875rem;
@@ -184,6 +216,11 @@
       text-transform: uppercase;
       line-height: 1.4;
       min-height: 40px;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        padding: 0.625rem;
+      }
 
       @include breakpoint($tablet) {
         width: 13.125rem;
