@@ -129,12 +129,10 @@ function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
     $sorts =& $query->getSorts();
     if (isset($sorts['final_price'])) {
       if ($sorts['final_price'] === 'DESC') {
-        unset($sorts['final_price']);
-        $sorts['price'] = 'DESC';
-        $sorts['final_price'] = 'DESC';
+        $sorts = ['price' => 'DESC'] + $sorts;
       }
       else {
-        $sorts['price'] = 'ASC';
+        $sorts = ['final_price' => 'ASC', 'price' => 'ASC'] + $sorts;
       }
     }
   }
