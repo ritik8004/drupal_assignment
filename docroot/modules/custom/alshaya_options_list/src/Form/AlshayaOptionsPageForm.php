@@ -50,13 +50,13 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
 
         $form['alshaya_options_page_settings'][$key]['alshaya_options_page_title'] = [
           '#type' => 'textfield',
-          '#default_value' => $attribute_options[$key]['title'],
+          '#default_value' => $attribute_options[$key]['title'] ?? '',
           '#title' => $this->t('The title for this options page.'),
         ];
 
         $form['alshaya_options_page_settings'][$key]['alshaya_options_page_description'] = [
           '#type' => 'textfield',
-          '#default_value' => $attribute_options[$key]['description'],
+          '#default_value' => $attribute_options[$key]['description'] ?? '',
           '#title' => $this->t('The description for this options page.'),
         ];
         foreach (array_filter($attribute_option['attributes']) as $selected_attribute) {
@@ -67,13 +67,13 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-search'] = [
             '#type' => 'checkbox',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-search'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-search'] ?? '',
             '#title' => $this->t('Enable search for %attribute', ['%attribute' => $selected_attribute]),
           ];
           $search_name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][show-search]';
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['search-placeholder'] = [
             '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['search-placeholder'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['search-placeholder'] ?? '',
             '#title' => $this->t('Search placeholder for %attribute', ['%attribute' => $selected_attribute]),
             '#prefix' => '<div id="options-search-placeholder">',
             '#suffix' => '</div>',
@@ -88,22 +88,22 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['show-images'] = [
             '#type' => 'checkbox',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-images'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['show-images'] ?? '',
             '#title' => $this->t('Show images for %attribute', ['%attribute' => $selected_attribute]),
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['group'] = [
             '#type' => 'checkbox',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['group'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['group'] ?? '',
             '#title' => $this->t('Group %attribute alphabetically.', ['%attribute' => $selected_attribute]),
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['title'] = [
             '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['title'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['title'] ?? '',
             '#title' => $this->t('Title for %attribute', ['%attribute' => $selected_attribute]),
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title_toggle'] = [
             '#type' => 'checkbox',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title_toggle'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title_toggle'] ?? '',
             '#title' => $this->t('Show button on mobile.'),
             '#attributes' => ['class' => ['mobile-title-toggle']],
           ];
@@ -111,7 +111,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           $name = 'alshaya_options_page_settings[' . $key . '][alshaya_options_page_attributes][' . $selected_attribute . '][mobile_title_toggle]';
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['mobile_title'] = [
             '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['mobile_title'] ?? '',
             '#title' => $this->t('Mobile button title.'),
             '#prefix' => '<div id="options-mobile-title">',
             '#suffix' => '</div>',
@@ -126,7 +126,7 @@ class AlshayaOptionsPageForm extends ConfigFormBase {
           ];
           $form['alshaya_options_page_settings'][$key]['alshaya_options_page_attributes'][$selected_attribute]['description'] = [
             '#type' => 'textfield',
-            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['description'],
+            '#default_value' => $attribute_options[$key]['attribute_details'][$selected_attribute]['description'] ?? '',
             '#title' => $this->t('Description for %attribute', ['%attribute' => $selected_attribute]),
           ];
         }

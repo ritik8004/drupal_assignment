@@ -1,5 +1,5 @@
 (function ($, Drupal) {
-  Drupal.behaviors.delayed_submit = {
+  Drupal.behaviors.alshaya_options_list_delayed_submit = {
     attach: function (context, settings) {
       $('input.delayed-search-submit').each(function () {
         var $self = $(this);

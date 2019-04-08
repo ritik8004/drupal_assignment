@@ -121,14 +121,14 @@ class AlshayaOptionsListForm extends ConfigFormBase {
         ];
         $form['alshaya_options_page'][$key]['alshaya_options_page_url'] = [
           '#type' => 'textfield',
-          '#default_value' => $attribute_option['url'],
+          '#default_value' => $attribute_option['url'] ?? '',
           '#title' => $this->t('Page url on which options should be displayed.'),
         ];
 
         $form['alshaya_options_page'][$key]['alshaya_options_page_title'] = [
           '#type' => 'textfield',
-          '#default_value' => $attribute_option['title'],
-          '#title' => $this->t('The title for this options page.'),
+          '#default_value' => $attribute_option['title'] ?? '',
+          '#title' => $this->t('Option page title'),
         ];
 
         $form['alshaya_options_page'][$key]['alshaya_options_attributes'] = [

@@ -102,7 +102,6 @@ class AlshayaOptionsListService {
           'query' => [
             'f[0]' => $attributeCode . ':' . $option->name,
             'sort_bef_combine' => 'search_api_relevance DESC',
-            'show_on_load' => '12',
           ],
         ];
         $list_object['url'] = Url::fromUri('internal:/search', $url);
