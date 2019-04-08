@@ -867,9 +867,7 @@ class AlshayaApiWrapper {
 
     $response = json_decode($response, TRUE);
 
-    if (!empty($response)) {
-      return isset($response['message']) ? [] : $response;
-    }
+    return (!empty($response) && isset($response['message'])) ? [] : $response;
   }
 
   /**
