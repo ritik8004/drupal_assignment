@@ -101,7 +101,13 @@
       // Show all filters blocks.
       $('.show-all-filters').once().on('click', function() {
         $('.all-filters').addClass('filters-active');
-        $('body').addClass('modal-overlay');
+
+        if ($(window).width() > 1023) {
+          $('body').addClass('modal-overlay');
+        }
+        else {
+          $('body').addClass('mobile--overlay')
+        }
 
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
 
@@ -117,8 +123,8 @@
       // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply').once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
+        $('body').removeClass('mobile--overlay');
         $('body').removeClass('modal-overlay');
-
         $('.all-filters').hide();
       });
 

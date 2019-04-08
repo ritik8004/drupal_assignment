@@ -1,0 +1,25 @@
+.c-plp .c-content__region .all-filters {
+  .filter__inner {
+    .views-exposed-form.c-accordion,
+    .c-facet.c-accordion {
+      .c-accordion__title {
+        text-transform: uppercase;
+      }
+    }
+
+    .block-views-exposed-filter-blockalshaya-product-list-block-1,
+    .block-views-exposed-filter-blockalshaya-product-list-block-2,
+    .block-views-exposed-filter-blocksearch-page {
+      fieldset.form-wrapper .fieldset-legend {
+        text-transform: uppercase;
+      }
+    }
+
+    .filter__foot {
+      .facet-all-clear ul li.clear-all {
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
