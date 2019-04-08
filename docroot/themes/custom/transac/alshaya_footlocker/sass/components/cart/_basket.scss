@@ -154,3 +154,13 @@
     margin: 0.875rem 0 0;
   }
 }
+
+.block-basket-horizontal-recommendation {
+  & > h3 {
+    font-family: $alshaya-thin;
+    text-align: center;
+    text-transform: capitalize;
+    font-size: 1.125rem;
+    margin-bottom: 0.9375rem;
+  }
+}
