@@ -5,7 +5,7 @@
     max-width: 31.25rem;
     width: 100%;
     box-sizing: border-box;
-    z-index: 1005;
+    z-index: 1000;
     position: fixed;
     #{$right}: 0;
     top: 0;
@@ -259,7 +259,7 @@
     }
 
     &__foot {
-      padding: 1.25rem 1.5rem;
+      padding: 1.25rem 1.25rem;
       text-align: center;
       box-shadow: 0 -0.125rem 0.625rem 0 rgba(0, 0, 0, 0.1);
       display: flex;
@@ -282,13 +282,44 @@
       .facet-all-clear {
         @extend %button-brand;
 
+        font-size: 0.8125rem;
         width: 48%;
         line-height: 1.5;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+
+        .filter-list-label {
+          display: none;
+        }
+
+        .block-facets-summary-blockfilter-bar-plp {
+          @include breakpoint($only-mobile) {
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          ul {
+            width: 100% !important;
+
+            li.clear-all {
+              height: auto;
+              float: none;
+
+              a {
+                font-size: 0.8125rem !important;
+              }
+            }
+          }
+        }
       }
 
       .facet-all-apply {
         @extend %button-wide;
 
+        min-width: 8.125rem;
+        font-size: 0.8125rem;
         width: 48%;
         line-height: 1.5;
         border: 1px solid $plp_all_filter_button_color;
