@@ -70,6 +70,25 @@
   }
 
   /**
+   * Adjust the grid view when back from PDP to listing page.
+   */
+  function adjustGridView() {
+    // Get storage values.
+    var storage_value = getStorageValues();
+    // Prepare grid type class as per storage value.
+    var grid_class_remove = storage_value.grid_type == 'small' ? 'large' : 'small';
+    $('.c-products-list').removeClass('product-' + grid_class_remove);
+    $('.c-products-list').addClass('product-' + storage_value.grid_type);
+    $('.c-products-list').addClass('back-to-list');
+    $('.' + grid_class_remove  + '-col-grid').removeClass('active');
+    $('.' + storage_value.grid_type + '-col-grid').addClass('active');
+    // Remove the grid_type property once applied when back from list
+    // so that on next page load, default behavior is used.
+    delete storage_value.grid_type;
+    localStorage.setItem(window.location.pathname, JSON.stringify(storage_value));
+  }
+
+  /**
    * Check if element is fully visible in viewport or not.
    *
    * @param element
@@ -93,6 +112,11 @@
     $('html').once('back-to-list').each(function () {
       var storage_value = getStorageValues();
       if (typeof storage_value !== 'undefined' && storage_value !== null) {
+        // To adjust the grid view mode.
+        if (typeof storage_value.grid_type !== 'undefined') {
+          adjustGridView();
+        }
+
         if (typeof storage_value.nid !== 'undefined') {
           // Set timeout because of conflict.
           setTimeout(function () {
@@ -109,7 +133,8 @@
       $('.views-infinite-scroll-content-wrapper .c-products__item').once('back-to-plp').on('click', function () {
         // Prepare object to store details.
         var storage_details = {
-          nid: $(this).find('article:first').attr('data-nid')
+          nid: $(this).find('article:first').attr('data-nid'),
+          grid_type: $('.c-products-list').hasClass('product-large') ? 'large' : 'small',
         };
 
         // As local storage only supports string key/value pair.
