@@ -12,6 +12,10 @@ $conductors = [
     'hmac_id' => 'a4288d2bc3a14db08f790ce7842cb6b1',
     'hmac_secret' => 'NTA1NTcxM2UtMmY4Mi00',
   ],
+  'mckw_dev3' => [
+    'hmac_id' => '65769d9ba82c4ffd8c26ed830de1e6c2',
+    'hmac_secret' => 'Y2MyMTVlYTQtMGQ0Yi00',
+  ],
   'mckw_uat' => [
     'hmac_id' => '47f687a22e044b6ea273411e0af86d26',
     'hmac_secret' => 'NTZhY2Y4MDktN2NjNi00',
