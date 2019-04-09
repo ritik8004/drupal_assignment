@@ -1,0 +1,27 @@
+.c-plp .c-content__region {
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    legend {
+      text-transform: uppercase;
+    }
+  }
+
+  .block-alshaya-plp-facets-block-all,
+  .block-alshaya-promo-facets-block-all,
+  .block-alshaya-search-facets-block-all {
+    .show-all-filters {
+      text-transform: uppercase;
+    }
+  }
+
+  .all-filters {
+    .filter__foot {
+      text-transform: uppercase;
+    }
+
+    .filter-sort-title {
+      text-transform: capitalize;
+    }
+  }
+}

@@ -88,6 +88,7 @@
         margin-#{$left}: 0;
         margin-#{$right}: 0;
         float: none;
+        padding: 0;
 
         fieldset.form-wrapper {
           margin-#{$left}: 0;
@@ -150,10 +151,16 @@
             }
           }
         }
+
+        @include breakpoint($upto-desktop) {
+          display: block;
+        }
       }
 
       .c-facet.c-accordion.block-facet-blockcategory-facet-plp {
-        display: block;
+        @include breakpoint($upto-desktop) {
+          display: block;
+        }
 
         @include breakpoint($only-mobile) {
           width: 100%;

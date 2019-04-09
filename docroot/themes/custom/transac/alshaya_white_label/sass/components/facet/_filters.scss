@@ -93,7 +93,7 @@
   &.block-facet-blockcategory-facet-promo,
   &.block-facet-blockcategory-facet-search {
     @include breakpoint($desktop) {
-      display: none;
+      display: none !important;
     }
 
     .c-accordion__title.active + ul {
@@ -391,6 +391,29 @@
       font-size: 0.8125rem !important;
       padding-bottom: 0 !important;
       margin: 0 !important;
+    }
+  }
+}
+
+.path--search,
+.nodetype--acq_promotion {
+  .c-plp .c-content__region {
+    .block-facet-blockcategory-facet-plp,
+    .block-facet-blockcategory-facet-promo,
+    .block-facet-blockcategory-facet-search {
+      display: none;
+    }
+
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all {
+      @include breakpoint ($only-mobile) {
+        width: 100% !important;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 0;
+      }
     }
   }
 }
