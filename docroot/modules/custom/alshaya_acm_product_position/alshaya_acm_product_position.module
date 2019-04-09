@@ -89,9 +89,6 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
       return;
     }
 
-    // Remove all query sorts, we will sort in db_query.
-    $sorts = [];
-
     // Find the tid.
     $tid = NULL;
     $conditions = $query->getConditionGroup()->getConditions();
@@ -110,6 +107,9 @@ function alshaya_acm_product_position_search_api_db_query_alter(SelectInterface 
     }
 
     if ($tid) {
+      // Remove all query sorts, we will sort in db_query.
+      $sorts = [];
+
       $db_query->leftJoin('acq_sku_position', 'acq_sku_position', '(t.original_nid = acq_sku_position.nid AND acq_sku_position.tid = :tid AND acq_sku_position.position_type = :position_type)', [
         ':tid' => $tid,
         ':position_type' => 'position',
