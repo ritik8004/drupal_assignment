@@ -26,38 +26,7 @@ function acq_sku_stock_install() {
  * Update managed sku views to have stock status and quantity field.
  */
 function acq_sku_stock_update_manged_sku_views() {
-  $config = \Drupal::configFactory()->getEditable('views.view.manage_skus');
-  $fields = $config->get("display.default.display_options.fields");
-  $operations = end($fields);
-  unset($fields[$operations['id']]);
-  $fields['stock_status'] = [
-    'id' => 'stock_status',
-    'table' => 'acq_sku_stock',
-    'field' => 'status',
-    'relationship' => 'none',
-    'group_type' => 'group',
-    'admin_label' => '',
-    'label' => 'In stock',
-    'exclude' => FALSE,
-    'type' => 'yes-no',
-    'not' => FALSE,
-    'plugin_id' => 'boolean',
-  ];
-
-  $fields['stock_quantity'] = [
-    'id' => 'stock_quantity',
-    'table' => 'acq_sku_stock',
-    'field' => 'quantity',
-    'relationship' => 'none',
-    'group_type' => 'group',
-    'admin_label' => '',
-    'label' => 'Stock Quantity',
-    'exclude' => FALSE,
-    'plugin_id' => 'numeric',
-  ];
-  $fields[$operations['id']] = $operations;
-  $config->set("display.default.display_options.fields", $fields);
-  $config->save(TRUE);
+  Drupal::configFactory()->getEditable('views.view.manage_skus')->save();
 }
 
 /**
