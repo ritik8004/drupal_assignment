@@ -90,7 +90,7 @@
       // that facet blocks can be closed.
       $('.facet-all-back').on('click', function() {
         $(this).hide();
-        $('.filter-sort-title').html(Drupal.t('Filter & Sort'));
+        $('.filter-sort-title').html(Drupal.t('filter & sort'));
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').show();
         $('.all-filters .bef-exposed-form legend').removeClass('active');
@@ -138,7 +138,7 @@
         $('.facet-all-clear').addClass('has-link');
       }
       else {
-        $('.facet-all-clear').html(Drupal.t('Clear All'));
+        $('.facet-all-clear').html(Drupal.t('clear all'));
         $('.facet-all-clear').removeClass('has-link');
       }
 

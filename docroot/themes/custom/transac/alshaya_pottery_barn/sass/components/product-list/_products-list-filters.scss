@@ -1,0 +1,15 @@
+.c-plp .c-content__region {
+  .all-filters {
+    .filter__head {
+      .filter-sort-title {
+        text-transform: capitalize;
+      }
+    }
+
+    .facet-all-clear,
+    .facet-all-apply {
+      text-transform: uppercase;
+      font-family: $alshaya-bold;
+    }
+  }
+}
