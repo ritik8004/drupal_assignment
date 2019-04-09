@@ -146,7 +146,7 @@
         var viewHeader = null;
         var selector = null;
         if ($('body').hasClass('path--search')) {
-          viewHeader = $('.c-search .view-search .view-header');
+          viewHeader = $('.c-plp .view-search .view-header');
           selector = $('.c-content__region .total-result-count, .facet-all-count');
         }
         else if ($('body').hasClass('nodetype--acq_promotion')) {
