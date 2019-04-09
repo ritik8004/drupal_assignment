@@ -15,14 +15,6 @@ function acq_sku_stock_update_8001() {
 }
 
 /**
- * Implements hook_install().
- */
-function acq_sku_stock_install() {
-  // Update managed sku views to have stock status and quantity field.
-  acq_sku_stock_update_manged_sku_views();
-}
-
-/**
  * Update managed sku views to have stock status and quantity field.
  */
 function acq_sku_stock_update_manged_sku_views() {
