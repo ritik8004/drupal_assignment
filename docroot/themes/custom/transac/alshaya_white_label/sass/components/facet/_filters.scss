@@ -89,7 +89,9 @@
     }
   }
 
-  &.block-facet-blockcategory-facet-plp {
+  &.block-facet-blockcategory-facet-plp,
+  &.block-facet-blockcategory-facet-promo,
+  &.block-facet-blockcategory-facet-search {
     @include breakpoint($desktop) {
       display: none;
     }
@@ -299,6 +301,10 @@
     @include breakpoint($tablet) {
       ul {
         width: calc(100% - 6.25rem) !important;
+      }
+
+      .filter-toggle-mobile {
+        display: none;
       }
     }
 

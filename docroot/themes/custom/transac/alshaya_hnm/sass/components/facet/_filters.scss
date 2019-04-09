@@ -23,6 +23,7 @@
     .block-facets-summary-blockfilter-bar {
       .filter-list-label {
         font-family: $hnm-demibold;
+        text-transform: capitalize;
       }
 
       ul li a {

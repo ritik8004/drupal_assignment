@@ -82,6 +82,7 @@ $_plp_filter_active_drodpwon_item: #f0f7ff;
 $_plp_facet_count_color: #7d7d7d;
 $_plp_sort_by_options: $brownish-grey;
 $_plp_selected_filter_text: #555;
+$_plp_clear_all_btn_disabled: #8d8d8d;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -478,6 +479,7 @@ $plp_all_filter_item_border: $white-two;
 $plp_all_filter_button_color: $primary_btn_bg;
 $plp_clear_all_btn_text: $marine-blue-two;
 $plp_all_filter_close_btn: $header_mobile_menu_close;
+$plp_clear_all_btn_disabled: $_plp_clear_all_btn_disabled;
 
 // PLP Filter bar.
 $plp_filterbar_clearall_border: $cerulean-two;
