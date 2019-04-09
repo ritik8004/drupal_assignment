@@ -67,14 +67,14 @@
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
           display: block !important;
-          margin-#{$left}: 0.5rem;
+          font-size: 0;
         }
 
         li,
         span {
           a:not([data-swatch-type=RGB]) {
             width: 4.5rem;
-            margin: 0 0 0.5rem;
+            margin: 0;
             margin-#{$right}: 0.5rem;
             border: none;
             max-height: inherit;
@@ -94,6 +94,14 @@
                 bottom: 0;
                 left: 0;
                 right: 0;
+
+                @include breakpoint($only-mobile) {
+                  border: 0.1875rem solid #fff;
+                  outline: 1px solid $pdp_swatch_selected_border;
+                  position: absolute;
+                  top: -0.1875rem;
+                  bottom: -0.1875rem;
+                }
               }
             }
 
@@ -113,9 +121,14 @@
             white-space: inherit;
           }
 
-          li {
+          li,
+          span {
             @include breakpoint($only-mobile) {
               display: inline-flex;
+
+              a:not([data-swatch-type=RGB]) {
+                margin-bottom: 0.5rem;
+              }
             }
           }
         }
@@ -131,11 +144,29 @@
             background-color: $colour-swatches-simple-effect-bg;
             margin-left: -0.5rem;
             padding-left: 0.5rem !important;
+            overflow: visible;
 
             li,
             span {
               a:not([data-swatch-type=RGB]) {
                 margin-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+
+      &.swatch-effect {
+        .select2Option {
+          .select-buttons {
+            padding: 0.25rem 1px 0.625rem;
+
+            li,
+            span {
+              &:last-child {
+                a:not([data-swatch-type=RGB]) {
+                  margin-#{$right}: 0;
+                }
               }
             }
           }
