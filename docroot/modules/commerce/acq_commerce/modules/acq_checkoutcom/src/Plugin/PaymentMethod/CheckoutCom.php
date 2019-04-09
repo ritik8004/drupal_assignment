@@ -120,36 +120,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // We don't send anything in payment here as that part is already processed.
     $inputs = $form_state->getUserInput();
-
-    $url = "https://sandbox.checkout.com/api2/v2/charges/token";
-    $ch = curl_init($url);
-    $header = [
-      'Content-Type: application/json;charset=UTF-8',
-      'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
-    ];
-    $totals = $this->getCart()->totals();
-    $data_string = '{
-      "value": "' . $totals['grand'] * 100 . '",
-      "currency": "KWD",
-      "cardToken": "' . $inputs['cko-card-token'] . '",
-      "email": "testing@test.com"
-	  }';
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-    $output = curl_exec($ch);
-
-    curl_close($ch);
-    $decoded = json_decode($output, TRUE);
-    echo '<pre>';
-    print_r($decoded);
-    echo '</pre>';
-    die();
-
-    // $cart = $this->getCart();
-    // $cart->clearPayment();
+    $cart = $this->getCart();
+    $cart->setPaymentMethod('checkout_com', ['card_token_id' => $inputs['cko-card-token']]);
   }
 
 }
