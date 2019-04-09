@@ -43,11 +43,17 @@
         $('.large-col-grid').removeClass('active');
         $(this).addClass('active');
         $('.c-products-list').removeClass('product-large').addClass('product-small');
+        setTimeout(function() {
+          $('.search-lightSlider').slick('refresh');
+         }, 300);
       });
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
         $(this).addClass('active');
         $('.c-products-list').removeClass('product-small').addClass('product-large');
+        setTimeout(function() {
+          $('.search-lightSlider').slick('refresh');
+         }, 300);
       });
 
       // On clicking facet block title, update the title of block and hide
