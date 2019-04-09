@@ -53,7 +53,7 @@
       // Back Button
       .facet-all-back {
         @include icon(chevron#{$left}, before) {
-          color: #000;
+          color: $plp_all_filter_close_btn;
           font-size: 2rem;
           width: 2rem;
           cursor: pointer;
@@ -62,7 +62,6 @@
       }
 
       .filter-sort-title {
-        text-transform: uppercase;
         color: $plp_all_filter_title;
         text-align: center;
         width: 100%;
@@ -289,12 +288,16 @@
         align-items: center;
         justify-content: center;
         padding: 0;
+        color: $plp_clear_all_btn_text;
 
-        .filter-list-label {
+        .filter-list-label,
+        .filter-toggle-mobile {
           display: none;
         }
 
-        .block-facets-summary-blockfilter-bar-plp {
+        .block-facets-summary-blockfilter-bar-promotions,
+        .block-facets-summary-blockfilter-bar-plp,
+        .block-facets-summary-blockfilter-bar {
           @include breakpoint($only-mobile) {
             padding-left: 0;
             padding-right: 0;
@@ -306,6 +309,7 @@
             li.clear-all {
               height: auto;
               float: none;
+              width: 100%;
 
               a {
                 font-size: 0.8125rem !important;

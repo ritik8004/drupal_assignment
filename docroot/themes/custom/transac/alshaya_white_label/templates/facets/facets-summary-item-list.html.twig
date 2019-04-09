@@ -30,12 +30,13 @@
   {%- endif -%}
 
   {%- if items -%}
-    <span class="filter-list-label">{{ 'Selected filter'|t }}</span>
+    <span class="filter-list-label">{{ 'selected filter'|t }}</span>
     <{{ list_type }}{{ attributes }}>
       {%- for item in items -%}
         <li{{ item.attributes }}>{{ item.value }}</li>
       {%- endfor -%}
     </{{ list_type }}>
+    <span class="filter-toggle-mobile"></span>
   {%- else -%}
     {{- empty -}}
   {%- endif -%}

@@ -96,6 +96,11 @@
           margin-#{$right}: 0.75rem;
           padding-bottom: 0.75rem;
 
+          @include breakpoint($only-mobile) {
+            margin-#{$right}: 0.5625rem;
+            padding-bottom: 0.5625rem;
+          }
+
           a {
             color: $plp_facet_filter_link;
             font-size: 0.75rem;

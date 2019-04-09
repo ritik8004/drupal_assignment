@@ -309,6 +309,49 @@
 
       ul {
         width: 100%;
+        position: relative;
+
+        .applied-filter {
+          width: 71%;
+          float: $left;
+          position: relative;
+
+          + .clear-all {
+            width: 29%;
+            float: $right;
+          }
+
+          &.max-height {
+            max-height: 82px;
+          }
+        }
+      }
+
+      .filter-toggle-mobile {
+        display: none;
+        width: 0.9375rem;
+        height: 0.9375rem;
+        font-size: 0.6875rem;
+        color: $plp_facet_count_number;
+        float: $right;
+        padding-#{$right}: 2rem;
+        cursor: pointer;
+        position: relative;
+
+        &::before {
+          content: '+';
+        }
+
+        @include icon(chevrondown, after) {
+          font-size: 1rem;
+          position: absolute;
+          top: 0;
+          #{$right}: 2px;
+        }
+
+        @include breakpoint($tablet) {
+          display: none;
+        }
       }
 
       padding-left: 1.25rem;

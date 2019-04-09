@@ -298,6 +298,10 @@
   z-index: 11;
   background-color: $header_bg;
 
+  @include breakpoint($desktop) {
+    z-index: 6;
+  }
+
   @include breakpoint($upto-desktop) {
     position: fixed;
     top: 0;
