@@ -290,11 +290,14 @@
         justify-content: center;
         padding: 0;
 
-        .filter-list-label {
+        .filter-list-label,
+        .filter-toggle-mobile {
           display: none;
         }
 
-        .block-facets-summary-blockfilter-bar-plp {
+        .block-facets-summary-blockfilter-bar-promotions,
+        .block-facets-summary-blockfilter-bar-plp,
+        .block-facets-summary-blockfilter-bar {
           @include breakpoint($only-mobile) {
             padding-left: 0;
             padding-right: 0;
@@ -306,6 +309,7 @@
             li.clear-all {
               height: auto;
               float: none;
+              width: 100%;
 
               a {
                 font-size: 0.8125rem !important;

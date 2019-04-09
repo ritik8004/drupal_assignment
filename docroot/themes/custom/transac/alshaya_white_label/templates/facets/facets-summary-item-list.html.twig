@@ -36,6 +36,7 @@
         <li{{ item.attributes }}>{{ item.value }}</li>
       {%- endfor -%}
     </{{ list_type }}>
+    <span class="filter-toggle-mobile"></span>
   {%- else -%}
     {{- empty -}}
   {%- endif -%}

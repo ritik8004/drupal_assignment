@@ -121,11 +121,13 @@
       });
 
       // Fake facet apply button to close the `all filter`.
-      $('.facet-all-apply').once().on('click', function() {
+      $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
         $('body').removeClass('modal-overlay');
         $('.all-filters').hide();
+        // Show filter count if applicable.
+        showFilterCount();
       });
 
       if ($('.c-content__region .region__content  > div.block-facets-summary li.clear-all').length > 0) {
@@ -161,6 +163,36 @@
       })
 
       showOnlyFewFacets();
+
+      /**
+       * Show filtercount on mobile on toggle buttons.
+       */
+      function showFilterCount() {
+        // Only for mobile.
+        if ($(window).width() < 768) {
+          $('.block-facets-summary-blockfilter-bar-plp ul li:not(.clear-all)').wrapAll('<div class="applied-filter"></div>');
+          var height = $('.block-facets-summary-blockfilter-bar-plp .applied-filter').height();
+          // Add a max-height if there are filters on third line.
+          if (height > 82) {
+            $('.block-facets-summary-blockfilter-bar-plp .applied-filter').addClass('max-height');
+          }
+
+          // Count the number of filters on the third line onwards.
+          var count = 0;
+          $('.block-facets-summary-blockfilter-bar-plp ul .applied-filter li').each(function () {
+            if ($(this).position().top > 41) {
+              count ++;
+            }
+          });
+          if (count > 0) {
+            $('.block-facets-summary-blockfilter-bar-plp .filter-toggle-mobile').show();
+            $('.block-facets-summary-blockfilter-bar-plp .filter-toggle-mobile').html(count);
+            $('.filter-toggle-mobile', context).once().on('click', function () {
+              $('.block-facets-summary-blockfilter-bar-plp .applied-filter').toggleClass('max-height');
+            });
+          }
+        }
+      }
 
       /**
        * Show only 4 facets by default and hide others.
