@@ -1,3 +1,12 @@
+.magazine-layout {
+  .c-pdp.l-one--w {
+    @include breakpoint($desktop) {
+      padding: 0 1.5rem;
+      max-width: 80rem;
+    }
+  }
+}
+
 .magazine-layout-node {
   .acq-content-product {
     .gallery-wrapper {
@@ -58,6 +67,7 @@
           bottom: 0;
           top: auto;
           #{$right}: 0 !important;
+          width: 100%;
 
           .click-collect-all-stores {
             &.inline-modal-wrapper {
@@ -87,8 +97,8 @@
     @include breakpoint($desktop) {
       &.sidebar-fixed {
         top: 8.125rem;
-        width: calc((30 * 71.5rem) / 100);
-        #{$right}: calc((100vw - 66.375rem) / 2);
+        width: calc((30 * 71.75rem) / 100);
+        #{$right}: calc((100vw - 71rem) / 2);
       }
     }
 
@@ -127,7 +137,7 @@
         z-index: 9;
         width: 100%;
         background: $primary_bg;
-        box-shadow: 0.0625rem 0.125rem 0.625rem $mothercare-black;
+        box-shadow: 0.0625rem 0.5rem 0.625rem $mothercare-black;
         transition: z-index 0.5s ease-in-out;
 
         h1 {
@@ -136,6 +146,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 0.9375rem;
           }
         }
       }
@@ -159,6 +170,17 @@
 
   .basic-details-wrapper {
     .sku-base-form {
+      button[type="submit"] {
+        padding-#{$left}: 0;
+        padding-#{$right}: 0;
+
+        &::before {
+          position: static;
+          vertical-align: text-bottom;
+          padding-#{$right}: 0.25rem;
+        }
+      }
+
       @include breakpoint($tablet) {
         display: grid;
         grid-column: 3 / -1;
@@ -219,8 +241,9 @@
           display: flex;
           justify-content: $left;
           align-items: center;
+          font-size: 0.875rem;
           height: 3rem;
-          border: 2px solid $primary_empty_btn_border;
+          border: 1px solid $primary_empty_btn_border;
           padding: 0.65rem;
           color: $primary_empty_btn;
           cursor: pointer;
@@ -243,6 +266,12 @@
           height: 3rem !important;
           cursor: pointer;
           grid-column: 2 / -1;
+
+          &::before {
+            top: 0.75rem;
+            position: absolute;
+            #{$left}: 23%;
+          }
         }
       }
     }
