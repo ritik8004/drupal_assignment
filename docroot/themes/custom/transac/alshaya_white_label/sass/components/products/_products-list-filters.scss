@@ -242,7 +242,7 @@
 
       .js-facets-checkbox-links {
         .facet-item {
-          padding: 1.125rem 1.5rem !important;
+          padding: 0.25rem 1.5rem !important;
           margin-bottom: 0;
           border-bottom: 1px solid $plp_all_filter_item_border;
 
@@ -288,11 +288,20 @@
         align-items: center;
         justify-content: center;
         padding: 0;
-        color: $plp_clear_all_btn_text;
+        border-color: $plp_clear_all_btn_disabled;
+        color: $plp_clear_all_btn_disabled;
+        pointer-events: none;
+        cursor: pointer;
+
+        &.has-link {
+          color: $plp_clear_all_btn_text;
+          border-color: $plp_clear_all_btn_text;
+          pointer-events: all;
+        }
 
         .filter-list-label,
         .filter-toggle-mobile {
-          display: none;
+          display: none !important;
         }
 
         .block-facets-summary-blockfilter-bar-promotions,
@@ -322,6 +331,7 @@
       .facet-all-apply {
         @extend %button-wide;
 
+        cursor: pointer;
         min-width: 8.125rem;
         font-size: 0.8125rem;
         width: 48%;

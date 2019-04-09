@@ -170,25 +170,36 @@
       function showFilterCount() {
         // Only for mobile.
         if ($(window).width() < 768) {
-          $('.block-facets-summary-blockfilter-bar-plp ul li:not(.clear-all)').wrapAll('<div class="applied-filter"></div>');
-          var height = $('.block-facets-summary-blockfilter-bar-plp .applied-filter').height();
+          var filterBarSelector;
+          if ($('body').hasClass('plp-page-only')) {
+            filterBarSelector = '.block-facets-summary-blockfilter-bar-plp';
+          }
+          else if ($('body').hasClass('nodetype--acq_promotion')) {
+            filterBarSelector = '.block-facets-summary-blockfilter-bar-promotions';
+          }
+          else {
+            filterBarSelector = '.block-facets-summary-blockfilter-bar';
+          }
+
+          $(filterBarSelector +' ul li:not(.clear-all)').wrapAll('<div class="applied-filter"></div>');
+          var height = $(filterBarSelector+ ' .applied-filter').height();
           // Add a max-height if there are filters on third line.
           if (height > 82) {
-            $('.block-facets-summary-blockfilter-bar-plp .applied-filter').addClass('max-height');
+            $(filterBarSelector + ' .applied-filter').addClass('max-height');
           }
 
           // Count the number of filters on the third line onwards.
           var count = 0;
-          $('.block-facets-summary-blockfilter-bar-plp ul .applied-filter li').each(function () {
+          $(filterBarSelector+ ' ul .applied-filter li').each(function () {
             if ($(this).position().top > 41) {
               count ++;
             }
           });
           if (count > 0) {
-            $('.block-facets-summary-blockfilter-bar-plp .filter-toggle-mobile').show();
-            $('.block-facets-summary-blockfilter-bar-plp .filter-toggle-mobile').html(count);
+            $(filterBarSelector + ' .filter-toggle-mobile').show();
+            $(filterBarSelector + ' .filter-toggle-mobile').html(count);
             $('.filter-toggle-mobile', context).once().on('click', function () {
-              $('.block-facets-summary-blockfilter-bar-plp .applied-filter').toggleClass('max-height');
+              $(filterBarSelector + ' .applied-filter').toggleClass('max-height');
             });
           }
         }
