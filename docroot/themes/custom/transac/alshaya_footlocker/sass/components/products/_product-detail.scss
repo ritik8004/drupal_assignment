@@ -61,7 +61,10 @@
     &__label {
       border-top: 1px solid $secondary_border;
       padding-top: 0.9375rem;
-      margin-top: 0;
+
+      @include breakpoint ($tablet) {
+        margin-top: 0;
+      }
     }
   }
 }
@@ -124,7 +127,18 @@
         label {
           color: $primary_input_label;
           font-size: 0.875rem;
+
+          @include breakpoint ($only-mobile) {
+            padding-top: 0;
+          }
         }
+      }
+    }
+
+    .form-type-configurable-select-group label {
+      @include breakpoint ($only-mobile) {
+        font-size: 0.875rem;
+        color: $primary_input_label;
       }
     }
   }
