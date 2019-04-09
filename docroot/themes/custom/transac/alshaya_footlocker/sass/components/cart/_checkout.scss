@@ -59,6 +59,16 @@
             }
           }
 
+          &.delivery-option {
+            @include breakpoint($desktop) {
+              padding-#{$left}: 5.2%;
+
+              html[lang=ar] & {
+                padding-#{$left}: 2%;
+              }
+            }
+          }
+
           html[lang=ar] & {
             @include breakpoint ($tablet) {
               padding: 1rem;
@@ -92,6 +102,7 @@
 
           &:first-child a {
             line-height: 1.29;
+            text-transform: capitalize;
 
             html[lang=ar] & {
               line-height: 1.4;
@@ -249,18 +260,17 @@
     }
   }
 
-  button[type="submit"] {
-    &:not(.edit-newsletter) {
-      @extend %button-wide;
-    }
-  }
-
   .page-standard.l-container {
     .edit-actions {
       @include breakpoint ($only-tablet) {
         margin-#{$right}: -3rem !important;
       }
     }
+  }
+
+  .edit-update,
+  .edit-checkout {
+    @extend %button-wide;
   }
 }
 

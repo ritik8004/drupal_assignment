@@ -4,6 +4,10 @@
   grid-template-rows: auto auto;
   grid-gap: 1rem;
 
+  @include breakpoint($only-mobile) {
+    grid-gap: 0.5rem;
+  }
+
   .ie & {
     display: block;
 
@@ -203,6 +207,7 @@
           img {
             width: 47%;
             margin: 0 auto;
+            display: block;
           }
         }
       }
@@ -224,7 +229,7 @@
         top: 0 !important;
 
         @include breakpoint($desktop) {
-          width: 21.625rem !important;
+          width: 25.25rem !important;
         }
 
         .cloud-zoom-title {
