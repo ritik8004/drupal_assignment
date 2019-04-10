@@ -237,17 +237,20 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
       if ($node->language()->getId() == $langcode) {
+        $static[$langcode][$sku_string][$check_parent_key] = $node;
         return $node;
       }
 
       // If node has translation, we return the translation.
       if ($node->hasTranslation($langcode)) {
-        return $node->getTranslation($langcode);
+        $static[$langcode][$sku_string][$check_parent_key] = $node->getTranslation($langcode);
+        return $static[$langcode][$sku_string][$check_parent_key];
       }
 
       // If translation not available and create_translation flag is true.
       if ($create_translation) {
-        return $node->addTranslation($langcode);
+        $static[$langcode][$sku_string][$check_parent_key] = $node->addTranslation($langcode);
+        return $static[$langcode][$sku_string][$check_parent_key];
       }
 
       // Just log the message and continue.
