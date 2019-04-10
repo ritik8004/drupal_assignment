@@ -1,7 +1,7 @@
 // share fields on product detail page
 .sharethis-wrapper {
   @include breakpoint($only-mobile) {
-    border-bottom: 0.0625rem solid $pdp_desc_wrapper_border;
+    margin-top: 0.625rem;
   }
 
   .st_facebook_custom {
