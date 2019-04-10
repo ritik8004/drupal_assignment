@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.alshayaFacetAllSlide = {
+  Drupal.behaviors.facetPanel = {
     attach: function (context, settings) {
 
       // Add active classes on facet dropdown content.

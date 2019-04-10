@@ -4,8 +4,8 @@ facets_language_switcher:
   dependencies:
     - core/jquery
 
-facets_all_slider:
+facets_panel:
   js:
-    js/facet-all-slider.js: {}
+    js/facets-panel.js: {}
   dependencies:
     - core/jquery
