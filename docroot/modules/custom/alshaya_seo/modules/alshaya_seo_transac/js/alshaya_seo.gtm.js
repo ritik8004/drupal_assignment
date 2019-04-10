@@ -60,14 +60,25 @@
         if ((localStorage.getItem('userDetails') === undefined ||
             localStorage.getItem('userDetails') === null ||
             drupalSettings.user.uid !== userDetails.userID ||
-            $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1) &&
-            orderConfirmationPage.length !== 0) {
+            $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
           Drupal.setUserDetailsInStorage();
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
           userDetails = JSON.parse(localStorage.getItem('userDetails'));
         }
+        
+        userDetails.platformType = platformType;
 
-        Drupal.alshaya_seo_default_datalayer_push(platformType, userDetails);
+        // For checkout pages, privilegeCustomer is added in checkout step.
+        if (cartCheckoutLoginSelector.length !== 0 ||
+            cartCheckoutDeliverySelector.length !== 0 ||
+            cartCheckoutPaymentSelector.length !==0) {
+          delete userDetails.privilegeCustomer;
+        }
+
+        // Push on all pages except confirmation page.
+        if (orderConfirmationPage.length === 0) {
+          Drupal.alshaya_seo_default_datalayer_push(userDetails);
+        }
 
         if ($(context).filter('article[data-vmode="modal"]').length === 1
             || $(document).find('article[data-vmode="full"]').length === 1) {
@@ -1137,6 +1148,7 @@
     userDetails.userName = '';
     userDetails.userType = 'Guest User';
     userDetails.privilegeCustomer = 'Regular Customer';
+    userDetails.customerType = '';
 
     userDetails = JSON.stringify(userDetails);
 
@@ -1162,15 +1174,8 @@
    * @param platformType
    * @param userDetails
    */
-  Drupal.alshaya_seo_default_datalayer_push = function (platformType, userDetails) {
-      dataLayer.push({
-        platformType: platformType,
-        userID: userDetails.userID,
-        userEmailID: userDetails.userEmailID,
-        userName: userDetails.userName,
-        userType: userDetails.userType,
-        privilegeCustomer: userDetails.privilegeCustomer
-      });
+  Drupal.alshaya_seo_default_datalayer_push = function (userDetails) {
+      dataLayer.push(userDetails);
   };
 
 })(jQuery, Drupal, dataLayer);

@@ -303,6 +303,9 @@ function alshaya_seo_user_logout($account) {
  */
 function alshaya_seo_entity_presave(EntityInterface $entity) {
   try {
+    if ($entity->getEntityTypeId() === 'user') {
+      user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
+    }
     if ($entity->getEntityTypeId() === 'user' &&
       $entity->get('field_subscribe_newsletter')->getString()) {
       $original_entity = $entity->original;
@@ -318,9 +321,6 @@ function alshaya_seo_entity_presave(EntityInterface $entity) {
         ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
         user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
       }
-    }
-    elseif ($entity->getEntityTypeId() === 'user') {
-      user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
     }
   }
   catch (Exception $e) {
