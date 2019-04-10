@@ -124,6 +124,17 @@ body {
       opacity: 1;
       z-index: 10;
       transform: translate3d(0, 0, 0);
+      height: 100%;
+      pointer-events: unset;
+    }
+
+    @include breakpoint($desktop) {
+      &.header--fixed {
+        &::before {
+          z-index: 1000;
+          top: 0;
+        }
+      }
     }
 
     .modal-share-this {
