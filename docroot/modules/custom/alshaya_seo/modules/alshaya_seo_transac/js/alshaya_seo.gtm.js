@@ -45,22 +45,23 @@
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
+
         var md = new MobileDetect(window.navigator.userAgent);
+        var platformType = 'desktop';
         if (md.tablet() !== null) {
-          dataLayer.push({
-            platformType: 'tablet',
-          });
+            platformType = 'tablet';
         }
         else if (md.mobile()) {
-          dataLayer.push({
-            platformType: 'mobile',
-          });
+            platformType = 'mobile';
         }
-        else {
-          dataLayer.push({
-            platformType: 'desktop',
-          });
+
+        var userDetails = JSON.parse(localStorage.getItem('userDetails'));
+        if (localStorage.getItem('userDetails') === undefined || localStorage.getItem('userDetails') === null || drupalSettings.user.uid !== userDetails.userID) {
+          Drupal.setUserDetailsInStorage();
+          userDetails = JSON.parse(localStorage.getItem('userDetails'));
         }
+
+        Drupal.alshaya_seo_default_datalayer_push(platformType, userDetails);
 
         if ($(context).filter('article[data-vmode="modal"]').length === 1
             || $(document).find('article[data-vmode="full"]').length === 1) {
@@ -1116,6 +1117,53 @@
         return decodeURIComponent(pair[1]);
       }
     }
+  };
+
+  /**
+   * Helper function to fetch current user details.
+   *
+   * @returns {array}
+   */
+  Drupal.setUserDetailsInStorage = function () {
+    var userDetails = {};
+    userDetails.userID = drupalSettings.user.uid;
+    userDetails.userEmailID = '';
+    userDetails.userName = '';
+    userDetails.userType = 'Guest User';
+    userDetails.privilegeCustomer = 'Regular Customer';
+
+    userDetails = JSON.stringify(userDetails);
+
+    if (drupalSettings.user.uid !== 0) {
+      $.ajax({
+        url: drupalSettings.path.baseUrl + "get-user-details",
+        type: "POST",
+        async: false,
+        success: function (response, status) {
+          userDetails = response;
+        },
+      });
+    }
+
+    // Save in localStorage.
+    localStorage.setItem('userDetails', userDetails);
+  };
+
+  /**
+   * Helper function to push default datalayer variables.
+   *
+   * @param platformType
+   * @param userDetails
+   */
+  Drupal.alshaya_seo_default_datalayer_push = function (platformType, userDetails) {
+      dataLayer.push({
+        platformType: platformType,
+        userID: userDetails.userID,
+        userEmailID: userDetails.userEmailID,
+        userName: userDetails.userName,
+        userType: userDetails.userType,
+        privilegeCustomer: userDetails.privilegeCustomer
+      });
   };
 
 })(jQuery, Drupal, dataLayer);
