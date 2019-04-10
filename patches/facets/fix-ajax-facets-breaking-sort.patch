@@ -9,7 +9,7 @@
 +    // Facets AJAX is not yet ready and coming from patch.
 +    // What we need is to ensure selected sort is sent in AJAX call.
 +    if ($('.c-content__region [data-drupal-selector="edit-sort-bef-combine"]').length > 0) {
-+      views_settings.sort_bef_combine = $('.c-content__region [data-drupal-selector="edit-sort-bef-combine"]').val();
++      views_settings.sort_bef_combine = $('.c-content__region [data-drupal-selector="edit-sort-bef-combine"] [name="sort_bef_combine"]:checked').val();
 +    }
 +
      // Update View.
