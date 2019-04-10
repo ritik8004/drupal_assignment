@@ -246,3 +246,12 @@
     margin-top: 0.5rem;
   }
 }
+
+.content__sidebar {
+  @include breakpoint($only-mobile) {
+    .mobile-related-wrapper {
+      border-top: 0.0625rem solid $pdp_desc_wrapper_border;
+      margin-top: 0.9375rem;
+    }
+  }
+}
