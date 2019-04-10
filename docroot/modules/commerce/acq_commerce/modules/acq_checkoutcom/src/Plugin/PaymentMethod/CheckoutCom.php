@@ -95,16 +95,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       '#value' => "
         window.CKOConfig = {
           debugMode: true,
+          // Replace with api call.
           publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
           ready: function (event) {
-            console.log(\"The Kit is ready\");
             CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
           },
-          apiError: function (event) {
-              // ...
-          },
           cardTokenised: function(event) {
-            console.log(event.data.cardToken);
             cardToken.value = event.data.cardToken
             document.getElementById('multistep-checkout').submit();
           }
@@ -118,7 +114,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // We don't send anything in payment here as that part is already processed.
+    // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
     $cart = $this->getCart();
     $cart->setPaymentMethod('checkout_com', ['card_token_id' => $inputs['cko-card-token']]);
