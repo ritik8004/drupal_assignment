@@ -1,0 +1,6 @@
+processor_configs:
+  sort_attributes_facets_processor:
+    processor_id: sort_attributes_facets_processor
+    weights:
+      build: 999
+    settings: {  }
