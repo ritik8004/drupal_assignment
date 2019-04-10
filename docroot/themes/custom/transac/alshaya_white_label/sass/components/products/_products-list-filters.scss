@@ -148,6 +148,10 @@
             legend.active,
             .fieldset-legend {
               display: none;
+
+              + .fieldset-wrapper {
+                display: block;
+              }
             }
           }
         }
@@ -185,7 +189,15 @@
               & + ul {
                 display: block !important;
                 overflow-y: auto;
-                height: 73vh;
+                height: 58vh;
+
+                @include breakpoint($desktop) {
+                  height: 71.5vh;
+                }
+
+                @include breakpoint($only-tablet) {
+                  height: 74vh;
+                }
               }
             }
           }

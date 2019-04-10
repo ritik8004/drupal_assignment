@@ -7,19 +7,6 @@
     border: none;
     font-size: 0.6875rem;
 
-    &.active {
-      + ul {
-        display: block;
-        position: absolute;
-        top: 2.25rem;
-        background: $plp_facet_active_bg;
-        z-index: 9;
-        min-width: 15.5rem;
-        padding: 1.125rem 0;
-        border: 1px solid $plp_facet_border;
-      }
-    }
-
     &::after {
       #{$right}: -1.375rem;
       top: 49%;
@@ -39,6 +26,57 @@
     }
   }
 
+  ul {
+    position: absolute;
+    top: 2.25rem;
+    background: $plp_facet_active_bg;
+    z-index: 9;
+    min-width: 15.5rem;
+    padding: 1.125rem 0;
+    border: 1px solid $plp_facet_border;
+
+    li {
+      span {
+        font-size: 0.75rem;
+        line-height: 2;
+        margin-#{$left}: 0;
+
+        &.facet-item__count {
+          color: $plp_facet_count_number;
+          padding-#{$left}: 0.5rem;
+        }
+      }
+
+      label {
+        &::before {
+          display: none;
+        }
+      }
+
+      padding-#{$left}: 1.125rem !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      min-height: auto;
+      position: relative;
+
+      &.is-active {
+        background: $plp_filter_active_item;
+
+        &::after {
+          background-image: url(#{$base_theme_img_directory_path}/icons/tick.svg);
+          background-repeat: no-repeat;
+          content: '';
+          position: absolute;
+          top: 50%;
+          width: 0.625rem;
+          height: 0.625rem;
+          transform: translateY(-50%);
+          #{$right}: 1rem;
+        }
+      }
+    }
+  }
+
   input[type=text] {
     display: none;
   }
@@ -46,47 +84,6 @@
   ul,
   &.hide-facet-block {
     display: none;
-  }
-
-  ul li {
-    span {
-      font-size: 0.75rem;
-      line-height: 2;
-      margin-#{$left}: 0;
-
-      &.facet-item__count {
-        color: $plp_facet_count_number;
-        padding-#{$left}: 0.5rem;
-      }
-    }
-
-    label {
-      &::before {
-        display: none;
-      }
-    }
-
-    padding-#{$left}: 1.125rem !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    min-height: auto;
-    position: relative;
-
-    &.is-active {
-      background: $plp_filter_active_item;
-
-      &::after {
-        background-image: url(#{$base_theme_img_directory_path}/icons/tick.svg);
-        background-repeat: no-repeat;
-        content: '';
-        position: absolute;
-        top: 50%;
-        width: 0.625rem;
-        height: 0.625rem;
-        transform: translateY(-50%);
-        #{$right}: 1rem;
-      }
-    }
   }
 
   &.block-facet-blockcategory-facet-plp,
@@ -129,6 +126,7 @@
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 0;
+      margin-#{$right}: 3.25rem;
     }
 
     @include breakpoint($upto-desktop) {
@@ -201,12 +199,6 @@
         transform: translateY(-50%);
         #{$right}: -1.3125rem;
       }
-
-      &.active {
-        + .fieldset-wrapper {
-          display: block;
-        }
-      }
     }
 
     @include breakpoint($upto-desktop) {
@@ -273,6 +265,10 @@
   height: 2.9375rem;
   line-height: 2.9375rem;
   margin-#{$left}: 1rem;
+
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+  }
 
   @include breakpoint($only-mobile) {
     margin-#{$left}: 0;
