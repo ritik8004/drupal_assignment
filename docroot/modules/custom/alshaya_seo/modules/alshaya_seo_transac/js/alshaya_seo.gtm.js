@@ -553,6 +553,7 @@
        * GTM virtual page tracking for click & collect journey.
        */
       if (isCCPage) {
+        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
