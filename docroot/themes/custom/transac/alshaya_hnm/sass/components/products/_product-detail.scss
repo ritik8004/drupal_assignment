@@ -668,13 +668,20 @@
 
         @include breakpoint($only-mobile) {
           padding-#{$left}: 1.3701rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           &.hide-button {
             display: block;
           }
 
           &::before {
-            display: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-#{$right}: 0.625rem;
+            position: static;
           }
         }
 
