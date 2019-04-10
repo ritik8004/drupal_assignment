@@ -61,7 +61,10 @@
     &__label {
       border-top: 1px solid $secondary_border;
       padding-top: 0.9375rem;
-      margin-top: 0;
+
+      @include breakpoint ($tablet) {
+        margin-top: 0;
+      }
     }
   }
 }
@@ -124,7 +127,18 @@
         label {
           color: $primary_input_label;
           font-size: 0.875rem;
+
+          @include breakpoint ($only-mobile) {
+            padding-top: 0;
+          }
         }
+      }
+    }
+
+    .form-type-configurable-select-group label {
+      @include breakpoint ($only-mobile) {
+        font-size: 0.875rem;
+        color: $primary_input_label;
       }
     }
   }
@@ -216,6 +230,14 @@
 }
 
 .description-wrapper {
+  padding-#{$right}: 0;
+
+  .field__content {
+    @include breakpoint($tablet) {
+      padding-#{$right}: 1.25rem;
+    }
+  }
+
   .close {
     width: 2.125rem;
     height: 2.125rem;
@@ -230,5 +252,14 @@
 
   .desc-wrapper {
     margin-top: 0.5rem;
+  }
+}
+
+.content__sidebar {
+  @include breakpoint($only-mobile) {
+    .mobile-related-wrapper {
+      border-top: 0.0625rem solid $pdp_desc_wrapper_border;
+      margin-top: 0.9375rem;
+    }
   }
 }
