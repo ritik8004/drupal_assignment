@@ -47,6 +47,13 @@ class AlshayaSearchApiCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
+   * Static reference to logger object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected static $loggerStatic;
+
+  /**
    * AlshayaSearchApiCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -68,6 +75,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->connection = $connection;
     $this->dateTime = $date_time;
     $this->setLogger($logger);
+    self::$loggerStatic = $logger;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
   }
@@ -130,11 +138,19 @@ class AlshayaSearchApiCommands extends DrushCommands {
   /**
    * Correct index stock data.
    *
+   * @param array $options
+   *   Command options.
+   *
    * @command alshaya_search_api:correct-index-stock-data
    *
+   * @option batch-size Batch size to use for processing items.
+   *
    * @aliases correct-index-stock-data
+   *
+   * @usage drush correct-index-stock-data --batch-size=50
+   *   Process all products to check for corrupt stock data in batches of 50.
    */
-  public function correctIndexStockData() {
+  public function correctIndexStockData(array $options = ['batch-size' => 50]) {
     // Find all index entries for which sku is in stock but index data says OOS
     // OR sku is OOS and index data says in stock.
     $query = $this->connection->query("SELECT sku.sku, sku.langcode, db.nid, db.stock 
@@ -149,32 +165,59 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return;
     }
 
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Checking for corrupt stock indexes...'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Corrupt stock indexes marked for re-indexing.'),
+    ];
+
+    foreach (array_chunk($data, $options['batch-size']) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'checkForCorruptStockIndex'],
+        [$chunk],
+      ];
+    }
+
+    // Initialize the batch.
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+  }
+
+  /**
+   * Batch callback to process chunk of skus for corrupt stock index data.
+   *
+   * @param array $chunk
+   *   Chunk of SKUs.
+   */
+  public static function checkForCorruptStockIndex(array $chunk) {
     $item_ids = [];
-    foreach (array_chunk($data, 100) as $chunk) {
-      foreach ($chunk as $row) {
-        $sku = SKU::loadFromSku($row->sku);
 
-        // Not able to load SKU, we will handle it separately.
-        if (!($sku instanceof SKU)) {
-          continue;
-        }
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-        $is_in_stock = $this->skuManager->isProductInStock($sku);
+    foreach ($chunk as $row) {
+      $sku = SKU::loadFromSku($row->sku);
 
-        // Valid data checks.
-        if (($is_in_stock && $row->stock == 2) || (!$is_in_stock && $row->stock != 2)) {
-          continue;
-        }
-
-        $item_ids[] = $row->nid . ':' . $row->langcode;
+      // Not able to load SKU, we will handle it separately.
+      if (!($sku instanceof SKU)) {
+        continue;
       }
 
-      $indexes = ['acquia_search_index', 'product'];
-      $this->reIndexItems($indexes, $item_ids);
+      $is_in_stock = $skuManager->isProductInStock($sku);
 
-      $this->entityTypeManager->getStorage('acq_sku')->resetCache();
-      drupal_static_reset();
+      // Valid data checks.
+      if (($is_in_stock && $row->stock == 2) || (!$is_in_stock && $row->stock != 2)) {
+        continue;
+      }
+
+      $item_ids[] = $row->nid . ':' . $row->langcode;
     }
+
+    $indexes = ['acquia_search_index', 'product'];
+    self::reIndexItems($indexes, $item_ids);
   }
 
   /**
@@ -235,12 +278,12 @@ class AlshayaSearchApiCommands extends DrushCommands {
    * @param array $item_ids
    *   Item ids.
    */
-  private function reIndexItems(array $indexes, array $item_ids) {
+  protected static function reIndexItems(array $indexes, array $item_ids) {
     if (empty($item_ids)) {
       return;
     }
 
-    $this->logger->warning(dt('Re-indexing items @items', [
+    self::$loggerStatic->warning(dt('Re-indexing items @items', [
       '@items' => json_encode($item_ids),
     ]));
 
