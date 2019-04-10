@@ -2,5 +2,7 @@ name: 'Alshaya Free Design Services'
 type: module
 core: 8.x
 dependencies:
-  - webform:webform
   - alshaya_addressbook:alshaya_addressbook
+  - alshaya_performance:alshaya_performance
+  - alshaya_stores_finder:alshaya_stores_finder_transac
+  - webform:webform

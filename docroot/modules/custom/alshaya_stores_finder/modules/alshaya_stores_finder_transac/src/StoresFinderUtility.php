@@ -230,6 +230,7 @@ class StoresFinderUtility {
     $node->get('field_latitude_longitude')->setValue(['lat' => $store['latitude'], 'lng' => $store['longitude']]);
 
     $node->get('field_store_phone')->setValue($store['store_phone']);
+    $node->get('field_store_email')->setValue($store['store_email']);
 
     // Always set the textarea to empty value first.
     $node->get('field_store_address')->setValue('');

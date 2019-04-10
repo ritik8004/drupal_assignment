@@ -1,6 +1,8 @@
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  module:
+    - alshaya_free_design_services
 open: null
 close: null
 weight: 0
@@ -11,55 +13,7 @@ id: free_design_services
 title: 'Free Design Services'
 description: ''
 category: ''
-elements: |
-  contact_information:
-    '#type': fieldset
-    '#title': 'Contact Information'
-    full_name:
-      '#type': textfield
-      '#title': 'Full Name'
-      '#required': true
-    email:
-      '#type': email
-      '#title': Email
-      '#required': true
-    mobile_number:
-      '#type': tel
-      '#title': 'Mobile number'
-      '#autocomplete': 'off'
-      '#required': true
-      '#international': true
-      '#international_initial_country': AE
-  address:
-    '#type': address
-    '#title': 'Address (Optional)'
-    '#field_overrides':
-      givenName: hidden
-      additionalName: hidden
-      familyName: hidden
-      organization: hidden
-  preferred_store:
-    '#type': textfield
-    '#title': 'Preferred Store'
-    '#required': true
-  room:
-    '#type': checkboxes
-    '#title': Room
-    '#description': '<p>*Select atleast one option</p>'
-    '#options':
-      Nursery: Nursery
-      'Dining Room': 'Dining Room'
-      'Formal Reception room': 'Formal Reception room'
-      'Family Living Room': 'Family Living Room'
-      Bedroom: Bedroom
-      'Diwaniya / Majlis': 'Diwaniya / Majlis'
-      'Home Office': 'Home Office'
-      CInema: CInema
-    '#options_display': two_columns
-    '#required': true
-  anything_else:
-    '#type': textarea
-    '#title': 'Anything else we should know?'
+elements: "contact_information:\n  '#type': fieldset\n  '#title': 'Contact Information'\n  full_name:\n    '#type': textfield\n    '#title': 'Full Name'\n    '#required': true\n  email:\n    '#type': email\n    '#title': Email\n    '#required': true\n  mobile_number:\n    '#type': tel\n    '#title': 'Mobile number'\n    '#autocomplete': 'off'\n    '#required': true\n    '#international': true\n    '#international_initial_country': AE\naddress:\n  '#type': address\n  '#title': 'Address (Optional)'\n  '#field_overrides':\n    givenName: hidden\n    additionalName: hidden\n    familyName: hidden\n    organization: hidden\npreferred_store:\n  '#type': textfield\n  '#title': 'Preferred Store'\n  '#required': true\nroom:\n  '#type': checkboxes\n  '#title': Room\n  '#description': '<p>*Select atleast one option</p>'\n  '#options':\n    Nursery: Nursery\n    'Dining Room': 'Dining Room'\n    'Formal Reception room': 'Formal Reception room'\n    'Family Living Room': 'Family Living Room'\n    Bedroom: Bedroom\n    'Diwaniya / Majlis': 'Diwaniya / Majlis'\n    'Home Office': 'Home Office'\n    CInema: CInema\n  '#options_display': two_columns\n  '#required': true\nanything_else:\n  '#type': textarea\n  '#title': 'Anything else we should know?'\n"
 css: ''
 javascript: ''
 settings:
@@ -139,10 +93,10 @@ settings:
   draft_auto_save: false
   draft_saved_message: ''
   draft_loaded_message: ''
-  confirmation_type: page
+  confirmation_type: url
   confirmation_title: ''
   confirmation_message: ''
-  confirmation_url: ''
+  confirmation_url: '/thank-you'
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
@@ -213,4 +167,38 @@ access:
     roles: {  }
     users: {  }
     permissions: {  }
-handlers: {  }
+handlers:
+  email_to_store:
+    id: email_to_store
+    label: 'Email to store'
+    handler_id: email_to_store
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      to_mail: '[webform_submission:values:preferred_store:raw]'
+      to_options: {  }
+      cc_mail: ''
+      cc_options: {  }
+      bcc_mail: ''
+      bcc_options: {  }
+      from_mail: _default
+      from_options: {  }
+      from_name: _default
+      subject: 'Ecommerce Free design request'
+      body: "<p>Submitted on {{ webform_token('[webform_submission:created]', webform_submission) }}</p>\r\n<p>Submitted by: {{ webform_token('[webform_submission:user]', webform_submission) }}</p>\r\n<p>Market: {{ url('<front>') }}</p>\r\n<p>Submitted values are:</p>\r\n{{ webform_token('[webform_submission:values]', webform_submission) }}\r\n"
+      excluded_elements: {  }
+      ignore_access: 0
+      exclude_empty: true
+      exclude_empty_checkbox: true
+      html: true
+      attachments: 0
+      twig: true
+      debug: false
+      reply_to: ''
+      return_path: ''
+      sender_mail: ''
+      sender_name: ''
+      theme_name: ''
