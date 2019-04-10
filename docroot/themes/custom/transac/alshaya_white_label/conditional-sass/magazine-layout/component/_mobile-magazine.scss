@@ -171,13 +171,16 @@
   .basic-details-wrapper {
     .sku-base-form {
       button[type="submit"] {
-        padding-#{$left}: 0;
-        padding-#{$right}: 0;
+        @include breakpoint($tablet) {
+          padding-#{$left}: 0;
+          padding-#{$right}: 0;
+        }
 
         &::before {
           position: static;
           vertical-align: text-bottom;
           padding-#{$right}: 0.25rem;
+          margin: 0 0 0.125rem;
         }
       }
 
@@ -190,6 +193,9 @@
         button[type="submit"] {
           width: 100%;
           max-width: 11.125rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           html[lang=ar] & {
             max-width: 13.7rem;
@@ -200,7 +206,7 @@
       @include breakpoint($only-tablet) {
         button[type="submit"] {
           html[lang=ar] & {
-            padding: 0.5rem 1.875rem 0.5rem 0.5rem;
+            padding: 0.5rem 0.4375rem;
             max-width: 11.75rem;
 
             &::before {
@@ -266,11 +272,10 @@
           height: 3rem !important;
           cursor: pointer;
           grid-column: 2 / -1;
+          padding: 0.65rem 0;
 
-          &::before {
-            top: 0.75rem;
-            position: absolute;
-            #{$left}: 23%;
+          html[lang=ar] & {
+            padding: 0.65rem;
           }
         }
       }
