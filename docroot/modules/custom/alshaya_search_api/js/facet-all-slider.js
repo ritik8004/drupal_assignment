@@ -13,16 +13,20 @@
       $('.c-facet__title.c-accordion__title').once().on('click', function () {
         if ($(this).hasClass('active')) {
           $(this).removeClass('active');
+          $(this).siblings('ul').slideUp();
         }
         else {
+          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
           $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
           $(this).addClass('active');
+          $(this).siblings('ul').slideDown();
         }
       });
 
       var sortSelector = '.c-content__region .region__content .bef-exposed-form legend';
       $(sortSelector).once().on('click', function () {
         $(this).toggleClass('active');
+        $(this).siblings('.fieldset-wrapper').slideToggle();
       });
 
       // Close the sort and facets on click outside of them.
@@ -30,11 +34,13 @@
         var sortBy = $('.c-content .c-content__region .bef-exposed-form').first();
         if ($(sortBy).find(event.target).length == 0) {
           $(sortBy).find('legend').removeClass('active');
+          $(sortBy).find('.fieldset-wrapper').slideUp();
         }
 
         var facet_block = $('.c-content .region__content > div.block-facets-ajax');
         if ($(facet_block).find(event.target).length == 0) {
           $(facet_block).find('.c-facet__title').removeClass('active');
+          $(facet_block).find('ul').slideUp();
         }
       });
 
