@@ -126,6 +126,7 @@
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 0;
+      margin-#{$right}: 3.25rem;
     }
 
     @include breakpoint($upto-desktop) {
@@ -264,6 +265,10 @@
   height: 2.9375rem;
   line-height: 2.9375rem;
   margin-#{$left}: 1rem;
+
+  @include breakpoint($only-tablet) {
+    margin-#{$left}: 0;
+  }
 
   @include breakpoint($only-mobile) {
     margin-#{$left}: 0;
