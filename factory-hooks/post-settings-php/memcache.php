@@ -1,5 +1,4 @@
 <?php
-// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -69,15 +68,9 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
 
     // Override default fastchained backend for static bins.
     // @see https://www.drupal.org/node/2754947
-    // We have a way of setting values in $settings from include
-    // files per brand, we might set it to different value from
-    // there. To avoid overriding we have added this check.
-    // @see factory-hooks/post-settings-php/includes.php.
-    if (!isset($settings['cache']['bins'])) {
-      $settings['cache']['bins']['bootstrap'] = 'cache.backend.memcache';
-      $settings['cache']['bins']['discovery'] = 'cache.backend.memcache';
-      $settings['cache']['bins']['config'] = 'cache.backend.memcache';
-    }
+    $settings['cache']['bins']['bootstrap'] = 'cache.backend.memcache';
+    $settings['cache']['bins']['discovery'] = 'cache.backend.memcache';
+    $settings['cache']['bins']['config'] = 'cache.backend.memcache';
 
     // Use memcache as the default bin.
     $settings['cache']['default'] = 'cache.backend.memcache';
@@ -100,6 +93,26 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     if (isset($settings, $settings['env']) && $settings['env'] == 'local') {
       global $host_site_code;
       $settings['memcache']['key_prefix'] = $host_site_code;
+    }
+
+    // Optionally set up chainedfast backend to measure performance difference.
+    // The purpose is to measure performance difference between using memcache
+    // and chainedfast backend for bootstrap, discovery and config cache bins.
+    // Default setting is memcache backend.
+    //
+    // To switch backend to chainedfast, create/edit the /home/alshaya/includes
+    // /memcache-settings.php file and enter
+    // $_ENV[<host>]['MEMCACHE_CHAINEDFAST_ENABLE'] = 1;
+    // (e.g. $_ENV['bbkw.uat-alshaya.acsitefactory.com']['MEMCACHE_CHAINEDFAST_ENABLE'] = 1;
+    // to enable chanedfast backend instead of memcache.
+    if (file_exists('/home/alshaya/includes/memcache-settings.php')) {
+      include_once '/home/alshaya/includes/memcache-settings.php';
+
+      if (!empty($_ENV[$_ENV['HTTP_HOST']]['MEMCACHE_CHAINEDFAST_ENABLE'])) {
+        $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+        $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+        $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+      }
     }
   }
 }
