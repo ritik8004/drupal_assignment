@@ -1,5 +1,6 @@
 {{ attach_library('alshaya_white_label/convert_to_select2') }}
-{% set attributes = attributes.addClass('c-search', 'c-plp', 'l-two--sf') %}
+{% set sidebar_visibility = enable_lhn_tree == 0 ? 'l-one--w lhn-without-sidebar' : 'l-two--sf' %}
+{% set attributes = attributes.addClass('c-plp', 'c-plp-only', sidebar_visibility) %}
 <div>
   <!-- ______________________ Banner Top _______________________ -->
   {% if page.banner_top %}
@@ -94,7 +95,7 @@
   <div class="clearfix page-wrapper">
     <div{{ attributes.addClass('l-container') }}>
 
-      {% if page.sidebar_first %}
+      {% if page.sidebar_first and enable_lhn_tree == 1 %}
         <aside class="c-sidebar-first">
           <div class="c-sidebar-first__region">
             <div class="c-facet__blocks__wrapper">

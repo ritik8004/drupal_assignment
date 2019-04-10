@@ -8,10 +8,6 @@
         margin-bottom: 0.75rem;
         border-bottom: 1px solid $content_pagetitle_border;
       }
-
-      @include breakpoint($only-tablet) {
-        max-width: 20rem;
-      }
     }
 
     .is-filter {

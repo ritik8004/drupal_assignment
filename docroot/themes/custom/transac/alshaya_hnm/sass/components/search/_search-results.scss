@@ -1,8 +1,4 @@
 .c-search {
-  @include breakpoint($only-mobile) {
-    padding-top: 1.375rem;
-  }
-
   .region__content {
     .view-id-search {
       .views-row {

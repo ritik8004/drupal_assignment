@@ -171,11 +171,18 @@ function alshaya_white_label_preprocess_page(&$variables) {
     '#markup' => \Drupal::config('alshaya_master.settings')->get('js_disable_message'),
   ];
 
+  // Initialising the variable to check the sidebar visibilty.
+  // This will be disable by default.
+  $variables['enable_lhn_tree'] = 0;
+
   // Attach the plp search js library to PLP page.
   if ($routematch->getRouteName() == 'entity.taxonomy_term.canonical') {
     $term = $routematch->getParameter('taxonomy_term');
     if ($term->bundle() == 'acq_product_category') {
       $variables['#attached']['library'][] = 'alshaya_white_label/plp_search_js';
+
+      // Taking the sidebar visibility check from config for PLP.
+      $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
 
       $plp_type = $term->get('field_plp_layout')->value;
       if ($plp_type == ProductCategoryTree::PLP_LAYOUT_1) {
@@ -315,7 +322,6 @@ function alshaya_white_label_preprocess_block(&$variables) {
   $listing_pages_plugin_id = [
     'views_block:alshaya_product_list-block_1',
     'views_block:alshaya_product_list-block_2',
-    'views_exposed_filter_block:search-page',
   ];
   if (in_array($variables['plugin_id'], $listing_pages_plugin_id)) {
     $variables['attributes']['class'][] = 'c-products-list';
