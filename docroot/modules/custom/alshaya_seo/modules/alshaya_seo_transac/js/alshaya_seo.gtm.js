@@ -56,8 +56,14 @@
         }
 
         var userDetails = JSON.parse(localStorage.getItem('userDetails'));
-        if (localStorage.getItem('userDetails') === undefined || localStorage.getItem('userDetails') === null || drupalSettings.user.uid !== userDetails.userID) {
+
+        if ((localStorage.getItem('userDetails') === undefined ||
+            localStorage.getItem('userDetails') === null ||
+            drupalSettings.user.uid !== userDetails.userID ||
+            $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1) &&
+            orderConfirmationPage.length !== 0) {
           Drupal.setUserDetailsInStorage();
+          $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
           userDetails = JSON.parse(localStorage.getItem('userDetails'));
         }
 
@@ -1140,7 +1146,8 @@
         type: "POST",
         async: false,
         success: function (response, status) {
-          userDetails = response;
+          console.log(response);
+          userDetails = response.user_data;
         },
       });
     }

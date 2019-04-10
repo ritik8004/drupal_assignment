@@ -319,6 +319,9 @@ function alshaya_seo_entity_presave(EntityInterface $entity) {
         user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
       }
     }
+    elseif ($entity->getEntityTypeId() === 'user') {
+      user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
+    }
   }
   catch (Exception $e) {
     \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');

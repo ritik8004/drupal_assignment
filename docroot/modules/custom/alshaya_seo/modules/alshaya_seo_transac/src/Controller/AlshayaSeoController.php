@@ -116,7 +116,7 @@ class AlshayaSeoController extends ControllerBase {
       'privilegeCustomer' => $privilege_customer,
     ];
 
-    return new JsonResponse(json_encode($user_details));
+    return new JsonResponse(['user_data' => json_encode($user_details)]);
   }
 
 }

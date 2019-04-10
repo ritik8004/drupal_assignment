@@ -214,6 +214,9 @@ class CheckoutHelper {
       $this->ordersManager->clearLastOrderRelatedProductsCache();
       $this->clearCartHistory($cart->id());
 
+      // Add cookie for gtm.
+      user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
+
       // Add success message in logs.
       $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
         '@cart_id' => $cart->id(),
