@@ -24,6 +24,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
+      var cartPage = $('body[gtm-container="cart page"]');
       var orderConfirmationPage = $('body[gtm-container="purchase confirmation page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
@@ -65,11 +66,12 @@
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
           userDetails = JSON.parse(localStorage.getItem('userDetails'));
         }
-        
+
         userDetails.platformType = platformType;
 
         // For checkout pages, privilegeCustomer is added in checkout step.
-        if (cartCheckoutLoginSelector.length !== 0 ||
+        if (cartPage.length !== 0 ||
+            cartCheckoutLoginSelector.length !== 0 ||
             cartCheckoutDeliverySelector.length !== 0 ||
             cartCheckoutPaymentSelector.length !==0) {
           delete userDetails.privilegeCustomer;
