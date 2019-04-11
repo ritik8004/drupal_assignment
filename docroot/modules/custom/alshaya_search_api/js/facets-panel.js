@@ -23,6 +23,11 @@
             $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
           }
           $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+          // Check if sort by is open, else close it.
+          if ($('.c-content .region__content > .views-exposed-form.bef-exposed-form').find('legend').hasClass('active')) {
+            $(this).removeClass('active');
+            $(this).siblings('.fieldset-wrapper').slideUp();
+          }
           $(this).addClass('active');
           if (!$(this).parent().parent().hasClass('filter__inner')) {
             $(this).siblings('ul').slideDown();
@@ -40,7 +45,7 @@
 
       // Close the sort and facets on click outside of them.
       document.addEventListener('click', function(event) {
-        var sortBy = $('.c-content .c-content__region > .views-exposed-form > .bef-exposed-form').first();
+        var sortBy = $('.c-content .region__content > .views-exposed-form.bef-exposed-form').first();
         if ($(sortBy).find(event.target).length == 0) {
           $(sortBy).find('legend').removeClass('active');
           $(sortBy).find('.fieldset-wrapper').slideUp();
