@@ -529,6 +529,27 @@
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           deliveryType = 'Home Delivery';
         }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+          cartCheckoutDeliverySelector.find('#edit-actions-get-shipping-methods'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
+
+        $('[data-drupal-selector="edit-member-delivery-home-address-form-save"]')
+          .once('delivery-address')
+          .on('click mousedown', function (e) {
+            dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
+          });
+
       }
 
       /**
