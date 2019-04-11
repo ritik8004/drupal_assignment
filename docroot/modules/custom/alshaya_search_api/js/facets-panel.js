@@ -257,6 +257,9 @@
         if ($('.all-filters #block-categoryfacetplp:not(:empty)').length === 0) {
           $('#block-alshaya-plp-facets-block-all').addClass('empty-category');
         }
+        else {
+          $('#block-alshaya-plp-facets-block-all').removeClass('empty-category');
+        }
 
       };
 
