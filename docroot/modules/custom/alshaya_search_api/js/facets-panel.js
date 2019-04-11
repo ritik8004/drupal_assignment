@@ -255,7 +255,7 @@
 
         // If no category facet after ajax selection, add class to identify it.
         if ($('.all-filters #block-categoryfacetplp:not(:empty)').length === 0) {
-          $('.show-all-filters .upto-desktop').addClass('empty-category');
+          $('#block-alshaya-plp-facets-block-all').addClass('empty-category');
         }
 
       };
