@@ -98,10 +98,19 @@ class AlshayaPlpFacetsBlock extends BlockBase implements ContainerFactoryPluginI
       $show_all = FALSE;
     }
 
+    // This is to determine whether category facet will render on the page.
+    $category_facet_block = $this->entityTypeManager->getStorage('block')->load('categoryfacetplp');
+    $category_facet_block_content = $category_facet_block->getPlugin()->build();
+    $class = '';
+    if (empty($category_facet_block_content)) {
+      $class = 'empty-category';
+    }
+
     return [
       '#theme' => 'all_facets_block',
       '#facet_blocks' => $facet_blocks,
       '#show_all' => $show_all,
+      '#class' => $class,
     ];
   }
 

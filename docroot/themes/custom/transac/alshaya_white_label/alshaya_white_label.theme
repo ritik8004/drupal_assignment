@@ -327,6 +327,13 @@ function alshaya_white_label_preprocess_block(&$variables) {
     $variables['attributes']['class'][] = 'c-products-list';
     $variables['attributes']['class'][] = 'product-small';
   }
+
+  // If `all filters` block of PLP.
+  if ($variables['plugin_id'] == 'alshaya_plp_facets_block_all') {
+    if ($variables['elements']['content']['#class'] == 'empty-category') {
+      $variables['attributes']['class'][] = 'empty-category';
+    }
+  }
 }
 
 /**

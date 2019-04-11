@@ -21,6 +21,7 @@ function alshaya_search_api_theme($existing, $type, $theme, $path) {
     'variables' => [
       'facet_blocks' => [],
       'show_all' => NULL,
+      'class' => NULL,
     ],
   ];
 

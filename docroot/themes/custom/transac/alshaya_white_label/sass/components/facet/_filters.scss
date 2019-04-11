@@ -93,6 +93,10 @@
       display: none !important;
     }
 
+    &:empty {
+      display: none;
+    }
+
     .c-accordion__title.active + ul {
       @include breakpoint($only-mobile) {
         width: 100vw;
@@ -274,6 +278,10 @@
     margin-#{$left}: 0;
     width: 50% !important;
     float: $left;
+
+    &.empty-category {
+      width: 100% !important;
+    }
   }
 }
 
