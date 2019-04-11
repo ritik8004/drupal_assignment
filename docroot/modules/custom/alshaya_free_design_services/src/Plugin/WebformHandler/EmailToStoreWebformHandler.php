@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\Plugin\WebformHandler\EmailWebformHandler;
 use Drupal\webform\WebformSubmissionConditionsValidatorInterface;
@@ -42,6 +43,13 @@ class EmailToStoreWebformHandler extends EmailWebformHandler {
    * @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility
    */
   protected $storesFinderUtility;
+
+  /**
+   * Term Storage.
+   *
+   * @var \Drupal\taxonomy\TermStorageInterface
+   */
+  protected $taxonomyTermStorage;
 
   /**
    * {@inheritdoc}
@@ -78,6 +86,7 @@ class EmailToStoreWebformHandler extends EmailWebformHandler {
     );
 
     $this->storesFinderUtility = $stores_finder_utility;
+    $this->taxonomyTermStorage = $entity_type_manager->getStorage('taxonomy_term');
   }
 
   /**
@@ -147,6 +156,47 @@ class EmailToStoreWebformHandler extends EmailWebformHandler {
     }
 
     return $emails;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getMessage(WebformSubmissionInterface $webform_submission) {
+    $address = $webform_submission->getElementData('address');
+
+    if (isset($address['administrative_area'])) {
+      $address['administrative_area'] = $this->getTaxonomyTermLabel($address['administrative_area']);
+    }
+    if (isset($address['area_parent'])) {
+      $address['administrative_area'] .= ', ' . $this->getTaxonomyTermLabel($address['area_parent']);
+    }
+
+    $webform_submission->setElementData('address', $address);
+    return parent::getMessage($webform_submission);
+  }
+
+  /**
+   * Wrapper function to get translated term label from tid.
+   *
+   * @param mixed $tid
+   *   Term id.
+   *
+   * @return string
+   *   Term label or tid if term not found.
+   */
+  private function getTaxonomyTermLabel($tid) {
+    $term = $this->taxonomyTermStorage->load($tid);
+
+    if ($term instanceof TermInterface) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+      if ($term->language()->getId() != $langcode && $term->hasTranslation($langcode)) {
+        $term = $term->getTranslation('en');
+      }
+
+      return $term->label();
+    }
+
+    return $tid;
   }
 
 }
