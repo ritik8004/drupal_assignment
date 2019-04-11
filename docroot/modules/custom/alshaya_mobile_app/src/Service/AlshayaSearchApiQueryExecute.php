@@ -370,6 +370,19 @@ class AlshayaSearchApiQueryExecute {
     if ($server->supportsFeature('search_api_facets')) {
       $facet_data = [];
       foreach ($facets as $facet) {
+        // New category facets ids.
+        $new_category_facets = [
+          'category_facet_search',
+          'category_facet_promo',
+          'category_facet_plp',
+        ];
+        // For mobile app, we still using old category facets. Thus skip new
+        // category facets processing.
+        // @Todo: Remove this in future when using new category facets.
+        if (in_array($facet->id(), $new_category_facets)) {
+          continue;
+        }
+
         $facet_data[$facet->id()] = [
           'field' => $facet->getFieldIdentifier(),
           'limit' => $facet->getHardLimit(),
