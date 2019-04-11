@@ -450,7 +450,8 @@
       font-size: 0.875rem;
       color: $accordion_title;
       line-height: 2.5;
-      height: 3.2rem;
+      height: auto;
+      margin-bottom: 0.3125rem;
       cursor: pointer;
       position: relative;
       text-transform: none;
@@ -473,7 +474,7 @@
         font-family: $hnm-regular;
         font-size: 0.6875rem;
         color: $accordion_subtitle;
-        line-height: 1;
+        line-height: 1.2;
         text-transform: none;
         margin-top: -0.25rem;
         padding-bottom: 0;
@@ -668,13 +669,20 @@
 
         @include breakpoint($only-mobile) {
           padding-#{$left}: 1.3701rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
           &.hide-button {
             display: block;
           }
 
           &::before {
-            display: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-#{$right}: 0.625rem;
+            position: static;
           }
         }
 
