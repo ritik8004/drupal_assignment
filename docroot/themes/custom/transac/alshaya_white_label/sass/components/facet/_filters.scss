@@ -278,6 +278,10 @@
     margin-#{$left}: 0;
     width: 50% !important;
     float: $left;
+
+    &.empty-category {
+      width: 100% !important;
+    }
   }
 }
 
