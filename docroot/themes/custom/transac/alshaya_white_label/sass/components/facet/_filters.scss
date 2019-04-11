@@ -96,6 +96,10 @@
       display: none !important;
     }
 
+    &:empty {
+      display: none;
+    }
+
     .c-accordion__title.active + ul {
       @include breakpoint($only-mobile) {
         width: 100vw;
