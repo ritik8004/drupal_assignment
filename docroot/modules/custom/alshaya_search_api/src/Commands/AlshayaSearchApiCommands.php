@@ -114,10 +114,11 @@ class AlshayaSearchApiCommands extends DrushCommands {
 
     // 3. Re-index items that are missing in DB index.
     $query = $this->connection->query("SELECT SQL_NO_CACHE nid, langcode 
-      FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node WHERE type = :node_type) AS n 
-      LEFT JOIN search_api_item ON iid=item_id 
+      FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node_field_data WHERE type = :node_type) AS n 
+      LEFT JOIN search_api_item ON iid=item_id AND index_id = :index 
       WHERE item_id IS NULL", [
         ':node_type' => 'acq_product',
+        ':index' => 'product',
       ]
     );
 
@@ -129,6 +130,27 @@ class AlshayaSearchApiCommands extends DrushCommands {
     }
 
     $indexes = ['product'];
+    $this->deleteItems($indexes, $item_ids);
+    $this->indexItems($indexes, $item_ids);
+
+    // 4. Re-index items that are missing in solr index.
+    $query = $this->connection->query("SELECT SQL_NO_CACHE nid, langcode 
+      FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node_field_data WHERE type = :node_type) AS n 
+      LEFT JOIN search_api_item ON iid=item_id AND index_id = :index 
+      WHERE item_id IS NULL", [
+        ':node_type' => 'acq_product',
+        ':index' => 'acquia_search_index',
+      ]
+    );
+
+    $data = $query->fetchAll();
+
+    $item_ids = [];
+    foreach ($data as $row) {
+      $item_ids[] = $row->nid . ':' . $row->langcode;
+    }
+
+    $indexes = ['acquia_search_index'];
     $this->deleteItems($indexes, $item_ids);
     $this->indexItems($indexes, $item_ids);
   }
