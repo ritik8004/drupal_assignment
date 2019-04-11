@@ -52,6 +52,8 @@
 
       // Back Button
       .facet-all-back {
+        cursor: pointer;
+
         @include icon(chevron#{$left}, before) {
           color: $plp_all_filter_close_btn;
           font-size: 2rem;
@@ -70,6 +72,8 @@
 
       // Close button
       .facet-all-apply {
+        cursor: pointer;
+
         @include icon('close') {
           font-size: 1.5rem;
           line-height: 1.5rem;
@@ -180,6 +184,16 @@
 
           ul {
             display: block;
+            overflow-y: auto;
+            height: 58vh;
+
+            @include breakpoint($desktop) {
+              height: 71.5vh;
+            }
+
+            @include breakpoint($only-tablet) {
+              height: 74vh;
+            }
           }
 
           .c-accordion__title {
@@ -188,16 +202,6 @@
             &.active {
               & + ul {
                 display: block !important;
-                overflow-y: auto;
-                height: 58vh;
-
-                @include breakpoint($desktop) {
-                  height: 71.5vh;
-                }
-
-                @include breakpoint($only-tablet) {
-                  height: 74vh;
-                }
               }
             }
           }

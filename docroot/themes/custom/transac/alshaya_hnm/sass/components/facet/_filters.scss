@@ -2,6 +2,7 @@
   .c-accordion__title {
     font-family: $hnm-demibold;
     color: $plp_facet_title;
+    font-size: 0.6875rem;
 
     &::after {
       font-size: 2.25rem;
@@ -14,6 +15,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   color: $plp_facet_title;
+  font-size: 0.6875rem;
 }
 
 .c-plp {
@@ -50,6 +52,7 @@
         font-family: $hnm-demibold;
         color: $plp_facet_title;
         letter-spacing: 1px;
+        font-size: 0.6875rem;
 
         @include icon(dropdown-expand, after) {
           position: absolute;
