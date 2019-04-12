@@ -180,15 +180,13 @@
         }
       }
 
-      .c-facet.c-accordion.block-facet-blockcategory-facet-plp {
-        @include breakpoint($upto-desktop) {
-          display: block;
-        }
-
-        @include breakpoint($only-mobile) {
-          width: 100%;
-          border-bottom: none;
-          border-#{$right}: none;
+      .c-facet.c-accordion {
+        &.block-facet-blockcategory-facet-plp,
+        &.block-facet-blockcategory-facet-promo,
+        &.block-facet-blockcategory-facet-search {
+          @include breakpoint($upto-desktop) {
+            display: none !important;
+          }
         }
       }
 
