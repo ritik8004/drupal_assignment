@@ -313,23 +313,22 @@
         }
       })
 
-      // Prepare the count span.
-      var count_span = '';
-      if (total_selected > 2) {
-        total_selected = total_selected - 2;
-        count_span = '<span class="total-count">(+' + total_selected + ')</span>';
-      }
-
       // Prepare the new title.
       var span_facet_title = '';
+      var count_span = '';
       if (new_title.length > 0) {
         // Remove last `,` from the string.
         new_title = new_title.slice(0, -2);
-        span_facet_title = '<span class="selected-facets">' + new_title + '</span>';
+        // Prepare the count span.
+        if (total_selected > 2) {
+          total_selected = total_selected - 2;
+          count_span = '<span class="total-count"> (+' + total_selected + ')</span>';
+        }
+        span_facet_title = '<span class="selected-facets">' + new_title + count_span + '</span>';
       }
 
       // Append new title and count to facet title.
-      var element_append = span_facet_title + count_span;
+      var element_append = span_facet_title;
       $(facet_block).find('h3').find('.selected-facets').remove();
       $(facet_block).find('h3').find('.total-count').remove();
       $(facet_block).find('h3').append(element_append);

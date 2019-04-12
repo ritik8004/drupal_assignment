@@ -110,6 +110,8 @@
 
           legend {
             width: 100%;
+            font-size: 0.75rem;
+            letter-spacing: normal;
 
             &::after {
               display: none;
@@ -123,6 +125,11 @@
             height: auto;
             line-height: 1;
             border-bottom: 1px solid $plp_all_filter_item_border;
+
+            .sort-for-label {
+              float: $right;
+              margin-#{$right}: 0.75rem;
+            }
 
             @include icon(chevron#{$right}, after) {
               color: #000;
@@ -249,8 +256,15 @@
             text-transform: capitalize;
             padding: 1.125rem 2rem;
             height: auto;
+            font-size: 0.75rem;
             line-height: 1;
             border-bottom: 1px solid $plp_all_filter_item_border;
+            letter-spacing: normal;
+
+            .selected-facets {
+              float: $right;
+              margin-#{$right}: 0.75rem;
+            }
 
             @include icon(chevron#{$right}, after) {
               color: #000;

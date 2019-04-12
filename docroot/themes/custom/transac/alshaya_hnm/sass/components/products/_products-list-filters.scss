@@ -3,7 +3,8 @@
     .views-exposed-form.c-accordion,
     .c-facet.c-accordion {
       .c-accordion__title {
-        text-transform: uppercase;
+        font-family: $hnm-regular;
+        text-transform: capitalize;
       }
     }
 
@@ -11,7 +12,8 @@
     .block-views-exposed-filter-blockalshaya-product-list-block-2,
     .block-views-exposed-filter-blocksearch-page {
       fieldset.form-wrapper .fieldset-legend {
-        text-transform: uppercase;
+        font-family: $hnm-regular;
+        text-transform: capitalize;
       }
     }
 
