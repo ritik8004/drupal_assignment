@@ -1,4 +1,6 @@
 <?php
+// @codingStandardsIgnoreFile
+
 /**
  * @file
  * This file contains the mapping between environment+site and magento /
@@ -117,6 +119,16 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
       '01dev2' => [
         'magento' => 'fl_uat',
         'conductor' => 'flae_uat',
+      ],
+    ],
+    'pbae' => [
+      'local' => [
+        'magento' => 'pb_banktransfer',
+        'conductor' => 'pbae_dev3',
+      ],
+      'dev3' => [
+        'magento' => 'pb_banktransfer',
+        'conductor' => 'pbae_dev3',
       ],
     ],
   ];
