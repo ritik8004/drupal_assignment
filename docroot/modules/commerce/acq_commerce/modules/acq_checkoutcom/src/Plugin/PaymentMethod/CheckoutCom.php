@@ -89,6 +89,14 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ],
     ];
 
+//    $pane_form['payment_details']['cardType'] = [
+//      '#type' => 'hidden',
+//      '#value' => 'mada',
+//      '#attributes' => [
+//        'id' => 'cardType',
+//      ],
+//    ];
+
     $pane_form['payment_details']['checkout_kit'] = [
       '#type' => 'html_tag',
       '#tag' => 'script',
@@ -117,7 +125,38 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
     $cart = $this->getCart();
-    $cart->setPaymentMethod('checkout_com', ['card_token_id' => $inputs['cko-card-token']]);
+    //$cart->setPaymentMethod('checkout_com', ['card_token_id' => $inputs['cko-card-token']]);
+
+    $totals = $cart->totals();
+    $url = "https://sandbox.checkout.com/api2/v2/charges/token";
+    $ch = curl_init($url);
+    $header = [
+      'Content-Type: application/json;charset=UTF-8',
+      'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
+    ];
+
+    $data_string = '{
+      "value": "' . $totals['grand'] * 100 . '",
+      "currency": "KWD",
+      "cardToken": "' . $inputs['cko-card-token'] . '",
+      "chargeMode": 2,
+      "email": "testing@test.com",
+	  }';
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+    $output = curl_exec($ch);
+
+    curl_close($ch);
+    $decoded = json_decode($output, TRUE);
+    echo '<pre>';
+    print_r($decoded);
+    echo '</pre>';
+    die();
+
+
   }
 
 }
