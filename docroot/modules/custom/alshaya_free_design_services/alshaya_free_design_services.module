@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -17,6 +18,55 @@ function alshaya_free_design_services_form_webform_submission_free_design_servic
   $form['elements']['preferred_store']['#type'] = 'select';
   $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
   $form['elements']['preferred_store']['#options'] = _alshaya_free_design_services_get_all_stores();
+
+  $form['#validate'][] = 'alshaya_free_design_services_form_webform_submission_free_design_services_validate';
+}
+
+/**
+ * Form validate callback to update address area ids to values.
+ */
+function alshaya_free_design_services_form_webform_submission_free_design_services_validate(array &$form, FormStateInterface $form_state) {
+  if ($form_state->getErrors()) {
+    return;
+  }
+
+  $address = $form_state->getValue('address');
+
+  if (isset($address['administrative_area'])) {
+    $address['administrative_area'] = _alshaya_free_design_services_get_taxonomy_term_label($address['administrative_area']);
+  }
+  if (isset($address['area_parent'])) {
+    $address['administrative_area'] .= ', ' . _alshaya_free_design_services_get_taxonomy_term_label($address['area_parent']);
+  }
+
+  $form_state->setValue('address', $address);
+}
+
+/**
+ * Wrapper function to get translated term label from tid.
+ *
+ * @param mixed $tid
+ *   Term id.
+ *
+ * @return string
+ *   Term label or tid if term not found.
+ */
+function _alshaya_free_design_services_get_taxonomy_term_label($tid) {
+  /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
+  $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $term = $termStorage->load($tid);
+
+  if ($term instanceof TermInterface) {
+    $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+    if ($term->language()->getId() != $langcode && $term->hasTranslation($langcode)) {
+      $term = $term->getTranslation('en');
+    }
+
+    return $term->label();
+  }
+
+  return $tid;
 }
 
 /**
