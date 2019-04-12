@@ -2,18 +2,34 @@
   text-transform: capitalize;
 }
 
-.c-plp .c-content__region .all-filters {
-  .filter__head {
-    .filter-sort-title {
-      text-transform: capitalize;
+.c-plp .c-content__region {
+  .all-filters {
+    .filter__head {
+      .filter-sort-title {
+        text-transform: capitalize;
+      }
+    }
+
+    .filter__foot {
+      .facet-all-clear {
+        text-transform: uppercase;
+        color: $plp_clear_all_btn_text;
+        border-color: $plp_clear_all_btn_text;
+      }
     }
   }
 
-  .filter__foot {
-    .facet-all-clear {
-      text-transform: uppercase;
-      color: $plp_clear_all_btn_text;
-      border-color: $plp_clear_all_btn_text;
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    color: $accordion_title;
+
+    legend {
+      text-transform: capitalize;
+
+      &::after {
+        color: $primary_dropdown_arrow;
+      }
     }
   }
 }

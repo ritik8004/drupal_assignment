@@ -147,13 +147,6 @@
         padding-top: 0.5rem;
       }
     }
-
-    .block-views-exposed-filter-blockalshaya-product-list-block-1 {
-      @include breakpoint($only-mobile) {
-        padding-top: 0.5rem;
-        border-top-color: $primary_border;
-      }
-    }
   }
 
   .c-page-title__description,

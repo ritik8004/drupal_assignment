@@ -162,7 +162,8 @@
     &.product-large {
       .alshaya_search_gallery .alshaya_search_mainimage {
         @include breakpoint($only-mobile) {
-          height: 32.125rem;
+          height: auto;
+          width: 100%;
         }
       }
     }
@@ -170,7 +171,7 @@
     &.product-small {
       .alshaya_search_gallery .alshaya_search_mainimage {
         @include breakpoint($only-mobile) {
-          height: 16.125rem;
+          height: 17.5rem;
         }
       }
     }
