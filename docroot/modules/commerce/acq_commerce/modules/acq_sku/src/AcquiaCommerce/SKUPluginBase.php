@@ -241,28 +241,24 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
       if ($node->language()->getId() == $langcode) {
-        $static[$langcode][$sku_string][$check_parent_key] = $node;
-        return $node;
+        // Do nothing as we just using the same node object for static cache.
       }
-
-      // If node has translation, we return the translation.
-      if ($node->hasTranslation($langcode)) {
-        $static[$langcode][$sku_string][$check_parent_key] = $node->getTranslation($langcode);
-        return $static[$langcode][$sku_string][$check_parent_key];
+      elseif ($node->hasTranslation($langcode)) {
+        // If node has translation, we return the translation.
+        $node = $node->getTranslation($langcode);
       }
-
-      // If translation not available and create_translation flag is true.
-      if ($create_translation) {
-        $static[$langcode][$sku_string][$check_parent_key] = $node->addTranslation($langcode);
-        return $static[$langcode][$sku_string][$check_parent_key];
+      elseif ($create_translation) {
+        // If translation not available and create_translation flag is true.
+        $node = $node->addTranslation($langcode);
       }
-
-      // Just log the message and continue.
-      // Don't want to show any fatal error anywhere.
-      \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
-        '@sku' => $sku->getSku(),
-        '@langcode' => $langcode,
-      ]);
+      else {
+        // Just log the message and continue.
+        // Don't want to show any fatal error anywhere.
+        \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $langcode,
+        ]);
+      }
     }
 
     $static[$langcode][$sku_string][$check_parent_key] = $node;
