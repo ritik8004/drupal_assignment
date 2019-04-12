@@ -363,11 +363,8 @@ class SKU extends ContentEntityBase implements SKUInterface {
       \Drupal::logger('acq_sku')->error('Duplicate SKUs found while loading for @sku.', ['@sku' => $sku]);
     }
 
-    if ($is_multilingual) {
-      if ($sku_entity->language()->getId() == $langcode) {
-        // Do nothing, we do not want to go into any elseif below.
-      }
-      elseif ($sku_entity->hasTranslation($langcode)) {
+    if ($is_multilingual && $sku_entity->language()->getId() != $langcode) {
+      if ($sku_entity->hasTranslation($langcode)) {
         $sku_entity = $sku_entity->getTranslation($langcode);
       }
       elseif ($create_translation) {
