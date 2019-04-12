@@ -126,8 +126,15 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $inputs = $form_state->getUserInput();
     $cart = $this->getCart();
     //$cart->setPaymentMethod('checkout_com', ['card_token_id' => $inputs['cko-card-token']]);
+    $this->requestPayment($inputs);
+    die();
 
-    $totals = $cart->totals();
+
+
+  }
+
+  protected function chargesToken($inputs) {
+    $totals = $this->getCart()->totals();
     $url = "https://sandbox.checkout.com/api2/v2/charges/token";
     $ch = curl_init($url);
     $header = [
@@ -142,6 +149,41 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       "chargeMode": 2,
       "email": "testing@test.com",
 	  }';
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+    $output = curl_exec($ch);
+
+    curl_close($ch);
+    $decoded = json_decode($output, TRUE);
+    echo '<pre>';
+    print_r($decoded);
+    echo '</pre>';
+    die();
+  }
+
+  protected function requestPayment($inputs) {
+    $totals = $this->getCart()->totals();
+    $url = "https://api.sandbox.checkout.com/payments";
+    $ch = curl_init($url);
+    $header = [
+      'Content-Type: application/json;charset=UTF-8',
+      'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
+    ];
+
+    $data_string = '{
+      source": {
+        "type": "token",
+        "token": "' . $inputs['cko-card-token'] . '",
+      },
+      "amount": "' . $totals['grand'] * 100 . '",
+      "currency": "KWD",
+      "3ds": {
+        "enabled": true
+      }
+    }';
     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
