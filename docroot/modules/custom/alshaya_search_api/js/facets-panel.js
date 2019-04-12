@@ -311,12 +311,13 @@
 
       var new_title = '';
       var total_selected = 0;
+      var facets_to_show_in_label = 2;
       // If any facet item active.
       var active_facets = $(facet_block).find('ul li.is-active label span.facet-item__value');
       $.each(active_facets, function(index, element) {
         total_selected = total_selected + 1;
         // Show only two facets in title.
-        if (total_selected <= 2) {
+        if (total_selected <= facets_to_show_in_label) {
           var active_facet_label = $(element).contents().not($('span').children()).text().trim();
           new_title += active_facet_label + ', ';
         }
@@ -329,8 +330,8 @@
         // Remove last `,` from the string.
         new_title = new_title.slice(0, -2);
         // Prepare the count span.
-        if (total_selected > 2) {
-          total_selected = total_selected - 2;
+        if (total_selected > facets_to_show_in_label) {
+          total_selected = total_selected - facets_to_show_in_label;
           count_span = '<span class="total-count"> (+' + total_selected + ')</span>';
         }
         span_facet_title = '<span class="selected-facets">' + new_title + count_span + '</span>';
