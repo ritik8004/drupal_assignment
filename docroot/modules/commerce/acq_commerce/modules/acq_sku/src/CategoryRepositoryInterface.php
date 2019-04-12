@@ -10,6 +10,19 @@ namespace Drupal\acq_sku;
 interface CategoryRepositoryInterface {
 
   /**
+   * Get Term Id from Commerce Id.
+   *
+   * @param int $commerce_id
+   *   Commerce Backend ID.
+   *
+   * @return int|null
+   *   Return found term id or null if not found.
+   *
+   * @throws \RuntimeException
+   */
+  public function getTermIdFromCommerceId($commerce_id);
+
+  /**
    * LoadCategoryTerm.
    *
    * Load a Taxonomy term representing a category by commerce ID.

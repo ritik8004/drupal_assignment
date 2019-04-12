@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_sku;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
 
@@ -47,18 +48,39 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
    *   EntityTypeManager object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerFactory object.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   Database Connection.
    * @param string $vocabulary
    *   Taxonomy Vocabulary for categories.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, LoggerChannelFactory $logger_factory, $vocabulary = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager,
+                              LoggerChannelFactory $logger_factory,
+                              Connection $connection,
+                              $vocabulary = NULL) {
 
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->vocabStorage = $entity_type_manager->getStorage('taxonomy_vocabulary');
+    $this->connection = $connection;
     $this->logger = $logger_factory->get('acq_sku');
 
     if ($vocabulary) {
       $this->loadVocabulary($vocabulary);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTermIdFromCommerceId($commerce_id) {
+    $mappings = &drupal_static(__METHOD__, []);
+
+    if (empty($mappings)) {
+      $query = $this->connection->select('taxonomy_term__field_commerce_id');
+      $query->fields('taxonomy_term__field_commerce_id', ['field_commerce_id_value', 'entity_id']);
+      $mappings = $query->execute()->fetchAllKeyed(0, 1);
+    }
+
+    return $mappings[$commerce_id] ?? NULL;
   }
 
   /**
@@ -84,22 +106,13 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
       return ($this->terms[$commerce_id]);
     }
 
-    $query = $this->termStorage->getQuery();
-    $group = $query->andConditionGroup()
-      ->condition('field_commerce_id', $commerce_id)
-      ->condition('vid', $this->vocabulary->id());
-    $query->condition($group);
+    $tid = $this->getTermIdFromCommerceId($commerce_id);
 
-    $tids = $query->execute();
-
-    if (count($tids) == 0) {
-      return (NULL);
-    }
-    elseif (count($tids) > 1) {
-      $this->logger->error('Multiple terms found for category id @cid', ['@cid' => $commerce_id]);
+    if (empty($tid)) {
+      return NULL;
     }
 
-    $term = $this->termStorage->load(array_shift($tids));
+    $term = $this->termStorage->load($tid);
     $this->terms[$commerce_id] = $term;
 
     return ($term);
