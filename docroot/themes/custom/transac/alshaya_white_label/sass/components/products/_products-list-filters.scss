@@ -132,7 +132,7 @@
             }
 
             @include icon(chevron#{$right}, after) {
-              color: #000;
+              color: $plp_all_filter_filter_arrow;
               font-size: 1.5rem;
               width: 2rem;
               cursor: pointer;
@@ -267,7 +267,7 @@
             }
 
             @include icon(chevron#{$right}, after) {
-              color: #000;
+              color: $plp_all_filter_filter_arrow;
               font-size: 1.5rem;
               width: 2rem;
               cursor: pointer;
@@ -338,7 +338,7 @@
 
         font-size: 0.8125rem;
         width: 48%;
-        line-height: 1.5;
+        height: 2.5625rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -392,6 +392,11 @@
         width: 48%;
         line-height: 1.5;
         border: 1px solid $plp_all_filter_button_color;
+        padding: 0;
+        height: 2.5625rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       ul {
