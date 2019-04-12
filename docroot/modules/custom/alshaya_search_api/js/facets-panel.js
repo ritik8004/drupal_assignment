@@ -301,11 +301,8 @@
     $('.all-filters .block-facets-ajax').each(function() {
       var facet_block = $(this);
 
-      var facet_block_id = $(facet_block).attr('id');
-      // Skip processing only for price facets.
-      if (facet_block_id === 'block-finalprice'
-        || facet_block_id === 'block-promotionpricefacet'
-        || facet_block_id === 'block-skusskureferencefinalprice') {
+      // Skip processing for price facets.
+      if ($(facet_block).hasClass('price-facet-block')) {
         return;
       }
 
