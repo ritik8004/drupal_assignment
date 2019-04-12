@@ -78,6 +78,12 @@ function alshaya_fl_transac_alshaya_acm_product_gallery_alter(array &$gallery, S
   // Display thumbnails from each variants in gallery
   // instead angles of one variant.
   if ($context == 'search') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+    if (!$skuManager->isListingDisplayModeAggregated()) {
+      return;
+    }
+
     $show_variants_thumbnail_plp_gallery = \Drupal::config('alshaya_acm_product.display_settings')->get('show_variants_thumbnail_plp_gallery');
     if ($show_variants_thumbnail_plp_gallery) {
       $sku_image_manager = \Drupal::service('alshaya_acm_product.sku_images_manager');
