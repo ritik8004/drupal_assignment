@@ -174,6 +174,7 @@
         var idd = $(this).attr('id');
         $('.all-filters .bef-exposed-form input:radio').attr('checked', false);
         $('.all-filters .bef-exposed-form #' + idd).attr('checked', true);
+        updateSortTitle();
       });
 
       // Sort result on change of sort in `All filters`.
@@ -184,12 +185,15 @@
         // Trigger click of button.
         var idd = $('.c-content .c-content__region [data-bef-auto-submit-click]').first().attr('id');
         $('#' + idd).trigger('click');
+        updateSortTitle();
         // Stopping other propagation.
         e.preventDefault();
         e.stopPropagation();
       })
 
       showOnlyFewFacets();
+      updateSortTitle();
+      updateFacetTitlesWithSelected();
 
       /**
        * Show filtercount on mobile on toggle buttons.
@@ -282,9 +286,65 @@
           $('#block-alshaya-plp-facets-block-all').removeClass('empty-category');
         }
 
+        // If there any active facet filter.
+        updateFacetTitlesWithSelected();
       };
 
     }
   };
+
+  /**
+   * Update the facet titles with the selected value.
+   */
+  function updateFacetTitlesWithSelected() {
+    // Iterate over each facet block.
+    $('.all-filters .block-facets-ajax').each(function() {
+      var facet_block = $(this);
+      var new_title = '';
+      var total_selected = 0;
+      // If any facet item active.
+      var active_facets = $(facet_block).find('ul li.is-active label span.facet-item__value');
+      $.each(active_facets, function(index, element) {
+        total_selected = total_selected + 1;
+        // Show only two facets in title.
+        if (total_selected <= 2) {
+          var active_facet_label = $(element).contents().not($('span').children()).text().trim();
+          new_title += active_facet_label + ', ';
+        }
+      })
+
+      // Prepare the count span.
+      var count_span = '';
+      if (total_selected > 2) {
+        total_selected = total_selected - 2;
+        count_span = '<span class="total-count">(+' + total_selected + ')</span>';
+      }
+
+      // Prepare the new title.
+      var span_facet_title = '';
+      if (new_title.length > 0) {
+        // Remove last `,` from the string.
+        new_title = new_title.slice(0, -2);
+        span_facet_title = '<span class="selected-facets">' + new_title + '</span>';
+      }
+
+      // Append new title and count to facet title.
+      var element_append = span_facet_title + count_span;
+      $(facet_block).find('h3').find('.selected-facets').remove();
+      $(facet_block).find('h3').find('.total-count').remove();
+      $(facet_block).find('h3').append(element_append);
+    });
+  }
+
+  // Update sort title on sort change/selection.
+  function updateSortTitle() {
+    // Get selected sort radio id.
+    var selected_sort = $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] [name="sort_bef_combine"]:checked').attr('id');
+    // Get the label for the radio button.
+    var for_label = $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] label[for="' + selected_sort +'"]').text();
+    var sort_label = '<span class="sort-for-label">' + for_label + '</span>';
+    $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend span.sort-for-label').remove();
+    $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);
+  }
 
 })(jQuery, Drupal);
