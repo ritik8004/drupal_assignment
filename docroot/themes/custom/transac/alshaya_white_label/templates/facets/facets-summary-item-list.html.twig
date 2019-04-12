@@ -30,7 +30,7 @@
   {%- endif -%}
 
   {%- if items -%}
-    <span class="filter-list-label">{{ 'selected filter'|t }}</span>
+    <span class="filter-list-label">{{ 'selected filters'|t }}</span>
     <{{ list_type }}{{ attributes }}>
       {%- for item in items -%}
         <li{{ item.attributes }}>{{ item.value }}</li>
