@@ -75,6 +75,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .selected-facets,
+        .sort-for-label {
+          display: none;
+        }
       }
 
       // Close button
