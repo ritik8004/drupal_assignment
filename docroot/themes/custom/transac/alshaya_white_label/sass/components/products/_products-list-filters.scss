@@ -266,7 +266,23 @@
 
             .selected-facets {
               float: $right;
+              text-align: $right;
               margin-#{$right}: 0.75rem;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+
+              .title {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                width: 12.5rem;
+                padding-#{$right}: 2px;
+
+                @include breakpoint($only-mobile) {
+                  width: 7.5rem;
+                }
+              }
             }
 
             @include icon(chevron#{$right}, after) {

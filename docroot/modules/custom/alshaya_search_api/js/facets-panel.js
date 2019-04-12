@@ -331,7 +331,7 @@
           total_selected = total_selected - facets_to_show_in_label;
           count_span = '<span class="total-count"> (+' + total_selected + ')</span>';
         }
-        span_facet_title = '<span class="selected-facets">' + new_title + count_span + '</span>';
+        span_facet_title = '<span class="selected-facets"><span class="title">' + new_title + '</span>' + count_span + '</span>';
       }
 
       // Append new title and count to facet title.
