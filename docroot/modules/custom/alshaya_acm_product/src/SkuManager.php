@@ -1961,7 +1961,7 @@ class SkuManager {
    *   TRUE if mode is non-aggregated.
    */
   public function isListingDisplayModeAggregated() {
-    return (bool) $this->getListingDisplayMode() === self::AGGREGATED_LISTING;
+    return $this->getListingDisplayMode() === self::AGGREGATED_LISTING;
   }
 
   /**
