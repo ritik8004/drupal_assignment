@@ -10,24 +10,24 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
- * Add string translations.
+ * Adding arabic translations for the LHN.
  */
 function alshaya_master_update_8025() {
   $strings = [
-    'All Filters' => [
-      'ar' => 'All Filters ar',
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
     ],
-    'Filter & Sort' => [
-      'ar' => 'Filter & Sort ar',
+    'filter & sort' => [
+      'ar' => 'اختر و رتب',
     ],
-    'Apply Filter' => [
-      'ar' => 'Apply Filter ar',
+    'apply filter' => [
+      'ar' => 'تفعيل اختياراتك',
     ],
-    'Selected filter' => [
-      'ar' => 'Selected filter ar',
+    'selected filters' => [
+      'ar' => 'الاختيارات المحددة',
     ],
     'All' => [
-      'ar' => 'All ar',
+      'ar' => 'جميع',
     ],
   ];
 
@@ -1629,20 +1629,20 @@ function alshaya_master_install() {
     'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
       'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
     ],
-    'All Filters' => [
-      'ar' => 'All Filters ar',
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
     ],
-    'Filter & Sort' => [
-      'ar' => 'Filter & Sort ar',
+    'filter & sort' => [
+      'ar' => 'اختر و رتب',
     ],
-    'Apply Filter' => [
-      'ar' => 'Apply Filter ar',
+    'apply filter' => [
+      'ar' => 'تفعيل اختياراتك',
     ],
-    'Selected filter' => [
-      'ar' => 'Selected filter ar',
+    'selected filters' => [
+      'ar' => 'الاختيارات المحددة',
     ],
     'All' => [
-      'ar' => 'All ar',
+      'ar' => 'جميع',
     ],
   ];
 
