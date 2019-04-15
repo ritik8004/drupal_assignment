@@ -1963,6 +1963,16 @@ class SkuManager {
   }
 
   /**
+   * Helper function to check if display mode is aggregated.
+   *
+   * @return bool
+   *   TRUE if mode is non-aggregated.
+   */
+  public function isListingDisplayModeAggregated() {
+    return (bool) $this->getListingDisplayMode() === self::AGGREGATED_LISTING;
+  }
+
+  /**
    * Helper function to get attributes used for swatch on PDP.
    *
    * @return array
@@ -2685,7 +2695,7 @@ class SkuManager {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function processColorNodesForConfigurable(NodeInterface $node) {
-    if (!$this->isListingModeNonAggregated()) {
+    if ($this->isListingDisplayModeAggregated()) {
       return;
     }
 
