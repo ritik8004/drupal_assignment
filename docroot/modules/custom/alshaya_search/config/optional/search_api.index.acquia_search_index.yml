@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.field_category
     - field.storage.node.field_acq_promotion_label
+    - field.storage.acq_sku.field_configured_skus
     - search_api.server.acquia_search_server
   module:
     - acq_sku
@@ -158,6 +159,18 @@ field_settings:
         module:
           - acq_sku
           - node
+  field_configured_skus:
+    label: 'SKUs » SKU Reference » Configured SKUs'
+    datasource_id: 'entity:node'
+    property_path: 'field_skus:entity:field_configured_skus'
+    type: text
+    boost: 0.1
+    dependencies:
+      config:
+        - field.storage.node.field_skus
+        - field.storage.acq_sku.field_configured_skus
+      module:
+        - acq_sku
 datasource_settings:
   'entity:node':
     bundles:
