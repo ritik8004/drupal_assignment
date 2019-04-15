@@ -81,4 +81,42 @@ class ProductInfoHelper {
     return $this->getValue($sku, 'media', $context, []);
   }
 
+  /**
+   * Get configurable attributes.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Processed configurable attributes.
+   */
+  public function getConfigurableAttributes(SKUInterface $sku, string $context = '') {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
+    return $this->getValue($sku, 'configurable_attributes', $context, []);
+  }
+
+  /**
+   * Get configurable product tree.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param string $context
+   *   Context.
+   *
+   * @return array
+   *   Processed configurable product tree.
+   */
+  public function getProductTree(SKUInterface $sku, string $context = '') {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
+    return $this->getValue($sku, 'product_tree', $context, []);
+  }
+
 }

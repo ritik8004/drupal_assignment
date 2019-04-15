@@ -99,9 +99,21 @@ function hook_acq_sku_clean_synced_data_alter(&$context) {
  * Alter old categories data that needs to be deleted after category sync.
  *
  * @param array $result
- *
+ *   Result array to alter.
  */
 function hook_acq_sku_sync_categories_delete_alter(array &$result) {
+
+}
+
+/**
+ * Alter the options added to cart item.
+ *
+ * @param array $options
+ *   Options to be added to cart item.
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   Parent sku which is being added to cart.
+ */
+function hook_acq_sku_configurable_cart_options_alter(array &$options, SKU $sku) {
 
 }
 

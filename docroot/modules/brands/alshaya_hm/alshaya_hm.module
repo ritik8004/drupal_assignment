@@ -6,6 +6,7 @@
  */
 
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\alshaya_hm\EventSubscriber\ProductInfoRequestedEventSubscriber;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
@@ -406,6 +407,20 @@ function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStat
         $data['parent_sku_id'] = $sku->id();
 
         $response->addCommand(new InvokeCommand('', 'updatePdpUrl', [$data]));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_configurable_cart_options_alter().
+ */
+function alshaya_hm_acq_sku_configurable_cart_options_alter(array &$options, SKU $sku) {
+  if ($sku->get('attr_style_code')->getString()) {
+    foreach ($options as $index => $option) {
+      if ($option['option_id'] == ProductInfoRequestedEventSubscriber::ARTICLE_CASTOR_ID_ATTRIBUTE_ID) {
+        unset($options[$index]);
+        break;
       }
     }
   }

@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
@@ -76,6 +77,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
       case 'title':
         $this->processTitle($event);
+        break;
+
+      case 'product_tree':
+        $this->getProductTree($event);
         break;
     }
   }
@@ -161,6 +166,70 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $event->setValue($title);
+  }
+
+  /**
+   * Get Product Tree.
+   *
+   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
+   *   Event object.
+   */
+  public function getProductTree(ProductInfoRequestedEvent $event) {
+    $sku = $event->getSku();
+
+    if ($event->isValueModified()) {
+      $tree = $event->getValue();
+    }
+    else {
+      $tree = [
+        'parent' => $sku,
+        'products' => Configurable::getChildren($sku),
+        'combinations' => [],
+        'configurables' => [],
+      ];
+    }
+
+    $combinations =& $tree['combinations'];
+
+    $configurables = Configurable::getSortedConfigurableAttributes($sku);
+
+    foreach ($configurables ?? [] as $configurable) {
+      $tree['configurables'][$configurable['code']] = $configurable;
+    }
+
+    $configurable_codes = array_keys($tree['configurables']);
+
+    foreach ($tree['products'] ?? [] as $sku_code => $sku_entity) {
+      // Dot not display free gifts.
+      if ($this->skuManager->isSkuFreeGift($sku_entity)) {
+        continue;
+      }
+
+      // Do not display OOS variants.
+      // Bypass wrapper function in this class as it creates cyclic
+      // dependency.
+      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $childPlugin */
+      if (!$this->skuManager->isProductInStock($sku_entity)) {
+        continue;
+      }
+
+      $attributes = $sku_entity->get('attributes')->getValue();
+      $attributes = array_column($attributes, 'value', 'key');
+      foreach ($configurable_codes as $code) {
+        $value = $attributes[$code] ?? '';
+
+        if (empty($value)) {
+          // Ignore variants with empty value in configurable options.
+          unset($tree['products'][$sku_code]);
+          continue;
+        }
+
+        $combinations['by_sku'][$sku_code][$code] = $value;
+        $combinations['attribute_sku'][$code][$value][] = $sku_code;
+      }
+    }
+
+    $event->setValue($tree);
   }
 
 }

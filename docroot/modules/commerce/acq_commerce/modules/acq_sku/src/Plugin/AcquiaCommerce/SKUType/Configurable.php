@@ -38,47 +38,14 @@ class Configurable extends SKUPluginBase {
     $langcode = $sku->language()->getId();
     $sku_code = $sku->getSku();
 
-    /** @var \Drupal\acq_sku\CartFormHelper $helper */
-    $helper = \Drupal::service('acq_sku.cart_form_helper');
-
     // Do not process the same thing again and again.
-    if (isset($static[$langcode][$sku_code])) {
-      return $static[$langcode][$sku_code];
+    if (!isset($static[$langcode][$sku_code])) {
+      /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+      $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+      $static[$langcode][$sku_code] = $productInfoHelper->getConfigurableAttributes($sku);
     }
 
-    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
-
-    $common_identifier_attribute = \Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('common_identifier_attribute');
-    // If style code attribute is available with the SKU, its possible there are
-    // additional configurable attribtues whose information is not supplied with
-    // Parent SKU's configurable attributes.
-    if (($common_identifier_attribute) &&
-      ($attr_style_code = $helper->getSkuAttribute($sku, $common_identifier_attribute)) &&
-      ($helper->getAdditionalConfigurables())) {
-      $helper->updateAdditionalConfigurables($sku, $configurables);
-    }
-
-    if (empty($configurables) || !is_array($configurables)) {
-      return [];
-    }
-
-    $configurable_weights = $helper->getConfigurableAttributeWeights(
-      $sku->get('attribute_set')->getString()
-    );
-
-    // Sort configurables based on the config.
-    uasort($configurables, function ($a, $b) use ($configurable_weights) {
-      // We may keep getting new configurable options not defined in config.
-      // Use default values for them and keep their sequence as is.
-      // Still move the ones defined in our config as per weight in config.
-      $a = $configurable_weights[$a['code']] ?? -50;
-      $b = $configurable_weights[$b['code']] ?? 50;
-      return $a - $b;
-    });
-
-    $static[$langcode][$sku_code] = $configurables;
-
-    return $configurables;
+    return $static[$langcode][$sku_code];
   }
 
   /**
@@ -307,25 +274,8 @@ class Configurable extends SKUPluginBase {
           ]
       ));
 
-      // Skip additional configurables from options being passed to ACM for
-      // updatecart call. This needs to happen only for products which have
-      // style code attribute & hence were appended with an additional attribute
-      // while building the cart form. But, since MDC doesn't know about this
-      // attribute anymore as a config attribute passing this will throw errors.
-      $tree_sku = $form_state->get('tree_sku');
-      if (($tree_sku = SKU::loadFromSku($tree_sku)) &&
-        ($tree_sku instanceof SKU) &&
-        ($tree_sku->hasField('attr_style_code')) &&
-        ($tree_sku->get('attr_style_code')->getString())) {
-        $config_additional_configurable = array_shift(\Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('additional_configurables'));
-        $options = array_filter($options, function ($option) use ($config_additional_configurable) {
-          if ($option['option_id'] == $config_additional_configurable['attribute_id']) {
-            return FALSE;
-          }
-
-          return TRUE;
-        });
-      }
+      // Allow other modules to update the options info sent to ACM.
+      \Drupal::moduleHandler()->alter('acq_sku_configurable_cart_options', $options, $sku);
 
       // Check if item already in cart.
       // @TODO: This needs to be fixed further to handle multiple parent
@@ -427,85 +377,22 @@ class Configurable extends SKUPluginBase {
    *   Configurables tree.
    */
   public static function deriveProductTree(SKU $sku) {
-    static $cache = [];
+    $static = &drupal_static(__FUNCTION__, []);
 
-    /** @var \Drupal\acq_sku\CartFormHelper $helper */
-    $helper = \Drupal::service('acq_sku.cart_form_helper');
-
-    if (isset($cache[$sku->language()->getId()], $cache[$sku->language()->getId()][$sku->id()])) {
-      return $cache[$sku->language()->getId()][$sku->id()];
+    $langcode = $sku->language()->getId();
+    $id = $sku->id();
+    if (isset($static[$langcode], $static[$langcode][$id])) {
+      return $static[$langcode][$id];
     }
 
-    $common_identifier_attibute = \Drupal::configFactory()->get('acq_sku.configurable_form_settings')->get('common_identifier_attribute');
-
-    $tree = [
-      'parent' => $sku,
-      'products' => ($common_identifier_attibute && $helper->getSkuAttribute($sku, $common_identifier_attibute)) ? $helper->getChildrenByCommonAttribute($sku) : self::getChildren($sku),
-      'combinations' => [],
-      'configurables' => [],
-    ];
-
-    $combinations =& $tree['combinations'];
-
-    $configurables = self::getSortedConfigurableAttributes($sku);
-
-    foreach ($configurables ?? [] as $configurable) {
-      $tree['configurables'][$configurable['code']] = $configurable;
+    // Do not process the same thing again and again.
+    if (!isset($static[$langcode][$id])) {
+      /** @var \Drupal\acq_sku\ProductInfoHelper $productInfoHelper */
+      $productInfoHelper = \Drupal::service('acq_sku.product_info_helper');
+      $static[$langcode][$id] = $productInfoHelper->getProductTree($sku);
     }
 
-    $configurable_codes = array_keys($tree['configurables']);
-
-    foreach ($tree['products'] ?? [] as $sku_code => $sku_entity) {
-      $attributes = $sku_entity->get('attributes')->getValue();
-      $attributes = array_column($attributes, 'value', 'key');
-      foreach ($configurable_codes as $code) {
-        $value = $attributes[$code] ?? '';
-
-        if (empty($value)) {
-          continue;
-        }
-
-        $combinations['by_sku'][$sku_code][$code] = $value;
-        $combinations['attribute_sku'][$code][$value][] = $sku_code;
-      }
-    }
-
-    // Sort the values in attribute_sku so we can use it later.
-    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
-      if ($helper->isAttributeSortable($code)) {
-        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
-      }
-      else {
-        // Sort from field_configurable_attributes.
-        $configurable_attribute = [];
-        foreach ($configurables as $configurable) {
-          if ($configurable['code'] === $code) {
-            $configurable_attribute = $configurable['values'];
-            break;
-          }
-        }
-
-        if ($configurable_attribute) {
-          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
-          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
-            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
-          });
-        }
-      }
-    }
-
-    // Prepare combinations array grouped by attributes to check later which
-    // combination is possible using isset().
-    $combinations['by_attribute'] = [];
-
-    foreach ($combinations['by_sku'] ?? [] as $sku_string => $combination) {
-      $combination_string = self::getSelectedCombination($combination);
-      $combinations['by_attribute'][$combination_string] = $sku_string;
-    }
-
-    $cache[$sku->language()->getId()][$sku->id()] = $tree;
-
-    return $cache[$sku->language()->getId()][$sku->id()];
+    return $static[$langcode][$id];
   }
 
   /**
@@ -675,7 +562,7 @@ class Configurable extends SKUPluginBase {
 
       $child_sku = SKU::loadFromSku($child['value']);
       if ($child_sku instanceof SKU) {
-        $children[$child_sku->getSKU()] = $child_sku;
+        $children[$child_sku->getSku()] = $child_sku;
       }
     }
 

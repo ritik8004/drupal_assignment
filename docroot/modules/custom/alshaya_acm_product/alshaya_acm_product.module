@@ -654,9 +654,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             // Try to load images first for child we will display as selected.
             $sku_for_gallery = $skuImagesManager->getSkuForGallery($selected_variant, TRUE, '');
 
-            if ($view_mode == 'full' && empty(\Drupal::request()->query->get('selected')) && $sku_for_gallery->bundle() === 'simple') {
+            if ($view_mode == 'full' && empty($skuManager->getSelectedVariantId()) && $sku_for_gallery->bundle() === 'simple') {
               // Set the id in $_GET to use later for add to cart form.
-              \Drupal::request()->query->set('selected', $sku_for_gallery->id());
+              $skuManager->setSelectedVariantId($sku_for_gallery->id());
             }
           }
           catch (\Exception $e) {
