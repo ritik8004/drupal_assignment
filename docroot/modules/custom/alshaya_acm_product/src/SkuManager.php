@@ -2108,7 +2108,7 @@ class SkuManager {
    *   Label for configurable fields.
    */
   public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
-    $parent_sku = alshaya_acm_product_get_parent_sku_by_sku($sku);
+    $parent_sku = $this->getParentSkuBySku($sku);
     $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
     foreach ($configurables as $field) {
       if (in_array($attr_code, $field)) {
