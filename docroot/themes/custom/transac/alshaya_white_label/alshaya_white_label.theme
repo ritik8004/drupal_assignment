@@ -334,15 +334,6 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = 'empty-category';
     }
   }
-
-  $price_facets_blocks = [
-    'facet_block:skus_sku_reference_final_price',
-    'facet_block:promotion_price_facet',
-    'facet_block:category_facet_search',
-  ];
-  if (in_array($variables['plugin_id'], $price_facets_blocks)) {
-    $variables['attributes']['class'][] = 'price-facet-block';
-  }
 }
 
 /**

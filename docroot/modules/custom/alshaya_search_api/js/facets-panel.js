@@ -300,12 +300,6 @@
     // Iterate over each facet block.
     $('.all-filters .block-facets-ajax').each(function() {
       var facet_block = $(this);
-
-      // Skip processing for price facets.
-      if ($(facet_block).hasClass('price-facet-block')) {
-        return;
-      }
-
       var new_title = '';
       var total_selected = 0;
       var facets_to_show_in_label = 2;
@@ -315,7 +309,7 @@
         total_selected = total_selected + 1;
         // Show only two facets in title.
         if (total_selected <= facets_to_show_in_label) {
-          var active_facet_label = $(element).contents().not($('span').children()).text().trim();
+          var active_facet_label = $(element).contents().not($('.facet-item__count')).text().trim();
           new_title += active_facet_label + ', ';
         }
       })
