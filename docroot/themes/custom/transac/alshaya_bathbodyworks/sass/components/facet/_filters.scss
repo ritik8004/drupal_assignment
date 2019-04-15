@@ -4,3 +4,16 @@
     line-height: 2.9375rem;
   }
 }
+
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-facet-blockcategory-facet-plp {
+      top: 3.375rem;
+
+      html[lang=ar] & {
+        top: 3.375rem;
+      }
+    }
+  }
+}

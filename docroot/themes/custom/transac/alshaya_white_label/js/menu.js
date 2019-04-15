@@ -191,27 +191,89 @@
         });
       }
 
+      // Filter sticky Header.
+      if ($('.show-all-filters').length > 0) {
+        if ($(window).width() > 767) {
+          if ($('.container-without-product').length < 1) {
+            // Wrapping region content inside a div.
+            $('.region__content').children().once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
+          }
+
+          if ($('.region__content > .c-products-list').length < 1) {
+            // Moving filter bar and product content outside the sticky filter wrapper.
+            $('.block-facets-summary-blockfilter-bar-plp, .block-facets-summary-blockfilter-bar-promotions, .block-facets-summary-blockfilter-bar, .block-alshaya-plp-facets-block-all, .block-alshaya-promo-facets-block-all, .block-alshaya-search-facets-block-all, .c-products-list').appendTo('.region__content');
+          }
+
+          if ($('.container-without-product .show-all-filters').length < 1) {
+            // Manipulating the dom for alignment.
+            $('.show-all-filters').insertBefore('.block-alshaya-grid-count-block');
+            $('#block-page-title').insertBefore('.sticky-filter-wrapper');
+            $('.block-views-blockalshaya-term-description-block-1').insertAfter('.c-products-list');
+          }
+        }
+        else {
+          if ($('.region__content > .all-filters').length < 1) {
+            $('.all-filters').insertAfter('.block-alshaya-plp-facets-block-all');
+          }
+        }
+      }
+
       /**
        * Make Header sticky on scroll.
        */
 
-      if ($('.branding__menu').length) {
-        var position = $('.branding__menu').offset().top;
-        var nav = $('.branding__menu');
-        var topHeader = $('.header--wrapper');
-        $(window, context).once().scroll(function () {
+      var filterposition = 0;
+      var supercategorymenuHeight = 0;
+      var position = 0;
+      var filter = $('.region__content');
+      var nav = $('.branding__menu');
+
+      if ($('.show-all-filters').length > 0) {
+        if ($(window).width() > 1023) {
+          filterposition = $('.container-without-product').offset().top;
+        }
+        else if ($(window).width() > 767 && $(window).width() < 1024) {
+          filterposition = $('.show-all-filters').offset().top + 20;
+        }
+        else {
+          if ($('.block-alshaya-super-category').length > 0) {
+            supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
+          }
+          filterposition = $('#block-alshaya-plp-facets-block-all').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+        }
+      }
+
+      // Sticky header on mobile view port with banner.
+      if ($(window).width() < 768) {
+        position = $('.region__banner-top').outerHeight();
+      }
+
+      $(window, context).once().on('scroll', function () {
+        // Sticky filter header.
+        if ($('.show-all-filters').length > 0) {
+          if ($(this).scrollTop() > filterposition) {
+            filter.addClass('filter-fixed-top');
+            $('body').addClass('header-sticky-filter');
+          }
+          else {
+            filter.removeClass('filter-fixed-top');
+            $('body').removeClass('header-sticky-filter');
+          }
+        }
+
+        // Sticky primary header on mobile.
+        if ($(window).width() < 768) {
           if ($(this).scrollTop() > position) {
-            $('body').addClass('header--fixed');
             nav.addClass('navbar-fixed-top');
-            topHeader.addClass('navbar-fixed-top');
+            $('body').addClass('header--fixed');
+
           }
           else {
             nav.removeClass('navbar-fixed-top');
-            topHeader.removeClass('navbar-fixed-top');
             $('body').removeClass('header--fixed');
           }
-        });
-      }
+        }
+      });
 
       $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseenter(function () {
         if (menuHovered === 1) {
