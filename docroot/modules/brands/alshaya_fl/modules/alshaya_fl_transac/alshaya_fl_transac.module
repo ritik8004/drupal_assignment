@@ -35,11 +35,9 @@ function alshaya_fl_transac_node_view(array &$build, EntityInterface $entity, En
         }
       }
 
-      $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $material_desc = [];
-      // Render material desc based on variant selection on PDP.
-      if ($material = $skuManager->fetchProductAttribute($sku_entity, 'attr_material', $search_direction)) {
+      // Render material desc under product description on PDP.
+      if ($material = $sku_entity->get('attr_material')->getString()) {
         $material_desc['label'] = [
           '#markup' => t('Material'),
         ];
