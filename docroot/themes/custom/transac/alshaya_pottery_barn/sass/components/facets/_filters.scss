@@ -1,0 +1,12 @@
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-facet-blockcategory-facet-plp {
+      top: 3.625rem;
+
+      html[lang=ar] & {
+        top: 4rem;
+      }
+    }
+  }
+}

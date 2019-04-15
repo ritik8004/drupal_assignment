@@ -1,0 +1,50 @@
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-facet-blockcategory-facet-plp {
+      top: 5.5rem;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .super-category-pink {
+    .filter-fixed-top {
+      .container-without-product {
+        &::before {
+          background: url("../imgs/logos/pink-logo.svg") no-repeat center;
+          background-size: contain;
+
+          html[lang=ar] & {
+            background: url("../imgs/logos/pink-logo-ar.svg") no-repeat center;
+            background-size: contain;
+          }
+        }
+      }
+    }
+  }
+
+  .super-category-victoria-sport {
+    .filter-fixed-top {
+      .container-without-product {
+        &::before {
+          background: url("../imgs/logos/victoria-sport-logo.svg") no-repeat center;
+          background-size: contain;
+
+          html[lang=ar] & {
+            background: url("../imgs/logos/victoria-sport-logo.svg") no-repeat center;
+            background-size: contain;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($upto-desktop) {
+  .branding__menu {
+    .c-header {
+      position: static;
+    }
+  }
+}
