@@ -112,27 +112,28 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->addEntryToSearchApiItem($indexes, $item_ids);
     $this->deleteItems($indexes, $item_ids);
 
-    // 3. Re-index items that are missing in DB index.
-    $query = $this->connection->query("SELECT node.nid, node.langcode
-      FROM node
-      LEFT JOIN search_api_item item ON 
-        node.nid = SUBSTR(SUBSTR(item.item_id, 1, LENGTH(item.item_id) - 3), 13) 
-        AND node.langcode = SUBSTR(item.item_id, -2, 2)
-      WHERE item.item_id IS NULL AND node.type = :node_type", [
-        ':node_type' => 'acq_product',
-      ]
-    );
+    // 3. Re-index items that are missing in specific indexes.
+    foreach (['product', 'acquia_search_index'] as $index) {
+      $query = $this->connection->query("SELECT SQL_NO_CACHE nid, langcode 
+        FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node_field_data WHERE type = :node_type) AS n 
+        LEFT JOIN search_api_item ON iid=item_id AND index_id = :index 
+        WHERE item_id IS NULL", [
+          ':node_type' => 'acq_product',
+          ':index' => $index,
+        ]
+      );
 
-    $data = $query->fetchAll();
+      $data = $query->fetchAll();
 
-    $item_ids = [];
-    foreach ($data as $row) {
-      $item_ids[] = $row->nid . ':' . $row->langcode;
+      $item_ids = [];
+      foreach ($data as $row) {
+        $item_ids[] = $row->nid . ':' . $row->langcode;
+      }
+
+      $indexes = [$index];
+      $this->deleteItems($indexes, $item_ids);
+      $this->indexItems($indexes, $item_ids);
     }
-
-    $indexes = ['product'];
-    $this->deleteItems($indexes, $item_ids);
-    $this->indexItems($indexes, $item_ids);
   }
 
   /**
