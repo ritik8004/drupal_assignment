@@ -202,14 +202,18 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $langcode = $sku->language()->getId();
     $sku_string = $sku->getSku();
 
+    // Key to fetch display node of the sku from static cache based on whether
+    // parent sku needs to consider or not.
+    $check_parent_key = (int) $check_parent;
+
     // Do not use static cache during sync when create translation flag is set
     // to true.
-    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
+    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$check_parent_key])) {
+      return $static[$langcode][$sku_string][$check_parent_key];
     }
 
     // Initialise with empty value.
-    $static[$langcode][$sku_string] = NULL;
+    $static[$langcode][$sku_string][$check_parent_key] = NULL;
 
     if ($check_parent) {
       if ($parent_sku = $this->getParentSku($sku)) {
@@ -237,28 +241,27 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
       if ($node->language()->getId() == $langcode) {
-        return $node;
+        // Do nothing as we just using the same node object for static cache.
       }
-
-      // If node has translation, we return the translation.
-      if ($node->hasTranslation($langcode)) {
-        return $node->getTranslation($langcode);
+      elseif ($node->hasTranslation($langcode)) {
+        // If node has translation, we return the translation.
+        $node = $node->getTranslation($langcode);
       }
-
-      // If translation not available and create_translation flag is true.
-      if ($create_translation) {
-        return $node->addTranslation($langcode);
+      elseif ($create_translation) {
+        // If translation not available and create_translation flag is true.
+        $node = $node->addTranslation($langcode);
       }
-
-      // Just log the message and continue.
-      // Don't want to show any fatal error anywhere.
-      \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
-        '@sku' => $sku->getSku(),
-        '@langcode' => $langcode,
-      ]);
+      else {
+        // Just log the message and continue.
+        // Don't want to show any fatal error anywhere.
+        \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $langcode,
+        ]);
+      }
     }
 
-    $static[$langcode][$sku_string] = $node;
+    $static[$langcode][$sku_string][$check_parent_key] = $node;
 
     return $node;
   }
