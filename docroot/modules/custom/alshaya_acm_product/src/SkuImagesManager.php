@@ -1292,7 +1292,7 @@ class SkuImagesManager {
         continue;
       }
 
-      if ($this->productDisplaySettings->get('color_swatches_show_product_image')) {
+      if ($this->productDisplaySettings->get('color_swatches_show_product_image') && $this->skuManager->isListingDisplayModeAggregated()) {
         $swatch_product_image = $child->getThumbnail();
 
         // If we have image for the product.
