@@ -9,6 +9,22 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Site\Settings;
 use Drupal\Component\Utility\Unicode;
 
+/**
+ * Implements hook_update_N().
+ *
+ * Update sort orders for size facet to match order in Magento.
+ */
+function alshaya_vs_transac_update_8007() {
+  $size_facets = [
+    'facets.facet.size',
+    'facets.facet.plp_size',
+    'facets.facet.promo_size',
+  ];
+
+  foreach ($size_facets as $config) {
+    \Drupal::configFactory()->getEditable($config)->save();
+  }
+}
 
 /**
  * Implements hook_update_N().

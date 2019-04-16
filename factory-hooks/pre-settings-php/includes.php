@@ -55,25 +55,42 @@ if ($settings['env'] === 'local') {
   $config['stage_file_proxy.settings']['origin_dir'] = 'files';
 }
 
-switch ($env) {
-  case 'local':
-    $settings['social_auth_facebook.settings']['app_id'] = '2140208022890023';
-    $settings['social_auth_facebook.settings']['app_secret'] = '7cde10657c1866f072c56283af920484';
-    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
-    break;
+// Facebook app keys for facebook login.
+$facebook_config = [
+  'local' => [
+    'app_id' => '2140208022890023',
+    'app_secret' => '7cde10657c1866f072c56283af920484',
+  ],
+  '01test' => [
+    'app_id' => '452346355260372',
+    'app_secret' => '466de9be713752a2f19eb566270013ab',
+  ],
+  '01dev' => [
+    'app_id' => '2104286043129625',
+    'app_secret' => '8af1b7ca4f9d21fd02ff626ee8a2a004',
+  ],
+  '01pprod' => [
+    'app_id' => '844066215928270',
+    'app_secret' => '107a72f9b68c6a62baaf917adb1fc9d6',
+  ],
+  '01qa2' => [
+    'app_id' => '2376200055744873',
+    'app_secret' => '1dd9679fcc9ba1ba3bdacb87da115a14',
+  ],
+  '01dev2' => [
+    'app_id' => '615516092244231',
+    'app_secret' => 'f0eaa4fd253010c23efb9cc3802ca5fd',
+  ],
+  '01dev3' => [
+    'app_id' => '357400338223237',
+    'app_secret' => '66354c2dc14b3dbbd9024425148d52b9',
+  ],
+];
 
-  case '01live':
-    $social_auth_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/01live/social_auth.php';
-    if (file_exists($social_auth_settings_file)) {
-      include_once $social_auth_settings_file;
-    }
-    break;
-
-  default:
-    $settings['social_auth_facebook.settings']['app_id'] = '452346355260372';
-    $settings['social_auth_facebook.settings']['app_secret'] = '466de9be713752a2f19eb566270013ab';
-    $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
-    break;
+if (isset($facebook_config[$env])) {
+  $settings['social_auth_facebook.settings']['app_id'] = $facebook_config[$env]['app_id'];
+  $settings['social_auth_facebook.settings']['app_secret'] = $facebook_config[$env]['app_secret'];
+  $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
 }
 
 // Configure your hash salt here.
