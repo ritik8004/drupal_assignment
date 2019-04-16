@@ -346,7 +346,7 @@
           }
 
           &.max-height {
-            max-height: 82px;
+            max-height: 5.125rem;
           }
         }
       }
@@ -370,7 +370,7 @@
           font-size: 1rem;
           position: absolute;
           top: 0;
-          #{$right}: 2px;
+          #{$right}: 0.125rem;
         }
 
         @include breakpoint($tablet) {
@@ -468,7 +468,9 @@
         content: '';
         height: 2.5rem;
         width: 11.0625rem;
-        background: url("../site-logo.svg") no-repeat center;
+        background-image: url(#{$brand_theme_default_path}/site-logo.svg);
+        background-repeat: no-repeat;
+        background-position: center;
         background-size: contain;
         position: absolute;
         #{$left}: 0;
@@ -477,7 +479,10 @@
         justify-content: right;
 
         html[lang=ar] & {
-          background: url("../site-logo-ar.svg") no-repeat center;
+          background-image: url(#{$brand_theme_default_path}/site-logo-ar.svg);
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
           background-size: contain;
         }
 
@@ -500,7 +505,7 @@
       width: 100%;
       z-index: 2;
       height: 3.75rem;
-      box-shadow: 0 2px 4px 0 $lhn_sticky-header-desktop-shadow;
+      box-shadow: 0 0.125rem 0.25rem 0 $lhn_sticky-header-desktop-shadow;
     }
   }
 }
@@ -510,10 +515,14 @@
     margin-top: 2.8125rem;
 
     .block-alshaya-plp-facets-block-all,
-    .block-facet-blockcategory-facet-plp {
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
+    > .block-facet-blockcategory-facet-plp,
+    > .block-facet-blockcategory-facet-promo,
+    > .block-facet-blockcategory-facet-search{
       position: fixed;
       top: 3.6875rem;
-      background: #fff;
+      background: $lhn_sticky-filter-background;
       z-index: 1;
 
       html[lang=ar] & {
@@ -521,12 +530,16 @@
       }
     }
 
-    .block-alshaya-plp-facets-block-all {
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all {
       #{$right}: 0;
     }
 
     .filters-active {
-      .block-facet-blockcategory-facet-plp {
+      .block-alshaya-plp-facets-block-all,
+      .block-alshaya-promo-facets-block-all,
+      .block-alshaya-search-facets-block-all {
         position: relative;
         top: auto;
         background: transparent;
