@@ -478,6 +478,10 @@ function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$co
     }
   }
 
+  if (empty($colors)) {
+    return;
+  }
+
   $configurations = [
     'article_castor_id' => [
       'attribute_id' => 999999,

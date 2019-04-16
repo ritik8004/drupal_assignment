@@ -17,8 +17,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  const ARTICLE_CASTOR_ID_ATTRIBUTE_ID = 999999;
-
   /**
    * SKU Manager.
    *
@@ -41,8 +39,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
    */
-  public function __construct(SkuManager $sku_manager,
-                              ConfigFactoryInterface $config_factory) {
+  public function __construct(SkuManager $sku_manager, ConfigFactoryInterface $config_factory) {
     $this->skuManager = $sku_manager;
     $this->configFactory = $config_factory;
   }
@@ -111,9 +108,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $description_value .= render($composition_markup);
 
-    $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
-    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
-
+    $washing_instructions = $sku_entity->get('attr_washing_instructions')
+      ->getString();
+    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')
+      ->getString();
     if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
       $description_value .= '<div class="care-instructions-wrapper">';
       $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions') . '</div>';
@@ -144,7 +142,8 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     ];
 
     // If specifications are enabled, prepare the specification variable.
-    if ($this->configFactory->get('alshaya_acm.settings')->get('pdp_show_specifications')) {
+    if ($this->configFactory->get('alshaya_acm.settings')
+      ->get('pdp_show_specifications')) {
       $specifications['label'] = [
         '#markup' => $this->t('Specifications'),
       ];
