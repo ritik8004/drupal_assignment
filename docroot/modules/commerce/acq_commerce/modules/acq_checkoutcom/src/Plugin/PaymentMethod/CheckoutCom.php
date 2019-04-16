@@ -5,6 +5,7 @@ namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Provides the CheckoutCom payment method.
@@ -124,39 +125,39 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
-    $cart = $this->getCart();
-    //$cart->setPaymentMethod('checkout_com', ['card_token_id' => $inputs['cko-card-token']]);
-    $this->requestPayment($inputs);
+    // $cart = $this->getCart();
+    // $cart->setPaymentMethod($this->getId(), ['card_token_id' => $inputs['cko-card-token']]);
+    $this->chargesToken($inputs);
     die();
-
-
-
   }
 
   protected function chargesToken($inputs) {
     $totals = $this->getCart()->totals();
     $url = "https://sandbox.checkout.com/api2/v2/charges/token";
-    $ch = curl_init($url);
     $header = [
       'Content-Type: application/json;charset=UTF-8',
       'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
     ];
 
-    $data_string = '{
-      "value": "' . $totals['grand'] * 100 . '",
-      "currency": "KWD",
-      "cardToken": "' . $inputs['cko-card-token'] . '",
-      "chargeMode": 2,
-      "email": "testing@test.com",
-	  }';
+    $request_data = [
+      'value' => $totals['grand'] * 100,
+      'currency' => 'KWD',
+      'cardToken' => $inputs['cko-card-token'],
+      'chargeMode' => 2,
+      'email' => 'testing@test.com',
+      'autoCapture' => 'Y',
+      'successUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
+      'failUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
+    ];
+
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request_data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
     $output = curl_exec($ch);
-
     curl_close($ch);
+
     $decoded = json_decode($output, TRUE);
     echo '<pre>';
     print_r($decoded);
@@ -167,25 +168,30 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected function requestPayment($inputs) {
     $totals = $this->getCart()->totals();
     $url = "https://api.sandbox.checkout.com/payments";
-    $ch = curl_init($url);
     $header = [
       'Content-Type: application/json;charset=UTF-8',
       'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
     ];
 
-    $data_string = '{
-      source": {
-        "type": "token",
-        "token": "' . $inputs['cko-card-token'] . '",
-      },
-      "amount": "' . $totals['grand'] * 100 . '",
-      "currency": "KWD",
-      "3ds": {
-        "enabled": true
-      }
-    }';
+    $request_data = [
+      'source' => [
+        'type' => 'token',
+        'token' => $inputs['cko-card-token'],
+      ],
+      'amount' => $totals['grand'] * 100,
+      'currency' => 'USD',
+      '3ds' => [
+        'enabled' => TRUE,
+      ]
+    ];
+
+    echo '<pre>';
+    print_r(json_encode($request_data));
+    echo '</pre>';
+
+    $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request_data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 
@@ -197,8 +203,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     print_r($decoded);
     echo '</pre>';
     die();
-
-
   }
 
 }
