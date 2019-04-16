@@ -171,16 +171,6 @@ header,
       }
     }
   }
-
-  .block-page-title-block {
-    h1 {
-      text-align: center;
-
-      @include breakpoint($only-mobile) {
-        text-transform: inherit;
-      }
-    }
-  }
 }
 
 .ui-autocomplete {
