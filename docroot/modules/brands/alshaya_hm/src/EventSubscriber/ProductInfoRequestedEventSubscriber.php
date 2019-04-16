@@ -4,7 +4,6 @@ namespace Drupal\alshaya_hm\EventSubscriber;
 
 use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -35,28 +34,17 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   private $configFactory;
 
   /**
-   * Entity Type Manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  private $entityTypeManager;
-
-  /**
    * ProductInfoRequestedEventSubscriber constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
    *   SKU Manager.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   Entity Type Manager.
    */
   public function __construct(SkuManager $sku_manager,
-                              ConfigFactoryInterface $config_factory,
-                              EntityTypeManagerInterface $entity_type_manager) {
+                              ConfigFactoryInterface $config_factory) {
     $this->skuManager = $sku_manager;
     $this->configFactory = $config_factory;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -83,14 +71,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     switch ($event->getFieldCode()) {
       case 'description':
         $this->processDescription($event);
-        break;
-
-      case 'configurable_attributes':
-        $this->getConfigurableAttributes($event);
-        break;
-
-      case 'product_tree':
-        $this->getProductTree($event);
         break;
     }
   }
@@ -131,10 +111,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $description_value .= render($composition_markup);
 
-    $washing_instructions = $sku_entity->get('attr_washing_instructions')
-      ->getString();
-    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')
-      ->getString();
+    $washing_instructions = $sku_entity->get('attr_washing_instructions')->getString();
+    $dry_cleaning_instructions = $sku_entity->get('attr_dry_cleaning_instructions')->getString();
+
     if (!empty($washing_instructions) || !empty($dry_cleaning_instructions)) {
       $description_value .= '<div class="care-instructions-wrapper">';
       $description_value .= '<div class="care-instructions-label">' . $this->t('care instructions') . '</div>';
@@ -165,8 +144,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     ];
 
     // If specifications are enabled, prepare the specification variable.
-    if ($this->configFactory->get('alshaya_acm.settings')
-      ->get('pdp_show_specifications')) {
+    if ($this->configFactory->get('alshaya_acm.settings')->get('pdp_show_specifications')) {
       $specifications['label'] = [
         '#markup' => $this->t('Specifications'),
       ];
@@ -209,130 +187,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $event->setValue($prod_description);
-  }
-
-  /**
-   * Get Configurable Attributes.
-   *
-   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
-   *   Event object.
-   */
-  public function getConfigurableAttributes(ProductInfoRequestedEvent $event) {
-    $sku = $event->getSku();
-    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
-
-    // We hard-code attribute name here as it is specific for HnM.
-    // Do nothing if this configurable product has article_castor_id as it
-    // seems it is not migrated yet to the new configurable per color structure.
-    if (isset($configurables['article_castor_id'])) {
-      return;
-    }
-
-    // If no style code available, return.
-    $style = $sku->get('attr_style_code')->getString();
-    if (empty($style)) {
-      return;
-    }
-
-    $skus = $this->entityTypeManager->getStorage('acq_sku')->loadByProperties([
-      'attr_style_code' => $style,
-    ]);
-
-    $langcode = $sku->language()->getId();
-    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
-
-    foreach ($skus as $variant) {
-      if ($variant->language()->getId() != $langcode && $variant->hasTranslation($langcode)) {
-        $variant = $variant->getTranslation($langcode);
-      }
-
-      if ($variant->bundle() == 'configurable') {
-        $variant_configurables = unserialize($variant->get('field_configurable_attributes')->getString());
-
-        foreach ($variant_configurables as $variant_configurable) {
-          if (empty($configurables[$variant_configurable['code']])) {
-            $configurables[$variant_configurable['code']] = $variant_configurable;
-            $configurables[$variant_configurable['code']]['values'] = [];
-          }
-
-          foreach ($variant_configurable['values'] as $value) {
-            $configurables[$variant_configurable['code']]['values'][$value['value_id']] = $value;
-          }
-        }
-      }
-      elseif ($variant->bundle() == 'simple') {
-        $attributes = $variant->get('attributes')->getValue();
-        $attributes = array_column($attributes, 'value', 'key');
-        $colors[$attributes['article_castor_id']] = [
-          'label' => $attributes['color_label'],
-          'value_id' => $attributes['article_castor_id'],
-        ];
-      }
-    }
-
-    // If we do not find any colors to show, we do nothing.
-    if (empty($colors)) {
-      return;
-    }
-
-    $configurables = [
-      'article_castor_id' => [
-        'attribute_id' => self::ARTICLE_CASTOR_ID_ATTRIBUTE_ID,
-        'code' => 'article_castor_id',
-        'label' => t('Article Castor Id'),
-        'position' => 0,
-        'values' => $colors,
-      ],
-    ] + $configurables;
-
-    $event->setValue($configurables);
-  }
-
-  /**
-   * Get Product Tree.
-   *
-   * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
-   *   Event object.
-   */
-  public function getProductTree(ProductInfoRequestedEvent $event) {
-    $sku = $event->getSku();
-
-    $configurables = unserialize($sku->get('field_configurable_attributes')->getString());
-
-    $configurable_codes = array_column($configurables, 'code', 'code');
-
-    // We hard-code attribute name here as it is specific for HnM.
-    // Do nothing if this configurable product has article_castor_id as it
-    // seems it is not migrated yet to the new configurable per color structure.
-    if (isset($configurable_codes['article_castor_id'])) {
-      return;
-    }
-
-    // If no style code available, return.
-    $style = $sku->get('attr_style_code')->getString();
-    if (empty($style)) {
-      return;
-    }
-
-    $children = $this->entityTypeManager->getStorage('acq_sku')->loadByProperties([
-      'attr_style_code' => $style,
-      'type' => 'simple',
-    ]);
-
-    $variants = [];
-    foreach ($children as $child) {
-      $variants[$child->getSku()] = $child;
-    }
-
-    $tree = [
-      'parent' => $sku,
-      'products' => $variants,
-      'combinations' => [],
-      'configurables' => [],
-    ];
-
-    // Rest of the processing will be done in alshaya_acm_product.
-    $event->setValue($tree);
   }
 
 }

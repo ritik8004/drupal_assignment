@@ -4,6 +4,5 @@ services:
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'
-      - '@entity_type.manager'
     tags:
       - { name: 'event_subscriber' }
