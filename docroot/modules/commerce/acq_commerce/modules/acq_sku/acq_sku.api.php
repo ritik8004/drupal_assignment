@@ -118,5 +118,29 @@ function hook_acq_sku_configurable_cart_options_alter(array &$options, SKU $sku)
 }
 
 /**
+ * Alter the children of configurable products.
+ *
+ * @param array $children
+ *   Variants for the SKU.
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   Parent sku which is being added to cart.
+ */
+function hook_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
+
+}
+
+/**
+ * Alter the configurations for configurable product.
+ *
+ * @param array $configurations
+ *   Configurations available for configurable product.
+ * @param \Drupal\acq_sku\Entity\SKU $sku
+ *   Parent sku which is being added to cart.
+ */
+function hook_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

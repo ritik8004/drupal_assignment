@@ -41,11 +41,18 @@ use Drupal\alshaya_acm_product\SkuManager;
  * Implements hook_module_implements_alter().
  */
 function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
-  // To call the alshaya_acm_product_build at the end for final changes.
-  if ($hook == 'alshaya_acm_product_build') {
-    $group = $implementations['alshaya_acm_product_build'];
-    unset($implementations['alshaya_acm_product_build']);
-    $implementations['alshaya_acm_product_build'] = $group;
+  // To call the hooks at the end for final changes.
+  $hooks_to_invoke_last = [
+    'alshaya_acm_product_build',
+    'acq_sku_configurable_variants',
+  ];
+
+  foreach ($hooks_to_invoke_last as $hook_to_invoke_last) {
+    if ($hook == $hook_to_invoke_last) {
+      $group = $implementations[$hook];
+      unset($implementations[$hook]);
+      $implementations[$hook] = $group;
+    }
   }
 }
 
@@ -2064,4 +2071,19 @@ function _alshaya_acm_product_configurable_option_value_callback(&$element, $inp
   }
 
   return $input;
+}
+
+/**
+ * Implements hook_acq_sku_configurable_variants_alter().
+ */
+function alshaya_acm_product_acq_sku_configurable_variants_alter(array &$children, $sku) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  foreach ($children as $child_sku_code => $child) {
+    // Dot not display free gifts or OOS variants.
+    if ($skuManager->isSkuFreeGift($child) || !$skuManager->isProductInStock($child)) {
+      unset($children[$child_sku_code]);
+    }
+  }
 }
