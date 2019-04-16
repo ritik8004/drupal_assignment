@@ -101,7 +101,7 @@
       display: none;
     }
 
-    .c-accordion__title.active + ul {
+    .c-accordion__title + ul {
       @include breakpoint($only-mobile) {
         width: 100vw;
         border-left: 0;
@@ -314,11 +314,19 @@
       align-items: center;
       justify-content: $left;
       height: 2rem;
+
+      html[lang=ar] & {
+        width: 7.25rem;
+      }
     }
 
     @include breakpoint($tablet) {
       ul {
         width: calc(100% - 6.25rem) !important;
+
+        html[lang=ar] & {
+          width: calc(100% - 7.25rem) !important;
+        }
       }
 
       .filter-toggle-mobile {

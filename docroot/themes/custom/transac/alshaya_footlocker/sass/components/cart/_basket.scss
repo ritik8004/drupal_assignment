@@ -141,10 +141,13 @@
     }
 
     #coupon-button.add {
-      @extend %button-wide;
-
       padding: 0.75rem;
       margin-#{$left}: 0;
+      font-family: $alshaya-thin;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      min-width: 10.625rem;
+      text-align: center;
     }
   }
 }

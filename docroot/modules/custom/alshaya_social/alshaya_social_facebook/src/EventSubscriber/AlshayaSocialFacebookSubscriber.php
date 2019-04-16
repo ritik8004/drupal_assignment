@@ -89,8 +89,8 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
     // Gets user's FB profile from Facebook API.
     if ($fb_profile = $this->facebookManager->getUserInfo('id,first_name,last_name,email')) {
       $fields = $event->getUserFields();
-      $fields['field_first_name'] = $fb_profile->getField('first_name');
-      $fields['field_last_name'] = $fb_profile->getField('last_name');
+      $fields['field_first_name'] = $fb_profile->getFirstName();
+      $fields['field_last_name'] = $fb_profile->getLastName();
 
       try {
         $customer = $this->customerHelper->updateCustomer(
