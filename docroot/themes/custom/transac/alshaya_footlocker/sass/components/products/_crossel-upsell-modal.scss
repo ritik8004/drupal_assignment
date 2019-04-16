@@ -10,7 +10,7 @@
 
     .sell--image {
       @include breakpoint($only-mobile) {
-        min-height: auto;
+        min-height: 11.875rem;
       }
     }
   }
@@ -23,7 +23,7 @@
     @include breakpoint($only-mobile) {
       .owl-carousel {
         .views-row {
-          width: 37%;
+          width: 53%;
           margin-#{$left}: 0;
           margin-#{$right}: 0.625rem;
         }

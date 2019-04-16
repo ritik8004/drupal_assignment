@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
@@ -322,12 +323,7 @@ $magentos = [
   ],
   'fl_prod' => [
     'url' => 'https://fl.store.alshaya.com',
-    'magento_secrets' => [
-      'consumer_key' => '7odnwfhqxgemmfg8cmmo7iqipbb74hav',
-      'consumer_secret' => 'mqf2sk1s87h9hmqmeyu2wdtetj73hyqf',
-      'access_token' => 'k80q59im7qx13hi2yyx1troafg7d32xd',
-      'access_token_secret' => '24mnew40x19g89w98d8vpagwhfwi39ts',
-    ],
+    'magento_secrets' => [],
     'kw' => [
       'store_id' => ['en' => 1, 'ar' => 19],
     ],
