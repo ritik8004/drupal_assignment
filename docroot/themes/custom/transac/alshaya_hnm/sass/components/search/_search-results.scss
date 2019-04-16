@@ -1,24 +1,3 @@
-.c-search {
-  .region__content {
-    .view-id-search {
-      .views-row {
-        .c-products__item__label {
-          a,
-          span {
-            font-family: $hnm-regular;
-          }
-        }
-      }
-
-      nav.pager {
-        .pager__item.is-active a {
-          font-family: $hnm-bold;
-        }
-      }
-    }
-  }
-}
-
 .alias--search {
   .block-page-title-block {
     @include breakpoint($only-mobile) {
