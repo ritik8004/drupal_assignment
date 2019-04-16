@@ -83,3 +83,13 @@ fields:
     label: 'Whats in the box'
     description: 'Part of description.'
     type: 'text_long'
+
+  is_sale:
+    label: 'Is sale'
+    type: 'string'
+    description: 'Sku applicable for the sales category or not.'
+
+  is_new:
+    label: 'Is new arrival'
+    type: 'string'
+    description: 'Sku applicable for the new-arrival category or not.'
