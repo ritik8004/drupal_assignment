@@ -5,3 +5,23 @@ acq_checkoutcom.status:
     _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::status'
   requirements:
     _permission: 'access content'
+
+acq_checkoutcom.customer_cards:
+  path: '/user/{user}/cards'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::listCards'
+    _title: 'Orders'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+  options:
+    user: \d+
+
+acq_checkoutcom.add_card:
+  path: '/user/{user}/card/add'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::addCard'
+    _title: 'Add new card'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+  options:
+    user: \d+
