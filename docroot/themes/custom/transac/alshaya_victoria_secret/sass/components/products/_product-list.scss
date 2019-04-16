@@ -10,11 +10,6 @@
   }
 
   .region__content {
-    .filter--mobile .form-type-select {
-      text-transform: none;
-      color: $plp_facet_filter_label;
-    }
-
     .block-page-title-block.mobile {
       h1 {
         @include breakpoint($only-mobile) {
@@ -127,61 +122,10 @@
       }
     }
 
-    .filter--mobile {
-      .c-facet__blocks__wrapper--mobile {
-        .c-facet__label {
-          border-#{$right}: 0;
-          color: $plp_facet_filter_label;
-          height: 2.5rem;
-          line-height: 1.4;
-
-          &::after {
-            border: 1px solid $plp_facet_label_border_mobile;
-            border-#{$left}: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            height: 2.5rem;
-          }
-
-          @include breakpoint($tablet) {
-            width: 6.8125rem;
-          }
-
-          &.is-active {
-            &::after {
-              @include breakpoint($only-tablet) {
-                #{$right}: -2.125rem;
-                border: none;
-              }
-            }
-          }
-        }
-      }
-
-      @include breakpoint($tablet) {
-        html[lang=ar] & {
-          top: -3.8125rem;
-        }
-      }
-    }
-
     .c-page-title__description {
       @include breakpoint($tablet) {
         width: auto;
         max-width: none;
-      }
-    }
-
-    .filter--mobile {
-      @include breakpoint($tablet) {
-        bottom: auto;
-        top: -3.8125rem;
-      }
-
-      @include breakpoint($only-mobile) {
-        z-index: 7;
       }
     }
 
@@ -255,31 +199,6 @@
     }
   }
 
-  .region__content {
-    .filter--mobile {
-      @include breakpoint($only-mobile) {
-        z-index: auto;
-      }
-
-      .c-facet__blocks__wrapper--mobile {
-        .c-facet__blocks {
-          li {
-            &.clear-all {
-              @include breakpoint($only-mobile) {
-                height: 2.5rem;
-                padding: 0;
-                text-transform: uppercase;
-                font-family: $vs-bold;
-                border-width: 1px;
-                line-height: 1.2;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
   .swatches {
     margin-top: 0.625rem;
 
@@ -299,51 +218,6 @@
 .price--discount {
   font-size: 0.75rem;
   margin: 0.625rem 0;
-}
-
-@include breakpoint($only-mobile) {
-  .filter--mobile {
-    .c-facet__label {
-      &.active-filter-count {
-        .filter-count {
-          align-items: start;
-        }
-      }
-    }
-  }
-}
-
-.is-filter {
-  &.view-filters {
-    label {
-      font-size: 0.875rem;
-    }
-
-    .form-type-select {
-      @include breakpoint($upto-desktop) {
-        select {
-          height: 2.5rem;
-          padding: 0.5rem;
-          position: static;
-          line-height: 1.4;
-
-          html[lang=ar] & {
-            height: 2.5rem;
-            padding-left: 3rem;
-          }
-        }
-
-        &::after {
-          height: auto;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          line-height: 40px;
-          font-size: 2rem;
-        }
-      }
-    }
-  }
 }
 
 .basic-details-wrapper {
