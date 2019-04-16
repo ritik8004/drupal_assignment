@@ -6,6 +6,7 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya_config\AlshayaConfigManager;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\redirect\Entity\Redirect;
 use Drush\Commands\DrushCommands;
 use Drupal\node\NodeInterface;
@@ -34,16 +35,27 @@ class AlshayaHmCommands extends DrushCommands {
   protected $skuFieldsManager;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * AlshayaHmCommands constructor.
    *
    * @param \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager
    *   Alshaya config manager.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory.
    * @param \Drupal\acq_sku\SKUFieldsManager $skuFieldsManager
    *   SKU fields manager.
    */
   public function __construct(AlshayaConfigManager $alshayaConfigManager,
+                              ConfigFactoryInterface $config_factory,
                               SKUFieldsManager $skuFieldsManager) {
     $this->alshayaConfigManager = $alshayaConfigManager;
+    $this->configFactory = $config_factory;
     $this->skuFieldsManager = $skuFieldsManager;
   }
 
@@ -72,7 +84,9 @@ class AlshayaHmCommands extends DrushCommands {
     $this->alshayaConfigManager->updateConfigs(['acq_sku.configurable_form_settings'], 'alshaya_hm', 'optional');
 
     // Update Alshaya display settings to hide swatches.
-    $this->alshayaConfigManager->updateConfigs(['alshaya_acm_product.display_settings'], 'alshaya_acm_product');
+    $config = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
+    $config->set('color_swatches', FALSE);
+    $config->save();
   }
 
   /**

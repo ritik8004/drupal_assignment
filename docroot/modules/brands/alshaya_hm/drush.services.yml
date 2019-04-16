@@ -1,6 +1,9 @@
 services:
   alshaya_hm.commands:
     class: Drupal\alshaya_hm\Commands\AlshayaHmCommands
-    arguments: [ '@alshaya_config.manager', '@acq_sku.fields_manager' ]
+    arguments:
+      - '@alshaya_config.manager'
+      - '@config.factory'
+      - '@acq_sku.fields_manager'
     tags:
       - { name: drush.command }
