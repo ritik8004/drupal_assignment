@@ -85,6 +85,10 @@ $facebook_config = [
     'app_id' => '357400338223237',
     'app_secret' => '66354c2dc14b3dbbd9024425148d52b9',
   ],
+  '01uat' => [
+    'app_id' => '307987113196828',
+    'app_secret' => '019eda6862dd77160f64a681113dfb0f',
+  ],
 ];
 
 if (isset($facebook_config[$env])) {
