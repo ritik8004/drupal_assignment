@@ -97,7 +97,7 @@
       display: none;
     }
 
-    .c-accordion__title.active + ul {
+    .c-accordion__title + ul {
       @include breakpoint($only-mobile) {
         width: 100vw;
         border-left: 0;

@@ -1485,8 +1485,15 @@ function alshaya_white_label_preprocess_breadcrumb(&$variables) {
 function alshaya_white_label_preprocess_facets_item_list(&$variables) {
   // Flag to determine if category facet has active item.
   $category_active_facet = FALSE;
+
+  // Category facet array.
+  $category_facets = [
+    'category_facet_plp',
+    'category_facet_search',
+    'category_facet_promo',
+  ];
   // If category facet.
-  $is_category_facet = (strpos($variables['attributes']['data-drupal-facet-id'], 'category') !== FALSE);
+  $is_category_facet = in_array($variables['attributes']['data-drupal-facet-id'], $category_facets);
   foreach ($variables['items'] as $key => $item) {
     if (isset($item['value']['#attributes']['class'])
       && in_array('is-active', $item['value']['#attributes']['class'])) {

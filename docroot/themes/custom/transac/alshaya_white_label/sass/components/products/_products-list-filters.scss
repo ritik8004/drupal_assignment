@@ -75,6 +75,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .selected-facets,
+        .sort-for-label {
+          display: none;
+        }
       }
 
       // Close button
@@ -110,6 +115,8 @@
 
           legend {
             width: 100%;
+            font-size: 0.75rem;
+            letter-spacing: normal;
 
             &::after {
               display: none;
@@ -124,8 +131,13 @@
             line-height: 1;
             border-bottom: 1px solid $plp_all_filter_item_border;
 
+            .sort-for-label {
+              float: $right;
+              margin-#{$right}: 0.75rem;
+            }
+
             @include icon(chevron#{$right}, after) {
-              color: #000;
+              color: $plp_all_filter_filter_arrow;
               font-size: 1.5rem;
               width: 2rem;
               cursor: pointer;
@@ -173,15 +185,13 @@
         }
       }
 
-      .c-facet.c-accordion.block-facet-blockcategory-facet-plp {
-        @include breakpoint($upto-desktop) {
-          display: block;
-        }
-
-        @include breakpoint($only-mobile) {
-          width: 100%;
-          border-bottom: none;
-          border-#{$right}: none;
+      .c-facet.c-accordion {
+        &.block-facet-blockcategory-facet-plp,
+        &.block-facet-blockcategory-facet-promo,
+        &.block-facet-blockcategory-facet-search {
+          @include breakpoint($upto-desktop) {
+            display: none !important;
+          }
         }
       }
 
@@ -249,11 +259,34 @@
             text-transform: capitalize;
             padding: 1.125rem 2rem;
             height: auto;
+            font-size: 0.75rem;
             line-height: 1;
             border-bottom: 1px solid $plp_all_filter_item_border;
+            letter-spacing: normal;
+
+            .selected-facets {
+              float: $right;
+              text-align: $right;
+              margin-#{$right}: 0.75rem;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+
+              .title {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                width: 12.5rem;
+                padding-#{$right}: 2px;
+
+                @include breakpoint($only-mobile) {
+                  width: 7.5rem;
+                }
+              }
+            }
 
             @include icon(chevron#{$right}, after) {
-              color: #000;
+              color: $plp_all_filter_filter_arrow;
               font-size: 1.5rem;
               width: 2rem;
               cursor: pointer;
@@ -324,7 +357,7 @@
 
         font-size: 0.8125rem;
         width: 48%;
-        line-height: 1.5;
+        height: 2.5625rem;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -378,6 +411,11 @@
         width: 48%;
         line-height: 1.5;
         border: 1px solid $plp_all_filter_button_color;
+        padding: 0;
+        height: 2.5625rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       ul {
