@@ -491,7 +491,6 @@
           background-repeat: no-repeat;
           background-position: center;
           background-size: contain;
-          background-size: contain;
         }
 
         @include breakpoint($only-tablet) {
@@ -527,7 +526,7 @@
     .block-alshaya-search-facets-block-all,
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
-    > .block-facet-blockcategory-facet-search{
+    > .block-facet-blockcategory-facet-search {
       position: fixed;
       top: 3.6875rem;
       background: $lhn_sticky-filter-background;
