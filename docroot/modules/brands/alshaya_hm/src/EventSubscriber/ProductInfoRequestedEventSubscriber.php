@@ -223,7 +223,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     // We hard-code attribute name here as it is specific for HnM.
     // Do nothing if this configurable product has article_castor_id as it
-    // seems it is not migrated yet.
+    // seems it is not migrated yet to the new configurable per color structure.
     if (isset($configurables['article_castor_id'])) {
       return;
     }
