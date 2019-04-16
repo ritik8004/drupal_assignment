@@ -1968,7 +1968,7 @@ class SkuManager {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Configurable SKU entity.
    *
-   * @return \Drupal\acq_sku\Entity\SKU
+   * @return \Drupal\acq_sku\Entity\SKU|null
    *   Valid child SKU or parent itself.
    */
   public function getFirstValidConfigurableChild(SKU $sku) {
@@ -1981,14 +1981,23 @@ class SkuManager {
 
     $sku_variants = explode(',', $sku->get('field_configured_skus')->getString());
     $combinations = $this->getConfigurableCombinations($sku);
+
+    // In some cases we modify combinations and add more children.
+    // Here to get first valid we want only available ones from current
+    // configurable sku.
     $sku_variants = array_intersect($sku_variants, array_keys($combinations['by_sku']));
-    foreach ($sku_variants as $sku_variant) {
-      $variant = SKU::loadFromSku($sku_variant);
-      $this->setProductCachedData($sku, $cache_key, $variant->getSku());
-      return $variant;
+
+    $variant_sku_code = NULL;
+    $variant = NULL;
+
+    if (!empty($sku_variants)) {
+      $variant_sku_code = reset($sku_variants);
+      $variant = SKU::loadFromSku($variant_sku_code);
     }
 
-    return $sku;
+    // Store the value in cache.
+    $this->setProductCachedData($sku, $cache_key, $variant_sku_code);
+    return $variant;
   }
 
   /**
