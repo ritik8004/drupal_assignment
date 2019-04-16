@@ -237,6 +237,10 @@
 #payment_details_wrapper {
   padding: 0 1rem;
 
+  > div:first-child {
+    border-width: 1px;
+  }
+
   @include breakpoint($only-mobile) {
     padding: 0;
   }
