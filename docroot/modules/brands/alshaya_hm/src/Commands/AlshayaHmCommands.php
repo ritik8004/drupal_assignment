@@ -80,9 +80,6 @@ class AlshayaHmCommands extends DrushCommands {
     $this->alshayaConfigManager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_hm');
     $this->alshayaConfigManager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm', 'install', AlshayaConfigManager::MODE_REPLACE);
 
-    // Set Additional configurable attribute for H&M.
-    $this->alshayaConfigManager->updateConfigs(['acq_sku.configurable_form_settings'], 'alshaya_hm', 'optional');
-
     // Update Alshaya display settings to hide swatches.
     $config = $this->configFactory->getEditable('alshaya_acm_product.display_settings');
     $config->set('color_swatches', FALSE);
