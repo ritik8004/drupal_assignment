@@ -410,3 +410,124 @@ function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStat
     }
   }
 }
+
+/**
+ * Implements hook_acq_sku_configurable_cart_options_alter().
+ */
+function alshaya_hm_acq_sku_configurable_cart_options_alter(array &$options, SKU $sku) {
+  if ($sku->get('attr_style_code')->getString()) {
+    foreach ($options as $index => $option) {
+      if ($option['option_id'] == 999999) {
+        unset($options[$index]);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_configurable_product_configurations_alter().
+ */
+function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
+  $style_code = $sku->get('attr_style_code')->getString();
+
+  // If we do not have any value for style code or we have
+  // article_castor_id already set, we do no further processing.
+  if (empty($style_code) || isset($configurations['article_castor_id'])) {
+    return;
+  }
+
+  $variants = \Drupal::entityTypeManager()
+    ->getStorage('acq_sku')
+    ->loadByProperties([
+      'attr_style_code' => $style_code,
+    ]);
+
+  if (empty($variants)) {
+    return;
+  }
+
+  $langcode = $sku->language()->getId();
+
+  foreach ($variants as $variant) {
+    if ($variant->language()->getId() != $langcode && $variant->hasTranslation($langcode)) {
+      $variant = $variant->getTranslation($langcode);
+    }
+
+    if ($variant->bundle() == 'configurable') {
+      $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
+
+      foreach ($variant_configurations as $variant_configurable) {
+        if (empty($configurations[$variant_configurable['code']])) {
+          $configurations[$variant_configurable['code']] = $variant_configurable;
+          $configurations[$variant_configurable['code']]['values'] = [];
+        }
+
+        foreach ($variant_configurable['values'] as $value) {
+          $configurations[$variant_configurable['code']]['values'][$value['value_id']] = $value;
+        }
+      }
+    }
+    elseif ($variant->bundle() == 'simple') {
+      $attributes = $variant->get('attributes')->getValue();
+      $attributes = array_column($attributes, 'value', 'key');
+      $colors[$attributes['article_castor_id']] = [
+        'label' => $attributes['color_label'],
+        'value_id' => $attributes['article_castor_id'],
+      ];
+    }
+  }
+
+  if (empty($colors)) {
+    return;
+  }
+
+  $configurations = [
+    'article_castor_id' => [
+      'attribute_id' => 999999,
+      'code' => 'article_castor_id',
+      'label' => t('Article Castor Id'),
+      'position' => 0,
+      'values' => $colors,
+    ],
+  ] + $configurations;
+}
+
+/**
+ * Implements hook_acq_sku_configurable_variants_alter().
+ */
+function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
+  // If we do not have any value for style code we do no further processing.
+  $style_code = $sku->get('attr_style_code')->getString();
+  if (empty($style_code)) {
+    return;
+  }
+
+  // If we we have article_castor_id already set, we do no further processing.
+  $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
+  $configurable_attribute_codes = array_column($configurations, 'code', 'code');
+  if (isset($configurable_attribute_codes['article_castor_id'])) {
+    return;
+  }
+
+  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  // For new catalog structure, we want all the variants for particular style
+  // code shown in all the product pages.
+  $variants = \Drupal::entityTypeManager()
+    ->getStorage('acq_sku')
+    ->loadByProperties([
+      'attr_style_code' => $style_code,
+      'type' => 'simple',
+    ]);
+
+  /** @var \Drupal\acq_sku\Entity\SKU $variant */
+  foreach ($variants as $variant) {
+    // Get current interface language translation.
+    if ($variant->language()->getId() != $langcode && $variant->hasTranslation($langcode)) {
+      $variant = $variant->getTranslation($langcode);
+    }
+
+    $children[$variant->getSku()] = $variant;
+  }
+}

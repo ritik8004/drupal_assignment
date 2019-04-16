@@ -59,6 +59,13 @@ class SkuManager {
   const NON_AGGREGATED_LISTING = 'non_aggregated';
 
   /**
+   * Store selected variant id.
+   *
+   * @var int
+   */
+  private static $selectedVariantId;
+
+  /**
    * The database service.
    *
    * @var \Drupal\Core\Database\Driver\mysql\Connection
@@ -1607,41 +1614,7 @@ class SkuManager {
     $configurable_codes = array_keys($tree['configurables']);
     $all_combinations = AlshayaArrayUtils::getAllCombinations($configurable_codes);
 
-    $combinations = [];
-
-    // Prepare array to get all combinations available grouped by SKU.
-    foreach ($tree['products'] ?? [] as $child_sku_code => $child_sku) {
-      if (!($child_sku instanceof SKU)) {
-        continue;
-      }
-
-      // Dot not display free gifts.
-      if ($this->isSkuFreeGift($child_sku)) {
-        continue;
-      }
-
-      // Do not display OOS variants.
-      // Bypass wrapper function in this class as it creates cyclic
-      // dependency.
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $childPlugin */
-      $childPlugin = $sku->getPluginInstance();
-      if (!$childPlugin->isProductInStock($child_sku)) {
-        continue;
-      }
-
-      $attributes = $child_sku->get('attributes')->getValue();
-      $attributes = array_column($attributes, 'value', 'key');
-      foreach ($configurable_codes as $code) {
-        $value = $attributes[$code] ?? '';
-
-        if (empty($value)) {
-          continue;
-        }
-
-        $combinations['by_sku'][$child_sku_code][$code] = $value;
-        $combinations['attribute_sku'][$code][$value][] = $child_sku_code;
-      }
-    }
+    $combinations =& $tree['combinations'];
 
     // Don't store in cache and return empty array here if no valid
     // SKU / combination found.
@@ -1661,32 +1634,6 @@ class SkuManager {
       }
 
       return [];
-    }
-
-    $configurables = Configurable::getSortedConfigurableAttributes($sku);
-
-    // Sort the values in attribute_sku so we can use it later.
-    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
-      if ($this->cartFormHelper->isAttributeSortable($code)) {
-        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
-      }
-      else {
-        // Sort from field_configurable_attributes.
-        $configurable_attribute = [];
-        foreach ($configurables as $configurable) {
-          if ($configurable['code'] === $code) {
-            $configurable_attribute = $configurable['values'];
-            break;
-          }
-        }
-
-        if ($configurable_attribute) {
-          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
-          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
-            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
-          });
-        }
-      }
     }
 
     // Prepare combinations array grouped by attributes to check later which
@@ -1910,7 +1857,7 @@ class SkuManager {
     }
 
     // Select first child based on value provided in query params.
-    $sku_id = (int) $this->currentRequest->query->get('selected');
+    $sku_id = (int) $this->getSelectedVariantId();
 
     // Give preference to sku id passed via query params.
     if ($sku_id && $sku_id != $sku->id()) {
@@ -2021,7 +1968,7 @@ class SkuManager {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Configurable SKU entity.
    *
-   * @return \Drupal\acq_sku\Entity\SKU
+   * @return \Drupal\acq_sku\Entity\SKU|null
    *   Valid child SKU or parent itself.
    */
   public function getFirstValidConfigurableChild(SKU $sku) {
@@ -2032,13 +1979,25 @@ class SkuManager {
       return SKU::loadFromSku($child_sku, $sku->language()->getId());
     }
 
-    $child = $this->getAvailableChildren($sku, TRUE);
-    if ($child instanceof SKUInterface) {
-      $this->setProductCachedData($sku, $cache_key, $child->getSku());
-      return $child;
+    $sku_variants = explode(',', $sku->get('field_configured_skus')->getString());
+    $combinations = $this->getConfigurableCombinations($sku);
+
+    // In some cases we modify combinations and add more children.
+    // Here to get first valid we want only available ones from current
+    // configurable sku.
+    $sku_variants = array_intersect($sku_variants, array_keys($combinations['by_sku']));
+
+    $variant_sku_code = NULL;
+    $variant = NULL;
+
+    if (!empty($sku_variants)) {
+      $variant_sku_code = reset($sku_variants);
+      $variant = SKU::loadFromSku($variant_sku_code);
     }
 
-    return $sku;
+    // Store the value in cache.
+    $this->setProductCachedData($sku, $cache_key, $variant_sku_code);
+    return $variant;
   }
 
   /**
@@ -2289,28 +2248,9 @@ class SkuManager {
     if ($sku->bundle() == 'configurable') {
       $combinations = $this->getConfigurableCombinations($sku);
 
-      if (empty($combinations)) {
+      if (empty($combinations) || empty($combinations['attribute_sku'])) {
         $static[$sku->id()] = FALSE;
         return FALSE;
-      }
-
-      foreach ($combinations['attribute_sku'] as $values) {
-        // If we have no values for particular attribute, we show it as OOS.
-        if (count($values) === 0) {
-          $static[$sku->id()] = FALSE;
-          return FALSE;
-        }
-      }
-
-      // Use the count of first sku as base for matching with others.
-      $count = count(reset($combinations['by_sku']));
-
-      foreach ($combinations['by_sku'] as $values) {
-        // If we have mis-match in count of values, we show it as OOS.
-        if (count($values) !== $count) {
-          $static[$sku->id()] = FALSE;
-          return FALSE;
-        }
       }
     }
 
@@ -2409,7 +2349,7 @@ class SkuManager {
       $child_skus = array_keys($combinations['by_sku']);
       $child_sku = reset($child_skus);
       if ($child = SKU::loadFromSku($child_sku, $sku->language()->getId())) {
-        $this->currentRequest->query->set('selected', $child->id());
+        $this->setSelectedVariantId($child->id());
         $static[$sku->id()] = $child;
         return $child;
       }
@@ -2451,7 +2391,7 @@ class SkuManager {
     // child if only one attribute is selected, process further.
     if ($select_from_query) {
       // Select first child based on value provided in query params.
-      $sku_id = (int) $this->currentRequest->query->get('selected');
+      $sku_id = (int) $this->getSelectedVariantId();
 
       if ($sku_id && $sku_id != $sku->id()) {
         $selected_sku = $this->loadSkuById($sku_id);
@@ -2462,13 +2402,13 @@ class SkuManager {
         }
         else {
           // Set it to NULL to indicate code below that we didn't change.
-          $this->currentRequest->query->set('selected', NULL);
+          $this->setSelectedVariantId(NULL);
         }
       }
 
       $selected_sku = $this->getFirstValidConfigurableChild($sku);
       if ($selected_sku instanceof SKUInterface) {
-        $this->currentRequest->query->set('selected', $selected_sku->id());
+        $this->setSelectedVariantId($selected_sku->id());
         return $selected_sku;
       }
     }
@@ -3052,6 +2992,31 @@ class SkuManager {
     }
 
     return FALSE;
+  }
+
+  /**
+   * Get selected variant id.
+   *
+   * @return int|null
+   *   Selected variant id if available.
+   */
+  public function getSelectedVariantId() {
+    $from_query = $this->currentRequest->query->get('selected');
+    if (!empty(self::$selectedVariantId) && !empty($from_query)) {
+      $this->setSelectedVariantId($from_query);
+    }
+
+    return self::$selectedVariantId ?? NULL;
+  }
+
+  /**
+   * Set selected variant id.
+   *
+   * @param int|null $id
+   *   Selected variant id.
+   */
+  public function setSelectedVariantId($id) {
+    self::$selectedVariantId = $id;
   }
 
 }
