@@ -74,7 +74,6 @@ fields:
     index: 1
   gender:
     label: 'Gender'
-    type: 'string'
     cardinality: -1
     index: 1
     facet: 1

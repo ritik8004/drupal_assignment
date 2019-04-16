@@ -6,7 +6,6 @@
  */
 
 use Drupal\Core\Site\Settings;
-use Drupal\alshaya_config\AlshayaConfigManager;
 
 /**
  * Implements hook_update_N().
@@ -14,29 +13,15 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  * Add gender field.
  */
 function alshaya_fl_transac_update_8003() {
-  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
     ['alshaya_acm_product.sku_base_fields'],
-    'alshaya_fl_transac',
-    'override',
-    AlshayaConfigManager::MODE_MERGE
+    'alshaya_acm_product'
   );
+
   /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
   $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
   $sku_fields_manager->addFields();
-
-  /** @var \Drupal\acq_sku\SKUFieldsManager $fieldsManager */
-  $fieldsManager = \Drupal::service('acq_sku.fields_manager');
-  $fieldsManager->resetBaseFields();
-
-  // Re-save index configs to ensure overrides are taken into consideration.
-  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
-  alshaya_config_install_configs(
-    ['search_api.index.acquia_search_index'],
-    'alshaya_search',
-    'optional'
-  );
 }
 
 /**
