@@ -204,7 +204,7 @@ function alshaya_acm_product_category_acq_sku_product_node_alter(NodeInterface $
 
   /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
   $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
-  $manager->processSalesCategoryCheckForNode($node);
+  $manager->processCategorizationCheckForNode($node);
 }
 
 /**
@@ -248,10 +248,10 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
 
   /** @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManager $manager */
   $manager = \Drupal::service('alshaya_acm_product_category.sales_category_manager');
-  $sale_ids = $manager->getSalesCategoryIds();
+  $sale_ids = $manager->getCategorizationIds();
 
   // Invalidate cache if term or it's parent are part of sales category tree.
   if (array_intersect($sale_ids, $term_ids)) {
-    Cache::invalidateTags([ProductCategoryManager::SALES_CATEGORY_IDS_CACHE_TAG]);
+    Cache::invalidateTags([ProductCategoryManager::CATEGORIZATION_IDS_CACHE_TAG]);
   }
 }
