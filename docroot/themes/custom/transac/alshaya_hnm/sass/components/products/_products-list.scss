@@ -64,22 +64,6 @@
       }
     }
 
-    .filter--mobile {
-      @include breakpoint($tablet) {
-        top: 0;
-
-        html[lang=ar] & {
-          top: 0;
-        }
-      }
-
-      .form-type-select {
-        label {
-          #{$left}: -3.8125rem;
-        }
-      }
-    }
-
     .view-header.search-count {
       color: $plp_search_count;
       padding-bottom: 0.75rem;
