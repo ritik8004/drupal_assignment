@@ -178,32 +178,6 @@
   }
 
   .c-products__item {
-    margin-bottom: 0.125rem;
-
-    @include breakpoint($mobile) {
-      width: 47%;
-      margin-bottom: 2rem;
-    }
-
-    @include breakpoint($tablet) {
-      width: 31.6%;
-
-      &:nth-child(3n+2) {
-        margin: 0 2.6%;
-        margin-bottom: 2rem;
-      }
-    }
-
-    @include breakpoint($upto-tablet) {
-      &:nth-child(2n+1) {
-        margin-#{$right}: 2.7%;
-      }
-
-      &:nth-child(2n) {
-        margin-#{$left}: 2.7%;
-      }
-    }
-
     .swatches {
       margin: 0.625rem 0;
     }

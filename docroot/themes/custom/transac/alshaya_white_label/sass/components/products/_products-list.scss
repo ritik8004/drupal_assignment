@@ -150,6 +150,10 @@
                   transform: translateX(-50%) translateY(-50%);
                   color: $plp_facet_summary_filter_icon;
                   font-size: 1.25rem;
+
+                  html[lang=ar] & {
+                    transform: translateX(50%) translateY(-50%);
+                  }
                 }
 
                 color: transparent;
@@ -491,7 +495,8 @@
       .c-products__item {
         @include breakpoint($desktop) {
           width: calc(100% / 3 - 2% + 2% / 3 - 0.01px);
-          margin: 0 0 2% 2%;
+          margin-bottom: 2%;
+          margin-#{$left}: 2%;
 
           &:nth-child(3n+1) {
             margin-#{$left}: 0;
@@ -500,7 +505,8 @@
 
         @include breakpoint($only-tablet) {
           width: calc(100% / 2 - 2% + 2% / 2 - 5px);
-          margin: 0 0 2% 3.334%;
+          margin-bottom: 2%;
+          margin-#{$left}: 3.334%;
 
           &:nth-child(2n+1) {
             margin-#{$left}: 0;
@@ -518,7 +524,8 @@
       .c-products__item {
         @include breakpoint($desktop) {
           width: calc(100% / 4 - 1.797% + 1.797% / 4 - 0.01px);
-          margin: 0 0 2% 1.797%;
+          margin-bottom: 2%;
+          margin-#{$left}: 1.797%;
 
           &:nth-child(4n+1) {
             margin-#{$left}: 0;
@@ -527,7 +534,8 @@
 
         @include breakpoint($only-tablet) {
           width: calc(100% / 3 - 2% + 2% / 3 + 2px);
-          margin: 0 0 2% 1.528%;
+          margin-bottom: 2%;
+          margin-#{$left}: 1.528%;
 
           &:nth-child(3n+1) {
             margin-#{$left}: 0;
@@ -536,7 +544,8 @@
 
         @include breakpoint($only-mobile) {
           width: calc(100% / 2 - 1.875% + 1.875% / 2);
-          margin: 0 0 2% 1.875%;
+          margin-bottom: 2%;
+          margin-#{$left}: 1.875%;
 
           &:nth-child(2n+1) {
             margin-#{$left}: 0;
@@ -1289,12 +1298,6 @@ html[lang=ar] {
         display: flex;
         align-items: stretch;
         flex-wrap: wrap;
-      }
-    }
-
-    .c-products__item {
-      &:nth-child(3n+2) {
-        margin: 0 1.5rem 1rem;
       }
     }
   }
