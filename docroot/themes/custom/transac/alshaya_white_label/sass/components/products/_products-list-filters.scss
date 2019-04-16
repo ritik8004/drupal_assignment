@@ -159,6 +159,7 @@
               padding: 0 !important;
               margin-bottom: 0;
               border-bottom: 1px solid $plp_all_filter_item_border;
+              line-height: 2.9375rem;
             }
 
             .form-type-radio:first-child {
@@ -252,8 +253,16 @@
                 line-height: unset;
                 margin-left: 0.5rem;
 
+                @include breakpoint($only-mobile) {
+                  line-height: 2.9375rem;
+                }
+
                 .facet-item__count {
                   line-height: unset;
+
+                  @include breakpoint($only-mobile) {
+                    line-height: 2.9375rem;
+                  }
                 }
               }
             }

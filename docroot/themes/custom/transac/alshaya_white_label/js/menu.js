@@ -191,28 +191,6 @@
         });
       }
 
-      /**
-       * Make Header sticky on scroll.
-       */
-
-      if ($('.branding__menu').length) {
-        var position = $('.branding__menu').offset().top;
-        var nav = $('.branding__menu');
-        var topHeader = $('.header--wrapper');
-        $(window, context).once().scroll(function () {
-          if ($(this).scrollTop() > position) {
-            $('body').addClass('header--fixed');
-            nav.addClass('navbar-fixed-top');
-            topHeader.addClass('navbar-fixed-top');
-          }
-          else {
-            nav.removeClass('navbar-fixed-top');
-            topHeader.removeClass('navbar-fixed-top');
-            $('body').removeClass('header--fixed');
-          }
-        });
-      }
-
       $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseenter(function () {
         if (menuHovered === 1) {
           $('ul.menu--two__list').css('transition', 'none');

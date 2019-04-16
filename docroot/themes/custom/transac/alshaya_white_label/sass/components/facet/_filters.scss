@@ -3,6 +3,10 @@
   margin-#{$right}: 2.25rem;
   position: relative;
 
+  @include breakpoint($only-tablet) {
+    margin: 0;
+  }
+
   .c-accordion__title {
     border: none;
     font-size: 0.75rem;
@@ -190,7 +194,6 @@
 
     legend {
       font-size: 0.75rem;
-      height: 2.9375rem;
       line-height: 2.9375rem;
       position: relative;
       margin-#{$right}: 2.25rem;
@@ -217,7 +220,15 @@
   padding-#{$left}: 1.875rem;
   cursor: pointer;
 
+  @include breakpoint($tablet) {
+    float: $left;
+    height: 2.9375rem;
+    line-height: 2.9375rem;
+  }
+
   @include breakpoint($desktop) {
+    margin-#{$left}: 0.5rem;
+
     .desktop {
       display: inline;
     }
@@ -266,9 +277,12 @@
 .block-alshaya-promo-facets-block-all,
 .block-alshaya-search-facets-block-all {
   float: $left;
-  height: 2.9375rem;
   line-height: 2.9375rem;
   margin-#{$left}: 1rem;
+
+  @include breakpoint($upto-desktop) {
+    height: 2.9375rem;
+  }
 
   @include breakpoint($only-tablet) {
     margin-#{$left}: 0;
@@ -340,7 +354,7 @@
           }
 
           &.max-height {
-            max-height: 82px;
+            max-height: 5.125rem;
           }
         }
       }
@@ -364,7 +378,7 @@
           font-size: 1rem;
           position: absolute;
           top: 0;
-          #{$right}: 2px;
+          #{$right}: 0.125rem;
         }
 
         @include breakpoint($tablet) {
@@ -427,5 +441,143 @@
         margin-#{$left}: 0;
       }
     }
+  }
+}
+
+@include breakpoint($tablet) {
+  .filter-fixed-top {
+    .container-without-product {
+      position: fixed;
+      top: 0;
+      background: $lhn_sticky-filter-background;
+      max-width: 77.25rem;
+      width: 100%;
+      z-index: 1;
+      height: 3.75rem;
+      #{$left}: calc((100vw - 77.15rem) / 2);
+      display: flex;
+      align-items: center;
+
+      @include breakpoint($desktop) {
+        padding-#{$left}: 14.625rem;
+      }
+
+      @include breakpoint($desktop-wide) {
+        width: calc(100vw - (100vw - 77.25rem));
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: 0;
+        padding-left: 0;
+        justify-content: center;
+      }
+
+      &::before {
+        content: '';
+        height: 2.5rem;
+        width: 11.0625rem;
+        background-image: url(#{$brand_theme_default_path}/site-logo.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        position: absolute;
+        #{$left}: 0;
+        display: flex;
+        align-items: center;
+        justify-content: right;
+
+        html[lang=ar] & {
+          background-image: url(#{$brand_theme_default_path}/site-logo-ar.svg);
+          background-repeat: no-repeat;
+          background-position: center;
+          background-size: contain;
+        }
+
+        @include breakpoint($only-tablet) {
+          #{$left}: 1.5rem;
+        }
+      }
+    }
+
+    .block-page-title-block,
+    .block-alshaya-grid-count-block {
+      display: none;
+    }
+
+    .sticky-filter-wrapper {
+      position: fixed;
+      top: 0;
+      #{$left}: 0;
+      background: $lhn_sticky-filter-background;
+      width: 100%;
+      z-index: 2;
+      height: 3.75rem;
+      box-shadow: 0 0.125rem 0.25rem 0 $lhn_sticky-header-desktop-shadow;
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    margin-top: 2.8125rem;
+
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
+    > .block-facet-blockcategory-facet-plp,
+    > .block-facet-blockcategory-facet-promo,
+    > .block-facet-blockcategory-facet-search {
+      position: fixed;
+      top: 3.6875rem;
+      background: $lhn_sticky-filter-background;
+      z-index: 1;
+
+      html[lang=ar] & {
+        top: 4.125rem;
+      }
+    }
+
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all {
+      #{$right}: 0;
+    }
+
+    .filters-active {
+      .block-alshaya-plp-facets-block-all,
+      .block-alshaya-promo-facets-block-all,
+      .block-alshaya-search-facets-block-all {
+        position: relative;
+        top: auto;
+        background: transparent;
+      }
+    }
+  }
+}
+
+body.header-sticky-filter {
+  @include breakpoint($tablet) {
+    margin-top: 7.8125rem !important;
+  }
+
+  @include breakpoint($desktop) {
+    margin-top: 2.5rem !important;
+  }
+
+  &.slug-banner-processed {
+    @include breakpoint($tablet) {
+      margin-top: 5.3125rem !important;
+    }
+  }
+}
+
+.branding__menu {
+  @include breakpoint($only-mobile) {
+    box-shadow: 0 0.8px 0 0 $lhn_sticky-header-shadow;
+    border-bottom: none;
+  }
+
+  @include breakpoint($only-tablet) {
+    position: absolute;
   }
 }

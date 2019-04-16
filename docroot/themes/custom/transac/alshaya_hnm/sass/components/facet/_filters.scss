@@ -78,3 +78,28 @@
     }
   }
 }
+
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
+    > .block-facet-blockcategory-facet-plp,
+    > .block-facet-blockcategory-facet-promo,
+    > .block-facet-blockcategory-facet-search {
+      top: 3.6875rem;
+
+      html[lang=ar] & {
+        top: 3.6875rem;
+      }
+    }
+  }
+}
+
+.filter-fixed-top {
+  .container-without-product {
+    &::before {
+      width: 2.5rem;
+    }
+  }
+}

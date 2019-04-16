@@ -352,8 +352,12 @@ header {
     .menu--mobile-navigation {
       @include breakpoint($upto-desktop) {
         border-bottom: 2px solid $header_mobile_border;
-        position: fixed;
+        position: absolute;
         z-index: 6;
+      }
+
+      @include breakpoint($only-mobile) {
+        position: fixed;
       }
     }
   }
