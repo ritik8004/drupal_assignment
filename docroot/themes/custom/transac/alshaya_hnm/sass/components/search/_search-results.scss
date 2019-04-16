@@ -19,6 +19,16 @@
   }
 }
 
+.alias--search {
+  .block-page-title-block {
+    @include breakpoint($only-mobile) {
+      h1 {
+        text-transform: inherit;
+      }
+    }
+  }
+}
+
 .facets-soft-limit-link {
   margin-bottom: 0.875rem;
 }

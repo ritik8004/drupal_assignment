@@ -182,6 +182,10 @@
 
         @include breakpoint($upto-desktop) {
           display: block;
+
+          form {
+            box-shadow: none;
+          }
         }
       }
 

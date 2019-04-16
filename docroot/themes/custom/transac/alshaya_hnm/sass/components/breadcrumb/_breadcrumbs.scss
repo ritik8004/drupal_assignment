@@ -55,6 +55,13 @@
     display: inline-flex;
     align-items: center;
 
+    &:last-of-type {
+      color: $breadcrumb_link;
+      font-family: $hnm-regular;
+      text-transform: uppercase;
+      font-weight: normal;
+    }
+
     &:last-of-type a {
       color: $breadcrumb_link;
       font-family: $hnm-regular;
