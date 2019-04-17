@@ -2798,10 +2798,17 @@ class SkuManager {
     $product_color = $node->get('field_product_color')->getString();
 
     $prices = $this->getMinPrices($sku, $product_color);
-    $price = empty($prices['final_price'])
-        ? $prices['price']
-        : $prices['final_price'];
-    $item->getField('final_price')->setValues([$price]);
+    $item->getField('price')->setValues([$prices['price']]);
+    $item->getField('final_price')->setValues([$prices['final_price']]);
+
+    // Use max of selling prices for price in configurable products.
+    if (!empty($prices['children'])) {
+      $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
+      $item->getField('price')->setValues([max($selling_prices)]);
+
+      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $item->getField('attr_selling_price')->setValues($selling_prices);
+    }
 
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
