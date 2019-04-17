@@ -85,15 +85,13 @@ $facebook_config = [
     'app_id' => '357400338223237',
     'app_secret' => '66354c2dc14b3dbbd9024425148d52b9',
   ],
+  '01uat' => [
+    'app_id' => '307987113196828',
+    'app_secret' => '019eda6862dd77160f64a681113dfb0f',
+  ],
 ];
 
-if ($env == '01live') {
-  $social_auth_settings_file = $_SERVER['HOME'] . DIRECTORY_SEPARATOR . 'settings/01live/social_auth.php';
-  if (file_exists($social_auth_settings_file)) {
-    include_once $social_auth_settings_file;
-  }
-}
-elseif (isset($facebook_config[$env])) {
+if (isset($facebook_config[$env])) {
   $settings['social_auth_facebook.settings']['app_id'] = $facebook_config[$env]['app_id'];
   $settings['social_auth_facebook.settings']['app_secret'] = $facebook_config[$env]['app_secret'];
   $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
