@@ -587,3 +587,9 @@ body.header-sticky-filter {
     position: absolute;
   }
 }
+
+.c-facet {
+  &.c-accordion:empty {
+    display: none;
+  }
+}
