@@ -340,7 +340,8 @@ function alshaya_hm_images_alshaya_master_post_drupal_install() {
 function alshaya_hm_images_alshaya_mobile_app_light_product_data_alter(SKU $sku, array &$data) {
   $data['swatches'] = [];
 
-  if (!empty($data['color'])) {
+  $swatches_display_status = (bool) \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
+  if (!empty($data['color']) || !$swatches_display_status) {
     return;
   }
 

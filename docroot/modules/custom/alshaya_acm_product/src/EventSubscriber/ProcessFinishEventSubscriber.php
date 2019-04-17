@@ -75,7 +75,9 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onKernelTerminate(PostResponseEvent $event) {
-    $this->processSkuColorNodes();
+    if ($this->skuManager->isListingModeNonAggregated()) {
+      $this->processSkuColorNodes();
+    }
   }
 
   /**
@@ -85,7 +87,9 @@ class ProcessFinishEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function postDrushCommand(Event $event) {
-    $this->processSkuColorNodes();
+    if ($this->skuManager->isListingModeNonAggregated()) {
+      $this->processSkuColorNodes();
+    }
   }
 
   /**

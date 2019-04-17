@@ -5,6 +5,10 @@
  * Module file.
  */
 
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -311,4 +315,232 @@ function alshaya_hm_acq_sku_presave(SKUInterface $sku) {
 function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
+}
+
+/**
+ * Implements hook_acq_sku_product_sku_alter().
+ */
+function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
+  if (isset($product['style_code'])) {
+    $sku->get('attr_style_code')->setValue($product['style_code']);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_hm_theme($existing, $type, $theme, $path) {
+  return [
+    'color_node_links' => [
+      'variables' => [
+        'color_nodes' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function alshaya_hm_form_sku_base_form_alter(&$form, FormStateInterface $form_state) {
+  $selected = $form_state->getValue('configurables');
+
+  if (!empty($selected['article_castor_id'])) {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+    $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+    // Load SKU entity.
+    $sku_entity = $sku_manager->loadSkuById((int) $form['sku_id']['#value']);
+
+    $product_tree = Configurable::deriveProductTree($sku_entity);
+    if (!empty($product_tree['combinations']['attribute_sku']['article_castor_id'][$selected['article_castor_id']])) {
+      $article_castor_id_child_sku_code = $product_tree['combinations']['attribute_sku']['article_castor_id'][$selected['article_castor_id']][0];
+
+      if (($article_castor_id_child_sku = SKU::loadFromSku($article_castor_id_child_sku_code)) &&
+        ($article_castor_id_child_sku instanceof SKU)) {
+        $parent_sku = $sku_manager->getParentSkuBySku($article_castor_id_child_sku);
+        // Set SKU tree to the parent based on color chosen. This is used while
+        // submitting the data back to MDC.
+        $form_state->set('tree_sku', $parent_sku->getSku());
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_alshaya_acm_product_add_to_cart_ajax_response_alter().
+ */
+function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStateInterface $form_state, AjaxResponse $response, SKUInterface $sku, SKUInterface $selected_sku = NULL) {
+  // List of attributes selected by end-users on the form.
+  $selected = $form_state->getValue('configurables');
+
+  /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
+  $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  // Update PDP Url when switching color if the SKU has style code attribute.
+  if (($sku_manager->fetchStyleCode($sku)) &&
+    !empty($selected['article_castor_id'])) {
+    $product_tree = Configurable::deriveProductTree($sku);
+
+    // If we have options for article castor id, compare it with the one
+    // selected, load the right child SKU, fetch the color node & update url in
+    // AJAX response.
+    if (!empty($product_tree['combinations']['attribute_sku']['article_castor_id'][$selected['article_castor_id']])) {
+      $article_castor_id_child_sku_code = $product_tree['combinations']['attribute_sku']['article_castor_id'][$selected['article_castor_id']][0];
+
+      if (($article_castor_id_child_sku = SKU::loadFromSku($article_castor_id_child_sku_code)) &&
+        ($article_castor_id_child_sku instanceof SKU)) {
+        $parent_sku = $sku_manager->getParentSkuBySku($article_castor_id_child_sku);
+
+        // Update Item code when switching the color.
+        $item_code['#markup'] = $parent_sku->getSku();
+        $item_code['#prefix'] = '<span class="field__value">';
+        $item_code['#suffix'] = '</span>';
+
+        $response->addCommand(new ReplaceCommand('article[data-sku="' . $sku->getSku() . '"] .content--item-code .field__value', $item_code));
+
+        // Fetch display node based on the castor Id selected.
+        $display_node = $sku_manager->getDisplayNode($article_castor_id_child_sku);
+        $data['display_node_url'] = $display_node->toUrl()->toString();
+        $data['display_node_title'] = $display_node->getTitle();
+        $data['parent_sku_id'] = $sku->id();
+
+        $response->addCommand(new InvokeCommand('', 'updatePdpUrl', [$data]));
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_configurable_cart_options_alter().
+ */
+function alshaya_hm_acq_sku_configurable_cart_options_alter(array &$options, SKU $sku) {
+  if ($sku->get('attr_style_code')->getString()) {
+    foreach ($options as $index => $option) {
+      if ($option['option_id'] == 999999) {
+        unset($options[$index]);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_configurable_product_configurations_alter().
+ */
+function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
+  $style_code = $sku->get('attr_style_code')->getString();
+
+  // If we do not have any value for style code or we have
+  // article_castor_id already set, we do no further processing.
+  if (empty($style_code) || isset($configurations['article_castor_id'])) {
+    return;
+  }
+
+  $variants = \Drupal::entityTypeManager()
+    ->getStorage('acq_sku')
+    ->loadByProperties([
+      'attr_style_code' => $style_code,
+      'type' => 'configurable',
+    ]);
+
+  if (empty($variants)) {
+    return;
+  }
+
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku->getPluginInstance();
+  foreach ($variants as $variant) {
+    if (!$plugin->isProductInStock($variant)) {
+      continue;
+    }
+
+    $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
+
+    foreach ($variant_configurations as $variant_configurable) {
+      if (empty($configurations[$variant_configurable['code']])) {
+        $configurations[$variant_configurable['code']] = $variant_configurable;
+        $configurations[$variant_configurable['code']]['values'] = [];
+      }
+
+      foreach ($variant_configurable['values'] as $value) {
+        $configurations[$variant_configurable['code']]['values'][$value['value_id']] = $value;
+      }
+    }
+  }
+
+  $colors = [];
+  $children = Configurable::getChildren($sku);
+  foreach ($children as $child) {
+    $attributes = $child->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+    $colors[$attributes['article_castor_id']] = [
+      'label' => $attributes['color_label'],
+      'value_id' => $attributes['article_castor_id'],
+    ];
+  }
+
+  if (empty($colors)) {
+    return;
+  }
+
+  $configurations = [
+    'article_castor_id' => [
+      'attribute_id' => 999999,
+      'code' => 'article_castor_id',
+      'label' => t('Article Castor Id'),
+      'position' => 0,
+      'values' => $colors,
+    ],
+  ] + $configurations;
+}
+
+/**
+ * Implements hook_acq_sku_configurable_variants_alter().
+ */
+function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
+  // If we do not have any value for style code we do no further processing.
+  $style_code = $sku->get('attr_style_code')->getString();
+  if (empty($style_code)) {
+    return;
+  }
+
+  // If we we have article_castor_id already set, we do no further processing.
+  $configurations = unserialize($sku->get('field_configurable_attributes')->getString());
+  $configurable_attribute_codes = array_column($configurations, 'code', 'code');
+  if (isset($configurable_attribute_codes['article_castor_id'])) {
+    return;
+  }
+
+  $variants = \Drupal::entityTypeManager()
+    ->getStorage('acq_sku')
+    ->loadByProperties([
+      'attr_style_code' => $style_code,
+      'type' => 'configurable',
+    ]);
+
+  if (empty($variants)) {
+    return;
+  }
+
+  $children = [];
+
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku->getPluginInstance();
+  foreach ($variants as $variant) {
+    if (!$plugin->isProductInStock($variant)) {
+      continue;
+    }
+
+    $variant_children = Configurable::getChildSkus($variant);
+
+    foreach ($variant_children as $child_sku_code) {
+      $child = SKU::loadFromSku($child_sku_code);
+      if (!($child instanceof SKU)) {
+        continue;
+      }
+
+      $children[$child->getSku()] = $child;
+    }
+  }
 }
