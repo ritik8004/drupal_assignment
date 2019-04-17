@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - language
+    - node
+id: product_pathauto
+label: 'Product Pathauto'
+type: 'canonical_entities:node'
+pattern: '[node:title]-[node:sku-color]'
+selection_criteria:
+  eff3f0fa-a9f5-4e0e-8e73-6e07761352e4:
+    id: node_type
+    bundles:
+      acq_product: acq_product
+    negate: false
+    context_mapping:
+      node: node
+    uuid: eff3f0fa-a9f5-4e0e-8e73-6e07761352e4
+  055c654f-e97a-4ff7-a44c-49db752c2fdf:
+    id: language
+    langcodes:
+      en: en
+      ar: ar
+    negate: false
+    context_mapping:
+      language: 'node:langcode:language'
+    uuid: 055c654f-e97a-4ff7-a44c-49db752c2fdf
+selection_logic: and
+weight: -10
+relationships:
+  'node:langcode:language':
+    label: Language
