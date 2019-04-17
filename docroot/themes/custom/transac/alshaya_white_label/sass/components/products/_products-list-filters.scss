@@ -76,6 +76,10 @@
         align-items: center;
         justify-content: center;
 
+        @include breakpoint($only-mobile) {
+          line-height: 2.9375rem;
+        }
+
         .selected-facets,
         .sort-for-label {
           display: none;

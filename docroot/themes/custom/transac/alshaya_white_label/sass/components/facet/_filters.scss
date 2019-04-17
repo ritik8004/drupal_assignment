@@ -497,6 +497,12 @@
           #{$left}: 1.5rem;
         }
       }
+
+      .c-accordion {
+        &:last-child {
+          border-bottom: none;
+        }
+      }
     }
 
     .block-page-title-block,
@@ -579,5 +585,11 @@ body.header-sticky-filter {
 
   @include breakpoint($only-tablet) {
     position: absolute;
+  }
+}
+
+.c-facet {
+  &.c-accordion:empty {
+    display: none;
   }
 }
