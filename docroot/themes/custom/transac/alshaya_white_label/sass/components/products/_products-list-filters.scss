@@ -144,7 +144,8 @@
               pointer-events: none;
               position: absolute;
               #{$right}: 0.625rem;
-              top: 0.625rem;
+              top: 50%;
+              transform: translateY(-50%);
             }
           }
 
