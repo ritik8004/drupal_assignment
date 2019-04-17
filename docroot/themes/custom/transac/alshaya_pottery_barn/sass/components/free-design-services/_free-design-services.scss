@@ -1,0 +1,100 @@
+.alias--free-design-services {
+  .page-standard {
+    @include container(65.625rem);
+  }
+
+  .c-content__region {
+    margin-top: 1px solid #ddd;
+  }
+
+  fieldset {
+    border: none;
+  }
+
+  .block-system-main-block {
+    margin-top: 2.6875rem;
+  }
+
+  .region__content {
+    form {
+      #edit-contact-information,
+      .address-book-address,
+      .form-item-preferred-store {
+        width: 49%;
+        float: left;
+        clear: left;
+        max-width: 514px;
+        margin: 0;
+        border-right: 1px solid #ddd;
+      }
+
+      .form-item-preferred-store {
+        clear: both;
+      }
+
+      .webform-composite-visible-title {
+        width: 49%;
+      }
+
+      .form-item-anything-else {
+        width: 49%;
+        overflow: auto;
+      }
+
+      > div {
+        &:last-child {
+          width: 49%;
+          overflow: auto;
+        }
+      }
+    }
+  }
+
+  #edit-contact-information {
+    .fieldset-legend {
+      font-size: 18px;
+      color: #4a4a4a;
+    }
+
+    .form-item {
+      margin-top: 1.5rem;
+      padding-bottom: 1.5rem;
+      position: relative;
+
+      label:last-of-type {
+        position: absolute;
+        left: 0;
+        top: -0.125rem;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #adadad;
+        transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+        pointer-events: none;
+      }
+
+      input:focus ~ label:last-of-type,
+      label.active-label:not(.error) {
+        top: -1.25em;
+        bottom: 0;
+        #{$left}: 0;
+        opacity: 1;
+        font-size: 0.75rem;
+      }
+
+      &.js-form-type-tel {
+        .flag-container {
+          display: none;
+        }
+
+        label:last-of-type {
+          top: -26px;
+        }
+      }
+    }
+
+    .fieldset-wrapper {
+      max-width: 395px;
+      width: 100%;
+    }
+  }
+}
