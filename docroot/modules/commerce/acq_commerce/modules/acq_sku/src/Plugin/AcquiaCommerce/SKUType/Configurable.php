@@ -650,14 +650,17 @@ class Configurable extends SKUPluginBase {
       return [];
     }
 
+    $static = &drupal_static(__METHOD__, []);
+    $langcode = $sku->language()->getId();
+    $sku_string = $sku->getSku();
+    if (isset($static[$langcode][$sku_string])) {
+      return $static[$langcode][$sku_string];
+    }
+
     $children = [];
 
-    foreach ($sku->get('field_configured_skus')->getValue() as $child) {
-      if (empty($child['value'])) {
-        continue;
-      }
-
-      $child_sku = SKU::loadFromSku($child['value']);
+    foreach (self::getChildSkus($sku) as $child) {
+      $child_sku = SKU::loadFromSku($child);
       if ($child_sku instanceof SKU) {
         $children[$child_sku->getSku()] = $child_sku;
       }
@@ -666,7 +669,21 @@ class Configurable extends SKUPluginBase {
     // Allow other modules to add/remove variants.
     \Drupal::moduleHandler()->alter('acq_sku_configurable_variants', $children, $sku);
 
+    $static[$langcode][$sku_string] = $children;
     return $children;
+  }
+
+  /**
+   * Wrapper function to get child skus as string array for configurable.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   Configurable SKU.
+   *
+   * @return array
+   *   Child skus as string array.
+   */
+  public static function getChildSkus(SKU $sku) {
+    return array_filter(array_map('trim', explode(',', $sku->get('field_configured_skus')->getString())));
   }
 
 }

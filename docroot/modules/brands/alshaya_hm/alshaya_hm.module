@@ -441,41 +441,43 @@ function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$co
     ->getStorage('acq_sku')
     ->loadByProperties([
       'attr_style_code' => $style_code,
+      'type' => 'configurable',
     ]);
 
   if (empty($variants)) {
     return;
   }
 
-  $langcode = $sku->language()->getId();
-
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku->getPluginInstance();
   foreach ($variants as $variant) {
-    if ($variant->language()->getId() != $langcode && $variant->hasTranslation($langcode)) {
-      $variant = $variant->getTranslation($langcode);
+    if (!$plugin->isProductInStock($variant)) {
+      continue;
     }
 
-    if ($variant->bundle() == 'configurable') {
-      $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
+    $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
 
-      foreach ($variant_configurations as $variant_configurable) {
-        if (empty($configurations[$variant_configurable['code']])) {
-          $configurations[$variant_configurable['code']] = $variant_configurable;
-          $configurations[$variant_configurable['code']]['values'] = [];
-        }
+    foreach ($variant_configurations as $variant_configurable) {
+      if (empty($configurations[$variant_configurable['code']])) {
+        $configurations[$variant_configurable['code']] = $variant_configurable;
+        $configurations[$variant_configurable['code']]['values'] = [];
+      }
 
-        foreach ($variant_configurable['values'] as $value) {
-          $configurations[$variant_configurable['code']]['values'][$value['value_id']] = $value;
-        }
+      foreach ($variant_configurable['values'] as $value) {
+        $configurations[$variant_configurable['code']]['values'][$value['value_id']] = $value;
       }
     }
-    elseif ($variant->bundle() == 'simple') {
-      $attributes = $variant->get('attributes')->getValue();
-      $attributes = array_column($attributes, 'value', 'key');
-      $colors[$attributes['article_castor_id']] = [
-        'label' => $attributes['color_label'],
-        'value_id' => $attributes['article_castor_id'],
-      ];
-    }
+  }
+
+  $colors = [];
+  $children = Configurable::getChildren($sku);
+  foreach ($children as $child) {
+    $attributes = $child->get('attributes')->getValue();
+    $attributes = array_column($attributes, 'value', 'key');
+    $colors[$attributes['article_castor_id']] = [
+      'label' => $attributes['color_label'],
+      'value_id' => $attributes['article_castor_id'],
+    ];
   }
 
   if (empty($colors)) {
@@ -510,24 +512,35 @@ function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $s
     return;
   }
 
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-
-  // For new catalog structure, we want all the variants for particular style
-  // code shown in all the product pages.
   $variants = \Drupal::entityTypeManager()
     ->getStorage('acq_sku')
     ->loadByProperties([
       'attr_style_code' => $style_code,
-      'type' => 'simple',
+      'type' => 'configurable',
     ]);
 
-  /** @var \Drupal\acq_sku\Entity\SKU $variant */
+  if (empty($variants)) {
+    return;
+  }
+
+  $children = [];
+
+  /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
+  $plugin = $sku->getPluginInstance();
   foreach ($variants as $variant) {
-    // Get current interface language translation.
-    if ($variant->language()->getId() != $langcode && $variant->hasTranslation($langcode)) {
-      $variant = $variant->getTranslation($langcode);
+    if (!$plugin->isProductInStock($variant)) {
+      continue;
     }
 
-    $children[$variant->getSku()] = $variant;
+    $variant_children = Configurable::getChildSkus($variant);
+
+    foreach ($variant_children as $child_sku_code) {
+      $child = SKU::loadFromSku($child_sku_code);
+      if (!($child instanceof SKU)) {
+        continue;
+      }
+
+      $children[$child->getSku()] = $child;
+    }
   }
 }
