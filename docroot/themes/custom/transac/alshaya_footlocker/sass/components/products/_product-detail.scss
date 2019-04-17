@@ -263,3 +263,23 @@
     }
   }
 }
+
+.material-wrapper {
+  .material-label {
+    font-size: 1rem;
+    padding: 0.625rem 0;
+    text-transform: capitalize;
+    border-top: 1px solid $secondary_border;
+
+    @include breakpoint($only-mobile) {
+      margin-top: 0.625rem;
+    }
+  }
+
+  .material-value {
+    p {
+      font-size: 0.75rem;
+      margin-top: 0;
+    }
+  }
+}

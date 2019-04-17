@@ -252,6 +252,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_material_markup'] = [
+    'variables' => [
+      'material' => NULL,
+    ],
+  ];
+
   $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
