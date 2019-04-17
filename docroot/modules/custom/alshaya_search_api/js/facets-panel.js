@@ -8,56 +8,7 @@
 
   Drupal.behaviors.facetPanel = {
     attach: function (context, settings) {
-
-      // Add active classes on facet dropdown content.
-      $('.c-facet__title.c-accordion__title').once().on('click', function () {
-        if ($(this).hasClass('active')) {
-          $(this).removeClass('active');
-          // We want to run this only on main page facets.
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).siblings('ul').slideUp();
-          }
-        }
-        else {
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
-          }
-          $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
-          // Check if sort by is open, else close it.
-          if ($('.c-content .region__content .container-without-product > .views-exposed-form.bef-exposed-form').find('legend').hasClass('active')) {
-            $(this).removeClass('active');
-            $(this).siblings('.fieldset-wrapper').slideUp();
-          }
-          $(this).addClass('active');
-          if (!$(this).parent().parent().hasClass('filter__inner')) {
-            $(this).siblings('ul').slideDown();
-          }
-        }
-      });
-
-      var sortSelector = '.c-content__region .region__content .bef-exposed-form legend';
-      $(sortSelector).once().on('click', function () {
-        $(this).toggleClass('active');
-        if ($(this).parents('.filter__inner').length === 0) {
-          $(this).siblings('.fieldset-wrapper').slideToggle();
-        }
-      });
-
-      // Close the sort and facets on click outside of them.
-      document.addEventListener('click', function(event) {
-        var sortBy = $('.c-content .region__content > .views-exposed-form.bef-exposed-form').first();
-        if ($(sortBy).find(event.target).length == 0) {
-          $(sortBy).find('legend').removeClass('active');
-          $(sortBy).find('.fieldset-wrapper').slideUp();
-        }
-
-        var facet_block = $('.c-content .region__content > div.block-facets-ajax');
-        if ($(facet_block).find(event.target).length == 0) {
-          $(facet_block).find('.c-facet__title').removeClass('active');
-          $(facet_block).find('ul').slideUp();
-        }
-      });
-
+      
       // Grid switch for PLP and Search pages.
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
@@ -262,6 +213,60 @@
         }
       }
 
+      /**
+       * Add sliding event handlers and active class for facets.
+       */
+      function addSlideEventhandlers() {
+        // Add active classes on facet dropdown content.
+        $('.c-facet__title.c-accordion__title').once().on('click', function () {
+          if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            // We want to run this only on main page facets.
+            if (!$(this).parent().parent().hasClass('filter__inner')) {
+              $(this).siblings('ul').slideUp();
+            }
+          }
+          else {
+            if (!$(this).parent().parent().hasClass('filter__inner')) {
+              $(this).parent().siblings('.c-facet').find('.c-facet__title.active').siblings('ul').slideUp();
+            }
+            $(this).parent().siblings('.c-facet').find('.c-facet__title.active').removeClass('active');
+            // Check if sort by is open, else close it.
+            if ($('.c-content .region__content .container-without-product .views-exposed-form.bef-exposed-form').find('legend').hasClass('active')) {
+              $(this).removeClass('active');
+              $(this).siblings('.fieldset-wrapper').slideUp();
+            }
+            $(this).addClass('active');
+            if (!$(this).parent().parent().hasClass('filter__inner')) {
+              $(this).siblings('ul').slideDown();
+            }
+          }
+        });
+
+        var sortSelector = '.c-content__region .region__content .container-without-product .bef-exposed-form legend';
+        $(sortSelector).once().on('click', function () {
+          $(this).toggleClass('active');
+          if ($(this).parents('.filter__inner').length === 0) {
+            $(this).siblings('.fieldset-wrapper').slideToggle();
+          }
+        });
+
+        // Close the sort and facets on click outside of them.
+        document.addEventListener('click', function(event) {
+          var sortBy = $('.c-content .region__content .container-without-product .views-exposed-form.bef-exposed-form').first();
+          if ($(sortBy).find(event.target).length == 0) {
+            $(sortBy).find('legend').removeClass('active');
+            $(sortBy).find('.fieldset-wrapper').slideUp();
+          }
+
+          var facet_block = $('.c-content .region__content .container-without-product div.block-facets-ajax');
+          if ($(facet_block).find(event.target).length == 0) {
+            $(facet_block).find('.c-facet__title').removeClass('active');
+            $(facet_block).find('ul').slideUp();
+          }
+        });
+      }
+
       // Function to call in ajax command on facet refresh.
       // @see AlshayaSearchAjaxController::ajaxFacetBlockView()
       $.fn.refreshListGridClass = function () {
@@ -373,6 +378,7 @@
         });
       }
 
+      addSlideEventhandlers();
     }
   };
 
