@@ -1959,6 +1959,37 @@ class SkuManager {
   }
 
   /**
+   * Get Valid child skus as string for particular configurable product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Child skus as string.
+   */
+  public function getValidChildSkusAsString(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
+    $static = &drupal_static(__METHOD__, []);
+
+    if (!isset($static[$sku->getSku()])) {
+      $sku_variants = Configurable::getChildSkus($sku);
+      $combinations = $this->getConfigurableCombinations($sku);
+
+      // In some cases we modify combinations and add more children.
+      // Here to get first valid we want only available ones from current
+      // configurable sku.
+      $static[$sku->getSku()] = empty($combinations)
+        ? []
+        : array_intersect($sku_variants, array_keys($combinations['by_sku']));
+    }
+
+    return $static[$sku->getSku()];
+  }
+
+  /**
    * Get first valid configurable child.
    *
    * For a configurable product, we may have many children as disabled or OOS.
@@ -1972,32 +2003,27 @@ class SkuManager {
    *   Valid child SKU or parent itself.
    */
   public function getFirstValidConfigurableChild(SKU $sku) {
-    $cache_key = 'first_valid_child';
-
-    $child_sku = $this->getProductCachedData($sku, $cache_key);
-    if ($child_sku) {
-      return SKU::loadFromSku($child_sku, $sku->language()->getId());
+    if ($sku->bundle() != 'configurable') {
+      return [];
     }
 
-    $sku_variants = Configurable::getChildSkus($sku);
-    $combinations = $this->getConfigurableCombinations($sku);
+    $static = &drupal_static(__METHOD__, []);
 
-    // In some cases we modify combinations and add more children.
-    // Here to get first valid we want only available ones from current
-    // configurable sku.
-    $sku_variants = array_intersect($sku_variants, array_keys($combinations['by_sku']));
+    $langcode = $sku->language()->getId();
+    $id = $sku->id();
 
-    $variant_sku_code = NULL;
-    $variant = NULL;
+    if (!isset($static[$langcode][$id])) {
+      $static[$langcode][$id] = NULL;
 
-    if (!empty($sku_variants)) {
-      $variant_sku_code = reset($sku_variants);
-      $variant = SKU::loadFromSku($variant_sku_code);
+      $sku_variants = $this->getValidChildSkusAsString($sku);
+
+      if (!empty($sku_variants)) {
+        $variant_sku_code = reset($sku_variants);
+        $static[$langcode][$id] = SKU::loadFromSku($variant_sku_code);
+      }
     }
 
-    // Store the value in cache.
-    $this->setProductCachedData($sku, $cache_key, $variant_sku_code);
-    return $variant;
+    return $static[$langcode][$id];
   }
 
   /**
@@ -2268,15 +2294,18 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
-    // For configurable we check combinations are valid to keep
-    // it consistent between detail and listing.
-    if ($sku->bundle() == 'configurable') {
-      return $this->skuAttributeCombinationsValid($sku);
-    }
-
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
-    return $plugin->isProductInStock($sku);
+
+    $in_stock = $plugin->isProductInStock($sku);
+
+    // For configurable we check combinations too as we remove
+    // some skus like free gift and ones with improper data.
+    if ($in_stock && $sku->bundle() == 'configurable') {
+      $in_stock = $this->skuAttributeCombinationsValid($sku);
+    }
+
+    return $in_stock;
   }
 
   /**

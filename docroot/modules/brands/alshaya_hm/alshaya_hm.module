@@ -321,7 +321,7 @@ function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
-  if ($product['style_code']) {
+  if (isset($product['style_code'])) {
     $sku->get('attr_style_code')->setValue($product['style_code']);
   }
 }
