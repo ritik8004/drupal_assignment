@@ -1979,7 +1979,7 @@ class SkuManager {
       return SKU::loadFromSku($child_sku, $sku->language()->getId());
     }
 
-    $sku_variants = explode(',', $sku->get('field_configured_skus')->getString());
+    $sku_variants = Configurable::getChildSkus($sku);
     $combinations = $this->getConfigurableCombinations($sku);
 
     // In some cases we modify combinations and add more children.

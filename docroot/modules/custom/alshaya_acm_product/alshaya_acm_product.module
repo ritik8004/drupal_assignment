@@ -44,14 +44,16 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
   // To call the hooks at the end for final changes.
   $hooks_to_invoke_last = [
     'alshaya_acm_product_build',
+    'alshaya_acm_product_build_alter',
     'acq_sku_configurable_variants',
+    'acq_sku_configurable_variants_alter',
   ];
 
   foreach ($hooks_to_invoke_last as $hook_to_invoke_last) {
     if ($hook == $hook_to_invoke_last) {
-      $group = $implementations[$hook];
-      unset($implementations[$hook]);
-      $implementations[$hook] = $group;
+      $group = $implementations['alshaya_acm_product'];
+      unset($implementations['alshaya_acm_product']);
+      $implementations['alshaya_acm_product'] = $group;
     }
   }
 }
