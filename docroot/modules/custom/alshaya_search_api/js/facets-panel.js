@@ -151,6 +151,7 @@
       showOnlyFewFacets();
       updateSortTitle();
       updateFacetTitlesWithSelected();
+      updateCategoryTitle();
       // Adjust height of PLP tiles.
       Drupal.plpListingProductTileHeight();
 
@@ -303,6 +304,7 @@
 
         // If there any active facet filter.
         updateFacetTitlesWithSelected();
+        updateCategoryTitle();
         showFilterCount();
       };
 
@@ -402,7 +404,7 @@
       var total_selected = 0;
       var facets_to_show_in_label = 2;
       // If any facet item active.
-      var active_facets = $(facet_block).find('ul li.is-active label span.facet-item__value');
+      var active_facets = $(facet_block).find('ul li.is-active a span.facet-item__value');
       $.each(active_facets, function(index, element) {
         total_selected = total_selected + 1;
         // Show only two facets in title.
@@ -431,6 +433,23 @@
       $(facet_block).find('h3').find('.selected-facets').remove();
       $(facet_block).find('h3').find('.total-count').remove();
       $(facet_block).find('h3').append(element_append);
+    });
+  }
+
+  /**
+   * Update the category facet title on selection.
+   */
+  function updateCategoryTitle() {
+    $('.category-facet').each(function() {
+      var active_cat_facet = $(this).find('ul li.is-active');
+      if ($(active_cat_facet).length > 0) {
+        var facet = $(active_cat_facet).find('label span.facet-item__value');
+        if (!$(active_cat_facet).hasClass('category-all')) {
+          var active_cat_label = $(facet).contents().not($('.facet-item__count')).text().trim();
+          $(this).find('h3').html('');
+          $(this).find('h3').append(active_cat_label);
+        }
+      }
     });
   }
 

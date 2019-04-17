@@ -334,6 +334,16 @@ function alshaya_white_label_preprocess_block(&$variables) {
       $variables['attributes']['class'][] = 'empty-category';
     }
   }
+
+  // Add class for category facet.
+  $category_facets = [
+    'facet_block:category_facet_plp',
+    'facet_block:category_facet_promo',
+    'facet_block:category_facet_search',
+  ];
+  if (in_array($variables['plugin_id'], $category_facets)) {
+    $variables['attributes']['class'][] = 'category-facet';
+  }
 }
 
 /**

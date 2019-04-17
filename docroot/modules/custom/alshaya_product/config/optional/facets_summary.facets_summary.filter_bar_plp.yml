@@ -27,9 +27,9 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
-  category_facet_plp:
+  plp_product_collection:
     checked: true
-    label: 'PLP Category'
+    label: Collection
     separator: ', '
     show_count: true
     weight: 0
