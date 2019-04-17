@@ -294,20 +294,8 @@
       if ($('.show-all-filters').length > 0) {
         if ($(window).width() > 767) {
           if ($('.container-without-product').length < 1) {
-            // Wrapping region content inside a div.
-            $('.region__content').children().once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
-          }
-
-          if ($('.region__content > .c-products-list').length < 1) {
-            // Moving filter bar and product content outside the sticky filter wrapper.
-            $('.block-facets-summary-blockfilter-bar-plp, .block-facets-summary-blockfilter-bar-promotions, .block-facets-summary-blockfilter-bar, .block-alshaya-plp-facets-block-all, .block-alshaya-promo-facets-block-all, .block-alshaya-search-facets-block-all, .c-products-list').appendTo('.region__content');
-          }
-
-          if ($('.container-without-product .show-all-filters').length < 1) {
-            // Manipulating the dom for alignment.
-            $('.show-all-filters').insertBefore('.block-alshaya-grid-count-block');
-            $('#block-page-title, .block-views-blockalshaya-promotion-description-block-1').insertBefore('.sticky-filter-wrapper');
-            $('.block-views-blockalshaya-term-description-block-1').insertAfter('.c-products-list');
+            // Wrapping all the filters inside a div to make it sticky.
+            $('.region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
           }
         }
         else {

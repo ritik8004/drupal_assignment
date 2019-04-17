@@ -497,6 +497,12 @@
           #{$left}: 1.5rem;
         }
       }
+
+      .c-accordion {
+        &:last-child {
+          border-bottom: none;
+        }
+      }
     }
 
     .block-page-title-block,
