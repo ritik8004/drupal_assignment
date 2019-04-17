@@ -1,6 +1,6 @@
 .c-facet.c-accordion {
   float: $left;
-  margin-#{$right}: 2.25rem;
+  margin-#{$right}: 2.6875rem;
   position: relative;
 
   @include breakpoint($only-tablet) {
@@ -196,7 +196,7 @@
       font-size: 0.75rem;
       line-height: 2.9375rem;
       position: relative;
-      margin-#{$right}: 2.25rem;
+      margin-#{$right}: 2.6875rem;
       cursor: pointer;
 
       @include icon(chevrondown, after) {
