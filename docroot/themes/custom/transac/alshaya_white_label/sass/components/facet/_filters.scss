@@ -344,13 +344,35 @@
         position: relative;
 
         .applied-filter {
-          width: 71%;
+          width: 67%;
           float: $left;
           position: relative;
 
+          > li > a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: row-reverse;
+
+            .facet-item__value {
+              max-width: 9rem;
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
+              line-height: 2rem !important;
+              display: inline-block !important;
+            }
+          }
+
           + .clear-all {
-            width: 29%;
+            width: 33%;
             float: $right;
+
+            a {
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
           }
 
           &.max-height {
