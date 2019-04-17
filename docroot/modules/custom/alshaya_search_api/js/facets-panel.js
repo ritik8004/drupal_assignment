@@ -8,7 +8,7 @@
 
   Drupal.behaviors.facetPanel = {
     attach: function (context, settings) {
-      
+
       // Grid switch for PLP and Search pages.
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
@@ -56,6 +56,7 @@
         $(this).removeClass('show-facet');
         $('.all-filters .block-facets-ajax').hide();
         $(this).addClass('show-facet');
+        $(this).find('legend').addClass('active');
 
         // Show the back button.
         $('.facet-all-back').show();
