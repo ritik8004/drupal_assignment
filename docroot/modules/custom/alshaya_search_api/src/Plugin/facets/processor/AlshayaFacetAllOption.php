@@ -41,7 +41,7 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
       if ($active_item) {
         // Get any one result item from current facet, get its url and then use
         // this url for `all` result with some changes.
-        $one_result = array_pop($results);
+        $one_result = end($results);
         if ($one_result instanceof Result) {
           // Get the query parameters from url.
           $url = $one_result->getUrl();
@@ -51,9 +51,7 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
             foreach ($options as $key => $option) {
               // Unset all active items of this facet to prepare url for the
               // `All` facet item.
-              if (strpos($option, $facet->getUrlAlias()) !== FALSE) {
-                unset($options[$key]);
-              }
+              unset($options[$key]);
             }
 
             $query['f'] = $options;
