@@ -9,9 +9,10 @@ dependencies:
     - search_api.server.acquia_search_server
   module:
     - acq_sku
+    - node
     - taxonomy
     - search_api
-    - node
+    - alshaya_product
 id: acquia_search_index
 name: 'Acquia Search Solr Index'
 description: ''
@@ -51,6 +52,11 @@ field_settings:
     label: Stock
     datasource_id: 'entity:node'
     property_path: sticky
+    type: integer
+  stock_quantity:
+    label: 'Stock quantity'
+    datasource_id: 'entity:node'
+    property_path: stock_quantity
     type: integer
   field_category:
     label: Category
@@ -188,7 +194,6 @@ datasource_settings:
       default: true
       selected: {  }
 processor_settings:
-  rendered_item: {  }
   add_url: {  }
   aggregated_field: {  }
   entity_status: {  }
@@ -197,7 +202,8 @@ processor_settings:
       field_category: taxonomy_term-parent
     weights:
       preprocess_index: -45
-  entity_status: {  }
+  rendered_item: {  }
+  stock_quantity: {  }
 tracker_settings:
   default:
     indexing_order: fifo
