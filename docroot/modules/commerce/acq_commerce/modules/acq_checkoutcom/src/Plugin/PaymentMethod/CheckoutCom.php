@@ -133,74 +133,47 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
 
   protected function chargesToken($inputs) {
     $totals = $this->getCart()->totals();
-    $url = "https://sandbox.checkout.com/api2/v2/charges/token";
-    $header = [
-      'Content-Type: application/json;charset=UTF-8',
-      'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
-    ];
 
-    $request_data = [
-      'value' => $totals['grand'] * 100,
-      'currency' => 'KWD',
-      'cardToken' => $inputs['cko-card-token'],
-      'chargeMode' => 2,
-      'email' => 'testing@test.com',
-      'autoCapture' => 'Y',
-      'successUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-      'failUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-    ];
+    $output = acq_checkoutcom_custom_curl_request(
+      "https://sandbox.checkout.com/api2/v2/charges/token",
+      [
+        'value' => $totals['grand'] * 100,
+        'currency' => 'KWD',
+        'cardToken' => $inputs['cko-card-token'],
+        'chargeMode' => 2,
+        'email' => 'testing@test.com',
+        'autoCapture' => 'Y',
+        'successUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
+        'failUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
+      ]
+    );
 
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request_data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    $output = curl_exec($ch);
-    curl_close($ch);
-
-    $decoded = json_decode($output, TRUE);
     echo '<pre>';
-    print_r($decoded);
+    print_r($output);
     echo '</pre>';
     die();
   }
 
   protected function requestPayment($inputs) {
     $totals = $this->getCart()->totals();
-    $url = "https://api.sandbox.checkout.com/payments";
-    $header = [
-      'Content-Type: application/json;charset=UTF-8',
-      'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
-    ];
 
-    $request_data = [
-      'source' => [
-        'type' => 'token',
-        'token' => $inputs['cko-card-token'],
-      ],
-      'amount' => $totals['grand'] * 100,
-      'currency' => 'USD',
-      '3ds' => [
-        'enabled' => TRUE,
+    $output = acq_checkoutcom_custom_curl_request(
+      "https://api.sandbox.checkout.com/payments",
+      [
+        'source' => [
+          'type' => 'token',
+          'token' => $inputs['cko-card-token'],
+        ],
+        'amount' => $totals['grand'] * 100,
+        'currency' => 'USD',
+        '3ds' => [
+          'enabled' => TRUE,
+        ]
       ]
-    ];
+    );
 
     echo '<pre>';
-    print_r(json_encode($request_data));
-    echo '</pre>';
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request_data));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-    $output = curl_exec($ch);
-
-    curl_close($ch);
-    $decoded = json_decode($output, TRUE);
-    echo '<pre>';
-    print_r($decoded);
+    print_r($output);
     echo '</pre>';
     die();
   }

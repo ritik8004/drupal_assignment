@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Module file for acq_checkoutcom.
+ */
+
+function acq_checkoutcom_custom_curl_request($url, $post_data = []) {
+  $header = [
+    'Content-Type: application/json;charset=UTF-8',
+    'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
+  ];
+
+  $ch = curl_init($url);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+  if (!empty($post_data)) {
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+  }
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+  $output = curl_exec($ch);
+  curl_close($ch);
+
+  return json_decode($output, TRUE);
+}
+

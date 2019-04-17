@@ -115,6 +115,23 @@ class CustomerCardForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $url = "https://sandbox.checkout.com/api2/v2/customers/?email=" . urlencode(\Drupal::currentUser()->getEmail());
+    $output = acq_checkoutcom_custom_curl_request($url);
+    print_r($output);
+    die();
+
+    $output = acq_checkoutcom_custom_curl_request(
+      "https://sandbox.checkout.com/api2/v2/customers",
+      [
+        'name' => 'Sarah Mitchell',
+        'email' => \Drupal::currentUser()->getEmail(),
+        'description' => 'checkout.com tokenisation poc from drupal',
+        'cardToken' => $card_token,
+      ]
+    );
+
+    print_r($output);
+    die();
   }
 
 }
