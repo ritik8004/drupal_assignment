@@ -303,17 +303,14 @@
   }
 
   @include breakpoint($upto-desktop) {
-    position: fixed;
     top: 0;
     width: 100%;
+    transition: border-bottom-color 0.5s ease, box-shadow 0.5s ease;
   }
 
   @include breakpoint($only-mobile) {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
-  }
-
-  @include breakpoint($upto-desktop) {
-    transition: border-bottom-color 0.5s ease, box-shadow 0.5s ease;
+    position: fixed;
   }
 }
 

@@ -335,7 +335,7 @@
             filterposition = $('.container-without-product').offset().top;
           }
           else if ($(window).width() > 767 && $(window).width() < 1024) {
-            filterposition = $('.show-all-filters').offset().top + 20;
+            filterposition = $('.show-all-filters').offset().top;
           }
           else {
             if ($('.block-alshaya-super-category').length > 0) {
