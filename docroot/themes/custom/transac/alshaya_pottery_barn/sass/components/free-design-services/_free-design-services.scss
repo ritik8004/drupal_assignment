@@ -3,10 +3,6 @@
     @include container(65.625rem);
   }
 
-  .c-content__region {
-    margin-top: 1px solid #ddd;
-  }
-
   fieldset {
     border: none;
   }
@@ -17,15 +13,24 @@
 
   .region__content {
     form {
+      overflow: hidden;
+      display: table;
+      width: 100%;
+
       #edit-contact-information,
       .address-book-address,
       .form-item-preferred-store {
-        width: 49%;
-        float: left;
-        clear: left;
-        max-width: 514px;
+        width: 100%;
+        max-width: 32.125rem;
         margin: 0;
-        border-right: 1px solid #ddd;
+        padding: 0;
+
+        @include breakpoint($desktop) {
+          width: 49%;
+          float: $left;
+          clear: $left;
+          border-#{$right}: 1px solid $form-middle-seperator;
+        }
       }
 
       .form-item-preferred-store {
@@ -33,68 +38,284 @@
       }
 
       .webform-composite-visible-title {
-        width: 49%;
+        width: 100%;
+
+        @include breakpoint($desktop) {
+          width: 49%;
+        }
       }
 
       .form-item-anything-else {
-        width: 49%;
+        width: 100%;
         overflow: auto;
+
+        @include breakpoint($desktop) {
+          width: 49%;
+        }
       }
 
-      > div {
-        &:last-child {
-          width: 49%;
-          overflow: auto;
-        }
+      #edit-actions {
+        width: 49%;
+        overflow: auto;
       }
     }
   }
 
-  #edit-contact-information {
-    .fieldset-legend {
-      font-size: 18px;
-      color: #4a4a4a;
-    }
+  #webform-submission-free-design-services-add-form {
+    #edit-contact-information,
+    .address-book-address,
+    .form-item-preferred-store,
+    .form-item-anything-else {
+      padding: 0.5rem;
 
-    .form-item {
-      margin-top: 1.5rem;
-      padding-bottom: 1.5rem;
-      position: relative;
-
-      label:last-of-type {
-        position: absolute;
-        left: 0;
-        top: -0.125rem;
-        font-size: 16px;
-        line-height: 1.5;
-        color: #adadad;
-        transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
-        pointer-events: none;
+      @include breakpoint($desktop) {
+        padding: 0;
       }
 
-      input:focus ~ label:last-of-type,
-      label.active-label:not(.error) {
-        top: -1.25em;
-        bottom: 0;
-        #{$left}: 0;
-        opacity: 1;
+      .fieldset-legend {
+        font-size: 1.125rem;
+        color: $form-field-legend;
+        text-transform: uppercase;
+      }
+
+      .form-item {
+        margin-top: 1.5rem;
+        padding-bottom: 1.5rem;
+        position: relative;
+
+        label:last-of-type {
+          position: absolute;
+          #{$left}: 0;
+          top: -0.125rem;
+          font-size: 1rem;
+          line-height: 1.5;
+          color: $form-field-label;
+          transition: font-size 0.2s ease-in-out, top 0.2s ease-in-out;
+          pointer-events: none;
+        }
+
+        input:focus ~ label:last-of-type,
+        label.active-label:not(.error) {
+          top: -1.25em;
+          bottom: 0;
+          #{$left}: 0;
+          opacity: 1;
+          font-size: 0.75rem;
+        }
+
+        &.js-form-type-tel {
+          margin-top: 3rem;
+
+          .flag-container {
+            display: none;
+          }
+
+          .intl-tel-input {
+            display: block;
+          }
+
+          label {
+            top: -1.5rem;
+            font-size: 0.75rem;
+          }
+        }
+      }
+
+      .fieldset-wrapper {
+        max-width: 24.6875rem;
+        width: 100%;
+      }
+    }
+
+    .address-book-address {
+      .form-item-address-dependent-locality {
+        width: 47%;
+        display: inline-block;
+        margin-#{$right}: 4.5%;
+      }
+
+      .form-item-address-address-line2 {
+        width: 47%;
+        display: inline-block;
+      }
+    }
+
+    .form-item-address-area-parent,
+    .form-item-address-administrative-area,
+    .form-item-preferred-store.form-type-select {
+      &::after {
+        display: none;
+      }
+
+      @include select-wrapper(100%);
+
+      label {
+        top: -3rem;
+        font-size: 1.125rem;
+        position: absolute;
+        text-transform: uppercase;
+        color: $form-field-title;
+      }
+
+      #edit-preferred-store,
+      select.select2-select.form-select {
+        font-size: 1rem;
+        box-sizing: border-box;
+
+        @include select-style(100%);
+      }
+
+      .select2-selection {
+        font-family: $alshaya-thin;
+        font-size: 1rem;
+        padding: 0.25rem 0.5rem;
+        width: 90.75%;
+        border-radius: 0;
+        height: 2.188rem !important;
+        border-color: $form-select-border;
+      }
+
+      .select2-selection__arrow {
+        top: 0;
+        #{$right}: 0;
+        width: 2.1875rem;
+        height: 2.1875rem;
+        background: $form-select-border;
+
+        &::after {
+          font-size: 1.7rem;
+          top: 12%;
+          #{$left}: 11%;
+        }
+      }
+
+      .select2-container {
+        width: 100% !important;
+        max-width: 24.6875rem;
+        border: none;
+      }
+
+      .select2-selection__rendered {
+        font-family: $arial;
+        line-height: 1.188rem !important;
+        color: $form-select-text;
+        font-size: 0.75rem;
+        padding: 0.25rem !important;
+      }
+    }
+
+    .form-item-address-area-parent,
+    .form-item-address-administrative-area {
+      label {
+        top: -1.25rem !important;
+        font-size: 0.75rem !important;
+        position: absolute;
+        text-transform: capitalize;
+        color: #adadad;
+      }
+    }
+
+    .form-type-select {
+      .select2-selection__arrow {
+        @include icon(chevrondown, after) {
+          font-size: 1.5rem;
+          position: absolute;
+          top: 15%;
+          #{$left}: 15%;
+        }
+
+        b {
+          display: none;
+        }
+      }
+    }
+
+    #edit-room--wrapper {
+      padding: 1.5rem 0.5rem;
+
+      @include breakpoint($desktop) {
+        padding: 2.375rem;
+      }
+
+      .fieldset-legend {
+        font-size: 1.125rem;
+        color: $form-edit-room-legend;
+        text-transform: uppercase;
+      }
+
+      .fieldset-wrapper {
+        position: relative;
+
+        .description {
+          position: absolute;
+          top: -1.5rem;
+          font-size: 0.75rem;
+
+          @include breakpoint($desktop) {
+            top: -2rem;
+          }
+        }
+      }
+
+      .form-item {
+        padding: 0 0 1.25rem;
+        position: relative;
+
+        label {
+          font-size: 0.75rem;
+          vertical-align: top;
+        }
+
+        input[type=checkbox] ~ label::before {
+          margin-#{$right}: 1rem;
+          float: $left;
+        }
+      }
+    }
+
+    .form-item-anything-else {
+      padding: 1.5rem 0.5rem;
+      position: relative;
+
+      @include breakpoint($desktop) {
+        padding: 1.375rem 2.375rem;
+      }
+
+      label {
+        position: absolute;
+        top: 2rem;
+        #{$left}: 3rem;
         font-size: 0.75rem;
       }
 
-      &.js-form-type-tel {
-        .flag-container {
-          display: none;
-        }
-
-        label:last-of-type {
-          top: -26px;
-        }
+      #edit-anything-else {
+        border: 1px solid $form-field-textarea-border;
       }
     }
 
-    .fieldset-wrapper {
-      max-width: 395px;
+    #edit-actions {
+      padding: 1.5rem 0.75rem;
+
+      @include breakpoint($desktop) {
+        padding: 2.375rem;
+      }
+    }
+
+    #edit-submit {
+      @extend %btn;
+
+      background: $primary_btn_bg;
+      margin-top: 1rem;
       width: 100%;
+      text-transform: uppercase;
+
+      @include breakpoint($tablet) {
+        width: auto;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 1.563rem;
+      }
     }
   }
 }
