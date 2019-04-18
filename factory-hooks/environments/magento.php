@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
