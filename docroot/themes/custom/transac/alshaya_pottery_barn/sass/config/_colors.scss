@@ -44,6 +44,7 @@ $_gray_fourteen: #f3f3f3;
 $_gray_fifteen: #acacac;
 $_grey_sixteen: #696969;
 $_grey_seventeen: #b4b3b3;
+$_grey_eighteen: #4a4a4a;
 
 // Overrides for variables.
 // Global elements.
@@ -543,3 +544,13 @@ $department_category_accordion_title_arrow: $_black_two;
 
 // gradient holder
 $gradient-holder: $PB_grey_five;
+
+// free design service form
+$form-middle-seperator: $white;
+$form-field-legend: $_grey_eighteen;
+$form-field-label: $PB_grey_two;
+$form-field-title: $PB_grey_one;
+$form-select-border: $PB_grey_four;
+$form-select-text: $PB_grey_two;
+$form-edit-room-legend: $_grey_eighteen;
+$form-field-textarea-border: $PB_grey_one;
