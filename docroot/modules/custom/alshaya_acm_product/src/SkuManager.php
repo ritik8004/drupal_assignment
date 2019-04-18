@@ -1975,15 +1975,19 @@ class SkuManager {
     $static = &drupal_static(__METHOD__, []);
 
     if (!isset($static[$sku->getSku()])) {
+      $static[$sku->getSku()] = [];
+
       $sku_variants = Configurable::getChildSkus($sku);
       $combinations = $this->getConfigurableCombinations($sku);
 
       // In some cases we modify combinations and add more children.
       // Here to get first valid we want only available ones from current
       // configurable sku.
-      $static[$sku->getSku()] = empty($combinations)
-        ? []
-        : array_intersect($sku_variants, array_keys($combinations['by_sku']));
+      if (!empty($combinations)) {
+        // Get the skus sorted by first attribute value.
+        $combination_skus = array_reduce(reset($combinations['attribute_sku']), 'array_merge', []);
+        $static[$sku->getSku()] = array_intersect($combination_skus, $sku_variants);
+      }
     }
 
     return $static[$sku->getSku()];
