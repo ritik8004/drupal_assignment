@@ -599,14 +599,16 @@ body.header-sticky-filter {
   }
 }
 
-.branding__menu {
-  @include breakpoint($only-mobile) {
-    box-shadow: 0 0.8px 0 0 $lhn_sticky-header-shadow;
-    border-bottom: none;
-  }
+body {
+  .branding__menu {
+    @include breakpoint($only-mobile) {
+      box-shadow: 0 0.8px 0 0 $lhn_sticky-header-shadow;
+      border-bottom: none;
+    }
 
-  @include breakpoint($only-tablet) {
-    position: absolute;
+    @include breakpoint($only-tablet) {
+      position: absolute;
+    }
   }
 }
 
