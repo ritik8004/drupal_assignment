@@ -147,7 +147,6 @@
       showOnlyFewFacets();
       updateSortTitle();
       updateFacetTitlesWithSelected();
-      stickyfacetfilter();
 
       /**
        * Show filtercount on mobile on toggle buttons.
@@ -319,8 +318,6 @@
         }
       }
 
-
-
       /**
        * Make Header sticky on scroll.
        */
@@ -380,6 +377,11 @@
       }
 
       addSlideEventhandlers();
+
+      $(window, context).on('load', function () {
+        // Calculate the filters top position now.
+        stickyfacetfilter();
+      });
     }
   };
 
