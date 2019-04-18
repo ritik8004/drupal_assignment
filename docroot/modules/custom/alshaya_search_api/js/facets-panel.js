@@ -384,6 +384,11 @@
       }
 
       addSlideEventhandlers();
+
+      $(window, context).on('load', function () {
+        // Calculate the filters top position now.
+        stickyfacetfilter();
+      });
     }
   };
 
