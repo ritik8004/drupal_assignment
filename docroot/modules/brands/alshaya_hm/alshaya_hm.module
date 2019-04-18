@@ -321,7 +321,7 @@ function alshaya_hm_alshaya_get_currency_code_alter(&$currency) {
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_hm_acq_sku_product_sku_alter(SKU $sku, array $product) {
-  if (isset($product['style_code'])) {
+  if (isset($product['style_code']) && $sku->hasField('attr_style_code')) {
     $sku->get('attr_style_code')->setValue($product['style_code']);
   }
 }
@@ -415,7 +415,10 @@ function alshaya_hm_alshaya_acm_product_add_to_cart_ajax_response_alter(FormStat
  * Implements hook_acq_sku_configurable_cart_options_alter().
  */
 function alshaya_hm_acq_sku_configurable_cart_options_alter(array &$options, SKU $sku) {
-  if ($sku->get('attr_style_code')->getString()) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  if ($skuManager->fetchStyleCode($sku)) {
     foreach ($options as $index => $option) {
       if ($option['option_id'] == 999999) {
         unset($options[$index]);
@@ -429,7 +432,10 @@ function alshaya_hm_acq_sku_configurable_cart_options_alter(array &$options, SKU
  * Implements hook_acq_sku_configurable_product_configurations_alter().
  */
 function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$configurations, SKU $sku) {
-  $style_code = $sku->get('attr_style_code')->getString();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $style_code = $skuManager->fetchStyleCode($sku);
 
   // If we do not have any value for style code or we have
   // article_castor_id already set, we do no further processing.
@@ -500,7 +506,10 @@ function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$co
  */
 function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $sku) {
   // If we do not have any value for style code we do no further processing.
-  $style_code = $sku->get('attr_style_code')->getString();
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  $style_code = $skuManager->fetchStyleCode($sku);
   if (empty($style_code)) {
     return;
   }
