@@ -58,11 +58,11 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
       unset($implementations['alshaya_acm_product']);
       $implementations['alshaya_acm_product'] = $group;
     }
-  }
-  elseif ($hook == 'search_api_query_alter') {
-    $group = $implementations['alshaya_acm_product'];
-    unset($implementations['alshaya_acm_product']);
-    $implementations['alshaya_acm_product'] = $group;
+    elseif ($hook == 'search_api_query_alter') {
+      $group = $implementations['alshaya_acm_product'];
+      unset($implementations['alshaya_acm_product']);
+      $implementations['alshaya_acm_product'] = $group;
+    }
   }
 }
 
