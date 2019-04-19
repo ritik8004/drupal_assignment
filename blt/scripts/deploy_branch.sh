@@ -3,6 +3,9 @@
 set -ev
 
 if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
+  echo "username=$acsf_api_username" > $HOME/acsf_api_settings
+  echo "api_key=$acsf_api_key" >> $HOME/acsf_api_settings
+cat $HOME/acsf_api_settings
   deployed_branches=$(${BUILD_DIR}/scripts/git_cleanup/get-deployed-branches.sh | cut -d' ' -f2)
   echo "Deployed branches:"
   echo $deployed_branches
