@@ -1,3 +1,24 @@
+html {
+  &::before {
+    content: '';
+    position: fixed;
+    width: 100vw;
+    box-shadow: 0 9999px 0 9999px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 7;
+    background-color: rgba(0, 0, 0, 0.48);
+    transition: opacity 300ms ease-in;
+  }
+
+  &.all-filters-overlay {
+    &::before {
+      opacity: 1;
+      transition: opacity 300ms ease-in;
+    }
+  }
+}
+
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Main all filters div theming.

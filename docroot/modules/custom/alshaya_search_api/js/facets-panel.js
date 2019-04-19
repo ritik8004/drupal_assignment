@@ -86,7 +86,7 @@
         $('.all-filters').addClass('filters-active');
 
         if ($(window).width() > 1023) {
-          $('body').addClass('modal-overlay');
+          $('html').addClass('all-filters-overlay');
         }
         else {
           $('body').addClass('mobile--overlay')
@@ -107,7 +107,7 @@
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
-        $('body').removeClass('modal-overlay');
+        $('html').removeClass('all-filters-overlay');
         $('.all-filters').hide();
         // Show filter count if applicable.
         showFilterCount();
