@@ -16,7 +16,7 @@ if [[ ! $TRAVIS_BRANCH =~ ^revert-.* ]]; then
   done
 
   if [ ! "$branch" = "$deployed_branch" ] ; then
-    echo ">>>>>>> We don't deploy because this branch is not deployed anywhere.";
+    echo ">>>>>>> We don't deploy because $branch is not deployed anywhere.";
   else
     source $BLT_DIR/scripts/travis/deploy_branch;
   fi
