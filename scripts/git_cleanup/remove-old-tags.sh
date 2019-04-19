@@ -23,7 +23,7 @@ done
 echo
 
 if [ ! "$to_delete" = "" ] ; then
-  read -p "Do you confirm the deletion of '$to_delete' branches? " -n 1 yn
+  read -p "Do you confirm the deletion of '$to_delete' tags? " -n 1 yn
   echo
   if [ "$yn" = y ] ; then
     for t in $to_delete ; do
