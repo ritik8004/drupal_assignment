@@ -28,6 +28,12 @@ fields:
     description: 'Flag to check if product is available for ship to store.'
     type: 'string'
 
+  selling_price:
+    label: 'Price'
+    cardinality: -1
+    index: 1
+    facet: 1
+
   color:
     label: 'Color'
     cardinality: -1

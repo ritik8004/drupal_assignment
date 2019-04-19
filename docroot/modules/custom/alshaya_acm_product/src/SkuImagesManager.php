@@ -482,23 +482,20 @@ class SkuImagesManager {
       return SKU::loadFromSku($child_sku, $sku->language()->getId());
     }
 
-    $combinations = $this->skuManager->getConfigurableCombinations($sku);
+    $children = $this->skuManager->getValidChildSkusAsString($sku);
 
-    foreach ($combinations['attribute_sku'] ?? [] as $children) {
-      foreach ($children as $child_skus) {
-        foreach ($child_skus as $child_sku) {
-          $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
-          if (($child instanceof SKUInterface) && ($this->hasMedia($child))) {
-            $this->skuManager->setProductCachedData(
-              $sku, $cache_key, $child->getSku()
-            );
-            return $child;
-          }
-        }
+    // First check from in-stock available ones.
+    foreach ($children as $child_sku) {
+      $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
+      if (($child instanceof SKUInterface) && ($this->hasMedia($child))) {
+        $this->skuManager->setProductCachedData(
+          $sku, $cache_key, $child->getSku()
+        );
+        return $child;
       }
     }
 
-    // Lets return one from available OOS ones.
+    // Lets return one from available OOS ones if not available from in-stock.
     foreach ($this->skuManager->getChildSkus($sku) as $child) {
       if ($this->hasMedia($child)) {
         $this->skuManager->setProductCachedData(

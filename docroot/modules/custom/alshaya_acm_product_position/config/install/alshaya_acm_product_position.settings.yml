@@ -1,8 +1,15 @@
+available_sort_options:
+  nid: 'Position'
+  name_1: 'Name'
+  final_price: 'Final Price'
+  created: 'New IN'
+  stock_quantity: 'Recommended'
 sort_options:
   nid: nid
   name_1: name_1
   final_price: final_price
   created: created
+  stock_quantity: stock_quantity
 sort_options_labels:
   -
     value: 'nid ASC'
@@ -28,3 +35,9 @@ sort_options_labels:
   -
     value: 'created DESC'
     label: 'New In'
+  -
+    value: 'stock_quantity ASC'
+    label: ''
+  -
+    value: 'stock_quantity DESC'
+    label: 'Recommended'

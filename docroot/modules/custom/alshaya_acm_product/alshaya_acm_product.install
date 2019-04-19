@@ -14,7 +14,7 @@ use Drupal\node\Entity\Node;
  *
  * Adding `is_sale` and `is_new` attribute to the product.
  */
-function alshaya_acm_product_update_8042() {
+function alshaya_acm_product_update_8043() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
 
@@ -24,6 +24,31 @@ function alshaya_acm_product_update_8042() {
   );
 
   \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Index selling_price along with final_price.
+ */
+function alshaya_acm_product_update_8042() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  // Updating cardinality config for the attribute.
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+
+  /** @var \Drupal\acq_sku\SKUFieldsManager $sku_fields_manager */
+  $sku_fields_manager = \Drupal::service('acq_sku.fields_manager');
+  $sku_fields_manager->addFields();
+
+  alshaya_config_install_configs(['search_api.index.product'], 'alshaya_product');
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  _alshaya_search_resave_indexes();
 }
 
 /**
