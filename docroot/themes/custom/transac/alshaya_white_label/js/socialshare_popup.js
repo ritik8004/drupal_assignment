@@ -10,7 +10,7 @@
     attach: function (context, settings) {
       function modalOverlay(button, className) {
         $(button).click(function () {
-          $('body').removeClass(className);
+          $('html').removeClass(className);
         });
       }
 
@@ -19,7 +19,7 @@
       }
       else {
         $('.magazine-layout .modal-share-this .share-icon').on('click', function (e) {
-          $('body').addClass('social-modal-overlay');
+          $('html').addClass('social-modal-overlay');
           var top_height = ($(window).height() - $('.social-modal-overlay .sharethis-container').height()) / 2;
           var left_width = ($(window).width() - $('.social-modal-overlay .sharethis-container').innerWidth()) / 2;
           // Make popup content in center of the window.
