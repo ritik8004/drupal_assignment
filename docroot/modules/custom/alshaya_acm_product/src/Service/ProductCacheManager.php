@@ -67,7 +67,9 @@ class ProductCacheManager {
   public function set(SKU $sku, string $key, $data) {
     $cid = $this->getSkuCacheId($sku, $key);
     $this->cache->set($cid, $data, Cache::PERMANENT, $sku->getCacheTags());
-    drupal_static_reset('alshaya_product_processed_cached');
+
+    $static = &drupal_static('alshaya_product_processed_cached', []);
+    $static[$cid] = $data;
   }
 
   /**
