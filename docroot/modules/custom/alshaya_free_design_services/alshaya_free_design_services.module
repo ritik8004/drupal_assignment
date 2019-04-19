@@ -112,3 +112,17 @@ function _alshaya_free_design_services_get_all_stores() {
 
   return $options;
 }
+
+/**
+ * Implements template_preprocess_webform_confirmation().
+ */
+function alshaya_free_design_services_preprocess_webform_confirmation(array &$variables) {
+  /** @var \Drupal\webform\WebformInterface $webform */
+  $webform = $variables['webform'];
+
+  if ($webform->id() != 'free_design_services') {
+    return;
+  }
+
+  $variables['message']['#markup'] = $webform->getElement('banner')['#text'] . $variables['message']['#markup'];
+}
