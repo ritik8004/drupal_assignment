@@ -151,7 +151,6 @@
       showOnlyFewFacets();
       updateSortTitle();
       updateFacetTitlesWithSelected();
-      stickyfacetfilter();
       // Adjust height of PLP tiles.
       Drupal.plpListingProductTileHeight();
 
