@@ -324,6 +324,16 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['billing_address'] = render($billing_address);
   }
 
+  if ($order['payment']['method_code'] == 'banktransfer') {
+    $orderDetails['bank_transfer'] = [
+      'payee' => 'Dummy Payee',
+      'iban' => 'Dummy IBAN',
+      'bic' => 'Dummy BIC',
+      'bank' => 'Dummy Bank',
+      'purpose' => 'Dummy Purpose',
+    ];
+  }
+
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
   $orderDetails['payment_method_code'] = $order['payment']['method_code'];
