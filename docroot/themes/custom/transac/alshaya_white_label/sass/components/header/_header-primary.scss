@@ -889,10 +889,10 @@ header {
       content: '';
       position: fixed;
       width: 100vw;
-      box-shadow: 0 9999px 0 9995px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 9999px 0 9999px rgba(0, 0, 0, 0.5);
       pointer-events: none;
       opacity: 0;
-      z-index: 5;
+      z-index: 7;
       background-color: rgba(0, 0, 0, 0.48);
       // transition: [transition-property] [transition-duration] [transition-timing-function] [transition-delay];
       transition: opacity var(--menuTiming) ease-in 0.3s;
