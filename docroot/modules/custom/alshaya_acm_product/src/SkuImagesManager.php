@@ -5,6 +5,7 @@ namespace Drupal\alshaya_acm_product;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\ProductInfoHelper;
+use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -75,6 +76,13 @@ class SkuImagesManager {
   protected $productDisplaySettings;
 
   /**
+   * Product Cache Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
+   */
+  protected $productCacheManager;
+
+  /**
    * SkuImagesManager constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -89,19 +97,23 @@ class SkuImagesManager {
    *   Product Info Helper.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache backend object.
+   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
+   *   Product Cache Manager.
    */
   public function __construct(ModuleHandlerInterface $module_handler,
                               ConfigFactoryInterface $config_factory,
                               EntityTypeManagerInterface $entity_type_manager,
                               SkuManager $sku_manager,
                               ProductInfoHelper $product_info_helper,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              ProductCacheManager $product_cache_manager) {
     $this->moduleHandler = $module_handler;
     $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->configFactory = $config_factory;
     $this->skuManager = $sku_manager;
     $this->productInfoHelper = $product_info_helper;
     $this->cache = $cache;
+    $this->productCacheManager = $product_cache_manager;
 
     $this->productDisplaySettings = $this->configFactory->get('alshaya_acm_product.display_settings');
   }
@@ -282,16 +294,13 @@ class SkuImagesManager {
     // And from_sku means specifically for this SKU.
     $cache_key = $check_parent_child ? 'media_for_sku' : 'media_from_sku';
 
-    $return = $this->skuManager->getProductCachedData($sku, $cache_key);
-
-    if (is_array($return)) {
-      try {
-        return $this->addFileObjects($return);
-      }
-      catch (\Exception $e) {
-        // Do nothing and let code execution continue to get
-        // fresh gallery.
-      }
+    try {
+      $media = $this->getMediaItemsFromCache($sku, $cache_key);
+      return $media;
+    }
+    catch (\Exception $e) {
+      // Do nothing and let code execution continue to get
+      // fresh gallery.
     }
 
     $plugin = $sku->getPluginInstance();
@@ -355,11 +364,11 @@ class SkuImagesManager {
         if ($media_item['media_type'] == 'image') {
           $url = $media_item['file']->url();
           $return['images'][$url] = $url;
-          $return['media_items']['images'][] = $media_item;
+          $return['media_items']['images'][] = array_filter($media_item);
         }
         elseif ($media_item['media_type'] == 'external-video') {
           $return['videos'][$media_item['video_url']] = $media_item['video_url'];
-          $return['media_items']['videos'][] = $media_item;
+          $return['media_items']['videos'][] = array_filter($media_item);
         }
       }
     }
@@ -389,11 +398,7 @@ class SkuImagesManager {
       }
     }
 
-    $this->skuManager->setProductCachedData(
-      $sku,
-      $cache_key,
-      $this->removeFileObjects($return)
-    );
+    $this->setMediaItemsToCache($sku, $cache_key, $return);
 
     return $return;
   }
@@ -415,23 +420,33 @@ class SkuImagesManager {
   }
 
   /**
-   * Add file objects back to cached version of media.
+   * Get media items from cache and wakeup array.
    *
-   * @param array $media
-   *   Media array.
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param string $cache_key
+   *   Cache key.
    *
    * @return array
    *   Processed media array.
    *
    * @throws \Exception
-   *   When fails to load file from fid in cache.
+   *   When fails to load file from fid in cache or nothing found in cache.
    */
-  private function addFileObjects(array $media) {
-    if (empty($media['media_items']['images'])) {
-      return $media;
+  private function getMediaItemsFromCache(SKU $sku, string $cache_key) {
+    $media = $this->skuManager->getProductCachedData($sku, $cache_key);
+
+    if (empty($media)) {
+      throw new \Exception('Nothing found in cache');
     }
 
-    foreach ($media['media_items']['images'] as &$item) {
+    foreach ($media['images'] ?? [] as &$image) {
+      if (strpos($image, 'http') !== 0) {
+        $image = self::getPublicDirectory() . $image;
+      }
+    }
+
+    foreach ($media['media_items']['images'] ?? [] as &$item) {
       if (isset($item['fid'])) {
         $item['file'] = $this->fileStorage->load($item['fid']);
 
@@ -445,24 +460,34 @@ class SkuImagesManager {
   }
 
   /**
-   * Remove file objects for caching media.
+   * Set media items to cache after removing extra data.
    *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param string $cache_key
+   *   Cache key.
    * @param array $media
    *   Media array.
-   *
-   * @return array
-   *   Processed media array.
    */
-  private function removeFileObjects(array $media) {
-    if (empty($media['media_items']['images'])) {
-      return $media;
+  private function setMediaItemsToCache(SKU $sku, string $cache_key, array $media) {
+    if (is_array($media['images'])) {
+      $media['images'] = array_values($media['images']);
+
+      foreach ($media['images'] as &$image) {
+        $image = str_replace(self::getPublicDirectory(), '', $image);
+      }
     }
 
-    foreach ($media['media_items']['images'] as &$item) {
+    foreach ($media['media_items']['images'] ?? [] as &$item) {
       unset($item['file']);
+      $item = array_filter($item);
     }
 
-    return $media;
+    $this->skuManager->setProductCachedData(
+      $sku,
+      $cache_key,
+      $media
+    );
   }
 
   /**
@@ -477,7 +502,7 @@ class SkuImagesManager {
   public function getFirstChildWithMedia(SKUInterface $sku) {
     $cache_key = 'first_child_with_media';
 
-    $child_sku = $this->skuManager->getProductCachedData($sku, $cache_key);
+    $child_sku = $this->productCacheManager->get($sku, $cache_key);
     if ($child_sku) {
       return SKU::loadFromSku($child_sku, $sku->language()->getId());
     }
@@ -488,9 +513,7 @@ class SkuImagesManager {
     foreach ($children as $child_sku) {
       $child = SKU::loadFromSku($child_sku, $sku->language()->getId());
       if (($child instanceof SKUInterface) && ($this->hasMedia($child))) {
-        $this->skuManager->setProductCachedData(
-          $sku, $cache_key, $child->getSku()
-        );
+        $this->productCacheManager->set($sku, $cache_key, $child->getSku());
         return $child;
       }
     }
@@ -498,9 +521,7 @@ class SkuImagesManager {
     // Lets return one from available OOS ones if not available from in-stock.
     foreach ($this->skuManager->getChildSkus($sku) as $child) {
       if ($this->hasMedia($child)) {
-        $this->skuManager->setProductCachedData(
-          $sku, $cache_key, $child->getSku()
-        );
+        $this->productCacheManager->set($sku, $cache_key, $child->getSku());
         return $child;
       }
     }
@@ -626,10 +647,10 @@ class SkuImagesManager {
       'case' => $case,
     ]);
 
-    $cache = $this->skuManager->getProductCachedData($sku, $cache_key);
+    $cache = $this->productCacheManager->get($sku, $cache_key);
 
-    if (is_array($cache)) {
-      $child = SKU::loadFromSku($cache['sku']);
+    if ($cache) {
+      $child = SKU::loadFromSku($cache);
       if ($child instanceof SKUInterface) {
         return $child;
       }
@@ -720,9 +741,7 @@ class SkuImagesManager {
         break;
     }
 
-    $cache = ['sku' => $skuForGallery->getSku()];
-
-    $this->skuManager->setProductCachedData($sku, $cache_key, $cache);
+    $this->productCacheManager->set($sku, $cache_key, $skuForGallery->getSku());
 
     return $skuForGallery;
   }
@@ -1259,7 +1278,7 @@ class SkuImagesManager {
    *   Swatches array.
    */
   public function getSwatches(SKUInterface $sku) {
-    $swatches = $this->skuManager->getProductCachedData($sku, 'swatches');
+    $swatches = $this->getSwatchesFromCache($sku);
 
     // We may have nothing for an SKU, we should not keep processing for it.
     // If value is not set, function returns NULL above so we check for array.
@@ -1289,26 +1308,96 @@ class SkuImagesManager {
         continue;
       }
 
+      $duplicates[$value] = 1;
+      $swatches[$child->id()] = [
+        'url' => file_url_transform_relative($swatch_image),
+      ];
+
       if ($this->productDisplaySettings->get('color_swatches_show_product_image') && $this->skuManager->isListingDisplayModeAggregated()) {
         $swatch_product_image = $child->getThumbnail();
 
         // If we have image for the product.
         if (!empty($swatch_product_image) && $swatch_product_image['file'] instanceof FileInterface) {
           $url = file_create_url($swatch_product_image['file']->getFileUri());
-          $swatch_product_image_url = file_url_transform_relative($url);
+          $swatches[$child->id()]['product_url'] = file_url_transform_relative($url);
         }
       }
+    }
 
-      $duplicates[$value] = 1;
-      $swatches[$child->id()] = [
-        'swatch_url' => file_url_transform_relative($swatch_image),
-        'swatch_product_url' => $swatch_product_image_url ?? '',
-      ];
+    $this->setSwatchesToCache($sku, $swatches);
+
+    return $swatches;
+  }
+
+  /**
+   * Wrapper function to get swatches from cache and wakeup array.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return array|null
+   *   Swatches array if found in cache or null.
+   */
+  private function getSwatchesFromCache(SKU $sku) {
+    $swatches = $this->skuManager->getProductCachedData($sku, 'swatches');
+
+    foreach ($swatches ?? [] as $index => $swatch) {
+      foreach ($swatch as $key => $url) {
+        $swatches[$index][$key] = self::getPublicDirectoryRelative() . $url;
+      }
+    }
+
+    return $swatches;
+  }
+
+  /**
+   * Wrapper function to set swatches to cache after removing duplicate data.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   * @param array $swatches
+   *   Swatches.
+   */
+  private function setSwatchesToCache(SKU $sku, array $swatches) {
+    foreach ($swatches ?? [] as $index => $swatch) {
+      foreach ($swatch as $key => $url) {
+        $swatches[$index][$key] = str_replace(self::getPublicDirectoryRelative(), '', $url);
+      }
     }
 
     $this->skuManager->setProductCachedData($sku, 'swatches', $swatches);
+  }
 
-    return $swatches;
+  /**
+   * Get relative path to public directory.
+   *
+   * @return string
+   *   Relative public directory path.
+   */
+  public static function getPublicDirectoryRelative() {
+    static $public_dir;
+
+    if (empty($public_dir)) {
+      $public_dir = file_url_transform_relative(self::getPublicDirectory());
+    }
+
+    return $public_dir;
+  }
+
+  /**
+   * Get absolute path to public directory.
+   *
+   * @return string
+   *   Absolute public directory path.
+   */
+  public static function getPublicDirectory() {
+    static $public_dir;
+
+    if (empty($public_dir)) {
+      $public_dir = file_create_url(file_default_scheme() . '://');
+    }
+
+    return $public_dir;
   }
 
 }

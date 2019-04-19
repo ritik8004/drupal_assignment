@@ -10,6 +10,7 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -221,6 +222,13 @@ class SkuManager {
   protected $productInfoHelper;
 
   /**
+   * Product Cache Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
+   */
+  protected $productCacheManager;
+
+  /**
    * SkuManager constructor.
    *
    * @param \Drupal\Core\Database\Driver\mysql\Connection $connection
@@ -263,6 +271,8 @@ class SkuManager {
    *   Simple sitemap generator.
    * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
    *   Product Info Helper.
+   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
+   *   Product Cache Manager.
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -283,7 +293,8 @@ class SkuManager {
                               Client $http_client,
                               RendererInterface $renderer,
                               Simplesitemap $generator,
-                              ProductInfoHelper $product_info_helper) {
+                              ProductInfoHelper $product_info_helper,
+                              ProductCacheManager $product_cache_manager) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -307,6 +318,7 @@ class SkuManager {
     $this->renderer = $renderer;
     $this->generator = $generator;
     $this->productInfoHelper = $product_info_helper;
+    $this->productCacheManager = $product_cache_manager;
   }
 
   /**
@@ -430,6 +442,19 @@ class SkuManager {
    *   Minimum final price and associated initial price.
    */
   public function getMinPrices(SKU $sku_entity, string $color = '') {
+    $static = &drupal_static(__METHOD__, []);
+
+    $cid = implode(':', [
+      $sku_entity->language()->getId(),
+      $sku_entity->getSku(),
+      $color,
+    ]);
+
+    // Do not process the same thing again and again.
+    if (isset($static[$cid])) {
+      return $static[$cid];
+    }
+
     $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
     $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
 
@@ -440,62 +465,31 @@ class SkuManager {
       $final_price = $price;
     }
 
-    $prices = [
+    $static[$cid] = [
       'price' => $price,
       'final_price' => $final_price,
     ];
+
+    $prices = &$static[$cid];
 
     if ($sku_entity->bundle() != 'configurable') {
       return $prices;
     }
 
-    $cache_key = $color ? 'price_' . $color : 'price';
-
-    if ($cache = $this->getProductCachedData($sku_entity, $cache_key)) {
-      return $cache;
+    if ($color) {
+      $combinations = $this->getConfigurableCombinations($sku_entity);
+      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+        if (isset($combinations['attribute_sku'][$attribute_code])) {
+          $children = $combinations['attribute_sku'][$attribute_code][$color];
+          break;
+        }
+      }
+    }
+    else {
+      $children = $this->getValidChildSkusAsString($sku_entity);
     }
 
     $sku_price = 0;
-
-    $combinations = $this->getConfigurableCombinations($sku_entity);
-
-    if (empty($combinations['by_sku'])) {
-      $children = [];
-    }
-    elseif ($color) {
-      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
-        if (isset($combinations['attribute_sku'][$attribute_code])) {
-          $children = $combinations['attribute_sku'][$attribute_code][$color];
-          break;
-        }
-      }
-    }
-    else {
-      $children = array_keys($combinations['by_sku']);
-    }
-
-    if (empty($combinations['by_sku'])) {
-      $children = [];
-    }
-    elseif ($color) {
-      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
-        if (isset($combinations['attribute_sku'][$attribute_code])) {
-          $children = $combinations['attribute_sku'][$attribute_code][$color];
-          break;
-        }
-      }
-    }
-    else {
-      $children = array_keys($combinations['by_sku']);
-    }
-
-    // Skip children that are not a part of the parent SKU. Product tree &
-    // combinations have been altered to have all children products linked via
-    // style code as a part of it.
-    if ($this->fetchStyleCode($sku_entity)) {
-      $sku_children = $this->getChildrenSkuIds($sku_entity);
-      $children = array_intersect($sku_children, $children);
-    }
 
     foreach ($children ?? [] as $child_sku_code) {
       try {
@@ -546,9 +540,6 @@ class SkuManager {
         // Log messages are already set in previous functions.
       }
     }
-
-    // Set the price info to cache.
-    $this->setProductCachedData($sku_entity, $cache_key, $prices);
 
     return $prices;
   }
@@ -770,11 +761,15 @@ class SkuManager {
    */
   public function getPromotionsForSearchViewFromSkuId(SKUInterface $sku): array {
     $cache_key = 'promotions_for_search_view';
-    $promos = $this->getProductCachedData($sku, $cache_key);
+    $promos = $this->productCacheManager->get($sku, $cache_key);
 
     if (!is_array($promos)) {
       $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
-      $this->setProductCachedData($sku, $cache_key, $promos);
+
+      // Set to cache only if there is some value.
+      if (!empty($promos)) {
+        $this->productCacheManager->set($sku, $cache_key, $promos);
+      }
     }
 
     return $promos ?? [];
@@ -1547,44 +1542,6 @@ class SkuManager {
   }
 
   /**
-   * Lighter function to fetch Children SKU text.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
-   *   Configurable SKU for which the child SKUs need to be fetched.
-   * @param bool $first_only
-   *   Flag to indicate we need to fetch only the first item.
-   *
-   * @return mixed
-   *   Array of SKU texts of single SKU text if first only is asked.
-   */
-  public function getChildrenSkuIds(SKU $sku_entity, $first_only = FALSE) {
-    $child_skus = [];
-
-    if ($sku_entity->getType() == 'configurable') {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
-      $query->fields('asfcs', ['field_configured_skus_value']);
-      $query->join('acq_sku_field_data', 'asfd', 'asfd.sku=asfcs.field_configured_skus_value');
-      $query->condition('asfcs.entity_id', $sku_entity->id());
-      $query->distinct();
-
-      if ($first_only) {
-        $query->range(0, 1);
-      }
-
-      $result = $query->execute();
-
-      while ($row = $result->fetchAssoc()) {
-        if ($first_only) {
-          return $row['field_configured_skus_value'];
-        }
-        $child_skus[] = $row['field_configured_skus_value'];
-      }
-    }
-
-    return array_filter($child_skus);
-  }
-
-  /**
    * Get possible combinations for a configurable SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -2004,7 +1961,7 @@ class SkuManager {
       // In some cases we modify combinations and add more children.
       // Here to get first valid we want only available ones from current
       // configurable sku.
-      if (!empty($combinations)) {
+      if (!empty($combinations['attribute_sku'])) {
         // Get the skus sorted by first attribute value.
         $combination_skus = array_reduce(reset($combinations['attribute_sku']), 'array_merge', []);
         $static[$sku->getSku()] = array_intersect($combination_skus, $sku_variants);

@@ -6,6 +6,7 @@ use Detection\MobileDetect;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -75,6 +76,13 @@ class SkuAssetManager {
   protected $moduleHandler;
 
   /**
+   * Product Cache Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
+   */
+  protected $productCacheManager;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -89,19 +97,23 @@ class SkuAssetManager {
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module Handler service object.
+   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
+   *   Product Cache Manager.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
                               SkuManager $skuManager,
                               SKUPluginManager $skuPluginManager,
                               EntityTypeManagerInterface $entity_type_manager,
-                              ModuleHandlerInterface $moduleHandler) {
+                              ModuleHandlerInterface $moduleHandler,
+                              ProductCacheManager $product_cache_manager) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
     $this->skuPluginManager = $skuPluginManager;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
     $this->moduleHandler = $moduleHandler;
+    $this->productCacheManager = $product_cache_manager;
   }
 
   /**
@@ -508,11 +520,12 @@ class SkuAssetManager {
    *   Array of sku child assets.
    */
   public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, array $avoid_assets = []) {
-    $child_skus = $this->skuManager->getChildrenSkuIds($sku, $first_only);
+    $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
     $assets = [];
 
     if (($first_only) && (!empty($child_skus))) {
-      return $this->getSkuAssets($child_skus, $context, $locations, '', $first_image_only, $avoid_assets);
+      $child_sku = reset($child_skus);
+      return $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only, $avoid_assets);
     }
 
     if (!empty($child_skus)) {
@@ -567,7 +580,7 @@ class SkuAssetManager {
       return [];
     }
 
-    if ($cache = $this->skuManager->getProductCachedData($sku, 'hm_colors_for_sku')) {
+    if ($cache = $this->productCacheManager->get($sku, 'hm_colors_for_sku')) {
       return $cache;
     }
 
@@ -599,7 +612,7 @@ class SkuAssetManager {
       }
     }
 
-    $this->skuManager->setProductCachedData($sku, 'hm_colors_for_sku', $article_castor_ids);
+    $this->productCacheManager->set($sku, 'hm_colors_for_sku', $article_castor_ids);
 
     return $article_castor_ids;
   }
