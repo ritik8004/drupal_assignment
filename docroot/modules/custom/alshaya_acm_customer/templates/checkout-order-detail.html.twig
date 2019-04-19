@@ -97,6 +97,10 @@
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
 
+            {% if order_details.banktransfer_payment_details %}
+                {{ order_details.banktransfer_payment_details }}
+            {% endif %}
+
           {% if order_details.transaction_id %}
             <div class="mobile-only transaction-id">
               <div class="label font-small">{{ "Transaction ID"|t }}</div>
@@ -156,14 +160,9 @@
           <div class="label payment-method font-small">{{ "Payment method"|t }}</div>
           <div class="dark">{{ order_details.payment_method }}</div>
 
-          {% if order_details.bank_transfer %}
-            <div class="label payment-method font-small">{{ "Payment"|t }}</div>
-            <div class="dark">{{ order_details.bank_transfer.payee }}</div>
-            <div class="dark">{{ order_details.bank_transfer.iban }}</div>
-            <div class="dark">{{ order_details.bank_transfer.bic }}</div>
-            <div class="dark">{{ order_details.bank_transfer.bank }}</div>
-            <div class="dark">{{ order_details.bank_transfer.purpose }}</div>
-          {% endif %}
+            {% if order_details.banktransfer_payment_details %}
+                {{ order_details.banktransfer_payment_details }}
+            {% endif %}
 
           {% if order_details.transaction_id %}
             <div class="label transaction-id font-small">{{ "Transaction ID"|t }}</div>

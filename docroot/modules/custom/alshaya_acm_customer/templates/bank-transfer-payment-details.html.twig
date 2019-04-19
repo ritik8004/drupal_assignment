@@ -1,0 +1,18 @@
+<div>
+  <div>{{ "Payment"|t }}</div>
+  {% if payee %}
+    <span>{{ "Payee"|t }}</span>:<span>{{ payee }}</span>
+  {% endif %}
+  {% if iban %}
+    <span>{{ "IBN"|t }}</span>:<span>{{ iban }}</span>
+  {% endif %}
+  {% if bic %}
+    <span>{{ "BIC"|t }}</span>:<span>{{ bic }}</span>
+  {% endif %}
+  {% if bank %}
+    <span>{{ "Bank"|t }}</span>:<span>{{ bank }}</span>
+  {% endif %}
+  {% if purpose %}
+    <span>{{ "Purpose"|t }}</span>:<span>{{ purpose }}</span>
+  {% endif %}
+</div>

@@ -103,6 +103,17 @@ function alshaya_acm_customer_theme($existing, $type, $theme, $path) {
     'variables' => ['order' => NULL],
   ];
 
+  $items['checkout_banktransfer_payment_details'] = [
+    'variables' => [
+      'payee' => NULL,
+      'iban' => NULL,
+      'bic' => NULL,
+      'bank' => NULL,
+      'purpose' => NULL,
+    ],
+    'template' => 'bank-transfer-payment-details',
+  ];
+
   return $items;
 }
 

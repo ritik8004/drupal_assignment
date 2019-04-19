@@ -325,12 +325,13 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
   }
 
   if ($order['payment']['method_code'] == 'banktransfer') {
-    $orderDetails['bank_transfer'] = [
-      'payee' => 'Dummy Payee',
-      'iban' => 'Dummy IBAN',
-      'bic' => 'Dummy BIC',
-      'bank' => 'Dummy Bank',
-      'purpose' => 'Dummy Purpose',
+    $orderDetails['banktransfer_payment_details'] = [
+      '#theme' => 'checkout_banktransfer_payment_details',
+      '#payee' => 'Dummy Payee',
+      '#iban' => 'Dummy IBAN',
+      '#bic' => 'Dummy BIC',
+      '#bank' => 'Dummy Bank',
+      '#purpose' => 'Dummy Purpose',
     ];
   }
 
