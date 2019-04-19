@@ -39,6 +39,11 @@
     padding: 1.125rem 0;
     border: 1px solid $plp_facet_border;
 
+    @include breakpoint($desktop) {
+      max-height: 35rem;
+      overflow-y: auto;
+    }
+
     li {
       span {
         font-size: 0.75rem;
