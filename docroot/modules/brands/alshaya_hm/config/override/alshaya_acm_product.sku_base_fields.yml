@@ -67,3 +67,6 @@ fields:
     description: 'Product Composition.'
     type: 'text_long'
 
+  style_code:
+    label: 'Style Code'
+    type: 'string'

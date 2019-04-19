@@ -457,6 +457,28 @@ display:
           entity_type: acq_sku
           entity_field: changed
           plugin_id: field
+        stock_status:
+          id: stock_status
+          table: acq_sku_stock
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'In stock'
+          exclude: false
+          type: yes-no
+          not: false
+          plugin_id: boolean
+        stock_quantity:
+          id: stock_quantity
+          table: acq_sku_stock
+          field: quantity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 'Stock Quantity'
+          exclude: false
+          plugin_id: numeric
         operations:
           id: operations
           table: acq_sku
@@ -548,6 +570,7 @@ display:
               reviewer: '0'
               store_creator: '0'
               store_reviewer: '0'
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''
@@ -602,6 +625,7 @@ display:
               reviewer: '0'
               store_creator: '0'
               store_reviewer: '0'
+            placeholder: ''
           is_grouped: false
           group_info:
             label: ''

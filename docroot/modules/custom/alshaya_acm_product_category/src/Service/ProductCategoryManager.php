@@ -286,6 +286,11 @@ class ProductCategoryManager {
    * @throws \Exception
    */
   public function processSalesCategoryCheckForNode(NodeInterface $node) {
+    // Do nothing if no sales category set.
+    if (empty($this->getSalesCategoryIds())) {
+      return FALSE;
+    }
+
     $save = FALSE;
 
     // Do stuff only if it is in Sale Category as per MDC data.
@@ -312,6 +317,11 @@ class ProductCategoryManager {
    * @throws \Exception
    */
   public function processSalesCategoryCheckForSku(SKUInterface $sku) {
+    // Do nothing if no sales category set.
+    if (empty($this->getSalesCategoryIds())) {
+      return;
+    }
+
     if ($sku->bundle() === 'simple') {
       $node = $this->skuManager->getDisplayNode($sku);
 

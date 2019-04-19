@@ -241,7 +241,8 @@
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
                 "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch",
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
-                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch"
+                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
