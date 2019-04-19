@@ -1,6 +1,6 @@
 /**
  * @file
- * PLP Hover js file.
+ * PLP - All Filters Panel & Facets JS file.
  */
 
 (function ($, Drupal) {
@@ -17,6 +17,8 @@
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
+         // Adjust height of PLP tiles.
+         Drupal.plpListingProductTileHeight();
       });
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
@@ -25,6 +27,8 @@
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
          }, 300);
+         // Adjust height of PLP tiles.
+         Drupal.plpListingProductTileHeight();
       });
 
       // On clicking facet block title, update the title of block and hide
@@ -147,6 +151,9 @@
       showOnlyFewFacets();
       updateSortTitle();
       updateFacetTitlesWithSelected();
+      stickyfacetfilter();
+      // Adjust height of PLP tiles.
+      Drupal.plpListingProductTileHeight();
 
       /**
        * Show filtercount on mobile on toggle buttons.
@@ -438,5 +445,22 @@
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend span.sort-for-label').remove();
     $('.all-filters [data-drupal-selector="edit-sort-bef-combine"] .fieldset-legend').append(sort_label);
   }
+
+  /**
+   * Calculate and add height for each product tile.
+   */
+  Drupal.plpListingProductTileHeight = function () {
+    if ($(window).width() > 1024) {
+      var Hgt = 0;
+      $('.c-products__item').each(function () {
+        var Height = $(this)
+          .find('> article')
+          .outerHeight(true);
+        Hgt = Hgt > Height ? Hgt : Height;
+      });
+
+      $('.c-products__item').css('height', Hgt);
+    }
+  };
 
 })(jQuery, Drupal);
