@@ -442,7 +442,7 @@ class CheckoutHelper {
    * @param bool $push
    *   Push the updates to Magento if true.
    */
-  public function setSelectedPayment($method, array $data = [], $push = TRUE) {
+  public function  setSelectedPayment($method, array $data = [], $push = TRUE) {
     $cart = $this->cartStorage->getCart(FALSE);
     $cart->setPaymentMethod($method, $data);
 

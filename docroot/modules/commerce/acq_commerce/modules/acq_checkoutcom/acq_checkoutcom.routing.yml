@@ -25,3 +25,12 @@ acq_checkoutcom.add_card:
     _user_is_logged_in: 'TRUE'
   options:
     user: \d+
+
+acq_checkoutcom.select_card_type:
+  path: 'checkoutcom/select-card-method'
+  defaults:
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::selectCardType'
+    _title: ''
+  // User can checkout as a guest.
+  requirements:
+    _access: 'TRUE'
