@@ -313,7 +313,9 @@
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 767) {
             if ($('.container-without-product').length < 1) {
+              var site_brand = $('.site-brand-home').clone();
               $('.region__content > .block-facets-ajax, .region__content > .views-exposed-form, .show-all-filters').once('bind-events').wrapAll("<div class='sticky-filter-wrapper'><div class='container-without-product'></div></div>");
+              $(site_brand).insertBefore('.container-without-product');
             }
           }
           else {

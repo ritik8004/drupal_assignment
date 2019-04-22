@@ -476,7 +476,6 @@
     .container-without-product {
       position: fixed;
       top: 0;
-      background: $lhn_sticky-filter-background;
       max-width: 77.25rem;
       width: 100%;
       z-index: 1;
@@ -486,7 +485,7 @@
       align-items: center;
 
       @include breakpoint($desktop) {
-        padding-#{$left}: 14.625rem;
+        margin-#{$left}: 14.625rem;
       }
 
       @include breakpoint($desktop-wide) {
@@ -497,32 +496,6 @@
         #{$left}: 0;
         padding-left: 0;
         justify-content: center;
-      }
-
-      &::before {
-        content: '';
-        height: 2.5rem;
-        width: 11.0625rem;
-        background-image: url(#{$brand_theme_default_path}/site-logo.svg);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: contain;
-        position: absolute;
-        #{$left}: 0;
-        display: flex;
-        align-items: center;
-        justify-content: right;
-
-        html[lang=ar] & {
-          background-image: url(#{$brand_theme_default_path}/site-logo-ar.svg);
-          background-repeat: no-repeat;
-          background-position: center;
-          background-size: contain;
-        }
-
-        @include breakpoint($only-tablet) {
-          #{$left}: 1.5rem;
-        }
       }
 
       .c-accordion {
@@ -561,12 +534,12 @@
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
       position: fixed;
-      top: 3.6875rem;
+      top: 3.625rem;
       background: $lhn_sticky-filter-background;
       z-index: 1;
 
       html[lang=ar] & {
-        top: 4.125rem;
+        top: 4rem;
       }
     }
 
@@ -620,5 +593,44 @@ body {
 .c-facet {
   &.c-accordion:empty {
     display: none;
+  }
+}
+
+.sticky-filter-wrapper {
+  .site-brand-home {
+    display: none;
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      display: block;
+      position: absolute;
+      #{$left}: calc((100vw - 77.15rem) / 2);
+
+      @include breakpoint($desktop-wide) {
+        width: calc(100vw - (100vw - 77.25rem));
+      }
+
+      @include breakpoint($only-tablet) {
+        #{$left}: 0;
+        z-index: 2;
+      }
+
+      a {
+        width: 7.8125rem;
+        height: 3.75rem;
+        display: flex;
+        align-items: center;
+        margin-#{$left}: 0;
+        max-width: none;
+
+        @include breakpoint($only-tablet) {
+          #{$left}: 0;
+          margin-#{$left}: 1.5rem;
+        }
+      }
+    }
   }
 }
