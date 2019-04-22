@@ -157,12 +157,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     // Initialise with empty value.
     $static[$langcode][$sku_string] = NULL;
 
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
-    $query->addField('acq_sku', 'sku');
-    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
-    $query->condition('child_sku.field_configured_skus_value', $sku_string);
-
-    $parent_skus = array_keys($query->execute()->fetchAllAssoc('sku'));
+    $parent_skus = array_values($this->getParentSkus($sku_string));
 
     if (empty($parent_skus)) {
       return NULL;
@@ -322,6 +317,24 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     }
 
     return $manager;
+  }
+
+  /**
+   * Get parent skus of given sku.
+   *
+   * @param string $sku
+   *   SKU string.
+   *
+   * @return array
+   *   Parent skus.
+   */
+  public function getParentSkus(string $sku) {
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'id');
+    $query->addField('acq_sku', 'sku');
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', $sku);
+    return $query->execute()->fetchAllKeyed();
   }
 
 }

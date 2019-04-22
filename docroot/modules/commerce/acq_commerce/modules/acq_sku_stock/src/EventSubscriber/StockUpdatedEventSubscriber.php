@@ -2,7 +2,6 @@
 
 namespace Drupal\acq_sku_stock\EventSubscriber;
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\Core\Cache\Cache;
 use Drupal\node\NodeInterface;
@@ -50,9 +49,11 @@ class StockUpdatedEventSubscriber implements EventSubscriberInterface {
     $plugin = $sku->getPluginInstance();
 
     // Invalidate cache for parent sku.
-    $parent = $plugin->getParentSku($sku);
-    if ($parent instanceof SKU) {
-      $cacheTagsToInvalidate = array_merge($cacheTagsToInvalidate, $parent->getCacheTagsToInvalidate());
+    $parent_skus = $plugin->getParentSkus($sku->getSku());
+    if (!empty($parent_skus)) {
+      foreach ($parent_skus as $sku_id => $parent_sku) {
+        $cacheTagsToInvalidate = array_merge($cacheTagsToInvalidate, ['acq_sku:' . $sku_id]);
+      }
     }
 
     // Invalidate cache for display node.
