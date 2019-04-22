@@ -223,6 +223,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
+        'display_in_desktop' => $term->display_in_desktop,
+        'display_in_mobile' => $term->display_in_mobile,
         // The actual depth of the term. For super category feature enabled,
         // the depth may be wrong according to main menu. which can be
         // processed when required.
@@ -442,9 +444,13 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->fields('tfd', ['tid', 'name', 'description__value', 'depth_level'])
       ->fields('ttdcl', ['field_display_as_clickable_link_value']);
     $query->addField('ttim', 'field_category_include_menu_value', 'include_in_menu');
+    $query->addField('in_desktop', 'field_include_in_desktop_value', 'display_in_desktop');
+    $query->addField('in_mobile', 'field_include_in_mobile_tablet_value', 'display_in_mobile');
     $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
+    $query->innerJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid AND in_desktop.langcode = tfd.langcode');
+    $query->innerJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid AND in_mobile.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);

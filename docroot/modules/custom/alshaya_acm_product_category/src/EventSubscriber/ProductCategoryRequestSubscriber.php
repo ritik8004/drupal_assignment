@@ -2,7 +2,9 @@
 
 namespace Drupal\alshaya_acm_product_category\EventSubscriber;
 
+use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -49,6 +51,16 @@ class ProductCategoryRequestSubscriber implements EventSubscriberInterface {
     if (($taxonomy_term = $this->routeMatch->getParameter('taxonomy_term')) && $taxonomy_term instanceof TermInterface) {
       if ($taxonomy_term->bundle() !== 'acq_product_category') {
         return;
+      }
+
+      if ($taxonomy_term->get('field_override_target_link')->value == '1') {
+        $qs = $request->getQueryString();
+        if ($qs) {
+          $qs = '?' . $qs;
+        }
+
+        $path = Url::fromUri($taxonomy_term->get('field_target_link')->getString())->toString();
+        $event->setResponse(new CacheableRedirectResponse($request->getUriForPath($path) . $qs));
       }
 
       if ($taxonomy_term->get('field_commerce_status')->getString() !== '1') {
