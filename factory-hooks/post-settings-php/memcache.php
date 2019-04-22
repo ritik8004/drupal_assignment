@@ -79,7 +79,6 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     $settings['cache']['bins']['product_category_tree'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['product_options'] = 'cache.backend.permanent_memcache';
     $settings['cache']['bins']['hm_product_configurations'] = 'cache.backend.permanent_memcache';
-    $settings['cache']['bins']['product_processed_data'] = 'cache.backend.permanent_memcache';
 
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;
