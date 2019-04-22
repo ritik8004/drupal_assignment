@@ -74,6 +74,8 @@
   }
 
   .grid-buttons {
+    font-size: 0;
+
     @include breakpoint($only-mobile) {
       margin-#{$right}: 1.25rem;
     }
