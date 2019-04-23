@@ -8,12 +8,17 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Url;
+use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * SkuAssetManager Class.
@@ -69,6 +74,13 @@ class SkuAssetManager {
   protected $termStorage;
 
   /**
+   * File Storage.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
+
+  /**
    * Module Handler service object.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
@@ -81,6 +93,20 @@ class SkuAssetManager {
    * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
    */
   protected $productCacheManager;
+
+  /**
+   * PIMS ID <=> FID cache.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cachePimsFiles;
+
+  /**
+   * GuzzleHttp\Client definition.
+   *
+   * @var GuzzleHttp\Client
+   */
+  protected $httpClient;
 
   /**
    * SkuAssetManager constructor.
@@ -99,6 +125,8 @@ class SkuAssetManager {
    *   Module Handler service object.
    * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
    *   Product Cache Manager.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_pims_files
+   *   PIMS ID <=> Drupal File URI cache.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -106,14 +134,120 @@ class SkuAssetManager {
                               SKUPluginManager $skuPluginManager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ModuleHandlerInterface $moduleHandler,
-                              ProductCacheManager $product_cache_manager) {
+                              ProductCacheManager $product_cache_manager,
+                              CacheBackendInterface $cache_pims_files,
+                              Client $http_client) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
     $this->skuPluginManager = $skuPluginManager;
     $this->termStorage = $entity_type_manager->getStorage('taxonomy_term');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
     $this->moduleHandler = $moduleHandler;
     $this->productCacheManager = $product_cache_manager;
+    $this->cachePimsFiles = $cache_pims_files;
+    $this->httpClient = $http_client;
+  }
+
+  public function getAssets(SKU $sku) {
+    $static = &drupal_static(__METHOD__, []);
+    $cid = implode(':', [
+      $sku->id(),
+      $sku->language()->getId(),
+    ]);
+
+    if (isset($static[$cid])) {
+      return $static[$cid];
+    }
+
+    $assets = unserialize($sku->get('attr_assets')->getString());
+
+    if (!is_array($assets) || empty($assets)) {
+      return [];
+    }
+
+    foreach ($assets as &$data) {
+      if (isset($data['pims_image'], $data['pims_image']['id'])) {
+        $data['drupal_uri'] = $this->getImageUri($data['pims_image']);
+      }
+    }
+
+    $static[$cid] = $assets;
+    return $assets;
+  }
+
+  private function getFileUriFromPimsId($pims_id) {
+    $cache = $this->cachePimsFiles->get($pims_id);
+    return $cache->data ?? NULL;
+  }
+
+  private function setFileUriForPimsId($pims_id, FileInterface $file) {
+    $this->cachePimsFiles->set($pims_id, $file->getFileUri(), Cache::PERMANENT, $file->getCacheTags());
+  }
+
+  private function downloadPimsImage($data) {
+    $base_url = $this->getBaseUrl();
+
+    $url = $base_url . $data['path'] . $data['filename'];
+
+    // Download the file contents.
+    try {
+      $file_data = $this->httpClient->get($url)->getBody();
+
+      if (empty($file_data)) {
+        throw new \Exception('Failed to download asset file: ' . $url);
+      }
+    }
+    catch (RequestException $e) {
+      watchdog_exception('SkuAssetManager', $e);
+
+      // Not able to download image, no further processing required.
+      return NULL;
+    }
+
+    // Prepare the directory path.
+    $directory = 'public://assets' . $data['path'];
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    try {
+      $file = file_save_data($file_data, $directory . '/' . $data['filename'], FILE_EXISTS_REPLACE);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file: ' . $url);
+      }
+    }
+    catch (\Exception $e) {
+      watchdog_exception('SkuAssetManager', $e);
+    }
+
+    $this->setFileUriForPimsId($data['id'], $file);
+
+    return $file->getFileUri();
+  }
+
+  private function getImageUri($data) {
+    // First check if we have fid for pims id.
+    $uri = $this->getFileUriFromPimsId($data['id']);
+
+    if (empty($uri)) {
+      $uri = $this->downloadPimsImage($data);
+    }
+
+    return $uri;
+  }
+
+  private function getBaseUrl() {
+    static $base_url;
+
+    if (empty($base_url)) {
+      $base_url = $this->configFactory
+        ->get('alshaya_hm_images.settings')
+        ->get('base_url');
+    }
+
+    return $base_url;
   }
 
   /**
@@ -155,7 +289,7 @@ class SkuAssetManager {
 
     $asset_variant_urls = [];
     $asset_urls = [];
-    $base_url = $this->configFactory->get('alshaya_hm_images.settings')->get('base_url');
+    $base_url = $this->getBaseUrl();
 
     foreach ($location_images as $location_image) {
       $asset_urls = [];

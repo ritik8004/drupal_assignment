@@ -358,10 +358,12 @@ class SkuManager {
   }
 
   /**
-   * Get Image tag from media item array.
+   * Get Image tag with optional rel.
    *
-   * @param array $media
-   *   Media array containing image details.
+   * @param string $uri
+   *   URI of file.
+   * @param string $alt
+   *   Image alternate text.
    * @param string $image_style
    *   Image style to apply to the image.
    * @param string $rel_image_style
@@ -370,15 +372,16 @@ class SkuManager {
    * @return array
    *   Image build array.
    */
-  public function getSkuImage(array $media, $image_style = '', $rel_image_style = '') {
-    $media['label'] = $media['label'] ?? '';
-
+  public function getSkuImage(string $uri,
+                              string $alt = '',
+                              string $image_style = '',
+                              string $rel_image_style = '') {
     $image = [
       '#theme' => 'image_style',
       '#style_name' => $image_style,
-      '#uri' => $media['file']->getFileUri(),
-      '#title' => $media['label'],
-      '#alt' => $media['label'],
+      '#uri' => $uri,
+      '#title' => $alt,
+      '#alt' => $alt,
     ];
 
     if ($rel_image_style) {

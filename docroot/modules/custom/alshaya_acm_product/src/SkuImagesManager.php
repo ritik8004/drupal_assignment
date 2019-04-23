@@ -125,14 +125,12 @@ class SkuImagesManager {
    *   SKU Entity.
    * @param bool $check_parent_child
    *   Check parent or child SKUs.
-   * @param string $default_label
-   *   Default value for alt/title.
    *
    * @return array
    *   Array of media files.
    */
-  public function getAllMediaItems(SKUInterface $sku, $check_parent_child = FALSE, $default_label = '') {
-    $media = $this->getAllMedia($sku, $check_parent_child, $default_label);
+  public function getAllMediaItems(SKUInterface $sku, $check_parent_child = FALSE) {
+    $media = $this->getProductMedia($sku, $check_parent_child);
     $media_items = [];
     foreach ($media['media_items'] ?? [] as $items) {
       $media_items = array_merge($media_items, $items);
@@ -150,8 +148,8 @@ class SkuImagesManager {
    *   TRUE if SKU has media(images/videos).
    */
   public function hasMedia(SKUInterface $sku) {
-    $media = $this->getAllMedia($sku, FALSE);
-    return !empty($media['images']) || !empty($media['videos']);
+    $media = $this->getProductMedia($sku, FALSE);
+    return !empty($media);
   }
 
   /**
@@ -172,15 +170,35 @@ class SkuImagesManager {
    *   Processed media items.
    */
   public function getProductMedia(SKUInterface $sku, string $context, $check_parent_child = TRUE): array {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $static_id = implode(':', [
+      $sku->getSku(),
+      $sku->language()->getId(),
+      (int) $check_parent_child,
+    ]);
+
+    if (isset($static[$static_id])) {
+      return $static[$static_id];
+    }
+
+    $static[$static_id] = $this->productCacheManager->get($sku, $static_id);
+    if (!empty($static[$static_id])) {
+      return $static[$static_id];
+    }
+
     try {
       $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
-      return $this->productInfoHelper->getMedia($skuForGallery, $context);
+      $static[$static_id] = $this->productInfoHelper->getMedia($skuForGallery, $context);
+      $this->productCacheManager->set($sku, $static_id, $static[$static_id]);
     }
     catch (\Exception $e) {
       // For configurable products with no children, we may not have any
       // child to get media items from.
-      return [];
+      $static[$static_id] = [];
     }
+
+    return $static[$static_id];
   }
 
   /**
@@ -190,38 +208,68 @@ class SkuImagesManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
-   * @param null|string $default_label
-   *   Default label to use for alt/title.
    *
    * @return array
    *   Media items array.
    */
-  public function getSkuMediaItems(SKUInterface $sku, ?string $default_label = ''): array {
+  public function getSkuMediaItems(SKUInterface $sku): array {
     $static = &drupal_static(__FUNCTION__, []);
 
     $static_id = implode(':', [
       $sku->getSku(),
       $sku->language()->getId(),
-      $default_label,
     ]);
 
     if (isset($static[$static_id])) {
       return $static[$static_id];
     }
 
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $plugin = $sku->getPluginInstance();
+    $media = $sku->getMedia();
 
-    if (empty($default_label) && $sku->bundle() == 'simple') {
-      $parent = $plugin->getParentSku($sku);
+    $this->moduleHandler->alter(
+      'alshaya_acm_product_media_items', $media, $sku
+    );
 
-      // Check if there is parent SKU available, we use label from that.
-      if ($parent instanceof SKUInterface) {
-        $default_label = $parent->label();
+    foreach ($media ?? [] as $index => $media_item) {
+      $media_item = array_filter($media_item);
+
+      if ($media_item['file'] instanceof FileInterface) {
+        $media_item['drupal_uri'] = $media_item['file']->getFileUri();
+        unset($media_item['file']);
       }
+
+      $media[$index] = $media_item;
     }
 
-    $media = $sku->getMedia(TRUE, FALSE, $default_label);
+    $static[$static_id] = $media;
+    return $media;
+  }
+
+  /**
+   * Utility function to return all media files for a SKU.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU Entity.
+   * @param bool $check_parent_child
+   *   Check parent or child SKUs.
+   *
+   * @return array
+   *   Array of media files.
+   */
+  public function getGalleryMedia(SKUInterface $sku, $check_parent_child = FALSE) {
+    $static = &drupal_static(__FUNCTION__, []);
+
+    $static_id = implode(':', [
+      $sku->getSku(),
+      $sku->language()->getId(),
+      (int) $check_parent_child,
+    ]);
+
+    if (isset($static[$static_id])) {
+      return $static[$static_id];
+    }
+
+    $media = $this->getSkuMediaItems($sku);
 
     foreach ($media ?? [] as $index => $media_item) {
       if (!isset($media_item['media_type'])) {
@@ -248,92 +296,8 @@ class SkuImagesManager {
       }
     }
 
-    $return = [
-      'images' => [],
-      'videos' => [],
-      'media_items' => $media,
-    ];
-
-    // Process CORE media files.
-    if (!empty($media)) {
-      foreach ($media as $media_item) {
-        if (!isset($media_item['media_type'])) {
-          continue;
-        }
-
-        if ($media_item['media_type'] == 'image') {
-          $url = $media_item['file']->url();
-          $return['images'][$url] = $url;
-        }
-        elseif ($media_item['media_type'] == 'external-video') {
-          $return['videos'][$media_item['video_url']] = $media_item['video_url'];
-        }
-      }
-    }
-
-    $static[$static_id] = $return;
-
-    return $return;
-  }
-
-  /**
-   * Utility function to return all media files for a SKU.
-   *
-   * @param \Drupal\acq_commerce\SKUInterface $sku
-   *   SKU Entity.
-   * @param bool $check_parent_child
-   *   Check parent or child SKUs.
-   * @param string $default_label
-   *   Default value for alt/title.
-   *
-   * @return array
-   *   Array of media files.
-   */
-  public function getAllMedia(SKUInterface $sku, $check_parent_child = FALSE, $default_label = '') {
-    // Here for_sku means it can be in parent or child.
-    // And from_sku means specifically for this SKU.
-    $cache_key = $check_parent_child ? 'media_for_sku' : 'media_from_sku';
-
-    try {
-      $media = $this->getMediaItemsFromCache($sku, $cache_key);
-      return $media;
-    }
-    catch (\Exception $e) {
-      // Do nothing and let code execution continue to get
-      // fresh gallery.
-    }
-
-    $plugin = $sku->getPluginInstance();
-
-    if (empty($default_label) && $sku->bundle() == 'simple') {
-      $parent = $plugin->getParentSku($sku);
-
-      // Check if there is parent SKU available, we use label from that.
-      if ($parent instanceof SKUInterface) {
-        $default_label = $parent->label();
-      }
-    }
-
-    $media = $this->getSkuMediaItems($sku, $default_label)['media_items'];
-
-    $return = [
-      'images' => [],
-      'videos' => [],
-      'media_items' => [],
-    ];
-
-    // We will use below variables for alter hooks.
-    $main = [];
-    $thumbs = [];
-
-    // Invoke the alter hook to allow all modules to update the element.
-    $this->moduleHandler->alter('acq_sku_pdp_gallery_media', $main, $thumbs, $sku);
-
-    $return['main'] = $main;
-    $return['thumbs'] = $thumbs;
-
     // Avoid notices and warnings in local.
-    if ($check_parent_child && empty($media) && empty($main)) {
+    if ($check_parent_child && empty($media)) {
       if ($sku->bundle() == 'simple') {
         /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
         $plugin = $sku->getPluginInstance();
@@ -341,7 +305,7 @@ class SkuImagesManager {
 
         // Check if there is parent SKU available, use media files of parent.
         if ($parent instanceof SKUInterface) {
-          return $this->getAllMedia($parent);
+          return $this->getGalleryMedia($parent);
         }
       }
       elseif ($sku->bundle() == 'configurable') {
@@ -349,40 +313,9 @@ class SkuImagesManager {
 
         // Check if there is child SKU available, use media files of child.
         if ($child instanceof SKUInterface) {
-          return $this->getAllMedia($child, FALSE, $default_label);
+          return $this->getGalleryMedia($child, FALSE);
         }
       }
-    }
-
-    // Process CORE media files.
-    if (!empty($media)) {
-      foreach ($media as $media_item) {
-        if (!isset($media_item['media_type'])) {
-          continue;
-        }
-
-        if ($media_item['media_type'] == 'image') {
-          $url = $media_item['file']->url();
-          $return['images'][$url] = $url;
-          $return['media_items']['images'][] = array_filter($media_item);
-        }
-        elseif ($media_item['media_type'] == 'external-video') {
-          $return['videos'][$media_item['video_url']] = $media_item['video_url'];
-          $return['media_items']['videos'][] = array_filter($media_item);
-        }
-      }
-    }
-
-    // Add main image provided by other modules.
-    if ($main) {
-      $url = $main['mediumurl']->toString();
-      $return['images'][$url] = $url;
-    }
-
-    // Add all thumbnails provided by other modules.
-    foreach ($thumbs as $thumb) {
-      $url = $thumb['mediumurl']->toString();
-      $return['images'][$url] = $url;
     }
 
     // For simple children we need to add images from parent
@@ -393,13 +326,22 @@ class SkuImagesManager {
       $parent = $plugin->getParentSku($sku);
 
       if ($parent instanceof SKUInterface) {
-        $parent_media = $this->getAllMedia($parent, FALSE, $default_label);
-        $return = array_merge_recursive($return, $parent_media);
+        $parent_media = $this->getGalleryMedia($parent, FALSE);
+        $media = array_merge_recursive($media, $parent_media);
       }
     }
 
-    $this->setMediaItemsToCache($sku, $cache_key, $return);
+    $return = [];
+    foreach ($media as $media_item) {
+      if ($media_item['media_type'] == 'image') {
+        $return['media_items']['images'][] = $media_item;
+      }
+      elseif (!empty($media_item['video_url'])) {
+        $return['media_items']['videos'][] = $media_item;
+      }
+    }
 
+    $static[$static_id] = $return;
     return $return;
   }
 
@@ -417,77 +359,6 @@ class SkuImagesManager {
     }
 
     return $static;
-  }
-
-  /**
-   * Get media items from cache and wakeup array.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param string $cache_key
-   *   Cache key.
-   *
-   * @return array
-   *   Processed media array.
-   *
-   * @throws \Exception
-   *   When fails to load file from fid in cache or nothing found in cache.
-   */
-  private function getMediaItemsFromCache(SKU $sku, string $cache_key) {
-    $media = $this->skuManager->getProductCachedData($sku, $cache_key);
-
-    if (empty($media)) {
-      throw new \Exception('Nothing found in cache');
-    }
-
-    foreach ($media['images'] ?? [] as &$image) {
-      if (strpos($image, 'http') !== 0) {
-        $image = self::getPublicDirectory() . $image;
-      }
-    }
-
-    foreach ($media['media_items']['images'] ?? [] as &$item) {
-      if (isset($item['fid'])) {
-        $item['file'] = $this->fileStorage->load($item['fid']);
-
-        if (!($item['file'] instanceof FileInterface)) {
-          throw new \Exception('Failed to load file from fid in cache.');
-        }
-      }
-    }
-
-    return $media;
-  }
-
-  /**
-   * Set media items to cache after removing extra data.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku
-   *   SKU Entity.
-   * @param string $cache_key
-   *   Cache key.
-   * @param array $media
-   *   Media array.
-   */
-  private function setMediaItemsToCache(SKU $sku, string $cache_key, array $media) {
-    if (is_array($media['images'])) {
-      $media['images'] = array_values($media['images']);
-
-      foreach ($media['images'] as &$image) {
-        $image = str_replace(self::getPublicDirectory(), '', $image);
-      }
-    }
-
-    foreach ($media['media_items']['images'] ?? [] as &$item) {
-      unset($item['file']);
-      $item = array_filter($item);
-    }
-
-    $this->skuManager->setProductCachedData(
-      $sku,
-      $cache_key,
-      $media
-    );
   }
 
   /**
@@ -547,7 +418,7 @@ class SkuImagesManager {
       return [];
     }
 
-    $media = $this->getAllMedia($sku);
+    $media = $this->getProductMedia($sku);
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {
@@ -573,9 +444,8 @@ class SkuImagesManager {
     $media_image = $this->getFirstImage($sku);
 
     // If we have image for the product.
-    if (!empty($media_image) && $media_image['file'] instanceof FileInterface) {
-      $uri = $media_image['file']->getFileUri();
-      $url = file_create_url($uri);
+    if (!empty($media_image['drupal_uri'])) {
+      $url = file_create_url($media_image['drupal_uri']);
       return $absolute ? $url : file_url_transform_relative($url);
     }
 
@@ -764,49 +634,40 @@ class SkuImagesManager {
   public function getGallery(SKUInterface $sku, $context = 'search', $product_label = '', $add_default_image = TRUE) {
     $gallery = [];
 
-    $display_thumbnails = $this->productDisplaySettings->get('image_thumb_gallery');
+    $media = $this->getProductMedia($sku, $context);
+
+    if (empty($media)) {
+      return [];
+    }
 
     switch ($context) {
       case 'search':
-        // Invoke the alter hook to allow all modules to set the gallery.
-        $this->moduleHandler->alter(
-          'alshaya_acm_product_gallery', $gallery, $sku, $context
-        );
+        $search_main_image = $thumbnails = [];
 
-        // Default logic if nothing done in any of the implemented alter hooks.
-        if (empty($gallery)) {
-          $search_main_image = $thumbnails = [];
-
-          $media = $this->getAllMedia($sku);
-
-          // Loop through all media items and prepare thumbnails array.
-          foreach ($media['media_items']['images'] ?? [] as $media_item) {
-            // For now we are displaying only image slider on search results
-            // page and PLP.
-            $media_item['label'] = $product_label;
-            if (empty($search_main_image)) {
-              $search_main_image = $this->skuManager->getSkuImage($media_item, '291x288');
-            }
-
-            if ($display_thumbnails) {
-              $thumbnails[] = $this->skuManager->getSkuImage($media_item, '291x288', '291x288');
-            }
+        // Loop through all media items and prepare thumbnails array.
+        foreach ($media['media_items']['images'] ?? [] as $media_item) {
+          // For now we are displaying only image slider on search results
+          // page and PLP.
+          if (empty($search_main_image)) {
+            $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
           }
 
-          $gallery = [
-            '#theme' => 'alshaya_search_gallery',
-            '#mainImage' => $search_main_image,
-            '#thumbnails' => $thumbnails,
-          ];
+          if ($this->productDisplaySettings->get('image_thumb_gallery')) {
+            $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288', '291x288');
+          }
         }
+
+        $gallery = [
+          '#theme' => 'alshaya_search_gallery',
+          '#mainImage' => $search_main_image,
+          '#thumbnails' => $thumbnails,
+        ];
 
         break;
 
       case 'modal':
       case 'pdp':
       case 'modal-magazine':
-
-        $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, TRUE);
         $thumbnails = $mediaItems['thumbnails'];
         $main_image = $mediaItems['main_image'];
@@ -892,7 +753,6 @@ class SkuImagesManager {
         break;
 
       case 'pdp-magazine':
-        $media = $this->getAllMedia($sku);
         $mediaItems = $this->getThumbnailsFromMedia($media, FALSE);
         $thumbnails = $mediaItems['thumbnails'];
 
@@ -1059,7 +919,7 @@ class SkuImagesManager {
    *   URL of swatch image or null
    */
   public function getPdpSwatchImageUrl(SKU $sku) {
-    $media = $sku->getMedia(TRUE, FALSE);
+    $media = $this->getSkuMediaItems($sku);
 
     $static = &drupal_static(__FUNCTION__, NULL);
     $static[$sku->getSku()] = NULL;
@@ -1067,10 +927,9 @@ class SkuImagesManager {
     foreach ($media as $item) {
       if (isset($item['roles'])
         && in_array(self::SWATCH_IMAGE_ROLE, $item['roles'])
-        && isset($item['file'])
-        && $item['file'] instanceof FileInterface) {
+        && !empty($item['drupal_uri'])) {
 
-        $static[$sku->getSku()] = file_create_url($item['file']->url());
+        $static[$sku->getSku()] = file_create_url($item['drupal_uri']);
         break;
       }
     }
@@ -1154,16 +1013,16 @@ class SkuImagesManager {
 
       $product_image = $child->getThumbnail();
 
-      if (empty($product_image) || !($product_image['file'] instanceof FileInterface)) {
+      if (empty($product_image) || empty($product_image['drupal_uri'])) {
         continue;
       }
 
       $duplicates[$value] = 1;
       if (empty($plp_main_image)) {
-        $plp_main_image = $this->skuManager->getSkuImage($product_image, '291x288');
+        $plp_main_image = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), '291x288');
       }
 
-      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image, '291x288', '291x288');
+      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), '291x288', '291x288');
     }
 
     return [
@@ -1185,25 +1044,24 @@ class SkuImagesManager {
    *   Thumbnails.
    */
   protected function getThumbnailsFromMedia(array $media, $get_main_image = FALSE) {
-    $thumbnails = $media['thumbs'];
+    $thumbnails = $media['thumbs'] ?? [];
 
     // Fetch settings.
     $settings = $this->getCloudZoomDefaultSettings();
     $thumbnail_style = $settings['thumb_style'];
     $zoom_style = $settings['zoom_style'];
     $slide_style = $settings['slide_style'];
-    $main_image = $media['main'];
+    $main_image = $media['main'] ?? [];
 
     // Create our thumbnails to be rendered for zoom.
     foreach ($media['media_items']['images'] ?? [] as $media_item) {
-      if ($media_item['file'] instanceof FileInterface) {
-        $file_uri = $media_item['file']->getFileUri();
+      if (!empty($media_item['drupal_uri'])) {
+        $file_uri = $media_item['drupal_uri'];
 
         // Show original full image in the modal inside a draggable container.
-        $original_image = $media_item['file']->url();
+        $original_image = file_create_url($file_uri);
 
-        $image_small = ImageStyle::load($thumbnail_style)
-          ->buildUrl($file_uri);
+        $image_small = ImageStyle::load($thumbnail_style)->buildUrl($file_uri);
         $image_zoom = ImageStyle::load($zoom_style)->buildUrl($file_uri);
         $image_medium = ImageStyle::load($slide_style)->buildUrl($file_uri);
 
@@ -1398,6 +1256,26 @@ class SkuImagesManager {
     }
 
     return $public_dir;
+  }
+
+  /**
+   * Wrapper function to get only the image urls for product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Array containing absolute urls of images.
+   */
+  public function getMediaImages(SKU $sku): array {
+    $media = $this->getProductMedia($sku);
+    $images = [];
+
+    foreach ($media['media_items']['images'] as $item) {
+      $images = file_create_url($item['drupal_uri']);
+    }
+
+    return $images;
   }
 
 }

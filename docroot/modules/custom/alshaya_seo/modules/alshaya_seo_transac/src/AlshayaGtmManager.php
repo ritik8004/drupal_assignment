@@ -1014,8 +1014,7 @@ class AlshayaGtmManager {
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
         if ($product_media) {
-          $product_media_file = $product_media['file'];
-          $product_media_url = file_create_url($product_media_file->getFileUri());
+          $product_media_url = file_create_url($product_media['drupal_uri']);
         }
         else {
           $product_media_url = '';
@@ -1303,13 +1302,11 @@ class AlshayaGtmManager {
       if ($product_node instanceof NodeInterface) {
         $sku_media = alshaya_acm_product_get_product_media($product_node->id(), TRUE) ?: '';
       }
-      if ($sku_media) {
-        $sku_media_file = $sku_media['file'];
-        $sku_media_url = file_create_url($sku_media_file->getFileUri());
-      }
-      else {
-        $sku_media_url = 'image not available';
-      }
+
+      $sku_media_url = empty($sku_media)
+        ? 'image not available'
+        : file_create_url($sku_media['drupal_uri']);
+
       $sku_entity = SKU::loadFromSku($item['sku']);
       if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
         $sku_entity = $sku_entity->getTranslation('en');
