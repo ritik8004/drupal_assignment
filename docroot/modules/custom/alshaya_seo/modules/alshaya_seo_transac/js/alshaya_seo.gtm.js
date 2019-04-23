@@ -543,13 +543,6 @@
               dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
             });
           });
-
-        $('[data-drupal-selector="edit-member-delivery-home-address-form-save"]')
-          .once('delivery-address')
-          .on('click mousedown', function (e) {
-            dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
-          });
-
       }
 
       /**
