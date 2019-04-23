@@ -1,0 +1,10 @@
+name: 'Alshaya Magazine'
+type: module
+core: 8.x
+description: 'Adds Magazine feature.'
+dependencies:
+  - alshaya_master:alshaya_master
+  - drupal:field
+  - drupal:system
+  - drupal:user
+package: Alshaya

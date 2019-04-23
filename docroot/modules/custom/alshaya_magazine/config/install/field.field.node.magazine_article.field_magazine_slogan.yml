@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_magazine_slogan
+    - node.type.magazine_article
+id: node.magazine_article.field_magazine_slogan
+field_name: field_magazine_slogan
+entity_type: node
+bundle: magazine_article
+label: Slogan
+description: ''
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

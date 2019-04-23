@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_magazine_category
+    - node.type.magazine_article
+    - taxonomy.vocabulary.magazine_category
+id: node.magazine_article.field_magazine_category
+field_name: field_magazine_category
+entity_type: node
+bundle: magazine_article
+label: 'Magazine Category'
+description: ''
+required: false
+translatable: false
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      magazine_category: magazine_category
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

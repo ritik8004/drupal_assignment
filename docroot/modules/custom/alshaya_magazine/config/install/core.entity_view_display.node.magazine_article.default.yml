@@ -1,0 +1,80 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.magazine_article.field_magazine_hero_image
+    - field.field.node.magazine_article.field_magazine_category
+    - field.field.node.magazine_article.field_magazine_date
+    - field.field.node.magazine_article.field_magazine_desktop_image
+    - field.field.node.magazine_article.field_magazine_weight
+    - field.field.node.magazine_article.field_magazine_paragraphs
+    - field.field.node.magazine_article.field_magazine_shop_the_story
+    - field.field.node.magazine_article.field_magazine_slogan
+    - node.type.magazine_article
+  module:
+    - acq_sku
+    - datetime
+    - entity_reference_revisions
+    - image
+    - user
+id: node.magazine_article.default
+targetEntityType: node
+bundle: magazine_article
+mode: default
+content:
+  field_magazine_hero_image:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_magazine_category:
+    weight: 1
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_magazine_date:
+    weight: 3
+    label: hidden
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_magazine_paragraphs:
+    type: entity_reference_revisions_entity_view
+    weight: 4
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    region: content
+  field_magazine_shop_the_story:
+    weight: 5
+    label: above
+    settings:
+      view_mode: teaser
+    third_party_settings: {  }
+    type: sku_formatter
+    region: content
+  field_magazine_slogan:
+    weight: 2
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+hidden:
+  field_magazine_desktop_image: true
+  field_magazine_weight: true
+  langcode: true
+  links: true
+  sharethis: true
