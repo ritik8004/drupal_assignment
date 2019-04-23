@@ -233,6 +233,10 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'depth' => (int) $term->depth_level,
       ];
 
+      if (($term->display_in_desktop || $term->display_in_mobile) && $link = $this->getOverrideTargetLink($term->tid, $langcode)) {
+        $data[$term->tid]['path'] = Url::fromUri($link)->toString();
+      }
+
       if ($highlight_paragraph) {
         $data[$term->tid]['highlight_paragraph'] = $this->getHighlightParagraph($term->tid, $langcode, self::VOCABULARY_ID);
       }
@@ -449,8 +453,8 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->innerJoin('taxonomy_term__parent', 'tth', 'tth.entity_id = tfd.tid');
     $query->leftJoin('taxonomy_term__field_display_as_clickable_link', 'ttdcl', 'ttdcl.entity_id = tfd.tid');
     $query->innerJoin('taxonomy_term__field_category_include_menu', 'ttim', 'ttim.entity_id = tfd.tid AND ttim.langcode = tfd.langcode');
-    $query->innerJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid AND in_desktop.langcode = tfd.langcode');
-    $query->innerJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid AND in_mobile.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_include_in_desktop', 'in_desktop', 'in_desktop.entity_id = tfd.tid AND in_desktop.langcode = tfd.langcode');
+    $query->leftJoin('taxonomy_term__field_include_in_mobile_tablet', 'in_mobile', 'in_mobile.entity_id = tfd.tid AND in_mobile.langcode = tfd.langcode');
     $query->innerJoin('taxonomy_term__field_commerce_status', 'ttcs', 'ttcs.entity_id = tfd.tid AND ttcs.langcode = tfd.langcode');
     if ($exclude_not_in_menu) {
       $query->condition('ttim.field_category_include_menu_value', 1);
@@ -553,6 +557,28 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     $query->condition('ttbc.langcode', $langcode);
     $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
     return $query->execute()->fetchObject();
+  }
+
+  /**
+   * Get the target link of given term id.
+   *
+   * @param int $tid
+   *   The term id.
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return null|string
+   *   Return target link of given term or null.
+   */
+  protected function getOverrideTargetLink($tid, $langcode) {
+    $query = $this->connection->select('taxonomy_term__field_target_link', 'target_link');
+    $query->fields('target_link', ['field_target_link_uri']);
+    $query->innerJoin('taxonomy_term__field_override_target_link', 'override_target', 'target_link.entity_id = override_target.entity_id AND target_link.langcode = override_target.langcode');
+    $query->condition('target_link.entity_id', $tid);
+    $query->condition('target_link.langcode', $langcode);
+    $query->condition('override_target.field_override_target_link_value', 1);
+    $query->condition('target_link.bundle', ProductCategoryTree::VOCABULARY_ID);
+    return $query->execute()->fetchField();
   }
 
   /**
