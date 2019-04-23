@@ -35,6 +35,17 @@ function alshaya_acm_product_category_update_8029() {
       'alshaya_acm_product_category',
       'install'
     );
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.taxonomy_term.acq_product_category.default',
+        'core.entity_view_display.taxonomy_term.acq_product_category.default',
+      ],
+      'alshaya_acm_product_category',
+      'install',
+      AlshayaConfigManager::MODE_MERGE
+    );
 }
 
 /**
