@@ -219,14 +219,15 @@
             }
           });
 
-          // Hide the `all filters` panel when less filters.
-          if (total_facets <= show_only_facets) {
-            $('.show-all-filters').removeClass('show-all-facet');
-            $('.show-all-filters').addClass('hide-all-facet');
-          }
-          else {
-            $('.show-all-filters').removeClass('hide-all-facet');
-            $('.show-all-filters').addClass('show-all-facet');
+          // Only for desktop.
+          if ($(window).width() > 1023) {
+            // Hide the `all filters` panel when less filters.
+            if (total_facets <= show_only_facets) {
+              $('.show-all-filters').hide();
+            }
+            else {
+              $('.show-all-filters').show();
+            }
           }
         }
       }
