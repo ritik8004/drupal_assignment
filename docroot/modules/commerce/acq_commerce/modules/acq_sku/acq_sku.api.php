@@ -154,5 +154,17 @@ function hook_acq_sku_indexes_alter(array &$indexes) {
 }
 
 /**
+ * Alter the attributes storing in .
+ *
+ * @param array $attributes
+ *   All attributes for the product.
+ * @param array $formatted
+ *   Formatted attributes array that will be stored.
+ */
+function hook_acq_sku_attribute_sync_alter(array &$attributes, array &$formatted) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

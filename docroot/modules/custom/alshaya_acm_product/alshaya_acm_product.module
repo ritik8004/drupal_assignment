@@ -1868,6 +1868,39 @@ function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields =
 }
 
 /**
+ * Implements hook_acq_sku_attribute_sync_alter().
+ */
+function alshaya_acm_product_acq_sku_attribute_sync_alter(array &$attributes, array &$formatted) {
+  // Doing DB query to get the config names as we have two configs for this.
+  // One for the `alshaya_acm_product.sku_base_fields` and another is brand
+  // specific config.
+  $db = \Drupal::database();
+  $query = $db->select('config', 'c');
+  $query->fields('c', ['name']);
+  $query->condition('c.name', '%' . $db->escapeLike('.sku_base_fields') . '%', 'LIKE');
+  $result = $query->execute()->fetchAllKeyed(0, 0);
+
+  // If there any field config available in DB.
+  if ($result) {
+    $fields = [];
+    foreach ($result as $rs) {
+      // If config available.
+      if ($attr_config = \Drupal::config($rs)->get('fields')) {
+        $fields = array_merge($fields, array_keys($attr_config));
+      }
+    }
+
+    if (!empty($fields)) {
+      foreach ($formatted as $key => $attr) {
+        if (in_array($attr['key'], $fields)) {
+          unset($formatted[$key]);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_alshaya_master_post_drupal_install().
  */
 function alshaya_acm_product_alshaya_master_post_drupal_install() {
