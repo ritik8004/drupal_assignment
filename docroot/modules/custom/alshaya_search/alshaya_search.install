@@ -24,8 +24,7 @@ function alshaya_search_update_8027() {
     AlshayaConfigManager::MODE_MERGE
   );
   // Save acquia_search_index to flag all products for re-index.
-  $index = Index::load('acquia_search_index');
-  $index->save();
+  _alshaya_search_api_reindex(['acquia_search_index']);
 }
 
 /**
