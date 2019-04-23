@@ -203,6 +203,7 @@
       function showOnlyFewFacets() {
         var facets = $('.c-content__region .region__content .container-without-product > div.block-facets-ajax:not(:empty)');
         if (facets.length > 0) {
+          var total_facets = facets.length;
           // By default only show 4 facets.
           var show_only_facets = 4;
           var plugin_id = facets[0].getAttribute('data-block-plugin-id');
@@ -210,12 +211,23 @@
           if (plugin_id.indexOf('category') !== -1) {
             // If category facet present. then index check increases.
             show_only_facets = 5;
+            total_facets -= 1;
           }
           facets.each( function (index) {
             if (index >= show_only_facets) {
               $(this).addClass('hide-facet-block');
             }
           });
+
+          // Hide the `all filters` panel when less filters.
+          if (total_facets <= show_only_facets) {
+            $('.show-all-filters').removeClass('show-all-facet');
+            $('.show-all-filters').addClass('hide-all-facet');
+          }
+          else {
+            $('.show-all-filters').removeClass('hide-all-facet');
+            $('.show-all-filters').addClass('show-all-facet');
+          }
         }
       }
 
