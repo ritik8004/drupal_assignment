@@ -180,6 +180,14 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       }
     }
 
+    $lhn_tree = array_filter($lhn_tree, function ($tree_term) {
+      return $tree_term['lhn'];
+    });
+
+    if (empty($lhn_tree)) {
+      return [];
+    }
+
     return [
       '#theme' => 'alshaya_lhn_tree',
       '#lhn_cat_tree' => $lhn_tree,
