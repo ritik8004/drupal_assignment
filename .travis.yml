@@ -83,8 +83,8 @@ install:
   - echo "memory_limit=512M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - echo "extension = memcached.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - source $BLT_DIR/scripts/travis/setup_project
-  - nvm install 6.10.0
-  - nvm use 6.10.0
+  - nvm install 8.12.0
+  - nvm use 8.12.0
   # Setup the themes here so the node_modules folders can be cached.
   - source ${BUILD_DIR}/blt/scripts/frontend-setup.sh "${BUILD_DIR}/docroot"
   # Frontend-setup.sh changed directory, hence we return to the original dir.
