@@ -221,11 +221,9 @@
 
           // Hide the `all filters` panel when less filters only for desktop.
           if (total_facets <= show_only_facets) {
-            $('.show-all-filters').removeClass('show-for-desktop');
             $('.show-all-filters').addClass('hide-for-desktop');
           }
           else {
-            $('.show-all-filters').addClass('show-for-desktop');
             $('.show-all-filters').removeClass('hide-for-desktop');
           }
         }
