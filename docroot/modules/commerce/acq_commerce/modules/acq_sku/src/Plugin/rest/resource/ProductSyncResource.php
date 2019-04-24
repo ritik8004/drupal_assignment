@@ -664,9 +664,6 @@ class ProductSyncResource extends ResourceBase {
       ];
     }
 
-    // Allow other modules to change/decide the attributes need to store.
-    \Drupal::moduleHandler()->alter('acq_sku_attribute_sync', $attributes, $formatted);
-
     return ($formatted);
   }
 
