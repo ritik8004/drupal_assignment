@@ -15,6 +15,26 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Allow multiple value selectable for brand facets.
+ */
+function alshaya_transac_update_8122() {
+  $brand_facets = [
+    'facets.facet.product_brand',
+    'facets.facet.plp_product_brand',
+    'facets.facet.promo_product_brand',
+  ];
+  foreach ($brand_facets as $brand_facet) {
+    $config = \Drupal::configFactory()->getEditable($brand_facet);
+    if ($config) {
+      $config->set('query_operator', 'or');
+      $config->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable `alshaya_knet` module and update k-net configs.
  */
 function alshaya_transac_update_8121() {
