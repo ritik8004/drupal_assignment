@@ -9,7 +9,7 @@ docrootDir="$1"
 # Also not doing this for amp as of now.
 
 # List of folders into themes/custom/transac which must be ignored.
-ignoredDirs=( "alshaya_example_subtheme" "alshaya_mothercare" "node_modules" )
+ignoredDirs=( "alshaya_example_subtheme" "node_modules" )
 
 for subdir in $(find $docrootDir/themes/custom/transac -mindepth 1 -maxdepth 1 -type d)
 do
