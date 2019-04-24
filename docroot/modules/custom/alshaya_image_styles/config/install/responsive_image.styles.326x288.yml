@@ -6,24 +6,24 @@ dependencies:
     - image.style.224x202
     - image.style.326x288
   theme:
-    - whitelabel
+    - alshaya_white_label
 id: 326x288
 label: 326x288
 image_style_mappings:
   -
-    breakpoint_id: whitelabel.desk
+    breakpoint_id: alshaya_white_label.desk
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: 326x288
   -
-    breakpoint_id: whitelabel.lap
+    breakpoint_id: alshaya_white_label.lap
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: 224x202
   -
-    breakpoint_id: whitelabel.palm
+    breakpoint_id: alshaya_white_label.palm
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: 146x132
-breakpoint_group: whitelabel
+breakpoint_group: alshaya_white_label
 fallback_image_style: 146x132

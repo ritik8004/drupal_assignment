@@ -8,7 +8,7 @@ use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
-use Drupal\alshaya\AlshayaArrayUtils;
+use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -218,6 +218,12 @@ class SkuManager {
    * @var \Drupal\acq_sku\ProductInfoHelper
    */
   protected $productInfoHelper;
+  /**
+   * Alshaya array utils service.
+   *
+   * @var \Drupal\alshaya_config\AlshayaArrayUtils
+   */
+  protected $alshayaArrayUtils;
 
   /**
    * SkuManager constructor.
@@ -262,6 +268,11 @@ class SkuManager {
    *   Simple sitemap generator.
    * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
    *   Product Info Helper.
+   * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
+   *   Alshaya arraty utility service.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -282,7 +293,8 @@ class SkuManager {
                               Client $http_client,
                               RendererInterface $renderer,
                               Simplesitemap $generator,
-                              ProductInfoHelper $product_info_helper) {
+                              ProductInfoHelper $product_info_helper,
+                              AlshayaArrayUtils $alshayaArrayUtils) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -306,6 +318,7 @@ class SkuManager {
     $this->renderer = $renderer;
     $this->generator = $generator;
     $this->productInfoHelper = $product_info_helper;
+    $this->alshayaArrayUtils = $alshayaArrayUtils;
   }
 
   /**
@@ -1612,7 +1625,7 @@ class SkuManager {
     $tree = $plugin->deriveProductTree($sku);
 
     $configurable_codes = array_keys($tree['configurables']);
-    $all_combinations = AlshayaArrayUtils::getAllCombinations($configurable_codes);
+    $all_combinations = $this->alshayaArrayUtils->getAllCombinations($configurable_codes);
 
     $combinations =& $tree['combinations'];
 

@@ -5,7 +5,6 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_category_image
   - field.field.taxonomy_term.acq_product_category.field_category_include_menu
   - field.field.taxonomy_term.acq_product_category.field_commerce_id
-  - field.field.taxonomy_term.acq_product_category.field_commerce_status
   - field.field.taxonomy_term.acq_product_category.field_image_text_bg_color
   - field.field.taxonomy_term.acq_product_category.field_image_text_font_color
   - field.field.taxonomy_term.acq_product_category.field_main_menu_highlight

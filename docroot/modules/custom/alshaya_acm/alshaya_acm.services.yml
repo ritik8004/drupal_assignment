@@ -41,7 +41,14 @@ services:
 
   alshaya_acm.config_check:
     class: Drupal\alshaya_acm\AlshayaAcmConfigCheck
-    arguments: ['@config.factory', '@module_installer', '@module_handler', '@language_manager', '@datetime.time', '@state']
+    arguments:
+      - '@config.factory'
+      - '@module_installer'
+      - '@module_handler'
+      - '@language_manager'
+      - '@datetime.time'
+      - '@state'
+      - '@alshaya_custom.alshaya_country_manager'
 
   cache.alshaya_api:
     class: Drupal\Core\Cache\CacheBackendInterface
