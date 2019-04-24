@@ -16,11 +16,6 @@
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       ul {
-        @include breakpoint($tablet) {
-          margin-bottom: 0;
-          border-bottom: none;
-        }
-
         li {
           a {
             font-size: 0.75rem;
