@@ -110,7 +110,7 @@
           &::after {
             color: $checkout_cc_map_hours_icon;
             top: 0.25rem;
-            left: 9.9375rem;
+            #{$left}: 9.9375rem;
           }
         }
 
@@ -147,8 +147,12 @@
             color: $checkout_cc_map_hours_icon;
             font-size: 2rem;
             position: absolute;
-            top: -0.1875rem;
-            #{$left}: -0.1875rem;
+            top: 0.5rem;
+            #{$left}: 0.1875rem;
+
+            html[lang=ar] & {
+              top: 0.875rem;
+            }
           }
         }
 
