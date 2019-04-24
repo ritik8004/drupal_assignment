@@ -1,15 +1,12 @@
 <?php
-
 /**
  * @file
  * Example implementation of ACSF post-sites-php hook.
  *
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
-
 // The function_exists check is required as the file is included several times.
 if (!function_exists('gardens_data_get_sites_from_file')) {
-
   /**
    * Get the domains defined for the given site.
    *
@@ -35,7 +32,7 @@ if (!function_exists('gardens_data_get_sites_from_file')) {
       elseif ($map = gardens_site_data_load_file()) {
         $domains = array_filter(
           $map['sites'],
-          function ($item) use ($name) {
+          function($item) use ($name) {
             return $item['name'] == $name;
           }
         );
@@ -49,10 +46,12 @@ if (!function_exists('gardens_data_get_sites_from_file')) {
     }
     return $domains;
   }
-
 }
 // Get all the domains that are defined for the current site.
-$domains = gardens_data_get_sites_from_file($GLOBALS['gardens_site_settings']['conf']['acsf_db_name']);
+$domains = gardens_data_get_sites_from_file($data['gardens_site_settings']['conf']['acsf_db_name']);
 // Get the site's name from the first domain.
-global $_acsf_site_name;
-$_acsf_site_name = explode('.', array_keys($domains)[0])[0];
+global $acsf_site_name;
+$acsf_site_name = explode('.', array_keys($domains)[0])[0];
+
+// Support cases like hmkw1 or mckw12.
+$acsf_site_name = preg_replace('/\d/', '', $acsf_site_name);

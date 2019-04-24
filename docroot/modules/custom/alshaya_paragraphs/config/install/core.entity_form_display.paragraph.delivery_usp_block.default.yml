@@ -27,7 +27,7 @@ content:
   field_usp_text:
     weight: 5
     settings:
-      rows: 5content_moderationcontent_moderationcontent_moderatcontent_moderation
+      rows: 5
       placeholder: ''
     third_party_settings: {  }
     type: text_textarea

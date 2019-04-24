@@ -416,6 +416,7 @@ function alshaya_transac_install() {
   global $_alshaya_modules_installed;
 
   foreach ($modules as $module) {
+    print_r($module);
     \Drupal::service('module_installer')->install([$module]);
     $_alshaya_modules_installed[] = $module;
   }

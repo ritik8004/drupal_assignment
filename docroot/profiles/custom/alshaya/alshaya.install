@@ -279,6 +279,6 @@ function alshaya_install() {
   }
 
   \Drupal::moduleHandler()->invokeAll('alshaya_profile_installed', ['alshaya', $modules]);
-  \Drupal::service('module_installer')->uninstall(['field_ui']);
-  \Drupal::service('module_installer')->uninstall(['quickedit']);
+//  \Drupal::service('module_installer')->uninstall(['field_ui']);
+//  \Drupal::service('module_installer')->uninstall(['quickedit']);
 }
