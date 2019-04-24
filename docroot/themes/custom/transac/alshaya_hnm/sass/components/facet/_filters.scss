@@ -87,19 +87,19 @@
     > .block-facet-blockcategory-facet-plp,
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
-      top: 3.6875rem;
-
       html[lang=ar] & {
-        top: 3.6875rem;
+        top: 3.625rem;
       }
     }
   }
 }
 
 .filter-fixed-top {
-  .container-without-product {
-    &::before {
-      width: 2.5rem;
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        width: 2.5rem;
+      }
     }
   }
 }
