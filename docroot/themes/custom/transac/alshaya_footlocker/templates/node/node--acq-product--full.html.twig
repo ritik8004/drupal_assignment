@@ -1,0 +1,9 @@
+{% extends "@alshaya_white_label/node/node--acq-product--full.html.twig" %}
+
+	{% block afterDescription %}
+    {% if content.materials %}
+      <div class="content--material">
+        {{ content.materials }}
+      </div>
+    {% endif %}
+  {% endblock %}
