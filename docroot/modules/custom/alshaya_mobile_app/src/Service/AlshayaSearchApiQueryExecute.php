@@ -16,6 +16,7 @@ use Drupal\facets\QueryType\QueryTypePluginManager;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
 
 /**
  * Class AlshayaSearchApiQueryExecute.
@@ -176,6 +177,13 @@ class AlshayaSearchApiQueryExecute {
   protected $plpSortOptions;
 
   /**
+   * PLP sort labels service.
+   *
+   * @var \Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService
+   */
+  protected $plpSortLabels;
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -196,6 +204,8 @@ class AlshayaSearchApiQueryExecute {
    *   Entity type manager.
    * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $sort_option_service
    *   Plp Sort options service.
+   * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService $sort_labels_service
+   *   Plp Sort labels service.
    */
   public function __construct(
     RequestStack $requestStack,
@@ -206,7 +216,8 @@ class AlshayaSearchApiQueryExecute {
     EntityRepositoryInterface $entity_repository,
     SkuManager $sku_manager,
     EntityTypeManagerInterface $entity_type_manager,
-    AlshayaPlpSortOptionsService $sort_option_service
+    AlshayaPlpSortOptionsService $sort_option_service,
+    AlshayaPlpSortLabelsService $sort_labels_service
   ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->facetManager = $facet_manager;
@@ -217,6 +228,7 @@ class AlshayaSearchApiQueryExecute {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->plpSortOptions = $sort_option_service;
+    $this->plpSortLabels = $sort_labels_service;
   }
 
   /**
@@ -623,7 +635,7 @@ class AlshayaSearchApiQueryExecute {
       }
       else {
         // Get sort config.
-        $sort_config = $this->plpSortOptions->getSortOptionsLabels();
+        $sort_config = $this->plpSortLabels->getSortOptionsLabels();
 
         // Sorted sort data.
         $sort_config = $this->plpSortOptions->sortGivenOptions($sort_config);
