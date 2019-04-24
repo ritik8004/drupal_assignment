@@ -1,3 +1,4 @@
+.alias--free-design-services-thank-you,
 .alias--free-design-services {
   .page-standard {
     @include container(65.625rem);
@@ -7,8 +8,62 @@
     border: none;
   }
 
-  .block-system-main-block {
-    margin-top: 2.6875rem;
+  #block-page-title {
+    display: none;
+  }
+
+  #edit-banner {
+    padding: 0.5rem;
+
+    @include breakpoint($desktop) {
+      padding: 0;
+    }
+
+    p {
+      margin-top: 0.5rem;
+    }
+  }
+
+  #edit-sub-title {
+    @include breakpoint($desktop) {
+      p {
+        margin-top: 0.5rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid $form-middle-seperator;
+      }
+    }
+  }
+
+  .webform-confirmation__message,
+  #edit-sub-title-mobile,
+  #edit-sub-title {
+    padding: 0.5rem;
+
+    @include breakpoint($desktop) {
+      padding: 0;
+    }
+
+    .h1 {
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      color: $title;
+      margin-top: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid $form-middle-seperator;
+
+      @include breakpoint($desktop) {
+        font-size: 1.5rem;
+        margin-top: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+    }
+
+    p {
+      font-size: 0.875rem;
+      color: $form-field-title;
+    }
   }
 
   .region__content {
@@ -132,6 +187,13 @@
         width: 47%;
         display: inline-block;
         margin-#{$right}: 4.5%;
+
+        label[for=edit-address-dependent-locality] {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+        }
       }
 
       .form-item-address-address-line2 {
@@ -211,7 +273,7 @@
         font-size: 0.75rem !important;
         position: absolute;
         text-transform: capitalize;
-        color: #adadad;
+        color: $form-field-label;
       }
     }
 
@@ -293,6 +355,20 @@
       }
     }
 
+    #edit-privacy-text {
+      padding: 0 0.5rem;
+
+      p {
+        font-size: 0.75rem;
+      }
+
+      @include breakpoint($desktop) {
+        padding: 0 2.375rem;
+        width: 49%;
+        overflow: auto;
+      }
+    }
+
     #edit-actions {
       padding: 1.5rem 0.75rem;
 
@@ -317,5 +393,9 @@
         margin-top: 1.563rem;
       }
     }
+  }
+
+  .select2-dropdown {
+    border-color: $form-select-border;
   }
 }
