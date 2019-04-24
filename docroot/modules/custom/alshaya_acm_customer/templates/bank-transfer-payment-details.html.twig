@@ -1,15 +1,14 @@
 <div>
-  <div>{{ "Payment"|t }}</div>
   {% if payee %}
-    <span>{{ "Payee"|t }}</span>:<span>{{ payee }}</span>
+    <span>{{ "Payee"|t }}</span>: <span>{{ payee }}</span>
   {% endif %}
   {% if acc_name %}
-    <span>{{ "Account name"|t }}</span>:<span>{{ acc_name }}</span>
+    <span>{{ "Account name"|t }}</span>: <span>{{ acc_name }}</span>
   {% endif %}
   {% if acc_number %}
-    <span>{{ "Account number"|t }}</span>:<span>{{ acc_number }}</span>
+    <span>{{ "Account number"|t }}</span>: <span>{{ acc_number }}</span>
   {% endif %}
   {% if bank %}
-    <span>{{ "Bank"|t }}</span>:<span>{{ bank }}</span>
+    <span>{{ "Bank"|t }}</span>: <span>{{ bank }}</span>
   {% endif %}
 </div>
