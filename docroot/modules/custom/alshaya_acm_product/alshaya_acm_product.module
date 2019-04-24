@@ -160,6 +160,7 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $attributes = $sku->get('attributes')->getValue();
   foreach ($attributes as $key => $attr) {
+    // @Todo: make it configurable when required.
     $attr_to_skip = ['article_castor_id'];
     // If attribute is not configurable (not available in fields), remove it.
     if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
