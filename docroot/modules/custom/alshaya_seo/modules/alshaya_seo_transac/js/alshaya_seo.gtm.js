@@ -548,10 +548,16 @@
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
+          let selectedStore = $(this).parent('.store-actions');
           dataLayer.push({
             event: 'VirtualPageview',
             virtualPageURL: ' /virtualpv/click-and-collect/step2/select-store',
             virtualPageTitle: 'C&C Step 2 – Select Store'
+          },
+          {
+            event: 'storeSelect',
+            storeName: selectedStore.attr('gtm-store-title').replace(/\s+/g,' ').replace(/^\s+|\s+$/g, ''),
+            storeAddress: selectedStore.attr('gtm-store-address').replace(/\s+/g,' ').replace(/^\s+|\s+$/g, ''),
           });
         });
       }
