@@ -3,16 +3,13 @@
   {% if payee %}
     <span>{{ "Payee"|t }}</span>:<span>{{ payee }}</span>
   {% endif %}
-  {% if iban %}
-    <span>{{ "IBN"|t }}</span>:<span>{{ iban }}</span>
+  {% if acc_name %}
+    <span>{{ "Account name"|t }}</span>:<span>{{ acc_name }}</span>
   {% endif %}
-  {% if bic %}
-    <span>{{ "BIC"|t }}</span>:<span>{{ bic }}</span>
+  {% if acc_number %}
+    <span>{{ "Account number"|t }}</span>:<span>{{ acc_number }}</span>
   {% endif %}
   {% if bank %}
     <span>{{ "Bank"|t }}</span>:<span>{{ bank }}</span>
-  {% endif %}
-  {% if purpose %}
-    <span>{{ "Purpose"|t }}</span>:<span>{{ purpose }}</span>
   {% endif %}
 </div>
