@@ -64,6 +64,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_acm_product_category.settings')
       ->set('sale_category_ids', $form_state->getValue('sale_category_ids'))
+      ->set('new_arrival_category_ids', $form_state->getValue('new_arrival_category_ids'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -86,6 +87,17 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#options' => $options,
       '#size' => count($options) + 1,
       '#default_value' => $config->get('sale_category_ids'),
+    ];
+
+    $form['new_arrival_category_ids'] = [
+      '#type' => 'select',
+      '#title' => $this->t('New-Arrival Categories'),
+      '#description' => $this->t('Sub-categories (tree) of selected L1 categories will be considered as New-Arrival categories.'),
+      '#required' => FALSE,
+      '#multiple' => TRUE,
+      '#options' => $options,
+      '#size' => count($options) + 1,
+      '#default_value' => $config->get('new_arrival_category_ids'),
     ];
 
     return parent::buildForm($form, $form_state);
