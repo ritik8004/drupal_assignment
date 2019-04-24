@@ -220,7 +220,6 @@
           });
 
           // Hide the `all filters` panel when less filters only for desktop.
-          console.log (total_facets + '+' + show_only_facets);
           if (total_facets <= show_only_facets) {
             $('.show-all-filters').addClass('hide-for-desktop');
           }
