@@ -9,6 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya\AlshayaArrayUtils;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -1910,6 +1911,26 @@ class SkuManager {
   }
 
   /**
+   * Wrapper function to check if price mode is from to.
+   *
+   * @return bool
+   *   TRUE if price mode is set to from to.
+   */
+  public function isPriceModeFromTo() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $display_mode = $this->configFactory
+        ->get('alshaya_acm_product.display_settings')
+        ->get('price_display_mode');
+
+      $static = $display_mode === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO;
+    }
+
+    return $static;
+  }
+
+  /**
    * Helper function to check if display mode is aggregated.
    *
    * @return bool
@@ -2792,6 +2813,10 @@ class SkuManager {
 
       $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
       $item->getField('attr_selling_price')->setValues($selling_prices);
+
+      if ($this->isPriceModeFromTo()) {
+        $item->getField('final_price')->setValues([min($selling_prices)]);
+      }
     }
 
     if ($sku->bundle() === 'configurable') {
