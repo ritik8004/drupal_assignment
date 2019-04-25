@@ -9,7 +9,6 @@ use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Implements hook_ENTITY_TYPE_view().
@@ -120,36 +119,4 @@ function alshaya_pb_transac_alshaya_search_facet_price_alter($range, &$displayVa
 
   // Remove decimal points from price block filter.
   $displayValue = str_replace('.' . str_repeat('0', $config->get('decimal_points')), '', $displayValue);
-}
-
-/**
- * Implements hook_tokens().
- */
-function alshaya_pb_transac_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
-  $replacements = [];
-
-  if ($type == 'custom_meta') {
-    foreach ($tokens as $name => $original) {
-      // Find the desired token by name.
-      switch ($name) {
-        case 'brand_name':
-          $replacements[$original] = t('Pottery Barn', [], ['context' => 'alshaya_custom_meta']);
-          break;
-
-        case 'usp1':
-          $replacements[$original] = t('Free Delivery on orders over AED 99', [], ['context' => 'alshaya_custom_meta']);
-          break;
-
-        case 'usp2':
-          $replacements[$original] = t('Easy returns', [], ['context' => 'alshaya_custom_meta']);
-          break;
-
-        case 'usp3':
-          $replacements[$original] = t('Click & Collect', [], ['context' => 'alshaya_custom_meta']);
-          break;
-      }
-    }
-  }
-
-  return $replacements;
 }

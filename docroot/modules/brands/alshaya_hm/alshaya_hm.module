@@ -16,7 +16,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Implements hook_form_alter().
@@ -640,3 +639,4 @@ function alshaya_hm_tokens($type, $tokens, array $data, array $options, Bubbleab
 
   return $replacements;
 }
+

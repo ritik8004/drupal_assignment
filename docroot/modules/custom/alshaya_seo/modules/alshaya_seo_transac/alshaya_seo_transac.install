@@ -33,6 +33,18 @@ function alshaya_seo_transac_update_8409() {
   $config->save();
 
   // Add translations for strings.
+  $strings = [
+    'Kuwait' => [
+      'ar' => 'حفظ',
+      'context' => 'alshaya_custom_meta',
+    ],
+    'Kuwait City' => [
+      'ar' => 'حفظ',
+      'context' => 'alshaya_custom_meta',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

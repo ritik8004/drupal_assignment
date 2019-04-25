@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * @file
  * Token related functions for the alshaya_seo.
  */
