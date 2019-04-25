@@ -47,27 +47,25 @@
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
 
-        var md = new MobileDetect(window.navigator.userAgent);
-        var platformType = 'desktop';
-        if (md.tablet() !== null) {
-            platformType = 'tablet';
-        }
-        else if (md.mobile()) {
-            platformType = 'mobile';
-        }
-
         var userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
         if ((localStorage.getItem('userDetails') === undefined ||
-            localStorage.getItem('userDetails') === null ||
-            drupalSettings.user.uid !== userDetails.userID ||
-            $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
+                localStorage.getItem('userDetails') === null ||
+                drupalSettings.user.uid !== userDetails.userID ||
+                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
           Drupal.setUserDetailsInStorage();
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
           userDetails = JSON.parse(localStorage.getItem('userDetails'));
         }
 
-        userDetails.platformType = platformType;
+        var md = new MobileDetect(window.navigator.userAgent);
+        userDetails.platformType = 'desktop';
+        if (md.tablet() !== null) {
+          userDetails.platformType = 'tablet';
+        }
+        else if (md.mobile()) {
+          userDetails.platformType = 'mobile';
+        }
 
         // For checkout pages, privilegeCustomer is added in checkout step.
         if (cartPage.length !== 0 ||
@@ -1160,7 +1158,6 @@
         type: "POST",
         async: false,
         success: function (response, status) {
-          console.log(response);
           userDetails = response.user_data;
         },
       });

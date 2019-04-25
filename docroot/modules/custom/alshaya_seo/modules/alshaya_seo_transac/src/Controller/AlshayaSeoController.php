@@ -4,6 +4,7 @@ namespace Drupal\alshaya_seo_transac\Controller;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -100,23 +101,26 @@ class AlshayaSeoController extends ControllerBase {
   public function getCurrentUserDetails() {
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
     $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $email = $current_user->get('mail')->getString();
-    $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : 'New Customer';
-    $privilege_customer = 'Regular Customer';
-    if (!empty($current_user->get('field_privilege_card_number')->getString())) {
-      $privilege_customer = 'Privilege Customer';
+    if ($current_user instanceof UserInterface) {
+      $email = $current_user->get('mail')->getString();
+      $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : 'New Customer';
+      $privilege_customer = 'Regular Customer';
+      if (!empty($current_user->get('field_privilege_card_number')
+        ->getString())) {
+        $privilege_customer = 'Privilege Customer';
+      }
+
+      $user_details = [
+        'userID' => $current_user->get('uid')->getString(),
+        'userEmailID' => $email,
+        'userName' => $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString(),
+        'userType' => 'Logged in User',
+        'customerType' => $customer_type,
+        'privilegeCustomer' => $privilege_customer,
+      ];
+
+      return new JsonResponse(['user_data' => json_encode($user_details)]);
     }
-
-    $user_details = [
-      'userID' => $current_user->get('uid')->getString(),
-      'userEmailID' => $email,
-      'userName' => $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString(),
-      'userType' => 'Logged in User',
-      'customerType' => $customer_type,
-      'privilegeCustomer' => $privilege_customer,
-    ];
-
-    return new JsonResponse(['user_data' => json_encode($user_details)]);
   }
 
 }

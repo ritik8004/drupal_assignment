@@ -302,29 +302,29 @@ function alshaya_seo_user_logout($account) {
  * Implements hook_entity_presave().
  */
 function alshaya_seo_entity_presave(EntityInterface $entity) {
-  try {
-    if ($entity->getEntityTypeId() === 'user') {
-      user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
-    }
-    if ($entity->getEntityTypeId() === 'user' &&
-      $entity->get('field_subscribe_newsletter')->getString()) {
-      $original_entity = $entity->original;
+  if ($entity->getEntityTypeId() === 'user') {
+    user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
 
-      // Check if the user updated his subscription status from 0 to 1.
-      if (($original_entity) &&
-        ($original_entity->get('field_subscribe_newsletter')->getString() !== "1") &&
-        ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
-        user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
-      }
-      // Handle registrations with subscrition checked.
-      elseif (($original_entity === NULL) &&
-        ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
-        user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+    try {
+      if ($entity->get('field_subscribe_newsletter')->getString()) {
+        $original_entity = $entity->original;
+
+        // Check if the user updated his subscription status from 0 to 1.
+        if (($original_entity) && ($original_entity->get('field_subscribe_newsletter')->getString() !== "1")
+          && ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
+          user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+        }
+        // Handle registrations with subscrition checked.
+        elseif (($original_entity === NULL) &&
+          ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
+          user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+        }
       }
     }
-  }
-  catch (Exception $e) {
-    \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
+    catch (Exception $e) {
+      \Drupal::logger('alshaya_seo')
+        ->critical('Field subscribe newsletter not found.');
+    }
   }
 }
 
