@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe66f543820467d0556cc82e41e06c1c",
+    "content-hash": "34b479fccfcce0e03d17c1e083d552d7",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -6122,6 +6122,57 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/entity_reference_revisions"
             }
+        },
+        {
+            "name": "drupal/external_hreflang",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/external_hreflang.git",
+                "reference": "b9a5214ffe4ed247100da139ee40560d93e895e8"
+            },
+            "require": {
+                "drupal/core": "~8.0",
+                "drupal/metatag": "~1.0",
+                "php": ">=7.1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.x-dev",
+                    "datestamp": "1554376685",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\external_hreflang\\": "src/"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Nikunj Kotecha (nikunjkotecha)",
+                    "homepage": "https://www.drupal.org/u/nikunjkotecha",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Allow adding alternate hreflang for external sites (not languages in Drupal).",
+            "homepage": "https://www.drupal.org/project/external_hreflang",
+            "support": {
+                "source": "https://cgit.drupalcode.org/external_hreflang",
+                "issues": "https://drupal.org/project/issues/external_hreflang"
+            },
+            "time": "2019-04-24T09:10:35+00:00"
         },
         {
             "name": "drupal/facets",
@@ -20834,6 +20885,7 @@
         "drupal/change_pwd_page": 10,
         "drupal/datalayer": 10,
         "drupal/default_content": 15,
+        "drupal/external_hreflang": 20,
         "drupal/field_group": 10,
         "drupal/google_tag": 20,
         "drupal/media_entity_actions": 20,

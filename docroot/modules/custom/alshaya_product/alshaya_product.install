@@ -15,10 +15,28 @@ use Drupal\search_api\Entity\Index;
  *
  * Adding class to product list view.
  */
-function alshaya_product_update_8023() {
+function alshaya_product_update_8024() {
   alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
 }
 
+/**
+ * Implements hook_update_N().
+ *
+ * Update views to add stock sorting filter.
+ */
+function alshaya_product_update_8023() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.alshaya_product_list', 'search_api.index.product'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+  // Save product index to flag all products for re-index.
+  $index = Index::load('product');
+  $index->save();
+}
 
 /**
  * Implements hook_update_N().

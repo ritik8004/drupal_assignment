@@ -14,8 +14,27 @@ use Drupal\alshaya_config\AlshayaConfigManager;
  *
  * Adding class to search product list view.
  */
-function alshaya_search_update_8026() {
+function alshaya_search_update_8027() {
   alshaya_config_install_configs(['views.view.search'], 'alshaya_search', 'optional');
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add stock quantity field to solr search index.
+ */
+function alshaya_search_update_8026() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshayaConfigManager */
+  $alshayaConfigManager = \Drupal::service('alshaya_config.manager');
+  $alshayaConfigManager->updateConfigs(
+    ['search_api.index.acquia_search_index'],
+    'alshaya_search',
+    'optional',
+    AlshayaConfigManager::MODE_MERGE
+  );
+  // Save acquia_search_index to flag all products for re-index.
+  $index = Index::load('acquia_search_index');
+  $index->save();
 }
 
 /**

@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_sort_options_labels
+    - taxonomy.vocabulary.acq_product_category
+id: taxonomy_term.acq_product_category.field_sort_options_labels
+field_name: field_sort_options_labels
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Product sort options labels'
+description: ''
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
