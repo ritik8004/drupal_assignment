@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.listing
     - field.field.node.magazine_article.field_magazine_category
     - field.field.node.magazine_article.field_magazine_date
     - field.field.node.magazine_article.field_magazine_desktop_image
@@ -13,71 +14,40 @@ dependencies:
     - field.field.node.magazine_article.field_magazine_weight
     - node.type.magazine_article
   module:
-    - alshaya_acm_product
     - datetime
-    - entity_reference_revisions
     - image
     - user
-    - video_embed_field
-id: node.magazine_article.default
+id: node.magazine_article.listing
 targetEntityType: node
 bundle: magazine_article
-mode: default
+mode: listing
 content:
   field_magazine_category:
-    weight: 2
-    label: hidden
-    settings:
-      link: false
-    third_party_settings: {  }
     type: entity_reference_label
+    weight: 1
     region: content
-  field_magazine_date:
-    weight: 4
-    label: hidden
+    label: above
     settings:
-      timezone_override: ''
-      format_type: magazine_date
+      link: true
     third_party_settings: {  }
+  field_magazine_date:
     type: datetime_default
-    region: content
-  field_magazine_hero_image:
     weight: 0
-    label: hidden
+    region: content
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+  field_magazine_hero_image:
+    type: image
+    weight: 2
+    region: content
+    label: above
     settings:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
-    type: image
-    region: content
-  field_magazine_hero_video:
-    weight: 1
-    label: hidden
-    settings:
-      responsive: true
-      width: 854
-      height: 480
-      autoplay: false
-    third_party_settings: {  }
-    type: video_embed_field_video
-    region: content
-  field_magazine_paragraphs:
-    type: entity_reference_revisions_entity_view
-    weight: 5
-    label: hidden
-    settings:
-      view_mode: default
-      link: ''
-    third_party_settings: {  }
-    region: content
-  field_magazine_shop_the_story:
-    weight: 6
-    label: above
-    settings:
-      view_mode: teaser
-    third_party_settings: {  }
-    type: sku_carousel
-    region: content
   field_magazine_slogan:
     weight: 3
     label: hidden
@@ -87,6 +57,9 @@ content:
     region: content
 hidden:
   field_magazine_desktop_image: true
+  field_magazine_hero_video: true
+  field_magazine_paragraphs: true
+  field_magazine_shop_the_story: true
   field_magazine_weight: true
   langcode: true
   links: true
