@@ -9,3 +9,4 @@ services:
     arguments: [ '@theme_handler', '@entity_type.manager' ]
   alshaya_custom.alshaya_country_manager:
     class: Drupal\alshaya_custom\AlshayaCountryManager
+    arguments: [ '@module_handler' ]

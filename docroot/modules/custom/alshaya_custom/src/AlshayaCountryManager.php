@@ -2,10 +2,29 @@
 
 namespace Drupal\alshaya_custom;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
+
 /**
  * Class AlshayaCountryManager.
  */
 class AlshayaCountryManager {
+
+  /**
+   * Module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * AlshayaCountryManager constructor.
+   *
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Module handler service.
+   */
+  public function __construct(ModuleHandlerInterface $moduleHandler) {
+    $this->moduleHandler = $moduleHandler;
+  }
 
   /**
    * Function to return currency code for current country in requested language.
@@ -40,7 +59,7 @@ class AlshayaCountryManager {
     $currency['eg']['ar'] = 'ج.م';
 
     // Invoke the alter hook to allow all modules to update the currency code.
-    \Drupal::moduleHandler()->alter('alshaya_get_currency_code', $currency);
+    $this->moduleHandler->alter('alshaya_get_currency_code', $currency);
 
     return $currency[$country_code][$lang_code];
   }
