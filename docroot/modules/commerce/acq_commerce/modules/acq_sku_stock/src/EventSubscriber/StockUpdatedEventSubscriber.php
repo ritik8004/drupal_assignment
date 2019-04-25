@@ -49,7 +49,7 @@ class StockUpdatedEventSubscriber implements EventSubscriberInterface {
     $plugin = $sku->getPluginInstance();
 
     // Invalidate cache for parent sku.
-    $parent_skus = $plugin->getParentSkus($sku->getSku());
+    $parent_skus = $plugin->getParentSku($sku, FALSE);
     if (!empty($parent_skus)) {
       foreach ($parent_skus as $sku_id => $parent_sku) {
         $cacheTagsToInvalidate = array_merge($cacheTagsToInvalidate, ['acq_sku:' . $sku_id]);

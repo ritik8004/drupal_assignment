@@ -140,24 +140,38 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Current product.
+   * @param bool $load
+   *   Whether return the fully loaded sku or not.
    *
    * @return \Drupal\acq_sku\Entity\SKU|null
    *   Parent product or null if not found.
    */
-  public function getParentSku(SKU $sku) {
+  public function getParentSku(SKU $sku, bool $load = TRUE) {
     $static = &drupal_static(__FUNCTION__, []);
 
     $langcode = $sku->language()->getId();
     $sku_string = $sku->getSku();
 
-    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
+    if (isset($static[$langcode], $static[$langcode][$sku_string]) && $load) {
       return $static[$langcode][$sku_string];
     }
 
     // Initialise with empty value.
     $static[$langcode][$sku_string] = NULL;
 
-    $parent_skus = array_values($this->getParentSkus($sku_string));
+    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'id');
+    $query->addField('acq_sku', 'sku');
+    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
+    $query->condition('child_sku.field_configured_skus_value', $sku_string);
+
+    $parent_skus = $query->execute()->fetchAllKeyed();
+
+    // If don't want fully loaded object, this returns an array having sku id
+    // as key and sku as the value.
+    if (!$load) {
+      return $parent_skus;
+    }
 
     if (empty($parent_skus)) {
       return NULL;
@@ -317,24 +331,6 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     }
 
     return $manager;
-  }
-
-  /**
-   * Get parent skus of given sku.
-   *
-   * @param string $sku
-   *   SKU string.
-   *
-   * @return array
-   *   Parent skus.
-   */
-  public function getParentSkus(string $sku) {
-    $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
-    $query->addField('acq_sku', 'id');
-    $query->addField('acq_sku', 'sku');
-    $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
-    $query->condition('child_sku.field_configured_skus_value', $sku);
-    return $query->execute()->fetchAllKeyed();
   }
 
 }
