@@ -156,13 +156,14 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
   }
 
+  $attr_to_skip = \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.settings')
+    ->get('acq_sku__attributes_skip') ?? [];
+
   // Get configurable fields/attributes.
   $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
   $attributes = $sku->get('attributes')->getValue();
   foreach ($attributes as $key => $attr) {
-    $attr_to_skip = \Drupal::configFactory()
-      ->getEditable('alshaya_acm_product.settings')
-      ->get('acq_sku__attributes_skip') ?? [];
     // If attribute is not configurable (not available in fields), remove it.
     if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
       unset($attributes[$key]);
