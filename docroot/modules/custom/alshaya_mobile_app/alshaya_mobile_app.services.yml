@@ -49,6 +49,7 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@entity_type.manager'
       - '@alshaya_acm_product_position.sort_options'
+      - '@alshaya_acm_product_position.sort_labels'
   alshaya_mobile_app.stdclass_normalizer:
     class: Drupal\alshaya_mobile_app\Normalizer\StdClassNormalizer
     arguments: ['\stdClass']

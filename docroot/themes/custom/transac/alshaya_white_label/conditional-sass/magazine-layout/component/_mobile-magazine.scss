@@ -58,7 +58,7 @@
 
       &.sidebar-fixed {
         position: fixed;
-        top: 5rem;
+        top: 1.25rem;
         width: calc((100vw - 5rem) / 3);
         #{$right}: 1.5rem;
 
@@ -96,9 +96,10 @@
 
     @include breakpoint($desktop) {
       &.sidebar-fixed {
-        top: 8.125rem;
-        width: calc((30 * 71.75rem) / 100);
-        #{$right}: calc((100vw - 71rem) / 2);
+        #{$right}: calc((100vw - 77rem) / 2);
+        max-width: 25rem;
+        width: 100%;
+        top: 1.25rem;
       }
     }
 

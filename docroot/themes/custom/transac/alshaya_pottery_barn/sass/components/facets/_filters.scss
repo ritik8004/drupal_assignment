@@ -20,3 +20,18 @@
     }
   }
 }
+
+.block-alshaya-category-lhn-block {
+  ul {
+    li {
+      a {
+        &.lhn-4,
+        &.lhn-3 {
+          &.active {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

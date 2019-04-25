@@ -29,10 +29,6 @@
     }
   }
 
-  @include breakpoint($desktop) {
-    margin-#{$right}: 1rem;
-  }
-
   figure {
     margin: 0;
 
@@ -287,6 +283,8 @@
         #wrap {
           position: inherit !important;
         }
+
+        position: inherit !important;
       }
     }
   }
@@ -359,5 +357,11 @@
         }
       }
     }
+  }
+}
+
+@include breakpoint($desktop) {
+  #product-zoom-container {
+    margin-#{$right}: 1rem;
   }
 }

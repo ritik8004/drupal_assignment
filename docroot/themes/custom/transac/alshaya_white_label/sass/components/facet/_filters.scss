@@ -276,6 +276,10 @@
     .upto-desktop {
       display: none;
     }
+
+    &.hide-for-desktop {
+      display: none;
+    }
   }
 
   @include breakpoint($upto-desktop) {

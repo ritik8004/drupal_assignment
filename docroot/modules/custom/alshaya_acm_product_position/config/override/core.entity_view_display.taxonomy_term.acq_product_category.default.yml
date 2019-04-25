@@ -2,6 +2,10 @@ dependencies:
   config:
     - field.field.taxonomy_term.acq_product_category.field_sorting_options
     - field.field.taxonomy_term.acq_product_category.field_sorting_order
+    - field.field.taxonomy_term.acq_product_category.field_sorting_labels
+    - field.field.taxonomy_term.acq_product_category.field_sort_options_labels
 hidden:
   field_sorting_options: true
   field_sorting_order: true
+  field_sorting_labels: true
+  field_sort_options_labels: true

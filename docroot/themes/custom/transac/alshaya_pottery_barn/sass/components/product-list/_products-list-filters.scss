@@ -12,4 +12,17 @@
       font-family: $alshaya-bold;
     }
   }
+
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    legend {
+      text-transform: capitalize;
+    }
+  }
+
+  .show-all-filters,
+  .filter-list-label {
+    text-transform: capitalize;
+  }
 }
