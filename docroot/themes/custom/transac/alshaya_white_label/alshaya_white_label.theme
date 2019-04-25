@@ -184,6 +184,12 @@ function alshaya_white_label_preprocess_page(&$variables) {
       // Taking the sidebar visibility check from config for PLP.
       $variables['enable_lhn_tree'] = \Drupal::config('alshaya_acm_product_category.settings')->get('enable_lhn_tree');
 
+      // If LHN config is enabled but the LHN block not rendering due to data.
+      $lhn_block = \Drupal::entityTypeManager()->getStorage('block')->load('categorylhnblock');
+      if (empty($lhn_block->getPlugin()->build())) {
+        $variables['enable_lhn_tree'] = 0;
+      }
+
       $plp_type = $term->get('field_plp_layout')->value;
       if ($plp_type == ProductCategoryTree::PLP_LAYOUT_1) {
         $variables['plp_layout'] = ProductCategoryTree::PLP_LAYOUT_1;
