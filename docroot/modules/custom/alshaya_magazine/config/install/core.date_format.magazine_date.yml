@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: magazine_date
+label: 'Magazine Date'
+locked: false
+pattern: 'd F Y'
