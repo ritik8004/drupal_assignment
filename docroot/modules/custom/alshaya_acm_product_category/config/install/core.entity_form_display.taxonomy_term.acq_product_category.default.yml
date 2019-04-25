@@ -30,6 +30,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
   module:
     - entity_browser
+    - acq_sku
     - field_group
     - file
     - image

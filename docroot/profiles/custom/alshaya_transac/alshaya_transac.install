@@ -389,6 +389,7 @@ function alshaya_transac_install() {
     'alshaya_click_collect',
     'alshaya_config',
     'alshaya_contact',
+    'alshaya_default_content',
     'alshaya_i18n',
     'alshaya_loyalty',
     'alshaya_main_menu',
