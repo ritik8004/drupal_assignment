@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_commerce\SKUInterface;
+use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Implements hook_alshaya_acm_product_build_alter().
@@ -155,4 +156,36 @@ function _alshaya_bbw_transac_get_product_title(SKU $sku) {
 function alshaya_bbw_transac_acq_sku_base_field_additions_alter(array &$fields = []) {
   $alshaya_bbw_transac_fields = \Drupal::config('alshaya_bbw_transac.sku_base_fields')->get('fields');
   $fields = array_merge($fields, $alshaya_bbw_transac_fields);
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function alshaya_bbw_transac_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if ($type == 'custom_meta') {
+    foreach ($tokens as $name => $original) {
+      // Find the desired token by name.
+      switch ($name) {
+        case 'brand_name':
+          $replacements[$original] = t('Bath and body works', [], ['context' => 'alshaya_custom_meta']);
+          break;
+
+        case 'usp1':
+          $replacements[$original] = t('Free Delivery on orders over AED 99', [], ['context' => 'alshaya_custom_meta']);
+          break;
+
+        case 'usp2':
+          $replacements[$original] = t('Easy returns', [], ['context' => 'alshaya_custom_meta']);
+          break;
+
+        case 'usp3':
+          $replacements[$original] = t('Click & Collect', [], ['context' => 'alshaya_custom_meta']);
+          break;
+      }
+    }
+  }
+
+  return $replacements;
 }

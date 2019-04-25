@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\Core\Render\BubbleableMetadata;
 
 /**
  * Implements hook_module_implements_alter().
@@ -302,4 +303,36 @@ function alshaya_vs_transac_alshaya_stores_finder_marker_label_position_alter(ar
 function alshaya_vs_transac_alshaya_get_currency_code_alter(&$currency) {
   // Updated UAE currency code.
   $currency['ae']['en'] = 'DHS';
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function alshaya_vs_transac_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  if ($type == 'custom_meta') {
+    foreach ($tokens as $name => $original) {
+      // Find the desired token by name.
+      switch ($name) {
+        case 'brand_name':
+          $replacements[$original] = t("Victoria's Secret", [], ['context' => 'alshaya_custom_meta']);
+          break;
+
+        case 'usp1':
+          $replacements[$original] = t('Free Delivery on orders over AED 99', [], ['context' => 'alshaya_custom_meta']);
+          break;
+
+        case 'usp2':
+          $replacements[$original] = t('Easy returns', [], ['context' => 'alshaya_custom_meta']);
+          break;
+
+        case 'usp3':
+          $replacements[$original] = t('Click & Collect', [], ['context' => 'alshaya_custom_meta']);
+          break;
+      }
+    }
+  }
+
+  return $replacements;
 }

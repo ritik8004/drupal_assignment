@@ -12,6 +12,26 @@ use Drupal\Core\Config\FileStorage;
  *
  * Update context for strings.
  */
+function alshaya_master_update_8025() {
+  $strings = [
+    'Kuwait' => [
+      'ar' => 'حفظ',
+      'context' => 'alshaya_custom_meta',
+    ],
+    'Kuwait City' => [
+      'ar' => 'حفظ',
+      'context' => 'alshaya_custom_meta',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update context for strings.
+ */
 function alshaya_master_update_8026() {
   $strings = [
     'The password does not satisfy the password policies.' => 'alshaya_static_text|empty_password',

@@ -17,6 +17,11 @@ use Drupal\node\NodeInterface;
 function alshaya_seo_token_info() {
   $info = [];
 
+  $info['types']['custom_meta'] = [
+    'name' => 'Custom Meta Tokens',
+    'description' => t('Custom tokens for meta tags.'),
+  ];
+
   // Token to return locale for the currently visited page.
   $info['tokens']['site']['locale'] = [
     'name' => 'locale',
@@ -37,6 +42,38 @@ function alshaya_seo_token_info() {
     'name' => t("Summary custom"),
     'description' => t("The summary of the node's main body text with dynamic length."),
     'dynamic' => TRUE,
+  ];
+
+  $info['tokens']['custom_meta']['brand_name'] = [
+    'name' => t("Brand name"),
+    'description' => t("The brand name for the website."),
+  ];
+
+  $info['tokens']['custom_meta']['city1'] = [
+    'name' => t("City 1"),
+    'description' => t("City for meta data."),
+  ];
+
+  $info['tokens']['custom_meta']['city2'] = [
+    'name' => t("City 2"),
+    'description' => t("City for meta data."),
+  ];
+
+  $info['tokens']['custom_meta']['country'] = [
+    'name' => t("Country"),
+    'description' => t("The website country."),
+  ];
+
+  $info['tokens']['custom_meta']['usp1'] = [
+    'name' => t("USP1"),
+  ];
+
+  $info['tokens']['custom_meta']['usp2'] = [
+    'name' => t("USP2"),
+  ];
+
+  $info['tokens']['custom_meta']['usp3'] = [
+    'name' => t("USP3"),
   ];
 
   return $info;
