@@ -6,24 +6,24 @@ dependencies:
     - image.style.w320
     - image.style.w768
   theme:
-    - alshaya_white_label
+    - whitelabel
 id: w1284
 label: w1284
 image_style_mappings:
   -
-    breakpoint_id: alshaya_white_label.desk
+    breakpoint_id: whitelabel.desk
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: w1284
   -
-    breakpoint_id: alshaya_white_label.lap
+    breakpoint_id: whitelabel.lap
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: w768
   -
-    breakpoint_id: alshaya_white_label.palm
+    breakpoint_id: whitelabel.palm
     multiplier: 1x
     image_mapping_type: image_style
     image_mapping: w320
-breakpoint_group: alshaya_white_label
+breakpoint_group: whitelabel
 fallback_image_style: w320
