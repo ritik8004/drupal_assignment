@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -75,12 +76,9 @@ if ($memcache_module_is_present && ($memcache_exists || $memcached_exists)) {
     // Use memcache as the default bin.
     $settings['cache']['default'] = 'cache.backend.memcache';
 
-    // Use pcb_memcache for stock.
-    $settings['cache']['bins']['stock'] = 'cache.backend.permanent_memcache';
-    // Use pcb_memcache for category tree.
     $settings['cache']['bins']['product_category_tree'] = 'cache.backend.permanent_memcache';
-    // Use pcb_memcache for product options.
     $settings['cache']['bins']['product_options'] = 'cache.backend.permanent_memcache';
+    $settings['cache']['bins']['hm_product_configurations'] = 'cache.backend.permanent_memcache';
 
     // Enable stampede protection.
     $settings['memcache']['stampede_protection'] = TRUE;

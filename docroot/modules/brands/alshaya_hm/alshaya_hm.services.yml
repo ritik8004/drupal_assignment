@@ -6,3 +6,9 @@ services:
       - '@config.factory'
     tags:
       - { name: 'event_subscriber' }
+  cache.hm_product_configurations:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [hm_product_configurations]
