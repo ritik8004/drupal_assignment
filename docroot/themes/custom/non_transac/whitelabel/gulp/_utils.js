@@ -1,6 +1,8 @@
 var config = require('./_config');
 var notify = require('gulp-notify');
-var gutil = require('gulp-util');
+var noop = require('gulp-noop');
+var parseArgs = require('minimist');
+var argv = parseArgs(process.argv.slice(2));
 var rename = require('gulp-rename');
 
 module.exports = {
@@ -10,25 +12,25 @@ module.exports = {
       title: 'Gulp error in ' + err.plugin,
       message: err.message
     })(err);
-    gutil.beep();
+    //gutil.beep();
   },
   onDev: function (task, other) {
     'use strict';
     if (!other) {
-      other = gutil.noop();
+      other = noop();
     }
-    if (gutil.env.type === 'undefined') {
-      gutil.env.type = 'development';
+    if (argv.type === 'undefined') {
+      argv.type = 'development';
     }
-    return (gutil.env.type !== config.env.prod)
+    return (argv.type !== config.env.prod)
       ? task : other;
   },
   onOther: function (task, other) {
     'use strict';
     if (!other) {
-      other = gutil.noop();
+      other = noop();
     }
-    return gutil.env.type !== config.env.dev ? task : gutil.noop();
+    return argv.type !== config.env.dev ? task : noop();
   },
   renameRTL: function (path) {
     'use strict';

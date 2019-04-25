@@ -9,7 +9,7 @@ module.exports = {
       'sass/**/*.ltr.scss',
       'components/**/*.ltr.scss'
     ],
-    destination: 'components/dist/css/',
+    destination: 'dist/css/',
     options: {
       outputStyle: 'expanded',
       includePaths: [
@@ -23,10 +23,9 @@ module.exports = {
   scripts: {
     source: [
       'js/**/*.js',
-      'components/js/**/*.js',
       'components/_patterns/**/*.js'
     ],
-    destination: 'components/dist/js/'
+    destination: 'dist/js/'
   },
   svg: {
     source: 'images/icons/svg/**/*.svg',
@@ -65,14 +64,13 @@ module.exports = {
     }
   },
   babel: {
-    presets: [
-      'es2015',
-      ['env', {
+    presets: [[
+      'env', {
         targets: {
           browsers: ['last 2 versions']
         }
-      }]
-    ]
+      }
+    ]]
   },
   browserSync: {
     proxy: 'https://local.non-transac.com',

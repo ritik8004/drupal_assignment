@@ -6,7 +6,9 @@ module.exports = function (gulp, config, bs) {
   var sassGlob = require('gulp-sass-glob');
   var postcss = require('gulp-postcss');
   var sourcemaps = require('gulp-sourcemaps');
-  var gutil = require('gulp-util');
+  //var gutil = require('gulp-util');
+  var parseArgs = require('minimist');
+  var argv = parseArgs(process.argv.slice(2));
   var plumber = require('gulp-plumber');
   var stylelint = require('gulp-stylelint');
   var autoprefixer = require('autoprefixer');
@@ -19,7 +21,7 @@ module.exports = function (gulp, config, bs) {
   gulp.task('styles-lint', function () {
     return gulp.src(config.styles.source)
       .pipe(utils.onDev(plumber({errorHandler: utils.errorHandler})))
-      .pipe(gutil.env.type === config.env.dev ? stylelint(config.stylelint.options) : stylelint(config.stylelint.optionsTest))
+      .pipe(argv.type === config.env.dev ? stylelint(config.stylelint.options) : stylelint(config.stylelint.optionsTest))
       .pipe(utils.onDev(plumber.stop()));
   });
 
