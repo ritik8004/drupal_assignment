@@ -206,11 +206,6 @@ class CheckoutHelper {
           $account->get('field_mobile_number')->setValue($billing['telephone']);
           $account->save();
         }
-
-        if (count(alshaya_acm_customer_get_user_orders($email)) < 3) {
-          // Add cookie to refresh user data in local storage for GTM.
-          user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
-        }
       }
 
       $session->save();
@@ -218,6 +213,13 @@ class CheckoutHelper {
       $this->ordersManager->clearOrderCache($email, $current_user_id);
       $this->ordersManager->clearLastOrderRelatedProductsCache();
       $this->clearCartHistory($cart->id());
+
+      // Customer type needs to be updated in GTM
+      // if the customer is a repeat customer.
+      if (alshaya_acm_customer_is_customer($this->currentUser) && count(alshaya_acm_customer_get_user_orders($email)) < 3) {
+        // Add cookie to refresh user data in local storage for GTM.
+        user_cookie_save(['alshaya_gtm_user_refresh' => 1]);
+      }
 
       // Add success message in logs.
       $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
