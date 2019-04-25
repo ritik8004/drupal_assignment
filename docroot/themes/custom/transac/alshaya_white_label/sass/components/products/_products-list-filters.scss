@@ -296,7 +296,7 @@ html {
 
           .c-accordion__title {
             text-transform: capitalize;
-            padding: 1.0625rem 2rem;
+            padding: 1.25rem 2rem;
             height: auto;
             font-size: 0.75rem;
             line-height: 1.2;
@@ -343,11 +343,15 @@ html {
         }
       }
 
-      .js-facets-checkbox-links {
+      .block-facets-ajax > ul {
         .facet-item {
           padding: 0.25rem 1.5rem !important;
           margin-bottom: 0;
           border-bottom: 1px solid $plp_all_filter_item_border;
+
+          @include breakpoint($only-mobile) {
+            padding: 2px 1.5rem !important;
+          }
 
           input[type=checkbox] {
             & ~ label {
