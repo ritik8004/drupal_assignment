@@ -12,9 +12,11 @@
     font-size: 0.75rem;
 
     &::after {
-      #{$right}: -1.375rem;
+      #{$right}: -2rem;
       top: 49%;
+      width: auto;
       font-size: 1.1875rem;
+      transition: transform 0.4s ease-in-out;
 
       @include breakpoint($only-mobile) {
         #{$right}: 1.25rem;
@@ -27,6 +29,12 @@
 
     @include breakpoint($only-mobile) {
       padding-#{$left}: 1.25rem;
+    }
+
+    &.active {
+      &::after {
+        transform: translateY(-50%) rotate(180deg);
+      }
     }
   }
 
@@ -209,7 +217,14 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        #{$right}: -1.3125rem;
+        #{$right}: -2rem;
+        transition: transform 0.4s ease-in-out;
+      }
+
+      &.active {
+        &::after {
+          transform: translateY(-50%) rotate(180deg);
+        }
       }
     }
 
