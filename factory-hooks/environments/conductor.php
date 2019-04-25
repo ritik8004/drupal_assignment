@@ -47,6 +47,10 @@ $conductors = [
     'hmac_secret' => 'NDI1NTM0NWEtYjMxNS00',
   ],
   // H&M KW.
+  'hmkw_dev' => [
+    'hmac_id' => '03551dee94ad4f91a20bf41459c02bdd',
+    'hmac_secret' => 'MWI3NDdjYWQtNGUwMS00',
+  ],
   'hmkw_qa' => [
     'hmac_id' => 'deb9efe4753344059090b12fc10d387e',
     'hmac_secret' => 'NWE3ZDg1OGYtNmEwYi00',
