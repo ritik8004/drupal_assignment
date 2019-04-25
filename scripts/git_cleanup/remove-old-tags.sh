@@ -28,7 +28,7 @@ if [ ! "$to_delete" = "" ] ; then
   if [ "$yn" = y ] ; then
     for t in $to_delete ; do
       echo "Deleting $t"
-      git push alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git  :refs/tags/$t
+      git push --delete alshaya@svn-25.enterprise-g1.hosting.acquia.com:alshaya.git $t
     done
   else
     echo "Nothing deleted"
