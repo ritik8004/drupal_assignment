@@ -11,9 +11,9 @@
     <div class="menu-backdrop"></div>
     {% for key1, level1 in term_tree %}
       {% set promopanel_class = 'promo-panel--mobile-link' in level1.class ? 'promo-panel--mobile-list' : '' %}
-      {% set level_class = level1.term_bg_color == true ? level1.class ~ ' has-bg-color' : level1.class %}
+      {% set level_class = level1.term_bg_color == true ? level1.class|merge(['has-bg-color']) : level1.class %}
       {% if level_class is not empty %}
-        <li class="menu__list-item menu--one__list-item {{ level_class }} {{ promopanel_class }}">
+        <li class="menu__list-item menu--one__list-item {{ level_class|join(' ') }} {{ promopanel_class }}">
       {% else %}
         <li class="menu__list-item menu--one__list-item {{ promopanel_class }}">
       {% endif %}

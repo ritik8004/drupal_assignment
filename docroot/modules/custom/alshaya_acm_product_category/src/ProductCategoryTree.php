@@ -235,6 +235,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
 
       if (($term->display_in_desktop || $term->display_in_mobile) && $link = $this->getOverrideTargetLink($term->tid, $langcode)) {
         $data[$term->tid]['path'] = Url::fromUri($link)->toString();
+        $data[$term->tid]['class'][] = 'non-category';
       }
 
       if ($highlight_paragraph) {
