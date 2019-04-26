@@ -445,10 +445,15 @@
           position: absolute;
           top: 0;
           #{$right}: 0.125rem;
+          transition: transform 0.3s ease;
         }
 
         @include breakpoint($tablet) {
           display: none;
+        }
+
+        &.active::after {
+          transform: rotate(180deg);
         }
       }
 
