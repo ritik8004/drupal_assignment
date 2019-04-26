@@ -23,10 +23,7 @@ widget:
   type: checkbox
   config:
     show_numbers: true
-    soft_limit: 5
-    soft_limit_settings:
-      show_less_label: 'Show less'
-      show_more_label: 'Show more'
+    soft_limit: 0
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
