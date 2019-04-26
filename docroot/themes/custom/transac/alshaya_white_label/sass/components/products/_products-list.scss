@@ -179,6 +179,10 @@
             padding-bottom: 0;
             float: $right;
 
+            @include breakpoint($only-mobile) {
+              justify-content: flex-end;
+            }
+
             @include breakpoint($desktop) {
               &:hover {
                 opacity: 0.75;

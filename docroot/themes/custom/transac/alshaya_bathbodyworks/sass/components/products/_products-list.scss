@@ -33,6 +33,7 @@
           }
 
           &.clear-all {
+            font-family: $alshaya-bold;
             text-transform: uppercase;
             height: 2.5rem;
             line-height: 1.7;
@@ -43,15 +44,6 @@
               font-size: 0.75rem;
               letter-spacing: 1px;
               color: $primary_brand_button;
-            }
-
-            &:hover {
-              opacity: 1;
-              background-color: $primary_brand_button;
-
-              a {
-                color: $primary_btn_text;
-              }
             }
           }
         }

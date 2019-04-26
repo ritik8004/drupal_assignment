@@ -33,4 +33,12 @@
       }
     }
   }
+
+  .block-facets-summary-blockfilter-bar,
+  .block-facets-summary-blockfilter-bar-promotions,
+  .block-facets-summary-blockfilter-bar-plp {
+    .filter-list-label {
+      text-transform: capitalize;
+    }
+  }
 }

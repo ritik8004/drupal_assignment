@@ -108,7 +108,6 @@
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
         $('html').removeClass('all-filters-overlay');
-        $('.all-filters').hide();
         // Show filter count if applicable.
         showFilterCount();
       });
@@ -191,6 +190,7 @@
             $(filterBarSelector + ' .filter-toggle-mobile').show();
             $(filterBarSelector + ' .filter-toggle-mobile').html(count);
             $('.filter-toggle-mobile', context).once().on('click', function () {
+              $(this).toggleClass('active');
               $(filterBarSelector + ' .applied-filter').toggleClass('max-height');
             });
           }
