@@ -238,6 +238,21 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         $data[$term->tid]['class'][] = 'non-category';
       }
 
+      if ($icon = $this->getIcon($term->tid, $langcode)) {
+        $data[$term->tid]['icon'] = $icon;
+      }
+
+      if (is_object($file = $this->getIcon($term->tid, $langcode))
+          && !empty($file->field_icon_target_id)
+      ) {
+        $image = $this->fileStorage->load($file->field_icon_target_id);
+        $data[$term->tid]['icon'] = [
+          'url' => file_create_url($image->getFileUri()),
+          'width' => (int) $file->field_icon_width,
+          'height' => (int) $file->field_icon_height,
+        ];
+      }
+
       if ($highlight_paragraph) {
         $data[$term->tid]['highlight_paragraph'] = $this->getHighlightParagraph($term->tid, $langcode, self::VOCABULARY_ID);
       }
@@ -536,6 +551,21 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
+   * Gets the image from 'field_icon' field.
+   *
+   * @param int $tid
+   *   Taxonomy term id.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object
+   *   Object containing fields data.
+   */
+  public function getIcon($tid, $langcode) {
+    return $this->getImageField($tid, 'field_icon', $langcode);
+  }
+
+  /**
    * Gets the image from 'field_promotion_banner_mobile' field.
    *
    * @param int $tid
@@ -547,16 +577,33 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
    *   Object containing fields data.
    */
   public function getMobileBanner($tid, $langcode) {
-    $query = $this->connection->select('taxonomy_term__field_promotion_banner_mobile', 'ttbc');
-    $query->fields('ttbc', [
+    return $this->getImageField($tid, 'field_promotion_banner_mobile', $langcode);
+  }
+
+  /**
+   * Get the image table fields for given field and term.
+   *
+   * @param int $tid
+   *   The term id.
+   * @param string $field
+   *   The field name.
+   * @param string $langcode
+   *   Language code.
+   *
+   * @return object|null
+   *   Object containing fields data.
+   */
+  protected function getImageField($tid, $field, $langcode) {
+    $query = $this->connection->select("taxonomy_term__{$field}", 'term_image_field');
+    $query->fields('term_image_field', [
       'entity_id',
-      'field_promotion_banner_mobile_target_id',
-      'field_promotion_banner_mobile_width',
-      'field_promotion_banner_mobile_height',
+      "{$field}_target_id",
+      "{$field}_width",
+      "{$field}_height",
     ]);
-    $query->condition('ttbc.entity_id', $tid);
-    $query->condition('ttbc.langcode', $langcode);
-    $query->condition('ttbc.bundle', ProductCategoryTree::VOCABULARY_ID);
+    $query->condition('term_image_field.entity_id', $tid);
+    $query->condition('term_image_field.langcode', $langcode);
+    $query->condition('term_image_field.bundle', ProductCategoryTree::VOCABULARY_ID);
     return $query->execute()->fetchObject();
   }
 
