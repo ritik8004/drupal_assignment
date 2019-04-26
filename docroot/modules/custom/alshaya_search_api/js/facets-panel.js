@@ -205,12 +205,13 @@
         if (facets.length > 0) {
           var total_facets = facets.length;
           // By default only show 4 facets.
-          var show_only_facets = 4;
+          var show_only_facets, base_facet_count_show;
+          show_only_facets = base_facet_count_show = 4
           var plugin_id = facets[0].getAttribute('data-block-plugin-id');
           // If block plugin id contains `category`, means its category facet.
           if (plugin_id.indexOf('category') !== -1) {
             // If category facet present. then index check increases.
-            show_only_facets = 5;
+            show_only_facets += 1;
             total_facets -= 1;
           }
           facets.each( function (index) {
@@ -220,7 +221,7 @@
           });
 
           // Hide the `all filters` panel when less filters only for desktop.
-          if (total_facets <= show_only_facets) {
+          if (total_facets <= base_facet_count_show) {
             $('.show-all-filters').addClass('hide-for-desktop');
           }
           else {
