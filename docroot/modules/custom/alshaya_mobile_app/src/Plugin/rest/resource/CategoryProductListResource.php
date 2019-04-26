@@ -165,7 +165,7 @@ class CategoryProductListResource extends ResourceBase {
     // Load the term object.
     $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($id);
     // If given term exists in system.
-    if (!$term instanceof TermInterface) {
+    if (!$term instanceof TermInterface || $term->bundle() != 'acq_product_category') {
       $this->mobileAppUtility->throwException();
     }
 
