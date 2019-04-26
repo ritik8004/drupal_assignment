@@ -1,0 +1,68 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_magazine_theme() {
+  $items = [];
+
+  $items['node__magazine_article__full'] = [
+    'template' => 'node--magazine-article--full',
+    'base hook' => 'node',
+  ];
+
+  $items['node__magazine_article__listing'] = [
+    'template' => 'node--magazine-article--listing',
+    'base hook' => 'node',
+  ];
+
+  $items['node__magazine_article__teaser'] = [
+    'template' => 'node--magazine-article--teaser',
+    'base hook' => 'node',
+  ];
+
+  $items['views_view__magazine_articles__homepage_block'] = [
+    'template' => 'views-view--magazine-articles--homepage_block',
+    'base hook' => 'views',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityViewDisplayInterface $display, $view_mode) {
+  if ($node->bundle() != 'magazine_article') {
+    return;
+  }
+
+  if ($view_mode == 'full') {
+    $build['title'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'h1',
+      '#value' => $node->label(),
+    ];
+
+    $build['field_magazine_slogan']['#prefix'] = render($build['title']);
+  }
+  elseif ($view_mode == 'listing') {
+    $build['title'] = [
+      '#type' => 'link',
+      '#url' => $node->toUrl(),
+      '#title' => $node->label(),
+      '#prefix' => '<h2>',
+      '#suffix' => '</h2>',
+    ];
+
+    $build['field_magazine_slogan']['#prefix'] = render($build['title']);
+  }
+}
