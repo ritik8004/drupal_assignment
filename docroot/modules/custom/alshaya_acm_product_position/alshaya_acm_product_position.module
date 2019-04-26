@@ -459,6 +459,16 @@ function alshaya_acm_product_position_term_submit(array &$form, FormStateInterfa
 function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterface $term, array &$category, $parent) {
   // Save field_sorting_options default value for all existing & new terms that
   // are being created programmatically.
+  _alshaya_acm_product_position_set_sorting_options_default_values($term);
+}
+
+/**
+ * Update default value for sorting options and labels fields.
+ *
+ * @param \Drupal\taxonomy\TermInterface $term
+ *   The term object.
+ */
+function _alshaya_acm_product_position_set_sorting_options_default_values(TermInterface &$term) {
   foreach (['field_sorting_options', 'field_sorting_labels'] as $field_name) {
     if (!empty($term->get($field_name)->getString())) {
       continue;
