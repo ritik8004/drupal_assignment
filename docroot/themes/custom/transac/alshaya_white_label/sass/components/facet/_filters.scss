@@ -627,6 +627,10 @@ body {
       position: absolute;
     }
   }
+
+  &.mobile--overlay {
+    overflow: hidden;
+  }
 }
 
 .c-facet {

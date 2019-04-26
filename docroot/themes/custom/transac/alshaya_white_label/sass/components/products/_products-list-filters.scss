@@ -12,6 +12,8 @@ html {
   }
 
   &.all-filters-overlay {
+    overflow: hidden;
+
     &::before {
       opacity: 1;
       transition: opacity 300ms ease-in;
@@ -234,14 +236,10 @@ html {
           ul {
             display: block;
             overflow-y: auto;
-            height: 73.5vh;
+            height: calc(100vh - 11.125rem);
 
-            @include breakpoint($desktop) {
-              height: 71.5vh;
-            }
-
-            @include breakpoint($only-tablet) {
-              height: 74vh;
+            @include breakpoint($tablet) {
+              height: calc(100vh - 14.5rem);
             }
           }
 
