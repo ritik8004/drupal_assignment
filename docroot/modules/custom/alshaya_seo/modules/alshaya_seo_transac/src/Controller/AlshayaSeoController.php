@@ -100,7 +100,8 @@ class AlshayaSeoController extends ControllerBase {
    */
   public function getCurrentUserDetails() {
     $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-    $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
+    $current_user = $this->entityTypeManager->getStorage('user')
+      ->load($this->currentUser->id());
     if ($current_user instanceof UserInterface) {
       $email = $current_user->get('mail')->getString();
       $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : 'New Customer';
@@ -112,6 +113,7 @@ class AlshayaSeoController extends ControllerBase {
 
       $user_details = [
         'userID' => $current_user->get('uid')->getString(),
+        'userPhone' => $current_user->get('field_mobile_number')->value,
         'userEmailID' => $email,
         'userName' => $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString(),
         'userType' => 'Logged in User',
