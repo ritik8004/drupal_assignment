@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Rebuild routes.
+ */
+function alshaya_seo_update_8006() {
+  \Drupal::service('router.builder')->rebuild();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable external_hreflang module.
  */
 function alshaya_seo_update_8005() {
