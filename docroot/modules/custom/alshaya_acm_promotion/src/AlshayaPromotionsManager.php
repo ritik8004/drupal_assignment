@@ -233,6 +233,10 @@ class AlshayaPromotionsManager {
     // We load only published promotions.
     $subTypePromotions = $this->getAllPromotions([
       [
+        'field' => 'status',
+        'value' => Node::PUBLISHED,
+      ],
+      [
         'field' => 'field_alshaya_promotion_subtype',
         'value' => [
           self::SUBTYPE_FIXED_PERCENTAGE_DISCOUNT_ORDER,
@@ -240,10 +244,6 @@ class AlshayaPromotionsManager {
           self::SUBTYPE_FREE_SHIPPING_ORDER,
         ],
         'operator' => 'IN',
-      ],
-      [
-        'field' => 'status',
-        'value' => Node::PUBLISHED,
       ],
     ]);
 
