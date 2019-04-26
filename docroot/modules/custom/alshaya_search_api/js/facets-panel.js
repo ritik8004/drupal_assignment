@@ -108,7 +108,6 @@
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
         $('html').removeClass('all-filters-overlay');
-        $('.all-filters').hide();
         // Show filter count if applicable.
         showFilterCount();
       });
