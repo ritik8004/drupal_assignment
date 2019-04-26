@@ -260,9 +260,36 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_acm_product_category_form_taxonomy_term_acq_product_category_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $form['field_override_target_link']['#states'] = [
+    'visible' => [
+      ':input[name="field_display_as_clickable_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+
   $form['field_target_link']['#states'] = [
     'visible' => [
       ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
     ],
   ];
+  $form['path']['widget']['#after_build'][] = 'alshaya_acm_product_category_after_build';
+}
+
+/**
+ * After build callback to uncheck auto generate path auto.
+ *
+ * @param array $element
+ *   Array of current element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state object.
+ *
+ * @return array
+ *   Return element array.
+ */
+function alshaya_acm_product_category_after_build(array $element, FormStateInterface $form_state) {
+  $element[0]['pathauto']['#states'] = [
+    'unchecked' => [
+      ':input[name="field_override_target_link[value]"]' => ['checked' => TRUE],
+    ],
+  ];
+  return $element;
 }
