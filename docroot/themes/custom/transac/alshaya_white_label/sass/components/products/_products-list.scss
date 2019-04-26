@@ -324,7 +324,7 @@
 
         @include breakpoint($only-tablet) {
           width: calc(100% / 2 - 2% + 2% / 2 - 5px);
-          margin-bottom: 2%;
+          margin-bottom: 5%;
           margin-#{$left}: 3.334%;
 
           &:nth-child(2n+1) {
@@ -334,7 +334,7 @@
 
         @include breakpoint($only-mobile) {
           width: 100%;
-          margin: 0 0 2%;
+          margin: 0 0 5%;
         }
       }
     }
@@ -353,7 +353,7 @@
 
         @include breakpoint($only-tablet) {
           width: calc(100% / 3 - 2% + 2% / 3 + 2px);
-          margin-bottom: 2%;
+          margin-bottom: 5%;
           margin-#{$left}: 1.528%;
 
           &:nth-child(3n+1) {
@@ -363,7 +363,7 @@
 
         @include breakpoint($only-mobile) {
           width: calc(100% / 2 - 1.875% + 1.875% / 2);
-          margin-bottom: 2%;
+          margin-bottom: 5%;
           margin-#{$left}: 1.875%;
 
           &:nth-child(2n+1) {
