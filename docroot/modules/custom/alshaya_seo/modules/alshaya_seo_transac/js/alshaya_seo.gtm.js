@@ -1150,6 +1150,7 @@
   Drupal.setUserDetailsInStorage = function () {
     var userDetails = {};
     userDetails.userID = drupalSettings.user.uid;
+    userDetails.userPhone = '';
     userDetails.userEmailID = '';
     userDetails.userName = '';
     userDetails.userType = 'Guest User';
