@@ -98,6 +98,11 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
    *   Event object.
    */
   public function onProductUpdatedProcessColor(ProductUpdatedEvent $event) {
+    // Do nothing when listing display mode is not non-aggregated.
+    if (!$this->skuManager->isListingModeNonAggregated()) {
+      return;
+    }
+
     $entity = $event->getSku();
 
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */

@@ -30,7 +30,7 @@
           <span class="label--delivery-time">{{ 'Collect in store from'|t }}</span>
           <span class="delivery--time--value">{{ store.delivery_time }}</span>
         </div>
-        <div class="store-actions">
+        <div class="store-actions" gtm-store-address="{{ store.address|striptags }}" gtm-store-title="{{ store.name }}">
           <a href="#" class="select-store">{{ 'select this store'|t }}</a>
           <a onclick="mapsApp({{ store.lat }}, {{ store.lng }})" class="view-on-map mobile-only">{{ 'View on map'|t }}</a>
           <a href="#" class="store-on-map desktop-only">{{ 'View on map'|t }}</a>
