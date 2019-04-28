@@ -134,7 +134,7 @@ class ProductReportController extends ControllerBase {
     $filename = 'product-report-' . $acsf_site_name . '-with-cat-' . $time_format . '.csv';
 
     $fp = fopen($path . '/' . $filename, 'w');
-    fwrite($fp, 'SKU, Category Id, Category Name' . PHP_EOL);
+    fputcsv($fp, ['SKU', 'Category Id', 'Category Name']);
 
     $select = $this->database->select('node__field_skus', 'nfs');
     $select->fields('nfs', ['field_skus_value']);
@@ -147,10 +147,7 @@ class ProductReportController extends ControllerBase {
     $result = $select->execute();
 
     while (($sku = $result->fetchAssoc()) !== FALSE) {
-      $sku_id = $sku['field_skus_value'];
-      $term_id = str_replace(',', '  ', $sku['TermId']);
-      $term_name = str_replace(',', '   ', $sku['TermName']);
-      fwrite($fp, "$sku_id, $term_id, $term_name" . PHP_EOL);
+      fputcsv($fp, [$sku['field_skus_value'], $sku['TermId'], $sku['TermName']]);
     }
 
     fclose($fp);
