@@ -78,6 +78,11 @@ html {
 
       @include breakpoint($only-mobile) {
         padding: 0.375rem 1rem;
+        min-height: 3.75rem;
+      }
+
+      @include breakpoint($only-tablet) {
+        min-height: 6.25rem;
       }
 
       // Back Button
@@ -180,6 +185,7 @@ html {
 
           .fieldset-wrapper {
             position: static;
+            top: 0;
             z-index: 9;
             min-width: auto;
             padding: 0;
