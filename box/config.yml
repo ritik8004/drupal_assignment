@@ -68,6 +68,7 @@ php_packages_extra:
   - "php{{ php_version }}-zip"
   - "php{{ php_version }}-imagick"
   - "php{{ php_version }}-xml"
+  - "php{{ php_version }}-soap"
   - imagemagick
 
 # Solr Configuration.
