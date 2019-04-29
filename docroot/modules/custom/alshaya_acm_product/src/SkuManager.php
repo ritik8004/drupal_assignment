@@ -2127,10 +2127,12 @@ class SkuManager {
    */
   public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
     $parent_sku = $this->getParentSkuBySku($sku);
-    $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
-    foreach ($configurables as $field) {
-      if (in_array($attr_code, $field)) {
-        return $field['label'];
+    if ($parent_sku instanceof SKUInterface) {
+      $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
+      foreach ($configurables as $field) {
+        if (in_array($attr_code, $field)) {
+          return $field['label'];
+        }
       }
     }
     return NULL;
