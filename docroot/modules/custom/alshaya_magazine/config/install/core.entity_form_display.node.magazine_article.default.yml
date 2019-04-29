@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.node.magazine_article.field_magazine_category
     - field.field.node.magazine_article.field_magazine_date
-    - field.field.node.magazine_article.field_magazine_desktop_image
+    - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_hero_image
     - field.field.node.magazine_article.field_magazine_hero_video
     - field.field.node.magazine_article.field_magazine_paragraphs
@@ -41,7 +41,7 @@ content:
     third_party_settings: {  }
     type: datetime_default
     region: content
-  field_magazine_desktop_image:
+  field_magazine_homepage_image:
     type: image_image
     weight: 0
     settings:

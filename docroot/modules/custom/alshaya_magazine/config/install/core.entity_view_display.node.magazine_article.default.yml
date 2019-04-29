@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.node.magazine_article.field_magazine_category
     - field.field.node.magazine_article.field_magazine_date
-    - field.field.node.magazine_article.field_magazine_desktop_image
+    - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_hero_image
     - field.field.node.magazine_article.field_magazine_hero_video
     - field.field.node.magazine_article.field_magazine_paragraphs
@@ -86,7 +86,7 @@ content:
     type: basic_string
     region: content
 hidden:
-  field_magazine_desktop_image: true
+  field_magazine_homepage_image: true
   field_magazine_weight: true
   langcode: true
   links: true

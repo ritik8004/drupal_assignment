@@ -5,8 +5,8 @@ dependencies:
     - file
     - image
     - node
-id: node.field_magazine_desktop_image
-field_name: field_magazine_desktop_image
+id: node.field_magazine_homepage_image
+field_name: field_magazine_homepage_image
 entity_type: node
 type: image
 settings:

@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_magazine_desktop_image
+    - field.storage.node.field_magazine_homepage_image
     - node.type.magazine_article
   module:
     - image
-id: node.magazine_article.field_magazine_desktop_image
-field_name: field_magazine_desktop_image
+id: node.magazine_article.field_magazine_homepage_image
+field_name: field_magazine_homepage_image
 entity_type: node
 bundle: magazine_article
-label: 'Desktop Image'
+label: 'Homepage Image'
 description: ''
 required: false
 translatable: true
