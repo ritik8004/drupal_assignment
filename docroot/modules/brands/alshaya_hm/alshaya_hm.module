@@ -594,7 +594,7 @@ function alshaya_hm_acq_sku_indexes_alter(array &$indexes) {
   $indexes['acq_sku__attr_style_code'] = [
     'table' => 'acq_sku_field_data',
     'fields' => [
-      ['attr_style_code', 64],
+      ['attr_style_code', 10],
     ],
     'spec' => [
       'fields' => [
