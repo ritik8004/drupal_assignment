@@ -6129,7 +6129,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/external_hreflang.git",
-                "reference": "b9a5214ffe4ed247100da139ee40560d93e895e8"
+                "reference": "9be43e3efe5b160e20b353e26bff3fc8a4011771"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -6143,7 +6143,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1554376685",
+                    "datestamp": "1556097185",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -6172,7 +6172,7 @@
                 "source": "https://cgit.drupalcode.org/external_hreflang",
                 "issues": "https://drupal.org/project/issues/external_hreflang"
             },
-            "time": "2019-04-24T09:10:35+00:00"
+            "time": "2019-04-29T13:47:26+00:00"
         },
         {
             "name": "drupal/facets",
