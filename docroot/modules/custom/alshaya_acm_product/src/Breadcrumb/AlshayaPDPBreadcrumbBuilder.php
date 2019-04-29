@@ -164,7 +164,7 @@ class AlshayaPDPBreadcrumbBuilder implements BreadcrumbBuilderInterface {
           $breadcrumb->addCacheableDependency($term);
 
           $options = [];
-          if (empty($term->get('field_display_as_clickable_link')->getString())) {
+          if ($term->get('field_display_as_clickable_link')->getString()) {
             // Make term link non-clickable.
             $options = [
               'attributes' => [
