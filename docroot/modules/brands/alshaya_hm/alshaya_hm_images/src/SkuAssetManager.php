@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_hm_images;
 
-use Detection\MobileDetect;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
@@ -14,7 +13,6 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
@@ -127,6 +125,8 @@ class SkuAssetManager {
    *   Product Cache Manager.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache_pims_files
    *   PIMS ID <=> Drupal File URI cache.
+   * @param \GuzzleHttp\Client $http_client
+   *   HTTP Client.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -149,6 +149,17 @@ class SkuAssetManager {
     $this->httpClient = $http_client;
   }
 
+  /**
+   * Get assets for SKU.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Get assets for SKU.
+   *
+   * @throws \Exception
+   */
   public function getAssets(SKU $sku) {
     $static = &drupal_static(__METHOD__, []);
     $cid = implode(':', [
@@ -166,9 +177,12 @@ class SkuAssetManager {
       return [];
     }
 
-    foreach ($assets as &$data) {
+    foreach ($assets as $index => &$data) {
       if (isset($data['pims_image'], $data['pims_image']['id'])) {
         $data['drupal_uri'] = $this->getImageUri($data['pims_image']);
+      }
+      else {
+        unset($assets[$index]);
       }
     }
 
@@ -176,19 +190,51 @@ class SkuAssetManager {
     return $assets;
   }
 
+  /**
+   * Get drupal file uri for PIMS id from cache.
+   *
+   * @param int|string $pims_id
+   *   PIMS Id.
+   *
+   * @return string|null
+   *   Drupal file uri if found in cache.
+   */
   private function getFileUriFromPimsId($pims_id) {
     $cache = $this->cachePimsFiles->get($pims_id);
     return $cache->data ?? NULL;
   }
 
+  /**
+   * Set drupal file uri for PIMS id in cache.
+   *
+   * @param int|string $pims_id
+   *   PIMS id.
+   * @param \Drupal\file\FileInterface $file
+   *   File entity.
+   */
   private function setFileUriForPimsId($pims_id, FileInterface $file) {
     $this->cachePimsFiles->set($pims_id, $file->getFileUri(), Cache::PERMANENT, $file->getCacheTags());
   }
 
-  private function downloadPimsImage($data) {
+  /**
+   * Download image for PIMS Data and store in Drupal.
+   *
+   * @param array $data
+   *   PIMS Data.
+   *
+   * @return string|null
+   *   Drupal File URI if image download successful.
+   *
+   * @throws \Exception
+   */
+  private function downloadPimsImage(array $data) {
     $base_url = $this->getBaseUrl();
 
-    $url = $base_url . $data['path'] . $data['filename'];
+    $url = implode('/', [
+      trim($base_url, '/'),
+      trim($data['path'], '/'),
+      trim($data['filename'], '/'),
+    ]);
 
     // Download the file contents.
     try {
@@ -227,7 +273,20 @@ class SkuAssetManager {
     return $file->getFileUri();
   }
 
-  private function getImageUri($data) {
+  /**
+   * Get Drupal file uri from PIMS data.
+   *
+   * Download image if not available in cache.
+   *
+   * @param array $data
+   *   PIMS data.
+   *
+   * @return string
+   *   File URI for pims id.
+   *
+   * @throws \Exception
+   */
+  private function getImageUri(array $data) {
     // First check if we have fid for pims id.
     $uri = $this->getFileUriFromPimsId($data['id']);
 
@@ -238,6 +297,12 @@ class SkuAssetManager {
     return $uri;
   }
 
+  /**
+   * Get base url from config.
+   *
+   * @return string
+   *   Base url from config.
+   */
   private function getBaseUrl() {
     static $base_url;
 
@@ -257,19 +322,13 @@ class SkuAssetManager {
    *   SKU text or full entity object.
    * @param string $page_type
    *   Page on which the asset needs to be rendered.
-   * @param array $location_images
-   *   Location on page e.g., main image, thumbnails etc.
-   * @param string $style
-   *   Style string.
-   * @param bool $first_image_only
-   *   Return only the first image.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of urls to sku assets.
    */
-  public function getSkuAssets($sku, $page_type, array $location_images, $style = '', $first_image_only = TRUE, array $avoid_assets = []) {
+  public function getSkuAssets($sku, $page_type, array $avoid_assets = []) {
     $skuEntity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $sku = $skuEntity->getSku();
 
@@ -287,155 +346,18 @@ class SkuAssetManager {
       return [];
     }
 
-    $asset_variant_urls = [];
-    $asset_urls = [];
-    $base_url = $this->getBaseUrl();
+    $media = $this->getAssets($skuEntity);
 
-    foreach ($location_images as $location_image) {
-      $asset_urls = [];
-      foreach ($assets as $asset) {
-        if (!empty($avoid_assets) && isset($asset['Data']['AssetId']) && in_array($asset['Data']['AssetId'], $avoid_assets)) {
-          continue;
-        }
+    $return = [];
 
-        list($set, $image_location_identifier) = $this->getAssetAttributes($sku, $asset, $page_type, $location_image, $style);
-
-        $query_options = $this->getAssetQueryString($set, $image_location_identifier);
-
-        $asset_url = [
-          'url' => Url::fromUri($base_url, ['query' => $query_options]),
-          'sortAssetType' => $asset['sortAssetType'],
-          'sortFacingType' => $asset['sortFacingType'],
-          'Data' => $asset['Data'] ?? [],
-        ];
-
-        // Prepare raw url without res and call.
-        unset($set['res']);
-        $raw_query_options = $this->getAssetQueryString($set, $image_location_identifier);
-        unset($raw_query_options['call']);
-        $asset_url['raw_url'] = Url::fromUri($base_url, ['query' => $raw_query_options]);
-
-        $asset_urls[] = $asset_url;
-
-        if ($first_image_only) {
-          return $asset_urls;
-        }
-
-        // Return specific image in case a match has been found for the swatch
-        // type.
-        if (($style) && ($asset['sortAssetType'] === $style)) {
-          $swatch_asset_url[] = $asset_urls[count($asset_urls) - 1];
-          return $swatch_asset_url;
-        }
-
-      }
-      if (!empty($asset_urls)) {
-        $asset_variant_urls[$location_image] = $asset_urls;
+    foreach ($assets as $asset) {
+      $asset_id = $asset['Data']['AssetId'];
+      if (isset($media[$asset_id]) && !in_array($asset_id, $avoid_assets)) {
+        $return[] = $media[$asset_id];
       }
     }
 
-    // If there is only a single location_image, we don't want the results to
-    // be grouped.
-    if (count($location_images) === 1) {
-      return $asset_urls;
-    }
-
-    return $asset_variant_urls;
-  }
-
-  /**
-   * Prepare query string for assets.
-   *
-   * @param array $set
-   *   Set data.
-   * @param string $image_location_identifier
-   *   Image location identifier.
-   *
-   * @return array
-   *   Query string.
-   */
-  private function getAssetQueryString(array $set, string $image_location_identifier): array {
-    // Prepare query options for image url.
-    if (isset($set['url'])) {
-      $url_parts = parse_url(urldecode($set['url']));
-      if (!empty($url_parts['query'])) {
-        parse_str($url_parts['query'], $query_options);
-        // Overwrite the product style coming from season 5 image url with
-        // the one based on context in which the image is being rendered.
-        $query_options['call'] = 'url[' . $image_location_identifier . ']';
-      }
-    }
-    else {
-      $query_options = [
-        'set' => implode(',', $set),
-        'call' => 'url[' . $image_location_identifier . ']',
-      ];
-    }
-
-    return $query_options;
-  }
-
-  /**
-   * Helper function to fetch asset attributes.
-   *
-   * @param string $sku
-   *   SKU code for Product we fetching the assets for.
-   * @param array $asset
-   *   Asset array with all metadata.
-   * @param string $page_type
-   *   Page type on which this asset needs to be rendered.
-   * @param string $location_image
-   *   Location on page e.g., main image, thumbnails etc.
-   * @param string $style
-   *   CSS style.
-   *
-   * @return array
-   *   Array of asset attributes.
-   */
-  public function getAssetAttributes($sku, array $asset, $page_type, $location_image, $style = '') {
-    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
-    $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
-
-    if (isset($asset['is_old_format']) && $asset['is_old_format']) {
-      return [['url' => $asset['Url']], $image_location_identifier];
-    }
-    else {
-      $origin = $alshaya_hm_images_settings->get('origin');
-
-      $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
-      $set['origin'] = "origin[" . $origin . "]";
-      $set['type'] = "type[" . $asset['sortAssetType'] . "]";
-      $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
-
-      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
-      $detect = new MobileDetect();
-      if ($detect->isMobile()) {
-        $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['mobile'] . "]";
-      }
-
-      // Check for overrides for style identifiers & dimensions.
-      $config_overrides = $this->overrideConfig($sku, $page_type);
-
-      // If overrides are available, update style id, width & height in the url.
-      if (!empty($config_overrides)) {
-        if (isset($config_overrides['style_identifiers'][$location_image])) {
-          $image_location_identifier = $config_overrides['style_identifiers'][$location_image];
-        }
-
-        if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['desktop'])) {
-          $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['desktop'] . "]";
-        }
-
-        $detect = new MobileDetect();
-        if ($detect->isMobile()) {
-          if ((!empty($style)) && isset($config_overrides['dimensions'][$location_image]['mobile'])) {
-            $set['res'] = "res[" . $config_overrides['dimensions'][$location_image]['mobile'] . "]";
-          }
-        }
-      }
-    }
-
-    return [$set, $image_location_identifier];
+    return $return;
   }
 
   /**
@@ -641,31 +563,18 @@ class SkuAssetManager {
    *   Parent sku for which we pulling child assets.
    * @param string $context
    *   Page on which the asset needs to be rendered.
-   * @param array $locations
-   *   Location on page e.g., main image, thumbnails etc.
-   * @param bool $first_only
-   *   Flag to indicate we need the assets of the first child only.
-   * @param bool $first_image_only
-   *   Return only the first image.
    * @param array $avoid_assets
    *   (optional) Array of AssetId to avoid.
    *
    * @return array
    *   Array of sku child assets.
    */
-  public function getChildSkuAssets(SKU $sku, $context, array $locations, $first_only = TRUE, $first_image_only = TRUE, array $avoid_assets = []) {
+  public function getChildSkuAssets(SKU $sku, $context, array $avoid_assets = []) {
     $child_skus = $this->skuManager->getValidChildSkusAsString($sku);
+
     $assets = [];
-
-    if (($first_only) && (!empty($child_skus))) {
-      $child_sku = reset($child_skus);
-      return $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only, $avoid_assets);
-    }
-
-    if (!empty($child_skus)) {
-      foreach ($child_skus as $child_sku) {
-        $assets[$sku->getSku()] = $this->getSkuAssets($child_sku, $context, $locations, '', $first_image_only, $avoid_assets);
-      }
+    foreach ($child_skus ?? [] as $child_sku) {
+      $assets[$child_sku] = $this->getSkuAssets($child_sku, $context, $avoid_assets);
     }
 
     return $assets;

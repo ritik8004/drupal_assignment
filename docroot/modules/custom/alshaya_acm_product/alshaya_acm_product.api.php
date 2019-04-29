@@ -75,5 +75,17 @@ function hook_acq_sku_cart_media_alter(array &$image, SKUInterface $sku, $contex
 }
 
 /**
+ * Allow other modules to alter media items array for products.
+ *
+ * @param array $media
+ *   Media data to alter.
+ * @param \Drupal\acq_commerce\SKUInterface $sku
+ *   SKU entity.
+ */
+function hook_alshaya_acm_product_media_items_alter(array $media, SKUInterface $sku) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

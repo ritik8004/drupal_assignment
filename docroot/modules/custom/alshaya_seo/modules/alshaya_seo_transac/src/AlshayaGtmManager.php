@@ -1013,12 +1013,10 @@ class AlshayaGtmManager {
         $product_terms = $this->fetchProductCategories($node);
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
-        if ($product_media) {
-          $product_media_url = file_create_url($product_media['drupal_uri']);
-        }
-        else {
-          $product_media_url = '';
-        }
+        $product_media_url = !empty($product_media)
+          ? file_create_url($product_media['drupal_uri'])
+          : '';
+
         $oldprice = '';
         if ((float) $sku_entity->get('price')->getString() != (float) $sku_attributes['gtm-price']) {
           $oldprice = (float) $sku_entity->get('price')->getString();

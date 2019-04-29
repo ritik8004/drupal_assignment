@@ -130,7 +130,7 @@ class SkuImagesManager {
    *   Array of media files.
    */
   public function getAllMediaItems(SKUInterface $sku, $check_parent_child = FALSE) {
-    $media = $this->getProductMedia($sku, $check_parent_child);
+    $media = $this->getProductMedia($sku, 'pdp', $check_parent_child);
     $media_items = [];
     foreach ($media['media_items'] ?? [] as $items) {
       $media_items = array_merge($media_items, $items);
@@ -148,7 +148,7 @@ class SkuImagesManager {
    *   TRUE if SKU has media(images/videos).
    */
   public function hasMedia(SKUInterface $sku) {
-    $media = $this->getProductMedia($sku, FALSE);
+    $media = $this->getProductMedia($sku, 'pdp', FALSE);
     return !empty($media);
   }
 
@@ -233,7 +233,7 @@ class SkuImagesManager {
     foreach ($media ?? [] as $index => $media_item) {
       $media_item = array_filter($media_item);
 
-      if ($media_item['file'] instanceof FileInterface) {
+      if (isset($media_item['file']) && $media_item['file'] instanceof FileInterface) {
         $media_item['drupal_uri'] = $media_item['file']->getFileUri();
         unset($media_item['file']);
       }
@@ -418,7 +418,7 @@ class SkuImagesManager {
       return [];
     }
 
-    $media = $this->getProductMedia($sku);
+    $media = $this->getProductMedia($sku, 'plp');
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {
@@ -642,7 +642,7 @@ class SkuImagesManager {
 
     switch ($context) {
       case 'search':
-        $search_main_image = $thumbnails = [];
+        $search_main_image = $thumbnails = $search_hover_image = [];
 
         // Loop through all media items and prepare thumbnails array.
         foreach ($media['media_items']['images'] ?? [] as $media_item) {
@@ -651,17 +651,32 @@ class SkuImagesManager {
           if (empty($search_main_image)) {
             $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
           }
+          elseif ($this->productDisplaySettings->get('gallery_show_hover_image') || 1) {
+            $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
+          }
 
           if ($this->productDisplaySettings->get('image_thumb_gallery')) {
             $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288', '291x288');
           }
         }
 
-        $gallery = [
-          '#theme' => 'alshaya_search_gallery',
-          '#mainImage' => $search_main_image,
-          '#thumbnails' => $thumbnails,
-        ];
+        if ($this->productDisplaySettings->get('gallery_show_hover_image') || 1) {
+          $gallery = [
+            '#theme' => 'alshaya_assets_gallery',
+            '#mainImage' => $search_main_image,
+          ];
+
+          if ($search_hover_image) {
+            $gallery['#hoverImage'] = $search_hover_image;
+          }
+        }
+        else {
+          $gallery = [
+            '#theme' => 'alshaya_search_gallery',
+            '#mainImage' => $search_main_image,
+            '#thumbnails' => $thumbnails,
+          ];
+        }
 
         break;
 
@@ -1268,7 +1283,7 @@ class SkuImagesManager {
    *   Array containing absolute urls of images.
    */
   public function getMediaImages(SKU $sku): array {
-    $media = $this->getProductMedia($sku);
+    $media = $this->getProductMedia($sku, 'pdp');
     $images = [];
 
     foreach ($media['media_items']['images'] as $item) {

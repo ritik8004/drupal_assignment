@@ -55,21 +55,6 @@ function _alshaya_hm_images_acq_sku_process_assets(array $product) {
 }
 
 /**
- * Implements hook_theme().
- */
-function alshaya_hm_images_theme($existing, $type, $theme, $path) {
-  return [
-    'alshaya_assets_gallery' => [
-      'variables' => [
-        'mainImage' => '',
-        'hoverImage' => '',
-        'label' => '',
-      ],
-    ],
-  ];
-}
-
-/**
  * Implements hook_views_pre_render().
  */
 function alshaya_hm_images_views_pre_render(ViewExecutable $view) {
@@ -120,6 +105,9 @@ function alshaya_hm_images_alshaya_acm_product_gallery_alter(array &$gallery, SK
   }
 }
 
+/**
+ * Implements hook_alshaya_acm_product_media_items_alter().
+ */
 function alshaya_hm_images_alshaya_acm_product_media_items_alter(array &$media, SKU $sku) {
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $assetsManager */
   $assetsManager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
@@ -317,13 +305,6 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
       }
     }
   }
-}
-
-/**
- * Implements template_preprocess_product_zoom().
- */
-function alshaya_hm_images_preprocess_product_zoom(&$variables) {
-  $variables['#cache']['contexts'][] = 'url.query_args:color';
 }
 
 /**

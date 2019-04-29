@@ -309,6 +309,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['alshaya_assets_gallery'] = [
+    'variables' => [
+      'mainImage' => '',
+      'hoverImage' => '',
+    ],
+  ];
+
   return $items;
 }
 

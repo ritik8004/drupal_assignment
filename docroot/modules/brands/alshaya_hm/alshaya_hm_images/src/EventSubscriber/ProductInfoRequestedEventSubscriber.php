@@ -83,27 +83,22 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     $context = $event->getContext();
 
-    $media = [];
-    $styled_images = [];
-
     switch ($context) {
       case 'pdp':
-        $pdp_images = $this->skuAssetsManager->getImagesForSku(
+        $media = $this->skuAssetsManager->getImagesForSku(
           $sku,
           'pdp',
           ['pdp_fullscreen'],
           FALSE
         );
 
-        foreach ($pdp_images ?? [] as $image) {
-          $url = $image['raw_url']->toString();
-          $media[$url] = [
-            'url' => $url,
-            'image_type' => $image['sortAssetType'],
-          ];
-
-          $styled_images[] = $image['url']->toString();
+        $return = [];
+        foreach ($media as $item) {
+          $item['label'] = $sku->label();
+          $return['media_items']['images'][] = $item;
         }
+
+        $event->setValue($return);
 
         break;
 
@@ -113,27 +108,17 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
         $hover_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_assets);
 
-        $plp_main_image = !empty($main_image_assets) ? $main_image_assets[0] : NULL;
-        $plp_hover_image = !empty($hover_image_assets) ? $hover_image_assets[0] : NULL;
+        $return = [];
 
-        if ($plp_main_image) {
-          $url = $plp_main_image['raw_url']->toString();
-          $media[$url] = [
-            'url' => $url,
-            'image_type' => $plp_main_image['sortAssetType'],
-          ];
+        if (!empty($main_image_assets)) {
+          $return['media_items']['images'][] = reset($main_image_assets);
 
-          $styled_images[] = $plp_main_image['url']->toString();
-
-          if ($plp_hover_image) {
-            $url = $plp_hover_image['raw_url']->toString();
-            $media[$url] = [
-              'url' => $url,
-              'image_type' => $plp_hover_image['sortAssetType'],
-            ];
-            $styled_images[] = $plp_hover_image['url']->toString();
+          if (!empty($hover_image_assets)) {
+            $return['media_items']['images'][] = reset($hover_image_assets);
           }
         }
+
+        $event->setValue($return);
         break;
 
       case 'teaser':
@@ -144,25 +129,12 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
           $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp', [$context]);
         }
 
+        $return = [];
         if (!empty($teaser_assets)) {
-          $image = reset($teaser_assets);
-          $url = $image['raw_url']->toString();
-          $media[$url] = [
-            'url' => $url,
-            'image_type' => $image['sortAssetType'],
-          ];
-          $styled_images[] = $image['url']->toString();
+          $return['media_items']['images'][] = reset($teaser_assets);
         }
+        $event->setValue($return);
         break;
-    }
-
-    if (!empty($media)) {
-      $event->setValue([
-        'images' => array_keys($media),
-        'videos' => [],
-        'styled_images' => $styled_images,
-        'images_with_type' => array_values($media),
-      ]);
     }
   }
 
@@ -189,10 +161,13 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     // If swatch type is not miniature_image or assets were missing from
     // sku, use rgb color code instead.
     $swatch = [
-      'display_value' => empty($assets) ? $sku->get('attr_rgb_color')->getString() : $assets[0]['raw_url']->toString(),
       'display_label' => $sku->get('attr_color_label')->getString(),
       'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
     ];
+
+    $swatch['display_value'] = empty($assets)
+      ? $sku->get('attr_rgb_color')->getString()
+      : file_url_transform_relative(file_create_url($assets[0]['drupal_uri']));
 
     $event->setValue($swatch);
   }

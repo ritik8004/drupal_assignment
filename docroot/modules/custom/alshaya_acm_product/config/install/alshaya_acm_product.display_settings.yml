@@ -1,4 +1,5 @@
 image_thumb_gallery: false
+gallery_show_hover_image: false
 configurable_use_parent_images: 'always'
 media_roles_to_hide_in_gallery: 'thumbnail,swatch_image'
 show_child_images_after_selecting: 'one'
