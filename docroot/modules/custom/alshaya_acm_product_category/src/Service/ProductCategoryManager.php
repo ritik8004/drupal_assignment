@@ -231,6 +231,14 @@ class ProductCategoryManager {
 
     $non_sale_new_arrival_categories = array_intersect($product_category_ids, $cat_ids);
 
+    // If there is no common term, then don't process further. This might be
+    // the case when sale and new arrival is configured at drupal level. At
+    // MDC level, new_arrival is enabled and sale is disabled but category
+    // contains the sales term.
+    if (empty($non_sale_new_arrival_categories)) {
+      return FALSE;
+    }
+
     // Load current value.
     $category_ids = $this->getProductCategoryIds($node);
 
@@ -334,7 +342,7 @@ class ProductCategoryManager {
    */
   public function processSalesCategoryCheckForSku(SKUInterface $sku) {
     // Do nothing if no sales category set.
-    if (empty($this->getSalesCategoryIds())) {
+    if (empty(array_filter($this->getCategorizationIds()))) {
       return;
     }
 
