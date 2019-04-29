@@ -65,6 +65,11 @@ class SearchPageProductListResource extends ResourceBase {
   const PRICE_FACET_KEY = 'final_price';
 
   /**
+   * Selling Price facet machine id.
+   */
+  const SELLING_PRICE_FACET_KEY = 'selling_price';
+
+  /**
    * Parse mode plugin manager.
    *
    * @var \Drupal\search_api\ParseMode\ParseModePluginManager
@@ -181,6 +186,8 @@ class SearchPageProductListResource extends ResourceBase {
     $this->alshayaSearchApiQueryExecute->setViewsDisplayId(self::VIEWS_DISPLAY_ID);
     // Set the price facet key.
     $this->alshayaSearchApiQueryExecute->setPriceFacetKey(self::PRICE_FACET_KEY);
+    // Set selling price facet key.
+    $this->alshayaSearchApiQueryExecute->setSellingPriceFacetKey(self::SELLING_PRICE_FACET_KEY);
 
     // Change the parse mode for the search.
     $parse_mode = $this->parseModeManager->createInstance(self::PARSE_MODE);
