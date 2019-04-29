@@ -386,5 +386,8 @@ function _acq_sku_indexes() {
     ],
   ];
 
+  // Allow other modules to add/alter indexes.
+  \Drupal::moduleHandler()->alter('acq_sku_indexes', $indexes);
+
   return $indexes;
 }
