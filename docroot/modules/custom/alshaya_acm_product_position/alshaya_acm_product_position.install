@@ -7,41 +7,41 @@
  */
 
 use Drupal\alshaya_config\AlshayaConfigManager;
-use Drupal\Core\Site\Settings;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Implements hook_update_N().
  *
  * Set default values for field_sorting_options and field_sorting_labels.
  */
-function alshaya_acm_product_position_update_8005(&$sandbox) {
-  // Initialize variables for total terms and current processing.
-  if (!isset($sandbox['current'])) {
-    $sandbox['current'] = 0;
-    $sandbox['total'] = \Drupal::entityQuery('taxonomy_term')
-      ->condition('vid', 'acq_product_category')
-      ->count()
-      ->execute();
-    $sandbox['limit'] = Settings::get('entity_update_batch_size', 50);
-  }
-
-  // Process terms in batches of 25 items.
+function alshaya_acm_product_position_update_8005() {
   $tids = \Drupal::entityQuery('taxonomy_term')
     ->condition('vid', 'acq_product_category')
-    ->range($sandbox['current'], $sandbox['limit'])
     ->sort('tid', 'ASC')
     ->execute();
 
   foreach($tids as $tid) {
-    $term = Term::load($tid);
-    _alshaya_acm_product_position_set_sorting_options_default_values($term);
-    $term->save();
-    $sandbox['current']++;
-  }
+    foreach(['field_sorting_labels', 'field_sorting_options'] as $field_name) {
+      $query = \Drupal::database()->select("taxonomy_term__{$field_name}");
+      $query->fields("taxonomy_term__{$field_name}", ['entity_id']);
+      $query->condition('entity_id', $tid);
+      $query->condition('bundle', 'acq_product_category');
+      $result = $query->execute()->fetchCol();
 
-  drupal_set_message($sandbox['current'] . ' terms processed.');
-  $sandbox['#finished'] = ($sandbox['total'] == 0) ? 1 : ($sandbox['current'] / $sandbox['total']);
+      if (empty($result)) {
+        \Drupal::database()->insert("taxonomy_term__{$field_name}")
+        ->fields([
+          'bundle' => 'acq_product_category',
+          'deleted' => 0,
+          'entity_id' => $tid,
+          'revision_id' => $tid,
+          'langcode' => 'en',
+          'delta' => 0,
+          "{$field_name}_value" => 'inherit_category',
+        ])
+        ->execute();
+      }
+    }
+  }
 }
 
 /**
