@@ -74,11 +74,13 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
     if ($blockContent instanceof Block && $blockContent->get('status')) {
       $block = BlockViewBuilder::lazyBuilder('youllbeableto', 'full');
       $block_markup = \Drupal::service('renderer')->renderPlain($block);
-      $pane_form['you_will_able_to'] = [
-        '#markup' => $block_markup->__toString(),
-        '#prefix' => '<div id="block-youllbeableto">',
-        '#suffix' => '<div>',
-      ];
+      if (!empty($block_markup)) {
+        $pane_form['you_will_able_to'] = [
+          '#markup' => $block_markup->__toString(),
+          '#prefix' => '<div id="block-youllbeableto">',
+          '#suffix' => '<div>',
+        ];
+      }
     }
     return $pane_form;
   }
