@@ -128,11 +128,11 @@ class EmailToStoreWebformHandler extends EmailWebformHandler {
    *   An array of email addresses and/or tokens.
    */
   protected function getMessageEmails(WebformSubmissionInterface $webform_submission, $configuration_name, $configuration_value) {
-    $emails = parent::getMessageEmails($webform_submission, $configuration_name, $configuration_value);
+    $return = parent::getMessageEmails($webform_submission, $configuration_name, $configuration_value);
 
     if ($configuration_name === 'to') {
-      foreach ($emails as $index => $email) {
-        $store = $this->storesFinderUtility->getStoreFromCode($email);
+      foreach ($return as $index => $data) {
+        $store = $this->storesFinderUtility->getStoreFromCode($data);
         if ($store instanceof NodeInterface) {
           $email = $store->get('field_store_email')->getString();
 
@@ -141,12 +141,12 @@ class EmailToStoreWebformHandler extends EmailWebformHandler {
             $email = $this->configFactory->get('system.site')->get('mail');
           }
 
-          $emails[$index] = $email;
+          $return[$index] = $email;
         }
       }
     }
 
-    return $emails;
+    return $return;
   }
 
 }

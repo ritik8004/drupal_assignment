@@ -4,6 +4,8 @@ namespace Drupal\alshaya_stores_finder_transac;
 
 use Drupal\alshaya_addressbook\AlshayaAddressBookManager;
 use Drupal\alshaya_addressbook\AlshayaAddressBookManagerInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -61,6 +63,13 @@ class StoresFinderUtility {
   protected $moduleHandler;
 
   /**
+   * Cache backend for cache.data.
+   *
+   * @var \Drupal\Core\Cache\CacheBackendInterface
+   */
+  protected $cache;
+
+  /**
    * Constructs a new StoresFinderUtility object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -75,19 +84,23 @@ class StoresFinderUtility {
    *   LoggerFactory object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   Cache backend for cache.data.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager,
                               AlshayaAddressBookManager $address_book_manager,
                               LanguageManagerInterface $language_manager,
                               Connection $database,
                               LoggerChannelFactoryInterface $logger_factory,
-                              ModuleHandlerInterface $module_handler) {
+                              ModuleHandlerInterface $module_handler,
+                              CacheBackendInterface $cache) {
     $this->nodeStorage = $entity_type_manager->getStorage('node');
     $this->addressBookManager = $address_book_manager;
     $this->languageManager = $language_manager;
     $this->database = $database;
     $this->logger = $logger_factory->get('alshaya_stores_finder');
     $this->moduleHandler = $module_handler;
+    $this->cache = $cache;
   }
 
   /**
@@ -382,6 +395,55 @@ class StoresFinderUtility {
     else {
       return $address ? $address['#address'] : '';
     }
+  }
+
+  /**
+   * Wrapper function to get store options array.
+   *
+   * @param string $langcode
+   *   Language in which we want the display value.
+   *
+   * @return array
+   *   Array for #options with store code as key and title as value.
+   */
+  public function getAllStoresAsOptions(string $langcode = '') {
+    if (empty($langcode)) {
+      $langcode = $this->languageManager->getCurrentLanguage()->getId();
+    }
+
+    $static = &drupal_static(__METHOD__, []);
+
+    if (isset($static[$langcode])) {
+      return $static[$langcode];
+    }
+
+    $cid = 'alshaya_free_design_services_all_stores_' . $langcode;
+    $cache = $this->cache->get($cid);
+    if (!empty($cache->data)) {
+      $static[$langcode] = $cache->data;
+      return $static[$langcode];
+    }
+
+    $options = [];
+
+    $stores = $this->nodeStorage->loadByProperties([
+      'type' => 'store',
+      'status' => NodeInterface::PUBLISHED,
+    ]);
+
+    /** @var \Drupal\node\NodeInterface $store */
+    foreach ($stores as $store) {
+      if ($store->language()->getId() != $langcode && $store->hasTranslation($langcode)) {
+        $store = $store->getTranslation($langcode);
+      }
+
+      $options[$store->get('field_store_locator_id')->getString()] = $store->label();
+    }
+
+    $this->cache->set($cid, $options, Cache::PERMANENT, ['node_type:store']);
+
+    $static[$langcode] = $options;
+    return $options;
   }
 
 }

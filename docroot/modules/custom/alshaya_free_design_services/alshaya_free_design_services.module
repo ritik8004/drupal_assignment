@@ -5,17 +5,17 @@
  * Module file.
  */
 
-use Drupal\Core\Cache\Cache;
-use Drupal\node\NodeInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_free_design_services_form_webform_submission_free_design_services_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinderUtility */
+  $storeFinderUtility = \Drupal::service('alshaya_stores_finder_transac.utility');
   $form['elements']['preferred_store']['#type'] = 'select';
   $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
-  $form['elements']['preferred_store']['#options'] = _alshaya_free_design_services_get_all_stores();
+  $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getAllStoresAsOptions();
 
   $form['#validate'][] = 'alshaya_free_design_services_form_webform_submission_free_design_services_validate';
 }
@@ -41,50 +41,6 @@ function alshaya_free_design_services_form_webform_submission_free_design_servic
   }
 
   $form_state->setValue('address', $address);
-}
-
-/**
- * Wrapper function to get store options array.
- *
- * @return array
- *   Array for #options with store code as key and title as value.
- */
-function _alshaya_free_design_services_get_all_stores() {
-  static $options;
-
-  if (is_array($options)) {
-    return $options;
-  }
-
-  $langcode = \Drupal::languageManager()->getCurrentLanguage()->getId();
-
-  // Check once in cache now.
-  $cid = 'alshaya_free_design_services_all_stores_' . $langcode;
-  $cache = \Drupal::cache()->get($cid);
-  if ($cache && $cache->data) {
-    $options = $cache->data;
-    return $options;
-  }
-
-  $options = [];
-
-  $stores = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties([
-    'type' => 'store',
-    'status' => NodeInterface::PUBLISHED,
-  ]);
-
-  /** @var \Drupal\node\NodeInterface $store */
-  foreach ($stores as $store) {
-    if ($store->language()->getId() != $langcode && $store->hasTranslation($langcode)) {
-      $store = $store->getTranslation($langcode);
-    }
-
-    $options[$store->get('field_store_locator_id')->getString()] = $store->label();
-  }
-
-  \Drupal::cache()->set($cid, $options, Cache::PERMANENT, ['node_type:store']);
-
-  return $options;
 }
 
 /**
