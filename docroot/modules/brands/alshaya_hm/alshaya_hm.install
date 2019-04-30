@@ -13,6 +13,23 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Add index for attr_style_code in acq_sku_field_data.
+ */
+function alshaya_hm_update_8032() {
+  \Drupal::moduleHandler()->loadInclude('acq_sku', 'install');
+
+  $index = 'acq_sku__attr_style_code';
+  $data = _acq_sku_indexes()[$index];
+  if (!\Drupal::database()->schema()->indexExists($data['table'], $index)) {
+    \Drupal::database()
+      ->schema()
+      ->addIndex($data['table'], $index, $data['fields'], $data['spec']);
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Mark all indexed data for re-indexation to get the price data indexed again.
  */
 function alshaya_hm_update_8031() {
