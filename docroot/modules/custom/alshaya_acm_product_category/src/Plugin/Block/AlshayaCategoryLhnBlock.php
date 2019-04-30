@@ -150,34 +150,30 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
     $lhn_tree = [];
 
     // Get all parents of the given term.
-    if ($term instanceof TermInterface) {
-      $parents = $this->productCategoryTree->getCategoryTermParents($term);
+    $parents = $this->productCategoryTree->getCategoryTermParents($term);
 
-      // If parent exists for the current term. Here doing
-      // `$context['depth_offset'] + 1` as $parents array contains the current
-      // term as well and to handle the super category feature.
-      if ((count($parents) - ($context['depth_offset'] + 1)) > 0) {
-        // Get root parent term.
-        /* @var \Drupal\taxonomy\Entity\Term $root_parent_term*/
+    // If parent exists for the current term. Here doing
+    // `$context['depth_offset'] + 1` as $parents array contains the current
+    // term as well.
+    if ((count($parents) - ($context['depth_offset'] + 1)) > 0) {
+      // Get root parent term.
+      /* @var \Drupal\taxonomy\Entity\Term $root_parent_term*/
+      $root_parent_term = array_pop($parents);
+
+      if (!empty($context['depth_offset'])) {
         $root_parent_term = array_pop($parents);
-
-        if (!empty($context['depth_offset'])) {
-          $root_parent_term = array_pop($parents);
-        }
-
-        $lhn_tree = $term_data[$root_parent_term->id()]['child'];
       }
-      else {
-        if (!empty($context['depth_offset'])) {
-          $lhn_tree = count($parents) == 1 ? $term_data : $term_data[key($parents)]['child'];
-          if (count($parents) == 1) {
-            $context['depth_offset'] = 2;
-          }
-        }
-        else {
-          $lhn_tree = count($parents) == 1 ? $term_data[key($parents)]['child'] : [];
-        }
+
+      $lhn_tree = $term_data[$root_parent_term->id()]['child'];
+    }
+    elseif (!empty($context['depth_offset'])) {
+      $lhn_tree = count($parents) == 1 ? $term_data : $term_data[key($parents)]['child'];
+      if (count($parents) == 1) {
+        $context['depth_offset'] = 2;
       }
+    }
+    else {
+      $lhn_tree = count($parents) == 1 ? $term_data[key($parents)]['child'] : [];
     }
 
     $lhn_tree = array_filter($lhn_tree, function ($tree_term) {

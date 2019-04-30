@@ -92,7 +92,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
     $form['enable_lhn_tree'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable LHN'),
-      '#description' => $this->t('Enables the LHN for the site.'),
+      '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on PLP pages for Desktop.'),
       '#default_value' => $config->get('enable_lhn_tree'),
     ];
 
