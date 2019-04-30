@@ -36,6 +36,9 @@ use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\Query\ConditionInterface;
+use Drupal\search_api\Query\ConditionGroupInterface;
 
 /**
  * Implements hook_module_implements_alter().
@@ -51,6 +54,11 @@ function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
 
   foreach ($hooks_to_invoke_last as $hook_to_invoke_last) {
     if ($hook == $hook_to_invoke_last) {
+      $group = $implementations['alshaya_acm_product'];
+      unset($implementations['alshaya_acm_product']);
+      $implementations['alshaya_acm_product'] = $group;
+    }
+    elseif ($hook == 'search_api_query_alter') {
       $group = $implementations['alshaya_acm_product'];
       unset($implementations['alshaya_acm_product']);
       $implementations['alshaya_acm_product'] = $group;
@@ -87,6 +95,52 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
         }
 
         unset($items[$item_id]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_search_api_query_alter().
+ */
+function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
+  if (_alshaya_acm_product_get_price_helper()->isPriceModeFromTo()) {
+    // Check for special price condition. We change it to price and final_price.
+    // We do separate conditions for price and final_price as between query is
+    // not working as expected in SOLR.
+    // We know it will be inside two levels, we check accordingly.
+    foreach ($query->getConditionGroup()->getConditions() as $conditionLevel1) {
+      if ($conditionLevel1 instanceof ConditionGroupInterface) {
+        foreach ($conditionLevel1->getConditions() as $conditionLevel2) {
+          if ($conditionLevel2 instanceof ConditionGroupInterface) {
+            foreach ($conditionLevel2->getConditions() as $condition) {
+              if ($condition instanceof ConditionInterface && $condition->getField() == 'attr_selling_price') {
+                $condition->setField('final_price');
+                $add_price_condition = TRUE;
+              }
+            }
+
+            // Add price condition too when filter by selling price.
+            if (isset($add_price_condition)) {
+              $priceConditionGroup = clone $conditionLevel2;
+              foreach ($priceConditionGroup->getConditions() as $priceCondition) {
+                $priceCondition->setField('price');
+              }
+              $conditionLevel1->addConditionGroup($priceConditionGroup);
+            }
+          }
+        }
+      }
+    }
+
+    // Check for sorting.
+    $sorts =& $query->getSorts();
+    if (isset($sorts['final_price'])) {
+      if ($sorts['final_price'] === 'DESC') {
+        $sorts = ['price' => 'DESC'] + $sorts;
+      }
+      else {
+        $sorts = ['final_price' => 'ASC', 'price' => 'ASC'] + $sorts;
       }
     }
   }
