@@ -175,6 +175,8 @@ $settings['additional_modules'] = [];
 // Set page cache duration to 24 hours by default.
 $config['system.performance']['cache']['page']['max_age'] = 14400;
 
+$settings['alshaya_hm_images.settings']['pims_base_url'] = 'http://172.16.126.102:8090/website/var/assets';
+
 // ################################################################
 // This switch/case is ONLY for per environment settings. If any of these
 // settings must be overridden on a per site basis, please, check

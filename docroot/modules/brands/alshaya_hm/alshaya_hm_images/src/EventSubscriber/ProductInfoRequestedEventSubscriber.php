@@ -85,12 +85,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
     switch ($context) {
       case 'pdp':
-        $media = $this->skuAssetsManager->getImagesForSku(
-          $sku,
-          'pdp',
-          ['pdp_fullscreen'],
-          FALSE
-        );
+        $media = $this->skuAssetsManager->getImagesForSku($sku, 'pdp');
 
         $return = [];
         foreach ($media as $item) {
@@ -104,9 +99,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
 
       case 'search':
         // Lookup images on current SKU if its a simple SKU.
-        $main_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp', ['plp']);
-        $avoid_assets = !empty($main_image_assets) && !empty($main_image_assets[0]['Data']) ? [$main_image_assets[0]['Data']['AssetId']] : [];
-        $hover_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp_hover', ['plp'], '', TRUE, $avoid_assets);
+        $main_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp');
+        $avoid_assets = !empty($main_image_assets) ? [$main_image_assets[0]['Data']['AssetId']] : [];
+        $hover_image_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp_hover', $avoid_assets);
 
         $return = [];
 
@@ -122,11 +117,11 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         break;
 
       case 'teaser':
-        $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'teaser', [$context]);
+        $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'teaser');
 
         // Try once with plp assets if nothing found for teaser.
         if (empty($teaser_assets)) {
-          $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp', [$context]);
+          $teaser_assets = $this->skuAssetsManager->getSkuAssets($sku, 'plp');
         }
 
         $return = [];
@@ -155,7 +150,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $swatch_type = $this->skuAssetsManager->getSkuSwatchType($parent);
 
     if (strtoupper($swatch_type) !== SkuAssetManager::LP_SWATCH_RGB) {
-      $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch', ['swatch'], $swatch_type, FALSE);
+      $assets = $this->skuAssetsManager->getSkuAssets($sku, 'swatch');
     }
 
     // If swatch type is not miniature_image or assets were missing from

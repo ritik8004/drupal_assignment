@@ -5,6 +5,23 @@
  * Contains install, update, uninstall hooks for alshaya_hm_images module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new config keys in alshaya_hm_images.settings.
+ */
+function alshaya_hm_images_update_8009() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_hm_images.settings'],
+    'alshaya_hm_images',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
 /**
  * Implements hook_update_N().
  *

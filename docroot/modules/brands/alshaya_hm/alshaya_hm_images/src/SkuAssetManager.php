@@ -7,12 +7,14 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
 use GuzzleHttp\Client;
@@ -177,11 +179,21 @@ class SkuAssetManager {
       return [];
     }
 
-    foreach ($assets as $index => &$data) {
-      if (isset($data['pims_image'], $data['pims_image']['id'])) {
-        $data['drupal_uri'] = $this->getImageUri($data['pims_image']);
+    foreach ($assets as $index => &$asset) {
+      // Sanity check, we always need asset id.
+      if (empty($asset['Data']['AssetId'])) {
+        unset($assets[$index]);
+        continue;
       }
-      else {
+
+      try {
+        $asset['drupal_uri'] = $this->getImageUri($asset);
+      }
+      catch (\Exception $e) {
+        watchdog_exception('SkuAssetManager', $e);
+      }
+
+      if (empty($asset['drupal_uri'])) {
         unset($assets[$index]);
       }
     }
@@ -228,7 +240,7 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadPimsImage(array $data) {
-    $base_url = $this->getBaseUrl();
+    $base_url = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'pims_base_url');
 
     $url = implode('/', [
       trim($base_url, '/'),
@@ -274,45 +286,85 @@ class SkuAssetManager {
   }
 
   /**
+   * Download image from Liquid Pixel to Drupal.
+   *
+   * @param array $asset
+   *   Asset data.
+   *
+   * @return string|null
+   *   File uri if download successful.
+   *
+   * @throws \Exception
+   */
+  public function downloadLiquidPixelImage(array $asset) {
+    $url = $this->getSkuAssetUrlLiquidPixel($asset);
+
+    // Download the file contents.
+    try {
+      $file_data = $this->httpClient->get($url)->getBody();
+
+      if (empty($file_data)) {
+        throw new \Exception('Failed to download asset file: ' . $url);
+      }
+    }
+    catch (RequestException $e) {
+      watchdog_exception('SkuAssetManager', $e);
+
+      // Not able to download image, no further processing required.
+      return NULL;
+    }
+
+    // Prepare the directory path.
+    $directory = 'public://assets-lp/' . dirname($asset['Data']['FilePath']);
+
+    // Prepare the directory.
+    file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+
+    try {
+      $file = file_save_data($file_data, $directory . '/' . basename($asset['Data']['FilePath']), FILE_EXISTS_REPLACE);
+
+      if (!($file instanceof FileInterface)) {
+        throw new \Exception('Failed to save asset file: ' . $url);
+      }
+    }
+    catch (\Exception $e) {
+      watchdog_exception('SkuAssetManager', $e);
+    }
+
+    $this->setFileUriForPimsId($asset['Data']['AssetId'], $file);
+
+    return $file->getFileUri();
+  }
+
+  /**
    * Get Drupal file uri from PIMS data.
    *
    * Download image if not available in cache.
    *
-   * @param array $data
-   *   PIMS data.
+   * @param array $asset
+   *   Asset data.
    *
    * @return string
    *   File URI for pims id.
    *
    * @throws \Exception
    */
-  private function getImageUri(array $data) {
-    // First check if we have fid for pims id.
-    $uri = $this->getFileUriFromPimsId($data['id']);
+  private function getImageUri(array $asset) {
+    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+
+    // First check if we have fid for pims id (or asset id for fallback).
+    $uri = $this->getFileUriFromPimsId($id);
 
     if (empty($uri)) {
-      $uri = $this->downloadPimsImage($data);
+      if (isset($asset['pims_image'])) {
+        $uri = $this->downloadPimsImage($asset['pims_image']);
+      }
+      elseif (AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'fallback_to_liquidpixel')) {
+        $uri = $this->downloadLiquidPixelImage($asset);
+      }
     }
 
     return $uri;
-  }
-
-  /**
-   * Get base url from config.
-   *
-   * @return string
-   *   Base url from config.
-   */
-  private function getBaseUrl() {
-    static $base_url;
-
-    if (empty($base_url)) {
-      $base_url = $this->configFactory
-        ->get('alshaya_hm_images.settings')
-        ->get('base_url');
-    }
-
-    return $base_url;
   }
 
   /**
@@ -358,6 +410,86 @@ class SkuAssetManager {
     }
 
     return $return;
+  }
+
+  /**
+   * Utility function to construct CDN url for the asset.
+   *
+   * @param array $asset
+   *   Asset data.
+   *
+   * @return string
+   *   Asset url.
+   */
+  private function getSkuAssetUrlLiquidPixel(array $asset) {
+    $base_url = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'base_url');
+    list($set, $image_location_identifier) = $this->getAssetAttributes($asset, 'pdp_fullscreen');
+    $query_options = $this->getAssetQueryString($set, $image_location_identifier);
+    return Url::fromUri($base_url, ['query' => $query_options])->toString();
+  }
+
+  /**
+   * Prepare query string for assets.
+   *
+   * @param array $set
+   *   Set data.
+   * @param string $image_location_identifier
+   *   Image location identifier.
+   *
+   * @return array
+   *   Query string.
+   */
+  private function getAssetQueryString(array $set, string $image_location_identifier): array {
+    // Prepare query options for image url.
+    if (isset($set['url'])) {
+      $url_parts = parse_url(urldecode($set['url']));
+      if (!empty($url_parts['query'])) {
+        parse_str($url_parts['query'], $query_options);
+        // Overwrite the product style coming from season 5 image url with
+        // the one based on context in which the image is being rendered.
+        $query_options['call'] = 'url[' . $image_location_identifier . ']';
+      }
+    }
+    else {
+      $query_options = [
+        'set' => implode(',', $set),
+        'call' => 'url[' . $image_location_identifier . ']',
+      ];
+    }
+
+    return $query_options;
+  }
+
+  /**
+   * Helper function to fetch asset attributes.
+   *
+   * @param array $asset
+   *   Asset array with all metadata.
+   * @param string $location_image
+   *   Location on page e.g., main image, thumbnails etc.
+   *
+   * @return array
+   *   Array of asset attributes.
+   */
+  public function getAssetAttributes(array $asset, $location_image) {
+    $alshaya_hm_images_settings = $this->configFactory->get('alshaya_hm_images.settings');
+    $image_location_identifier = $alshaya_hm_images_settings->get('style_identifiers')[$location_image];
+
+    if (isset($asset['is_old_format']) && $asset['is_old_format']) {
+      return [['url' => $asset['Url']], $image_location_identifier];
+    }
+    else {
+      $origin = $alshaya_hm_images_settings->get('origin');
+
+      $set['source'] = "source[/" . $asset['Data']['FilePath'] . "]";
+      $set['origin'] = "origin[" . $origin . "]";
+      $set['type'] = "type[" . $asset['sortAssetType'] . "]";
+      $set['hmver'] = "hmver[" . $asset['Data']['Version'] . "]";
+
+      $set['res'] = "res[" . $alshaya_hm_images_settings->get('dimensions')[$location_image]['desktop'] . "]";
+    }
+
+    return [$set, $image_location_identifier];
   }
 
   /**
@@ -667,21 +799,17 @@ class SkuAssetManager {
    *   Parent Sku.
    * @param string $page_type
    *   Type of page.
-   * @param array $image_types
-   *   Type of image.
-   * @param bool $first_image_only
-   *   Return only the first image.
    *
    * @return array|images
    *   Array of images for the SKU.
    */
-  public function getImagesForSku(SKU $sku, $page_type, array $image_types, $first_image_only = TRUE) {
+  public function getImagesForSku(SKU $sku, $page_type) {
     $images = [];
     if ($sku->bundle() == 'simple') {
-      $images = $this->getSkuAssets($sku, $page_type, $image_types, '', $first_image_only);
+      $images = $this->getSkuAssets($sku, $page_type);
     }
     elseif ($sku->bundle() == 'configurable') {
-      $images = $this->getChildSkuAssets($sku, $page_type, $image_types, TRUE, $first_image_only);
+      $images = $this->getChildSkuAssets($sku, $page_type);
     }
     return $images;
   }

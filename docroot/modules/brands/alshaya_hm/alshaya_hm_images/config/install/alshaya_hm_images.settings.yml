@@ -1,4 +1,6 @@
 base_url: 'https://lp2.hm.com/hmgoepprod'
+pims_base_url: 'http://172.16.126.102:8090/website/var/assets'
+fallback_to_liquidpixel: 1
 origin: 'dam'
 # For any new key in 'dimension', update 'style_identifiers' with appropriate
 # file path.
