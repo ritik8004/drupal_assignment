@@ -2191,9 +2191,9 @@ function _alshaya_acm_product_adjust_facet_block() {
 function _alshaya_acm_product_adjust_block_weight(string $type, string $base_block, string $facet_source) {
   // Get active theme.
   $active_theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+  $block_storage = \Drupal::entityTypeManager()->getStorage('block');
   // Get all block of `content` region with active theme.
-  $all_content_region_blocks = \Drupal::entityTypeManager()->getStorage('block')
-    ->loadByProperties(['region' => 'content', 'theme' => $active_theme]);
+  $all_content_region_blocks = $block_storage->loadByProperties(['region' => 'content', 'theme' => $active_theme]);
 
   /* @var \Drupal\facets\FacetInterface[] $facets */
   $facets = \Drupal::service('facets.manager')->getEnabledFacets();
@@ -2203,7 +2203,7 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
       if ($facet->getFacetSourceId() == $facet_source) {
         $block_id = str_replace('_', '', $facet->id());
         $blck = \Drupal::entityTypeManager()->getStorage('block')->load($block_id);
-        if ($blck instanceof BlockInterface && $blck->status()) {
+        if ($blck instanceof BlockInterface) {
           $facet_blocks[$blck->id()] = $blck;
         }
       }
@@ -2211,20 +2211,20 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
   }
 
   // Get weight of base block.
-  $tmp_weight = $weight = \Drupal::entityTypeManager()->getStorage('block')->load($base_block)->getWeight();
+  $tmp_weight = $weight = $block_storage->load($base_block)->getWeight();
   if (!empty($facet_blocks)) {
     foreach ($facet_blocks as $facet_block) {
-      $weight += 1;
+      $weight++;
       $facet_block->setWeight($weight);
       $facet_block->save();
     }
 
-    $weight += 1;
+    $weight++;
     \Drupal::configFactory()->getEditable('block.block.alshaya_' . $type . '_facets_block_all')
       ->set('weight', $weight)
       ->save();
 
-    $weight += 1;
+    $weight++;
     \Drupal::configFactory()->getEditable('block.block.alshayagridcountblock_' . $type)
       ->set('weight', $weight)
       ->save();
