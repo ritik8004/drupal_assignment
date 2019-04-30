@@ -105,11 +105,16 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 
-    if ($parent = $plugin->getParentSku($entity)) {
-      // Update color nodes on save of each child.
-      $node = $this->skuManager->getDisplayNode($parent, FALSE);
-      if ($node instanceof NodeInterface) {
-        $this->skuManager->processColorNodesForConfigurable($node);
+    $parent_skus = $plugin->getParentSku($entity, FALSE);
+
+    if (!empty($parent_skus)) {
+      foreach ($parent_skus as $parent_sku) {
+        // Update color nodes on save of each child.
+        $node = $this->skuManager->getDisplayNode($parent_sku, FALSE);
+        if ($node instanceof NodeInterface) {
+          $this->skuManager->processColorNodesForConfigurable($node);
+          break;
+        }
       }
     }
   }
