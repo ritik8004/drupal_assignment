@@ -1,0 +1,5 @@
+services:
+  alshaya_pb_free_design_services.breadcrumb:
+     class: Drupal\alshaya_pb_free_design_services\Breadcrumb\AlshayaFreeDesignServicesBreadcrumbBuilder
+     tags:
+       - { name: breadcrumb_builder, priority: 100 }

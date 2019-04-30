@@ -10,20 +10,20 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function alshaya_free_design_services_form_webform_submission_free_design_services_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function alshaya_pb_free_design_services_form_webform_submission_free_design_services_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinderUtility */
   $storeFinderUtility = \Drupal::service('alshaya_stores_finder_transac.utility');
   $form['elements']['preferred_store']['#type'] = 'select';
   $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
   $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getAllStoresAsOptions();
 
-  $form['#validate'][] = 'alshaya_free_design_services_form_webform_submission_free_design_services_validate';
+  $form['#validate'][] = 'alshaya_pb_free_design_services_form_webform_submission_free_design_services_validate';
 }
 
 /**
  * Form validate callback to update address area ids to values.
  */
-function alshaya_free_design_services_form_webform_submission_free_design_services_validate(array &$form, FormStateInterface $form_state) {
+function alshaya_pb_free_design_services_form_webform_submission_free_design_services_validate(array &$form, FormStateInterface $form_state) {
   if ($form_state->getErrors()) {
     return;
   }
@@ -46,7 +46,7 @@ function alshaya_free_design_services_form_webform_submission_free_design_servic
 /**
  * Implements template_preprocess_webform_confirmation().
  */
-function alshaya_free_design_services_preprocess_webform_confirmation(array &$variables) {
+function alshaya_pb_free_design_services_preprocess_webform_confirmation(array &$variables) {
   /** @var \Drupal\webform\WebformInterface $webform */
   $webform = $variables['webform'];
 

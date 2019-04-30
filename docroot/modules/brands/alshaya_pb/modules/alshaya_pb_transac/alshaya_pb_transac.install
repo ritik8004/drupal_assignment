@@ -15,7 +15,7 @@ use Drupal\Core\Site\Settings;
  * Enable free design services module.
  */
 function alshaya_pb_transac_update_8011() {
-  \Drupal::service('module_installer')->install(['alshaya_free_design_services']);
+  \Drupal::service('module_installer')->install(['alshaya_pb_free_design_services']);
 }
 
 /**

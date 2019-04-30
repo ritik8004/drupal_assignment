@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_free_design_services\Breadcrumb;
+namespace Drupal\alshaya_pb_free_design_services\Breadcrumb;
 
 use Drupal\Core\Breadcrumb\Breadcrumb;
 use Drupal\Core\Breadcrumb\BreadcrumbBuilderInterface;

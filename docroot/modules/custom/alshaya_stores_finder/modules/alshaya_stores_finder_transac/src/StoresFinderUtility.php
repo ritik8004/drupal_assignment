@@ -417,7 +417,7 @@ class StoresFinderUtility {
       return $static[$langcode];
     }
 
-    $cid = 'alshaya_free_design_services_all_stores_' . $langcode;
+    $cid = 'store_options_' . $langcode;
     $cache = $this->cache->get($cid);
     if (!empty($cache->data)) {
       $static[$langcode] = $cache->data;

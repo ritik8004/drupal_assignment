@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_free_design_services\Plugin\WebformHandler;
+namespace Drupal\alshaya_pb_free_design_services\Plugin\WebformHandler;
 
 use Drupal\alshaya_stores_finder_transac\StoresFinderUtility;
 use Drupal\Core\Config\ConfigFactoryInterface;
