@@ -645,7 +645,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '291x288');
+          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], '291x288');
         }
 
         $promotion_types = ['cart'];

@@ -18,6 +18,7 @@ function alshaya_hm_images_update_8009() {
   $manager->updateConfigs(
     ['alshaya_hm_images.settings'],
     'alshaya_hm_images',
+    'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
 }

@@ -129,6 +129,9 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
   /** @var \Drupal\alshaya_hm_images\SkuAssetManager $sku_assets_manager */
   $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   if ($context == 'search') {
     $swatches_display_status = \Drupal::config('alshaya_acm_product.display_settings')->get('color_swatches');
 
@@ -163,14 +166,8 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
     }
 
     if (!empty($teaser_assets)) {
-      $build['image'] = [
-        '#theme' => 'image',
-        '#attributes' => [
-          'src' => $teaser_assets[0]['url']->toString(),
-          'title' => $sku->label(),
-          'alt' => $sku->label(),
-        ],
-      ];
+      $sku_media = reset($teaser_assets);
+      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku->label(), '291x288');
     }
   }
   elseif ($context == 'pdp' && !empty($build['free_gift_promotions']['#free_sku_code']) && empty($build['free_gift_promotions']['#sku_image'])) {
