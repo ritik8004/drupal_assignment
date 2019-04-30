@@ -8,6 +8,18 @@
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_pb_free_design_services_module_implements_alter(&$implementations, $hook) {
+  // To call the element_info_alter at the end for final changes.
+  if ($hook == 'element_info_alter') {
+    $group = $implementations['alshaya_pb_free_design_services'];
+    unset($implementations['alshaya_pb_free_design_services']);
+    $implementations['alshaya_pb_free_design_services'] = $group;
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function alshaya_pb_free_design_services_form_webform_submission_free_design_services_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
@@ -55,4 +67,39 @@ function alshaya_pb_free_design_services_preprocess_webform_confirmation(array &
   }
 
   $variables['message']['#markup'] = $webform->getElement('banner')['#text'] . $variables['message']['#markup'];
+}
+
+/**
+ * Processor for the country in address field.
+ */
+function _alshaya_pb_free_design_services_process_address_form(array &$element, FormStateInterface $form_state) {
+  if (isset($element['#webform_element']) && $element['#webform'] == 'free_design_services') {
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+    // Hide all the fields which we couldn't map.
+    foreach ($address_book_manager->getMagentoUnmappedFields() as $field_code) {
+      $element[$field_code]['#access'] = FALSE;
+    }
+
+    // Hide all disabled fields.
+    foreach ($address_book_manager->getMagentoDisabledFields() as $field_code => $magento_field_code) {
+      $element[$field_code]['#access'] = FALSE;
+    }
+
+    // For webform, we show name fields separately.
+    $element['given_name']['#access'] = FALSE;
+    $element['family_name']['#access'] = FALSE;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_pb_free_design_services_element_info_alter(array &$info) {
+  if (isset($info['address']['#process'])) {
+    $info['address']['#process'][] = '_alshaya_pb_free_design_services_process_address_form';
+  }
 }

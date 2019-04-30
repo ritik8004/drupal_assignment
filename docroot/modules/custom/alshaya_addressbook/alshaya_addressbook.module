@@ -318,22 +318,6 @@ function _alshaya_addressbook_country_process(array &$element, FormStateInterfac
     ? $country_field + $element
     : _alshaya_addressbook_array_insert($element, $country_field, 'mobile_number');
 
-  if ($is_webform) {
-    // Hide all the fields which we couldn't map.
-    foreach ($address_book_manager->getMagentoUnmappedFields() as $field_code) {
-      $element[$field_code]['#access'] = FALSE;
-    }
-
-    // Hide all disabled fields.
-    foreach ($address_book_manager->getMagentoDisabledFields() as $field_code => $magento_field_code) {
-      $element[$field_code]['#access'] = FALSE;
-    }
-
-    // For webform, we show name fields separately.
-    $element['given_name']['#access'] = FALSE;
-    $element['family_name']['#access'] = FALSE;
-  }
-
   return $element;
 }
 
