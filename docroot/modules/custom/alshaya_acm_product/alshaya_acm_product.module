@@ -2202,7 +2202,7 @@ function _alshaya_acm_product_adjust_block_weight(string $type, string $base_blo
     foreach ($facets as $facet) {
       if ($facet->getFacetSourceId() == $facet_source) {
         $block_id = str_replace('_', '', $facet->id());
-        $blck = \Drupal::entityTypeManager()->getStorage('block')->load($block_id);
+        $blck = $block_storage->load($block_id);
         if ($blck instanceof BlockInterface) {
           $facet_blocks[$blck->id()] = $blck;
         }
