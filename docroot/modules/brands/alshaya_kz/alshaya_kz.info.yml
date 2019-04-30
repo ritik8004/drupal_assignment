@@ -1,7 +1,0 @@
-name: 'Alshaya Kidzania'
-type: module
-description: 'The dedicated module for Kidzania brand.'
-package: Alshaya
-core: 8.x
-themes:
-  - kidzania
