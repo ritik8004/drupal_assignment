@@ -13,3 +13,9 @@ alshaya_seo.sitemap:
   requirements:
   # Sitemap should be accessible without any restriction.
     _access: 'TRUE'
+alshaya_seo.get_user_details:
+  path: '/get-user-details'
+  defaults:
+    _controller: '\Drupal\alshaya_seo_transac\Controller\AlshayaSeoController::getCurrentUserDetails'
+  requirements:
+    _user_is_logged_in: 'TRUE'
