@@ -2345,16 +2345,7 @@ class SkuManager {
   public function isProductInStock(SKUInterface $sku): bool {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
-
-    $in_stock = $plugin->isProductInStock($sku);
-
-    // For configurable we check combinations too as we remove
-    // some skus like free gift and ones with improper data.
-    if ($in_stock && $sku->bundle() == 'configurable') {
-      $in_stock = $this->skuAttributeCombinationsValid($sku);
-    }
-
-    return $in_stock;
+    return $plugin->isProductInStock($sku);
   }
 
   /**
