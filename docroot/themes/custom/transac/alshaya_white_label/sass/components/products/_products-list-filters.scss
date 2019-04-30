@@ -283,7 +283,7 @@ html {
 
               span.facet-item__value {
                 line-height: unset;
-                margin-left: 0.5rem;
+                margin-#{$left}: 0.5rem;
 
                 @include breakpoint($only-mobile) {
                   line-height: 2.9375rem;
