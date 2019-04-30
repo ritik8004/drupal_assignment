@@ -152,12 +152,13 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $langcode = $sku->language()->getId();
     $sku_string = $sku->getSku();
 
-    if (isset($static[$langcode], $static[$langcode][$sku_string]) && $load) {
-      return $static[$langcode][$sku_string];
+    $load_sku = (int) $load;
+    if (isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$load_sku])) {
+      return $static[$langcode][$sku_string][$load_sku];
     }
 
     // Initialise with empty value.
-    $static[$langcode][$sku_string] = NULL;
+    $static[$langcode][$sku_string][$load_sku] = NULL;
 
     $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
     $query->addField('acq_sku', 'id');
@@ -170,6 +171,7 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     // If don't want fully loaded object, this returns an array having sku id
     // as key and sku as the value.
     if (!$load) {
+      $static[$langcode][$sku_string][$load_sku] = $parent_skus;
       return $parent_skus;
     }
 
@@ -193,13 +195,13 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         $node = $this->getDisplayNode($parent, FALSE, FALSE);
 
         if ($node instanceof Node) {
-          $static[$langcode][$sku_string] = $parent;
+          $static[$langcode][$sku_string][$load_sku] = $parent;
           break;
         }
       }
     }
 
-    return $static[$langcode][$sku_string];
+    return $static[$langcode][$sku_string][$load_sku];
   }
 
   /**
