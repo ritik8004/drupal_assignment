@@ -405,6 +405,11 @@
               white-space: nowrap;
               line-height: 2rem !important;
               display: inline-block !important;
+
+              .price-type__wrapper,
+              .price {
+                display: inline !important;
+              }
             }
           }
 
