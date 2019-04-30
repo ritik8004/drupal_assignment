@@ -1,0 +1,4 @@
+/**
+ * @file
+ * Globaly required scripts.
+ */

@@ -1,0 +1,382 @@
+// Define theme fonts here.
+
+$base_theme_fonts_directory_path: '/themes/custom/transac_lite/kidzania/fonts';
+
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('Ubuntu.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/Ubuntu.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu.svg#Ubuntu') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenSans';
+  src: url('OpenSans.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/OpenSans.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans.svg#OpenSans') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ubuntu-Bold';
+  src: url('Ubuntu-Bold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/Ubuntu-Bold.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu-Bold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu-Bold.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu-Bold.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/Ubuntu-Bold.svg#Ubuntu-Bold') format('svg');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenSans-Bold';
+  src: url('OpenSans-Extrabold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.woff2') format('woff2'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.ttf') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/OpenSans-Extrabold.svg#OpenSans-Extrabold') format('svg');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.ttf')  format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-regular.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cairo-bold';
+  src: url('#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.eot');
+  src:
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.eot?#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.woff') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.ttf')  format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/alshaya-cairo-bold.svg#NotoKufiArabic-Bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// Icon Fonts
+@font-face {
+  font-family: 'icomoon';
+  src: url('#{$base_theme_fonts_directory_path}/icomoon.eot?vey8d6');
+  src:
+    url('#{$base_theme_fonts_directory_path}/icomoon.eot?vey8d6#iefix') format('embedded-opentype'),
+    url('#{$base_theme_fonts_directory_path}/icomoon.ttf?vey8d6') format('truetype'),
+    url('#{$base_theme_fonts_directory_path}/icomoon.woff?vey8d6') format('woff'),
+    url('#{$base_theme_fonts_directory_path}/icomoon.svg?vey8d6#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$arial: 'arial', sans-serif;
+$open-sans: 'OpenSans', sans-serif;
+$open-sans-bold: 'OpenSans-Bold', sans-serif;
+$ubuntu-sans: 'Ubuntu', sans-serif;
+$ubuntu-sans-bold: 'Ubuntu-Bold', sans-serif;
+$cairo: 'Cairo', sans-serif;
+$cairo-bold: 'Cairo-bold', sans-serif;
+$icomoon: 'icomoon';
+
+// Icon Fonts
+$icons: (
+  u-emaar: "\e9f6",
+  disability-child: "\e9eb",
+  plus: "\e9ec",
+  minus: "\e9ed",
+  shopping-cart: "\e9ee",
+  flag-blank: "\e9ef",
+  boy: "\e9f0",
+  girl: "\e9f1",
+  woman: "\e9f2",
+  man: "\e9f3",
+  disability: "\e9f4",
+  baby: "\e9f5",
+  citizen-profile: "\e9e5",
+  logout: "\e9e6",
+  print: "\e9e7",
+  pencil: "\e9e8",
+  eye: "\e9e9",
+  pazzport-list: "\e9ea",
+  naturalized: "\e9de",
+  distinguished: "\e9e0",
+  honorable: "\e9e1",
+  parents-profile: "\e9e2",
+  joining: "\e9e3",
+  bank-balance: "\e9e4",
+  chat2: "\e92f",
+  toddler: "\e95f",
+  chemical-lab: "\e960",
+  pharmacy: "\e961",
+  sleeping: "\e962",
+  optometrist: "\e963",
+  pharmaceutical-lab: "\e964",
+  hospital: "\e965",
+  medical-lab: "\e966",
+  health-center: "\e967",
+  ambulance: "\e968",
+  dental: "\e969",
+  chiropractic: "\e96a",
+  antibacterial-lab: "\e96b",
+  vault: "\e96c",
+  saving-and-loan: "\e96d",
+  investment: "\e96e",
+  insurance: "\e96f",
+  private-assistance-institute: "\e970",
+  bank: "\e971",
+  e-card: "\e972",
+  urban-garden: "\e973",
+  waste-recycle: "\e974",
+  water-teratment: "\e975",
+  sutainable-home: "\e976",
+  recycle-shop: "\e977",
+  pet-recycle: "\e978",
+  recycle-plant: "\e979",
+  air-purifier: "\e97a",
+  ecobag: "\e97b",
+  wedding: "\e97c",
+  parade: "\e97d",
+  tattoo: "\e97e",
+  theatre: "\e97f",
+  fortune-teller: "\e980",
+  games-room: "\e981",
+  magic-studio: "\e982",
+  city-tour-bus: "\e983",
+  disco-lounge: "\e984",
+  face-painting: "\e985",
+  animation-studio: "\e986",
+  city-clock: "\e987",
+  education: "\e988",
+  secret-agent: "\e989",
+  road-safety: "\e98a",
+  science-lab: "\e98b",
+  space-center: "\e98c",
+  risk-prevention-center: "\e98d",
+  painting2: "\e98e",
+  modeling-studio: "\e98f",
+  music-studio: "\e990",
+  natural-disaster: "\e991",
+  finance-school: "\e992",
+  interior-design-studio: "\e993",
+  kindergarten: "\e994",
+  language-global-education: "\e995",
+  cullinary-school: "\e996",
+  dashion-design-studio: "\e997",
+  driving-shcool: "\e998",
+  acting-academy: "\e999",
+  aeronautical-lab: "\e99a",
+  architecture-workshop: "\e99b",
+  archive: "\e99c",
+  arts-and-crafts: "\e99d",
+  ballet: "\e99e",
+  museum: "\e99f",
+  service-center: "\e9a0",
+  driving-streets: "\e9a1",
+  expert-driving-streets: "\e9a2",
+  gas-station: "\e9a3",
+  motor-race-track: "\e9a4",
+  car-dealer: "\e9a5",
+  car-design: "\e9a6",
+  car-rental: "\e9a7",
+  auto-repair: "\e9a8",
+  bus: "\e9a9",
+  car-assembly: "\e9aa",
+  eating: "\e9ab",
+  house: "\e9ac",
+  shopping: "\e9ad",
+  sports: "\e9ae",
+  media: "\e9af",
+  police-badge: "\e9b0",
+  private-assistance: "\e9b1",
+  industry-building: "\e9b2",
+  kidzos-new: "\e9b3",
+  eco: "\e9b4",
+  shows: "\e9b5",
+  university: "\e9b6",
+  car-front: "\e9b7",
+  urbano-icon-5: "\e9b8",
+  urbano-icon-2: "\e9b9",
+  urbano-icon-3: "\e9ba",
+  urbano-icon-4: "\e9bb",
+  group: "\e9bc",
+  job-finder: "\e9bd",
+  urbano-icon-1: "\e9be",
+  around-kidzania: "\e9bf",
+  check: "\e9c0",
+  filter: "\e9c1",
+  bagage: "\e9c2",
+  refresh: "\e9c3",
+  ticket2: "\e9c4",
+  calendar-2: "\e9c5",
+  coupon: "\e9c6",
+  merchanidse: "\e9c7",
+  promo: "\e9c8",
+  resume: "\e9c9",
+  add-user: "\e9ca",
+  kz-flag: "\e9cb",
+  services: "\e9cc",
+  eating2: "\e9cd",
+  establishments2: "\e9ce",
+  shopping2: "\e9cf",
+  shows2: "\e9d0",
+  ages: "\e9d1",
+  capacity: "\e9d2",
+  location-pin: "\e9d3",
+  briefcase: "\e9d4",
+  calendar2: "\e9d5",
+  clock2: "\e9d6",
+  kz-info: "\e9d7",
+  bkz-1: "\e9d8",
+  bkz-2: "\e9d9",
+  bkz-3: "\e9da",
+  train: "\e9db",
+  car: "\e9dc",
+  chat: "\e9dd",
+  public-transportation: "\e9df",
+  ticket: "\e900",
+  clock: "\e914",
+  calendar: "\e901",
+  a-nation-is-formed: "\e902",
+  a-spirit-is-born2: "\e903",
+  around-the-world2: "\e904",
+  kidzanians: "\e905",
+  language2: "\e906",
+  labor-day: "\e907",
+  the-company2: "\e908",
+  national-symbols2: "\e909",
+  to-create: "\e90a",
+  to-share: "\e90b",
+  to-play: "\e90c",
+  to-care: "\e90d",
+  to-know: "\e90e",
+  to-be: "\e90f",
+  saving-money2: "\e910",
+  earning-money2: "\e911",
+  spending-money2: "\e912",
+  economy2: "\e913",
+  vision: "\e931",
+  values: "\e932",
+  traditions: "\e933",
+  tourist: "\e934",
+  roleplay: "\e935",
+  rk-bday: "\e936",
+  rightzkeepers: "\e937",
+  rightz-are-defined2: "\e938",
+  redeeming-money: "\e939",
+  press: "\e93a",
+  press-news2: "\e93b",
+  press-kz-journal2: "\e93c",
+  press-kit2: "\e93d",
+  portrait-of-kz: "\e93e",
+  painting: "\e93f",
+  our-story: "\e940",
+  our-culture2: "\e941",
+  national-monuments: "\e942",
+  music: "\e943",
+  mision: "\e944",
+  korporate2: "\e946",
+  kids-day: "\e947",
+  kids-activities2: "\e948",
+  key-to-the-city: "\e949",
+  inspired2: "\e94a",
+  industry-partners: "\e94b",
+  industry-clusters: "\e94c",
+  independence-day: "\e94d",
+  government-rights2: "\e94e",
+  franchises2: "\e94f",
+  foundation-day: "\e950",
+  for-good-works2: "\e951",
+  experiential-learning: "\e952",
+  establishments: "\e953",
+  essence: "\e954",
+  donating2: "\e955",
+  declaration-is-made: "\e956",
+  csr2: "\e957",
+  city-setting: "\e958",
+  city-plan: "\e959",
+  city-is-envisioned: "\e95a",
+  benefits-roleplay: "\e95b",
+  awards2: "\e95c",
+  arts2: "\e95d",
+  architecture: "\e95e",
+  our-culture: "\e915",
+  the-company: "\e916",
+  spirit-is-born: "\e917",
+  government-rights: "\e918",
+  national-symbols: "\e919",
+  arts: "\e91a",
+  language: "\e91b",
+  for-good-works: "\e91c",
+  korporate: "\e91d",
+  franchises: "\e91e",
+  press-news: "\e91f",
+  press-kz-journal: "\e920",
+  press-kit: "\e921",
+  a-spirit-is-born: "\e922",
+  rightz-are-defined: "\e923",
+  csr: "\e924",
+  inspired: "\e925",
+  awards: "\e926",
+  donating: "\e927",
+  saving-money: "\e928",
+  spending-money: "\e929",
+  economy: "\e92a",
+  language-and-traditions: "\e92b",
+  around-the-world: "\e92c",
+  earning-money: "\e92d",
+  favicon: "\e92e",
+  kids-activities: "\e930",
+  language-and-traditions2: "\e945"
+);
+
+@mixin iconbase() {
+  font-family: $icomoon;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@mixin icon($icon: false, $position: before, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: "#{map-get($icons, $icon)}";
+    }
+
+    @if $styles {
+      @include iconbase;
+    }
+
+    @content;
+  }
+}
