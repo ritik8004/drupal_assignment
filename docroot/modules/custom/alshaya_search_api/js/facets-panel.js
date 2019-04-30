@@ -153,6 +153,11 @@
       // Adjust height of PLP tiles.
       Drupal.plpListingProductTileHeight();
 
+      // Back to PLP and loading a PLP/SRP with facets active in URL.
+      if (context === $(document)[0]) {
+        showFilterCount();
+      }
+
       /**
        * Show filtercount on mobile on toggle buttons.
        */
