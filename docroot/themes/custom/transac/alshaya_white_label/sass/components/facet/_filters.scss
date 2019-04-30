@@ -120,10 +120,17 @@
         border-left: 0;
         border-right: 0;
         top: 100%;
+        overflow-y: auto;
+        max-height: calc(100vh - 15rem);
       }
 
       padding-top: 0;
       padding-bottom: 0;
+
+      @include breakpoint($only-tablet) {
+        max-height: 42rem;
+        overflow-y: auto;
+      }
 
       > li {
         padding-top: 0.75rem !important;
@@ -492,7 +499,6 @@
   }
 }
 
-.path--search,
 .nodetype--acq_promotion {
   .c-plp .c-content__region {
     .block-facet-blockcategory-facet-plp,
