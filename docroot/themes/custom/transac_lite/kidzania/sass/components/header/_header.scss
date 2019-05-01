@@ -1,0 +1,95 @@
+.primary-header {
+  width: 100%;
+  background: $header_bg;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  min-height: 4.6875rem;
+  color: #fff;
+  font-size: 1.125rem;
+  transition: all 0.4s;
+  box-shadow: 0 0.4375rem 0.625rem rgba(0, 0, 0, 0.13);
+
+  .region__wrapper {
+    position: relative;
+    padding: 0 1.25rem;
+
+    @include breakpoint($desktop) {
+      max-width: 73.125rem;
+      margin: auto;
+    }
+  }
+}
+
+.site__logo {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+
+  a {
+    margin-top: 1.125rem;
+    margin-#{$right}: 0.75rem;
+    width: 7.1875rem;
+    display: inline-block;
+    line-height: 1;
+
+    img {
+      max-height: 2.875rem;
+    }
+
+    p {
+      margin: 0;
+      font-family: $arial;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: $header_text;
+    }
+  }
+}
+
+.menu-toggle {
+  @include icon_img('#{$theme_img_directory_path}/icons/menu.svg', 35px, 35px);
+
+  color: $primary_icon;
+  width: 2.75rem;
+  padding: 0 0.625rem;
+  display: inline-block;
+  position: absolute;
+  top: 1.5625rem;
+  #{$left}: 1.875rem;
+
+  @include breakpoint($only-mobile) {
+    padding-#{$left}: 0;
+  }
+}
+
+.menu-navigation {
+  @extend %list-clear;
+
+  display: block;
+  margin: 0;
+  padding: 0;
+  transition: all 0.5s ease 0s;
+  height: 0;
+  overflow: hidden;
+
+  &.show-menu {
+    height: 3.75rem;
+    padding-top: 1.875rem;
+  }
+
+  a {
+    color: $primary_link;
+    font-size: 1.125rem;
+    text-decoration: none;
+    padding: 0.625rem;
+    float: $left;
+    margin-#{$left}: 1.25rem;
+
+    &.ic-home {
+      @include icon(house) {
+        margin-#{$right}: 0.625rem;
+      }
+    }
+  }
+}

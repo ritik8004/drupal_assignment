@@ -8,6 +8,7 @@ $dir: rtl;
 
 // Config file that contains centralized variables.
 @import "config/**/*";
+@import "utils";
 
 // Utilities for building multilingual websites.
 @import "directional";

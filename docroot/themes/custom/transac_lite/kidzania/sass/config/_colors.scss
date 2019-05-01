@@ -1,0 +1,29 @@
+// Define theme colors here.
+
+/* ------- 1. Brand Colors ------- */
+$brand-orange: #f18b21;
+$white: #fff;
+$brand-red: #bd234f;
+$brand-grey: #a0a2a2;
+
+/* ------- 2. Primary Colors ------- */
+//links.
+$primary_link: $white;
+$secondary_link: $brand-red;
+
+//Buttons.
+$primary_btn_bg: $brand-orange;
+$primary_btn_text: $white;
+$secondary_btn_bg: $brand-red;
+$secondary_btn_text: $white;
+$tertiary_btn_bg: $white;
+$tertiary_btn_text: $brand-red;
+$tertiary_btn_border: $brand-red;
+
+// Icons.
+$primary_icon: $white;
+$secondary_icon: $brand-orange;
+
+/* ------- 2. Header Colors ------- */
+$header_bg: $brand-orange;
+$header_text: $white;
