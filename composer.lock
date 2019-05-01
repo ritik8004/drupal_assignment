@@ -20907,6 +20907,11 @@
                 "bin/deprecation-detector"
             ],
             "type": "application",
+            "extra": {
+                "patches_applied": {
+                    "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "SensioLabs\\DeprecationDetector\\": "src/"
@@ -21385,17 +21390,6 @@
         {
             "name": "webflo/drupal-core-require-dev",
             "version": "8.6.15",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webflo/drupal-core-require-dev.git",
-                "reference": "6b3d632fa16e56858706fe0394eafe88a13a9cd0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webflo/drupal-core-require-dev/zipball/6b3d632fa16e56858706fe0394eafe88a13a9cd0",
-                "reference": "6b3d632fa16e56858706fe0394eafe88a13a9cd0",
-                "shasum": ""
-            },
             "require": {
                 "behat/mink": "1.7.x-dev",
                 "behat/mink-goutte-driver": "^1.2",
