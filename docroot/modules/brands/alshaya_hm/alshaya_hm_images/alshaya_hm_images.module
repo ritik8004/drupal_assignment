@@ -11,6 +11,7 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ViewExecutable;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
@@ -229,7 +230,7 @@ function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $co
       $sku_image = [
         '#theme' => 'image',
         '#attributes' => [
-          'src' => $cart_assets[0]['url']->toString(),
+          'src' => ImageStyle::load('291x288')->buildUrl($cart_assets[0]['drupal_uri']),
         ],
       ];
     }
