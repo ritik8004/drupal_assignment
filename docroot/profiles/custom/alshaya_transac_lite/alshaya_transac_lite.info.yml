@@ -6,10 +6,6 @@ dependencies:
   - block_content_machine_name:block_content_machine_name
   - menu_link_modal:menu_link_modal
 
-themes:
-  - bartik
-  - seven
-
 base profile: alshaya
 
 exclude:

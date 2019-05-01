@@ -1,6 +1,6 @@
 name: 'Alshaya Kidzania Transac lite'
 type: module
-description: 'The dedicated module for Kidzania brand.'
+description: 'Provides online ticket booking features for kidzania.'
 package: Alshaya
 core: 8.x
 dependencies:
