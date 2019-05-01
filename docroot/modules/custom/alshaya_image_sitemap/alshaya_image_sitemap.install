@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Install file for alshaya_image_sitemap.
+ */
+
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Decrease image_sitemap_batch_chunk_size to 25.
+ */
+function alshaya_image_sitemap_update_8001() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      ['alshaya_image_sitemap.settings'],
+      'alshaya_image_sitemap',
+      'install',
+      AlshayaConfigManager::MODE_REPLACE
+    );
+}
