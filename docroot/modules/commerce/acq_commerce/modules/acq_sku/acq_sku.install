@@ -14,6 +14,15 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Remove stock status and quantity fields from sku views.
+ */
+function acq_sku_update_8020() {
+  \Drupal::configFactory()->getEditable('views.view.manage_skus')->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Manage stock through separate module acq_sku_stock.
  */
 function acq_sku_update_8018() {
@@ -29,12 +38,12 @@ function acq_sku_update_8018() {
   // To start with we will let everything be handled by quantity only.
   foreach ($result as $row) {
     $db->merge('acq_sku_stock')
-        ->key(['sku' => $row->sku])
-        ->fields([
-          'quantity' => $row->stock,
-          'status' => 1,
-        ])
-        ->execute();
+      ->key(['sku' => $row->sku])
+      ->fields([
+        'quantity' => $row->stock,
+        'status' => 1,
+      ])
+      ->execute();
   }
 
   // Apply updates to remove stock field.
@@ -68,14 +77,14 @@ function acq_sku_update_8016() {
 /**
  * Implements hook_update_N().
  *
- * Remove join index on acq_sku__attributes
+ * Remove join index on acq_sku__attributes.
  */
 function acq_sku_update_8015() {
   \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_join');
   \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_where');
 
   // Add back index on attributes_value.
-  $index_attributes_value= [
+  $index_attributes_value = [
     'fields' => [
       ['attributes_value', 128],
     ],
