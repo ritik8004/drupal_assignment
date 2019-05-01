@@ -14,46 +14,6 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
- * Update managed sku views to have stock status and quantity field.
- */
-function acq_sku_update_8019() {
-  $config = \Drupal::configFactory()->getEditable('views.view.manage_skus');
-  $fields = $config->get("display.default.display_options.fields");
-  $operations = end($fields);
-  unset($fields[$operations['id']]);
-  $fields['stock_status'] = [
-    'id' => 'stock_status',
-    'table' => 'acq_sku_stock',
-    'field' => 'status',
-    'relationship' => 'none',
-    'group_type' => 'group',
-    'admin_label' => '',
-    'label' => 'In stock',
-    'exclude' => FALSE,
-    'type' => 'yes-no',
-    'not' => FALSE,
-    'plugin_id' => 'boolean',
-  ];
-
-  $fields['stock_quantity'] = [
-    'id' => 'stock_quantity',
-    'table' => 'acq_sku_stock',
-    'field' => 'quantity',
-    'relationship' => 'none',
-    'group_type' => 'group',
-    'admin_label' => '',
-    'label' => 'Stock Quantity',
-    'exclude' => FALSE,
-    'plugin_id' => 'numeric',
-  ];
-  $fields[$operations['id']] = $operations;
-  $config->set("display.default.display_options.fields", $fields);
-  $config->save(TRUE);
-}
-
-/**
- * Implements hook_update_N().
- *
  * Manage stock through separate module acq_sku_stock.
  */
 function acq_sku_update_8018() {
@@ -69,12 +29,12 @@ function acq_sku_update_8018() {
   // To start with we will let everything be handled by quantity only.
   foreach ($result as $row) {
     $db->merge('acq_sku_stock')
-      ->key(['sku' => $row->sku])
-      ->fields([
-        'quantity' => $row->stock,
-        'status' => 1,
-      ])
-      ->execute();
+        ->key(['sku' => $row->sku])
+        ->fields([
+          'quantity' => $row->stock,
+          'status' => 1,
+        ])
+        ->execute();
   }
 
   // Apply updates to remove stock field.
@@ -108,14 +68,14 @@ function acq_sku_update_8016() {
 /**
  * Implements hook_update_N().
  *
- * Remove join index on acq_sku__attributes.
+ * Remove join index on acq_sku__attributes
  */
 function acq_sku_update_8015() {
   \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_join');
   \Drupal::database()->schema()->dropIndex('acq_sku__attributes', 'acq_sku__attr_where');
 
   // Add back index on attributes_value.
-  $index_attributes_value = [
+  $index_attributes_value= [
     'fields' => [
       ['attributes_value', 128],
     ],
