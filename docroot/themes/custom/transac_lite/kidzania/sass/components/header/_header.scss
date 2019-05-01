@@ -48,7 +48,7 @@
 }
 
 .menu-toggle {
-  @include icon_img('#{$theme_img_directory_path}/icons/menu.svg', 35px, 35px);
+  @include icon_img('#{$theme_img_directory_path}/icons/menu.svg', 2.1875rem, 2.1875rem);
 
   color: $primary_icon;
   width: 2.75rem;
