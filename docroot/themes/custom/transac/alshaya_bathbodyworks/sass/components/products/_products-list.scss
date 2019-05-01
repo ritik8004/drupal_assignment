@@ -166,7 +166,11 @@
 
     @include breakpoint($only-mobile) {
       height: auto;
-      line-height: 1;
+      line-height: normal;
+
+      html[lang=ar] & {
+        line-height: 1.5;
+      }
     }
   }
 }
