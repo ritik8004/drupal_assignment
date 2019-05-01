@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Theme specific functionality.
+ */
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function kidzania_preprocess_block(&$variables) {
+  // Check if the page is front or not.
+  try {
+    $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  }
+  catch (Exception $e) {
+    $variables['is_front'] = FALSE;
+  }
+  // Ensure the cache varies correctly (new in Drupal 8.3).
+  $variables['#cache']['contexts'][] = 'url.path.is_front';
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function kidzania_preprocess_html(&$variables) {
+  $current_theme = \Drupal::theme()->getActiveTheme()->getName();
+  $direction = \Drupal::service('language_manager')->getCurrentLanguage()->getDirection();
+
+  $variables['#attached']['library'][] = $current_theme . '/' . $direction . '_styles';
+
+  // If loader is enabled for the site, attach PACE library.
+  $progressConfig = \Drupal::config('alshaya_master.loader_settings');
+  if ($progressConfig->get('alshaya_page_progress_loader') == 1) {
+    $variables['#attached']['library'][] = 'alshaya_whitelabel/pace';
+  }
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="google" value="notranslate">
+    <head-placeholder token="{{ placeholder_token|raw }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token|raw }}">
+    <js-placeholder token="{{ placeholder_token|raw }}">
+</head>
+<body{{ attributes }}>
+<div id="skip">
+    <a class="visually-hidden focusable skip-link" href="#main-menu">
+        {{ 'Skip to main navigation'|t }}
+    </a>
+</div>
+{{ page_top }}
+{{ page }}
+{{ page_bottom }}
+<js-bottom-placeholder token="{{ placeholder_token|raw }}">
+</body>
+</html>
