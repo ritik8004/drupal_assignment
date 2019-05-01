@@ -154,7 +154,7 @@ class AlshayaImageSitemapController extends ControllerBase {
       drupal_set_message(t('Image Sitemap Generated Successfully.'), 'success');
     }
     else {
-      drupal_set_message(t('There was some error while importing redirects.'), 'error');
+      drupal_set_message(t('There was some error while generating image sitemap.'), 'error');
     }
   }
 
