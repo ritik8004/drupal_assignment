@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for the alshaya_transac_lite subprofile.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_transac_lite_install() {
+  $modules = [
+    // Custom modules.
+    'alshaya_master',
+    'alshaya_arabic',
+    'alshaya_default_content',
+  ];
+
+  global $_alshaya_modules_installed;
+
+  foreach ($modules as $module) {
+    \Drupal::service('module_installer')->install([$module]);
+    $_alshaya_modules_installed[] = $module;
+  }
+
+  // We probably don't have any module depending on acquia_connector which is
+  // required on ACSF environments.
+  if (isset($_ENV['AH_SITE_NAME'])) {
+    \Drupal::service('module_installer')->install(['acquia_connector']);
+  }
+
+  // Enable admin theme.
+  \Drupal::configFactory()->getEditable('system.theme')
+    ->set('admin', 'seven')
+    ->save();
+
+  // Enable edit content form in the admin theme.
+  \Drupal::configFactory()->getEditable('node.settings')
+    ->set('use_admin_theme', TRUE)
+    ->save(TRUE);
+
+  // Set registration to administrator only.
+  $config = \Drupal::configFactory()->getEditable('user.settings');
+  $config->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save();
+
+  // Invoke the function in profile to inform sub profile is installed.
+  alshaya_sub_profile_installed('alshaya_transac_lite', $modules);
+}

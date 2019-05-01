@@ -1,0 +1,7 @@
+name: 'Alshaya Kidzania Transac lite'
+type: module
+description: 'The dedicated module for Kidzania brand.'
+package: Alshaya
+core: 8.x
+dependencies:
+  - alshaya_kz:alshaya_kz
