@@ -17,7 +17,11 @@ use Symfony\Component\Yaml\Yaml;
  * Remove stock status and quantity fields from sku views.
  */
 function acq_sku_update_8020() {
-  \Drupal::configFactory()->getEditable('views.view.manage_skus')->save();
+  $config = \Drupal::configFactory()->getEditable('views.view.manage_skus');
+  $fields = $config->get("display.default.display_options.fields");
+  unset($fields['stock_status'], $fields['stock_quantity']);
+  $config->set("display.default.display_options.fields", $fields);
+  $config->save(TRUE);
 }
 
 /**
