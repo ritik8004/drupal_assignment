@@ -86,3 +86,7 @@ sites:
     module: alshaya_fl
     type: alshaya_transac
     country: ae
+  kzkw:
+    module: alshaya_kz
+    type: alshaya_transac_lite
+    country: kw
