@@ -27,12 +27,6 @@ facets:
     separator: ', '
     show_count: true
     weight: 0
-  category_facet_plp:
-    checked: true
-    label: 'PLP Category'
-    separator: ', '
-    show_count: true
-    weight: 0
 facet_source_id: 'search_api:views_block__alshaya_product_list__block_1'
 processor_configs:
   alshaya_strip_l2_params:
