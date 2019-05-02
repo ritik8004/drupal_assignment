@@ -1,0 +1,91 @@
+.region-hero-content {
+  .region__wrapper {
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+.main-banner {
+  position: relative;
+
+  .field--name-field-banner {
+    max-height: 40.3125rem;
+    overflow: hidden;
+
+    @include breakpoint($only-mobile) {
+      max-height: 35rem;
+    }
+
+    img {
+      width: 100%;
+
+      @include breakpoint($only-mobile) {
+        max-width: inherit;
+        width: auto;
+        position: relative;
+        left: -15rem;
+
+        html[lang=ar] & {
+          left: 50rem;
+        }
+      }
+
+      @include breakpoint($only-tablet) {
+        max-width: inherit;
+        width: auto;
+        position: relative;
+        left: -8rem;
+
+        html[lang=ar] & {
+          left: 32rem;
+        }
+      }
+    }
+  }
+
+  .field--name-field-title {
+    font-family: $open-sans-bold;
+    font-size: 3rem;
+    position: absolute;
+    bottom: 16%;
+    #{$left}: 27%;
+    text-shadow: 0 1px 7px rgba(0, 0, 0, 0.6);
+    color: $header_text;
+    text-align: center;
+
+    html[lang=ar] & {
+      line-height: 1.4;
+    }
+
+    @include breakpoint($only-mobile) {
+      font-size: 2.25rem;
+      max-width: 11.5625rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      font-size: 2.375rem;
+      bottom: 21%;
+      #{$left}: 25%;
+      max-width: 24.375rem;
+    }
+  }
+
+  @include icon_img('#{$theme_img_directory_path}/arc.svg', 4.375rem, 100%, after);
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+
+    @include breakpoint($only-mobile) {
+      height: 1.5625rem;
+      margin-top: -1.5625rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      height: 2.5rem;
+      margin-top: -2.5rem;
+    }
+  }
+}
