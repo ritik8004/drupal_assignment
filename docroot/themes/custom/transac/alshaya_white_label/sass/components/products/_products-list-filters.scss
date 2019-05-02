@@ -212,6 +212,12 @@ html {
 
               + .fieldset-wrapper {
                 display: block;
+
+                @include breakpoint($upto-desktop) {
+                  top: 0;
+                  position: absolute;
+                  width: 100%;
+                }
               }
             }
           }
