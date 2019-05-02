@@ -270,11 +270,11 @@ class ProductCategoryManager {
 
     $cat_ids = [];
 
-    if ($this->isProductWithSalesOrNewArrival($node, ['attr_is_sale'])) {
+    if (!$this->isProductWithSalesOrNewArrival($node, ['attr_is_sale'])) {
       $cat_ids = array_merge($cat_ids, $categorization_ids['sale']);
     }
 
-    if ($this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])) {
+    if (!$this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])) {
       $cat_ids = array_merge($cat_ids, $categorization_ids['new_arrival']);
     }
 
