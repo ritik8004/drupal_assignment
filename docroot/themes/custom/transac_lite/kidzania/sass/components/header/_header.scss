@@ -5,20 +5,10 @@
   top: 0;
   z-index: 10;
   min-height: 4.6875rem;
-  color: #fff;
+  color: $header_text;
   font-size: 1.125rem;
   transition: all 0.4s;
   box-shadow: 0 0.4375rem 0.625rem rgba(0, 0, 0, 0.13);
-
-  .region__wrapper {
-    position: relative;
-    padding: 0 1.25rem;
-
-    @include breakpoint($desktop) {
-      max-width: 73.125rem;
-      margin: auto;
-    }
-  }
 }
 
 .site__logo {

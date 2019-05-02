@@ -3,12 +3,16 @@
  * Globaly required scripts.
  */
 
-(function ($) {
+(function ($, Drupal) {
   'use strict';
 
-  $('.menu-toggle').on('click', function (e) {
-    $('.menu-navigation').toggleClass('show-menu');
-    e.preventDefault();
-  });
+  Drupal.behaviors.menuToggle = {
+    attach: function () {
+      $('.menu-toggle').on('click', function (e) {
+        $('.menu-navigation').toggleClass('show-menu');
+        e.preventDefault();
+      });
+    }
+  };
 
-})(jQuery);
+})(jQuery, Drupal);
