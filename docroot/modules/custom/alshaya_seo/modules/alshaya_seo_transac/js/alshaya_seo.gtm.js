@@ -52,7 +52,7 @@
         if ((localStorage.getItem('userDetails') === undefined ||
                 localStorage.getItem('userDetails') === null ||
                 drupalSettings.user.uid !== userDetails.userID ||
-                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
+                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') == 1)) {
           Drupal.setUserDetailsInStorage();
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
           userDetails = JSON.parse(localStorage.getItem('userDetails'));
@@ -547,12 +547,27 @@
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           deliveryType = 'Home Delivery';
         }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+          cartCheckoutDeliverySelector.find('#edit-actions-get-shipping-methods'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
       }
 
       /**
        * GTM virtual page tracking for click & collect journey.
        */
       if (isCCPage) {
+        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
