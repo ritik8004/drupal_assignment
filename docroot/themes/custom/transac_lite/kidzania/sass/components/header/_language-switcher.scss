@@ -1,0 +1,28 @@
+.block-language-switcher {
+  float: $right;
+  position: absolute;
+  #{$right}: 1.875rem;
+  top: 1.375rem;
+  font-size: 0.875rem;
+
+  ul {
+    @extend %list-clear;
+
+    li {
+      &.is-active {
+        display: none;
+      }
+
+      &.ar {
+        font-family: $cairo;
+      }
+    }
+  }
+
+  a {
+    font-size: 0.8125rem;
+    color: $primary_link;
+    display: inline-block;
+    line-height: normal;
+  }
+}
