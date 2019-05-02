@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\taxonomy\TermInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -501,8 +502,20 @@ class ProductResource extends ResourceBase {
           'skus' => $skus,
         ];
 
-        if ($attribute_code == 'size' && !empty($size_labels[$value])) {
-          $attr_value['label'] = $size_labels[$value];
+        if ($attribute_code == 'size') {
+          if (!empty($size_labels[$value])) {
+            $attr_value['label'] = $size_labels[$value];
+          }
+          elseif (
+            ($term = $this->productOptionsManager->loadProductOptionByOptionId(
+              $attribute_code,
+              $value,
+              $this->mobileAppUtility->currentLanguage())
+            )
+            && $term instanceof TermInterface
+          ) {
+            $attr_value['label'] = $term->label();
+          }
         }
 
         $combinations['attribute_sku'][$attribute_code]['values'][] = $attr_value;
