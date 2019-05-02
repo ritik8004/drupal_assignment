@@ -1,0 +1,28 @@
+.footer-logo {
+  width: 50%;
+  float: $left;
+
+  @include breakpoint ($upto-desktop) {
+    width: 100%;
+  }
+
+  .paragraph--type--image-title-subtitle {
+    width: 12.5rem;
+    text-align: center;
+    float: $right;
+    margin-#{$right}: 5.9375rem;
+    margin-top: 1.25rem;
+    line-height: 1;
+
+    @include breakpoint ($upto-desktop) {
+      margin: auto;
+      float: none;
+    }
+
+    .field--name-field-title {
+      color: $footer-logo-text;
+      font-family: $open-sans-bold;
+      font-size: 0.9375rem;
+    }
+  }
+}

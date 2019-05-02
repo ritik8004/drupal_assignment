@@ -1,0 +1,53 @@
+.footer-social-links {
+  width: 30%;
+  float: $left;
+  padding-#{$left}: 5rem;
+  margin-top: 1.875rem;
+
+  @include breakpoint ($upto-desktop) {
+    width: 100%;
+    padding-#{$left}: 0;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1.875rem;
+    font-family: $ubuntu-sans-bold;
+    max-width: 15.625rem;
+    margin: 0.5rem 1.25rem;
+    line-height: 1.3;
+
+    @include breakpoint ($upto-desktop) {
+      margin: 0.625rem auto;
+    }
+  }
+
+  ul {
+    @extend %list-clear;
+
+    li {
+      display: inline-block;
+    }
+  }
+
+  .ic-social {
+    font-size: 0;
+    margin-#{$right}: 0.3125rem;
+
+    &-facebook {
+      @include icon_img('#{$theme_img_directory_path}/social-icons/fb-logo.svg', 2.8125rem, 2.8125rem);
+    }
+
+    &-twitter {
+      @include icon_img('#{$theme_img_directory_path}/social-icons/twitter-logo.svg', 2.8125rem, 2.8125rem);
+    }
+
+    &-instagram {
+      @include icon_img('#{$theme_img_directory_path}/social-icons/instagram-logo.svg', 2.8125rem, 2.8125rem);
+    }
+
+    &-youtube {
+      @include icon_img('#{$theme_img_directory_path}/social-icons/youtube-logo.svg', 2.8125rem, 2.8125rem);
+    }
+  }
+}
