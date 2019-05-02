@@ -52,7 +52,7 @@
         if ((localStorage.getItem('userDetails') === undefined ||
                 localStorage.getItem('userDetails') === null ||
                 drupalSettings.user.uid !== userDetails.userID ||
-                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
+                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') == 1)) {
           Drupal.setUserDetailsInStorage();
           $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
           userDetails = JSON.parse(localStorage.getItem('userDetails'));
