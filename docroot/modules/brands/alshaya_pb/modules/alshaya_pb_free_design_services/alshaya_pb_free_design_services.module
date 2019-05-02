@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_pb_free_design_services_module_implements_alter(&$implementations, $hook) {
+  // To call the element_info_alter at the end for final changes.
+  if ($hook == 'element_info_alter') {
+    $group = $implementations['alshaya_pb_free_design_services'];
+    unset($implementations['alshaya_pb_free_design_services']);
+    $implementations['alshaya_pb_free_design_services'] = $group;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function alshaya_pb_free_design_services_form_webform_submission_free_design_services_add_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\alshaya_stores_finder_transac\StoresFinderUtility $storeFinderUtility */
+  $storeFinderUtility = \Drupal::service('alshaya_stores_finder_transac.utility');
+  $form['elements']['preferred_store']['#type'] = 'select';
+  $form['elements']['preferred_store']['#empty_option'] = t('Select @title', ['@title' => $form['elements']['preferred_store']['#title']]);
+  $form['elements']['preferred_store']['#options'] = $storeFinderUtility->getAllStoresAsOptions();
+
+  $form['#validate'][] = 'alshaya_pb_free_design_services_form_webform_submission_free_design_services_validate';
+}
+
+/**
+ * Form validate callback to update address area ids to values.
+ */
+function alshaya_pb_free_design_services_form_webform_submission_free_design_services_validate(array &$form, FormStateInterface $form_state) {
+  if ($form_state->getErrors()) {
+    return;
+  }
+
+  $address = $form_state->getValue('address');
+
+  /** @var \Drupal\alshaya_master\Service\AlshayaEntityHelper $helper */
+  $helper = \Drupal::service('alshaya_master.entity_helper');
+
+  if (isset($address['administrative_area'])) {
+    $address['administrative_area'] = $helper->getLabelInSiteDefaultLanguage('taxonomy_term', $address['administrative_area']);
+  }
+  if (isset($address['area_parent'])) {
+    $address['administrative_area'] .= ', ' . $helper->getLabelInSiteDefaultLanguage('taxonomy_term', $address['area_parent']);
+  }
+
+  $form_state->setValue('address', $address);
+}
+
+/**
+ * Implements template_preprocess_webform_confirmation().
+ */
+function alshaya_pb_free_design_services_preprocess_webform_confirmation(array &$variables) {
+  /** @var \Drupal\webform\WebformInterface $webform */
+  $webform = $variables['webform'];
+
+  if ($webform->id() != 'free_design_services') {
+    return;
+  }
+
+  $variables['message']['#markup'] = $webform->getElement('banner')['#text'] . $variables['message']['#markup'];
+}
+
+/**
+ * Processor for the country in address field.
+ */
+function _alshaya_pb_free_design_services_process_address_form(array &$element, FormStateInterface $form_state) {
+  if (isset($element['#webform_element']) && $element['#webform'] == 'free_design_services') {
+    /** @var \Drupal\alshaya_addressbook\AlshayaAddressBookManager $address_book_manager */
+    $address_book_manager = \Drupal::service('alshaya_addressbook.manager');
+
+    // Hide all the fields which we couldn't map.
+    foreach ($address_book_manager->getMagentoUnmappedFields() as $field_code) {
+      $element[$field_code]['#access'] = FALSE;
+    }
+
+    // Hide all disabled fields.
+    foreach ($address_book_manager->getMagentoDisabledFields() as $field_code => $magento_field_code) {
+      $element[$field_code]['#access'] = FALSE;
+    }
+
+    // For webform, we show name fields separately.
+    $element['given_name']['#access'] = FALSE;
+    $element['family_name']['#access'] = FALSE;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function alshaya_pb_free_design_services_element_info_alter(array &$info) {
+  if (isset($info['address']['#process'])) {
+    $info['address']['#process'][] = '_alshaya_pb_free_design_services_process_address_form';
+  }
+}

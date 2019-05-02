@@ -17,3 +17,4 @@ services:
       - '@database'
       - '@logger.factory'
       - '@module_handler'
+      - '@cache.data'
