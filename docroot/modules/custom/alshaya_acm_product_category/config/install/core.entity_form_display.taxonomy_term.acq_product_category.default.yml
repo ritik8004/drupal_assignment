@@ -28,6 +28,10 @@ dependencies:
     - taxonomy.vocabulary.acq_product_category
     - field.field.taxonomy_term.acq_product_category.field_pdp_image_slider_position
     - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
+    - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
+    - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
+    - field.field.taxonomy_term.acq_product_category.field_sub_category_image
+    - field.field.taxonomy_term.acq_product_category.field_sub_category_title
   module:
     - entity_browser
     - field_group
@@ -136,6 +140,7 @@ third_party_settings:
     group_plp_content:
       children:
         - field_plp_layout
+        - group_group_by_sub_category
         - group_promotion_
         - group_right_side_menu
         - group_videos
@@ -239,6 +244,22 @@ third_party_settings:
         required_fields: true
       label: 'Right side menu'
       region: content
+    group_group_by_sub_category:
+      children:
+        - field_group_by_sub_category
+        - field_select_subcategories_plp
+        - field_sub_category_title
+        - field_sub_category_image
+      parent_name: group_plp_content
+      weight: 5
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: true
+      label: 'Group by sub-category'
+      region: hidden
 id: taxonomy_term.acq_product_category.default
 targetEntityType: taxonomy_term
 bundle: acq_product_category
@@ -285,6 +306,13 @@ content:
     region: content
   field_display_as_clickable_link:
     weight: 9
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_group_by_sub_category:
+    weight: 2
     settings:
       display_label: true
     third_party_settings: {  }
@@ -462,6 +490,12 @@ content:
       progress_indicator: throbber
     region: content
     third_party_settings: {  }
+  field_select_subcategories_plp:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_size_guide_anchor:
     type: string_textfield
     weight: 0
@@ -470,6 +504,28 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_sub_category_image:
+    type: entity_browser_file
+    weight: 5
+    settings:
+      entity_browser: image_browser
+      field_widget_edit: true
+      field_widget_remove: true
+      view_mode: default
+      preview_image_style: thumbnail
+      open: true
+      field_widget_replace: false
+      selection_mode: selection_append
+    region: content
+    third_party_settings: {  }
+  field_sub_category_title:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textfield
+    region: content
   field_term_background_color:
     weight: 9
     settings:
