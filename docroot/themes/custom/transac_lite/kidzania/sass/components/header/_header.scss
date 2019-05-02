@@ -76,6 +76,10 @@
     float: $left;
     margin-#{$left}: 1.25rem;
 
+    @include breakpoint($only-mobile) {
+      margin-#{$left}: 0.625rem;
+    }
+
     &.ic-home {
       @include icon(house) {
         margin-#{$right}: 0.625rem;
