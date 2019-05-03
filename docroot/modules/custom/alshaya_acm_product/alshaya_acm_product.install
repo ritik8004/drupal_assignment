@@ -12,6 +12,20 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Enable the `meta tag` field for `acq_product` bundle form display.
+ */
+function alshaya_acm_product_update_8043() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['core.entity_form_display.node.acq_product.default'],
+    'acq_sku'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Index selling_price along with final_price.
  */
 function alshaya_acm_product_update_8042() {
