@@ -66,3 +66,7 @@ hidden:
   langcode: true
   field_pdp_image_slider_position: true
   field_mobile_plp_video_links: true
+  field_group_by_sub_category: true
+  field_select_subcategories_plp: true
+  field_sub_category_image: true
+  field_sub_category_title: true
