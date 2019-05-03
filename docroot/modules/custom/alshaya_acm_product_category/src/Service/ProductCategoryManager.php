@@ -420,10 +420,7 @@ class ProductCategoryManager {
       && $this->isProductWithSalesOrNewArrival($node, ['attr_is_sale'])) {
       $return = TRUE;
     }
-
-    // If product has any new-arrival category or its child assigned and
-    // `is_new` also set.
-    if (array_intersect($categorization_ids['new_arrival'], $product_category_ids)
+    elseif (array_intersect($categorization_ids['new_arrival'], $product_category_ids)
       && $this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])) {
       $return = TRUE;
     }
