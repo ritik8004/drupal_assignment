@@ -1,14 +1,26 @@
 <div>
-  {% if payee %}
-    <span>{{ "Payee"|t }}</span>: <span>{{ payee }}</span>
+  {% if beneficiary_name %}
+    <span>{{ "Beneficiary Name"|t }}</span>: <span>{{ beneficiary_name }}</span>
   {% endif %}
-  {% if acc_name %}
-    <span>{{ "Account name"|t }}</span>: <span>{{ acc_name }}</span>
+  {% if bank_name %}
+    <span>{{ "Name of Bank"|t }}</span>: <span>{{ bank_name }}</span>
   {% endif %}
-  {% if acc_number %}
-    <span>{{ "Account number"|t }}</span>: <span>{{ acc_number }}</span>
+  {% if branch %}
+    <span>{{ "Branch"|t }}</span>: <span>{{ branch }}</span>
   {% endif %}
-  {% if bank %}
-    <span>{{ "Bank"|t }}</span>: <span>{{ bank }}</span>
+  {% if address %}
+    <span>{{ "Address"|t }}</span>: <span>{{ address }}</span>
+  {% endif %}
+  {% if account_number %}
+    <span>{{ "Account No."|t }}</span>: <span>{{ account_number }}</span>
+  {% endif %}
+  {% if iban %}
+    <span>{{ "IBAN"|t }}</span>: <span>{{ iban }}</span>
+  {% endif %}
+  {% if swift_code %}
+    <span>{{ "Swift Code"|t }}</span>: <span>{{ swift_code }}</span>
+  {% endif %}
+  {% if purpose %}
+    <span>{{ "Purpose"|t }}</span>: <span>{{ purpose }}</span>
   {% endif %}
 </div>
