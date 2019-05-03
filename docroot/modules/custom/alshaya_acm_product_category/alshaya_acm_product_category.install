@@ -34,7 +34,8 @@ function alshaya_acm_product_category_update_8029() {
   $manager->updateConfigs(
     $configs,
     'alshaya_acm_product_category',
-    'install'
+    'install',
+    AlshayaConfigManager::MODE_MERGE
   );
 }
 
