@@ -10,7 +10,7 @@ entity_type: taxonomy_term
 type: list_string
 settings:
   allowed_values: {  }
-  allowed_values_function: 'alshaya_acm_product_category_plp_subcategories'
+  allowed_values_function: 'alshaya_acm_product_category_term_subcategories'
 module: options
 locked: false
 cardinality: -1

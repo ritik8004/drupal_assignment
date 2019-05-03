@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Implements hook_module_implements_alter().
@@ -258,15 +259,30 @@ function _alshaya_acm_product_category_taxonomy_term_updated_operation(TermInter
 
 /**
  * Implements allowed values callback.
+ *
+ * @param \Drupal\field\Entity\FieldStorageConfig $definition
+ *   The field for which this allowed values callback is called.
+ * @param \Drupal\taxonomy\Entity\Term $term
+ *   The term.
+ * @param bool $cacheable
+ *   Field is cacheable or not.
+ *
+ * @return array
+ *   The array of child terms.
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
  */
-function alshaya_acm_product_category_plp_subcategories() {
-  $plp_sub_categories = [];
-  $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $definition = NULL, Term $term = NULL, $cacheable = FALSE) {
+  $term_sub_categories = [];
+  if (empty($term)) {
+    $term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+  }
   if ($term instanceof TermInterface) {
     $child_terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadChildren($term->id());
     foreach ($child_terms as $child) {
-      $plp_sub_categories[$child->id()] = $child->label();
+      $term_sub_categories[$child->id()] = $child->label();
     }
   }
-  return $plp_sub_categories;
+  return $term_sub_categories;
 }
