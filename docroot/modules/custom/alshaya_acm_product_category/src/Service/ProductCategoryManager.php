@@ -319,7 +319,8 @@ class ProductCategoryManager {
 
     // Do stuff only if it is in Sale/New-arrival Category as per MDC data.
     if ($this->isOriginalProductCategorized($node)) {
-      if ($this->isProductWithSalesOrNewArrival($node)) {
+      if ($this->isProductWithSalesOrNewArrival($node)
+        && $this->validateSaleNewArrivalCombination($node)) {
         // Remove all non sales/new-arrival categories.
         $save = $this->removeNonSaleNewArrivalCategories($node);
       }
@@ -394,6 +395,34 @@ class ProductCategoryManager {
           }
         }
       }
+    }
+
+    return $return;
+  }
+
+  /**
+   * Checks if either is_sale or is_new enabled and have categories assigned.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   Product node.
+   *
+   * @return bool
+   *   If valid or not.
+   */
+  public function validateSaleNewArrivalCombination(NodeInterface $node) {
+    $return = FALSE;
+    $categorization_ids = $this->getCategorizationIds();
+    $product_category_ids = $this->getProductOriginalCategoryIds($node);
+
+    // If product has any sale category or its child assigned and `is_sale`
+    // also set.
+    if (array_intersect($categorization_ids['sale'], $product_category_ids)
+      && $this->isProductWithSalesOrNewArrival($node, ['attr_is_sale'])) {
+      $return = TRUE;
+    }
+    elseif (array_intersect($categorization_ids['new_arrival'], $product_category_ids)
+      && $this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])) {
+      $return = TRUE;
     }
 
     return $return;
