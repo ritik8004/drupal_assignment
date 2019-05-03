@@ -375,6 +375,16 @@
         background: $order_detail_order_details_row;
       }
     }
+
+    .banktransfer__details {
+      @include breakpoint($desktop) {
+        min-width: 12rem;
+      }
+
+      span {
+        margin-#{$right}: 0.25rem;
+      }
+    }
   }
 
   .order-item-row,

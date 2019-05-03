@@ -1,26 +1,42 @@
-<div>
+<div class="banktransfer__details">
   {% if beneficiary_name %}
-    <span>{{ "Beneficiary Name"|t }}</span>: <span>{{ beneficiary_name }}</span>
+    <div class="beneficiary__name">
+      <span>{{ "Beneficiary Name"|t }}:</span> <span>{{ beneficiary_name }}</span>
+    </div>
   {% endif %}
   {% if bank_name %}
-    <span>{{ "Name of Bank"|t }}</span>: <span>{{ bank_name }}</span>
+    <div class="bank__name">
+      <span>{{ "Name of Bank"|t }}:</span><span>{{ bank_name }}</span>
+    </div>
   {% endif %}
   {% if branch %}
-    <span>{{ "Branch"|t }}</span>: <span>{{ branch }}</span>
+    <div class="branch__name">
+      <span>{{ "Branch"|t }}:</span><span>{{ branch }}</span>
+    </div>
   {% endif %}
   {% if address %}
-    <span>{{ "Address"|t }}</span>: <span>{{ address }}</span>
+    <div class="beneficiary__address">
+      <span>{{ "Address"|t }}:</span><span>{{ address }}</span>
+    </div>
   {% endif %}
   {% if account_number %}
-    <span>{{ "Account No."|t }}</span>: <span>{{ account_number }}</span>
+    <div class="beneficiary__account">
+      <span>{{ "Account No."|t }}:</span><span>{{ account_number }}</span>
+    </div>
   {% endif %}
   {% if iban %}
-    <span>{{ "IBAN"|t }}</span>: <span>{{ iban }}</span>
+    <div class="beneficiary__iban">
+      <span>{{ "IBAN"|t }}:</span><span>{{ iban }}</span>
+    </div>
   {% endif %}
   {% if swift_code %}
-    <span>{{ "Swift Code"|t }}</span>: <span>{{ swift_code }}</span>
+    <div class="beneficiary__code">
+      <span>{{ "Swift Code"|t }}:</span><span>{{ swift_code }}</span>
+    </div>
   {% endif %}
   {% if purpose %}
-    <span>{{ "Purpose"|t }}</span>: <span>{{ purpose }}</span>
+    <div class="banktransfer__purpose">
+      <span>{{ "Purpose"|t }}:</span><span>{{ purpose }}</span>
+    </div>
   {% endif %}
 </div>

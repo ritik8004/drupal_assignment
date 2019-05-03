@@ -97,9 +97,11 @@
             <div class="dark">{{ order_details.payment_method }}</div>
           </div>
 
-            {% if order_details.banktransfer_payment_details %}
+          {% if order_details.banktransfer_payment_details %}
+            <div class="mobile-only banktransfer">
               {{ order_details.banktransfer_payment_details }}
-            {% endif %}
+            </div>
+          {% endif %}
 
           {% if order_details.transaction_id %}
             <div class="mobile-only transaction-id">
