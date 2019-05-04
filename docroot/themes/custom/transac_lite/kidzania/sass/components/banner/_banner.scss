@@ -23,10 +23,10 @@
         max-width: inherit;
         width: auto;
         position: relative;
-        left: -15rem;
+        #{$left}: -15rem;
 
         html[lang=ar] & {
-          left: 50rem;
+          #{$left}: -52rem;
         }
       }
 
@@ -34,10 +34,10 @@
         max-width: inherit;
         width: auto;
         position: relative;
-        left: -8rem;
+        #{$left}: -8rem;
 
         html[lang=ar] & {
-          left: 32rem;
+          #{$left}: -32rem;
         }
       }
     }
@@ -60,6 +60,7 @@
     @include breakpoint($only-mobile) {
       font-size: 2.25rem;
       max-width: 11.5625rem;
+      #{$left}: 23%;
     }
 
     @include breakpoint($only-tablet) {
