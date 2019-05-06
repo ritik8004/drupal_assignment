@@ -11,7 +11,6 @@
         // due to race condition.
         setTimeout(function() {
           if (!$('form#alshaya-newsletter-subscribe').hasClass('clientside-validation-ajax-submit-invalid')) {
-            console.error("adsfsdfs");
             // Start loading
             l.ladda('start');
           }
