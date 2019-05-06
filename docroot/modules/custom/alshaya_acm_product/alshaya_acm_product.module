@@ -127,7 +127,6 @@ function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
                 $priceCondition->setField('price');
               }
               $conditionLevel1->addConditionGroup($priceConditionGroup);
-              break 2;
             }
           }
         }
@@ -260,6 +259,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
   $items['product_concept_markup'] = [
     'variables' => [
       'concepts' => NULL,
+    ],
+  ];
+
+  $items['product_material_markup'] = [
+    'variables' => [
+      'material' => NULL,
     ],
   ];
 

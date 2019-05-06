@@ -82,7 +82,8 @@
     width: 1.875rem;
     height: 1.875rem;
     background-size: contain;
-    top: 0.625rem;
+    top: 0.25rem;
+    #{$right}: 0.625rem;
   }
 
   .input--wrapper {
@@ -328,8 +329,8 @@
     .current-location,
     .cc-near-me {
       @include breakpoint($only-tablet) {
-        line-height: 1.5;
-        padding-#{$left}: 2.5rem !important;
+        line-height: 1.2;
+        padding-#{$left}: 2.75rem !important;
       }
 
       &::before {
@@ -337,7 +338,11 @@
         background-size: 100%;
         height: 1.9375rem;
         width: 2rem;
-        margin-top: -0.25rem;
+        margin-top: -0.125rem;
+
+        @include breakpoint($only-mobile) {
+          margin-top: -0.125rem;
+        }
       }
 
       html[lang=ar] & {
@@ -354,15 +359,20 @@
           line-height: 2.7;
           text-indent: 0.125rem;
 
+          @include breakpoint($only-tablet) {
+            padding-#{$left}: 2.5625rem !important;
+          }
+
           @include breakpoint($only-mobile) {
             padding: 0.25rem 0;
             line-height: 2;
+            padding-#{$right}: 0.75rem;
           }
         }
 
         @include breakpoint($only-tablet) {
-          line-height: 2.8;
-          padding-#{$left}: 2.4375rem !important;
+          line-height: 2.5;
+          padding-#{$left}: 2.6875rem !important;
         }
       }
     }
@@ -498,6 +508,12 @@
 
       html[lang=ar] & {
         margin-top: 0;
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      html[lang=ar] & {
+        line-height: 2;
       }
     }
   }

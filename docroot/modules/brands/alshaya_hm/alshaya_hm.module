@@ -9,6 +9,7 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
@@ -454,11 +455,41 @@ function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$co
     return;
   }
 
+  $langcode = $sku->language()->getId();
+  $cid = implode(':', [
+    $sku->id(),
+    $langcode,
+  ]);
+
+  $cache = \Drupal::cache('hm_product_configurations')->get($cid);
+
+  if (isset($cache, $cache->data)) {
+    $configurations = $cache->data;
+    return;
+  }
+
+  // Ensure configurable value id is used as key in values.
+  foreach ($configurations as $code => $configuration) {
+    if (empty($configuration['values'])) {
+      continue;
+    }
+    $values = $configuration['values'];
+    $configurations[$code]['values'] = [];
+    foreach ($values as $value) {
+      $configurations[$code]['values'][$value['value_id']] = $value;
+    }
+  }
+
   /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
   $plugin = $sku->getPluginInstance();
+  /** @var \Drupal\acq_sku\Entity\SKU $variant */
   foreach ($variants as $variant) {
     if (!$plugin->isProductInStock($variant)) {
       continue;
+    }
+
+    if ($langcode != $variant->language()->getId() && $variant->hasTranslation($langcode)) {
+      $variant = $variant->getTranslation($langcode);
     }
 
     $variant_configurations = unserialize($variant->get('field_configurable_attributes')->getString());
@@ -494,11 +525,13 @@ function alshaya_hm_acq_sku_configurable_product_configurations_alter(array &$co
     'article_castor_id' => [
       'attribute_id' => 999999,
       'code' => 'article_castor_id',
-      'label' => t('Article Castor Id'),
-      'position' => 0,
+      'label' => (string) t('Article Castor Id'),
+      'position' => -1,
       'values' => $colors,
     ],
   ] + $configurations;
+
+  \Drupal::cache('hm_product_configurations')->set($cid, $configurations, Cache::PERMANENT, $sku->getCacheTags());
 }
 
 /**
@@ -552,4 +585,25 @@ function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $s
       $children[$child->getSku()] = $child;
     }
   }
+}
+
+/**
+ * Implements hook_acq_sku_indexes_alter().
+ */
+function alshaya_hm_acq_sku_indexes_alter(array &$indexes) {
+  $indexes['acq_sku__attr_style_code'] = [
+    'table' => 'acq_sku_field_data',
+    'fields' => [
+      ['attr_style_code', 10],
+    ],
+    'spec' => [
+      'fields' => [
+        'attr_style_code' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
 }

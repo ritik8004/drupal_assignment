@@ -529,12 +529,27 @@
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           deliveryType = 'Home Delivery';
         }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+          cartCheckoutDeliverySelector.find('#edit-actions-get-shipping-methods'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
       }
 
       /**
        * GTM virtual page tracking for click & collect journey.
        */
       if (isCCPage) {
+        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
@@ -548,10 +563,16 @@
         }
 
         $('.store-actions a.select-store', context).once('js-event').click(function () {
+          let selectedStore = $(this).parent('.store-actions');
           dataLayer.push({
             event: 'VirtualPageview',
             virtualPageURL: ' /virtualpv/click-and-collect/step2/select-store',
             virtualPageTitle: 'C&C Step 2 – Select Store'
+          },
+          {
+            event: 'storeSelect',
+            storeName: selectedStore.attr('gtm-store-title').replace(/\s+/g,' ').replace(/^\s+|\s+$/g, ''),
+            storeAddress: selectedStore.attr('gtm-store-address').replace(/\s+/g,' ').replace(/^\s+|\s+$/g, ''),
           });
         });
       }
