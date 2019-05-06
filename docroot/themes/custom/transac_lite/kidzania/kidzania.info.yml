@@ -8,6 +8,7 @@ alshaya_theme_type: alshaya_transac_lite
 regions:
   header_primary: 'Header Primary'
   header: Header
+  hero_content: 'Hero Content'
   content: Content
   sidebar: Sidebar
   footer: Footer

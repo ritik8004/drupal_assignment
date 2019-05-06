@@ -68,6 +68,12 @@
     <a id="main-content" tabindex="-1"></a>
     {# link is in html.html.twig #}
 
+    {% if page.hero_content %}
+      <div class="region-hero-content">
+        {{ page.hero_content }}
+      </div>
+    {% endif %}
+
     <div class="region-content">
       {{ page.content }}
     </div>
