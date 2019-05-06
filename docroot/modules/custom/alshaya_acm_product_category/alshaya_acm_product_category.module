@@ -40,6 +40,12 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
         'term_tree' => NULL,
       ],
     ],
+    'alshaya_subcategory_block' => [
+      'template' => 'alshaya-subcategory-block',
+      'variables' => [
+        'subcategories' => NULL,
+      ],
+    ],
   ];
 }
 
