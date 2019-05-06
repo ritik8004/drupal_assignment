@@ -23,18 +23,14 @@
         max-width: inherit;
         width: auto;
         position: relative;
-        #{$left}: -15rem;
-
-        html[lang=ar] & {
-          #{$left}: -52rem;
-        }
+        #{$left}: -33rem;
       }
 
       @include breakpoint($only-tablet) {
         max-width: inherit;
         width: auto;
         position: relative;
-        #{$left}: -8rem;
+        #{$left}: -10rem;
 
         html[lang=ar] & {
           #{$left}: -32rem;
