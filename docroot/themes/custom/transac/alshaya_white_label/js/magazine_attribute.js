@@ -374,7 +374,7 @@
         $('.edit-add-to-cart', context).once().on('mousedown', function () {
           var that = this;
           setTimeout(function () {
-            if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
+            if ($(that).closest('form').hasClass('clientside-validation-ajax-submit-invalid')) {
               $('.size-tray').addClass('tray-open');
               $('.size-tray > div').toggle('slide', {direction: 'down'}, 400);
               $('body').addClass('open-tray-without-selection');
