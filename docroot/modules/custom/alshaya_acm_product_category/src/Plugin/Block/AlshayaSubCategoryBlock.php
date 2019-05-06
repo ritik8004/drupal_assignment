@@ -114,10 +114,10 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')) {
-      return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value);
+      return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value)->addCacheContexts(['route.name']);
     }
     else {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden()->addCacheContexts(['route.name']);
     }
   }
 

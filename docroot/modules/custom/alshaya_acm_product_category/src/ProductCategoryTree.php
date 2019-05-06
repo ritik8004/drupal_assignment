@@ -657,4 +657,29 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     return $tid;
   }
 
+  /**
+   * Check which grouping category product belongs to.
+   *
+   * @param int $product_category_id
+   *   Product category id.
+   * @param int $selected_category_id
+   *   Selected category id.
+   *
+   * @return bool
+   *   TRUE is product can be grouped in sub-category.
+   */
+  public function getGroupingSubCategory($product_category_id, $selected_category_id) {
+    if ($product_category_id === $selected_category_id) {
+      return TRUE;
+    }
+    $ancestors = \Drupal::service('entity_type.manager')
+      ->getStorage("taxonomy_term")
+      ->loadAllParents($product_category_id);
+    foreach ($ancestors as $term) {
+      if ($term->id() === $selected_category_id) {
+        return TRUE;
+      }
+    }
+  }
+
 }
