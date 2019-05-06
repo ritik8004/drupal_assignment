@@ -300,7 +300,6 @@ function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $def
  */
 function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
   $result_row = [];
-  // Override the 'result summary' header for PLP and Search.
   if ($view->id() == 'alshaya_product_list') {
     $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')
       ->getCategoryTermFromRoute();
