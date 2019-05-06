@@ -525,6 +525,10 @@
        */
       if ((cartCheckoutDeliverySelector.length !== 0) &&
         (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
+        if (document.location.search === '?method=hd') {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+        }
+
         // Fire checkout option event if home delivery option is selected by default on delivery page.
         if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
           deliveryType = 'Home Delivery';
@@ -550,6 +554,7 @@
        */
       if (isCCPage) {
         dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+        
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
