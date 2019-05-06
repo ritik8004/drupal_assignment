@@ -160,6 +160,14 @@
     @include breakpoint($upto-desktop) {
       .c-accordion__title {
         display: block;
+
+        .cateogry-active-title {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          max-width: 70%;
+          display: inline-block;
+        }
       }
     }
   }

@@ -464,7 +464,7 @@
         var facet = $(active_cat_facet).find('label span.facet-item__value');
         if (!$(active_cat_facet).hasClass('category-all')) {
           var active_cat_label = $(facet).contents().not($('.facet-item__count')).text().trim();
-          $(this).find('h3').html(active_cat_label);
+          $(this).find('h3').html('<span class="cateogry-active-title">' + active_cat_label + '</span>');
         }
       }
     });
