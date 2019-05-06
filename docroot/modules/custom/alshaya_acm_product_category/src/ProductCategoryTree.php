@@ -672,9 +672,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     if ($product_category_id === $selected_category_id) {
       return TRUE;
     }
-    $ancestors = \Drupal::service('entity_type.manager')
-      ->getStorage("taxonomy_term")
-      ->loadAllParents($product_category_id);
+    $ancestors = $this->termStorage->loadAllParents($product_category_id);
     foreach ($ancestors as $term) {
       if ($term->id() === $selected_category_id) {
         return TRUE;
