@@ -9,7 +9,7 @@
 
   .c-accordion__title {
     border: none;
-    font-size: 0.75rem;
+    font-size: 0.875rem;
 
     &::after {
       #{$right}: -2rem;
@@ -213,7 +213,7 @@
     }
 
     legend {
-      font-size: 0.75rem;
+      font-size: 0.875rem;
       line-height: 2.9375rem;
       position: relative;
       margin-#{$right}: 2.6875rem;
@@ -262,7 +262,7 @@
 }
 
 .show-all-filters {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   position: relative;
   padding-#{$left}: 1.875rem;
   cursor: pointer;
