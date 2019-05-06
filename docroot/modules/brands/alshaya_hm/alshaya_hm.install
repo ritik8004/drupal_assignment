@@ -13,6 +13,15 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Enable magazine articles feature.
+ */
+function alshaya_hm_update_8032() {
+  \Drupal::service('module_installer')->install(['alshaya_magazine']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Mark all indexed data for re-indexation to get the price data indexed again.
  */
 function alshaya_hm_update_8031() {
