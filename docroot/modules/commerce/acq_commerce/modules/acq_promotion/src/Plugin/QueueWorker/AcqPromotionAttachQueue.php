@@ -71,23 +71,19 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
     $skipped_skus = [];
 
     foreach ($rows as $sku) {
-      $update_sku_flag = FALSE;
-
-      if (isset($existing[$sku['sku']])) {
-        if (!in_array($promotion_nid, $existing[$sku['sku']]['promotion_ids'])) {
-          $update_sku_flag = TRUE;
-        }
-        elseif (!empty($sku['final_price'])
-          && $existing[$sku['sku']]['final_price'] != $sku['final_price']) {
-          $update_sku_flag = TRUE;
-        }
-      }
-      else {
+      if (!isset($existing[$sku['sku']])) {
         $skus_not_found[] = $sku['sku'];
         continue;
       }
 
-      if (!$update_sku_flag) {
+      $has_final_price = !empty($sku['final_price']);
+
+      $row = $existing[$sku['sku']];
+
+      // If promotion already available
+      // AND if no final price OR final price is same.
+      if (in_array($promotion_nid, $row['promotion_ids'])
+        && (!$has_final_price || $row['final_price'] == $sku['final_price'])) {
         $skipped_skus[] = $sku['sku'];
         continue;
       }
