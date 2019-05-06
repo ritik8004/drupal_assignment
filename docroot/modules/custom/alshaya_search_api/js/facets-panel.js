@@ -108,7 +108,7 @@
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
-        $('body').css('position', 'static');
+        $('body').css('position', 'relative');
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
