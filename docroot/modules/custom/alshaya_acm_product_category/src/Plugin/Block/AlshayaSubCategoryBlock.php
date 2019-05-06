@@ -8,6 +8,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\file\FileInterface;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
@@ -112,7 +113,12 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
   protected function blockAccess(AccountInterface $account) {
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
-    return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value);
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')) {
+      return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value);
+    }
+    else {
+      return AccessResult::forbidden();
+    }
   }
 
 }

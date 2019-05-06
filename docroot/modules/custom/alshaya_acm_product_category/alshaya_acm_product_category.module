@@ -15,6 +15,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\ViewExecutable;
+use Drupal\search_api\Plugin\views\ResultRow;
 
 /**
  * Implements hook_module_implements_alter().
@@ -291,4 +293,65 @@ function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $def
     }
   }
   return $term_sub_categories;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
+  $result_row = [];
+  // Override the 'result summary' header for PLP and Search.
+  if ($view->id() == 'alshaya_product_list') {
+    $term = \Drupal::service('alshaya_acm_product_category.product_category_tree')
+      ->getCategoryTermFromRoute();
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->value) {
+      foreach ($view->result as $row) {
+        $product_categories = $row->_object->getValue()
+          ->get('field_category')
+          ->getValue();
+        // Get all selected subcategories to be displayed on PLP.
+        $selected_subcategories = $term->get('field_select_subcategories_plp')
+          ->getValue();
+        foreach ($selected_subcategories as $selected_subcategory) {
+          foreach ($product_categories as $product_category) {
+            if (alshaya_get_grouping_subcategory($product_category['target_id'], $selected_subcategory['value'])) {
+              $result_row[$selected_subcategory['value']][] = $row;
+              break;
+            }
+          }
+        }
+      }
+      $new_view_result = [];
+      foreach ($result_row as $key => $grouped_row) {
+        $category_row = [
+          'tid' => $key,
+          'lable' => 'test',
+          'desc' => 'desc',
+        ];
+        $new_view_result[] = new ResultRow($category_row);
+        foreach ($grouped_row as $key => $row) {
+          $new_view_result[] = $row;
+        }
+      }
+
+      $view->result = $new_view_result;
+    }
+  }
+}
+
+/**
+ * Return TRUE if grouping subcategory found.
+ */
+function alshaya_get_grouping_subcategory($product_category_id, $selected_category_id) {
+  if ($product_category_id === $selected_category_id) {
+    return TRUE;
+  }
+  $ancestors = \Drupal::service('entity_type.manager')
+    ->getStorage("taxonomy_term")
+    ->loadAllParents($product_category_id);
+  foreach ($ancestors as $term) {
+    if ($term->id() === $selected_category_id) {
+      return TRUE;
+    }
+  }
 }
