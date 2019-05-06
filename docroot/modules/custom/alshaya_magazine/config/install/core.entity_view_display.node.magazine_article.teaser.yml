@@ -37,14 +37,8 @@ content:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
-  field_magazine_slogan:
-    type: basic_string
-    weight: 2
-    region: content
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
 hidden:
+  field_magazine_slogan: true
   field_magazine_date: true
   field_magazine_hero_image: true
   field_magazine_paragraphs: true
