@@ -24,7 +24,6 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
-      var cartPage = $('body[gtm-container="cart page"]');
       var orderConfirmationPage = $('body[gtm-container="purchase confirmation page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
@@ -46,38 +45,21 @@
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
-
-        var userDetails = JSON.parse(localStorage.getItem('userDetails'));
-
-        if ((localStorage.getItem('userDetails') === undefined ||
-                localStorage.getItem('userDetails') === null ||
-                drupalSettings.user.uid !== userDetails.userID ||
-                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
-          Drupal.setUserDetailsInStorage();
-          $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
-          userDetails = JSON.parse(localStorage.getItem('userDetails'));
-        }
-
         var md = new MobileDetect(window.navigator.userAgent);
-        userDetails.platformType = 'desktop';
         if (md.tablet() !== null) {
-          userDetails.platformType = 'tablet';
+          dataLayer.push({
+            platformType: 'tablet',
+          });
         }
         else if (md.mobile()) {
-          userDetails.platformType = 'mobile';
+          dataLayer.push({
+            platformType: 'mobile',
+          });
         }
-
-        // For checkout pages, privilegeCustomer is added in checkout step.
-        if (cartPage.length !== 0 ||
-            cartCheckoutLoginSelector.length !== 0 ||
-            cartCheckoutDeliverySelector.length !== 0 ||
-            cartCheckoutPaymentSelector.length !==0) {
-          delete userDetails.privilegeCustomer;
-        }
-
-        // Push on all pages except confirmation page.
-        if (orderConfirmationPage.length === 0) {
-          Drupal.alshaya_seo_default_datalayer_push(userDetails);
+        else {
+          dataLayer.push({
+            platformType: 'desktop',
+          });
         }
 
         if ($(context).filter('article[data-vmode="modal"]').length === 1
@@ -1140,47 +1122,6 @@
         return decodeURIComponent(pair[1]);
       }
     }
-  };
-
-  /**
-   * Helper function to fetch current user details.
-   *
-   * @returns {array}
-   */
-  Drupal.setUserDetailsInStorage = function () {
-    var userDetails = {};
-    userDetails.userID = drupalSettings.user.uid;
-    userDetails.userEmailID = '';
-    userDetails.userName = '';
-    userDetails.userType = 'Guest User';
-    userDetails.privilegeCustomer = 'Regular Customer';
-    userDetails.customerType = '';
-
-    userDetails = JSON.stringify(userDetails);
-
-    if (drupalSettings.user.uid !== 0) {
-      $.ajax({
-        url: drupalSettings.path.baseUrl + "get-user-details",
-        type: "POST",
-        async: false,
-        success: function (response, status) {
-          userDetails = response.user_data;
-        },
-      });
-    }
-
-    // Save in localStorage.
-    localStorage.setItem('userDetails', userDetails);
-  };
-
-  /**
-   * Helper function to push default datalayer variables.
-   *
-   * @param platformType
-   * @param userDetails
-   */
-  Drupal.alshaya_seo_default_datalayer_push = function (userDetails) {
-      dataLayer.push(userDetails);
   };
 
 })(jQuery, Drupal, dataLayer);
