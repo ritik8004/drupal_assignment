@@ -7,7 +7,6 @@ dependencies:
     - field.field.node.magazine_article.field_magazine_date
     - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_hero_image
-    - field.field.node.magazine_article.field_magazine_hero_video
     - field.field.node.magazine_article.field_magazine_paragraphs
     - field.field.node.magazine_article.field_magazine_shop_the_story
     - field.field.node.magazine_article.field_magazine_slogan
@@ -48,7 +47,6 @@ content:
 hidden:
   field_magazine_date: true
   field_magazine_hero_image: true
-  field_magazine_hero_video: true
   field_magazine_paragraphs: true
   field_magazine_shop_the_story: true
   field_magazine_weight: true

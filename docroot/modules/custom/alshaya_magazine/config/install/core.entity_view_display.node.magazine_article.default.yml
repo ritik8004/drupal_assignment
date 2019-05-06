@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.magazine_article.field_magazine_date
     - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_hero_image
-    - field.field.node.magazine_article.field_magazine_hero_video
     - field.field.node.magazine_article.field_magazine_paragraphs
     - field.field.node.magazine_article.field_magazine_shop_the_story
     - field.field.node.magazine_article.field_magazine_slogan
@@ -49,17 +48,6 @@ content:
       image_link: ''
     third_party_settings: {  }
     type: image
-    region: content
-  field_magazine_hero_video:
-    weight: 1
-    label: hidden
-    settings:
-      responsive: true
-      width: 854
-      height: 480
-      autoplay: false
-    third_party_settings: {  }
-    type: video_embed_field_video
     region: content
   field_magazine_paragraphs:
     type: entity_reference_revisions_entity_view

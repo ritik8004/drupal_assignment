@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.magazine_article.field_magazine_date
     - field.field.node.magazine_article.field_magazine_homepage_image
     - field.field.node.magazine_article.field_magazine_hero_image
-    - field.field.node.magazine_article.field_magazine_hero_video
     - field.field.node.magazine_article.field_magazine_paragraphs
     - field.field.node.magazine_article.field_magazine_shop_the_story
     - field.field.node.magazine_article.field_magazine_slogan
@@ -57,12 +56,6 @@ content:
       progress_indicator: throbber
     region: content
     third_party_settings: {  }
-  field_magazine_hero_video:
-    weight: 1
-    settings: {  }
-    third_party_settings: {  }
-    type: video_embed_field_textfield
-    region: content
   field_magazine_paragraphs:
     type: entity_reference_paragraphs
     weight: 7
