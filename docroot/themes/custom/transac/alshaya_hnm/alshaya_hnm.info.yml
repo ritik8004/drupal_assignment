@@ -38,3 +38,8 @@ libraries-override:
     css:
       theme:
         css/conditional-sass/magazine-layout/magazine-layout.ltr.css: css/conditional-sass/magazine-layout/magazine-layout.ltr.css
+
+  alshaya_white_label/magazine_article:
+      css:
+        theme:
+          css/conditional-sass/magazine-article/magazine-article.ltr.css: css/conditional-sass/magazine-article/magazine-article.ltr.css

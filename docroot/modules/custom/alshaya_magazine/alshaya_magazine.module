@@ -45,11 +45,14 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
     return;
   }
 
+  $build['#attached']['library'][] = 'alshaya_white_label/magazine_article';
+
   if ($view_mode == 'full') {
     $build['title'] = [
       '#type' => 'html_tag',
       '#tag' => 'h1',
       '#value' => $node->label(),
+      '#attributes' => array('class' => array('magazine-article-title')),
     ];
 
     $build['field_magazine_slogan']['#prefix'] = render($build['title']);
@@ -64,5 +67,14 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
     ];
 
     $build['field_magazine_slogan']['#prefix'] = render($build['title']);
+  }
+}
+
+/**
+ * Implements template_view_unformatted_alter().
+ */
+function alshaya_magazine_theme_suggestions_views_view_unformatted_alter(array &$suggestions, &$variables) {
+  if ($variables['view']->id() == 'magazine_articles' && $variables['view']->current_display == 'homepage_block') {
+    $suggestions[] = "views_view_unformatted__magazine_articles";
   }
 }

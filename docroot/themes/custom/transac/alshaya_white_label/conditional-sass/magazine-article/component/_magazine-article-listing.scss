@@ -1,0 +1,96 @@
+.path--magazine {
+  .page-standard {
+    @include container(52.75rem);
+
+    padding: 0 1.25rem;
+  }
+
+  .block-page-title-block {
+    text-align: center;
+
+    h1 {
+      font-size: 2.5rem;
+      margin-top: 1.5rem;
+    }
+  }
+
+  article {
+    text-align: center;
+
+    > div {
+      > .field--name-field-magazine-hero-image {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  .read-more {
+    text-align: center;
+    padding-bottom: 0.9375rem;
+
+    a {
+      position: relative;
+      display: inline-block;
+      padding: 0.5rem 0.5625rem 0.4375rem 1.1875rem;
+      font-weight: 700;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      background-color: $magazine-article-read-more-bg-color;
+      color: $magazine-article-title;
+      text-decoration: underline;
+      cursor: pointer;
+
+      @include icon(dropdown-expand, before) {
+        position: absolute;
+        #{$left}: -0.25rem;
+        font-size: 2.25rem;
+        width: 1.75rem;
+        top: 1px;
+        transform: rotate(270deg);
+        color: $magazine-article-read-more-icon-color;
+      }
+
+      &:hover {
+        background-color: $magazine-label-color;
+        border-color: $magazine-label-color;
+        color: $magazine-article-primary-color;
+
+        &::before {
+          color: $magazine-article-primary-color;
+        }
+      }
+    }
+  }
+
+  .pager__item {
+    list-style: none;
+
+    .button {
+      font-size: 0.9375rem;
+      display: block;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 1.25rem;
+      margin: 0 auto 2.25rem;
+      width: 14.375rem;
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0.9375rem;
+        #{$left}: 0;
+        width: 1.875rem;
+        height: 1.875rem;
+        background: url('#{$base_theme_img_directory_path}/icons/sprites-life.png') center center no-repeat;
+        background-position: -11.25rem 0;
+      }
+    }
+  }
+}
+
+body {
+  &.path--magazine {
+    color: $magazine-article-title;
+  }
+}

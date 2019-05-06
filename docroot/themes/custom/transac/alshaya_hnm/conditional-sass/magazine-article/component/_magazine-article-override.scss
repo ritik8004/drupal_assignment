@@ -1,0 +1,42 @@
+.nodetype--magazine_article,
+.path--magazine {
+  .magazine-article-title,
+  h2 a {
+    font-family: $magazine-regular;
+  }
+
+  .field--name-field-magazine-slogan {
+    font-family: $magazine-italic;
+  }
+}
+
+body {
+  &.nodetype--magazine_article,
+  &.path--magazine {
+    font-family: $magazine-light;
+  }
+}
+
+.block-views-blockmagazine-articles-homepage-block {
+  font-family: $magazine-light;
+
+  > h3,
+  article h3 {
+    font-family: $magazine-regular;
+  }
+}
+
+.path--magazine {
+  .block-page-title-block {
+    h1 {
+      font-family: $magazine-regular;
+    }
+  }
+}
+
+.field--name-field-magazine-shop-the-story {
+  .c-products__item__label span,
+  .price-block {
+    font-family: $magazine-light;
+  }
+}

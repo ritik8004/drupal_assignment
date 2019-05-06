@@ -1,15 +1,17 @@
 <article{{ attributes }}>
+  <a href="{{ url }}">
+    <div{{ content_attributes }}>
+      {{ content }}
+    </div>
 
-  <div{{ content_attributes }}>
-    {{ content }}
-  </div>
-
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
-  {% endif %}
-  {{ title_suffix }}
-
+    {{ title_prefix }}
+    {% if not page %}
+      <h3{{ title_attributes }}>{{ label }}
+      </h3>
+      <div class="read-more">
+        <span>{{ 'read the story'|t }}</span>
+      </div>
+    {% endif %}
+    {{ title_suffix }}
+  </a>
 </article>

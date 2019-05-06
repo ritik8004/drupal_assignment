@@ -1,0 +1,288 @@
+.nodetype--magazine_article {
+  .page-standard {
+    @include container(844px);
+
+    margin-top: 1.5rem;
+
+    @include breakpoint($only-tablet) {
+      padding: 0 1.5rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0 0.5rem;
+    }
+  }
+
+  .c-breadcrumb {
+    display: none;
+  }
+
+  .field__items {
+    .field--name-field-magazine-hero-image {
+      margin-bottom: 2rem;
+    }
+  }
+
+  .field--name-field-magazine-paragraphs {
+    &.field__items {
+      @include container(32.25rem);
+    }
+
+    .paragraph--type--title-textarea {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: $magazine-textarea-color;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0 0 0.5rem;
+      padding: 0;
+      color: $magazine-label-color;
+      text-align: center;
+      text-transform: uppercase;
+
+      li {
+        display: inline-block;
+        margin: 0 0.625rem;
+        font-size: 0.75rem;
+      }
+    }
+
+    p {
+      margin: 0 0 1rem;
+    }
+
+    .field--name-field-banner {
+      margin-bottom: 1.25rem;
+    }
+
+    .field--name-field-html-heading {
+      p {
+        margin: 0;
+      }
+    }
+  }
+}
+
+body {
+  &.nodetype--magazine_article {
+    color: $magazine-article-title;
+    font-size: 0.75rem;
+    line-height: 1.33333;
+  }
+}
+
+.field--name-field-magazine-shop-the-story,
+.field--name-field-magazine-hero-image {
+  .slick-arrow {
+    position: absolute;
+    top: 28%;
+
+    &::before {
+      width: 1.1875rem;
+      height: 2.3125rem;
+      padding: 0;
+    }
+  }
+
+  .slick-disabled {
+    display: none !important;
+  }
+
+  .slick-prev {
+    left: 0;
+
+    &::before {
+      content: '';
+      background: url('#{$base_theme_img_directory_path}/icons/arrow_prev.png') center center no-repeat;
+      background-size: 1.1875rem 2.3125rem;
+    }
+  }
+
+  .slick-next {
+    right: 0;
+
+    &::before {
+      content: '';
+      background: url('#{$base_theme_img_directory_path}/icons/arrow_next.png') center center no-repeat;
+      background-size: 1.1875rem 2.3125rem;
+    }
+  }
+}
+
+.field--name-field-magazine-hero-image {
+  .slick-arrow {
+    top: 43%;
+
+    &::before {
+      width: 2.5rem;
+      height: 4.375rem;
+      background-size: 2.5rem 4.375rem;
+    }
+  }
+
+  .slick-dots {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+
+  .slick-prev {
+    @include breakpoint($tablet) {
+      left: -1.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      left: -3.3125rem;
+    }
+  }
+
+  .slick-next {
+    @include breakpoint($tablet) {
+      right: -1.25rem;
+    }
+
+    @include breakpoint($desktop) {
+      right: -3.3125rem;
+    }
+  }
+}
+
+.field--name-field-magazine-shop-the-story {
+  .slick-list {
+    margin: 0 1.5rem;
+  }
+
+  .field__item {
+    article {
+      margin: 0 0.75rem;
+
+      @include breakpoint($only-mobile) {
+        margin: 0;
+      }
+    }
+
+    .c-products__item__label,
+    .price-block {
+      font-size: 0.875rem;
+      line-height: 1.42857;
+      letter-spacing: 0;
+      text-transform: none;
+      text-align: center;
+      color: $magazine-article-title;
+      font-weight: 700;
+
+      @include breakpoint($tablet) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .c-products__item__label {
+      span {
+        font-size: 0.875rem;
+
+        @include breakpoint($only-mobile) {
+          line-height: 1.2;
+          display: block;
+        }
+      }
+    }
+  }
+
+  @include breakpoint($upto-desktop) {
+    .field__items {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      overflow-y: hidden;
+      white-space: nowrap;
+      padding-bottom: 1.25rem;
+
+      .field__item {
+        width: 29%;
+        display: inline-block;
+        vertical-align: top;
+        white-space: normal;
+
+        @include breakpoint($only-mobile) {
+          width: 37%;
+          margin-#{$right}: 0.625rem;
+        }
+      }
+    }
+  }
+}
+
+.nodetype--magazine_article,
+.path--magazine {
+  .field--name-field-magazine-date,
+  .magazine-shop-the-story__label {
+    display: block;
+    margin: 0 0 1.25rem;
+    border-bottom: 1px solid $magazine-article-border-color;
+    font-weight: 300;
+    text-align: center;
+    text-transform: uppercase;
+    color: $magazine-label-color;
+
+    time,
+    .label-separator {
+      display: inline-block;
+      background: $magazine-article-primary-color;
+      position: relative;
+      top: 0.5rem;
+      padding: 0 0.625rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .field--name-field-magazine-category {
+    margin: 0 0 3px;
+    font-weight: 300;
+    font-size: 0.9375rem;
+    text-align: center;
+    text-transform: uppercase;
+    color: $magazine-textarea-color;
+  }
+
+  .magazine-article-title,
+  h2 a {
+    font-size: 3.125rem;
+    text-align: center;
+    color: $magazine-textarea-color;
+    margin: 0 0 0.625rem;
+    line-height: 1;
+    text-transform: uppercase;
+
+    @include breakpoint($only-mobile) {
+      font-size: 2rem;
+    }
+
+    &:hover {
+      color: $magazine-label-color;
+    }
+  }
+
+  .field--name-field-magazine-slogan {
+    @include container(39.5rem);
+
+    max-width: 632px;
+    margin: 0 auto 0.9375rem;
+    font-style: italic;
+    font-size: 1.125rem;
+    color: $magazine-textarea-color;
+    text-align: center;
+    line-height: 1.1;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.9375rem;
+    }
+  }
+}
