@@ -3,8 +3,10 @@
 namespace Drupal\alshaya_acm_product_category\Plugin\Block;
 
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\file\FileInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -102,6 +104,15 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
       '#theme' => 'alshaya_subcategory_block',
       '#subcategories' => $subcategories,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function blockAccess(AccountInterface $account) {
+    // Get the term object from current route.
+    $term = $this->productCategoryTree->getCategoryTermFromRoute();
+    return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value);
   }
 
 }
