@@ -10,19 +10,13 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Update the the width for 291x288 image style.
- */
-function alshaya_hm_images_update_8010() {
-  // Re-install the config for image style.
-  alshaya_config_install_configs(['image.style.291x288'], 'alshaya_image_styles');
-}
-
-/**
- * Implements hook_update_N().
- *
+ * Update the width for 291x288 image style.
  * Add new config keys in alshaya_hm_images.settings.
  */
 function alshaya_hm_images_update_8009() {
+  // Re-install the config for image style.
+  alshaya_config_install_configs(['image.style.291x288'], 'alshaya_image_styles');
+
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
