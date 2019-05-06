@@ -323,10 +323,11 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
       }
       $new_view_result = [];
       foreach ($result_row as $key => $grouped_row) {
+        $category_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($key);
         $category_row = [
           'tid' => $key,
-          'lable' => 'test',
-          'desc' => 'desc',
+          'lable' => $term->label(),
+          'desc' => $term->get('field_sub_category_description')->value,
         ];
         $new_view_result[] = new ResultRow($category_row);
         foreach ($grouped_row as $key => $row) {

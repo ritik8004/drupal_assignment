@@ -98,7 +98,7 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
           $subcategories[$subcategory->id()]['image'] = file_url_transform_relative(file_create_url($image->getFileUri()));
         }
       }
-      $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_sub_category_title')->value;
+      $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_sub_category_description')->value;
     }
 
     return [

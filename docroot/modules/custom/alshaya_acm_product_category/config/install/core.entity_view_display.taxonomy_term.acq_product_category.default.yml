@@ -69,4 +69,4 @@ hidden:
   field_group_by_sub_category: true
   field_select_subcategories_plp: true
   field_sub_category_image: true
-  field_sub_category_title: true
+  field_sub_category_description: true

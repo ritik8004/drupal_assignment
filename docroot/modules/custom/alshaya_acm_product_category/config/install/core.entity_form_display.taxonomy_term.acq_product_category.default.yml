@@ -31,7 +31,7 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
     - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
     - field.field.taxonomy_term.acq_product_category.field_sub_category_image
-    - field.field.taxonomy_term.acq_product_category.field_sub_category_title
+    - field.field.taxonomy_term.acq_product_category.field_sub_category_description
   module:
     - entity_browser
     - field_group
@@ -248,7 +248,7 @@ third_party_settings:
       region: content
     group_group_by_sub_category:
       children:
-        - field_sub_category_title
+        - field_sub_category_description
         - field_sub_category_image
       parent_name: group_plp_content
       weight: 5
@@ -518,7 +518,7 @@ content:
       selection_mode: selection_append
     region: content
     third_party_settings: {  }
-  field_sub_category_title:
+  field_sub_category_description:
     weight: 4
     settings:
       size: 60

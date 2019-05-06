@@ -4,8 +4,8 @@ dependencies:
   module:
     - taxonomy
     - text
-id: taxonomy_term.field_sub_category_title
-field_name: field_sub_category_title
+id: taxonomy_term.field_sub_category_description
+field_name: field_sub_category_description
 entity_type: taxonomy_term
 type: text
 settings:
