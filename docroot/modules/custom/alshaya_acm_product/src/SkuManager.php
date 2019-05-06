@@ -2103,7 +2103,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
-          'label' => (string) $sku->get($fieldKey)
+          'label' => $this->getLabelFromParentSku($sku, $key) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
@@ -2112,6 +2112,30 @@ class SkuManager {
     }
 
     return $configurableFieldValues;
+  }
+
+  /**
+   * Utility function to return label from parent sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $attr_code
+   *   Attribute code.
+   *
+   * @return string
+   *   Label for configurable fields.
+   */
+  public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if ($parent_sku instanceof SKUInterface) {
+      $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
+      foreach ($configurables as $field) {
+        if (in_array($attr_code, $field)) {
+          return $field['label'];
+        }
+      }
+    }
+    return NULL;
   }
 
   /**
@@ -2321,16 +2345,7 @@ class SkuManager {
   public function isProductInStock(SKUInterface $sku): bool {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
-
-    $in_stock = $plugin->isProductInStock($sku);
-
-    // For configurable we check combinations too as we remove
-    // some skus like free gift and ones with improper data.
-    if ($in_stock && $sku->bundle() == 'configurable') {
-      $in_stock = $this->skuAttributeCombinationsValid($sku);
-    }
-
-    return $in_stock;
+    return $plugin->isProductInStock($sku);
   }
 
   /**
