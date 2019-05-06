@@ -323,8 +323,7 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
 
     $orderDetails['billing_address'] = render($billing_address);
   }
-
-  if ($order['payment']['method_code'] == 'banktransfer'
+  elseif ($order['payment']['method_code'] == 'banktransfer'
     && !empty($order['extension']['bank_transfer_instructions'])) {
     $orderDetails['banktransfer_payment_details'] = [
       '#theme' => 'banktransfer_payment_details',
