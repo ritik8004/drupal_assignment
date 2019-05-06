@@ -10,7 +10,7 @@
         // Doing this as we checking class and its not available immediately
         // due to race condition.
         setTimeout(function() {
-          if (!$('form#alshaya-newsletter-subscribe').hasClass('ajax-submit-prevented')) {
+          if (!$('form#alshaya-newsletter-subscribe').hasClass('clientside-validation-ajax-submit-invalid')) {
             console.error("adsfsdfs");
             // Start loading
             l.ladda('start');
