@@ -113,7 +113,7 @@ class AlshayaSeoController extends ControllerBase {
 
       $user_details = [
         'userID' => $current_user->get('uid')->getString(),
-        'userPhone' => $current_user->get('field_mobile_number')->value ?? '',
+        'userPhone' => $current_user->get('field_mobile_number')->value,
         'userEmailID' => $email,
         'userName' => $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString(),
         'userType' => 'Logged in User',
