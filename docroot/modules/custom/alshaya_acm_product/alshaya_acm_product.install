@@ -12,6 +12,34 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Add new config key for listing page display of hover images.
+ */
+function alshaya_acm_product_update_8044() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.display_settings'],
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Clear product cache after code changes to reduce data in cache.
+ */
+function alshaya_acm_product_update_8044() {
+  /** @var \Drupal\pcb\Cache\PermanentDatabaseBackend $cache */
+  $cache = \Drupal::service('cache.alshaya_product');
+  $cache->deleteAllPermanent();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Enable the `meta tag` field for `acq_product` bundle form display.
  */
 function alshaya_acm_product_update_8043() {

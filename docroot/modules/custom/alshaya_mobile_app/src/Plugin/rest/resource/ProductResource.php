@@ -371,22 +371,7 @@ class ProductResource extends ResourceBase {
    *   Media Items.
    */
   private function getMedia(SKUInterface $sku, string $context): array {
-    /** @var \Drupal\acq_sku\Entity\SKU $sku */
-    $media = $this->skuImagesManager->getProductMedia($sku, $context);
-
-    if (!isset($media['images_with_type'])) {
-      $media['images_with_type'] = array_map(function ($image) {
-        return [
-          'url' => $image,
-          'image_type' => 'image',
-        ];
-      }, array_values($media['images']));
-    }
-
-    return [
-      'images' => $media['images_with_type'],
-      'videos' => array_values($media['videos']),
-    ];
+    return $this->mobileAppUtility->getMedia($sku, $context);
   }
 
   /**

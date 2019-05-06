@@ -41,14 +41,17 @@ services:
       - '@renderer'
       - '@simple_sitemap.generator'
       - '@acq_sku.product_info_helper'
-
+      - '@alshaya_acm_product.cache_manager'
+  alshaya_acm_product.cache_manager:
+    class: Drupal\alshaya_acm_product\Service\ProductCacheManager
+    arguments:
+      - '@cache.product_processed_data'
   alshaya_acm_product.price_helper:
     class: Drupal\alshaya_acm_product\Service\SkuPriceHelper
     arguments:
       - '@alshaya_acm_product.skumanager'
       - '@config.factory'
       - '@renderer'
-
   alshaya_acm_product.sku_images_manager:
     class: Drupal\alshaya_acm_product\SkuImagesManager
     arguments:
@@ -58,6 +61,7 @@ services:
       - '@alshaya_acm_product.skumanager'
       - '@acq_sku.product_info_helper'
       - '@cache.data'
+      - '@alshaya_acm_product.cache_manager'
   cache.alshaya:
     class: Drupal\Core\Cache\CacheInterface
     tags:
@@ -76,6 +80,12 @@ services:
       - { name: cache.bin, default_backend: cache.backend.permanent_database }
     factory: cache_factory:get
     arguments: [alshaya_product]
+  cache.product_processed_data:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [product_processed_data]
   alshaya_acm_product.sku_fields_helper:
     class: Drupal\alshaya_acm_product\SkuFieldsHelper
     arguments:

@@ -150,6 +150,8 @@ class AlshayaAcmConfigCheck {
       'social_auth_facebook.settings',
     ];
 
+    $this->moduleHandler->alter('alshaya_reset_config_configs_to_reset', $reset);
+
     if (!empty($config_reset)) {
       if (!in_array($config_reset, $reset)) {
         return FALSE;

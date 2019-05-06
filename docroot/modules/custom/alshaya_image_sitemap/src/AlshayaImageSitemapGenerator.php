@@ -201,7 +201,6 @@ class AlshayaImageSitemapGenerator {
         }
 
         $media = [];
-        $all_media = [];
         $sku_for_gallery = NULL;
 
         if ($product instanceof Node) {
@@ -232,12 +231,7 @@ class AlshayaImageSitemapGenerator {
               }
 
               if ($sku_for_gallery instanceof SKU) {
-                $all_media = $this->skuImagesManager->getAllMedia($sku_for_gallery);
-              }
-
-              if (!empty($all_media['images'])) {
-                // Changes for the image count.
-                $media = $all_media['images'];
+                $media = $this->skuImagesManager->getMediaImages($sku_for_gallery);
               }
             }
           }

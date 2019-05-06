@@ -312,4 +312,27 @@ class AlshayaConfigManager {
     }
   }
 
+  /**
+   * Wrapper function to get value from config for specific key.
+   *
+   * Uses static cache to avoid loading config again and again.
+   *
+   * @param string $config
+   *   Config from which we want to load value.
+   * @param string $key
+   *   Key to get value for.
+   *
+   * @return mixed
+   *   Value for particular key in config.
+   */
+  public static function getConfigValue(string $config, string $key) {
+    static $values = [];
+
+    if (!isset($values[$config][$key])) {
+      $values[$config][$key] = \Drupal::config($config)->get($key) ?? '';
+    }
+
+    return $values[$config][$key];
+  }
+
 }

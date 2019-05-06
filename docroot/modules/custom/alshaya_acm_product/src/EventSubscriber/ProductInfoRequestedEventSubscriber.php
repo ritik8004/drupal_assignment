@@ -86,16 +86,14 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
    *   Event object.
    */
-  public function processMedia(ProductInfoRequestedEvent $event): void {
+  private function processMedia(ProductInfoRequestedEvent $event): void {
     // Don't modify again here.
     if ($event->isValueModified()) {
       return;
     }
 
-    $event->setValue($this->skuImagesManager->getSkuMediaItems(
-      $event->getSku(),
-      $event->getContext()
-    ));
+    $media = $this->skuImagesManager->getGalleryMedia($event->getSku());
+    $event->setValue($media);
   }
 
   /**
