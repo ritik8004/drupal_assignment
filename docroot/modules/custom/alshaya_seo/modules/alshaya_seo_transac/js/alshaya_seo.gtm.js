@@ -294,6 +294,10 @@
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
+        $('body[gtm-container="checkout click and collect page"]').find('div[gtm-type="checkout-click-collect"]').once('delivery-option-event').each(function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+        });
+
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -532,7 +536,9 @@
         }
 
         if (document.location.search === '?method=hd') {
-          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+          cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('delivery-option-event').each(function() {
+            dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+          });
         }
 
         var deliveryAddressButtons = [
@@ -554,8 +560,6 @@
        * GTM virtual page tracking for click & collect journey.
        */
       if (isCCPage) {
-        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
-
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
