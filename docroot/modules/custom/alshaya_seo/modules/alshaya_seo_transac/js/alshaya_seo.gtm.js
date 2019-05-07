@@ -294,6 +294,10 @@
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
+        $('body[gtm-container="checkout click and collect page"]').find('div[gtm-type="checkout-click-collect"]').once('delivery-option-event').each(function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+        });
+
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -524,12 +528,17 @@
        * Tracking Home Delivery.
        */
       if (cartCheckoutDeliverySelector.length !== 0) {
+        // Fire checkout option event if home delivery option is selected by default on delivery page.
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0
+          && cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')
+        ) {
+          deliveryType = 'Home Delivery';
+        }
 
-        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0) {
-          // Fire checkout option event if home delivery option is selected by default on delivery page.
-          if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-            deliveryType = 'Home Delivery';
-          }
+        if (document.location.search === '?method=hd') {
+          cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('delivery-option-event').each(function() {
+            dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+          });
         }
 
         var deliveryAddressButtons = [
@@ -551,7 +560,6 @@
        * GTM virtual page tracking for click & collect journey.
        */
       if (isCCPage) {
-        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
