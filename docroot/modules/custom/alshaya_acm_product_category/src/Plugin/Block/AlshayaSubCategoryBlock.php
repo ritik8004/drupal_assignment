@@ -97,14 +97,14 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
 
         if ($subcategory instanceof TermInterface) {
           $subcategories[$subcategory->id()]['title'] = $subcategory->label();
-          if ($subcategory->get('field_plp_group_by_category_image')->first()) {
-            $file_value = $subcategory->get('field_plp_group_by_category_image')->first()->getValue();
+          if ($subcategory->get('field_plp_group_category_img')->first()) {
+            $file_value = $subcategory->get('field_plp_group_category_img')->first()->getValue();
             $image = $this->fileStorage->load($file_value['target_id']);
             if ($image instanceof FileInterface) {
               $subcategories[$subcategory->id()]['image'] = file_url_transform_relative(file_create_url($image->getFileUri()));
             }
           }
-          $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_plp_group_by_category_description')->value;
+          $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_plp_group_category_desc')->value;
         }
       }
 

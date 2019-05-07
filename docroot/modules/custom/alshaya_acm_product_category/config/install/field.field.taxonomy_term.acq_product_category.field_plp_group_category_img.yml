@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_plp_group_by_category_image
+    - field.storage.taxonomy_term.field_plp_group_category_img
     - taxonomy.vocabulary.acq_product_category
   module:
     - image
-id: taxonomy_term.acq_product_category.field_plp_group_by_category_image
-field_name: field_plp_group_by_category_image
+id: taxonomy_term.acq_product_category.field_plp_group_category_img
+field_name: field_plp_group_category_img
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Sub-category image'
+label: 'PLP group by category image'
 description: 'Upload the image that should be displayed when this sub-category is displayed on a PLP grouped by sub-categories.'
 required: false
 translatable: true

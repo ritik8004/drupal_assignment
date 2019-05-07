@@ -22,12 +22,12 @@ function alshaya_acm_product_category_update_8029() {
   $configs = [
     'field.storage.taxonomy_term.field_group_by_sub_category',
     'field.storage.taxonomy_term.field_select_subcategories_plp',
-    'field.storage.taxonomy_term.field_plp_group_by_category_image',
-    'field.storage.taxonomy_term.field_plp_group_by_category_description',
+    'field.storage.taxonomy_term.field_plp_group_category_img',
+    'field.storage.taxonomy_term.field_plp_group_category_desc',
     'field.field.taxonomy_term.acq_product_category.field_group_by_sub_category',
     'field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp',
-    'field.field.taxonomy_term.acq_product_category.field_plp_group_by_category_image',
-    'field.field.taxonomy_term.acq_product_category.field_plp_group_by_category_description',
+    'field.field.taxonomy_term.acq_product_category.field_plp_group_category_img',
+    'field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc',
     'core.entity_form_display.taxonomy_term.acq_product_category.default',
     'core.entity_view_display.taxonomy_term.acq_product_category.default',
   ];

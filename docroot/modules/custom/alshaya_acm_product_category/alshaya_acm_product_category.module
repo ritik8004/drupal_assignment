@@ -332,7 +332,7 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
           $category_row = [
             'tid' => $tid,
             'lable' => $category_term->label(),
-            'desc' => $category_term->get('field_plp_group_by_category_description')->getValue()[0]['value'] ?? '',
+            'desc' => $category_term->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '',
           ];
           $view->result[] = new ResultRow($category_row);
           foreach ($grouped_row as $row) {
