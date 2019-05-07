@@ -658,23 +658,23 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
   }
 
   /**
-   * Check which grouping category product belongs to.
+   * Check if category is a sub-category of given term.
    *
-   * @param int $product_category_id
+   * @param int $sub_category_id
    *   Product category id.
-   * @param int $selected_category_id
+   * @param int $parent_category_id
    *   Selected category id.
    *
    * @return bool
-   *   TRUE is product can be grouped in sub-category.
+   *   TRUE if $sub_category is a $sub-catgegory of $parent_category.
    */
-  public function getGroupingSubCategory($product_category_id, $selected_category_id) {
-    if ($product_category_id === $selected_category_id) {
+  public function checkIfSubCategory($sub_category_id, $parent_category_id) {
+    if ($sub_category_id === $parent_category_id) {
       return TRUE;
     }
-    $ancestors = $this->termStorage->loadAllParents($product_category_id);
+    $ancestors = $this->termStorage->loadAllParents($sub_category_id);
     foreach ($ancestors as $term) {
-      if ($term->id() === $selected_category_id) {
+      if ($term->id() === $parent_category_id) {
         return TRUE;
       }
     }

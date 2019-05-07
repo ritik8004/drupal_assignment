@@ -2,12 +2,12 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_sub_category_image
+    - field.storage.taxonomy_term.field_plp_group_by_category_image
     - taxonomy.vocabulary.acq_product_category
   module:
     - image
-id: taxonomy_term.acq_product_category.field_sub_category_image
-field_name: field_sub_category_image
+id: taxonomy_term.acq_product_category.field_plp_group_by_category_image
+field_name: field_plp_group_by_category_image
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Sub-category image'

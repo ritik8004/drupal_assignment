@@ -315,28 +315,31 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
           ->getValue();
         foreach ($selected_subcategories as $selected_subcategory) {
           foreach ($product_categories as $product_category) {
-            if ($product_category_tree->getGroupingSubCategory($product_category['target_id'], $selected_subcategory['value'])) {
+            if ($product_category_tree->checkIfSubCategory($product_category['target_id'], $selected_subcategory['value'])) {
               $result_row[$selected_subcategory['value']][] = $row;
               break;
             }
           }
         }
       }
-      $new_view_result = [];
-      foreach ($result_row as $key => $grouped_row) {
-        $category_term = $taxonomy_storage->load($key);
-        $category_row = [
-          'tid' => $key,
-          'lable' => $category_term->label(),
-          'desc' => $category_term->get('field_sub_category_description')->getValue()[0]['value'] ?? '',
-        ];
-        $new_view_result[] = new ResultRow($category_row);
-        foreach ($grouped_row as $key => $row) {
-          $new_view_result[] = $row;
+
+      // Empty view results to add new values.
+      $view->result = [];
+      foreach ($result_row as $tid => $grouped_row) {
+        $category_term = $taxonomy_storage->load($tid);
+
+        if ($category_term instanceof TermInterface) {
+          $category_row = [
+            'tid' => $tid,
+            'lable' => $category_term->label(),
+            'desc' => $category_term->get('field_plp_group_by_category_description')->getValue()[0]['value'] ?? '',
+          ];
+          $view->result[] = new ResultRow($category_row);
+          foreach ($grouped_row as $row) {
+            $view->result[] = $row;
+          }
         }
       }
-
-      $view->result = $new_view_result;
     }
   }
 }

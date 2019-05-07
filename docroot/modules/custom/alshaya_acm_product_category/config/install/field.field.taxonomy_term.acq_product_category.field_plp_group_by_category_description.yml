@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_sub_category_description
+    - field.storage.taxonomy_term.field_plp_group_by_category_description
     - taxonomy.vocabulary.acq_product_category
   module:
     - allowed_formats
@@ -14,8 +14,8 @@ third_party_settings:
     plain_text: plain_text
     limited_options: '0'
     mail_text: '0'
-id: taxonomy_term.acq_product_category.field_sub_category_description
-field_name: field_sub_category_description
+id: taxonomy_term.acq_product_category.field_plp_group_by_category_description
+field_name: field_plp_group_by_category_description
 entity_type: taxonomy_term
 bundle: acq_product_category
 label: 'Sub-category Description'

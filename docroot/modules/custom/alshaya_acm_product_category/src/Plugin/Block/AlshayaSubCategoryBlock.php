@@ -56,6 +56,9 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
    *   Product category tree.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, ProductCategoryTree $product_category_tree, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -85,26 +88,31 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
 
-    // Get all selected subcategories to be displayed on PLP.
-    $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
+    if ($term instanceof TermInterface) {
+      // Get all selected subcategories to be displayed on PLP.
+      $selected_subcategories = $term->get('field_select_subcategories_plp')->getValue();
 
-    foreach ($selected_subcategories as $selected_subcategory) {
-      $subcategory = $this->termStorage->load($selected_subcategory['value']);
-      $subcategories[$subcategory->id()]['title'] = $subcategory->label();
-      if ($subcategory->get('field_sub_category_image')->first()) {
-        $file_value = $subcategory->get('field_sub_category_image')->first()->getValue();
-        $image = $this->fileStorage->load($file_value['target_id']);
-        if ($image instanceof FileInterface) {
-          $subcategories[$subcategory->id()]['image'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+      foreach ($selected_subcategories as $selected_subcategory) {
+        $subcategory = $this->termStorage->load($selected_subcategory['value']);
+
+        if ($subcategory instanceof TermInterface) {
+          $subcategories[$subcategory->id()]['title'] = $subcategory->label();
+          if ($subcategory->get('field_plp_group_by_category_image')->first()) {
+            $file_value = $subcategory->get('field_plp_group_by_category_image')->first()->getValue();
+            $image = $this->fileStorage->load($file_value['target_id']);
+            if ($image instanceof FileInterface) {
+              $subcategories[$subcategory->id()]['image'] = file_url_transform_relative(file_create_url($image->getFileUri()));
+            }
+          }
+          $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_plp_group_by_category_description')->value;
         }
       }
-      $subcategories[$subcategory->id()]['description'] = $subcategory->get('field_sub_category_description')->value;
-    }
 
-    return [
-      '#theme' => 'alshaya_subcategory_block',
-      '#subcategories' => $subcategories,
-    ];
+      return [
+        '#theme' => 'alshaya_subcategory_block',
+        '#subcategories' => $subcategories,
+      ];
+    }
   }
 
   /**
@@ -114,11 +122,11 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
     // Get the term object from current route.
     $term = $this->productCategoryTree->getCategoryTermFromRoute();
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')) {
-      return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value)->addCacheContexts(['route.name']);
+      return AccessResult::allowedIf($term->get('field_group_by_sub_category')->value)
+        ->addCacheContexts(['route.name']);
     }
-    else {
-      return AccessResult::forbidden()->addCacheContexts(['route.name']);
-    }
+    return AccessResult::forbidden()->addCacheContexts(['route.name']);
+
   }
 
 }
