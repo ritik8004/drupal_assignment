@@ -173,11 +173,13 @@ campaign-plp-style-1-common:
 magazine_socialSharepopup:
   js:
     js/socialshare_popup.js: {}
+
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
 
-
-lazysizes:
+alshaya_image_lazy_load:
   js:
-    vendor/js/lazysizes.min.js: {}
+    js/alshaya_image_lazyload.js: {}
+  dependencies:
+    - blazy/blazy
