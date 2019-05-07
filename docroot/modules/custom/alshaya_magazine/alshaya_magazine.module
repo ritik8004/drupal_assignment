@@ -52,7 +52,7 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
       '#type' => 'html_tag',
       '#tag' => 'h1',
       '#value' => $node->label(),
-      '#attributes' => array('class' => array('magazine-article-title')),
+      '#attributes' => ['class' => ['magazine-article-title']],
     ];
 
     $build['field_magazine_slogan']['#prefix'] = render($build['title']);

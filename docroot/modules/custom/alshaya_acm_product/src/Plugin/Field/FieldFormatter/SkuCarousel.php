@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_product\Plugin\Field\FieldFormatter;
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\Field\FieldFormatter\SKUFieldFormatter;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -120,12 +119,7 @@ class SkuCarousel extends SKUFieldFormatter implements ContainerFactoryPluginInt
 
     $elements = [];
     foreach ($skus as $sku_code) {
-      $sku = SKU::loadFromSku($sku_code);
-      if (!($sku instanceof SKU)) {
-        continue;
-      }
-
-      $node = $this->skuManager->getDisplayNode($sku);
+      $node = $this->skuManager->getDisplayNode($sku_code);
       if (!($node instanceof NodeInterface)) {
         continue;
       }
