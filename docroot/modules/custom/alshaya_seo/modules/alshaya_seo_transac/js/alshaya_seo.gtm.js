@@ -523,11 +523,13 @@
       /**
        * Tracking Home Delivery.
        */
-      if ((cartCheckoutDeliverySelector.length !== 0) &&
-        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
-        // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          deliveryType = 'Home Delivery';
+      if (cartCheckoutDeliverySelector.length !== 0) {
+
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0) {
+          // Fire checkout option event if home delivery option is selected by default on delivery page.
+          if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
+            deliveryType = 'Home Delivery';
+          }
         }
 
         var deliveryAddressButtons = [
