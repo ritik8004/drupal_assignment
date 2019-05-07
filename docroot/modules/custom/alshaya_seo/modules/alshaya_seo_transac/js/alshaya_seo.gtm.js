@@ -523,15 +523,16 @@
       /**
        * Tracking Home Delivery.
        */
-      if ((cartCheckoutDeliverySelector.length !== 0) &&
-        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
-        if (document.location.search === '?method=hd') {
-          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+      if (cartCheckoutDeliverySelector.length !== 0) {
+        // Fire checkout option event if home delivery option is selected by default on delivery page.
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0
+          && cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')
+        ) {
+          deliveryType = 'Home Delivery';
         }
 
-        // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
-          deliveryType = 'Home Delivery';
+        if (document.location.search === '?method=hd') {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
         }
 
         var deliveryAddressButtons = [
@@ -554,7 +555,7 @@
        */
       if (isCCPage) {
         dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
-        
+
         if ($('#store-finder-wrapper', context).length > 0) {
           if (!(body.hasClass('virtualpageview-fired'))) {
             dataLayer.push({
