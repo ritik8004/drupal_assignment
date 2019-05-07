@@ -11,7 +11,7 @@
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
       // Initialize.
-      var bLazy = new Blazy();
+      Blazy();
     }
   };
 })(jQuery, Drupal, drupalSettings);
