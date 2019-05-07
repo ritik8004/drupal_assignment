@@ -180,6 +180,5 @@ plp-swatch-hover:
 
 alshaya_image_lazy_load:
   js:
+    vendor/js/blazy.min.js: { minified: true }
     js/alshaya_image_lazyload.js: {}
-  dependencies:
-    - blazy/blazy
