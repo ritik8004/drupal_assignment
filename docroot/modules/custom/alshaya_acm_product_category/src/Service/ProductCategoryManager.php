@@ -270,13 +270,13 @@ class ProductCategoryManager {
 
     $cat_ids = [];
 
-    if (!$this->isProductWithSalesOrNewArrival($node, ['attr_is_sale'])
-      && $this->isEmptySaleNewArrival($node, ['attr_is_sale'])) {
+    $is_sale = $this->isProductWithSalesOrNewArrival($node, ['attr_is_sale']);
+    if (!is_null($is_sale) && !$is_sale) {
       $cat_ids = array_merge($cat_ids, $categorization_ids['sale']);
     }
 
-    if (!$this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])
-      && $this->isEmptySaleNewArrival($node, ['attr_is_new'])) {
+    $is_new = $this->isProductWithSalesOrNewArrival($node, ['attr_is_new']);
+    if (!is_null($is_new) && !$is_new) {
       $cat_ids = array_merge($cat_ids, $categorization_ids['new_arrival']);
     }
 
@@ -320,15 +320,17 @@ class ProductCategoryManager {
     $save = FALSE;
 
     // Do stuff only if it is in Sale/New-arrival Category as per MDC data.
-    if ($this->isOriginalProductCategorized($node) && $this->isEmptySaleNewArrival($node)) {
-      if ($this->isProductWithSalesOrNewArrival($node)
-        && $this->validateSaleNewArrivalCombination($node)) {
-        // Remove all non sales/new-arrival categories.
-        $save = $this->removeNonSaleNewArrivalCategories($node);
-      }
-      else {
-        // Else remove all sales/new-arrival categories.
-        $save = $this->removeSaleNewArrivalCategories($node);
+    if ($this->isOriginalProductCategorized($node)) {
+      $is_sale_new_arrival = $this->isProductWithSalesOrNewArrival($node);
+      if (!is_null($is_sale_new_arrival)) {
+        if ($is_sale_new_arrival && $this->validateSaleNewArrivalCombination($node)) {
+          // Remove all non sales/new-arrival categories.
+          $save = $this->removeNonSaleNewArrivalCategories($node);
+        }
+        else {
+          // Else remove all sales/new-arrival categories.
+          $save = $this->removeSaleNewArrivalCategories($node);
+        }
       }
     }
 
@@ -373,8 +375,8 @@ class ProductCategoryManager {
    * @param array $attributes
    *   Attributes (is_new / is_sale) to check.
    *
-   * @return bool
-   *   If product sku has `is_sale` / 'is_new' attribute true.
+   * @return bool|mixed
+   *   True/False if is_sale` / 'is_new' attribute has value or null if empty.
    */
   public function isProductWithSalesOrNewArrival(NodeInterface $node, array $attributes = []) {
     // Get the attached sku with the node.
@@ -389,12 +391,18 @@ class ProductCategoryManager {
         ];
       }
 
+      $empty_check = TRUE;
       foreach ($attributes as $attribute) {
-        if ($attr = $sku->get($attribute)->getValue()) {
-          $return = (bool) $attr[0]['value'];
-          if ($return) {
-            break;
-          }
+        $attr = $sku->get($attribute)->getValue();
+        if (empty($attr) && $empty_check) {
+          $return = NULL;
+          continue;
+        }
+
+        $empty_check = FALSE;
+        $return = (bool) $attr[0]['value'];
+        if ($return) {
+          break;
         }
       }
     }
@@ -425,42 +433,6 @@ class ProductCategoryManager {
     elseif (array_intersect($categorization_ids['new_arrival'], $product_category_ids)
       && $this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])) {
       $return = TRUE;
-    }
-
-    return $return;
-  }
-
-  /**
-   * Checks for the `is_sale` and `is_new` is empty and not contains 0 or 1.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   Node object.
-   * @param array $attributes
-   *   Attributes array.
-   *
-   * @return bool
-   *   Returns TRUE if attribute not empty.
-   */
-  public function isEmptySaleNewArrival(NodeInterface $node, array $attributes = []) {
-    // Get the attached sku with the node.
-    $sku = $node->get('field_skus')->first()->getString();
-    $sku = SKU::loadFromSku($sku);
-    $return = FALSE;
-    if ($sku instanceof SKUInterface) {
-      if (!$attributes) {
-        $attributes = [
-          'attr_is_sale',
-          'attr_is_new',
-        ];
-      }
-
-      foreach ($attributes as $attribute) {
-        $attr = $sku->get($attribute)->getValue();
-        if (!empty($attr)) {
-          $return = TRUE;
-          break;
-        }
-      }
     }
 
     return $return;
