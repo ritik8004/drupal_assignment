@@ -9,6 +9,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
 use Drupal\alshaya\AlshayaArrayUtils;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -1910,6 +1911,26 @@ class SkuManager {
   }
 
   /**
+   * Wrapper function to check if price mode is from to.
+   *
+   * @return bool
+   *   TRUE if price mode is set to from to.
+   */
+  public function isPriceModeFromTo() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $display_mode = $this->configFactory
+        ->get('alshaya_acm_product.display_settings')
+        ->get('price_display_mode');
+
+      $static = $display_mode === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO;
+    }
+
+    return $static;
+  }
+
+  /**
    * Helper function to check if display mode is aggregated.
    *
    * @return bool
@@ -2082,7 +2103,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
-          'label' => (string) $sku->get($fieldKey)
+          'label' => $this->getLabelFromParentSku($sku, $key) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
@@ -2091,6 +2112,30 @@ class SkuManager {
     }
 
     return $configurableFieldValues;
+  }
+
+  /**
+   * Utility function to return label from parent sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $attr_code
+   *   Attribute code.
+   *
+   * @return string
+   *   Label for configurable fields.
+   */
+  public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if ($parent_sku instanceof SKUInterface) {
+      $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
+      foreach ($configurables as $field) {
+        if (in_array($attr_code, $field)) {
+          return $field['label'];
+        }
+      }
+    }
+    return NULL;
   }
 
   /**
@@ -2300,16 +2345,7 @@ class SkuManager {
   public function isProductInStock(SKUInterface $sku): bool {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
-
-    $in_stock = $plugin->isProductInStock($sku);
-
-    // For configurable we check combinations too as we remove
-    // some skus like free gift and ones with improper data.
-    if ($in_stock && $sku->bundle() == 'configurable') {
-      $in_stock = $this->skuAttributeCombinationsValid($sku);
-    }
-
-    return $in_stock;
+    return $plugin->isProductInStock($sku);
   }
 
   /**
@@ -2792,6 +2828,10 @@ class SkuManager {
 
       $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
       $item->getField('attr_selling_price')->setValues($selling_prices);
+
+      if ($this->isPriceModeFromTo()) {
+        $item->getField('final_price')->setValues([min($selling_prices)]);
+      }
     }
 
     if ($sku->bundle() === 'configurable') {
