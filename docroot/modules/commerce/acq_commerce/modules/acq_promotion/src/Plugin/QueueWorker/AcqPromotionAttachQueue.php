@@ -42,87 +42,80 @@ class AcqPromotionAttachQueue extends AcqPromotionQueueBase {
    * @see \Drupal\Core\Cron::processQueues()
    */
   public function processItem($data) {
-    $skus = $data['skus'];
+    $rows = $data['skus'];
+    $skus = array_column($rows, 'sku');
+
+    // Get attached promotions and final price.
+    $query = $this->db->select('acq_sku_field_data', 'sku');
+    $query->leftJoin('acq_sku__field_acq_sku_promotions', 'sku_promotions', 'sku.id = sku_promotions.entity_id AND sku.langcode = sku_promotions.langcode');
+    $query->addField('sku', 'sku');
+    $query->addField('sku', 'final_price');
+    $query->addField('sku_promotions', 'field_acq_sku_promotions_target_id', 'promotion_id');
+    $query->condition('sku.sku', $skus, 'IN');
+    $query->condition('sku.default_langcode', 1);
+    $result = $query->execute()->fetchAll();
+
+    $existing = [];
+    foreach ($result as $record) {
+      $existing[$record->sku]['final_price'] = $record->final_price;
+
+      // A product can have multiple promotions attached.
+      $existing[$record->sku]['promotion_ids'][$record->promotion_id] = $record->promotion_id;
+    }
+
     $promotion_nid = $data['promotion'];
     $promotion_attach_item = ['target_id' => $promotion_nid];
+
     $skus_not_found = [];
     $attached_skus = [];
-    $invalidate_tags = ['node:' . $promotion_nid];
+    $skipped_skus = [];
 
-    foreach ($skus as $key => $sku) {
-      $update_sku_flag = FALSE;
-      $sku_entity = SKU::loadFromSku($sku['sku']);
-      $sku_entity_translations = [];
-
-      if ($sku_entity) {
-        $translation_languages = $sku_entity->getTranslationLanguages(TRUE);
-
-        $sku_promotions = $sku_entity->get('field_acq_sku_promotions')->getValue();
-        if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
-          $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
-          $update_sku_flag = TRUE;
-        }
-
-        // Update SKU translations if arabic translation is added to a promotion
-        // post creation & import of that promo on Drupal.
-        if (!empty($translation_languages)) {
-          foreach ($translation_languages as $langcode => $lang_obj) {
-            $sku_entity_translation = $sku_entity->getTranslation($langcode);
-            $sku_promotions = $sku_entity_translation->get('field_acq_sku_promotions')->getValue();
-            if (!in_array($promotion_attach_item, $sku_promotions, TRUE)) {
-              $sku_entity_translation->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
-              $sku_entity_translations[$langcode] = $sku_entity_translation;
-              // Set an update translation flag per langcode & save sku entity
-              // translation if corresponding langcode flag is set.
-              $update_sku_translations_flag[$langcode] = TRUE;
-            }
-          }
-        }
-
-        if ((isset($sku['final_price'])) && ($sku_entity->final_price->value !== $sku['final_price'])) {
-          $sku_entity->final_price->value = $sku['final_price'];
-
-          // Update SKU final price.
-          if (!empty($translation_languages)) {
-            foreach ($sku_entity_translations as $langcode => $sku_entity_translation) {
-              $sku_entity_translation->final_price->value = $sku['final_price'];
-              $update_sku_translations_flag[$langcode] = TRUE;
-            }
-          }
-          $update_sku_flag = TRUE;
-        }
-
-        if ($update_sku_flag) {
-          $sku_entity->save();
-        }
-
-        // Process sku entity translations.
-        if (!empty($sku_entity_translations)) {
-          foreach ($sku_entity_translations as $langcode => $sku_entity_translation) {
-            if (isset($update_sku_translations_flag[$langcode]) &&
-              ($update_sku_translations_flag[$langcode])) {
-              $sku_entity_translation->save();
-            }
-          }
-        }
-        $attached_skus[] = $sku['sku'];
-        $invalidate_tags[] = 'acq_sku:' . $sku_entity->id();
-      }
-      else {
+    foreach ($rows as $sku) {
+      if (!isset($existing[$sku['sku']])) {
         $skus_not_found[] = $sku['sku'];
+        continue;
       }
+
+      $has_final_price = !empty($sku['final_price']);
+
+      $row = $existing[$sku['sku']];
+
+      // If promotion already available
+      // AND if no final price OR final price is same.
+      if (in_array($promotion_nid, $row['promotion_ids'])
+        && (!$has_final_price || $row['final_price'] == $sku['final_price'])) {
+        $skipped_skus[] = $sku['sku'];
+        continue;
+      }
+
+      // Load SKU only if update sku flag is true.
+      $sku_entity = SKU::loadFromSku($sku['sku']);
+
+      // Sanity check.
+      if (!($sku_entity instanceof SKU)) {
+        $skus_not_found[] = $sku['sku'];
+        continue;
+      }
+
+      $sku_entity->get('field_acq_sku_promotions')->appendItem($promotion_attach_item);
+
+      // Check again for final price.
+      if (!empty($sku['final_price']) && ($sku_entity->get('final_price')->getString() != $sku['final_price'])) {
+        $sku_entity->get('final_price')->setValue($sku['final_price']);
+      }
+
+      $sku_entity->save();
+      $attached_skus[] = $sku['sku'];
     }
 
-    // Invalidate sku cache tags & related promotion nid.
-    Cache::invalidateTags($invalidate_tags);
+    // Invalidate promotion cache.
+    Cache::invalidateTags(['node:' . $promotion_nid]);
 
-    if (!empty($skus_not_found)) {
-      $this->logger->warning('Skus @skus not found in Drupal.',
-        ['@skus' => implode(',', $skus_not_found)]);
-    }
-
-    $this->logger->info('Attached Promotion:@promo to SKUs: @skus',
-      ['@promo' => $promotion_nid, '@skus' => implode(',', $attached_skus)]);
+    $this->logger->notice('Processed acq_promotion_attach_queue queue. Attached: @attached; Skipped: @skipped; Not found: @notfound', [
+      '@attached' => implode(',', $attached_skus),
+      '@skipped' => implode(',', $skipped_skus),
+      '@notfound' => implode(',', $skus_not_found),
+    ]);
   }
 
 }
