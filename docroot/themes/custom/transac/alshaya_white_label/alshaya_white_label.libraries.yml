@@ -176,3 +176,13 @@ magazine_socialSharepopup:
 plp-swatch-hover:
   js:
     js/plp-swatch-hover.js: {}
+
+magazine_article:
+  css:
+    theme:
+      css/conditional-sass/magazine-article/magazine-article.ltr.css: {}
+  js:
+    js/magazine_article.js: {}
+    dependencies:
+      - core/jquery
+      - alshaya_white_label/slick
