@@ -71,7 +71,7 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
 }
 
 /**
- * Implements template_view_unformatted_alter().
+ * Implements hook_theme_suggestion_view_unformatted_alter().
  */
 function alshaya_magazine_theme_suggestions_views_view_unformatted_alter(array &$suggestions, &$variables) {
   if ($variables['view']->id() == 'magazine_articles' && $variables['view']->current_display == 'homepage_block') {
