@@ -43,7 +43,7 @@
         // we might have some client side validation error preventing
         // ajax call.
         setTimeout(function () {
-          if ($(that).closest('form').hasClass('clientside-validation-ajax-submit-invalid')) {
+          if ($(that).closest('form').hasClass('ajax-submit-prevented')) {
             // Scroll to error.
             scrollToErrorPDP();
             return;
@@ -55,7 +55,7 @@
       });
 
       $('.edit-add-to-cart', context).on('keydown', function (event) {
-        if ($(this).closest('form').hasClass('clientside-validation-ajax-submit-invalid')) {
+        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
           // Scroll to error.
           scrollToErrorPDP();
           return;
@@ -107,7 +107,7 @@
           // Doing this for the JS conflict.
           setTimeout(function () {
             // First error label.
-            var first_error_label = $('form.clientside-validation-ajax-submit-invalid label.error').first();
+            var first_error_label = $('form.ajax-submit-prevented label.error').first();
             // If button is sticky (fix), just scroll.
             var is_button_sticky = $('button.edit-add-to-cart').hasClass('fix-button');
 
