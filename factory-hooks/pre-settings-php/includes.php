@@ -59,8 +59,8 @@ if ($settings['env'] === 'local') {
 // Facebook app keys for facebook login.
 $facebook_config = [
   'local' => [
-    'app_id' => '2140208022890023',
-    'app_secret' => '7cde10657c1866f072c56283af920484',
+    'app_id' => '383866358862411',
+    'app_secret' => '0646a2901853b99062ff2d15127db379',
   ],
   '01test' => [
     'app_id' => '452346355260372',

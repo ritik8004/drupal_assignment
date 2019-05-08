@@ -80,6 +80,8 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\social_auth\Event\SocialAuthUserFieldsEvent $event
    *   The social auth user fields event object.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function onUserFields(SocialAuthUserFieldsEvent $event) {
     /* @var \Facebook\Facebook|false $facebook */
