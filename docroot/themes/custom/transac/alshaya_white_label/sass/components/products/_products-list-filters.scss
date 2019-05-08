@@ -152,6 +152,10 @@ html {
             font-size: 0.75rem;
             letter-spacing: normal;
 
+            @include breakpoint($desktop) {
+              font-size: 0.875rem;
+            }
+
             &::after {
               display: none;
             }
@@ -314,6 +318,10 @@ html {
             line-height: 1.2;
             border-bottom: 1px solid $plp_all_filter_item_border;
             letter-spacing: normal;
+
+            @include breakpoint($desktop) {
+              font-size: 0.875rem;
+            }
 
             .selected-facets {
               float: $right;
