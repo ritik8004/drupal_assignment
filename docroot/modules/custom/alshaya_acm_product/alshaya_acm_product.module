@@ -2149,12 +2149,3 @@ function alshaya_acm_product_acq_sku_configurable_variants_alter(array &$childre
     }
   }
 }
-
-/**
- * Implements hook_preprocess_html().
- */
-function alshaya_acm_product_preprocess_html(&$variables) {
-  // Attach config to drupal settings to ignore checks for elements missing
-  // class during AJAX requests.
-  $variables['#attached']['drupalSettings']['cvJqueryValidateOptions']['ignore'] = ':not(.cv-validate-before-ajax)';
-}
