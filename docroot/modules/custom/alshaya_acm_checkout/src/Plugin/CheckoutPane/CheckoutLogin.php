@@ -29,7 +29,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
    */
   public function defaultConfiguration() {
     return [
-      'weight' => 2,
+      'weight' => 1,
     ] + parent::defaultConfiguration();
   }
 
@@ -37,10 +37,6 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if ($this->getSelectedTab() !== 'login') {
-      $pane_form['#attributes']['class'][] = 'above-mobile-block';
-    }
-
     $pane_form['returning_customer'] = [
       '#markup' => '<span class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</span>',
       '#weight' => -51,
@@ -105,12 +101,6 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     $pane_form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
     $pane_form['request_password']['#weight'] = 101;
 
-    // Constructor of parent class "CheckoutPaneBase" has
-    // "CheckoutFlowInterface" injected this object, but couldn't find a
-    // service/plugin service that can be used with "static create" method to
-    // be injected in this class, even if we implement
-    // ContainerFactoryPluginInterface.
-    \Drupal::moduleHandler()->alter('checkout_login', $pane_form, $form_state, $complete_form);
     $complete_form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 
     return $pane_form;

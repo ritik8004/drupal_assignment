@@ -29,7 +29,7 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
    */
   public function defaultConfiguration() {
     return [
-      'weight' => 1,
+      'weight' => 3,
     ] + parent::defaultConfiguration();
   }
 
@@ -37,12 +37,7 @@ class CheckoutGuest extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if ($this->getSelectedTab() === 'login') {
-      $pane_form['#attributes']['class'][] = 'above-mobile-block';
-    }
-
     $config = \Drupal::config('alshaya_acm_checkout.settings');
-
     $checkout_guest_options = [
       'attributes' => [
         'gtm-type' => 'checkout-as-guest',
