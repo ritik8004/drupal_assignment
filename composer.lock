@@ -1,19 +1,17 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ceb17816a602ae312ab476493689ab1",
+    "content-hash": "4ec88e557ca7062db290e2506312f4c3",
     "packages": [
         {
             "name": "HubSpot/pace",
             "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/HubSpot/pace/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/HubSpot/pace/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -73,7 +71,7 @@
             ],
             "description": "Drush powered command line tools for working with Acquia Cloud Site Factory.",
             "homepage": "https://github.com/acquia/acsf-tools",
-            "time": "2019-03-05 08:35:36"
+            "time": "2019-03-05T08:35:36+00:00"
         },
         {
             "name": "acquia/blt",
@@ -352,6 +350,62 @@
             "time": "2018-10-18T00:13:32+00:00"
         },
         {
+            "name": "algolia/algoliasearch-client-php",
+            "version": "1.28.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/algolia/algoliasearch-client-php.git",
+                "reference": "c167ba3247b38b028fc05b1c58e8b5fb5e08d114"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/algolia/algoliasearch-client-php/zipball/c167ba3247b38b028fc05b1c58e8b5fb5e08d114",
+                "reference": "c167ba3247b38b028fc05b1c58e8b5fb5e08d114",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-mbstring": "*",
+                "php": "^5.3 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4 || ^7.0",
+                "satooshi/php-coveralls": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.0": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "AlgoliaSearch": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Algolia Team",
+                    "email": "contact@algolia.com"
+                },
+                {
+                    "name": "Ryan T. Catlin",
+                    "email": "ryan.catlin@gmail.com"
+                },
+                {
+                    "name": "Jonathan H. Wage",
+                    "email": "jonwage@gmail.com"
+                }
+            ],
+            "description": "Algolia Search API Client for PHP",
+            "homepage": "https://github.com/algolia/algoliasearch-client-php",
+            "time": "2018-11-06T10:48:00+00:00"
+        },
+        {
             "name": "asm89/stack-cors",
             "version": "1.2.0",
             "source": {
@@ -601,7 +655,7 @@
                 "testing",
                 "web"
             ],
-            "time": "2019-05-07 14:41:06"
+            "time": "2019-05-07T14:41:06+00:00"
         },
         {
             "name": "behat/mink-browserkit-driver",
@@ -832,7 +886,7 @@
                 "testing",
                 "webdriver"
             ],
-            "time": "2018-10-10 12:39:06"
+            "time": "2018-10-10T12:39:06+00:00"
         },
         {
             "name": "behat/transliterator",
@@ -889,8 +943,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fengyuanchen/cropper/zipball/30c58b29ee21010e17e58ebab165fbd84285c685",
-                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685",
-                "shasum": null
+                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "type": "bower-asset",
             "license": [
@@ -908,8 +961,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/enyo/dropzone/zipball/08b9e0a763b54a685404dea523a9c54242fbe1b9",
-                "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9",
-                "shasum": null
+                "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9"
             },
             "type": "bower-asset"
         },
@@ -924,8 +976,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "shasum": null
+                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "type": "bower-asset",
             "license": [
@@ -943,8 +994,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/kenwheeler/slick/zipball/0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "shasum": null
+                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -1138,9 +1188,7 @@
             "version": "4.9.2",
             "dist": {
                 "type": "zip",
-                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip"
             },
             "type": "drupal-library"
         },
@@ -1149,9 +1197,7 @@
             "version": "2.2.6",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -4149,7 +4195,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/better_exposed_filters"
             },
-            "time": "2019-04-12 22:15:16"
+            "time": "2019-04-12T22:15:16+00:00"
         },
         {
             "name": "drupal/blazy",
@@ -6562,7 +6608,7 @@
                 "source": "https://cgit.drupalcode.org/external_hreflang",
                 "issues": "https://drupal.org/project/issues/external_hreflang"
             },
-            "time": "2019-04-29 13:47:26"
+            "time": "2019-04-29T13:47:26+00:00"
         },
         {
             "name": "drupal/facets",
@@ -7005,7 +7051,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/google_tag"
             },
-            "time": "2019-04-03 13:12:29"
+            "time": "2019-04-03T13:12:29+00:00"
         },
         {
             "name": "drupal/image_widget_crop",
@@ -8476,7 +8522,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/media_entity_actions"
             },
-            "time": "2017-11-13 15:49:17"
+            "time": "2017-11-13T15:49:17+00:00"
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -8717,7 +8763,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/memory_limit_policy"
             },
-            "time": "2019-01-15 15:04:01"
+            "time": "2019-01-15T15:04:01+00:00"
         },
         {
             "name": "drupal/menu_admin_per_menu",
@@ -9167,7 +9213,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/mimemail"
             },
-            "time": "2019-05-08 04:46:52"
+            "time": "2019-05-08T04:46:52+00:00"
         },
         {
             "name": "drupal/mobile_app_links",
@@ -9217,7 +9263,7 @@
                 "source": "https://cgit.drupalcode.org/mobile_app_links",
                 "issues": "https://drupal.org/project/issues/mobile_app_links"
             },
-            "time": "2019-05-06 10:37:19"
+            "time": "2019-05-06T10:37:19+00:00"
         },
         {
             "name": "drupal/mobile_number",
@@ -10650,7 +10696,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/r4032login"
             },
-            "time": "2018-07-20 09:54:11"
+            "time": "2018-07-20T09:54:11+00:00"
         },
         {
             "name": "drupal/recaptcha",
@@ -11300,6 +11346,70 @@
             }
         },
         {
+            "name": "drupal/search_api_algolia",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/search_api_algolia.git",
+                "reference": "835dbe272a97ef96c70bb5798d2f87fe466aa2da"
+            },
+            "require": {
+                "algolia/algoliasearch-client-php": "^1.0",
+                "drupal/core": "~8.0",
+                "drupal/search_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha1+6-dev",
+                    "datestamp": "1550807888",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches_applied": {
+                    "Map algolia index": "https://www.drupal.org/files/issues/2019-05-08/3053205-3.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Jens Beltofte",
+                    "homepage": "https://www.drupal.org/u/beltofte"
+                },
+                {
+                    "name": "Jonas Krat",
+                    "homepage": "https://www.drupal.org/u/jonasdk"
+                },
+                {
+                    "name": "chriscalip",
+                    "homepage": "https://www.drupal.org/user/210499"
+                },
+                {
+                    "name": "julienbourdeau",
+                    "homepage": "https://www.drupal.org/user/3565774"
+                },
+                {
+                    "name": "mlbrgl",
+                    "homepage": "https://www.drupal.org/user/489214"
+                }
+            ],
+            "description": "Provides integration with the Algolia search engine.",
+            "homepage": "https://www.drupal.org/project/search_api_algolia",
+            "support": {
+                "source": "http://git.drupal.org/project/search_api_algolia.git",
+                "issues": "https://www.drupal.org/project/issues/search_api_algolia"
+            },
+            "time": "2019-02-22T03:57:49+00:00"
+        },
+        {
             "name": "drupal/search_api_autocomplete",
             "version": "1.2.0",
             "source": {
@@ -11526,7 +11636,7 @@
             "support": {
                 "issues": "http://drupal.org/"
             },
-            "time": "2017-03-02 15:34:04"
+            "time": "2017-03-02T15:34:04+00:00"
         },
         {
             "name": "drupal/seckit",
@@ -11647,7 +11757,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/security_review"
             },
-            "time": "2018-07-27 02:32:58"
+            "time": "2018-07-27T02:32:58+00:00"
         },
         {
             "name": "drupal/sharethis",
@@ -11978,7 +12088,7 @@
                 "issues": "https://drupal.org/project/issues/simple_sitemap",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             },
-            "time": "2018-06-05 07:42:48"
+            "time": "2018-06-05T07:42:48+00:00"
         },
         {
             "name": "drupal/slick",
@@ -12159,7 +12269,7 @@
                 "source": "http://cgit.drupalcode.org/social_api",
                 "issues": "https://www.drupal.org/project/issues/social_api"
             },
-            "time": "2018-10-17 15:41:24"
+            "time": "2018-10-17T15:41:24+00:00"
         },
         {
             "name": "drupal/social_auth",
@@ -12224,7 +12334,7 @@
                 "source": "http://cgit.drupalcode.org/social_auth",
                 "issues": "https://www.drupal.org/project/issues/social_auth"
             },
-            "time": "2019-03-13 01:59:25"
+            "time": "2019-03-13T01:59:25+00:00"
         },
         {
             "name": "drupal/social_auth_facebook",
@@ -12682,7 +12792,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/views_ajax_get"
             },
-            "time": "2018-09-14 13:01:07"
+            "time": "2018-09-14T13:01:07+00:00"
         },
         {
             "name": "drupal/views_block_filter_block",
@@ -14043,9 +14153,7 @@
             "version": "1.4.2",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -14251,9 +14359,7 @@
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip"
             },
             "type": "drupal-library"
         },
@@ -20887,7 +20993,7 @@
                 }
             ],
             "description": "Command line tool to detect usage of deprecated code",
-            "time": "2017-09-06 12:14:01"
+            "time": "2017-09-06T12:14:01+00:00"
         },
         {
             "name": "stecman/symfony-console-completion",
@@ -21453,6 +21559,7 @@
         "drupal/redirect": 15,
         "drupal/role_delegation": 15,
         "drupal/scheduled_updates": 15,
+        "drupal/search_api_algolia": 20,
         "drupal/search_api_solr_multilingual": 10,
         "drupal/search_api_spellcheck": 20,
         "drupal/sharethis": 10,
