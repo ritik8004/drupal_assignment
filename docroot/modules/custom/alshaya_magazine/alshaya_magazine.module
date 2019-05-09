@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 
 /**
@@ -56,6 +57,15 @@ function alshaya_magazine_node_view(array &$build, NodeInterface $node, EntityVi
     ];
 
     $build['field_magazine_slogan']['#prefix'] = render($build['title']);
+
+    $build['back_to_feed'] = [
+      '#type' => 'link',
+      '#title' => t('Back to feed'),
+      '#url' => Url::fromRoute('view.magazine_articles.list'),
+      '#attributes' => [
+        'class' => ['magazine-back-to-feed'],
+      ],
+    ];
   }
   elseif ($view_mode == 'listing') {
     $build['title'] = [
