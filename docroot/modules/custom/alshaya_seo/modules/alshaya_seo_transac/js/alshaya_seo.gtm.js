@@ -24,7 +24,6 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
-      var cartPage = $('body[gtm-container="cart page"]');
       var orderConfirmationPage = $('body[gtm-container="purchase confirmation page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
@@ -46,38 +45,21 @@
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
-
-        var userDetails = JSON.parse(localStorage.getItem('userDetails'));
-
-        if ((localStorage.getItem('userDetails') === undefined ||
-                localStorage.getItem('userDetails') === null ||
-                drupalSettings.user.uid !== userDetails.userID ||
-                $.cookie('Drupal.visitor.alshaya_gtm_user_refresh') === 1)) {
-          Drupal.setUserDetailsInStorage();
-          $.removeCookie('Drupal.visitor.alshaya_gtm_user_refresh', {path: '/'});
-          userDetails = JSON.parse(localStorage.getItem('userDetails'));
-        }
-
         var md = new MobileDetect(window.navigator.userAgent);
-        userDetails.platformType = 'desktop';
         if (md.tablet() !== null) {
-          userDetails.platformType = 'tablet';
+          dataLayer.push({
+            platformType: 'tablet',
+          });
         }
         else if (md.mobile()) {
-          userDetails.platformType = 'mobile';
+          dataLayer.push({
+            platformType: 'mobile',
+          });
         }
-
-        // For checkout pages, privilegeCustomer is added in checkout step.
-        if (cartPage.length !== 0 ||
-            cartCheckoutLoginSelector.length !== 0 ||
-            cartCheckoutDeliverySelector.length !== 0 ||
-            cartCheckoutPaymentSelector.length !==0) {
-          delete userDetails.privilegeCustomer;
-        }
-
-        // Push on all pages except confirmation page.
-        if (orderConfirmationPage.length === 0) {
-          Drupal.alshaya_seo_default_datalayer_push(userDetails);
+        else {
+          dataLayer.push({
+            platformType: 'desktop',
+          });
         }
 
         if ($(context).filter('article[data-vmode="modal"]').length === 1
@@ -312,6 +294,10 @@
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
+        $('body[gtm-container="checkout click and collect page"]').find('div[gtm-type="checkout-click-collect"]').once('delivery-option-event').each(function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+        });
+
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -541,12 +527,32 @@
       /**
        * Tracking Home Delivery.
        */
-      if ((cartCheckoutDeliverySelector.length !== 0) &&
-        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
+      if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0
+          && cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')
+        ) {
           deliveryType = 'Home Delivery';
         }
+
+        if (document.location.search === '?method=hd') {
+          cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('delivery-option-event').each(function() {
+            dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+          });
+        }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click, mousedown', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
       }
 
       /**
@@ -1142,46 +1148,9 @@
     }
   };
 
-  /**
-   * Helper function to fetch current user details.
-   *
-   * @returns {array}
-   */
-  Drupal.setUserDetailsInStorage = function () {
-    var userDetails = {};
-    userDetails.userID = drupalSettings.user.uid;
-    userDetails.userPhone = '';
-    userDetails.userEmailID = '';
-    userDetails.userName = '';
-    userDetails.userType = 'Guest User';
-    userDetails.privilegeCustomer = 'Regular Customer';
-    userDetails.customerType = '';
-
-    userDetails = JSON.stringify(userDetails);
-
-    if (drupalSettings.user.uid !== 0) {
-      $.ajax({
-        url: drupalSettings.path.baseUrl + "get-user-details",
-        type: "POST",
-        async: false,
-        success: function (response, status) {
-          userDetails = response.user_data;
-        },
-      });
-    }
-
-    // Save in localStorage.
-    localStorage.setItem('userDetails', userDetails);
-  };
-
-  /**
-   * Helper function to push default datalayer variables.
-   *
-   * @param platformType
-   * @param userDetails
-   */
-  Drupal.alshaya_seo_default_datalayer_push = function (userDetails) {
-      dataLayer.push(userDetails);
+  // Ajax command to push deliveryAddress Event.
+  $.fn.triggerDeliveryAddress = function () {
+    dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
 })(jQuery, Drupal, dataLayer);
