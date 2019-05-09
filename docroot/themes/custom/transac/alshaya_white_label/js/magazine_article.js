@@ -8,9 +8,9 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.MagazineShoptheStorySlider = {
+  Drupal.behaviors.magazineArticleSlider = {
     attach: function (context, settings) {
-      var optionsshopbyStory = {
+      var optionsShopByStory = {
         arrows: true,
         useTransform: false,
         slidesToShow: 5,
@@ -20,7 +20,7 @@
         infinite: false
       };
 
-      var optionsheroimageBanner = {
+      var optionsHeroImageBanner = {
         arrows: true,
         useTransform: false,
         slidesToShow: 1,
@@ -51,18 +51,18 @@
         }
       }
 
-      var shopbyStory = $('.field--name-field-magazine-shop-the-story .field__items');
-      var magazineHerobanner = $('.field--name-field-magazine-hero-image.field__items');
+      var shopByStory = $('.field--name-field-magazine-shop-the-story .field__items');
+      var magazineHeroBanner = $('.field--name-field-magazine-hero-image.field__items');
 
       // For tablets and mobile we don't want to apply slickSlider.
       if ($(window).width() > 1023) {
-        shopbyStory.each(function () {
-          applyRtl($(this), optionsshopbyStory);
+        shopByStory.each(function () {
+          applyRtl($(this), optionsShopByStory);
         });
       }
 
-      magazineHerobanner.each(function () {
-        applyRtl($(this), optionsheroimageBanner);
+      magazineHeroBanner.each(function () {
+        applyRtl($(this), optionsHeroImageBanner);
       });
     }
   };

@@ -58,12 +58,12 @@ label_display == 'visually_hidden' ? 'visually-hidden',
     <span class="label-separator"> {{ label }} </span>
   </div>
   {% if multiple %}
-  <div class='field__items'>
-    {% endif %}
-    {% for item in items %}
-      <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
-    {% endfor %}
-    {% if multiple %}
-  </div>
+    <div class='field__items'>
+  {% endif %}
+  {% for item in items %}
+    <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+  {% endfor %}
+  {% if multiple %}
+    </div>
   {% endif %}
 </div>
