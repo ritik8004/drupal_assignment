@@ -247,6 +247,12 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       // Clear the shipping method info now to ensure we set it properly again.
       \Drupal::service('acq_cart.cart_storage')->clearShippingMethodSession();
 
+      $plugin_id = 'guest_delivery_home';
+      \Drupal::moduleHandler()->alter(
+        'home_delivery_save_address',
+        $response,
+        $plugin_id
+      );
       $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
       $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
     }
