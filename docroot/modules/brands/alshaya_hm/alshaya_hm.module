@@ -185,12 +185,9 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $description_value = '';
 
   if ($body = $sku_entity->get('attr_description')->getValue()) {
-    $description_value .= '<div class= "description-first">';
     $description_value .= $body[0]['value'];
-    $description_value .= '</div>';
   }
 
-  $description_value .= '<div class="description-details">';
   if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
     $concepts_markup = [
       '#theme' => 'product_concept_markup',
@@ -242,8 +239,6 @@ function _alshaya_hm_get_product_description($sku_entity) {
   }
 
   $description_value .= render($warning_markup);
-
-  $description_value .= '</div>';
 
   $description['value'] = [
     '#markup' => $description_value,
