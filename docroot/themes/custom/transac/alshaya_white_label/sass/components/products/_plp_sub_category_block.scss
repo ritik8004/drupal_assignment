@@ -1,0 +1,38 @@
+.block-alshaya-sub-category-block {
+  white-space: nowrap;
+  overflow-y: scroll;
+
+  .plp-subcategory-block {
+    .sub-category {
+      display: inline-block;
+      margin-#{$right}: 3.375rem;
+      max-width: 6.75rem;
+
+      @include breakpoint($only-tablet) {
+        margin-#{$right}: 2.6875rem;
+        max-width: 5.3125rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-#{$right}: 4px;
+        max-width: 4.375rem;
+      }
+
+      .sub-category-title {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: $plp_sub_cat_block_cat_title;
+        white-space: normal;
+
+        @include breakpoint($only-tablet) {
+          font-size: 0.75rem;
+        }
+
+        @include breakpoint($only-mobile) {
+          font-size: 0.6875rem;
+        }
+      }
+    }
+  }
+}
