@@ -5,6 +5,9 @@ $brand-orange: #f18b21;
 $white: #fff;
 $brand-red: #bd234f;
 $brand-grey: #a0a2a2;
+$wram-grey: #777;
+$grey: #ddd;
+$black: #000;
 
 /* ------- 2. Primary Colors ------- */
 //links.
@@ -30,3 +33,14 @@ $header_text: $white;
 
 /* ------- 3. Footer Colors ------- */
 $footer-logo-text: $brand-orange;
+
+/* -------- 4. step1 -------------- */
+$instruction_heading: $wram-grey;
+$select_country_btn_bg: $grey;
+$select_country_btn_text: $black;
+$step_icons_odd_hover: $white;
+$brand_icon: $brand-red;
+$step_odd_icons: $secondary_icon;
+$steps_odd_number: $brand-red;
+$steps_odd_text: $wram-grey;
+$steps_even_text: $white;
