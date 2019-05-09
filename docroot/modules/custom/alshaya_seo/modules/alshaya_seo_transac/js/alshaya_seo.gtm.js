@@ -294,6 +294,10 @@
       });
 
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
+        $('body[gtm-container="checkout click and collect page"]').find('div[gtm-type="checkout-click-collect"]').once('delivery-option-event').each(function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+        });
+
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -523,12 +527,32 @@
       /**
        * Tracking Home Delivery.
        */
-      if ((cartCheckoutDeliverySelector.length !== 0) &&
-        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
+      if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0
+          && cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')
+        ) {
           deliveryType = 'Home Delivery';
         }
+
+        if (document.location.search === '?method=hd') {
+          cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('delivery-option-event').each(function() {
+            dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+          });
+        }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click, mousedown', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
       }
 
       /**
@@ -1122,6 +1146,11 @@
         return decodeURIComponent(pair[1]);
       }
     }
+  };
+
+  // Ajax command to push deliveryAddress Event.
+  $.fn.triggerDeliveryAddress = function () {
+    dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
 })(jQuery, Drupal, dataLayer);
