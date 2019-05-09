@@ -544,12 +544,11 @@
         var deliveryAddressButtons = [
           cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
           cartCheckoutDeliverySelector.find('#add-address-button'),
-          cartCheckoutDeliverySelector.find('#edit-actions-get-shipping-methods'),
         ];
 
         $(deliveryAddressButtons)
           .each(function() {
-            $(this).once('delivery-address').on('click', function (e) {
+            $(this).once('delivery-address').on('click, mousedown', function (e) {
               let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
               dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
             });
@@ -1147,6 +1146,11 @@
         return decodeURIComponent(pair[1]);
       }
     }
+  };
+
+  // Ajax command to push deliveryAddress Event.
+  $.fn.triggerDeliveryAddress = function () {
+    dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
 })(jQuery, Drupal, dataLayer);
