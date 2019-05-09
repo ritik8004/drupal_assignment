@@ -84,10 +84,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $event->getValue();
     $search_direction = $sku_entity->getType() == 'configurable' ? 'children' : 'self';
 
-    $description_value = '<div class= "description-first">';
+    $description_value = '<div class="description-first">';
     $description_value .= $event->getValue()['description']['#markup'] ?? '';
     $description_value .= '</div>';
-
     $description_value .= '<div class="description-details">';
     if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
       $concepts_markup = [
@@ -140,7 +139,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $description_value .= render($warning_markup);
-
     $description_value .= '</div>';
 
     $description['value'] = [
