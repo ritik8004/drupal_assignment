@@ -477,3 +477,10 @@ function alshaya_seo_transac_node_view(array &$build, EntityInterface $entity, E
     }
   }
 }
+
+/**
+ * Implements hook_home_delivery_save_address_alter().
+ */
+function alshaya_seo_transac_home_delivery_save_address_alter(&$response, $plugin_id) {
+  $response->addCommand(new InvokeCommand(NULL, 'triggerDeliveryAddress', []));
+}
