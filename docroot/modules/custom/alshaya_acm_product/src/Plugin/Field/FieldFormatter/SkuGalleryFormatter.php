@@ -263,7 +263,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       if (empty($element['#gallery']['#mainImage'])) {
         $default_image = $this->skuImagesManager->getProductDefaultImage();
         if ($default_image) {
-          $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
+          $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', '291x288');
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';
         }
