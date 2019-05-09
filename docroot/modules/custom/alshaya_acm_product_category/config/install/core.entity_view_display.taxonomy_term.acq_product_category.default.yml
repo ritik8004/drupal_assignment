@@ -68,5 +68,5 @@ hidden:
   field_mobile_plp_video_links: true
   field_group_by_sub_category: true
   field_select_subcategories_plp: true
-  field_sub_category_image: true
-  field_sub_category_title: true
+  field_plp_group_category_img: true
+  field_plp_group_category_desc: true

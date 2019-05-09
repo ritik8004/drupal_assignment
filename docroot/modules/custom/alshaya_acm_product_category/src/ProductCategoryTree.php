@@ -657,4 +657,27 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
     return $tid;
   }
 
+  /**
+   * Check if category is a sub-category of given term.
+   *
+   * @param int $sub_category_id
+   *   Product category id.
+   * @param int $parent_category_id
+   *   Selected category id.
+   *
+   * @return bool
+   *   TRUE if $sub_category is a $sub-catgegory of $parent_category.
+   */
+  public function checkIfSubCategory($sub_category_id, $parent_category_id) {
+    if ($sub_category_id === $parent_category_id) {
+      return TRUE;
+    }
+    $ancestors = $this->termStorage->loadAllParents($sub_category_id);
+    foreach ($ancestors as $term) {
+      if ($term->id() === $parent_category_id) {
+        return TRUE;
+      }
+    }
+  }
+
 }

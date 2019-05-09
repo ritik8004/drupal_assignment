@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.taxonomy_term.field_sub_category_title
+    - field.storage.taxonomy_term.field_plp_group_category_desc
     - taxonomy.vocabulary.acq_product_category
   module:
     - allowed_formats
@@ -14,12 +14,12 @@ third_party_settings:
     plain_text: plain_text
     limited_options: '0'
     mail_text: '0'
-id: taxonomy_term.acq_product_category.field_sub_category_title
-field_name: field_sub_category_title
+id: taxonomy_term.acq_product_category.field_plp_group_category_desc
+field_name: field_plp_group_category_desc
 entity_type: taxonomy_term
 bundle: acq_product_category
-label: 'Sub-category Title'
-description: 'Enter the title that should be displayed when this sub-category is displayed on a PLP grouped by sub-categories.'
+label: 'PLP group by category Description'
+description: 'Enter the description that should be displayed when this sub-category is displayed on a PLP grouped by sub-categories.'
 required: false
 translatable: true
 skip_translation_check: 0

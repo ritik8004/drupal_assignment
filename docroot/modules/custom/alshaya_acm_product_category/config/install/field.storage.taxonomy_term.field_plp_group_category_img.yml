@@ -5,8 +5,8 @@ dependencies:
     - file
     - image
     - taxonomy
-id: taxonomy_term.field_sub_category_image
-field_name: field_sub_category_image
+id: taxonomy_term.field_plp_group_category_img
+field_name: field_plp_group_category_img
 entity_type: taxonomy_term
 type: image
 settings:

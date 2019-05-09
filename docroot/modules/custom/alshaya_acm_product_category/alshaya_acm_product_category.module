@@ -15,6 +15,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\views\ViewExecutable;
+use Drupal\search_api\Plugin\views\ResultRow;
 
 /**
  * Implements hook_module_implements_alter().
@@ -38,6 +40,12 @@ function alshaya_acm_product_category_theme($existing, $type, $theme, $path) {
       'template' => 'alshaya-shop-by',
       'variables' => [
         'term_tree' => NULL,
+      ],
+    ],
+    'alshaya_subcategory_block' => [
+      'template' => 'alshaya-subcategory-block',
+      'variables' => [
+        'subcategories' => NULL,
       ],
     ],
   ];
@@ -285,4 +293,58 @@ function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $def
     }
   }
   return $term_sub_categories;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
+  if ($view->id() == 'alshaya_product_list' && $view->current_display === 'block_1') {
+    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
+    if (isset($view->args[0])) {
+      $term = $taxonomy_storage->load($view->args[0]);
+    }
+    else {
+      $term = $product_category_tree->getCategoryTermFromRoute();
+    }
+
+    if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
+      $result_row = [];
+      foreach ($view->result as $row) {
+        $product_categories = $row->_object->getValue()
+          ->get('field_category')
+          ->getValue();
+        // Get all selected subcategories to be displayed on PLP.
+        $selected_subcategories = $term->get('field_select_subcategories_plp')
+          ->getValue();
+        foreach ($selected_subcategories as $selected_subcategory) {
+          foreach ($product_categories as $product_category) {
+            if ($product_category_tree->checkIfSubCategory($product_category['target_id'], $selected_subcategory['value'])) {
+              $result_row[$selected_subcategory['value']][] = $row;
+              break;
+            }
+          }
+        }
+      }
+
+      // Empty view results to add new values.
+      $view->result = [];
+      foreach ($result_row as $tid => $grouped_row) {
+        $category_term = $taxonomy_storage->load($tid);
+
+        if ($category_term instanceof TermInterface) {
+          $category_row = [
+            'tid' => $tid,
+            'lable' => $category_term->label(),
+            'desc' => $category_term->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '',
+          ];
+          $view->result[] = new ResultRow($category_row);
+          foreach ($grouped_row as $row) {
+            $view->result[] = $row;
+          }
+        }
+      }
+    }
+  }
 }

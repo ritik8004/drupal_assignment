@@ -30,8 +30,8 @@ dependencies:
     - field.field.taxonomy_term.acq_product_category.field_mobile_plp_video_links
     - field.field.taxonomy_term.acq_product_category.field_group_by_sub_category
     - field.field.taxonomy_term.acq_product_category.field_select_subcategories_plp
-    - field.field.taxonomy_term.acq_product_category.field_sub_category_image
-    - field.field.taxonomy_term.acq_product_category.field_sub_category_title
+    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_img
+    - field.field.taxonomy_term.acq_product_category.field_plp_group_category_desc
   module:
     - entity_browser
     - field_group
@@ -84,6 +84,8 @@ third_party_settings:
         - langcode
         - field_commerce_status
         - field_pdp_layout
+        - field_group_by_sub_category
+        - field_select_subcategories_plp
         - description
         - field_pdp_image_slider_position
         - path
@@ -246,10 +248,8 @@ third_party_settings:
       region: content
     group_group_by_sub_category:
       children:
-        - field_group_by_sub_category
-        - field_select_subcategories_plp
-        - field_sub_category_title
-        - field_sub_category_image
+        - field_plp_group_category_desc
+        - field_plp_group_category_img
       parent_name: group_plp_content
       weight: 5
       format_type: details
@@ -504,7 +504,7 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  field_sub_category_image:
+  field_plp_group_category_img:
     type: entity_browser_file
     weight: 5
     settings:
@@ -518,7 +518,7 @@ content:
       selection_mode: selection_append
     region: content
     third_party_settings: {  }
-  field_sub_category_title:
+  field_plp_group_category_desc:
     weight: 4
     settings:
       size: 60
