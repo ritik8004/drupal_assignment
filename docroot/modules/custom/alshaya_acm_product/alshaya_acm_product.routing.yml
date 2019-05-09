@@ -105,3 +105,11 @@ alshaya_acm_product.product_sku_export:
     _title: ''
   requirements:
     _role: 'webmaster+administrator'
+
+alshaya_acm_product.product_sku_export_category:
+  path: '/admin/commerce/sku-export-data-category'
+  defaults:
+    _controller: '\Drupal\alshaya_acm_product\Controller\ProductReportController::downloadProductReportWithCategory'
+    _title: ''
+  requirements:
+    _role: 'webmaster+administrator'

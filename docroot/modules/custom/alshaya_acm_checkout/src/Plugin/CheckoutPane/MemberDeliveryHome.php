@@ -355,6 +355,11 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return $response;
     }
 
+    \Drupal::moduleHandler()->alter(
+      'home_delivery_save_address',
+      $response,
+      $this->getPluginId()
+    );
     $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
     $response->addCommand(new RedirectCommand(Url::fromRoute('acq_checkout.form', ['step' => 'delivery'], ['query' => ['method' => 'hd']])->toString()));
 
