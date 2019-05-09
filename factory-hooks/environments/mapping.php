@@ -41,6 +41,12 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
     if (isset($magentos[$env_keys['magento']][$country_code])) {
       $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
     }
+
+    // This is specific to HM right now but since it is tied to Magento env
+    // we set in magento.php and use like this.
+    if (isset($magentos[$env_keys['magento']]['pims_base_url'])) {
+      $settings['alshaya_hm_images.settings']['pims_base_url'] = $magentos[$env_keys['magento']]['pims_base_url'];
+    }
   }
 
   return $settings;

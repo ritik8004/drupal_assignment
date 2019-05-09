@@ -241,9 +241,11 @@ class SkuAssetManager {
    */
   private function downloadPimsImage(array $data) {
     $base_url = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'pims_base_url');
+    $pims_directory = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'pims_directory');
 
     $url = implode('/', [
       trim($base_url, '/'),
+      trim($pims_directory, '/'),
       trim($data['path'], '/'),
       trim($data['filename'], '/'),
     ]);
