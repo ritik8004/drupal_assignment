@@ -651,7 +651,7 @@ class SkuImagesManager {
           if (empty($search_main_image)) {
             $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
           }
-          elseif ($this->productDisplaySettings->get('gallery_show_hover_image') || 1) {
+          elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
             $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
           }
 
@@ -660,7 +660,7 @@ class SkuImagesManager {
           }
         }
 
-        if ($this->productDisplaySettings->get('gallery_show_hover_image') || 1) {
+        if ($this->productDisplaySettings->get('gallery_show_hover_image')) {
           $gallery = [
             '#theme' => 'alshaya_assets_gallery',
             '#mainImage' => $search_main_image,
