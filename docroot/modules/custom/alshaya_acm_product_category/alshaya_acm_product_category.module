@@ -300,11 +300,16 @@ function alshaya_acm_product_category_term_subcategories(FieldStorageConfig $def
  */
 function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'alshaya_product_list' && $view->current_display === 'block_1') {
+    $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    $term = $product_category_tree->getCategoryTermFromRoute();
+    if (isset($view->args[0])) {
+      $term = $taxonomy_storage->load($view->args[0]);
+    }
+    else {
+      $term = $product_category_tree->getCategoryTermFromRoute();
+    }
 
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
-      $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
       $result_row = [];
       foreach ($view->result as $row) {
         $product_categories = $row->_object->getValue()
