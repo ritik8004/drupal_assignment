@@ -62,8 +62,6 @@ section {
   }
 
   &:hover {
-    @extend %btn_hover;
-
     font-family: $ubuntu-sans-bold;
 
     .icon {

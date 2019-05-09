@@ -15,10 +15,10 @@
   html[lang=ar] & {
     line-height: 1;
   }
-}
 
-%btn_hover {
-  background: $brand-orange;
-  color: $white;
-  text-decoration: none;
+  &:hover {
+    background: $brand-orange;
+    color: $white;
+    text-decoration: none;
+  }
 }
