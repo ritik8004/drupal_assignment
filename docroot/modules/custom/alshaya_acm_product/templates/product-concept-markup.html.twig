@@ -1,16 +1,16 @@
-<div class="concept-wrapper">
-	{% if concepts is not empty %}
-		<div class="concept-label">
-			{% trans %} concept {% endtrans %}
-		</div>
-		<div class="concept-value">
-			<ul>
-			{% for key,concept in concepts %}
-				{% if concept is not empty %}
-					<li>{{ concept.value }}</li>
-				{% endif %}
-			{% endfor %}
-			</ul>
-		</div>
-	{% endif %}
-</div>
+{% if concepts is not empty %}
+  <div class="concept-wrapper">
+    <div class="concept-label">
+      {% trans %} concept {% endtrans %}
+    </div>
+    <div class="concept-value">
+      <ul>
+        {% for key,concept in concepts %}
+          {% if concept is not empty %}
+            <li>{{ concept.value }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

@@ -1,10 +1,10 @@
-<div class="warning-wrapper">
-	{% if warning is not empty %}
+{% if warning is not empty %}
+  <div class="warning-wrapper">
 		<div class="warning-label">
 			{% trans %} safety warning {% endtrans %}
 		</div>
 		<div class="warning-value">
 			{{ warning }}
 		</div>
-	{% endif %}
-</div>
+  </div>
+{% endif %}
