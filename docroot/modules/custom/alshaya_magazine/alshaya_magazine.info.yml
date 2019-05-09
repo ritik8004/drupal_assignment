@@ -1,7 +1,7 @@
 name: 'Alshaya Magazine'
 type: module
 core: 8.x
-description: 'Adds Magazine feature.'
+description: 'Feature to manage magazine articles.'
 dependencies:
   - alshaya_master:alshaya_master
   - drupal:field
