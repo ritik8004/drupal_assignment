@@ -9,7 +9,7 @@ id: node.magazine_article.field_magazine_category
 field_name: field_magazine_category
 entity_type: node
 bundle: magazine_article
-label: 'Magazine Category'
+label: 'Category'
 description: ''
 required: false
 translatable: false
