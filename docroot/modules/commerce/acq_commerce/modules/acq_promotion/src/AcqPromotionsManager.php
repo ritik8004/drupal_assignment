@@ -13,8 +13,10 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 
 /**
  * Class AcqPromotionsManager.
@@ -183,11 +185,24 @@ class AcqPromotionsManager {
       $node = $this->nodeStorage->load($nid);
 
       if ($node instanceof Node) {
+        $rule_id = $node->get('field_acq_promotion_rule_id')->getString();
+        $attached_promotion_skus = $this->getSkusForPromotion($node->id());
+
+        if (count($attached_promotion_skus) > 0) {
+          $this->queueItemsInBatches(
+            $this->queue->get('acq_promotion_detach_queue'),
+            $node->id(),
+            $attached_promotion_skus,
+            $rule_id,
+            'detach'
+          );
+        }
+
         $node->delete();
         $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
           '@nid' => $node->id(),
           '@promotion' => $node->label(),
-          '@rule_id' => $node->get('field_acq_promotion_rule_id')->first()->getString(),
+          '@rule_id' => $node->get('field_acq_promotion_rule_id')->getString(),
         ]);
       }
     }
@@ -235,17 +250,19 @@ class AcqPromotionsManager {
   /**
    * Helper function to get skus attached with a promotion.
    *
-   * @param \Drupal\node\Entity\Node $promotion
+   * @param mixed $promotion_id
    *   Promotion node for which we need to find skus.
    *
    * @return array
    *   Array of sku objects attached with the promotion.
    */
-  public function getSkusForPromotion(Node $promotion) {
+  public function getSkusForPromotion($promotion_id) {
+    // Backwards compatibility, it was first expecting Node object.
+    $promotion_id = $promotion_id instanceof NodeInterface ? $promotion_id->id() : $promotion_id;
 
     $query = $this->connection->select('acq_sku__field_acq_sku_promotions', 'fasp');
     $query->join('acq_sku_field_data', 'asfd', 'asfd.id = fasp.entity_id');
-    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion->id());
+    $query->condition('fasp.field_acq_sku_promotions_target_id', $promotion_id);
     $query->fields('asfd', ['id', 'sku']);
     $query->distinct();
     $skus = $query->execute()->fetchAllKeyed(0, 1);
@@ -357,22 +374,14 @@ class AcqPromotionsManager {
    *
    * @param array $promotions
    *   List of promotions to sync.
-   *
-   * @return array
-   *   Messages around attach & detach queues.
    */
   public function processPromotions(array $promotions = []) {
-    $output = [];
-    $acq_promotion_attach_batch_size = $this->configFactory
-      ->get('acq_promotion.settings')
-      ->get('promotion_attach_batch_size');
-
     $promotion_detach_queue = $this->queue->get('acq_promotion_detach_queue');
     $promotion_attach_queue = $this->queue->get('acq_promotion_attach_queue');
 
-    // Clear any outstanding items in queue before starting promotion import to
-    // avoid duplicate queues.
-    $promotion_detach_queue->deleteQueue();
+    // Clear any outstanding items in attach queue before starting promotion
+    // import to avoid duplicate processing. For delete queue we want it to
+    // be processed for deleted promotions.
     $promotion_attach_queue->deleteQueue();
 
     foreach ($promotions as $promotion) {
@@ -405,10 +414,9 @@ class AcqPromotionsManager {
 
       // If promotion exists, we update the related skus & final price.
       if ($promotion_node) {
-        $promotion_nid = $promotion_node->id();
         // Update promotion metadata.
         $this->syncPromotionWithMiddlewareResponse($promotion, $promotion_node);
-        $attached_promotion_skus = $this->getSkusForPromotion($promotion_node);
+        $attached_promotion_skus = $this->getSkusForPromotion($promotion_node->id());
         $detach_promotion_skus = [];
 
         // Get list of skus for which promotions should be detached.
@@ -418,19 +426,13 @@ class AcqPromotionsManager {
 
         // Create a queue for removing promotions from skus.
         if (!empty($detach_promotion_skus)) {
-          $chunks = array_chunk($detach_promotion_skus, $acq_promotion_attach_batch_size);
-          foreach ($chunks as $chunk) {
-            $data['promotion'] = $promotion_nid;
-            $data['skus'] = $chunk;
-            $promotion_detach_queue->createItem($data);
-            $output['detached_message'] = t(
-              'Skus @skus queued up to detach promotion rule: @rule_id',
-              [
-                '@skus' => implode(',', $data['skus']),
-                '@rule_id' => $promotion['rule_id'],
-              ]
-            );
-          }
+          $this->queueItemsInBatches(
+            $promotion_detach_queue,
+            $promotion_node->id(),
+            $detach_promotion_skus,
+            $promotion['rule_id'],
+            'detach'
+          );
         }
       }
       else {
@@ -440,19 +442,13 @@ class AcqPromotionsManager {
 
       // Attach promotions to skus.
       if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
-        $data['promotion'] = $promotion_node->id();
-        $chunks = array_chunk($fetched_promotion_sku_attach_data, $acq_promotion_attach_batch_size);
-        foreach ($chunks as $chunk) {
-          $data['skus'] = $chunk;
-          $promotion_attach_queue->createItem($data);
-          $output['attached_message'] = t(
-            'Skus @skus queued up to attach promotion rule: @rule_id',
-            [
-              '@skus' => implode(',', array_keys($fetched_promotion_sku_attach_data)),
-              '@rule_id' => $promotion['rule_id'],
-            ]
-          );
-        }
+        $this->queueItemsInBatches(
+          $promotion_attach_queue,
+          $promotion_node->id(),
+          $fetched_promotion_sku_attach_data,
+          $promotion['rule_id'],
+          'attach'
+        );
       }
 
       $this->logger->notice($this->t('Promotion `@node` having rule_id:@rule_id created or updated successfully with @attach items in attach queue and @detach items in detach queue.', [
@@ -462,8 +458,6 @@ class AcqPromotionsManager {
         '@detach' => !empty($detach_promotion_skus) ? count($detach_promotion_skus) : 0,
       ]));
     }
-
-    return $output;
   }
 
   /**
@@ -478,23 +472,56 @@ class AcqPromotionsManager {
     $promotion_detach_item[] = ['target_id' => $nid];
     $sku_promotions = $sku->get('field_acq_sku_promotions')->getValue();
 
-    $sku_promotions = array_udiff($sku_promotions, $promotion_detach_item, function ($array1, $array2) {
+    $updated_sku_promotions = array_udiff($sku_promotions, $promotion_detach_item, function ($array1, $array2) {
       return $array1['target_id'] - $array2['target_id'];
     });
 
-    $sku->get('field_acq_sku_promotions')->setValue($sku_promotions);
-    $sku->save();
-
-    // Update Sku Translations.
-    $translation_languages = $sku->getTranslationLanguages(TRUE);
-
-    if (!empty($translation_languages)) {
-      foreach ($translation_languages as $langcode => $language) {
-        $sku_entity_translation = $sku->getTranslation($langcode);
-        $sku_entity_translation->get('field_acq_sku_promotions')->setValue($sku_promotions);
-        $sku_entity_translation->save();
-      }
+    if (count($updated_sku_promotions) == count($sku_promotions)) {
+      // Nothing to remove.
+      return;
     }
+
+    $sku->get('field_acq_sku_promotions')->setValue($updated_sku_promotions);
+    $sku->save();
+  }
+
+  /**
+   * Wrapper function to Queue items in batches.
+   *
+   * @param \Drupal\Core\Queue\QueueInterface $queue
+   *   Queue to queue items to.
+   * @param int|string $promotion_nid
+   *   Promotion Node ID.
+   * @param array $data
+   *   Queue data.
+   * @param int|string $rule_id
+   *   Rule ID.
+   * @param string $op
+   *   Operation attach / detach.
+   */
+  private function queueItemsInBatches(QueueInterface $queue, $promotion_nid, array $data, $rule_id, string $op) {
+    static $batch_size;
+
+    if (empty($batch_size)) {
+      $batch_size = $this->configFactory
+        ->get('acq_promotion.settings')
+        ->get('promotion_attach_batch_size');
+    }
+
+    foreach (array_chunk($data, $batch_size) as $chunk) {
+      $item = [];
+      $item['promotion'] = $promotion_nid;
+      $item['skus'] = $chunk;
+      $queue->createItem($item);
+    }
+
+    $first = reset($data);
+    $flat_skus = is_array($first) ? array_column($data, 'sku') : $data;
+    $this->logger->notice('SKUs @skus queued up to @operation promotion rule: @rule_id', [
+      '@skus' => implode(',', $flat_skus),
+      '@rule_id' => $rule_id,
+      '@operation' => $op,
+    ]);
   }
 
 }
