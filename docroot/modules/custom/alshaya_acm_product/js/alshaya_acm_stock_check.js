@@ -51,7 +51,7 @@
       });
 
       $('.edit-add-to-cart').once('js-to-move-error-message').on('click', function () {
-        if ($(this).closest('form').hasClass('clientside-validation-ajax-submit-invalid')) {
+        if ($(this).closest('form').hasClass('ajax-submit-prevented')) {
           $('.form-item > label.error', $(this).closest('form')).each(function () {
             var parent = $(this).closest('.form-item');
             if (parent.find('.select2Option').length > 0) {

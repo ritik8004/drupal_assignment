@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "91d1458fb24055d685c2faacf34c36a1",
+    "content-hash": "afb93df64a2b9c87e48e00a673d0b4eb",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -4521,20 +4521,21 @@
         },
         {
             "name": "drupal/clientside_validation",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/clientside_validation.git",
-                "reference": "8.x-1.0"
+                "reference": "8.x-1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/clientside_validation-8.x-1.0.zip",
-                "reference": "8.x-1.0",
-                "shasum": "e630a9ac11add3054cd84be6d3193686f69bacc0"
+                "url": "https://ftp.drupal.org/files/projects/clientside_validation-8.x-1.1.zip",
+                "reference": "8.x-1.1",
+                "shasum": "e800e9b0e838f6ebcb25a82ee17d6daacd0dd421"
             },
             "require": {
-                "drupal/core": "~8.0"
+                "drupal/core": "~8.0",
+                "php": ">=7.0.0"
             },
             "require-dev": {
                 "drupal/clientside_validation_demo": "*",
@@ -4546,15 +4547,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0",
-                    "datestamp": "1547893380",
+                    "version": "8.x-1.1",
+                    "datestamp": "1556018287",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "patches_applied": {
-                    "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-11-19/2952233-5.patch"
+                    "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2019-05-08/cv-validate-ajax-2952233-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4578,7 +4579,8 @@
             "description": "This module adds clientside validation",
             "homepage": "https://www.drupal.org/project/clientside_validation",
             "support": {
-                "source": "https://git.drupalcode.org/project/clientside_validation"
+                "source": "https://cgit.drupalcode.org/clientside_validation",
+                "issues": "https://drupal.org/project/issues/clientside_validation"
             }
         },
         {
