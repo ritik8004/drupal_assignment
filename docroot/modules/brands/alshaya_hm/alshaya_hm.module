@@ -185,7 +185,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $description_value = '';
 
   if ($body = $sku_entity->get('attr_description')->getValue()) {
-    $description_value = $body[0]['value'];
+    $description_value .= $body[0]['value'];
   }
 
   if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
