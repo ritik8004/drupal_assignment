@@ -629,7 +629,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               }
 
               if ($free_sku_media) {
-                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, '192x168');
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, $free_sku_entity->label(), '192x168');
                 $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
@@ -805,7 +805,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
-      $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
+      $build['image'] = $skuManager->getSkuImage($sku_media, $entity->label(), '192x168');
     }
 
     // Add PDP slider position config to variable so it is available in themes.
@@ -839,12 +839,7 @@ function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterfa
         if (!empty($default_image)) {
           /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
           $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-          $sku_media = [
-            'file' => $default_image,
-            'label' => $sku->label(),
-          ];
-          $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+          $default_sku_image = $skuManager->getSkuImage($default_image->getFileUri(), $sku->label(), '192x168');
           $default_sku_image['#attributes']['class'][] = 'product-default-image';
           $build['image'] = $default_sku_image;
         }
