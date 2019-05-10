@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "34b479fccfcce0e03d17c1e083d552d7",
+    "content-hash": "9f7e861f92f2cb26f129136accdef259",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11485,7 +11485,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Limit token delete on cron run": "https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
+                    "Limit token delete on cron run": "https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch",
+                    "oauth2_token entity type & cache tags": "https://www.drupal.org/files/issues/2019-05-10/3051648-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
