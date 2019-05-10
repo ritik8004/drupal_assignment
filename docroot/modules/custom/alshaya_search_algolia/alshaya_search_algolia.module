@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Module file.
+ */
+
+use Drupal\search_api\IndexInterface;
+
+/**
+ * Implements hook_search_api_algolia_sorts_alter().
+ */
+function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, IndexInterface $index) {
+  unset($sorts['stock']);
+}
