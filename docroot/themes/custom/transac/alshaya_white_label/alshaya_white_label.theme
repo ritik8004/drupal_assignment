@@ -1091,9 +1091,6 @@ function alshaya_white_label_preprocess_paragraph(&$variables) {
       $variables['mobile_image'] = !empty($mobile_image) ? _alshaya_white_label_get_image_url($mobile_image) : _alshaya_white_label_get_image_url($desktop_image);
       $variables['desktop_image'] = !empty($desktop_image) ? _alshaya_white_label_get_image_url($desktop_image) : _alshaya_white_label_get_image_url($mobile_image);
       $variables['promo_default_image'] = _alshaya_white_label_get_image_url($default_image);
-
-      // Lazy load images in promo blocks.
-      $variables['#attached']['library'][] = 'alshaya_white_label/lazysizes';
     }
   }
 
