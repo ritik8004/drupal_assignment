@@ -309,7 +309,8 @@
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
             "drupal/simple_oauth": {
-                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
+                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch",
+                "oauth2_token entity type & cache tags": "https://www.drupal.org/files/issues/2019-05-10/3051648-9.patch"
             },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
