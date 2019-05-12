@@ -1,0 +1,105 @@
+.date-to-visit {
+  width: 55%;
+  padding-#{$right}: 3.125rem;
+
+  @include breakpoint($only-mobile) {
+    padding-bottom: 0.9375rem;
+  }
+}
+
+.time-to-visit {
+  width: 38%;
+}
+
+.date-to-visit,
+.time-to-visit {
+  float: $left;
+
+  @include breakpoint($only-tablet) {
+    width: 45%;
+    margin: 0.9375rem auto;
+  }
+
+  @include breakpoint($only-mobile) {
+    width: 100%;
+  }
+}
+
+.appointment-wrapper {
+  display: inline-block;
+  border: 0.125rem solid $date_wrapper_border;
+  border-radius: 1.875rem;
+  width: 100%;
+  font-size: 1.875rem;
+  font-family: $ubuntu-sans;
+  position: relative;
+
+  @include breakpoint($upto-desktop) {
+    width: auto;
+  }
+
+  .time-to-visit & {
+    padding: 0.9375rem 0;
+  }
+
+  input {
+    border: none;
+    font-size: 1.875rem;
+    padding: 0.625rem 0;
+    padding-#{$right}: 1.25rem;
+    padding-#{$left}: 3.75rem;
+    background: transparent;
+    cursor: pointer;
+    width: 80%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .icon {
+    width: auto;
+    color: $step_odd_icons;
+    transition: all 0.4s;
+
+    &.icon-calendar {
+      @include icon(calendar) {
+        margin-#{$right}: 0.1875rem;
+        position: absolute;
+        top: 0.625rem;
+        #{$left}: 1.25rem;
+      }
+    }
+
+    &.icon-clock {
+      @include icon(clock) {
+        margin-#{$right}: 0.1875rem;
+      }
+    }
+  }
+
+  .time_block {
+    padding: 0.9375rem;
+
+    .tickettimeBtn {
+      @extend %btn;
+
+      background: $select_time_btn_bg;
+      box-shadow: $box_shadow_inset;
+      color: $select_time_btn_text;
+
+      &:hover {
+        @extend %btn_hover;
+
+        background-image: $btn_hover_bg_img_gradient;
+        box-shadow: none;
+      }
+
+      &.active {
+        background-image: $btn_active_bg_img_gradient;
+        box-shadow: none;
+        color: $select_time_btn_active_text;
+      }
+    }
+  }
+}
