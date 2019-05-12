@@ -1,0 +1,344 @@
+.ticket_information {
+  width: 100%;
+  text-align: $left;
+  padding: 1.125rem 0;
+  border-bottom: 0.0625rem solid $ticket_info_border;
+  display: flex;
+  align-items: center;
+
+  .age-group,
+  .ticket-count {
+    display: flex;
+    float: $left;
+
+    @include breakpoint ($only-mobile) {
+      display: block;
+      width: 41%;
+    }
+
+    .icon {
+      display: inline-block;
+      width: auto;
+      font-size: 3.75rem;
+      color: $step_even_icons;
+    }
+  }
+
+  .ticket-count {
+    @include breakpoint ($only-tablet) {
+      width: 39%;
+    }
+  }
+
+  .ticket-unit-price {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 1.875rem;
+    float: $left;
+    padding-#{$left}: 0.9375rem;
+    width: 18.25rem;
+
+    @include breakpoint($only-mobile) {
+      width: 33%;
+      text-align: center;
+      padding-#{$left}: 0.5rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 34%;
+    }
+
+    .ticket-qty {
+      display: inline-block;
+      float: $right;
+
+      @include breakpoint($only-mobile) {
+        width: auto;
+        float: none;
+      }
+
+      .plusBtn,
+      .minusBtn {
+        margin-top: 0.0625rem;
+        color: $btn_add_minus_text;
+        box-shadow: inset 0 0 0 0.125rem rgba(255, 255, 255, 1);
+        display: inline-block;
+        width: 2.4375rem;
+        height: 2.4375rem;
+        font-size: 1.5rem;
+        margin-#{$left}: 0.9375rem;
+        border-radius: 50%;
+        text-align: center;
+        vertical-align: middle;
+        float: right;
+        transition: all 0.4s;
+        cursor: pointer;
+
+        @include breakpoint($only-mobile) {
+          width: 1.875rem;
+          height: 1.875rem;
+          margin-#{$left}: 0.3125rem;
+        }
+
+        .icon {
+          font-size: 1rem;
+          margin-top: 0.6875rem;
+          line-height: 2.5;
+
+          @include breakpoint($only-mobile) {
+            font-size: 0.625rem;
+          }
+        }
+
+        &:hover {
+          background-image: $btn_active_bg_img_gradient;
+          box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 1);
+        }
+      }
+
+      .plusBtn {
+        .icon {
+          &.icon-plus {
+            @include icon(plus);
+          }
+        }
+      }
+
+      .minusBtn {
+        .icon {
+          &.icon-minus {
+            @include icon(minus);
+          }
+        }
+
+        &.disable {
+          opacity: 0.5;
+          cursor: default;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .age-group {
+    font-family: $ubuntu-sans;
+
+    @include breakpoint($only-mobile) {
+      width: 25%;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    @include breakpoint($only-tablet) {
+      width: 27%;
+    }
+
+    .age-group-icon {
+      @include breakpoint($desktop) {
+        display: inline-block;
+        float: $left;
+      }
+
+      .icon {
+        margin-#{$right}: 0.625rem;
+
+        @include breakpoint($only-mobile) {
+          font-size: 2rem;
+        }
+
+        &.icon_0 {
+          @include icon(baby);
+        }
+
+        &.icon_1 {
+          @include icon(toddler);
+        }
+
+        &.icon_2 {
+          @include icon(kids-day);
+        }
+
+        &.icon_3 {
+          @include icon(kids-day);
+        }
+
+        &.icon_4 {
+          @include icon(parents-profile);
+        }
+      }
+    }
+
+    .age-range {
+      display: inline-block;
+      float: $left;
+      font-size: 1.875rem;
+      width: 8.5rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+        font-size: 1.125rem;
+        text-align: center;
+      }
+
+      .ticket-age {
+        font-size: 1rem;
+        display: inline-block;
+        float: $left;
+
+        @include breakpoint($only-mobile) {
+          float: none;
+        }
+      }
+    }
+  }
+
+  .ticket-count {
+    .ticket-subtotal {
+      font-size: 1.6875rem;
+      color: $cart_total_amt;
+      margin-#{$left}: 1.25rem;
+      padding: 0.5rem;
+      display: inline-block;
+      background: $cart_total_amt_bg;
+      border-radius: 0.3125rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.4375rem;
+        width: 65%;
+      }
+
+      @include breakpoint($only-tablet) {
+        margin-#{$left}: 0.625rem;
+        padding: 0.5rem 0;
+      }
+
+      &.cost {
+        @include breakpoint($only-mobile) {
+          border-radius: 0 0 0.3125rem 0.3125rem;
+          text-align: $right;
+        }
+      }
+
+      &.unit {
+        @include breakpoint($only-mobile) {
+          border-radius: 0.3125rem 0.3125rem 0 0;
+          border-bottom: 1px solid $cart_item_count_mobile_border;
+          text-align: $right;
+        }
+      }
+
+      .value {
+        padding: 0.625rem;
+        font-weight: 800;
+        border-radius: 0.3125rem;
+        display: inline;
+
+        @include breakpoint($only-mobile) {
+          padding: 0;
+        }
+
+        .icon {
+          color: #f18b21;
+          font-size: 1.5rem;
+          margin-bottom: 0;
+
+          &.icon-ticket {
+            @include icon(ticket);
+          }
+        }
+      }
+    }
+  }
+}
+
+.total_wrapper {
+  padding: 1.25rem 0;
+  width: 100%;
+  font-size: 2.5rem;
+  font-weight: 800;
+  border-bottom-#{$left}-radius: 0.625rem;
+  border-bottom-#{$right}-radius: 0.625rem;
+  color: $total_wrapper_text;
+  background: $total_wrapper_bg;
+  transition: all 0.5s;
+  height: 0;
+  visibility: hidden;
+  opacity: 0;
+  margin-bottom: 1.25rem;
+
+  @include breakpoint($only-mobile) {
+    font-size: 1.5rem;
+  }
+
+  &.active {
+    height: auto;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .total {
+    width: 25%;
+    display: inline-block;
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      text-align: $right;
+    }
+  }
+
+  .total_price {
+    width: 69%;
+    display: inline-block;
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      text-align: $left;
+      margin-#{$left}: 0.3125rem;
+    }
+
+    .amount {
+      float: $right;
+    }
+
+    .icon {
+      color: $step_odd_icons;
+      display: inline-block;
+      width: auto;
+      font-size: 2.5rem;
+      margin-#{$right}: 1.25rem;
+
+      @include breakpoint($only-mobile) {
+        font-size: 1.5rem;
+        margin-#{$right}: 0;
+      }
+
+      &.icon-ticket {
+        @include icon(ticket);
+      }
+    }
+  }
+}
+
+.next_step {
+  text-align: $left;
+  padding-top: 3.125rem;
+
+  .nextBtn {
+    background-color: $nxt_step_btn_bg;
+    background-image: $btn_active_bg_img_gradient;
+    color: $nxt_step_btn_text;
+    box-shadow: 0 8px 15px rgba(133, 26, 44, 0.3), 0 20px 55px rgba(206, 27, 74, 0.35);
+
+    @extend %btn;
+
+    &:hover {
+      background-image: $btn_hover_bg_img_gradient;
+      box-shadow: none;
+    }
+
+    &.disable {
+      pointer-events: none;
+      opacity: 0.65;
+    }
+  }
+}
