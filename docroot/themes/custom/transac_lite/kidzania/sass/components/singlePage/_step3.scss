@@ -89,8 +89,6 @@
       color: $select_time_btn_text;
 
       &:hover {
-        @extend %btn_hover;
-
         background-image: $btn_hover_bg_img_gradient;
         box-shadow: none;
       }
