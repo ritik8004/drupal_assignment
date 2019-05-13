@@ -293,11 +293,12 @@
         Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
       });
 
-      if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
-        $('body[gtm-container="checkout click and collect page"]').find('div[gtm-type="checkout-click-collect"]').once('delivery-option-event').each(function() {
-          dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
-        });
+      // Trigger deliveryOption event for click & collect tab click.
+      cartCheckoutDeliverySelector.find('div[gtm-type="checkout-click-collect"] > a').once('delivery-option-event').on('click', function() {
+        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+      });
 
+      if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
           var resultCount = $('li.select-store', context).length;
@@ -535,12 +536,6 @@
           deliveryType = 'Home Delivery';
         }
 
-        if (document.location.search === '?method=hd') {
-          cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('delivery-option-event').each(function() {
-            dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
-          });
-        }
-
         var deliveryAddressButtons = [
           cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
           cartCheckoutDeliverySelector.find('#add-address-button'),
@@ -554,6 +549,14 @@
             });
           });
       }
+
+      // Trigger deliveryOption event for "home delivery" tab click.
+      $('body[gtm-container="checkout click and collect page"], body[gtm-container="checkout delivery page"]')
+        .find('div[gtm-type="checkout-home-delivery"]:not(.active--tab--head) > a')
+        .once('delivery-option-event')
+        .on('click', function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+        });
 
       /**
        * GTM virtual page tracking for click & collect journey.
