@@ -91,8 +91,7 @@
         else {
           $('body').addClass('mobile--overlay');
           if($('body').hasClass('safari')) {
-            $('body').css('position', 'fixed');
-            $('body').css('margin-top', '0');
+            $('body').addClass('safari-fixed');
           }
         }
 
@@ -111,9 +110,8 @@
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
-        if($('body').hasClass('safari')) {
-          $('body').css('position', 'static');
-          $('body').css('margin-top', '4.5rem');
+        if($('body').hasClass('safari') && $('body').hasClass('safari-fixed')) {
+          $('body').removeClass('safari-fixed');
         }
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.

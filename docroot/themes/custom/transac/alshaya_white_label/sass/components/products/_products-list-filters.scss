@@ -23,6 +23,13 @@ html {
   }
 }
 
+body.mobile--overlay.safari {
+  &.safari-fixed {
+    position: fixed !important;
+    margin-top: 0 !important;
+  }
+}
+
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Main all filters div theming.
