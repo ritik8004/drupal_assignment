@@ -265,7 +265,7 @@ class AlshayaMasterCommands extends DrushCommands {
       $num_roles = count($roles);
 
       // Only if a user has just a single role of authenticated user,
-      // we will delete him.
+      // we will delete them.
       if (($num_roles == 1) && ($roles[0] == 'authenticated')) {
         $ids_to_delete[] = $id;
       }
