@@ -16,7 +16,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\ViewExecutable;
-use Drupal\search_api\Plugin\views\ResultRow;
+use Drupal\views\ResultRow;
 
 /**
  * Implements hook_module_implements_alter().
@@ -302,12 +302,7 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
   if ($view->id() == 'alshaya_product_list' && $view->current_display === 'block_1') {
     $taxonomy_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $product_category_tree = \Drupal::service('alshaya_acm_product_category.product_category_tree');
-    if (isset($view->args[0])) {
-      $term = $taxonomy_storage->load($view->args[0]);
-    }
-    else {
-      $term = $product_category_tree->getCategoryTermFromRoute();
-    }
+    $term = $product_category_tree->getCategoryTermFromRoute();
 
     if ($term instanceof TermInterface && $term->get('field_group_by_sub_category')->getString()) {
       $result_row = [];
