@@ -11,7 +11,7 @@ use Drupal\Core\Site\Settings;
  * Implements hook_install().
  */
 function alshaya_social_facebook_install() {
-  // Configure recaptcha settings.
+  // Configure app_id and app_secret for facbook.
   $config = \Drupal::configFactory()->getEditable('social_auth_facebook.settings');
 
   $facebook_settings = Settings::get('social_auth_facebook.settings');

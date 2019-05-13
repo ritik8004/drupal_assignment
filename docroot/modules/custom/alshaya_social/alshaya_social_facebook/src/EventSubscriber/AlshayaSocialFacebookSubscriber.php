@@ -3,9 +3,10 @@
 namespace Drupal\alshaya_social_facebook\EventSubscriber;
 
 use Drupal\social_api\Plugin\NetworkManager;
+use Drupal\social_auth\AuthManager\OAuth2ManagerInterface;
 use Drupal\social_auth\Event\SocialAuthEvents;
 use Drupal\social_auth\Event\SocialAuthUserFieldsEvent;
-use Drupal\social_auth_facebook\FacebookAuthManager;
+use Drupal\social_auth\SocialAuthDataHandler;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\alshaya_acm_customer\CustomerHelper;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -14,6 +15,13 @@ use Drupal\Core\Logger\LoggerChannelFactory;
  * Event subscriber to fill first and last name for user using facebook.
  */
 class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
+
+  /**
+   * The data handler.
+   *
+   * @var \Drupal\social_auth\SocialAuthDataHandler
+   */
+  private $dataHandler;
 
   /**
    * The network plugin manager.
@@ -25,9 +33,9 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
   /**
    * The Facebook authentication manager.
    *
-   * @var \Drupal\social_auth_facebook\FacebookAuthManager
+   * @var \Drupal\social_auth\AuthManager\OAuth2ManagerInterface
    */
-  protected $facebookManager;
+  protected $providerAuth;
 
   /**
    * The customer helper.
@@ -46,25 +54,29 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
   /**
    * AlshayaSocialFacebookSubscriber constructor.
    *
+   * @param \Drupal\social_auth\SocialAuthDataHandler $data_handler
+   *   Used to manage session variables.
    * @param \Drupal\social_api\Plugin\NetworkManager $network_manager
-   *   Used to get an instance of social_auth_facebook network plugin.
-   * @param \Drupal\social_auth_facebook\FacebookAuthManager $facebook_manager
-   *   Used to manage authentication methods.
+   *   An instance of social_auth_facebook network plugin.
+   * @param \Drupal\social_auth\AuthManager\OAuth2ManagerInterface $provider_auth
+   *   The provider auth manager.
    * @param \Drupal\alshaya_acm_customer\CustomerHelper $customer_helper
    *   The customer helper.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
   public function __construct(
+    SocialAuthDataHandler $data_handler,
     NetworkManager $network_manager,
-    FacebookAuthManager $facebook_manager,
+    OAuth2ManagerInterface $provider_auth,
     CustomerHelper $customer_helper,
     LoggerChannelFactory $logger_factory
   ) {
+    $this->dataHandler = $data_handler;
     $this->networkManager = $network_manager;
-    $this->facebookManager = $facebook_manager;
+    $this->providerAuth = $provider_auth;
     $this->customerHelper = $customer_helper;
-    $this->logger = $logger_factory->get('alshaya_social');
+    $this->logger = $logger_factory->get('alshaya_social_facebook');
   }
 
   /**
@@ -84,12 +96,15 @@ class AlshayaSocialFacebookSubscriber implements EventSubscriberInterface {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function onUserFields(SocialAuthUserFieldsEvent $event) {
-    /* @var \Facebook\Facebook|false $facebook */
-    $facebook = $this->networkManager->createInstance('social_auth_facebook')->getSdk();
-    $this->facebookManager->setClient($facebook)->authenticate();
+    if ($event->getPluginId() !== 'social_auth_facebook' || empty($this->dataHandler->get('access_token'))) {
+      return;
+    }
+
+    $facebook = $this->networkManager->createInstance($event->getPluginId())->getSdk();
+    $this->providerAuth->setClient($facebook)->setAccessToken($this->dataHandler->get('access_token'));
 
     // Gets user's FB profile from Facebook API.
-    if ($fb_profile = $this->facebookManager->getUserInfo('id,first_name,last_name,email')) {
+    if ($fb_profile = $this->providerAuth->getUserInfo()) {
       $fields = $event->getUserFields();
       $fields['field_first_name'] = $fb_profile->getFirstName();
       $fields['field_last_name'] = $fb_profile->getLastName();
