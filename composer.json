@@ -319,10 +319,10 @@
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
             "drupal/social_auth": {
-                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-05-08/provider-redirect-event-dispatcher-3033749-17.patch"
+                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-05-13/provider-redirect-event-dispatcher-3033749-19.patch"
             },
             "drupal/social_auth_facebook": {
-                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-05-08/use-event-dispatcher-method-3033751-8.patch"
+                "Leverage the use of event from social_auth": "https://www.drupal.org/files/issues/2019-05-13/use-event-dispatcher-method-3033751-9.patch"
             },
             "drupal/back_to_top": {
                 "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
