@@ -338,11 +338,11 @@ class AlshayaApiCommands extends DrushCommands {
                 $price_mismatch_sync[$type][] = $sku;
               }
 
-              // If special price in Drupal not matches with final price
+              // If final price in Drupal not matches with final price
               // in Magento.
-              if ($data['special_price'] != $mskus[$type][$sku]['final_price']) {
-                $price_output .= 'Drupal spl price:' . $data['special_price'] . ' | ';
-                $price_output .= 'MDC spl price:' . $mskus[$type][$sku]['final_price'];
+              if ($data['final_price'] != $mskus[$type][$sku]['final_price']) {
+                $price_output .= 'Drupal final price:' . $data['final_price'] . ' | ';
+                $price_output .= 'MDC final price:' . $mskus[$type][$sku]['final_price'];
                 $price_mismatch_sync[$type][] = $sku;
               }
 
