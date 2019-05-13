@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * List all known Conductor environments keyed by environment machine name.
@@ -67,6 +68,10 @@ $conductors = [
     'hmac_id' => 'd42e1e4ee7354200891b4e13fcd5a06b',
     'hmac_secret' => 'ZGMzYmYzMWYtNDAyOS00',
   ],
+  'hmsa_dev' => [
+    'hmac_id' => 'aa9714724c894af59aafdd60a2bfd09a',
+    'hmac_secret' => 'YjQxNWM0MmItODM0Ny00',
+  ],
   // H&M SA.
   'hmsa_qa' => [
     'hmac_id' => 'd6e8ad54d1b74a9d8153028b42da4e38',
@@ -85,6 +90,10 @@ $conductors = [
     'hmac_secret' => 'OGE2ZTUzZjItMjE0YS00',
   ],
   // H&M AE.
+  'hmae_dev' => [
+    'hmac_id' => 'c988092f47f54bb7bcc14fa2fd4fd950',
+    'hmac_secret' => 'ZTkwODE2YTEtYTE2Zi00',
+  ],
   'hmae_qa' => [
     'hmac_id' => '48f2b6197df649f6bf5437312319ab5b',
     'hmac_secret' => 'ZDI1OTgyNDEtNzlkMS00',
