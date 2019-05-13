@@ -100,7 +100,7 @@
         "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
-        "drupal/devel": "^1.0.0-alpha1",
+        "drupal/devel": "^2.0.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
@@ -269,7 +269,7 @@
                 "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
             },
             "drupal/recaptcha": {
-                "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
+                "modal support": "https://www.drupal.org/files/issues/2019-04-17/recaptcha-ajax-2493183-172.patch"
             },
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
@@ -281,7 +281,7 @@
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
             },
             "drupal/clientside_validation": {
-                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
+                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2019-05-08/cv-validate-ajax-2952233-12.patch"
             },
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
@@ -319,14 +319,17 @@
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
             "drupal/social_auth": {
-                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033749-3.patch",
+                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-03-22/provider-redirect-event-dispatcher-3033749-12.patch",
                 "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
             },
             "drupal/social_auth_facebook": {
-                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-02-18/login_error_destination-3033751-2.patch"
+                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-03-23/use-event-dispatcher-method-3033751-7.patch"
             },
             "drupal/back_to_top": {
                 "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
+            },
+            "sensiolabs-de/deprecation-detector": {
+                "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             }
         },
         "installer-paths": {
