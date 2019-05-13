@@ -1,2 +1,3 @@
 sale_category_ids: { }
 new_arrival_category_ids: { }
+old_categorization_enabled: true
