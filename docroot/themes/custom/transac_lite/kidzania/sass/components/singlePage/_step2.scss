@@ -36,6 +36,10 @@
   }
 
   .steps__information {
+    html[lang=ar] & {
+      line-height: 1.4;
+    }
+
     .ticket__type {
       width: 22%;
       padding: 0 0.625rem;
@@ -74,14 +78,12 @@
       &:hover {
         background-image: $btn_hover_bg_img_gradient;
         box-shadow: none;
-
-        @extend %btn_hover;
       }
 
       &.active {
         background-image: $btn_active_bg_img_gradient;
         box-shadow: none;
-        color: #fff;
+        color: $btn_active_text;
       }
     }
   }
