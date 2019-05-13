@@ -50,49 +50,37 @@
     position: relative;
 
     .magazine-desc-wrapper {
-      padding: 0.8125rem 2rem 0.625rem;
+      @include container(45rem);
+
+      padding: 4rem 1.875rem;
       font-family: $arial;
       font-size: 1.1375rem;
-      line-height: 1.71;
+      line-height: 1.2;
       color: $magazine-pdp-description;
-
-      @include breakpoint($only-mobile) {
-        padding: 1rem 1.5rem 0.6875rem;
-        font-size: 0.875rem;
-      }
 
       div[class*="label"] {
         font-family: $alshaya-bold;
-        font-size: 0.975rem;
-        letter-spacing: 3px;
+        font-size: 0.6875rem;
+        letter-spacing: 1.1px;
         color: $magazine-pdp-label;
         margin-bottom: 1.1875rem;
+        padding-#{$right}: 0.25rem;
 
         html[lang=ar] & {
           letter-spacing: normal;
-        }
-
-        @include breakpoint($only-mobile) {
-          font-size: 0.75rem;
-          margin-bottom: 0.5rem;
         }
       }
 
       div[class*="value"] {
         font-family: $arial;
-        font-size: 1.1375rem;
+        font-size: 0.6875rem;
         line-height: 1.71;
         color: $magazine-pdp-description;
-
-        @include breakpoint($only-mobile) {
-          font-size: 0.875rem;
-        }
       }
     }
 
     @include breakpoint($tablet) {
       margin: 0 auto;
-      padding: 1rem 0;
     }
 
     ul {
@@ -101,6 +89,19 @@
 
       li {
         list-style: none;
+        margin-#{$right}: 0.125rem;
+
+        &::after {
+          content: ',';
+          width: 0.125rem;
+          height: 0.125rem;
+        }
+
+        &:last-child {
+          &::after {
+            display: none;
+          }
+        }
       }
     }
 
@@ -362,6 +363,49 @@
           }
         }
       }
+    }
+  }
+}
+
+@include breakpoint($mobile) {
+  .description-details {
+    div,
+    ul,
+    li {
+      display: inline;
+    }
+
+    > div {
+      margin: 0 !important;
+
+      &::after {
+        content: "";
+        background-color: $magazine-pdp-description-separator;
+        position: relative;
+        display: inline-block;
+        width: 1.875rem;
+        height: 1px;
+        top: -0.1875rem;
+        margin: 0 0.9375rem;
+      }
+
+      &:last-child {
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .description-first {
+    margin-bottom: 2.125rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: $magazine-pdp-description-first-color;
+
+    @include breakpoint($only-mobile) {
+      font-size: 0.9375rem;
+      line-height: 1.2;
     }
   }
 }
