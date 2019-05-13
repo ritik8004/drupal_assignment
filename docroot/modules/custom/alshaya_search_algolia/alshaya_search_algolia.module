@@ -11,5 +11,7 @@ use Drupal\search_api\IndexInterface;
  * Implements hook_search_api_algolia_sorts_alter().
  */
 function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, IndexInterface $index) {
+  // We have added stock as ranking already in all the replicas.
+  // It is added in views to keep consistency with solr / db.
   unset($sorts['stock']);
 }
