@@ -20,13 +20,27 @@
 {% if title %}
   <h3>{{ title }}</h3>
 {% endif %}
+
 {% for row in rows %}
   {%
     set row_classes = [
       default_row_class ? 'views-row',
     ]
   %}
-  <div{{ row.attributes.addClass(row_classes) }}>
-    {{- row.content -}}
-  </div>
+
+  {% if row.content.tid %}
+    <div class="term-header" id="{{ row.content.tid }}">
+      {% if row.content.label %}
+        <div class="term-title">{{ row.content.label }}</div>
+      {% endif %}
+      {% if row.content.desc %}
+        <div class="term-desc">{{ row.content.desc }}</div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div{{ row.attributes.addClass(row_classes) }}>
+      {{- row.content -}}
+    </div>
+  {% endif %}
+
 {% endfor %}
