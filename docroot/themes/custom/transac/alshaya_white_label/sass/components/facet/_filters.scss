@@ -293,7 +293,8 @@
     }
 
     &.hide-for-desktop {
-      display: none;
+      opacity: 0.4;
+      pointer-events: none;
     }
   }
 
@@ -644,7 +645,7 @@ body.header-sticky-filter {
 body {
   .branding__menu {
     @include breakpoint($only-mobile) {
-      box-shadow: 0 0.125rem 0 0 $lhn_sticky-header-shadow;
+      box-shadow: 0 1px 0 0 $lhn_sticky-header-shadow;
       border-bottom: none;
     }
 
