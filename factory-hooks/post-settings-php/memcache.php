@@ -3,7 +3,9 @@
 
 /**
  * @file
- * Contains memcache configuration.
+ * Factory hook implementation for memcache.
+ *
+ * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
 use Composer\Autoload\ClassLoader;
