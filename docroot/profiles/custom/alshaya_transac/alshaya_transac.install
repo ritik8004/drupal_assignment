@@ -398,7 +398,7 @@ function alshaya_transac_install() {
     'alshaya_click_collect',
     'alshaya_config',
     'alshaya_contact',
-    'alshaya_default_content_transac',
+    'alshaya_default_content',
     'alshaya_i18n',
     'alshaya_loyalty',
     'alshaya_main_menu',
@@ -450,7 +450,7 @@ function alshaya_transac_install() {
   \Drupal::service('theme_handler')->setDefault('alshaya_white_label');
 
   // Invoke the function in profile to inform sub profile is installed.
-  alshaya_sub_profile_installed('alshaya_transac', $modules);
+  alshaya_sub_profile_installed('alshaya_transac');
 
   // Set stock mode.
   \Drupal::configFactory()->getEditable('acq_sku.settings')
