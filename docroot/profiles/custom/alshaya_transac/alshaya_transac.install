@@ -15,6 +15,15 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Enable alshaya_social_google module.
+ */
+function alshaya_transac_update_8121() {
+  \Drupal::service('module_installer')->install(['alshaya_social_google']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Move facet blocks for left sidebar region to content region for
  * PLP/SRP/Promo pages. Blocks should be placed after block exposed form block
  * of sort.
