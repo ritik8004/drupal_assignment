@@ -18,6 +18,7 @@ services:
       - '@config.factory'
       - '@alshaya_acm_product.skumanager'
       - '@alshaya_acm_product.sku_images_manager'
+
   alshaya_acm_product.skumanager:
     class: Drupal\alshaya_acm_product\SkuManager
     arguments:
@@ -41,6 +42,7 @@ services:
       - '@renderer'
       - '@simple_sitemap.generator'
       - '@acq_sku.product_info_helper'
+      - '@alshaya.alshaya_array_utils'
 
   alshaya_acm_product.price_helper:
     class: Drupal\alshaya_acm_product\Service\SkuPriceHelper

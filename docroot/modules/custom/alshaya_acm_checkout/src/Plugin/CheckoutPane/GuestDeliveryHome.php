@@ -62,7 +62,7 @@ class GuestDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfac
       '#markup' => '<div class="title">' . $this->t('delivery information') . '</div>',
     ];
 
-    // Check if user is changing his mind, if so clear shipping info.
+    // Check if user is changing their mind, if so clear shipping info.
     if ($this->isUserChangingHisMind()) {
       $this->clearShippingInfo();
     }
