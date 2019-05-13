@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_acm;
 
+use Drupal\alshaya_custom\AlshayaCountryManager;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -59,6 +60,13 @@ class AlshayaAcmConfigCheck {
   protected $state;
 
   /**
+   * Alshaya country manager.
+   *
+   * @var \Drupal\alshaya_custom\AlshayaCountryManager
+   */
+  protected $alshayaCountryManager;
+
+  /**
    * AlshayaAcmConfigCheck constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -73,19 +81,23 @@ class AlshayaAcmConfigCheck {
    *   The date time service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state factory.
+   * @param \Drupal\alshaya_custom\AlshayaCountryManager $alshaya_country_manager
+   *   Alshaya country manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               ModuleInstallerInterface $module_installer,
                               ModuleHandlerInterface $module_handler,
                               LanguageManagerInterface $language_manager,
                               TimeInterface $date_time,
-                              StateInterface $state) {
+                              StateInterface $state,
+                              AlshayaCountryManager $alshaya_country_manager) {
     $this->configFactory = $config_factory;
     $this->moduleInstaller = $module_installer;
     $this->moduleHandler = $module_handler;
     $this->languageManager = $language_manager;
     $this->dateTime = $date_time;
     $this->state = $state;
+    $this->alshayaCountryManager = $alshaya_country_manager;
   }
 
   /**
@@ -254,12 +266,12 @@ class AlshayaAcmConfigCheck {
 
     // Reset currency code - EN.
     $this->configFactory->getEditable('acq_commerce.currency')
-      ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'en'))
+      ->set('currency_code', $this->alshayaCountryManager->getCurrencyCode($expected_country_code, 'en'))
       ->save();
 
     // Reset currency code - AR.
     $this->languageManager->getLanguageConfigOverride('ar', 'acq_commerce.currency')
-      ->set('currency_code', _alshaya_get_currency_code($expected_country_code, 'ar'))
+      ->set('currency_code', $this->alshayaCountryManager->getCurrencyCode($expected_country_code, 'ar'))
       ->save();
   }
 
