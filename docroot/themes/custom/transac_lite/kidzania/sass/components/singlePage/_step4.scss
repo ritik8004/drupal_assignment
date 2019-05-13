@@ -1,3 +1,13 @@
+.ticketing__steps {
+  &.four {
+    .steps__information {
+      html[lang=ar] & {
+        line-height: 1;
+      }
+    }
+  }
+}
+
 .ticket_information {
   width: 100%;
   text-align: $left;
@@ -9,7 +19,6 @@
   .age-group,
   .ticket-count {
     display: flex;
-    float: $left;
 
     @include breakpoint ($only-mobile) {
       display: block;
@@ -70,7 +79,7 @@
         border-radius: 50%;
         text-align: center;
         vertical-align: middle;
-        float: right;
+        float: $right;
         transition: all 0.4s;
         cursor: pointer;
 
@@ -83,7 +92,7 @@
         .icon {
           font-size: 1rem;
           margin-top: 0.6875rem;
-          line-height: 2.5;
+          line-height: 2.7;
 
           @include breakpoint($only-mobile) {
             font-size: 0.625rem;
@@ -222,7 +231,7 @@
       &.unit {
         @include breakpoint($only-mobile) {
           border-radius: 0.3125rem 0.3125rem 0 0;
-          border-bottom: 1px solid $cart_item_count_mobile_border;
+          border-bottom: 0.0625rem solid $cart_item_count_mobile_border;
           text-align: $right;
         }
       }
@@ -327,7 +336,7 @@
     background-color: $nxt_step_btn_bg;
     background-image: $btn_active_bg_img_gradient;
     color: $nxt_step_btn_text;
-    box-shadow: 0 8px 15px rgba(133, 26, 44, 0.3), 0 20px 55px rgba(206, 27, 74, 0.35);
+    box-shadow: 0 0.5rem 0.9375rem rgba(133, 26, 44, 0.3), 0 1.25rem 3.4375rem rgba(206, 27, 74, 0.35);
 
     @extend %btn;
 
