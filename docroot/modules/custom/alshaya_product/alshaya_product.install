@@ -13,6 +13,22 @@ use Drupal\search_api\Entity\Index;
 /**
  * Implements hook_update_N().
  *
+ * Update views to change row render style.
+ */
+function alshaya_product_update_8024() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['views.view.alshaya_product_list'],
+    'alshaya_product',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update views to add stock sorting filter.
  */
 function alshaya_product_update_8023() {
@@ -259,7 +275,7 @@ function alshaya_product_update_8011() {
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 جديدنا تنازلي|جديدنا
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
 
@@ -440,7 +456,7 @@ function alshaya_product_update_8002() {
 
   $product_list_view->set('display.default.display_options.exposed_form.options.bef.sort.advanced.combine_rewrite', 'ما ننصح به تصاعدي|ما ننصح به
 الاسم تصاعدي|الاسم من أ إلى ي
-الاسم تنازلي|الاسم من ي إلى أ 
+الاسم تنازلي|الاسم من ي إلى أ
 السعر تنازلي|السعر من الأعلى إلى الأدنى
 السعر تصاعدي|السعر من الأدنى إلى الأعلى');
 

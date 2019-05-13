@@ -329,9 +329,9 @@ function alshaya_acm_product_category_views_pre_render(ViewExecutable $view) {
         $category_term = $taxonomy_storage->load($tid);
 
         if ($category_term instanceof TermInterface) {
-          $category_row = [
+          $category_row['group_details'] = [
             'tid' => $tid,
-            'lable' => $category_term->label(),
+            'label' => $category_term->label(),
             'desc' => $category_term->get('field_plp_group_category_desc')->getValue()[0]['value'] ?? '',
           ];
           $view->result[] = new ResultRow($category_row);
