@@ -7,3 +7,6 @@ services:
   alshaya_custom.utility:
     class: Drupal\alshaya_custom\Utility
     arguments: [ '@theme_handler', '@entity_type.manager' ]
+  alshaya_custom.alshaya_country_manager:
+    class: Drupal\alshaya_custom\AlshayaCountryManager
+    arguments: [ '@module_handler' ]
