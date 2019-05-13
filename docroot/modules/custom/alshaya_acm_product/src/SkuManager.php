@@ -2869,9 +2869,9 @@ class SkuManager {
    */
   private function updateStockForIndex(SKUInterface $sku, ItemInterface $item) {
     // We will use node.sticky to map stock status in index.
-    // For stock index, we use only in stock (1) or out of stock (-1).
+    // For stock index, we use only in stock (1) or out of stock (0).
     // We will use 1 for not-buyable products too.
-    $in_stock = -1;
+    $in_stock = 0;
 
     if (!alshaya_acm_product_is_buyable($sku)) {
       $in_stock = 2;
