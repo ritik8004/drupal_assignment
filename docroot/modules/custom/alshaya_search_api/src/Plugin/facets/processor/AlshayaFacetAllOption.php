@@ -44,10 +44,11 @@ class AlshayaFacetAllOption extends ProcessorPluginBase implements BuildProcesso
         $one_result = end($results);
         if ($one_result instanceof Result) {
           // Get the query parameters from url.
-          $url = $one_result->getUrl();
+          $url = clone $one_result->getUrl();
           $query = $url->getOption('query');
 
-          if ($query && !empty($options = $query['f'])) {
+          if ($query) {
+            $options = $query['f'];
             foreach ($options as $key => $option) {
               // Unset all active items of this facet to prepare url for the
               // `All` facet item.
