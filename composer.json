@@ -72,6 +72,7 @@
         "drupal/robotstxt": "^1.1",
         "drupal/role_delegation": "^1.0@alpha",
         "drupal/scheduled_updates": "^1.0@alpha",
+        "drupal/search_api_algolia": "1.x-dev",
         "drupal/search_api_autocomplete": "^1.0",
         "drupal/search_api_solr": "^1.0-rc3",
         "drupal/search_api_solr_multilingual": "^1.0@beta",
@@ -330,6 +331,9 @@
             },
             "sensiolabs-de/deprecation-detector": {
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
+            },
+            "drupal/search_api_algolia": {
+                "Allow viewing results via Drupal": "https://www.drupal.org/files/issues/2019-05-10/3053205-4.patch"
             }
         },
         "installer-paths": {

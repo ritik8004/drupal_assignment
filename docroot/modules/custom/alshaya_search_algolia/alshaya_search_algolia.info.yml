@@ -1,0 +1,8 @@
+name: 'Alshaya Search Algolia'
+description: 'Contains search config for Algolia'
+type: module
+core: 8.x
+dependencies:
+  - alshaya_search:alshaya_search
+  - search_api_algolia:search_api_algolia
+package: Alshaya
