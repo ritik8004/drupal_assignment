@@ -6,7 +6,7 @@ html {
     box-shadow: 0 9999px 0 9999px rgba(0, 0, 0, 0.5);
     pointer-events: none;
     opacity: 0;
-    z-index: 11;
+    z-index: 12;
     background-color: rgba(0, 0, 0, 0.48);
     transition: opacity 300ms ease-in;
   }
@@ -20,6 +20,13 @@ html {
       height: 100%;
       pointer-events: unset;
     }
+  }
+}
+
+body.mobile--overlay.safari {
+  &.safari-fixed {
+    position: fixed !important;
+    margin-top: 0 !important;
   }
 }
 

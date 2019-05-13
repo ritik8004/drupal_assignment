@@ -90,7 +90,9 @@
         }
         else {
           $('body').addClass('mobile--overlay');
-          $('body').css('position', 'fixed');
+          if($('body').hasClass('safari')) {
+            $('body').addClass('safari-fixed');
+          }
         }
 
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -108,7 +110,9 @@
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
-        $('body').css('position', 'relative');
+        if($('body').hasClass('safari') && $('body').hasClass('safari-fixed')) {
+          $('body').removeClass('safari-fixed');
+        }
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
