@@ -14,7 +14,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Url;
 
 /**
- * Event subscriber to fill first and last name for user using facebook.
+ * Subscriber to set login_error_destination link and redirect on error.
  */
 class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
 
@@ -92,7 +92,7 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Reirect to login_error_destination on provider error.
+   * Redirect to login_error_destination on provider error.
    *
    * @param \Drupal\social_auth\Event\ProviderErrorEvent $event
    *   The event object.
