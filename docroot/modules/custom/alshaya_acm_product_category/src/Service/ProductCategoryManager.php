@@ -476,15 +476,21 @@ class ProductCategoryManager {
    *   True if old categorization rule enabled.
    */
   public function isOldCategorizationRuleEnabled() {
+    static $old_cat_rule_enabled;
+    if (isset($old_cat_rule_enabled)) {
+      return $old_cat_rule_enabled;
+    }
+
+    $old_cat_rule_enabled = TRUE;
     $old_categorization_enabled = $this->configFactory
       ->get('alshaya_acm_product_category.settings')
       ->get('old_categorization_enabled');
 
     if ($old_categorization_enabled) {
-      return FALSE;
+      $old_cat_rule_enabled = FALSE;
     }
 
-    return TRUE;
+    return $old_cat_rule_enabled;
   }
 
 }
