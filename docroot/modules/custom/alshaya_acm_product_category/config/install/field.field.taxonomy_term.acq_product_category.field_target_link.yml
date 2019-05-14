@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_target_link
+    - taxonomy.vocabulary.acq_product_category
+  module:
+    - link
+id: taxonomy_term.acq_product_category.field_target_link
+field_name: field_target_link
+entity_type: taxonomy_term
+bundle: acq_product_category
+label: 'Target link'
+description: ''
+required: false
+translatable: true
+skip_translation_check: 0
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

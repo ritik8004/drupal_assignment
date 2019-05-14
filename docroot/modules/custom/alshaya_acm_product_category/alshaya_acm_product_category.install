@@ -14,6 +14,43 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
 /**
  * Implements hook_update_N().
  *
+ * Add fields to create term items that can be displayed as a main menu, and
+ * which are not commerce category items.
+ */
+function alshaya_acm_product_category_update_8029() {
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'field.storage.taxonomy_term.field_icon',
+        'field.storage.taxonomy_term.field_include_in_desktop',
+        'field.storage.taxonomy_term.field_include_in_mobile_tablet',
+        'field.storage.taxonomy_term.field_override_target_link',
+        'field.storage.taxonomy_term.field_target_link',
+        'field.field.taxonomy_term.acq_product_category.field_icon',
+        'field.field.taxonomy_term.acq_product_category.field_include_in_desktop',
+        'field.field.taxonomy_term.acq_product_category.field_include_in_mobile_tablet',
+        'field.field.taxonomy_term.acq_product_category.field_override_target_link',
+        'field.field.taxonomy_term.acq_product_category.field_target_link',
+      ],
+      'alshaya_acm_product_category',
+      'install'
+    );
+
+  \Drupal::service('alshaya_config.manager')
+    ->updateConfigs(
+      [
+        'core.entity_form_display.taxonomy_term.acq_product_category.default',
+        'core.entity_view_display.taxonomy_term.acq_product_category.default',
+      ],
+      'alshaya_acm_product_category',
+      'install',
+      AlshayaConfigManager::MODE_MERGE
+    );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove hide_facet_condition_moschino plugin from blocks.
  */
 function alshaya_acm_product_category_update_8028() {

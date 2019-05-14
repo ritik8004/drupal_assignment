@@ -21,6 +21,11 @@ dependencies:
   - field.field.taxonomy_term.acq_product_category.field_display_as_clickable_link
   - field.field.taxonomy_term.acq_product_category.field_plp_menu_icon
   - field.field.taxonomy_term.acq_product_category.field_plp_menu
+  - field.field.taxonomy_term.acq_product_category.field_icon
+  - field.field.taxonomy_term.acq_product_category.field_include_in_desktop
+  - field.field.taxonomy_term.acq_product_category.field_include_in_mobile_tablet
+  - field.field.taxonomy_term.acq_product_category.field_override_target_link
+  - field.field.taxonomy_term.acq_product_category.field_target_link
   module:
   - metatag
 id: taxonomy_term.acq_product_category.default
@@ -52,15 +57,20 @@ hidden:
   field_commerce_id: true
   field_commerce_status: true
   field_display_as_clickable_link: true
+  field_icon: true
   field_image_text_bg_color: true
   field_image_text_font_color: true
+  field_include_in_desktop: true
+  field_include_in_mobile_tablet: true
   field_main_menu_highlight: true
   field_mobile_only_dpt_page_link: true
+  field_override_target_link: true
   field_pdp_layout: true
   field_promo_banner_for_mobile: true
   field_promotion_banner: true
   field_promotion_banner_mobile: true
   field_size_guide_anchor: true
+  field_target_link: true
   field_term_background_color: true
   field_term_font_color: true
   langcode: true

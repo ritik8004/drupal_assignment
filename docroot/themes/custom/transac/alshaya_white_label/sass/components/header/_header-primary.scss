@@ -880,6 +880,29 @@ header {
         }
       }
     }
+
+    &.non-category {
+      @include breakpoint($desktop) {
+        display: none;
+      }
+
+      @include breakpoint($upto-desktop) {
+        a.non-category {
+          display: inline-flex;
+          align-items: center;
+          justify-content: $left;
+          width: 100%;
+          padding: 0.5rem 0;
+
+          .icon {
+            display: inline-block;
+            max-width: 2rem;
+            max-height: 2rem;
+            margin-#{$right}: 0.3125rem;
+          }
+        }
+      }
+    }
   }
 }
 
