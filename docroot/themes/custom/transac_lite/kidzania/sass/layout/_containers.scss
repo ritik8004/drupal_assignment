@@ -16,13 +16,8 @@
 .container {
   margin: 0 auto;
 
-  @include breakpoint($upto-desktop) {
-    max-width: 100%;
+  @include breakpoint($only-tablet) {
     margin: 0 1rem;
-  }
-
-  @include breakpoint($only-mobile) {
-    margin: 0;
   }
 
   @include breakpoint($desktop) {
