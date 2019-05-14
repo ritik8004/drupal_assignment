@@ -79,14 +79,11 @@
       &.is-active {
         background: $plp_filter_active_item;
 
-        &::after {
-          background-image: url(#{$base_theme_img_directory_path}/icons/tick.svg);
-          background-repeat: no-repeat;
-          content: '';
+        @include icon(check, after) {
+          font-size: 1.5rem;
           position: absolute;
           top: 50%;
-          width: 0.625rem;
-          height: 0.625rem;
+          color: $plp_filter_active_tick;
           transform: translateY(-50%);
           #{$right}: 1rem;
         }
@@ -313,22 +310,19 @@
     border-bottom: 1px solid $plp_mobile_separator;
   }
 
-  &::before {
-    content: '';
+  @include icon(filter, before) {
     position: absolute;
-    top: 50%;
+    top: 49%;
     transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
-    background-image: url(#{$base_theme_img_directory_path}/icons/filter-icon.svg);
-    background-repeat: no-repeat;
+    font-size: 2.125rem;
+    color: $plp_filter_icon;
 
     @include breakpoint($only-mobile) {
-      #{$right}: 1.25rem;
+      #{$right}: 0.6875rem;
     }
 
     @include breakpoint($tablet) {
-      #{$left}: 0;
+      #{$left}: -0.25rem;
     }
   }
 }

@@ -468,9 +468,11 @@ $plp-swatch-color-count: $black;
 $plp_mobile_separator: $warm-grey-two;
 $plp_facet_count_number: $_plp_facet_count_color;
 $plp_sort_by_options: $_plp_sort_by_options;
-$plp_selected_filter_label_text: $_plp_selected_filter_text;
+$plp_selected_filter_label_text: $grey-ash;
 $plp_grid_active_color: $marine-blue-two;
 $plp_all_filter_filter_arrow: $grey-ash;
+$plp_filter_icon: $grey-ash;
+$plp_filter_active_tick: $marine-blue-two;
 
 // PLP All filter colors
 $plp_all_filter_bg: $white-five;
