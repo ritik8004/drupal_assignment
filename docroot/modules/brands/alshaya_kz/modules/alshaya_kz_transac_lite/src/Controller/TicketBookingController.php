@@ -52,7 +52,7 @@ class TicketBookingController extends ControllerBase {
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticketBooking
    *   The TicketBooking object.
    * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $bookingPayment
-   *   The Booking payemnt object.
+   *   The Booking payment object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler object.
    * @param \Drupal\Component\Serialization\Json $json_decode
@@ -73,8 +73,8 @@ class TicketBookingController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('alshaya_kz_transac_lite.booking'),
-      $container->get('alshaya_kz_transac_lite.booking_payemnt'),
+      $container->get('alshaya_kz_transac_lite.booking_manager'),
+      $container->get('alshaya_kz_transac_lite.booking_payment_manager'),
       $container->get('module_handler'),
       $container->get('serialization.json')
     );

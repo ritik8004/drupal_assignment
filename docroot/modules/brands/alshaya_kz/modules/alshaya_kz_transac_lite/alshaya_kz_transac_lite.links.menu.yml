@@ -3,3 +3,4 @@ alshaya_kz_transac_lite.kidzania_settings_form:
   description: 'Configure Kidzania settings.'
   parent: alshaya_master.alshaya_admin
   route_name: 'alshaya_kz_transac_lite.kidzania_settings_form'
+

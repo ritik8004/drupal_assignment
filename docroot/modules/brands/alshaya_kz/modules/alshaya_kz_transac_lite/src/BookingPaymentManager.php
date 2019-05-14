@@ -9,7 +9,7 @@ use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxy;
 use Drupal\node\NodeInterface;
-use Drupal\node\Entity\Node;
+use Drupal\Core\Entity\Query\QueryFactory;
 
 /**
  * Class BookingPaymentManager.
@@ -54,6 +54,13 @@ class BookingPaymentManager {
   protected $currentUser;
 
   /**
+   * The entity query.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
+   */
+  protected $entityQuery;
+
+  /**
    * The BookingPaymentManager constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -66,18 +73,22 @@ class BookingPaymentManager {
    *   Render object.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   Current user object.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $entity_query
+   *   The entity query object.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_factory,
                               EntityTypeManagerInterface $entity_manager,
                               MailManagerInterface $mail_manager,
                               Renderer $renderer,
-                              AccountProxy $current_user) {
+                              AccountProxy $current_user,
+                              QueryFactory $entity_query) {
 
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->entityManager = $entity_manager;
     $this->mailManager = $mail_manager;
     $this->renderer = $renderer;
     $this->currentUser = $current_user;
+    $this->entityQuery = $entity_query;
   }
 
   /**
@@ -127,20 +138,19 @@ class BookingPaymentManager {
   public function updateTicketDetails($sales_number, $payment_id) {
 
     try {
-      $query = \Drupal::entityQuery('node')
+      $query = $this->entityQuery->get('node')
         ->condition('type', 'tickets')
         ->condition('title', $sales_number);
       $result = $query->execute();
 
       if (isset($result) && !empty($result)) {
         foreach ($result as $nid) {
-          $node = Node::load($nid);
+          $node = $this->entityManager->getStorage('node')->load($nid);
         }
-
         if ($node instanceof NodeInterface) {
-          $node->set('field_payment_id', $payment_id);
-          $node->set('field_booking_status', 'active');
-          $node->set('field_payment_status', 'complete');
+          $node->field_payment_id = $payment_id;
+          $node->field_booking_status = 'active';
+          $node->field_payment_status = 'complete';
           $node->save();
         }
       }
