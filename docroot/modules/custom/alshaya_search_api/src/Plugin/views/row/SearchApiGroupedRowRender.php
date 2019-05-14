@@ -14,10 +14,10 @@ use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a row plugin for displaying a result as a rendered item.
+ * Provides a row plugin for displaying a result as a grouped rendered item.
  *
  * @ViewsRow(
- *   id = "search_api_grouped_row",
+ *   id = "alshaya_search_api_grouped_row",
  *   title = @Translation("Grouped Rendered entity"),
  *   help = @Translation("Displays entity of the matching search API item along with groups"),
  * )
@@ -111,7 +111,6 @@ class SearchApiGroupedRowRender extends RowPluginBase {
     /** @var \Drupal\search_api\Datasource\DatasourceInterface $datasource */
     foreach ($this->index->getDatasources() as $datasource_id => $datasource) {
       $datasource_label = $datasource->label();
-      $bundles = $datasource->getBundles();
       if (!$datasource->getViewModes()) {
         $form['view_modes'][$datasource_id] = [
           '#type' => 'item',
@@ -121,7 +120,7 @@ class SearchApiGroupedRowRender extends RowPluginBase {
         continue;
       }
 
-      foreach ($bundles as $bundle_id => $bundle_label) {
+      foreach ($datasource->getBundles() as $bundle_id => $bundle_label) {
         $title = $this->t('View mode for datasource %datasource, bundle %bundle', ['%datasource' => $datasource_label, '%bundle' => $bundle_label]);
         $view_modes = $datasource->getViewModes($bundle_id);
         if (!$view_modes) {
