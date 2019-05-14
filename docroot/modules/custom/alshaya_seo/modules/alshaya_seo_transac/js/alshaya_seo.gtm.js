@@ -293,6 +293,11 @@
         Drupal.alshaya_seo_gtm_push_checkout_option('Click & Collect', 2);
       });
 
+      // Trigger deliveryOption event for click & collect tab click.
+      cartCheckoutDeliverySelector.find('div[gtm-type="checkout-click-collect"] > a').once('delivery-option-event').on('click', function() {
+        dataLayer.push({event: 'deliveryOption', eventLabel: 'Click & Collect'});
+      });
+
       if (isCCPage && gtm_execute_onetime_events && !ccPaymentsClicked) {
         if ($('li.select-store', context).length > 0) {
           var keyword = $('input#edit-store-location').val();
@@ -523,13 +528,35 @@
       /**
        * Tracking Home Delivery.
        */
-      if ((cartCheckoutDeliverySelector.length !== 0) &&
-        (subDeliveryOptionSelector.find('.form-type-radio').length === 0)) {
+      if (cartCheckoutDeliverySelector.length !== 0) {
         // Fire checkout option event if home delivery option is selected by default on delivery page.
-        if (cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')) {
+        if (subDeliveryOptionSelector.find('.form-type-radio').length === 0
+          && cartCheckoutDeliverySelector.find('div[gtm-type="checkout-home-delivery"]').once('js-event').hasClass('active--tab--head')
+        ) {
           deliveryType = 'Home Delivery';
         }
+
+        var deliveryAddressButtons = [
+          cartCheckoutDeliverySelector.find('.address--deliver-to-this-address > a'),
+          cartCheckoutDeliverySelector.find('#add-address-button'),
+        ];
+
+        $(deliveryAddressButtons)
+          .each(function() {
+            $(this).once('delivery-address').on('click, mousedown', function (e) {
+              let eventLabel = $(this).attr('id') === 'add-address-button' ? 'add new address' : 'deliver to this address';
+              dataLayer.push({event: 'deliveryAddress', eventLabel: eventLabel});
+            });
+          });
       }
+
+      // Trigger deliveryOption event for "home delivery" tab click.
+      $('body[gtm-container="checkout click and collect page"], body[gtm-container="checkout delivery page"]')
+        .find('div[gtm-type="checkout-home-delivery"]:not(.active--tab--head) > a')
+        .once('delivery-option-event')
+        .on('click', function() {
+          dataLayer.push({event: 'deliveryOption', eventLabel: 'Home Delivery'});
+        });
 
       /**
        * GTM virtual page tracking for click & collect journey.
@@ -1122,6 +1149,11 @@
         return decodeURIComponent(pair[1]);
       }
     }
+  };
+
+  // Ajax command to push deliveryAddress Event.
+  $.fn.triggerDeliveryAddress = function () {
+    dataLayer.push({event: 'deliveryAddress', eventLabel: 'deliver to this address'});
   };
 
 })(jQuery, Drupal, dataLayer);

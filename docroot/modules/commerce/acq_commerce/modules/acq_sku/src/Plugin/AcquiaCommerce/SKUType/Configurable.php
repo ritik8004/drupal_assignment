@@ -476,8 +476,6 @@ class Configurable extends SKUPluginBase {
 
     // Prepare combinations array grouped by attributes to check later which
     // combination is possible using isset().
-    $combinations['by_attribute'] = [];
-
     foreach ($combinations['by_sku'] ?? [] as $sku_string => $combination) {
       $combination_string = self::getSelectedCombination($combination);
       $combinations['by_attribute'][$combination_string] = $sku_string;
