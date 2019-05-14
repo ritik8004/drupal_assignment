@@ -73,7 +73,8 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer validate --no-check-all --ansi
-  - composer install
+  - source ${BUILD_DIR}/blt/scripts/delete_composer_caches "${BUILD_DIR}"
+  - composer install --no-interaction
   # Exit build early if only documentation was changed in a Pull Request.
   - source ${BLT_DIR}/scripts/travis/exit_early
 

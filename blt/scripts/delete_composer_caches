@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -ev
+
+buildDir="$1"
+
+if git diff --name-only $TRAVIS_COMMIT_RANGE | grep -iE '(composer.json|composer.lock)'
+then
+  echo "Composer files updated, deleting caches."
+  rm -Rf $buildDir/docroot/modules/contrib
+  rm -Rf $buildDir/docroot/themes/contrib
+  rm -Rf $buildDir/docroot/core
+  rm -Rf $buildDir/profiles/contrib
+  rm -Rf $buildDir/vendor
+fi
+
+set +v
