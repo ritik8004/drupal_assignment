@@ -675,25 +675,26 @@ class SkuManager {
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $child_skus = [];
 
-    if ($sku_entity->getType() == 'configurable') {
-      foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
-        try {
-          $child_sku_entity = SKU::loadFromSku(
-            $child_sku->getString(), $sku_entity->language()->getId()
-          );
+    if ($sku_entity->getType() != 'configurable') {
+      return $child_skus;
+    }
+    foreach (Configurable::getChildSkus($sku_entity) as $child_sku) {
+      try {
+        $child_sku_entity = SKU::loadFromSku($child_sku, $sku_entity->language()->getId());
 
-          if ($child_sku_entity instanceof SKU) {
-            // Return the first valid SKU if only one is required.
-            if ($first_only) {
-              return $child_sku_entity;
-            }
-
-            $child_skus[] = $child_sku_entity;
-          }
-        }
-        catch (\Exception $e) {
+        if (!($child_sku_entity instanceof SKU) || $this->isSkuFreeGift($child_sku_entity)) {
           continue;
         }
+
+        // Return the first valid SKU if only one is required.
+        if ($first_only) {
+          return $child_sku_entity;
+        }
+
+        $child_skus[] = $child_sku_entity;
+      }
+      catch (\Exception $e) {
+        continue;
       }
     }
 
@@ -1114,38 +1115,6 @@ class SkuManager {
     else {
       throw new \Exception(new FormattableMarkup('Failed to save labels image file "@file" for SKU id @sku_id.', $args));
     }
-  }
-
-  /**
-   * Helper function to fetch sku tree.
-   *
-   * @return array
-   *   Sku tree with keyed by configurable sku entity id.
-   */
-  public function getSkuTree() {
-    if (!empty($this->cache->get('sku_tree'))) {
-      $sku_tree_cache = $this->cache->get('sku_tree');
-      $sku_tree = $sku_tree_cache->data;
-      return $sku_tree;
-    }
-    else {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
-      $query->fields('asfcs', []);
-      $results = $query->execute()->fetchAll();
-      $processed_skus = [];
-      $sku_tree = [];
-
-      foreach ($results as $result) {
-        if (!in_array($result->field_configured_skus_value, $processed_skus)) {
-          $sku_tree[$result->field_configured_skus_value] = $result->entity_id;
-          $processed_skus[] = $result->field_configured_skus_value;
-        }
-      }
-
-      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['acq_sku_list']);
-    }
-
-    return $sku_tree;
   }
 
   /**
@@ -1597,7 +1566,7 @@ class SkuManager {
       // even when there are children in stock.
       // @TODO: To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
-      if ($plugin->isProductInStock($sku)) {
+      if ($this->isProductInStock($sku)) {
         // Log message here to allow debugging further.
         $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
           '@sku' => $sku_code,
@@ -1984,7 +1953,7 @@ class SkuManager {
       }
     }
 
-    return $static[$sku->getSku()];
+    return $static[$sku->getSku()] ?? [];
   }
 
   /**
@@ -2318,7 +2287,15 @@ class SkuManager {
   public function isProductInStock(SKUInterface $sku): bool {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
-    return $plugin->isProductInStock($sku);
+    $in_stock = $plugin->isProductInStock($sku);
+
+    if ($in_stock && $sku->bundle() == 'configurable') {
+      // Check if there are in-stock children available.
+      // (Excluding free gifts and OOS).
+      $in_stock = (count(Configurable::getChildren($sku)) > 0);
+    }
+
+    return $in_stock;
   }
 
   /**
