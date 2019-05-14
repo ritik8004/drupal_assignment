@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * The Module file.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function alshaya_kz_transac_lite_theme($existing, $type, $theme, $path) {
+  $items = [];
+
+  $items['booking_mail'] = [
+    'variables' => [
+      'qr_code' => NULL,
+      'booking_info' => NULL,
+      'visitor_list' => NULL,
+    ],
+  ];
+
+  $items['payment_success'] = [
+    'variables' => [
+      'ref_number' => NULL,
+    ],
+  ];
+
+  $items['payment_failed'] = [
+    'variables' => [
+      'ref_number' => NULL,
+    ],
+  ];
+
+  $items['booking_payment'] = [
+    'render element' => 'form',
+  ];
+
+  return $items;
+}
+
+/**
+ * Implements hook_mail().
+ */
+function alshaya_kz_transac_lite_mail($key, &$message, $params) {
+  $options = [
+    'langcode' => $message['langcode'],
+  ];
+
+  switch ($key) {
+    case 'booking_confirm':
+      $message['from'] = \Drupal::config('system.site')->get('mail');
+      $message['subject'] = t('Booking details: Visit date: @visit_date, Ticket count: @ticket_count, Ref Num: @ref_number',
+                              [
+                                '@visit_date' => $params['visit_date'],
+                                '@ticket_count' => $params['ticket_count'],
+                                '@ref_number' => $params['ref_number'],
+                              ], $options);
+
+      $message['body'][] = $params['message'];
+      break;
+  }
+}
