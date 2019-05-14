@@ -187,15 +187,17 @@ class SkuImagesManager {
       return $static[$static_id];
     }
 
+    // For configurable products with no children, we may not have any
+    // child to get media items from.
+    $static[$static_id] = [];
+
     try {
       $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
-      $static[$static_id] = $this->productInfoHelper->getMedia($skuForGallery, $context);
+      $static[$static_id] = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
       $this->productCacheManager->set($sku, $static_id, $static[$static_id]);
     }
     catch (\Exception $e) {
-      // For configurable products with no children, we may not have any
-      // child to get media items from.
-      $static[$static_id] = [];
+      // Do nothing.
     }
 
     return $static[$static_id];
