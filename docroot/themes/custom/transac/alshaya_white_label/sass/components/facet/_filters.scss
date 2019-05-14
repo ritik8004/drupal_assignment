@@ -83,8 +83,7 @@
           font-size: 1.5rem;
           position: absolute;
           top: 50%;
-          width: 0.625rem;
-          height: 0.625rem;
+          color: $plp_filter_active_tick;
           transform: translateY(-50%);
           #{$right}: 1rem;
         }
@@ -316,13 +315,14 @@
     top: 49%;
     transform: translateY(-50%);
     font-size: 2.125rem;
+    color: $plp_filter_icon;
 
     @include breakpoint($only-mobile) {
-      #{$right}: 1.25rem;
+      #{$right}: 0.6875rem;
     }
 
     @include breakpoint($tablet) {
-      #{$left}: 0;
+      #{$left}: -0.25rem;
     }
   }
 }
