@@ -65,6 +65,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
     $this->config('alshaya_acm_product_category.settings')
       ->set('sale_category_ids', $form_state->getValue('sale_category_ids'))
       ->set('new_arrival_category_ids', $form_state->getValue('new_arrival_category_ids'))
+      ->set('old_categorization_enabled', $form_state->getValue('old_categorization_enabled'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -98,6 +99,13 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#options' => $options,
       '#size' => count($options) + 1,
       '#default_value' => $config->get('new_arrival_category_ids'),
+    ];
+
+    $form['old_categorization_enabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable old categorization rule'),
+      '#description' => $this->t('Checking this will disable the old categorization rule and will use the new `is_sale` and `is_new` based rule.'),
+      '#default_value' => $config->get('old_categorization_enabled'),
     ];
 
     return parent::buildForm($form, $form_state);

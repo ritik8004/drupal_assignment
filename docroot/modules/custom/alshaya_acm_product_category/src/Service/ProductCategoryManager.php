@@ -50,6 +50,13 @@ class ProductCategoryManager {
   private $cache;
 
   /**
+   * Old categorization manager.
+   *
+   * @var \Drupal\alshaya_acm_product_category\Service\ProductCategoryManagerOld
+   */
+  private $categoryManagerOld;
+
+  /**
    * ProductCategoryManager constructor.
    *
    * @param \Drupal\alshaya_acm_product\SkuManager $sku_manager
@@ -60,15 +67,20 @@ class ProductCategoryManager {
    *   Config Factory.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache to store ids of sale category tree.
+   * @param \Drupal\alshaya_acm_product_category\Service\ProductCategoryManagerOld $category_manager_old
+   *   Old categorization manager.
    */
   public function __construct(SkuManager $sku_manager,
                               EntityTypeManagerInterface $entity_type_manager,
                               ConfigFactoryInterface $config_factory,
-                              CacheBackendInterface $cache) {
+                              CacheBackendInterface $cache,
+                              ProductCategoryManagerOld $category_manager_old) {
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
     $this->configFactory = $config_factory;
     $this->cache = $cache;
+    // @Todo: Remove this once new MLTA is available.
+    $this->categoryManagerOld = $category_manager_old;
   }
 
   /**
@@ -80,6 +92,12 @@ class ProductCategoryManager {
    * @throws \Exception
    */
   public function getCategorizationIds(): array {
+    // Use old categorization if enabled.
+    // @Todo: Remove this once old categorization not required.
+    if ($this->isOldCategorizationRuleEnabled()) {
+      return $this->categoryManagerOld->getSalesCategoryIds();
+    }
+
     // Static cache.
     static $categorizationIds = NULL;
     if (is_array($categorizationIds)) {
@@ -87,7 +105,7 @@ class ProductCategoryManager {
     }
 
     // Drupal cache.
-    $cache = $this->cache->get('alshaya_acm_categorization_ids');
+    $cache = $this->cache->get(self::CATEGORIZATION_IDS_CACHE_TAG);
     if ($cache && $cache->data) {
       $categorizationIds = $cache->data;
       return $categorizationIds;
@@ -126,7 +144,7 @@ class ProductCategoryManager {
       'new_arrival' => $newArrivalCategoryIds,
     ];
 
-    $this->cache->set('alshaya_acm_categorization_ids', $categorizationIds, Cache::PERMANENT, $tags);
+    $this->cache->set(self::CATEGORIZATION_IDS_CACHE_TAG, $categorizationIds, Cache::PERMANENT, $tags);
 
     return $categorizationIds;
   }
@@ -312,6 +330,12 @@ class ProductCategoryManager {
    * @throws \Exception
    */
   public function processCategorizationCheckForNode(NodeInterface $node) {
+    // Use old categorization if enabled.
+    // @Todo: Remove this once old categorization not required.
+    if ($this->isOldCategorizationRuleEnabled()) {
+      return $this->categoryManagerOld->processSalesCategoryCheckForNode($node);
+    }
+
     // Do nothing if no sales/new-arrival category set.
     if (empty(array_filter($this->getCategorizationIds()))) {
       return FALSE;
@@ -346,6 +370,13 @@ class ProductCategoryManager {
    * @throws \Exception
    */
   public function processSalesCategoryCheckForSku(SKUInterface $sku) {
+    // Use old categorization if enabled.
+    // @Todo: Remove this once old categorization not required.
+    if ($this->isOldCategorizationRuleEnabled()) {
+      $this->categoryManagerOld->processSalesCategoryCheckForSku($sku);
+      return;
+    }
+
     // Do nothing if no sales category set.
     if (empty(array_filter($this->getCategorizationIds()))) {
       return;
@@ -436,6 +467,30 @@ class ProductCategoryManager {
     }
 
     return $return;
+  }
+
+  /**
+   * Checks if old categorization rule enabled or not.
+   *
+   * @return bool
+   *   True if old categorization rule enabled.
+   */
+  public function isOldCategorizationRuleEnabled() {
+    static $old_cat_rule_enabled;
+    if (isset($old_cat_rule_enabled)) {
+      return $old_cat_rule_enabled;
+    }
+
+    $old_cat_rule_enabled = TRUE;
+    $old_categorization_enabled = $this->configFactory
+      ->get('alshaya_acm_product_category.settings')
+      ->get('old_categorization_enabled');
+
+    if ($old_categorization_enabled) {
+      $old_cat_rule_enabled = FALSE;
+    }
+
+    return $old_cat_rule_enabled;
   }
 
 }
