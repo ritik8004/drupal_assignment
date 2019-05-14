@@ -17,6 +17,7 @@ use Drupal\alshaya_acm_product_category\Service\ProductCategoryManager;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\views\ViewExecutable;
 use Drupal\views\ResultRow;
+use Drupal\file\FileInterface;
 
 /**
  * Implements hook_module_implements_alter().

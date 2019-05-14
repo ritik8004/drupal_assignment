@@ -29,14 +29,17 @@
   %}
 
   {% if row.content.tid %}
-    <div class="term-header" id="{{ row.content.tid }}">
+    <term class="term-header" id="{{ row.content.tid }}">
+      {% if row.content.image %}
+        <div class="term-image"><img src="{{ row.content.image }}"/></div>
+      {% endif %}
       {% if row.content.label %}
         <div class="term-title">{{ row.content.label }}</div>
       {% endif %}
       {% if row.content.desc %}
         <div class="term-desc">{{ row.content.desc }}</div>
       {% endif %}
-    </div>
+    </term>
   {% else %}
     <div{{ row.attributes.addClass(row_classes) }}>
       {{- row.content -}}
