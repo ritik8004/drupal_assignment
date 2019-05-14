@@ -1,7 +1,11 @@
 <?php
+// @codingStandardsIgnoreFile
 
 // ===== Added by acsf-init, please do not delete. Section start. =====
-include dirname(__FILE__) . '/acsf.settings.php';
+$_acsf_infrastructure = include dirname(__FILE__) . '/acsf.settings.php';
+if ($_acsf_infrastructure === 'acsf-infrastructure') {
+  return;
+}
 // ===== Added by acsf-init, please do not delete. Section end. =====
 
 

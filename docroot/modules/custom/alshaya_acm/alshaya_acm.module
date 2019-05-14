@@ -7,7 +7,6 @@
 
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_sku\Entity\SKU;
-use Drupal\alshaya\AlshayaArrayUtils;
 use Drupal\alshaya_acm\EventSubscriber\UpdateCartErrorEventSubscriber;
 use Drupal\alshaya_acm_promotion\AlshayaPromotionsManager;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -438,7 +437,7 @@ function _alshaya_acm_format_cart_total(array &$form, $cart) {
           ];
 
           \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.array');
-          $form['totals'] = AlshayaArrayUtils::arrayInsert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
+          $form['totals'] = \Drupal::service('alshaya.alshaya_array_utils')->arrayInsert($form['totals'], 'grand', 'shipping', $shipping_info, FALSE);
           break;
         }
       }
@@ -639,12 +638,10 @@ function _alshaya_acm_get_cart_quantity_options($max = NULL, $selected = NULL) {
  * Implements hook_alshaya_i18n_onetime_translation_add().
  */
 function alshaya_acm_alshaya_i18n_onetime_translation_add() {
-  \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
-
   $country_code = _alshaya_custom_get_site_level_country_code(TRUE);
 
   // Translate currency code in config.
-  $currency_code = _alshaya_get_currency_code($country_code, 'ar');
+  $currency_code = \Drupal::service('alshaya_custom.alshaya_country_manager')->getCurrencyCode($country_code, 'ar');
   $config = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'acq_commerce.currency');
   $config->set('currency_code', $currency_code);
   $config->set('currency_code_position', 'after');
