@@ -300,32 +300,30 @@ function alshaya_seo_user_logout($account) {
 }
 
 /**
- * Implements hook_entity_presave().
+ * Implements hook_ENTITY_TYPE_presave().
  */
-function alshaya_seo_entity_presave(EntityInterface $entity) {
-  if ($entity->getEntityTypeId() === 'user') {
-    // Invalidate cache so that drupalSettings is rebuilt.
-    Cache::invalidateTags(['alshaya-seo-attachments']);
-    try {
-      if ($entity->get('field_subscribe_newsletter')->getString()) {
-        $original_entity = $entity->original;
+function alshaya_seo_user_presave(EntityInterface $entity) {
+  // Invalidate cache so that drupalSettings is rebuilt.
+  Cache::invalidateTags([AlshayaGtmManager::JS_CACHETAG]);
+  try {
+    if ($entity->get('field_subscribe_newsletter')->getString()) {
+      $original_entity = $entity->original;
 
-        // Check if the user updated his subscription status from 0 to 1.
-        if (($original_entity) &&
-          ($original_entity->get('field_subscribe_newsletter')->getString() !== "1") &&
-          ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
-          user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
-        }
-        // Handle registrations with subscrition checked.
-        elseif (($original_entity === NULL) &&
-          ($entity->get('field_subscribe_newsletter')->getString() === "1")) {
-          user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
-        }
+      // Check if the user updated his subscription status from 0 to 1.
+      if (($original_entity) &&
+        ($original_entity->get('field_subscribe_newsletter')->getString() !== '1') &&
+        ($entity->get('field_subscribe_newsletter')->getString() === '1')) {
+        user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
+      }
+      // Handle registrations with subscrition checked.
+      elseif ((empty($original_entity)) &&
+        ($entity->get('field_subscribe_newsletter')->getString() === '1')) {
+        user_cookie_save(['alshaya_gtm_update_user_lead' => $entity->id()]);
       }
     }
-    catch (Exception $e) {
-      \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
-    }
+  }
+  catch (Exception $e) {
+    \Drupal::logger('alshaya_seo')->critical('Field subscribe newsletter not found.');
   }
 }
 

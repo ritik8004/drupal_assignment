@@ -116,6 +116,11 @@ class AlshayaGtmManager {
   ];
 
   /**
+   * The cache tag for rebuild GTM variables in js.
+   */
+  const JS_CACHETAG = 'alshaya-seo-attachments';
+
+  /**
    * The Config Factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface

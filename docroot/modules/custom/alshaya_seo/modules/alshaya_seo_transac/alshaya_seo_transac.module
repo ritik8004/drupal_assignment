@@ -14,6 +14,7 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\user\Entity\User;
+use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -37,34 +38,35 @@ function alshaya_seo_transac_preprocess_html(&$variables) {
  */
 function alshaya_seo_transac_page_attachments_alter(&$page) {
   if (_alshaya_seo_process_gtm()) {
+    $current_user = NULL;
     $page['#attached']['library'][] = 'alshaya_seo_transac/gtm';
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
     $current_user_id = \Drupal::currentUser()->id();
-    $current_user = User::load($current_user_id);
-    if ($current_user_id !== 0) {
+    $privilege_customer = 'Regular Customer';
+    $email = '';
+    $customer_type = 'New Customer';
+
+    if (!\Drupal::currentUser()->isAnonymous()) {
+      $current_user = User::load($current_user_id);
       $email = $current_user->get('mail')->getString();
       $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : 'New Customer';
+      if (!empty($current_user->get('field_privilege_card_number')->getString())) {
+        $privilege_customer = 'Privilege Customer';
+      }
     }
-    else {
-      $email = '';
-      $customer_type = 'New Customer';
-    }
-    $privilege_customer = 'Regular Customer';
-    if (!empty($current_user->get('field_privilege_card_number')->getString())) {
-      $privilege_customer = 'Privilege Customer';
-    }
+
     $user_details = [
-      'userID' => $current_user->get('uid')->getString(),
+      'userID' => $current_user_id ? $current_user->get('uid')->getString() : 0,
       'userEmailID' => $email,
-      'userPhone' => $current_user->get('field_mobile_number')->value ?? '',
+      'userPhone' => $current_user_id ? $current_user->get('field_mobile_number')->value : '',
       'customerType' => $customer_type,
       'userName' => $current_user_id ? $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString() : '',
-      'userType' => $current_user->id() ? 'Logged in User' : 'Guest User',
+      'userType' => $current_user_id ? 'Logged in User' : 'Guest User',
       'privilegeCustomer' => $privilege_customer,
     ];
     $page['#attached']['drupalSettings']['userDetails'] = $user_details;
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-    $page['#cache']['tags'] = ['alshaya-seo-attachments'];
+    $page['#cache']['tags'] = AlshayaGtmManager::JS_CACHETAG;
   }
 }
 
