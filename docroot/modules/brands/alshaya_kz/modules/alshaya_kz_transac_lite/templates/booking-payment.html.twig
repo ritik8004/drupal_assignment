@@ -1,0 +1,54 @@
+<section id="step-5" class="ticketing__steps six">
+  <div class="container clearfix">
+    <div class="steps_count">
+      <div class="steps odd">
+        <div class="step_number">6</div>
+        <span class="step_legend">{{ 'Payment Info'|t }}</span>
+      </div>
+    </div>
+    <div class="steps__information clearfix">
+      <h2 class="steps_instruction">{{ 'Purchase Summary'|t }}</h2>
+      <div class="booking_info">
+        <div class="booking_row clearfix">
+          <div class="booking_col">
+            <span class="up_row">{{ 'Visit Date'|t }}</span>
+            <div class="below_row">
+              <span class="">
+                <span class="icon icon-calendar"></span>{{form.visit_date}}</span>
+            </div>
+          </div>
+          <div class="booking_col">
+            <span class="up_row">{{ 'Facility'|t }}</span>
+            <div class="below_row">
+              <span>
+                <span class="icon icon-flag-blank"></span>{{form.park}}</span>
+            </div>
+          </div>
+          <div class="booking_col">
+            <span class="up_row">Total</span>
+            <div class="below_row">
+              <span>KWD
+                <span>{{form.order_total}}</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="user-info-form">
+          {{form.name}}
+          {{form.email}}
+          {{form.mobile}}
+        </div>
+        <div class="terms-conditions">
+          {{form.approve}}
+        </div>
+        <div class="knet-payment_option">
+          {{form.payment_option}}
+        </div>
+        <div class="form_submit_block">
+          {{form.actions}}
+        </div>
+      </div>
+      {{form.form_build_id}}
+      {{form.form_id}}
+    </div>
+  </div>
+</section>
