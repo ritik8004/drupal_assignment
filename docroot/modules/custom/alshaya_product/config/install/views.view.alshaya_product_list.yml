@@ -702,7 +702,7 @@ display:
           default_row_class: false
           uses_fields: false
       row:
-        type: search_api_grouped_row
+        type: alshaya_search_api_grouped_row
         options:
           view_modes:
             'entity:node':

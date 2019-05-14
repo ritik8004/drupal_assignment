@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a row plugin for displaying a result as a rendered item.
  *
  * @ViewsRow(
- *   id = "search_api_grouped_row",
+ *   id = "alshaya_search_api_grouped_row",
  *   title = @Translation("Grouped Rendered entity"),
  *   help = @Translation("Displays entity of the matching search API item along with groups"),
  * )
