@@ -333,7 +333,7 @@
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             },
             "drupal/search_api_algolia": {
-                "Allow viewing results via Drupal": "https://www.drupal.org/files/issues/2019-05-10/3053205-4.patch"
+                "Allow viewing results via Drupal": "https://www.drupal.org/files/issues/2019-05-14/3053205-5.patch"
             }
         },
         "installer-paths": {
