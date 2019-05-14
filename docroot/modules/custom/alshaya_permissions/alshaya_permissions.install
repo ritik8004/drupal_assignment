@@ -10,6 +10,15 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_update_N().
  *
+ * Grant 'administer mobile app links' permissions to the site_builder.
+ */
+function alshaya_permissions_update_8020() {
+  _alshaya_permissions_update_role_from_config(['site_builder']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Grant "access taxonomy overview" permissions to the webmaster.
  */
 function alshaya_permissions_update_8019() {
