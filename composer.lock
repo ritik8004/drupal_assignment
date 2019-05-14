@@ -9221,7 +9221,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/mobile_app_links.git",
-                "reference": "f6d21f9342cd1233acc6356f44d8fced75b3bb97"
+                "reference": "64a839741015961097edf946085faf01850857d2"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -9234,7 +9234,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x-dev",
-                    "datestamp": "1554962581",
+                    "datestamp": "1557139084",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -9263,7 +9263,7 @@
                 "source": "https://cgit.drupalcode.org/mobile_app_links",
                 "issues": "https://drupal.org/project/issues/mobile_app_links"
             },
-            "time": "2019-05-06T10:37:19+00:00"
+            "time": "2019-05-13T12:13:03+00:00"
         },
         {
             "name": "drupal/mobile_number",
