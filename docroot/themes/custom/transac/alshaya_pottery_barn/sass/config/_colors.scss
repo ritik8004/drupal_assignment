@@ -318,7 +318,7 @@ $plp_facet_filter_bg: $PB_grey_one;
 $plp_facet_filter_link: $PB_white;
 $plp_facet_clear_border: $_black_two;
 $plp_facet_clear_bg: $_black_two;
-$plp_facet_clear_text: $white-two;
+$plp_facet_clear_text: $_black_two;
 $plp_facet_label_border_mobile: $_black_two;
 $plp_facet_label_bg_mobile: $white-two;
 $plp_facet_label_text_color: $_black_two;
@@ -328,6 +328,12 @@ $plp_facet_filter_count_background: $PB_confirmation_blue;
 $plp_pager_link: $white-two;
 $plp_pager_btn_bg: $_black_two;
 $plp_promotion_link: $PB_deep_red;
+$plp_grid_active_color: $PB_deep_red;
+$plp_all_filter_title: $_black_two;
+$plp_clear_all_btn_text: $_black_two;
+$plp_all_filter_button_color: $_black_two;
+$plp_filter_icon: $_black_two;
+$plp_filter_active_tick: $PB_deep_red;
 
 // Sharethis
 $sharethis_icon: $_grey_sixteen;
@@ -554,3 +560,6 @@ $form-select-border: $PB_grey_four;
 $form-select-text: $PB_grey_two;
 $form-edit-room-legend: $_grey_eighteen;
 $form-field-textarea-border: $PB_grey_one;
+
+// Category carousel.
+$_category_carosel_title_color: $PB_black_one;
