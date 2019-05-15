@@ -4,6 +4,7 @@ namespace Drupal\alshaya_acm_product;
 
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\ProductInfoHelper;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -194,6 +195,13 @@ class SkuImagesManager {
     try {
       $skuForGallery = $this->getSkuForGallery($sku, $check_parent_child);
       $static[$static_id] = $this->productInfoHelper->getMedia($skuForGallery, $context) ?? [];
+
+      foreach ($static[$static_id]['media_items']['images'] ?? [] as &$item) {
+        if (empty($item['label'])) {
+          $item['label'] = $sku->label();
+        }
+      }
+
       $this->productCacheManager->set($sku, $static_id, $static[$static_id]);
     }
     catch (\Exception $e) {
@@ -1015,7 +1023,7 @@ class SkuImagesManager {
       $sku = $plugin->getParentSku($sku);
     }
 
-    $children = $this->skuManager->getChildSkus($sku);
+    $children = Configurable::getChildren($sku);
     $configurable_attributes = $this->skuManager->getConfigurableAttributes($sku);
     $duplicates = [];
     foreach ($children as $child) {
@@ -1024,12 +1032,7 @@ class SkuImagesManager {
         continue;
       }
 
-      // Do not show OOS products.
-      if (!$this->skuManager->isProductInStock($child)) {
-        continue;
-      }
-
-      $product_image = $child->getThumbnail();
+      $product_image = $this->getFirstImage($child);
 
       if (empty($product_image) || empty($product_image['drupal_uri'])) {
         continue;
@@ -1164,18 +1167,13 @@ class SkuImagesManager {
 
     $swatches = [];
     $duplicates = [];
-    $children = $this->skuManager->getChildSkus($sku);
+    $children = Configurable::getChildren($sku);
     $configurable_attributes = $this->skuManager->getConfigurableAttributes($sku);
 
     foreach ($children as $child) {
       $value = $this->skuManager->getPdpSwatchValue($child, $configurable_attributes);
 
       if (empty($value) || isset($duplicates[$value])) {
-        continue;
-      }
-
-      // Do not show OOS swatches.
-      if (!$this->skuManager->isProductInStock($child)) {
         continue;
       }
 
