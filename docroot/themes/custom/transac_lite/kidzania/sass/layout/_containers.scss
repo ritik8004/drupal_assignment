@@ -12,3 +12,20 @@
     margin: auto;
   }
 }
+
+.container {
+  margin: 0 auto;
+
+  @include breakpoint($only-tablet) {
+    margin: 0 1rem;
+  }
+
+  @include breakpoint($desktop) {
+    max-width: 73.125rem;
+  }
+
+  &::before {
+    display: table;
+    content: " ";
+  }
+}

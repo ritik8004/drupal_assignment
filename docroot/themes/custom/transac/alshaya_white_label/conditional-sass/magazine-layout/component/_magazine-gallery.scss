@@ -50,13 +50,15 @@
     position: relative;
 
     .magazine-desc-wrapper {
-      @include container(45rem);
-
-      padding: 4rem 1.875rem;
+      padding: 4rem 0;
       font-family: $arial;
       font-size: 1.1375rem;
       line-height: 1.2;
       color: $magazine-pdp-description;
+
+      @include breakpoint($only-mobile) {
+        padding: 4rem 1rem;
+      }
 
       div[class*="label"] {
         font-family: $alshaya-bold;
@@ -77,10 +79,6 @@
         line-height: 1.71;
         color: $magazine-pdp-description;
       }
-    }
-
-    @include breakpoint($tablet) {
-      margin: 0 auto;
     }
 
     ul {

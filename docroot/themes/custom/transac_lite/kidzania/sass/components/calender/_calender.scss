@@ -1,0 +1,77 @@
+.ui-widget {
+  font-family: $ubuntu-sans;
+  font-size: 1.625rem;
+
+  @include breakpoint($only-mobile) {
+    font-size: 1.25rem;
+  }
+
+  @include breakpoint($only-mobile) {
+    font-size: 1.125rem;
+  }
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button {
+  background: $calender_default_state_bg;
+  text-align: center;
+  border-color: $calender_default_state_border;
+  border-radius: 0.625rem;
+}
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight {
+  background: $calender_highlight_date_bg;
+  border-color: $calender_highlight_date_border;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-button:hover {
+  background: $calender_active_date_bg;
+  color: $calender_active_date_text;
+}
+
+.ui-widget.ui-widget-content {
+  padding: 0.3125rem;
+  border-radius: 0.5rem;
+}
+
+.ui-datepicker .ui-datepicker-header {
+  border: 1px solid $calender_header_border;
+  background: $calender_header_bg;
+  color: $calender_header_text;
+  font-weight: bold;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.ui-widget-header .ui-icon {
+  background-image: url('#{$theme_img_directory_path}/icons/next.png');
+  background-position: 0% 0%;
+}
+
+.ui-datepicker .ui-datepicker-prev {
+  transform: rotate(180deg);
+}
+
+.ui-datepicker-calendar {
+  th {
+    background-color: $calender_day_bg;
+    color: $calender_day_text;
+    font-family: $ubuntu-sans-bold;
+
+    & > span {
+      html[lang=ar] & {
+        width: 2.8125rem;
+        display: inline-block;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 1rem;
+      }
+    }
+  }
+}
