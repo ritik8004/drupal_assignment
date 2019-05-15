@@ -1,0 +1,22 @@
+{% if lhn_cat_tree %}
+  <ul>
+    {% for link in lhn_cat_tree %}
+      {#Show category and tree only when `lhn` is enabled.#}
+      {% if link.lhn == 1 %}
+        <li>
+          {% set class = link.id == current_term ? 'active' : '' %}
+          {% set depth = depth_offset == 1 ? link.depth - 1 : link.depth %}
+          {% if link.clickable == 0 %}
+            {# If not clickable link. #}
+            <span class="lhn-{{ depth }} {{ class }}">{{ link.label }}</span>
+          {% else %}
+            <a href="{{ path('entity.taxonomy_term.canonical', {'taxonomy_term': link.id}) }}" class="lhn-{{ depth }} {{ class }}">{{ link.label }}</a>
+          {% endif %}
+          {% if link.child %}
+            {% include "@alshaya_acm_product_category/alshaya-lhn.html.twig" with {'lhn_cat_tree': link.child, 'current_term': current_term} %}
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
