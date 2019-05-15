@@ -49,10 +49,8 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     if (!\Drupal::currentUser()->isAnonymous()) {
       $current_user = User::load($current_user_id);
       $email = $current_user->get('mail')->getString();
-      $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : 'New Customer';
-      if (!empty($current_user->get('field_privilege_card_number')->getString())) {
-        $privilege_customer = 'Privilege Customer';
-      }
+      $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : $customer_type;
+      $privilege_customer = !empty($current_user->get('field_privilege_card_number')->getString()) ? 'Privilege Customer' : $privilege_customer;
     }
 
     $user_details = [
