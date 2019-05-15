@@ -1,10 +1,12 @@
 image_thumb_gallery: false
 configurable_use_parent_images: 'always'
+media_roles_to_hide_in_gallery: 'thumbnail,swatch_image'
 show_child_images_after_selecting: 'one'
 show_parent_images_in_child: false
 color_swatches: false
 color_swatches_hover: false
 color_swatches_show_product_image: false
+show_variants_thumbnail_plp_gallery: false
 show_configurable_boxes_after: 767
 plp_slider:
   item: 4

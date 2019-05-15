@@ -11,7 +11,9 @@
   }
 
   .ui-dialog-titlebar {
-    .nodetype--acq_product & {
+    .nodetype--acq_product &,
+    .path--cart &,
+    .path--store-finder & {
       @include breakpoint($only-tablet) {
         margin: 0;
         width: auto !important;
@@ -24,7 +26,9 @@
   }
 
   #drupal-modal {
-    .nodetype--acq_product & {
+    .nodetype--acq_product &,
+    .path--cart &,
+    .path--store-finder & {
       @include breakpoint($desktop) {
         height: 8.75rem !important;
         padding-top: 3.5rem;

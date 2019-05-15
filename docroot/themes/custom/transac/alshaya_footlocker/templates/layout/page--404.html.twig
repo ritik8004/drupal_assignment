@@ -1,0 +1,69 @@
+{% extends '@alshaya_white_label/layout/page--404.html.twig' %}
+{% block header_precontent %}
+  <!-- ______________________ Banner Top _______________________ -->
+  {% if page.banner_top %}
+    {{ page.banner_top }}
+  {% endif %}
+  <!-- /Banner Top -->
+<!-- ______________________ MENU SECONDARY _______________________ -->
+
+<div class="header--wrapper">
+  {% if page.menu_secondary %}
+    <div class="c-menu-secondary">
+      <div class="l-container">
+        <div class="c-menu-secondary__region">
+          {{ page.menu_secondary }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+  <!-- /menu-secondary -->
+
+  <!-- ______________________ HEADER _______________________ -->
+<div class="branding__menu">
+  {% include directory ~ '/../alshaya_white_label/templates/partial/nojs.html.twig' %}
+
+  {% if page.header %}
+    <header class="c-header">
+      <div class="l-container">
+        <div class="c-header__region">
+          {{ page.header }}
+        </div>
+      </div>
+    </header>
+  {% endif %}
+  <!-- /header -->
+
+  <!-- ______________________ MENU PRIMARY _______________________ -->
+
+  {% if page.menu_primary %}
+    <div class="c-menu-primary">
+      <div class="l-container">
+        <div id="c-menu-primary__region">
+          {{ page.menu_primary }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <!-- /menu-primary -->
+
+  <!-- ______________________ Pre content _______________________ -->
+  {% if page.pre_content %}
+    <div class="c-pre-content">
+      <div class="l-container">
+        <div class="c-pre-content__region">
+          {{ page.pre_content }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block primary_footer %}
+  {% if page.footer_primary %}
+      {% include directory ~ '/templates/partial/footer-primary.html.twig' %}
+    <!-- /footer-primary -->
+  {% endif %}
+{% endblock %}

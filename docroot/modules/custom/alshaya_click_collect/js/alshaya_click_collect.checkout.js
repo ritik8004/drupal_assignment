@@ -60,15 +60,13 @@
       $('#edit-store-location').once('bind-js').on('focusin', function () {
         if (geoPerm === false && typeof $(this).data('second-try') === 'undefined') {
           $(this).data('second-try', 'done');
-          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.locationError);
+          Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.LocationError);
         }
       });
 
       // Checkout click and collect near me.
       $('#edit-guest-delivery-collect, #edit-member-delivery-collect', context).once('get-location').on('click', '.cc-near-me', function () {
-        // Start the loader.
-        $(this).showCheckoutLoader();
-        Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.click_collect.locationError);
+        Drupal.click_collect.getCurrentPosition(Drupal.click_collect.LocationSuccess, Drupal.checkoutClickCollect.LocationAccessError);
         return false;
       });
 
@@ -224,11 +222,19 @@
 
   // Success callback.
   Drupal.click_collect.LocationAccessSuccess = function (coords) {
+    // Start the loader.
+    $(this).showCheckoutLoader();
     ascoords = coords;
     geoPerm = true;
     if (typeof ascoords !== 'undefined' && !$.isEmptyObject(ascoords)) {
       Drupal.checkoutClickCollect.storeListAll(ascoords);
     }
+  };
+
+  // Error callback.
+  Drupal.checkoutClickCollect.LocationAccessError = function (error) {
+    Drupal.AlshayaPlacesAutocomplete.LocationError(error);
+    geoPerm = false;
   };
 
   // Error callback.

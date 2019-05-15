@@ -49,10 +49,11 @@
 
         <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
 
-        <div class="content--item-code">
-          <span class="field__label">{{ 'Item Code'|t }}:</span>
-          {{ content.item_code }}
-        </div>
+        {% if vat_text %}
+          <div class="vat-text">
+            {{ vat_text }}
+          </div>
+        {% endif %}
 
         {% if content.delivery_link is not empty %}
           <div class="delivery">
@@ -69,7 +70,7 @@
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
           <div class="modal-share-this">
-            <span class="share-icon"></span>
+            <span class="share-icon">{{  'Share'|t }}</span>
             <div class="sharethis-container">
               <span class="close-icon"></span>
               <div class="sharethis-label">{{ 'Share'|t }}</div>

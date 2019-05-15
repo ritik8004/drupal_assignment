@@ -17,6 +17,15 @@ do
   fi
 done
 
+# Clear permanent cache for products to avoid issues with same SKUs on prod.
+echo "Clear permanent caches."
+drush --uri=$uri pcbf alshaya_product
+drush --uri=$uri pcbf product_options
+drush --uri=$uri pcbf cart_history
+drush --uri=$uri pcbf product_category_tree
+drush --uri=$uri pcbf addressbook
+drush --uri=$uri pcbf product_labels
+
 echo "Enable the search api indexes again."
 drush --uri=$uri search-api-enable-all
 

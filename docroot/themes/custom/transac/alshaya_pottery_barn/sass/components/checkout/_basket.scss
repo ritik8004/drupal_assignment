@@ -116,16 +116,16 @@
                 }
               }
             }
-
-            @include breakpoint($only-tablet) {
-              padding: 1rem 0.625rem;
-            }
           }
 
           &.delivery-option {
             @include breakpoint($only-tablet) {
               padding-left: 3px;
               padding-right: 3px;
+
+              html[lang=ar] & {
+                padding: 1.35rem 0.7rem;
+              }
             }
           }
         }

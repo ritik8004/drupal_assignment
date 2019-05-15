@@ -98,6 +98,19 @@
                 div {
                   display: inline;
                 }
+
+                .price-wrapper {
+                  .price {
+                    padding: 0 0.125rem;
+                    display: inline-block;
+                    font-size: 0;
+
+                    .price-currency,
+                    .price-amount {
+                      font-size: 0.875rem;
+                    }
+                  }
+                }
               }
 
               &.facet-item__count {
@@ -1205,5 +1218,16 @@ body {
 .nodetype--acq_promotion {
   .select2-container--open {
     z-index: 4;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .swatch-color-count-wrapper {
+    margin-top: 0.625rem;
+
+    a {
+      width: auto;
+      color: $plp-swatch-color-count;
+    }
   }
 }

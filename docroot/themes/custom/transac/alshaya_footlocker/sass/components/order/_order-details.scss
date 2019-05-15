@@ -38,4 +38,12 @@
       }
     }
   }
+
+  .order-details-row {
+    .mobile-only {
+      &.delivery--method {
+        margin-top: 0;
+      }
+    }
+  }
 }

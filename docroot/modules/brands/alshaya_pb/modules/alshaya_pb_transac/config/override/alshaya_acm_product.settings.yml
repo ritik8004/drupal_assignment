@@ -6,3 +6,4 @@ pdp_slider_items_settings:
 product_carousel_items_settings:
   hp_product_carousel_items_number: 4
   dp_product_carousel_items_number: 3
+excluded_attribute_options: ['Not Required']

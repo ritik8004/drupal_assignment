@@ -84,7 +84,7 @@
         color: $pdp_delivery_options_subtitle;
         text-transform: none;
         font-weight: normal !important;
-        line-height: 0.9;
+        line-height: 1.2;
       }
     }
   }
@@ -409,6 +409,18 @@
   .c-accordion_content {
     html[lang=ar] & {
       line-height: 1.5;
+    }
+  }
+}
+
+.c-pdp {
+  .acq-content-product-modal {
+    .delivery-options-wrapper {
+      .c-accordion__title {
+        .subtitle {
+          line-height: 0.9;
+        }
+      }
     }
   }
 }

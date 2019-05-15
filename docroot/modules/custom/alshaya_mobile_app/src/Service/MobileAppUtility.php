@@ -155,6 +155,13 @@ class MobileAppUtility {
   protected $renderer;
 
   /**
+   * Listing config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $listingConfig;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -734,7 +741,8 @@ class MobileAppUtility {
     }
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-    $color = $node->get('field_product_color')->getString();
+
+    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);

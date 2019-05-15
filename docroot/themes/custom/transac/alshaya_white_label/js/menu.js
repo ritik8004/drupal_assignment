@@ -176,16 +176,18 @@
       /**
        * Add active state to the menu.
        */
-
+      var menuHovered = 0;
       if ($('.block-alshaya-main-menu').length) {
         var parent = $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item');
 
         $('.branding__menu .block-alshaya-main-menu').mouseenter(function () {
+          menuHovered = 1;
           $(parent).parent().addClass('active--menu--links');
         });
 
         $('.block-alshaya-main-menu').mouseleave(function () {
           $(parent).parent().removeClass('active--menu--links');
+          menuHovered = 0;
         });
       }
 
@@ -210,6 +212,24 @@
           }
         });
       }
+
+      $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseenter(function () {
+        if (menuHovered === 1) {
+          $('ul.menu--two__list').css('transition', 'none');
+          $('.menu-backdrop').css('transition', 'none');
+        }
+        else {
+          $('ul.menu--two__list').css('transition', 'all var(--menuTiming) ease-in 300ms');
+          $('.menu-backdrop').css('transition', 'all var(--menuTiming) ease-in 300ms');
+        }
+      });
+
+      $('.branding__menu .block-alshaya-main-menu li.menu--one__list-item').mouseleave(function () {
+        if (menuHovered === 1) {
+          $('ul.menu--two__list').css('transition', 'all var(--menuTiming) ease-in 300ms');
+          $('.menu-backdrop').css('transition', 'all var(--menuTiming) ease-in 300ms');
+        }
+      });
 
       // Add class for three level navigation.
       $('.menu--one__list-item:not(:has(.menu--four__list-item))').addClass('has--three-levels');
