@@ -37,6 +37,14 @@ function alshaya_acm_product_category_update_8029() {
     'install',
     AlshayaConfigManager::MODE_MERGE
   );
+
+  // Place block.
+  $manager->updateConfigs(
+    ['block.block.subcategoryblock'],
+    'alshaya_acm_product_category',
+    'optional',
+    AlshayaConfigManager::MODE_MERGE
+  );
 }
 
 /**

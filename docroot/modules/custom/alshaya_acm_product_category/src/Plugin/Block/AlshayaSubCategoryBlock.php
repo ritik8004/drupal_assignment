@@ -109,6 +109,9 @@ class AlshayaSubCategoryBlock extends BlockBase implements ContainerFactoryPlugi
         }
       }
 
+      // Sort the results so that the block categories are in same order.
+      ksort($subcategories);
+
       return [
         '#theme' => 'alshaya_subcategory_block',
         '#subcategories' => $subcategories,
