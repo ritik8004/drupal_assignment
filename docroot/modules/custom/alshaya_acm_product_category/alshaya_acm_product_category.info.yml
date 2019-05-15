@@ -15,3 +15,4 @@ dependencies:
   - form_options_attributes:form_options_attributes
   - metatag:metatag
   - drupal:views
+  - svg_image:svg_image
