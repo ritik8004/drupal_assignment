@@ -1,23 +1,19 @@
 #cart_notification {
-  top: 4rem;
+  top: 3.25rem;
   #{$right}: 0;
 
-  @include breakpoint($only-mobile) {
-    #{$right}: 0.3125rem;
-    top: 3.4rem;
+  html[lang=ar] & {
+    top: 3.25rem;
 
-    &.has--notification::before {
-      #{$right}: 0.75rem;
+    @include breakpoint($upto-desktop) {
+      top: 3rem;
+      #{$right}: 0;
     }
   }
 
-  @include breakpoint($only-tablet) {
-    top: 3.8rem;
-
-    html[lang=ar] & {
-      top: 3.8rem;
-      #{$right}: 0;
-    }
+  @include breakpoint($upto-desktop) {
+    top: 3.125rem;
+    #{$right}: 0;
   }
 
   &.has--notification::before {
@@ -34,6 +30,10 @@
     -o-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     background: $minicart_notification_background;
+
+    @include breakpoint($only-mobile) {
+      #{$right}: 0.75rem;
+    }
   }
 
   .notification,

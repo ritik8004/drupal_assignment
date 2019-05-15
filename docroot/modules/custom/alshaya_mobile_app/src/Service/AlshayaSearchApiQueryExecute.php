@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Service;
 
+use Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\block\Entity\Block;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -15,6 +16,8 @@ use Drupal\facets\QueryType\QueryTypePluginManager;
 use Drupal\facets\FacetManager\DefaultFacetManager;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
 
 /**
  * Class AlshayaSearchApiQueryExecute.
@@ -89,6 +92,13 @@ class AlshayaSearchApiQueryExecute {
    * @var string
    */
   protected $priceFacetKey = 'skus_sku_reference_final_price';
+
+  /**
+   * Price facet key.
+   *
+   * @var string
+   */
+  protected $sellingPriceFacetKey = 'plp_selling_price';
 
   /**
    * Processed facets array.
@@ -168,6 +178,27 @@ class AlshayaSearchApiQueryExecute {
   protected $entityTypeManager;
 
   /**
+   * PLP sort option service.
+   *
+   * @var \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService
+   */
+  protected $plpSortOptions;
+
+  /**
+   * PLP sort labels service.
+   *
+   * @var \Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService
+   */
+  protected $plpSortLabels;
+
+  /**
+   * SKU Price Helper.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\SkuPriceHelper
+   */
+  private $priceHelper;
+
+  /**
    * AlshayaSearchApiQueryExecute constructor.
    *
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
@@ -186,15 +217,26 @@ class AlshayaSearchApiQueryExecute {
    *   SKU manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   Entity type manager.
+   * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsService $sort_option_service
+   *   Plp Sort options service.
+   * @param \Drupal\alshaya_acm_product_position\AlshayaPlpSortLabelsService $sort_labels_service
+   *   Plp Sort labels service.
+   * @param \Drupal\alshaya_acm_product\Service\SkuPriceHelper $price_helper
+   *   SKU Price Helper.
    */
-  public function __construct(RequestStack $requestStack,
-                              DefaultFacetManager $facet_manager,
-                              LanguageManagerInterface $language_manager,
-                              QueryTypePluginManager $query_type_manager,
-                              MobileAppUtility $mobile_app_utility,
-                              EntityRepositoryInterface $entity_repository,
-                              SkuManager $sku_manager,
-                              EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    RequestStack $requestStack,
+    DefaultFacetManager $facet_manager,
+    LanguageManagerInterface $language_manager,
+    QueryTypePluginManager $query_type_manager,
+    MobileAppUtility $mobile_app_utility,
+    EntityRepositoryInterface $entity_repository,
+    SkuManager $sku_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    AlshayaPlpSortOptionsService $sort_option_service,
+    AlshayaPlpSortLabelsService $sort_labels_service,
+    SkuPriceHelper $price_helper
+  ) {
     $this->currentRequest = $requestStack->getCurrentRequest();
     $this->facetManager = $facet_manager;
     $this->languageManager = $language_manager;
@@ -203,6 +245,9 @@ class AlshayaSearchApiQueryExecute {
     $this->entityRepository = $entity_repository;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
+    $this->plpSortOptions = $sort_option_service;
+    $this->plpSortLabels = $sort_labels_service;
+    $this->priceHelper = $price_helper;
   }
 
   /**
@@ -381,7 +426,19 @@ class AlshayaSearchApiQueryExecute {
 
     // Fill facets with the result data.
     $facet_build = [];
+
     foreach ($facets as $facet) {
+
+      // Show only one price facet - final_price or selling_price.
+      if ($facet->id() == $this->getPriceFacetKey() && $this->priceHelper->isPriceModeFromTo()) {
+        // Do not show final price if price mode from-to.
+        continue;
+      }
+      elseif ($facet->id() == $this->getSellingPriceFacetKey() && !$this->priceHelper->isPriceModeFromTo()) {
+        // Do not show selling price if price mode not from-to.
+        continue;
+      }
+
       $facet_result = $results->getExtraData('search_api_facets')[$facet->id()] ?? [];
       $data = [];
       foreach ($facet_result as $result) {
@@ -425,12 +482,19 @@ class AlshayaSearchApiQueryExecute {
     $product_data = $this->prepareProductData($result_set);
 
     // Process the price facet for special handling.
+    // Get price facet key.
+    if ($this->priceHelper->isPriceModeFromTo()) {
+      $price_facet_key = $this->getSellingPriceFacetKey();
+    }
+    else {
+      $price_facet_key = $this->getPriceFacetKey();
+    }
     foreach ($facet_result as &$facet) {
       // If price facet.
-      if ($facet['key'] == $this->getPriceFacetKey()
-        && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$this->getPriceFacetKey()])
+      if ($facet['key'] == $price_facet_key
+        && isset($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key])
       ) {
-        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$this->getPriceFacetKey()]);
+        $facet = $this->processPriceFacet($result_set['search_api_results']->getExtraData('search_api_facets')[$price_facet_key]);
       }
     }
 
@@ -609,12 +673,10 @@ class AlshayaSearchApiQueryExecute {
       }
       else {
         // Get sort config.
-        $sort_config = _alshaya_acm_product_position_get_config(TRUE);
-        // Remove empty label items.
-        $sort_config = array_filter($sort_config);
+        $sort_config = $this->plpSortLabels->getSortOptionsLabels();
 
         // Sorted sort data.
-        $sort_config = _alshaya_acm_product_position_sorted_options($sort_config);
+        $sort_config = $this->plpSortOptions->sortGivenOptions($sort_config);
         foreach ($sort_config as $key => $label) {
           $sort_data[] = [
             'key' => $key,
@@ -922,6 +984,26 @@ class AlshayaSearchApiQueryExecute {
   public function setPriceFacetKey(string $price_facet_key) {
     $this->priceFacetKey = $price_facet_key;
     return $this;
+  }
+
+  /**
+   * Get selling price facet key.
+   *
+   * @return string
+   *   Selling price facet key.
+   */
+  public function getSellingPriceFacetKey() {
+    return $this->sellingPriceFacetKey;
+  }
+
+  /**
+   * Set selling price facet key.
+   *
+   * @param string $sellingPriceFacetKey
+   *   Price facet key.
+   */
+  public function setSellingPriceFacetKey($sellingPriceFacetKey) {
+    $this->sellingPriceFacetKey = $sellingPriceFacetKey;
   }
 
   /**

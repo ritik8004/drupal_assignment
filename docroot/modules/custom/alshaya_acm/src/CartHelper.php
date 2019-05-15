@@ -5,11 +5,20 @@ namespace Drupal\alshaya_acm;
 use Drupal\acq_cart\Cart;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_cart\CartStorageInterface;
+use Drupal\acq_commerce\Response\NeedsRedirectException;
+use Drupal\acq_sku\Entity\SKU;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Messenger\MessengerTrait;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 
 /**
  * ApiHelper.
  */
 class CartHelper {
+
+  use MessengerTrait;
+  use StringTranslationTrait;
 
   /**
    * The cart storage service.
@@ -19,13 +28,24 @@ class CartHelper {
   protected $cartStorage;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected $logger;
+
+  /**
    * Constructor.
    *
    * @param \Drupal\acq_cart\CartStorageInterface $cart_storage
    *   Cart Storage service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel
+   *   Logger Factory.
    */
-  public function __construct(CartStorageInterface $cart_storage) {
+  public function __construct(CartStorageInterface $cart_storage,
+                              LoggerChannelFactoryInterface $logger_channel) {
     $this->cartStorage = $cart_storage;
+    $this->logger = $logger_channel->get('CartHelper');
   }
 
   /**
@@ -127,6 +147,129 @@ class CartHelper {
     $cartData['shipping']['extension'] = $shipping['extension'];
 
     return json_encode($cartData);
+  }
+
+  /**
+   * Remove out of stock items from cart (in session only).
+   *
+   * @return bool
+   *   TRUE if any item removed.
+   */
+  public function removeOutOfStockItemsFromCart(): bool {
+    $removed = FALSE;
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    // Sanity check.
+    if (empty($cart)) {
+      return $removed;
+    }
+
+    $items = $cart->items();
+
+    foreach ($items as $index => $item) {
+      $sku = SKU::loadFromSku($item['sku']);
+      $plugin = $sku->getPluginInstance();
+      if (!$plugin->isProductInStock($sku)) {
+        $removed = TRUE;
+        unset($items[$index]);
+      }
+    }
+
+    if ($removed) {
+      $cart->setItemsInCart($items);
+    }
+
+    return $removed;
+  }
+
+  /**
+   * Wrapper function to remove item from cart.
+   *
+   * Tries to remove all other OOS items as well if required.
+   *
+   * @param string $sku
+   *   SKU to remove.
+   *
+   * @throws \Drupal\acq_commerce\Response\NeedsRedirectException
+   */
+  public function removeItemFromCart(string $sku) {
+    $cart = $this->cartStorage->getCart(FALSE);
+    $cart->removeItemFromCart($sku);
+
+    try {
+      $this->updateCartWrapper(__METHOD__);
+    }
+    catch (\Exception $e) {
+      // Try to remove again (only once) after removing OOS items.
+      if ($this->removeOutOfStockItemsFromCart()) {
+        $cart = $this->cartStorage->getCart(FALSE);
+        $cart->removeItemFromCart($sku);
+        $this->updateCartWrapper(__METHOD__);
+
+        // Operation was successful after second try, show the error message
+        // for user to know about the updates user didn't ask for.
+        $this->messenger()->addError($this->t('Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.'));
+      }
+    }
+  }
+
+  /**
+   * Wrapper function to update cart and handle exception.
+   *
+   * @param string $function
+   *   Function name invoking update cart for logs.
+   *
+   * @throws \Drupal\acq_commerce\Response\NeedsRedirectException
+   */
+  public function updateCartWrapper(string $function) {
+    $cart = $this->cartStorage->getCart(FALSE);
+
+    if (empty($cart)) {
+      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+    }
+
+    try {
+      $this->cartStorage->updateCart(FALSE);
+    }
+    catch (\Exception $e) {
+      $this->logger->error('Error while updating cart @cart_id, invoked from @function, exception: @message', [
+        '@message' => $e->getMessage(),
+        '@cart_id' => $cart->id(),
+        '@function' => $function,
+      ]);
+
+      if (_alshaya_acm_is_out_of_stock_exception($e)) {
+        if ($cart = $this->cartStorage->getCart(FALSE)) {
+          $this->refreshStockForProductsInCart($cart);
+          $cart->setCheckoutStep('');
+        }
+      }
+
+      throw new NeedsRedirectException(Url::fromRoute('acq_cart.cart')->toString());
+    }
+  }
+
+  /**
+   * Refresh stock cache and Drupal cache of products in cart.
+   *
+   * @param \Drupal\acq_cart\CartInterface|null $cart
+   *   Cart.
+   */
+  public function refreshStockForProductsInCart(CartInterface $cart = NULL) {
+    if (empty($cart)) {
+      $cart = $this->cartStorage->getCart(FALSE);
+    }
+
+    // Still if empty, simply return.
+    if (empty($cart)) {
+      return;
+    }
+
+    foreach ($cart->items() ?? [] as $item) {
+      if ($sku_entity = SKU::loadFromSku($item['sku'])) {
+        $sku_entity->refreshStock();
+      }
+    }
   }
 
 }

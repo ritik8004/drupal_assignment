@@ -311,13 +311,3 @@
     }
   }
 }
-
-@include breakpoint($desktop) {
-  .order-confirmation {
-    #edit-confirmation-continue-shopping {
-      &.expanded-table {
-        margin-#{$right}: 2.5rem !important;
-      }
-    }
-  }
-}

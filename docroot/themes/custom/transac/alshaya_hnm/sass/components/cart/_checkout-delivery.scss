@@ -88,11 +88,9 @@
 
       @include breakpoint($only-tablet) {
         width: 46.9%;
-        padding: 1.25rem 0;
       }
 
       @include breakpoint($desktop) {
-        padding: 1.0625rem 0;
         width: 47.44%;
 
         html[lang=ar] & {
@@ -182,7 +180,6 @@
           background-color: $delivery_tab_active_bg;
           border-width: 1px;
           border-color: $secondary_border;
-          padding: 5px;
         }
       }
     }
@@ -488,6 +485,7 @@
     .tabs--content {
       @include breakpoint($tablet) {
         border: 1px solid $secondary_border;
+        border-top: none;
       }
     }
   }
@@ -528,7 +526,6 @@
     .tab-home-delivery {
       border-color: $secondary_border !important;
       border-width: 1px !important;
-      padding: 0.5rem 0 !important;
       display: block !important;
 
       &.active--tab--head {

@@ -1,0 +1,9 @@
+sortable_options:
+  - color
+  - color_family
+  - size_shoe_eu
+  - size_textile_eu
+  - size_socks
+  - size_bras
+  - size_rest
+  - size

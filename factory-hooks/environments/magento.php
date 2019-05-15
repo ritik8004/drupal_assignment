@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * List all known Magento environments keyed by environment machine name.
@@ -82,16 +83,16 @@ $magentos = [
   'hm_uat' => [
     'url' => 'https://hm-uat.store.alshaya.com',
     'kw' => [
-      'store_id' => ['en' => 1, 'ar' => 2],
+      'store_id' => ['en' => 1, 'ar' => 5],
     ],
     'sa' => [
-      'store_id' => ['en' => 8, 'ar' => 5],
+      'store_id' => ['en' => 8, 'ar' => 14],
     ],
     'ae' => [
-      'store_id' => ['en' => 14, 'ar' => 11],
+      'store_id' => ['en' => 17, 'ar' => 23],
     ],
     'eg' => [
-      'store_id' => ['en' => 19, 'ar' => 16],
+      'store_id' => ['en' => 30, 'ar' => 27],
     ],
     'magento_secrets' => [
       'consumer_key' => 'ld4h0pms530qrlwkpn99o52nnmvlha2x',
@@ -318,6 +319,19 @@ $magentos = [
     ],
     'ae' => [
       'store_id' => ['en' => 4, 'ar' => 5],
+    ],
+  ],
+  'fl_prod' => [
+    'url' => 'https://fl.store.alshaya.com',
+    'magento_secrets' => [],
+    'kw' => [
+      'store_id' => ['en' => 1, 'ar' => 19],
+    ],
+    'sa' => [
+      'store_id' => ['en' => 7, 'ar' => 10],
+    ],
+    'ae' => [
+      'store_id' => ['en' => 13, 'ar' => 16],
     ],
   ],
   'default' => [

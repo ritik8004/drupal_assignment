@@ -6,6 +6,7 @@ use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\acq_sku\Entity\SKU;
+use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku_stock\Event\StockUpdatedEvent;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
@@ -13,6 +14,11 @@ use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class StockManager.
+ *
+ * @package Drupal\acq_sku
+ */
 class StockManager {
 
   /**
@@ -79,7 +85,7 @@ class StockManager {
    *   Lock.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   Event Dispatcher.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger.
    */
   public function __construct(Connection $connection,
@@ -126,22 +132,31 @@ class StockManager {
     // Check status + quantity of children if configurable.
     switch ($sku->bundle()) {
       case 'configurable':
-        // For configurable product to be in-stock only one in-stock child
-        // is enough.
-        foreach ($sku->get('field_configured_skus')->getValue() as $child) {
-          if (empty($child['value'])) {
-            continue;
-          }
+        $child_skus = Configurable::getChildSkus($sku);
 
-          $child_sku = SKU::loadFromSku($child['value']);
-          if ($child_sku instanceof SKU) {
-            if ($this->getStockQuantity($child_sku->getSku()) > 0) {
+        if (empty($child_skus)) {
+          return FALSE;
+        }
+
+        // Populate static cache for each child with single query.
+        $this->getStockMultiple($child_skus);
+
+        // For configurable product to be in-stock only one in-stock
+        // available child is enough.
+        foreach ($child_skus as $child_sku) {
+          if ($this->getStockQuantity($child_sku) > 0) {
+            // Try to load the child and confirm it is available only
+            // if stock available for it. Stock query is lighter compared to
+            // entity load so we do stock query first.
+            $child = SKU::loadFromSku($child_sku);
+            if ($child instanceof SKU) {
               $static[$sku_string] = TRUE;
               break;
             }
           }
         }
         break;
+
       case 'simple':
       default:
         $static[$sku_string] = (bool) $this->getStockQuantity($sku->getSku());
@@ -183,27 +198,42 @@ class StockManager {
    *   Stock data with keys [sku, status, quantity].
    */
   public function getStock(string $sku) {
-    $query = $this->connection->select('acq_sku_stock');
-    $query->fields('acq_sku_stock');
-    $query->condition('sku', $sku);
-    $result = $query->execute()->fetchAll();
+    $stocks = $this->getStockMultiple([$sku]);
+    return $stocks[$sku] ?? [];
+  }
 
-    // We may not have any entry.
-    if (empty($result)) {
-      return [];
+  /**
+   * Get current stock data for SKUs from DB.
+   *
+   * @param array $skus
+   *   Array of SKU strings.
+   *
+   * @return array
+   *   Stock data for requested SKUs from DB.
+   */
+  public function getStockMultiple(array $skus) {
+    $static = &drupal_static(__METHOD__, []);
+
+    $return = [];
+    foreach ($skus as $index => $sku) {
+      if (isset($static[$sku])) {
+        $return[$sku] = $static[$sku];
+        unset($skus[$index]);
+      }
     }
 
-    // Log if more than one found.
-    if (count($result) > 1) {
-      $this->logger->error('Duplicate entries found for stock of sku @sku.', [
-        '@sku' => $sku
-      ]);
+    if (count($skus) > 0) {
+      $query = $this->connection->select('acq_sku_stock');
+      $query->fields('acq_sku_stock');
+      $query->condition('sku', $skus, 'IN');
+      $result = $query->execute()->fetchAllAssoc('sku');
+      foreach ($result as $sku => $row) {
+        $return[$sku] = (array) $row;
+        $static[$sku] = $return[$sku];
+      }
     }
 
-    // Get the first result.
-    $data = reset($result);
-
-    return (array) $data;
+    return $return;
   }
 
   /**

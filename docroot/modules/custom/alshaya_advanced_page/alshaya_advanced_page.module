@@ -25,7 +25,7 @@ function alshaya_advanced_page_acq_sku_sync_categories_delete_alter(array &$resu
       // Get all advanced department page.
       $all_dpt_page = alshaya_advanced_page_get_pages();
       // If department page node exists for the given term, don't delete it.
-      if (!empty($dpt_nid = $all_dpt_page[$tid])) {
+      if (isset($all_dpt_page[$tid]) && !empty($dpt_nid = $all_dpt_page[$tid])) {
         $dpt_node = Node::load($dpt_nid);
         if ($dpt_node instanceof Node) {
           unset($result[$tid]);

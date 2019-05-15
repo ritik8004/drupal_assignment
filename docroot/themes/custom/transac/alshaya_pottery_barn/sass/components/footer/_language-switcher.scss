@@ -18,9 +18,15 @@
     }
 
     .language-switcher-language-url ul {
-      li:first-child a {
+      li {
         @include breakpoint($only-tablet) {
-          margin-#{$left}: 0;
+          &.en a {
+            margin-left: 0;
+          }
+
+          &.ar a {
+            margin-right: 0;
+          }
         }
       }
     }

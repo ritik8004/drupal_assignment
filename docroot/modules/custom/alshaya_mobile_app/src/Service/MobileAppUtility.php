@@ -155,6 +155,13 @@ class MobileAppUtility {
   protected $renderer;
 
   /**
+   * Listing config.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $listingConfig;
+
+  /**
    * MobileAppUtility constructor.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
@@ -734,7 +741,8 @@ class MobileAppUtility {
     }
     // Get translated node.
     $node = $this->entityRepository->getTranslationFromContext($node, $langcode);
-    $color = $node->get('field_product_color')->getString();
+
+    $color = ($this->skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     // Get SKU attached with node.
     $sku = $this->skuManager->getSkuForNode($node);
@@ -751,20 +759,20 @@ class MobileAppUtility {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU Entity.
-   * @param string|null $color
+   * @param string $color
    *   Color value.
    *
    * @return array
    *   Light Product.
    */
-  public function getLightProduct(SKUInterface $sku, $color = NULL): array {
+  public function getLightProduct(SKUInterface $sku, string $color = ''): array {
     $node = $this->skuManager->getDisplayNode($sku);
     if (!($node instanceof NodeInterface) || !($node->hasTranslation($this->currentLanguage()))) {
       return [];
     }
 
     // Get the prices.
-    $prices = $this->skuManager->getMinPrices($sku);
+    $prices = $this->skuManager->getMinPrices($sku, $color);
 
     // Get the promotion data.
     $promotions = $this->getPromotions($sku);
@@ -804,8 +812,7 @@ class MobileAppUtility {
     ];
 
     if ($color) {
-      // Keep data type consistent here.
-      $data['color'] = (string) $color;
+      $data['color'] = $color;
     }
 
     // Allow other modules to alter light product data.

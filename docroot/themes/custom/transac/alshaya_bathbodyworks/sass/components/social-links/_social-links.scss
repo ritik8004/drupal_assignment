@@ -80,6 +80,7 @@ $path-social-icons: "../../alshaya_white_label/imgs/social-icons/pdp";
       text-transform: uppercase;
       font-size: 0.75rem;
       margin-bottom: 0.5rem;
+      line-height: normal;
 
       @include breakpoint($only-mobile) {
         text-align: center;

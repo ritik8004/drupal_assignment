@@ -31,4 +31,5 @@ dependencies:
   - ckeditor_font:ckeditor_font
   - allowed_formats:allowed_formats
   - drupal:link_attributes
+  - drupal:content_moderation
 package: Alshaya

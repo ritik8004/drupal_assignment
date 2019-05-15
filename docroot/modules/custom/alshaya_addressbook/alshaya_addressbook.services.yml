@@ -5,6 +5,8 @@ services:
       - { name: event_subscriber }
   alshaya_addressbook.address_subscriber:
     class: Drupal\alshaya_addressbook\EventSubscriber\AddressFormatSubscriber
+    arguments:
+      - '@alshaya_addressbook.manager'
     tags:
       - { name: event_subscriber }
   alshaya_addressbook.manager:

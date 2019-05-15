@@ -102,31 +102,11 @@ function alshaya_pb_transac_preprocess_alshaya_cart_product_name(&$variables) {
  */
 function alshaya_pb_transac_alshaya_acm_product_build_alter(&$build, SKUInterface $sku, $context = 'pdp') {
   if ($context == 'search') {
+    /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
+    $productHelper = \Drupal::service('alshaya_acm_product.helper');
     // Display swatches on PLP/Search/Promo. We use sku gallery formatter for
     // all these cases and context received here is 'search' for that.
-    $settings = \Drupal::config('alshaya_acm_product.display_settings');
-
-    $swatches_display_status = $settings->get('color_swatches');
-
-    // We do not display swatches for color nodes.
-    $color = $build['#color'] ?? '';
-
-    // Display swatches only if enabled in configuration and not color node.
-    if ($swatches_display_status && empty($color)) {
-      /** @var \Drupal\alshaya_acm_product\SkuManager $sku_manager */
-      $sku_manager = \Drupal::service('alshaya_acm_product.skumanager');
-
-      // Get swatches for this product from media.
-      $swatches = $sku_manager->getSwatches($sku);
-      if ($swatches) {
-        // Show only first 'X' swatches as defined in configuration.
-        $swatch_plp_limit = $settings->get('swatch_plp_limit');
-        $build['#swatches'] = array_slice($swatches, 0, $swatch_plp_limit, TRUE);
-        $build['#swatch_more_text'] = count($swatches) > $swatch_plp_limit
-          ? t('+ @swatch_count more', ['@swatch_count' => count($swatches) - $swatch_plp_limit])
-          : FALSE;
-      }
-    }
+    $productHelper->updateSwatches($build, $sku);
   }
 }
 

@@ -1,4 +1,19 @@
 .path--user {
+  &.modal-overlay {
+    @include breakpoint($upto-desktop) {
+      &::before {
+        z-index: 12;
+        top: -4.75rem;
+      }
+    }
+  }
+
+  .ui-dialog {
+    @include breakpoint($upto-desktop) {
+      z-index: 13;
+    }
+  }
+
   .ui-dialog .ui-dialog-titlebar-close {
     color: $modal_subtext;
 

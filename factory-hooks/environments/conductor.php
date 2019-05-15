@@ -232,6 +232,10 @@ $conductors = [
     'hmac_id' => 'b7850578d9864538a51eb94bc9632487',
     'hmac_secret' => 'MjU3YjExNDYtYzFmMy00',
   ],
+  'flkw_prod' => [
+    'hmac_id' => '4cc5c57ce5b5413f98fe0661158e4e99',
+    'hmac_secret' => 'M2U3NWQxYjAtMDE4Zi00',
+  ],
   // FootLocker SA.
   'flsa_qa' => [
     'hmac_id' => '31a27139b98448379c08c90bee5e866e',
@@ -241,14 +245,22 @@ $conductors = [
     'hmac_id' => 'b8371f86a2e548ecbe3f7f7fc556596c',
     'hmac_secret' => 'M2RlMTc3YTgtZDA4OS00',
   ],
+  'flsa_prod' => [
+    'hmac_id' => 'e5e05dd4da47426e9da0e9d3cad04ed5',
+    'hmac_secret' => 'M2I4YzllMWItZDA3Zi00',
+  ],
   // FootLocker AE.
-  'flae_test' => [
+  'flae_qa' => [
     'hmac_id' => '61f09f6fe1474ce68cc8057f97188d2f',
     'hmac_secret' => 'MjU3YzZiOGEtNmI1Yi00',
   ],
   'flae_uat' => [
     'hmac_id' => '8d8c55c242f947efa44de57bbd84155e',
     'hmac_secret' => 'YWFlYTc2ZDgtYmJjYS00',
+  ],
+  'flae_prod' => [
+    'hmac_id' => 'a220ff2d59e846c79426e5b001516063',
+    'hmac_secret' => 'ZmJiNzUzOTctMTBiMC00',
   ],
 ];
 

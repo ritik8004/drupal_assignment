@@ -47,6 +47,13 @@ class AlshayaSearchApiCommands extends DrushCommands {
   private $entityTypeManager;
 
   /**
+   * Static reference to logger object.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  protected static $loggerStatic;
+
+  /**
    * AlshayaSearchApiCommands constructor.
    *
    * @param \Drupal\Core\Database\Connection $connection
@@ -68,6 +75,7 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->connection = $connection;
     $this->dateTime = $date_time;
     $this->setLogger($logger);
+    self::$loggerStatic = $logger;
     $this->skuManager = $sku_manager;
     $this->entityTypeManager = $entity_type_manager;
   }
@@ -81,10 +89,9 @@ class AlshayaSearchApiCommands extends DrushCommands {
    */
   public function correctIndexData() {
     // 1. Delete items from search_api which are no longer available in system.
-    $query = $this->connection->query("SELECT item.item_id 
-      FROM search_api_item item 
-      LEFT JOIN node ON item.item_id LIKE CONCAT('entity:node/', node.nid, ':%') 
-      WHERE node.nid IS NULL");
+    $query = $this->connection->query("SELECT sai.item_id FROM search_api_item sai
+      LEFT JOIN node n ON n.nid = SUBSTR(SUBSTR(sai.item_id, 1, LENGTH(sai.item_id) - 3), 13)
+      WHERE n.nid IS NULL");
 
     $item_ids = $query->fetchAll();
     $indexes = ['acquia_search_index', 'product'];
@@ -105,40 +112,51 @@ class AlshayaSearchApiCommands extends DrushCommands {
     $this->addEntryToSearchApiItem($indexes, $item_ids);
     $this->deleteItems($indexes, $item_ids);
 
-    // 3. Re-index items that are missing in DB index.
-    $query = $this->connection->query("SELECT node.nid, node.langcode 
-      FROM node 
-      LEFT JOIN search_api_db_product item ON item.item_id LIKE CONCAT('%', node.nid, ':', node.langcode) 
-      WHERE item.item_id IS NULL AND node.type = :node_type", [
-        ':node_type' => 'acq_product',
-      ]
-    );
+    // 3. Re-index items that are missing in specific indexes.
+    foreach (['product', 'acquia_search_index'] as $index) {
+      $query = $this->connection->query("SELECT SQL_NO_CACHE nid, langcode 
+        FROM (SELECT CONCAT('entity:node/', nid, ':', langcode) as iid, nid, langcode, type FROM node_field_data WHERE type = :node_type) AS n 
+        LEFT JOIN search_api_item ON iid=item_id AND index_id = :index 
+        WHERE item_id IS NULL", [
+          ':node_type' => 'acq_product',
+          ':index' => $index,
+        ]
+      );
 
-    $data = $query->fetchAll();
+      $data = $query->fetchAll();
 
-    $item_ids = [];
-    foreach ($data as $row) {
-      $item_ids[] = $row->nid . ':' . $row->langcode;
+      $item_ids = [];
+      foreach ($data as $row) {
+        $item_ids[] = $row->nid . ':' . $row->langcode;
+      }
+
+      $indexes = [$index];
+      $this->deleteItems($indexes, $item_ids);
+      $this->indexItems($indexes, $item_ids);
     }
-
-    $indexes = ['product'];
-    $this->deleteItems($indexes, $item_ids);
-    $this->indexItems($indexes, $item_ids);
   }
 
   /**
    * Correct index stock data.
    *
+   * @param array $options
+   *   Command options.
+   *
    * @command alshaya_search_api:correct-index-stock-data
    *
+   * @option batch-size Batch size to use for processing items.
+   *
    * @aliases correct-index-stock-data
+   *
+   * @usage drush correct-index-stock-data --batch-size=50
+   *   Process all products to check for corrupt stock data in batches of 50.
    */
-  public function correctIndexStockData() {
+  public function correctIndexStockData(array $options = ['batch-size' => 50]) {
     // Find all index entries for which sku is in stock but index data says OOS
     // OR sku is OOS and index data says in stock.
     $query = $this->connection->query("SELECT sku.sku, sku.langcode, db.nid, db.stock 
       FROM {acq_sku_field_data} sku 
-      LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.item_id LIKE CONCAT('%:', sku.langcode)
+      LEFT JOIN {search_api_db_product} db ON db.sku = sku.sku AND db.search_api_language = sku.langcode
       WHERE db.nid IS NOT NULL");
 
     // Above query will return all the products in system.
@@ -148,32 +166,59 @@ class AlshayaSearchApiCommands extends DrushCommands {
       return;
     }
 
+    $batch = [
+      'operations' => [],
+      'init_message' => dt('Checking for corrupt stock indexes...'),
+      'progress_message' => dt('Completed @current step of @total.'),
+      'error_message' => dt('Corrupt stock indexes marked for re-indexing.'),
+    ];
+
+    foreach (array_chunk($data, $options['batch-size']) as $chunk) {
+      $batch['operations'][] = [
+        [__CLASS__, 'checkForCorruptStockIndex'],
+        [$chunk],
+      ];
+    }
+
+    // Initialize the batch.
+    batch_set($batch);
+
+    // Process the batch.
+    drush_backend_batch_process();
+  }
+
+  /**
+   * Batch callback to process chunk of skus for corrupt stock index data.
+   *
+   * @param array $chunk
+   *   Chunk of SKUs.
+   */
+  public static function checkForCorruptStockIndex(array $chunk) {
     $item_ids = [];
-    foreach (array_chunk($data, 100) as $chunk) {
-      foreach ($chunk as $row) {
-        $sku = SKU::loadFromSku($row->sku);
 
-        // Not able to load SKU, we will handle it separately.
-        if (!($sku instanceof SKU)) {
-          continue;
-        }
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
 
-        $is_in_stock = $this->skuManager->isProductInStock($sku);
+    foreach ($chunk as $row) {
+      $sku = SKU::loadFromSku($row->sku);
 
-        // Valid data checks.
-        if (($is_in_stock && $row->stock == 2) || (!$is_in_stock && $row->stock != 2)) {
-          continue;
-        }
-
-        $item_ids[] = $row->nid . ':' . $row->langcode;
+      // Not able to load SKU, we will handle it separately.
+      if (!($sku instanceof SKU)) {
+        continue;
       }
 
-      $indexes = ['acquia_search_index', 'product'];
-      $this->reIndexItems($indexes, $item_ids);
+      $is_in_stock = $skuManager->isProductInStock($sku);
 
-      $this->entityTypeManager->getStorage('acq_sku')->resetCache();
-      drupal_static_reset();
+      // Valid data checks.
+      if (($is_in_stock && $row->stock == 2) || (!$is_in_stock && $row->stock != 2)) {
+        continue;
+      }
+
+      $item_ids[] = $row->nid . ':' . $row->langcode;
     }
+
+    $indexes = ['acquia_search_index', 'product'];
+    self::reIndexItems($indexes, $item_ids);
   }
 
   /**
@@ -234,12 +279,12 @@ class AlshayaSearchApiCommands extends DrushCommands {
    * @param array $item_ids
    *   Item ids.
    */
-  private function reIndexItems(array $indexes, array $item_ids) {
+  protected static function reIndexItems(array $indexes, array $item_ids) {
     if (empty($item_ids)) {
       return;
     }
 
-    $this->logger->warning(dt('Re-indexing items @items', [
+    self::$loggerStatic->warning(dt('Re-indexing items @items', [
       '@items' => json_encode($item_ids),
     ]));
 

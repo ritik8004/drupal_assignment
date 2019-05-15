@@ -94,7 +94,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
    *
    * @option default_parent Default parent term id to render main menu
    *
-   * @aliases ascs,alshaya-super-category-switch
+   * @aliases alshaya-super-category-switch
    */
   public function enableDisableSuperCategory(
     array $options = ['default_parent' => 0]
@@ -183,7 +183,7 @@ class AlshayaSuperCategoryCommands extends DrushCommands {
    *
    * @command alshaya_super_category:product-alias
    *
-   * @aliases ascs-pa,alshaya-super-category-product-alias
+   * @aliases alshaya-super-category-product-alias
    */
   public function generateProductAlias() {
     $config = $this->configFactory->getEditable('alshaya_super_category.settings');

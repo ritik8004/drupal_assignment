@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_attribute_size_chart_label
+    - taxonomy.vocabulary.sku_product_option
+id: taxonomy_term.sku_product_option.field_attribute_size_chart_label
+field_name: field_attribute_size_chart_label
+entity_type: taxonomy_term
+bundle: sku_product_option
+label: 'Size chart label'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

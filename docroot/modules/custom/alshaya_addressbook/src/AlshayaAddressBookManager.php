@@ -992,6 +992,36 @@ class AlshayaAddressBookManager implements AlshayaAddressBookManagerInterface {
   }
 
   /**
+   * Function to get field mapping between magento form and address fields.
+   *
+   * @return array
+   *   Mapping Address field <-> Magento form field.
+   */
+  public function getMagentoUnmappedFields() {
+    static $field_unmapped = NULL;
+
+    if (!is_array($field_unmapped)) {
+      $mapping = array_flip($this->getMagentoFieldMappings());
+      $form_fields = $this->getMagentoFormFields();
+
+      foreach ($form_fields as $form_item) {
+        if (empty($form_item['attribute_code'])) {
+          continue;
+        }
+
+        if (isset($mapping[$form_item['attribute_code']])) {
+          $field_code = $mapping[$form_item['attribute_code']];
+          $fields_mapped[$form_item['attribute_code']] = $field_code;
+        }
+      }
+
+      $field_unmapped = array_diff($mapping, $fields_mapped);
+    }
+
+    return $field_unmapped;
+  }
+
+  /**
    * Function to get fields disabled in magento form and available in address.
    *
    * @return array

@@ -76,12 +76,15 @@
   .tooltip::after {
     @extend %tooltip-after;
 
+    border-bottom-color: $tooltip_border_2;
     border-bottom-width: 0.4375rem;
     bottom: calc(100% + -1px);
   }
 
   .tooltip::before {
     @extend %tooltip-before;
+
+    border-bottom-color: $tooltip_border;
   }
 }
 

@@ -345,12 +345,6 @@ html[lang="ar"] {
         padding-left: 40px !important;
       }
     }
-
-    #payment_details_wrapper > .form-wrapper .payment-plugin-wrapper-div .payment-method-name {
-      @include breakpoint($tablet) {
-        width: 91.5%;
-      }
-    }
   }
 }
 

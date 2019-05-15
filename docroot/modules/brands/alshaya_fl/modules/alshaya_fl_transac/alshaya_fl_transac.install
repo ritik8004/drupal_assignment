@@ -10,6 +10,21 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Cross sell modal product thumbnail count and basket page carousel count.
+ */
+function alshaya_fl_transac_update_8002() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+
+  $manager->updateConfigs(
+    ['alshaya_acm_product.settings'],
+    'alshaya_acm_product'
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * PDP gallery slider position.
  */
 function alshaya_fl_transac_update_8001() {
@@ -45,4 +60,12 @@ function alshaya_fl_transac_install() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')
     ->set('all_products_buyable', 0)
     ->save();
+
+  // Configure ShareThis defaults.
+  $configFactory = \Drupal::configFactory()->getEditable('sharethis.settings');
+  $services = $configFactory->get('service_option');
+  $services = str_replace('Pinterest:pinterest', 'Instagram:instagram', $services);
+  $configFactory->set('service_option', $services);
+  // Save the changes.
+  $configFactory->save();
 }

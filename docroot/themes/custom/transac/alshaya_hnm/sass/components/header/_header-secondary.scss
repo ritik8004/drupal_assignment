@@ -128,6 +128,10 @@
 }
 
 .branding__menu {
+  @include breakpoint($desktop) {
+    z-index: 6;
+  }
+
   @include breakpoint($only-tablet) {
     height: 4.5rem;
 

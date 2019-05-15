@@ -154,7 +154,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
-    if ($entity_adapter instanceof EntityAdapter) {
+    if (($entity_adapter instanceof EntityAdapter) &&
+      ($this->skuManager->isListingModeNonAggregated())) {
       $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
 
       /** @var \Drupal\node\NodeInterface $colorNode */
@@ -192,7 +193,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
           // Do not add selected param if we are using parent sku itself for
           // gallery. This is normal for PB, MC, etc.
-          if ($sku_for_gallery->id() != $sku->id()) {
+          if (($sku_for_gallery->id() != $sku->id()) &&
+            ($this->skuManager->isListingModeNonAggregated())) {
             $product_url .= '?selected=' . $sku_for_gallery->id();
           }
         }
@@ -238,6 +240,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
         if ($this->configFactory->get('alshaya_acm_product.display_settings')->get('color_swatches_show_product_image')) {
           $elements[$delta]['#attached']['library'][] = 'alshaya_white_label/plp-swatch-hover';
+          $elements[$delta]['#attached']['drupalSettings']['show_variants_thumbnail_plp_gallery'] = $this->configFactory->get('alshaya_acm_product.display_settings')->get('show_variants_thumbnail_plp_gallery');
         }
 
         $elements[$delta]['#attached']['library'][] = 'alshaya_acm_product/sku_gallery_format';

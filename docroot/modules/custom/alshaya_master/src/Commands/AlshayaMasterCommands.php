@@ -265,7 +265,7 @@ class AlshayaMasterCommands extends DrushCommands {
       $num_roles = count($roles);
 
       // Only if a user has just a single role of authenticated user,
-      // we will delete him.
+      // we will delete them.
       if (($num_roles == 1) && ($roles[0] == 'authenticated')) {
         $ids_to_delete[] = $id;
       }
@@ -304,7 +304,7 @@ class AlshayaMasterCommands extends DrushCommands {
     $url = parse_url($uri);
 
     // If the uri does not have a scheme add https.
-    if (!$url['scheme']) {
+    if (!isset($url['scheme'])) {
       $self->set('uri', "https://$uri");
     }
     elseif ($url['scheme'] == 'http') {

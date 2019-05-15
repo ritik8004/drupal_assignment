@@ -60,3 +60,11 @@
     }
   }
 }
+
+.nodetype--acq_product {
+  .sharethis-wrapper {
+    @include breakpoint($only-mobile) {
+      margin-bottom: 1rem;
+    }
+  }
+}
