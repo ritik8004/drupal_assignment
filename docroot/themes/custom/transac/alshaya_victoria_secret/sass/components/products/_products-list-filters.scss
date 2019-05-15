@@ -1,0 +1,18 @@
+.show-all-filters {
+  text-transform: capitalize;
+}
+
+.c-plp .c-content__region .all-filters {
+  .filter__head {
+    .filter-sort-title {
+      text-transform: capitalize;
+    }
+  }
+
+  .filter__foot {
+    .facet-all-clear,
+    .facet-all-apply {
+      text-transform: capitalize;
+    }
+  }
+}
