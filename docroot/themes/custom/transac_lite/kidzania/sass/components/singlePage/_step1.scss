@@ -1,0 +1,164 @@
+section {
+  font-family: $ubuntu-sans-bold;
+}
+
+.ticketing__steps {
+  &.one {
+    padding-top: 2.5rem;
+
+    .steps_count {
+      @include breakpoint($only-tablet) {
+        padding-top: 1.875rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        padding-top: 3rem;
+      }
+    }
+
+    .steps__information {
+      @include breakpoint($upto-desktop) {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+.steps_instruction {
+  color: $instruction_heading;
+  font-size: 1.875rem;
+  text-align: center;
+  font-family: $open-sans-bold;
+  margin: 0;
+
+  @include breakpoint($only-tablet) {
+    font-size: 2.25rem;
+    line-height: 1;
+  }
+
+  @include breakpoint($only-mobile) {
+    font-size: 1.125rem;
+  }
+}
+
+.steps_count {
+  width: 28%;
+  float: $left;
+
+  @include breakpoint($upto-desktop) {
+    width: 100%;
+  }
+}
+
+.countryBtn {
+  @extend %btn;
+
+  background: $select_country_btn_bg;
+  width: 46%;
+  color: $select_country_btn_text;
+
+  @include breakpoint($only-mobile) {
+    width: 92%;
+  }
+
+  &:hover {
+    font-family: $ubuntu-sans-bold;
+
+    .icon {
+      color: $step_icons_odd_hover;
+    }
+  }
+
+  .icon {
+    width: auto;
+    color: $brand_icon;
+    transition: all 0.4s;
+
+    &.icon-kz-flag {
+      @include icon(kz-flag) {
+        font-family: $icomoon !important;
+        margin-#{$right}: 0.1875rem;
+      }
+    }
+  }
+}
+
+.steps__information {
+  width: 70%;
+  float: $left;
+  text-align: center;
+  padding-top: 2.8125rem;
+
+  @include breakpoint($upto-desktop) {
+    width: 100%;
+  }
+}
+
+.steps {
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1;
+  text-align: $left;
+  position: relative;
+
+  @include breakpoint($upto-desktop) {
+    font-size: 2rem;
+    padding: 0 0.9375rem;
+    margin-bottom: 1.5625rem;
+    text-align: center;
+  }
+
+  @include breakpoint($only-mobile) {
+    font-family: $ubuntu-sans-bold;
+  }
+
+  &.odd {
+    color: $steps_odd_text;
+
+    .step_number {
+      @include breakpoint($upto-desktop) {
+        color: $steps_odd_number;
+      }
+
+      &::after {
+        @include breakpoint($upto-desktop) {
+          color: $steps_odd_number;
+        }
+      }
+    }
+  }
+
+  &.even {
+    color: $steps_even_text;
+  }
+
+  .step_number {
+    font-size: 12.5rem;
+    display: inline-block;
+    padding-#{$right}: 0.875rem;
+
+    @include breakpoint($upto-desktop) {
+      font-size: 2rem;
+    }
+
+    &::after {
+      content: "·";
+      font-size: 6.25rem;
+      position: absolute;
+
+      @include breakpoint($upto-desktop) {
+        font-size: 2.25rem;
+      }
+    }
+  }
+
+  .step_legend {
+    @include breakpoint($desktop) {
+      width: 43%;
+      display: inline-block;
+      position: absolute;
+      top: 2.5rem;
+      padding-#{$left}: 1.875rem;
+    }
+  }
+}

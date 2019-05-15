@@ -47,12 +47,6 @@
  */
 #}
 <div {{ attributes.addClass('page-generic') }}>
-  <div class="loading-overlay">
-    <div class="over-elements">
-      <span class="icon-refresh"></span><br>
-      <span>{{ 'Please Wait a Moment...'|t }}</span>
-    </div>
-  </div>
   <header role="banner" class="primary-header">
     <div class="region-top-header">
       {% if page.header_primary %}
@@ -81,6 +75,10 @@
 
     <div class="region-content">
       <div class="region-content" id="kizForm">
+        <!-- __________________ step1 select park  _______________________ -->
+        {% include directory ~ '/../kidzania/templates/steps/step1.html.twig' %}
+        <!-- __________________ step2 select ticket type _______________________ -->
+        {% include directory ~ '/../kidzania/templates/steps/step2.html.twig' %}
         <!-- __________________ step3 select date _______________________ -->
         {% include directory ~ '/../kidzania/templates/steps/step3.html.twig' %}
       </div>

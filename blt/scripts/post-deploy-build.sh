@@ -18,7 +18,7 @@ do
     uname_string=`uname`
     if [ $uname_string == 'Darwin' ]
     then
-      sed -i '' '/dist/d' $deployDir/docroot/themes/custom/transac/$i/.gitignore
+      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/transac/$i/.gitignore
     else
       sed -i '/dist/d' $deployDir/docroot/themes/custom/transac/$i/.gitignore
     fi
@@ -32,7 +32,7 @@ do
     uname_string=`uname`
     if [ $uname_string == 'Darwin' ]
     then
-      sed -i '' '/dist/d' $deployDir/docroot/themes/custom/non_transac/$i/.gitignore
+      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/non_transac/$i/.gitignore
     else
       sed -i '/dist/d' $deployDir/docroot/themes/custom/non_transac/$i/.gitignore
     fi
@@ -46,7 +46,7 @@ do
     uname_string=`uname`
     if [ $uname_string == 'Darwin' ]
     then
-      sed -i '' '/dist/d' $deployDir/docroot/themes/custom/amp/$i/.gitignore
+      sed -i'' '/dist/d' $deployDir/docroot/themes/custom/amp/$i/.gitignore
     else
       sed -i '/dist/d' $deployDir/docroot/themes/custom/amp/$i/.gitignore
     fi
