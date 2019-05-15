@@ -44,10 +44,12 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $config = \Drupal::config('alshaya_acm_checkout.settings');
 
-    $pane_form['summary'] = [
-      '#markup' => $config->get('checkout_guest_login.value'),
-      '#weight' => -50,
-    ];
+    if (!empty($config->get('checkout_guest_login.value'))) {
+      $pane_form['summary'] = [
+        '#markup' => $config->get('checkout_guest_login.value'),
+        '#weight' => -50,
+      ];
+    }
 
     $pane_form['messages'] = [
       '#type' => 'status_messages',
