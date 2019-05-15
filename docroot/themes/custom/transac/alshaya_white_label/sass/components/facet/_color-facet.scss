@@ -29,8 +29,8 @@
             content: '';
             border: 1px solid $color_facet_active_border;
             position: absolute;
-            top: -2px;
-            bottom: -2px;
+            top: 2px;
+            bottom: -6px;
             #{$left}: -2px;
             #{$right}: -2px;
             border-radius: 2.6px;
@@ -44,7 +44,7 @@
 
       .facet-item__value,
       .facet-item__count {
-        font-size: 0.875rem;
+        font-size: 0.75rem;
       }
 
       color: $plp_facet_label;
