@@ -14,7 +14,6 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\acq_commerce\SKUInterface;
 use Drupal\user\Entity\User;
-use Drupal\alshaya_seo_transac\AlshayaGtmManager;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -47,6 +46,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $customer_type = 'New Customer';
 
     if (!\Drupal::currentUser()->isAnonymous()) {
+      \Drupal::moduleHandler()->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
       $current_user = User::load($current_user_id);
       $email = $current_user->get('mail')->getString();
       $customer_type = count(alshaya_acm_customer_get_user_orders($email)) > 1 ? 'Repeat Customer' : $customer_type;
@@ -56,7 +56,7 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     $user_details = [
       'userID' => $current_user_id ? $current_user->get('uid')->getString() : 0,
       'userEmailID' => $email,
-      'userPhone' => $current_user_id ? $current_user->get('field_mobile_number')->value : '',
+      'userPhone' => $current_user_id ? ($current_user->get('field_mobile_number')->value ?? '') : '',
       'customerType' => $customer_type,
       'userName' => $current_user_id ? $current_user->get('field_first_name')->getString() . ' ' . $current_user->get('field_last_name')->getString() : '',
       'userType' => $current_user_id ? 'Logged in User' : 'Guest User',
@@ -64,7 +64,6 @@ function alshaya_seo_transac_page_attachments_alter(&$page) {
     ];
     $page['#attached']['drupalSettings']['userDetails'] = $user_details;
     $page['#attached']['drupalSettings']['gtm']['disabled_vars'] = \Drupal::config('alshaya_seo.disabled_gtm_vars')->get('disabled_vars');
-    $page['#cache']['tags'] = AlshayaGtmManager::JS_CACHETAG;
   }
 }
 

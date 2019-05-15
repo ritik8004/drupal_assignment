@@ -214,13 +214,6 @@ class CheckoutHelper {
       $this->ordersManager->clearLastOrderRelatedProductsCache();
       $this->clearCartHistory($cart->id());
 
-      // Customer type needs to be updated in GTM
-      // if the customer is a repeat customer.
-      if (alshaya_acm_customer_is_customer($this->currentUser) && count(alshaya_acm_customer_get_user_orders($email)) < 3) {
-        // Invalidate cache so that drupalSettings is rebuilt.
-        Cache::invalidateTags([AlshayaGtmManager::JS_CACHETAG]);
-      }
-
       // Add success message in logs.
       $this->logger->info('Placed order. Cart id: @cart_id. Order id: @order_id. Payment method: @method', [
         '@cart_id' => $cart->id(),

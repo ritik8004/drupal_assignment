@@ -10,7 +10,6 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\Core\Cache\Cache;
 
 /**
  * Function to check if we should process GTM code for current request.
@@ -303,8 +302,6 @@ function alshaya_seo_user_logout($account) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function alshaya_seo_user_presave(EntityInterface $entity) {
-  // Invalidate cache so that drupalSettings is rebuilt.
-  Cache::invalidateTags([AlshayaGtmManager::JS_CACHETAG]);
   try {
     if ($entity->get('field_subscribe_newsletter')->getString()) {
       $original_entity = $entity->original;
