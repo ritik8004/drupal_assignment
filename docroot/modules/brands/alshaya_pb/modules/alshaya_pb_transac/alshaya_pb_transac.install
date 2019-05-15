@@ -20,7 +20,9 @@ function alshaya_pb_transac_update_8011() {
 
   $manager->updateConfigs(
     ['alshaya_acm_product.settings'],
-    'alshaya_acm_product'
+    'alshaya_acm_product',
+    'install',
+    AlshayaConfigManager::MODE_RESAVE
   );
 }
 
