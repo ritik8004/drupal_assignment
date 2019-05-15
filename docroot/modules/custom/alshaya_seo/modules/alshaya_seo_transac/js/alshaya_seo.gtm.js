@@ -24,6 +24,7 @@
       var cartCheckoutLoginSelector = $('body[gtm-container="checkout login page"]');
       var cartCheckoutDeliverySelector = $('body[gtm-container="checkout delivery page"]');
       var cartCheckoutPaymentSelector = $('body[gtm-container="checkout payment page"]');
+      var cartPage = $('body[gtm-container="cart page"]');
       var orderConfirmationPage = $('body[gtm-container="purchase confirmation page"]');
       var subDeliveryOptionSelector = $('#shipping_methods_wrapper .shipping-methods-container', context);
       var topNavLevelOneSelector = $('li.menu--one__list-item', context);
@@ -42,27 +43,35 @@
       var ccPaymentsClicked = false;
       var footerNewsletterSubmiClicked = false;
       var deliveryType = 'Home Delivery';
+      var userDetails = drupalSettings.userDetails;
 
       // Set platformType.
       $('body').once('page-load-gta').each(function () {
         var md = new MobileDetect(window.navigator.userAgent);
         if (md.tablet() !== null) {
-          dataLayer.push({
-            platformType: 'tablet',
-          });
+            userDetails.platformType = 'tablet';
         }
         else if (md.mobile()) {
-          dataLayer.push({
-            platformType: 'mobile',
-          });
+            userDetails.platformType = 'mobile';
         }
         else {
-          dataLayer.push({
-            platformType: 'desktop',
-          });
+            userDetails.platformType = 'desktop';
         }
 
-        if ($(context).filter('article[data-vmode="modal"]').length === 1
+        // For checkout pages, privilegeCustomer is added in checkout step.
+        if (cartPage.length !== 0 ||
+            cartCheckoutLoginSelector.length !== 0 ||
+            cartCheckoutDeliverySelector.length !== 0 ||
+            cartCheckoutPaymentSelector.length !==0) {
+          delete userDetails.privilegeCustomer;
+        }
+
+        // Push on all pages except confirmation page.
+        if (orderConfirmationPage.length === 0) {
+          dataLayer.push(userDetails);
+        }
+
+          if ($(context).filter('article[data-vmode="modal"]').length === 1
             || $(document).find('article[data-vmode="full"]').length === 1) {
 
           if ($(document).find('article[data-vmode="full"]').length === 1) {
