@@ -7,7 +7,6 @@ use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -63,8 +62,8 @@ class BookingPaymentForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('alshaya_kz_transac_lite.booking'),
-      $container->get('alshaya_kz_transac_lite.booking_payemnt')
+      $container->get('alshaya_kz_transac_lite.booking_manager'),
+      $container->get('alshaya_kz_transac_lite.booking_payment_manager')
     );
   }
 
@@ -114,29 +113,31 @@ class BookingPaymentForm extends FormBase {
 
     $form['mobile'] = [
       '#type' => 'mobile_number',
+      '#title' => $this->t('Mobile Number'),
       '#placeholder' => $this->t('Mobile Number'),
       '#required' => TRUE,
     ];
 
-    $tnc = Link::fromTextAndUrl(new TranslatableMarkup('Terms & conditions'), Url::fromUri('entity:node/10', ['attributes' => ['target' => '_blank']]))->toString();
+    $host = $this->getRequest()->getSchemeAndHttpHost();
+    $tnc = Link::fromTextAndUrl($this->t('Terms & conditions'), Url::fromUri($host . '/tnc', ['attributes' => ['target' => '_blank']]))->toString();
     $form['approve'] = [
       '#type' => 'checkbox',
-      '#title' => new TranslatableMarkup('Accept our') . ' ' . $tnc,
+      '#title' => $this->t('Accept our') . ' ' . $tnc,
       '#required' => TRUE,
     ];
 
     $form['payment_option']['knet'] = [
       '#type' => 'checkbox',
       '#required' => TRUE,
-      '#suffix' => '<div class="knet-option">
-          <span class="k-net"></span>
+      '#suffix' => '<div class="payment_option">
+          <span class="k-net">K-NET</span>
           </div>',
     ];
 
     $form['payment_option']['cybersource'] = [
       '#type' => 'markup',
       '#markup' => '<div class="payment_option">
-          <p class="future_option">' . $this->t('Please note: we are in the process of adding credit card payment option') . '</p>
+          <p class="future_option">' . $this->t('please note: we are in the process of adding credit card payment option') . '</p>
           </div>',
     ];
 
