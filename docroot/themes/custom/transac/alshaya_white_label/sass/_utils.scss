@@ -101,10 +101,11 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
 }
 
 %modal-overlay,
-.modal-overlay {
-  position: fixed;
+.modal-overlay,
+body.modal-overlay {
   height: initial;
   width: 100%;
+  margin-top: 0;
 
   &::before {
     content: '';
@@ -116,6 +117,11 @@ $brand_theme_img_directory_path: '/themes/custom/transac/alshaya_white_label/img
     background: rgba(0, 0, 0, 0.5);
     z-index: 7;
     opacity: 1;
+
+    @include breakpoint($desktop) {
+      pointer-events: unset;
+      height: 100%;
+    }
   }
 }
 

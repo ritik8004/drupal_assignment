@@ -3,3 +3,9 @@ facets_language_switcher:
     js/facets-language-switcher.js: {}
   dependencies:
     - core/jquery
+
+facets_panel:
+  js:
+    js/facets-panel.js: {}
+  dependencies:
+    - core/jquery
