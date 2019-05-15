@@ -1,0 +1,29 @@
+{{ attach_library('alshaya_search_api/facets_panel') }}
+
+{% if facet_blocks %}
+  {% if show_all %}
+    <div class="show-all-filters">
+      <span class="desktop">{{ 'all filters'|t }}</span>
+      <span class="upto-desktop">{{ 'filter & sort'|t }}</span>
+    </div>
+  {% endif %}
+  <div class='all-filters'>
+    <div class='filter__head'>
+      <div class='facet-all-back' style='display: none;'></div>
+      <div class='filter-sort-title'>{{ 'filter & sort'|t }}</div>
+      <div class='facet-all-apply'></div>
+    </div>
+    <div class="filter__inner">
+      {% for facet_block in facet_blocks %}
+        {{ facet_block }}
+      {% endfor %}
+      <div class='filter__foot'>
+        <div class='facet-all-count'></div>
+        <div class='facet-all-clear button'></div>
+        <a class='facet-all-apply button'>{{ 'apply filter'|t }}</a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{#Dummy hidden field to keep which facet/sort is active/open in all filters#}
+<input type='hidden' id='all-filter-active-facet-sort' value=''>

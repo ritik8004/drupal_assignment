@@ -5,6 +5,9 @@ namespace Drupal\alshaya_search_api;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
+use Drupal\facets\FacetManager\DefaultFacetManager;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\block\BlockInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -36,6 +39,20 @@ class AlshayaSearchApiFacetsManager {
   private $themeManager;
 
   /**
+   * Facet manager.
+   *
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
+   */
+  private $facetManager;
+
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  private $entityTypeManager;
+
+  /**
    * AlshayaSearchApiFacetsManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -44,13 +61,21 @@ class AlshayaSearchApiFacetsManager {
    *   Language Manager.
    * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
    *   The Theme Manager service.
+   * @param \Drupal\facets\FacetManager\DefaultFacetManager $facets_manager
+   *   Facet manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity type manager.
    */
   public function __construct(ConfigFactoryInterface $config_factory,
                               LanguageManagerInterface $language_manager,
-                              ThemeManagerInterface $theme_manager) {
+                              ThemeManagerInterface $theme_manager,
+                              DefaultFacetManager $facets_manager,
+                              EntityTypeManagerInterface $entity_type_manager) {
     $this->configFactory = $config_factory;
     $this->languageManager = $language_manager;
     $this->themeManager = $theme_manager;
+    $this->facetManager = $facets_manager;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -209,6 +234,63 @@ class AlshayaSearchApiFacetsManager {
     }
 
     return Yaml::parse($content);
+  }
+
+  /**
+   * Get the block list of all facets of a given source.
+   *
+   * @param string $facet_source
+   *   Facet source.
+   *
+   * @return array
+   *   Block arrays.
+   */
+  public function getBlocksForFacets(string $facet_source) {
+    // Get all facets of the given source.
+    $facets = $this->facetManager->getFacetsByFacetSourceId($facet_source);
+    $blocks = $block_ids = [];
+    if (!empty($facets)) {
+      foreach ($facets as $facet) {
+        $block_ids[] = str_replace('_', '', $facet->id());
+      }
+
+      if (!empty($block_ids)) {
+        /* @var \Drupal\block\Entity\Block[] $block*/
+        $blocks_list = $this->entityTypeManager->getStorage('block')->loadMultiple($block_ids);
+        // Sort the blocks.
+        uasort($blocks_list, [$this, 'sortBlocksByWeight']);
+        foreach ($blocks_list as $block) {
+          // If block is enabled.
+          if ($block instanceof BlockInterface && $block->status()) {
+            $blocks[] = $this->entityTypeManager->getViewBuilder('block')->view($block);
+          }
+        }
+      }
+    }
+
+    return $blocks;
+  }
+
+  /**
+   * Sorts array of block objects by object weight property.
+   *
+   * @param \Drupal\block\BlockInterface $a
+   *   A facet.
+   * @param \Drupal\block\BlockInterface $b
+   *   A facet.
+   *
+   * @return int
+   *   Sort value.
+   */
+  public function sortBlocksByWeight(BlockInterface $a, BlockInterface $b) {
+    $a_weight = $a->getWeight();
+    $b_weight = $b->getWeight();
+
+    if ($a_weight == $b_weight) {
+      return 0;
+    }
+
+    return ($a_weight < $b_weight) ? -1 : 1;
   }
 
 }
