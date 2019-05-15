@@ -18,8 +18,8 @@
       }
 
       @include breakpoint($only-mobile) {
-        margin-#{$right}: 4px;
-        min-width: 4.375rem;
+        margin-#{$right}: 0.25rem;
+        min-width: 5.625rem;
       }
 
       &:hover {
