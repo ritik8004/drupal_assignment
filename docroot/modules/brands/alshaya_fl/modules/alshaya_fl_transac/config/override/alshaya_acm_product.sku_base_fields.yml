@@ -72,3 +72,8 @@ fields:
     label: 'Material'
     type: 'string'
     index: 1
+  gender:
+    label: 'Gender'
+    cardinality: -1
+    index: 1
+    facet: 1

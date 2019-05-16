@@ -4,7 +4,7 @@
   Drupal.behaviors.sizeFacetCopy = {
     attach: function (context, settings) {
       // For now we want to do it for PLP only.
-      $('.region__sidebar-first [data-block-plugin-id="facet_block:plp_size"]:first').once('size-copy').each(function () {
+      $('.region__content [data-block-plugin-id="facet_block:plp_size"]:first').once('size-copy').each(function () {
         var $wrapper = $(this);
 
         $('.sfb-facets-container').html('');

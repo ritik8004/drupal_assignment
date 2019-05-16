@@ -66,10 +66,12 @@ set classes = [
             </div>
           {% endif %}
 
-          <div class="content--item-code">
-            <span class="field__label">{{ 'Item Code'|t }}:</span>
-            <span class="field__value">{{ content.item_code }}</span>
-          </div>
+          {% block itemCode %}
+            <div class="content--item-code">
+              <span class="field__label">{{ 'Item Code'|t }}:</span>
+              <span class="field__value">{{ content.item_code }}</span>
+            </div>
+          {% endblock %}
 
           {% if content.delivery_link is not empty %}
             <div class="delivery">
