@@ -241,7 +241,7 @@ class SkuImagesManager {
     );
 
     foreach ($media ?? [] as $index => $media_item) {
-      $media_item = array_filter($media_item);
+      $media_item = !empty($media_item) ? array_filter($media_item) : [];
 
       if (isset($media_item['file']) && $media_item['file'] instanceof FileInterface) {
         $media_item['drupal_uri'] = $media_item['file']->getFileUri();
@@ -342,6 +342,7 @@ class SkuImagesManager {
     }
 
     $return = [];
+    $media = !empty($media) ? array_filter($media) : [];
     foreach ($media as $media_item) {
       if ($media_item['media_type'] == 'image') {
         $return['media_items']['images'][] = $media_item;
@@ -646,7 +647,7 @@ class SkuImagesManager {
 
     $media = $this->getProductMedia($sku, $context);
 
-    if (empty($media)) {
+    if (empty($media) && !$add_default_image) {
       return [];
     }
 
