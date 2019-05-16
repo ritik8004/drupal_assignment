@@ -51,34 +51,38 @@ class SmsHelper {
   }
 
   /**
-   * A helper fucntion to hit sms send service method.
+   * A helper function to hit sms send service method.
    *
    * @param array $recipients
    *   Destinations as mobile numbers.
    * @param string $message
    *   Contains message body.
+   * @param bool $skip_queue
+   *   Enable/Disable queue for outgoing sms.
    */
-  public function sendSms(array $recipients, $message) {
-    $this->message = SmsMessage::create()
+  public function sendSms(array $recipients, $message, $skip_queue = TRUE) {
+    $sms_message = SmsMessage::create()
       ->addRecipients($recipients)
       ->setMessage($message);
 
-    $this->message->setDirection(Direction::OUTGOING);
+    $sms_message->setDirection(Direction::OUTGOING);
 
     try {
-      $messages = $this->smsProvider->send($this->message);
-      foreach ($messages as $message) {
-        $result = $message->getResult();
-        if ($error = $this->resultMessage($result)) {
-          throw new \Exception($error);
+      if ($skip_queue) {
+        $messages = $this->smsProvider->send($sms_message);
+        foreach ($messages as $message) {
+          $result = $message->getResult();
+          if ($error = $this->resultMessage($result)) {
+            throw new \Exception($error);
+          }
         }
       }
-
-      $this->smsProvider->queue($this->message);
-      $this->logger->info('Message added to the outgoing queue - Recipients:@recipients', [
-        '@recipients' => implode(',', $recipients),
-      ]);
-
+      else {
+        $this->smsProvider->queue($sms_message);
+        $this->logger->info('Message added to the outgoing queue - Recipients:@recipients', [
+          '@recipients' => implode(',', $recipients),
+        ]);
+      }
     }
     catch (\Exception $e) {
       $this->logger->error('Message could not be sent: @error', [
