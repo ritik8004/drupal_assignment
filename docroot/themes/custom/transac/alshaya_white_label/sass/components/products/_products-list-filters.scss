@@ -129,11 +129,17 @@ body.mobile--overlay.safari {
         line-height: 1;
 
         @include icon('close') {
-          font-size: 1.5rem;
+          font-size: 3rem;
           line-height: 1.5rem;
-          width: 2rem;
+          width: auto;
           color: $plp_all_filter_close_btn;
         }
+      }
+
+      .facet-all-back,
+      .facet-all-apply {
+        display: flex;
+        align-items: center;
       }
     }
 
