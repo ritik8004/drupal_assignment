@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_config\EventSubscriber;
 
-use Drupal\alshaya\AlshayaArrayUtils;
+use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\Cache;
@@ -39,6 +39,12 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $configFactory;
+  /**
+   * Alshaya array utility service.
+   *
+   * @var \Drupal\alshaya_config\AlshayaArrayUtils
+   */
+  protected $alshayaArrayUtils;
 
   /**
    * Constructs a new AlshayaConfigSubscriber object.
@@ -49,13 +55,17 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
    *   Config storage object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   Config Factory.
+   * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshaya_array_utils
+   *   Alshaya array utility service.
    */
   public function __construct(ModuleHandlerInterface $moduleHandler,
                               StorageInterface $configStorage,
-                              ConfigFactoryInterface $configFactory) {
+                              ConfigFactoryInterface $configFactory,
+                              AlshayaArrayUtils $alshaya_array_utils) {
     $this->moduleHandler = $moduleHandler;
     $this->configStorage = $configStorage;
     $this->configFactory = $configFactory;
+    $this->alshayaArrayUtils = $alshaya_array_utils;
   }
 
   /**
@@ -124,7 +134,7 @@ class AlshayaConfigSubscriber implements EventSubscriberInterface {
 
     // Remove duplicates in indexed arrays only if we have modified.
     if ($data_modified && is_array($data)) {
-      AlshayaArrayUtils::arrayUnique($data);
+      $this->alshayaArrayUtils->arrayUnique($data);
     }
   }
 

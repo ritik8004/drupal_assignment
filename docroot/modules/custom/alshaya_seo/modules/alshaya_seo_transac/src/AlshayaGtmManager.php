@@ -952,10 +952,30 @@ class AlshayaGtmManager {
    * Helper function to fetch general datalayer attributes for a page.
    */
   public function fetchGeneralPageAttributes($data_layer) {
+    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
+    $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
+
+    if ($data_layer['userUid'] !== 0) {
+      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'Repeat Customer' : 'New Customer';
+    }
+    else {
+      $customer_type = 'New Customer';
+    }
+
+    $privilege_customer = 'Regular Customer';
+    if (!empty($current_user->get('field_privilege_card_number')->getString())) {
+      $privilege_customer = 'Privilege Customer';
+    }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->getGtmCurrency(),
+      'userID' => $data_layer['userUid'] ?: '' ,
+      'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
+      'customerType' => $customer_type,
+      'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
+      'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
+      'privilegeCustomer' => $privilege_customer,
     ];
 
     return $data_layer_attributes;

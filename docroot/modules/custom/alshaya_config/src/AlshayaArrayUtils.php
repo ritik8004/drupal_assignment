@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya;
+namespace Drupal\alshaya_config;
 
 /**
  * Class AlshayaArrayUtils.
@@ -84,7 +84,7 @@ class AlshayaArrayUtils {
    */
   public static function getAllCombinations(array $source, array $partial = [], array $used = []) {
     if (count($partial) == count($source)) {
-     return [$partial];
+      return [$partial];
     }
 
     $combinations = [];

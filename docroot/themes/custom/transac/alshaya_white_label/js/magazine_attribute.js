@@ -346,7 +346,7 @@
         // Moving sharethis before description field in mobile.
         var sharethisSection = $('.basic-details-wrapper .modal-share-this').clone();
         if ($('.magazine-product-description .modal-share-this').length < 1) {
-          sharethisSection.once('bind-events').insertBefore('.magazine-swatch-placeholder');
+          sharethisSection.once('bind-events').insertAfter('.magazine-swatch-placeholder');
         }
         $('.basic-details-wrapper .modal-share-this').addClass('visually-hidden');
         if ($('.magazine-product-description .modal-share-this').hasClass('visually-hidden')) {
