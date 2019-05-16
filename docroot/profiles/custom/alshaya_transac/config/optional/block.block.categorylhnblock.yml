@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - alshaya_acm_product_category
+  theme:
+    - alshaya_white_label
+id: categorylhnblock
+theme: alshaya_white_label
+region: sidebar_first
+weight: -16
+provider: null
+plugin: alshaya_category_lhn_block
+settings:
+  id: alshaya_category_lhn_block
+  label: 'Category LHN Block'
+  provider: alshaya_acm_product_category
+  label_display: '0'
+visibility:
+  'entity_bundle:taxonomy_term':
+    id: 'entity_bundle:taxonomy_term'
+    bundles:
+      acq_product_category: acq_product_category
+    negate: false
+    context_mapping:
+      taxonomy_term: '@alshaya_custom.term_route_context:taxonomy_term'
+  request_path:
+    id: request_path
+    pages: '/taxonomy/term/*'
+    negate: false
+    context_mapping: {  }
