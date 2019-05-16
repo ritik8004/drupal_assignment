@@ -212,7 +212,7 @@ class StockManager {
    *   Stock data for requested SKUs from DB.
    */
   public function getStockMultiple(array $skus) {
-    $static = &drupal_static(__METHOD__, []);
+    $static = &drupal_static('stock_static_cache', []);
 
     $return = [];
     foreach ($skus as $index => $sku) {
@@ -282,6 +282,8 @@ class StockManager {
     // Update the stock now.
     $this->acquireLock($sku);
 
+    $status_changed = FALSE;
+
     // First try to check if stock changed.
     $current = $this->getStock($sku);
 
@@ -297,22 +299,26 @@ class StockManager {
         ->fields($new)
         ->execute();
 
+      // Reset static cache of stocks.
+      drupal_static_reset('stock_static_cache');
+
       $status_changed = $current
         ? $this->isStockStatusChanged($current, $new)
         : TRUE;
+    }
 
+    $this->releaseLock($sku);
+
+    if ($status_changed) {
       $sku_entity = SKU::loadFromSku($sku);
       if ($sku_entity instanceof SKUInterface) {
         $low_quantity = $this->isQuantityLow($new);
         $event = new StockUpdatedEvent($sku_entity, $status_changed, $low_quantity);
         $this->dispatcher->dispatch(StockUpdatedEvent::EVENT_NAME, $event);
       }
-
-      return $status_changed;
     }
 
-    $this->releaseLock($sku);
-    return FALSE;
+    return $status_changed;
   }
 
   /**
