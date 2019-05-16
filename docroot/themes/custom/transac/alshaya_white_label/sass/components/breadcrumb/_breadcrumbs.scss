@@ -33,6 +33,11 @@
       &:hover {
         text-decoration: underline;
       }
+
+      &.no-link {
+        pointer-events: none;
+        cursor: default;
+      }
     }
 
     &::after {
