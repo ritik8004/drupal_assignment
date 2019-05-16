@@ -1,0 +1,61 @@
+.block-alshaya-category-lhn-block {
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      font-size: 0.75rem;
+
+      a {
+        color: $lhn_l3;
+
+        &.lhn-3,
+        &.lhn-4 {
+          &.active {
+            font-family: $alshaya-bold;
+          }
+        }
+      }
+
+      a:hover {
+        cursor: pointer;
+      }
+
+      // L3.
+      > ul {
+        line-height: 1.67;
+      }
+    }
+  }
+
+  // L2.
+  > ul > li {
+    margin-bottom: 1.875rem;
+
+    > .lhn-2 {
+      color: $lhn_l2;
+      font-family: $alshaya-bold;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+  }
+
+  // L4.
+  .lhn-4 {
+    display: none;
+  }
+
+  .lhn-3.active {
+    + ul {
+      line-height: 1.67;
+
+      li {
+        padding-#{$left}: 0.625rem;
+
+        .lhn-4 {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
