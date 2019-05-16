@@ -16,9 +16,9 @@ settings:
   label: 'Autocomplete widget of Algolia'
   provider: search_api_algolia
   label_display: '0'
-  application_id: HGR051I5XN
-  search_api_key: a2fdc9d456e5e714d8b654dfe1d8aed8
-  index: mckw_local_query
+  application_id: ''
+  search_api_key: ''
+  index: ''
   hits: '10'
   search_url: search
   search_param: keywords

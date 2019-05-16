@@ -8,5 +8,5 @@ name: Algolia
 description: ''
 backend: search_api_algolia
 backend_config:
-  application_id: HGR051I5XN
-  api_key: 6fc229a5d5d0f0d9cc927184b2e4af3f
+  application_id: ''
+  api_key: ''
