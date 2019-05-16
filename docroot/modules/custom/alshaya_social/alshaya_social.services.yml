@@ -1,0 +1,10 @@
+services:
+  alshaya_social.event_subscriber:
+    class: Drupal\alshaya_social\EventSubscriber\AlshayaSocialEventSubscriber
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@request_stack'
+      - '@language_manager'
+      - '@url_generator'
+      - '@logger.factory'

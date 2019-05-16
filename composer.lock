@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "333e359cc83e554068c995c7811491f1",
+    "content-hash": "01bb5c1cfe55998c306e7d5ae2a0d2cf",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -12154,11 +12154,17 @@
         },
         {
             "name": "drupal/social_auth",
-            "version": "dev-2.x",
+            "version": "2.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth.git",
-                "reference": "c53c6001d44c261cfcf288eb9ac5df5c2604fe04"
+                "reference": "8.x-2.0-beta6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/social_auth-8.x-2.0-beta6.zip",
+                "reference": "8.x-2.0-beta6",
+                "shasum": "53d9ec0c3d43b319bd916ac2a9eea93022b733a5"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -12170,16 +12176,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-beta5+6-dev",
-                    "datestamp": "1552442588",
+                    "version": "8.x-2.0-beta6",
+                    "datestamp": "1552443188",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "Set login error destination to allow users to redirect back to the origin page on social auth fail.": "https://www.drupal.org/files/issues/2019-03-22/provider-redirect-event-dispatcher-3033749-12.patch",
-                    "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
+                    "Set login error destination to allow users to redirect back to the origin page on social auth fail.": "https://www.drupal.org/files/issues/2019-05-13/provider-redirect-event-dispatcher-3033749-19.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12214,8 +12219,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/social_auth",
                 "issues": "https://www.drupal.org/project/issues/social_auth"
-            },
-            "time": "2019-03-13T01:59:25+00:00"
+            }
         },
         {
             "name": "drupal/social_auth_facebook",
@@ -12250,7 +12254,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-03-23/use-event-dispatcher-method-3033751-7.patch"
+                    "Leverage the use of event from social_auth": "https://www.drupal.org/files/issues/2019-05-13/use-event-dispatcher-method-3033751-9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -21445,7 +21449,6 @@
         "drupal/sharethis": 10,
         "drupal/simple_sitemap": 20,
         "drupal/social_api": 20,
-        "drupal/social_auth": 20,
         "drupal/views_ajax_get": 20,
         "drupal/views_block_filter_block": 10,
         "drupal/stage_file_proxy": 15,
