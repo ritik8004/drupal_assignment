@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_config\EventSubscriber;
 
-use Differ\ArrayDiff;
 use Drupal\alshaya_config\AlshayaArrayUtils;
 use Drupal\Component\Utility\DiffArray;
 use Drupal\Component\Utility\NestedArray;
