@@ -10,8 +10,15 @@
     attach: function () {
       $('.sub-category').once().on('click', function() {
         var tid = $(this).attr('data-tid');
-        console.log(tid);
         scrollToCategoryHeader(tid);
+      });
+
+      // Hide the divs that do not have results.
+      $('div.plp-subcategory-block').find('div.sub-category').each(function(){
+        var tid = $(this).attr('data-tid');
+        if($('term#' + tid).length === 0) {
+          $(this).hide();
+        }
       });
 
       /**
