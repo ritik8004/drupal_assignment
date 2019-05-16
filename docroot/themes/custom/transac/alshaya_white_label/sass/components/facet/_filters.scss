@@ -595,13 +595,8 @@
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
       position: fixed;
-      top: 3.625rem;
       background: $lhn_sticky-filter-background;
       z-index: 1;
-
-      html[lang=ar] & {
-        top: 4rem;
-      }
     }
 
     .block-alshaya-plp-facets-block-all,
