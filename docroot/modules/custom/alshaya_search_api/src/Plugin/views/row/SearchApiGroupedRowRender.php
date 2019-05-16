@@ -24,7 +24,7 @@ class SearchApiGroupedRowRender extends SearchApiRow {
     if (!empty($row->group_details)) {
       return $row->group_details;
     }
-    parent::render($row);
+    return parent::render($row);
   }
 
 }
