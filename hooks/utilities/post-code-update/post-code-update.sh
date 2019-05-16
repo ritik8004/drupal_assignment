@@ -29,7 +29,7 @@ else
   echo "$HOME/slack_settings does not exist. Slack won't be notified."
 fi
 
-cd `drush sa @$subscription.$target_env | grep root | cut -d"'" -f4`
+cd `drush sa @$subscription.$target_env --fields=root | grep root | cut -d" " -f4`
 
 ## Checking if any install/config file have been updated.
 echo "Checking git diff to identify hook_update() or config change."
