@@ -225,7 +225,15 @@ class StockManager {
     if (count($skus) > 0) {
       $query = $this->connection->select('acq_sku_stock');
       $query->fields('acq_sku_stock');
-      $query->condition('sku', $skus, 'IN');
+
+      // Use IN query only when required to avoid deadlock issues.
+      if (count($skus) > 1) {
+        $query->condition('sku', $skus, 'IN');
+      }
+      else {
+        $query->condition('sku', reset($skus));
+      }
+
       $result = $query->execute()->fetchAllAssoc('sku');
       foreach ($result as $sku => $row) {
         $return[$sku] = (array) $row;
