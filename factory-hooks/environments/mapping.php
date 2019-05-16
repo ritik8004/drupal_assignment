@@ -133,16 +133,6 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'conductor' => 'flae_uat',
       ],
     ],
-    'pbae' => [
-      'local' => [
-        'magento' => 'pb_banktransfer',
-        'conductor' => 'pbae_dev3',
-      ],
-      'dev3' => [
-        'magento' => 'pb_banktransfer',
-        'conductor' => 'pbae_dev3',
-      ],
-    ],
   ];
 
   // All 01update should match 01live.

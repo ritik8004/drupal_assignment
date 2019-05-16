@@ -134,10 +134,6 @@ $conductors = [
     'hmac_secret' => 'N2M3NTMzMDAtOWRjZC00',
   ],
   // Pottery Barn AE.
-  'pbae_dev3' => [
-    'hmac_id' => '025ab24275354b41a75d4d4c11b04cb8',
-    'hmac_secret' => 'NWNkNTMxMmUtNTJkOC00',
-  ],
   'pbae_qa' => [
     'hmac_id' => '8e9bdd7df11e44c89ece0a5ac94dab2b',
     'hmac_secret' => 'NTdlYTc5OWUtMmEzNC00',
