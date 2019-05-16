@@ -10,7 +10,7 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
- * Decrease image_sitemap_batch_chunk_size to 25.
+ * Decrease image_sitemap_batch_chunk_size to 20.
  */
 function alshaya_image_sitemap_update_8001() {
   \Drupal::service('alshaya_config.manager')
