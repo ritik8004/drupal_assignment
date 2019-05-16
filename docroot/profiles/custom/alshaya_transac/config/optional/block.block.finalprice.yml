@@ -10,7 +10,7 @@ dependencies:
     - alshaya_white_label
 id: finalprice
 theme: alshaya_white_label
-region: sidebar_first
+region: content
 weight: -22
 provider: null
 plugin: 'facet_block:final_price'

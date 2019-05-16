@@ -27,3 +27,14 @@
     @include container($desktop-wide);
   }
 }
+
+.lhn-without-sidebar {
+  &.l-one--w {
+    main {
+      @include breakpoint($desktop) {
+        max-width: none;
+        width: 100%;
+      }
+    }
+  }
+}
