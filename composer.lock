@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1764785a7ed54594170cb9a9b2deaeae",
+    "content-hash": "44abe1433b473111d61c73d31de7c039",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11373,8 +11373,8 @@
                     }
                 },
                 "patches_applied": {
-                    "Full support via Drupal": "https://www.drupal.org/files/issues/2019-05-15/3053205-8.patch",
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-15/3054878-2.patch"
+                    "Full support via Drupal": "https://www.drupal.org/files/issues/2019-05-17/3053205-10.patch",
+                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-17/3054878-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
