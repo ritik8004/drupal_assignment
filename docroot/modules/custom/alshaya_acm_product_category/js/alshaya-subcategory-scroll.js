@@ -6,7 +6,7 @@
 (function ($, Drupal) {
   'use strict';
 
-  Drupal.behaviors.subCategoryScroll = {
+  Drupal.behaviors.alshayaAcmProductCategorySubCategoryScroll = {
     attach: function () {
       $('.sub-category').once().on('click', function() {
         var tid = $(this).attr('data-tid');
