@@ -19,7 +19,7 @@ else
   echo "$HOME/slack_settings does not exist. Slack won't be notified."
 fi
 
-cd `drush sa @$subscription.$target_env | grep root | cut -d"'" -f4`
+cd `drush sa @$subscription.$target_env --fields=root | grep root | cut -d" " -f4`
 
 errorstr="error"
 
