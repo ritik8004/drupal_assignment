@@ -1,0 +1,7 @@
+<div class = "plp-subcategory-block">
+  {% for term in subcategories %}
+    {{ term.title }}
+    {{ term.description }}
+    <img src = {{ term.image }}>
+  {% endfor %}
+</div>
