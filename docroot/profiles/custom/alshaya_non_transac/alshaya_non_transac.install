@@ -128,5 +128,5 @@ function alshaya_non_transac_install() {
     ->save();
 
   // Invoke the function in profile to inform sub profile is installed.
-  alshaya_sub_profile_installed('alshaya_non_transac', $modules);
+  alshaya_sub_profile_installed('alshaya_non_transac');
 }

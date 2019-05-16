@@ -1,6 +1,7 @@
 .c-facet.c-accordion {
   float: $left;
-  margin-#{$right}: 2.6875rem;
+  margin: 0;
+  margin-#{$left}: 0.5rem;
   position: relative;
 
   @include breakpoint($only-tablet) {
@@ -10,9 +11,10 @@
   .c-accordion__title {
     border: none;
     font-size: 0.875rem;
+    padding-#{$right}: 2.6875rem;
 
     &::after {
-      #{$right}: -2rem;
+      #{$right}: 0.6875rem;
       top: 49%;
       width: auto;
       font-size: 1.1875rem;
@@ -151,7 +153,7 @@
 
     @include breakpoint($only-tablet) {
       margin-#{$left}: 0;
-      margin-#{$right}: 3.25rem;
+      margin-#{$right}: 0.5625rem;
     }
 
     @include breakpoint($upto-desktop) {
@@ -221,7 +223,7 @@
       font-size: 0.875rem;
       line-height: 2.9375rem;
       position: relative;
-      margin-#{$right}: 2.6875rem;
+      padding-#{$right}: 2.6875rem;
       cursor: pointer;
 
       @include icon(chevrondown, after) {
@@ -229,7 +231,7 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        #{$right}: -2rem;
+        #{$right}: 0.6875rem;
         transition: transform 0.4s ease-in-out;
       }
 
@@ -593,13 +595,8 @@
     > .block-facet-blockcategory-facet-promo,
     > .block-facet-blockcategory-facet-search {
       position: fixed;
-      top: 3.625rem;
       background: $lhn_sticky-filter-background;
       z-index: 1;
-
-      html[lang=ar] & {
-        top: 4rem;
-      }
     }
 
     .block-alshaya-plp-facets-block-all,
@@ -692,6 +689,35 @@ body {
         @include breakpoint($only-tablet) {
           #{$left}: 0;
           margin-#{$left}: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.filters-active {
+  .c-facet.c-accordion {
+    .c-accordion__title {
+      margin: 0;
+    }
+  }
+
+  fieldset.form-wrapper {
+    legend {
+      padding: 0 !important;
+    }
+  }
+
+  .block-views-exposed-filter-blockalshaya-product-list-block-1,
+  .block-views-exposed-filter-blockalshaya-product-list-block-2,
+  .block-views-exposed-filter-blocksearch-page {
+    .fieldset-wrapper {
+      .form-type-radio {
+        label {
+          &::before {
+            width: 1.3125rem;
+            height: 1.3125rem;
+          }
         }
       }
     }

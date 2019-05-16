@@ -5,6 +5,7 @@ services:
       - '@module_handler'
       - '@config.storage'
       - '@config.factory'
+      - '@alshaya.alshaya_array_utils'
     tags:
       - {name: event_subscriber}
   alshaya_config.manager:
@@ -14,3 +15,6 @@ services:
       - '@entity_type.manager'
       - '@theme.manager'
       - '@module_handler'
+
+  alshaya.alshaya_array_utils:
+    class: Drupal\alshaya_config\AlshayaArrayUtils

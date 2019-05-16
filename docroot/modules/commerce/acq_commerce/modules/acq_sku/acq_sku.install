@@ -14,6 +14,21 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * Make field_acq_sku_promotions non-translatable.
+ */
+function acq_sku_update_8021() {
+  $field_storage = FieldStorageConfig::loadByName('acq_sku', 'field_acq_sku_promotions');
+  $field_storage->setTranslatable(FALSE);
+  $field_storage->save();
+
+  $field = FieldConfig::loadByName('acq_sku', 'configurable', 'field_acq_sku_promotions');
+  $field->setTranslatable(FALSE);
+  $field->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Remove stock status and quantity fields from sku views.
  */
 function acq_sku_update_8020() {
