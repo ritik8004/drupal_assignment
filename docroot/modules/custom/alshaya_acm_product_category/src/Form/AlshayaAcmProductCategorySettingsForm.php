@@ -66,6 +66,7 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       ->set('sale_category_ids', $form_state->getValue('sale_category_ids'))
       ->set('new_arrival_category_ids', $form_state->getValue('new_arrival_category_ids'))
       ->set('old_categorization_enabled', $form_state->getValue('old_categorization_enabled'))
+      ->set('enable_lhn_tree', $form_state->getValue('enable_lhn_tree'))
       ->save();
 
     return parent::submitForm($form, $form_state);
@@ -106,6 +107,13 @@ class AlshayaAcmProductCategorySettingsForm extends ConfigFormBase {
       '#title' => $this->t('Disable old categorization rule'),
       '#description' => $this->t('Checking this will disable the old categorization rule and will use the new `is_sale` and `is_new` based rule.'),
       '#default_value' => $config->get('old_categorization_enabled'),
+    ];
+
+    $form['enable_lhn_tree'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable LHN'),
+      '#description' => $this->t('LHN is a left sidebar tree of categories which will be available on PLP pages for Desktop.'),
+      '#default_value' => $config->get('enable_lhn_tree'),
     ];
 
     return parent::buildForm($form, $form_state);

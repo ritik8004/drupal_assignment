@@ -1,0 +1,106 @@
+.c-facet.c-accordion {
+  .c-accordion__title {
+    font-family: $hnm-demibold;
+    color: $plp_facet_title;
+    font-size: 0.6875rem;
+
+    &::after {
+      font-size: 2.25rem;
+    }
+  }
+}
+
+.show-all-filters {
+  font-family: $hnm-demibold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: $plp_facet_title;
+  font-size: 0.6875rem;
+}
+
+.c-plp {
+  .c-content__region {
+    .block-facets-summary-blockfilter-bar-promotions,
+    .block-facets-summary-blockfilter-bar-plp,
+    .block-facets-summary-blockfilter-bar {
+      .filter-list-label {
+        font-family: $hnm-demibold;
+        text-transform: capitalize;
+      }
+
+      ul li a {
+        span.js-facet-deactivate::after {
+          font-size: 1rem;
+        }
+      }
+
+      .filter-toggle-mobile {
+        @include icon(dropdown-expand, after) {
+          font-size: 1.8125rem;
+          top: -0.375rem;
+          #{$right}: -0.25rem;
+          color: $plp_facet_title;
+        }
+      }
+    }
+
+    .block-views-exposed-filter-blockalshaya-product-list-block-1,
+    .block-views-exposed-filter-blockalshaya-product-list-block-2,
+    .block-views-exposed-filter-blocksearch-page {
+      legend {
+        text-transform: uppercase;
+        font-family: $hnm-demibold;
+        color: $plp_facet_title;
+        letter-spacing: 1px;
+        font-size: 0.6875rem;
+
+        @include icon(dropdown-expand, after) {
+          position: absolute;
+          font-size: 2.25rem;
+        }
+      }
+
+      .fieldset-wrapper {
+        .form-type-radio {
+          input[checked='checked'] ~ label {
+            font-family: $hnm-demibold;
+          }
+
+          label {
+            &::before {
+              font-size: 3.75rem;
+              top: -1.125rem;
+              #{$left}: 0;
+              transform: translateY(0);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .filter-fixed-top {
+    .block-alshaya-plp-facets-block-all,
+    .block-alshaya-promo-facets-block-all,
+    .block-alshaya-search-facets-block-all,
+    > .block-facet-blockcategory-facet-plp,
+    > .block-facet-blockcategory-facet-promo,
+    > .block-facet-blockcategory-facet-search {
+      html[lang=ar] & {
+        top: 3.625rem;
+      }
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        width: 2.5rem;
+      }
+    }
+  }
+}
