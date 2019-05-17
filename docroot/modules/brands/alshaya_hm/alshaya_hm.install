@@ -15,8 +15,22 @@ use Drupal\Component\Utility\Unicode;
  *
  * Enable magazine articles feature.
  */
-function alshaya_hm_update_8033() {
+function alshaya_hm_update_8034() {
   \Drupal::service('module_installer')->install(['alshaya_magazine']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Add new sku_base_fields config field - display_configurable_for.
+ */
+function alshaya_hm_update_8033() {
+  alshaya_config_install_configs(['alshaya_acm_product.sku_base_fields'], 'alshaya_acm_product');
+  $config = \Drupal::configFactory()->getEditable(SKUFieldsManager::BASE_FIELD_ADDITIONS_CONFIG);
+  $field = $config->get('color_label');
+  $field['display_configurable_for'] = 'article_castor_id';
+  $config->set('color_label', $field);
+  $config->save();
 }
 
 /**

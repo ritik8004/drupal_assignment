@@ -324,6 +324,21 @@ function alshaya_acm_customer_get_processed_order_details(array $order) {
     $orderDetails['billing_address'] = render($billing_address);
   }
 
+  if ($order['payment']['method_code'] == 'banktransfer'
+    && !empty(array_filter($order['extension']['bank_transfer_instructions']))) {
+    $orderDetails['banktransfer_payment_details'] = [
+      '#theme' => 'banktransfer_payment_details',
+      '#account_number' => $order['extension']['bank_transfer_instructions']['account_number'],
+      '#address' => $order['extension']['bank_transfer_instructions']['address'],
+      '#bank_name' => $order['extension']['bank_transfer_instructions']['bank_name'],
+      '#beneficiary_name' => $order['extension']['bank_transfer_instructions']['beneficiary_name'],
+      '#branch' => $order['extension']['bank_transfer_instructions']['branch'],
+      '#iban' => $order['extension']['bank_transfer_instructions']['iban'],
+      '#swift_code' => $order['extension']['bank_transfer_instructions']['swift_code'],
+      '#purpose' => t('Purchase of Goods - @order_id', ['@order_id' => $order['increment_id']]),
+    ];
+  }
+
   $payment_method_term = $checkoutOptionsManager->loadPaymentMethod($order['payment']['method_code']);
   $orderDetails['payment_method'] = $payment_method_term->getName();
   $orderDetails['payment_method_code'] = $order['payment']['method_code'];

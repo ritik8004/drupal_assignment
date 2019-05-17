@@ -148,8 +148,10 @@ $accordion_bg: $white-five;
 $btt_bg: $white-three;
 
 // Breadcrumb.
-$breadcrumb_link_light: $greyish;
-$breadcrumb_link: $hnm-black-two;
+$breadcrumb_link_light: $grey8;
+$breadcrumb_link: $hnm-black-three;
+$breadcrumb_region_separator: $grey5;
+$breadcrumb_region_background: $white-five;
 
 // Cloudzoom
 $cloudzoom_hovertext: $hnm-black-two;
@@ -160,7 +162,9 @@ $webform_contact_legend: $hnm-black-two;
 // Facet
 $plp_facet_filter: $black-three;
 $plp_facet_input_placeholder: $hnm-black-two;
-$plp_facet_label: $black-two;
+$plp_facet_label: $grey1;
+$plp_facet_summary_filter_icon: $hnm-black-four;
+$plp_facet_filter_link: $hnm-black-four;
 $category_facet_active_icon: $hnm-black-two;
 $category_facet_active_text: $hnm-black-two;
 $plp_facet_filter_count_background: $hnm-red;
@@ -281,15 +285,13 @@ $header_toggle_sign_default_mobile: $black;
 $header_toggle_sign_default: $hnm-grey;
 $header_toggle_sign_active_tab: $hnm-black-two;
 $header_toggle_sign_active_tab_bg: $white-five;
-$header_branding_shadow: $white;
+$header_branding_shadow: $grey5;
 $highlights_subtitle_hover: $link-hover;
 
 // PLP
 $plp_swatch_more_link: $hnm-black-two;
-$plp_facet_label: $hnm-black-two;
 $plp_facet_clear_border: $hnm-black-two;
-$plp_facet_border: $hnm-black-two;
-$plp_search_count: $grey7;
+$plp_search_count: $grey8;
 $plp_category_desc: $grey7;
 $plp_tile_product_title: $hnm-black-two;
 $plp_tile_product_title_hover: $black;
@@ -297,6 +299,18 @@ $plp_tile_oos_bg: $hnm-red;
 $plp_pager_link: $hnm-black-two;
 $plp_pager_link_border: $hnm-black-two;
 $plp__label_active_bg: $white-five;
+$plp_facet_title: $hnm-black-four;
+$plp_promotion_description: $hnm-black-four;
+$plp_grid_active_color: $hnm-black-four;
+$plp_sort_by_options: $hnm-black-four;
+$plp_all_filter_button_color: $hnm-black-two;
+$plp_clear_all_btn_text: $hnm-black-two;
+$plp_all_filter_filter_arrow: $grey6;
+$plp_filter_icon: $hnm-black-two;
+$plp_filter_active_tick: $hnm-black-two;
+
+// PLP All filter colors
+$plp_all_filter_title: $hnm-black-two;
 
 // PDP
 $pdp_modal_full_prodlink: $hnm-black-two;
@@ -522,6 +536,8 @@ $plp-machino-modal-content: $hnm-black-two;
 
 // Magazine-layout
 $magazine-pdp-description: $grey8;
+$magazine-pdp-description-separator: $grey8;
+$magazine-pdp-description-first-color: $hnm-black-four;
 
 // PDP Magazine layout
 $colour-swatches-simple-effect-bg: $grey1;
@@ -531,3 +547,7 @@ $magazine-textarea-color: $hnm-black-three;
 $magazine-label-color: $grey8;
 $magazine-article-title: $hnm-black-four;
 $magazine-article-back-to-feed: $hnm-black-four;
+
+// PLP LHN block.
+$lhn_l3: $grey8;
+$lhn_l4: $grey8;
