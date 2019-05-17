@@ -108,6 +108,11 @@ class AlshayaShopByBlock extends BlockBase implements ContainerFactoryPluginInte
       return [];
     }
 
+    // Do not display non category links for "shop by" block in footer.
+    $term_data = array_filter($term_data, function ($term) {
+      return !in_array('non-category', $term['class']);
+    });
+
     // Get all parents of the given term.
     if ($term instanceof TermInterface) {
       $parents = $this->productCategoryTree->getCategoryTermParents($term);
