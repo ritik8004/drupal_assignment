@@ -15,7 +15,7 @@ use Drupal\search_api\Entity\Index;
  *
  * Update views to change row render style.
  */
-function alshaya_product_update_8024() {
+function alshaya_product_update_8025() {
   /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
   $manager = \Drupal::service('alshaya_config.manager');
   $manager->updateConfigs(
@@ -24,6 +24,13 @@ function alshaya_product_update_8024() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING_RECURSIVE
   );
+}
+
+/*
+ * Adding class to product list view.
+ */
+function alshaya_product_update_8024() {
+  alshaya_config_install_configs(['views.view.alshaya_product_list'], 'alshaya_product');
 }
 
 /**

@@ -188,15 +188,13 @@ class AcqPromotionsManager {
         $rule_id = $node->get('field_acq_promotion_rule_id')->getString();
         $attached_promotion_skus = $this->getSkusForPromotion($node->id());
 
-        if (count($attached_promotion_skus) > 0) {
-          $this->queueItemsInBatches(
-            $this->queue->get('acq_promotion_detach_queue'),
-            $node->id(),
-            $attached_promotion_skus,
-            $rule_id,
-            'detach'
-          );
-        }
+        $this->queueItemsInBatches(
+          $this->queue->get('acq_promotion_detach_queue'),
+          $node->id(),
+          $attached_promotion_skus,
+          $rule_id,
+          'detach'
+        );
 
         $node->delete();
         $this->logger->notice('Deleted orphan promotion node:@nid title:@promotion having rule_id:@rule_id.', [
@@ -425,15 +423,13 @@ class AcqPromotionsManager {
         }
 
         // Create a queue for removing promotions from skus.
-        if (!empty($detach_promotion_skus)) {
-          $this->queueItemsInBatches(
-            $promotion_detach_queue,
-            $promotion_node->id(),
-            $detach_promotion_skus,
-            $promotion['rule_id'],
-            'detach'
-          );
-        }
+        $this->queueItemsInBatches(
+          $promotion_detach_queue,
+          $promotion_node->id(),
+          $detach_promotion_skus,
+          $promotion['rule_id'],
+          'detach'
+        );
       }
       else {
         // Create promotions node using Metadata from Promotions Object.
@@ -442,6 +438,12 @@ class AcqPromotionsManager {
 
       // Attach promotions to skus.
       if ($promotion_node && (!empty($fetched_promotion_sku_attach_data))) {
+        if ($promotion['promotion_type'] == 'cart' && !empty($attached_promotion_skus)) {
+          foreach ($attached_promotion_skus as $sku) {
+            unset($fetched_promotion_sku_attach_data[$sku]);
+          }
+        }
+
         $this->queueItemsInBatches(
           $promotion_attach_queue,
           $promotion_node->id(),
@@ -500,6 +502,10 @@ class AcqPromotionsManager {
    *   Operation attach / detach.
    */
   private function queueItemsInBatches(QueueInterface $queue, $promotion_nid, array $data, $rule_id, string $op) {
+    if (empty($data)) {
+      return;
+    }
+
     static $batch_size;
 
     if (empty($batch_size)) {

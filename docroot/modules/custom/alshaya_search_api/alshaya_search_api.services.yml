@@ -5,6 +5,8 @@ services:
       - '@config.factory'
       - '@language_manager'
       - '@theme.manager'
+      - '@facets.manager'
+      - '@entity_type.manager'
 
 
   alshaya_search_api.ajax_response_subscriber:
