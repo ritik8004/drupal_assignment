@@ -1,0 +1,4 @@
+alshaya_knet.settings:
+  title: 'K-Net Settings'
+  route_name: 'alshaya_knet.settings'
+  base_route: 'alshaya_knet.settings'

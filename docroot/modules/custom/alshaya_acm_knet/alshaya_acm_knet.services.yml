@@ -1,14 +1,20 @@
 services:
   alshaya_acm_knet.helper:
-    class: Drupal\alshaya_acm_knet\KnetHelper
+    class: Drupal\alshaya_acm_knet\AlshayaAcmKnetHelper
+    decorates: alshaya_knet.helper
     arguments:
-      - '@acq_commerce.api'
-      - '@alshaya_api.api'
+      - '@alshaya_acm_knet.helper.inner'
       - '@config.factory'
       - '@state'
-      - '@logger.channel.knet'
+      - '@logger.channel.alshaya_acm_knet'
+      - '@acq_commerce.api'
+      - '@alshaya_api.api'
+      - '@acq_cart.cart_storage'
+      - '@alshaya_acm_checkout.checkout_helper'
+      - '@alshaya_acm.cart_helper'
+      - '@module_handler'
 
-  logger.channel.knet:
+  logger.channel.alshaya_acm_knet:
     class: Drupal\Core\Logger\LoggerChannel
     factory: logger.factory:get
     arguments: ['alshaya_acm_knet']

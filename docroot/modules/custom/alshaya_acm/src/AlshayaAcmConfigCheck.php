@@ -155,7 +155,7 @@ class AlshayaAcmConfigCheck {
       'acq_commerce.conductor',
       'alshaya_api.settings',
       'acq_cybersource.settings',
-      'alshaya_acm_knet.settings',
+      'alshaya_knet.settings',
       'recaptcha.settings',
       'geolocation.settings',
       'google_tag.settings',

@@ -10,16 +10,6 @@ use Drupal\Core\Url;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Implements hook_alshaya_i18n_onetime_translation_add().
- */
-function alshaya_acm_knet_alshaya_i18n_onetime_translation_add() {
-  // Set K-Net langcode for AR.
-  $settings = \Drupal::languageManager()->getLanguageConfigOverride('ar', 'alshaya_acm_knet.settings');
-  $settings->set('knet_language_code', 'ARA');
-  $settings->save();
-}
-
-/**
  * Implements hook_alshaya_acm_checkout_pre_place_order().
  */
 function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $cart) {
@@ -31,8 +21,8 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     return;
   }
 
-  /** @var \Drupal\alshaya_acm_knet\KnetHelper $knetHelper */
-  $knetHelper = \Drupal::service('alshaya_acm_knet.helper');
+  /** @var \Drupal\alshaya_knet\Helper\KnetHelper $knetHelper */
+  $knetHelper = \Drupal::service('alshaya_knet.helper');
 
   $order_id = $cart->getExtension('real_reserved_order_id');
   $totals = $cart->totals();
@@ -41,9 +31,9 @@ function alshaya_acm_knet_alshaya_acm_checkout_pre_place_order(CartInterface $ca
     $request = $knetHelper->initKnetRequest(
       $cart->id(),
       \Drupal::currentUser()->id(),
+      $totals['grand'],
       $cart->customerId(),
-      $order_id,
-      $totals['grand']
+      $order_id
     );
 
     $response = new RedirectResponse($request['url']);

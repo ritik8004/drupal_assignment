@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
-use Drupal\alshaya_acm_knet\KnetHelper;
+use Drupal\alshaya_knet\Helper\KnetHelper;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
@@ -25,7 +25,7 @@ class KnetFinalizeRequestResource extends ResourceBase {
   /**
    * K-Net Helper.
    *
-   * @var \Drupal\alshaya_acm_knet\KnetHelper
+   * @var \Drupal\alshaya_knet\Helper\KnetHelper
    */
   private $knetHelper;
 
@@ -49,7 +49,7 @@ class KnetFinalizeRequestResource extends ResourceBase {
    *   Serializer formats.
    * @param \Psr\Log\LoggerInterface $logger
    *   Logger channel.
-   * @param \Drupal\alshaya_acm_knet\KnetHelper $knet_helper
+   * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
    *   K-Net Helper.
    * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
    *   The mobile app utility service.
@@ -70,7 +70,7 @@ class KnetFinalizeRequestResource extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('alshaya_acm_knet.helper'),
+      $container->get('alshaya_knet.helper'),
       $container->get('alshaya_mobile_app.utility')
     );
   }
