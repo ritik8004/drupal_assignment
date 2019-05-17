@@ -4,9 +4,9 @@ namespace Drupal\sms_textanywhere\Helper;
 
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\sms\Provider\SmsProviderInterface;
-use Drupal\sms\Entity\SmsMessage;
 use Drupal\sms\Direction;
 use Drupal\sms\Message\SmsMessageResultInterface;
+use Drupal\sms\Entity\SmsMessage;
 
 /**
  * Class SmsHelper.
@@ -23,13 +23,6 @@ class SmsHelper {
   protected $smsProvider;
 
   /**
-   * The message.
-   *
-   * @var \Drupal\sms\Entity\SmsMessageInterface
-   */
-  protected $message;
-
-  /**
    * Logger.
    *
    * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
@@ -37,30 +30,29 @@ class SmsHelper {
   protected $logger;
 
   /**
-   * Pass the dependency to the object constructor.
+   * SmsHelper constructor.
    *
    * @param \Drupal\sms\Provider\SmsProviderInterface $sms_provider
    *   The SMS service provider.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   LoggerFactory object.
    */
-  public function __construct(SmsProviderInterface $sms_provider, LoggerChannelFactoryInterface $logger_factory) {
+  public function __construct(SmsProviderInterface $sms_provider,
+                              LoggerChannelFactoryInterface $logger_factory) {
 
     $this->smsProvider = $sms_provider;
     $this->logger = $logger_factory->get('sms_textanywhere');
   }
 
   /**
-   * A helper function to hit sms send service method.
+   * Sends sms to the specified recipients.
    *
    * @param array $recipients
    *   Destinations as mobile numbers.
    * @param string $message
    *   Contains message body.
-   * @param bool $skip_queue
-   *   Enable/Disable queue for outgoing sms.
    */
-  public function sendSms(array $recipients, $message, $skip_queue = TRUE) {
+  public function sendSms(array $recipients, string $message) {
     $sms_message = SmsMessage::create()
       ->addRecipients($recipients)
       ->setMessage($message);
@@ -68,20 +60,10 @@ class SmsHelper {
     $sms_message->setDirection(Direction::OUTGOING);
 
     try {
-      if ($skip_queue) {
-        $messages = $this->smsProvider->send($sms_message);
-        foreach ($messages as $message) {
-          $result = $message->getResult();
-          if ($error = $this->resultMessage($result)) {
-            throw new \Exception($error);
-          }
-        }
-      }
-      else {
-        $this->smsProvider->queue($sms_message);
-        $this->logger->info('Message added to the outgoing queue - Recipients:@recipients', [
-          '@recipients' => implode(',', $recipients),
-        ]);
+      $messages = $this->smsProvider->send($sms_message);
+      foreach ($messages as $message) {
+        $result = $message->getResult();
+        $this->resultMessage($result, $message->getRecipients());
       }
     }
     catch (\Exception $e) {
@@ -96,20 +78,19 @@ class SmsHelper {
    *
    * @param \Drupal\sms\Message\SmsMessageResultInterface $result
    *   An SMS result object.
-   *
-   * @return Drupal\sms\Message\SmsMessageResultInterface
-   *   An API error message.
+   * @param array $recipients
+   *   An array of recipients.
    */
-  protected function resultMessage(SmsMessageResultInterface $result) {
+  protected function resultMessage(SmsMessageResultInterface $result, array $recipients) {
     if ($result->getError()) {
-      $this->logger->error('Error in TextAnywhere API - %error', [
+      $this->logger->error('Message could not be sent due to error in textanywhere gateway - %error', [
         '%error' => $result->getErrorMessage(),
       ]);
-      return $result->getErrorMessage();
     }
     elseif ($report_count = count($result->getReports())) {
-      $this->logger->info('Message was processed, @count delivery reports were generated.', [
+      $this->logger->info('Message was processed, @count delivery reports were generated - Recipients: @recipients', [
         '@count' => $report_count,
+        '@recipients' => implode(',', $recipients),
       ]);
     }
     else {

@@ -3,12 +3,15 @@
 namespace Drupal\sms_textanywhere\Plugin\SmsGateway;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\sms\Message\SmsDeliveryReport;
 use Drupal\sms\Message\SmsMessageReportStatus;
 use Drupal\sms\Message\SmsMessageResultStatus;
 use Drupal\sms\Plugin\SmsGatewayPluginBase;
 use Drupal\sms\Message\SmsMessageInterface;
 use Drupal\sms\Message\SmsMessageResult;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a TextAnywhere gateway to send SMSes using SOAP based service API.
@@ -19,7 +22,43 @@ use Drupal\sms\Message\SmsMessageResult;
  *   outgoing_message_max_recipients = -1,
  * )
  */
-class TextAnywhereGateway extends SmsGatewayPluginBase {
+class TextAnywhereGateway extends SmsGatewayPluginBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * The configFactory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
+   * TextAnywhereGateway constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The Config factory object.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ConfigFactoryInterface $config_factory) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('config.factory')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -169,11 +208,10 @@ class TextAnywhereGateway extends SmsGatewayPluginBase {
    * {@inheritdoc}
    */
   public function send(SmsMessageInterface $sms) {
-    $login = \Drupal::config('alshaya_kz_transac_lite.settings')->get('sms_textanywhere_external_login');
-    $pass = \Drupal::config('alshaya_kz_transac_lite.settings')->get('sms_textanywhere_external_pass');
+    $login = $this->configFactory->get('alshaya_kz_transac_lite.settings')->get('sms_textanywhere_external_login');
+    $pass = $this->configFactory->get('alshaya_kz_transac_lite.settings')->get('sms_textanywhere_external_pass');
     $client = new \SoapClient($this->configuration['textanywhere']['service_url']);
     $result = new SmsMessageResult();
-    $report = new SmsDeliveryReport();
 
     $params = new \stdClass();
     $params->returnCSVString = FALSE;
