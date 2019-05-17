@@ -307,7 +307,7 @@ function alshaya_seo_entity_presave(EntityInterface $entity) {
       $entity->get('field_subscribe_newsletter')->getString()) {
       $original_entity = $entity->original;
 
-      // Check if the user updated his subscription status from 0 to 1.
+      // Check if the user updated their subscription status from 0 to 1.
       if (($original_entity) &&
         ($original_entity->get('field_subscribe_newsletter')->getString() !== "1") &&
         ($entity->get('field_subscribe_newsletter')->getString() === "1")) {

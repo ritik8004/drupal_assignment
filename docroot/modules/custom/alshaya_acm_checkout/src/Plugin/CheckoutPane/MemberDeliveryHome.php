@@ -51,7 +51,7 @@ class MemberDeliveryHome extends CheckoutPaneBase implements CheckoutPaneInterfa
       return $pane_form;
     }
 
-    // Check if user is changing his mind, if so clear shipping info.
+    // Check if user is changing their mind, if so clear shipping info.
     if ($this->isUserChangingHisMind()) {
       $this->clearShippingInfo();
     }
