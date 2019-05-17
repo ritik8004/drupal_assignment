@@ -363,21 +363,14 @@ function alshaya_acm_product_category_create_term(array $term) {
  * display it as menu items with icon in mobile / tablet display.
  */
 function alshaya_acm_product_category_default_terms() {
-  $terms[] = [
-    'en' => 'Top Offers',
-    'ar' => 'أفضل العروض',
-    'include_in_desktop' => TRUE,
-    'icon' => 'images/top-offers.svg',
-    'target_link' => '/top-offers',
-    'weight' => 1000,
-  ];
-
-  $terms[] = [
-    'en' => 'store finder',
-    'ar' => 'البحث عن محلاتنا',
-    'icon' => 'images/map-pin.svg',
-    'target_link' => '/store-finder',
-    'weight' => 1001,
+  $terms = [
+    [
+      'en' => 'store finder',
+      'ar' => 'البحث عن محلاتنا',
+      'icon' => 'images/map-pin.svg',
+      'target_link' => '/store-finder',
+      'weight' => 1001,
+    ],
   ];
 
   foreach ($terms as $term) {
