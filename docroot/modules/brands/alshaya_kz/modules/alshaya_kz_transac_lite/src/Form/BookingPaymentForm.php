@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * BookingPaymentForm provide a form to do the booking payment.
@@ -38,6 +39,13 @@ class BookingPaymentForm extends FormBase {
   protected $bookingPayment;
 
   /**
+   * Config Factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * BookingPaymentForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -46,14 +54,18 @@ class BookingPaymentForm extends FormBase {
    *   The ticket booking object.
    * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $bookingPayment
    *   The booking payment object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory object.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
                               TicketBookingManager $ticketBooking,
-                              BookingPaymentManager $bookingPayment) {
+                              BookingPaymentManager $bookingPayment,
+                              ConfigFactoryInterface $config_factory) {
 
     $this->entityTypeManager = $entityTypeManager;
     $this->ticketBooking = $ticketBooking;
     $this->bookingPayment = $bookingPayment;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -63,7 +75,8 @@ class BookingPaymentForm extends FormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('alshaya_kz_transac_lite.booking_manager'),
-      $container->get('alshaya_kz_transac_lite.booking_payment_manager')
+      $container->get('alshaya_kz_transac_lite.booking_payment_manager'),
+      $container->get('config.factory')
     );
   }
 
@@ -118,8 +131,8 @@ class BookingPaymentForm extends FormBase {
       '#required' => TRUE,
     ];
 
-    $host = $this->getRequest()->getSchemeAndHttpHost();
-    $tnc = Link::fromTextAndUrl($this->t('Terms & conditions'), Url::fromUri($host . '/tnc', ['attributes' => ['target' => '_blank']]))->toString();
+    $tnc_url = $this->configFactory->get('alshaya_kz_transac_lite.settings')->get('tnc_url');
+    $tnc = Link::fromTextAndUrl($this->t('Terms & condition'), Url::fromUri($tnc_url, ['attributes' => ['target' => '_blank']]))->toString();
     $form['approve'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Accept our') . ' ' . $tnc,
@@ -158,7 +171,7 @@ class BookingPaymentForm extends FormBase {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     $name = $form_state->getValue('name');
     if (preg_match('/[#$\_\!@%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $name)) {
-      $form_state->setErrorByName('name', $this->t('Please enter the valid name.'));
+      $form_state->setErrorByName('name', $this->t('Please enter a valid name.'));
     }
   }
 
@@ -190,7 +203,7 @@ class BookingPaymentForm extends FormBase {
       'order_date' => date('Y-m-d'),
     ];
 
-    // Create content for Tickets content type.
+    // Create content for ticket entity type.
     if ($this->bookingPayment->saveTicketDetails($booking, $sales_number)) {
       $this->ticketBooking->tempStore()->set('booking_info', json_encode($booking));
       $form_state->setRedirect('alshaya_kz_transac_lite.payemnt_option', ['option' => $knet]);
