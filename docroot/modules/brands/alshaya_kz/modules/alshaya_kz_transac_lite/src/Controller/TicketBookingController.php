@@ -216,6 +216,7 @@ class TicketBookingController extends ControllerBase {
     $booking_info = $this->jsonDecode->decode($this->ticketBooking->tempStore()->get('booking_info'));
 
     $payment_id = '';
+    // @To do - integration with knet payment gateway.
     if ($option == 'knet') {
       $final_visitor_list = $this->jsonDecode->decode($this->ticketBooking->tempStore()->get('final_visitor_list'));
       // Activate order and notify the user about ticket booking.

@@ -8,8 +8,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountProxy;
-use Drupal\node\NodeInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
 
 /**
  * Class BookingPaymentManager.
@@ -40,7 +38,7 @@ class BookingPaymentManager {
   protected $mailManager;
 
   /**
-   * The mail manager.
+   * The renderer.
    *
    * @var \Drupal\Core\Render\Renderer
    */
@@ -54,14 +52,7 @@ class BookingPaymentManager {
   protected $currentUser;
 
   /**
-   * The entity query.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryFactory
-   */
-  protected $entityQuery;
-
-  /**
-   * The BookingPaymentManager constructor.
+   * BookingPaymentManager constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
    *   Logger factory object.
@@ -73,22 +64,18 @@ class BookingPaymentManager {
    *   Render object.
    * @param \Drupal\Core\Session\AccountProxy $current_user
    *   Current user object.
-   * @param \Drupal\Core\Entity\Query\QueryFactory $entity_query
-   *   The entity query object.
    */
   public function __construct(LoggerChannelFactoryInterface $logger_factory,
                               EntityTypeManagerInterface $entity_manager,
                               MailManagerInterface $mail_manager,
                               Renderer $renderer,
-                              AccountProxy $current_user,
-                              QueryFactory $entity_query) {
+                              AccountProxy $current_user) {
 
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->entityManager = $entity_manager;
     $this->mailManager = $mail_manager;
     $this->renderer = $renderer;
     $this->currentUser = $current_user;
-    $this->entityQuery = $entity_query;
   }
 
   /**
@@ -102,20 +89,19 @@ class BookingPaymentManager {
    */
   public function saveTicketDetails(array $booking) {
     try {
-      $node = $this->entityManager->getStorage('node')->create([
-        'type' => 'tickets',
-        'title' => $booking['sales_number'],
-        'field_email' => $booking['email'],
-        'field_mobile_number' => $booking['mobile'],
-        'field_name' => $booking['name'],
-        'field_visitor_types' => $booking['visitor_types'],
-        'field_visit_date' => $booking['visit_date'],
-        'field_booking_date' => time(),
-        'field_booking_status' => 'inactive',
-        'field_payment_status' => 'pending',
-        'field_payment_id' => '',
-        'field_payment_type' => $booking['payment_type'],
-        'field_total_price' => $booking['order_total'],
+      $node = $this->entityManager->getStorage('ticket')->create([
+        'sales_number' => $booking['sales_number'],
+        'email' => $booking['email'],
+        'telephone' => $booking['mobile'],
+        'name' => $booking['name'],
+        'visitor_types' => $booking['visitor_types'],
+        'visit_date' => $booking['visit_date'],
+        'booking_date' => time(),
+        'booking_status' => 'inactive',
+        'payment_status' => 'pending',
+        'payment_type' => $booking['payment_type'],
+        'payment_id' => '',
+        'order_total' => $booking['order_total'],
       ]);
 
       return $node->save($node);
@@ -135,23 +121,20 @@ class BookingPaymentManager {
    * @param string $payment_id
    *   Payment id generated from payment method.
    */
-  public function updateTicketDetails($sales_number, $payment_id) {
+  public function updateTicketDetails(string $sales_number, string $payment_id) {
 
     try {
-      $query = $this->entityQuery->get('node')
-        ->condition('type', 'tickets')
-        ->condition('title', $sales_number);
+      $query = $this->entityManager->getStorage('ticket')->getQuery()
+        ->condition('sales_number', $sales_number);
       $result = $query->execute();
 
       if (isset($result) && !empty($result)) {
-        foreach ($result as $nid) {
-          $node = $this->entityManager->getStorage('node')->load($nid);
-        }
-        if ($node instanceof NodeInterface) {
-          $node->field_payment_id = $payment_id;
-          $node->field_booking_status = 'active';
-          $node->field_payment_status = 'complete';
-          $node->save();
+        foreach ($result as $id) {
+          $ticket = $this->entityManager->getStorage('ticket')->load($id);
+          $ticket->payment_id = $payment_id;
+          $ticket->booking_status = 'active';
+          $ticket->payment_status = 'complete';
+          $ticket->save();
         }
       }
     }
@@ -172,40 +155,43 @@ class BookingPaymentManager {
    *   Array of final visitor list.
    */
   public function bookingConfirmationMail(array $booking_info, array $final_visitor_list) {
-    $qr_code = [
-      '#theme' => 'image',
-      '#uri' => Url::fromRoute('endroid_qr_code.qr.generator', ['content' => $booking_info['sales_number']])->toString(),
-      '#attributes' => ['class' => 'qr-code-image'],
-    ];
+    try {
+      $qr_code = [
+        '#theme' => 'image',
+        '#uri' => Url::fromRoute('endroid_qr_code.qr.generator', ['content' => $booking_info['sales_number']])->toString(),
+        '#attributes' => ['class' => 'qr-code-image'],
+      ];
 
-    $params = [];
-    $module = 'alshaya_kz_transac_lite';
-    $key = 'booking_confirm';
-    $to = $booking_info['email'];
-    $build = [
-      '#theme' => 'booking_mail',
-      '#qr_code' => $qr_code,
-      '#booking_info' => $booking_info,
-      '#visitor_list' => $final_visitor_list,
-    ];
+      $params = [];
+      $module = 'alshaya_kz_transac_lite';
+      $key = 'booking_confirm';
+      $to = $booking_info['email'];
+      $build = [
+        '#theme' => 'booking_mail',
+        '#qr_code' => $qr_code,
+        '#booking_info' => $booking_info,
+        '#visitor_list' => $final_visitor_list,
+      ];
 
-    $body = $this->renderer->render($build);
-    $params['message'] = $body;
+      $body = $this->renderer->render($build);
+      $params['message'] = $body;
 
-    $params['visit_date'] = $booking_info['visit_date'];
-    $params['ticket_count'] = $final_visitor_list['total']['count'];
-    $params['ref_number'] = $booking_info['sales_number'];
-    $langcode = $this->currentUser->getPreferredLangcode();
-    $send = TRUE;
-    $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
-    if ($result['result'] !== TRUE) {
-      $this->logger->warning('There was a problem sending the message and it was not sent - @sales_number.', [
-        '%sales_number' => $booking_info['sales_number'],
-      ]);
+      $params['visit_date'] = $booking_info['visit_date'];
+      $params['ticket_count'] = $final_visitor_list['total']['count'];
+      $params['ref_number'] = $booking_info['sales_number'];
+      $langcode = $this->currentUser->getPreferredLangcode();
+      $send = TRUE;
+      $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
+      if ($result['result']) {
+        $this->logger->info('Message has been sent - @sales_number', [
+          '@sales_number' => $booking_info['sales_number'],
+        ]);
+      }
     }
-    else {
-      $this->logger->warning('Message has been sent - @sales_number', [
-        '%sales_number' => $booking_info['sales_number'],
+    catch (\Exception $e) {
+      $this->logger->warning('There was a problem sending your message and it was not sent - @sales_number - @message.', [
+        '@sales_number' => $booking_info['sales_number'],
+        '@message' => $e->getMessage(),
       ]);
     }
   }
