@@ -162,6 +162,14 @@ class BookingPaymentManager {
         '#attributes' => ['class' => 'qr-code-image'],
       ];
 
+      $langcode = $this->currentUser->getPreferredLangcode();
+
+      // Get logo based on user preferred language.
+      $email_logo = alshaya_master_get_email_logo(NULL, $langcode);
+      if (empty($email_logo['logo_url'])) {
+        $email_logo['logo_url'] = file_create_url($email_logo['logo_path']);
+      }
+
       $params = [];
       $module = 'alshaya_kz_transac_lite';
       $key = 'booking_confirm';
@@ -171,15 +179,15 @@ class BookingPaymentManager {
         '#qr_code' => $qr_code,
         '#booking_info' => $booking_info,
         '#visitor_list' => $final_visitor_list,
+        '#email_logo' => $email_logo['logo_url'],
       ];
 
       $body = $this->renderer->render($build);
       $params['message'] = $body;
-
       $params['visit_date'] = $booking_info['visit_date'];
       $params['ticket_count'] = $final_visitor_list['total']['count'];
       $params['ref_number'] = $booking_info['sales_number'];
-      $langcode = $this->currentUser->getPreferredLangcode();
+
       $send = TRUE;
       $result = $this->mailManager->mail($module, $key, $to, $langcode, $params, NULL, $send);
       if ($result['result']) {

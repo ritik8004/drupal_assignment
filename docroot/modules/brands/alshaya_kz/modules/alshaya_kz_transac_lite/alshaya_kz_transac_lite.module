@@ -16,6 +16,7 @@ function alshaya_kz_transac_lite_theme($existing, $type, $theme, $path) {
       'qr_code' => NULL,
       'booking_info' => NULL,
       'visitor_list' => NULL,
+      '#email_logo' => NULL,
     ],
   ];
 
@@ -49,14 +50,165 @@ function alshaya_kz_transac_lite_mail($key, &$message, $params) {
   switch ($key) {
     case 'booking_confirm':
       $message['from'] = \Drupal::config('system.site')->get('mail');
-      $message['subject'] = t('Booking details: Visit date: @visit_date, Ticket count: @ticket_count, Ref Num: @ref_number',
-                              [
-                                '@visit_date' => $params['visit_date'],
-                                '@ticket_count' => $params['ticket_count'],
-                                '@ref_number' => $params['ref_number'],
-                              ], $options);
+      $message['subject'] = t('KidZania booking details: Visit date: @visit_date, Ticket count: @ticket_count, Ref Num: @ref_number', [
+        '@visit_date' => $params['visit_date'],
+        '@ticket_count' => $params['ticket_count'],
+        '@ref_number' => $params['ref_number'],
+      ], $options);
 
       $message['body'][] = $params['message'];
       break;
   }
+}
+
+/**
+ * Implements hook_alshaya_i18n_onetime_translation_add().
+ */
+function alshaya_kz_transac_lite_alshaya_i18n_onetime_translation_add() {
+  $strings = [
+    'Buy your tickets for KidZania!' => [
+      'ar' => 'اشترِ تذاكر كيدزانيا!',
+    ],
+    'Please follow the instructions to buy your ticket!' => [
+      'ar' => 'يرجى اتباع التعليمات لشراء تذكرتك!',
+    ],
+    'Select your KidZania' => [
+      'ar' => ' اختر كيدزانيا الخاصة بك',
+    ],
+    'Type of ticket' => [
+      'ar' => ' نوع التذاكر',
+    ],
+    'Date and time of visit' => [
+      'ar' => ' تاريخ وموعد الفعالية',
+    ],
+    'Tickets and Visitors' => [
+      'ar' => 'التذاكر والزوار',
+    ],
+    'Visitor details' => [
+      'ar' => 'معلومات الزوار',
+    ],
+    'Purchase Summary' => [
+      'ar' => ' ملخص الشراء',
+    ],
+    'Customer Information' => [
+      'ar' => ' معلومات الزبون',
+    ],
+    'Buy tickets for toddlers, kids, adults and seniors. Children under 120cm must be accompanied by an adult.' => [
+      'ar' => 'اشترِ تذاكر للصغار والأطفال والبالغين وكبار السن. يجب أن يكون الأطفال الذين يقل طولهم عن 120 سم برفقة بالغ.',
+    ],
+    'Kuwait' => [
+      'ar' => 'الكويت',
+    ],
+    'Tickets' => [
+      'ar' => 'تذاكر',
+    ],
+    'Availability' => [
+      'ar' => 'التذاكر المتوفرة',
+    ],
+    'Total' => [
+      'ar' => 'الإجمالي',
+    ],
+    'Visit Date ' => [
+      'ar' => 'تاريخ الزيارة',
+    ],
+    'Facility' => [
+      'ar' => 'المنشأة',
+    ],
+    'Infants' => [
+      'ar' => 'الصغار',
+    ],
+    'Children' => [
+      'ar' => 'الأطفال',
+    ],
+    'Adult' => [
+      'ar' => 'البالغون',
+    ],
+    'Note: Infants must be accompanied by an adult.' => [
+      'ar' => 'ملاحظة: يجب أن يكون الصغار برفقة بالغين.',
+    ],
+    'Note: Adults are allowed entry only if they are accompanying at least 1 child.' => [
+      'ar' => 'ملاحظة: يسمح بدخول البالغين إذا كانوا برفقة طفل واحد على الأقل.',
+    ],
+    'Note: Children under 120cm of height, should be accompanied by an Adult.' => [
+      'ar' => 'ملاحظة: يجب أن يكون الأطفال الذين يقل طولهم عن 120 سم برفقة بالغ.',
+    ],
+    'Visitor Details' => [
+      'ar' => 'تفاصيل خاصة بالزوار',
+    ],
+    'Let us know who’s coming to visit us for a personalised visit' => [
+      'ar' => 'أخبرنا من الذي سيزورنا للحصول على زيارة مخصصة',
+    ],
+    'Continue for Payment' => [
+      'ar' => 'الاستمرار للدفع',
+    ],
+    'Confirm Payment' => [
+      'ar' => 'تأكيد الدفع',
+    ],
+    'Purchase Summary' => [
+      'ar' => 'ملخص الشراء',
+    ],
+    'Purchase Progress' => [
+      'ar' => 'استمرار عملية الشراء',
+    ],
+    'Name' => [
+      'ar' => 'الاسم',
+    ],
+    'Email' => [
+      'ar' => 'البريد الإلكتروني',
+    ],
+    'Mobile Number' => [
+      'ar' => 'رقم الجوال',
+    ],
+    'I accept the Terms and Conditions  ' => [
+      'ar' => 'أوافق على الشروط والأحكام',
+    ],
+    'Next' => [
+      'ar' => 'التالي',
+    ],
+    'Please enter all details for the visitor' => [
+      'ar' => 'يُرجى إدخال كافة تفاصيل الزائر',
+    ],
+    'Follow us on social media' => [
+      'ar' => 'تابعنا على برامج التواصل الاجتماعي',
+    ],
+    'Order Number' => [
+      'ar' => 'رقم الطلب',
+    ],
+    'Reference Number' => [
+      'ar' => 'رقم المرجع',
+    ],
+    'Online Booking Completed Successfully' => [
+      'ar' => 'تم إتمام عملية الحجز عبر الانترنت بنجاح',
+    ],
+    'We’ve sent you an email and SMS with all the details of your Online Ticket Booking. Please print and present your email at KidZania’ s ticketing counters on the day of your visit. Z-U Soon!' => [
+      'ar' => 'لقد أرسلنا لك رسالة الكترونية ورسالة نصية بتفاصيل حجزك عبر الإنترنت. يُرجى طباعة الرسالة وإحضارها معك إلى شباك تذاكر كيدزانيا يوم الزيارة. نراك قريباً.',
+    ],
+    'For safety and liability purposes, all children up to the age of 14 years need to be registered by and adult (18+ Years) at the front desk before they can enter the park.' => [
+      'ar' => 'لأغراض السلامة والأمان، لا بدّ من تسجيل جميع الأطفال حتى سن 14 سنة والبالغين (+18 سنة) لدى المكتب الأمامي قبل دخولهم المدينة الترفيهية.',
+    ],
+    'Online Booking Confirmation' => [
+      'ar' => 'تأكيد الحجز',
+    ],
+    'Kai! Please print and present your email at KidZania’ s ticketing counters on the day of your visit. Z-U Soon!' => [
+      'ar' => 'مرحباً! يُرجى طباعة بريدك الالكتروني وتقديمه عند شباك التذاكر يوم زيارتك لِكدزانيا.  نراكَ قريباً!',
+    ],
+    'Customer Name' => [
+      'ar' => 'اسم الزبون ',
+    ],
+    'Order Date' => [
+      'ar' => 'تاريخ الطلب',
+    ],
+    'Visit Date' => [
+      'ar' => 'تاريخ الزياره',
+    ],
+    'Facility' => [
+      'ar' => 'المنشأة',
+    ],
+    'Payment' => [
+      'ar' => 'طريقة الدفع',
+    ],
+  ];
+
+  // Save the translation.
+  alshaya_i18n_save_translations($strings);
 }
