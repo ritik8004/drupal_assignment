@@ -1,3 +1,13 @@
+.ticketing__steps {
+  &.three {
+    min-height: 20.3125rem;
+
+    @include breakpoint($only-tablet) {
+      min-height: 26.25rem;
+    }
+  }
+}
+
 .date-to-visit {
   width: 55%;
   padding-#{$right}: 3.125rem;
