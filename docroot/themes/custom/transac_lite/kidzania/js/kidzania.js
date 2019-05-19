@@ -235,10 +235,12 @@
             }
           },
           manualDataChange: function () {
+            var babyIndex = this.getIndexByID(0);
             var okuIndex = this.getIndexByDes('OKU');
             var kidIndex = this.getIndexByDes('Kid');
             var toddIndex = this.getIndexByDes('Toddler');
             ticketTypes.splice(okuIndex, 1);
+            ticketTypes[babyIndex].Description = 'Infant';
             ticketTypes[kidIndex].Description = 'Children';
             ticketTypes[toddIndex].Description = 'Children';
           },
