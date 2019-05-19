@@ -346,9 +346,21 @@
           e.preventDefault();
         });
 
-        $('#paymentForm').on('input', '.onlyAlpha', function (e) {
+        $('#paymentForm').on('keypress input', '.onlyAlpha', function (e) {
           var $this = $(this);
-          $this.val($this.val().replace(/[^A-Za-z_\s]/, ''));
+          var val = $this.val().trim();
+          var regex = new RegExp('^[a-zA-Z ]+$');
+          if (e.type === 'keypress') {
+            var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+            if (!regex.test(key)) {
+              e.preventDefault();
+            }
+          }
+          else {
+            if (!val.match(regex)) {
+              $this.val(val.replace(/[^A-Za-z ]/g, '').replace(/ {1,}/g, ' '));
+            }
+          }
         });
 
         $('.continueBtn').on('click', function (e) {
