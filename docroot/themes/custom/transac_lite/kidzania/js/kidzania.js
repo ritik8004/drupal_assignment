@@ -52,7 +52,7 @@
           },
           getParks: function () {
             $.get(
-              Drupal.url('kidzania-parks'),
+              Drupal.url('get-parks'),
               function (data) {
                 if (data) {
                   $('.countryBtn .value, .countryDisplay').html(data);
@@ -62,7 +62,7 @@
             );
           },
           getGender: function () {
-            $.get(Drupal.url('kidzania-sexes'), function (data) {
+            $.get(Drupal.url('get-sexes'), function (data) {
               if (data.getSexesResult.Sex) {
                 genderResponse = data.getSexesResult.Sex;
               }
@@ -292,7 +292,7 @@
             ticketNextEle.addClass('disable');
             $('.dateDisplay').html(val);
             $('.loading-overlay').addClass('active');
-            var call = $.post(Drupal.url('kidzania-shifts'), {
+            var call = $.post(Drupal.url('get-shifts'), {
               visit_date: val
             });
             call.done(function (data) {
@@ -310,7 +310,7 @@
         $('.time_block').on('click', 'a', function () {
           actions.hideEle([eleStep3, eleStep4, eleTotWrapper]);
           ticketNextEle.addClass('disable');
-          $.post(Drupal.url('kidzania-visitor-types'), function (data) {
+          $.post(Drupal.url('get-visitor-types'), function (data) {
             ticketTypes = data.getVisitorTypesResult.VisitorType;
             if (ticketTypes) {
               actions.showEle(eleStep3);
@@ -390,7 +390,6 @@
               else {
                 entryBook = [local];
               }
-              // console.log(ticketTypesFinal);
             }
             else {
               isValid = false;
