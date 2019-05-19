@@ -79,6 +79,7 @@
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "2.x-dev",
+        "drupal/sms": "^1.1",
         "drupal/social_api": "2.x-dev",
         "drupal/social_auth": "2.x-dev",
         "drupal/social_auth_facebook": "^2.0",
