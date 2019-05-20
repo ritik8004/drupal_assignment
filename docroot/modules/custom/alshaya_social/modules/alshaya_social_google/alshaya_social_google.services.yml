@@ -4,8 +4,5 @@ services:
     tags:
       - { name: event_subscriber }
     arguments:
-      - '@social_auth.data_handler'
-      - '@plugin.network.manager'
       - '@social_auth_google.manager'
-      - '@alshaya_acm_customer.helper'
-      - '@logger.factory'
+      - '@alshaya_social.helper'
