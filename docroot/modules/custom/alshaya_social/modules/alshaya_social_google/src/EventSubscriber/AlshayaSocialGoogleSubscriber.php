@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class AlshayaSocialGoogleSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Facebook authentication manager.
+   * The google authentication manager.
    *
    * @var \Drupal\social_auth\AuthManager\OAuth2ManagerInterface
    */
