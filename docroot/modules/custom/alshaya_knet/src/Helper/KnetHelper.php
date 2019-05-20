@@ -42,6 +42,34 @@ class KnetHelper {
   protected $logger;
 
   /**
+   * Cart Id.
+   *
+   * @var mixed
+   */
+  protected $cartId = 0;
+
+  /**
+   * Current user id.
+   *
+   * @var mixed
+   */
+  protected $currentUserId = 0;
+
+  /**
+   * Customer id.
+   *
+   * @var mixed
+   */
+  protected $customerId = 0;
+
+  /**
+   * Order id.
+   *
+   * @var mixed
+   */
+  protected $orderId = NULL;
+
+  /**
    * KnetHelper constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -62,28 +90,18 @@ class KnetHelper {
   /**
    * Initialize knet request.
    *
-   * @param int|string $cart_id
-   *   Cart ID.
-   * @param int|string $current_user_id
-   *   Current Drupal user id.
    * @param string $amount
    *   Cart Amount.
-   * @param int|string $customer_id
-   *   MDC Customer id.
-   * @param string $order_id
-   *   Reserved order id.
    * @param string $context
    *   Source of request - drupal/mobile.
    *
    * @return array
    *   Array containing url and state key.
    */
-  public function initKnetRequest($cart_id,
-                                  $current_user_id,
-                                  $amount,
-                                  $customer_id = NULL,
-                                  $order_id = NULL,
+  public function initKnetRequest($amount,
                                   string $context = 'drupal'): array {
+    $cart_id = $this->getCartId();
+    $order_id = $this->getOrderId();
     // We store the cart id as cart id here and change it to quote id in
     // response so no one can directly use the state key from URL in error
     // and use it for success page.
@@ -125,8 +143,8 @@ class KnetHelper {
 
     $pipe->setAmt($amount);
     $pipe->setTrackId($order_id);
-    $pipe->setUdf1($current_user_id);
-    $pipe->setUdf2($customer_id);
+    $pipe->setUdf1($this->getCurrentUserId());
+    $pipe->setUdf2($this->getCustomerId());
     $pipe->setUdf3($cart_id);
 
     $pipe->setUdf4($state_key);
@@ -160,6 +178,102 @@ class KnetHelper {
       'state_key' => $state_key,
       'url' => $pipe->getRedirectUrl(),
     ];
+  }
+
+  /**
+   * Setter for cart id.
+   *
+   * @param mixed $cart_id
+   *   Cart id.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setCartId($cart_id) {
+    $this->cartId = $cart_id;
+    return $this;
+  }
+
+  /**
+   * Getter for cart id.
+   *
+   * @return mixed
+   *   Cart id.
+   */
+  public function getCartId() {
+    return $this->cartId;
+  }
+
+  /**
+   * Setter for current user id.
+   *
+   * @param mixed $current_user_id
+   *   Current user id.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setCurrentUserId($current_user_id) {
+    $this->currentUserId = $current_user_id;
+    return $this;
+  }
+
+  /**
+   * Getter for current user id.
+   *
+   * @return mixed
+   *   Current user id.
+   */
+  public function getCurrentUserId() {
+    return $this->currentUserId;
+  }
+
+  /**
+   * Setter for customer id.
+   *
+   * @param mixed $customer_id
+   *   Customer id.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setCustomerId($customer_id) {
+    $this->customerId = $customer_id;
+    return $this;
+  }
+
+  /**
+   * Getter for customer id.
+   *
+   * @return mixed
+   *   Customer id.
+   */
+  public function getCustomerId() {
+    return $this->customerId;
+  }
+
+  /**
+   * Setter for order id.
+   *
+   * @param mixed $order_id
+   *   Order id.
+   *
+   * @return $this
+   *   Current object.
+   */
+  public function setOrderId($order_id) {
+    $this->orderId = $order_id;
+    return $this;
+  }
+
+  /**
+   * Getter for order id.
+   *
+   * @return mixed
+   *   Order id.
+   */
+  public function getOrderId() {
+    return $this->orderId;
   }
 
   /**

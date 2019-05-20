@@ -95,14 +95,11 @@ class KnetInitRequestResource extends ResourceBase {
     $cart = $this->knetHelper->getCart($cart_id);
 
     try {
-      $response = $this->knetHelper->initKnetRequest(
-        $cart['cart_id'],
-        0,
-        $cart['totals']['grand'],
-        $cart['customer_id'],
-        $cart['extension']['real_reserved_order_id'],
-        'mobile'
-      );
+      $this->knetHelper->setCartId($cart['cart_id']);
+      $this->knetHelper->setCurrentUserId(0);
+      $this->knetHelper->setCustomerId($cart['customer_id']);
+      $this->knetHelper->setOrderId($cart['extension']['real_reserved_order_id']);
+      $response = $this->knetHelper->initKnetRequest($cart['totals']['grand'], 'mobile');
     }
     catch (\Exception $e) {
       // Log message in watchdog.
