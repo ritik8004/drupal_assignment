@@ -243,7 +243,7 @@
       color: $form_input_text;
       background-color: $form_input_bg;
       background-image: none;
-      border: 1px solid $form_input_border;
+      border: 0.0625rem solid $form_input_border;
       border-radius: 1.25rem;
       -webkit-appearance: none;
       box-shadow: none;
@@ -256,7 +256,7 @@
       }
 
       &.formErr {
-        border-color: #bd0505;
+        border-color: $error_form_border;
       }
     }
 
@@ -269,16 +269,16 @@
       padding: 0;
 
       &.formErr {
-        border-color: #bd0505;
+        border-color: $error_form_border;
         position: relative;
 
         &::before {
           content: "";
           position: absolute;
-          width: 12px;
-          height: 12px;
-          border: 1px solid #bd0505;
-          left: -1px;
+          width: 0.75rem;
+          height: 0.75rem;
+          border: 0.0625rem solid $error_form_border;
+          left: -0.0625rem;
           border-radius: 50%;
         }
       }
@@ -295,7 +295,7 @@
 
 .formErrMessage {
   display: none;
-  color: $alert-red;
+  color: $error_form_msg;
   margin-top: 1.25rem;
 }
 
