@@ -47,11 +47,12 @@ function alshaya_social_checkout_login_alter(array &$pane_form, $form_state, $co
  *   The current form id.
  */
 function alshaya_social_display_social_authentication_links(array &$form, $form_id) {
-  if (alshaya_social_network_status()) {
+  $social_helper = \Drupal::service('alshaya_social.helper');
+  if ($social_helper->getStatus()) {
     $form['#attributes']['class'][] = 'social-signup-form';
     $form['social_media_auth_links'] = [
       '#theme' => 'alshaya_social',
-      '#social_networks' => \Drupal::configFactory()->get('social_auth.settings')->get('auth'),
+      '#social_networks' => $social_helper->getSocialNetworks(),
       '#form' => $form_id,
       '#weight' => 1000,
     ];
@@ -123,18 +124,4 @@ function alshaya_social_preprocess_alshaya_social(&$variables) {
   }
 
   $variables['base_path'] = base_path();
-}
-
-/**
- * Get social network status.
- *
- * @return bool
- *   Return social network status.
- */
-function alshaya_social_network_status() {
-  if (!\Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')) {
-    return FALSE;
-  }
-
-  return (bool) array_filter(\Drupal::configFactory()->get('alshaya_social.settings')->get('social_networks'));
 }

@@ -16,14 +16,13 @@ function alshaya_social_facebook_install() {
 
   $facebook_settings = Settings::get('social_auth_facebook.settings');
   if (!empty($facebook_settings)) {
-    $facebook_settings['post_login'] = '/user';
-    $facebook_settings['disable_admin_login'] = 1;
     foreach ($facebook_settings as $key => $value) {
       $config->set($key, $value);
     }
   }
   $config->save();
 
+  // Set facebook social auth disable by default.
   \Drupal::configFactory()->getEditable('alshaya_social.settings')
     ->set('social_networks.social_auth_facebook', 0)
     ->save();

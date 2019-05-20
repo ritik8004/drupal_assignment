@@ -8,3 +8,8 @@ services:
       - '@language_manager'
       - '@url_generator'
       - '@logger.factory'
+
+  alshaya_social.helper:
+    class: Drupal\alshaya_social\AlshayaSocialHelper
+    arguments:
+      - '@config.factory'
