@@ -5,6 +5,10 @@ global_styles:
 
   js:
     js/global.js: {}
+    js/kidzania.js: {}
+
+  dependencies:
+    - core/jquery.ui.datepicker
 
 ltr_styles:
   css:
