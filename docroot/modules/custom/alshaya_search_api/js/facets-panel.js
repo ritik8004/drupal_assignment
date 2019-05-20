@@ -359,7 +359,7 @@
         var position = 0;
         var filter = $('.region__content');
         var nav = $('.branding__menu');
-        var fixedNavHeight = nav.height();
+        var fixedNavHeight = 0;
 
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 1023) {
@@ -373,6 +373,7 @@
               supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
             }
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+            fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
           }
         }
 
