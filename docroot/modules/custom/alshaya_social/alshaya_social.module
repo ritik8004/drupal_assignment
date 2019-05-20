@@ -79,6 +79,30 @@ function alshaya_social_form_alshaya_user_settings_alter(array &$form, FormState
     '#default_value' => \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login'),
   ];
 
+  $form['social']['networks'] = [
+    '#type' => 'details',
+    '#title' => t('Manage social auths.'),
+    '#open' => TRUE,
+    '#tree' => TRUE,
+    '#states' => [
+      'invisible' => [
+        ':input[name="social_login"]' => ['checked' => FALSE],
+      ],
+    ],
+  ];
+
+  // Load all available social auth networks.
+  $networks = \Drupal::service('plugin.network.manager')->getDefinitions();
+  // Get saved settings to enable / disable networks.
+  $networks_status = \Drupal::configFactory()->get('alshaya_social.settings')->get('social_networks');
+  foreach ($networks as $network) {
+    $form['social']['networks'][$network['id']] = [
+      '#type' => 'checkbox',
+      '#title' => t('@network.', ['@network' => $network['social_network']]),
+      '#default_value' => isset($networks_status[$network['id']]) ? $networks_status[$network['id']] : FALSE,
+    ];
+  }
+
   array_unshift($form['#submit'], 'alshaya_social_user_settings_submit');
 }
 
@@ -89,6 +113,7 @@ function alshaya_social_user_settings_submit(array &$form, FormStateInterface $f
   \Drupal::configFactory()
     ->getEditable('alshaya_social.settings')
     ->set('social_login', (bool) $form_state->getValue('social_login'))
+    ->set('social_networks', $form_state->getValue('networks'))
     ->save();
 }
 
