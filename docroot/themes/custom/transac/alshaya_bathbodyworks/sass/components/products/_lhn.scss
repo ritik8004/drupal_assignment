@@ -1,0 +1,26 @@
+.block-alshaya-category-lhn-block {
+  // L2.
+  > ul > li {
+    > .lhn-2 {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+  }
+
+  ul {
+    li {
+      a {
+        text-transform: capitalize;
+        font-size: 0.875rem;
+
+        &.active {
+          font-family: $alshaya-bold;
+        }
+
+        &:hover {
+          color: $l3-link-hover;
+        }
+      }
+    }
+  }
+}
