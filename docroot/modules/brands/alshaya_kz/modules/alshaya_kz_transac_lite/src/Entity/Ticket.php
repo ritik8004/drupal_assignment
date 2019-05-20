@@ -1,8 +1,4 @@
 <?php
-/**
- * @file
- * Contains \Drupal\alshaya_kz_transac_lite\Entity\Ticket.
- */
 
 namespace Drupal\alshaya_kz_transac_lite\Entity;
 
@@ -13,8 +9,8 @@ use Drupal\Core\Entity\EntityTypeInterface;
 /**
  * Defines the Ticket booking details entity.
  *
- * The Ticket entity is used to maintain the ticket details, the ticket details may persist
- * in the database as an archive record.
+ * The Ticket entity is used to maintain the ticket details, the ticket details
+ * may persist in the database as an archive record.
  *
  * @ContentEntityType(
  *   id = "ticket",
@@ -47,7 +43,7 @@ class Ticket extends ContentEntityBase {
       ->setLabel(t('UUID'))
       ->setDescription(t('The UUID of ticket entity.'))
       ->setReadOnly(TRUE);
-    
+
     $fields['sales_number'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Sales number'))
       ->setDescription(t('The sales number of ticket entity.'))
@@ -107,14 +103,13 @@ class Ticket extends ContentEntityBase {
       ]);
 
     $fields['payment_type'] = BaseFieldDefinition::create('list_string')
-    ->setLabel(t('Payment type'))
-    ->setDescription(t('The payment type of the ticket entity.'))
-    ->setSettings([
-      'allowed_values' => [
-        'knet' => 'K-net',
-        'cybersource' => 'Cybersource',
-      ],
-    ]);
+      ->setLabel(t('Payment type'))
+      ->setDescription(t('The payment type of the ticket entity.'))
+      ->setSettings([
+        'allowed_values' => [
+          'knet' => 'K-Net',
+        ],
+      ]);
 
     $fields['payment_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Payment id'))
@@ -136,4 +131,5 @@ class Ticket extends ContentEntityBase {
 
     return $fields;
   }
+
 }
