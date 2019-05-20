@@ -22,6 +22,9 @@ function alshaya_social_facebook_install() {
       $config->set($key, $value);
     }
   }
-
   $config->save();
+
+  \Drupal::configFactory()->getEditable('alshaya_social.settings')
+    ->set('social_networks.social_auth_facebook', 0)
+    ->save();
 }

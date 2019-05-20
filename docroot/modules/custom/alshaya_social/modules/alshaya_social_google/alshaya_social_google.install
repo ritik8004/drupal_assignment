@@ -22,4 +22,8 @@ function alshaya_social_google_install() {
   }
 
   $config->save();
+
+  \Drupal::configFactory()->getEditable('alshaya_social.settings')
+    ->set('social_networks.social_auth_google', 0)
+    ->save();
 }
