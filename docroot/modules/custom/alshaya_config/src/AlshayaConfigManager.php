@@ -245,8 +245,8 @@ class AlshayaConfigManager {
       case self::MODE_REPLACE_KEY:
         foreach ($options['replace_keys'] as $replace_key) {
           $existing[$replace_key] = $data[$replace_key];
-          $data = $existing;
         }
+        $data = $existing;
         break;
 
       case self::MODE_RESAVE:
