@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -20,7 +21,8 @@ $languages = [
   'ar',
 ];
 
-$client = new Client('HGR051I5XN', '6fc229a5d5d0f0d9cc927184b2e4af3f');
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
+$client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $env . '_' . $language;

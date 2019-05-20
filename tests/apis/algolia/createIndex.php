@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
@@ -69,7 +70,21 @@ $facets = [
   'final_price',
   'attr_product_collection',
   'attr_concept',
-  'attr_selling_price',
+];
+
+$query_facets = [
+  [
+    'attribute' => 'field_category_name',
+    'amount' => 1,
+  ],
+];
+
+$query_generate = [
+  ['field_acq_promotion_label'],
+  ['attr_product_brand'],
+  ['attr_product_collection'],
+  ['attr_concept'],
+  ['attr_color'],
 ];
 
 $ranking = [
@@ -80,15 +95,31 @@ $ranking = [
   'custom',
 ];
 
-$client = new Client('HGR051I5XN', '6fc229a5d5d0f0d9cc927184b2e4af3f');
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'custom.php';
+$client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $env . '_' . $language;
+
   // Just need a dummy index to create our index as there is no API to create
   // new index directly.
   $client->copyIndex('local_en', $name);
   $index = $client->initIndex($name);
   sleep(10);
+
+  $query_suggestion = $name . '_query';
+  $query = [
+    'indexName' => $query_suggestion,
+    'sourceIndices' => [
+      [
+        'indexName' => $name,
+        'facets' => $query_facets,
+        'generate' => $query_generate,
+      ],
+    ],
+  ];
+  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
 
   $settings = $index->getSettings();
   $settings['attributesForFaceting'] = $facets;
@@ -101,8 +132,8 @@ foreach ($languages as $language) {
     $settings['replicas'][] = $replica;
     $client->copyIndex($name, $replica);
   }
-
   sleep(2);
+
   $index->setSettings($settings, TRUE);
 
   foreach ($sorts as $sort) {
@@ -117,6 +148,7 @@ foreach ($languages as $language) {
   }
 
   print $name . PHP_EOL;
+  print $query_suggestion . PHP_EOL;
   print implode(PHP_EOL, $settings['replicas']);
   print PHP_EOL . PHP_EOL . PHP_EOL;
 }
