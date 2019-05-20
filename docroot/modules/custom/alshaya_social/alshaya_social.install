@@ -15,4 +15,7 @@ function alshaya_social_update_8001() {
     ->set('disable_admin_login', TRUE)
     ->set('user_allowed', 'register')
     ->save();
+
+  // Enable alshaya_social_google module.
+  \Drupal::service('module_installer')->install(['alshaya_social_google']);
 }
