@@ -97,7 +97,47 @@ $error_msg_bg: $brand-red;
 $error_msg_white_text: $white;
 $error_icon_bg: $white;
 $error_info_icon: $brand-red;
+$error_form_border: $alert-red;
+$error_form_msg: $alert-red;
+
+/* -------- 9. step5 -------------- */
+$visitor_info_text: $wram-grey;
+$booking_info_text: $warm-grey1;
+$booking_info_with_icon: $secondary_icon;
+$tbl_header_bg: $brand-orange;
+$tbl_header_text: $white;
+$tbl_header_border: $white;
+$tbl_header_lst_border: $brand-orange;
+$tbl_content_bg: $warm-grey1;
+$tbl_content_icon: $wram-grey;
+$tbl_content_mobile_bg: $brand-orange;
+$tbl_content_mobile_text: $white;
+$step_brand_color_icon: $brand-red;
+$continue_btn_bg: $brand-red;
+$continue_btn_text: $white;
+
+/* -------- 10. steps form --------- */
+$form_input_text: $dark-black;
+$form_input_bg: $white;
+$form_input_border: $light-grey;
+
+/* -------- 11. step6 -------------- */
+$future_payment_option_text: $wram-grey;
 
 /* -------- 12. loading-overlay --- */
 $loading_overlay_bg: rgba(255, 255, 255, 0.75);
 $loading_overlay_text: $wram-grey;
+
+/* --------------- 13. sticky footer ----------- */
+$cart_bg: $grey;
+$cart_border: $light-grey;
+$cart_text: $dark-black;
+$cart_add_item_text: $white;
+$cart_add_item_bg: $brand-orange;
+$keyframes_fullcart0: $dark-black;
+$keyframes_fullcart58: $pink;
+$progress_bar_text: $wram-grey;
+$progress_step_border: $wram-grey;
+$progress_step: $white;
+$progress_step_current: $brand-orange;
+$progress_step_done: $brand-red;
