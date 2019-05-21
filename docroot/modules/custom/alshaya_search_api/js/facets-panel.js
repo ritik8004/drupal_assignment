@@ -13,6 +13,7 @@
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
         $(this).addClass('active');
+        $('body').removeClass('large-grid')
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
@@ -23,6 +24,7 @@
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
         $(this).addClass('active');
+        $('body').addClass('large-grid')
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
@@ -30,6 +32,11 @@
          // Adjust height of PLP tiles.
          Drupal.plpListingProductTileHeight();
       });
+
+      // On filter selection keeping the selected layout.
+      if ($('body').hasClass('large-grid')) {
+        $('.large-col-grid').click();
+      }
 
       // On clicking facet block title, update the title of block and hide
       // other facets.
@@ -90,9 +97,6 @@
         }
         else {
           $('body').addClass('mobile--overlay');
-          if($('body').hasClass('safari')) {
-            $('body').addClass('safari-fixed');
-          }
         }
 
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -110,9 +114,6 @@
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
         $('body').removeClass('mobile--overlay');
-        if($('body').hasClass('safari') && $('body').hasClass('safari-fixed')) {
-          $('body').removeClass('safari-fixed');
-        }
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
@@ -157,8 +158,12 @@
       updateSortTitle();
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
-      // Adjust height of PLP tiles.
-      Drupal.plpListingProductTileHeight();
+
+      // Adding timeout to do calculation after images get load on plp.
+      setTimeout(function() {
+        // Adjust height of PLP tiles.
+        Drupal.plpListingProductTileHeight();
+      }, 300);
 
       // Back to PLP and loading a PLP/SRP with facets active in URL.
       if (context === $(document)[0]) {
@@ -359,7 +364,7 @@
         var position = 0;
         var filter = $('.region__content');
         var nav = $('.branding__menu');
-        var fixedNavHeight = nav.height();
+        var fixedNavHeight = 0;
 
         if ($('.show-all-filters').length > 0) {
           if ($(window).width() > 1023) {
@@ -373,6 +378,7 @@
               supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
             }
             filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
+            fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
           }
         }
 

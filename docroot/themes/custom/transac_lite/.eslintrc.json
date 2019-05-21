@@ -2,7 +2,8 @@
   "extends": "eslint:recommended",
   "root": true,
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true
   },
   "globals": {
     "Drupal": true,
@@ -50,7 +51,6 @@
     "no-multi-spaces": 2,
     "no-multi-str": 2,
     "no-native-reassign": 2,
-    "no-nested-ternary": 2,
     "no-new-func": 2,
     "no-new-object": 2,
     "no-new-wrappers": 2,
@@ -65,11 +65,11 @@
     "no-trailing-spaces": 2,
     "no-undef-init": 2,
     "no-undefined": 2,
-    "no-unused-expressions": 2,
+    "no-unused-expressions": [2, {"allowTernary": true }],
     "no-unused-vars": [2, {"vars": "all", "args": "none"}],
     "no-with": 2,
     "object-curly-spacing": [2, "never"],
-    "one-var": [2, "never"],
+    "operator-linebreak": [2, "none"],
     "quote-props": [2, "consistent-as-needed"],
     "quotes": [2, "single", "avoid-escape"],
     "semi": [2, "always"],

@@ -1,6 +1,8 @@
 services:
   alshaya_hm_images.commands:
     class: Drupal\alshaya_hm_images\Commands\AlshayaHmImagesCommands
-    arguments: [ '@database', '@config.factory' ]
+    arguments:
+      - '@database'
+      - '@alshaya_hm_images.skuassetsmanager'
     tags:
       - { name: drush.command }
