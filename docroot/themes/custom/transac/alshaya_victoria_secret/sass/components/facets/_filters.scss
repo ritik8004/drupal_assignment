@@ -28,11 +28,3 @@
     }
   }
 }
-
-@include breakpoint($only-tablet) {
-  .all-filters-mobile-overlay {
-    #block-supercategorymenu {
-      z-index: 9;
-    }
-  }
-}

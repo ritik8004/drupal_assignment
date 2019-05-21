@@ -122,11 +122,3 @@
     }
   }
 }
-
-@include breakpoint($only-tablet) {
-  .all-filters-mobile-overlay {
-    .c-breadcrumb {
-      border-top: 1px solid $breadcrumb_region_separator;
-    }
-  }
-}

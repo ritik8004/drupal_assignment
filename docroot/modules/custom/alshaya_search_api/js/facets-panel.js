@@ -96,7 +96,7 @@
           $('html').addClass('all-filters-overlay');
         }
         else {
-          $('body').addClass('mobile--overlay all-filters-mobile-overlay');
+          $('body').addClass('mobile--overlay');
         }
 
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -113,7 +113,7 @@
       // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
-        $('body').removeClass('mobile--overlay all-filters-mobile-overlay');
+        $('body').removeClass('mobile--overlay');
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
