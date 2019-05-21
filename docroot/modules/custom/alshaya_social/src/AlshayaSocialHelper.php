@@ -136,8 +136,8 @@ class AlshayaSocialHelper {
       return NULL;
     }
 
-    $facebook = $this->networkManager->createInstance($event->getPluginId())->getSdk();
-    $providerAuth->setClient($facebook)->setAccessToken($this->dataHandler->get('access_token'));
+    $provider = $this->networkManager->createInstance($event->getPluginId())->getSdk();
+    $providerAuth->setClient($provider)->setAccessToken($this->dataHandler->get('access_token'));
 
     // Gets user's profile from social auth provider.
     if ($user_info = $providerAuth->getUserInfo()) {
