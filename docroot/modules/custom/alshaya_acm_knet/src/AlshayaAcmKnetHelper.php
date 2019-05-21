@@ -338,8 +338,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    * {@inheritdoc}
    */
   public function processKnetFailed(string $state_key) {
-    parent::processKnetFailed($state_key);
     $data = $this->state->get($state_key);
+    parent::processKnetFailed($state_key);
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],
       '@payment_id' => $data['payment_id'],
