@@ -5,12 +5,12 @@
 {% endif %}
 	{% if mainImage %}
 		<div class="alshaya_search_mainimage">
-			<img src="{{ mainImage.url }}" alt="{{ label }}" title="{{ label }}">
+			{{ mainImage }}
 		</div>
 	{% endif %}
 	{% if hoverImage %}
 		<div class="alshaya_search_hoverimage">
-			<img src="{{ hoverImage.url }}" alt="{{ label }}" title="{{ label }}">
+			{{ hoverImage }}
 		</div>
 	{% endif %}
 </div>
