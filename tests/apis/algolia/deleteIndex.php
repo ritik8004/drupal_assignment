@@ -1,8 +1,19 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file
  * Delete indexes for an env.
+ */
+
+/**
+ * How to use this:
+ *
+ * Usage: php deleteIndex.php [env]
+ * Example: php deleteIndex.php 01dev
+ *
+ * Deletes index along with it's query suggestion and all replicas in all
+ * languages.
  */
 
 $env = isset($argv, $argv[1]) ? $argv[1] : '';
@@ -20,10 +31,16 @@ $languages = [
   'ar',
 ];
 
-$client = new Client('HGR051I5XN', '6fc229a5d5d0f0d9cc927184b2e4af3f');
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
+$client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $env . '_' . $language;
+
+  $query = $name . '_query1';
+  algolia_delete_query_suggestion($app_id, $app_secret_admin, $query);
+  $client->deleteIndex($query);
+
   $index = $client->initIndex($name);
   $settings = $index->getSettings();
   $client->deleteIndex($name);
@@ -34,6 +51,7 @@ foreach ($languages as $language) {
   }
 
   print $name . PHP_EOL;
+  print $query . PHP_EOL;
   print implode(PHP_EOL, $settings['replicas']);
   print PHP_EOL . PHP_EOL . PHP_EOL;
 }
