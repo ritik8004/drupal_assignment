@@ -6,6 +6,34 @@
  * Create index and it's replicas for each language.
  */
 
+/**
+ * How to use this:
+ *
+ * Usage: php createIndex.php [env]
+ * Example: php createIndex.php 01dev
+ *
+ * Ensure settings.php is updated with proper application id and admin secret
+ * key. Once that is done, please go through all the arrays here:
+ *
+ * $languages:              Specify all the languages for which primary indexes
+ *                          need to be created.
+ *
+ * $sorts:                  Replicas need to be created for each sorting option
+ *                          required by Views
+ *
+ * $searchable_attributes   Attributes that should be used for searching.
+ *
+ * $facets                  Facet fields.
+ *
+ * $query_facets            Facets used for query suggestion (autocomplete).
+ *
+ * $query_generate          Additional facets to be used for generating results
+ *                          in query suggestions.
+ *
+ * $ranking:                Default ranking.
+ */
+
+
 $env = isset($argv, $argv[1]) ? $argv[1] : '';
 if (empty($env)) {
   print 'No env passed as parameter.' . PHP_EOL . PHP_EOL;
@@ -96,7 +124,6 @@ $ranking = [
 ];
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'custom.php';
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {

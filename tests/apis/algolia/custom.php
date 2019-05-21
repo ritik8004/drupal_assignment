@@ -59,3 +59,25 @@ function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) 
   }
   curl_close($ch);
 }
+
+
+function algolia_delete_query_suggestion($app_id, $app_secret_admin, $index) {
+  $ch = curl_init();
+
+  curl_setopt($ch, CURLOPT_URL, 'https://query-suggestions.fi.algolia.com/1/configs/' . $index);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+  curl_setopt($ch, CURLOPT_TIMEOUT, 3000);
+
+  $headers = [];
+  $headers[] = 'X-Algolia-Api-Key: ' . $app_secret_admin;
+  $headers[] = 'X-Algolia-Application-Id: ' . $app_id;
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+  $result = curl_exec($ch);
+  if (curl_errno($ch)) {
+    echo 'Error:' . curl_error($ch);
+  }
+
+  curl_close($ch);
+}
