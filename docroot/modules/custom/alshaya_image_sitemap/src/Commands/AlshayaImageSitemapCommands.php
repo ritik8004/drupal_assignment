@@ -128,7 +128,7 @@ class AlshayaImageSitemapCommands extends DrushCommands {
       drush_print(dt('Image Sitemap Generated Successfully.'));
     }
     else {
-      drush_print(dt('There was some error while importing redirects.'));
+      drush_print(dt('There was some error while generating image sitemap.'));
     }
   }
 
