@@ -14,6 +14,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\node\NodeInterface;
@@ -101,6 +102,13 @@ class AlshayaAcmCommands extends DrushCommands {
   private $skuManager;
 
   /**
+   * Module Handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  private $moduleHandler;
+
+  /**
    * AlshayaAcmCommands constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
@@ -123,6 +131,8 @@ class AlshayaAcmCommands extends DrushCommands {
    *   Mdc Queue Manager.
    * @param \Drupal\alshaya_acm_product\SkuManager $skuManager
    *   Sku manager service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   Module Handler.
    */
   public function __construct(ConfigFactoryInterface $configFactory,
                               LanguageManagerInterface $languageManager,
@@ -133,7 +143,8 @@ class AlshayaAcmCommands extends DrushCommands {
                               Connection $connection,
                               APIWrapper $api_wrapper,
                               AlshayaMdcQueueManager $mdcQueueManager,
-                              SkuManager $skuManager) {
+                              SkuManager $skuManager,
+                              ModuleHandlerInterface $moduleHandler) {
     $this->configFactory = $configFactory;
     $this->languageManager = $languageManager;
     $this->entityTypeManager = $entityTypeManager;
@@ -144,6 +155,7 @@ class AlshayaAcmCommands extends DrushCommands {
     $this->apiWrapper = $api_wrapper;
     $this->mdcQueueManager = $mdcQueueManager;
     $this->skuManager = $skuManager;
+    $this->moduleHandler = $moduleHandler;
   }
 
   /**
@@ -237,25 +249,47 @@ class AlshayaAcmCommands extends DrushCommands {
           'alshaya_api.settings' => 'magento_lang_prefix',
         ];
 
+        $this->moduleHandler->alter('alshaya_acm_switch_magento_configs', $configs);
+
         // Update the magento store ids and lang_prefix.
         foreach ($configs as $name => $key) {
-          foreach ($this->languageManager->getLanguages() as $lang => $language) {
-            if ($lang == $this->languageManager->getDefaultLanguage()->getId()) {
-              $config = $this->configFactory->getEditable($name);
-            }
-            else {
-              $config = $this->languageManager->getLanguageConfigOverride($lang, $name);
-            }
+          // For configs that are not separate per language, we process
+          // directly below.
+          if (isset($magentos[$mdc][$key])) {
+            $config = $this->configFactory->getEditable($name);
+            $value = $magentos[$mdc][$key];
 
-            // Use specific config if it exists, use default one otherwise.
-            $value = isset($magentos[$mdc][$country_code][$key][$lang]) ? $magentos[$mdc][$country_code][$key][$lang] : $magentos['default'][$country_code][$key][$lang];
             $config->set($key, $value)->save();
 
             $this->output->writeln(dt('Configuring @name.@key to @value.', [
               '@name' => $name,
-              '@key' => $key . ' ' . $lang,
+              '@key' => $key,
               '@value' => $value,
             ]));
+          }
+          // For configs that are different per language, we process below.
+          else {
+            foreach ($this->languageManager->getLanguages() as $lang => $language) {
+              if ($lang == $this->languageManager->getDefaultLanguage()->getId()) {
+                $config = $this->configFactory->getEditable($name);
+              }
+              else {
+                $config = $this->languageManager->getLanguageConfigOverride($lang, $name);
+              }
+
+              // Use specific config if it exists, use default one otherwise.
+              $value = isset($magentos[$mdc][$country_code][$key][$lang])
+                ? $magentos[$mdc][$country_code][$key][$lang]
+                : $magentos['default'][$country_code][$key][$lang];
+
+              $config->set($key, $value)->save();
+
+              $this->output->writeln(dt('Configuring @name.@key to @value.', [
+                '@name' => $name,
+                '@key' => $key . ' ' . $lang,
+                '@value' => $value,
+              ]));
+            }
           }
         }
       }

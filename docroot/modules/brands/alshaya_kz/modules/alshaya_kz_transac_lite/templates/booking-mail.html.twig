@@ -1,0 +1,165 @@
+<style type="text/css">
+  body,
+  p {
+    font-family: Arial, helvetica;
+    font-size: 14px;
+    line-height: 1.31;
+    color: #000;
+  }
+  p {
+    margin: 15px 0;
+  }
+  h2 {
+    font-size: 30px;
+    font-family: Arial, helvetica;
+    text-align: center;
+    margin: 20px auto;
+  }
+  strong {
+    font-weight: bold;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul li {
+    display: block;
+    margin: 10px 0;
+  }
+  ul li span {
+    display: inline-block;
+    margin: 0 5px;
+  }
+  .user-info {
+    width: 50%;
+    float: left;
+  }
+  .qr-code {
+    width: 50%;
+    float: left;
+    margin: 25px 0;
+  }
+  .reference-number {
+    font-size: 1.625rem;
+    width: 100%;
+    float: left;
+  }
+  .reference-number strong {
+    font-size: 1.625rem;
+    padding: 10px;
+  }
+  table {
+    width: 70%;
+  }
+  table td,
+  table th {
+    padding: 10px;
+    text-align: left;
+  }
+  table td span,
+  table th span {
+    display: inline-block;
+    padding-right: 5px;
+  }
+  br {
+    display: none;
+  }
+  @media only screen and (max-device-width: 767px) {
+    table {
+      width: 100%;
+    }
+
+    .user-info {
+      width: 100%;
+      float: left;
+    }
+    .qr-code {
+      width: 100%;
+      float: left;
+      margin: 20px 0;
+    }
+  }
+</style>
+<h2>Online Booking Confirmation</h2>
+<div>
+  <strong>
+    Kai! Please print and present your email at KidZania’ s ticketing counters on the day of your visit. Z-U Soon!
+  </strong>
+</div>
+<div class="user-info">
+  <ul style="float: left;">
+    <li>
+      <span>Customer Name :</span>
+      <span>{{booking_info.name}}</span>
+    </li>
+    <li>
+      <span>Order Date :</span>
+      <span>{{booking_info.order_date}}</span>
+    </li>
+    <li>
+      <span>Visit Date :</span>
+      <span>{{booking_info.visit_date}}</span>
+    </li>
+    <li>
+      <span>Facility :</span>
+      <span>KidZania Kuwait, Grand Avenues, Kuwait</span>
+    </li>
+    <li>
+      <span>Payment:</span>
+      <span>{{booking_info.payment_type}}</span>
+    </li>
+  </ul>
+</div>
+<div class="qr-code">QRCODE
+  {{qr_code}}
+</div>
+<div class="reference-number">
+  <p>
+    Reference Number:
+    <strong>{{booking_info.sales_number}}</strong>
+  </p>
+</div>
+<table border='1' cellspacing='0' cellpadding='0'>
+  <thead style="text-align: right;">
+    <tr>
+      <th>Visitor Types</th>
+      <th>Price</th>
+      <th>Ticket Number</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, types in visitor_list.data %}
+      {% for val in types.Book %}
+        <tr>
+          <td>
+            <span>{{types.Description}}</span>
+            <span>({{types.MinAge}}-{{types.MaxAge}}Years)</span>
+          </td>
+          <td>
+            <span>KWD</span>
+            <span>{{types.Price}}</span>
+          </td>
+          <td>{{val.ticket_id}}</td>
+        </tr>
+      {% endfor %}
+    {% endfor %}
+    <tr>
+      <td>
+        <span>
+          <strong>Total</strong>
+        </span>
+      </td>
+      <td colspan="2">
+        <strong>
+          <span>KWD</span>
+          <span>
+            {{booking_info.order_total}}
+          </span>
+        </strong>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<p>
+  For safety and liability purposes, all children up to the age of 14 years need to be registered by and adult (18+ Years) at the front desk before they can enter the park.
+</p>

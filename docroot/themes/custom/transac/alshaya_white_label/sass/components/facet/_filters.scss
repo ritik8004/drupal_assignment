@@ -292,8 +292,7 @@
     }
 
     &.hide-for-desktop {
-      opacity: 0.4;
-      pointer-events: none;
+      display: none;
     }
   }
 
