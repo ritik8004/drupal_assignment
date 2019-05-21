@@ -129,16 +129,8 @@ class SKUImagesResource extends ResourceBase {
         if ($node instanceof NodeInterface) {
           $response[$sku] = [
             'product_url' => $node->toUrl()->setAbsolute()->toString(),
-            'images' => [],
+            'images' => $this->skuImagesManager->getMediaImages($sku_entity),
           ];
-
-          $gallery = $this->skuImagesManager->getAllMedia($sku_entity, TRUE);
-
-          if (!empty($gallery['images']) || !empty($gallery['videos'])) {
-            $response[$sku]['images'] = array_values(
-              array_merge($gallery['images'], $gallery['videos'])
-            );
-          }
         }
       }
     }
