@@ -7,7 +7,6 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\alshaya_config\AlshayaConfigManager;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
@@ -109,6 +108,13 @@ class SkuAssetManager {
   protected $httpClient;
 
   /**
+   * Config alshaya_hm_images.settings.
+   *
+   * @var \Drupal\Core\Config\Config|\Drupal\Core\Config\ImmutableConfig
+   */
+  protected $hmImageSettings;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -149,6 +155,8 @@ class SkuAssetManager {
     $this->productCacheManager = $product_cache_manager;
     $this->cachePimsFiles = $cache_pims_files;
     $this->httpClient = $http_client;
+
+    $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
 
   /**
@@ -240,8 +248,8 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadPimsImage(array $data) {
-    $base_url = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'pims_base_url');
-    $pims_directory = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'pims_directory');
+    $base_url = $this->hmImageSettings->get('pims_base_url');
+    $pims_directory = $this->hmImageSettings->get('pims_directory');
 
     $url = implode('/', [
       trim($base_url, '/'),
@@ -361,7 +369,7 @@ class SkuAssetManager {
       if (isset($asset['pims_image'])) {
         $uri = $this->downloadPimsImage($asset['pims_image']);
       }
-      elseif (AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'fallback_to_liquidpixel')) {
+      elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
         $uri = $this->downloadLiquidPixelImage($asset);
       }
     }
@@ -424,7 +432,7 @@ class SkuAssetManager {
    *   Asset url.
    */
   private function getSkuAssetUrlLiquidPixel(array $asset) {
-    $base_url = AlshayaConfigManager::getConfigValue('alshaya_hm_images.settings', 'base_url');
+    $base_url = $this->hmImageSettings->get('base_url');
     list($set, $image_location_identifier) = $this->getAssetAttributes($asset, 'pdp_fullscreen');
     $query_options = $this->getAssetQueryString($set, $image_location_identifier);
     return Url::fromUri($base_url, ['query' => $query_options])->toString();
