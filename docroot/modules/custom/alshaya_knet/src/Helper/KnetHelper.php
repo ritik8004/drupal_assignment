@@ -378,7 +378,7 @@ class KnetHelper {
     ]);
 
     // Delete the data from DB.
-    $this->state()->delete($state_key);
+    $this->state->delete($state_key);
   }
 
   /**
