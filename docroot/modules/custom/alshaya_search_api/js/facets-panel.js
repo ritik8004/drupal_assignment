@@ -13,6 +13,7 @@
       $('.small-col-grid').once().on('click', function () {
         $('.large-col-grid').removeClass('active');
         $(this).addClass('active');
+        $('body').removeClass('large-grid')
         $('.c-products-list').removeClass('product-large').addClass('product-small');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
@@ -23,6 +24,7 @@
       $('.large-col-grid').once().on('click', function () {
         $('.small-col-grid').removeClass('active');
         $(this).addClass('active');
+        $('body').addClass('large-grid')
         $('.c-products-list').removeClass('product-small').addClass('product-large');
         setTimeout(function() {
           $('.search-lightSlider').slick('refresh');
@@ -30,6 +32,11 @@
          // Adjust height of PLP tiles.
          Drupal.plpListingProductTileHeight();
       });
+
+      // On filter selection keeping the selected layout.
+      if ($('body').hasClass('large-grid')) {
+        $('.large-col-grid').click();
+      }
 
       // On clicking facet block title, update the title of block and hide
       // other facets.
@@ -157,8 +164,12 @@
       updateSortTitle();
       updateFacetTitlesWithSelected();
       updateCategoryTitle();
-      // Adjust height of PLP tiles.
-      Drupal.plpListingProductTileHeight();
+
+      // Adding timeout to do calculation after images get load on plp.
+      setTimeout(function() {
+        // Adjust height of PLP tiles.
+        Drupal.plpListingProductTileHeight();
+      }, 300);
 
       // Back to PLP and loading a PLP/SRP with facets active in URL.
       if (context === $(document)[0]) {
