@@ -13,10 +13,8 @@ use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
-use Drupal\taxonomy\TermInterface;
 use Drupal\views\ViewExecutable;
 use Solarium\Core\Query\QueryInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
