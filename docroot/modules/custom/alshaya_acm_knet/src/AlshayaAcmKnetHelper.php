@@ -213,7 +213,7 @@ class AlshayaAcmKnetHelper extends KnetHelper {
     }
     // Store amount in state variable for logs.
     $response['amount'] = $totals['grand'];
-    $this->state()->set($state_key, $response);
+    $this->state->set($state_key, $response);
     // On local/dev we don't use https for response url.
     // But for sure we want to use httpd on success url.
     $url_options = [
@@ -309,18 +309,19 @@ class AlshayaAcmKnetHelper extends KnetHelper {
 
       // Preserve the payment id in a state variable to render it on Order
       // Confirmation page.
-      $this->state()->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
+      $this->state->set('knet:' . md5($cart->getExtension('real_reserved_order_id')), [
         'payment_id' => $data['payment_id'],
         'transaction_id' => $data['transaction_id'],
         'result_code' => $data['result'],
       ]);
 
       // Delete the data from DB (state).
-      $this->state()->delete($state_key);
+      $this->state->delete($state_key);
     }
     catch (\Exception $e) {
       drupal_set_message($e->getMessage(), 'error');
-      return $this->redirect('acq_checkout.form', ['step' => 'payment']);
+      $url = Url::fromRoute('acq_checkout.form', ['step' => 'payment'])->toString();
+      return new RedirectResponse($url, 302);
     }
 
     if (isset($restored_cart) && $restored_cart) {
@@ -337,8 +338,8 @@ class AlshayaAcmKnetHelper extends KnetHelper {
    * {@inheritdoc}
    */
   public function processKnetFailed(string $state_key) {
-    parent::processKnetFailed($state_key);
     $data = $this->state->get($state_key);
+    parent::processKnetFailed($state_key);
     drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : $data['quote_id'],
       '@payment_id' => $data['payment_id'],
