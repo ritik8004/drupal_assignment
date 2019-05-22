@@ -8,6 +8,7 @@
 use Drupal\alshaya_acm_product_position\Form\AlshayaPlpSortSettingsForm;
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\TypedData\Exception\MissingDataException as MissingDataExceptionAlias;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Query\ConditionInterface;
 use Drupal\Core\Database\Query\SelectInterface;
@@ -474,5 +475,60 @@ function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterf
     if (!empty($field_default_value)) {
       $term->set($field_name, $field_default_value);
     }
+  }
+}
+
+/**
+ * Implements hook_acq_sku_position_sync_alter().
+ */
+function alshaya_acm_product_position_acq_sku_position_sync_alter(array &$terms) {
+  if (!empty($terms)) {
+    $plp_sort_config = \Drupal::configFactory()->get('alshaya_acm_product_position.settings');
+    $plp_sort_available_options = $plp_sort_config->get('available_sort_options');
+    $plp_sort_position_key = array_search('Position', $plp_sort_available_options);
+
+    /** @var \Drupal\alshaya_acm_product_position\AlshayaPlpSortOptionsBase $alshaya_plp_sort_manager */
+    $alshaya_plp_sort_manager = \Drupal::service('alshaya_acm_product_position.sort_options');
+
+    foreach ($terms as $key => $term) {
+      try {
+        $term_object = Term::load($term->tid);
+
+        // Fetch overrides(if any) set for the term.
+        $options = $alshaya_plp_sort_manager->getPlpSortConfigForTerm($term_object);
+
+        // Pull options config from site level config if no override is set.
+        if (!$options) {
+          $options = $plp_sort_config->get('sort_options');
+        }
+
+        // Filter out empty array items.
+        $options = array_filter($options);
+
+        if (!in_array($plp_sort_position_key, array_keys($options))) {
+          unset($terms[$key]);
+          \Drupal::logger('alshaya_acm_product')->notice('Skipping position sync for category id: @cat_id as it has no sort criteria set for position.', [
+            '@cat_id' => $term->tid,
+          ]);
+        }
+      }
+      catch (MissingDataExceptionAlias $e) {
+        \Drupal::logger('alshaya_acm_product')->error('Error checking sort config for category @cat_id.', [
+          '@cat_id' => $term->tid,
+        ]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function alshaya_acm_product_position_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'acq_sku_position_sync_alter') {
+    // Alter acq_sku after processing the alter hook for advanced page.
+    $group = $implementations['alshaya_acm_product_position'];
+    unset($implementations['alshaya_acm_product_position']);
+    $implementations['alshaya_acm_product_position'] = $group;
   }
 }
