@@ -533,7 +533,8 @@ function alshaya_acm_product_position_acq_sku_position_sync_alter(array &$terms)
  */
 function alshaya_acm_product_position_module_implements_alter(&$implementations, $hook) {
   if ($hook == 'acq_sku_position_sync_alter') {
-    // Alter acq_sku after processing the alter hook for advanced page.
+    // Make sure acq_sku_position_sync_alter provided by this module runs at the
+    // end of other implementations.
     $group = $implementations['alshaya_acm_product_position'];
     unset($implementations['alshaya_acm_product_position']);
     $implementations['alshaya_acm_product_position'] = $group;
