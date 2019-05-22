@@ -232,6 +232,8 @@ class AcqSkuPositionCommands extends DrushCommands {
         if ($is_data_available) {
           $insert_query->execute();
         }
+
+        $this->moduleHandler->invokeAll('acq_sku_position_sync_category_chunk_processed', $categories_chunk);
       }
       catch (\Exception $e) {
         $this->logger->error('Error while deleting and inserting data for product position for terms: @tids. Message: @message', [
@@ -239,8 +241,6 @@ class AcqSkuPositionCommands extends DrushCommands {
           '@message' => $e->getMessage(),
         ]);
       }
-
-      $this->moduleHandler->invokeAll('acq_sku_position_sync_category_chunk_processed', $categories_chunk);
     }
 
     // Allow other modules to take action after position sync finished.
