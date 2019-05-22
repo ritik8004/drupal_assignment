@@ -239,6 +239,8 @@ class AcqSkuPositionCommands extends DrushCommands {
           '@message' => $e->getMessage(),
         ]);
       }
+
+      $this->moduleHandler->invokeAll('acq_sku_position_sync_category_chunk_processed', $categories_chunk);
     }
 
     // Allow other modules to take action after position sync finished.

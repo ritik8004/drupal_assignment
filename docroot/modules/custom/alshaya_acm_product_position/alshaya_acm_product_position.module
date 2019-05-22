@@ -160,17 +160,24 @@ function alshaya_acm_product_position_views_pre_build(ViewExecutable $view) {
 
   // Nid is used for position sort, this is hard coded so we use it directly.
   if (isset($filters['sort_bef_combine']) && strpos($filters['sort_bef_combine'], 'nid') === 0) {
-    $view->element['#cache']['tags'][] = 'search_api_list:product:sort_position';
+    if ($tid = \Drupal::routeMatch()->getRawParameter('taxonomy_term')) {
+      $view->element['#cache']['tags'][] = 'search_api_list:product:sort_position:' . $tid;
+    }
   }
 }
 
 /**
- * Implements hook_acq_sku_position_sync_finished().
+ * Implements hook_acq_sku_position_sync_category_chunk_processed().
  */
-function alshaya_acm_product_position_acq_sku_position_sync_finished() {
-  // Invalidate the cache tag for product index pages using position sort.
-  $tags = ["search_api_list:product:sort_position"];
-  Cache::invalidateTags($tags);
+function alshaya_acm_product_position_acq_sku_position_sync_category_chunk_processed($category_chunk) {
+  $invalidate_cache_tags = [];
+
+  // Invalidate cache tags for categories processed during position sync.
+  foreach ($category_chunk as $tid) {
+    $invalidate_cache_tags[] = 'search_api_list:product:sort_position:' . $tid;
+  }
+
+  Cache::invalidateTags($invalidate_cache_tags);
 }
 
 /**
