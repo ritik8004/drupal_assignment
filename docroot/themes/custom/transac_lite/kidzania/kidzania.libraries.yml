@@ -1,3 +1,7 @@
+booking_steps:
+  js:
+    js/kidzania.js: {}
+
 global_styles:
   css:
     theme:
@@ -5,7 +9,6 @@ global_styles:
 
   js:
     js/global.js: {}
-    js/kidzania.js: {}
 
   dependencies:
     - core/jquery.ui.datepicker
