@@ -12,6 +12,22 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Adding `is_sale` and `is_new` attribute to the product.
+ */
+function alshaya_acm_product_update_8045() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['alshaya_acm_product.sku_base_fields'],
+    'alshaya_acm_product'
+  );
+
+  \Drupal::service('acq_sku.fields_manager')->addFields();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new config key for listing page display of hover images.
  * Clear product cache after code changes to reduce data in cache and to rebuild
  * swatches data.
