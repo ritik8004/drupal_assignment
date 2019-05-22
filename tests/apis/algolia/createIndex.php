@@ -9,8 +9,8 @@
 /**
  * How to use this:
  *
- * Usage: php createIndex.php [env]
- * Example: php createIndex.php 01dev
+ * Usage: php createIndex.php [prefix]
+ * Example: php createIndex.php mckw_01dev
  *
  * Ensure settings.php is updated with proper application id and admin secret
  * key. Once that is done, please go through all the arrays here:
@@ -34,9 +34,9 @@
  */
 
 
-$env = isset($argv, $argv[1]) ? $argv[1] : '';
-if (empty($env)) {
-  print 'No env passed as parameter.' . PHP_EOL . PHP_EOL;
+$prefix = isset($argv, $argv[1]) ? $argv[1] : '';
+if (empty($prefix)) {
+  print 'No prefix passed as parameter.' . PHP_EOL . PHP_EOL;
   die();
 }
 
@@ -127,7 +127,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
-  $name = $env . '_' . $language;
+  $name = $prefix . '_' . $language;
 
   // Just need a dummy index to create our index as there is no API to create
   // new index directly.

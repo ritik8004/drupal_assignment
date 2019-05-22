@@ -8,9 +8,11 @@
  * @see https://docs.acquia.com/site-factory/tiers/paas/workflow/hooks
  */
 
+global $acsf_site_name;
+
 // Ensure we never connect to Index of another ENV.
-$config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $settings['env'];
-$config['block.block.autocompletewidgetofalgolia']['settings']['index'] = $settings['env'];
+$config['search_api.index.acquia_search_index']['options']['algolia_index_name'] = $acsf_site_name . '_' . $settings['env'];
+$config['block.block.autocompletewidgetofalgolia']['settings']['index'] = $acsf_site_name . '_' . $settings['env'];
 
 // Values for developer machine here. This will need to be overridden in brand
 // specific settings files on each env for each brand.
