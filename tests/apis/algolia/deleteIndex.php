@@ -3,22 +3,22 @@
 
 /**
  * @file
- * Delete indexes for an env.
+ * Delete indexes for an prefix.
  */
 
 /**
  * How to use this:
  *
- * Usage: php deleteIndex.php [env]
- * Example: php deleteIndex.php 01dev
+ * Usage: php deleteIndex.php [prefix]
+ * Example: php deleteIndex.php mckw_01dev
  *
  * Deletes index along with it's query suggestion and all replicas in all
  * languages.
  */
 
-$env = isset($argv, $argv[1]) ? $argv[1] : '';
-if (empty($env)) {
-  print 'No env passed as parameter.' . PHP_EOL . PHP_EOL;
+$prefix = isset($argv, $argv[1]) ? $argv[1] : '';
+if (empty($prefix)) {
+  print 'No prefix passed as parameter.' . PHP_EOL . PHP_EOL;
   die();
 }
 
@@ -35,7 +35,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
-  $name = $env . '_' . $language;
+  $name = $prefix . '_' . $language;
 
   $query = $name . '_query1';
   algolia_delete_query_suggestion($app_id, $app_secret_admin, $query);
