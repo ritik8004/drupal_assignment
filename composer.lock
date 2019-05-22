@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbc3391cc643e35366927726e8abfa7f",
+    "content-hash": "c27d415cdae1b45649b9198dd1eec491",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -11352,7 +11352,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "835dbe272a97ef96c70bb5798d2f87fe466aa2da"
+                "reference": "3f336fc15b3917143268d81bf7a07e904c4b3109"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^1.0",
@@ -11365,16 +11365,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha1+6-dev",
-                    "datestamp": "1550807888",
+                    "version": "8.x-1.0-alpha2+3-dev",
+                    "datestamp": "1558521485",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "Full support via Drupal": "https://www.drupal.org/files/issues/2019-05-17/3053205-11.patch",
-                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-17/3054878-3.patch"
+                    "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-22/3054878-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11401,6 +11400,10 @@
                 {
                     "name": "mlbrgl",
                     "homepage": "https://www.drupal.org/user/489214"
+                },
+                {
+                    "name": "nikunjkotecha",
+                    "homepage": "https://www.drupal.org/user/694082"
                 }
             ],
             "description": "Provides integration with the Algolia search engine.",
@@ -11409,7 +11412,7 @@
                 "source": "http://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
             },
-            "time": "2019-02-22T03:57:49+00:00"
+            "time": "2019-05-22T10:59:31+00:00"
         },
         {
             "name": "drupal/search_api_autocomplete",
