@@ -7,12 +7,15 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
@@ -115,6 +118,20 @@ class SkuAssetManager {
   protected $hmImageSettings;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
+   * Date Time Service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  private $time;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -135,6 +152,10 @@ class SkuAssetManager {
    *   PIMS ID <=> Drupal File URI cache.
    * @param \GuzzleHttp\Client $http_client
    *   HTTP Client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Channel Factory.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   Date Time service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -144,7 +165,9 @@ class SkuAssetManager {
                               ModuleHandlerInterface $moduleHandler,
                               ProductCacheManager $product_cache_manager,
                               CacheBackendInterface $cache_pims_files,
-                              Client $http_client) {
+                              Client $http_client,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              TimeInterface $time) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -155,6 +178,8 @@ class SkuAssetManager {
     $this->productCacheManager = $product_cache_manager;
     $this->cachePimsFiles = $cache_pims_files;
     $this->httpClient = $http_client;
+    $this->logger = $logger_factory->get('SkuAssetManager');
+    $this->time = $time;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -307,6 +332,12 @@ class SkuAssetManager {
    * @throws \Exception
    */
   public function downloadLiquidPixelImage(array $asset) {
+    $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
+    $cache = $this->cachePimsFiles->get($skipped_key);
+    if (isset($cache, $cache->data)) {
+      return NULL;
+    }
+
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
 
     // Download the file contents.
@@ -321,6 +352,22 @@ class SkuAssetManager {
       watchdog_exception('SkuAssetManager', $e);
 
       // Not able to download image, no further processing required.
+      return NULL;
+    }
+
+    $file_data = (string) $file_data;
+    $hash = sha1($file_data);
+
+    if ($hash === Settings::get('hm_grey_image_hash', '98338129c981c32ec6a32309993bfee129b90b45')) {
+      $this->logger->error('Skipping grey image. File: @file, Hash: @hash, Asset id: @id', [
+        '@file' => $url,
+        '@hash' => $hash,
+        '@id' => $asset['Data']['AssetId'],
+      ]);
+
+      // Cache it for a day so we can check for it again after one day.
+      $this->cachePimsFiles->set($skipped_key, $this->time->getCurrentTime() + 86400);
+
       return NULL;
     }
 

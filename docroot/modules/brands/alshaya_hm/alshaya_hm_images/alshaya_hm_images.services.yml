@@ -17,6 +17,8 @@ services:
       - '@alshaya_acm_product.cache_manager'
       - '@cache.pims_files'
       - '@http_client'
+      - '@logger.factory'
+      - '@datetime.time'
   alshaya_hm_images.route_subscriber:
     class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
     tags:
