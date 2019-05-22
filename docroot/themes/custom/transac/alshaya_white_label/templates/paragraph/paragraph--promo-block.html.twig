@@ -65,25 +65,13 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
         <a href="{{ button_link }}">
           <!-- /#For demo purpose only. -->
           {% if content.field_banner or content.field_promotion_image_mobile %}
-            <div class="picture-tag">
-              <picture>
-                <source media="(min-width: 768px)" data-srcset="{{ file_url(desktop_image) }}">
-                <source media="(max-width: 767px)" data-srcset="{{ file_url(mobile_image) }}">
-                <img class="b-lazy" data-src="{{ file_url(promo_default_image) }}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/>
-              </picture>
-            </div>
+            {{ promo_block_picture }}
           {% endif %}
           {{ content.field_promo_block_button }}
         </a>
       {% else %}
         {% if content.field_banner or content.field_promotion_image_mobile %}
-          <div class="picture-tag">
-            <picture>
-              <source media="(min-width: 768px)" data-srcset="{{ file_url(desktop_image) }}">
-              <source media="(max-width: 767px)" data-srcset="{{ file_url(mobile_image) }}">
-              <img class="b-lazy" data-src="{{ file_url(promo_default_image) }}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/>
-            </picture>
-          </div>
+          {{ promo_block_picture }}
         {% endif %}
         {{ content|without('field_banner', 'field_promotion_image_mobile') }}
       {% endif %}

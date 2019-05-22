@@ -7,6 +7,19 @@
 
 use Drupal\Core\Config\FileStorage;
 
+
+/**
+ * Implements hook_update_N().
+ *
+ * Setting default value for lazy load placeholder.
+ */
+function alshaya_master_update_8026() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $alshaya_config_manager */
+  $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
+
+  $alshaya_config_manager->updateConfigs(['alshaya_master.settings'], 'alshaya_master');
+}
+
 /**
  * Implements hook_update_N().
  *
