@@ -19,6 +19,7 @@ function alshaya_social_facebook_install() {
     foreach ($facebook_settings as $key => $value) {
       $config->set($key, $value);
     }
+    $config->set('graph_version', '3.0');
   }
   $config->save();
 

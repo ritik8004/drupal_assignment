@@ -112,15 +112,10 @@ $social_config = [
   ],
 ];
 
-if (!empty($social_config[$env]['facebook'])) {
-  $settings['social_auth_facebook.settings']['app_id'] = $social_config[$env]['facebook']['app_id'];
-  $settings['social_auth_facebook.settings']['app_secret'] = $social_config[$env]['facebook']['app_secret'];
-  $settings['social_auth_facebook.settings']['graph_version'] = '3.0';
-}
-
-if (!empty($social_config[$env]['google'])) {
-  $settings['social_auth_google.settings']['client_id'] = $social_config[$env]['google']['client_id'];
-  $settings['social_auth_google.settings']['client_secret'] = $social_config[$env]['google']['client_secret'];
+if (!empty($social_config[$env])) {
+  foreach ($social_config[$env] as $provider => $config) {
+    $settings["social_auth_{$provider}.settings"] = $config;
+  }
 }
 
 // Configure your hash salt here.
