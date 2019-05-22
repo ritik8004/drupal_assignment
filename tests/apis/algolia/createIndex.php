@@ -131,7 +131,7 @@ foreach ($languages as $language) {
 
   // Just need a dummy index to create our index as there is no API to create
   // new index directly.
-  $client->copyIndex('local_en', $name);
+  $client->copyIndex('dummy', $name);
   $index = $client->initIndex($name);
   sleep(10);
 

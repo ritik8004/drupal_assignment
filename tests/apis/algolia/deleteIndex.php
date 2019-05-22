@@ -37,7 +37,7 @@ $client = new Client($app_id, $app_secret_admin);
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;
 
-  $query = $name . '_query1';
+  $query = $name . '_query';
   algolia_delete_query_suggestion($app_id, $app_secret_admin, $query);
   $client->deleteIndex($query);
 
