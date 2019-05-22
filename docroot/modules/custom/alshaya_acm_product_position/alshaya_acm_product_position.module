@@ -489,8 +489,8 @@ function alshaya_acm_product_position_acq_sku_commerce_category_alter(TermInterf
  * Implements hook_acq_sku_position_sync_alter().
  */
 function alshaya_acm_product_position_acq_sku_position_sync_alter(array &$terms) {
-  if (!empty($terms)) {
-    $plp_sort_config = \Drupal::configFactory()->get('alshaya_acm_product_position.settings');
+  $plp_sort_config = \Drupal::configFactory()->get('alshaya_acm_product_position.settings');
+  if (!empty($terms) && ($plp_sort_config->get('skip_sync_missing_position_sort'))) {
     $plp_sort_available_options = $plp_sort_config->get('available_sort_options');
     $plp_sort_position_key = array_search('Position', $plp_sort_available_options);
 

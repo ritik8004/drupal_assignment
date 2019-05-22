@@ -8,6 +8,12 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 
+function alshaya_acm_product_position_update_8006() {
+  /** @var AlshayaConfigManager $alshaya_config_manager */
+  $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
+  $alshaya_config_manager->updateConfigs(['alshaya_acm_product_position.settings'], 'alshaya_acm_product_position');
+}
+
 /**
  * Implements hook_update_N().
  *
