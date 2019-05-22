@@ -3,8 +3,8 @@
 namespace Drupal\alshaya_social\EventSubscriber;
 
 use Drupal\Core\Routing\UrlGeneratorInterface;
-use Drupal\social_auth\Event\ProviderErrorEvent;
-use Drupal\social_auth\Event\ProviderRedirectEvent;
+use Drupal\social_auth\Event\BeforeRedirectEvent;
+use Drupal\social_auth\Event\FailedAuthenticationEvent;
 use Drupal\social_auth\Event\SocialAuthEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
@@ -74,18 +74,18 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[SocialAuthEvents::BEFORE_PROVIDER_REDIRECT][] = ['beforeProviderRedirect', 100];
-    $events[SocialAuthEvents::PROVIDER_ERROR][] = ['onProviderError', 100];
+    $events[SocialAuthEvents::BEFORE_REDIRECT][] = ['beforeProviderRedirect', 100];
+    $events[SocialAuthEvents::FAILED_AUTH][] = ['onFailedAuth', 100];
     return $events;
   }
 
   /**
    * Set login_error_desitnation to redirect back.
    *
-   * @param \Drupal\social_auth\Event\ProviderRedirectEvent $event
+   * @param \Drupal\social_auth\Event\BeforeRedirectEvent $event
    *   The event object.
    */
-  public function beforeProviderRedirect(ProviderRedirectEvent $event) {
+  public function beforeProviderRedirect(BeforeRedirectEvent $event) {
     $base_url = $this->request->getCurrentRequest()->getSchemeAndHttpHost() . $this->request->getCurrentRequest()->getBasePath() . '/' . $this->languageManager->getCurrentLanguage()->getId();
     $error_destination = str_replace($base_url, '', $this->request->getCurrentRequest()->server->get('HTTP_REFERER'));
     $event->getDataHandler()->set('login_error_destination', $error_destination);
@@ -94,10 +94,10 @@ class AlshayaSocialEventSubscriber implements EventSubscriberInterface {
   /**
    * Redirect to login_error_destination on provider error.
    *
-   * @param \Drupal\social_auth\Event\ProviderErrorEvent $event
+   * @param \Drupal\social_auth\Event\FailedAuthenticationEvent $event
    *   The event object.
    */
-  public function onProviderError(ProviderErrorEvent $event) {
+  public function onFailedAuth(FailedAuthenticationEvent $event) {
     if ($error_dest = $event->getDataHandler()->get('login_error_destination')) {
       $event->getDataHandler()->set('login_error_destination', NULL);
       $redirectPath = Url::fromUserInput($error_dest);
