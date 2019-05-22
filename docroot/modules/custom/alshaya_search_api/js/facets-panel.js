@@ -134,8 +134,8 @@
       // On change of outer `sort by`, update the 'all filter' sort by as well.
       $('.c-content .c-content__region .bef-exposed-form input:radio').on('click', function() {
         var idd = $(this).attr('id');
-        $('.all-filters .bef-exposed-form input:radio').attr('checked', false);
-        $('.all-filters .bef-exposed-form #' + idd).attr('checked', true);
+        $('.c-content__region .bef-exposed-form input:radio').attr('checked', false);
+        $('.c-content__region .bef-exposed-form #' + idd).attr('checked', true);
         updateSortTitle();
       });
 
@@ -149,7 +149,6 @@
         $('#' + idd).trigger('click');
         updateSortTitle();
         // Stopping other propagation.
-        e.preventDefault();
         e.stopPropagation();
       })
 
