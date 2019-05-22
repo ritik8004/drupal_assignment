@@ -384,6 +384,16 @@
         // Sticky header on mobile view port with banner.
         if ($(window).width() < 768) {
           position = $('.region__banner-top').outerHeight();
+
+          // Making sticky filters after category filter selection.
+          if (filter.hasClass('filter-fixed-top')) {
+            $('.show-all-filters').parent().css('top', fixedNavHeight);
+            $('.filter-fixed-top > .block-facet-blockcategory-facet-plp, .filter-fixed-top > .block-facet-blockcategory-facet-promo, .filter-fixed-top > .block-facet-blockcategory-facet-search').css('top', fixedNavHeight);
+          }
+          else {
+            $('.show-all-filters').parent().css('top', 0);
+            $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
+          }
         }
 
         $(window, context).once().on('scroll', function () {
@@ -423,6 +433,7 @@
       }
 
       addSlideEventhandlers();
+      stickyfacetfilter();
 
       $(window, context).on('load', function () {
         // Calculate the filters top position now.
