@@ -12,6 +12,24 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Cleanup all configurations related to textbox display for facets.
+ */
+function alshaya_search_update_8027() {
+  $facets = \Drupal::entityQuery('node')
+    ->condition('type', 'my_custom_type')->execute();
+  /** @var \Drupal\facets\FacetInterface $facet_storage */
+  $facet_storage = \Drupal::service('entity_type.manager')->getStorage('facets_facet');
+
+  foreach ($facets as $facet_id) {
+    $facet = $facet_storage->load($facet_id);
+    $facet->unsetThirdPartySetting('alshaya_search', 'display_textbox');
+    $facet->unsetThirdPartySetting('alshaya_search', 'display_textbox_item_count');
+  }
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add stock quantity field to solr search index.
  */
 function alshaya_search_update_8026() {
