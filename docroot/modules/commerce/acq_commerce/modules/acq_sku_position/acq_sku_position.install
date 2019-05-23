@@ -6,6 +6,37 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Add index for nid & position on acq_sku_position table.
+ */
+function acq_sku_position_update_8001() {
+  // Add index for nid & position on acq_sku_position table.
+  $index = [
+    'table' => 'acq_sku_position',
+    'fields' => ['nid', 'position'],
+    'spec' => [
+      'fields' => [
+        'nid' => [
+          'type' => 'int',
+          'length' => 11,
+          'default' => '',
+        ],
+        'position' => [
+          'type' => 'int',
+          'length' => 11,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
+
+  \Drupal::database()
+    ->schema()
+    ->addIndex($index['table'], 'nid_position', $index['fields'], $index['spec']);
+}
+
+/**
  * Implements hook_schema().
  */
 function acq_sku_position_schema() {
@@ -36,6 +67,7 @@ function acq_sku_position_schema() {
     ],
     'indexes' => [
       'indexing' => ['nid', 'tid', 'position_type'],
+      'nid_position' => ['nid', 'position'],
     ],
     'primary key' => ['nid', 'tid', 'position_type'],
   ];
