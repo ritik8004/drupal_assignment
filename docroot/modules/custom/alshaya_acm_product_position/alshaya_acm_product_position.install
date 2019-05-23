@@ -8,6 +8,11 @@
 
 use Drupal\alshaya_config\AlshayaConfigManager;
 
+/**
+ * Impleemnts hook_update_N().
+ *
+ * Setting default config to avoid checks around positions sort for terms.
+ */
 function alshaya_acm_product_position_update_8006() {
   /** @var AlshayaConfigManager $alshaya_config_manager */
   $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
