@@ -380,7 +380,7 @@ class SkuAssetManager {
    * @throws \Exception
    */
   private function downloadImage(array $asset) {
-    if (isset($asset['pims_image'])) {
+    if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
       $file = $this->downloadPimsImage($asset['pims_image']);
     }
     elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
