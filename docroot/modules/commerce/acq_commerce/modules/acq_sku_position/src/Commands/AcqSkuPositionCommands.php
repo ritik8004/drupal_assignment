@@ -248,7 +248,7 @@ class AcqSkuPositionCommands extends DrushCommands {
           // not changed since the last sync.
           $this->connection->delete('acq_sku_position')
             ->condition('tid', array_column($categories_chunk, 'tid'), 'IN')
-            ->condition('nid', $skip_deletion_nids, 'IN')
+            ->condition('nid', $skip_deletion_nids, 'NOT IN')
             ->condition('position_type', $position_type)
             ->execute();
         }
