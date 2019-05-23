@@ -6,8 +6,6 @@
  */
 
 use Drupal\alshaya_custom\AlshayaDynamicConfigValueBase;
-use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\Url;
@@ -240,36 +238,6 @@ function alshaya_search_ajax_render_alter(array &$data) {
  */
 function alshaya_search_entity_type_alter(array &$entity_types) {
   $entity_types['facets_facet']->setFormClass('edit', 'Drupal\alshaya_search\Form\AlshayaSearchFacetForm');
-}
-
-/**
- * Implements hook_block_view_alter().
- */
-function alshaya_search_block_view_alter(array &$build, BlockPluginInterface $block) {
-  if ($block->getBaseId() === 'facet_block') {
-    $facet_configuration = $block->getConfiguration();
-    $facet_mapping = $facet_configuration['id'];
-    $facet_id = explode(PluginBase::DERIVATIVE_SEPARATOR, $facet_mapping)[1];
-    $display_textbox_item_count = FALSE;
-    /** @var \Drupal\facets\FacetInterface $facet */
-    $facet_storage = \Drupal::service('entity_type.manager')->getStorage('facets_facet');
-    $facet = $facet_storage->load($facet_id);
-    $display_textbox = $facet->getThirdPartySetting('alshaya_search', 'display_textbox');
-    if ($display_textbox) {
-      $display_textbox_item_count = $facet->getThirdPartySetting('alshaya_search', 'display_textbox_item_count');
-    }
-
-    if ($display_textbox_item_count) {
-      $build['#attached']['drupalSettings']['alshaya_search_facets_display_textbox'] = [
-        $block->getPluginId() => $display_textbox_item_count,
-      ];
-    }
-
-    // Add the currency variable in JS.
-    if ($block->getConfiguration()['id'] == 'facet_block:final_price') {
-      $build['#attached']['drupalSettings']['alshaya_search_price_currency'] = \Drupal::config('acq_commerce.currency')->get('currency_code');
-    }
-  }
 }
 
 /**
