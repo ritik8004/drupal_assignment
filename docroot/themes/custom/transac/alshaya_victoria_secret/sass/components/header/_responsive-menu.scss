@@ -12,6 +12,10 @@ header {
       z-index: 8;
       bottom: auto;
       top: 5.3125rem;
+      position: absolute;
+    }
+
+    @include breakpoint($only-mobile) {
       position: fixed;
     }
 
@@ -188,28 +192,32 @@ header {
   }
 
   .block-alshaya-super-category-menu {
-    position: fixed;
+    position: absolute;
     width: 100%;
     top: 0;
     z-index: 10;
+
+    @include breakpoint($only-mobile) {
+      position: fixed;
+    }
   }
 
   .menu--mobile-navigation {
     width: 75%;
     top: 2.8125rem;
     background-color: $header_mobile_menu_bg;
-
-    @include breakpoint($only-mobile) {
-      top: 2.75rem;
-    }
   }
 
   #block-cartminiblock {
-    position: fixed;
+    position: absolute;
     display: block;
     z-index: 6;
     transform: translate3d(0, 0, 0);
     -webkit-overflow-scrolling: touch;
+
+    @include breakpoint($only-mobile) {
+      position: fixed;
+    }
   }
 
   .block-cart-mini-block {
@@ -219,10 +227,6 @@ header {
     z-index: 1;
     text-align: center;
     background-color: $header_mobile_menu_bg;
-
-    @include breakpoint($only-mobile) {
-      top: 2.75rem;
-    }
   }
 
   .mobile--close {
