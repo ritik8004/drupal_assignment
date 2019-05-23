@@ -16,10 +16,14 @@ use Drupal\image\Entity\ImageStyle;
 /**
  * Implements hook_acq_sku_product_sku_alter().
  */
-function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product) {
+function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
   // Process assets data & create attributes which are needed for sorting
   // the assets while displaying them.
-  $sku->attr_assets = _alshaya_hm_images_acq_sku_process_assets($product);
+  $existing_assets = !empty($existing_data['attr_assets'])
+    ? unserialize($existing_data['attr_assets'][0]['value'])
+    : [];
+
+  $sku->get('attr_assets')->setValue(_alshaya_hm_images_acq_sku_process_assets($product, $existing_assets));
 }
 
 /**
@@ -27,16 +31,32 @@ function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product) {
  *
  * @param array $product
  *   Product array containing assets to be processed.
+ * @param array $existing_assets
+ *   Existing assets data.
  *
  * @return string
  *   Serialized & processed assets.
  */
-function _alshaya_hm_images_acq_sku_process_assets(array $product) {
+function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existing_assets) {
   $assets = [];
   if (isset($product['extension'], $product['extension']['assets'])) {
     $assets = $product['extension']['assets'];
 
+    foreach ($existing_assets as $key => $asset) {
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $existing_assets[$id] = $asset;
+    }
+
     foreach ($assets as $key => $asset) {
+      // If asset had no pims data before and has pims data now, asset id here
+      // won't match and hence we will not use old downloaded image.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+
+      if (isset($existing_assets[$id]) && isset($existing_assets[$id]['fid'])) {
+        $assets[$key]['fid'] = $existing_assets[$id]['fid'];
+        $assets[$key]['drupal_uri'] = $existing_assets[$id]['drupal_uri'];
+      }
+
       if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
         continue;
       }
