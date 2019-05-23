@@ -142,5 +142,15 @@ function hook_acq_sku_configurable_product_configurations_alter(array &$configur
 }
 
 /**
+ * Allow other modules to add/alter indexes.
+ *
+ * @param array $indexes
+ *   Indexes for acq_sku.
+ */
+function hook_acq_sku_indexes_alter(array &$indexes) {
+
+}
+
+/**
  * @} End of "addtogroup hooks".
  */

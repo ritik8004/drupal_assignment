@@ -38,9 +38,7 @@ function alshaya_country_set_default_regional_info($country_code) {
 
   // Update the currency code to one required for the transac site.
   if (\Drupal::moduleHandler()->moduleExists('acq_commerce')) {
-    \Drupal::moduleHandler()->loadInclude('alshaya', 'inc', 'utilities/alshaya.utilities.countries');
-
-    $currency_code = _alshaya_get_currency_code($country_code, 'en');
+    $currency_code = \Drupal::service('alshaya_custom.alshaya_country_manager')->getCurrencyCode($country_code, 'en');
     $config = \Drupal::configFactory()->getEditable('acq_commerce.currency');
     $config->set('currency_code', $currency_code);
     $config->set('decimal_points', 3);

@@ -57,7 +57,7 @@ function alshaya_hm_datalayer_alter(&$data_layer) {
             $sku = SKU::loadFromSku($item['sku']);
             if ($sku instanceof SKU) {
               $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-              $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main']);
+              $images = $sku_assets_manager->getImagesForSku($sku, 'pdp');
               if (!empty($images[0]) && isset($images[0]['url'])) {
                 $data_layer['cartItemsFlocktory'][$key]['image'] = $images[0]['url']->toString();
               }
@@ -126,7 +126,7 @@ function alshaya_hm_get_sku_images($sku) {
   $images = [];
   if ($sku instanceof SKU) {
     $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp', ['pdp_main'], FALSE);
+    $images = $sku_assets_manager->getImagesForSku($sku, 'pdp');
   }
   return $images;
 }
@@ -185,7 +185,7 @@ function _alshaya_hm_get_product_description($sku_entity) {
   $description_value = '';
 
   if ($body = $sku_entity->get('attr_description')->getValue()) {
-    $description_value = $body[0]['value'];
+    $description_value .= $body[0]['value'];
   }
 
   if ($concepts = $sku_entity->get('attr_concept')->getValue()) {
@@ -585,4 +585,25 @@ function alshaya_hm_acq_sku_configurable_variants_alter(array &$children, SKU $s
       $children[$child->getSku()] = $child;
     }
   }
+}
+
+/**
+ * Implements hook_acq_sku_indexes_alter().
+ */
+function alshaya_hm_acq_sku_indexes_alter(array &$indexes) {
+  $indexes['acq_sku__attr_style_code'] = [
+    'table' => 'acq_sku_field_data',
+    'fields' => [
+      ['attr_style_code', 10],
+    ],
+    'spec' => [
+      'fields' => [
+        'attr_style_code' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'default' => '',
+        ],
+      ],
+    ],
+  ];
 }

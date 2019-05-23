@@ -19,20 +19,34 @@ function alshaya_fl_transac_node_view(array &$build, EntityInterface $entity, En
     $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $skuManager->getSkuForNode($entity);
     $sku_entity = SKU::loadFromSku($sku);
+
     if ($sku_entity instanceof SKU && $view_mode == 'full') {
       /** @var \Drupal\alshaya_acm_product\ProductHelper $productHelper */
       $productHelper = \Drupal::service('alshaya_acm_product.helper');
 
       $description = [];
+
       if ($body = $entity->get('body')->getValue()) {
         $description['value'] = [
           '#markup' => $body[0]['value'],
         ];
+
         $build['description'][] = $description;
+
         $productHelper->updateShortDescription($build, $body[0]['value']);
         if (!empty($build['short_desc'])) {
           $build['short_desc']['value']['#markup'] = $productHelper->processShortDescEllipsis($build['short_desc']['value']['#markup']);
         }
+      }
+
+      $material = $sku_entity->get('attr_material')->getString();
+      if (!empty($material)) {
+        $build['materials'] = [
+          '#theme' => 'product_material_markup',
+          '#material' => [
+            '#markup' => $material,
+          ],
+        ];
       }
     }
   }

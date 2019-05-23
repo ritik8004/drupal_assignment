@@ -1,4 +1,5 @@
 configurable_use_parent_images: 'never'
+gallery_show_hover_image: true
 swatches:
   pdp:
     - article_castor_id

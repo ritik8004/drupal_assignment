@@ -31,10 +31,8 @@ function alshaya_acm_product_get_product_media($productId, $first_image_only = F
 
   if ($product instanceof Node) {
     // Get SKU from product.
-    $sku_entity = $product->get('field_skus')
-      ->first()
-      ->get('entity')
-      ->getValue();
+    $sku = $product->get('field_skus')->getString();
+    $sku_entity = SKU::loadFromSku($sku);
 
     // Get the processed media data for the SKU.
     if ($sku_entity instanceof SKU) {

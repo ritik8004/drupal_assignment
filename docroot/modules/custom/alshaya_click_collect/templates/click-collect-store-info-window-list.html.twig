@@ -29,7 +29,7 @@
           {% endtrans %}
         </a>
       </div>
-      <div class="store-actions">
+      <div class="store-actions" gtm-store-address="{{ store.address|striptags }}" gtm-store-title="{{ store.name }}">
         <a href="#" class="select-store" data-store-code="{{ store.code }}" data-lat="{{ store.lat }}" data-lng="{{ store.lng }}">{{ 'select this store'|t }}</a>
       </div>
       <div class="get--directions">

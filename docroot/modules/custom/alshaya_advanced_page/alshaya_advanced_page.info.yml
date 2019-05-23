@@ -8,6 +8,7 @@ dependencies:
   - block_field:block_field
   - captcha:captcha
   - drupal:content_translation
+  - drupal:datetime
   - entity_reference_revisions:entity_reference_revisions
   - drupal:field
   - field_group:field_group

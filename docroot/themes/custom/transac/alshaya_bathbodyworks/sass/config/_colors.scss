@@ -307,6 +307,14 @@ $plp_item_label: $black;
 $plp_promotion_description: $warm-grey-one;
 $plp_promotion_link: $error-red;
 $plp_facet_filter_count_background: $peacock-blue;
+$plp_grid_active_color: $peacock-blue;
+$plp_all_filter_title: $peacock-blue;
+$plp_clear_all_btn_text: $peacock-blue;
+$plp_clear_all_btn_disabled: $warm-grey-two;
+$plp_clear_all_btn_disabled: $warm-grey-two;
+$plp_all_filter_button_color: $black;
+$plp_filter_icon: $black;
+$plp_filter_active_tick: $peacock-blue;
 
 // PLP Product tile.
 $plp_tile_product_title: $black;
@@ -542,3 +550,9 @@ $modal_zoom_bg: rgba(242, 242, 242, 0.3);
 
 // Pace progress color
 $progress_loader: $peacock-blue;
+
+// PLP LHN block.
+$lhn_l2: $black;
+$lhn_l3: $warm-grey-one;
+$lhn_l4: $warm-grey-one;
+$l3-link-hover: $peacock-blue;
