@@ -154,7 +154,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
     // Fetch Product in which this sku is referenced.
     $entity_adapter = $items->first()->getParent()->getParent();
-    if ($entity_adapter instanceof EntityAdapter) {
+    if (($entity_adapter instanceof EntityAdapter) &&
+      ($this->skuManager->isListingModeNonAggregated())) {
       $currentLangCode = $this->languageManager->getCurrentLanguage()->getId();
 
       /** @var \Drupal\node\NodeInterface $colorNode */
@@ -192,7 +193,8 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
 
           // Do not add selected param if we are using parent sku itself for
           // gallery. This is normal for PB, MC, etc.
-          if ($sku_for_gallery->id() != $sku->id()) {
+          if (($sku_for_gallery->id() != $sku->id()) &&
+            ($this->skuManager->isListingModeNonAggregated())) {
             $product_url .= '?selected=' . $sku_for_gallery->id();
           }
         }
@@ -261,7 +263,7 @@ class SkuGalleryFormatter extends SKUFieldFormatter implements ContainerFactoryP
       if (empty($element['#gallery']['#mainImage'])) {
         $default_image = $this->skuImagesManager->getProductDefaultImage();
         if ($default_image) {
-          $main_image = $this->skuManager->getSkuImage(['file' => $default_image], '291x288');
+          $main_image = $this->skuManager->getSkuImage($default_image->getFileUri(), '', '291x288');
           $elements[$delta]['#gallery']['#mainImage'] = $main_image;
           $elements[$delta]['#gallery']['#class'] = 'product-default-image';
         }

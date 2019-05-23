@@ -28,6 +28,7 @@ use Drupal\Core\Link;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\block\BlockInterface;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\taxonomy\TermInterface;
@@ -36,16 +37,33 @@ use Drupal\Core\Template\Attribute;
 use Drupal\alshaya_acm_product\EventSubscriber\ProcessFinishEventSubscriber;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\alshaya_acm_product\SkuManager;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\Query\ConditionInterface;
+use Drupal\search_api\Query\ConditionGroupInterface;
 
 /**
  * Implements hook_module_implements_alter().
  */
 function alshaya_acm_product_module_implements_alter(&$implementations, $hook) {
-  // To call the alshaya_acm_product_build at the end for final changes.
-  if ($hook == 'alshaya_acm_product_build') {
-    $group = $implementations['alshaya_acm_product_build'];
-    unset($implementations['alshaya_acm_product_build']);
-    $implementations['alshaya_acm_product_build'] = $group;
+  // To call the hooks at the end for final changes.
+  $hooks_to_invoke_last = [
+    'alshaya_acm_product_build',
+    'alshaya_acm_product_build_alter',
+    'acq_sku_configurable_variants',
+    'acq_sku_configurable_variants_alter',
+  ];
+
+  foreach ($hooks_to_invoke_last as $hook_to_invoke_last) {
+    if ($hook == $hook_to_invoke_last) {
+      $group = $implementations['alshaya_acm_product'];
+      unset($implementations['alshaya_acm_product']);
+      $implementations['alshaya_acm_product'] = $group;
+    }
+    elseif ($hook == 'search_api_query_alter') {
+      $group = $implementations['alshaya_acm_product'];
+      unset($implementations['alshaya_acm_product']);
+      $implementations['alshaya_acm_product'] = $group;
+    }
   }
 }
 
@@ -84,6 +102,52 @@ function alshaya_acm_product_search_api_index_items_alter(IndexInterface $index,
 }
 
 /**
+ * Implements hook_search_api_query_alter().
+ */
+function alshaya_acm_product_search_api_query_alter(QueryInterface &$query) {
+  if (_alshaya_acm_product_get_price_helper()->isPriceModeFromTo()) {
+    // Check for special price condition. We change it to price and final_price.
+    // We do separate conditions for price and final_price as between query is
+    // not working as expected in SOLR.
+    // We know it will be inside two levels, we check accordingly.
+    foreach ($query->getConditionGroup()->getConditions() as $conditionLevel1) {
+      if ($conditionLevel1 instanceof ConditionGroupInterface) {
+        foreach ($conditionLevel1->getConditions() as $conditionLevel2) {
+          if ($conditionLevel2 instanceof ConditionGroupInterface) {
+            foreach ($conditionLevel2->getConditions() as $condition) {
+              if ($condition instanceof ConditionInterface && $condition->getField() == 'attr_selling_price') {
+                $condition->setField('final_price');
+                $add_price_condition = TRUE;
+              }
+            }
+
+            // Add price condition too when filter by selling price.
+            if (isset($add_price_condition)) {
+              $priceConditionGroup = clone $conditionLevel2;
+              foreach ($priceConditionGroup->getConditions() as $priceCondition) {
+                $priceCondition->setField('price');
+              }
+              $conditionLevel1->addConditionGroup($priceConditionGroup);
+            }
+          }
+        }
+      }
+    }
+
+    // Check for sorting.
+    $sorts =& $query->getSorts();
+    if (isset($sorts['final_price'])) {
+      if ($sorts['final_price'] === 'DESC') {
+        $sorts = ['price' => 'DESC'] + $sorts;
+      }
+      else {
+        $sorts = ['final_price' => 'ASC', 'price' => 'ASC'] + $sorts;
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_acq_sku_product_sku_alter().
  */
 function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
@@ -108,7 +172,9 @@ function alshaya_acm_product_acq_sku_product_node_alter(NodeInterface $node, $pr
 
   /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
   $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-  $skuManager->processColorNodesForConfigurable($node);
+  if ($skuManager->isListingModeNonAggregated()) {
+    $skuManager->processColorNodesForConfigurable($node);
+  }
 }
 
 /**
@@ -197,6 +263,12 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['product_material_markup'] = [
+    'variables' => [
+      'material' => NULL,
+    ],
+  ];
+
   $items['products_horizontal_slider'] = [
     'variables' => [
       'data' => NULL,
@@ -235,6 +307,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
       'currency_format' => '',
       'currency_code_position' => '',
       'show_currency' => TRUE,
+    ],
+  ];
+
+  $items['alshaya_assets_gallery'] = [
+    'variables' => [
+      'mainImage' => '',
+      'hoverImage' => '',
     ],
   ];
 
@@ -304,14 +383,14 @@ function alshaya_acm_product_acq_sku_delete(SKU $entity) {
  */
 function alshaya_acm_product_node_delete(NodeInterface $node) {
   if ($node->bundle() == 'acq_product') {
+    /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+    $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
     $sku = $node->get('field_skus')->getString();
-    $color = $node->get('field_product_color')->getString();
+    $color = ($skuManager->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : NULL;
 
     // Delete the color nodes available in system for this particular product.
     // Do nothing when deleting color node itself.
     if ($sku && empty($color)) {
-      /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
-      $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
       $nids = $skuManager->getColorNodeIds($sku);
 
       if ($nids) {
@@ -551,7 +630,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               }
 
               if ($free_sku_media) {
-                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, '192x168');
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, $free_sku_entity->label(), '192x168');
                 $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
@@ -567,7 +646,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '291x288');
+          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), '291x288');
         }
 
         $promotion_types = ['cart'];
@@ -652,9 +731,9 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
             // Try to load images first for child we will display as selected.
             $sku_for_gallery = $skuImagesManager->getSkuForGallery($selected_variant, TRUE, '');
 
-            if ($view_mode == 'full' && empty(\Drupal::request()->query->get('selected')) && $sku_for_gallery->bundle() === 'simple') {
+            if ($view_mode == 'full' && empty($skuManager->getSelectedVariantId()) && $sku_for_gallery->bundle() === 'simple') {
               // Set the id in $_GET to use later for add to cart form.
-              \Drupal::request()->query->set('selected', $sku_for_gallery->id());
+              $skuManager->setSelectedVariantId($sku_for_gallery->id());
             }
           }
           catch (\Exception $e) {
@@ -727,7 +806,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
-      $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
+      $build['image'] = $skuManager->getSkuImage($sku_media, $entity->label(), '192x168');
     }
 
     // Add PDP slider position config to variable so it is available in themes.
@@ -761,12 +840,7 @@ function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterfa
         if (!empty($default_image)) {
           /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
           $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-          $sku_media = [
-            'file' => $default_image,
-            'label' => $sku->label(),
-          ];
-          $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+          $default_sku_image = $skuManager->getSkuImage($default_image->getFileUri(), $sku->label(), '192x168');
           $default_sku_image['#attributes']['class'][] = 'product-default-image';
           $build['image'] = $default_sku_image;
         }
@@ -1685,7 +1759,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $response->addCommand(new SettingsCommand($attachments['drupalSettings'], TRUE));
   }
 
-  \Drupal::moduleHandler()->alter('alshaya_acm_product_add_to_cart_ajax_response', $response, $sku, $selected_sku);
+  \Drupal::moduleHandler()->alter('alshaya_acm_product_add_to_cart_ajax_response', $form_state, $response, $sku, $selected_sku);
 
   return $response;
 }
@@ -1798,6 +1872,9 @@ function alshaya_acm_product_acq_sku_base_field_additions_alter(array &$fields =
 function alshaya_acm_product_alshaya_master_post_drupal_install() {
   // Add fields to store the values from attributes as fields.
   \Drupal::service('acq_sku.fields_manager')->addFields();
+
+  // Adjust the weights of block due to facet block creation.
+  _alshaya_acm_product_adjust_facet_block();
 }
 
 /**
@@ -1962,8 +2039,12 @@ function alshaya_acm_product_query_get_display_node_for_sku_alter(AlterableInter
   // For Alshaya we have developed a feature to display one entry per color
   // on listing pages. For this we need extra nodes. To avoid affecting original
   // functionality we add conditions below.
-  $query->addJoin('left', 'node__field_product_color', 'color', 'node_field_data.vid = color.revision_id');
-  $query->isNull('field_product_color_value');
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+  if ($skuManager->isListingModeNonAggregated()) {
+    $query->addJoin('left', 'node__field_product_color', 'color', 'node_field_data.vid = color.revision_id');
+    $query->isNull('field_product_color_value');
+  }
 }
 
 /**
@@ -2058,4 +2139,115 @@ function _alshaya_acm_product_configurable_option_value_callback(&$element, $inp
   }
 
   return $input;
+}
+
+/**
+ * Implements hook_acq_sku_configurable_variants_alter().
+ */
+function alshaya_acm_product_acq_sku_configurable_variants_alter(array &$children, $sku) {
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
+  foreach ($children as $child_sku_code => $child) {
+    // Dot not display free gifts or OOS variants.
+    if ($skuManager->isSkuFreeGift($child) || !$skuManager->isProductInStock($child)) {
+      unset($children[$child_sku_code]);
+    }
+  }
+}
+
+/**
+ * Adjust the weights of the facet blocks for fresh install.
+ *
+ * @see alshaya_acm_product_alshaya_master_post_drupal_install()
+ */
+function _alshaya_acm_product_adjust_facet_block() {
+  // In each sub-array, key is base form id (exposed sort form) and key is the
+  // facet source id.
+  $fct_block_data = [
+    'plp' => [
+      'exposedformalshaya_product_listblock_1' => 'search_api:views_block__alshaya_product_list__block_1',
+    ],
+    'promo' => [
+      'exposedformalshaya_product_listblock_2' => 'search_api:views_block__alshaya_product_list__block_2',
+    ],
+    'search' => [
+      'exposedformsearchpage_3' => 'search_api:views_page__search__page',
+    ],
+  ];
+
+  foreach ($fct_block_data as $type => $facet_blck_source) {
+    _alshaya_acm_product_adjust_block_weight($type, key($facet_blck_source), $facet_blck_source[key($facet_blck_source)]);
+  }
+}
+
+/**
+ * Adjust the weight of facet blocks and other blocks in content region.
+ *
+ * As now all facet blocks are in content region, they and other blocks in
+ * content region requires proper weight. So this adjust the facet block
+ * weight as per their base block (exposed form) and then adjust the weight
+ * of other blocks as facet block weight changes.
+ *
+ * @param string $type
+ *   Type - plp/search/promo.
+ * @param string $base_block
+ *   Base exposed form block id.
+ * @param string $facet_source
+ *   Facet source.
+ */
+function _alshaya_acm_product_adjust_block_weight(string $type, string $base_block, string $facet_source) {
+  // Get active theme.
+  $active_theme = \Drupal::service('theme.manager')->getActiveTheme()->getName();
+  $block_storage = \Drupal::entityTypeManager()->getStorage('block');
+  // Get all block of `content` region with active theme.
+  $all_content_region_blocks = $block_storage->loadByProperties(['region' => 'content', 'theme' => $active_theme]);
+
+  /* @var \Drupal\facets\FacetInterface[] $facets */
+  $facets = \Drupal::service('facets.manager')->getEnabledFacets();
+  $facet_blocks = [];
+  if (!empty($facets)) {
+    foreach ($facets as $facet) {
+      if ($facet->getFacetSourceId() == $facet_source) {
+        $block_id = str_replace('_', '', $facet->id());
+        $blck = $block_storage->load($block_id);
+        if ($blck instanceof BlockInterface) {
+          $facet_blocks[$blck->id()] = $blck;
+        }
+      }
+    }
+  }
+
+  // Get weight of base block.
+  $tmp_weight = $weight = $block_storage->load($base_block)->getWeight();
+  if (!empty($facet_blocks)) {
+    foreach ($facet_blocks as $facet_block) {
+      $weight++;
+      $facet_block->setWeight($weight);
+      $facet_block->save();
+    }
+
+    $weight++;
+    \Drupal::configFactory()->getEditable('block.block.alshaya_' . $type . '_facets_block_all')
+      ->set('weight', $weight)
+      ->save();
+
+    $weight++;
+    \Drupal::configFactory()->getEditable('block.block.alshayagridcountblock_' . $type)
+      ->set('weight', $weight)
+      ->save();
+
+    $facet_blocks['alshaya_' . $type . '_facets_block_all'] = 'alshaya_' . $type . '_facets_block_all';
+    $facet_blocks['alshayagridcountblock_' . $type] = 'alshayagridcountblock_' . $type;
+    $facet_blocks[$base_block] = $base_block;
+
+    // Now update blocks in content region with appropriate weight.
+    foreach ($all_content_region_blocks as $all_block) {
+      if (($all_block->getWeight() >= $tmp_weight) &&  !in_array($all_block->id(), array_keys($facet_blocks))) {
+        $all_block_weight = $all_block->getWeight() + count($facet_blocks) + 3;
+        $all_block->setWeight($all_block_weight);
+        $all_block->save();
+      }
+    }
+  }
 }

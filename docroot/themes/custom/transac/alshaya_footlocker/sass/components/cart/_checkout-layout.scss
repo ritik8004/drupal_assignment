@@ -85,3 +85,21 @@
     border: 0;
   }
 }
+
+.block-customer-service-block {
+  font-family: $alshaya-thin;
+  text-transform: none;
+  font-size: 0.875rem;
+
+  h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-family: $alshaya-bold;
+  }
+
+  p:last-child {
+    .light {
+      font-family: $alshaya-thin;
+    }
+  }
+}

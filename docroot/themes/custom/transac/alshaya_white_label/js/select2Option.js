@@ -114,7 +114,9 @@ jQuery.fn.select2Option = function (options) {
       $(this).closest('.select2Option').find('.list-title .selected-text').remove();
       $(this).closest('.sku-base-form').find('label.error, span.error, div.error').remove();
 
-      var selectedText = clickedOption.text();
+      var selectedText = clickedOption.attr('selected-text')
+        ? clickedOption.attr('selected-text')
+        : clickedOption.text();
 
       if ($(this).attr('data-color-label')) {
         selectedText = $(this).attr('data-color-label');

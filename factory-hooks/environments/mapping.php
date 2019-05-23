@@ -1,4 +1,6 @@
 <?php
+// @codingStandardsIgnoreFile
+
 /**
  * @file
  * This file contains the mapping between environment+site and magento /
@@ -38,6 +40,12 @@ function alshaya_get_commerce_third_party_settings($site_code, $country_code, $e
     $settings += $magentos['default'][$country_code];
     if (isset($magentos[$env_keys['magento']][$country_code])) {
       $settings = array_replace_recursive($settings, $magentos[$env_keys['magento']][$country_code]);
+    }
+
+    // This is specific to HM right now but since it is tied to Magento env
+    // we set in magento.php and use like this.
+    if (isset($magentos[$env_keys['magento']]['pims_base_url'])) {
+      $settings['alshaya_hm_images.settings']['pims_base_url'] = $magentos[$env_keys['magento']]['pims_base_url'];
     }
   }
 
@@ -88,17 +96,29 @@ function alshaya_get_env_keys($site_code, $country_code, $env) {
         'magento' => 'hm_mapp',
         'conductor' => 'hmkw_mapp',
       ],
+      '01qa2' => [
+        'magento' => 'hm_uat',
+        'conductor' => 'hmkw_uat',
+      ],
     ],
     'hmsa' => [
       '01dev3' => [
         'magento' => 'hm_mapp',
         'conductor' => 'hmsa_mapp',
       ],
+      '01qa2' => [
+        'magento' => 'hm_uat',
+        'conductor' => 'hmsa_uat',
+      ],
     ],
     'hmae' => [
       '01dev3' => [
         'magento' => 'hm_mapp',
         'conductor' => 'hmae_mapp',
+      ],
+      '01qa2' => [
+        'magento' => 'hm_uat',
+        'conductor' => 'hmae_uat',
       ],
     ],
     'flkw' => [

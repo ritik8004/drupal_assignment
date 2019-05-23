@@ -62,6 +62,19 @@
     }
   };
 
+  // Force reload on click of browser back button.
+  $(window).on('popstate', function(event) {
+    location.reload(true);
+  });
+
+  $.fn.updatePdpUrl = function (data) {
+    // Avoid triggering url update if the SKU for which the change was triggered
+    // is in a modal window.
+    if ($('#drupal-modal .acq-sku-configurable-' + data.parent_sku_id + '__sku-base-form').length === 0) {
+      window.history.pushState(data, data.display_node_title, data.display_node_url);
+    }
+  };
+
   /**
    * Update cross sell block, when current product form is not opened in modal.
    *
@@ -78,6 +91,5 @@
       $('.horizontal-crossell.above-mobile-block').replaceWith(desktop_markup);
     }
   };
-
 
 })(jQuery, Drupal);

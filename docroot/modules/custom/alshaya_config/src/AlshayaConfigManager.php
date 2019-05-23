@@ -245,8 +245,8 @@ class AlshayaConfigManager {
       case self::MODE_REPLACE_KEY:
         foreach ($options['replace_keys'] as $replace_key) {
           $existing[$replace_key] = $data[$replace_key];
-          $data = $existing;
         }
+        $data = $existing;
         break;
 
       case self::MODE_RESAVE:
@@ -280,6 +280,36 @@ class AlshayaConfigManager {
   public function getDataFromCode($config_id, $module_name, $path) {
     $file = drupal_get_path('module', $module_name) . '/config/' . $path . '/' . $config_id . '.yml';
     return Yaml::parse(file_get_contents($file));
+  }
+
+  /**
+   * Helper function to delete fields.
+   *
+   * @param string $entity_type
+   *   Entity type for which the fields needs to be deleted.
+   * @param array $bundles
+   *   List of bundles from which the fields need to be deleted.
+   * @param array $fields
+   *   List of fields that need to be deleted.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function deleteFields($entity_type, array $bundles, array $fields) {
+    foreach ($bundles as $bundle) {
+      foreach ($fields as $field_name) {
+        $field = FieldConfig::loadByName($entity_type, $bundle, $field_name);
+        if (!empty($field)) {
+          $field->delete();
+        }
+      }
+    }
+
+    foreach ($fields as $field_name) {
+      $field_storage = FieldStorageConfig::loadByName($entity_type, $field_name);
+      if (!empty($field_storage)) {
+        $field_storage->delete();
+      }
+    }
   }
 
 }

@@ -8,6 +8,15 @@
 /**
  * Implements hook_update_N().
  *
+ * Enable external_hreflang module.
+ */
+function alshaya_seo_update_8005() {
+  \Drupal::service('module_installer')->install(['external_hreflang']);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update the 'simple_sitemap' config value.
  */
 function alshaya_seo_update_8004() {

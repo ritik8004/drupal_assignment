@@ -98,6 +98,16 @@ class SkuPriceHelper {
   }
 
   /**
+   * Wrapper function to check if price mode is from to.
+   *
+   * @return bool
+   *   TRUE if price mode is set to from to.
+   */
+  public function isPriceModeFromTo() {
+    return $this->displayMode === self::PRICE_DISPLAY_MODE_FROM_TO;
+  }
+
+  /**
    * Get price block for specific sku.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -195,15 +205,18 @@ class SkuPriceHelper {
     $selling_prices = array_column($prices['children'], 'selling_price');
 
     // We show normal price(no range) only in below conditions.
+    // 0. It is possible that one product has final price but other doesn't
+    // have it, we need to show range here.
     // 1. If no variant available.
     // 2. If all variants have same price.
     // 3. If all variants have same final_price.
     // If final_price available but the discount is
     // zero(discount=price-final_price), in this case we show
     // range(only when final_prices are not same).
-    if (count($prices['children']) <= 1
+    if (count(array_filter($child_prices)) == count(array_filter($child_final_prices))
+      && (count($prices['children']) <= 1
       || count(array_unique(array_filter($child_prices))) == 1
-      || count(array_unique($selling_prices)) == 1) {
+      || count(array_unique($selling_prices)) == 1)) {
 
       return $this->buildPriceBlockSimple($sku);
     }

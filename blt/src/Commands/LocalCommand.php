@@ -35,7 +35,9 @@ class LocalCommand extends BltTasks {
     $this->say('Local: ' . $info['local']['url']);
     $this->say('Remote: ' . $info['remote']['url']);
 
-    if ($mode === 'download') {
+    // If the mode is set to download or archive doesn't exist we download
+    // the dump from cloud.
+    if ($mode === 'download' || !file_exists($info['archive'])) {
       if (!$this->downloadDb($site, $env)) {
         return;
       }

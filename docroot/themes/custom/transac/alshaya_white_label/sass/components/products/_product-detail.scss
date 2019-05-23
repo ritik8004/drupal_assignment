@@ -730,15 +730,7 @@
         font-size: 0.6875rem;
         color: $accordion_sub_title;
         line-height: 1.5;
-        max-width: 15rem;
-
-        @include breakpoint($tablet) {
-          max-width: 13rem;
-        }
-
-        @include breakpoint($desktop) {
-          max-width: 15rem;
-        }
+        margin-#{$right}: 2.5rem;
       }
 
       .title-price {

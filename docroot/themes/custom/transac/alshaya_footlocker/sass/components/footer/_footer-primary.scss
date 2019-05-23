@@ -154,14 +154,18 @@
     padding-#{$left}: 0.3125rem;
     height: 2.5rem;
 
+    @include ellipsis-text;
+
     @include breakpoint($tablet) {
       margin-top: 0;
     }
 
     @include breakpoint($only-tablet) {
-      @include ellipsis-text;
+      padding-#{$right}: 40% !important;
 
-      padding-right: 40% !important;
+      html[lang=ar] & {
+        padding-#{$right}: 44% !important;
+      }
     }
 
     @include breakpoint($only-mobile) {

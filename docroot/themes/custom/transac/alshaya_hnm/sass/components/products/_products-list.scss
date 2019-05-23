@@ -2,28 +2,27 @@
   padding-top: 1.5rem;
 
   @include breakpoint($only-mobile) {
-    padding-top: 0.75rem;
+    padding-top: 0;
   }
 
   .region__content {
+    .block-page-title-block {
+      h1 {
+        font-family: $hnm-bold;
+      }
+    }
+
     .block-facets-summary-blockfilter-bar-promotions,
     .block-facets-summary-blockfilter-bar-plp,
     .block-facets-summary-blockfilter-bar {
       ul {
-        @include breakpoint($tablet) {
-          margin-bottom: 0;
-          margin-top: 0.75rem;
-          border-bottom: none;
-        }
-
         li {
           a {
-            font-size: 0.875rem;
+            font-size: 0.75rem;
 
             span {
               &.facet-item__value {
                 background: $plp_facet_label;
-                display: inline;
                 vertical-align: top;
                 line-height: 1;
                 text-transform: capitalize;
@@ -49,77 +48,12 @@
           }
 
           &.clear-all {
-            border: 2px solid $plp_facet_clear_border;
-            line-height: 1;
-
             a {
-              color: $plp_facet_label;
-              font-family: $hnm-bold;
+              color: $plp_facet_filter_link;
+              font-family: $hnm-demibold;
               text-transform: uppercase;
+              letter-spacing: 1px;
             }
-          }
-        }
-      }
-    }
-
-    .filter--mobile {
-      @include breakpoint($tablet) {
-        top: 0;
-
-        html[lang=ar] & {
-          top: 0;
-        }
-      }
-
-      .form-type-select {
-        label {
-          #{$left}: -3.8125rem;
-        }
-      }
-
-      .c-facet__blocks__wrapper--mobile {
-        .c-facet__blocks {
-          padding: 0 1rem;
-
-          .filter-menu-label {
-            @include breakpoint($only-mobile) {
-              margin-top: 0.875rem;
-
-              .label {
-                @include arabic-letter-spacing;
-
-                font-family: $hnm-bold;
-                font-size: 0.875rem;
-                letter-spacing: 1px;
-                text-transform: uppercase;
-              }
-            }
-          }
-
-          li.clear-all {
-            border: 1px solid $plp_facet_clear_border;
-
-            a {
-              color: $plp_facet_label;
-            }
-          }
-
-          .applied-filter-count {
-            @include arabic-letter-spacing;
-
-            font-family: $hnm-bold;
-            color: $plp_facet_label;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-          }
-        }
-      }
-
-      @include breakpoint($only-mobile) {
-        .c-facet__blocks__wrapper--mobile {
-          .c-facet__label {
-            border: 1px solid $plp_facet_clear_border;
-            border-#{$right}: none;
           }
         }
       }
@@ -129,7 +63,6 @@
       color: $plp_search_count;
       padding-bottom: 0.75rem;
       font-family: $hnm-regular;
-      border-bottom: 1px solid $content_pagetitle_border;
 
       @include breakpoint($only-mobile) {
         margin-top: 0.75rem;
@@ -146,7 +79,6 @@
 
   .c-page-title__description,
   .field--name-field-acq-promotion-description {
-    color: $plp_category_desc;
     margin-top: 0.3125rem;
     font-family: $hnm-regular;
     line-height: 1.56;
@@ -158,35 +90,26 @@
       align-items: stretch;
       flex-wrap: wrap;
     }
+
+    &.product-large {
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: auto;
+          width: 100%;
+        }
+      }
+    }
+
+    &.product-small {
+      .alshaya_search_gallery .alshaya_search_mainimage {
+        @include breakpoint($only-mobile) {
+          height: 17.5rem;
+        }
+      }
+    }
   }
 
   .c-products__item {
-    margin-bottom: 0.125rem;
-
-    @include breakpoint($mobile) {
-      width: 47%;
-      margin-bottom: 2rem;
-    }
-
-    @include breakpoint($tablet) {
-      width: 31.6%;
-
-      &:nth-child(3n+2) {
-        margin: 0 2.6%;
-        margin-bottom: 2rem;
-      }
-    }
-
-    @include breakpoint($upto-tablet) {
-      &:nth-child(2n+1) {
-        margin-#{$right}: 2.7%;
-      }
-
-      &:nth-child(2n) {
-        margin-#{$left}: 2.7%;
-      }
-    }
-
     .swatches {
       margin: 0.625rem 0;
     }
@@ -263,154 +186,6 @@
       padding: 0.5625rem 6.8rem;
       font-family: $hnm-bold;
       text-transform: uppercase;
-    }
-  }
-}
-
-.c-facet__blocks__wrapper--mobile {
-  .c-facet__label {
-    @include breakpoint($only-mobile) {
-      border: 1px solid $plp_facet_border;
-      border-#{$right}: none;
-
-      @include icon(chevron#{$right}, after) {
-        #{$right}: -2.188rem;
-        height: 2.1875rem;
-        width: 2.1875rem;
-        position: absolute;
-        text-align: center;
-        top: 0;
-        font-size: 2.1875rem;
-        border: 1px solid $plp_facet_border;
-        border-#{$left}: none;
-        background-color: transparent;
-      }
-    }
-
-    @include breakpoint($tablet) {
-      width: 6.3125rem;
-
-      @include icon(dropdown-expand, after) {
-        #{$right}: -2.15rem;
-        height: 2.1875rem;
-        width: 2.1875rem;
-        position: absolute;
-        text-align: center;
-        top: 0;
-        font-size: 2.1875rem;
-        border: 1px solid $plp_facet_border;
-        border-#{$left}: none;
-        background-color: transparent;
-      }
-    }
-
-    border: 1px solid $plp_facet_border;
-    border-#{$right}: none;
-
-    &.is-active {
-      @include breakpoint($only-tablet) {
-        @include icon(dropdown-collapse, after);
-
-        border: none;
-      }
-
-      &::after {
-        @include breakpoint($tablet) {
-          border: none;
-          background-color: $plp__label_active_bg;
-        }
-      }
-    }
-  }
-
-  .c-facet__blocks {
-    @include breakpoint($only-tablet) {
-      #{$right}: -10.55rem;
-    }
-
-    @include breakpoint($only-mobile) {
-      width: 100%;
-
-      .c-facet__blocks {
-        color: $plp_facet_label;
-      }
-    }
-
-    width: 16.85rem;
-    padding: 0 1rem;
-
-    .filter-menu-label {
-      @include u-visibility(inline-block);
-
-      .label {
-        @include arabic-letter-spacing;
-
-        font-family: $hnm-bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
-    }
-
-    li.clear-all {
-      border: 1px solid $plp_facet_clear_border;
-
-      a {
-        color: $plp_facet_label;
-      }
-    }
-
-    .applied-filter-count {
-      @include arabic-letter-spacing;
-
-      font-family: $hnm-bold;
-      color: $plp_facet_label;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-  }
-
-  .region__sidebar-first {
-    > .block-facets-summary {
-      @include breakpoint($only-mobile) {
-        width: 100%;
-      }
-    }
-  }
-}
-
-.is-filter {
-  &.view-filters {
-    label {
-      @include arabic-letter-spacing;
-
-      font-size: 0.75rem;
-      color: $title;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .select2-container .select2-selection .select2-selection__rendered {
-      @include arabic-letter-spacing;
-    }
-
-    .select2-container--open {
-      .select2-selection__arrow {
-        @include icon(dropdown-collapse, after);
-      }
-    }
-
-    @include breakpoint($upto-desktop) {
-      .form-type-select {
-        @include select-wrapper(8.5rem);
-
-        select {
-          width: 100%;
-
-          @include arabic-letter-spacing;
-
-          letter-spacing: 1px;
-        }
-      }
     }
   }
 }
@@ -499,19 +274,5 @@
 
   .js-pager__items.visually-hidden {
     position: static !important;
-  }
-}
-
-@include breakpoint($only-mobile) {
-  .filter--mobile {
-    .c-facet__label {
-      &.active-filter-count {
-        .filter-count {
-          html[lang=ar] & {
-            align-items: center;
-          }
-        }
-      }
-    }
   }
 }

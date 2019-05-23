@@ -1,0 +1,13 @@
+diff --git a/js/facets-views-ajax.js b/js/facets-views-ajax.js
+index ec4145b..bdfd0b2 100644
+--- a/js/facets-views-ajax.js
++++ b/js/facets-views-ajax.js
+@@ -55,7 +55,7 @@
+         });
+ 
+         if (update_summary && (facetId === 'facets_summary_ajax')) {
+-          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id +']').children('ul').children('li').once().click(function (e) {
++          $('[data-drupal-facets-summary-id=' + facetSettings.facets_summary_id +']').children('ul').find('li').once().click(function (e) {
+             e.preventDefault();
+             var facetLink = $(this).find('a');
+             updateFacetsView(facetLink, facets_blocks, current_dom_id, update_summary, settings);

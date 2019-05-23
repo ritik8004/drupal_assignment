@@ -36,6 +36,12 @@
       font-family: $alshaya-thin;
     }
   }
+
+  #edit-checkout-terms {
+    @include breakpoint($mobile) {
+      margin-top: 0.5rem;
+    }
+  }
 }
 
 #block-youllbeableto-checkout-confirm,

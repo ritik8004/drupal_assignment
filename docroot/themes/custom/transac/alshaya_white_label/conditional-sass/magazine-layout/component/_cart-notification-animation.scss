@@ -22,7 +22,7 @@
     top: calc((100vh - 10rem) / 2);
     #{$right}: calc((100% - 17.5rem) / 2);
     transform-origin: 100% 0;
-    animation: cart-notification-animation 1.5s forwards ease-in-out 1.5s;
+    animation: cart-notification-animation 0.5s forwards ease-in-out 1.5s;
 
     html[lang=ar] & {
       transform-origin: 0 0;

@@ -8,7 +8,9 @@ use Drupal\acq_sku\CartFormHelper;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\acq_sku\SKUFieldsManager;
-use Drupal\alshaya\AlshayaArrayUtils;
+use Drupal\alshaya_config\AlshayaArrayUtils;
+use Drupal\alshaya_acm_product\Service\SkuPriceHelper;
+use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -57,6 +59,13 @@ class SkuManager {
   const AGGREGATED_LISTING = 'aggregated';
 
   const NON_AGGREGATED_LISTING = 'non_aggregated';
+
+  /**
+   * Store selected variant id.
+   *
+   * @var int
+   */
+  private static $selectedVariantId;
 
   /**
    * The database service.
@@ -211,6 +220,19 @@ class SkuManager {
    * @var \Drupal\acq_sku\ProductInfoHelper
    */
   protected $productInfoHelper;
+  /**
+   * Alshaya array utils service.
+   *
+   * @var \Drupal\alshaya_config\AlshayaArrayUtils
+   */
+  protected $alshayaArrayUtils;
+
+  /**
+   * Product Cache Manager.
+   *
+   * @var \Drupal\alshaya_acm_product\Service\ProductCacheManager
+   */
+  protected $productCacheManager;
 
   /**
    * SkuManager constructor.
@@ -255,6 +277,13 @@ class SkuManager {
    *   Simple sitemap generator.
    * @param \Drupal\acq_sku\ProductInfoHelper $product_info_helper
    *   Product Info Helper.
+   * @param \Drupal\alshaya_acm_product\Service\ProductCacheManager $product_cache_manager
+   *   Product Cache Manager.
+   * @param \Drupal\alshaya_config\AlshayaArrayUtils $alshayaArrayUtils
+   *   Alshaya arraty utility service.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function __construct(Connection $connection,
                               ConfigFactoryInterface $config_factory,
@@ -275,7 +304,9 @@ class SkuManager {
                               Client $http_client,
                               RendererInterface $renderer,
                               Simplesitemap $generator,
-                              ProductInfoHelper $product_info_helper) {
+                              ProductInfoHelper $product_info_helper,
+                              ProductCacheManager $product_cache_manager,
+                              AlshayaArrayUtils $alshayaArrayUtils) {
     $this->connection = $connection;
     $this->configFactory = $config_factory;
     $this->currentRoute = $current_route;
@@ -299,6 +330,8 @@ class SkuManager {
     $this->renderer = $renderer;
     $this->generator = $generator;
     $this->productInfoHelper = $product_info_helper;
+    $this->productCacheManager = $product_cache_manager;
+    $this->alshayaArrayUtils = $alshayaArrayUtils;
   }
 
   /**
@@ -338,10 +371,12 @@ class SkuManager {
   }
 
   /**
-   * Get Image tag from media item array.
+   * Get Image tag with optional rel.
    *
-   * @param array $media
-   *   Media array containing image details.
+   * @param string $uri
+   *   URI of file.
+   * @param string $alt
+   *   Image alternate text.
    * @param string $image_style
    *   Image style to apply to the image.
    * @param string $rel_image_style
@@ -350,15 +385,16 @@ class SkuManager {
    * @return array
    *   Image build array.
    */
-  public function getSkuImage(array $media, $image_style = '', $rel_image_style = '') {
-    $media['label'] = $media['label'] ?? '';
-
+  public function getSkuImage(string $uri,
+                              string $alt = '',
+                              string $image_style = '',
+                              string $rel_image_style = '') {
     $image = [
       '#theme' => 'image_style',
       '#style_name' => $image_style,
-      '#uri' => $media['file']->getFileUri(),
-      '#title' => $media['label'],
-      '#alt' => $media['label'],
+      '#uri' => $uri,
+      '#title' => $alt,
+      '#alt' => $alt,
     ];
 
     if ($rel_image_style) {
@@ -422,6 +458,19 @@ class SkuManager {
    *   Minimum final price and associated initial price.
    */
   public function getMinPrices(SKU $sku_entity, string $color = '') {
+    $static = &drupal_static(__METHOD__, []);
+
+    $cid = implode(':', [
+      $sku_entity->language()->getId(),
+      $sku_entity->getSku(),
+      $color,
+    ]);
+
+    // Do not process the same thing again and again.
+    if (isset($static[$cid])) {
+      return $static[$cid];
+    }
+
     $price = (float) acq_commerce_get_clean_price($sku_entity->get('price')->getString());
     $final_price = (float) acq_commerce_get_clean_price($sku_entity->get('final_price')->getString());
 
@@ -432,54 +481,31 @@ class SkuManager {
       $final_price = $price;
     }
 
-    $prices = [
+    $static[$cid] = [
       'price' => $price,
       'final_price' => $final_price,
     ];
+
+    $prices = &$static[$cid];
 
     if ($sku_entity->bundle() != 'configurable') {
       return $prices;
     }
 
-    $cache_key = $color ? 'price_' . $color : 'price';
-
-    if ($cache = $this->getProductCachedData($sku_entity, $cache_key)) {
-      return $cache;
+    if ($color) {
+      $combinations = $this->getConfigurableCombinations($sku_entity);
+      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+        if (isset($combinations['attribute_sku'][$attribute_code])) {
+          $children = $combinations['attribute_sku'][$attribute_code][$color];
+          break;
+        }
+      }
+    }
+    else {
+      $children = $this->getValidChildSkusAsString($sku_entity);
     }
 
     $sku_price = 0;
-
-    $combinations = $this->getConfigurableCombinations($sku_entity);
-
-    if (empty($combinations['by_sku'])) {
-      $children = [];
-    }
-    elseif ($color) {
-      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
-        if (isset($combinations['attribute_sku'][$attribute_code])) {
-          $children = $combinations['attribute_sku'][$attribute_code][$color];
-          break;
-        }
-      }
-    }
-    else {
-      $children = array_keys($combinations['by_sku']);
-    }
-
-    if (empty($combinations['by_sku'])) {
-      $children = [];
-    }
-    elseif ($color) {
-      foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
-        if (isset($combinations['attribute_sku'][$attribute_code])) {
-          $children = $combinations['attribute_sku'][$attribute_code][$color];
-          break;
-        }
-      }
-    }
-    else {
-      $children = array_keys($combinations['by_sku']);
-    }
 
     foreach ($children ?? [] as $child_sku_code) {
       try {
@@ -530,9 +556,6 @@ class SkuManager {
         // Log messages are already set in previous functions.
       }
     }
-
-    // Set the price info to cache.
-    $this->setProductCachedData($sku_entity, $cache_key, $prices);
 
     return $prices;
   }
@@ -652,25 +675,26 @@ class SkuManager {
     $sku_entity = $sku instanceof SKU ? $sku : SKU::loadFromSku($sku);
     $child_skus = [];
 
-    if ($sku_entity->getType() == 'configurable') {
-      foreach ($sku_entity->get('field_configured_skus') as $child_sku) {
-        try {
-          $child_sku_entity = SKU::loadFromSku(
-            $child_sku->getString(), $sku_entity->language()->getId()
-          );
+    if ($sku_entity->getType() != 'configurable') {
+      return $child_skus;
+    }
+    foreach (Configurable::getChildSkus($sku_entity) as $child_sku) {
+      try {
+        $child_sku_entity = SKU::loadFromSku($child_sku, $sku_entity->language()->getId());
 
-          if ($child_sku_entity instanceof SKU) {
-            // Return the first valid SKU if only one is required.
-            if ($first_only) {
-              return $child_sku_entity;
-            }
-
-            $child_skus[] = $child_sku_entity;
-          }
-        }
-        catch (\Exception $e) {
+        if (!($child_sku_entity instanceof SKU) || $this->isSkuFreeGift($child_sku_entity)) {
           continue;
         }
+
+        // Return the first valid SKU if only one is required.
+        if ($first_only) {
+          return $child_sku_entity;
+        }
+
+        $child_skus[] = $child_sku_entity;
+      }
+      catch (\Exception $e) {
+        continue;
       }
     }
 
@@ -754,11 +778,15 @@ class SkuManager {
    */
   public function getPromotionsForSearchViewFromSkuId(SKUInterface $sku): array {
     $cache_key = 'promotions_for_search_view';
-    $promos = $this->getProductCachedData($sku, $cache_key);
+    $promos = $this->productCacheManager->get($sku, $cache_key);
 
     if (!is_array($promos)) {
       $promos = $this->getPromotionsFromSkuId($sku, 'default', ['cart']);
-      $this->setProductCachedData($sku, $cache_key, $promos);
+
+      // Set to cache only if there is some value.
+      if (!empty($promos)) {
+        $this->productCacheManager->set($sku, $cache_key, $promos);
+      }
     }
 
     return $promos ?? [];
@@ -1087,38 +1115,6 @@ class SkuManager {
     else {
       throw new \Exception(new FormattableMarkup('Failed to save labels image file "@file" for SKU id @sku_id.', $args));
     }
-  }
-
-  /**
-   * Helper function to fetch sku tree.
-   *
-   * @return array
-   *   Sku tree with keyed by configurable sku entity id.
-   */
-  public function getSkuTree() {
-    if (!empty($this->cache->get('sku_tree'))) {
-      $sku_tree_cache = $this->cache->get('sku_tree');
-      $sku_tree = $sku_tree_cache->data;
-      return $sku_tree;
-    }
-    else {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
-      $query->fields('asfcs', []);
-      $results = $query->execute()->fetchAll();
-      $processed_skus = [];
-      $sku_tree = [];
-
-      foreach ($results as $result) {
-        if (!in_array($result->field_configured_skus_value, $processed_skus)) {
-          $sku_tree[$result->field_configured_skus_value] = $result->entity_id;
-          $processed_skus[] = $result->field_configured_skus_value;
-        }
-      }
-
-      $this->cache->set('sku_tree', $sku_tree, Cache::PERMANENT, ['acq_sku_list']);
-    }
-
-    return $sku_tree;
   }
 
   /**
@@ -1531,44 +1527,6 @@ class SkuManager {
   }
 
   /**
-   * Lighter function to fetch Children SKU text.
-   *
-   * @param \Drupal\acq_sku\Entity\SKU $sku_entity
-   *   Configurable SKU for which the child SKUs need to be fetched.
-   * @param bool $first_only
-   *   Flag to indicate we need to fetch only the first item.
-   *
-   * @return mixed
-   *   Array of SKU texts of single SKU text if first only is asked.
-   */
-  public function getChildrenSkuIds(SKU $sku_entity, $first_only = FALSE) {
-    $child_skus = [];
-
-    if ($sku_entity->getType() == 'configurable') {
-      $query = $this->connection->select('acq_sku__field_configured_skus', 'asfcs');
-      $query->fields('asfcs', ['field_configured_skus_value']);
-      $query->join('acq_sku_field_data', 'asfd', 'asfd.sku=asfcs.field_configured_skus_value');
-      $query->condition('asfcs.entity_id', $sku_entity->id());
-      $query->distinct();
-
-      if ($first_only) {
-        $query->range(0, 1);
-      }
-
-      $result = $query->execute();
-
-      while ($row = $result->fetchAssoc()) {
-        if ($first_only) {
-          return $row['field_configured_skus_value'];
-        }
-        $child_skus[] = $row['field_configured_skus_value'];
-      }
-    }
-
-    return array_filter($child_skus);
-  }
-
-  /**
    * Get possible combinations for a configurable SKU.
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
@@ -1597,43 +1555,9 @@ class SkuManager {
     $tree = $plugin->deriveProductTree($sku);
 
     $configurable_codes = array_keys($tree['configurables']);
-    $all_combinations = AlshayaArrayUtils::getAllCombinations($configurable_codes);
+    $all_combinations = $this->alshayaArrayUtils->getAllCombinations($configurable_codes);
 
-    $combinations = [];
-
-    // Prepare array to get all combinations available grouped by SKU.
-    foreach ($tree['products'] ?? [] as $child_sku_code => $child_sku) {
-      if (!($child_sku instanceof SKU)) {
-        continue;
-      }
-
-      // Dot not display free gifts.
-      if ($this->isSkuFreeGift($child_sku)) {
-        continue;
-      }
-
-      // Do not display OOS variants.
-      // Bypass wrapper function in this class as it creates cyclic
-      // dependency.
-      /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $childPlugin */
-      $childPlugin = $sku->getPluginInstance();
-      if (!$childPlugin->isProductInStock($child_sku)) {
-        continue;
-      }
-
-      $attributes = $child_sku->get('attributes')->getValue();
-      $attributes = array_column($attributes, 'value', 'key');
-      foreach ($configurable_codes as $code) {
-        $value = $attributes[$code] ?? '';
-
-        if (empty($value)) {
-          continue;
-        }
-
-        $combinations['by_sku'][$child_sku_code][$code] = $value;
-        $combinations['attribute_sku'][$code][$value][] = $child_sku_code;
-      }
-    }
+    $combinations =& $tree['combinations'];
 
     // Don't store in cache and return empty array here if no valid
     // SKU / combination found.
@@ -1642,7 +1566,7 @@ class SkuManager {
       // even when there are children in stock.
       // @TODO: To be removed in: CORE-5271.
       // Done for: CORE-5200, CORE-5248.
-      if ($plugin->isProductInStock($sku)) {
+      if ($this->isProductInStock($sku)) {
         // Log message here to allow debugging further.
         $this->logger->info($this->t('Found no combinations for SKU: @sku having language @langcode. Requested from @trace. Page: @page', [
           '@sku' => $sku_code,
@@ -1653,32 +1577,6 @@ class SkuManager {
       }
 
       return [];
-    }
-
-    $configurables = Configurable::getSortedConfigurableAttributes($sku);
-
-    // Sort the values in attribute_sku so we can use it later.
-    foreach ($combinations['attribute_sku'] ?? [] as $code => $values) {
-      if ($this->cartFormHelper->isAttributeSortable($code)) {
-        $combinations['attribute_sku'][$code] = Configurable::sortConfigOptions($values, $code);
-      }
-      else {
-        // Sort from field_configurable_attributes.
-        $configurable_attribute = [];
-        foreach ($configurables as $configurable) {
-          if ($configurable['code'] === $code) {
-            $configurable_attribute = $configurable['values'];
-            break;
-          }
-        }
-
-        if ($configurable_attribute) {
-          $configurable_attribute_weights = array_flip(array_column($configurable_attribute, 'value_id'));
-          uksort($combinations['attribute_sku'][$code], function ($a, $b) use ($configurable_attribute_weights) {
-            return $configurable_attribute_weights[$a] - $configurable_attribute_weights[$b];
-          });
-        }
-      }
     }
 
     // Prepare combinations array grouped by attributes to check later which
@@ -1699,6 +1597,20 @@ class SkuManager {
     $static[$langcode][$sku_code] = $combinations;
 
     return $combinations;
+  }
+
+  /**
+   * Get configurable attribute codes.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU entity.
+   *
+   * @return array
+   *   Configurable attribute codes for SKU.
+   */
+  public function getConfigurableAttributes(SKU $sku) {
+    $combinations = $this->getConfigurableCombinations($sku);
+    return $combinations ? array_keys($combinations['attribute_sku']) : [];
   }
 
   /**
@@ -1902,7 +1814,7 @@ class SkuManager {
     }
 
     // Select first child based on value provided in query params.
-    $sku_id = (int) $this->currentRequest->query->get('selected');
+    $sku_id = (int) $this->getSelectedVariantId();
 
     // Give preference to sku id passed via query params.
     if ($sku_id && $sku_id != $sku->id()) {
@@ -1955,6 +1867,36 @@ class SkuManager {
   }
 
   /**
+   * Wrapper function to check if price mode is from to.
+   *
+   * @return bool
+   *   TRUE if price mode is set to from to.
+   */
+  public function isPriceModeFromTo() {
+    $static = &drupal_static(__FUNCTION__, NULL);
+
+    if ($static === NULL) {
+      $display_mode = $this->configFactory
+        ->get('alshaya_acm_product.display_settings')
+        ->get('price_display_mode');
+
+      $static = $display_mode === SkuPriceHelper::PRICE_DISPLAY_MODE_FROM_TO;
+    }
+
+    return $static;
+  }
+
+  /**
+   * Helper function to check if display mode is aggregated.
+   *
+   * @return bool
+   *   TRUE if mode is non-aggregated.
+   */
+  public function isListingDisplayModeAggregated() {
+    return $this->getListingDisplayMode() === self::AGGREGATED_LISTING;
+  }
+
+  /**
    * Helper function to get attributes used for swatch on PDP.
    *
    * @return array
@@ -1977,12 +1919,15 @@ class SkuManager {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   SKU entity.
+   * @param array $configurable_attributes
+   *   Configurable attributes used in the product.
    *
    * @return string|null
    *   Attribute value if found for the SKU.
    */
-  public function getPdpSwatchValue(SKU $sku) {
-    foreach ($this->getPdpSwatchAttributes() as $attribute_code) {
+  public function getPdpSwatchValue(SKU $sku, array $configurable_attributes) {
+    $swatch_attributes = array_intersect($this->getPdpSwatchAttributes(), $configurable_attributes);
+    foreach ($swatch_attributes as $attribute_code) {
       $attributes = $sku->get('attributes')->getValue();
       $attributes = array_column($attributes, 'value', 'key');
       if (isset($attributes[$attribute_code]) && !empty($attributes[$attribute_code])) {
@@ -1991,6 +1936,41 @@ class SkuManager {
     }
 
     return NULL;
+  }
+
+  /**
+   * Get Valid child skus as string for particular configurable product.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity.
+   *
+   * @return array
+   *   Child skus as string.
+   */
+  public function getValidChildSkusAsString(SKU $sku) {
+    if ($sku->bundle() != 'configurable') {
+      return [];
+    }
+
+    $static = &drupal_static(__METHOD__, []);
+
+    if (!isset($static[$sku->getSku()])) {
+      $static[$sku->getSku()] = [];
+
+      $sku_variants = Configurable::getChildSkus($sku);
+      $combinations = $this->getConfigurableCombinations($sku);
+
+      // In some cases we modify combinations and add more children.
+      // Here to get first valid we want only available ones from current
+      // configurable sku.
+      if (!empty($combinations['attribute_sku'])) {
+        // Get the skus sorted by first attribute value.
+        $combination_skus = array_reduce(reset($combinations['attribute_sku']), 'array_merge', []);
+        $static[$sku->getSku()] = array_intersect($combination_skus, $sku_variants);
+      }
+    }
+
+    return $static[$sku->getSku()] ?? [];
   }
 
   /**
@@ -2003,24 +1983,31 @@ class SkuManager {
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Configurable SKU entity.
    *
-   * @return \Drupal\acq_sku\Entity\SKU
+   * @return \Drupal\acq_sku\Entity\SKU|null
    *   Valid child SKU or parent itself.
    */
   public function getFirstValidConfigurableChild(SKU $sku) {
-    $cache_key = 'first_valid_child';
-
-    $child_sku = $this->getProductCachedData($sku, $cache_key);
-    if ($child_sku) {
-      return SKU::loadFromSku($child_sku, $sku->language()->getId());
+    if ($sku->bundle() != 'configurable') {
+      return [];
     }
 
-    $child = $this->getAvailableChildren($sku, TRUE);
-    if ($child instanceof SKUInterface) {
-      $this->setProductCachedData($sku, $cache_key, $child->getSku());
-      return $child;
+    $static = &drupal_static(__METHOD__, []);
+
+    $langcode = $sku->language()->getId();
+    $id = $sku->id();
+
+    if (!isset($static[$langcode][$id])) {
+      $static[$langcode][$id] = NULL;
+
+      $sku_variants = $this->getValidChildSkusAsString($sku);
+
+      if (!empty($sku_variants)) {
+        $variant_sku_code = reset($sku_variants);
+        $static[$langcode][$id] = SKU::loadFromSku($variant_sku_code);
+      }
     }
 
-    return $sku;
+    return $static[$langcode][$id];
   }
 
   /**
@@ -2057,17 +2044,40 @@ class SkuManager {
   public function getConfigurableValues(SKUInterface $sku): array {
     $configurableFieldValues = [];
 
+    if ($sku->bundle() == 'configurable') {
+      $configurable_attributes = $this->getConfigurableAttributes($sku);
+    }
+    else {
+      $parent = $this->getParentSkuBySku($sku);
+      if ($parent instanceof SKU) {
+        $configurable_attributes = $this->getConfigurableAttributes($parent);
+      }
+    }
+
+    if (empty($configurable_attributes)) {
+      return $configurableFieldValues;
+    }
+
     $fields = $this->skuFieldsManager->getFieldAdditions();
-    $configurableFields = array_filter($fields, function ($field) {
-      return (bool) $field['configurable'];
+    $configurableFieldReplacements = array_filter($fields, function ($field) {
+      return !empty($field['display_configurable_for']);
     });
+
+    // For some fields we display from different attribute.
+    // For instance for article_castor_id we display from color_label.
+    foreach ($configurableFieldReplacements as $code => $field) {
+      $index = array_search($field['display_configurable_for'], $configurable_attributes);
+      if ($index !== 'false') {
+        $configurable_attributes[$index] = $code;
+      }
+    }
 
     $remove_not_required_option = $this->isNotRequiredOptionsToBeRemoved();
 
-    foreach ($configurableFields as $key => $field) {
-      $fieldKey = 'attr_' . $key;
+    foreach ($configurable_attributes as $code) {
+      $fieldKey = 'attr_' . $code;
 
-      if ($sku->get($fieldKey)->getString()) {
+      if ($sku->hasField($fieldKey)) {
         $value = $sku->get($fieldKey)->getString();
 
         if ($remove_not_required_option && $this->isAttributeOptionToExclude($value)) {
@@ -2075,7 +2085,7 @@ class SkuManager {
         }
 
         $configurableFieldValues[$fieldKey] = [
-          'label' => (string) $sku->get($fieldKey)
+          'label' => $this->getLabelFromParentSku($sku, $fieldKey) ?? (string) $sku->get($fieldKey)
             ->getFieldDefinition()
             ->getLabel(),
           'value' => $sku->get($fieldKey)->getString(),
@@ -2084,6 +2094,30 @@ class SkuManager {
     }
 
     return $configurableFieldValues;
+  }
+
+  /**
+   * Utility function to return label from parent sku.
+   *
+   * @param \Drupal\acq_commerce\SKUInterface $sku
+   *   SKU entity.
+   * @param string $attr_code
+   *   Attribute code.
+   *
+   * @return string
+   *   Label for configurable fields.
+   */
+  public function getLabelFromParentSku(SKUInterface $sku, $attr_code) {
+    $parent_sku = $this->getParentSkuBySku($sku);
+    if ($parent_sku instanceof SKUInterface) {
+      $configurables = unserialize($parent_sku->get('field_configurable_attributes')->getString());
+      foreach ($configurables as $field) {
+        if (in_array($attr_code, $field)) {
+          return $field['label'];
+        }
+      }
+    }
+    return NULL;
   }
 
   /**
@@ -2271,28 +2305,9 @@ class SkuManager {
     if ($sku->bundle() == 'configurable') {
       $combinations = $this->getConfigurableCombinations($sku);
 
-      if (empty($combinations)) {
+      if (empty($combinations) || empty($combinations['attribute_sku'])) {
         $static[$sku->id()] = FALSE;
         return FALSE;
-      }
-
-      foreach ($combinations['attribute_sku'] as $values) {
-        // If we have no values for particular attribute, we show it as OOS.
-        if (count($values) === 0) {
-          $static[$sku->id()] = FALSE;
-          return FALSE;
-        }
-      }
-
-      // Use the count of first sku as base for matching with others.
-      $count = count(reset($combinations['by_sku']));
-
-      foreach ($combinations['by_sku'] as $values) {
-        // If we have mis-match in count of values, we show it as OOS.
-        if (count($values) !== $count) {
-          $static[$sku->id()] = FALSE;
-          return FALSE;
-        }
       }
     }
 
@@ -2310,15 +2325,17 @@ class SkuManager {
    *   TRUE if product is in stock.
    */
   public function isProductInStock(SKUInterface $sku): bool {
-    // For configurable we check combinations are valid to keep
-    // it consistent between detail and listing.
-    if ($sku->bundle() == 'configurable') {
-      return $this->skuAttributeCombinationsValid($sku);
-    }
-
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $sku->getPluginInstance();
-    return $plugin->isProductInStock($sku);
+    $in_stock = $plugin->isProductInStock($sku);
+
+    if ($in_stock && $sku->bundle() == 'configurable') {
+      // Check if there are in-stock children available.
+      // (Excluding free gifts and OOS).
+      $in_stock = (count(Configurable::getChildren($sku)) > 0);
+    }
+
+    return $in_stock;
   }
 
   /**
@@ -2391,7 +2408,7 @@ class SkuManager {
       $child_skus = array_keys($combinations['by_sku']);
       $child_sku = reset($child_skus);
       if ($child = SKU::loadFromSku($child_sku, $sku->language()->getId())) {
-        $this->currentRequest->query->set('selected', $child->id());
+        $this->setSelectedVariantId($child->id());
         $static[$sku->id()] = $child;
         return $child;
       }
@@ -2433,7 +2450,7 @@ class SkuManager {
     // child if only one attribute is selected, process further.
     if ($select_from_query) {
       // Select first child based on value provided in query params.
-      $sku_id = (int) $this->currentRequest->query->get('selected');
+      $sku_id = (int) $this->getSelectedVariantId();
 
       if ($sku_id && $sku_id != $sku->id()) {
         $selected_sku = $this->loadSkuById($sku_id);
@@ -2444,13 +2461,13 @@ class SkuManager {
         }
         else {
           // Set it to NULL to indicate code below that we didn't change.
-          $this->currentRequest->query->set('selected', NULL);
+          $this->setSelectedVariantId(NULL);
         }
       }
 
       $selected_sku = $this->getFirstValidConfigurableChild($sku);
       if ($selected_sku instanceof SKUInterface) {
-        $this->currentRequest->query->set('selected', $selected_sku->id());
+        $this->setSelectedVariantId($selected_sku->id());
         return $selected_sku;
       }
     }
@@ -2658,7 +2675,8 @@ class SkuManager {
    */
   public function getSkuForNode(NodeInterface $node, $no_color_node = FALSE) {
     $sku_string = $node->get('field_skus')->getString();
-    $product_color = $node->get('field_product_color')->getString();
+
+    $product_color = ($this->isListingModeNonAggregated()) ? $node->get('field_product_color')->getString() : '';
 
     if ($no_color_node && $product_color) {
       return '';
@@ -2676,9 +2694,7 @@ class SkuManager {
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function processColorNodesForConfigurable(NodeInterface $node) {
-    $mode = $this->getListingDisplayMode();
-
-    if ($mode != self::NON_AGGREGATED_LISTING) {
+    if ($this->isListingDisplayModeAggregated()) {
       return;
     }
 
@@ -2700,8 +2716,9 @@ class SkuManager {
     $nids = array_flip($this->getColorNodeIds($sku->getSku()));
 
     $colors = [];
+    $configurable_attributes = $this->getConfigurableAttributes($sku);
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
-      $child_color = $this->getPdpSwatchValue($child);
+      $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
 
       if (!empty($child_color) && !isset($colors[$child_color])) {
         // Create the node if not available.
@@ -2786,14 +2803,27 @@ class SkuManager {
     if ($nid_field) {
       $nid_field->setValues([$original->id()]);
     }
-
-    $product_color = $node->get('field_product_color')->getString();
+    $product_color = '';
+    if ($this->isListingModeNonAggregated()) {
+      $product_color = $node->get('field_product_color')->getString();
+    }
 
     $prices = $this->getMinPrices($sku, $product_color);
-    $price = empty($prices['final_price'])
-        ? $prices['price']
-        : $prices['final_price'];
-    $item->getField('final_price')->setValues([$price]);
+    $item->getField('price')->setValues([$prices['price']]);
+    $item->getField('final_price')->setValues([$prices['final_price']]);
+
+    // Use max of selling prices for price in configurable products.
+    if (!empty($prices['children'])) {
+      $selling_prices = array_filter(array_column($prices['children'], 'selling_price'));
+      $item->getField('price')->setValues([max($selling_prices)]);
+
+      $selling_prices = array_unique([min($selling_prices), max($selling_prices)]);
+      $item->getField('attr_selling_price')->setValues($selling_prices);
+
+      if ($this->isPriceModeFromTo()) {
+        $item->getField('final_price')->setValues([min($selling_prices)]);
+      }
+    }
 
     if ($sku->bundle() === 'configurable') {
       $this->processIndexItemConfigurable($sku, $item, $product_color);
@@ -2870,8 +2900,9 @@ class SkuManager {
     $has_color_data = FALSE;
 
     // Gather data from children to set in parent.
+    $configurable_attributes = $this->getConfigurableAttributes($sku);
     foreach ($this->getAvailableChildren($sku) ?? [] as $child) {
-      $child_color = $this->getPdpSwatchValue($child);
+      $child_color = $this->getPdpSwatchValue($child, $configurable_attributes);
 
       // Need to have a flag to avoid indexing main node when it has colors.
       // For nodes not having swatch/color attribute, we still need to index it.
@@ -3005,6 +3036,59 @@ class SkuManager {
     $query->condition('nc.field_category_target_id', $tid);
     $query->distinct();
     return $query->execute()->fetchAllKeyed(0, 0);
+  }
+
+  /**
+   * Check if listing mode is non-aggregated.
+   *
+   * @return bool
+   *   TRUE if listing mode is set to non-aggregated.
+   */
+  public function isListingModeNonAggregated() {
+    return $this->getListingDisplayMode() == self::NON_AGGREGATED_LISTING;
+  }
+
+  /**
+   * Helper function to check if SKU entity has style code attribute or not.
+   *
+   * @param \Drupal\acq_sku\Entity\SKU $sku
+   *   SKU Entity for which the style code needs to be fetched.
+   *
+   * @return bool|mixed
+   *   Style code value if field & value exist, FALSE otherwise.
+   */
+  public function fetchStyleCode(SKU $sku) {
+    if ($sku->hasField('attr_style_code') &&
+      $style_code = $sku->get('attr_style_code')->getString()) {
+      return $style_code;
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Get selected variant id.
+   *
+   * @return int|null
+   *   Selected variant id if available.
+   */
+  public function getSelectedVariantId() {
+    $from_query = $this->currentRequest->query->get('selected');
+    if (!empty(self::$selectedVariantId) && !empty($from_query)) {
+      $this->setSelectedVariantId($from_query);
+    }
+
+    return self::$selectedVariantId ?? NULL;
+  }
+
+  /**
+   * Set selected variant id.
+   *
+   * @param int|null $id
+   *   Selected variant id.
+   */
+  public function setSelectedVariantId($id) {
+    self::$selectedVariantId = $id;
   }
 
 }

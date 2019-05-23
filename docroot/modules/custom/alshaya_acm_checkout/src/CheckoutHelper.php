@@ -375,7 +375,7 @@ class CheckoutHelper {
     $address = $this->cleanCheckoutAddress($address);
 
     // Prepare data to store in cache as history.
-    // We will use it to restore in cart if user changes his mind again.
+    // We will use it to restore in cart if user changes their mind again.
     $history[$method] = [
       'method' => $method,
       'address' => $address,
