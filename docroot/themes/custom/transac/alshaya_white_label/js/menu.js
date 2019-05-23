@@ -133,8 +133,6 @@
         }
       });
 
-
-
       // Stop event from inside container to propogate out.
       $('.c-menu-primary #block-exposedformsearchpage').on('click touchstart', function (event) {
         event.stopPropagation();
