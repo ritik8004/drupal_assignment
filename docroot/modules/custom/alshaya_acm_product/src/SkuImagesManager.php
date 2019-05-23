@@ -660,14 +660,14 @@ class SkuImagesManager {
           // For now we are displaying only image slider on search results
           // page and PLP.
           if (empty($search_main_image)) {
-            $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
+            $search_main_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
           }
           elseif ($this->productDisplaySettings->get('gallery_show_hover_image')) {
-            $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288');
+            $search_hover_image = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing');
           }
 
           if ($this->productDisplaySettings->get('image_thumb_gallery')) {
-            $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, '291x288', '291x288');
+            $thumbnails[] = $this->skuManager->getSkuImage($media_item['drupal_uri'], $product_label, 'product_listing', 'product_listing');
           }
         }
 
@@ -840,7 +840,7 @@ class SkuImagesManager {
     return [
       'slide_style' => 'product_zoom_medium_606x504',
       'zoom_style' => 'product_zoom_large_800x800',
-      'thumb_style' => '291x288',
+      'thumb_style' => 'pdp_gallery_thumbnail',
       'zoom_width' => 'auto',
       'zoom_height' => 'auto',
       'zoom_position' => 'right',
@@ -1041,10 +1041,10 @@ class SkuImagesManager {
 
       $duplicates[$value] = 1;
       if (empty($plp_main_image)) {
-        $plp_main_image = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), '291x288');
+        $plp_main_image = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), 'product_listing');
       }
 
-      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), '291x288', '291x288');
+      $variants_image[$child->id()][] = $this->skuManager->getSkuImage($product_image['drupal_uri'], $sku->label(), 'product_listing', 'product_listing');
     }
 
     return [
