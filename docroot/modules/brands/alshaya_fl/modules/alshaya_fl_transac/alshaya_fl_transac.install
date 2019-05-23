@@ -30,6 +30,14 @@ function alshaya_fl_transac_update_8003() {
     'alshaya_search',
     'optional'
   );
+
+  // Re-saving new block with region change as for LHN update hook
+  // expects all facet blocks to be in sidebar region.
+  $config_factory = \Drupal::configFactory();
+  $config_factory->getEditable('block.block.gender')->set('region', 'sidebar_first')->save();
+  $config_factory->getEditable('block.block.promogender')->set('region', 'sidebar_first')->save();
+  $config_factory->getEditable('block.block.plpgender')->set('region', 'sidebar_first')->save();
+
   _alshaya_search_api_reindex();
 }
 
