@@ -19,6 +19,8 @@
         });
 
       $.fn.kidzania = function (options) {
+    	  var book_visit_date;
+        var book_shifts;
         var defaults = {speed: 500};
         var settings = $.extend({}, defaults, options);
         var body = $('html, body');
@@ -286,6 +288,7 @@
 
         actions.init();
         $('.datepicker').on('change', function () {
+          var shiftsData;
           var val = $(this).val();
           if (val) {
             ticketTypes = [];
@@ -302,7 +305,10 @@
                 timeEle
                   .show()
                   .find('a')
-                  .html(data);
+                  .html(data.getShiftsResult.Shift.Name)
+                  .after('<input type="hidden" value="' + val + '" id="book-visit-date">') // store visit date.
+                  .after('<input type="hidden" id="book-shifts">'); // store shifts data.
+                $("#book-shifts").val(JSON.stringify(data));
                 $('.loading-overlay').removeClass('active');
               }
             });
@@ -312,7 +318,12 @@
         $('.time_block').on('click', 'a', function () {
           actions.hideEle([eleStep3, eleStep4, eleTotWrapper]);
           ticketNextEle.addClass('disable');
-          $.post(Drupal.url('get-visitor-types'), function (data) {
+          book_visit_date = $("#book-visit-date").val();
+          book_shifts = $("#book-shifts").val();
+          $.post(Drupal.url('get-visitor-types'), {
+            visit_date: book_visit_date,
+            shifts: book_shifts
+          }, function (data) {
             ticketTypes = data.getVisitorTypesResult.VisitorType;
             if (ticketTypes) {
               actions.showEle(eleStep3);
@@ -397,12 +408,12 @@
                   break;
                 }
               }
-              var entryBook = ticketTypesFinal.data[index]['Book'];
-              if (entryBook) {
-                entryBook.push(local);
+              var entryBook = ticketTypesFinal.data[index];
+              if (entryBook['Book']) {
+                entryBook['Book'].push(local);
               }
               else {
-                entryBook = [local];
+                entryBook['Book'] = [local];
               }
             }
             else {
@@ -414,6 +425,23 @@
           });
           if (isValid) {
             actions.hideEle(eleFormErrMsg);
+            // Pre validate visitors at server level.
+            $.post(Drupal.url('validate-visitor-details'), {
+              final_visitor_list: ticketTypesFinal,
+              visit_date: book_visit_date,
+              shifts: book_shifts
+            }, function (data) {
+              if (data.err) {
+                actions.showEle(eleFormErrMsg);
+                eleFormErrMsg.html(data.message);
+                console.log(data.message);
+              }
+              else {
+                if ($.isNumeric(data)) {
+                  $(location).attr('href', Drupal.url('payment'));
+                }
+              }
+            });
           }
           else {
             actions.showEle(eleFormErrMsg);
