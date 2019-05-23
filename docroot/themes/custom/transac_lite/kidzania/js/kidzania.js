@@ -19,7 +19,7 @@
         });
 
       $.fn.kidzania = function (options) {
-    	  var book_visit_date;
+        var book_visit_date;
         var book_shifts;
         var defaults = {speed: 500};
         var settings = $.extend({}, defaults, options);
@@ -288,7 +288,6 @@
 
         actions.init();
         $('.datepicker').on('change', function () {
-          var shiftsData;
           var val = $(this).val();
           if (val) {
             ticketTypes = [];
@@ -308,7 +307,7 @@
                   .html(data.getShiftsResult.Shift.Name)
                   .after('<input type="hidden" value="' + val + '" id="book-visit-date">') // store visit date.
                   .after('<input type="hidden" id="book-shifts">'); // store shifts data.
-                $("#book-shifts").val(JSON.stringify(data));
+                $('#book-shifts').val(JSON.stringify(data));
                 $('.loading-overlay').removeClass('active');
               }
             });
@@ -318,8 +317,8 @@
         $('.time_block').on('click', 'a', function () {
           actions.hideEle([eleStep3, eleStep4, eleTotWrapper]);
           ticketNextEle.addClass('disable');
-          book_visit_date = $("#book-visit-date").val();
-          book_shifts = $("#book-shifts").val();
+          book_visit_date = $('#book-visit-date').val();
+          book_shifts = $('#book-shifts').val();
           $.post(Drupal.url('get-visitor-types'), {
             visit_date: book_visit_date,
             shifts: book_shifts
@@ -434,7 +433,6 @@
               if (data.err) {
                 actions.showEle(eleFormErrMsg);
                 eleFormErrMsg.html(data.message);
-                console.log(data.message);
               }
               else {
                 if ($.isNumeric(data)) {
