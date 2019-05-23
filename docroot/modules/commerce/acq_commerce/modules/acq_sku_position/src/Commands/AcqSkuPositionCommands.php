@@ -149,6 +149,15 @@ class AcqSkuPositionCommands extends DrushCommands {
       $is_data_available = FALSE;
       $insert_query = $this->connection->insert('acq_sku_position')
         ->fields(['nid', 'tid', 'position', 'position_type']);
+
+      // Fetch existing position <=> nid mapping for the category chunk being
+      // processed.
+      $query = $this->connection->select('acq_sku_position', 'asp');
+      $query->fields('asp', ['nid', 'position']);
+      $query->condition('asp.tid', array_column($categories_chunk, 'tid'), 'IN');
+      $existing_nid_positions = $query->execute()->fetchAllKeyed();
+      $skip_deletion_nids = [];
+
       foreach ($categories_chunk as $term) {
         // Find the commerce id from the term. Skip if not found.
         $commerce_id = $term->commerce_id;
@@ -205,7 +214,9 @@ class AcqSkuPositionCommands extends DrushCommands {
         }
 
         foreach ($response as $product_position) {
-          if (isset($nids[$product_position['sku']])) {
+          // Check if the position has changed before doing a sync.
+          if (isset($nids[$product_position['sku']]) &&
+            ($product_position['position'] !== $existing_nid_positions[$nids[$product_position['sku']]])) {
             // Insert new position data for the product.
             $record = [
               'nid' => $nids[$product_position['sku']],
@@ -216,14 +227,28 @@ class AcqSkuPositionCommands extends DrushCommands {
             $is_data_available = TRUE;
             $insert_query->values($record);
           }
+          // Record the list of nids whose position has not changed.
+          elseif (isset($nids[$product_position['sku']]) &&
+            ($product_position['position'] == $existing_nid_positions[$nids[$product_position['sku']]])) {
+            $skip_deletion_nids[] = $nids[$product_position['sku']];
+          }
+        }
+
+        if (!empty($skip_deletion_nids)) {
+          $this->logger->notice('Skipping deletion for nids: @nids while processing term: @tid', [
+            '@nids' => implode(',', $skip_deletion_nids),
+            '@tid' => $term->tid,
+          ]);
         }
       }
 
       try {
         if (!empty($categories_chunk)) {
-          // Delete existing records of position for this category.
+          // Delete existing records of position for this category which have
+          // not changed since the last sync.
           $this->connection->delete('acq_sku_position')
             ->condition('tid', array_column($categories_chunk, 'tid'), 'IN')
+            ->condition('nid', $skip_deletion_nids, 'IN')
             ->condition('position_type', $position_type)
             ->execute();
         }
