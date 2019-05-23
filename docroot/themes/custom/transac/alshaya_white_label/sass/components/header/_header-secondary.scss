@@ -310,7 +310,7 @@
 
   @include breakpoint($only-mobile) {
     box-shadow: 0 0 0.125rem $header_branding_shadow;
-    position: fixed;
+    position: absolute;
   }
 }
 

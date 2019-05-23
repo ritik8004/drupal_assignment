@@ -87,6 +87,35 @@
         $(this).parent().toggleClass('search-active');
       });
 
+      $('#search_api_algolia_autocomplete_block-search').off().on('click', function (e) {
+        $('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
+      });
+
+      // Show/hide the trending title.
+      $('#search_api_algolia_autocomplete_block-search').on('keyup', function () {
+        if ($('.algolia-autocomplete pre').text().length < 1) {
+          $('.trending-title').show();
+        }
+        else {
+          $('.trending-title').hide();
+        }
+      });
+
+      // Add the trending title by default to algolia search suggestion list.
+      $('#search_api_algolia_autocomplete_block-search').once().on('focus', function (e) {
+        if ($('.algolia-autocomplete pre').text().length < 1 && $('.trending-title').length < 1) {
+          $('.aa-dropdown-menu').prepend('<span class="trending-title">Trending searches</span>');
+        }
+
+        if ($('.algolia-autocomplete pre').text().length < 1) {
+          $('.trending-title').show();
+        }
+      });
+
+      $('.populate-input').once().on('click', function (e) {
+        $('.trending-title').hide();
+      });
+
       // Hide mobile search box, when clicked anywhere else.
       $(window).on('click touchstart', function (e) {
         if (!$(e.target).is('.c-menu-primary .mobile--search')) {
@@ -96,7 +125,15 @@
             $('.c-menu-primary .mobile--search').parent().toggleClass('search-active');
           }
         }
+
+        if (!$(e.target).is('#search_api_algolia_autocomplete_block-search')) {
+          if ($('.block-search-api-algolia-autocomplete-block').hasClass('algolia-search-active')) {
+            $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
+          }
+        }
       });
+
+
 
       // Stop event from inside container to propogate out.
       $('.c-menu-primary #block-exposedformsearchpage').on('click touchstart', function (event) {
