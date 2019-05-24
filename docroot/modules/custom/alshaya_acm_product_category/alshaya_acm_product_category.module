@@ -8,7 +8,6 @@
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
-use Drupal\pathauto\PathautoState;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\taxonomy\TermInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -301,88 +300,4 @@ function alshaya_acm_product_category_after_build(array $element, FormStateInter
     ],
   ];
   return $element;
-}
-
-/**
- * Create term for given array.
- *
- * @param array $term
- *   The array of term.
- *
- * @throws \Drupal\Core\Entity\EntityStorageException
- */
-function alshaya_acm_product_category_create_term(array $term) {
-  $default_langcode = \Drupal::languageManager()->getDefaultLanguage()->getId();
-
-  $entity = Term::create([
-    'name' => $term[$default_langcode],
-    'vid' => 'acq_product_category',
-  ]);
-  $entity->set('field_commerce_status', ['value' => 1]);
-  $entity->set('field_include_in_desktop', ['value' => $term['include_in_desktop'] ?? FALSE]);
-  $entity->set('field_include_in_mobile_tablet', ['value' => 1]);
-  $entity->set('field_override_target_link', ['value' => 1]);
-  $entity->set('field_target_link', ['uri' => 'internal:' . $term['target_link']]);
-
-  if (!empty($term['icon'])) {
-    $file = drupal_get_path('module', 'alshaya_acm_product_category');
-    $data = file_get_contents("$file/{$term['icon']}");
-    $file = file_save_data($data, 'public://' . basename($term['icon']), FILE_EXISTS_REPLACE);
-    $entity->set('field_icon', ['target_id' => $file->id(), 'alt' => basename($term['icon'])]);
-  }
-
-  if (!empty($term['weight'])) {
-    $entity->setWeight($term['weight']);
-  }
-  $entity->path->pathauto = PathautoState::SKIP;
-  $entity->save();
-
-  // Get all languages.
-  $languages = \Drupal::languageManager()->getLanguages();
-
-  // Remove default language, we already saved menu item for that.
-  unset($languages[$default_langcode]);
-
-  // Get only the langcodes.
-  $langcodes = array_keys($languages);
-
-  // Save translation for each language if available.
-  foreach ($langcodes as $langcode) {
-    if (isset($term[$langcode])) {
-      $language_term = $entity->addTranslation($langcode, $entity->toArray());
-      $language_term->setName($term[$langcode]);
-      $language_term->save();
-    }
-  }
-}
-
-/**
- * Create default terms: store finder and top offers.
- *
- * Prepare array of terms with store finder and top offers term items, to
- * display it as menu items with icon in mobile / tablet display.
- */
-function alshaya_acm_product_category_default_terms() {
-  $terms = [
-    [
-      'en' => 'store finder',
-      'ar' => 'البحث عن محلاتنا',
-      'icon' => 'images/map-pin.svg',
-      'target_link' => '/store-finder',
-      'weight' => 1001,
-    ],
-  ];
-
-  foreach ($terms as $term) {
-    try {
-      alshaya_acm_product_category_create_term($term);
-    }
-    catch (\Exception $e) {
-      $t = t('There is some error while creating term: @term error: %error', [
-        '@term' => $term['en'],
-        '%error' => $e->getMessage(),
-      ]);
-      \Drupal::logger('alshaya_acm_product_category')->error($t);
-    }
-  }
 }

@@ -47,10 +47,6 @@ function alshaya_acm_product_category_update_8030() {
       'install',
       AlshayaConfigManager::MODE_MERGE
     );
-
-  // Create default terms: store finder and top offers to display it as menu
-  // items with icon in mobile / tablet display.
-  alshaya_acm_product_category_default_terms();
 }
 
 /**
@@ -675,13 +671,4 @@ function alshaya_acm_product_category_update_8001() {
   // Revert the view to have language filter.
   $reverter = \Drupal::service('config_update.config_update');
   $reverter->revert('view', 'plp_promotional_banner');
-}
-
-/**
- * Implements hook_install().
- */
-function alshaya_acm_product_category_install() {
-  // Create default terms: store finder and top offers to display it as menu
-  // items with icon in mobile / tablet display.
-  alshaya_acm_product_category_default_terms();
 }
