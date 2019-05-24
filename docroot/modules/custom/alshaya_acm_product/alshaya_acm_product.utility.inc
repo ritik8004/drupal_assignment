@@ -155,7 +155,7 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
   // Load the first image.
-  $media_image = $skuImagesManager->getFirstImage($sku);
+  $media_image = $skuImagesManager->getFirstImage($sku, $context);
   $image = [];
 
   // If we have image for the product.
