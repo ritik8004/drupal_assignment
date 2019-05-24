@@ -4,12 +4,11 @@ namespace Drupal\alshaya_kz_transac_lite\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
-use Drupal\Component\Serialization\Json;
 
 /**
  * TicketBooking controller to fullfil the ticket booking process.
@@ -38,13 +37,6 @@ class TicketBookingController extends ControllerBase {
   protected $logger;
 
   /**
-   * The jsonDecode.
-   *
-   * @var \Drupal\Component\Serialization\Json
-   */
-  protected $jsonDecode;
-
-  /**
    * TicketBookingController constructor.
    *
    * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticketBooking
@@ -53,17 +45,13 @@ class TicketBookingController extends ControllerBase {
    *   The Booking payment object.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler object.
-   * @param \Drupal\Component\Serialization\Json $json_decode
-   *   The serialize object to decode json into array.
    */
   public function __construct(TicketBookingManager $ticketBooking,
                               BookingPaymentManager $bookingPayment,
-                              ModuleHandlerInterface $module_handler,
-                              Json $json_decode) {
+                              ModuleHandlerInterface $module_handler) {
     $this->ticketBooking = $ticketBooking;
     $this->bookingPayment = $bookingPayment;
     $this->moduleHandler = $module_handler;
-    $this->jsonDecode = $json_decode;
   }
 
   /**
@@ -73,8 +61,7 @@ class TicketBookingController extends ControllerBase {
     return new static(
       $container->get('alshaya_kz_transac_lite.booking_manager'),
       $container->get('alshaya_kz_transac_lite.booking_payment_manager'),
-      $container->get('module_handler'),
-      $container->get('serialization.json')
+      $container->get('module_handler')
     );
   }
 
@@ -85,9 +72,6 @@ class TicketBookingController extends ControllerBase {
    *   Return park name as json response.
    */
   public function getParks() {
-    // Delete private store data on get parks request.
-    $this->ticketBooking->deletePrivateTempStore();
-
     $parks = $this->ticketBooking->getParkData();
 
     $response = new JsonResponse();
@@ -194,18 +178,8 @@ class TicketBookingController extends ControllerBase {
       if ($flag) {
         $final_visitor_list['sales_number'] = $sales_number;
         $final_visitor_list['visit_date'] = $visit_date;
-        $order_total = $this->ticketBooking->getOrderTotal($final_visitor_list['sales_number']);
-        if ($final_visitor_list['total']['price'] == $order_total) {
-          $this->ticketBooking->privateTempStore()
-            ->get('alshaya_kz_transac_lite_cart')
-            ->set('final_visitor_list', json_encode($final_visitor_list));
-
-          $response->setData($order_total);
-          return $response;
-        }
-        $responseData->err = TRUE;
-        $responseData->message = $this->t('Order total is not valid.');
-        $response->setData($responseData);
+        $final_visitor_list['status'] = TRUE;
+        $response->setData($final_visitor_list);
         return $response;
       }
     }

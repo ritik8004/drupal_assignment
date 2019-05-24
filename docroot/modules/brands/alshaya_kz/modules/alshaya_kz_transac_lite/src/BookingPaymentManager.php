@@ -122,7 +122,6 @@ class BookingPaymentManager {
    *   Payment id generated from payment method.
    */
   public function updateTicketDetails(string $sales_number, string $payment_id) {
-
     try {
       $query = $this->entityManager->getStorage('ticket')->getQuery()
         ->condition('sales_number', $sales_number);
@@ -143,7 +142,6 @@ class BookingPaymentManager {
         '%message' => $e->getMessage(),
       ]);
     }
-
   }
 
   /**

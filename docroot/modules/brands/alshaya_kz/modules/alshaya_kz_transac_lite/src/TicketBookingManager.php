@@ -4,7 +4,6 @@ namespace Drupal\alshaya_kz_transac_lite;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 
@@ -12,13 +11,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
  * TicketBookingManager integrate and receive response from kidsoft API.
  */
 class TicketBookingManager {
-
-  /**
-   * The private temp store.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
-   */
-  protected $privateTempStore;
 
   /**
    * Cache Backend object for "cache.data".
@@ -51,8 +43,6 @@ class TicketBookingManager {
   /**
    * TicketBooking constructor.
    *
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
-   *   Temporary store factory object.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   Cache Backend object for "cache.data".
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
@@ -60,33 +50,14 @@ class TicketBookingManager {
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory object.
    */
-  public function __construct(PrivateTempStoreFactory $temp_store_factory,
-                              CacheBackendInterface $cache,
+  public function __construct(CacheBackendInterface $cache,
                               LoggerChannelFactoryInterface $logger_factory,
                               ConfigFactoryInterface $config_factory) {
 
-    $this->privateTempStore = $temp_store_factory;
     $this->cache = $cache;
     $this->logger = $logger_factory->get('alshaya_kz_transac_lite');
     $this->configFactory = $config_factory;
     $this->soapClient = new \SoapClient($this->configFactory->get('alshaya_kz_transac_lite.settings')->get('service_url'));
-  }
-
-  /**
-   * The private temp store object.
-   *
-   * @return \Drupal\Core\TempStore\PrivateTempStoreFactory
-   *   private temporary store factory object.
-   */
-  public function privateTempStore() {
-    return $this->privateTempStore;
-  }
-
-  /**
-   * Removes all the keys from the store collection.
-   */
-  public function deletePrivateTempStore() {
-    $this->privateTempStore()->get('alshaya_kz_transac_lite_cart')->delete('final_visitor_list');
   }
 
   /**
@@ -141,7 +112,7 @@ class TicketBookingManager {
    *   Return token with AuthString and AuthVal.
    */
   public function getToken() {
-    if (json_decode($this->getTicketBookingCachedData('getToken'))->authenticateResult) {
+    if (isset(json_decode($this->getTicketBookingCachedData('getToken'))->authenticateResult)) {
       return json_decode($this->getTicketBookingCachedData('getToken'));
     }
     // Get token from kidsoft.
@@ -174,9 +145,10 @@ class TicketBookingManager {
    *   Object of parks data.
    */
   public function getParkData() {
-    if (json_decode($this->getTicketBookingCachedData('getParkData'))->getParksResult) {
-      return json_decode($this->getTicketBookingCachedData('getParkData'));
+    if (isset(json_decode($this->getTicketBookingCachedData('getParks'))->getParksResult)) {
+      return json_decode($this->getTicketBookingCachedData('getParks'));
     }
+
     try {
       $parks = $this->soapClient->__soapCall("getParks",
         [
@@ -255,7 +227,7 @@ class TicketBookingManager {
    *   object of visitorTypes.
    */
   public function getVisitorTypesData(string $shifts, string $visit_date) {
-    if (json_decode($this->getTicketBookingCachedData('getVisitorTypesData'))->getVisitorTypesResult) {
+    if (isset(json_decode($this->getTicketBookingCachedData('getVisitorTypesData'))->getVisitorTypesResult)) {
       return json_decode($this->getTicketBookingCachedData('getVisitorTypesData'));
     }
     $shifts = json_decode($shifts);
@@ -301,6 +273,9 @@ class TicketBookingManager {
    *   object of sexes data.
    */
   public function getSexesData() {
+    if (isset(json_decode($this->getTicketBookingCachedData('getSexesData'))->getSexesResult)) {
+      return json_decode($this->getTicketBookingCachedData('getSexesData'));
+    }
     try {
       $getSexes = $this->soapClient->__soapCall("getSexes",
         [
@@ -317,6 +292,7 @@ class TicketBookingManager {
             ],
         ]
       );
+      $this->setTicketBookingCachedData(json_encode($getSexes), 'getSexesData');
       return $getSexes;
     }
     catch (\ SoapFault $fault) {

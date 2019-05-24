@@ -21,6 +21,7 @@
       $.fn.kidzania = function (options) {
         var book_visit_date;
         var book_shifts;
+        var parks;
         var defaults = {speed: 500};
         var settings = $.extend({}, defaults, options);
         var body = $('html, body');
@@ -28,7 +29,9 @@
         var formErrClass = 'formErr';
         var sections = this.children();
         var isFormValid = false;
-
+        if (localStorage.getItem('booking_info') !== null) {
+          localStorage.removeItem('booking_info');
+        }
         var errorEle = $('.error_block'),
           timeEle = $('.time-to-visit'),
           cartEle = $('.sticky-cart .add-item'),
@@ -57,6 +60,7 @@
               Drupal.url('get-parks'),
               function (data) {
                 if (data) {
+                  parks = data;
                   $('.countryBtn .value, .countryDisplay').html(data);
                   this.getGender();
                 }
@@ -424,6 +428,7 @@
           });
           if (isValid) {
             actions.hideEle(eleFormErrMsg);
+            ticketTypesFinal['parks'] = parks;
             // Pre validate visitors at server level.
             $.post(Drupal.url('validate-visitor-details'), {
               final_visitor_list: ticketTypesFinal,
@@ -435,7 +440,8 @@
                 eleFormErrMsg.html(data.message);
               }
               else {
-                if ($.isNumeric(data)) {
+                if (data.status) {
+                  localStorage.setItem('booking_info', JSON.stringify(data));
                   $(location).attr('href', Drupal.url('payment'));
                 }
               }
