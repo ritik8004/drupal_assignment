@@ -82,6 +82,7 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $context = $event->getContext();
+    $context = (strpos($context, 'modal') > -1) ? 'pdp' : $context;
 
     switch ($context) {
       case 'cart':
@@ -95,7 +96,6 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
         }
 
         $event->setValue($return);
-
         break;
 
       case 'search':
