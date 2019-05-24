@@ -53,13 +53,17 @@
 
   .aa-suggestions {
     .aa-suggestion {
-      padding: 0.875rem 0.75rem;
       font-family: $alshaya-thin;
       font-size: 0.875rem;
       line-height: 1.3;
       color: $algolia-suggestion-text;
       display: flex;
       align-items: center;
+      padding: 0;
+
+      .suggested-text {
+        padding: 0.875rem 0.75rem;
+      }
 
       .populate-input {
         font-size: 0;
