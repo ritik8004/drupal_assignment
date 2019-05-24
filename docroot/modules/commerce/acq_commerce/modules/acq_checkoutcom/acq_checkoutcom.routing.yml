@@ -31,6 +31,6 @@ acq_checkoutcom.select_card_type:
   defaults:
     _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::selectCardType'
     _title: ''
-  // User can checkout as a guest.
   requirements:
+    # User can checkout as a guest.
     _access: 'TRUE'

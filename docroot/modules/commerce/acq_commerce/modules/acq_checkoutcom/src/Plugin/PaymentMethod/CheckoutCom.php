@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 
+use Drupal\acq_cart\CartInterface;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -16,6 +17,30 @@ use Drupal\Core\Url;
  * )
  */
 class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
+
+  /**
+   * Checkout.com api wrapper object.
+   *
+   * @var \Drupal\acq_checkoutcom\CheckoutComAPIWrapper
+   */
+  protected $checkoutComApi;
+
+  /**
+   * CheckoutCom constructor.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\acq_cart\CartInterface $cart
+   *   The shopping cart.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
+    $this->checkoutComApi = \Drupal::service('acq_checkoutcom.api');
+  }
 
   /**
    * {@inheritdoc}
@@ -45,10 +70,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         'existing' => $this->t('Existing Card'),
         'new' => $this->t('New Card'),
       ],
-      '#default_value' => !empty($options) && ($payment_type == 'existing' || empty($payment_type))  ? 'existing' : 'new',
+      '#default_value' => !empty($options) && ($payment_type == 'existing' || empty($payment_type)) ? 'existing' : 'new',
       '#ajax' => [
         'url' => Url::fromRoute('acq_checkoutcom.select_card_type'),
-        // 'callback' => [get_class($this), 'renderRelevantFields'],
         'wrapper' => 'payment_details_checkout_com',
         'effect' => 'fade',
       ],
@@ -148,98 +172,65 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     return $pane_form;
   }
 
-  public function renderRelevantFields(&$form, FormStateInterface $form_state) {
-    return $form['acm_payment_methods']['payment_details_wrapper']['payment_method_checkout_com']['payment_details'];
-  }
-
   /**
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
-
-    // $cart = $this->getCart();
-    // $cart->setPaymentMethod($this->getId(), ['card_token_id' => $inputs['cko-card-token']]);
-    if (!empty($inputs['cko-card-token'])) {
-      $this->chargesToken($inputs);
-      die();
+    $process_type = '3d';
+    if ($process_type == '2d') {
+      $cart = $this->getCart();
+      $cart->setPaymentMethod($this->getId(), ['card_token_id' => $inputs['cko-card-token']]);
     }
-    else {
-      $card_id = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_details']['existing_card'];
-      $this->chargesCard($card_id);
-      die();
+    elseif ($process_type == '3d') {
+      if (!empty($inputs['cko-card-token'])) {
+        $this->initiate3dSecurePayment($inputs);
+      }
+      else {
+        $acm_payment_methods = $form_state->getValue('acm_payment_methods');
+        $card_id = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_details']['existing_card'];
+        $this->initiateStoredCardPayment($card_id);
+      }
     }
   }
 
-  protected function chargesToken($inputs) {
-    $totals = $this->getCart()->totals();
-
-    $output = acq_checkoutcom_custom_curl_request(
-      'https://sandbox.checkout.com/api2/v2/charges/token',
-      [
-        'value' => $totals['grand'] * 100,
-        'currency' => 'KWD',
-        'cardToken' => $inputs['cko-card-token'],
-        'chargeMode' => 2,
-        'email' => 'testing@test.com',
-        'autoCapture' => 'Y',
-        'successUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-        'failUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-      ]
-    );
-
-    echo '<pre>';
-    print_r($output);
-    echo '</pre>';
-    die();
+  /**
+   * Process 3d secure payment for new card.
+   *
+   * @param array $inputs
+   *   The array of inputs from user.
+   *
+   * @throws \Exception
+   */
+  protected function initiate3dSecurePayment(array $inputs) {
+    $cart = $this->getCart();
+    $totals = $cart->totals();
+    // Process 3d secure payment.
+    $this->checkoutComApi->processNewCardPayment($cart, [
+      'value' => $totals['grand'] * 100,
+      'cardToken' => $inputs['cko-card-token'],
+      'email' => 'testing@test.com',
+    ]);
   }
 
-  protected function chargesCard($card_id) {
-    $totals = $this->getCart()->totals();
+  /**
+   * Process 3d secure payment for stored card.
+   *
+   * @param string $card_id
+   *   The stored card unique id.
+   *
+   * @throws \Exception
+   */
+  protected function initiateStoredCardPayment(string $card_id) {
+    $cart = $this->getCart();
+    $totals = $cart->totals();
 
-    $output = acq_checkoutcom_custom_curl_request(
-      'https://sandbox.checkout.com/api2/v2/charges/card',
-      [
-        'cardId' => $card_id,
-        'value' => $totals['grand'] * 100,
-        'currency' => 'KWD',
-        'chargeMode' => 2,
-        'email' => 'mitesh+cards@axelerant.com',
-        'autoCapture' => 'Y',
-        'successUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-        'failUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-      ]
-    );
-
-    echo '<pre>';
-    print_r($output);
-    echo '</pre>';
-    die();
-  }
-
-  protected function requestPayment($inputs) {
-    $totals = $this->getCart()->totals();
-
-    $output = acq_checkoutcom_custom_curl_request(
-      'https://api.sandbox.checkout.com/payments',
-      [
-        'source' => [
-          'type' => 'token',
-          'token' => $inputs['cko-card-token'],
-        ],
-        'amount' => $totals['grand'] * 100,
-        'currency' => 'USD',
-        '3ds' => [
-          'enabled' => TRUE,
-        ]
-      ]
-    );
-
-    echo '<pre>';
-    print_r($output);
-    echo '</pre>';
-    die();
+    $this->checkoutComApi->processStoredCardPayment($cart, [
+      'cardId' => $card_id,
+      'value' => $totals['grand'] * 100,
+      'email' => 'mitesh+cards@axelerant.com',
+    ]);
   }
 
 }
