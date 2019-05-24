@@ -1290,7 +1290,7 @@ class SkuImagesManager {
     $images = [];
 
     foreach ($media['media_items']['images'] as $item) {
-      $images = file_create_url($item['drupal_uri']);
+      $images[] = file_create_url($item['drupal_uri']);
     }
 
     return $images;
