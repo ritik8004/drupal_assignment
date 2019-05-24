@@ -10,6 +10,7 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -285,9 +286,13 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
               'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
 
-            $sku_configurable_options_color[$key]['display_value'] = empty($assets)
-              ? $variant_sku->get('attr_rgb_color')->getString()
-              : '<img src="' . file_url_transform_relative(file_create_url($assets[0]['drupal_uri'])) . '">';
+            if (empty($assets)) {
+              $sku_configurable_options_color[$key]['display_value'] = $variant_sku->get('attr_rgb_color')->getString();
+            }
+            else {
+              $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
+              $sku_configurable_options_color[$key]['display_value'] = '<img src="' . file_url_transform_relative($url) . '">';
+            }
 
             break;
           }
