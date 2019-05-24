@@ -63,6 +63,10 @@
     color: $calender_day_text;
     font-family: $ubuntu-sans-bold;
 
+    html[lang=ar] & {
+      line-height: 1;
+    }
+
     & > span {
       html[lang=ar] & {
         width: 2.8125rem;
@@ -72,6 +76,12 @@
         overflow: hidden;
         font-size: 1rem;
       }
+    }
+  }
+
+  td {
+    html[lang=ar] & {
+      line-height: 1;
     }
   }
 }
