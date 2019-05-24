@@ -8,7 +8,6 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -196,21 +195,13 @@ class SkuAssetManager {
    * @throws \Exception
    */
   public function getAssets(SKU $sku) {
-    $static = &drupal_static(__METHOD__, []);
-    $cid = implode(':', [
-      $sku->id(),
-      $sku->language()->getId(),
-    ]);
-
-    if (isset($static[$cid])) {
-      return $static[$cid];
-    }
-
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
       return [];
     }
+
+    $save = FALSE;
 
     foreach ($assets as $index => &$asset) {
       // Sanity check, we always need asset id.
@@ -219,8 +210,18 @@ class SkuAssetManager {
         continue;
       }
 
+      // We already have drupal_uri in asset data.
+      if (!empty($asset['drupal_uri'])) {
+        continue;
+      }
+
       try {
-        $asset['drupal_uri'] = $this->getImageUri($asset);
+        $file = $this->downloadImage($asset);
+        if ($file instanceof FileInterface) {
+          $asset['drupal_uri'] = $file->getFileUri();
+          $asset['fid'] = $file->id();
+          $save = TRUE;
+        }
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
@@ -231,34 +232,12 @@ class SkuAssetManager {
       }
     }
 
-    $static[$cid] = $assets;
+    if ($save) {
+      $sku->get('attr_assets')->setValue(serialize($assets));
+      $sku->save();
+    }
+
     return $assets;
-  }
-
-  /**
-   * Get drupal file uri for PIMS id from cache.
-   *
-   * @param int|string $pims_id
-   *   PIMS Id.
-   *
-   * @return string|null
-   *   Drupal file uri if found in cache.
-   */
-  private function getFileUriFromPimsId($pims_id) {
-    $cache = $this->cachePimsFiles->get($pims_id);
-    return $cache->data ?? NULL;
-  }
-
-  /**
-   * Set drupal file uri for PIMS id in cache.
-   *
-   * @param int|string $pims_id
-   *   PIMS id.
-   * @param \Drupal\file\FileInterface $file
-   *   File entity.
-   */
-  private function setFileUriForPimsId($pims_id, FileInterface $file) {
-    $this->cachePimsFiles->set($pims_id, $file->getFileUri(), Cache::PERMANENT, $file->getCacheTags());
   }
 
   /**
@@ -267,8 +246,8 @@ class SkuAssetManager {
    * @param array $data
    *   PIMS Data.
    *
-   * @return string|null
-   *   Drupal File URI if image download successful.
+   * @return \Drupal\file\FileInterface|null
+   *   File entity if image download successful.
    *
    * @throws \Exception
    */
@@ -315,9 +294,7 @@ class SkuAssetManager {
       watchdog_exception('SkuAssetManager', $e);
     }
 
-    $this->setFileUriForPimsId($data['id'], $file);
-
-    return $file->getFileUri();
+    return $file ?? [];
   }
 
   /**
@@ -326,8 +303,8 @@ class SkuAssetManager {
    * @param array $asset
    *   Asset data.
    *
-   * @return string|null
-   *   File uri if download successful.
+   * @return \Drupal\file\FileInterface|null
+   *   File entity download successful.
    *
    * @throws \Exception
    */
@@ -388,40 +365,29 @@ class SkuAssetManager {
       watchdog_exception('SkuAssetManager', $e);
     }
 
-    $this->setFileUriForPimsId($asset['Data']['AssetId'], $file);
-
-    return $file->getFileUri();
+    return $file ?? NULL;
   }
 
   /**
-   * Get Drupal file uri from PIMS data.
-   *
-   * Download image if not available in cache.
+   * Download Drupal file for Asset.
    *
    * @param array $asset
    *   Asset data.
    *
-   * @return string
-   *   File URI for pims id.
+   * @return \Drupal\file\FileInterface|null
+   *   File from asset if available.
    *
    * @throws \Exception
    */
-  private function getImageUri(array $asset) {
-    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-
-    // First check if we have fid for pims id (or asset id for fallback).
-    $uri = $this->getFileUriFromPimsId($id);
-
-    if (empty($uri)) {
-      if (isset($asset['pims_image'])) {
-        $uri = $this->downloadPimsImage($asset['pims_image']);
-      }
-      elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
-        $uri = $this->downloadLiquidPixelImage($asset);
-      }
+  private function downloadImage(array $asset) {
+    if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
+      $file = $this->downloadPimsImage($asset['pims_image']);
+    }
+    elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
+      $file = $this->downloadLiquidPixelImage($asset);
     }
 
-    return $uri;
+    return $file ?? NULL;
   }
 
   /**

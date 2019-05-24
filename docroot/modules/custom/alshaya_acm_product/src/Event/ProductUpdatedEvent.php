@@ -13,6 +13,9 @@ use Symfony\Component\EventDispatcher\Event;
 class ProductUpdatedEvent extends Event {
 
   const EVENT_NAME = 'product_updated';
+  const EVENT_INSERT = 'insert';
+  const EVENT_UPDATE = 'update';
+  const EVENT_DELETE = 'delete';
 
   /**
    * SKU Entity.
