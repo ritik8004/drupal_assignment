@@ -177,14 +177,10 @@ class SkuImagesManager {
       $sku->getSku(),
       $sku->language()->getId(),
       (int) $check_parent_child,
+      $context,
     ]);
 
     if (isset($static[$static_id])) {
-      return $static[$static_id];
-    }
-
-    $static[$static_id] = $this->productCacheManager->get($sku, $static_id);
-    if (!empty($static[$static_id])) {
       return $static[$static_id];
     }
 
@@ -201,8 +197,6 @@ class SkuImagesManager {
           $item['label'] = $sku->label();
         }
       }
-
-      $this->productCacheManager->set($sku, $static_id, $static[$static_id]);
     }
     catch (\Exception $e) {
       // Do nothing.
