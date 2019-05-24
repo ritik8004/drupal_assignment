@@ -119,10 +119,10 @@ function alshaya_acm_cart_notification_form_submit(&$form, FormStateInterface $f
       // If we have a child_sku available.
       $child_sku_entity = SKU::loadFromSku($form_state->getTemporaryValue('child_sku'));
       $product_name = $productInfoHelper->getTitle($child_sku_entity, 'basket');
-      $image = alshaya_acm_get_product_display_image($child_sku_entity, 'cart_notification_thumbnail', 'cart_notification');
+      $image = alshaya_acm_get_product_display_image($child_sku_entity, 'pdp_gallery_thumbnail', 'cart');
     }
     else {
-      $image = alshaya_acm_get_product_display_image($sku_entity, 'cart_notification_thumbnail', 'cart_notification');
+      $image = alshaya_acm_get_product_display_image($sku_entity, 'pdp_gallery_thumbnail', 'cart');
     }
 
     // Use the template to render the HTML.
