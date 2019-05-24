@@ -84,8 +84,9 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     $context = $event->getContext();
 
     switch ($context) {
+      case 'cart':
       case 'pdp':
-        $media = $this->skuAssetsManager->getImagesForSku($sku, 'pdp');
+        $media = $this->skuAssetsManager->getImagesForSku($sku, $context);
 
         $return = [];
         foreach ($media as $item) {

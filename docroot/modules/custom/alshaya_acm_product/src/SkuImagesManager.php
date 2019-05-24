@@ -410,11 +410,13 @@ class SkuImagesManager {
    *
    * @param \Drupal\acq_commerce\SKUInterface $sku
    *   SKU entity.
+   * @param string $context
+   *   Context for image.
    *
    * @return array
    *   Media item array.
    */
-  public function getFirstImage(SKUInterface $sku) {
+  public function getFirstImage(SKUInterface $sku, string $context = 'plp') {
 
     try {
       $sku = $this->getSkuForGallery($sku);
@@ -423,7 +425,7 @@ class SkuImagesManager {
       return [];
     }
 
-    $media = $this->getProductMedia($sku, 'plp');
+    $media = $this->getProductMedia($sku, $context);
 
     if (isset($media['media_items'], $media['media_items']['images'])
       && is_array($media['media_items']['images'])) {
