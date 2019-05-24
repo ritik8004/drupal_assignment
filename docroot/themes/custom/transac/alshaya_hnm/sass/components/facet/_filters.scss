@@ -68,9 +68,7 @@
 
           label {
             &::before {
-              font-size: 3.75rem;
-              top: -1.125rem;
-              #{$left}: 0;
+              top: -0.1875rem;
               transform: translateY(0);
             }
           }
@@ -100,6 +98,27 @@
     .site-brand-home {
       a {
         width: 2.5rem;
+      }
+    }
+  }
+}
+
+.c-plp .c-content__region {
+  .filters-active {
+    .block-views-exposed-filter-blockalshaya-product-list-block-1,
+    .block-views-exposed-filter-blockalshaya-product-list-block-2,
+    .block-views-exposed-filter-blocksearch-page {
+      .fieldset-wrapper {
+        .form-type-radio {
+          label {
+            &::before {
+              font-size: 3.75rem;
+              top: -1.125rem;
+              #{$left}: 0;
+              margin-top: 0.0625rem;
+            }
+          }
+        }
       }
     }
   }

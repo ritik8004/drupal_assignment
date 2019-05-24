@@ -23,13 +23,6 @@ html {
   }
 }
 
-body.mobile--overlay.safari {
-  &.safari-fixed {
-    position: fixed !important;
-    margin-top: 0 !important;
-  }
-}
-
 // Css for filters on products listing page and search page.
 .c-plp .c-content__region {
   // Main all filters div theming.
@@ -177,7 +170,7 @@ body.mobile--overlay.safari {
           .fieldset-legend {
             display: block;
             text-transform: capitalize;
-            padding: 1.125rem 2rem;
+            padding: 1.3125rem 2rem;
             height: auto;
             line-height: 1;
             border-bottom: 1px solid $plp_all_filter_item_border;
@@ -212,7 +205,7 @@ body.mobile--overlay.safari {
               padding: 0 !important;
               margin-bottom: 0;
               border-bottom: 1px solid $plp_all_filter_item_border;
-              line-height: 2.9375rem;
+              line-height: 3.4375rem;
             }
 
             .form-type-radio:first-child {
