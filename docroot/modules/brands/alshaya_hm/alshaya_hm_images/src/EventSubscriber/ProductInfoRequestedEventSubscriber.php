@@ -82,6 +82,10 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
     }
 
     $context = $event->getContext();
+
+    // We show same images for pdp, modal, modal-magazine.
+    // To avoid adding extra configs for them (sorting assets) we use pdp
+    // for all three cases.
     $context = (strpos($context, 'modal') > -1) ? 'pdp' : $context;
 
     switch ($context) {
