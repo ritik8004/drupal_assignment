@@ -25,6 +25,11 @@ function alshaya_hm_images_update_8009() {
     'install',
     AlshayaConfigManager::MODE_ADD_MISSING
   );
+
+  // Reset Image Settings to set proper pims_base_url.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'alshaya_hm_images.settings');
 }
 
 /**
