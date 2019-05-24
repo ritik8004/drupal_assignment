@@ -15,7 +15,7 @@ function alshaya_product_zoom_cloudzoom_default_settings() {
   return [
     'slide_style' => 'product_zoom_medium_606x504',
     'zoom_style' => 'product_zoom_large_800x800',
-    'thumb_style' => '291x288',
+    'thumb_style' => 'pdp_gallery_thumbnail',
     'zoom_width' => 'auto',
     'zoom_height' => 'auto',
     'zoom_position' => 'right',
