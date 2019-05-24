@@ -1283,7 +1283,7 @@ class SkuImagesManager {
     $media = $this->getProductMedia($sku, 'pdp');
     $images = [];
 
-    foreach ($media['media_items']['images'] as $item) {
+    foreach ($media['media_items']['images'] ?? [] as $item) {
       $images[] = file_create_url($item['drupal_uri']);
     }
 
