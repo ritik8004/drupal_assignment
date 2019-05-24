@@ -6,7 +6,7 @@
 subscription="$1"
 target_env="$2"
 
-cd `drush sa @$subscription.$target_env | grep root | cut -d"'" -f4`
+cd `drush sa @$subscription.$target_env --fields=root | grep root | cut -d" " -f4`
 
 domains=$(drush acsf-tools-list --fields=domains | grep " " | cut -d' ' -f6 | awk NF)
 
