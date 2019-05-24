@@ -132,23 +132,19 @@ foreach ($languages as $language) {
   // Just need a dummy index to create our index as there is no API to create
   // new index directly.
   $client->copyIndex('dummy', $name);
-  $index = $client->initIndex($name);
-  sleep(10);
 
-  $query_suggestion = $name . '_query';
-  $query = [
-    'indexName' => $query_suggestion,
-    'sourceIndices' => [
-      [
-        'indexName' => $name,
-        'facets' => $query_facets,
-        'generate' => $query_generate,
-      ],
-    ],
-  ];
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
+  do {
+    try {
+      $index = $client->initIndex($name);
+      sleep(10);
+      $settings = $index->getSettings();
+    }
+    catch (\Exception $e) {
+      print $e->getMessage() . PHP_EOL;
+    }
+  } while (!isset($settings));
+  print PHP_EOL . PHP_EOL;
 
-  $settings = $index->getSettings();
   $settings['attributesForFaceting'] = $facets;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
@@ -173,6 +169,26 @@ foreach ($languages as $language) {
     ] + $ranking;
     $replica_index->setSettings($replica_settings);
   }
+
+  $query_suggestion = $name . '_query';
+  $query = [
+    'indexName' => $query_suggestion,
+    'sourceIndices' => [
+      [
+        'indexName' => $name,
+        'facets' => $query_facets,
+        'generate' => $query_generate,
+      ],
+    ],
+  ];
+
+  foreach ($settings['replicas'] as $replica) {
+    $query['sourceIndices'][] = [
+      'indexName' => $replica,
+    ];
+  }
+
+  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
 
   print $name . PHP_EOL;
   print $query_suggestion . PHP_EOL;
