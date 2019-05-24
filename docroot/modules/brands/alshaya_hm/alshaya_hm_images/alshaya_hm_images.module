@@ -11,7 +11,6 @@ use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\ViewExecutable;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
@@ -168,7 +167,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
 
     if (!empty($teaser_assets)) {
       $sku_media = reset($teaser_assets);
-      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku->label(), '291x288');
+      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku->label(), 'product_teaser');
     }
   }
   elseif ($context == 'pdp' && !empty($build['free_gift_promotions']['#free_sku_code']) && empty($build['free_gift_promotions']['#sku_image'])) {
@@ -214,25 +213,6 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
         $main_image['mediumurl'] = $pdp_images['pdp_main'][0]['url'];
         $main_image['label'] = $sku->label();
       }
-    }
-  }
-}
-
-/**
- * Implements hook_acq_sku_cart_media_alter().
- */
-function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $context = 'cart') {
-  if (empty($sku_image)) {
-    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart');
-
-    if (!empty($cart_assets)) {
-      $sku_image = [
-        '#theme' => 'image',
-        '#attributes' => [
-          'src' => ImageStyle::load('291x288')->buildUrl($cart_assets[0]['drupal_uri']),
-        ],
-      ];
     }
   }
 }
