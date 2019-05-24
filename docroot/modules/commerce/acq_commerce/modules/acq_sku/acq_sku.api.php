@@ -63,8 +63,10 @@ function hook_acq_sku_product_node_alter(NodeInterface $node, array $product) {
  *   SKU to alter.
  * @param array $product
  *   Array containing details provided by API.
+ * @param array $existing_data
+ *   Existing SKU data as array.
  */
-function hook_acq_sku_product_sku_alter(SKU $sku, array $product) {
+function hook_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
 
 }
 

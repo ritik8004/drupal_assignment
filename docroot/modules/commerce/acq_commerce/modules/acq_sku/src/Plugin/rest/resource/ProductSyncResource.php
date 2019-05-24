@@ -441,7 +441,7 @@ class ProductSyncResource extends ResourceBase {
         $plugin->processImport($sku, $product);
 
         // Invoke the alter hook to allow all modules to update the sku.
-        \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product);
+        \Drupal::moduleHandler()->alter('acq_sku_product_sku', $sku, $product, $skuData);
 
         $sku->save();
 
