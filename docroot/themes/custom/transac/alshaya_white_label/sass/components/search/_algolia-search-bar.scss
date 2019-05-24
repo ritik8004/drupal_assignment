@@ -29,6 +29,14 @@
     @include breakpoint($tablet) {
       border-bottom: 1px solid $algolia-input-border;
     }
+
+    html[lang=ar] & {
+      direction: rtl !important;
+
+      .form-text {
+        text-align: right;
+      }
+    }
   }
 
   .aa-dropdown-menu {
@@ -53,16 +61,21 @@
 
   .aa-suggestions {
     .aa-suggestion {
-      padding: 0.875rem 0.75rem;
       font-family: $alshaya-thin;
       font-size: 0.875rem;
       line-height: 1.3;
       color: $algolia-suggestion-text;
       display: flex;
       align-items: center;
+      padding: 0;
+
+      .suggested-text {
+        padding: 0.875rem 0.75rem;
+      }
 
       .populate-input {
         font-size: 0;
+        #{$right}: 0;
 
         @include icon(edit-input, after) {
           color: $algolia-suggestion-input-popout-icon;
