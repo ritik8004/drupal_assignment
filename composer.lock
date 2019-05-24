@@ -11352,7 +11352,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api_algolia.git",
-                "reference": "3f336fc15b3917143268d81bf7a07e904c4b3109"
+                "reference": "3456aea28dc0177b05374da4ea4c0d76a1f7f2d1"
             },
             "require": {
                 "algolia/algoliasearch-client-php": "^1.0",
@@ -11365,8 +11365,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha2+3-dev",
-                    "datestamp": "1558521485",
+                    "version": "8.x-1.0-alpha2+4-dev",
+                    "datestamp": "1558522985",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -11412,7 +11412,7 @@
                 "source": "http://git.drupal.org/project/search_api_algolia.git",
                 "issues": "https://www.drupal.org/project/issues/search_api_algolia"
             },
-            "time": "2019-05-22T10:59:31+00:00"
+            "time": "2019-05-24T11:04:42+00:00"
         },
         {
             "name": "drupal/search_api_autocomplete",

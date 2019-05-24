@@ -61,6 +61,9 @@ $client = new Client($app_id, $app_secret_admin);
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;
 
+  $index = $client->initIndex($name);
+  $settings = $index->getSettings();
+
   $query_suggestion = $name . '_query';
   $query = [
     'indexName' => $query_suggestion,
@@ -72,6 +75,13 @@ foreach ($languages as $language) {
       ],
     ],
   ];
+
+  foreach ($settings['replicas'] as $replica) {
+    $query['sourceIndices'][] = [
+      'indexName' => $replica,
+    ];
+  }
+
   algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
 
   print $query_suggestion . PHP_EOL;
