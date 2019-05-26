@@ -93,6 +93,12 @@
   }
 }
 
+.path--payment {
+  .progress-bar-status {
+    visibility: hidden;
+  }
+}
+
 @keyframes addItem {
   0% {
     top: -2.5rem;
@@ -110,8 +116,6 @@
   99% {
     top: -0.5rem;
   }
-
-  // 100% { }
 }
 
 @keyframes fullCart {

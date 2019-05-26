@@ -38,6 +38,15 @@
     @include breakpoint ($only-mobile) {
       width: 100%;
     }
+
+    label.error {
+      display: block !important;
+      text-align: $left;
+      color: $error_form_msg;
+      font-size: 0.75rem;
+      padding-#{$left}: 0.75rem;
+      padding-top: 0.375rem;
+    }
   }
 
   .mobile-input--wrapper {
