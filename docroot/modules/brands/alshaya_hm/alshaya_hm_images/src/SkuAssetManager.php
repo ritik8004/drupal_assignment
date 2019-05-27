@@ -333,12 +333,10 @@ class SkuAssetManager {
     }
 
     $file_data = (string) $file_data;
-    $hash = sha1($file_data);
-
-    if ($hash === Settings::get('hm_grey_image_hash', '98338129c981c32ec6a32309993bfee129b90b45')) {
-      $this->logger->error('Skipping grey image. File: @file, Hash: @hash, Asset id: @id', [
+    if (strlen($file_data) <= Settings::get('hm_grey_image_size', 24211)) {
+      $this->logger->error('Skipping grey image. File: @file, Size: @size, Asset id: @id', [
         '@file' => $url,
-        '@hash' => $hash,
+        '@size' => strlen($file_data),
         '@id' => $asset['Data']['AssetId'],
       ]);
 
