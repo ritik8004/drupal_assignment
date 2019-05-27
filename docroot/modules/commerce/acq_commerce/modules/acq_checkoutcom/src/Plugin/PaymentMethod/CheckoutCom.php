@@ -53,6 +53,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    // @todo: Repalce this code with API call.
     $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card.json';
     $data = file_get_contents($file);
     $existing_cards = !empty($data) ? json_decode($data) : [];
@@ -178,6 +179,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
     // MDC will handle the part of payment just need to send card_token_id.
     $inputs = $form_state->getUserInput();
+    // @todo: Replace this with APi call + cache / config.
     $process_type = '3d';
     if ($process_type == '2d') {
       $cart = $this->getCart();
