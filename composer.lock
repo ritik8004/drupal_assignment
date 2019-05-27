@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0370abd9dc90697efe56e923ee09d5ae",
+    "content-hash": "0cf77c2b858a5f8451f9c60a2ab47884",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -12254,7 +12254,7 @@
                     }
                 },
                 "patches_applied": {
-                    "Leverage the use of event from social_auth": "https://www.drupal.org/files/issues/2019-05-13/use-event-dispatcher-method-3033751-9.patch"
+                    "Dispatch failed authentication event in callback": "https://git.drupalcode.org/project/social_auth_facebook/commit/730ad4e.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12323,6 +12323,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "Dispatch failed authentication event in callback": "https://www.drupal.org/files/issues/2019-05-27/dispatch-authentication-error-3057287-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
