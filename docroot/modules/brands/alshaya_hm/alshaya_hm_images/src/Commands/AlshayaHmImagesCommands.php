@@ -55,7 +55,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
    */
   public function generateImageReport(array $options = [
     'check_faults' => 0,
-    'faulty_size' => 351,
+    'faulty_size' => 24211,
     'batch_size' => 50,
   ]) {
 
