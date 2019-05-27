@@ -331,6 +331,12 @@ class AlshayaApiCommands extends DrushCommands {
                 $stock_mismatch_sync[$type][] = $sku;
               }
 
+              // Cast prices to ensure comparison is between apple to apple.
+              $data['price'] = (float) $data['price'];
+              $data['final_price'] = (float) $data['final_price'];
+              $mskus[$type][$sku]['price'] = (float) $mskus[$type][$sku]['price'];
+              $mskus[$type][$sku]['final_price'] = (float) $mskus[$type][$sku]['final_price'];
+
               // If price in Drupal not matches with price in Magento.
               if ($data['price'] != $mskus[$type][$sku]['price']) {
                 $price_output .= 'Drupal price:' . $data['price'] . ' | ';
