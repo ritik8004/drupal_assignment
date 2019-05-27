@@ -1,0 +1,5 @@
+acq_checkoutcom_add_payment_Card_action:
+  route_name: acq_checkoutcom.payment_card.add_card
+  title: 'Add new card'
+  appears_on:
+    - acq_checkoutcom.payment_cards

@@ -10,6 +10,7 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Http\ClientFactory as HttpClientFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\user\UserInterface;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Component\Serialization\Json;
@@ -252,6 +253,151 @@ class CheckoutComAPIWrapper {
     if ($response instanceof RedirectResponse) {
       $response->send();
     }
+  }
+
+  /**
+   * Authorize a card fro payment.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The usser object.
+   * @param string $endpoint
+   *   The end point to call.
+   * @param array $params
+   *   The array of params.
+   * @param string $caller
+   *   The caller method.
+   *
+   * @return array
+   *   Return array of reponse or empty array.
+   *
+   * @throws \Exception
+   */
+  protected function authorizeCardForPayment(UserInterface $user, string $endpoint, array $params, $caller = '') {
+    $doReq = function ($client, $req_param) use ($endpoint, $params) {
+      $opt = ['json' => $req_param['commerce'] + $params];
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      $result = $this->tryCheckoutRequest($doReq, $caller);
+    }
+    catch (\UnexpectedValueException $e) {
+      $this->logger->warning('Error occurred while processing card authorization for user: %user : %message', [
+        '%user' => $user->getEmail(),
+        '%message' => $e->getMessage(),
+      ]);
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    // Validate authorisation.
+    if (array_key_exists('status', $result) && $result['status'] === 'Declined') {
+      $this->logger->warning('checkout.com card autorization failed.');
+      return [];
+    }
+
+    return $result;
+  }
+
+  /**
+   * Make void transaction.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param string $endpoint
+   *   The end point to call.
+   * @param array $params
+   *   The array of params.
+   * @param string $caller
+   *   The caller method.
+   *
+   * @return array
+   *   The array of reponse or empty array.
+   *
+   * @throws \Exception
+   */
+  protected function makeVoidTransaction(UserInterface $user, string $endpoint, array $params, $caller = '') {
+    $doReq = function ($client, $req_param) use ($endpoint, $params) {
+      $opt = ['json' => $req_param['commerce'] + $params];
+      return ($client->post($endpoint, $opt));
+    };
+
+    try {
+      $result = $this->tryCheckoutRequest($doReq, $caller);
+    }
+    catch (\UnexpectedValueException $e) {
+      $this->logger->warning('Error occurred while processing card authorization for user: %user : %message', [
+        '%user' => $user->getEmail(),
+        '%message' => $e->getMessage(),
+      ]);
+      throw new \Exception($e->getMessage(), $e->getCode());
+    }
+
+    if (array_key_exists('errorCode', $result)) {
+      $this->logger->warning('void transaction failed for card.');
+      return [];
+    }
+
+    return $result;
+  }
+
+  /**
+   * Get the card details to save new card.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param array $params
+   *   The payment params.
+   *
+   * @return array
+   *   Return array of card data to be saved.
+   *
+   * @throws \Exception
+   */
+  public function storeNewCard(UserInterface $user, array $params) {
+    $params = $params + [
+      'value' => (float) self::VOID_PAYMENT_AMOUNT * 100,
+      'autoCapture' => 'N',
+      'description' => 'Saving new card',
+      'customerName' => $params['name'],
+    ];
+
+    // Authorize a card for payment.
+    $response = $this->authorizeCardForPayment(
+      $user,
+      self::AUTHORIZE_PAYMENT_ENDPOINT,
+      $params,
+      'storeNewCard'
+    );
+
+    if (empty($response)) {
+      return [];
+    }
+
+    // Run the void transaction for the gateway.
+    $void = $this->makeVoidTransaction(
+      $user,
+      strtr(self::VOID_PAYMENT_ENDPOINT, ['@id' => $response['id']]),
+      ['trackId' => ''],
+      'storeNewCard'
+    );
+
+    if (empty($void) || empty($response['card'])) {
+      return [];
+    }
+
+    // Prepare the card data to save.
+    $cardData = array_filter($response['card'], function ($key) {
+      return !in_array($key, [
+        'customerId',
+        'billingDetails',
+        'bin',
+        'fingerprint',
+        'cvvCheck',
+        'avsCheck',
+      ]);
+    }, ARRAY_FILTER_USE_KEY);
+    // Add the key 'name' in about array.
+    return $cardData;
   }
 
 }
