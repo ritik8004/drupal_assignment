@@ -1,6 +1,8 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - image_style_quality
 name: product_listing
 label: 'Product Listing'
 effects:
@@ -12,3 +14,9 @@ effects:
       width: null
       height: 450
       upscale: false
+  373ba336-9855-4368-be3f-cffac44b8b68:
+    uuid: 373ba336-9855-4368-be3f-cffac44b8b68
+    id: image_style_quality
+    weight: 2
+    data:
+      quality: 75
