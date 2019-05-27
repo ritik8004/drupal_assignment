@@ -52,7 +52,7 @@
       font-family: $alshaya-bold;
       padding: 1.5625rem 0.75rem;
       display: block;
-      border-bottom: 1px solid #dadada;
+      border-bottom: 1px solid $algolia-trending-title-border;
 
       @include breakpoint($tablet) {
         padding: 1rem 0.75rem;
@@ -69,7 +69,7 @@
       display: flex;
       align-items: center;
       padding: 0;
-      border-bottom: 1px solid #f2f2f2;
+      border-bottom: 1px solid $algolia-suggestion-border;
 
       .suggested-text {
         padding: 0.875rem 0.75rem;
@@ -140,7 +140,7 @@
     top: 3rem;
     #{$left}: 0;
     background-color: $algolia-dropdown-background;
-    box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 0.5px 0 0 $algolia_sticky-header-shadow;
     border-top: 1px solid $algolia-dropdown-border;
     border-bottom: 1px solid $algolia-dropdown-border;
 
