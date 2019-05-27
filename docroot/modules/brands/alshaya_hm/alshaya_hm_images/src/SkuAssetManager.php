@@ -333,7 +333,7 @@ class SkuAssetManager {
     }
 
     $file_data = (string) $file_data;
-    if (strlen($file_data) == Settings::get('hm_grey_image_size', 24211)) {
+    if (strlen($file_data) <= Settings::get('hm_grey_image_size', 24211)) {
       $this->logger->error('Skipping grey image. File: @file, Size: @size, Asset id: @id', [
         '@file' => $url,
         '@size' => strlen($file_data),
