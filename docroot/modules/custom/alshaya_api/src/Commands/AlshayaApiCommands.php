@@ -331,6 +331,12 @@ class AlshayaApiCommands extends DrushCommands {
                 $stock_mismatch_sync[$type][] = $sku;
               }
 
+              // Cast prices to ensure comparison is between apple to apple.
+              $data['price'] = (float) $data['price'];
+              $data['final_price'] = (float) $data['final_price'];
+              $mskus[$type][$sku]['price'] = (float) $mskus[$type][$sku]['price'];
+              $mskus[$type][$sku]['final_price'] = (float) $mskus[$type][$sku]['final_price'];
+
               // If price in Drupal not matches with price in Magento.
               if ($data['price'] != $mskus[$type][$sku]['price']) {
                 $price_output .= 'Drupal price:' . $data['price'] . ' | ';
@@ -338,11 +344,11 @@ class AlshayaApiCommands extends DrushCommands {
                 $price_mismatch_sync[$type][] = $sku;
               }
 
-              // If special price in Drupal not matches with final price
+              // If final price in Drupal not matches with final price
               // in Magento.
-              if ($data['special_price'] != $mskus[$type][$sku]['final_price']) {
-                $price_output .= 'Drupal spl price:' . $data['special_price'] . ' | ';
-                $price_output .= 'MDC spl price:' . $mskus[$type][$sku]['final_price'];
+              if ($data['final_price'] != $mskus[$type][$sku]['final_price']) {
+                $price_output .= 'Drupal final price:' . $data['final_price'] . ' | ';
+                $price_output .= 'MDC final price:' . $mskus[$type][$sku]['final_price'];
                 $price_mismatch_sync[$type][] = $sku;
               }
 

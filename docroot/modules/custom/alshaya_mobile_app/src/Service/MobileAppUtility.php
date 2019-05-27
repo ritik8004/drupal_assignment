@@ -700,26 +700,26 @@ class MobileAppUtility {
    *   Media Items.
    */
   public function getMedia(SKUInterface $sku, string $context): array {
+    /** @var \Drupal\acq_sku\Entity\SKU $sku */
     $media = $this->skuImagesManager->getProductMedia($sku, $context);
 
-    // Keep schema consistent.
-    if (empty($media)) {
-      return ['images' => [], 'videos' => []];
-    }
-
-    if (!isset($media['images_with_type'])) {
-      $media['images_with_type'] = array_map(function ($image) {
-        return [
-          'url' => $image,
-          'image_type' => 'image',
-        ];
-      }, array_values($media['images']));
-    }
-
-    return [
-      'images' => $media['images_with_type'],
-      'videos' => array_values($media['videos']),
+    $return = [
+      'images' => [],
+      'videos' => [],
     ];
+
+    foreach ($media['media_items']['images'] ?? [] as $media_item) {
+      $return['images'][] = [
+        'url' => file_create_url($media_item['drupal_uri']),
+        'type' => 'image',
+      ];
+    }
+
+    foreach ($media['media_items']['videos'] ?? [] as $media_item) {
+      $return['videos'][] = $media_item['video_url'];
+    }
+
+    return $return;
   }
 
   /**

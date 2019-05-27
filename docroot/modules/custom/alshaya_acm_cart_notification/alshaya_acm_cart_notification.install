@@ -5,6 +5,18 @@
  * Contains install, update, uninstall hooks for alshaya_acm_cart_notification.
  */
 
+use Drupal\image\Entity\ImageStyle;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Update image style to have more width and avoid pixelated images.
+ */
+function alshaya_acm_cart_notification_update_8002() {
+  $style = ImageStyle::load('cart_notification_thumbnail');
+  $style->delete();
+}
+
 /**
  * Implements hook_update_N().
  *
