@@ -271,7 +271,7 @@ class CheckoutSummaryBlock extends BlockBase implements ContainerFactoryPluginIn
       }
 
       // Load the first image.
-      $image = alshaya_acm_get_product_display_image($sku, '291x288', 'checkout_summary');
+      $image = alshaya_acm_get_product_display_image($sku, '291x288', 'cart');
 
       $node = alshaya_acm_product_get_display_node($sku);
       $product_name = $this->productInfoHelper->getTitle($sku, 'basket');
