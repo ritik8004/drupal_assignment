@@ -15,6 +15,13 @@ function alshaya_search_algolia_install() {
     'alshaya_white_label'
   );
 
+  // Update block weight of search bar to match what was there for existing
+  // keywords exposed form block.
+  $existing = \Drupal::configFactory()->get('block.block.keywordsearchblock');
+  $new = \Drupal::configFactory()->getEditable('block.block.autocompletewidgetofalgolia');
+  $new->set('weight', $existing->get('weight'));
+  $new->save();
+
   // Reset Algolia keys in configs.
   /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
   $config_check = \Drupal::service('alshaya_acm.config_check');
