@@ -244,15 +244,15 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
       ];
 
+      if ($term->display_in_desktop) {
+        $data[$term->tid]['class'][] = 'show-on-desktop';
+      }
+
+      if ($term->display_in_mobile) {
+        $data[$term->tid]['class'][] = 'show-on-mobile';
+      }
+
       if ($link = $this->getOverrideTargetLink($term->tid, $langcode)) {
-        if ($term->display_in_desktop) {
-          $data[$term->tid]['class'][] = 'show-on-desktop';
-        }
-
-        if ($term->display_in_mobile) {
-          $data[$term->tid]['class'][] = 'show-on-mobile';
-        }
-
         $data[$term->tid]['path'] = Url::fromUri($link)->toString();
         $data[$term->tid]['class'][] = 'non-category';
       }
