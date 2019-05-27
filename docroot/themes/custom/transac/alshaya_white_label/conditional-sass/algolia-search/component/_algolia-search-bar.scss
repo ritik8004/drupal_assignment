@@ -52,6 +52,7 @@
       font-family: $alshaya-bold;
       padding: 1.5625rem 0.75rem;
       display: block;
+      border-bottom: 1px solid #dadada;
 
       @include breakpoint($tablet) {
         padding: 1rem 0.75rem;
@@ -68,6 +69,7 @@
       display: flex;
       align-items: center;
       padding: 0;
+      border-bottom: 1px solid #f2f2f2;
 
       .suggested-text {
         padding: 0.875rem 0.75rem;
@@ -86,6 +88,10 @@
           height: 1.25rem;
           #{$right}: 1.5rem;
           top: -0.625rem;
+
+          @include breakpoint($only-mobile) {
+            #{$right}: 0.625rem;
+          }
         }
       }
 
@@ -98,6 +104,14 @@
           }
         }
       }
+
+      .suggested-text {
+        font-weight: bold;
+
+        em {
+          font-weight: normal;
+        }
+      }
     }
   }
 
@@ -107,6 +121,7 @@
     @include breakpoint($only-mobile) {
       top: 3.625rem !important;
       height: 100vh;
+      overflow-y: auto;
     }
   }
 
@@ -127,6 +142,7 @@
     background-color: $algolia-dropdown-background;
     box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.24);
     border-top: 1px solid $algolia-dropdown-border;
+    border-bottom: 1px solid $algolia-dropdown-border;
 
     .algolia-form-wrapper {
       max-width: none;
@@ -170,33 +186,113 @@
 }
 
 @include breakpoint($only-mobile) {
-  body {
-    &.frontpage {
-      margin-top: 7rem !important;
-    }
-  }
-}
-
-@include breakpoint($only-mobile) {
   .block-search-api-algolia-autocomplete-block {
+    display: none;
+    transition: border-bottom-color 0.5s ease, box-shadow 0.5s ease;
+
     &.algolia-search-active {
-      .algolia-form-wrapper {
+      .algolia-search-icon {
         @include icon(chevron#{$left});
       }
     }
 
-    .algolia-form-wrapper {
-      @include icon(search);
+    &::before {
+      content: '';
+      background-color: transparent;
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out, z-index 0.5s ease-in-out;
+    }
+
+    .algolia-search-icon {
+      position: absolute;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      margin: 0.875rem 0 0.625rem;
+      #{$left}: 0.75rem;
+      z-index: 1;
 
       &::before {
         position: absolute;
         font-size: 2rem;
-        margin: 0.875rem 0 0.625rem;
         color: $algolia-search-icon;
       }
+    }
 
-      button[type="submit"] {
+    button[type="submit"] {
+      display: none;
+    }
+  }
+
+  body {
+    &.frontpage {
+      margin-top: 7rem !important;
+    }
+
+    &.Sticky-algolia-search {
+      .block-search-api-algolia-autocomplete-block {
+        position: fixed;
+        top: 0;
+      }
+    }
+
+    &.mobile--overlay {
+      .block-search-api-algolia-autocomplete-block {
+        border-color: $header_mobile_menu_overlay;
+
+        &::before {
+          opacity: 1;
+          z-index: 7;
+          transform: translate3d(0, 0, 0);
+          background-color: $header_mobile_menu_overlay;
+        }
+      }
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      .branding__menu {
+        position: absolute !important;
+      }
+
+      .block-search-api-algolia-autocomplete-block {
+        display: block;
+
+        .algolia-search-icon {
+          @include icon(search);
+        }
+
+        &.algolia-search-active {
+          .algolia-search-icon {
+            @include icon(chevron#{$left});
+          }
+        }
+      }
+
+      .mobile--search {
         display: none;
+      }
+    }
+
+    &.no-sticky-algolia-search-bar {
+      .block-search-api-algolia-autocomplete-block {
+        display: none;
+
+        &.show-algolia-search-bar {
+          display: block;
+          top: -0.625rem;
+          z-index: 1;
+        }
+
+        .algolia-search-icon {
+          @include icon(chevron#{$left});
+        }
       }
     }
   }
