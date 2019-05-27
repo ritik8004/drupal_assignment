@@ -13,6 +13,8 @@ use Symfony\Component\Yaml\Yaml;
  * Add image styles for each layout separately (split 291x288).
  */
 function alshaya_image_styles_update_8105() {
+  \Drupal::service('module_installer')->install(['image_style_quality']);
+
   // Install the config for image styles.
   $configs = [
     'image.style.cart_thumbnail',
