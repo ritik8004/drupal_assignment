@@ -11,7 +11,7 @@
   Drupal.behaviors.algoliaSearchMenu = {
     attach: function (context, settings) {
 
-      $('#search_api_algolia_autocomplete_block-search').off().on('click', function (e) {
+      $('#search_api_algolia_autocomplete_block-search').once().on('click', function (e) {
         $('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
       });
 
@@ -26,7 +26,7 @@
       });
 
       // Add the trending title by default to algolia search suggestion list.
-      $('#search_api_algolia_autocomplete_block-search').once().on('focus', function (e) {
+      $('#search_api_algolia_autocomplete_block-search').on('focus', function (e) {
         if ($('.algolia-autocomplete pre').text().length < 1 && $('.trending-title').length < 1) {
           $('.aa-dropdown-menu').prepend('<span class="trending-title">Trending searches</span>');
         }
@@ -34,11 +34,7 @@
         if ($('.algolia-autocomplete pre').text().length < 1) {
           $('.trending-title').show();
         }
-      });
-
-      // Hide the trending title when click on arrow.
-      $('.populate-input').once().on('click', function (e) {
-        $('.trending-title').hide();
+        $('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
       });
 
       // Hide mobile search box, when clicked anywhere else.

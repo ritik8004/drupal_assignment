@@ -335,7 +335,7 @@
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             },
             "drupal/search_api_algolia": {
-                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-23/3054878-8.patch"
+                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-28/3054878-9.patch"
             }
         },
         "installer-paths": {
