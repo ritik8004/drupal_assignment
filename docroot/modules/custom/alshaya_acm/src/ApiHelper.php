@@ -168,7 +168,10 @@ class ApiHelper {
    * Sets the cart object.
    */
   protected function setCart() {
-    $this->cart = $this->cartStorage->getCart(FALSE);
+    // Set only if cart property is not set.
+    if (!$this->cart) {
+      $this->cart = $this->cartStorage->getCart(FALSE);
+    }
   }
 
 }
