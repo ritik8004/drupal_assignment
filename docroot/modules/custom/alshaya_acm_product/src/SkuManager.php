@@ -1151,7 +1151,7 @@ class SkuManager {
     $query = $this->connection->select('acq_sku_field_data', 'asfd');
     $query->join('acq_sku_stock', 'stock', 'stock.sku = asfd.sku');
 
-    $query->fields('asfd', ['sku', 'price', 'special_price']);
+    $query->fields('asfd', ['sku', 'price', 'final_price']);
     $query->fields('stock', ['quantity', 'status']);
 
     $query->condition('type', $type, '=');
@@ -1391,7 +1391,7 @@ class SkuManager {
    *   Linked SKUs for requested type.
    */
   public function getLinkedSkus(SKU $sku, $type) {
-    $linked_skus = $this->linkedSkus->getLinkedSKus($sku);
+    $linked_skus = $this->linkedSkus->getLinkedSkus($sku);
 
     $linked_skus_requested = [];
 

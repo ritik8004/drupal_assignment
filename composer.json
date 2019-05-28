@@ -40,6 +40,7 @@
         "drupal/form_options_attributes": "^1.0",
         "drupal/geolocation": "^1.10",
         "drupal/google_tag": "1.x-dev",
+        "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^2.3",
         "drupal/jquery_minicolors": "^1.2",
         "drupal/jsonapi": "^1.25",
@@ -334,7 +335,7 @@
                 "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             },
             "drupal/search_api_algolia": {
-                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-23/3054878-8.patch"
+                "Add autocomplete block": "https://www.drupal.org/files/issues/2019-05-28/3054878-9.patch"
             }
         },
         "installer-paths": {
