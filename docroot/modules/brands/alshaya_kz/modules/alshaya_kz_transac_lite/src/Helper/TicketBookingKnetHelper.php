@@ -88,11 +88,12 @@ class TicketBookingKnetHelper extends KnetHelper {
   public function processKnetFailed(string $state_key) {
     $data = $this->state->get($state_key);
     parent::processKnetFailed($state_key);
-    drupal_set_message($this->t('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
+
+    $this->logger->error('Sorry, we are unable to process your payment. Please contact our customer service team for assistance.</br> Transaction ID: @transaction_id Payment ID: @payment_id Result code: @result_code', [
       '@transaction_id' => !empty($data['transaction_id']) ? $data['transaction_id'] : '',
       '@payment_id' => $data['payment_id'],
       '@result_code' => $data['result'],
-    ]), 'error');
+    ]);
 
     $url = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option', ['option' => 'failed'])->toString();
     return new RedirectResponse($url, 302);
