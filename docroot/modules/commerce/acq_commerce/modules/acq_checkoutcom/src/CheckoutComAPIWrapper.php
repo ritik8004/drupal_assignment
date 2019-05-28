@@ -282,11 +282,16 @@ class CheckoutComAPIWrapper {
       $result = $this->tryCheckoutRequest($doReq, $caller);
     }
     catch (\UnexpectedValueException $e) {
-      $this->logger->warning('Error occurred while processing card authorization for user: %user : %message', [
+      $this->logger->error('Error occurred while processing card authorization for user: %user : %message', [
         '%user' => $user->getEmail(),
         '%message' => $e->getMessage(),
       ]);
-      throw new \Exception($e->getMessage(), $e->getCode());
+      throw new \Exception(
+        new FormattableMarkup(
+          'Error occurred while processing card authorization for user: %user',
+          ['%user' => $user->getEmail()]
+        )
+      );
     }
 
     // Validate authorisation.
@@ -325,11 +330,16 @@ class CheckoutComAPIWrapper {
       $result = $this->tryCheckoutRequest($doReq, $caller);
     }
     catch (\UnexpectedValueException $e) {
-      $this->logger->warning('Error occurred while processing card authorization for user: %user : %message', [
+      $this->logger->error('Error occurred while processing card authorization for user: %user : %message', [
         '%user' => $user->getEmail(),
         '%message' => $e->getMessage(),
       ]);
-      throw new \Exception($e->getMessage(), $e->getCode());
+      throw new \Exception(
+        new FormattableMarkup(
+          'Error occurred while processing card authorization for user: %user',
+          ['%user' => $user->getEmail()]
+        )
+      );
     }
 
     if (array_key_exists('errorCode', $result)) {
@@ -345,7 +355,7 @@ class CheckoutComAPIWrapper {
    *
    * @param \Drupal\user\UserInterface $user
    *   The user object.
-   * @param array $params
+   * @param array $request_param
    *   The payment params.
    *
    * @return array
@@ -353,12 +363,14 @@ class CheckoutComAPIWrapper {
    *
    * @throws \Exception
    */
-  public function storeNewCard(UserInterface $user, array $params) {
-    $params = $params + [
+  public function storeNewCard(UserInterface $user, array $request_param) {
+    $params = [
+      'cardToken' => $request_param['cardToken'],
+      'email' => $request_param['email'],
       'value' => (float) self::VOID_PAYMENT_AMOUNT * 100,
       'autoCapture' => 'N',
       'description' => 'Saving new card',
-      'customerName' => $params['name'],
+      'customerName' => $request_param['name'],
     ];
 
     // Authorize a card for payment.
@@ -388,7 +400,6 @@ class CheckoutComAPIWrapper {
     // Prepare the card data to save.
     $cardData = array_filter($response['card'], function ($key) {
       return !in_array($key, [
-        'customerId',
         'billingDetails',
         'bin',
         'fingerprint',

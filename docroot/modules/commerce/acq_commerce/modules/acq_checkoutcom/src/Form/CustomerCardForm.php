@@ -3,6 +3,7 @@
 namespace Drupal\acq_checkoutcom\Form;
 
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -91,11 +92,11 @@ class CustomerCardForm extends FormBase {
 
     $form['payment_details']['cc_name'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Expiration Month'),
+      '#title' => $this->t('Name on card'),
       '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-name', 'checkoutcom-input'],
-        'data-checkout' => 'card-sname',
+        'data-customer-name' => 'card-sname',
       ],
     ];
 
@@ -157,17 +158,27 @@ class CustomerCardForm extends FormBase {
       '#value' => "
         window.CKOConfig = {
           debugMode: true,
-          // Replace with api call.
           publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
           ready: function (event) {
-            console.log('The Kit is ready');
             CheckoutKit.monitorForm('.acq-checkoutcom-customer-card-form', CheckoutKit.CardFormModes.CARD_TOKENISATION);
           },
           cardTokenised: function(event) {
-            console.log(event);
             cardToken.value = event.data.cardToken
             document.getElementById('acq-checkoutcom-customer-card-form').submit();
-          }
+          },
+          apiError: function (event) {
+            // Remove any existing error messages.
+            let list = document.getElementsByClassName('acq-checkoutcom-customer-card-form');
+            if (list[0].firstElementChild.className == 'messages error') {
+              let messageElement = document.getElementsByClassName('messages error');
+              list[0].removeChild(messageElement[0]);
+            }
+            // Create error message.
+            var errorMessage = document.createElement('div');
+            errorMessage.setAttribute('class', 'messages error');
+            errorMessage.innerHTML = event.data.errors.toString();
+            list[0].prepend(errorMessage);
+          },
         };",
     ];
 
@@ -188,6 +199,20 @@ class CustomerCardForm extends FormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
+    $inputs = $form_state->getUserInput();
+    if (empty($inputs['cko-card-token'])) {
+      $form_state->setError(
+        $form,
+        $this->t('Could not generate cko-card-token, there is something wrong.')
+      );
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $inputs = $form_state->getUserInput();
 
@@ -196,6 +221,7 @@ class CustomerCardForm extends FormBase {
       [
         'cardToken' => $inputs['cko-card-token'],
         'email' => $this->currentRequest->get('user')->getEmail(),
+        'name' => $form_state->getValue('cc_name'),
       ]
     );
 
@@ -205,8 +231,8 @@ class CustomerCardForm extends FormBase {
 
     $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
     $data = file_get_contents($file);
-    $data = array_merge(!empty($data) ? json_decode($data) : [], [$cardData]);
-    file_put_contents($file, json_encode($data));
+    $data = array_merge(!empty($data) ? Json::decode($data) : [], [$cardData]);
+    file_put_contents($file, Json::encode($data));
     die();
   }
 
