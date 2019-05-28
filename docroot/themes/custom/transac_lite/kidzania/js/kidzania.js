@@ -397,13 +397,8 @@
                   break;
                 }
               }
-              var entryBook = ticketTypesFinal.data[index]['Book'];
-              if (entryBook) {
-                entryBook.push(local);
-              }
-              else {
-                entryBook = [local];
-              }
+              ticketTypesFinal.data[index]['Book'] = [];
+              ticketTypesFinal.data[index]['Book'].push(local);
             }
             else {
               isValid = false;
@@ -414,6 +409,20 @@
           });
           if (isValid) {
             actions.hideEle(eleFormErrMsg);
+            // Pre validate visitors at server level.
+            $.post(Drupal.url('validate-visitor-details'), {
+              final_visitor_list: ticketTypesFinal
+            }, function (data) {
+              if (data.err) {
+                actions.showEle(eleFormErrMsg);
+                eleFormErrMsg.html(data.message);
+              }
+              else {
+                if ($.isNumeric(data)) {
+                  $(location).attr('href', Drupal.url('payment'));
+                }
+              }
+            });
           }
           else {
             actions.showEle(eleFormErrMsg);
