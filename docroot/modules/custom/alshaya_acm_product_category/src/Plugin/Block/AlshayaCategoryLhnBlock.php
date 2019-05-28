@@ -189,6 +189,7 @@ class AlshayaCategoryLhnBlock extends BlockBase implements ContainerFactoryPlugi
       '#lhn_cat_tree' => $lhn_tree,
       '#current_term' => $term->id(),
       '#depth_offset' => $context['depth_offset'],
+      '#current_term_parent_id' => $term->get('parent')->getString(),
     ];
   }
 
