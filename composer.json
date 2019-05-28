@@ -317,6 +317,9 @@
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
+            "drupal/r4032login": {
+                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2019-03-13/2941064-20.patch"
+            },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
             },
