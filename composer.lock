@@ -4,16 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d6cc694757b39c73bf274c13203627c",
+    "content-hash": "a2f86941878c0585c537f874ad61ff90",
     "packages": [
         {
             "name": "HubSpot/pace",
             "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/HubSpot/pace/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/HubSpot/pace/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -945,8 +943,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fengyuanchen/cropper/zipball/30c58b29ee21010e17e58ebab165fbd84285c685",
-                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685",
-                "shasum": null
+                "reference": "30c58b29ee21010e17e58ebab165fbd84285c685"
             },
             "type": "bower-asset",
             "license": [
@@ -964,8 +961,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/enyo/dropzone/zipball/08b9e0a763b54a685404dea523a9c54242fbe1b9",
-                "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9",
-                "shasum": null
+                "reference": "08b9e0a763b54a685404dea523a9c54242fbe1b9"
             },
             "type": "bower-asset"
         },
@@ -980,8 +976,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
-                "shasum": null
+                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "type": "bower-asset",
             "license": [
@@ -999,8 +994,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/kenwheeler/slick/zipball/0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee",
-                "shasum": null
+                "reference": "0f40c9d6a02a5c08b5f4dd80fdada3a854a59bee"
             },
             "require": {
                 "bower-asset/jquery": ">=1.7"
@@ -1194,9 +1188,7 @@
             "version": "4.9.2",
             "dist": {
                 "type": "zip",
-                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://download.ckeditor.com/font/releases/font_4.9.2.zip"
             },
             "type": "drupal-library"
         },
@@ -1205,9 +1197,7 @@
             "version": "2.2.6",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/claviska/jquery-minicolors/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -10699,6 +10689,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2019-03-13/2941064-20.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -14213,9 +14206,7 @@
             "version": "1.4.2",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/hgoebl/mobile-detect.js/archive/master.zip"
             },
             "type": "drupal-library"
         },
@@ -14421,9 +14412,7 @@
             "version": "1.17.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://github.com/jquery-validation/jquery-validation/releases/download/1.17.0/jquery-validation-1.17.0.zip"
             },
             "type": "drupal-library"
         },
