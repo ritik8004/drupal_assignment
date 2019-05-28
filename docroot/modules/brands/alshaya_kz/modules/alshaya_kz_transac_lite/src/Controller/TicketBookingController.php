@@ -2,13 +2,11 @@
 
 namespace Drupal\alshaya_kz_transac_lite\Controller;
 
-use Drupal\Core\Url;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\alshaya_kz_transac_lite\TicketBookingManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\alshaya_kz_transac_lite\BookingPaymentManager;
 use Drupal\Component\Serialization\Json;
@@ -214,25 +212,15 @@ class TicketBookingController extends ControllerBase {
    */
   public function paymentOption($option) {
     $booking_info = $this->jsonDecode->decode($this->ticketBooking->tempStore()->get('booking_info'));
+    $final_visitor_list = $this->jsonDecode->decode($this->ticketBooking->tempStore()->get('final_visitor_list'));
 
-    $payment_id = '';
-    // @To do - integration with knet payment gateway.
-    if ($option == 'knet') {
-      $final_visitor_list = $this->jsonDecode->decode($this->ticketBooking->tempStore()->get('final_visitor_list'));
+    if ($option == 'success') {
       // Activate order and notify the user about ticket booking.
       // update the status on order in backend.
       if ($this->ticketBooking->activateOrder($booking_info['sales_number'])) {
         $this->bookingPayment->bookingConfirmationMail($booking_info, $final_visitor_list);
-        $this->bookingPayment->updateTicketDetails($booking_info['sales_number'], $payment_id);
-
-        $path = Url::fromRoute('alshaya_kz_transac_lite.payemnt_option',
-          ['option' => 'success'])->toString();
-        $response = new RedirectResponse($path);
-        $response->send();
+        $this->bookingPayment->updateTicketDetails($booking_info['sales_number'], '');
       }
-    }
-
-    if ($option == 'success') {
       $build = [
         '#theme' => 'payment_success',
         '#ref_number' => $booking_info['sales_number'],
@@ -242,6 +230,7 @@ class TicketBookingController extends ControllerBase {
     }
 
     if ($option == 'failed') {
+      $this->bookingPayment->updateTicketDetails($booking_info['sales_number'], '');
       $build = [
         '#theme' => 'payment_failed',
         '#ref_number' => $booking_info['sales_number'],
