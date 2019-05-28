@@ -1,20 +1,30 @@
 .block-search-api-algolia-autocomplete-block {
+  background-color: $algolia-search-bar-background;
+
   .algolia-form-wrapper {
     position: relative;
     padding: 0 0.75rem;
-    max-width: 15rem;
+    max-width: 27.5rem;
     width: 100%;
+    margin: 0 auto;
+
+    @include breakpoint($desktop) {
+      margin: 0;
+      margin-#{$right}: auto;
+    }
   }
 
   .form-text {
     border: none;
     font-family: $alshaya-thin;
-    font-size: 0.875rem;
     color: $algolia-input-text;
+    padding: 0.34375rem 0 0.59375rem;
+    margin-bottom: 0;
+    margin-#{$left}: 0.75rem;
+    font-size: 1.0625rem;
 
     @include breakpoint($tablet) {
-      width: calc(100% - 2.25rem);
-      margin-bottom: 0.25rem;
+      width: calc(100% - 3.375rem);
     }
 
     &::placeholder {
@@ -26,9 +36,8 @@
   }
 
   .algolia-autocomplete {
-    @include breakpoint($tablet) {
-      border-bottom: 1px solid $algolia-input-border;
-    }
+    border-radius: 0.5rem;
+    border: solid 0.1875rem $algolia-auto-complete-border;
 
     html[lang=ar] & {
       direction: rtl !important;
@@ -70,6 +79,10 @@
       align-items: center;
       padding: 0;
       border-bottom: 1px solid $algolia-suggestion-border;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       .suggested-text {
         padding: 0.875rem 0.75rem;
@@ -116,10 +129,10 @@
   }
 
   .aa-dropdown-menu {
-    top: 1.5rem !important;
+    margin-top: 0.1875rem;
+    border-radius: 0.5rem;
 
     @include breakpoint($only-mobile) {
-      top: 3.625rem !important;
       height: 100vh;
       overflow-y: auto;
     }
@@ -130,27 +143,34 @@
   }
 
   @include breakpoint($only-tablet) {
-    #{$right}: 6.5625rem;
-    bottom: 1.5rem;
+    position: absolute;
+    bottom: -3.8125rem;
+    left: 0;
+    right: 0;
   }
 
   @include breakpoint($only-mobile) {
     width: 100%;
     display: block;
-    top: 3rem;
+    top: 3.125rem;
     #{$left}: 0;
     background-color: $algolia-dropdown-background;
     box-shadow: 0 0.5px 0 0 $algolia_sticky-header-shadow;
-    border-top: 1px solid $algolia-dropdown-border;
-    border-bottom: 1px solid $algolia-dropdown-border;
+    padding: 0.375rem 0;
+
+    html[lang=ar] & {
+      top: 3.8125rem;
+      padding: 0.5625rem 0;
+    }
 
     .algolia-form-wrapper {
       max-width: none;
     }
 
     .form-text {
-      padding: 1.25rem 0;
-      margin-#{$left}: 2.25rem;
+      width: calc(100% - 3.375rem);
+      margin-#{$right}: 2.25rem;
+      margin-#{$left}: 0.75rem;
     }
 
     .aa-input {
@@ -160,14 +180,18 @@
 
   button[type="submit"] {
     position: absolute;
-    top: 0;
+    bottom: 0;
     font-size: 0;
     appearance: none;
-    background: transparent;
     border: none;
     padding: 0;
     margin-top: -0.75rem;
     #{$right}: 0.75rem;
+    background-color: #0072ce;
+    height: 2.75rem;
+    width: 2.8125rem;
+    border-top-#{$right}-radius: 0.5rem;
+    border-bottom-#{$right}-radius: 0.5rem;
 
     @include breakpoint($only-tablet) {
       margin-top: -0.625rem;
@@ -192,7 +216,7 @@
 
     &.algolia-search-active {
       .algolia-search-icon {
-        @include icon(chevron#{$left});
+        @include icon(chevron#{$right});
       }
     }
 
@@ -211,18 +235,22 @@
 
     .algolia-search-icon {
       position: absolute;
-      width: 2rem;
-      height: 2rem;
       display: flex;
       align-items: center;
-      margin: 0.875rem 0 0.625rem;
-      #{$left}: 0.75rem;
+      margin: 0;
+      #{$right}: 0.75rem;
       z-index: 1;
+      background-color: $algolia-search-icon-background;
+      height: 2.75rem;
+      width: 2.8125rem;
+      border-top-#{$right}-radius: 0.5rem;
+      border-bottom-#{$right}-radius: 0.5rem;
 
       &::before {
         position: absolute;
         font-size: 2rem;
         color: $algolia-search-icon;
+        #{$right}: 0.4375rem;
       }
     }
 
@@ -232,10 +260,6 @@
   }
 
   body {
-    &.frontpage {
-      margin-top: 7rem !important;
-    }
-
     &.Sticky-algolia-search {
       .block-search-api-algolia-autocomplete-block {
         position: fixed;
@@ -257,12 +281,22 @@
     }
 
     &:not(.no-sticky-algolia-search-bar) {
+      @include breakpoint($only-mobile) {
+        margin-top: 7.3125rem;
+
+        html[lang=ar] & {
+          margin-top: 8rem;
+        }
+      }
+
       .branding__menu {
         position: absolute !important;
+        box-shadow: none;
       }
 
       .block-search-api-algolia-autocomplete-block {
         display: block;
+        padding: 0.5rem 0 0.6875rem;
 
         .algolia-search-icon {
           @include icon(search);
@@ -270,13 +304,19 @@
 
         &.algolia-search-active {
           .algolia-search-icon {
-            @include icon(chevron#{$left});
+            @include icon(chevron#{$right});
           }
         }
       }
 
       .mobile--search {
         display: none;
+      }
+
+      header {
+        .c-header__region {
+          height: 3rem;
+        }
       }
     }
 
@@ -286,14 +326,44 @@
 
         &.show-algolia-search-bar {
           display: block;
-          top: -0.625rem;
+          top: 0;
           z-index: 1;
         }
 
         .algolia-search-icon {
-          @include icon(chevron#{$left});
+          @include icon(chevron#{$right});
         }
       }
+    }
+  }
+
+  .slug-banner-processed {
+    &:not(.header--fixed) {
+      margin-top: 0 !important;
+    }
+
+    &:not(.no-sticky-algolia-search-bar) {
+      .branding__menu {
+        position: relative !important;
+      }
+    }
+  }
+}
+
+@include breakpoint($only-tablet) {
+  .c-menu-primary {
+    .menu {
+      .mobile--menu {
+        padding: 1.25rem 1.515rem;
+      }
+    }
+  }
+}
+
+body {
+  .block-search-api-algolia-autocomplete-block {
+    .form-text {
+      height: 2.375rem;
     }
   }
 }
