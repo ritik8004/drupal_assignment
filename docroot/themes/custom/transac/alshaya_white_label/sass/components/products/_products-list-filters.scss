@@ -175,6 +175,10 @@ html {
             line-height: 1;
             border-bottom: 1px solid $plp_all_filter_item_border;
 
+            @include breakpoint($only-mobile) {
+              width: 100%;
+            }
+
             .sort-for-label {
               float: $right;
               margin-#{$right}: 0.75rem;
