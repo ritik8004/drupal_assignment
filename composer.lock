@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb951edd599043bc4445fa79422690c7",
+    "content-hash": "c6008888fa508836f28854e2b9747765",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -10633,6 +10633,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2019-03-13/2941064-20.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
