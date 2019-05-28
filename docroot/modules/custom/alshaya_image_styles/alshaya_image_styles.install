@@ -10,6 +10,20 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Implements hook_update_N().
  *
+ * For PLP use higher res image so 1 col layout is not blurred.
+ */
+function alshaya_image_styles_update_8106() {
+  // Install the config for image styles.
+  $configs = [
+    'image.style.product_listing',
+  ];
+
+  alshaya_config_install_configs($configs, 'alshaya_image_styles');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add image styles for each layout separately (split 291x288).
  */
 function alshaya_image_styles_update_8105() {
