@@ -63,3 +63,15 @@ services:
       - '@http_client_factory'
       - '@config.factory'
       - '@logger.factory'
+
+  alshaya_acm.acq_commerce_agent_api:
+    decorates: acq_commerce.agent_api
+    decoration_priority: 9
+    public: false
+    class: Drupal\alshaya_acm\Service\AlshayaAcmApiWrapper
+    arguments:
+      - '@acq_commerce.client_factory'
+      - '@config.factory'
+      - '@logger.factory'
+      - '@acq_commerce.i18n_helper'
+      - '@acq_commerce.api_helper'
