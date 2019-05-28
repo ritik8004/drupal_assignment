@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - alshaya_search_algolia
     - search_api_algolia
 id: algolia
 name: Algolia

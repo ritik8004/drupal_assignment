@@ -112,3 +112,34 @@ function alshaya_config_modules_installed($modules) {
     }
   }
 }
+
+/**
+ * Implmenents hook_modules_uninstalled().
+ */
+function alshaya_config_modules_uninstalled($modules) {
+  foreach ($modules as $module) {
+    $install_path = \Drupal::root() . '/' . drupal_get_path('module', $module) . '/config/install/';
+
+    // Check if the module has configs in install.
+    if (file_exists($install_path)) {
+      $storage = new FileStorage($install_path);
+      $installs = $storage->listAll();
+
+      if ($installs) {
+        // Delete the configs installed by this module.
+        foreach ($installs as $install) {
+          try {
+            \Drupal::configFactory()->getEditable($install)->delete();
+          }
+          catch (\Exception $e) {
+            \Drupal::logger($module)->warning('Error while deleting config: @install from module @module. Message: @message', [
+              '@install' => $install,
+              '@module' => $module,
+              '@message' => $e->getMessage(),
+            ]);
+          }
+        }
+      }
+    }
+  }
+}
