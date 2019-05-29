@@ -216,7 +216,10 @@
 
     &.algolia-search-active {
       .algolia-search-icon {
-        @include icon(chevron#{$right});
+        @include icon(arrow-#{$right}) {
+          font-size: 2.625rem;
+          #{$right}: 0;
+        }
       }
     }
 
@@ -304,7 +307,10 @@
 
         &.algolia-search-active {
           .algolia-search-icon {
-            @include icon(chevron#{$right});
+            @include icon(arrow-#{$right}) {
+              font-size: 2.625rem;
+              #{$right}: 0;
+            }
           }
         }
       }
@@ -331,7 +337,10 @@
         }
 
         .algolia-search-icon {
-          @include icon(chevron#{$right});
+          @include icon(arrow-#{$right}) {
+            font-size: 2.625rem;
+            #{$right}: 0;
+          }
         }
       }
     }
@@ -364,6 +373,28 @@ body {
   .block-search-api-algolia-autocomplete-block {
     .form-text {
       height: 2.375rem;
+    }
+  }
+}
+
+@include breakpoint($tablet) {
+  .block-search-api-algolia-autocomplete-block {
+    &.algolia-search-active {
+      .aa-dropdown-menu {
+        margin-#{$left}: -3px;
+        margin-top: 1px;
+        width: calc(100% - 2.4375rem);
+        border-top-#{$right}-radius: 0;
+        border-top-#{$left}-radius: 0;
+
+        html[lang=ar] & {
+          left: auto !important;
+        }
+      }
+
+      .algolia-autocomplete {
+        border-bottom-#{$left}-radius: 0;
+      }
     }
   }
 }
