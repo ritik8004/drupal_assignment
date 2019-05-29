@@ -91,6 +91,10 @@
         .suggested-text {
           font-family: $hnm-bold;
           font-weight: normal;
+
+          em {
+            font-family: $hnm-regular;
+          }
         }
       }
     }
@@ -176,6 +180,7 @@ body {
         width: calc(100% + 1.5rem);
         margin: 1px -0.75rem 0;
         border-radius: 0;
+        border: none;
       }
 
       .algolia-autocomplete {
