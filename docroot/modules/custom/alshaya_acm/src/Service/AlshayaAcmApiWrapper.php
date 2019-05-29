@@ -33,7 +33,7 @@ class AlshayaAcmApiWrapper extends APIWrapper {
 
     $doReq = function ($client, $opt) use ($endpoint) {
       // Allow overriding the timeout value from settings.
-      $opt['timeout'] = (int) Settings::get('linked_skus_timeout', 1);
+      $opt['timeout'] = (int) Settings::get('linked_skus_timeout', 2);
       return ($client->get($endpoint, $opt));
     };
 
