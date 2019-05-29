@@ -29,6 +29,7 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@logger.factory'
+      - '@database'
       - 'acq_product_category'
 
   acq_sku.form_builder:
