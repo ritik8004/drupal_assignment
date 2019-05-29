@@ -232,30 +232,6 @@ class CheckoutComAPIWrapper {
   }
 
   /**
-   * Process the payment for given cart.
-   *
-   * @param \Drupal\acq_cart\Cart $cart
-   *   The cart object.
-   * @param array $params
-   *   The array of parameters.
-   * @param bool $is_new
-   *   TRUE if processing new card, False otherwise.
-   *
-   * @throws \Exception
-   */
-  public function processCardPayment(Cart $cart, array $params, $is_new = FALSE) {
-    $response = $this->make3dSecurePaymentRequest(
-      $cart,
-      $is_new ? self::AUTHORIZE_PAYMENT_ENDPOINT : self::CARD_PAYMENT_ENDPOINT,
-      $params,
-      __METHOD__
-    );
-    if ($response instanceof RedirectResponse) {
-      $response->send();
-    }
-  }
-
-  /**
    * Authorize a card fro payment.
    *
    * @param \Drupal\user\UserInterface $user
@@ -351,6 +327,30 @@ class CheckoutComAPIWrapper {
   }
 
   /**
+   * Process the payment for given cart.
+   *
+   * @param \Drupal\acq_cart\Cart $cart
+   *   The cart object.
+   * @param array $params
+   *   The array of parameters.
+   * @param bool $is_new
+   *   TRUE if processing new card, False otherwise.
+   *
+   * @throws \Exception
+   */
+  public function processCardPayment(Cart $cart, array $params, $is_new = FALSE) {
+    $response = $this->make3dSecurePaymentRequest(
+      $cart,
+      $is_new ? self::AUTHORIZE_PAYMENT_ENDPOINT : self::CARD_PAYMENT_ENDPOINT,
+      $params,
+      __METHOD__
+    );
+    if ($response instanceof RedirectResponse) {
+      $response->send();
+    }
+  }
+
+  /**
    * Get the card details to save new card.
    *
    * @param \Drupal\user\UserInterface $user
@@ -378,7 +378,7 @@ class CheckoutComAPIWrapper {
       $user,
       self::AUTHORIZE_PAYMENT_ENDPOINT,
       $params,
-      'storeNewCard'
+      __METHOD__
     );
 
     if (empty($response)) {
@@ -390,7 +390,7 @@ class CheckoutComAPIWrapper {
       $user,
       strtr(self::VOID_PAYMENT_ENDPOINT, ['@id' => $response['id']]),
       ['trackId' => ''],
-      'storeNewCard'
+      __METHOD__
     );
 
     if (empty($void) || empty($response['card'])) {
@@ -407,7 +407,7 @@ class CheckoutComAPIWrapper {
         'avsCheck',
       ]);
     }, ARRAY_FILTER_USE_KEY);
-    // Add the key 'name' in about array.
+
     return $cardData;
   }
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\acq_checkoutcom\Controller;
 
+use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
 use Drupal\user\UserInterface;
