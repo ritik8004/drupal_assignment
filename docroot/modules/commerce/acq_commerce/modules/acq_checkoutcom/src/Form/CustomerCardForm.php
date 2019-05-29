@@ -7,6 +7,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -79,7 +80,12 @@ class CustomerCardForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state) {
+  public function buildForm(array $form, FormStateInterface $form_state, UserInterface $user = NULL) {
+    $form['uid'] = [
+      '#type' => 'hidden',
+      '#value' => $user->id(),
+    ];
+
     $form['payment_details'] = [
       '#type' => 'container',
       '#attributes' => [

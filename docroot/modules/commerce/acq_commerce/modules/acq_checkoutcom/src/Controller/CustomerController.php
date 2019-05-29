@@ -94,13 +94,16 @@ class CustomerController extends ControllerBase {
 
     $options = [];
     foreach ($existing_cards as $card) {
-      $options[$card->id] = '**** **** **** ' . $card->last4;
+      $options[$card->id] = [
+        '#theme' => 'payment_card_teaser',
+        '#card_info' => $card,
+        '#user' => $user,
+      ];
     }
 
     return [
       '#theme' => 'item_list',
       '#list_type' => 'ul',
-      '#title' => 'Payment Cards',
       '#items' => $options,
     ];
   }
@@ -115,7 +118,22 @@ class CustomerController extends ControllerBase {
    *   Build array.
    */
   public function addCard(UserInterface $user) {
-    return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardForm');
+    return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardForm', $user);
+  }
+
+  /**
+   * Remove card for given user.
+   *
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   * @param string $card_id
+   *   The card id to delete.
+   *
+   * @return array
+   *   Return the build array.
+   */
+  public function removeCard(UserInterface $user, string $card_id) {
+    return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardDeleteForm', $user, $card_id);
   }
 
 }
