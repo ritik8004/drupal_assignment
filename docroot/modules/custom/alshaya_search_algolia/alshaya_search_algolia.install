@@ -30,6 +30,16 @@ function alshaya_search_algolia_install() {
 
   // Mark everything for reindexation for search index.
   _alshaya_search_api_reindex(['acquia_search_index']);
+
+  $strings = [
+    'Search' => [
+      'en' => 'What are you looking for?',
+      'ar' => 'عن ماذا تبحث؟',
+      'context' => 'algolia_search_block_placeholder',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
