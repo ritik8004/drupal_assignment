@@ -10,16 +10,20 @@ use Drupal\acq_sku\Entity\SKU;
 use Drupal\acq_sku\Plugin\AcquiaCommerce\SKUType\Configurable;
 use Drupal\alshaya_hm_images\SkuAssetManager;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\views\ViewExecutable;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_acq_sku_product_sku_alter().
  */
-function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product) {
+function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product, array $existing_data) {
   // Process assets data & create attributes which are needed for sorting
   // the assets while displaying them.
-  $sku->attr_assets = _alshaya_hm_images_acq_sku_process_assets($product);
+  $existing_assets = !empty($existing_data['attr_assets'])
+    ? unserialize($existing_data['attr_assets'][0]['value'])
+    : [];
+
+  $sku->get('attr_assets')->setValue(_alshaya_hm_images_acq_sku_process_assets($product, $existing_assets));
 }
 
 /**
@@ -27,16 +31,32 @@ function alshaya_hm_images_acq_sku_product_sku_alter(SKU $sku, array $product) {
  *
  * @param array $product
  *   Product array containing assets to be processed.
+ * @param array $existing_assets
+ *   Existing assets data.
  *
  * @return string
  *   Serialized & processed assets.
  */
-function _alshaya_hm_images_acq_sku_process_assets(array $product) {
+function _alshaya_hm_images_acq_sku_process_assets(array $product, array $existing_assets) {
   $assets = [];
   if (isset($product['extension'], $product['extension']['assets'])) {
     $assets = $product['extension']['assets'];
 
+    foreach ($existing_assets as $key => $asset) {
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+      $existing_assets[$id] = $asset;
+    }
+
     foreach ($assets as $key => $asset) {
+      // If asset had no pims data before and has pims data now, asset id here
+      // won't match and hence we will not use old downloaded image.
+      $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
+
+      if (isset($existing_assets[$id]) && isset($existing_assets[$id]['fid'])) {
+        $assets[$key]['fid'] = $existing_assets[$id]['fid'];
+        $assets[$key]['drupal_uri'] = $existing_assets[$id]['drupal_uri'];
+      }
+
       if (empty($asset['Data']['AssetType']) && ($asset['is_old_format'] && empty($asset['Type']))) {
         continue;
       }
@@ -168,7 +188,7 @@ function alshaya_hm_images_alshaya_acm_product_build_alter(array &$build, SKUInt
 
     if (!empty($teaser_assets)) {
       $sku_media = reset($teaser_assets);
-      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku->label(), '291x288');
+      $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku->label(), 'product_teaser');
     }
   }
   elseif ($context == 'pdp' && !empty($build['free_gift_promotions']['#free_sku_code']) && empty($build['free_gift_promotions']['#sku_image'])) {
@@ -214,25 +234,6 @@ function alshaya_hm_images_acq_sku_pdp_gallery_media_alter(&$main_image, &$thumb
         $main_image['mediumurl'] = $pdp_images['pdp_main'][0]['url'];
         $main_image['label'] = $sku->label();
       }
-    }
-  }
-}
-
-/**
- * Implements hook_acq_sku_cart_media_alter().
- */
-function alshaya_hm_images_acq_sku_cart_media_alter(array &$sku_image, $sku, $context = 'cart') {
-  if (empty($sku_image)) {
-    $sku_assets_manager = \Drupal::service('alshaya_hm_images.skuassetsmanager');
-    $cart_assets = $sku_assets_manager->getSkuAssets($sku, 'cart');
-
-    if (!empty($cart_assets)) {
-      $sku_image = [
-        '#theme' => 'image',
-        '#attributes' => [
-          'src' => ImageStyle::load('291x288')->buildUrl($cart_assets[0]['drupal_uri']),
-        ],
-      ];
     }
   }
 }
@@ -285,9 +286,13 @@ function alshaya_hm_images_form_sku_base_form_alter(&$form, FormStateInterface $
               'swatch_type' => empty($assets) ? SkuAssetManager::LP_SWATCH_RGB : $swatch_type,
             ];
 
-            $sku_configurable_options_color[$key]['display_value'] = empty($assets)
-              ? $variant_sku->get('attr_rgb_color')->getString()
-              : '<img src="' . file_url_transform_relative(file_create_url($assets[0]['drupal_uri'])) . '">';
+            if (empty($assets)) {
+              $sku_configurable_options_color[$key]['display_value'] = $variant_sku->get('attr_rgb_color')->getString();
+            }
+            else {
+              $url = ImageStyle::load('pdp_gallery_thumbnail')->buildUrl($assets[0]['drupal_uri']);
+              $sku_configurable_options_color[$key]['display_value'] = '<img src="' . file_url_transform_relative($url) . '">';
+            }
 
             break;
           }

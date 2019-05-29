@@ -16,19 +16,19 @@ set classes = [
           <div id="product-zoom-container"></div>
         {% endif %}
 
-        {% if content.cross_sell %}
+        {% if content.cross_sell is not empty %}
           <div class="horizontal-crossell above-mobile-block">
             {{ content.cross_sell }}
           </div>
         {% endif %}
 
-        {% if content.up_sell %}
+        {% if content.up_sell is not empty %}
           <div class="horizontal-upell above-mobile-block">
             {{ content.up_sell }}
           </div>
         {% endif %}
 
-        {% if content.related %}
+        {% if content.related is not empty %}
           <div class="horizontal-related above-mobile-block">
             {{ content.related }}
           </div>
@@ -196,20 +196,20 @@ set classes = [
 
           {% if content.up_sell or content.related or content.cross_sell %}
             <div class="mobile-related-wrapper">
-              {% if content.cross_sell %}
+              {% if content.cross_sell is not empty %}
                 <div class="horizontal-crossell mobile-only-block">
                   <h3 class="subtitle crossell-title">{{ "Customers also bought"|t }}</h3>
                   {{ content.cross_sell }}
                 </div>
               {% endif %}
 
-              {% if content.up_sell %}
+              {% if content.up_sell is not empty %}
                 <div class="horizontal-upell mobile-only-block">
                   {{ content.up_sell }}
                 </div>
               {% endif %}
 
-              {% if content.related %}
+              {% if content.related is not empty %}
                 <div class="horizontal-upell mobile-only-block">
                   {{ content.related }}
                 </div>
