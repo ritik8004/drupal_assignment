@@ -53,13 +53,7 @@ view_mode ? 'paragraph--view-mode--' ~ view_mode|clean_class,
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
       {% if content.field_banner or content.field_mobile_banner_image %}
-        <div class="picture-tag">
-          <picture>
-            <source media="(min-width: 768px)" data-srcset="{{ file_url(desktop_banner_image) }}">
-            <source media="(max-width: 767px)" data-srcset="{{ file_url(mobile_banner_image) }}">
-            <img class="b-lazy" data-src="{{ file_url(banner_default_image) }}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="/>
-          </picture>
-        </div>
+        {{ promo_block_picture }}
       {% endif %}
       {{ content|without('field_banner', 'field_mobile_banner_image') }}
     {% endblock %}
