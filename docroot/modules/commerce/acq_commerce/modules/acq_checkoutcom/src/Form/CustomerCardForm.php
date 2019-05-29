@@ -2,16 +2,16 @@
 
 namespace Drupal\acq_checkoutcom\Form;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class CartConfigForm.
+ * Class CustomerCardForm.
+ *
+ * @package Drupal\acq_checkoutcom\Form
  */
 class CustomerCardForm extends FormBase {
 
@@ -30,7 +30,7 @@ class CustomerCardForm extends FormBase {
   protected $currentRequest;
 
   /**
-   * OrderSearchForm constructor.
+   * CustomerCardForm constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module Handler service object.

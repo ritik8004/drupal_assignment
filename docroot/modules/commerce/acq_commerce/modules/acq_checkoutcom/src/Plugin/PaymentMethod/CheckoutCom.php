@@ -26,6 +26,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $checkoutComApi;
 
   /**
+   * The config factory.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -40,6 +47,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function __construct(array $configuration, $plugin_id, $plugin_definition, CartInterface $cart) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $cart);
     $this->checkoutComApi = \Drupal::service('acq_checkoutcom.api');
+    $this->configFactory = \Drupal::service('config.factory');
   }
 
   /**
@@ -53,6 +61,8 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
+    $config = $this->configFactory->get('acq_checkoutcom.settings');
+
     // @todo: Repalce this code with API call.
     $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card.json';
     $data = file_get_contents($file);
@@ -151,7 +161,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#tag' => 'script',
         '#value' => "
         window.CKOConfig = {
-          debugMode: true,
+          debugMode: " . $config->get('debug') . ",
           // Replace with api call.
           publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
           ready: function (event) {
@@ -159,12 +169,10 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
           },
           cardTokenised: function(event) {
-            console.log(event);
             cardToken.value = event.data.cardToken
             document.getElementById('multistep-checkout').submit();
           },
           apiError: function (event) {
-            console.log(event);
           },
         };",
       ];

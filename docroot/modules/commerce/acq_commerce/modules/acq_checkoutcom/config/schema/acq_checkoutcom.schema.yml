@@ -1,0 +1,10 @@
+acq_checkoutcom.settings:
+  type: config_entity
+  label: 'checkout.com config'
+  mapping:
+    debug:
+      type: boolean
+      label: 'Debug mode'
+    env:
+      type: string
+      label: 'Environment to use (sandbox / live)'
