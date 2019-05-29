@@ -88,7 +88,9 @@
   .algolia-autocomplete-active {
     .aa-suggestions {
       .aa-suggestion {
-        color: $algolia-input-text;
+        .suggested-text {
+          font-weight: bold;
+        }
       }
     }
   }
