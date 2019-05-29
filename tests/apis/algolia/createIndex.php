@@ -81,6 +81,7 @@ $searchable_attributes = [
   'field_category_name',
   'attr_product_brand',
   'sku',
+  'field_configured_skus',
   'attr_product_collection',
   'attr_concept',
   'attr_color',
