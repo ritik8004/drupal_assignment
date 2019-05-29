@@ -5,21 +5,14 @@ namespace Drupal\acq_checkoutcom\Controller;
 use Drupal\alshaya_api\AlshayaApiWrapper;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Datetime\DateFormatterInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\user\UserInterface;
-use Drupal\Core\Access\AccessResult;
-use Drupal\block\Entity\Block;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Customer controller to add/override pages for customer.
+ * Class CustomerController.
+ *
+ * @package Drupal\acq_checkoutcom\Controller
  */
 class CustomerController extends ControllerBase {
 
@@ -45,18 +38,24 @@ class CustomerController extends ControllerBase {
   protected $apiWrapper;
 
   /**
-   * Current time service.
+   * CustomerController constructor.
    *
-   * @var \Drupal\Component\Datetime\TimeInterface
+   * @param \Symfony\Component\HttpFoundation\Request $current_request
+   *   Current request object.
+   * @param \Drupal\Core\Render\Renderer $renderer
+   *   Renderer service object.
+   * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
+   *   Api wrapper.
    */
-  protected $currentTime;
-
-  /**
-   * Date formatter service.
-   *
-   * @var \Drupal\Core\Datetime\DateFormatterInterface
-   */
-  protected $dateFormatter;
+  public function __construct(
+    Request $current_request,
+    Renderer $renderer,
+    AlshayaApiWrapper $api_wrapper
+  ) {
+    $this->currentRequest = $current_request;
+    $this->renderer = $renderer;
+    $this->apiWrapper = $api_wrapper;
+  }
 
   /**
    * {@inheritdoc}
@@ -65,12 +64,16 @@ class CustomerController extends ControllerBase {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('alshaya_api.api'),
-      $container->get('datetime.time'),
-      $container->get('date.formatter')
+      $container->get('alshaya_api.api')
     );
   }
 
+  /**
+   * Helper method to check access.
+   *
+   * @return bool
+   *   Return TRUE to allow access, false otherwise.
+   */
   public function checkAccess() {
     return TRUE;
   }
@@ -80,9 +83,6 @@ class CustomerController extends ControllerBase {
    *
    * @param \Drupal\user\UserInterface $user
    *   User object for which the orders list page is being viewed.
-   *
-   * @return array
-   *   Build array.
    */
   public function listCards(UserInterface $user) {
 
@@ -100,6 +100,5 @@ class CustomerController extends ControllerBase {
   public function addCard(UserInterface $user) {
     return $this->formBuilder()->getForm('\Drupal\acq_checkoutcom\Form\CustomerCardForm');
   }
-
 
 }

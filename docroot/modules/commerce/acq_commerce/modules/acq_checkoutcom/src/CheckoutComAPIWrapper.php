@@ -4,11 +4,10 @@ namespace Drupal\acq_checkoutcom;
 
 use Acquia\Hmac\Exception\MalformedResponseException;
 use Drupal\acq_cart\Cart;
-use Drupal\acq_commerce\Conductor\APIWrapper;
-use Drupal\acq_commerce\Connector\ConnectorException;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactory;
-use Drupal\Core\Http\ClientFactory as DrupalClientFactory;
+use Drupal\Core\Http\ClientFactory as HttpClientFactory;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use GuzzleHttp\Exception\RequestException;
@@ -22,6 +21,24 @@ class CheckoutComAPIWrapper {
 
   use StringTranslationTrait;
 
+  // Authorize payment endpoint.
+  const AUTHORIZE_PAYMENT_ENDPOINT = '/v2/charges/token';
+
+  // Saved card payment endpoint.
+  const CARD_PAYMENT_ENDPOINT = '/v2/charges/card';
+
+  // Void payment endpoint.
+  const VOID_PAYMENT_ENDPOINT = '/v2/charges/@id/void';
+
+  // Void payment amount.
+  const VOID_PAYMENT_AMOUNT = 1.0;
+
+  // 3D secure charge mode.
+  const CHARGE_MODE_3D = '2';
+
+  // 3D secure charge mode.
+  const AUTOCAPTURE = 'Y';
+
   /**
    * API Helper service object.
    *
@@ -34,7 +51,14 @@ class CheckoutComAPIWrapper {
    *
    * @var \Drupal\Core\Http\ClientFactory
    */
-  protected $drupalClientFactory;
+  protected $httpClientFactory;
+
+  /**
+   * The config factory object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
 
   /**
    * The logger channel.
@@ -44,24 +68,8 @@ class CheckoutComAPIWrapper {
   protected $logger;
 
   /**
-   * ACM API Version.
-   *
-   * @var string
-   */
-  protected $apiVersion;
-
-  /**
-   * APIWrapper service object.
-   *
-   * @var \Drupal\acq_commerce\Conductor\APIWrapper
-   */
-  protected $apiWrapper;
-
-  /**
    * CheckoutComAPIWrapper constructor.
    *
-   * @param \Drupal\acq_commerce\Conductor\APIWrapper $api_wrapper
-   *   APIWrapper service object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   ConfigFactoryInterface object.
    * @param \Drupal\Core\Http\ClientFactory $drupal_client_factory
@@ -70,15 +78,13 @@ class CheckoutComAPIWrapper {
    *   LoggerChannelFactory object.
    */
   public function __construct(
-    APIWrapper $api_wrapper,
     ConfigFactoryInterface $config_factory,
-    DrupalClientFactory $drupal_client_factory,
+    HttpClientFactory $drupal_client_factory,
     LoggerChannelFactory $logger_factory
   ) {
-    $this->apiVersion = $config_factory->get('acq_commerce.conductor')->get('api_version');
+    $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('acq_checkoutcom');
-    $this->drupalClientFactory = $drupal_client_factory;
-    $this->apiWrapper = $api_wrapper;
+    $this->httpClientFactory = $drupal_client_factory;
   }
 
   /**
@@ -94,7 +100,9 @@ class CheckoutComAPIWrapper {
    */
   protected function createClient() {
     $clientConfig = [
-      'base_uri' => 'https://sandbox.checkout.com/',
+      'base_uri' => $this->configFactory->get('acq_checkoutcom.settings')->get('env') == 'sandbox'
+      ? 'https://sandbox.checkout.com/api2/'
+      : 'https://api2.checkout.com/',
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
@@ -102,36 +110,30 @@ class CheckoutComAPIWrapper {
       ],
     ];
 
-    return $this->drupalClientFactory->fromOptions($clientConfig);
+    return $this->httpClientFactory->fromOptions($clientConfig);
   }
 
   /**
    * TryCheckoutRequest.
    *
    * Try a simple request with the Guzzle client, catching / logging request
-   * e  xceptions if needed.
+   * exceptions if needed.
    *
    * @param callable $doReq
    *   Request closure, passed client.
    * @param string $action
    *   Action name for logging.
-   * @param string $reskey
-   *   Result data key (or NULL)
    *
    * @return mixed
    *   API response.
    *
    * @throws \Exception
    */
-  protected function tryCheckoutRequest(callable $doReq, $action, $reskey = NULL) {
+  protected function tryCheckoutRequest(callable $doReq, $action) {
     $client = $this->createClient();
 
-    $req_param['3d'] = [
+    $req_param['commerce'] = [
       'currency' => 'KWD',
-      'chargeMode' => 2,
-      'autoCapture' => 'Y',
-      'successUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
-      'failUrl' => Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString(),
     ];
 
     // Make Request.
@@ -140,14 +142,17 @@ class CheckoutComAPIWrapper {
       $result = $doReq($client, $req_param);
     }
     catch (\Exception $e) {
-      $mesg = $this->t('@action: @class during request: (@code) - @message', [
-        '@action' => $action,
-        '@class' => get_class($e),
-        '@code' => $e->getCode(),
-        '@message' => $e->getMessage(),
-      ]);
+      $msg = new FormattableMarkup(
+        '@action: @class during request: (@code) - @message',
+        [
+          '@action' => $action,
+          '@class' => get_class($e),
+          '@code' => $e->getCode(),
+          '@message' => $e->getMessage(),
+        ]
+      );
 
-      $this->logger->error($mesg);
+      $this->logger->error($msg);
 
       // REDUNDANT at 20180531 because now we set http_errors = false.
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
@@ -156,7 +161,7 @@ class CheckoutComAPIWrapper {
         );
       }
       elseif ($e instanceof RequestException) {
-        throw new \UnexpectedValueException($mesg, $e->getCode(), $e);
+        throw new \UnexpectedValueException($msg, $e->getCode(), $e);
       }
       else {
         throw $e;
@@ -164,45 +169,7 @@ class CheckoutComAPIWrapper {
     }
 
     // This code means we must always return valid JSON for every HTTP status.
-    // Is that what we want to enforce? Probably yes.
-    $response = Json::decode($result->getBody());
-
-    if (strlen($reskey)) {
-      if (!isset($response[$reskey])) {
-        throw new \Exception('request successful but did not contain requested data.');
-      }
-      return ($response[$reskey]);
-    }
-
-    return ($response);
-  }
-
-  /**
-   * Gets the token from Magento.
-   *
-   * @return mixed
-   *   API response containing all the data to be passed on to Cybersource.
-   *
-   * @throws \Exception
-   *   Failed request exception.
-   */
-  public function getSubscriptionRequest() {
-    $endpoint = $this->apiVersion . '/agent/token/checkoutcom';
-
-    $doReq = function ($client, $opt) use ($endpoint) {
-      return ($client->get($endpoint, $opt));
-    };
-
-    try {
-      return $this->apiWrapper->tryAgentRequest($doReq, 'getSubscriptionRequest');
-    }
-    catch (ConnectorException $e) {
-      $this->logger->warning('Error occurred while getting cybersource token for cart id: %cart_id and card type: %card_type: %message', [
-        '%message' => $e->getMessage(),
-      ]);
-
-      throw new \Exception($e->getMessage(), $e->getCode());
-    }
+    return (Json::decode($result->getBody()));
   }
 
   /**
@@ -223,8 +190,14 @@ class CheckoutComAPIWrapper {
    * @throws \Exception
    */
   protected function make3dSecurePaymentRequest(Cart $cart, string $endpoint, array $params, $caller = '') {
+    // Set parameters required for 3d secure payment.
+    $params['chargeMode'] = self::CHARGE_MODE_3D;
+    $params['autoCapture'] = self::AUTOCAPTURE;
+    $params['successUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
+    $params['failUrl'] = Url::fromRoute('acq_checkoutcom.status', [], ['absolute' => TRUE])->toString();
+
     $doReq = function ($client, $req_param) use ($endpoint, $params) {
-      $opt = ['json' => $req_param['3d'] + $params];
+      $opt = ['json' => $req_param['commerce'] + $params];
       return ($client->post($endpoint, $opt));
     };
 
@@ -232,15 +205,27 @@ class CheckoutComAPIWrapper {
       $result = $this->tryCheckoutRequest($doReq, $caller);
     }
     catch (\UnexpectedValueException $e) {
-      $this->logger->warning('Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id : %message', [
+      $this->logger->error('Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id : %message', [
         '%cart_id' => $cart->id(),
         '%message' => $e->getMessage(),
       ]);
-      throw new \Exception($e->getMessage(), $e->getCode());
+      throw new \Exception(
+        new FormattableMarkup(
+          'Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id',
+          ['%cart_id' => $cart->id()]
+        )
+      );
     }
 
     if ($result['responseCode'] !== '10000' && empty($result['redirectUrl'])) {
       $this->logger->warning('checkout.com card charges request did not process.');
+
+      throw new \Exception(
+        new FormattableMarkup(
+          'Error occurred while processing checkout.com 3d secure payment process for cart id: %cart_id',
+          ['%cart_id' => $cart->id()]
+        )
+      );
     }
 
     if (isset($result['redirectUrl'])) {
@@ -255,28 +240,18 @@ class CheckoutComAPIWrapper {
    *   The cart object.
    * @param array $params
    *   The array of parameters.
+   * @param bool $is_new
+   *   TRUE if processing new card, False otherwise.
    *
    * @throws \Exception
    */
-  public function processNewCardPayment(Cart $cart, array $params) {
-    $response = $this->make3dSecurePaymentRequest($cart, '/api2/v2/charges/token', $params, 'process3dSecurePayment');
-    if ($response instanceof RedirectResponse) {
-      $response->send();
-    }
-  }
-
-  /**
-   * Process the payment for given cart.
-   *
-   * @param \Drupal\acq_cart\Cart $cart
-   *   The cart object.
-   * @param array $params
-   *   The array of parameters.
-   *
-   * @throws \Exception
-   */
-  public function processStoredCardPayment(Cart $cart, array $params) {
-    $response = $this->make3dSecurePaymentRequest($cart, '/api2/v2/charges/card', $params, 'processStoredCardPayment');
+  public function processCardPayment(Cart $cart, array $params, $is_new = FALSE) {
+    $response = $this->make3dSecurePaymentRequest(
+      $cart,
+      $is_new ? self::AUTHORIZE_PAYMENT_ENDPOINT : self::CARD_PAYMENT_ENDPOINT,
+      $params,
+      __METHOD__
+    );
     if ($response instanceof RedirectResponse) {
       $response->send();
     }

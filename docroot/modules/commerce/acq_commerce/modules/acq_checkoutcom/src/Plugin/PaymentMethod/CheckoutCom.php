@@ -217,11 +217,15 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $cart = $this->getCart();
     $totals = $cart->totals();
     // Process 3d secure payment.
-    $this->checkoutComApi->processNewCardPayment($cart, [
-      'value' => $totals['grand'] * 100,
-      'cardToken' => $inputs['cko-card-token'],
-      'email' => 'testing@test.com',
-    ]);
+    $this->checkoutComApi->processCardPayment(
+      $cart,
+      [
+        'value' => $totals['grand'] * 100,
+        'cardToken' => $inputs['cko-card-token'],
+        'email' => 'testing@test.com',
+      ],
+      TRUE
+    );
   }
 
   /**
@@ -236,7 +240,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $cart = $this->getCart();
     $totals = $cart->totals();
 
-    $this->checkoutComApi->processStoredCardPayment($cart, [
+    $this->checkoutComApi->processCardPayment($cart, [
       'cardId' => $card_id,
       'value' => $totals['grand'] * 100,
       'email' => 'mitesh+cards@axelerant.com',
