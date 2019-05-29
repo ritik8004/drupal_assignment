@@ -157,6 +157,7 @@ html {
             width: 100%;
             font-size: 0.75rem;
             letter-spacing: normal;
+            border-bottom: 1px solid $plp_all_filter_item_border;
 
             @include breakpoint($desktop) {
               font-size: 0.875rem;
@@ -173,7 +174,6 @@ html {
             padding: 1.3125rem 2rem;
             height: auto;
             line-height: 1;
-            border-bottom: 1px solid $plp_all_filter_item_border;
 
             @include breakpoint($only-mobile) {
               width: 100%;
@@ -182,6 +182,11 @@ html {
             .sort-for-label {
               float: $right;
               margin-#{$right}: 0.75rem;
+
+              @include breakpoint($only-mobile) {
+                position: absolute;
+                #{$right}: 2rem;
+              }
             }
 
             @include icon(chevron#{$right}, after) {
