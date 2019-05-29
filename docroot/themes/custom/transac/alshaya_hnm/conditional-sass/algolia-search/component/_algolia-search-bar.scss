@@ -89,7 +89,8 @@
     .aa-suggestions {
       .aa-suggestion {
         .suggested-text {
-          font-weight: bold;
+          font-family: $hnm-bold;
+          font-weight: normal;
         }
       }
     }
