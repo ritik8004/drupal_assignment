@@ -72,6 +72,20 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
    * {@inheritdoc}
    */
   public function getTermIdFromCommerceId($commerce_id) {
+    $term_ids = $this->getTermIdsFromCommerceIds([$commerce_id]);
+    return (count($term_ids) > 0) ? reset($term_ids) : NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTermIdsFromCommerceIds(array $commerce_ids) {
+    $commerce_ids = array_filter($commerce_ids);
+
+    if (empty($commerce_ids)) {
+      return [];
+    }
+
     $mappings = &drupal_static(__METHOD__, []);
 
     if (empty($mappings)) {
@@ -80,7 +94,18 @@ class ConductorCategoryRepository implements CategoryRepositoryInterface {
       $mappings = $query->execute()->fetchAllKeyed(0, 1);
     }
 
-    return $mappings[$commerce_id] ?? NULL;
+    // If no category found in database, simply return.
+    if (empty($mappings)) {
+      return;
+    }
+
+    // Prepare array to use array_intersect_key.
+    foreach ($commerce_ids as $commerce_id) {
+      if (!empty($mappings[$commerce_id])) {
+        $return[] = $mappings[$commerce_id];
+      }
+    }
+    return $return;
   }
 
   /**

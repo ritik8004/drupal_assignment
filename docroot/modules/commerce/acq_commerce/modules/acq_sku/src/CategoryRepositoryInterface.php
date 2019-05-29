@@ -23,6 +23,19 @@ interface CategoryRepositoryInterface {
   public function getTermIdFromCommerceId($commerce_id);
 
   /**
+   * Get Term Id from Commerce Id.
+   *
+   * @param array $commerce_ids
+   *   Array Commerce Backend ID.
+   *
+   * @return array
+   *   Return found term ids.
+   *
+   * @throws \RuntimeException
+   */
+  public function getTermIdsFromCommerceIds(array $commerce_ids);
+
+  /**
    * LoadCategoryTerm.
    *
    * Load a Taxonomy term representing a category by commerce ID.

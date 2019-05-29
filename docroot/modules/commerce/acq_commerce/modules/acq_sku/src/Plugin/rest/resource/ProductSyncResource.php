@@ -630,16 +630,7 @@ class ProductSyncResource extends ResourceBase {
    *   Array of terms.
    */
   private function formatCategories(array $categories) {
-    $terms = [];
-
-    foreach ($categories as $cid) {
-      $tid = $this->categoryRepo->getTermIdFromCommerceId($cid);
-      if ($tid) {
-        $terms[] = $tid;
-      }
-    }
-
-    return ($terms);
+    return $this->categoryRepo->getTermIdsFromCommerceIds($categories);
   }
 
   /**
