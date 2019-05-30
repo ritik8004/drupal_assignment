@@ -22,13 +22,13 @@ class CheckoutComAPIWrapper {
   use StringTranslationTrait;
 
   // Authorize payment endpoint.
-  const AUTHORIZE_PAYMENT_ENDPOINT = '/v2/charges/token';
+  const AUTHORIZE_PAYMENT_ENDPOINT = 'charges/token';
 
   // Saved card payment endpoint.
-  const CARD_PAYMENT_ENDPOINT = '/v2/charges/card';
+  const CARD_PAYMENT_ENDPOINT = 'charges/card';
 
   // Void payment endpoint.
-  const VOID_PAYMENT_ENDPOINT = '/v2/charges/@id/void';
+  const VOID_PAYMENT_ENDPOINT = 'charges/@id/void';
 
   // Void payment amount.
   const VOID_PAYMENT_AMOUNT = 1.0;
@@ -101,8 +101,8 @@ class CheckoutComAPIWrapper {
   protected function createClient() {
     $clientConfig = [
       'base_uri' => $this->configFactory->get('acq_checkoutcom.settings')->get('env') == 'sandbox'
-      ? 'https://sandbox.checkout.com/api2/'
-      : 'https://api2.checkout.com/',
+      ? 'https://sandbox.checkout.com/api2/v2/'
+      : 'https://api2.checkout.com/v2/',
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
