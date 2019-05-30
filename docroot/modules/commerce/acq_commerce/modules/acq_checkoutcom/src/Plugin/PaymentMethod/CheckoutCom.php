@@ -69,8 +69,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
-
     // @todo: Repalce this code with API call.
     $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
     $data = file_get_contents($file);
@@ -174,6 +172,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#attributes' => [
           'id' => 'cardToken',
         ],
+      ];
+
+      $pane_form['payment_details']['save_card'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Save card for future use'),
       ];
 
       $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
