@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cf77c2b858a5f8451f9c60a2ab47884",
+    "content-hash": "9b3ea8c89d62fc55ebb99903159ef528",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -21593,6 +21593,7 @@
         "drupal/external_hreflang": 20,
         "drupal/field_group": 10,
         "drupal/google_tag": 20,
+        "drupal/image_style_quality": 20,
         "drupal/media_entity_actions": 20,
         "drupal/memory_limit_policy": 20,
         "drupal/menu_admin_per_menu": 5,
