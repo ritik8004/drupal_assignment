@@ -89,7 +89,7 @@ class CustomerController extends ControllerBase {
    */
   public function listCards(UserInterface $user) {
     // @todo: Repalce this code with API call.
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card.json';
+    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
     $data = file_get_contents($file);
     $existing_cards = !empty($data) ? json_decode($data) : [];
 
