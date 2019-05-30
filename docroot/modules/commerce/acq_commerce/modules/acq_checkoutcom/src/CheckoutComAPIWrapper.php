@@ -36,7 +36,7 @@ class CheckoutComAPIWrapper {
   // 3D secure charge mode.
   const CHARGE_MODE_3D = '2';
 
-  // 3D secure charge mode.
+  // 3D secure autocapture.
   const AUTOCAPTURE = 'Y';
 
   /**
@@ -72,19 +72,19 @@ class CheckoutComAPIWrapper {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   ConfigFactoryInterface object.
-   * @param \Drupal\Core\Http\ClientFactory $drupal_client_factory
+   * @param \Drupal\Core\Http\ClientFactory $http_client_factory
    *   ClientFactory object.
    * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_factory
    *   LoggerChannelFactory object.
    */
   public function __construct(
     ConfigFactoryInterface $config_factory,
-    HttpClientFactory $drupal_client_factory,
+    HttpClientFactory $http_client_factory,
     LoggerChannelFactory $logger_factory
   ) {
     $this->configFactory = $config_factory;
     $this->logger = $logger_factory->get('acq_checkoutcom');
-    $this->httpClientFactory = $drupal_client_factory;
+    $this->httpClientFactory = $http_client_factory;
   }
 
   /**
@@ -117,7 +117,7 @@ class CheckoutComAPIWrapper {
    * TryCheckoutRequest.
    *
    * Try a simple request with the Guzzle client, catching / logging request
-   * exceptions if needed.
+   * exceptions when needed.
    *
    * @param callable $doReq
    *   Request closure, passed client.
@@ -154,7 +154,6 @@ class CheckoutComAPIWrapper {
 
       $this->logger->error($msg);
 
-      // REDUNDANT at 20180531 because now we set http_errors = false.
       if ($e->getCode() == 404 || $e instanceof MalformedResponseException) {
         throw new \Exception(
           $this->t('Could not make request to checkout.com, please contact administator if the error presist.')
@@ -168,7 +167,6 @@ class CheckoutComAPIWrapper {
       }
     }
 
-    // This code means we must always return valid JSON for every HTTP status.
     return (Json::decode($result->getBody()));
   }
 
@@ -227,7 +225,7 @@ class CheckoutComAPIWrapper {
         )
       );
     }
-
+    // Redirect user for 3d verification page.
     if (isset($result['redirectUrl'])) {
       return new RedirectResponse($result['redirectUrl']);
     }

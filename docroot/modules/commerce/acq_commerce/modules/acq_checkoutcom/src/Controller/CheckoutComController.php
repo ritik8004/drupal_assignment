@@ -12,7 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Provides the checkout form page.
+ * Class CheckoutComController.
+ *
+ * @package Drupal\acq_checkoutcom\Controller
  */
 class CheckoutComController implements ContainerInjectionInterface {
 
