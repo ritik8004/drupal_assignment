@@ -38,7 +38,6 @@ class AlshayaHmImagesCommands extends DrushCommands {
    *   Assets Manager.
    */
   public function __construct(Connection $connection, SkuAssetManager $assets_manager) {
-    parent::__construct();
     $this->connection = $connection;
     $this->assetsManager = $assets_manager;
   }
@@ -232,7 +231,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
     // If no sku available, then no need to process further as with empty
     // array, drush throws error.
     if (!$skus) {
-      $this->io()->block(dt('No matched sku found for corrupt assets check.'));
+      $this->output->writeln(dt('No matched sku found for corrupt assets check.'));
       return;
     }
 
