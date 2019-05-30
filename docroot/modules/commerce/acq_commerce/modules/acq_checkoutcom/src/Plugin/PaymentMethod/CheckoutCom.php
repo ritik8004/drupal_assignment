@@ -6,7 +6,6 @@ use Drupal\acq_cart\CartInterface;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 
 /**
  * Provides the CheckoutCom payment method.
@@ -63,120 +62,74 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $config = $this->configFactory->get('acq_checkoutcom.settings');
 
-    // @todo: Repalce this code with API call.
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card.json';
-    $data = file_get_contents($file);
-    $existing_cards = !empty($data) ? json_decode($data) : [];
-
-    $options = [];
-    foreach ($existing_cards as $card) {
-      $options[$card->id] = '**** **** **** ' . $card->last4;
-    }
-
-    $payment_type = \Drupal::requestStack()->getCurrentRequest()->query->get('type');
-
-    $pane_form['payment_type'] = [
-      '#type' => 'radios',
-      '#options' => [
-        'existing' => $this->t('Existing Card'),
-        'new' => $this->t('New Card'),
-      ],
-      '#default_value' => !empty($options) && ($payment_type == 'existing' || empty($payment_type)) ? 'existing' : 'new',
-      '#ajax' => [
-        'url' => Url::fromRoute('acq_checkoutcom.select_card_type'),
-        'wrapper' => 'payment_details_checkout_com',
-        'effect' => 'fade',
-      ],
-      '#attached' => [
-        'library' => ['acq_checkoutcom/checkoutcom.kit'],
-      ],
-    ];
-
-    $pane_form['payment_details'] = [
-      '#type' => 'container',
+    $pane_form['payment_details']['cc_number'] = [
+      '#type' => 'tel',
+      '#title' => $this->t('Credit Card Number'),
+      '#default_value' => '',
       '#attributes' => [
-        'id' => ['payment_details_checkout_com'],
+        'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
+        'autocomplete' => 'cc-number',
+        'data-checkout' => 'card-number',
       ],
     ];
 
-    if (!empty($options) && ($payment_type == 'existing' || empty($payment_type))) {
-      $pane_form['payment_details']['existing_card'] = [
-        '#type' => 'radios',
-        '#title' => $this->t('Existing cards'),
-        '#title_display' => 'invisible',
-        '#options' => $options,
-      ];
-    }
-    elseif ($payment_type == 'new') {
-      $pane_form['payment_details']['cc_number'] = [
-        '#type' => 'tel',
-        '#title' => $this->t('Credit Card Number'),
-        '#default_value' => '',
-        '#attributes' => [
-          'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
-          'autocomplete' => 'cc-number',
-          'data-checkout' => 'card-number',
-        ],
-      ];
+    $pane_form['payment_details']['cc_cvv'] = [
+      '#type' => 'password',
+      '#maxlength' => 4,
+      '#title' => $this->t('Security code (CVV)'),
+      '#default_value' => '',
+      '#attributes' => [
+        'class' => ['checkoutcom-credit-card-cvv-input', 'checkoutcom-input'],
+        'autocomplete' => 'cc-csc',
+        'data-checkout' => 'cvv',
+      ],
+    ];
 
-      $pane_form['payment_details']['cc_cvv'] = [
-        '#type' => 'password',
-        '#maxlength' => 4,
-        '#title' => $this->t('Security code (CVV)'),
-        '#default_value' => '',
-        '#attributes' => [
-          'class' => ['checkoutcom-credit-card-cvv-input', 'checkoutcom-input'],
-          'autocomplete' => 'cc-csc',
-          'data-checkout' => 'cvv',
-        ],
-      ];
+    $pane_form['payment_details']['cc_exp_month'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Expiration Month'),
+      '#attributes' => [
+        'class' => ['checkoutcom-credit-card-exp-month-select', 'checkoutcom-input'],
+        'data-checkout' => 'expiry-month',
+      ],
+    ];
 
-      $pane_form['payment_details']['cc_exp_month'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Expiration Month'),
-        '#attributes' => [
-          'class' => ['checkoutcom-credit-card-exp-month-select', 'checkoutcom-input'],
-          'data-checkout' => 'expiry-month',
-        ],
-      ];
+    $pane_form['payment_details']['cc_exp_year'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Expiration Year'),
+      '#attributes' => [
+        'class' => ['checkoutcom-credit-card-exp-year-select', 'checkoutcom-input'],
+        'data-checkout' => 'expiry-year',
+      ],
+    ];
 
-      $pane_form['payment_details']['cc_exp_year'] = [
-        '#type' => 'textfield',
-        '#title' => $this->t('Expiration Year'),
-        '#attributes' => [
-          'class' => ['checkoutcom-credit-card-exp-year-select', 'checkoutcom-input'],
-          'data-checkout' => 'expiry-year',
-        ],
-      ];
+    $pane_form['payment_details']['card_token'] = [
+      '#type' => 'hidden',
+      '#attributes' => [
+        'id' => 'cardToken',
+      ],
+    ];
 
-      $pane_form['payment_details']['card_token'] = [
-        '#type' => 'hidden',
-        '#attributes' => [
-          'id' => 'cardToken',
-        ],
-      ];
-
-      $pane_form['payment_details']['checkout_kit'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'script',
-        '#value' => "
-        window.CKOConfig = {
-          debugMode: " . $config->get('debug') . ",
-          // Replace with api call.
-          publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
-          ready: function (event) {
-            console.log('card is ready');
-            CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
-          },
-          cardTokenised: function(event) {
-            cardToken.value = event.data.cardToken
-            document.getElementById('multistep-checkout').submit();
-          },
-          apiError: function (event) {
-          },
-        };",
-      ];
-    }
+    $pane_form['payment_details']['checkout_kit'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => "
+      window.CKOConfig = {
+        debugMode: " . $config->get('debug') . ",
+        // Replace with api call.
+        publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
+        ready: function (event) {
+          console.log('card is ready');
+          CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
+        },
+        cardTokenised: function(event) {
+          cardToken.value = event.data.cardToken
+          document.getElementById('multistep-checkout').submit();
+        },
+        apiError: function (event) {
+        },
+      };",
+    ];
 
     return $pane_form;
   }
@@ -196,11 +149,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     elseif ($process_type == '3d') {
       if (!empty($inputs['cko-card-token'])) {
         $this->initiate3dSecurePayment($inputs);
-      }
-      else {
-        $acm_payment_methods = $form_state->getValue('acm_payment_methods');
-        $card_id = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_details']['existing_card'];
-        $this->initiateStoredCardPayment($card_id);
       }
     }
   }
@@ -222,29 +170,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       [
         'value' => $totals['grand'] * 100,
         'cardToken' => $inputs['cko-card-token'],
+        // @todo: Repalce with customer email.
         'email' => 'testing@test.com',
       ],
       TRUE
     );
-  }
-
-  /**
-   * Process 3d secure payment for stored card.
-   *
-   * @param string $card_id
-   *   The stored card unique id.
-   *
-   * @throws \Exception
-   */
-  protected function initiateStoredCardPayment(string $card_id) {
-    $cart = $this->getCart();
-    $totals = $cart->totals();
-
-    $this->checkoutComApi->processCardPayment($cart, [
-      'cardId' => $card_id,
-      'value' => $totals['grand'] * 100,
-      'email' => 'mitesh+cards@axelerant.com',
-    ]);
   }
 
 }
