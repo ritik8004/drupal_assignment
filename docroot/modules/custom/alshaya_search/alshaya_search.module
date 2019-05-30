@@ -358,17 +358,6 @@ function alshaya_search_alshaya_profile_installed_final_task() {
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function alshaya_search_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'facets_query_string_alter') {
-    $group = $implementations['alshaya_search'];
-    unset($implementations['alshaya_search']);
-    $implementations['alshaya_search'] = $group;
-  }
-}
-
-/**
  * Helper function to clear all indexed items resave indexes.
  *
  * Since we will add/update lot of attributes, best to re-use the code.
