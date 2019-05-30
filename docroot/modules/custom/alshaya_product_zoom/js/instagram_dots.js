@@ -146,6 +146,10 @@
     }
     // Sync dots.
     var mainPDPGallery = $('#product-image-gallery-mobile');
+    // If it is just a single image, then no need of sync.
+    if (mainPDPGallery.find('.slick-slide').length === 1) {
+      return;
+    }
     var transformCount = mainPDPGallery.find('ul.slick-dots .slick-dots-container').css('transform');
     var translateX = Drupal.behaviors.pdpInstagranDots.getTranslateXFromMatrix(transformCount);
     var pPointerIndex = mainPDPGallery.find('ul.slick-dots li.p-small-1').index();
