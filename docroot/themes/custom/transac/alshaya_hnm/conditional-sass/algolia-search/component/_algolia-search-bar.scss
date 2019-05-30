@@ -22,6 +22,10 @@
           #{$left}: -0.375rem;
         }
       }
+
+      button[type="submit"] {
+        display: none;
+      }
     }
   }
 
@@ -30,6 +34,11 @@
     height: 2.25rem;
     width: 2.25rem;
     border-radius: inherit;
+
+    @include breakpoint($only-mobile) {
+      #{$left}: 0.75rem;
+      top: 0;
+    }
   }
 
   @include breakpoint($tablet) {
@@ -88,7 +97,24 @@
   .algolia-autocomplete-active {
     .aa-suggestions {
       .aa-suggestion {
-        color: $algolia-input-text;
+        .suggested-text {
+          font-family: $hnm-bold;
+          font-weight: normal;
+
+          em {
+            font-family: $hnm-regular;
+          }
+        }
+      }
+    }
+  }
+
+  .aa-suggestions {
+    .aa-suggestion {
+      .populate-input {
+        &::after {
+          #{$right}: 1.5rem;
+        }
       }
     }
   }
@@ -173,11 +199,32 @@ body {
         width: calc(100% + 1.5rem);
         margin: 1px -0.75rem 0;
         border-radius: 0;
+        border: none;
       }
 
       .algolia-autocomplete {
         border-radius: inherit;
       }
     }
+  }
+}
+
+.algolia-cleartext-icon {
+  #{$right}: 3.125rem;
+  top: 0;
+
+  @include breakpoint($upto-desktop) {
+    &::after {
+      font-size: 1.875rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
+    top: 0.875rem;
+  }
+
+  @include breakpoint($only-tablet) {
+    top: 0.3125rem;
+    #{$right}: 0.5rem;
   }
 }

@@ -20,11 +20,20 @@
         if ($('.algolia-autocomplete pre').text().length < 1) {
           $('.trending-title').show();
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
+          $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
         }
         else {
           $('.trending-title').hide();
           $('.algolia-autocomplete').addClass('algolia-autocomplete-active');
+          $('.algolia-form-wrapper').addClass('algolia-cleartext-active');
         }
+      });
+
+      // Condition on click of clear text icon.
+      $('.algolia-cleartext-icon').once().on('click', function (e) {
+        $('#search_api_algolia_autocomplete_block-search').val('');
+        $('#search_api_algolia_autocomplete_block-search').focus();
+        $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
       });
 
       // Add the trending title by default to algolia search suggestion list.
@@ -41,19 +50,6 @@
           $('.algolia-autocomplete').addClass('algolia-autocomplete-active');
         }
         $('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
-      });
-
-      // Hide mobile search box, when clicked anywhere else.
-      $(window).on('click touchstart', function (e) {
-        if (!$(e.target).is('#search_api_algolia_autocomplete_block-search, .populate-input')) {
-          if ($('.block-search-api-algolia-autocomplete-block').hasClass('algolia-search-active')) {
-            $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
-          }
-
-          if ($('.algolia-autocomplet').hasClass('algolia-autocomplete-active')) {
-            $('.algolia-autocomplet').removeClass('algolia-autocomplete-active');
-          }
-        }
       });
 
       /**
@@ -83,6 +79,13 @@
             }
           }
         });
+
+        // Condition on click of back arrow.
+        $('.algolia-search-icon').once().on('click', function (e) {
+          $('#search_api_algolia_autocomplete_block-search').val('');
+          $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
+          $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
+        });
       }
 
       /**
@@ -92,11 +95,15 @@
         $('.mobile--search').once().on('click', function (e) {
           $('.block-search-api-algolia-autocomplete-block').toggleClass('show-algolia-search-bar');
           $('#search_api_algolia_autocomplete_block-search').focus();
+          $('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
         });
 
         $('.algolia-search-icon').once().on('click', function (e) {
           $('.block-search-api-algolia-autocomplete-block').toggleClass('show-algolia-search-bar');
           $('.mobile--search').parent().toggleClass('search-active');
+          $('#search_api_algolia_autocomplete_block-search').val('');
+          $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
+          $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
         });
       }
 
