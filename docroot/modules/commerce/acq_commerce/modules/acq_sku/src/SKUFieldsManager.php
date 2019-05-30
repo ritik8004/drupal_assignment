@@ -59,6 +59,8 @@ class SKUFieldsManager {
    *   The Config Factory service.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The Module Handler service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   Entity Type Manager.
    * @param \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface $entity_definition_update_manager
    *   The Entity Definition Update Manager service.
    * @param \Psr\Log\LoggerInterface $logger
@@ -148,7 +150,7 @@ class SKUFieldsManager {
    * It will not do anything except updating the config. Be very careful when
    * using this.
    *
-   * @param $field_code
+   * @param string $field_code
    *   Field code.
    * @param array $field
    *   Field definition.
@@ -208,6 +210,7 @@ class SKUFieldsManager {
    *   Existing field additions.
    */
   public function getFieldAdditions() {
+    $this->configFactory->clearStaticCache();
     return $this->configFactory->get(self::BASE_FIELD_ADDITIONS_CONFIG)->getRawData();
   }
 
@@ -232,7 +235,7 @@ class SKUFieldsManager {
   /**
    * Function to apply defaults and complete field definition.
    *
-   * @param $field_code
+   * @param string $field_code
    *   Field code.
    * @param array $field
    *   Field definition.
@@ -264,8 +267,9 @@ class SKUFieldsManager {
   }
 
   /**
-   * Returns an associative array containing all required values with defaults
-   * set.
+   * Returns an associative array containing all required values.
+   *
+   * It also has default values set.
    *
    * @returns array
    *   Associative array containing all required values with defaults set.
@@ -294,6 +298,8 @@ class SKUFieldsManager {
       'visible_view' => 0,
       // Whether the field should be visible in form.
       'visible_form' => 1,
+      // Whether the field should be translatable or not.
+      'translatable' => 1,
     ];
   }
 
