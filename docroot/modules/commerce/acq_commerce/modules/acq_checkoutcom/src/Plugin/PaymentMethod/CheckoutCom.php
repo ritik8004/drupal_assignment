@@ -60,7 +60,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    $config = $this->configFactory->get('acq_checkoutcom.settings');
+    $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
 
     $pane_form['payment_details']['cc_number'] = [
       '#type' => 'tel',
@@ -110,25 +110,28 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ],
     ];
 
+    $debug = $checkout_com_settings->get('debug') ? 'true' : 'false';
+    // Replace with api call.
+    $public_key = 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f';
+
+    $string = "window.CKOConfig = {
+      debugMode: {$debug},
+      publicKey: '{$public_key}',
+      ready: function (event) {
+        CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
+      },
+      cardTokenised: function(event) {
+        cardToken.value = event.data.cardToken
+        document.getElementById('multistep-checkout').submit();
+      },
+      apiError: function (event) {
+      }
+    };";
+
     $pane_form['payment_details']['checkout_kit'] = [
       '#type' => 'html_tag',
       '#tag' => 'script',
-      '#value' => "
-      window.CKOConfig = {
-        debugMode: " . $config->get('debug') . ",
-        // Replace with api call.
-        publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
-        ready: function (event) {
-          console.log('card is ready');
-          CheckoutKit.monitorForm('.multistep-checkout', CheckoutKit.CardFormModes.CARD_TOKENISATION);
-        },
-        cardTokenised: function(event) {
-          cardToken.value = event.data.cardToken
-          document.getElementById('multistep-checkout').submit();
-        },
-        apiError: function (event) {
-        },
-      };",
+      '#value' => $string,
     ];
 
     return $pane_form;
