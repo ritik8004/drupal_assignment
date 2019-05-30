@@ -4,6 +4,7 @@ namespace Drupal\acq_checkoutcom\Form;
 
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -40,6 +41,13 @@ class CustomerCardForm extends FormBase {
   protected $checkoutComApi;
 
   /**
+   * Config Factory service object.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * CustomerCardForm constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -48,15 +56,19 @@ class CustomerCardForm extends FormBase {
    *   Current request object.
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
    *   Checkout.com api wrapper object.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   Config Factory service object.
    */
   public function __construct(
     ModuleHandlerInterface $module_handler,
     Request $current_request,
-    CheckoutComAPIWrapper $checkout_com_Api
+    CheckoutComAPIWrapper $checkout_com_Api,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->moduleHandler = $module_handler;
     $this->currentRequest = $current_request;
     $this->checkoutComApi = $checkout_com_Api;
+    $this->configFactory = $config_factory;
   }
 
   /**
@@ -66,7 +78,8 @@ class CustomerCardForm extends FormBase {
     return new static(
       $container->get('module_handler'),
       $container->get('request_stack')->getCurrentRequest(),
-      $container->get('acq_checkoutcom.api')
+      $container->get('acq_checkoutcom.api'),
+      $container->get('config.factory')
     );
   }
 
@@ -158,34 +171,39 @@ class CustomerCardForm extends FormBase {
       ],
     ];
 
+    $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
+    $debug = $checkout_com_settings->get('debug') ? 'true' : 'false';
+    // Replace with api call.
+    $public_key = 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f';
+    $script = "window.CKOConfig = {
+      debugMode: {$debug},
+      publicKey: '{$public_key}',
+      ready: function (event) {
+        CheckoutKit.monitorForm('.acq-checkoutcom-customer-card-form', CheckoutKit.CardFormModes.CARD_TOKENISATION);
+      },
+      cardTokenised: function(event) {
+        cardToken.value = event.data.cardToken
+        document.getElementById('acq-checkoutcom-customer-card-form').submit();
+      },
+      apiError: function (event) {
+        // Remove any existing error messages.
+        let list = document.getElementsByClassName('acq-checkoutcom-customer-card-form');
+        if (list[0].firstElementChild.className == 'messages error') {
+        let messageElement = document.getElementsByClassName('messages error');
+        list[0].removeChild(messageElement[0]);
+        }
+        // Create error message.
+        var errorMessage = document.createElement('div');
+        errorMessage.setAttribute('class', 'messages error');
+        errorMessage.innerHTML = event.data.errors.toString();
+        list[0].prepend(errorMessage);
+      },
+    };";
+
     $form['payment_details']['checkout_kit'] = [
       '#type' => 'html_tag',
       '#tag' => 'script',
-      '#value' => "
-        window.CKOConfig = {
-          debugMode: true,
-          publicKey: 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f',
-          ready: function (event) {
-            CheckoutKit.monitorForm('.acq-checkoutcom-customer-card-form', CheckoutKit.CardFormModes.CARD_TOKENISATION);
-          },
-          cardTokenised: function(event) {
-            cardToken.value = event.data.cardToken
-            document.getElementById('acq-checkoutcom-customer-card-form').submit();
-          },
-          apiError: function (event) {
-            // Remove any existing error messages.
-            let list = document.getElementsByClassName('acq-checkoutcom-customer-card-form');
-            if (list[0].firstElementChild.className == 'messages error') {
-              let messageElement = document.getElementsByClassName('messages error');
-              list[0].removeChild(messageElement[0]);
-            }
-            // Create error message.
-            var errorMessage = document.createElement('div');
-            errorMessage.setAttribute('class', 'messages error');
-            errorMessage.innerHTML = event.data.errors.toString();
-            list[0].prepend(errorMessage);
-          },
-        };",
+      '#value' => $script,
     ];
 
     $form['actions'] = [
