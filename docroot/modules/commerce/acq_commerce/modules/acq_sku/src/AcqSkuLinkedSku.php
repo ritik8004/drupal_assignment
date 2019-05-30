@@ -10,7 +10,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 
 /**
+ * Class AcqSkuLinkedSku.
  *
+ * @package Drupal\acq_sku
  */
 class AcqSkuLinkedSku {
 
@@ -82,7 +84,7 @@ class AcqSkuLinkedSku {
    * @return array
    *   All linked skus of given type.
    */
-  public function getLinkedSKus(SKU $sku, $type = LINKED_SKU_TYPE_ALL) {
+  public function getLinkedSkus(SKU $sku, $type = LINKED_SKU_TYPE_ALL) {
     // Cache key is like - 'acq_sku:linked_skus:123:LINKED_SKU_TYPE_ALL'.
     $cache_key = 'acq_sku:linked_skus:' . $sku->id() . ':' . $type;
 
@@ -95,16 +97,11 @@ class AcqSkuLinkedSku {
     }
 
     $data = [];
-    try {
-      // Get linked skus and set the cache.
-      $linked_skus = $this->apiWrapper->getLinkedskus($sku->getSku(), $type);
-      $data = $type != LINKED_SKU_TYPE_ALL ? $linked_skus[$type] : $linked_skus;
 
-      // Set the cache.
-      if ($cache_lifetime = $this->configFactory->get('acq_sku.settings')->get('linked_skus_cache_max_lifetime')) {
-        $cache_lifetime += \Drupal::time()->getRequestTime();
-        $this->cache->set($cache_key, $data, $cache_lifetime, ['acq_sku:' . $sku->id()]);
-      }
+    try {
+      // Get linked skus from API.
+      $linked_skus = $this->apiWrapper->getLinkedskus($sku->getSku(), $type);
+      $data = ($type != LINKED_SKU_TYPE_ALL) ? $linked_skus[$type] : $linked_skus;
     }
     catch (\Exception $e) {
       // If something bad happens, log the error.
@@ -113,6 +110,16 @@ class AcqSkuLinkedSku {
         '@sku' => $sku->getSku(),
         '@message' => $e->getMessage(),
       ]);
+    }
+
+    $cache_lifetime = $this->configFactory
+      ->get('acq_sku.settings')
+      ->get('linked_skus_cache_max_lifetime');
+
+    // Set data in cache if enabled.
+    if ($cache_lifetime > 0) {
+      $cache_lifetime += \Drupal::time()->getRequestTime();
+      $this->cache->set($cache_key, $data, $cache_lifetime, ['acq_sku:' . $sku->id()]);
     }
 
     return $data;

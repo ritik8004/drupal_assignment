@@ -7,12 +7,14 @@ use Drupal\acq_sku\AcquiaCommerce\SKUPluginManager;
 use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Service\ProductCacheManager;
 use Drupal\alshaya_acm_product\SkuManager;
-use Drupal\Core\Cache\Cache;
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\taxonomy\TermInterface;
@@ -115,6 +117,20 @@ class SkuAssetManager {
   protected $hmImageSettings;
 
   /**
+   * Logger.
+   *
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
+   */
+  private $logger;
+
+  /**
+   * Date Time Service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  private $time;
+
+  /**
    * SkuAssetManager constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactory $configFactory
@@ -135,6 +151,10 @@ class SkuAssetManager {
    *   PIMS ID <=> Drupal File URI cache.
    * @param \GuzzleHttp\Client $http_client
    *   HTTP Client.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_factory
+   *   Logger Channel Factory.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   Date Time service.
    */
   public function __construct(ConfigFactory $configFactory,
                               CurrentRouteMatch $currentRouteMatch,
@@ -144,7 +164,9 @@ class SkuAssetManager {
                               ModuleHandlerInterface $moduleHandler,
                               ProductCacheManager $product_cache_manager,
                               CacheBackendInterface $cache_pims_files,
-                              Client $http_client) {
+                              Client $http_client,
+                              LoggerChannelFactoryInterface $logger_factory,
+                              TimeInterface $time) {
     $this->configFactory = $configFactory;
     $this->currentRouteMatch = $currentRouteMatch;
     $this->skuManager = $skuManager;
@@ -155,6 +177,8 @@ class SkuAssetManager {
     $this->productCacheManager = $product_cache_manager;
     $this->cachePimsFiles = $cache_pims_files;
     $this->httpClient = $http_client;
+    $this->logger = $logger_factory->get('SkuAssetManager');
+    $this->time = $time;
 
     $this->hmImageSettings = $this->configFactory->get('alshaya_hm_images.settings');
   }
@@ -171,21 +195,13 @@ class SkuAssetManager {
    * @throws \Exception
    */
   public function getAssets(SKU $sku) {
-    $static = &drupal_static(__METHOD__, []);
-    $cid = implode(':', [
-      $sku->id(),
-      $sku->language()->getId(),
-    ]);
-
-    if (isset($static[$cid])) {
-      return $static[$cid];
-    }
-
     $assets = unserialize($sku->get('attr_assets')->getString());
 
     if (!is_array($assets) || empty($assets)) {
       return [];
     }
+
+    $save = FALSE;
 
     foreach ($assets as $index => &$asset) {
       // Sanity check, we always need asset id.
@@ -194,8 +210,18 @@ class SkuAssetManager {
         continue;
       }
 
+      // We already have drupal_uri in asset data.
+      if (!empty($asset['drupal_uri'])) {
+        continue;
+      }
+
       try {
-        $asset['drupal_uri'] = $this->getImageUri($asset);
+        $file = $this->downloadImage($asset);
+        if ($file instanceof FileInterface) {
+          $asset['drupal_uri'] = $file->getFileUri();
+          $asset['fid'] = $file->id();
+          $save = TRUE;
+        }
       }
       catch (\Exception $e) {
         watchdog_exception('SkuAssetManager', $e);
@@ -206,34 +232,12 @@ class SkuAssetManager {
       }
     }
 
-    $static[$cid] = $assets;
+    if ($save) {
+      $sku->get('attr_assets')->setValue(serialize($assets));
+      $sku->save();
+    }
+
     return $assets;
-  }
-
-  /**
-   * Get drupal file uri for PIMS id from cache.
-   *
-   * @param int|string $pims_id
-   *   PIMS Id.
-   *
-   * @return string|null
-   *   Drupal file uri if found in cache.
-   */
-  private function getFileUriFromPimsId($pims_id) {
-    $cache = $this->cachePimsFiles->get($pims_id);
-    return $cache->data ?? NULL;
-  }
-
-  /**
-   * Set drupal file uri for PIMS id in cache.
-   *
-   * @param int|string $pims_id
-   *   PIMS id.
-   * @param \Drupal\file\FileInterface $file
-   *   File entity.
-   */
-  private function setFileUriForPimsId($pims_id, FileInterface $file) {
-    $this->cachePimsFiles->set($pims_id, $file->getFileUri(), Cache::PERMANENT, $file->getCacheTags());
   }
 
   /**
@@ -242,8 +246,8 @@ class SkuAssetManager {
    * @param array $data
    *   PIMS Data.
    *
-   * @return string|null
-   *   Drupal File URI if image download successful.
+   * @return \Drupal\file\FileInterface|null
+   *   File entity if image download successful.
    *
    * @throws \Exception
    */
@@ -290,9 +294,7 @@ class SkuAssetManager {
       watchdog_exception('SkuAssetManager', $e);
     }
 
-    $this->setFileUriForPimsId($data['id'], $file);
-
-    return $file->getFileUri();
+    return $file ?? [];
   }
 
   /**
@@ -301,12 +303,18 @@ class SkuAssetManager {
    * @param array $asset
    *   Asset data.
    *
-   * @return string|null
-   *   File uri if download successful.
+   * @return \Drupal\file\FileInterface|null
+   *   File entity download successful.
    *
    * @throws \Exception
    */
   public function downloadLiquidPixelImage(array $asset) {
+    $skipped_key = 'skipped_' . $asset['Data']['AssetId'];
+    $cache = $this->cachePimsFiles->get($skipped_key);
+    if (isset($cache, $cache->data)) {
+      return NULL;
+    }
+
     $url = $this->getSkuAssetUrlLiquidPixel($asset);
 
     // Download the file contents.
@@ -321,6 +329,20 @@ class SkuAssetManager {
       watchdog_exception('SkuAssetManager', $e);
 
       // Not able to download image, no further processing required.
+      return NULL;
+    }
+
+    $file_data = (string) $file_data;
+    if (strlen($file_data) <= Settings::get('hm_grey_image_size', 24211)) {
+      $this->logger->error('Skipping grey image. File: @file, Size: @size, Asset id: @id', [
+        '@file' => $url,
+        '@size' => strlen($file_data),
+        '@id' => $asset['Data']['AssetId'],
+      ]);
+
+      // Cache it for a day so we can check for it again after one day.
+      $this->cachePimsFiles->set($skipped_key, $this->time->getCurrentTime() + 86400);
+
       return NULL;
     }
 
@@ -341,40 +363,29 @@ class SkuAssetManager {
       watchdog_exception('SkuAssetManager', $e);
     }
 
-    $this->setFileUriForPimsId($asset['Data']['AssetId'], $file);
-
-    return $file->getFileUri();
+    return $file ?? NULL;
   }
 
   /**
-   * Get Drupal file uri from PIMS data.
-   *
-   * Download image if not available in cache.
+   * Download Drupal file for Asset.
    *
    * @param array $asset
    *   Asset data.
    *
-   * @return string
-   *   File URI for pims id.
+   * @return \Drupal\file\FileInterface|null
+   *   File from asset if available.
    *
    * @throws \Exception
    */
-  private function getImageUri(array $asset) {
-    $id = $asset['pims_image']['id'] ?? $asset['Data']['AssetId'];
-
-    // First check if we have fid for pims id (or asset id for fallback).
-    $uri = $this->getFileUriFromPimsId($id);
-
-    if (empty($uri)) {
-      if (isset($asset['pims_image'])) {
-        $uri = $this->downloadPimsImage($asset['pims_image']);
-      }
-      elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
-        $uri = $this->downloadLiquidPixelImage($asset);
-      }
+  private function downloadImage(array $asset) {
+    if (isset($asset['pims_image']) && is_array($asset['pims_image'])) {
+      $file = $this->downloadPimsImage($asset['pims_image']);
+    }
+    elseif ($this->hmImageSettings->get('fallback_to_liquidpixel')) {
+      $file = $this->downloadLiquidPixelImage($asset);
     }
 
-    return $uri;
+    return $file ?? NULL;
   }
 
   /**

@@ -96,7 +96,7 @@
           $('html').addClass('all-filters-overlay');
         }
         else {
-          $('body').addClass('mobile--overlay all-filters-mobile-overlay');
+          $('body').addClass('mobile--overlay');
         }
 
         $('.all-filters .bef-exposed-form, .all-filters .block-facets-ajax').removeClass('show-facet');
@@ -113,7 +113,7 @@
       // Fake facet apply button to close the `all filter`.
       $('.facet-all-apply', context).once().on('click', function() {
         $('.all-filters').removeClass('filters-active');
-        $('body').removeClass('mobile--overlay all-filters-mobile-overlay');
+        $('body').removeClass('mobile--overlay');
         $('html').removeClass('all-filters-overlay');
         // Show filter count if applicable.
         showFilterCount();
@@ -134,8 +134,8 @@
       // On change of outer `sort by`, update the 'all filter' sort by as well.
       $('.c-content .c-content__region .bef-exposed-form input:radio').on('click', function() {
         var idd = $(this).attr('id');
-        $('.all-filters .bef-exposed-form input:radio').attr('checked', false);
-        $('.all-filters .bef-exposed-form #' + idd).attr('checked', true);
+        $('.c-content__region .bef-exposed-form input:radio').attr('checked', false);
+        $('.c-content__region .bef-exposed-form #' + idd).attr('checked', true);
         updateSortTitle();
       });
 
@@ -149,7 +149,6 @@
         $('#' + idd).trigger('click');
         updateSortTitle();
         // Stopping other propagation.
-        e.preventDefault();
         e.stopPropagation();
       })
 
@@ -385,6 +384,16 @@
         // Sticky header on mobile view port with banner.
         if ($(window).width() < 768) {
           position = $('.region__banner-top').outerHeight();
+
+          // Making sticky filters after category filter selection.
+          if (filter.hasClass('filter-fixed-top')) {
+            $('.show-all-filters').parent().css('top', fixedNavHeight);
+            $('.filter-fixed-top > .block-facet-blockcategory-facet-plp, .filter-fixed-top > .block-facet-blockcategory-facet-promo, .filter-fixed-top > .block-facet-blockcategory-facet-search').css('top', fixedNavHeight);
+          }
+          else {
+            $('.show-all-filters').parent().css('top', 0);
+            $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
+          }
         }
 
         $(window, context).once().on('scroll', function () {
@@ -424,6 +433,7 @@
       }
 
       addSlideEventhandlers();
+      stickyfacetfilter();
 
       $(window, context).on('load', function () {
         // Calculate the filters top position now.

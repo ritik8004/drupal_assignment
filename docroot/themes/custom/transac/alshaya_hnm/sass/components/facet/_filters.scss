@@ -115,18 +115,11 @@
               font-size: 3.75rem;
               top: -1.125rem;
               #{$left}: 0;
+              margin-top: 0.0625rem;
             }
           }
         }
       }
-    }
-  }
-}
-
-@include breakpoint($only-tablet) {
-  .all-filters-mobile-overlay {
-    .c-breadcrumb {
-      border-top: 1px solid $breadcrumb_region_separator;
     }
   }
 }
