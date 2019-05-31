@@ -2,7 +2,7 @@
 
 namespace Drupal\alshaya_knet\Helper;
 
-use Drupal\alshaya_knet\E24PaymentPipe;
+use Drupal\alshaya_knet\Knet\KnetEncryptDecypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\State\StateInterface;
@@ -152,6 +152,10 @@ class KnetHelper {
     $udf5_prefix = $knetSettings->get('knet_udf5_prefix');
     $pipe->setUdf5($udf5_prefix . ' ' . $order_id);
 
+    //$pp = $this->testNewToolkitRequest();
+    //$response = new \Symfony\Component\HttpFoundation\RedirectResponse($pp['url']);
+    //$response->send();
+    //exit;
     $pipe->performPaymentInitialization();
 
     // Check again once if there is any error.
@@ -402,6 +406,59 @@ class KnetHelper {
       '@quote_id' => $quote_id,
       '@message' => $message,
     ]);
+  }
+
+  /**
+   * Determines if use of new K-Net toolkit.
+   *
+   * @return bool
+   */
+  public function useNewKnetToolKit() {
+    return TRUE;
+  }
+
+  public function testNewToolkitRequest() {
+    // This needs to know
+    $TranportalId="IDHERE";
+    $ReqTranportalId="id=".$TranportalId;
+
+    // This needs to know
+    $TranportalPassword='PASSWORD HERE';
+    $ReqTranportalPassword="password=".$TranportalPassword;
+
+    $TranAmount = 10;
+    $ReqAmount="amt=".$TranAmount;
+
+    $TranTrackid=mt_rand();
+    $ReqTrackId="trackid=".$TranTrackid;
+
+    $ReqCurrency="currencycode=414";
+
+    $ReqLangid="langid=USA";
+
+    $ReqAction="action=1";
+
+    $ResponseUrl="https://local.alshaya-hmsa.com/en/knet/response";
+    $ReqResponseUrl="responseURL=".$ResponseUrl;
+
+    $ErrorUrl="https://local.alshaya-hmsa.com/en/knet/error/0";
+    $ReqErrorUrl="errorURL=".$ErrorUrl;
+
+    $ReqUdf1="udf1=test1";
+    $ReqUdf2="udf2=test2";
+    $ReqUdf3="udf3=test3";
+    $ReqUdf4="udf4=test4";
+    $ReqUdf5="udf5=test5";
+
+    $param=$ReqTranportalId."&".$ReqTranportalPassword."&".$ReqAction."&".$ReqLangid."&".$ReqCurrency."&".$ReqAmount."&".$ReqResponseUrl."&".$ReqErrorUrl."&".$ReqTrackId."&".$ReqUdf1."&".$ReqUdf2."&".$ReqUdf3."&".$ReqUdf4."&".$ReqUdf5;
+
+    $termResourceKey="";
+    $enc_dec = new KnetEncryptDecypt();
+    $param=$enc_dec->encryptAES($param,$termResourceKey)."&tranportalId=".$TranportalId."&responseURL=".$ResponseUrl."&errorURL=".$ErrorUrl;
+
+    return [
+      'url' => "https://kpaytest.com.kw/kpg/PaymentHTTP.htm?param=paymentInit"."&trandata=".$param,
+    ];
   }
 
 }

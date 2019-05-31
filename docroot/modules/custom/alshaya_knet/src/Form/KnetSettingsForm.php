@@ -29,6 +29,7 @@ class KnetSettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('alshaya_knet.settings')
+      ->set('use_new_knet_toolkit', $form_state->getValue('use_new_knet_toolkit'))
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
@@ -45,6 +46,13 @@ class KnetSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('alshaya_knet.settings');
+
+    $form['use_new_knet_toolkit'] = [
+      '#type' => 'checkbox',
+      '#description' => $this->t('If checked, then new K-Net toolkit will be used.'),
+      '#title' => $this->t('Use new K-Net toolkit.'),
+      '#default_value' => $config->get('use_new_knet_toolkit'),
+    ];
 
     $form['resource_path'] = [
       '#type' => 'textfield',
