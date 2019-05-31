@@ -15,6 +15,13 @@
         $('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
       });
 
+      // On focus out make it in default state.
+      if ($(window).width() > 767) {
+        $('#search_api_algolia_autocomplete_block-search').on('focusout', function () {
+          $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
+        });
+      }
+
       // Show/hide the trending title.
       $('#search_api_algolia_autocomplete_block-search').on('keyup', function () {
         if ($('.algolia-autocomplete pre').text().length < 1) {
@@ -25,6 +32,9 @@
         else {
           $('.trending-title').hide();
           $('.algolia-autocomplete').addClass('algolia-autocomplete-active');
+        }
+
+        if ($('#search_api_algolia_autocomplete_block-search').val().length > 0) {
           $('.algolia-form-wrapper').addClass('algolia-cleartext-active');
         }
       });
@@ -86,6 +96,15 @@
           $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
           $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
         });
+
+        $('#search_api_algolia_autocomplete_block-search').on('focusout', function (e) {
+          if ($('#search_api_algolia_autocomplete_block-search').val().length > 0) {
+            $('.algolia-search-icon').once().click();
+          }
+          else {
+            $('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
+          }
+        });
       }
 
       /**
@@ -107,15 +126,17 @@
         });
       }
 
-      // Only on listing and product pages.
-      if($('.c-plp').length === 1 || $('.nodetype--acq_product').length === 1) {
-        $('body').addClass('no-sticky-algolia-search-bar');
-        setTimeout(function() {
-          showAlgoliaSearchBar();
-        }, 100);
-      }
-      else {
-        stickyAlgoliaHeader();
+      if ($(window).width() < 768) {
+        // Only on listing and product pages.
+        if ($('.c-plp').length === 1 || $('.nodetype--acq_product').length === 1) {
+          $('body').addClass('no-sticky-algolia-search-bar');
+          setTimeout(function () {
+            showAlgoliaSearchBar();
+          }, 100);
+        }
+        else {
+          stickyAlgoliaHeader();
+        }
       }
     }
   };
