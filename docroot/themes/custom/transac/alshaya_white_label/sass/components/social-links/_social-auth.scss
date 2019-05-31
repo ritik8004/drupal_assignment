@@ -2,7 +2,7 @@
   .auth-link {
     display: flex;
     align-items: center;
-    width: auto;
+    width: 14.375rem;
     max-width: 15.4375rem;
     padding: 0.5rem;
     margin-top: 1.5rem;
@@ -77,6 +77,82 @@
           margin-bottom: 1.5rem;
         }
       }
+    }
+  }
+}
+
+.checkout-login {
+  #edit-checkout-social-auth,
+  #edit-checkout-guest {
+    padding: 0 7.875rem;
+    text-align: $left;
+
+    @include breakpoint($only-tablet) {
+      padding: 0;
+      padding-#{$left}: 4rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      padding: 0;
+      text-align: center;
+    }
+  }
+
+  #edit-checkout-login {
+    button {
+      width: 11.875rem;
+      height: 2.875rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+
+    .selected-tab-title.mobile-only-block {
+      @include breakpoint($only-mobile) {
+        display: none;
+      }
+    }
+  }
+
+  #edit-checkout-social-auth,
+  #edit-checkout-guest,
+  #edit-checkout-login {
+    legend {
+      @include breakpoint($only-mobile) {
+        display: block;
+        text-align: center;
+      }
+    }
+
+    .fieldset-legend {
+      text-transform: capitalize;
+      font-size: 1.125rem;
+    }
+  }
+
+  #edit-checkout-guest {
+    #edit-checkout-guest-checkout-as-guest {
+      width: 12.5625rem;
+      height: 2.875rem;
+
+      @include breakpoint($only-mobile) {
+        width: 100%;
+      }
+    }
+
+    .above-mobile-block {
+      @include breakpoint($only-mobile) {
+        display: block;
+      }
+    }
+  }
+
+  .form-actions {
+    float: $left;
+
+    @include breakpoint($only-mobile) {
+      width: 100%;
     }
   }
 }
