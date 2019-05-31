@@ -208,7 +208,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
 
     $batch_size = (int) $options['batch_size'];
     $skus = (string) $options['skus'];
-    $skus = explode(',', $skus);
+    $skus = array_filter(explode(',', $skus));
 
     $this->logger()->notice('Checking all assets...');
 
@@ -227,6 +227,13 @@ class AlshayaHmImagesCommands extends DrushCommands {
     $result = $select->execute()->fetchAll();
 
     $skus = array_column($result, 'sku');
+
+    // If no sku available, then no need to process further as with empty
+    // array, drush throws error.
+    if (!$skus) {
+      $this->output->writeln(dt('No matched sku found for corrupt assets check.'));
+      return;
+    }
 
     $batch = [
       'title' => 'Process assets',
