@@ -68,8 +68,6 @@
     }
 
     a {
-      text-align: $left;
-
       @include breakpoint($upto-desktop) {
         img {
           width: 2.5rem;

@@ -214,6 +214,10 @@
       #edit-checkout-login {
         order: 2;
       }
+
+      #edit-checkout-guest {
+        order: 3;
+      }
     }
   }
 
@@ -288,33 +292,30 @@
     }
 
     @include breakpoint($tablet) {
-      padding-#{$right}: 7.5rem;
+      padding-#{$right}: 3.5rem;
     }
 
     .request-password-link {
-      margin-top: 1.6rem;
-      display: block;
-      text-align: center;
       font-weight: bold;
       color: $content_link_color;
+      height: 2.875rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      top: 0;
+      float: $left;
+      margin-top: 3.0625rem;
+      #{$left}: 2.4rem;
 
-      @include breakpoint($tablet) {
-        position: absolute;
-        bottom: 1.5em;
-        #{$left}: 11rem;
-        width: auto;
-        font-size: 0.75rem;
+      @include breakpoint($only-mobile) {
+        margin-top: 0.625rem;
+        #{$left}: 50%;
+        transform: translateX(-50%);
+        text-decoration: underline;
 
         html[lang=ar] & {
-          #{$left}: 13rem;
-        }
-      }
-
-      @include breakpoint($desktop) {
-        #{$left}: 15rem;
-
-        html[lang=ar] & {
-          #{$left}: 17rem;
+          transform: translateX(50%);
         }
       }
     }
@@ -353,11 +354,15 @@
     a {
       @extend %btn;
 
-      background: $primary_btn_bg;
-      display: inline-block;
+      background: $checkout_guest_button_bg;
+      border: 2px solid $checkout_guest_button_border;
+      color: $checkout_guest_button_txt;
       margin: 1em 0;
       margin-bottom: 2rem;
-      padding: 0.625rem 1.5rem;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
 
       @include link-ripple();
 
@@ -493,6 +498,12 @@
 
       p {
         margin-top: 0;
+      }
+    }
+
+    .c-page-title {
+      @include breakpoint($only-mobile) {
+        text-align: center;
       }
     }
   }
