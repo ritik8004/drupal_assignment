@@ -157,8 +157,13 @@
 
     a {
       margin-#{$left}: 0;
-      width: 52.5%;
+      width: 100%;
       display: inline-block;
+
+      @include breakpoint($only-mobile) {
+        text-align: center;
+        max-width: none;
+      }
 
       @include breakpoint($tablet) {
         width: 29%;
