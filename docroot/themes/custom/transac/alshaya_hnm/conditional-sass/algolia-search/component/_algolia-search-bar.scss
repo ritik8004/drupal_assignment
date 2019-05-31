@@ -92,6 +92,10 @@
 
   .aa-dropdown-menu {
     margin-top: 1px;
+
+    @include breakpoint($only-mobile) {
+      border-radius: 0;
+    }
   }
 
   .algolia-autocomplete-active {
@@ -188,6 +192,14 @@ body {
       @include breakpoint($tablet) {
         height: 2.25rem;
       }
+
+      &::placeholder {
+        line-height: 1.0625rem;
+
+        @include breakpoint($tablet) {
+          line-height: 2.25rem;
+        }
+      }
     }
   }
 }
@@ -226,5 +238,13 @@ body {
   @include breakpoint($only-tablet) {
     top: 0.3125rem;
     #{$right}: 0.5rem;
+  }
+}
+
+@include breakpoint($only-mobile) {
+  .algolia-cleartext-active {
+    button[type="submit"] {
+      display: block;
+    }
   }
 }
