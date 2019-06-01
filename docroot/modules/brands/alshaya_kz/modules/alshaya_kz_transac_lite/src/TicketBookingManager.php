@@ -85,19 +85,20 @@ class TicketBookingManager {
     if (!isset($static) && $cache = $this->cache->get($cid)) {
       $static = $cache->data;
     }
-    return $static;
+    return json_decode($static);
   }
 
   /**
    * Set data in Cache for booking steps.
    *
-   * @param string $data
+   * @param object $data
    *   Data to set in cache.
    * @param string $key
    *   Key of the data to get from cache.
    */
-  public function setTicketBookingCachedData(string $data, $key) {
+  public function setTicketBookingCachedData($data, $key) {
     $cid = $this->getTicketBookingCachedId($key);
+    $data = json_encode($data);
     $this->cache->set($cid, $data, Cache::PERMANENT, ['alshaya_kz_transac_lite:kidsoft']);
 
     // Update data in static cache too.
@@ -112,8 +113,8 @@ class TicketBookingManager {
    *   Return token with AuthString and AuthVal.
    */
   public function getToken() {
-    if (isset(json_decode($this->getTicketBookingCachedData('getToken'))->authenticateResult)) {
-      return json_decode($this->getTicketBookingCachedData('getToken'));
+    if (isset($this->getTicketBookingCachedData('getToken')->authenticateResult)) {
+      return $this->getTicketBookingCachedData('getToken');
     }
     // Get token from kidsoft.
     $settings = $this->configFactory->get('alshaya_kz_transac_lite.settings');
@@ -127,7 +128,7 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->setTicketBookingCachedData(json_encode($token), 'getToken');
+      $this->setTicketBookingCachedData($token, 'getToken');
       return $token;
     }
     catch (\SoapFault $fault) {
@@ -145,8 +146,8 @@ class TicketBookingManager {
    *   Object of parks data.
    */
   public function getParkData() {
-    if (isset(json_decode($this->getTicketBookingCachedData('getParks'))->getParksResult)) {
-      return json_decode($this->getTicketBookingCachedData('getParks'));
+    if (isset($this->getTicketBookingCachedData('getParks')->getParksResult)) {
+      return $this->getTicketBookingCachedData('getParks');
     }
 
     try {
@@ -165,9 +166,8 @@ class TicketBookingManager {
       // by invalidating cache and get new one.
       if (empty($parks->getParksResult) && $this->getTicketBookingCachedData('getToken')) {
         cache::invalidateTags(['alshaya_kz_transac_lite:kidsoft']);
-        return $this->getParkData();
       }
-      $this->setTicketBookingCachedData(json_encode($parks), 'getParkData');
+      $this->setTicketBookingCachedData($parks, 'getParkData');
       return $parks;
     }
     catch (\ SoapFault $fault) {
@@ -227,8 +227,8 @@ class TicketBookingManager {
    *   object of visitorTypes.
    */
   public function getVisitorTypesData(string $shifts, string $visit_date) {
-    if (isset(json_decode($this->getTicketBookingCachedData('getVisitorTypesData'))->getVisitorTypesResult)) {
-      return json_decode($this->getTicketBookingCachedData('getVisitorTypesData'));
+    if (isset($this->getTicketBookingCachedData('getVisitorTypesData')->getVisitorTypesResult)) {
+      return $this->getTicketBookingCachedData('getVisitorTypesData');
     }
     $shifts = json_decode($shifts);
     try {
@@ -255,7 +255,7 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->setTicketBookingCachedData(json_encode($visitorTypes), 'getVisitorTypesData');
+      $this->setTicketBookingCachedData($visitorTypes, 'getVisitorTypesData');
       return $visitorTypes;
     }
     catch (\SoapFault $fault) {
@@ -273,8 +273,8 @@ class TicketBookingManager {
    *   object of sexes data.
    */
   public function getSexesData() {
-    if (isset(json_decode($this->getTicketBookingCachedData('getSexesData'))->getSexesResult)) {
-      return json_decode($this->getTicketBookingCachedData('getSexesData'));
+    if (isset($this->getTicketBookingCachedData('getSexesData')->getSexesResult)) {
+      return $this->getTicketBookingCachedData('getSexesData');
     }
     try {
       $getSexes = $this->soapClient->__soapCall("getSexes",
@@ -292,7 +292,7 @@ class TicketBookingManager {
             ],
         ]
       );
-      $this->setTicketBookingCachedData(json_encode($getSexes), 'getSexesData');
+      $this->setTicketBookingCachedData($getSexes, 'getSexesData');
       return $getSexes;
     }
     catch (\ SoapFault $fault) {
@@ -448,6 +448,7 @@ class TicketBookingManager {
             ],
         ]
       );
+      return $saveTicket->saveTicketResult;
     }
     catch (\SoapFault $fault) {
       $this->logger->warning('API Error in saving ticket - %faultcode: %message', [
@@ -455,8 +456,6 @@ class TicketBookingManager {
         '%message' => $fault->faultstring,
       ]);
     }
-
-    return $saveTicket->saveTicketResult;
   }
 
   /**
@@ -564,7 +563,6 @@ class TicketBookingManager {
         }
       }
     }
-
     return $flag;
   }
 

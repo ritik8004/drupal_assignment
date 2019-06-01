@@ -21,7 +21,6 @@
       $.fn.kidzania = function (options) {
         var book_visit_date;
         var book_shifts;
-        var parks;
         var defaults = {speed: 500};
         var settings = $.extend({}, defaults, options);
         var body = $('html, body');
@@ -60,7 +59,6 @@
               Drupal.url('get-parks'),
               function (data) {
                 if (data) {
-                  parks = data;
                   $('.countryBtn .value, .countryDisplay').html(data);
                   this.getGender();
                 }
@@ -428,11 +426,10 @@
           });
           if (isValid) {
             actions.hideEle(eleFormErrMsg);
-            ticketTypesFinal['parks'] = parks;
+            ticketTypesFinal['visit_date'] = book_visit_date;
             // Pre validate visitors at server level.
             $.post(Drupal.url('validate-visitor-details'), {
               final_visitor_list: ticketTypesFinal,
-              visit_date: book_visit_date,
               shifts: book_shifts
             }, function (data) {
               if (data.err) {

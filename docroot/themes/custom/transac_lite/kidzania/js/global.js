@@ -18,7 +18,6 @@
         var getDataFromLocal = JSON.parse(localStorage.getItem('booking_info'));
         $('.visit-date').html(getDataFromLocal.visit_date);
         $('.order-total').html(getDataFromLocal.total.price);
-        $('.parks').html(getDataFromLocal.parks);
         $('#booking-info').val(JSON.stringify(getDataFromLocal));
       }
     }

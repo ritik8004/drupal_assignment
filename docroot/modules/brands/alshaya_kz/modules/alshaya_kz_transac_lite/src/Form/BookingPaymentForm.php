@@ -50,21 +50,21 @@ class BookingPaymentForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity manager.
-   * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticketBooking
+   * @param \Drupal\alshaya_kz_transac_lite\TicketBookingManager $ticket_booking
    *   The ticket booking object.
-   * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $bookingPayment
+   * @param \Drupal\alshaya_kz_transac_lite\BookingPaymentManager $booking_payment
    *   The booking payment object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory object.
    */
   public function __construct(EntityTypeManagerInterface $entityTypeManager,
-                              TicketBookingManager $ticketBooking,
-                              BookingPaymentManager $bookingPayment,
+                              TicketBookingManager $ticket_booking,
+                              BookingPaymentManager $booking_payment,
                               ConfigFactoryInterface $config_factory) {
 
     $this->entityTypeManager = $entityTypeManager;
-    $this->ticketBooking = $ticketBooking;
-    $this->bookingPayment = $bookingPayment;
+    $this->ticketBooking = $ticket_booking;
+    $this->bookingPayment = $booking_payment;
     $this->configFactory = $config_factory;
   }
 
@@ -95,10 +95,14 @@ class BookingPaymentForm extends FormBase {
    * {@inheritdoc}.
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-
+    $parks = $this->ticketBooking->getParkData();
     $form['booking_info'] = [
       '#type' => 'hidden',
       '#attributes' => ['id' => ['booking-info']],
+    ];
+
+    $form['parks'] = [
+      '#markup' => $parks->getParksResult->Park->Name,
     ];
 
     $form['name'] = [
@@ -116,7 +120,7 @@ class BookingPaymentForm extends FormBase {
 
     $form['mobile'] = [
       '#type' => 'mobile_number',
-      '#title' => $this->t('Mobile Number'),
+      '#title' => '',
       '#placeholder' => $this->t('Mobile Number'),
       '#required' => TRUE,
     ];
@@ -133,7 +137,7 @@ class BookingPaymentForm extends FormBase {
       '#type' => 'checkbox',
       '#required' => TRUE,
       '#prefix' => '<div class="payment_option">',
-      '#suffix' => '<span class="k-net">K-NET</span></div>',
+      '#suffix' => '<span class="k-net"></span></div>',
     ];
 
     $form['payment_option']['cybersource'] = [
@@ -174,7 +178,6 @@ class BookingPaymentForm extends FormBase {
       foreach ($final_visitor_list->data as $value) {
         $visitor_types .= $value->Description . '-' . $value->Ticket->count . ',';
       }
-
       $order_total = $this->ticketBooking->getOrderTotal($final_visitor_list->sales_number);
       $knet = ($form_state->getValue('knet')) ? 'knet' : '';
       $booking = [
@@ -188,7 +191,6 @@ class BookingPaymentForm extends FormBase {
         'order_total' => $order_total,
         'order_date' => date('Y-m-d'),
       ];
-
       // Create content for ticket entity type.
       if ($this->bookingPayment->saveTicketDetails($booking, $final_visitor_list->sales_number)) {
         // @Todo - Knet integration here.
