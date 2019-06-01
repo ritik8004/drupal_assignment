@@ -1,11 +1,7 @@
 services:
   alshaya_kz_transac_lite.booking_manager:
     class: Drupal\alshaya_kz_transac_lite\TicketBookingManager
-    arguments: ['@user.private_tempstore','@logger.factory','@config.factory']
+    arguments: ['@user.private_tempstore','@logger.factory','@config.factory',]
   alshaya_kz_transac_lite.booking_payment_manager:
     class: Drupal\alshaya_kz_transac_lite\BookingPaymentManager
     arguments: ['@logger.factory','@entity.manager','@plugin.manager.mail','@renderer','@current_user']
-  alshaya_kz_transac_lite.helper:
-    class: Drupal\alshaya_kz_transac_lite\Helper\TicketBookingKnetHelper
-    decorates: alshaya_knet.helper
-    arguments: ['@alshaya_kz_transac_lite.helper.inner', '@config.factory', '@state', '@logger.factory']
