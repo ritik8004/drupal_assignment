@@ -35,31 +35,11 @@ $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;
-
   $index = $client->initIndex($name);
   $settings = $index->getSettings();
-
   $query_suggestion = $name . '_query';
-  $query = [
-    'indexName' => $query_suggestion,
-    'sourceIndices' => [
-      [
-        'indexName' => $name,
-        'facets' => $query_facets,
-        'generate' => $query_generate,
-      ],
-    ],
-  ];
-
-  foreach ($settings['replicas'] as $replica) {
-    $query['sourceIndices'][] = [
-      'indexName' => $replica,
-    ];
-  }
-
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
-  sleep(60);
-
+  algolia_delete_query_suggestion($app_id, $app_secret_admin, $query_suggestion);
   print $query_suggestion . PHP_EOL;
   print PHP_EOL . PHP_EOL . PHP_EOL;
+  sleep(60);
 }

@@ -53,9 +53,12 @@ function algolia_add_query_suggestion($app_id, $app_secret_admin, $name, $data) 
   $headers[] = 'Content-Type: application/x-www-form-urlencoded';
   curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-  curl_exec($ch);
+  $result = curl_exec($ch);
   if (curl_errno($ch)) {
-    echo 'Error:' . curl_error($ch);
+    echo 'Error:' . curl_error($ch) . PHP_EOL . PHP_EOL;
+  }
+  else {
+    print $result . PHP_EOL . PHP_EOL;
   }
   curl_close($ch);
 }
