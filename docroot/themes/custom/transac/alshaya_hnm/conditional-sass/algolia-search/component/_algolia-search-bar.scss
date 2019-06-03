@@ -242,10 +242,12 @@ body {
 .algolia-cleartext-icon {
   #{$right}: 3.125rem;
   top: 0;
+  background: none;
 
   @include breakpoint($upto-desktop) {
     &::after {
       font-size: 1.875rem;
+      display: block;
     }
   }
 
@@ -259,8 +261,14 @@ body {
   }
 }
 
-@include breakpoint($only-mobile) {
-  .algolia-cleartext-active {
+.algolia-cleartext-active {
+  .algolia-cleartext-icon {
+    @include breakpoint($upto-desktop) {
+      #{$right}: 0.9375rem;
+    }
+  }
+
+  @include breakpoint($only-mobile) {
     button[type="submit"] {
       display: block;
     }
