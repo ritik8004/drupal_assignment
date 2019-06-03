@@ -56,6 +56,11 @@
   .site-brand-home {
     @include breakpoint($tablet) {
       padding: 1rem 1.5rem 1rem 1.25rem;
+      text-align: center;
+
+      a {
+        text-align: center;
+      }
     }
 
     @include breakpoint($desktop) {
@@ -68,17 +73,11 @@
     }
 
     a {
-      @include breakpoint($upto-desktop) {
+      @include breakpoint($upto-tablet) {
         img {
           width: 2.5rem;
           height: 2.25rem;
         }
-      }
-
-      @include breakpoint($desktop) {
-        width: 53.5%;
-        text-align: $right;
-        max-width: none;
       }
     }
   }
