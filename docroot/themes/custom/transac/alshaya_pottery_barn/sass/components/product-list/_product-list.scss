@@ -93,19 +93,6 @@
     .promotions .sku-promotion-link {
       color: $plp_promotion_link;
     }
-
-    .alshaya_search_gallery {
-      max-height: 18rem;
-
-      .alshaya_search_mainimage {
-        height: auto;
-        min-height: auto;
-
-        @include breakpoint($desktop) {
-          min-height: 16.57625rem;
-        }
-      }
-    }
   }
 
   .c-products-list.product-large {
@@ -121,6 +108,16 @@
 
         .alshaya_search_mainimage {
           height: 21rem;
+        }
+      }
+    }
+
+    @include breakpoint($desktop) {
+      .alshaya_search_gallery {
+        max-height: none;
+
+        .alshaya_search_mainimage {
+          height: auto;
         }
       }
     }
