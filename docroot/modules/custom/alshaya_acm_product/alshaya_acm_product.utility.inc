@@ -11,7 +11,6 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
-use Drupal\file\FileInterface;
 use GuzzleHttp\Exception\RequestException;
 
 /**
@@ -149,22 +148,20 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
     return [];
   }
 
+  /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
+  $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
+
   /** @var \Drupal\alshaya_acm_product\SkuImagesManager $skuImagesManager */
   $skuImagesManager = \Drupal::service('alshaya_acm_product.sku_images_manager');
 
   // Load the first image.
-  $media_image = $skuImagesManager->getFirstImage($sku);
+  $media_image = $skuImagesManager->getFirstImage($sku, $context);
   $image = [];
 
   // If we have image for the product.
   if (!empty($media_image)) {
-    if ($media_image['file'] instanceof FileInterface) {
-      $image = alshaya_acm_product_get_sku_image($media_image, $image_style);
-    }
+    $image = $skuManager->getSkuImage($media_image['drupal_uri'], $sku->label(), $image_style);
   }
-
-  // Alter cart product image found in child sku in case of config products.
-  \Drupal::moduleHandler()->alter('acq_sku_cart_media', $image, $sku, $context);
 
   // If still image is not available, set default one.
   if (empty($image)) {
@@ -175,8 +172,8 @@ function alshaya_acm_get_product_display_image($sku, $image_style = '', $context
         '#theme' => 'image',
         '#attributes' => [
           'src' => $default_image_url,
-          'title' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
-          'alt' => ($sku instanceof SKUInterface) ? $sku->label() : $sku,
+          'title' => $sku->label(),
+          'alt' => $sku->label(),
           'class' => [
             'product-default-image',
           ],
