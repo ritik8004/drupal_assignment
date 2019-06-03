@@ -66,6 +66,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
       '#default_value' => '',
+      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-number',
@@ -78,6 +79,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       '#maxlength' => 4,
       '#title' => $this->t('Security code (CVV)'),
       '#default_value' => '',
+      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-cvv-input', 'checkoutcom-input'],
         'autocomplete' => 'cc-csc',
@@ -88,6 +90,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $pane_form['payment_details']['cc_exp_month'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expiration Month'),
+      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-exp-month-select', 'checkoutcom-input'],
         'data-checkout' => 'expiry-month',
@@ -97,6 +100,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $pane_form['payment_details']['cc_exp_year'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expiration Year'),
+      '#required' => TRUE,
       '#attributes' => [
         'class' => ['checkoutcom-credit-card-exp-year-select', 'checkoutcom-input'],
         'data-checkout' => 'expiry-year',
