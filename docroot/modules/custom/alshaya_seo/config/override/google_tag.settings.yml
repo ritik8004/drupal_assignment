@@ -22,3 +22,4 @@ blacklist_classes: "customScripts\ncustomPixels"
 include_environment: false
 environment_id: ''
 environment_token: ''
+rebuild_snippets: true
