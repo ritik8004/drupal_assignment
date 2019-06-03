@@ -111,7 +111,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     ];
 
     $debug = $checkout_com_settings->get('debug') ? 'true' : 'false';
-    // Replace with api call.
+    // @todo: Replace with api call.
     $public_key = 'pk_test_ed88f0cd-e9b1-41b7-887e-de794963921f';
 
     $string = "window.CKOConfig = {
@@ -173,8 +173,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       [
         'value' => $totals['grand'] * 100,
         'cardToken' => $inputs['cko-card-token'],
-        // @todo: Repalce with customer email.
-        'email' => 'testing@test.com',
+        'email' => $cart->customerEmail(),
       ],
       TRUE
     );

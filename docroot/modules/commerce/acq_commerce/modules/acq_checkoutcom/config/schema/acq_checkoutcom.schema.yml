@@ -8,3 +8,13 @@ acq_checkoutcom.settings:
     env:
       type: string
       label: 'Environment to use (sandbox / live)'
+    base_uri:
+      type: mapping
+      label: 'Environment to use (sandbox / live)'
+      mapping:
+        sandbox:
+          type: string
+          label: 'Sandbox base_uri'
+        live:
+          type: string
+          label: 'live base_uri'

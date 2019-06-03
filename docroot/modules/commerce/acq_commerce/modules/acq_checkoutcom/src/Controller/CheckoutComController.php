@@ -79,26 +79,9 @@ class CheckoutComController implements ContainerInjectionInterface {
    *   Request object.
    */
   public function status(Request $request) {
-    $post_data = $request->query->get('cko-payment-token');
-    // Todo: Replace with magento api call.
-    $url = "https://sandbox.checkout.com/api2/v2/charges/$post_data";
-    $header = [
-      'Content-Type: application/json;charset=UTF-8',
-      'Authorization: sk_test_863d1545-5253-4387-b86b-df6a86797baa',
-    ];
-
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-
-    $output = curl_exec($ch);
-
-    curl_close($ch);
-    $decoded = json_decode($output, TRUE);
-    echo '<pre>';
-    print_r($decoded);
-    echo '</pre>';
-    die();
+    // $post_data = $request->query->get('cko-payment-token');
+    // Todo: add setPaymentMethod when cko-payment-token with api
+    // is in place.
   }
 
   /**

@@ -99,10 +99,9 @@ class CheckoutComAPIWrapper {
    * @throws \InvalidArgumentException
    */
   protected function createClient() {
+    $config = $this->configFactory->get('acq_checkoutcom.settings');
     $clientConfig = [
-      'base_uri' => $this->configFactory->get('acq_checkoutcom.settings')->get('env') == 'sandbox'
-      ? 'https://sandbox.checkout.com/api2/v2/'
-      : 'https://api2.checkout.com/v2/',
+      'base_uri' => $config->get('base_uri')[$config->get('env')],
       'verify'   => TRUE,
       'headers' => [
         'Content-Type' => 'application/json;charset=UTF-8',
