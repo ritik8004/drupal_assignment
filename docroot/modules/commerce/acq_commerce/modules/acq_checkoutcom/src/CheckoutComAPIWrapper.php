@@ -132,7 +132,7 @@ class CheckoutComAPIWrapper {
     $client = $this->createClient();
 
     $req_param['commerce'] = [
-      'currency' => 'KWD',
+      'currency' => $this->configFactory->get('acq_commerce.currency')->get('currency_code'),
     ];
 
     // Make Request.
