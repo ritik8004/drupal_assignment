@@ -1,12 +1,10 @@
-{{ attach_library('alshaya_white_label/alshaya_image_lazy_load') }}
-
 <div id="product-zoom-container">
   {% block defaultGallery %}
     <div class="cloudzoom thumbnail-count-{{ thumbnails|length }}">
     <div class="cloudzoom__herocontainer">
       <div id="cloud-zoom-wrap" class="cloudzoom__image">
         <a href="{{ mainImage.zoomurl }}" rel="{{ properties }}" id="cloud-zoom" class="cloud-zoom">
-          <div class="img-wrap b-lazy"><img data-src="{{ mainImage.mediumurl }}" src="{{ lazy_load_placeholder }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" /></div>
+          <div class="img-wrap"><img src="{{ mainImage.mediumurl }}" alt="{{ mainImage.label }}" title="{{ mainImage.label }}" /></div>
           <span class="hover-text">{{ 'Hover over image to zoom'|t }}</span><span class="mobile-hover-text">{{ 'Double tap image to zoom'|t }}</span>
         </a>
       </div>
