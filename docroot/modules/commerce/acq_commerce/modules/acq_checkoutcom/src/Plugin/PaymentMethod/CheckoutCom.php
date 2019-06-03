@@ -269,8 +269,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->checkoutComApi->processCardPayment($cart, [
       'cardId' => $card_id,
       'value' => $totals['grand'] * 100,
-      // @todo: Replace with customer email.
-      'email' => 'mitesh+cards@axelerant.com',
+      'email' => $cart->customerEmail(),
       'cvv' => $cvv,
     ]);
   }
