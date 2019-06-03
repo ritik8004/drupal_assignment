@@ -62,6 +62,16 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
     $checkout_com_settings = $this->configFactory->get('acq_checkoutcom.settings');
 
+    $pane_form['payment_details'] = [
+      '#type' => 'container',
+      '#attributes' => [
+        'id' => ['payment_details_checkout_com'],
+      ],
+      '#attached' => [
+        'library' => ['acq_checkoutcom/checkoutcom.kit'],
+      ],
+    ];
+
     $pane_form['payment_details']['cc_number'] = [
       '#type' => 'tel',
       '#title' => $this->t('Credit Card Number'),
