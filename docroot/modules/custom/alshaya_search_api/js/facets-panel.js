@@ -433,7 +433,10 @@
       }
 
       addSlideEventhandlers();
-      stickyfacetfilter();
+
+      if ($(window).width() < 768 && $('.filter-fixed-top').length > 0) {
+        stickyfacetfilter();
+      }
 
       $(window, context).on('load', function () {
         // Calculate the filters top position now.
