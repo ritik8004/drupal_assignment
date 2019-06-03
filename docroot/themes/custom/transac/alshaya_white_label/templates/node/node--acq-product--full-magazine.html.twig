@@ -8,18 +8,18 @@
       <div id="product-zoom-container"></div>
     {% endif %}
   </div>
-  {% if content.cross_sell %}
+  {% if content.cross_sell|trim is not empty %}
     <div class="horizontal-crossell above-mobile-block">
       {{ content.cross_sell }}
     </div>
   {% endif %}
 
-  {% if content.up_sell %}
+  {% if content.up_sell|trim is not empty %}
     <div class="horizontal-upell above-mobile-block">
       {{ content.up_sell }}
     </div>
   {% endif %}
-  {% if content.related %}
+  {% if content.related|trim is not empty %}
     <div class="horizontal-related above-mobile-block">
       {{ content.related }}
     </div>
@@ -113,19 +113,19 @@
 
         {% if content.up_sell or content.related or content.cross_sell %}
           <div class="mobile-related-wrapper">
-            {% if content.cross_sell %}
+            {% if content.cross_sell|trim is not empty %}
               <div class="horizontal-crossell mobile-only-block">
                 {{ content.cross_sell }}
               </div>
             {% endif %}
 
-            {% if content.up_sell %}
+            {% if content.up_sell|trim is not empty %}
               <div class="horizontal-upell mobile-only-block">
                 {{ content.up_sell }}
               </div>
             {% endif %}
 
-            {% if content.related %}
+            {% if content.related|trim is not empty %}
               <div class="horizontal-upell mobile-only-block">
                 {{ content.related }}
               </div>
