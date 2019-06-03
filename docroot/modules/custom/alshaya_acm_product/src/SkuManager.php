@@ -25,6 +25,7 @@ use Drupal\Core\Language\LanguageManager;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Url;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\node\Entity\Node;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -396,6 +397,11 @@ class SkuManager {
       '#title' => $alt,
       '#alt' => $alt,
     ];
+
+    $image['#attributes']['class'][] = 'b-lazy';
+    $image['#attributes']['data-src'] = ImageStyle::load($image_style)->buildUrl($image['#uri']);
+    $image['#attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
+    $image['#attached']['library'][] = 'alshaya_white_label/alshaya_image_lazy_load';
 
     if ($rel_image_style) {
       $image['#attributes']['rel'] = ImageStyle::load($rel_image_style)->buildUrl($image['#uri']);
@@ -1008,6 +1014,11 @@ class SkuManager {
           '#title' => $data[$text_key],
           '#alt' => $data[$text_key],
         ];
+
+        $image['#attributes']['class'][] = 'b-lazy';
+        $image['#attributes']['data-src'] = Url::fromUri($image['#uri']);
+        $image['#attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
+        $image['#attached']['library'][] = 'alshaya_white_label/alshaya_image_lazy_load';
 
         $row['image'] = $this->renderer->renderPlain($image);
         $row['position'] = $data[$position_key];
