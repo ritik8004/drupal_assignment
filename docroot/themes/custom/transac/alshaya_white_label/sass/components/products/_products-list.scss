@@ -381,8 +381,24 @@
       }
 
       &.product-large {
-        .alshaya_search_gallery .alshaya_search_mainimage {
-          height: 17.125rem;
+        .alshaya_search_gallery {
+          max-height: none;
+
+          .alshaya_search_mainimage {
+            height: 24.125rem;
+          }
+        }
+      }
+    }
+
+    @include breakpoint($only-tablet) {
+      &.product-large {
+        .alshaya_search_gallery {
+          max-height: none;
+
+          .alshaya_search_mainimage {
+            height: 22.5rem;
+          }
         }
       }
     }
