@@ -221,6 +221,11 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       if (!empty($inputs['cko-card-token'])) {
         $this->initiate3dSecurePayment($inputs);
       }
+      else {
+        $acm_payment_methods = $form_state->getValue('acm_payment_methods');
+        $card_id = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_details']['existing_card'];
+        $this->initiateStoredCardPayment($card_id, $form_state->getValue($card_id)['cvv']);
+      }
     }
   }
 
@@ -252,10 +257,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    *
    * @param string $card_id
    *   The stored card unique id.
+   * @param int $cvv
+   *   The cvv of stored card.
    *
    * @throws \Exception
    */
-  protected function initiateStoredCardPayment(string $card_id) {
+  protected function initiateStoredCardPayment(string $card_id, int $cvv) {
     $cart = $this->getCart();
     $totals = $cart->totals();
 
@@ -264,6 +271,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       'value' => $totals['grand'] * 100,
       // @todo: Replace with customer email.
       'email' => 'mitesh+cards@axelerant.com',
+      'cvv' => $cvv,
     ]);
   }
 
