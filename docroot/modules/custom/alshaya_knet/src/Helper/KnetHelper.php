@@ -2,6 +2,7 @@
 
 namespace Drupal\alshaya_knet\Helper;
 
+use Drupal\alshaya_knet\E24PaymentPipe;
 use Drupal\alshaya_knet\Knet\KnetEncryptDecypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
