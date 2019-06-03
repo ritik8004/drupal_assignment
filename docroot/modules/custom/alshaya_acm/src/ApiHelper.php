@@ -87,7 +87,6 @@ class ApiHelper {
                               TimeInterface $date_time) {
     $this->apiWrapper = $api_wrapper;
     $this->cartStorage = $cart_storage;
-    $this->cart = $this->cartStorage->getCart(FALSE);
     $this->cacheTime = (int) $config_factory->get('alshaya_acm.settings')->get('api_cache_time');
     $this->cache = $cache;
     $this->langcode = $language_manager->getCurrentLanguage()->getId();
@@ -101,6 +100,9 @@ class ApiHelper {
    *   Payment methods.
    */
   public function getPaymentMethods() {
+    // Set the cart object.
+    $this->setCart();
+
     if (empty($this->cart)) {
       return [];
     }
@@ -135,6 +137,9 @@ class ApiHelper {
    *   Shipping methods with estimated costs.
    */
   public function getShippingEstimates($address) {
+    // Set the cart object.
+    $this->setCart();
+
     if (empty($this->cart)) {
       return [];
     }
@@ -157,6 +162,16 @@ class ApiHelper {
     ]);
 
     return $methods;
+  }
+
+  /**
+   * Sets the cart object.
+   */
+  protected function setCart() {
+    // Set only if cart property is not set.
+    if (!$this->cart) {
+      $this->cart = $this->cartStorage->getCart(FALSE);
+    }
   }
 
 }
