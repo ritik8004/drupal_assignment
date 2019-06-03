@@ -2,7 +2,6 @@
 
 namespace Drupal\alshaya_acm_product\EventSubscriber;
 
-use Drupal\acq_sku\Entity\SKU;
 use Drupal\alshaya_acm_product\Event\ProductUpdatedEvent;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\Cache\Cache;
@@ -62,15 +61,13 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
 
     // If there any parent sku available.
     if (!empty($parent_skus)) {
-      foreach ($parent_skus as $parent_sku) {
-        if ($sku = SKU::loadFromSku($parent_sku)) {
-          // Invalidate caches for all parent skus here.
-          $cache_tags = Cache::mergeTags($cache_tags, $sku->getCacheTagsToInvalidate());
-          // We also invalidate caches for node here.
-          $node = $this->skuManager->getDisplayNode($sku);
-          if ($node instanceof NodeInterface) {
-            $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
-          }
+      foreach ($parent_skus as $sku_id => $parent_sku) {
+        // Invalidate caches for all parent skus here.
+        $cache_tags = Cache::mergeTags($cache_tags, ['acq_sku:' . $sku_id]);
+        // We also invalidate caches for node here.
+        $node = $this->skuManager->getDisplayNode($parent_sku);
+        if ($node instanceof NodeInterface) {
+          $cache_tags = Cache::mergeTags($cache_tags, $node->getCacheTagsToInvalidate());
         }
       }
     }
@@ -108,11 +105,16 @@ class ProductUpdatedEventSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\acq_sku\AcquiaCommerce\SKUPluginBase $plugin */
     $plugin = $entity->getPluginInstance();
 
-    if ($parent = $plugin->getParentSku($entity)) {
-      // Update color nodes on save of each child.
-      $node = $this->skuManager->getDisplayNode($parent, FALSE);
-      if ($node instanceof NodeInterface) {
-        $this->skuManager->processColorNodesForConfigurable($node);
+    $parent_skus = $plugin->getParentSku($entity, FALSE);
+
+    if (!empty($parent_skus)) {
+      foreach ($parent_skus as $parent_sku) {
+        // Update color nodes on save of each child.
+        $node = $this->skuManager->getDisplayNode($parent_sku, FALSE);
+        if ($node instanceof NodeInterface) {
+          $this->skuManager->processColorNodesForConfigurable($node);
+          break;
+        }
       }
     }
   }
