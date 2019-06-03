@@ -30,6 +30,10 @@ function alshaya_master_update_8026() {
     'Please enter a valid CVC.' => 'alshaya_static_text|invalid_cvv',
     'Please enter exp month' => 'alshaya_static_text|empty_exp_month',
     'Please enter exp year' => 'alshaya_static_text|empty_exp_year',
+    'The password does not match this account' => 'alshaya_static_text|wrong_password',
+    'At least 7 characters with one special and one numeric' => 'alshaya_static_text|invalid_format_password',
+    'Password do not match' => 'alshaya_static_text|password_unmatch',
+    'The code you have entered is invalid' => 'alshaya_static_text|invalid_promo_code',
   ];
   alshaya_i18n_update_context($strings);
 }
