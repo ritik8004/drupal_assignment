@@ -123,7 +123,6 @@
   }
 
   .tabs--content {
-    //max-width: 65.3125rem;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -395,7 +394,6 @@
       @include breakpoint($desktop) {
         margin-#{$left}: 0;
         margin-top: 1.1rem;
-        //width: 94%;
       }
     }
 
