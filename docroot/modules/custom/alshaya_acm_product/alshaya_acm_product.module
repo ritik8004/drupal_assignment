@@ -1511,6 +1511,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $skuManager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
   }
 
+  $tree_pointer = NULL;
   if ($variant_sku = $form_state->get('variant_sku')) {
     $tree_pointer = SKU::loadFromSku($variant_sku);
   }
@@ -1705,10 +1706,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $configurable_codes = array_keys($product_tree['configurables']);
     $attribute = reset($configurable_codes);
-    $option_id = $selected[$attribute];
+    $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-    if ($display_settings->get('show_child_images_after_selecting') !== 'all') {
+    if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
       $selected_sku = $first_child;
