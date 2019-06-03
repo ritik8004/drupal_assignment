@@ -99,6 +99,10 @@
     @include breakpoint($only-tablet) {
       .alshaya_search_gallery {
         max-height: 20rem;
+
+        .alshaya_search_mainimage {
+          height: auto;
+        }
       }
     }
 
