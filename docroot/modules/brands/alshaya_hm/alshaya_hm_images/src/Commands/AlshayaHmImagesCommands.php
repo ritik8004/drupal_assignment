@@ -204,11 +204,19 @@ class AlshayaHmImagesCommands extends DrushCommands {
    *
    * @aliases hm-correct-corrupt-assets
    */
-  public function correctCorruptAssets(array $options = ['batch_size' => 50, 'skus' => '']) {
+  public function correctCorruptAssets(array $options = [
+    'batch_size' => 50,
+    'skus' => '',
+    'check_file_exists' => FALSE,
+    'dry-run' => FALSE,
+  ]) {
 
     $batch_size = (int) $options['batch_size'];
+    $check_file_exists = (bool) $options['check_file_exists'];
+    $dry_run = (bool) $options['dry-run'];
     $skus = (string) $options['skus'];
     $skus = array_filter(explode(',', $skus));
+    $verbose = $options['verbose'];
 
     $this->logger()->notice('Checking all assets...');
 
@@ -243,7 +251,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
     foreach (array_chunk($skus, $batch_size) as $chunk) {
       $batch['operations'][] = [
         [__CLASS__, 'correctCorruptAssetsChunk'],
-        [$chunk],
+        [$chunk, $check_file_exists, $dry_run, $verbose],
       ];
     }
 
@@ -258,8 +266,14 @@ class AlshayaHmImagesCommands extends DrushCommands {
    *
    * @param array $skus
    *   SKUs to process.
+   * @param bool $check_file_exists
+   *   Flag - check if file exists in file system or not.
+   * @param bool $dry_run
+   *   Flag - do not save skus yet, only output errors.
+   * @param bool $verbose
+   *   Flag - show debug output or not.
    */
-  public static function correctCorruptAssetsChunk(array $skus) {
+  public static function correctCorruptAssetsChunk(array $skus, $check_file_exists, $dry_run, $verbose) {
     $fileStorage = \Drupal::entityTypeManager()->getStorage('file');
     $logger = \Drupal::logger('AlshayaHmImagesCommands');
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
@@ -291,9 +305,11 @@ class AlshayaHmImagesCommands extends DrushCommands {
           $file = $fileStorage->load($asset['fid']);
 
           if ($file instanceof FileInterface) {
-            $data = file_get_contents($file_system->realpath($file->getFileUri()));
-            if (empty($data)) {
-              $redownload = 'missing file';
+            if ($check_file_exists) {
+              $data = file_get_contents($file_system->realpath($file->getFileUri()));
+              if (empty($data)) {
+                $redownload = 'missing file';
+              }
             }
           }
           else {
@@ -302,10 +318,10 @@ class AlshayaHmImagesCommands extends DrushCommands {
         }
 
         if ($redownload) {
-          $logger->error('Removing fid and/or drupal_uri from asset from @sku, for @reason, Asset: @asset.', [
+          $logger->error('Removing fid and/or drupal_uri from asset from @sku, for @reason. @asset.', [
             '@sku' => $sku->getSku(),
             '@reason' => $redownload,
-            '@asset' => json_encode($asset),
+            '@asset' => $verbose ? json_encode($asset) : '',
           ]);
 
           $resave = TRUE;
@@ -316,7 +332,7 @@ class AlshayaHmImagesCommands extends DrushCommands {
         }
       }
 
-      if ($resave) {
+      if ($resave && !$dry_run) {
         $sku->get('attr_assets')->setValue(serialize($assets));
         $sku->save();
       }
