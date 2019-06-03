@@ -3101,10 +3101,8 @@ class SkuManager {
    *   Node id for the parent node for the SKU.
    */
   public function getDisplayNodeId($sku) {
-    $database = \Drupal::database();
-
     // Fetch parent SKU for this SKU, if exists.
-    $query = $database->select('acq_sku_field_data', 'asfd');
+    $query = $this->connection->select('acq_sku_field_data', 'asfd');
     $query->fields('asfd', ['sku']);
     $query->join('acq_sku__field_configured_skus', 'fcs', "fcs.entity_id = asfd.id");
     $parent_sku = $query->condition('fcs.field_configured_skus_value', $sku)
@@ -3116,7 +3114,7 @@ class SkuManager {
       $sku = $parent_sku;
     }
 
-    $parent_nid = $database->select('node__field_skus', 'nfs')
+    $parent_nid = $this->connection->select('node__field_skus', 'nfs')
       ->fields('nfs', ['entity_id'])
       ->condition('nfs.field_skus_value', $sku)
       ->execute()->fetchField();
