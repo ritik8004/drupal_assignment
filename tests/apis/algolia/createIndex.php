@@ -34,97 +34,17 @@
  */
 
 
-$prefix = isset($argv, $argv[1]) ? $argv[1] : '';
-if (empty($prefix)) {
-  print 'No prefix passed as parameter.' . PHP_EOL . PHP_EOL;
-  die();
-}
-
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
 use AlgoliaSearch\Client;
 
-$languages = [
-  'en',
-  'ar',
-];
+$clientSource = new Client($source_app_id, $source_app_secret_admin);
+$indexSource = $clientSource->initIndex($source_index);
+$settingsSource = $indexSource->getSettings();
+$ranking = $settingsSource['ranking'];
 
-$sorts = [
-  [
-    'field' => 'title',
-    'direction' => 'asc',
-  ],
-  [
-    'field' => 'title',
-    'direction' => 'desc',
-  ],
-  [
-    'field' => 'final_price',
-    'direction' => 'asc',
-  ],
-  [
-    'field' => 'final_price',
-    'direction' => 'desc',
-  ],
-  [
-    'field' => 'created',
-    'direction' => 'desc',
-  ],
-  [
-    'field' => 'search_api_relevance',
-    'direction' => 'desc',
-  ],
-];
-
-$searchable_attributes = [
-  'title',
-  'field_category_name',
-  'attr_product_brand',
-  'sku',
-  'field_configured_skus',
-  'attr_product_collection',
-  'attr_concept',
-  'attr_color',
-  'attr_size',
-  'body',
-];
-
-$facets = [
-  'attr_color',
-  'attr_product_brand',
-  'attr_selling_price',
-  'attr_size',
-  'field_acq_promotion_label',
-  'field_category',
-  'final_price',
-  'attr_product_collection',
-  'attr_concept',
-];
-
-$query_facets = [
-  [
-    'attribute' => 'field_category_name',
-    'amount' => 1,
-  ],
-];
-
-$query_generate = [
-  ['field_acq_promotion_label'],
-  ['attr_product_brand'],
-  ['attr_product_collection'],
-  ['attr_concept'],
-  ['attr_color'],
-];
-
-$ranking = [
-  'desc(stock)',
-  'words',
-  'filters',
-  'exact',
-  'custom',
-];
-
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
@@ -146,6 +66,7 @@ foreach ($languages as $language) {
   } while (!isset($settings));
   print PHP_EOL . PHP_EOL;
 
+  $settings = array_merge($settingsSource, $settings);
   $settings['attributesForFaceting'] = $facets;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
@@ -156,7 +77,7 @@ foreach ($languages as $language) {
     $settings['replicas'][] = $replica;
     $client->copyIndex($name, $replica);
   }
-  sleep(2);
+  sleep(3);
 
   $index->setSettings($settings, TRUE);
 
@@ -190,6 +111,7 @@ foreach ($languages as $language) {
   }
 
   algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
+  sleep(30);
 
   print $name . PHP_EOL;
   print $query_suggestion . PHP_EOL;

@@ -3,7 +3,7 @@
 
 /**
  * @file
- * Create query suggestions for each language for an index.
+ * Update index and it's replicas for each language.
  */
 
 /**
@@ -18,10 +18,16 @@
  * $languages:              Specify all the languages for which primary indexes
  *                          need to be created.
  *
+ * $searchable_attributes   Attributes that should be used for searching.
+ *
+ * $facets                  Facet fields.
+ *
  * $query_facets            Facets used for query suggestion (autocomplete).
  *
  * $query_generate          Additional facets to be used for generating results
  *                          in query suggestions.
+ *
+ * $ranking:                Default ranking.
  */
 
 
@@ -30,36 +36,29 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
 use AlgoliaSearch\Client;
-
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
   $name = $prefix . '_' . $language;
 
   $index = $client->initIndex($name);
-  $settings = $index->getSettings();
 
-  $query_suggestion = $name . '_query';
-  $query = [
-    'indexName' => $query_suggestion,
-    'sourceIndices' => [
-      [
-        'indexName' => $name,
-        'facets' => $query_facets,
-        'generate' => $query_generate,
-      ],
-    ],
-  ];
+  $settings = $index->getSettings();
+  $settings['attributesForFaceting'] = $facets;
+  $settings['searchableAttributes'] = $searchable_attributes;
+  $index->setSettings($settings);
+  sleep(3);
 
   foreach ($settings['replicas'] as $replica) {
-    $query['sourceIndices'][] = [
-      'indexName' => $replica,
-    ];
+    $replicaIndex = $client->initIndex($replica);
+    $replicaSettings = $replicaIndex->getSettings();
+    $replicaSettings['attributesForFaceting'] = $facets;
+    $replicaSettings['searchableAttributes'] = $searchable_attributes;
+    $replicaIndex->setSettings($replicaSettings);
+    sleep(3);
   }
 
-  algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
-  sleep(60);
-
-  print $query_suggestion . PHP_EOL;
+  print $name . PHP_EOL;
+  print implode(PHP_EOL, $settings['replicas']);
   print PHP_EOL . PHP_EOL . PHP_EOL;
 }

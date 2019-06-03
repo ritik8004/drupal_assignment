@@ -16,22 +16,12 @@
  * languages.
  */
 
-$prefix = isset($argv, $argv[1]) ? $argv[1] : '';
-if (empty($prefix)) {
-  print 'No prefix passed as parameter.' . PHP_EOL . PHP_EOL;
-  die();
-}
-
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'parse_args.php';
 require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 
 use AlgoliaSearch\Client;
 
-$languages = [
-  'en',
-  'ar',
-];
-
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
