@@ -246,8 +246,8 @@ class AlshayaImageSitemapGenerator {
               'language' => $language,
             ])->toString() . '" hreflang="' . $language->getId() . '-' . strtolower($country_code) . '"/>';
           }
-          foreach ($media as $key => $value) {
-            if ($key) {
+          foreach ($media as $value) {
+            if ($value) {
               $path = str_replace('&', '%26', $value);
               $output .= '<image:image><image:loc>' . $path . '</image:loc></image:image>';
             }

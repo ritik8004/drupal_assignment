@@ -361,21 +361,21 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation)
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_acm_product_acq_sku_insert(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity, 'insert');
+  _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_INSERT);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
 function alshaya_acm_product_acq_sku_update(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity, 'update');
+  _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_UPDATE);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity, 'delete');
+  _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_DELETE);
 }
 
 /**
@@ -646,7 +646,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), '291x288');
+          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
         }
 
         $promotion_types = ['cart'];

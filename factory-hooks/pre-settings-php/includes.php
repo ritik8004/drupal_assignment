@@ -183,6 +183,10 @@ $config['system.performance']['cache']['page']['max_age'] = 14400;
 switch ($env) {
   case 'local':
   case 'travis':
+    // Requests from local are slow, we can to wait for some more time
+    // while loading linked skus.
+    $settings['linked_skus_timeout'] = 5;
+
     // Specific/development modules to be enabled on this env.
     $settings['additional_modules'][] = 'dblog';
     $settings['additional_modules'][] = 'views_ui';
@@ -212,4 +216,10 @@ switch ($env) {
     // We only debug on ACSF dev/test environments.
     $config['acq_commerce.conductor']['debug'] = TRUE;
     break;
+
+  case '01live':
+    // We want to timeout linked skus API call in 1 second on prod.
+    $settings['linked_skus_timeout'] = 1;
+    break;
+
 }
