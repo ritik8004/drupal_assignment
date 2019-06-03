@@ -242,9 +242,10 @@ body {
 .algolia-cleartext-icon {
   #{$right}: 3.125rem;
   top: 0;
-  background: none;
 
   @include breakpoint($upto-desktop) {
+    background: none;
+
     &::after {
       font-size: 1.875rem;
       display: block;
