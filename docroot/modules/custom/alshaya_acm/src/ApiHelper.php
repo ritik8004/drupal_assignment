@@ -119,7 +119,7 @@ class ApiHelper {
     $expire = $this->dateTime->getRequestTime() + $this->cacheTime;
 
     $this->cache->set($cache_id, $methods, $expire, [
-      'acq_cart_payment_methods:' . $this->cart->id(),
+      'cart_extra:' . $this->cart->id(),
     ]);
 
     return $methods;
@@ -153,7 +153,7 @@ class ApiHelper {
     $expire = $this->dateTime->getRequestTime() + $this->cacheTime;
 
     $this->cache->set($cache_id, $methods, $expire, [
-      'acq_cart_shipping_estimate:' . $this->cart->id(),
+      'cart_extra:' . $this->cart->id(),
     ]);
 
     return $methods;
