@@ -15,7 +15,7 @@ use Drupal\user\Entity\User;
  *
  * @ACQCheckoutPane(
  *   id = "checkout_login",
- *   label = @Translation("returning customers"),
+ *   label = @Translation("sign in with email address"),
  *   defaultStep = "login",
  *   wrapperElement = "fieldset",
  * )
@@ -29,7 +29,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
    */
   public function defaultConfiguration() {
     return [
-      'weight' => 2,
+      'weight' => 1,
     ] + parent::defaultConfiguration();
   }
 
@@ -37,10 +37,7 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    if ($this->getSelectedTab() !== 'login') {
-      $pane_form['#attributes']['class'][] = 'above-mobile-block';
-    }
-
+    $pane_form['#prefix'] = '<div class="checkout-login-separator"><span>' . $this->t('or') . '</span></div>';
     $pane_form['returning_customer'] = [
       '#markup' => '<span class="selected-tab-title mobile-only-block">' . $this->t('Sign In') . '</span>',
       '#weight' => -51,
@@ -48,10 +45,12 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
 
     $config = \Drupal::config('alshaya_acm_checkout.settings');
 
-    $pane_form['summary'] = [
-      '#markup' => $config->get('checkout_guest_login.value'),
-      '#weight' => -50,
-    ];
+    if (!empty($config->get('checkout_guest_login.value'))) {
+      $pane_form['summary'] = [
+        '#markup' => $config->get('checkout_guest_login.value'),
+        '#weight' => -50,
+      ];
+    }
 
     $pane_form['messages'] = [
       '#type' => 'status_messages',
@@ -105,12 +104,6 @@ class CheckoutLogin extends CheckoutPaneBase implements CheckoutPaneInterface {
     $pane_form['request_password'] = Link::fromTextAndUrl($this->t('Forgot password?'), $request_password_link)->toRenderable();
     $pane_form['request_password']['#weight'] = 101;
 
-    // Constructor of parent class "CheckoutPaneBase" has
-    // "CheckoutFlowInterface" injected this object, but couldn't find a
-    // service/plugin service that can be used with "static create" method to
-    // be injected in this class, even if we implement
-    // ContainerFactoryPluginInterface.
-    \Drupal::moduleHandler()->alter('checkout_login', $pane_form, $form_state, $complete_form);
     $complete_form['#attached']['library'][] = 'alshaya_user/email_validator_override';
 
     return $pane_form;
