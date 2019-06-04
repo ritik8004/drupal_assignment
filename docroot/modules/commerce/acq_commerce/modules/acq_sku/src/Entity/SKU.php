@@ -700,6 +700,9 @@ class SKU extends ContentEntityBase implements SKUInterface {
         $field->setDescription($field_info['description']);
 
         $field->setTranslatable(TRUE);
+        if (isset($field_info['translatable']) && $field_info['translatable'] == 0) {
+          $field->setTranslatable(FALSE);
+        }
 
         // Update cardinality with default value if empty.
         $field_info['cardinality'] = empty($field_info['cardinality']) ? 1 : $field_info['cardinality'];

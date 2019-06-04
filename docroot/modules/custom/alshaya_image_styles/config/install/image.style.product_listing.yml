@@ -11,8 +11,8 @@ effects:
     id: image_scale
     weight: 2
     data:
-      width: null
-      height: 450
+      width: 450
+      height: null
       upscale: false
   373ba336-9855-4368-be3f-cffac44b8b68:
     uuid: 373ba336-9855-4368-be3f-cffac44b8b68

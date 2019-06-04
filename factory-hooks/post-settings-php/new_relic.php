@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Implementation of New Relic.
@@ -9,4 +10,6 @@
 if (extension_loaded('newrelic')) {
   global $acsf_site_name;
   newrelic_set_appname("$acsf_site_name;alshaya.01live", '', 'true');
+  // Disable newrelic for all pages.
+  newrelic_disable_autorum();
 }
