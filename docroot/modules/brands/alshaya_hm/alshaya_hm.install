@@ -15,7 +15,7 @@ use Drupal\Component\Utility\Unicode;
  *
  * Adding new config `acq_sku__attributes_skip`.
  */
-function alshaya_hm_update_8032() {
+function alshaya_hm_update_8034() {
   \Drupal::configFactory()->getEditable('alshaya_acm_product.settings')->save();
 }
 
