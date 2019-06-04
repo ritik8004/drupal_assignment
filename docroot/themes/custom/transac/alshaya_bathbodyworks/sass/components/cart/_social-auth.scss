@@ -1,0 +1,18 @@
+.checkout-login-separator {
+  > span {
+    text-transform: capitalize;
+  }
+}
+
+.alias--cart-checkout-delivery,
+.alias--cart-checkout-payment,
+.alias--cart-checkout-confirmation,
+.alias--cart-checkout-login {
+  .site-brand-home {
+    a {
+      @include breakpoint($only-mobile) {
+        max-width: 12.5rem;
+      }
+    }
+  }
+}
