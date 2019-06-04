@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains general hooks and alters.
+ */
+
+/**
+ * Implements hook_alshaya_knet_success_route_alter().
+ */
+function alshaya_mobile_app_alshaya_knet_success_route_alter(string &$route, array $state_data) {
+  if (isset($state_data['context']) && $state_data['context'] === 'mobile') {
+    $route = 'alshaya_mobile_app.mobile_complete';
+  }
+}
