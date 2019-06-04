@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreFile
 
 /**
  * @file.
@@ -46,7 +47,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'hm' => [
       'kw' => [
         '01live' => [
-          'alshaya_acm_knet.settings' => [
+          'alshaya_knet.settings' => [
             'alias' => 'hm',
           ],
         ],
@@ -97,7 +98,7 @@ function alshaya_get_additional_settings($site_code, $country_code, $env) {
     'default' => [
       'default' => [
         'default' => [
-          'alshaya_acm_knet.settings' => [
+          'alshaya_knet.settings' => [
             'alias' => 'alshaya',
           ],
           'google_tag.settings' => [
