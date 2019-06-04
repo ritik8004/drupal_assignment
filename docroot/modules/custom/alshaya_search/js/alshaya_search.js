@@ -51,8 +51,6 @@ var alshayaSearchActiveFacetAfterAjaxTimer = null;
         }
       };
 
-      Drupal.alshayaSearchActiveFacetResetAfterAjax();
-
       $('.ui-autocomplete').on("touchend",function (e) {
         if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
           e.stopPropagation();
