@@ -22,10 +22,6 @@
       padding-top: 0;
       padding-bottom: 0.6em;
     }
-
-    @include breakpoint($only-mobile) {
-      padding-#{$left}: 2rem;
-    }
   }
 
   a.back-link {
@@ -292,6 +288,10 @@
 
     @include breakpoint($tablet) {
       padding-#{$right}: 3.5rem;
+    }
+
+    @include breakpoint($desktop) {
+      padding-#{$right}: 7.4375rem;
     }
 
     .request-password-link {

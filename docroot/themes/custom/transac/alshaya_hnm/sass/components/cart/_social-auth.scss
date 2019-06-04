@@ -1,6 +1,15 @@
 .checkout-login-separator {
   > span {
+    text-transform: uppercase;
     font-family: $hnm-demibold;
     letter-spacing: 0.8px;
+  }
+}
+
+#edit-checkout-social-auth,
+#edit-checkout-guest,
+#edit-checkout-login {
+  .fieldset-legend {
+    text-transform: capitalize;
   }
 }
