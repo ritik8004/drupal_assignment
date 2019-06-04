@@ -213,6 +213,8 @@ class ProductResource extends ResourceBase {
       $cacheableMetadata->addCacheTags($this->cache['tags']);
     }
 
+    $response->addCacheableDependency($cacheableMetadata);
+
     return $response;
   }
 
