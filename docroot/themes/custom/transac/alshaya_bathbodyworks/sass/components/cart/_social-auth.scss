@@ -1,5 +1,5 @@
 .checkout-login-separator {
-  > span {
+  > span::first-letter {
     text-transform: capitalize;
   }
 }
