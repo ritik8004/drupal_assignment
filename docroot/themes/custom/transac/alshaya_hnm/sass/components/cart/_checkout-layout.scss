@@ -74,6 +74,8 @@
 
     a {
       @include breakpoint($upto-tablet) {
+        max-width: none;
+
         img {
           width: 2.5rem;
           height: 2.25rem;
