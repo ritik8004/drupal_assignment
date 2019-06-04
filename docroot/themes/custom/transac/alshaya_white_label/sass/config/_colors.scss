@@ -85,6 +85,7 @@ $_plp_selected_filter_text: #555;
 $_plp_clear_all_btn_disabled: #8d8d8d;
 $light-blue-border: #b3d3f0;
 $_algolia_search_icon_bg: #0072ce;
+$_algolia_suggestion_list_bg: #f7fafe;
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -1009,3 +1010,4 @@ $algolia-auto-complete-border: $light-blue-border;
 $algolia-search-icon-background: $_algolia_search_icon_bg;
 $algolia-input-text: $grey-ash;
 $algolia-search-clear-text-icon: $_algolia_search_icon_bg;
+$algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
