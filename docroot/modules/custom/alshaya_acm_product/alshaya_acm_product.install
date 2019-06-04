@@ -12,6 +12,20 @@ use Drupal\node\Entity\Node;
 /**
  * Implements hook_update_N().
  *
+ * Split pathauto pattern for product and add .html suffix.
+ */
+function alshaya_acm_product_update_8047() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(['pathauto.pattern.content_pathauto'], 'alshaya_acm');
+  $manager->updateConfigs(['pathauto.pattern.product_pathauto'], 'alshaya_acm_product');
+
+  // @TODO: Re-create all the url aliases for products and add redirect.
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add new config key for listing page display of hover images.
  * Clear product cache after code changes to reduce data in cache and to rebuild
  * swatches data.
