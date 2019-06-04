@@ -1,0 +1,9 @@
+checkoutcom.kit:
+  remote: https://cdn.checkout.com
+  version: VERSION
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: http://www.gnu.org/licenses/gpl-2.0.html
+    gpl-compatible: true
+  js:
+    https://cdn.checkout.com/sandbox/js/checkoutkit.js: { type: external }

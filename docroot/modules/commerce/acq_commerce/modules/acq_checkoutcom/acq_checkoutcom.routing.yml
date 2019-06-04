@@ -1,0 +1,7 @@
+acq_checkoutcom.status:
+  path: '/checkoutcom/status'
+  defaults:
+    _title: 'Checkout.com status'
+    _controller: '\Drupal\acq_checkoutcom\Controller\CheckoutComController::status'
+  requirements:
+    _permission: 'access content'

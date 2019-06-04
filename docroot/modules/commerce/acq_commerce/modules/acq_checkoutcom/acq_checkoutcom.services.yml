@@ -1,0 +1,7 @@
+services:
+  acq_checkoutcom.api:
+    class: Drupal\acq_checkoutcom\CheckoutComAPIWrapper
+    arguments:
+      - '@config.factory'
+      - '@http_client_factory'
+      - '@logger.factory'
