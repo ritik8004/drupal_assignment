@@ -12,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @ACQCheckoutPane(
  *   id = "checkout_social_auth",
- *   label = @Translation("Sign in with social media"),
+ *   label = @Translation("sign in with social media"),
  *   defaultStep = "login",
  *   wrapperElement = "fieldset",
  * )
@@ -38,7 +38,6 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
       \Drupal::configFactory()->get('alshaya_social.settings')->get('social_login')
       && !empty($social_networks = \Drupal::configFactory()->get('social_auth.settings')->get('auth'))
     ) {
-      $pane_form['#prefix'] = '<div class="checkout-login-separator"><span>' . $this->t('or') . '</span></div>';
       $pane_form['#attributes']['class'][] = 'social-signup-form';
       $pane_form['social_media_auth_links'] = [
         '#theme' => 'alshaya_social',
@@ -47,6 +46,7 @@ class CheckoutSocialAuth extends CheckoutPaneBase implements CheckoutPaneInterfa
         '#weight' => -1000,
       ];
     }
+    $pane_form['#prefix'] = '<div class="checkout-login-separator"><span>' . $this->t('or') . '</span></div>';
     $pane_form['#cache']['tags'][] = 'config:alshaya_social.settings';
     return $pane_form;
   }

@@ -15,7 +15,7 @@ use Drupal\user\Entity\User;
  *
  * @ACQCheckoutPane(
  *   id = "checkout_login",
- *   label = @Translation("returning customers"),
+ *   label = @Translation("sign in with email address"),
  *   defaultStep = "login",
  *   wrapperElement = "fieldset",
  * )
