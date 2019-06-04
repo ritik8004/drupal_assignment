@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\alshaya_acm_knet\Form;
+namespace Drupal\alshaya_knet\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -14,21 +14,21 @@ class KnetSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'alshaya_acm_knet_settings';
+    return 'alshaya_knet_settings';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getEditableConfigNames() {
-    return ['alshaya_acm_knet.settings'];
+    return ['alshaya_knet.settings'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $this->config('alshaya_acm_knet.settings')
+    $this->config('alshaya_knet.settings')
       ->set('resource_path', $form_state->getValue('resource_path'))
       ->set('use_secure_response_url', $form_state->getValue('use_secure_response_url'))
       ->set('alias', $form_state->getValue('alias'))
@@ -44,7 +44,7 @@ class KnetSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('alshaya_acm_knet.settings');
+    $config = $this->config('alshaya_knet.settings');
 
     $form['resource_path'] = [
       '#type' => 'textfield',

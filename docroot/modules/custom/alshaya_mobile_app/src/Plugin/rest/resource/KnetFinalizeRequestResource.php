@@ -2,11 +2,10 @@
 
 namespace Drupal\alshaya_mobile_app\Plugin\rest\resource;
 
-use Drupal\alshaya_acm_knet\KnetHelper;
+use Drupal\alshaya_knet\Helper\KnetHelper;
 use Drupal\alshaya_mobile_app\Service\MobileAppUtility;
 use Drupal\rest\ModifiedResourceResponse;
 use Drupal\rest\Plugin\ResourceBase;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,7 +24,7 @@ class KnetFinalizeRequestResource extends ResourceBase {
   /**
    * K-Net Helper.
    *
-   * @var \Drupal\alshaya_acm_knet\KnetHelper
+   * @var \Drupal\alshaya_knet\Helper\KnetHelper
    */
   private $knetHelper;
 
@@ -37,42 +36,42 @@ class KnetFinalizeRequestResource extends ResourceBase {
   private $mobileAppUtility;
 
   /**
-   * KnetFinalizeRequestResource constructor.
-   *
-   * @param array $configuration
-   *   Configuration array.
-   * @param string $plugin_id
-   *   Plugin id.
-   * @param mixed $plugin_definition
-   *   Plugin definition.
-   * @param array $serializer_formats
-   *   Serializer formats.
-   * @param \Psr\Log\LoggerInterface $logger
-   *   Logger channel.
-   * @param \Drupal\alshaya_acm_knet\KnetHelper $knet_helper
-   *   K-Net Helper.
-   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
-   *   The mobile app utility service.
+   * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, KnetHelper $knet_helper, MobileAppUtility $mobile_app_utility) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
-    $this->knetHelper = $knet_helper;
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create(
+      $container,
+      $configuration,
+      $plugin_id,
+      $plugin_definition
+    );
+
+    $instance->setMobileAppUtility($container->get('alshaya_mobile_app.utility'));
+    if ($container->has('alshaya_knet.helper')) {
+      $instance->setKnetHelper($container->get('alshaya_knet.helper'));
+    }
+
+    return $instance;
+  }
+
+  /**
+   * Setter for mobile app utility object.
+   *
+   * @param \Drupal\alshaya_mobile_app\Service\MobileAppUtility $mobile_app_utility
+   *   Mobile app utility service.
+   */
+  public function setMobileAppUtility(MobileAppUtility $mobile_app_utility) {
     $this->mobileAppUtility = $mobile_app_utility;
   }
 
   /**
-   * {@inheritdoc}
+   * Setter for K-Net helper object.
+   *
+   * @param \Drupal\alshaya_knet\Helper\KnetHelper $knet_helper
+   *   K-Net helper service.
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->getParameter('serializer.formats'),
-      $container->get('logger.factory')->get('alshaya_mobile_app'),
-      $container->get('alshaya_acm_knet.helper'),
-      $container->get('alshaya_mobile_app.utility')
-    );
+  public function setKnetHelper(KnetHelper $knet_helper) {
+    $this->knetHelper = $knet_helper;
   }
 
   /**
