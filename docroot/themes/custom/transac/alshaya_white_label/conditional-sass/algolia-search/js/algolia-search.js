@@ -15,19 +15,18 @@
       var algoliaAutocompleteBlock = $('.block-search-api-algolia-autocomplete-block');
 
       input.once().on('click', function (e) {
-        algoliaAutocompleteBlock.addClass('algolia-search-active');
+        $(this).parents('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
         input.focus();
       });
 
       // On focus out make it in default state.
       if ($(window).width() > 767) {
-        input.on('focusout', function () {
-          algoliaAutocompleteBlock.removeClass('algolia-search-active');
+        input.on('focusout', function (e) {
+          $(this).parents('.block-search-api-algolia-autocomplete-block').removeClass('algolia-search-active');
         });
       }
 
-      // Show/hide the trending title.
-      input.on('keyup', function () {
+      function showAlgoliaSearchresult() {
         if ($('.algolia-autocomplete pre').text().length < 1) {
           $('.trending-title').show();
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
@@ -37,10 +36,19 @@
           $('.trending-title').hide();
           $('.algolia-autocomplete').addClass('algolia-autocomplete-active');
         }
+      }
 
+      // Show/hide the trending title.
+      input.on('keyup', function () {
+        showAlgoliaSearchresult();
         if (input.val().length > 0) {
           $('.algolia-form-wrapper').addClass('algolia-cleartext-active');
         }
+
+        // For first time case adding a delay.
+        setTimeout(function () {
+          showAlgoliaSearchresult();
+        }, 50);
       });
 
       // Condition on click of clear text icon.
@@ -62,11 +70,7 @@
           $('.trending-title').show();
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
         }
-        else {
-          $('.algolia-autocomplete').addClass('algolia-autocomplete-active');
-        }
-        algoliaAutocompleteBlock.addClass('algolia-search-active');
-        $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
+        $(this).parents('.block-search-api-algolia-autocomplete-block').addClass('algolia-search-active');
       });
 
       /**
@@ -105,15 +109,6 @@
           $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
           $('.trending-title').show();
         });
-
-        input.on('focusout', function (e) {
-          if (input.val().length > 0) {
-            $('.algolia-search-icon').once().click();
-          }
-          else {
-            algoliaAutocompleteBlock.removeClass('algolia-search-active');
-          }
-        });
       }
 
       /**
@@ -133,6 +128,7 @@
           $('.trending-title').show();
           $('.algolia-form-wrapper').removeClass('algolia-cleartext-active');
           algoliaAutocompleteBlock.removeClass('algolia-search-active');
+          $('.algolia-autocomplete').removeClass('algolia-autocomplete-active');
         });
       }
 
