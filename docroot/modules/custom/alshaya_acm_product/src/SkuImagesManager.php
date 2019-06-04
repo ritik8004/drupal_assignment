@@ -322,6 +322,17 @@ class SkuImagesManager {
       }
     }
 
+    $return = [];
+    $media = !empty($media) ? array_filter($media) : [];
+    foreach ($media as $media_item) {
+      if ($media_item['media_type'] == 'image') {
+        $return['media_items']['images'][] = $media_item;
+      }
+      elseif (!empty($media_item['video_url'])) {
+        $return['media_items']['videos'][] = $media_item;
+      }
+    }
+
     // For simple children we need to add images from parent
     // if configured to do so.
     if ($sku->bundle() === 'simple' && !$check_parent_child && $this->addParentImagesInChild()) {
@@ -331,18 +342,7 @@ class SkuImagesManager {
 
       if ($parent instanceof SKUInterface) {
         $parent_media = $this->getGalleryMedia($parent, FALSE);
-        $media = array_merge_recursive($media, $parent_media);
-      }
-    }
-
-    $return = [];
-    $media = !empty($media) ? array_filter($media) : [];
-    foreach ($media as $media_item) {
-      if ($media_item['media_type'] == 'image') {
-        $return['media_items']['images'][] = $media_item;
-      }
-      elseif (!empty($media_item['video_url'])) {
-        $return['media_items']['videos'][] = $media_item;
+        $return = array_merge_recursive($return, $parent_media);
       }
     }
 
