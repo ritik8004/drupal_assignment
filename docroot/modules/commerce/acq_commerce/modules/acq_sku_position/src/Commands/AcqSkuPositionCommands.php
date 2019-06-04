@@ -4,12 +4,13 @@ namespace Drupal\acq_sku_position\Commands;
 
 use Drupal\acq_commerce\Conductor\APIWrapper;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Query\Query;
+use Drupal\Core\Database\Query\Merge;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\xhprof\Profiler;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
@@ -70,6 +71,33 @@ class AcqSkuPositionCommands extends DrushCommands {
   private $configFactory;
 
   /**
+   * Counter for inserted items.
+   *
+   * @var integer
+   */
+  private $inserted;
+
+  /**
+   * Counter for updated items.
+   *
+   * @var integer
+   */
+  private $updated;
+
+  /**
+   * Counter for skipped items.
+   *
+   * @var integer
+   */
+  private $skipped;
+
+  /**
+   * Counter for skipped items.
+   *
+   * @var integer
+   */
+  private $deleted;
+  /**
    * AcqSkuPositionCommands constructor.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
@@ -94,7 +122,7 @@ class AcqSkuPositionCommands extends DrushCommands {
                               CategoryManagerInterface $categoryManager,
                               I18nHelper $i18n_helper,
                               ConfigFactoryInterface $configFactory) {
-    $this->logger = $logger->get('acq_sku_position_position');
+    $this->logger = $logger->get('acq_sku_position');
     $this->apiWrapper = $api_wrapper;
     $this->connection = $connection;
     $this->moduleHandler = $moduleHandler;
@@ -129,6 +157,11 @@ class AcqSkuPositionCommands extends DrushCommands {
    * @throws \Drush\Exceptions\UserAbortException
    */
   public function syncPositions($position_type = 'position', array $options = ['category-source' => 'magento']) {
+    /** @var Profiler $profiler */
+    $profiler = \Drupal::service('xhprof.profiler');
+    $run_id = $profiler->createRunId();
+    $profiler->enable();
+
     $this->logger->notice('Product position sync in progress...');
 
     // If invalid option for category source.
@@ -145,15 +178,14 @@ class AcqSkuPositionCommands extends DrushCommands {
     // Allow other modules to skip terms from position sync.
     $this->moduleHandler->alter('acq_sku_position_sync', $terms);
     $chunk_size = 100;
+
+    // Set all positions in DB to unprocessed.
+    $this->connection->update('acq_sku_position')
+      ->fields(['processed' => 0])
+      ->execute();
+
+    $this->skipped = $this->updated = $this->inserted = 0;
     foreach (array_chunk($terms, $chunk_size) as $categories_chunk) {
-      $is_data_available = FALSE;
-      $insert_query = $this->connection->insert('acq_sku_position')
-        ->fields(['nid', 'tid', 'position', 'position_type']);
-
-      // Fetch existing position <=> nid mapping for the category chunk being
-      // processed.
-      $db_positions = $this->getDbPositions(array_column($categories_chunk, 'tid'));
-
       foreach ($categories_chunk as $term) {
         // Find the commerce id from the term. Skip if not found.
         $commerce_id = $term->commerce_id;
@@ -204,66 +236,40 @@ class AcqSkuPositionCommands extends DrushCommands {
           continue;
         }
 
-        // Process the response data, prepare insert query & list of nodes whose
-        // position has not changed & doesn't need to be updated.
-        $skip_deletion_nids = $this->processPositionResopnse($response, $db_positions, $term, $nids, $position_type, $insert_query, $is_data_available);
-
-        if (!empty($skip_deletion_nids)) {
-          $this->logger->notice('Skipping deletion for nids: @nids while processing term: @tid', [
-            '@nids' => implode(',', $skip_deletion_nids),
-            '@tid' => $term->tid,
+        try {
+          // Perform merge query for all positions received as a part of position
+          // sync.
+          $this->processPositionResponse($response, $term, $nids, $position_type);
+        }
+        catch (\Exception $e) {
+          $this->logger->error('Error while deleting and inserting data for product position for terms: @tids. Message: @message', [
+            '@tids' => implode(',', array_column($categories_chunk, 'tid')),
+            '@message' => $e->getMessage(),
           ]);
         }
       }
-
-      try {
-        if (!empty($categories_chunk)) {
-          // Delete entries for positions that are going to be synced now.
-          $this->deleteOldPositions($categories_chunk, $skip_deletion_nids, $position_type);
-        }
-
-        // Run query only if there is any record to insert.
-        if ($is_data_available) {
-          $insert_query->execute();
-        }
-
-        $this->moduleHandler->invokeAll('acq_sku_position_sync_category_chunk_processed', $categories_chunk);
-      }
-      catch (\Exception $e) {
-        $this->logger->error('Error while deleting and inserting data for product position for terms: @tids. Message: @message', [
-          '@tids' => implode(',', array_column($categories_chunk, 'tid')),
-          '@message' => $e->getMessage(),
-        ]);
-      }
     }
+
+    // Clear all obsolete position records for whihc processed status is at 0.
+    $this->deleted = $this->connection->delete('acq_sku_position')
+      ->condition('processed',0)
+      ->execute();
 
     // Allow other modules to take action after position sync finished.
     $this->moduleHandler->invokeAll('acq_sku_position_sync_finished');
 
     $this->logger->notice(dt('Product position sync completed!'));
-  }
 
-  /**
-   * Helper function to delete old positions from DB before inserting updates.
-   *
-   * @param array $categories_chunk
-   *   List of categories being processed.
-   * @param array $skip_deletion_nids
-   *   List of node & tid mapping for which position value hasn't changed.
-   * @param string $position_type
-   *   Position type.
-   */
-  public function deleteOldPositions(array $categories_chunk, array $skip_deletion_nids, $position_type) {
-    // Delete existing records of position for this category which have
-    // not changed since the last sync.
-    $delete_query = $this->connection->delete('acq_sku_position')
-      ->condition('tid', array_column($categories_chunk, 'tid'), 'IN');
-    if (!empty($skip_deletion_nids)) {
-      $delete_query->condition('nid', $skip_deletion_nids, 'NOT IN');
-      $delete_query->condition('tid', array_keys($skip_deletion_nids), 'IN');
-    }
-    $delete_query->condition('position_type', $position_type)
-      ->execute();
+
+    \Drupal::logger('alshaya_advanced_page')->notice('Inserted @inserted_count new items, Updated @updated_count items, Skipped @skipped_count items, Deleted @deleted_count items.', [
+      '@inserted_count' => $this->inserted,
+      '@updated_count' => $this->updated,
+      '@skipped_count' => $this->skipped,
+      '@deleted_count' => $this->deleted,
+    ]);
+
+    $profiler->shutdown($run_id);
+    print $run_id;
   }
 
   /**
@@ -271,53 +277,70 @@ class AcqSkuPositionCommands extends DrushCommands {
    *
    * @param array $response
    *   Response received from Magento for positions.
-   * @param array $db_positions
-   *   Data fetched from DB around positions.
    * @param \stdClass $term
    *   Term being processed.
    * @param array $nids
    *   List of nids fetched from list of SKUs in response for the term.
    * @param string $position_type
    *   Position type.
-   * @param \Drupal\Core\Database\Query\Query $insert_query
-   *   Insert query for position data.
-   * @param bool $is_data_available
-   *   Flag to suggest if there is data available for insert query to execute.
-   *
-   * @return mixed
-   *   List of nids that shoudld be skipped for deletion as well as insert.
+   * @throws \Exception
    */
-  public function processPositionResopnse(array $response,
-                                          array $db_positions,
+  public function processPositionResponse(array $response,
                                           $term,
                                           array $nids,
-                                          $position_type,
-                                          Query $insert_query,
-                                          &$is_data_available) {
-    $skip_deletion_nids = [];
+                                          $position_type) {
+    // Fetch positions from database;
+    $db_positions = $this->getDbPositions();
+    static $skipped_update_nids;
 
     foreach ($response as $product_position) {
       // Check if the position has changed before doing a sync.
-      if (isset($nids[$product_position['sku']]) &&
-        ($product_position['position'] != $db_positions[$term->tid][$nids[$product_position['sku']]])) {
+      if (isset($nids[$product_position['sku']])) {
+
+        $db_position_nid = isset($db_positions[$term->tid][$nids[$product_position['sku']]]) ? $db_positions[$term->tid][$nids[$product_position['sku']]] : NULL;
+
+        // Skip merge query for this if the db position matches the one in
+        // response.
+        if (($db_position_nid !== NULL) &&
+          ($db_position_nid == $product_position['position'])) {
+          print 'Skipping nid ' . $nids[$product_position['sku']] . ' for tid ' . $term->tid;
+          $skipped_update_nids[] = $nids[$product_position['sku']];
+          $this->skipped++;
+          continue;
+        }
+
         // Insert new position data for the product.
         $record = [
-          'nid' => $nids[$product_position['sku']],
-          'tid' => $term->tid,
           'position' => $product_position['position'],
-          'position_type' => $position_type,
+          'processed' => 1,
         ];
-        $is_data_available = TRUE;
-        $insert_query->values($record);
-      }
-      // Record the list of nids whose position has not changed.
-      elseif (isset($nids[$product_position['sku']]) &&
-        ($product_position['position'] == $db_positions[$term->tid][$nids[$product_position['sku']]])) {
-        $skip_deletion_nids[$term->tid] = $nids[$product_position['sku']];
+
+        $result = $this->connection->merge('acq_sku_position')
+          ->keys([
+            'nid' => $nids[$product_position['sku']],
+            'tid' => $term->tid,
+            'position_type' => $position_type,
+          ])
+          ->fields($record)
+          ->execute();
+        if ($result == Merge::STATUS_INSERT) {
+          $this->inserted++;
+        }
+        elseif ($result == Merge::STATUS_UPDATE) {
+          $this->updated++;
+        }
       }
     }
 
-    return $skip_deletion_nids;
+    if (!empty($skipped_update_nids)) {
+      // Update status for the skipped updates to 1 to avoid them from getting
+      // deleted.
+      $this->connection->update('acq_sku_position')
+        ->fields(['processed' => 1])
+        ->condition('nid', $skipped_update_nids, 'IN')
+        ->condition('tid', $term->tid)
+        ->execute();
+    }
   }
 
   /**
@@ -343,16 +366,18 @@ class AcqSkuPositionCommands extends DrushCommands {
   /**
    * Helper function to fetch positions stored in DB for the category chunk.
    *
-   * @param array $categories_chunk
-   *   List of categories for which the positions need to be fetched from db.
-   *
    * @return array
    *   List of product positions grouped by term_id.
    */
-  public function getDbPositions(array $categories_chunk) {
+  public function getDbPositions() {
+    $db_positions = &drupal_static(__METHOD__, []);
+
+    if (!empty($db_positions)) {
+      return $db_positions;
+    }
+
     $query = $this->connection->select('acq_sku_position', 'asp');
     $query->fields('asp', ['nid', 'tid', 'position']);
-    $query->condition('asp.tid', $categories_chunk, 'IN');
     $existing_nid_positions = $query->execute()->fetchAll();
     $db_positions = [];
 

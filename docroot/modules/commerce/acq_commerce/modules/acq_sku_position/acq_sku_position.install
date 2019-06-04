@@ -11,6 +11,16 @@
  * Add index for nid & position on acq_sku_position table.
  */
 function acq_sku_position_update_8001() {
+  // Add processed status column to acq_sku_position table.
+  \Drupal::database()
+    ->schema()
+    ->addField('acq_sku_position', 'processed', [
+      'type' => 'int',
+      'length' => 1,
+      'not null' => TRUE,
+      'description' => 'Processed status.',
+    ]);
+
   // Add index for nid & position on acq_sku_position table.
   $index = [
     'table' => 'acq_sku_position',
@@ -63,6 +73,11 @@ function acq_sku_position_schema() {
         'length' => 32,
         'not null' => TRUE,
         'description' => 'Type of position',
+      ],
+      'processed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Processed status.',
       ],
     ],
     'indexes' => [
