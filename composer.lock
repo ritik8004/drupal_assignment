@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2931eeb5c42b1a9dea4e30e7d606119e",
+    "content-hash": "7a56aa957eadb9162030931863891506",
     "packages": [
         {
             "name": "HubSpot/pace",
@@ -12334,6 +12334,53 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/social_auth_facebook",
                 "issues": "https://www.drupal.org/project/issues/social_auth_facebook"
+            }
+        },
+        {
+            "name": "drupal/svg_image",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/svg_image.git",
+                "reference": "8.x-1.9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/svg_image-8.x-1.9.zip",
+                "reference": "8.x-1.9",
+                "shasum": "7b193de6ec7b7fc3626f170d0f5f8fccaa2f26bf"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.9",
+                    "datestamp": "1548492180",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "zvse",
+                    "homepage": "https://www.drupal.org/user/2870933"
+                }
+            ],
+            "description": "Overrides the standard image formatter and widget to support SVG files.",
+            "homepage": "https://www.drupal.org/project/svg_image",
+            "support": {
+                "source": "https://git.drupalcode.org/project/svg_image"
             }
         },
         {

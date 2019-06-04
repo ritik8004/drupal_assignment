@@ -231,6 +231,7 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'id' => $term->tid,
         'path' => Url::fromRoute('entity.taxonomy_term.canonical', ['taxonomy_term' => $term->tid])->toString(),
         'active_class' => '',
+        'class' => [],
         'clickable' => !is_null($term->field_display_as_clickable_link_value) ? $term->field_display_as_clickable_link_value : TRUE,
         'display_in_desktop' => $term->display_in_desktop,
         'display_in_mobile' => $term->display_in_mobile,
@@ -243,13 +244,22 @@ class ProductCategoryTree implements ProductCategoryTreeInterface {
         'lhn' => is_null($term->field_show_in_lhn_value) ? (int) $term->include_in_menu : (int) $term->field_show_in_lhn_value,
       ];
 
-      if (($term->display_in_desktop || $term->display_in_mobile) && $link = $this->getOverrideTargetLink($term->tid, $langcode)) {
+      if ($term->display_in_desktop) {
+        $data[$term->tid]['class'][] = 'show-on-desktop';
+      }
+
+      if ($term->display_in_mobile) {
+        $data[$term->tid]['class'][] = 'show-on-mobile';
+      }
+
+      if ($link = $this->getOverrideTargetLink($term->tid, $langcode)) {
         $data[$term->tid]['path'] = Url::fromUri($link)->toString();
         $data[$term->tid]['class'][] = 'non-category';
       }
 
       if ($icon = $this->getIcon($term->tid, $langcode)) {
         $data[$term->tid]['icon'] = $icon;
+        $data[$term->tid]['class'][] = 'with-icon';
       }
 
       if (is_object($file = $this->getIcon($term->tid, $langcode))

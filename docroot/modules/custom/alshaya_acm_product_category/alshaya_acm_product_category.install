@@ -18,6 +18,7 @@ use Drupal\alshaya_acm_product_category\ProductCategoryTree;
  * which are not commerce category items.
  */
 function alshaya_acm_product_category_update_8030() {
+  \Drupal::service('module_installer')->install(['svg_image']);
   \Drupal::service('alshaya_config.manager')
     ->updateConfigs(
       [
