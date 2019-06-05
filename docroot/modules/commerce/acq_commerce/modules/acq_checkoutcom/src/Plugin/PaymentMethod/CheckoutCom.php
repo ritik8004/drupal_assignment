@@ -5,8 +5,12 @@ namespace Drupal\acq_checkoutcom\Plugin\PaymentMethod;
 use Drupal\acq_cart\CartInterface;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodBase;
 use Drupal\acq_payment\Plugin\PaymentMethod\PaymentMethodInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Provides the CheckoutCom payment method.
@@ -40,6 +44,13 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   protected $configFactory;
 
   /**
+   * Current user object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * CheckoutCom constructor.
    *
    * @param array $configuration
@@ -56,6 +67,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
     $this->checkoutComApi = \Drupal::service('acq_checkoutcom.checkout_api');
     $this->apiHelper = \Drupal::service('acq_checkoutcom.agent_api');
     $this->configFactory = \Drupal::service('config.factory');
+    $this->currentUser = \Drupal::service('current_user');
   }
 
   /**
@@ -69,34 +81,46 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
    * {@inheritdoc}
    */
   public function buildPaneForm(array $pane_form, FormStateInterface $form_state, array &$complete_form) {
-    // @todo: Repalce this code with API call.
-    $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
-    $data = file_get_contents($file);
-    $existing_cards = !empty($data) ? json_decode($data) : [];
+    $payment_card = 'new';
+    // @todo: Replace this code with API call.
+    if ($this->currentUser->isAuthenticated()) {
+      $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
+      $data = file_get_contents($file);
+      $existing_cards = !empty($data) ? json_decode($data) : [];
 
-    $options = [];
-    foreach ($existing_cards as $card) {
-      $options[$card->id] = '**** **** **** ' . $card->last4;
+      $options = [];
+      foreach ($existing_cards as $card) {
+        $options[$card->id] = '
+        <div class="saved-card">
+          <div class="card-number">**** **** **** ' . $card->last4 . '</div>
+          <div class="card-name">' . $card->name . '</div>
+          <div class="card-expiry-date">' . "{$card->expiryMonth}/{$card->expiryYear}" . '</div>
+        </div>
+      ';
+      }
+
+      $payment_card = empty($options) ? $payment_card : \Drupal::requestStack()->getCurrentRequest()->query->get('payment-card');
+      if (!empty($form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_card'])) {
+        $payment_card = $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+      }
+
+      if (!empty($options)) {
+        $pane_form['payment_card'] = [
+          '#type' => 'radios',
+          '#options' => $options + ['new' => $this->t('New Card')],
+          '#default_value' => $payment_card,
+          '#ajax' => [
+            'callback' => [$this, 'renderSelectedCardFields'],
+            'wrapper' => 'payment_details_checkout_com',
+            'method' => 'replace',
+            'effect' => 'fade',
+          ],
+          '#attached' => [
+            'library' => ['acq_checkoutcom/checkoutcom.kit'],
+          ],
+        ];
+      }
     }
-
-    $payment_type = \Drupal::requestStack()->getCurrentRequest()->query->get('type');
-
-    $pane_form['payment_type'] = [
-      '#type' => 'radios',
-      '#options' => [
-        'existing' => $this->t('Existing Card'),
-        'new' => $this->t('New Card'),
-      ],
-      '#default_value' => !empty($options) && ($payment_type == 'existing' || empty($payment_type)) ? 'existing' : 'new',
-      '#ajax' => [
-        'url' => Url::fromRoute('acq_checkoutcom.select_card_type'),
-        'wrapper' => 'payment_details_checkout_com',
-        'effect' => 'fade',
-      ],
-      '#attached' => [
-        'library' => ['acq_checkoutcom/checkoutcom.kit'],
-      ],
-    ];
 
     $pane_form['payment_details'] = [
       '#type' => 'container',
@@ -105,26 +129,30 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       ],
     ];
 
-    if (!empty($options) && ($payment_type == 'existing' || empty($payment_type))) {
-      $pane_form['payment_details']['existing_card'] = [
-        '#type' => 'radios',
-        '#title' => $this->t('Existing cards'),
-        '#title_display' => 'invisible',
-        '#options' => $options,
+    if (!empty($payment_card) && $payment_card != 'new') {
+      $pane_form['payment_details'][$payment_card]['cc_cvv'] = [
+        '#type' => 'password',
+        '#maxlength' => 4,
+        '#title' => $this->t('Security code (CVV)'),
+        '#default_value' => '',
+        '#attributes' => [
+          'class' => [
+            'checkoutcom-credit-card-cvv-input',
+            'checkoutcom-input',
+          ],
+          'autocomplete' => 'cc-csc',
+          'data-checkout' => 'cvv',
+        ],
       ];
     }
-    elseif ($payment_type == 'new') {
+    elseif ($payment_card == 'new') {
       $pane_form['payment_details']['cc_number'] = [
         '#type' => 'tel',
         '#title' => $this->t('Credit Card Number'),
         '#default_value' => '',
+        '#required' => TRUE,
         '#attributes' => [
-          'class' => [
-            'checkoutcom-credit-card-input',
-            'checkoutcom-input',
-          ],
           'autocomplete' => 'cc-number',
-          'data-checkout' => 'card-number',
         ],
       ];
 
@@ -206,6 +234,33 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
   }
 
   /**
+   * Ajax callback method to render cvv.
+   */
+  public function renderSelectedCardFields(&$form, FormStateInterface $form_state) {
+    $element = $form_state->getTriggeringElement();
+
+    // Confirm it is a POST request and contains form data.
+    if (empty($element)) {
+      throw new NotFoundHttpException();
+    }
+
+    $acm_payment_methods = $form_state->getValue('acm_payment_methods');
+    $response = new AjaxResponse();
+    $url = Url::fromRoute(
+      'acq_checkout.form',
+      ['step' => 'payment'],
+      [
+        'query' => [
+          'payment-card' => $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_card'],
+        ],
+      ]
+    );
+    $response->addCommand(new InvokeCommand(NULL, 'showCheckoutLoader', []));
+    $response->addCommand(new RedirectCommand($url->toString()));
+    return $response;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitPaymentForm(array &$pane_form, FormStateInterface $form_state, array &$complete_form) {
@@ -218,13 +273,14 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $cart->setPaymentMethod($this->getId(), ['card_token_id' => $inputs['cko-card-token']]);
     }
     elseif ($process_type == '3d') {
-      if (!empty($inputs['cko-card-token'])) {
+      $acm_payment_methods = $form_state->getValue('acm_payment_methods');
+      $payment_card = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
+
+      if ($payment_card == 'new' && !empty($inputs['cko-card-token'])) {
         $this->initiate3dSecurePayment($inputs);
       }
       else {
-        $acm_payment_methods = $form_state->getValue('acm_payment_methods');
-        $card_id = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_details']['existing_card'];
-        $this->initiateStoredCardPayment($card_id, $form_state->getValue($card_id)['cvv']);
+        $this->initiateStoredCardPayment($payment_card, (int) $form_state->getValue('acm_payment_methods')['payment_details_wrapper']['payment_method_checkout_com']['payment_details'][$payment_card]['cc_cvv']);
       }
     }
   }
