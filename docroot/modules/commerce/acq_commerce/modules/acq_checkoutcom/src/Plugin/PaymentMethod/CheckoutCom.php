@@ -207,10 +207,12 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         ],
       ];
 
-      $pane_form['payment_details']['save_card'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Save card for future use'),
-      ];
+      if ($this->currentUser->isAuthenticated()) {
+        $pane_form['payment_details']['save_card'] = [
+          '#type'  => 'checkbox',
+          '#title' => $this->t('Save card for future use'),
+        ];
+      }
 
       $debug = $this->configFactory->get('acq_checkoutcom.settings')->get('debug') ? 'true' : 'false';
 
