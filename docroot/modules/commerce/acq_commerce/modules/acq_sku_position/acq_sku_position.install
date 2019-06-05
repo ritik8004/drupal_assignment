@@ -10,7 +10,7 @@
  *
  * Add index for nid & position on acq_sku_position table.
  */
-function acq_sku_position_update_8002() {
+function acq_sku_position_update_8001() {
   // Add processed status column to acq_sku_position table.
   \Drupal::database()
     ->schema()
