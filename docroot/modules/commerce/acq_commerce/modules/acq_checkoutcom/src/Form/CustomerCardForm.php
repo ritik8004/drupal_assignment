@@ -240,7 +240,7 @@ class CustomerCardForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $inputs = $form_state->getUserInput();
 
-    $cardData = $this->checkoutComApi->storeNewCard(
+    $cardData = $this->checkoutComApi->authorizeNewCard(
       $this->currentRequest->get('user'),
       [
         'cardToken' => $inputs['cko-card-token'],

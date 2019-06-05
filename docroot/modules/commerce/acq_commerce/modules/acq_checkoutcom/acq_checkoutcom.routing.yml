@@ -33,7 +33,7 @@ acq_checkoutcom.payment_card.add_card:
         type: entity:user
 
 acq_checkoutcom.payment_card.remove_card:
-  path: '/user/{user}/payment-card/{card_id}/remove/{js}'
+  path: '/user/{user}/payment-card/{card_id}/remove'
   defaults:
     _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::removeCard'
     _title: 'Remove card'
@@ -42,7 +42,8 @@ acq_checkoutcom.payment_card.remove_card:
       user:
         type: entity:user
   requirements:
-    _user_is_logged_in: 'TRUE'
     user: \d+
     card_id: '^[a-z0-9_-].*?$'
     js: 'nojs|ajax'
+    _csrf_token: 'TRUE'
+    _user_is_logged_in: 'TRUE'

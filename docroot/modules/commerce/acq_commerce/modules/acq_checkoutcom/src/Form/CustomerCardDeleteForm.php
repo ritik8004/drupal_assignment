@@ -3,6 +3,7 @@
 namespace Drupal\acq_checkoutcom\Form;
 
 use Drupal\acq_checkoutcom\CheckoutComAPIWrapper;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,13 +25,26 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
   protected $checkoutComApi;
 
   /**
+   * Current user object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * CustomerCardDeleteForm constructor.
    *
    * @param \Drupal\acq_checkoutcom\CheckoutComAPIWrapper $checkout_com_Api
    *   Checkout.com api wrapper object.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
+   *   The current user object.
    */
-  public function __construct(CheckoutComAPIWrapper $checkout_com_Api) {
+  public function __construct(
+    CheckoutComAPIWrapper $checkout_com_Api,
+    AccountProxyInterface $account_proxy
+  ) {
     $this->checkoutComApi = $checkout_com_Api;
+    $this->currentUser = $account_proxy;
   }
 
   /**
@@ -38,7 +52,8 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('acq_checkoutcom.api')
+      $container->get('acq_checkoutcom.api'),
+      $container->get('current_user')
     );
   }
 
@@ -60,7 +75,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getDescription() {
-    return $this->t("This will delete the saved card. This action cannot be undone.");
+    return $this->t('This will delete the saved card. This action cannot be undone.');
   }
 
   /**
@@ -138,7 +153,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
     $uid = $form_state->getValue('uid');
     $card_id = $form_state->getValue('card_id');
     // Delete the card for given user.
-    if ($uid && $card_id) {
+    if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer site configuration') && $card_id)) {
       // Delete card script.
     }
     return $response;

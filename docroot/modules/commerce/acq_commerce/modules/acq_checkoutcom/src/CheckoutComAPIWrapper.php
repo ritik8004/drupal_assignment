@@ -351,19 +351,19 @@ class CheckoutComAPIWrapper {
   }
 
   /**
-   * Get the card details to save new card.
+   * Authorize new card with void payment to be saved.
    *
    * @param \Drupal\user\UserInterface $user
    *   The user object.
    * @param array $request_param
-   *   The payment params.
+   *   The payment card params.
    *
    * @return array
    *   Return array of card data to be saved.
    *
    * @throws \Exception
    */
-  public function storeNewCard(UserInterface $user, array $request_param) {
+  public function authorizeNewCard(UserInterface $user, array $request_param) {
     $params = [
       'cardToken' => $request_param['cardToken'],
       'email' => $request_param['email'],
