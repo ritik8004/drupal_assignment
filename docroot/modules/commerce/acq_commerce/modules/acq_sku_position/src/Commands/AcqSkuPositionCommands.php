@@ -243,6 +243,8 @@ class AcqSkuPositionCommands extends DrushCommands {
           ]);
         }
       }
+
+      $this->moduleHandler->invokeAll('acq_sku_position_sync_category_chunk_processed', $categories_chunk);
     }
 
     // Clear all obsolete position records for whihc processed status is at 0.
