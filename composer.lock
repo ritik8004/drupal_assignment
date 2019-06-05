@@ -3405,17 +3405,17 @@
         },
         {
             "name": "drupal/acsf",
-            "version": "2.55.0",
+            "version": "2.57.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acsf.git",
-                "reference": "8.x-2.55"
+                "reference": "8.x-2.57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.55.zip",
-                "reference": "8.x-2.55",
-                "shasum": "4afed0a41e33449378718a8fd52c6ef23176dd58"
+                "url": "https://ftp.drupal.org/files/projects/acsf-8.x-2.57.zip",
+                "reference": "8.x-2.57",
+                "shasum": "f3cdfc9e9b03afa766cedfe3dc8ae9118b54b4b2"
             },
             "require": {
                 "drupal/acsf_duplication": "*",
@@ -3438,8 +3438,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.55",
-                    "datestamp": "1557315785",
+                    "version": "8.x-2.57",
+                    "datestamp": "1559672585",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3506,7 +3506,7 @@
         },
         {
             "name": "drupal/acsf_duplication",
-            "version": "2.55.0",
+            "version": "2.57.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -3517,8 +3517,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.55",
-                    "datestamp": "1557315785",
+                    "version": "8.x-2.57",
+                    "datestamp": "1559672585",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3579,7 +3579,7 @@
         },
         {
             "name": "drupal/acsf_theme",
-            "version": "2.55.0",
+            "version": "2.57.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/acsf_variables": "*",
@@ -3591,8 +3591,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.55",
-                    "datestamp": "1557315785",
+                    "version": "8.x-2.57",
+                    "datestamp": "1559672585",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3653,7 +3653,7 @@
         },
         {
             "name": "drupal/acsf_variables",
-            "version": "2.55.0",
+            "version": "2.57.0",
             "require": {
                 "drupal/acsf": "self.version",
                 "drupal/core": "~8.0"
@@ -3664,8 +3664,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.55",
-                    "datestamp": "1557315785",
+                    "version": "8.x-2.57",
+                    "datestamp": "1559672585",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -10885,7 +10885,7 @@
             "description": "Redirect anonymous users from 403 Access Denied pages to the /user/login page.",
             "homepage": "https://www.drupal.org/project/r4032login",
             "support": {
-                "source": "http://cgit.drupalcode.org/r4032login"
+                "source": "https://git.drupalcode.org/project/r4032login"
             },
             "time": "2018-07-20T09:54:11+00:00"
         },
