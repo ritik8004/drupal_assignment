@@ -10,7 +10,6 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\acq_sku\CategoryManagerInterface;
 use Drupal\acq_commerce\I18nHelper;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\xhprof\Profiler;
 use Drush\Commands\DrushCommands;
 use Drush\Exceptions\UserAbortException;
 
@@ -73,30 +72,31 @@ class AcqSkuPositionCommands extends DrushCommands {
   /**
    * Counter for inserted items.
    *
-   * @var integer
+   * @var int
    */
   private $inserted;
 
   /**
    * Counter for updated items.
    *
-   * @var integer
+   * @var int
    */
   private $updated;
 
   /**
    * Counter for skipped items.
    *
-   * @var integer
+   * @var int
    */
   private $skipped;
 
   /**
    * Counter for skipped items.
    *
-   * @var integer
+   * @var int
    */
   private $deleted;
+
   /**
    * AcqSkuPositionCommands constructor.
    *
@@ -157,11 +157,6 @@ class AcqSkuPositionCommands extends DrushCommands {
    * @throws \Drush\Exceptions\UserAbortException
    */
   public function syncPositions($position_type = 'position', array $options = ['category-source' => 'magento']) {
-    /** @var Profiler $profiler */
-    $profiler = \Drupal::service('xhprof.profiler');
-    $run_id = $profiler->createRunId();
-    $profiler->enable();
-
     $this->logger->notice('Product position sync in progress...');
 
     // If invalid option for category source.
@@ -237,8 +232,8 @@ class AcqSkuPositionCommands extends DrushCommands {
         }
 
         try {
-          // Perform merge query for all positions received as a part of position
-          // sync.
+          // Perform merge query for all positions received as a part of
+          // position sync.
           $this->processPositionResponse($response, $term, $nids, $position_type);
         }
         catch (\Exception $e) {
@@ -252,7 +247,7 @@ class AcqSkuPositionCommands extends DrushCommands {
 
     // Clear all obsolete position records for whihc processed status is at 0.
     $this->deleted = $this->connection->delete('acq_sku_position')
-      ->condition('processed',0)
+      ->condition('processed', 0)
       ->execute();
 
     // Allow other modules to take action after position sync finished.
@@ -260,16 +255,12 @@ class AcqSkuPositionCommands extends DrushCommands {
 
     $this->logger->notice(dt('Product position sync completed!'));
 
-
-    \Drupal::logger('alshaya_advanced_page')->notice('Inserted @inserted_count new items, Updated @updated_count items, Skipped @skipped_count items, Deleted @deleted_count items.', [
+    $this->logger()->notice('Inserted @inserted_count new positions, Updated @updated_count positions, Skipped @skipped_count positions, Deleted @deleted_count positions.', [
       '@inserted_count' => $this->inserted,
       '@updated_count' => $this->updated,
       '@skipped_count' => $this->skipped,
       '@deleted_count' => $this->deleted,
     ]);
-
-    $profiler->shutdown($run_id);
-    print $run_id;
   }
 
   /**
@@ -283,13 +274,14 @@ class AcqSkuPositionCommands extends DrushCommands {
    *   List of nids fetched from list of SKUs in response for the term.
    * @param string $position_type
    *   Position type.
+   *
    * @throws \Exception
    */
   public function processPositionResponse(array $response,
-                                          $term,
+                                          \stdClass $term,
                                           array $nids,
                                           $position_type) {
-    // Fetch positions from database;
+    // Fetch positions from database.
     $db_positions = $this->getDbPositions();
     static $skipped_update_nids;
 
@@ -303,7 +295,6 @@ class AcqSkuPositionCommands extends DrushCommands {
         // response.
         if (($db_position_nid !== NULL) &&
           ($db_position_nid == $product_position['position'])) {
-          print 'Skipping nid ' . $nids[$product_position['sku']] . ' for tid ' . $term->tid;
           $skipped_update_nids[] = $nids[$product_position['sku']];
           $this->skipped++;
           continue;
