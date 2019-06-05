@@ -10,6 +10,26 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Set config values for meta variables.
+ */
+function alshaya_mc_update_8315() {
+  $configFactory = \Drupal::configFactory()->getEditable('alshaya_seo_transac.meta_variables.yml');
+
+  // Set minimum free shipping amount for hmkw.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_kw')) {
+    $configFactory->set('min_shipping_amount', 20);
+  }
+  else {
+    $configFactory->set('min_shipping_amount', 250);
+  }
+
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config translation for placeholder text.
  */
 function alshaya_mc_update_8314() {
@@ -322,6 +342,9 @@ function alshaya_mc_update_dependencies() {
   ];
   $dependencies['alshaya_mc'][8310] = [
     'alshaya' => 8004,
+  ];
+  $dependencies['alshaya_mc'][8315] = [
+    'alshaya_seo_transac' => 8402,
   ];
   return $dependencies;
 }
