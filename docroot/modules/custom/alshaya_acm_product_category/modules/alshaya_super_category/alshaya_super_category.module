@@ -797,3 +797,16 @@ function alshaya_super_category_alshaya_search_api_language_switcher_alter(&$que
     }
   }
 }
+
+/**
+ * Implements hook_alshaya_seo_brandname_alter().
+ */
+function alshaya_super_category_alshaya_seo_brandname_alter(&$brand_name) {
+  // If super category feature is enabled.
+  if (\Drupal::config('alshaya_super_category.settings')->get('status')) {
+    $super_category = \Drupal::service('alshaya_acm_product_category.product_category_tree')->getCategoryTermRequired();
+    if (!empty($super_category)) {
+      $brand_name = $super_category['label'];
+    }
+  }
+}

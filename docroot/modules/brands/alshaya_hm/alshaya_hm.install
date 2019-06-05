@@ -13,6 +13,26 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Set config values for meta variables.
+ */
+function alshaya_hm_update_8035() {
+  $configFactory = \Drupal::configFactory()->getEditable('alshaya_seo_transac.meta_variables');
+
+  // Set minimum free shipping amount for hmkw.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_kw')) {
+    $configFactory->set('min_shipping_amount', 9);
+  }
+  else {
+    $configFactory->set('min_shipping_amount', 99);
+  }
+
+  // Save the changes.
+  $configFactory->save();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Adding new config `acq_sku__attributes_skip`.
  */
 function alshaya_hm_update_8034() {
@@ -653,6 +673,11 @@ function alshaya_hm_update_dependencies() {
     'alshaya_hm' => [
       '8018' => [
         'alshaya' => '8004',
+      ],
+    ],
+    'alshaya_hm' => [
+      '8034' => [
+        'alshaya_seo_transac' => '8402',
       ],
     ],
   ];
