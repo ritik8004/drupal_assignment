@@ -25,6 +25,14 @@ function alshaya_mc_update_8315() {
 
   // Save the changes.
   $configFactory->save();
+
+  $strings = [
+    'Mothercare' => [
+      'ar' => 'مذركير',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

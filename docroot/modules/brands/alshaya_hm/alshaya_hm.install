@@ -28,6 +28,14 @@ function alshaya_hm_update_8035() {
 
   // Save the changes.
   $configFactory->save();
+
+  $strings = [
+    'H&M' => [
+      'ar' => 'اتش اند ام',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

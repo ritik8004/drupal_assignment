@@ -12,6 +12,21 @@ use Drupal\Component\Utility\Unicode;
 /**
  * Implements hook_update_N().
  *
+ * Save translations for meta tags.
+ */
+function alshaya_vs_transac_update_8008() {
+  $strings = [
+    "Victoria's Secret" => [
+      'ar' => 'فيكتوريا سيكريت',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Update sort orders for size facet to match order in Magento.
  */
 function alshaya_vs_transac_update_8007() {
