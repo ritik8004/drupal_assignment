@@ -29,7 +29,7 @@ class CheckoutComAPIWrapper {
   const CARD_PAYMENT_ENDPOINT = 'charges/card';
 
   // Void payment endpoint.
-  const VOID_PAYMENT_ENDPOINT = 'charges/@id/void';
+  const VOID_PAYMENT_ENDPOINT = 'charges/{id}/void';
 
   // Void payment amount.
   const VOID_PAYMENT_AMOUNT = 1.0;
@@ -232,16 +232,16 @@ class CheckoutComAPIWrapper {
   }
 
   /**
-   * Authorize a card fro payment.
+   * Authorize a card for payment.
    *
    * @param \Drupal\user\UserInterface $user
-   *   The usser object.
+   *   The user object.
    * @param string $endpoint
    *   The end point to call.
    * @param array $params
    *   The array of params.
    * @param string $caller
-   *   The caller method.
+   *   The caller method name.
    *
    * @return array
    *   Return array of reponse or empty array.
@@ -381,19 +381,19 @@ class CheckoutComAPIWrapper {
       __METHOD__
     );
 
-    if (empty($response)) {
+    if (empty($response) || empty($response['card'])) {
       return [];
     }
 
     // Run the void transaction for the gateway.
     $void = $this->makeVoidTransaction(
       $user,
-      strtr(self::VOID_PAYMENT_ENDPOINT, ['@id' => $response['id']]),
+      strtr(self::VOID_PAYMENT_ENDPOINT, ['{id}' => $response['id']]),
       ['trackId' => ''],
       __METHOD__
     );
 
-    if (empty($void) || empty($response['card'])) {
+    if (empty($void)) {
       return [];
     }
 
