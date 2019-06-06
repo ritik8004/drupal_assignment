@@ -1562,7 +1562,7 @@ function alshaya_white_label_preprocess_image(&$variables) {
   } else {
     $variables['attributes']['data-src'] = $variables['uri'];
   }
-  //$variables['attributes']['data-src'] = Url::fromUri($variables['uri']);
+  
   $variables['attributes']['src'] = \Drupal::config('alshaya_master.settings')->get('lazy_load_placeholder');
   $variables['#attached']['library'][] = 'alshaya_white_label/alshaya_image_lazy_load';
 }
