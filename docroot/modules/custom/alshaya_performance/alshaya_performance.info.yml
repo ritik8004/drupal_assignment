@@ -5,5 +5,4 @@ package: Alshaya
 description: 'Contains all code related to performance improvement.'
 
 dependencies:
-  - 'purge:purge_processor_lateruntime'
   - 'memcache:memcache'

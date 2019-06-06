@@ -2,12 +2,3 @@ services:
   lock:
     class: Drupal\Core\Lock\LockBackendInterface
     factory: ['@memcache.lock.factory', get]
-  alshaya_performance.purge_processor_lateruntime_processor:
-    decorates: purge_processor_lateruntime.processor
-    decoration_priority: 9
-    public: false
-    class: Drupal\alshaya_performance\EventSubscriber\AlshayaLateRuntimeProcessor
-    tags:
-      - { name: event_subscriber }
-    calls:
-      - [setContainer, ['@service_container']]
