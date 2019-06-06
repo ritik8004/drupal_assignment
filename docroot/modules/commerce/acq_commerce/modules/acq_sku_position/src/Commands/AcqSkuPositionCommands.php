@@ -359,8 +359,15 @@ class AcqSkuPositionCommands extends DrushCommands {
       return;
     }
 
-    // Fetch the diff between nids in DB & the ones from response.
-    $obsolete_record_nids = array_diff(array_keys($db_positions[$term->tid]), $processed_response_nids);
+    // Consider all db positions for this term as obsolete if no nid got
+    // processed while processing the response nids.
+    if (empty($processed_response_nids)) {
+      $obsolete_record_nids = $db_positions[$term->tid];
+    }
+    else {
+      // Fetch the diff between nids in DB & the ones from response.
+      $obsolete_record_nids = array_diff(array_keys($db_positions[$term->tid]), $processed_response_nids);
+    }
 
     // Delete obsolete records & update the delete count for logging.
     if (!empty($obsolete_record_nids)) {
