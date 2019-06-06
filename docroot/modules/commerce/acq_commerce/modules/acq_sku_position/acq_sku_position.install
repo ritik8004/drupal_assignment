@@ -33,15 +33,9 @@ function acq_sku_position_schema() {
         'not null' => TRUE,
         'description' => 'Type of position',
       ],
-      'processed' => [
-        'type' => 'int',
-        'not null' => TRUE,
-        'description' => 'Processed status.',
-      ],
     ],
     'indexes' => [
       'indexing' => ['nid', 'tid', 'position_type'],
-      'nid_tid' => ['nid', 'tid'],
     ],
     'primary key' => ['nid', 'tid', 'position_type'],
   ];
