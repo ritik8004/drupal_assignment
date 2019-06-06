@@ -155,6 +155,22 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   if (isset($product['attributes']['product_activation_date'])) {
     $sku->created = strtotime($product['attributes']['product_activation_date']);
   }
+
+  $attr_to_skip = \Drupal::configFactory()
+    ->getEditable('alshaya_acm_product.settings')
+    ->get('acq_sku__attributes_skip') ?? [];
+
+  // Get configurable fields/attributes.
+  $fields = \Drupal::service('acq_sku.fields_manager')->getFieldAdditions();
+  $attributes = $sku->get('attributes')->getValue();
+  foreach ($attributes as $key => $attr) {
+    // If attribute is not configurable (not available in fields), remove it.
+    if (!isset($fields[$attr['key']]) && !in_array($attr['key'], $attr_to_skip)) {
+      unset($attributes[$key]);
+    }
+  }
+
+  $sku->get('attributes')->setValue($attributes);
 }
 
 /**
@@ -310,6 +326,13 @@ function alshaya_acm_product_theme($existing, $type, $theme, $path) {
     ],
   ];
 
+  $items['alshaya_assets_gallery'] = [
+    'variables' => [
+      'mainImage' => '',
+      'hoverImage' => '',
+    ],
+  ];
+
   return $items;
 }
 
@@ -354,21 +377,21 @@ function _alshaya_acm_product_post_sku_operation(SKU $entity, string $operation)
  * Implements hook_ENTITY_TYPE_insert().
  */
 function alshaya_acm_product_acq_sku_insert(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity, 'insert');
+  _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_INSERT);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
 function alshaya_acm_product_acq_sku_update(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity, 'update');
+  _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_UPDATE);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
 function alshaya_acm_product_acq_sku_delete(SKU $entity) {
-  _alshaya_acm_product_post_sku_operation($entity, 'delete');
+  _alshaya_acm_product_post_sku_operation($entity, ProductUpdatedEvent::EVENT_DELETE);
 }
 
 /**
@@ -623,7 +646,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
               }
 
               if ($free_sku_media) {
-                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, '192x168');
+                $free_sku_image['#title'] = $skuManager->getSkuImage($free_sku_media, $free_sku_entity->label(), '192x168');
                 $build['free_gift_promotions']['#sku_image'] = \Drupal::service('renderer')->render($free_sku_image);
               }
             }
@@ -639,7 +662,7 @@ function alshaya_acm_product_node_view(array &$build, EntityInterface $entity, E
         $sku_media = $skuImagesManager->getFirstImage($sku_entity);
 
         if ($sku_media) {
-          $build['image'] = $skuManager->getSkuImage($sku_media, '291x288');
+          $build['image'] = $skuManager->getSkuImage($sku_media['drupal_uri'], $sku_entity->label(), 'product_teaser');
         }
 
         $promotion_types = ['cart'];
@@ -799,7 +822,7 @@ function alshaya_acm_product_acq_sku_view(array &$build, EntityInterface $entity
     $sku_media = $skuImagesManager->getFirstImage($entity);
 
     if ($sku_media) {
-      $build['image'] = $skuManager->getSkuImage($sku_media, '192x168');
+      $build['image'] = $skuManager->getSkuImage($sku_media, $entity->label(), '192x168');
     }
 
     // Add PDP slider position config to variable so it is available in themes.
@@ -833,12 +856,7 @@ function alshaya_acm_product_alshaya_acm_product_build_alter(&$build, SKUInterfa
         if (!empty($default_image)) {
           /** @var \Drupal\alshaya_acm_product\SkuManager $skuManager */
           $skuManager = \Drupal::service('alshaya_acm_product.skumanager');
-
-          $sku_media = [
-            'file' => $default_image,
-            'label' => $sku->label(),
-          ];
-          $default_sku_image = $skuManager->getSkuImage($sku_media, '192x168');
+          $default_sku_image = $skuManager->getSkuImage($default_image->getFileUri(), $sku->label(), '192x168');
           $default_sku_image['#attributes']['class'][] = 'product-default-image';
           $build['image'] = $default_sku_image;
         }
@@ -1509,6 +1527,7 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
     $skuManager->disableUnavailableOptions($sku, $dynamic_parts['configurables'], $product_tree, $selected);
   }
 
+  $tree_pointer = NULL;
   if ($variant_sku = $form_state->get('variant_sku')) {
     $tree_pointer = SKU::loadFromSku($variant_sku);
   }
@@ -1703,10 +1722,10 @@ function alshaya_acm_product_configurable_form_ajax_callback(array &$form, FormS
 
     $configurable_codes = array_keys($product_tree['configurables']);
     $attribute = reset($configurable_codes);
-    $option_id = $selected[$attribute];
+    $option_id = $selected[$attribute] ?? '';
 
     $display_settings = \Drupal::config('alshaya_acm_product.display_settings');
-    if ($display_settings->get('show_child_images_after_selecting') !== 'all') {
+    if ($option_id && $display_settings->get('show_child_images_after_selecting') !== 'all') {
       // Pull out & update gallery image based on the selected first item.
       $first_child = $skuManager->getChildSkuFromAttribute($sku, $attribute, $option_id);
       $selected_sku = $first_child;

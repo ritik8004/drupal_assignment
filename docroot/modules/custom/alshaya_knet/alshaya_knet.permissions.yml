@@ -1,0 +1,3 @@
+administer knet settings:
+  title: 'Administer K-Net Settings'
+  description: 'Allows user to update the K-Net settings.'

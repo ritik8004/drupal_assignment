@@ -1,4 +1,10 @@
 services:
+  cache.pims_files:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.permanent_database }
+    factory: cache_factory:get
+    arguments: [pims_files]
   alshaya_hm_images.skuassetsmanager:
     class: Drupal\alshaya_hm_images\SkuAssetManager
     arguments:
@@ -8,6 +14,11 @@ services:
       - '@plugin.manager.sku'
       - '@entity_type.manager'
       - '@module_handler'
+      - '@alshaya_acm_product.cache_manager'
+      - '@cache.pims_files'
+      - '@http_client'
+      - '@logger.factory'
+      - '@datetime.time'
   alshaya_hm_images.route_subscriber:
     class: Drupal\alshaya_hm_images\Routing\RouteSubscriber
     tags:
@@ -16,5 +27,11 @@ services:
     class: Drupal\alshaya_hm_images\EventSubscriber\ProductInfoRequestedEventSubscriber
     arguments:
       - '@alshaya_hm_images.skuassetsmanager'
+    tags:
+      - { name: 'event_subscriber' }
+  alshaya_acm_product.product_updated_event:
+    class: Drupal\alshaya_hm_images\EventSubscriber\ProductUpdatedEventSubscriber
+    arguments:
+      - '@entity_type.manager'
     tags:
       - { name: 'event_subscriber' }
