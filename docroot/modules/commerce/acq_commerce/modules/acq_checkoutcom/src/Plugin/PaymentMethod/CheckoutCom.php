@@ -116,9 +116,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
             'method' => 'replace',
             'effect' => 'fade',
           ],
-          '#attached' => [
-            'library' => ['acq_checkoutcom/checkoutcom.kit'],
-          ],
         ];
       }
     }
@@ -137,14 +134,6 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#title' => $this->t('Security code (CVV)'),
         '#default_value' => '',
         '#required' => TRUE,
-        '#attributes' => [
-          'class' => [
-            'checkoutcom-credit-card-cvv-input',
-            'checkoutcom-input',
-          ],
-          'autocomplete' => 'cc-csc',
-          'data-checkout' => 'cvv',
-        ],
       ];
     }
     elseif ($payment_card == 'new') {
@@ -154,7 +143,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#default_value' => '',
         '#required' => TRUE,
         '#attributes' => [
+          'class' => ['checkoutcom-credit-card-input', 'checkoutcom-input'],
           'autocomplete' => 'cc-number',
+          'data-checkout' => 'card-number',
         ],
       ];
 
@@ -234,6 +225,9 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
         '#type' => 'html_tag',
         '#tag' => 'script',
         '#value' => $string,
+        '#attached' => [
+          'library' => ['acq_checkoutcom/checkoutcom.kit'],
+        ],
       ];
     }
 
@@ -283,7 +277,7 @@ class CheckoutCom extends PaymentMethodBase implements PaymentMethodInterface {
       $acm_payment_methods = $form_state->getValue('acm_payment_methods');
       $payment_card = $acm_payment_methods['payment_details_wrapper']['payment_method_checkout_com']['payment_card'];
 
-      if ($payment_card == 'new' && !empty($inputs['cko-card-token'])) {
+      if ((empty($payment_card) || $payment_card == 'new') && !empty($inputs['cko-card-token'])) {
         $this->initiate3dSecurePayment($inputs);
       }
       else {
