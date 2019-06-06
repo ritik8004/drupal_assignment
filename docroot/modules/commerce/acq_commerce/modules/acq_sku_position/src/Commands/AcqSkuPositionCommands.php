@@ -174,7 +174,7 @@ class AcqSkuPositionCommands extends DrushCommands {
     $this->moduleHandler->alter('acq_sku_position_sync', $terms);
     $chunk_size = 100;
 
-    $this->skipped = $this->updated = $this->inserted = 0;
+    $this->skipped = $this->updated = $this->deleted = $this->inserted = 0;
     foreach (array_chunk($terms, $chunk_size) as $categories_chunk) {
       // Initialize insert query & add values for insert while processing the
       // API response for bulk insert.
