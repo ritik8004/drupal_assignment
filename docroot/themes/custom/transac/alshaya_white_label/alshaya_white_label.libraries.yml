@@ -26,6 +26,7 @@ global_styles:
     - mobile_number/element
     - alshaya_white_label/utils
     - core/drupal.dialog.ajax
+    - alshaya_search_api/facets_panel
 
 ltr_styles:
   css:

@@ -38,8 +38,18 @@
     }
 
     .page-standard {
-      @include breakpoint($upto-tablet) {
-        margin-top: 0;
+      @include breakpoint($only-tablet) {
+        margin-top: 2.625rem;
+      }
+
+      @include breakpoint($only-mobile) {
+        margin-top: 2.6875rem;
+      }
+
+      &.user-page {
+        @include breakpoint($only-mobile) {
+          margin-top: 5rem;
+        }
       }
     }
 
@@ -70,21 +80,6 @@
 
     @include breakpoint($only-mobile) {
       margin-top: 2.875rem !important;
-    }
-  }
-
-  .c-breadcrumb {
-    @include breakpoint($only-mobile) {
-      margin-top: 2.75rem;
-      display: block;
-
-      .l-container {
-        display: none;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      margin-top: 2.625rem;
     }
   }
 
