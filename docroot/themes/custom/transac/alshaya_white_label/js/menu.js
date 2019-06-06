@@ -252,91 +252,26 @@
         });
       }
 
-      /**
-       * Make Header sticky on scroll.
-       */
-      function stickyfacetfilter() {
-        var filterposition = 0;
-        var supercategorymenuHeight = 0;
-        var position = 0;
-        var filter = $('.region__content');
-        var nav = $('.branding__menu');
-        var fixedNavHeight = 0;
-
-        if ($('.show-all-filters').length > 0) {
-          if ($(window).width() > 1023) {
-            filterposition = $('.container-without-product').offset().top;
-          }
-          else if ($(window).width() > 767 && $(window).width() < 1024) {
-            filterposition = $('.show-all-filters').offset().top;
-          }
-          else {
-            if ($('.block-alshaya-super-category').length > 0) {
-              supercategorymenuHeight = $('.block-alshaya-super-category').outerHeight() + $('.menu--mobile-navigation').outerHeight();
-            }
-            filterposition = $('.show-all-filters').offset().top - $('.branding__menu').outerHeight() - supercategorymenuHeight;
-            fixedNavHeight = nav.outerHeight() + supercategorymenuHeight;
-          }
-        }
-
-        // Sticky header on mobile view port with banner.
-        if ($(window).width() < 768) {
-          position = $('.region__banner-top').outerHeight();
-
-          // Making sticky filters after category filter selection.
-          if (filter.hasClass('filter-fixed-top')) {
-            $('.show-all-filters').parent().css('top', fixedNavHeight);
-            $('.filter-fixed-top > .block-facet-blockcategory-facet-plp, .filter-fixed-top > .block-facet-blockcategory-facet-promo, .filter-fixed-top > .block-facet-blockcategory-facet-search').css('top', fixedNavHeight);
-          }
-          else {
-            $('.show-all-filters').parent().css('top', 0);
-            $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
-          }
-        }
-
+      function stickyHeader() {
         $(window, context).once().on('scroll', function () {
-          // Sticky filter header.
-          if ($('.show-all-filters').length > 0) {
-            if ($(this).scrollTop() > filterposition) {
-              filter.addClass('filter-fixed-top');
-              $('body').addClass('header-sticky-filter');
-            }
-            else {
-              filter.removeClass('filter-fixed-top');
-              $('body').removeClass('header-sticky-filter');
-            }
+          var position = $('.region__banner-top').outerHeight();
+
+          if ($(this).scrollTop() > position) {
+            $('.branding__menu').addClass('navbar-fixed-top');
+            $('body').addClass('header--fixed');
           }
-
-          // Sticky primary header on mobile.
-          if ($(window).width() < 768) {
-            if ($(this).scrollTop() > position) {
-              nav.addClass('navbar-fixed-top');
-              $('body').addClass('header--fixed');
-            }
-            else {
-              nav.removeClass('navbar-fixed-top');
-              $('body').removeClass('header--fixed');
-            }
-
-            if (filter.hasClass('filter-fixed-top')) {
-              $('.show-all-filters').parent().css('top', fixedNavHeight);
-              $('.filter-fixed-top > .block-facet-blockcategory-facet-plp, .filter-fixed-top > .block-facet-blockcategory-facet-promo, .filter-fixed-top > .block-facet-blockcategory-facet-search').css('top', fixedNavHeight);
-            }
-            else {
-              $('.show-all-filters').parent().css('top', 0);
-              $('.region__content > .block-facet-blockcategory-facet-plp, .region__content > .block-facet-blockcategory-facet-promo, .region__content > .block-facet-blockcategory-facet-search').css('top', '0');
-            }
+          else {
+            $('.branding__menu').removeClass('navbar-fixed-top');
+            $('body').removeClass('header--fixed');
           }
         });
       }
 
-      if ($(window).width() < 768 && $('.filter-fixed-top').length > 0) {
-        stickyfacetfilter();
-      }
-
       $(window, context).on('load', function () {
-        // Calculate the filters top position now.
-        stickyfacetfilter();
+        // Apply the sticky header only on non plp,srp,promo pages.
+        if ($(window).width() < 768 && $('.region__banner-top').length > 0 && $('.c-plp').length < 1) {
+          stickyHeader();
+        }
       });
     }
   };
