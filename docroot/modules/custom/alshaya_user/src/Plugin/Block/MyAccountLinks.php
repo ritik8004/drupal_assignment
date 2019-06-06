@@ -258,6 +258,7 @@ class MyAccountLinks extends BlockBase implements ContainerFactoryPluginInterfac
       unset($links['orders']);
       unset($links['address_book']);
       unset($links['communication_preference']);
+      unset($links['payment_cards']);
     }
 
     if ($uid != $account->id() && isset($links['my_account'])) {

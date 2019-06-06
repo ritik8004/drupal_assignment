@@ -12,7 +12,7 @@ acq_checkoutcom.payment_cards:
     _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::listCards'
     _title: 'Payment Cards'
   requirements:
-    _user_is_logged_in: 'TRUE'
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
     user: \d+
   options:
     parameters:
@@ -25,7 +25,7 @@ acq_checkoutcom.payment_card.add_card:
     _controller: '\Drupal\acq_checkoutcom\Controller\CustomerController::addCard'
     _title: 'Add new card'
   requirements:
-    _user_is_logged_in: 'TRUE'
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
     user: \d+
   options:
     parameters:
@@ -42,8 +42,7 @@ acq_checkoutcom.payment_card.remove_card:
       user:
         type: entity:user
   requirements:
+    _custom_access: '\Drupal\acq_checkoutcom\Controller\CustomerController::checkAccess'
     user: \d+
     card_id: '^[a-z0-9_-].*?$'
-    js: 'nojs|ajax'
     _csrf_token: 'TRUE'
-    _user_is_logged_in: 'TRUE'

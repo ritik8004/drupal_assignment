@@ -3,8 +3,10 @@
 namespace Drupal\acq_checkoutcom\Controller;
 
 use Drupal\alshaya_api\AlshayaApiWrapper;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\Renderer;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +40,13 @@ class CustomerController extends ControllerBase {
   protected $apiWrapper;
 
   /**
+   * The current user object.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * CustomerController constructor.
    *
    * @param \Symfony\Component\HttpFoundation\Request $current_request
@@ -46,15 +55,19 @@ class CustomerController extends ControllerBase {
    *   Renderer service object.
    * @param \Drupal\alshaya_api\AlshayaApiWrapper $api_wrapper
    *   Api wrapper.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
+   *   The current user.
    */
   public function __construct(
     Request $current_request,
     Renderer $renderer,
-    AlshayaApiWrapper $api_wrapper
+    AlshayaApiWrapper $api_wrapper,
+    AccountProxyInterface $account_proxy
   ) {
     $this->currentRequest = $current_request;
     $this->renderer = $renderer;
     $this->apiWrapper = $api_wrapper;
+    $this->currentUser = $account_proxy;
   }
 
   /**
@@ -64,18 +77,25 @@ class CustomerController extends ControllerBase {
     return new static(
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('renderer'),
-      $container->get('alshaya_api.api')
+      $container->get('alshaya_api.api'),
+      $container->get('current_user')
     );
   }
 
   /**
    * Helper method to check access.
    *
-   * @return bool
-   *   Return TRUE to allow access, false otherwise.
+   * @param \Drupal\user\UserInterface $user
+   *   The user object.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   Return access result object.
    */
-  public function checkAccess() {
-    return TRUE;
+  public function checkAccess(UserInterface $user) {
+    return AccessResult::allowedIf(
+      !empty($user->get('acq_customer_id')->getString())
+      && $this->currentUser->id() == $user->id()
+    );
   }
 
   /**
