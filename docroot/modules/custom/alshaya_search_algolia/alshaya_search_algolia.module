@@ -14,6 +14,11 @@ function alshaya_search_algolia_search_api_algolia_sorts_alter(array &$sorts, In
   // We have added stock as ranking already in all the replicas.
   // It is added in views to keep consistency with solr / db.
   unset($sorts['stock']);
+
+  // Sort by relevance is default index.
+  if (isset($sorts['search_api_relevance'])) {
+    unset($sorts['search_api_relevance']);
+  }
 }
 
 /**
