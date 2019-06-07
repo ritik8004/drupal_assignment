@@ -109,6 +109,7 @@ class ProductSettingsForm extends ConfigFormBase {
     $config->set('vat_text_footer', $form_state->getValue('vat_text_footer'));
     $config->set('back_to_list', $form_state->getValue('back_to_list'));
     $config->set('pdp_layout', $form_state->getValue('pdp_layout'));
+    $config->set('min_discount_to_log', $form_state->getValue('min_discount_to_log'));
 
     // Product default image.
     $product_default_image = NULL;
@@ -290,6 +291,15 @@ class ProductSettingsForm extends ConfigFormBase {
       '#description' => $this->t('This will change the layout/appearence of the PDP page.'),
       '#options' => $pdp_layout_options,
       '#default_value' => $config->get('pdp_layout'),
+    ];
+
+    $form['min_discount_to_log'] = [
+      '#type' => 'number',
+      '#min' => 0,
+      '#max' => 100,
+      '#title' => $this->t('Min discount value to trace (in %).'),
+      '#description' => $this->t('This will trace the log when sku has discount (price - final price) greater than this.'),
+      '#default_value' => $config->get('min_discount_to_log'),
     ];
 
     return $form;

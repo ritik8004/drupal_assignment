@@ -174,10 +174,12 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
   if ($sku->get('sku')->first()->getString() == 'simple') {
     $price = (float) $sku->get('price')->first()->getString();
     $final_price = (float) $sku->get('final_price')->first()->getString();
-    if ($final_price < $price && ((($price - $final_price) / $price) * 100) > 80) {
+    $min_discount = (int) \Drupal::config('alshaya_acm_product.settings')
+      ->get('min_discount_to_log');
+    if ($min_discount && $final_price < $price && ((($price - $final_price) / $price) * 100) > $min_discount) {
       \Drupal::logger('alshaya_acm_product')->notice('SKU:@sku having discount more than @discount_percent. Price:@price Final price:@final_price.', [
         '@sku' => $sku->get('sku')->first()->getString(),
-        '@discount_percent' => '80%',
+        '@discount_percent' => $min_discount . '%',
         '@price' => $price,
         '@final_price' => $final_price,
       ]);
