@@ -341,6 +341,10 @@ function alshaya_white_label_preprocess_block(&$variables) {
     }
   }
 
+  if ($variables['plugin_id'] == 'search_api_algolia_autocomplete_block') {
+    $variables['#attached']['library'][] = 'alshaya_white_label/algolia_search';
+  }
+
   // Add class for category facet.
   $category_facets = [
     'facet_block:category_facet_plp',
