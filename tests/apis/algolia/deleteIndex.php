@@ -9,8 +9,7 @@
 /**
  * How to use this:
  *
- * Usage: php deleteIndex.php [prefix]
- * Example: php deleteIndex.php mckw_01dev
+ * Usage: php deleteIndex.php [brand] [env] [app_id] [app_secret_admin]
  *
  * Deletes index along with it's query suggestion and all replicas in all
  * languages.

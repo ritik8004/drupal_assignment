@@ -9,8 +9,8 @@
 /**
  * How to use this:
  *
- * Usage: php createIndex.php [prefix]
- * Example: php createIndex.php mckw_01dev
+ * Usage: php createIndex.php [brand] [env] [app_id] [app_secret_admin]
+ * Example: php createIndex.php mckw 01dev XXXX YYYYYYYYYYYY
  *
  * Ensure settings.php is updated with proper application id and admin secret
  * key. Once that is done, please go through all the arrays here:
@@ -21,16 +21,12 @@
  * $sorts:                  Replicas need to be created for each sorting option
  *                          required by Views
  *
- * $searchable_attributes   Attributes that should be used for searching.
- *
  * $facets                  Facet fields.
  *
  * $query_facets            Facets used for query suggestion (autocomplete).
  *
  * $query_generate          Additional facets to be used for generating results
  *                          in query suggestions.
- *
- * $ranking:                Default ranking.
  */
 
 
@@ -41,32 +37,32 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'settings.php';
 use AlgoliaSearch\Client;
 
 $clientSource = new Client($source_app_id, $source_app_secret_admin);
-$indexSource = $clientSource->initIndex($source_index);
-$settingsSource = $indexSource->getSettings();
-$ranking = $settingsSource['ranking'];
-
 $client = new Client($app_id, $app_secret_admin);
 
 foreach ($languages as $language) {
+  $indexSource = $clientSource->initIndex($source_index . '_' . $language);
+  $settingsSource = $indexSource->getSettings();
+  $ranking = $settingsSource['ranking'];
+  $searchable_attributes = $settingsSource['searchableAttributes'];
+
   $name = $prefix . '_' . $language;
 
   // Just need a dummy index to create our index as there is no API to create
   // new index directly.
   $client->copyIndex('dummy', $name);
+  $index = $client->initIndex($name);
+//  do {
+//    try {
+//      sleep(10);
+//
+//    }
+//    catch (\Exception $e) {
+//      print $e->getMessage() . PHP_EOL;
+//    }
+//  } while (!empty($index));
+//  print PHP_EOL . PHP_EOL;
 
-  do {
-    try {
-      $index = $client->initIndex($name);
-      sleep(10);
-      $settings = $index->getSettings();
-    }
-    catch (\Exception $e) {
-      print $e->getMessage() . PHP_EOL;
-    }
-  } while (!isset($settings));
-  print PHP_EOL . PHP_EOL;
-
-  $settings = array_merge($settingsSource, $settings);
+  $settings = $settingsSource;
   $settings['attributesForFaceting'] = $facets;
   $settings['searchableAttributes'] = $searchable_attributes;
   $settings['ranking'] = $ranking;
@@ -103,12 +99,6 @@ foreach ($languages as $language) {
       ],
     ],
   ];
-
-  foreach ($settings['replicas'] as $replica) {
-    $query['sourceIndices'][] = [
-      'indexName' => $replica,
-    ];
-  }
 
   algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
   sleep(30);

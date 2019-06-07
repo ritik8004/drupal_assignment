@@ -11,4 +11,4 @@ if (empty($brand) || empty($env) || empty($app_id) || empty($app_secret_admin)) 
   die();
 }
 
-$prefix = $brand . '_' . $env;
+$prefix = $env . '_' . $brand;

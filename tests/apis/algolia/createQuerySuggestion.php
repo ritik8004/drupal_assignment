@@ -9,8 +9,7 @@
 /**
  * How to use this:
  *
- * Usage: php createIndex.php [prefix]
- * Example: php createIndex.php mckw_01dev
+ * Usage: php createIndex.php [brand] [env] [app_id] [app_secret_admin]
  *
  * Ensure settings.php is updated with proper application id and admin secret
  * key. Once that is done, please go through all the arrays here:
@@ -50,12 +49,6 @@ foreach ($languages as $language) {
       ],
     ],
   ];
-
-  foreach ($settings['replicas'] as $replica) {
-    $query['sourceIndices'][] = [
-      'indexName' => $replica,
-    ];
-  }
 
   algolia_add_query_suggestion($app_id, $app_secret_admin, $query_suggestion, json_encode($query));
   sleep(60);

@@ -10,7 +10,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'custom.php';
 
 $source_app_id = 'VP3QKEIIC5';
 $source_app_secret_admin = 'a695124fb2716596ee47a1521e3fb2a0';
-$source_index = 'mckw_01dev2';
+$source_index = 'template';
 
 $languages = [
   'en',
@@ -18,10 +18,10 @@ $languages = [
 ];
 
 $sorts = [
-  [
-    'field' => 'search_api_relevance',
-    'direction' => 'desc',
-  ],
+//  [
+//    'field' => 'search_api_relevance',
+//    'direction' => 'desc',
+//  ],
   [
     'field' => 'title',
     'direction' => 'asc',
@@ -42,19 +42,6 @@ $sorts = [
     'field' => 'created',
     'direction' => 'desc',
   ],
-];
-
-$searchable_attributes = [
-  'title',
-  'field_category_name',
-  'attr_product_brand',
-  'sku',
-  'field_configured_skus',
-  'attr_product_collection',
-  'attr_concept',
-  'attr_color',
-  'attr_size',
-  'body',
 ];
 
 $facets = [
@@ -82,4 +69,27 @@ $query_generate = [
   ['attr_product_collection'],
   ['attr_concept'],
   ['attr_color'],
+];
+
+// For backup.
+$searchable_attributes = [
+  'title',
+  'field_category_name',
+  'attr_product_brand',
+  'sku',
+  'field_configured_skus',
+  'attr_product_collection',
+  'attr_concept',
+  'attr_color',
+  'attr_size',
+  'body',
+];
+
+$ranking = [
+  'desc(stock)',
+  'desc(search_api_relevance)',
+  'words',
+  'filters',
+  'exact',
+  'custom',
 ];
