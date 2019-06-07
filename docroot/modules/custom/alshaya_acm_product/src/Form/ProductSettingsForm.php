@@ -297,7 +297,7 @@ class ProductSettingsForm extends ConfigFormBase {
       '#type' => 'number',
       '#min' => 0,
       '#max' => 100,
-      '#title' => $this->t('Min discount value to trace (in %).'),
+      '#title' => $this->t('Max discount value to trace (in %).'),
       '#description' => $this->t('This will trace the log when sku has discount (price - final price) greater than this.'),
       '#default_value' => $config->get('max_discount_to_log'),
     ];
