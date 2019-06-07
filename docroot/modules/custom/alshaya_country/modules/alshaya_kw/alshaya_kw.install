@@ -6,6 +6,24 @@
  */
 
 /**
+ * Implements hook_update_N().
+ *
+ * Save translations for meta tags.
+ */
+function alshaya_ae_update_8002() {
+  $strings = [
+    'Kuwait' => [
+      'ar' => 'اتش اند ام',
+    ],
+    'Kuwait City' => [
+      'ar' => 'كويت سيتي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
  * Implements hook_install().
  */
 function alshaya_kw_install() {
@@ -14,6 +32,17 @@ function alshaya_kw_install() {
 
   // Store finder search placeholder for Kuwait.
   alshaya_country_set_default_store_search_placeholder('e.g. Salmiya', 'مثل السالمية');
+
+  $strings = [
+    'Kuwait' => [
+      'ar' => 'اتش اند ام',
+    ],
+    'Kuwait City' => [
+      'ar' => 'كويت سيتي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
