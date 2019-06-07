@@ -270,10 +270,13 @@ class CheckoutComAPIWrapper {
       );
     }
 
+    if (array_key_exists('errorCode', $result)) {
+      throw new \Exception('Error Code ' . $result['errorCode'] . ': ' . $result['message']);
+    }
+
     // Validate authorisation.
     if (array_key_exists('status', $result) && $result['status'] === 'Declined') {
-      $this->logger->warning('checkout.com card autorization failed.');
-      return [];
+      throw new \Exception('Void transaction decliened by checkout.com');
     }
 
     return $result;
@@ -319,8 +322,7 @@ class CheckoutComAPIWrapper {
     }
 
     if (array_key_exists('errorCode', $result)) {
-      $this->logger->warning('void transaction failed for card.');
-      return [];
+      throw new \Exception('Error Code ' . $result['errorCode'] . ': ' . $result['message']);
     }
 
     return $result;
@@ -381,21 +383,13 @@ class CheckoutComAPIWrapper {
       __METHOD__
     );
 
-    if (empty($response) || empty($response['card'])) {
-      return [];
-    }
-
     // Run the void transaction for the gateway.
-    $void = $this->makeVoidTransaction(
+    $this->makeVoidTransaction(
       $user,
       strtr(self::VOID_PAYMENT_ENDPOINT, ['{id}' => $response['id']]),
       ['trackId' => ''],
       __METHOD__
     );
-
-    if (empty($void)) {
-      return [];
-    }
 
     // Prepare the card data to save.
     $cardData = array_filter($response['card'], function ($key) {

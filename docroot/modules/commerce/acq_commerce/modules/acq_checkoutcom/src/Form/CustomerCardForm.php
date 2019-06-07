@@ -8,6 +8,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,13 @@ class CustomerCardForm extends FormBase {
   protected $configFactory;
 
   /**
+   * Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * CustomerCardForm constructor.
    *
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
@@ -58,17 +66,21 @@ class CustomerCardForm extends FormBase {
    *   Checkout.com api wrapper object.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   Config Factory service object.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger service.
    */
   public function __construct(
     ModuleHandlerInterface $module_handler,
     Request $current_request,
     CheckoutComAPIWrapper $checkout_com_Api,
-    ConfigFactoryInterface $config_factory
+    ConfigFactoryInterface $config_factory,
+    MessengerInterface $messenger
   ) {
     $this->moduleHandler = $module_handler;
     $this->currentRequest = $current_request;
     $this->checkoutComApi = $checkout_com_Api;
     $this->configFactory = $config_factory;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -79,7 +91,8 @@ class CustomerCardForm extends FormBase {
       $container->get('module_handler'),
       $container->get('request_stack')->getCurrentRequest(),
       $container->get('acq_checkoutcom.api'),
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('messenger')
     );
   }
 
@@ -249,15 +262,17 @@ class CustomerCardForm extends FormBase {
       ]
     );
 
-    echo '<pre>';
-    print_r($cardData);
-    echo '</pre>';
+    if (empty($cardData)) {
+      $this->messenger->addError(
+        $this->t('something went wrong while saving your card, Please contact administrator.')
+      );
+    }
 
     $file = drupal_get_path('module', 'acq_checkoutcom') . '/saved_card_new.json';
     $data = file_get_contents($file);
     $data = array_merge(!empty($data) ? Json::decode($data) : [], [$cardData]);
     file_put_contents($file, Json::encode($data));
-    die();
+    $form_state->setRedirect('acq_checkoutcom.payment_cards', ['user' => $form_state->getValue('uid')]);
   }
 
 }
