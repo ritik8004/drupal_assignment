@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_magazine_install() {
+  // Get current default theme.
+  $current_theme = \Drupal::config('system.theme')->get('default');
+
+  // Move blocks to current default theme.
+  if (!empty($current_theme)) {
+    alshaya_block_move_blocks_theme_to_theme($current_theme, 'alshaya_white_label');
+  }
+}
