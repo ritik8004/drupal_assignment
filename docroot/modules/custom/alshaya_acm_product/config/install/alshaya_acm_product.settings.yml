@@ -40,4 +40,4 @@ pdp_product_swatch_items_settings:
   pdp_product_swatch_items_1025: 12
 excluded_attribute_options: []
 acq_sku__attributes_skip: { }
-min_discount_to_log: 0
+max_discount_to_log: 80
