@@ -11,7 +11,9 @@
   Drupal.behaviors.blazy = {
     attach: function (context, settings) {
       // Initialize.
-      Blazy();
+      Blazy({
+        offset: 370 // Loads images 100px before they're visible
+      });
     }
   };
 })(jQuery, Drupal, drupalSettings);
