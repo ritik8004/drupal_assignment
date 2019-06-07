@@ -9,8 +9,8 @@
   {% if thumbnails|length > 0 %}
   <div class="alshaya_search_slider">
     <ul class="search-lightSlider">
-      {% for thumbs in thumbnails %}
-        <li>
+      {% for key,thumbs in thumbnails %}
+        <li data-sku-id="{{ key }}">
           {{ thumbs }}
         </li>
       {% endfor %}

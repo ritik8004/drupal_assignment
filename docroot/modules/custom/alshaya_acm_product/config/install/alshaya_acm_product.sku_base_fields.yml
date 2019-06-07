@@ -28,6 +28,12 @@ fields:
     description: 'Flag to check if product is available for ship to store.'
     type: 'string'
 
+  selling_price:
+    label: 'Price'
+    cardinality: -1
+    index: 1
+    facet: 1
+
   color:
     label: 'Color'
     cardinality: -1
@@ -83,3 +89,13 @@ fields:
     label: 'Whats in the box'
     description: 'Part of description.'
     type: 'text_long'
+
+  is_sale:
+    label: 'Is sale'
+    type: 'string'
+    description: 'Sku applicable for the sales category or not.'
+
+  is_new:
+    label: 'Is new arrival'
+    type: 'string'
+    description: 'Sku applicable for the new-arrival category or not.'

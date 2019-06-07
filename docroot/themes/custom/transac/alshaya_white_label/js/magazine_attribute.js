@@ -131,6 +131,7 @@
 
       else if ($('.content__title_wrapper').hasClass('show-all-swatch')) {
         $('.magazine-swatch-placeholder').removeClass('simple-swatch-effect');
+        $('.configurable-swatch, .magazine-swatch-placeholder').addClass('swatch-effect');
       }
 
       else {
@@ -345,7 +346,7 @@
         // Moving sharethis before description field in mobile.
         var sharethisSection = $('.basic-details-wrapper .modal-share-this').clone();
         if ($('.magazine-product-description .modal-share-this').length < 1) {
-          sharethisSection.once('bind-events').insertBefore('.magazine-swatch-placeholder');
+          sharethisSection.once('bind-events').insertAfter('.magazine-swatch-placeholder');
         }
         $('.basic-details-wrapper .modal-share-this').addClass('visually-hidden');
         if ($('.magazine-product-description .modal-share-this').hasClass('visually-hidden')) {
@@ -396,7 +397,7 @@
       }
       else {
         // JS to make sidebar sticky in desktop.
-        var topposition = $('.gallery-wrapper').offset().top - $('.branding__menu').height() - 20;
+        var topposition = $('.gallery-wrapper').offset().top - 20;
         var mainbottom = $('.gallery-wrapper').offset().top + $('.gallery-wrapper').height();
         $(window).on('scroll', function () {
           if (($(this).scrollTop() > topposition)) {
@@ -410,7 +411,7 @@
             $('.content-sidebar-wrapper').addClass('contain');
           }
 
-          if ($(document).scrollTop() <= $('.content-sidebar-wrapper').offset().top - $('.branding__menu').height() - 16) {
+          if ($(document).scrollTop() <= $('.content-sidebar-wrapper').offset().top - 16) {
             if ($('.content-sidebar-wrapper').hasClass('contain')) {
               $('.content-sidebar-wrapper').removeClass('contain');
             }

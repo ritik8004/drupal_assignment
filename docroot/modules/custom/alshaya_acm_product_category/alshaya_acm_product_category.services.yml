@@ -30,3 +30,14 @@ services:
       - '@entity_type.manager'
       - '@config.factory'
       - '@cache.product_category_tree'
+      - '@alshaya_acm_product_category.sales_category_manager.old'
+
+#  @Todo: Remove this service once new MLTA is active.
+#  @see: http://jira.alshaya.com:8080/browse/CORE-9010 for reference.
+  alshaya_acm_product_category.sales_category_manager.old:
+    class: Drupal\alshaya_acm_product_category\Service\ProductCategoryManagerOld
+    arguments:
+      - '@alshaya_acm_product.skumanager'
+      - '@entity_type.manager'
+      - '@config.factory'
+      - '@cache.product_category_tree'

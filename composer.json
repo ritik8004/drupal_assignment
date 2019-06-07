@@ -34,11 +34,13 @@
         "drupal/datalayer": "^1.0@beta",
         "drupal/default_content": "^1.0@alpha",
         "drupal/email_registration": "^1.0",
+        "drupal/external_hreflang": "1.x-dev",
         "drupal/facets": "1.0-alpha11",
         "drupal/field_group": "^3.0@beta",
         "drupal/form_options_attributes": "^1.0",
         "drupal/geolocation": "^1.10",
         "drupal/google_tag": "1.x-dev",
+        "drupal/image_style_quality": "1.x-dev",
         "drupal/imagemagick": "^2.3",
         "drupal/jquery_minicolors": "^1.2",
         "drupal/jsonapi": "^1.25",
@@ -78,7 +80,9 @@
         "drupal/sharethis": "^2.0@beta",
         "drupal/simple_oauth": "^3.0",
         "drupal/simple_sitemap": "2.x-dev",
-        "drupal/social_auth_facebook": "^1.0",
+        "drupal/social_api": "2.x-dev",
+        "drupal/social_auth": "2.x-dev",
+        "drupal/social_auth_facebook": "^2.0",
         "drupal/taxonomy_access_fix": "^2.1",
         "drupal/taxonomy_term_depth": "^2.0",
         "drupal/twig_tweak": "^1.8",
@@ -97,7 +101,7 @@
         "springimport/magento2-api-v1": "^1.0"
     },
     "require-dev": {
-        "drupal/devel": "^1.0.0-alpha1",
+        "drupal/devel": "^2.0.0",
         "jakoch/phantomjs-installer": "^2.1.1-p07",
         "drupal/stage_file_proxy": "^1.0@alpha",
         "geerlingguy/drupal-vm": "^4.9",
@@ -221,7 +225,8 @@
                 "Allow to alter url built for facet item": "https://www.drupal.org/files/issues/2018-05-07/query_string_alter_3.patch",
                 "Facets AJAX using GET": "patches/facets/custom-facets-ajax-get.patch",
                 "CORE-2150 Get facets working with filters in url on page load": "patches/facets/CORE-2150-get_it_working_with_params_in_url.patch",
-                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch"
+                "FacetsHierarchy Taxonomy uses old (taxonomy_term_hierachy) table": "https://www.drupal.org/files/issues/2919034-22.patch",
+                "CORE-8843 Fixes the issue when li no direct child of ul for facet summary": "patches/facets/custom-fix-li-CORE-8843.patch"
             },
             "drupal/better_exposed_filter": {
                 "Undefined index: input_required notice": "https://www.drupal.org/files/issues/undefined_index_input_required-2857685-11.patch"
@@ -238,7 +243,8 @@
                 "Allow skipping translations check for paragraph fields": "patches/core/add_config_to_allow_skipping_translation_check.patch",
                 "Column not found: 1054 Unknown column content_translation_source": "https://www.drupal.org/files/issues/2018-09-25/2599228-74.patch",
                 "Permission to display 'This block is broken or missing..' error": "https://www.drupal.org/files/issues/2018-12-18/2918149-this-block-broken-or-missing-14.patch",
-                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch"
+                "Decrease deadlock by invalidating cache tags late.": "https://www.drupal.org/files/issues/2018-12-08/2966607-88.patch",
+                "Multiple usages of FieldPluginBase::getEntity do not check for NULL, leading to WSOD": "https://www.drupal.org/files/issues/2019-01-30/drupal-Multiple-usages-of-FieldPluginBase-getEntity-3007424-7.patch"
             },
             "drupal/mobile_number": {
                 "Fix notices": "https://www.drupal.org/files/issues/2886786.patch",
@@ -265,7 +271,7 @@
                 "Error: [] operator not supported for strings": "https://www.drupal.org/files/issues/Error-operator-not-supported-for-strings-2885710-12128018.patch"
             },
             "drupal/recaptcha": {
-                "modal support": "https://www.drupal.org/files/issues/2018-03-21/2493183-ajax-support-91.patch"
+                "modal support": "https://www.drupal.org/files/issues/2019-04-17/recaptcha-ajax-2493183-172.patch"
             },
             "drupal/wbm2cm": {
                 "Revert all moderation_state fields": "https://www.drupal.org/files/issues/2933745-7.patch"
@@ -277,7 +283,7 @@
                 "Pass view object to theme function": "https://www.drupal.org/files/issues/2018-05-17/views_infinite_scroll_pager-2973472-2.patch"
             },
             "drupal/clientside_validation": {
-                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2018-07-30/cv-validate-ajax-2952233-2.patch"
+                "Validate form before AJAX submit": "https://www.drupal.org/files/issues/2019-05-08/cv-validate-ajax-2952233-12.patch"
             },
             "drupal/restrict_role_login_by_ip": {
                 "Add support for ipv6 addresses too": "https://www.drupal.org/files/issues/2018-06-08/Add_support_for_ipv6_addresses_too-2978274-2.patch",
@@ -305,13 +311,30 @@
                 "Embed Paragraph Content in Normalized Parent Entities (REST)": "https://www.drupal.org/files/issues/embed_paragraph_content-2848878-43.patch"
             },
             "drupal/simple_oauth": {
-                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch"
+                "Limit token delete on cron run" :"https://www.drupal.org/files/issues/2018-11-19/config_limit_cron_delete_30146_5.patch",
+                "oauth2_token entity type & cache tags": "https://www.drupal.org/files/issues/2019-05-10/3051648-9.patch"
             },
             "drupal/memcache": {
                 "Support for cache tags": "https://www.drupal.org/files/issues/2018-09-11/2989601-cache-tags-memcache-6.patch"
             },
+            "drupal/r4032login": {
+                "403 redirect to login is cached wrongly.": "https://www.drupal.org/files/issues/2019-03-13/2941064-20.patch"
+            },
             "drupal/shield": {
                 "Exclude/Include Pages from Shield Protection": "https://www.drupal.org/files/issues/2019-02-20/2822720-36.patch"
+            },
+            "drupal/social_auth": {
+                "Set login error destination to allow users to redirect back to the origin page on social auth fail." : "https://www.drupal.org/files/issues/2019-03-22/provider-redirect-event-dispatcher-3033749-12.patch",
+                "add version to avoid error notification": "patches/social_auth/social_auth-version-CORE-7485.patch"
+            },
+            "drupal/social_auth_facebook": {
+                "Leverage the use of login_error_destination from social_auth": "https://www.drupal.org/files/issues/2019-03-23/use-event-dispatcher-method-3033751-7.patch"
+            },
+            "drupal/back_to_top": {
+                "Place back_to_top.schema.yml to config/schema folder to enable config translation": "https://www.drupal.org/files/issues/2019-03-20/move-schema-file-3041673-2.patch"
+            },
+            "sensiolabs-de/deprecation-detector": {
+                "Updated nikic/php-parser to 4.x.": "https://github.com/sensiolabs-de/deprecation-detector/pull/147.patch"
             }
         },
         "installer-paths": {
@@ -378,7 +401,8 @@
             "cd docroot && patch -p1 <../patches/htaccess-temporary-hotfix.patch",
             "cd docroot && patch -p1 <../patches/htaccess-detect-https-acsf.patch",
             "cd docroot && patch -p1 <../patches/htaccess-simplesaml.patch",
-            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch"
+            "cd docroot && patch -p1 <../patches/htaccess-remove-html-kwt-url.patch",
+            "cd docroot && patch -p1 <../patches/htaccess-maintenance.patch"
         ],
         "nuke": [
             "rm -rf vendor composer.lock",
@@ -394,6 +418,7 @@
         "platform": {
             "php": "7.2"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "discard-changes": true
     }
 }

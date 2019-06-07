@@ -140,29 +140,40 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
    *
    * @param \Drupal\acq_sku\Entity\SKU $sku
    *   Current product.
+   * @param bool $load
+   *   Whether return the fully loaded sku or not.
    *
    * @return \Drupal\acq_sku\Entity\SKU|null
    *   Parent product or null if not found.
    */
-  public function getParentSku(SKU $sku) {
+  public function getParentSku(SKU $sku, bool $load = TRUE) {
     $static = &drupal_static(__FUNCTION__, []);
 
     $langcode = $sku->language()->getId();
     $sku_string = $sku->getSku();
 
-    if (isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
+    $load_sku = (int) $load;
+    if (isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$load_sku])) {
+      return $static[$langcode][$sku_string][$load_sku];
     }
 
     // Initialise with empty value.
-    $static[$langcode][$sku_string] = NULL;
+    $static[$langcode][$sku_string][$load_sku] = NULL;
 
     $query = \Drupal::database()->select('acq_sku_field_data', 'acq_sku');
+    $query->addField('acq_sku', 'id');
     $query->addField('acq_sku', 'sku');
     $query->join('acq_sku__field_configured_skus', 'child_sku', 'acq_sku.id = child_sku.entity_id');
     $query->condition('child_sku.field_configured_skus_value', $sku_string);
 
-    $parent_skus = array_keys($query->execute()->fetchAllAssoc('sku'));
+    $parent_skus = $query->execute()->fetchAllKeyed();
+
+    // If don't want fully loaded object, this returns an array having sku id
+    // as key and sku as the value.
+    if (!$load) {
+      $static[$langcode][$sku_string][$load_sku] = $parent_skus;
+      return $parent_skus;
+    }
 
     if (empty($parent_skus)) {
       return NULL;
@@ -184,13 +195,13 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
         $node = $this->getDisplayNode($parent, FALSE, FALSE);
 
         if ($node instanceof Node) {
-          $static[$langcode][$sku_string] = $parent;
+          $static[$langcode][$sku_string][$load_sku] = $parent;
           break;
         }
       }
     }
 
-    return $static[$langcode][$sku_string];
+    return $static[$langcode][$sku_string][$load_sku];
   }
 
   /**
@@ -202,14 +213,18 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     $langcode = $sku->language()->getId();
     $sku_string = $sku->getSku();
 
+    // Key to fetch display node of the sku from static cache based on whether
+    // parent sku needs to consider or not.
+    $check_parent_key = (int) $check_parent;
+
     // Do not use static cache during sync when create translation flag is set
     // to true.
-    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string])) {
-      return $static[$langcode][$sku_string];
+    if (!$create_translation && isset($static[$langcode], $static[$langcode][$sku_string], $static[$langcode][$sku_string][$check_parent_key])) {
+      return $static[$langcode][$sku_string][$check_parent_key];
     }
 
     // Initialise with empty value.
-    $static[$langcode][$sku_string] = NULL;
+    $static[$langcode][$sku_string][$check_parent_key] = NULL;
 
     if ($check_parent) {
       if ($parent_sku = $this->getParentSku($sku)) {
@@ -237,28 +252,27 @@ abstract class SKUPluginBase implements SKUPluginInterface, FormInterface {
     if (\Drupal::languageManager()->isMultilingual()) {
       // If language of SKU and node are the same, we return the node.
       if ($node->language()->getId() == $langcode) {
-        return $node;
+        // Do nothing as we just using the same node object for static cache.
       }
-
-      // If node has translation, we return the translation.
-      if ($node->hasTranslation($langcode)) {
-        return $node->getTranslation($langcode);
+      elseif ($node->hasTranslation($langcode)) {
+        // If node has translation, we return the translation.
+        $node = $node->getTranslation($langcode);
       }
-
-      // If translation not available and create_translation flag is true.
-      if ($create_translation) {
-        return $node->addTranslation($langcode);
+      elseif ($create_translation) {
+        // If translation not available and create_translation flag is true.
+        $node = $node->addTranslation($langcode);
       }
-
-      // Just log the message and continue.
-      // Don't want to show any fatal error anywhere.
-      \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
-        '@sku' => $sku->getSku(),
-        '@langcode' => $langcode,
-      ]);
+      else {
+        // Just log the message and continue.
+        // Don't want to show any fatal error anywhere.
+        \Drupal::logger('acq_sku')->warning('Node translation not found of @sku for @langcode', [
+          '@sku' => $sku->getSku(),
+          '@langcode' => $langcode,
+        ]);
+      }
     }
 
-    $static[$langcode][$sku_string] = $node;
+    $static[$langcode][$sku_string][$check_parent_key] = $node;
 
     return $node;
   }

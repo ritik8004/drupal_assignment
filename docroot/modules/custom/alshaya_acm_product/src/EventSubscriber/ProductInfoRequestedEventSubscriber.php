@@ -6,7 +6,6 @@ use Drupal\acq_sku\ProductInfoRequestedEvent;
 use Drupal\alshaya_acm_product\SkuImagesManager;
 use Drupal\alshaya_acm_product\SkuManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\file\FileInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -87,16 +86,14 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\acq_sku\ProductInfoRequestedEvent $event
    *   Event object.
    */
-  public function processMedia(ProductInfoRequestedEvent $event): void {
+  private function processMedia(ProductInfoRequestedEvent $event): void {
     // Don't modify again here.
     if ($event->isValueModified()) {
       return;
     }
 
-    $event->setValue($this->skuImagesManager->getSkuMediaItems(
-      $event->getSku(),
-      $event->getContext()
-    ));
+    $media = $this->skuImagesManager->getGalleryMedia($event->getSku());
+    $event->setValue($media);
   }
 
   /**
@@ -108,13 +105,13 @@ class ProductInfoRequestedEventSubscriber implements EventSubscriberInterface {
   public function processSwatch(ProductInfoRequestedEvent $event): void {
     $sku = $event->getSku();
 
-    $image = $sku->getSwatchImage();
-    if (empty($image['file']) || !($image['file'] instanceof FileInterface)) {
+    $image = $this->skuImagesManager->getPdpSwatchImageUrl($sku);
+    if (empty($image)) {
       return;
     }
 
     $swatch = [
-      'image_url' => file_create_url($image['file']->url()),
+      'image_url' => $image,
       'display_label' => $sku->get('attr_' . $event->getContext())->getString(),
       'swatch_type' => 'image',
     ];

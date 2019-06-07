@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme().
@@ -95,5 +96,9 @@ function alshaya_social_user_settings_submit(array &$form, FormStateInterface $f
  * Implements hook_preprocess_HOOK().
  */
 function alshaya_social_preprocess_alshaya_social(&$variables) {
+  if (\Drupal::routeMatch()->getRouteName() == 'acq_checkout.form') {
+    $variables['destination'] = Url::fromRoute('acq_checkout.form', ['step' => 'delivery'])->toString();
+  }
+
   $variables['base_path'] = base_path();
 }

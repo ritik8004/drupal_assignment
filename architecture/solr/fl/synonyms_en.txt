@@ -1,0 +1,24 @@
+boy,boys,boy’s
+girl,girls,girl’s
+men,mens,men’s
+women,womens,women’s
+shoe,shoes,sneaker,sneakers,trainer,trainers,kicks
+slipper,slippers,slide,slides,flipflop,flipflops,flip flop,flip flops,sandal,sandals
+t-shirt,t-shirts,tee,tees,jersey,jerseys
+jumper,jumpers,jacket,jackets,tracksuit,tracksuits
+jogger,joggers,leggin,leggins
+short,shorts
+top,tops
+trouser,trousers,pant,pants,tracksuit,tracksuits
+hats,hat,beanie,cap,caps,new era
+accessory,accessories
+sock,socks
+bottle,bottles
+lace,laces,shoe lace,shoe laces
+backpack,backpacks,shoulder bag,shoulder bags,tote,totes,pack,packs,fanny pack,hip pack
+brief,briefs,underwear,underclothes
+legging,leggings
+shirt,shirts
+bodysuit,bodysuits
+cardigan,cardigans,jacket,jackets,sweater,sweaters,overcoat,overcoats
+shoecare,shoe care,shoe spray,crep,shoe cleaner

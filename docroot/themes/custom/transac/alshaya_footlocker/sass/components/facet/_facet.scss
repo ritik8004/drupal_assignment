@@ -1,4 +1,9 @@
 .c-facet {
+  a {
+    text-transform: none;
+    font-weight: normal;
+  }
+
   ul {
     @include breakpoint($desktop) {
       padding-top: 0;
@@ -32,6 +37,13 @@
     .facet-item__value,
     .facet-item__count {
       display: inline-block;
+      text-transform: capitalize;
+
+      @include breakpoint($only-mobile) {
+        html[lang=en] & {
+          margin-top: 0;
+        }
+      }
     }
   }
 }
@@ -220,6 +232,16 @@ ul[data-drupal-facet-id=promotion_category_facet] {
   & > li > label {
     .facet-item__value {
       margin-#{$left}: 0;
+    }
+  }
+}
+
+.filter-fixed-top {
+  .sticky-filter-wrapper {
+    .site-brand-home {
+      a {
+        width: 11.0625rem;
+      }
     }
   }
 }

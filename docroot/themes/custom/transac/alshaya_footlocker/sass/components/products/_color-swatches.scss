@@ -1,0 +1,43 @@
+.sku-base-form {
+  .form-wrapper {
+    .configurable-swatch {
+      .li-swatch-image {
+        a,
+        span {
+          width: 4.0625rem;
+          height: 4.8125rem;
+          margin-top: 0.625rem;
+          padding: 0;
+
+          &.picked,
+          &:hover {
+            &::after {
+              width: 4.0625rem;
+              height: 4.8125rem;
+              #{$left}: 1px;
+            }
+          }
+
+          @include breakpoint($desktop) {
+            &:hover:not(.picked) {
+              &::after {
+                border: none;
+                background: $pdp_thumbimage_hover_bg;
+                position: absolute;
+                left: 0;
+                top: -2px;
+                width: 100%;
+                height: 100%;
+              }
+            }
+          }
+        }
+
+        img {
+          width: 4.0625rem;
+          height: 4.5625rem;
+        }
+      }
+    }
+  }
+}

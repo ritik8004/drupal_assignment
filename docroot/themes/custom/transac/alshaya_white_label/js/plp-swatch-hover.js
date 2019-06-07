@@ -28,6 +28,28 @@
           $(this).closest('.c-products__item').find('.alshaya_search_mainimage img').attr('src', ProductUrl);
         }, 100));
       }
+
+      // Update ?selected param on hover and show specific variant on PDP
+      // if show_variants_thumbnail_plp_gallery is set to true.
+      if (settings.show_variants_thumbnail_plp_gallery) {
+        $('.alshaya_search_slider ul li').once().on('mouseover', debounce(function (e) {
+          e.preventDefault();
+          var URL = $(this).closest('.c-products__item').find('a').attr('href');
+          var SkuId = $(this).attr('data-sku-id');
+          URL = URL.split('?');
+          URL = URL[0] + '?selected=' + SkuId;
+          $(this).closest('.c-products__item').find('a').attr('href', URL);
+        }, 100));
+
+        $('.alshaya_search_slider ul li').on('mouseout', debounce(function (e) {
+          e.preventDefault();
+          var URL = $(this).closest('.c-products__item').find('a').attr('href');
+          var SkuId = $(this).attr('data-sku-id');
+          URL = URL.split('?');
+          URL = URL[0] + '?selected=' + SkuId;
+          $(this).closest('.c-products__item').find('a').attr('href', URL);
+        }, 100));
+      }
     }
   };
 

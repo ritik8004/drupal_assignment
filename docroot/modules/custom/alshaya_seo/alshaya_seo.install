@@ -5,6 +5,33 @@
  * Contains install, update, uninstall hooks for alshaya_seo module.
  */
 
+use Drupal\alshaya_config\AlshayaConfigManager;
+
+/**
+ * Implements hook_update_N().
+ *
+ * Check the rebuild snippets checkbox for GTM.
+ */
+function alshaya_seo_update_8008() {
+  /** @var \Drupal\alshaya_config\AlshayaConfigManager $manager */
+  $manager = \Drupal::service('alshaya_config.manager');
+  $manager->updateConfigs(
+    ['google_tag.settings'],
+    'google_tag',
+    'install',
+    AlshayaConfigManager::MODE_ADD_MISSING
+  );
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Enable external_hreflang module.
+ */
+function alshaya_seo_update_8005() {
+  \Drupal::service('module_installer')->install(['external_hreflang']);
+}
+
 /**
  * Implements hook_update_N().
  *

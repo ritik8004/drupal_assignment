@@ -80,7 +80,8 @@ class AlshayaGtmManager {
     'entity.taxonomy_term.canonical:acq_product_category' => 'PLP',
     'entity.node.canonical:acq_product' => 'PDP',
     'acq_cart.cart' => 'CartPage',
-    'alshaya_master.home' => 'home page',
+    'alshaya_master.home' => 'HP-ProductCarrousel',
+    'entity.node.canonical:department_page' => 'DPT-ProductCarrousel',
   ];
 
   /**
@@ -549,7 +550,12 @@ class AlshayaGtmManager {
           if (isset($currentRoute['route_params']['node'])) {
             /** @var \Drupal\node\Entity\Node $node */
             $node = $currentRoute['route_params']['node'];
-            $routeIdentifier .= ':' . $node->bundle();
+            if ($node->bundle() == 'advanced_page' && $node->get('field_use_as_department_page')->value == 1) {
+              $routeIdentifier .= ':department_page';
+            }
+            else {
+              $routeIdentifier .= ':' . $node->bundle();
+            }
           }
           break;
 
@@ -946,30 +952,10 @@ class AlshayaGtmManager {
    * Helper function to fetch general datalayer attributes for a page.
    */
   public function fetchGeneralPageAttributes($data_layer) {
-    $this->moduleHandler->loadInclude('alshaya_acm_customer', 'inc', 'alshaya_acm_customer.orders');
-    $current_user = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-
-    if ($data_layer['userUid'] !== 0) {
-      $customer_type = count(alshaya_acm_customer_get_user_orders($data_layer['userMail'])) > 1 ? 'Repeat Customer' : 'New Customer';
-    }
-    else {
-      $customer_type = 'New Customer';
-    }
-
-    $privilege_customer = 'Regular Customer';
-    if (!empty($current_user->get('field_privilege_card_number')->getString())) {
-      $privilege_customer = 'Privilege Customer';
-    }
     $data_layer_attributes = [
       'language' => $this->languageManager->getCurrentLanguage()->getId(),
       'country' => function_exists('_alshaya_country_get_site_level_country_name') ? _alshaya_country_get_site_level_country_name() : '',
       'currency' => $this->getGtmCurrency(),
-      'userID' => $data_layer['userUid'] ?: '' ,
-      'userEmailID' => ($data_layer['userUid'] !== 0) ? $data_layer['userMail'] : '',
-      'customerType' => $customer_type,
-      'userName' => ($data_layer['userUid'] !== 0) ? $current_user->field_first_name->value . ' ' . $current_user->field_last_name->value : '',
-      'userType' => $data_layer['userUid'] ? 'Logged in User' : 'Guest User',
-      'privilegeCustomer' => $privilege_customer,
     ];
 
     return $data_layer_attributes;
@@ -1007,13 +993,10 @@ class AlshayaGtmManager {
         $product_terms = $this->fetchProductCategories($node);
 
         $product_media = alshaya_acm_product_get_product_media($node->id(), TRUE);
-        if ($product_media) {
-          $product_media_file = $product_media['file'];
-          $product_media_url = file_create_url($product_media_file->getFileUri());
-        }
-        else {
-          $product_media_url = '';
-        }
+        $product_media_url = !empty($product_media)
+          ? file_create_url($product_media['drupal_uri'])
+          : '';
+
         $oldprice = '';
         if ((float) $sku_entity->get('price')->getString() != (float) $sku_attributes['gtm-price']) {
           $oldprice = (float) $sku_entity->get('price')->getString();
@@ -1297,13 +1280,11 @@ class AlshayaGtmManager {
       if ($product_node instanceof NodeInterface) {
         $sku_media = alshaya_acm_product_get_product_media($product_node->id(), TRUE) ?: '';
       }
-      if ($sku_media) {
-        $sku_media_file = $sku_media['file'];
-        $sku_media_url = file_create_url($sku_media_file->getFileUri());
-      }
-      else {
-        $sku_media_url = 'image not available';
-      }
+
+      $sku_media_url = empty($sku_media)
+        ? 'image not available'
+        : file_create_url($sku_media['drupal_uri']);
+
       $sku_entity = SKU::loadFromSku($item['sku']);
       if ($sku_entity instanceof SKU && $sku_entity->hasTranslation('en')) {
         $sku_entity = $sku_entity->getTranslation('en');

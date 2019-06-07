@@ -8,18 +8,18 @@
       <div id="product-zoom-container"></div>
     {% endif %}
   </div>
-  {% if content.cross_sell %}
+  {% if content.cross_sell|trim is not empty %}
     <div class="horizontal-crossell above-mobile-block">
       {{ content.cross_sell }}
     </div>
   {% endif %}
 
-  {% if content.up_sell %}
+  {% if content.up_sell|trim is not empty %}
     <div class="horizontal-upell above-mobile-block">
       {{ content.up_sell }}
     </div>
   {% endif %}
-  {% if content.related %}
+  {% if content.related|trim is not empty %}
     <div class="horizontal-related above-mobile-block">
       {{ content.related }}
     </div>
@@ -43,21 +43,18 @@
         {% block pricePrefix %}
         {% endblock %}
 
-        <div class="price-block {{ content.price_block_identifier }}">
-          {{ content.price_block }}
-        </div>
-
-        <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
-
-        {% if vat_text %}
-          <div class="vat-text">
-            {{ vat_text }}
+        <div class="info-wrapper">
+          <div class="price-block {{ content.price_block_identifier }}">
+            {{ content.price_block }}
           </div>
-        {% endif %}
 
-        <div class="content--item-code">
-          <span class="field__label">{{ 'Item Code'|t }}:</span>
-          {{ content.item_code }}
+          <div class="promotions">{% if content.promotions %}{{ content.promotions }}{% endif %}</div>
+
+          {% if vat_text %}
+            <div class="vat-text">
+              {{ vat_text }}
+            </div>
+          {% endif %}
         </div>
 
         {% if content.delivery_link is not empty %}
@@ -75,7 +72,7 @@
         <div class="basic-details-wrapper">
           {{ content.field_skus }}
           <div class="modal-share-this">
-            <span class="share-icon"></span>
+            <span class="share-icon">{{  'Share'|t }}</span>
             <div class="sharethis-container">
               <span class="close-icon"></span>
               <div class="sharethis-label">{{ 'Share'|t }}</div>
@@ -118,19 +115,19 @@
 
         {% if content.up_sell or content.related or content.cross_sell %}
           <div class="mobile-related-wrapper">
-            {% if content.cross_sell %}
+            {% if content.cross_sell|trim is not empty %}
               <div class="horizontal-crossell mobile-only-block">
                 {{ content.cross_sell }}
               </div>
             {% endif %}
 
-            {% if content.up_sell %}
+            {% if content.up_sell|trim is not empty %}
               <div class="horizontal-upell mobile-only-block">
                 {{ content.up_sell }}
               </div>
             {% endif %}
 
-            {% if content.related %}
+            {% if content.related|trim is not empty %}
               <div class="horizontal-upell mobile-only-block">
                 {{ content.related }}
               </div>

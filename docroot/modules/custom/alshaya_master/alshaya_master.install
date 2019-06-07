@@ -10,6 +10,64 @@ use Drupal\Core\Config\FileStorage;
 /**
  * Implements hook_update_N().
  *
+ * Update context for strings.
+ */
+function alshaya_master_update_8026() {
+  $strings = [
+    'The password does not satisfy the password policies.' => 'alshaya_static_text|empty_password',
+    'Please enter a valid email address.' => 'alshaya_static_text|invalid_email',
+    'Please enter a valid name.' => 'alshaya_static_text|invalid_name',
+    'Please enter a valid last name.' => 'alshaya_static_text|invalid_last_name',
+    'Please enter an email address.' => 'alshaya_static_text|empty_email',
+    'Please enter a password' => 'alshaya_static_text|empty_password',
+    'The email address could not be found.' => 'alshaya_static_text|email_not_found',
+    'Please enter a valid mobile number.' => 'alshaya_static_text|invalid_mobile',
+    'Please enter a block.' => 'alshaya_static_text|empty_block',
+    'Please enter a street name/number' => 'alshaya_static_text|empty_street',
+    'Please enter a building name/number' => 'alshaya_static_text|empty_building',
+    'Please enter an area' => 'alshaya_static_text|empty_area',
+    'Please enter a valid credit card number.' => 'alshaya_static_text|invalid_cc_number',
+    'Please enter a valid CVC.' => 'alshaya_static_text|invalid_cvv',
+    'Please enter exp month' => 'alshaya_static_text|empty_exp_month',
+    'Please enter exp year' => 'alshaya_static_text|empty_exp_year',
+    'The password does not match this account' => 'alshaya_static_text|wrong_password',
+    'At least 7 characters with one special and one numeric' => 'alshaya_static_text|invalid_format_password',
+    'Password do not match' => 'alshaya_static_text|password_unmatch',
+    'The code you have entered is invalid' => 'alshaya_static_text|invalid_promo_code',
+  ];
+  alshaya_i18n_update_context($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
+ * Adding arabic translations for the LHN.
+ */
+function alshaya_master_update_8025() {
+  $strings = [
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
+    ],
+    'filter & sort' => [
+      'ar' => 'اختر و رتب',
+    ],
+    'apply filter' => [
+      'ar' => 'تفعيل اختياراتك',
+    ],
+    'selected filters' => [
+      'ar' => 'الاختيارات المحددة',
+    ],
+    'All' => [
+      'ar' => 'جميع',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add string translation for - OOS items removal message.
  */
 function alshaya_master_update_8024() {
@@ -1602,6 +1660,21 @@ function alshaya_master_install() {
     'Sorry, one or more products in your basket are no longer available and have been removed in order to proceed.' => [
       'ar' => 'عفواً، بعض المنتجات في سلة المشتريات غير متوفرة في الوقت الحالي، وبالتالي تمت إزالتها لإتمام عملية الشراء',
     ],
+    'all filters' => [
+      'ar' => 'جميع اختياراتك',
+    ],
+    'filter & sort' => [
+      'ar' => 'اختر و رتب',
+    ],
+    'apply filter' => [
+      'ar' => 'تفعيل اختياراتك',
+    ],
+    'selected filters' => [
+      'ar' => 'الاختيارات المحددة',
+    ],
+    'All' => [
+      'ar' => 'جميع',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
@@ -1730,4 +1803,8 @@ function alshaya_master_install() {
     'seckit',
     'install'
   );
+
+  \Drupal::languageManager()->getLanguageConfigOverride('ar', 'back_to_top.settings')
+    ->set('back_to_top_button_text', 'أعلى الصفحة')
+    ->save();
 }

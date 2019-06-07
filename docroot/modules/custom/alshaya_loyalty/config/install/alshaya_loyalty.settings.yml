@@ -1,5 +1,5 @@
 apcn_max_length: '16'
 apcn_value_starts_with: ''
-enable_disable_loyalty: 1
+enable_disable_loyalty: 0
 privilege_card_earn_text: 'Earn one draw entry for every KD 5 spent online'
 langcode: en
