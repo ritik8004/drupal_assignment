@@ -220,4 +220,12 @@ function alshaya_bbw_transac_install() {
   $configFactory->set('service_option', $services);
   // Save the changes.
   $configFactory->save();
+
+  $strings = [
+    'Bath and body works' => [
+      'ar' => 'باث اند بودي ووركس',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

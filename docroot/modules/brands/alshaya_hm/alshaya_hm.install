@@ -651,6 +651,9 @@ function alshaya_hm_install() {
       'ar' => 'المفهوم',
       'en' => 'Concept',
     ],
+    'H&M' => [
+      'ar' => 'اتش اند ام',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 

@@ -83,4 +83,18 @@ function alshaya_ae_install() {
 
   // Store finder search placeholder for UAE.
   alshaya_country_set_default_store_search_placeholder('e.g. Dubai', 'مثل دبي');
+
+  $strings = [
+    'UAE' => [
+      'ar' => 'الامارات',
+    ],
+    'Dubai' => [
+      'ar' => 'دبي',
+    ],
+    'Abu dhabi' => [
+      'ar' => 'ابوظبي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }

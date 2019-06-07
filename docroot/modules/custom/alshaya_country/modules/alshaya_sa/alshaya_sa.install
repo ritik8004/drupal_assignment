@@ -43,6 +43,20 @@ function alshaya_sa_install() {
 
   // Store finder search placeholder for Saudi Arabia.
   alshaya_country_set_default_store_search_placeholder('e.g. Riyadh', 'مثل الرياض');
+
+  $strings = [
+    'KSA' => [
+      'ar' => 'اتش اند ام',
+    ],
+    'Jeddah' => [
+      'ar' => 'جدة',
+    ],
+    'Riyadh' => [
+      'ar' => 'الرياض',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

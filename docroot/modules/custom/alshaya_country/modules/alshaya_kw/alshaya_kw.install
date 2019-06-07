@@ -32,6 +32,17 @@ function alshaya_kw_install() {
 
   // Store finder search placeholder for Kuwait.
   alshaya_country_set_default_store_search_placeholder('e.g. Salmiya', 'مثل السالمية');
+
+  $strings = [
+    'Kuwait' => [
+      'ar' => 'اتش اند ام',
+    ],
+    'Kuwait City' => [
+      'ar' => 'كويت سيتي',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**

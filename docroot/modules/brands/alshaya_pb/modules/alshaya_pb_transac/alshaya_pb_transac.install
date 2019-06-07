@@ -312,6 +312,9 @@ function alshaya_pb_transac_install() {
     '@group_name/@sku_name' => [
       'ar' => '@sku_name/@group_name',
     ],
+    'Pottery Barn' => [
+      'ar' => 'بوتري بارن',
+    ],
   ];
   alshaya_i18n_save_translations($strings);
 
