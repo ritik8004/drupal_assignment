@@ -24,14 +24,14 @@ class AlshayaPerformanceServiceProvider extends ServiceProviderBase implements S
         $syslog->setClass(AlshayaPerformanceSysLog::class);
       }
 
-      // Override the syslog logger class.
+      // Override purge late runtime processor.
       $purge_late_runtime = $container->getDefinition('purge_processor_lateruntime.processor');
       if ($purge_late_runtime) {
         $purge_late_runtime->setClass(AlshayaLateRuntimeProcessor::class);
       }
     }
     catch (\Exception $e) {
-      // Do nothing, system might still be installing or syslog module might
+      // Do nothing, system might still be installing or module might
       // be disabled.
     }
   }
