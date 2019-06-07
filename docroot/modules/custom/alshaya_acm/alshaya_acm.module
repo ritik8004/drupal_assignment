@@ -43,11 +43,10 @@ function alshaya_acm_form_customer_cart_form_alter(&$form, FormStateInterface $f
   $cart = $cart_storage->getCart(FALSE);
 
   if ($cart instanceof CartInterface) {
-    // If for any reason user comes back to basket from checkout pages, we clear
-    // API caches.
+    // If for any reason user comes back to basket from checkout pages,
+    // we clear API caches.
     $tags = [
-      'acq_cart_shipping_estimate:' . $cart->id(),
-      'acq_cart_payment_methods:' . $cart->id(),
+      'cart_extra:' . $cart->id(),
     ];
 
     Cache::invalidateTags($tags);
