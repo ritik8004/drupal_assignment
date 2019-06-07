@@ -170,6 +170,20 @@ function alshaya_acm_product_acq_sku_product_sku_alter(SKU $sku, $product) {
     }
   }
 
+  // Price is only available on simple skus.
+  if ($sku->get('sku')->first()->getString() == 'simple') {
+    $price = (float) $sku->get('price')->first()->getString();
+    $final_price = (float) $sku->get('final_price')->first()->getString();
+    if ($final_price < $price && ((($price - $final_price) / $price) * 100) > 80) {
+      \Drupal::logger('alshaya_acm_product')->notice('SKU:@sku having discount more than @discount_percent. Price:@price Final price:@final_price.', [
+        '@sku' => $sku->get('sku')->first()->getString(),
+        '@discount_percent' => '80%',
+        '@price' => $price,
+        '@final_price' => $final_price,
+      ]);
+    }
+  }
+
   $sku->get('attributes')->setValue($attributes);
 }
 
