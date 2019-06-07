@@ -104,7 +104,7 @@ function alshaya_acm_product_get_sku_configurable_values($sku) {
  * @param string $langcode
  *   Language code.
  *
- * @return \Drupal\acq_sku\Entity\SKU
+ * @return \Drupal\acq_sku\Entity\SKU|null
  *   Loaded SKU entity.
  */
 function alshaya_acm_product_get_parent_sku_by_sku($sku, $langcode = '') {
