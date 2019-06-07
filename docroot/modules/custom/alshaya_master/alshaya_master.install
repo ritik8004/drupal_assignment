@@ -1666,6 +1666,11 @@ function alshaya_master_install() {
     'All' => [
       'ar' => 'جميع',
     ],
+    'Search' => [
+      'en' => 'What are you looking for?',
+      'ar' => 'عن ماذا تبحث؟',
+      'context' => 'algolia_search_block_placeholder',
+    ],
   ];
 
   alshaya_i18n_save_translations($strings);
