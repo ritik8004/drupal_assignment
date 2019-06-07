@@ -37,12 +37,6 @@
       }
     }
 
-    .page-standard {
-      @include breakpoint($upto-tablet) {
-        margin-top: 0;
-      }
-    }
-
     &.mobile--overlay {
       .branding__menu {
         @include breakpoint($upto-desktop) {
@@ -73,24 +67,31 @@
     }
   }
 
-  .c-breadcrumb {
-    @include breakpoint($only-mobile) {
-      margin-top: 2.75rem;
-      display: block;
-
-      .l-container {
-        display: none;
-      }
-    }
-
-    @include breakpoint($only-tablet) {
-      margin-top: 2.625rem;
-    }
-  }
-
   .branding__menu.navbar-fixed-top {
     @include breakpoint($upto-desktop) {
       position: static;
+    }
+  }
+
+  #block-sizefacetblock {
+    @include breakpoint($only-mobile) {
+      margin-top: 2.75rem;
+    }
+  }
+
+  .page-standard {
+    @include breakpoint($only-tablet) {
+      margin-top: 2.625rem;
+    }
+
+    @include breakpoint($only-mobile) {
+      margin-top: 2.6875rem;
+    }
+
+    &.user-page {
+      @include breakpoint($only-mobile) {
+        margin-top: 5rem;
+      }
     }
   }
 }
