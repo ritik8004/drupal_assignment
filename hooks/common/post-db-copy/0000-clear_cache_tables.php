@@ -59,7 +59,7 @@ shell_exec(sprintf('mkdir -p %s', escapeshellarg($cache_directory)));
 // Execute the cleanup. If we execute code on the update environment (as per
 // above), we must change AH_SITE_ENVIRONMENT to match the docroot during
 // execution; see sites.php.
-$command = "db=`CACHE_PREFIX=$cache_directory AH_SITE_ENVIRONMENT=$env \drush8 -r $docroot -l https://$new_domain sql-connect` | \$db --disable-column-names -e \"SHOW TABLES LIKE 'cache%'\" | xargs -I cache_table \$db -e \"TRUNCATE TABLE cache_table\"";
+$command = "db=`CACHE_PREFIX=$cache_directory AH_SITE_ENVIRONMENT=$env \drush8 -r $docroot -l https://$new_domain sql-connect` ; \$db --disable-column-names -e \"SHOW TABLES LIKE 'cache%'\" | xargs -I cache_table \$db -e \"TRUNCATE TABLE cache_table\"";
 fwrite(STDERR, "Executing: $command;\n");
 
 $result = 0;
