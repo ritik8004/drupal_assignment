@@ -25,6 +25,14 @@ function alshaya_mc_update_8315() {
 
   // Save the changes.
   $configFactory->save();
+
+  $strings = [
+    'Mothercare' => [
+      'ar' => 'مذركير',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
@@ -329,6 +337,14 @@ function alshaya_mc_install() {
 
   // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
   _alshaya_master_initialize_amp('alshaya_amp_mothercare');
+
+  $strings = [
+    'Mothercare' => [
+      'ar' => 'مذركير',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
