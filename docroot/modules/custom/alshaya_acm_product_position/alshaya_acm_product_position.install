@@ -11,6 +11,17 @@ use Drupal\alshaya_config\AlshayaConfigManager;
 /**
  * Implements hook_update_N().
  *
+ * Setting default config to avoid checks around positions sort for terms.
+ */
+function alshaya_acm_product_position_update_8006() {
+  /** @var AlshayaConfigManager $alshaya_config_manager */
+  $alshaya_config_manager = \Drupal::service('alshaya_config.manager');
+  $alshaya_config_manager->updateConfigs(['alshaya_acm_product_position.settings'], 'alshaya_acm_product_position');
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Set default values for field_sorting_options and field_sorting_labels.
  */
 function alshaya_acm_product_position_update_8005() {
