@@ -22,6 +22,21 @@ function alshaya_pb_transac_update_8012()  {
 /**
  * Implements hook_update_N().
  *
+ * Save translations for meta tags.
+ */
+function alshaya_pb_transac_update_8012() {
+  $strings = [
+    'Pottery Barn' => [
+      'ar' => 'بوتري بارن',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Change number of items in Product Carousel for PB.
  */
 function alshaya_pb_transac_update_8011() {
@@ -306,6 +321,9 @@ function alshaya_pb_transac_install() {
     ],
     '@group_name/@sku_name' => [
       'ar' => '@sku_name/@group_name',
+    ],
+    'Pottery Barn' => [
+      'ar' => 'بوتري بارن',
     ],
   ];
   alshaya_i18n_save_translations($strings);
