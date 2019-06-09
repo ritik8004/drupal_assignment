@@ -11,9 +11,9 @@
 function alshaya_transac_lite_install() {
   $modules = [
     // Custom modules.
-    'alshaya_master',
     'alshaya_arabic',
     'alshaya_default_content',
+    'alshaya_master',
   ];
 
   global $_alshaya_modules_installed;
