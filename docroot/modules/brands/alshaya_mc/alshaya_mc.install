@@ -10,6 +10,34 @@ use Drupal\Core\Site\Settings;
 /**
  * Implements hook_update_N().
  *
+ * Set config values for meta variables.
+ */
+function alshaya_mc_update_8315() {
+  $configFactory = \Drupal::configFactory()->getEditable('alshaya_seo_transac.meta_variables.yml');
+
+  // Set minimum free shipping amount for hmkw.
+  if (\Drupal::moduleHandler()->moduleExists('alshaya_kw')) {
+    $configFactory->set('min_shipping_amount', 20);
+  }
+  else {
+    $configFactory->set('min_shipping_amount', 250);
+  }
+
+  // Save the changes.
+  $configFactory->save();
+
+  $strings = [
+    'Mothercare' => [
+      'ar' => 'مذركير',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Add config translation for placeholder text.
  */
 function alshaya_mc_update_8314() {
@@ -309,6 +337,14 @@ function alshaya_mc_install() {
 
   // Enable alshaya_amp module, AMP theme and set AMP page logo and favicon.
   _alshaya_master_initialize_amp('alshaya_amp_mothercare');
+
+  $strings = [
+    'Mothercare' => [
+      'ar' => 'مذركير',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
 }
 
 /**
@@ -322,6 +358,9 @@ function alshaya_mc_update_dependencies() {
   ];
   $dependencies['alshaya_mc'][8310] = [
     'alshaya' => 8004,
+  ];
+  $dependencies['alshaya_mc'][8315] = [
+    'alshaya_seo_transac' => 8402,
   ];
   return $dependencies;
 }

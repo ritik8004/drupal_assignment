@@ -423,6 +423,9 @@
       width: calc((100% - 5.8125rem) / 4);
       margin-#{$right}: 1.9375rem;
       margin-bottom: 1.9375rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       @include breakpoint($only-tablet) {
         margin-#{$right}: 1.5rem;
@@ -455,11 +458,7 @@
       }
 
       .swatch-title {
-        position: absolute;
-        top: 0;
         font-size: 1.875rem;
-        left: 0;
-        right: 0;
         text-transform: uppercase;
         text-align: center;
         line-height: 1.2;
@@ -476,6 +475,10 @@
 
       img + span {
         color: $attribute-swatch-title-text;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
       }
     }
   }

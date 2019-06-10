@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Install file.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function alshaya_search_algolia_install() {
+  // Move top search block to proper theme.
+  alshaya_block_move_blocks_theme_to_theme(
+    \Drupal::service('theme_handler')->getDefault(),
+    'alshaya_white_label'
+  );
+
+  // Update block weight of search bar to match what was there for existing
+  // keywords exposed form block.
+  $existing = \Drupal::configFactory()->get('block.block.keywordsearchblock');
+  $new = \Drupal::configFactory()->getEditable('block.block.autocompletewidgetofalgolia');
+  $new->set('weight', $existing->get('weight'));
+  $new->save();
+
+  // Reset Algolia keys in configs.
+  /** @var \Drupal\alshaya_acm\AlshayaAcmConfigCheck $config_check */
+  $config_check = \Drupal::service('alshaya_acm.config_check');
+  $config_check->checkConfig(TRUE, 'search_api.server.algolia');
+  $config_check->checkConfig(TRUE, 'block.block.autocompletewidgetofalgolia');
+
+  // Mark everything for reindexation for search index.
+  _alshaya_search_api_reindex(['acquia_search_index']);
+
+  $strings = [
+    'Search' => [
+      'en' => 'What are you looking for?',
+      'ar' => 'عن ماذا تبحث؟',
+      'context' => 'algolia_search_block_placeholder',
+    ],
+  ];
+
+  alshaya_i18n_save_translations($strings);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function alshaya_search_algolia_uninstall() {
+  // Reset configs overridden by this module.
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
+}

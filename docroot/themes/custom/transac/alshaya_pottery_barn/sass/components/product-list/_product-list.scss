@@ -61,6 +61,20 @@
         }
       }
     }
+
+    &.product-small {
+      .alshaya_search_gallery {
+        .alshaya_search_mainimage {
+          @include breakpoint($only-tablet) {
+            height: 13.5rem;
+          }
+
+          @include breakpoint($only-mobile) {
+            height: 10.25rem;
+          }
+        }
+      }
+    }
   }
 
   .c-products__item {
