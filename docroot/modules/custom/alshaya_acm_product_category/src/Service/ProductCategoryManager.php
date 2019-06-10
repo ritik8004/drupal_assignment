@@ -237,10 +237,6 @@ class ProductCategoryManager {
       $cat_ids = array_merge($cat_ids, $categorization_ids['sale']);
     }
 
-    if ($this->isProductWithSalesOrNewArrival($node, ['attr_is_new'])) {
-      $cat_ids = array_merge($cat_ids, $categorization_ids['new_arrival']);
-    }
-
     // If still its empty, then don't process further. This might be the case
     // for example - when sales category is configured but `is_sale` is false.
     if (empty($cat_ids)) {

@@ -15,6 +15,25 @@ use Drupal\taxonomy\Entity\Term;
 /**
  * Implements hook_update_N().
  *
+ * Enable `alshaya_knet` module and update k-net configs.
+ */
+function alshaya_transac_update_8121() {
+  // Install module.
+  \Drupal::service('module_installer')->install(['alshaya_knet']);
+
+  // Update the k-net settings.
+  $data = \Drupal::config('alshaya_acm_knet.settings')->getRawData();
+  \Drupal::configFactory()->getEditable('alshaya_knet.settings')
+    ->setData($data)
+    ->save();
+
+  // Delete old k-net settings.
+  \Drupal::configFactory()->getEditable('alshaya_acm_knet.settings')->delete();
+}
+
+/**
+ * Implements hook_update_N().
+ *
  * Move facet blocks for left sidebar region to content region for
  * PLP/SRP/Promo pages. Blocks should be placed after block exposed form block
  * of sort.

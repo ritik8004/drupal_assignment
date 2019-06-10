@@ -1,0 +1,6 @@
+alshaya_knet.settings:
+  title: 'K-Net settings'
+  route_name: alshaya_knet.settings
+  parent: alshaya_master.alshaya_admin
+  description: 'Configure K-Net settings.'
+  weight: 25

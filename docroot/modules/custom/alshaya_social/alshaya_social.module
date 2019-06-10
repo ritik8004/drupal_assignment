@@ -32,13 +32,6 @@ function alshaya_social_form_alter(array &$form, FormStateInterface $form_state,
 }
 
 /**
- * Implements hook_checkout_login_alter().
- */
-function alshaya_social_checkout_login_alter(array &$pane_form, $form_state, $complete_form) {
-  alshaya_social_display_social_authentication_links($pane_form, 'user_login_form');
-}
-
-/**
  * Helper class to add social auth links to given form.
  *
  * @param array $form
