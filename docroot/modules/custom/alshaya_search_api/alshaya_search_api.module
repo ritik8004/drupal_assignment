@@ -206,3 +206,16 @@ function alshaya_search_api_search_api_query_alter(QueryInterface &$query) {
     $query->getConditionGroup()->addConditionGroup($stock_condition);
   }
 }
+
+/**
+ * Implements hook_modules_installed().
+ */
+function alshaya_search_api_modules_uninstalled($modules) {
+  if (!in_array('alshaya_search_algolia', $modules)) {
+    return;
+  }
+
+  // Reset configs overridden by alshaya_search_algolia module.
+  alshaya_config_install_configs(['search_api.index.acquia_search_index'], 'alshaya_search', 'optional');
+  alshaya_config_install_configs(['block.block.keywordsearchblock'], 'alshaya_transac', 'optional');
+}

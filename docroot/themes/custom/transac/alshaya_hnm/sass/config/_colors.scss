@@ -60,6 +60,7 @@ $whisper-light-59: rgba(235, 235, 235, 0.59);
 $white-four-70: rgba(247, 247, 247, 0.7);
 $_white-four: #f7f7f7;
 $_grey_11: #f2f2f2;
+$_algolia_suggestion_list_bg: rgba(51, 51, 51, 0.06);
 
 /* ------- 2. Primary Colors ------- */
 // Global elements.
@@ -549,3 +550,14 @@ $colour-swatches-simple-effect-bg: $grey1;
 $lhn_l2: $hnm-black-two;
 $lhn_l3: $grey7;
 $lhn_l4: $grey7;
+
+//Algolia search bar.
+$algolia-input-text: $hnm-black-two;
+$algolia-input-placeholder-text: $grey6;
+$algolia-input-border: $white-smoke-border;
+$algolia-suggestion-text: $grey6;
+$algolia-dropdown-border: $grey5;
+$algolia-search-icon: $hnm-black-two;
+$algolia-trending-title-text: $hnm-black-two;
+$algolia-search-clear-text-icon: $hnm-black-two;
+$algolia-search-suggestion-hover-bg: $_algolia_suggestion_list_bg;
