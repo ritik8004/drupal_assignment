@@ -27,10 +27,10 @@
   @include arabic-letter-spacing;
 
   font-family: $hnm-demibold;
-  letter-spacing: 1px;
 
   @include breakpoint($tablet) {
     margin-bottom: 0.25rem;
+    font-size: 1rem;
   }
 }
 
