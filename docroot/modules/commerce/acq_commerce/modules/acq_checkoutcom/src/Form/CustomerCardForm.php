@@ -242,7 +242,7 @@ class CustomerCardForm extends FormBase {
     if (empty($inputs['cko-card-token'])) {
       $form_state->setError(
         $form,
-        $this->t('Could not generate cko-card-token, there is something wrong.')
+        $this->t('Could not generate token, there is something wrong.')
       );
     }
   }
@@ -264,7 +264,7 @@ class CustomerCardForm extends FormBase {
 
     if (empty($cardData)) {
       $this->messenger->addError(
-        $this->t('something went wrong while saving your card, Please contact administrator.')
+        $this->t('Something went wrong while saving your card, please contact administrator.')
       );
     }
 

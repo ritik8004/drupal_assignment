@@ -7,7 +7,7 @@
     <div class="payment-card--info">
       <div class="payment-card--number">**** **** **** {{ card_info.last4 }}</div>
       <div class="payment-card--name">{{ card_info.name }}</div>
-      <div class="payment-card--expiry">Expiry: {{ card_info.expiryMonth ~ '/' ~ card_info.expiryYear }} </div>
+      <div class="payment-card--expiry">{% trans %}Expiry{% endtrans %}: {{ card_info.expiryMonth ~ '/' ~ card_info.expiryYear }} </div>
     </div>
   </div>
   <div class="payment-card--options">

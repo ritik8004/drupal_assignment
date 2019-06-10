@@ -153,7 +153,7 @@ class CustomerCardDeleteForm extends ConfirmFormBase {
     $uid = $form_state->getValue('uid');
     $card_id = $form_state->getValue('card_id');
     // Delete the card for given user.
-    if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer site configuration') && $card_id)) {
+    if (($uid == $this->currentUser->id() || $this->currentUser->hasPermission('administer users')) && $card_id) {
       // Delete card script.
     }
     return $response;
