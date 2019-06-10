@@ -251,6 +251,8 @@ body {
 
   @include breakpoint($upto-desktop) {
     background: none;
+    width: 1.875rem;
+    height: 1.875rem;
 
     &::after {
       font-size: 1.875rem;
@@ -261,17 +263,17 @@ body {
   @include breakpoint($only-mobile) {
     top: 0.875rem;
   }
-
-  @include breakpoint($only-tablet) {
-    top: 0.3125rem;
-    #{$right}: 0.5rem;
-  }
 }
 
 .algolia-cleartext-active {
   .algolia-cleartext-icon {
-    @include breakpoint($upto-desktop) {
+    @include breakpoint($only-mobile) {
       #{$right}: 0.9375rem;
+    }
+
+    @include breakpoint($only-tablet) {
+      top: 0.3125rem;
+      #{$right}: 2.875rem;
     }
   }
 
