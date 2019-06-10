@@ -14,5 +14,10 @@
 #edit-checkout-login {
   .fieldset-legend {
     text-transform: none;
+    display: inline-block;
+  }
+
+  .fieldset-legend::first-letter {
+    text-transform: uppercase;
   }
 }
